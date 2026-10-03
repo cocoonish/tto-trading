@@ -65,7 +65,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "medyan-yansız ρ arasındaki 0,011'lik fark",
+   "parca": "medyan-yansız ρ arasındaki 0,010'luk fark",
    "degerler": [
     {
      "ifade": "v('b07.p7a.tufe.tam.rho_mu') - v('b07.p7a.tufe.tam.rho_ols')",
@@ -76,7 +76,7 @@
   },
   {
    "tur": "sabit",
-   "parca": "0,5 ile 1 arasındaki bir ızgaranın her noktasında aynı uzunlukta 400 yapay seri",
+   "parca": "0,5 ile 1 arasındaki bir ızgaranın her noktasında aynı uzunlukta 4.000 yapay seri",
    "neden": "medyan-yansız AR(1) kestiriminin benzetim ızgarası (0,50–1,00, 101 nokta) ve deneme sayısı (yöntem sabiti)"
   },
   {
@@ -137,7 +137,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| DM | 9 | 5 | sonsuz | 3,9 yıl |",
+   "satir": "| DM | 9 | 6 | sonsuz | 3,6 yıl |",
    "degerler": [
     {
      "yol": "b07.p7c.dm.medyan_alt90_yil",
@@ -148,7 +148,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| EM | 10 | 1 | 3,3 yıl | 1,5 yıl |",
+   "satir": "| EM | 10 | 1 | 3,2 yıl | 1,4 yıl |",
    "degerler": [
     {
      "yol": "b07.p7c.em.medyan_mu_yil",
@@ -164,7 +164,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "İsviçre'de 5,0, euro alanında 4,7 yıl",
+   "parca": "İsviçre'de 5,3, euro alanında 4,7 yıl",
    "degerler": [
     {
      "yol": "b07.p7c.ulkeler.CH.yari_omur_mu_yil",
@@ -184,39 +184,13 @@
    "kaynak": "rogoff1996"
   },
   {
-   "tur": "olcum",
-   "parca": "Türkiye'de BIS sepeti 11,0, TCMB'nin TÜFE bazlı REDK'si 19,6 yıl veriyor: sepet ve endeks değişince kestirim yıllarca oynar (alt uç BIS'te 2,4, TCMB'de 2,66 yıl)",
-   "degerler": [
-    {
-     "yol": "b07.p7c.ulkeler.TR.yari_omur_mu_yil",
-     "bicim": "sayi",
-     "hane": 1
-    },
-    {
-     "yol": "b07.p7a.tufe.tam.yari_omur_mu_yil",
-     "bicim": "sayi",
-     "hane": 1
-    },
-    {
-     "yol": "b07.p7c.ulkeler.TR.yari_omur_alt90_yil",
-     "bicim": "sayi",
-     "hane": 1
-    },
-    {
-     "yol": "b07.p7a.tufe.tam.yari_omur_alt90_yil",
-     "bicim": "sayi",
-     "hane": 2
-    }
-   ]
-  },
-  {
    "tur": "sabit",
    "parca": "aralık %90",
    "neden": "kalıcılık katsayısı için verilen güven aralığının düzeyi (yöntem sabiti)"
   },
   {
    "tur": "tablo",
-   "satir": "| TÜFE, 1994–2026 | 392 | 0,9971 | 19,6 | 2,66 – ∞ | 4,15 | −1,06 |",
+   "satir": "| TÜFE, 1994–2026 | 392 | 0,9967 | 17,3 | 2,65 – ∞ | 4,15 | −1,06 |",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.tam.rho_mu",
@@ -247,7 +221,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| TÜFE, 1994–2001 | 96 | 0,9696 | 1,87 | 0,53 – ∞ | 0,80 | −1,69 |",
+   "satir": "| TÜFE, 1994–2001 | 96 | 0,9684 | 1,80 | 0,52 – ∞ | 0,80 | −1,69 |",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.donemler.1994_2001.rho_mu",
@@ -278,7 +252,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| TÜFE, 2002–2017 | 192 | 0,9746 | 2,25 | 0,85 – ∞ | 1,30 | −2,23 |",
+   "satir": "| TÜFE, 2002–2017 | 192 | 0,9754 | 2,32 | 0,85 – ∞ | 1,30 | −2,23 |",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.donemler.2002_2017.rho_mu",
@@ -309,7 +283,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| TÜFE, 2018–2026 | 104 | 0,9639 | 1,57 | 0,52 – ∞ | 0,80 | −1,65 |",
+   "satir": "| TÜFE, 2018–2026 | 104 | 0,9648 | 1,61 | 0,52 – ∞ | 0,80 | −1,65 |",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.donemler.2018_2026.rho_mu",
@@ -340,7 +314,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| ÜFE, 1994–2026 | 392 | 0,9785 | 2,65 | 1,23 – ∞ | 1,84 | −2,29 |",
+   "satir": "| ÜFE, 1994–2026 | 392 | 0,9776 | 2,55 | 1,25 – ∞ | 1,84 | −2,29 |",
    "degerler": [
     {
      "yol": "b07.p7a.ufe.tam.rho_mu",
@@ -371,7 +345,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| ÜFE, 1994–2001 | 96 | 0,9875 | 4,58 | 0,65 – ∞ | 1,02 | −1,73 |",
+   "satir": "| ÜFE, 1994–2001 | 96 | 0,9874 | 4,54 | 0,63 – ∞ | 1,02 | −1,73 |",
    "degerler": [
     {
      "yol": "b07.p7a.ufe.donemler.1994_2001.rho_mu",
@@ -402,7 +376,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| ÜFE, 2002–2017 | 192 | 0,9644 | 1,59 | 0,71 – ∞ | 1,08 | −2,57 |",
+   "satir": "| ÜFE, 2002–2017 | 192 | 0,9661 | 1,68 | 0,70 – ∞ | 1,08 | −2,57 |",
    "degerler": [
     {
      "yol": "b07.p7a.ufe.donemler.2002_2017.rho_mu",
@@ -433,7 +407,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| ÜFE, 2018–2026 | 104 | 0,9884 | 4,94 | 0,72 – ∞ | 1,18 | −1,30 |",
+   "satir": "| ÜFE, 2018–2026 | 104 | 0,9897 | 5,60 | 0,75 – ∞ | 1,18 | −1,30 |",
    "degerler": [
     {
      "yol": "b07.p7a.ufe.donemler.2018_2026.rho_mu",
@@ -464,23 +438,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "(t −2,571, %10 eşiği −2,57)",
-   "degerler": [
-    {
-     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.t",
-     "bicim": "sayi",
-     "hane": 3
-    },
-    {
-     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.kritik.yuzde10",
-     "bicim": "sayi",
-     "hane": 2
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
-   "parca": "yarı ömrü 1,57 ile 2,25 yıl arasına iner",
+   "parca": "yarı ömrü 1,61 ile 2,32 yıl arasına iner",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.donemler.2018_2026.yari_omur_mu_yil",
@@ -496,7 +454,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "yılda −0,86 log puan, yani hafif reel değer kaybıdır",
+   "parca": "yılda −0,86 log puan, yani hafif reel değer kaybı yönünde",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.egilimden_arindirilmis.egilim_log_yil",
@@ -508,7 +466,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "(alt uç 2,71 yıl)",
+   "parca": "(alt uç 2,92 yıl)",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.egilimden_arindirilmis.yari_omur_alt90_yil",
@@ -519,7 +477,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Eğilimsiz ÜFE bazlı seri 4,11 yıl, alt ucu 1,41 yıl",
+   "parca": "Eğilimsiz ÜFE bazlı seri 4,02 yıl, alt ucu 1,39 yıl",
    "degerler": [
     {
      "yol": "b07.p7a.ufe.egilimden_arindirilmis.yari_omur_mu_yil",
@@ -546,7 +504,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "bir yılda 105,68'e, beş yılda 108,04'e çıkar; aralığın alt ucuyla (ρ 0,9785) beş yılda 119,24'e",
+   "parca": "bir yılda 105,76'ya, beş yılda 108,42'ye çıkar; aralığın alt ucuyla (ρ 0,9784) beş yılda 119,27'ye",
    "degerler": [
     {
      "yol": "b07.sekil_12.fan.mu.12",
@@ -759,7 +717,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "2021 dibinin bugünkü tam örneklem ortalamasına göre sapması −58,0 log puandı; medyan-yansız ρ'nun çekimi on iki ayda +%2,0, aralığın hızlı ucu +%14,2 dönüş ima eder",
+   "parca": "2021 dibinin bugünkü tam örneklem ortalamasına göre sapması −58,0 log puandı; medyan-yansız ρ'nun çekimi on iki ayda +%2,3, aralığın hızlı ucu +%14,3 dönüş ima eder",
    "degerler": [
     {
      "ifade": "math.log(v('b07.vakalar.tr_dip_2021.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks'))*100",
@@ -787,7 +745,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "Açılış değerleri 08.2026 ölçümüdür: REDK 105,04, denge 125,02 (seçenek 126,91), ρ 0,9971 (seçenekler 0,9785 ve 0,9862)",
+   "parca": "Açılış değerleri 08.2026 ölçümüdür: REDK 105,04, denge 125,02 (seçenek 126,91), ρ 0,9967 (seçenekler 0,9784 ve 0,9862)",
    "degerler": [
     {
      "ifade": "a('redk.tarih_metin')",
@@ -828,7 +786,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "Açılışta sapma −17,4 ve A bloğu −%0,60 / yıl",
+   "parca": "Açılışta sapma −17,4 log puan ve yıllık çekim −%0,68",
    "degerler": [
     {
      "ifade": "redk_sapma(a('redk.redk'), a('redk.denge_tam'))",
@@ -844,7 +802,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "hızlı uçla −%4,00, en küçük karelerle −%2,67",
+   "parca": "hızlı uçla −%4,01, en küçük karelerle −%2,67",
    "degerler": [
     {
      "ifade": "a_blok(a('redk.rho_alt'), redk_sapma(a('redk.redk'), a('redk.denge_tam')))",
@@ -860,7 +818,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "yarı ömrü 239 ay gösterir (ölçüm 235,8 ay)",
+   "parca": "yarı ömrü 210 ay gösterir (ölçüm 207,0 ay)",
    "degerler": [
     {
      "ifade": "yari_omur(a('redk.rho_mu'))",
@@ -876,7 +834,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "ρ medyan-yansız 0,997064, en küçük kareler 0,986172, %90 aralığı [0,978522; 1]",
+   "parca": "ρ medyan-yansız 0,996658, en küçük kareler 0,986172, %90 aralığı [0,978432; 1]",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.tam.rho_mu",
@@ -909,7 +867,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "medyan-yansız 235,8 ay, en küçük kareler 49,8 ay, alt uç 31,9 ay",
+   "parca": "medyan-yansız 207,0 ay, en küçük kareler 49,8 ay, alt uç 31,8 ay",
    "degerler": [
     {
      "yol": "b07.p7a.tufe.tam.yari_omur_mu_ay",
@@ -930,7 +888,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "medyan-yansızla $1 - 0{,}9653$, yani sapmanın %3,5'i (+0,60 log puan); en küçük karelerle $1 - 0{,}8461$, %15,4 (+2,68 log puan); alt uçta $1 - 0{,}7706$, %22,9 (+3,99 log puan)",
+   "parca": "medyan-yansızla $1 - 0{,}9606$, yani sapmanın %3,9'u (+0,69 log puan); en küçük karelerle $1 - 0{,}8461$, %15,4 (+2,68 log puan); alt uçta $1 - 0{,}7698$, %23,0 (+4,01 log puan)",
    "degerler": [
     {
      "ifade": "v('b07.p7a.tufe.tam.rho_mu')**12",
@@ -1021,7 +979,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "medyan-yansızla +1,88 log puan (+%1,9), hızlı uçla +12,41 log puan (+%13,2); gerçekleşen +%29,66",
+   "parca": "medyan-yansızla +2,13 log puan (+%2,2), hızlı uçla +12,45 log puan (+%13,3); gerçekleşen +%29,66",
    "degerler": [
     {
      "ifade": "(v('b07.p7a.tufe.tam.rho_mu')**12-1)*math.log(v('b07.vakalar.tr_dip_2023.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks'))*100",
@@ -1057,7 +1015,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "(−56,8; Bölüm 8.6)",
+   "parca": "(−56,8; Bölüm 8.6'nın tanımıyla",
    "degerler": [
     {
      "yol": "b08.sekil_15.redk_sapma_yuzde.295",
@@ -1068,7 +1026,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "ABD, İsveç ve Japonya'da alt uç bile 5 yılın üstünde (5,1 · 5,6 · 34,9 yıl)",
+   "parca": "ABD, İsveç ve Japonya'da alt uç bile 5 yılın üstünde (5,3 · 6,3 · 49,0 yıl)",
    "degerler": [
     {
      "yol": "b07.p7c.ulkeler.US.yari_omur_alt90_yil",
@@ -1089,7 +1047,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "1994–2001 ve 2018–2026'da 4,58 ve 4,94 yıl, tam örneklemden (2,65) uzun",
+   "parca": "1994–2001 ve 2018–2026'da 4,54 ve 5,60 yıl, tam örneklemden (2,55) uzun",
    "degerler": [
     {
      "yol": "b07.p7a.ufe.donemler.1994_2001.yari_omur_mu_yil",
@@ -1107,6 +1065,175 @@
      "hane": 2
     }
    ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "beş bağımsız benzetimde 14,5 ile 17,3 yıl arasında oynar; aralığın alt ucu ise yerinde kalır (2,59–2,73 yıl)",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.tam.benzetim_araligi.yari_omur_min_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.benzetim_araligi.yari_omur_max_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.benzetim_araligi.yari_omur_alt90_min_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.benzetim_araligi.yari_omur_alt90_max_yil",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "aynı benzetim ayarı (4.000 deneme, beş tohum)",
+   "neden": "medyan-yansız kestirimin benzetim ayarı (yöntem sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "aynı uzunlukta 4.000 yapay seri",
+   "neden": "medyan-yansız kestirimin benzetim ayarı (yöntem sabiti)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Türkiye'de BIS sepeti 12,6, TCMB'nin TÜFE bazlı REDK'si 17,3 yıl veriyor",
+   "degerler": [
+    {
+     "yol": "b07.p7c.ulkeler.TR.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(0,9862'ye karşı 0,9851), farkın büyüklüğü ise benzetime duyarlıdır (beş tohumda 3,8 ile 4,7 yıl)",
+   "degerler": [
+    {
+     "yol": "b07.p7c.tr_tcmb_kiyas.tcmb_rho_ols",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7c.tr_tcmb_kiyas.bis_rho_ols",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7c.tr_tcmb_kiyas.fark_min_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7c.tr_tcmb_kiyas.fark_max_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Alt uçlar yakın: BIS'te 2,5, TCMB'de 2,65 yıl",
+   "degerler": [
+    {
+     "yol": "b07.p7c.ulkeler.TR.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "t'si (−2,571) yalnız asimptotik %10 eşiğinin (−2,567) altında, sonlu örneklem eşiğinin (−2,575) değil",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.t",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.kritik.yuzde10",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.kritik_sonlu.yuzde10",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ÜFE 2018–2026'da nokta beş tohumda 5,5–7,5, ÜFE 1994–2001'de 4,1–4,6 yıl oynar",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.benzetim_araligi.yari_omur_min_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.benzetim_araligi.yari_omur_max_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.benzetim_araligi.yari_omur_min_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.benzetim_araligi.yari_omur_max_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kısalma tutarlı değil: 2002–2017'de 1,68 yıl",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "hızlı uç büyük kısmını verir (+%16,46)",
+   "degerler": [
+    {
+     "yol": "b07.vakalar.tr_dip_2021.sonraki_12ay_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Engel (2004) ise bu yanlılığın bulmacayı çözmediğini savunur",
+   "kaynak": "chen_engel2004"
   }
  ]
 }

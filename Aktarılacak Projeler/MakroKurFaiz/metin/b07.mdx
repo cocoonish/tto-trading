@@ -1,5 +1,7 @@
 ## Bölüm 7 — Reel efektif kur ve PPP (≈9 dk)
 
+*Bu bölümde:* REDK ve PPP, yarı ömür aralığı, DM, EM ve Türkiye kanıtı, Balassa–Samuelson vekili ve çıpaya çekim aracı.
+
 ### 7.1 Kuruluş: REDK, PPP ve Balassa–Samuelson (≈2 dk)
 
 <span id="hy-b07"></span>
@@ -14,11 +16,11 @@ $$
 $E_{j,t}$ j parasının TL fiyatı, $P_t$ ve $P_{j,t}$ Türkiye'nin ve ortağın fiyat endeksi, $w_j$
 dış ticaret ağırlığıdır; seri bir baz yılına bölünür (2025 = 100). TÜFE bazlı seri tüketici
 sepetini, Yİ-ÜFE bazlı seri büyük ölçüde ticarete konu malları karşılaştırır. Log alınınca
-$\ln \text{REDK}_t = -\sum_j w_j\, q_{j,t}$ + sabit, $q_j = e_j + p_j - p$. Yön
+$\ln \text{REDK}_t = -\sum_j w_j\, q_{j,t}$ + sabit, $q_j = s_j + p_j - p$ ($s_j = \ln E_j$, Bölüm 1'in kur logu). Yön
 **terstir: REDK ↑ TL'nin reel değer kazancı**.
 
 **Mutlak PPP** fiyat seviyelerini tek kurla eşitler, $P = E\,P^*$, yani $q = 0$. **Göreli PPP**
-yalnız değişimleri bağlar, $\Delta e = \pi - \pi^*$, yani $\Delta q = 0$: reel kur bir sabit
+yalnız değişimleri bağlar, $\Delta s = \pi - \pi^*$, yani $\Delta q = 0$: reel kur bir sabit
 etrafında durağandır. Endeksin seviyesi baz yılına bağlı olduğu için sınanabilen göreli PPP'dir
 ve "pahalı" ya da "ucuz" ancak bir ortalamaya göre okunur; ortalamanın seçimi hükmün parçasıdır.
 08.2026'da TÜFE bazlı REDK 105,04; 1994–2026'nın geometrik ortalaması 125,02, 2003–2026'nınki
@@ -28,10 +30,10 @@ da ona eşitti: TL bu ölçüyle ucuzdur.
 **Balassa–Samuelson.** İki kesim olsun, ticarete konu (T) ve konu olmayan (N), tek girdi emek,
 $Y_i = A_i L_i$. Ücret kesimler arasında eşitlenir, $W = P_T A_T = P_N A_N$, yani
 $p_N - p_T = a_T - a_N$. Log fiyat endeksi $p = \alpha\,p_N + (1-\alpha)\,p_T$ ve ticarete konu
-mallarda tek fiyat yasası ($e + p_T^* = p_T$) ile
+mallarda tek fiyat yasası ($s + p_T^* = p_T$) ile
 
 $$
-q \;=\; e + p^* - p \;=\; \alpha^*\big(a_T^* - a_N^*\big) \;-\; \alpha\big(a_T - a_N\big)
+q \;=\; s + p^* - p \;=\; \alpha^*\big(a_T^* - a_N^*\big) \;-\; \alpha\big(a_T - a_N\big)
 $$
 
 Ticarete konu kesimde verimliliği ortaklarından hızlı artan ekonomide hizmetler pahalanır, q
@@ -49,17 +51,22 @@ h_{1/2} \;=\; \frac{\ln 0{,}5}{\ln \rho} \;\approx\; \frac{0{,}693}{1-\rho}
 $$
 
 olur (ikinci biçim ρ 1'e yakınken): ρ'nun 1'e uzaklığı yarıya inerse yarı ömür iki katına
-çıkar. Türkiye'de en küçük kareler ile medyan-yansız ρ arasındaki 0,011'lik fark yarı ömrü dört
-yıldan yirmi yıla çevirir.
+çıkar. Türkiye'de en küçük kareler ile medyan-yansız ρ arasındaki 0,010'luk fark yarı ömrü dört
+yıldan on yedi yıla çevirir. ρ 1'e bu kadar yakınken nokta kestirimin kendisi de benzetime duyarlıdır:
+aynı kestirim beş bağımsız benzetimde 14,5 ile 17,3 yıl arasında oynar; aralığın alt ucu ise yerinde
+kalır (2,59–2,73 yıl).
 
 **Küçük örneklem yanlılığı.** Ortalaması tahmin edilen seride en küçük kareler ρ'yu aşağı
 çeker. Medyan-yansız kestirim bunu benzetimle düzeltir: 0,5 ile 1 arasındaki bir ızgaranın her
-noktasında aynı uzunlukta 400 yapay seri üretilir, en küçük kareler kestirimlerinin medyanı
+noktasında aynı uzunlukta 4.000 yapay seri üretilir, en küçük kareler kestirimlerinin medyanı
 gözlenen ρ̂'ya eşit olan ρ seçilir; %90 aralığı aynı
 dağılımların 5. ve 95. yüzdeliklerinden ters çevrilir. ρ̂, ρ = 1'de üretilen serilerin 5.
 yüzdeliğinin üstündeyse aralığın üst ucu 1'e dayanır ve **yarı ömrün üst sınırı sonsuzdur**:
-veri sapmanın hiç kapanmamasını dışlayamıyor. Birim kökü sabitli Dickey–Fuller sınaması sorar
-(gecikme 0–12 arasında bilgi ölçütüyle; kritik değer %5'te −2,86, %10'da −2,57).
+veri sapmanın hiç kapanmamasını dışlayamıyor. Benzetim de bir tahmindir: ρ 1'e yaklaştıkça sonucu
+rastgele sayı tohumuna duyarlıdır, bu yüzden kestirim beş bağımsız tohumla tekrarlanır ve en küçük ile en büyük
+sonuç da yazılır. Birim kökü sabitli Dickey–Fuller sınaması sorar
+(gecikme 0–12 arasında bilgi ölçütüyle; asimptotik kritik değer %5'te −2,86, %10'da −2,57; hüküm
+örneklem uzunluğuna göre düzeltilmiş sonlu örneklem eşiğiyle verilir).
 
 **Denge kavramları.** Clark ve MacDonald (1998) reel kurun temellerle uyumunu iki yoldan ölçer:
 FEER, tam istihdamdaki cari dengeyi sürdürülebilir net sermaye akımına eşitleyen reel kurdur;
@@ -83,65 +90,71 @@ finansal krizlerin en sağlam öncüleri olduğunu gösterir. Rodrik (2008) Bala
 düzeltilmiş düşük değerlenmenin büyümeyle pozitif ilişkili olduğunu bulur; bulgu sonraki
 çalışmalarda tartışmalıdır.
 
-**Pratik 7C — BIS kesiti.** BIS'in geniş reel efektif kurları, aylık 01.1994–08.2026, ülke başına
-aynı kestirim; alt uç %90 aralığınındır:
+**Pratik 7A — BIS kesiti.** BIS'in geniş reel efektif kurları, aylık 01.1994–08.2026, ülke başına
+aynı kestirim ve aynı benzetim ayarı (4.000 deneme, beş tohum); alt uç %90 aralığınındır:
 
 | Grup | Ülke | ρ = 1 olan | Medyan yarı ömür | Medyan alt uç |
 |---|---|---|---|---|
-| DM | 9 | 5 | sonsuz | 3,9 yıl |
-| EM | 10 | 1 | 3,3 yıl | 1,5 yıl |
+| DM | 9 | 6 | sonsuz | 3,6 yıl |
+| EM | 10 | 1 | 3,2 yıl | 1,4 yıl |
 
-Beş DM'de (ABD, İngiltere, Japonya, Norveç, İsveç) medyan-yansız ρ 1'e dayanıyor; İsviçre'de
-5,0, euro alanında 4,7 yıl. On dokuz ülkenin on sekizinde üst uç sonsuz. Rogoff'un 3–5 yılı DM
+Altı DM'de (ABD, İngiltere, Japonya, Kanada, Norveç, İsveç) medyan-yansız ρ 1'e dayanıyor; İsviçre'de
+5,3, euro alanında 4,7 yıl. On dokuz ülkenin on yedisinde üst uç sonsuz (Hindistan ve Endonezya hariç). Rogoff'un 3–5 yılı DM
 medyan alt ucunu kapsar, ama her DM'yi değil: ABD, İsveç ve Japonya'da alt uç bile 5 yılın
-üstünde (5,1 · 5,6 · 34,9 yıl). Bu kesitte EM medyanı daha kısa; on dokuz ülke bir sınama
-değildir. Türkiye'de BIS sepeti 11,0, TCMB'nin TÜFE bazlı REDK'si 19,6 yıl veriyor: sepet
-ve endeks değişince kestirim yıllarca oynar (alt uç BIS'te 2,4, TCMB'de 2,66 yıl).
+üstünde (5,3 · 6,3 · 49,0 yıl). Bu kesitte EM medyanı daha kısa; on dokuz ülke bir sınama
+değildir. Türkiye'de BIS sepeti 12,6, TCMB'nin TÜFE bazlı REDK'si 17,3 yıl veriyor. İki seri aynı
+uzunlukta olduğu için aynı yapay serilerle kestirilir: TCMB serisinin daha kalıcı çıkması iki serinin kendi
+en küçük kareler katsayısından gelir (0,9862'ye karşı 0,9851), farkın büyüklüğü ise benzetime duyarlıdır
+(beş tohumda 3,8 ile 4,7 yıl). Alt uçlar yakın: BIS'te 2,5, TCMB'de 2,65 yıl.
 
 **Türkiye.** Bant istatistiği [TRY REER](/projeler/try-reer/) panosundadır. OVP'nin ima ettiği
 "reel lira" tek paraya karşı kurulur, REDK değildir
 ([OVP analizi](/analiz/ovp-2026-09-06/), Bölüm 7). Reel kur taşımaya özdeşlikle bağlanır: dolar
 cinsinden TL taşımasının fazla getirisi
 $i - i^* - \Delta s = (i - \pi) - (i^* - \pi^*) - \Delta q$, yani gerçekleşen reel faiz farkı
-artı TL'nin reel değer kazancıdır. Çekim (A bloğu) ortalamanın üstündeki bir REDK'de taşımanın
-aleyhine, altındakinde lehine çalışır (Bölüm 11).
+artı TL'nin reel değer kazancıdır. Çıpaya çekim ortalamanın üstündeki bir REDK'de taşımanın
+aleyhine, altındakinde lehine çalışır.
 
-### 7.4 Pratik 7A — Türkiye'nin yarı ömrü (≈2 dk)
+### 7.4 Pratik 7B — Türkiye'nin yarı ömrü (≈2 dk)
 
 TCMB REDK, aylık 01.1994–08.2026, log seviye, her dönemde kendi ortalaması çıkarılmış; aralık %90.
 
 | Seri, dönem | Ay | ρ medyan-yansız | Yarı ömür (yıl) | Aralık (yıl) | En küçük kareler (yıl) | ADF t |
 |---|---|---|---|---|---|---|
-| TÜFE, 1994–2026 | 392 | 0,9971 | 19,6 | 2,66 – ∞ | 4,15 | −1,06 |
-| TÜFE, 1994–2001 | 96 | 0,9696 | 1,87 | 0,53 – ∞ | 0,80 | −1,69 |
-| TÜFE, 2002–2017 | 192 | 0,9746 | 2,25 | 0,85 – ∞ | 1,30 | −2,23 |
-| TÜFE, 2018–2026 | 104 | 0,9639 | 1,57 | 0,52 – ∞ | 0,80 | −1,65 |
-| ÜFE, 1994–2026 | 392 | 0,9785 | 2,65 | 1,23 – ∞ | 1,84 | −2,29 |
-| ÜFE, 1994–2001 | 96 | 0,9875 | 4,58 | 0,65 – ∞ | 1,02 | −1,73 |
-| ÜFE, 2002–2017 | 192 | 0,9644 | 1,59 | 0,71 – ∞ | 1,08 | −2,57 |
-| ÜFE, 2018–2026 | 104 | 0,9884 | 4,94 | 0,72 – ∞ | 1,18 | −1,30 |
+| TÜFE, 1994–2026 | 392 | 0,9967 | 17,3 | 2,65 – ∞ | 4,15 | −1,06 |
+| TÜFE, 1994–2001 | 96 | 0,9684 | 1,80 | 0,52 – ∞ | 0,80 | −1,69 |
+| TÜFE, 2002–2017 | 192 | 0,9754 | 2,32 | 0,85 – ∞ | 1,30 | −2,23 |
+| TÜFE, 2018–2026 | 104 | 0,9648 | 1,61 | 0,52 – ∞ | 0,80 | −1,65 |
+| ÜFE, 1994–2026 | 392 | 0,9776 | 2,55 | 1,25 – ∞ | 1,84 | −2,29 |
+| ÜFE, 1994–2001 | 96 | 0,9874 | 4,54 | 0,63 – ∞ | 1,02 | −1,73 |
+| ÜFE, 2002–2017 | 192 | 0,9661 | 1,68 | 0,70 – ∞ | 1,08 | −2,57 |
+| ÜFE, 2018–2026 | 104 | 0,9897 | 5,60 | 0,75 – ∞ | 1,18 | −1,30 |
 
-(1) Sekiz satırın sekizinde üst uç sonsuz; birim kök yalnız ÜFE 2002–2017'de ve sınırda
-reddediliyor (t −2,571, %10 eşiği −2,57). (2) Alt dönemlerde TÜFE yarı ömrü 1,57 ile 2,25 yıl arasına iner: her dönem kendi
+(1) Sekiz satırın sekizinde üst uç sonsuz. Birim kök hiçbir satırda reddedilmiyor: ÜFE 2002–2017'nin
+t'si (−2,571) yalnız asimptotik %10 eşiğinin (−2,567) altında, sonlu örneklem eşiğinin (−2,575) değil.
+Benzetim duyarlılığı ρ 1'e yaklaştıkça büyür: en büyüğü tam örneklem TÜFE satırında (7.2); ÜFE 2018–2026'da
+nokta beş tohumda 5,5–7,5, ÜFE 1994–2001'de 4,1–4,6 yıl oynar, öbür satırlarda yılın onda biri kadar. (2) Alt dönemlerde TÜFE yarı ömrü 1,61 ile 2,32 yıl arasına iner: her dönem kendi
 ortalamasına döner ve ortalamanın dönemden döneme kayması tam örneklemde kalıcılık gibi görünür.
 Kayma ancak dönem bitince bilinir; alt dönem yarı ömrü gerçek zamanlı bir çekim değildir. ÜFE'de
-bu kısalma yok: 1994–2001 ve 2018–2026'da 4,58 ve 4,94 yıl, tam örneklemden (2,65) uzun.
-(3) TÜFE bazlı REDK'nin eğilimi yılda −0,86 log puan, yani hafif reel değer kaybıdır
-(Balassa–Samuelson'un beklediğinin tersi, 7.5); eğilim çıkarılınca da
-medyan-yansız ρ 1'e dayanır (alt uç 2,71 yıl). Eğilimsiz ÜFE bazlı seri 4,11 yıl, alt ucu 1,41 yıl.
+kısalma tutarlı değil: 2002–2017'de 1,68 yıl, ama 1994–2001 ve 2018–2026'da 4,54 ve 5,60 yıl, tam
+örneklemden (2,55) uzun.
+(3) TÜFE bazlı REDK'nin doğrusal eğilimi yılda −0,86 log puan, yani hafif reel değer kaybı yönünde
+(anlamlılığı ölçülmedi: birim kökü reddedilmeyen bir seride eğilim tarif edicidir; Balassa–Samuelson'un
+beklediğinin tersi, 7.5); eğilim çıkarılınca da
+medyan-yansız ρ 1'e dayanır (alt uç 2,92 yıl). Eğilimsiz ÜFE bazlı seri 4,02 yıl, alt ucu 1,39 yıl.
 
 <GrafikEmbed src="/arastirma/makro-kur-ve-faiz/12_redk.html" baslik="Türkiye REDK ve dönüş yelpazesi" no="12" kaynak="TCMB" />
 
 **Bu seri nasıl hesaplanıyor.** Üst panel TCMB'nin TÜFE bazlı REDK'si (aylık, 01.1994–08.2026;
 artış TL'nin reel değer kazancı) ve 392 ayın geometrik ortalaması (kesikli çizgi).
 Yelpaze bugünkü log sapmanın $\rho^h$ ile söndüğü yoldur, h = 0…60 ay: medyan-yansız ρ ile REDK
-bir yılda 105,68'e, beş yılda 108,04'e çıkar; aralığın alt ucuyla (ρ 0,9785) beş yılda
-119,24'e; üst uçta ρ = 1 ve yol düzdür. Yelpaze tahmin değil, kalıcılığın görselidir. Alt panel
-7A'nın TÜFE satırları: nokta medyan-yansız, elmas en küçük kareler, gri çubuk aralık; eksen 20
+bir yılda 105,76'ya, beş yılda 108,42'ye çıkar; aralığın alt ucuyla (ρ 0,9784) beş yılda
+119,27'ye; üst uçta ρ = 1 ve yol düzdür. Yelpaze tahmin değil, kalıcılığın görselidir. Alt panel
+7B'nin TÜFE satırları: nokta medyan-yansız, elmas en küçük kareler, gri çubuk aralık; eksen 20
 yılda kesilir, ∞ sonsuz üst uçtur. Kusurlar: ortalama tam örneklemdendir (o gün
 bilinmeyen gözlemleri içerir); denge sabit varsayılır.
 
-### 7.5 Pratik 7B — Balassa–Samuelson'un fiyat vekili (≈1 dk)
+### 7.5 Pratik 7C — Balassa–Samuelson'un fiyat vekili (≈1 dk)
 
 Verimlilik bacağı ölçülmedi (kesim verimlilik serisi yok); fiyat tarafında iki vekil:
 
@@ -163,7 +176,7 @@ Ocak'taki 1,2010'dan 15 Ocak'ta 1,0280'e indi (−%14,4) ve BIS'in derlediği po
 hedef bandının orta noktası) Aralık sonundaki −%0,25'ten Ocak sonunda −%0,75'e geriledi. New
 York 17:00 kapanışlarında EUR/CHF 1,2007'den 0,9978'e (−%16,90), USD/CHF −%15,75: iki saat iki
 fiyat verir (Bölüm 2). Kadrana politika faizi ve kurun işaretiyle yerleşir (uzun faiz
-ölçülmedi): güvenli liman köşesi (faiz ↓, para ↑). Frankın reel kur sapması ölçülmediği için vaka bir değerleme hükmü değil, bir
+ölçülmedi): güvenli liman kadranı (faiz ↓, para ↑). Frankın reel kur sapması ölçülmediği için vaka bir değerleme hükmü değil, bir
 kısıt dersidir: ECB kuru 7 Eylül 2011'den 14 Ocak 2015'e hiç 1,2008'in altına inmemişti ve kısıt
 kalkınca uyum yarı ömürle değil bir günde geldi.
 
@@ -171,21 +184,26 @@ kalkınca uyum yarı ömürle değil bir günde geldi.
 on iki ay sonra 81,51 (+%16,46) ve 94,38 (+%29,66). Dibe inen aylarda TL'nin en sert haftaları
 (31.12.2021 ve 09.06.2023) Bölüm 1'in kuralıyla R4 ve prim kadranıdır, ama o haftalarda kur
 yönü piyasayı değil politikayı ölçer. 2021 dibinin bugünkü tam örneklem
-ortalamasına göre sapması −58,0 log puandı; medyan-yansız ρ'nun çekimi on iki ayda +%2,0, aralığın
-hızlı ucu +%14,2 dönüş ima eder. Dönüşün çoğunu çekim açıklamıyor: dipten sonraki yıl yönetilen
-kur dönemidir (12.2021–06.2023) ve nominal kur yönetilirken enflasyon farkı reel değer kazancını
+ortalamasına göre sapması −58,0 log puandı; medyan-yansız ρ'nun çekimi on iki ayda +%2,3, aralığın
+hızlı ucu +%14,3 dönüş ima eder. Medyan-yansız ρ gerçekleşen dönüşün yedide birini, hızlı uç büyük kısmını
+verir (+%16,46). Dönüş kalıcılığın hızlı ucuyla uyumlu, ama hangi ucun geçerli olduğu bu veriyle ayrılamaz:
+dipten sonraki yıl yönetilen kur dönemidir (12.2021–06.2023) ve nominal kur yönetilirken enflasyon farkı reel değer kazancını
 kendiliğinden yazar
 ([Türkiye Piyasa Tarihi](/arastirma/turkiye-piyasa-tarihi/), Bölüm 9). 2023 dibi Alıştırma 2'de.
 
-### 7.7 Araç 3 — REDK dengesi ve A bloğu
+### 7.7 Araç 3 — REDK dengesi ve çıpaya çekim (≈1 dk)
 
 Araç sapmayı $x = 100\,\ln(\text{REDK}/\text{denge})$, h ay sonraki beklenen sapmayı $\rho^h x$,
-yarı ömrü $\ln 0{,}5/\ln\rho$ ve A bloğunu q yönünde bir yıllık beklenen değişim olarak
-$A = -(\rho^{12}-1)\,x$ yazar (artı: TL'nin reel değer kaybı). Açılış değerleri 08.2026
-ölçümüdür: REDK 105,04, denge 125,02 (seçenek 126,91), ρ 0,9971 (seçenekler 0,9785 ve 0,9862).
-Açılışta sapma −17,4 ve A bloğu −%0,60 / yıl: TL ucuz, çekim reel değer kazancı yönünde ve
-küçük; hızlı uçla −%4,00, en küçük karelerle −%2,67. Araç ρ'yu dört ondalıkla taşır ve
-yarı ömrü 239 ay gösterir (ölçüm 235,8 ay): ρ 1'e yakınken dördüncü ondalık aylar eder. Sapma Kurun üç bloğu aracına akar (Bölüm 11).
+yarı ömrü $\ln 0{,}5/\ln\rho$ ve çıpaya (A) doğru bir yıllık çekimi, yani q'nun bir yıllık beklenen
+değişimini $-(\rho^{12}-1)\,x$ olarak yazar (artı: TL'nin reel değer kaybı); çıpanın kendisi (A bloğu,
+Bölüm 1) ortalamadır. Açılış değerleri 08.2026
+ölçümüdür: REDK 105,04, denge 125,02 (seçenek 126,91), ρ 0,9967 (seçenekler 0,9784 ve 0,9862).
+Açılışta sapma −17,4 log puan ve yıllık çekim −%0,68: TL ucuz, çekim reel değer kazancı yönünde ve
+küçük; hızlı uçla −%4,01, en küçük karelerle −%2,67. Araç ρ'yu dört ondalıkla taşır ve
+yarı ömrü 210 ay gösterir (ölçüm 207,0 ay): ρ 1'e yakınken dördüncü ondalık aylar eder ve benzetimin
+kendisi de bu basamağı oynatır (7.2), nokta bir aralık gibi okunur. Araç yıllık çekimi Taylor aracının
+reel faiz farkı R ile kıyaslar: dolar cinsinden taşımanın beklenen fazla getirisi kabaca R eksi
+çekimdir. Sapma Kurun üç bloğu aracına akar (Bölüm 11); kalıcılık seçimi ve yıllık çekim akmaz.
 
 <MakroRedkHesaplayici />
 
@@ -196,7 +214,8 @@ yarı ömrü 239 ay gösterir (ölçüm 235,8 ay): ρ 1'e yakınken dördüncü 
   - "TL pahalı/ucuz" fiyat bazı ve ortalama yazılmadan okunmaz; iki ortalama aynı gün ters
     hüküm verebilir (Bölüm 8).
   - Yarı ömür aralığıyla okunur; üst uç sonsuzsa çekim yön verir, ufuk vermez.
-  - A bloğunun yıllık çekimi taşımanın ve reel faiz farkının yanına konur (Bölüm 11).
+  - Çıpaya yıllık çekim reel faiz farkının yanında okunur (Araç 3 ikisini kıyaslar); Kurun üç bloğu
+    aracı (Bölüm 11) çekimi değil, çıpadan sapmanın kendisini kullanır.
   - REDK uçtayken sorulan soru dönüşün hızı değil, onu hangi politika değişikliğinin getireceğidir.
 
 </div>
@@ -215,17 +234,17 @@ yarı ömrü 239 ay gösterir (ölçüm 235,8 ay): ρ 1'e yakınken dördüncü 
   <span class="etiket">Pratik — Bölüm 7</span>
 
 **1. Aralık ve ufuk.** TÜFE bazlı REDK'nin tam örneklem kestirimlerinde ρ medyan-yansız
-0,997064, en küçük kareler 0,986172, %90 aralığı [0,978522; 1]. Her biri için yarı ömrü ve
+0,996658, en küçük kareler 0,986172, %90 aralığı [0,978432; 1]. Her biri için yarı ömrü ve
 bugünkü −17,41 log sapmanın bir yılda ne kadarının kapanacağını hesaplayın.
 
 <details>
 <summary>Çözüm</summary>
 
-$h_{1/2} = \ln 0{,}5/\ln\rho$: medyan-yansız 235,8 ay, en küçük kareler 49,8 ay, alt uç 31,9
-ay, üst uç sonsuz. Bir yılda kapanan pay $1-\rho^{12}$: medyan-yansızla $1 - 0{,}9653$, yani
-sapmanın %3,5'i (+0,60 log puan); en küçük karelerle $1 - 0{,}8461$, %15,4 (+2,68 log puan); alt
-uçta $1 - 0{,}7706$, %22,9 (+3,99 log puan); üst uçta sıfır. Yön (TL'nin reel değer kazancı) aralığın her yerinde aynı, büyüklük sıfır ile dört log puan
-arasında.
+$h_{1/2} = \ln 0{,}5/\ln\rho$: medyan-yansız 207,0 ay, en küçük kareler 49,8 ay, alt uç 31,8
+ay, üst uç sonsuz. Bir yılda kapanan pay $1-\rho^{12}$: medyan-yansızla $1 - 0{,}9606$, yani
+sapmanın %3,9'u (+0,69 log puan); en küçük karelerle $1 - 0{,}8461$, %15,4 (+2,68 log puan); alt
+uçta $1 - 0{,}7698$, %23,0 (+4,01 log puan); üst uçta sıfır. Yön (TL'nin reel değer kazancı) aralığın her yerinde aynı, büyüklük sıfır ile yaklaşık dört log
+puan arasında; medyan-yansız ρ'nun kendisi de benzetime duyarlıdır (7.2).
 
 </details>
 
@@ -237,9 +256,9 @@ ortalama hükmü değiştirir mi?
 <summary>Çözüm</summary>
 
 Sapma $100\ln(72{,}79/125{,}02) = -54{,}1$. Beklenen on iki aylık değişim $(\rho^{12}-1)\,x$:
-medyan-yansızla +1,88 log puan (+%1,9), hızlı uçla +12,41 log puan (+%13,2); gerçekleşen
+medyan-yansızla +2,13 log puan (+%2,2), hızlı uçla +12,45 log puan (+%13,3); gerçekleşen
 +%29,66: hızlı uç bile dönüşün yarısından azını açıklıyor. O gün bilinen genişleyen ortalamaya
-göre sapma daha büyüktü (−56,8; Bölüm 8.6), hüküm değişmez. Dönüşün çoğunu kalıcılık
+göre sapma daha büyüktü (−56,8; Bölüm 8.6'nın tanımıyla, Şekil 15), hüküm değişmez. Dönüşün çoğunu kalıcılık
 açıklamıyor; zamanlaması Haziran 2023'teki politika dönüşüyle çakışıyor.
 
 </details>
