@@ -357,7 +357,11 @@ def m11():
 
 
 # 12 ─ ozet: kara kutu, gecici dizinde
-def _ozet_kos(tarihce, karne, sekil_ozet=True):
+REJIM_SEKIL = {"label": "Risk-Off", "basket_spread": 0.21, "avg_correlation": 0.33,
+               "pc1_share": 0.44, "as_of": "2026-09-27", "n_assets": 15}
+
+
+def _ozet_kos(tarihce, karne, sekil_ozet=True, rejim_ozet=REJIM_SEKIL):
     d = tempfile.mkdtemp()
     try:
         for f in ("ozet_uret.py", "kalibrasyon_damga.py", "config.py"):
@@ -370,7 +374,7 @@ def _ozet_kos(tarihce, karne, sekil_ozet=True):
         json.dump(karne, open(os.path.join(d, "data", "kalibrasyon_karne.json"), "w"))
         json.dump({k: {"params": dict(config.DEFAULT_PARAMS), "timestamp": karne["olcum_ani"]}
                    for k in config.ASSETS}, open(os.path.join(d, "data", "optimized_params.json"), "w"))
-        json.dump({"as_of": "2026-09-27", "n_assets": 15}, open(os.path.join(d, "cikti", "rejim_ozet.json"), "w"))
+        json.dump(rejim_ozet, open(os.path.join(d, "cikti", "rejim_ozet.json"), "w"))
         if sekil_ozet:
             json.dump({"sekil04": {"varlik": {k: {"rho": 0.1 * (i % 3 - 1), "n": 50, "p": 0.3}
                                               for i, k in enumerate(config.ASSETS)}, "uc": "2026-09-25"},
@@ -430,6 +434,10 @@ def m12():
               ("figür defteri yok", defsiz))}
     eksik = {ad: e for ad, e in eksik.items() if e}
     out.append(not eksik)
+    # Rejim cümlesi Şekil 06'nın dosyasından; dosya rejim taşımıyorsa snapshot'tan.
+    out.append((o["rejim"], o["spread"], o["ort_korelasyon"], o["pc1"]) == ("Risk-Off", 0.21, 0.33, 0.44))
+    yedek = _ozet_kos(ayni, karne, rejim_ozet={"as_of": "2026-09-27", "n_assets": 15})
+    out.append((yedek["rejim"], yedek["spread"]) == ("Transitioning", 0.01))
     return all(out), f"{out} eksik: {eksik}"
 
 

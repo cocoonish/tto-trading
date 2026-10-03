@@ -324,6 +324,15 @@ try:
         ozet["veri_sonu"] = ".".join(reversed(ro["as_of"].split("-")))
     if ro.get("n_assets"):
         ozet["rejim_varlik"] = ro["n_assets"]
+    # Sayfadaki rejim cümlesi Şekil 06'nın KENDİ dosyasından: snapshot'ın rejimi
+    # koşu anında yazılır, şekil ise kalibrasyon değişince yeniden çizilir; ikisi
+    # o gün ayrışır ve aynı tarihle iki ayrı sayı basılırdı.
+    if ro.get("label"):
+        ozet.update({"rejim": ro.get("label"), "spread": ro.get("basket_spread"),
+                     "ort_korelasyon": ro.get("avg_correlation"), "pc1": ro.get("pc1_share")})
+        if ro.get("as_of"):
+            for anahtar in ("rejim", "spread", "ort_korelasyon", "pc1"):
+                ozet[f"{anahtar}_tarih"] = ro["as_of"]
 except Exception:
     pass
 # ── ŞEKİL SAAT DEFTERİ: her figür KENDİ tarihiyle damgalansın ───────────────

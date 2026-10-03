@@ -4172,20 +4172,28 @@ analizinde ölçülen kaymanın üretimdeki eşi; ölçülmedi, düzeltilmedi).
 **KARAR (03.10.2026, kullanıcı) ve Kurucu ilke — BİR KALİBRASYONUN HEDEFİ,
 ÖLÇTÜĞÜ SORUNUN YÖNÜDÜR; GEÇMİŞE BAKAN BİR HEDEF ÖNGÖRÜYÜ DEĞİL YANSIMAYI
 ÖLÇER.** FX haber endeksinin 22.07 kalibrasyonu, 02.10'da açık bırakılan kur
-kusurunun üstünde, kendi başına üç kusur daha taşıyordu ve dördü aynı sayfada
-"haber tonu haftayı fiyatlar" hükmünü kuruyordu. (1) Döviz fiyatı Yahoo'nun
+kusurunun üstünde, kendi başına üç kusur daha taşıyordu ve sayfanın "haber tonu
+haftayı fiyatlar" hükmü onların üstüne kuruluydu. (1) SAAT. Döviz fiyatı Yahoo'nun
 günlük barından okunuyordu; o barın kapanışı günün başıdır. Bulutta ölçüldü
 (`data/kalibrasyon_kesif.json`): dokuz paritede aynı günün günlük barı New York
 17:00 kapanışından medyanda 17–34 bp, ertesi günün barı 2–6 bp sapıyor. Kural
 02.10'da `ortak/fx_kapanis`a yazılmış ve bültene, kur hatlarına uygulanmıştı;
 bu hat aynı kaynağı ayrıca okuyordu ve sorulmamıştı — "bu kaynağı başka kim
 okuyor" sorusu bir kez daha listeden değil kaynağın kendisinden sorulmalıydı.
+Ama iki kayma GÜNLÜK seride dövizde birbirini götürüyordu: eski endeks de gece
+yarısında (UTC) kesiliyordu, yani endeks ile döviz barı aynı ana bakıyordu.
+Kayma haftalık saçılımda (endeks pazar gecesine, getiri tabanı cuma başına) ve
+döviz DIŞI varlıklarda (endeks kapanıştan bir seans önce kesik) ısırıyordu. Bir
+saat kusurunun etkisi, karşısındaki serinin saati sorulmadan tahmin edilmez.
 (2) Hedef GERİYE bakıyordu: getiri `pct_change(5)`, yani o güne kadar BİTEN
-beş gün. Eski kayıtlı parametrelerle ölçüldü: geçmiş beş günle medyan ρ +0,07,
-altın +0,61, gümüş +0,59, S&P 500 +0,46; sonraki beş günle medyan −0,07. Sayfa
-yansımayı öngörü diye yayımlıyordu ve "5 günlük ufuk daha güçlü" bulgusu bunun
-doğal sonucuydu: beş günlük geçmiş getiri haberin biriktiği pencerenin ta
-kendisidir. (3) Gecikme parametresi (0 · 1 gün) kıyaslanan korelasyonu hiç
+beş gün. Eski kayıtlı parametrelerle (gecikme 0, örneklemin ilk %70'i, 20
+günlük yuvarlanan Pearson korelasyonlarının ortalaması — eski ölçünün kendisi)
+ölçüldü: geçmiş beş günle medyan +0,07, altın +0,61, gümüş +0,59, S&P 500
++0,46; sonraki beş günle medyan −0,07. Sayfa yansımayı öngörü diye
+yayımlıyordu. "5 günlük ufuk daha güçlü" bulgusunun büyük kısmı bunun doğal
+sonucuydu (beş günlük geçmiş getiri haberin biriktiği pencerenin ta kendisidir);
+kalanı döviz dışı varlıklarda gece yarısı kesiminden geliyordu — eski 1 günlük
+geçmiş getiriyle altın −0,01, kapanışa hizalı +0,24. (3) Gecikme parametresi (0 · 1 gün) kıyaslanan korelasyonu hiç
 değiştirmiyordu ve yedi varlıkta okura "1 gün gecikme" diye basılan değer eşit
 sonuçlar arasında sıranın seçtiğiydi — ölçülmemiş bir şeyin ölçülmüş gibi
 görünmesinin en sessiz biçimi. (4) Seçim aynı veriyle yapılıp aynı veriyle
@@ -4204,12 +4212,19 @@ hareket aile sınamasıyla (aynı kaydırma hepsine) şansın içinde kalır. Ve
 fiyat-yalnız rakip var: haber tonu geçen haftayı yansıtıyorsa, sonraki haftayı
 öngören şey haber değil fiyatın kendi devamı ya da geri dönüşü olabilir.
 
-KURAL ÖLÇÜMDEN ÖNCE KODA YAZILDI ve kullanıcı seçti: aile p ≤ 0,05 ise örnek
-dışı ρ'su hem sıfırın hem rakibin üstündeki varlık kendi parametresini alır;
-öbür her varlık `config.DEFAULT_PARAMS` ile kurulur (o varsayılan bu
-değişiklikten önce de depodaydı, ölçüme göre seçilmedi). Teşhis koşusu yalnız
-ESKİ parametrelerin ve bar hizasının ölçüsünü verdi; yeni ızgaranın sonucu kural
-commit edildikten sonra ölçüldü. Rakip ilk yazımda yalnız DEVAM işaretini
+KURAL YÜRÜYEN PENCERE ÖLÇÜMÜNDEN ÖNCE KODA YAZILDI ve kullanıcı seçti: aile
+p ≤ 0,05 ise örnek dışı ρ'su hem sıfırın hem rakibin üstündeki varlık kendi
+parametresini alır; öbür her varlık `config.DEFAULT_PARAMS` ile kurulur (o
+varsayılan bu değişiklikten önce de depodaydı, ölçüme göre seçilmedi). AMA
+"veri görülmeden yazıldı" DENEMEZ: teşhis koşusu (8db3b554) aynı 192 adayın
+ileri yönlü sonucunu kaba bir 70/30 ayrımla ÖLÇMÜŞTÜ (15 varlığın 5'inde örnek
+dışı artı, birinde p ≤ 0,05) ve kural ondan SONRA yazıldı. Bunu
+inceleme buldu; ilk yazım bu dosyaya ve sayfaya "teşhis yalnız eski
+parametreleri ölçtü" diye geçmişti. Ön ölçüm kuralı tutucu yöne itmiş olabilir
+ve sonuç olumsuz çıktığı için hükmü yanlış pozitife çeviremez, ama ön kayıt
+iddiası düştü ve sayfa ön ölçümü sayısıyla anıyor. Ders: bir teşhis koşusu yeni
+yöntemin SONUCUNU da ölçüyorsa o koşudan sonra yazılan kural ön kayıt değildir;
+kural teşhisten önce yazılır ya da teşhis yalnız eski yöntemi ölçer. Rakip ilk yazımda yalnız DEVAM işaretini
 taşıyordu — donmuş kopyaya karşı inceleme buldu: dönüş yönlü bir fiyat
 örüntüsünü haber tonu yakalarsa rakip onu temsil edemez ve kural haberi "fiyatın
 üstünde" sayardı. Rakip artık iki işaretli (dört yarı ömür × devam/dönüş, aynı
@@ -4219,9 +4234,11 @@ edildi: kural ölçümden önce yazılır, ölçüm başladıktan sonra değişm
 SONUÇ (03.10.2026, 192 aday, 15 varlık, 52 hafta): aile sınaması geçmedi —
 sonraki 5 günle örnek dışı ρ ortalaması +0,008, plasebo p 0,450 (39 kaydırma;
 1 günlük ufukta +0,016, p 0,262). Kural gereği 15 varlığın 15'i tek
-varsayılanla kuruluyor. Tepki ise güçlü ve beşinde anlamlı (gümüş +0,69, altın
-+0,64, S&P 500 +0,60, BIST 100 +0,41, AUD/USD +0,37): haber tonu geçen haftanın
-fiyatını ANLATIYOR, sonrakini SÖYLEMİYOR. Öngörüde anlamlı tek varlık USD/JPY
+varsayılanla kuruluyor. Tepki ise beş varlıkta güçlü ve anlamlı (gümüş +0,69,
+altın +0,64, S&P 500 +0,60, BIST 100 +0,41, AUD/USD +0,37), öbür sekiz paritede
+zayıf ve dördünde eksi (medyan +0,13): haber tonu metallerde ve hisse
+endekslerinde geçen haftanın fiyatını ANLATIYOR, hiçbir yerde sonrakini
+SÖYLEMİYOR. Öngörüde anlamlı tek varlık USD/JPY
 (+0,23, p 0,050) ve şansın beklediği sayı 0,75; tek başına hiçbir şey söylemez.
 Sayfa (Şekil 04, 05, 09) bunu sayısıyla yazıyor, beş tarihli düzeltme kaydı eski
 sayıları ve sebebini taşıyor.
@@ -4241,6 +4258,21 @@ yalnız hepsi geçerse commit eder. `dogrula.py` (yalnız standart kütüphane, 
 sınavı 26) kuralı karneden BAĞIMSIZ yeniden uygular: 199 ölçüt. Duman 14 madde;
 on altı arıza enjeksiyonunun on altısı, kapının sekiz enjeksiyonunun sekizi
 kendi maddesinde yakalandı.
+
+İNCELEME (donmuş db4425c7, tek mercek, 17 bulgu; hepsi kaynağa karşı doğrulandı ve
+uygulandı) dört sınıfı kayda değer buldu. (a) DÜZELTME KAYDININ YENİ DEĞERİ
+YAYIMLANAN DOSYADAN OKUNUR: Şekil 04 ve 05 kayıtlarının iki sayısı (EUR/USD ρ ·
+USD/CAD) yerel bir koşunun ekran çıktısından alınmıştı ve bulutun yazdığı figür
+defterinde (`cikti/sekil_ozet.json`) yoktu; bir sayı yalnız bir yerel koşuda
+var olabilir ve o koşu tekrarlanamaz. (b) AYNI SAYI İKİ KAYNAKTAN: sayfanın
+rejim cümlesi koşu anının anlık görüntüsünden, Şekil 06 yeniden çizilen
+dosyadan okunuyordu; kalibrasyonun değiştiği gün aynı tarihle iki ayrı sayı
+basıldı. Cümle artık şeklin dosyasından okur (duman 12, arıza enjeksiyonuyla
+sınandı). (c) Sayfa Şekil 07'yi koşu sayısıyla biriken bir tarihçe diye
+anlatıyordu; şekil 52 haftalık günlük seriden kurulur — bir şeklin metni,
+şekli çizen fonksiyondan okunur. (d) Öngörü dili sayfanın altı yerinde
+kalmıştı ("sinyal ŞU ANDA çalışıyor mu", "alım sinyali iskonto edilir"):
+hükmü değiştiren bir ölçüm, o hükmü taşıyan BÜTÜN cümleleri değiştirir.
 
 AÇIK: (i) canlı endeks bir sonraki günlük koşuda yeni kalibrasyona geçer ve
 tarihçe orada bir kez kırılır (Şekil 02 o günü çizgiyle işaretler); o koşu
