@@ -21,6 +21,11 @@
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
   },
   {
+   "tur": "sabit",
+   "parca": "(≈7,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "kaynak",
    "parca": "Eichengreen ve Hausmann (1999) 'orijinal günah'ı, finansal piyasalardaki bir eksiklik yüzünden yerel paranın yurt dışından borçlanmada, hatta yurt içinde uzun vadeli borçlanmada bile kullanılamaması olarak tanımlar.",
    "kaynak": "eichengreen_hausmann1999"
@@ -162,11 +167,6 @@
   },
   {
    "tur": "kaynak",
-   "parca": "4.K'deki neo-Fisher bulgusu, Uribe (2022), buradaki sonuçla aynı şey değildir: orada faiz artışını kısa dönemde de enflasyona çeviren artışın kalıcılığıdır, geçici artış enflasyonu düşürür ve örneklem ABD'dir.",
-   "kaynak": "uribe2022"
-  },
-  {
-   "tur": "kaynak",
    "parca": "Cagan (1956), hiperenflasyonlarda reel para talebini beklenen enflasyonun yarı logaritmik bir fonksiyonu olarak kurar; bu talep altında enflasyon vergisi gelirini en yükseğe çıkaran sabit enflasyon oranı, para talebinin yarı esnekliğinin tersine eşittir ve literatürde bu sonuç \"Cagan kuralı\" diye anılır.",
    "kaynak": "cagan1956"
   },
@@ -177,7 +177,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "5.K'deki Catão ve Terrones (2005) bulgusu bir ilişkidir: bağ yüksek enflasyonlu ve gelişmekte olan ülke gruplarında güçlüdür.",
+   "parca": "5.K'deki Catão ve Terrones (2005) ilişkisinin mekanizmasını",
    "kaynak": "catao_terrones2005"
   },
   {

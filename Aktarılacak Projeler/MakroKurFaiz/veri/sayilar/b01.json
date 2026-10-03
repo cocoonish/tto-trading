@@ -7,11 +7,6 @@
   },
   {
    "tur": "kaynak",
-   "parca": "İki model 1.2'deki sentezde (Frankel 1979) birleşince işareti \"faiz neden yükseldi?\" sorusu verir",
-   "kaynak": "frankel1979"
-  },
-  {
-   "tur": "kaynak",
    "parca": "Hnatkovska, Lahiri ve Végh (2016), para politikası sıkılaştığında yerli paranın gelişmiş ülkelerde değer kazanma, gelişmekte olan ülkelerde ise değer kaybetme eğiliminde olduğunu belgeler; likidite talebi, mali ve çıktı kanallarını taşıyan modelleri bu karşıtlığı açıklar ve iki grup arasındaki farkın asıl kaynağının likidite talebi etkisindeki ayrım olduğunu gösterir",
    "kaynak": "hlv2016"
   },

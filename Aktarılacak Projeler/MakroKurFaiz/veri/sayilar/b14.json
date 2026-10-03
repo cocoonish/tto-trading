@@ -87,7 +87,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Bank of England, 28.09.2022: finansal istikrar gerekçesiyle geçici uzun gilt alımı, uzun getiri o gün sert düştü",
+   "parca": "Bank of England, 28.09.2022: geçici uzun gilt alımı",
    "kaynak": "boe2022_gilt"
   },
   {
@@ -157,7 +157,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "beklenenden yüksek enflasyon parayı değerlendirebilir (Clarida ve Waldman 2007)",
+   "parca": "beklenenden yüksek enflasyon parayı güçlendirebilir (Clarida ve Waldman 2007)",
    "kaynak": "clarida_waldman2007"
   },
   {
@@ -217,6 +217,16 @@
      "hane": 0
     }
    ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈6,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈9,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
   }
  ]
 }

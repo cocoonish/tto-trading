@@ -4281,3 +4281,73 @@ rejim ve korelasyon panelleri fiyat kullanmıyor. Günlük döviz barını okuya
 yer kaldı ve ikisi de okura gitmiyor: Streamlit paneli ve koşu kaydının bilgi
 satırı (`price_fetcher`). (iii) Örneklem 52 hafta ve tek dönem; ızgara 192 aday ile
 sınırlı ve aramanın kendisi bir seçim.
+
+**KARAR (03.10.2026, kullanıcı) — "Makrodan Kura ve Faize" DERSİNE KİTAP KATMANI:
+her bölümde "Kitap ne der", sonda zorunlu hamleler ve genel beklentiler tablosu; ders
+yaklaşık dört saat ("uzun kalabilir").** Kullanıcı: "çok şey anlatıp aynı zamanda hiçbir
+şey anlatmamışız … teorik olarak bütçe ne olursa kura faize ne olur, enflasyona GSYH
+büyümeye göre ne beklenir, kitaplarda kura faize ne zaman negatif pozitif yansıması
+beklenir … en alta da bir özet tablosu … bütçe açığı çok artarsa merkez bankası ne yapmak
+zorunda kalır". Ölçüm katmanı dokunulmadan kaldı (yeni ölçüm yirmi dört figürü yeniden
+çizdirirdi); eklenen şey bir YORUM katmanı: 1.K ve 3.K–11.K alt bölümleri (her biri
+sembolsüz ve atıfsız bir "Kitabın cevabı" kutusuyla açılır: ne olur · neden · ne zaman
+tersine döner · merkez bankası; altında türetim, koşul, kaynak ve "Bu derste" satırı) ve
+Bölüm 14 (okuma kuralı · merkez bankasının zorunlu kaldığı on dört hâl · iyi haberin kötü
+haber olduğu hâller · iki çözümlü alıştırma · yirmi beş satırlık genel beklentiler
+tablosu). Ders 156 → 238 dakika; kullanıcı +60'a onay vermişti, aşım bildirildi ve
+"uzun kalabilir" dedi — kısaltma merceğinin önerilerinden yalnız gerçek tekrarlar
+uygulandı.
+
+Dört yapı kararı kayda geçsin ki bir sonraki oturum onları geri almasın. (1) KİTABIN
+BEKLENTİSİ ÖLÇÜM DEĞİLDİR: her kitap alt bölümü beş etiketten biriyle biten bir "Bu
+derste" satırıyla kapanır (uyuyor · kısmen · ters · görünmedi · ölçülmedi) ve ölçülmüş
+sayıyı yinelemez, alt bölüme atıf verir. (2) İŞARET HÜKMÜ R ETİKETİYLE KURULMAZ: 1.4'ün R2
+ve R4 tanımları "uzun uç yükselir, para zayıflar" içerir; "R4'te şahin sürpriz parayı
+zayıflatır" demek kendi kendini doğrular. Kitap katmanı rejimleri yapısal adlarıyla anar,
+R etiketleri onların ölçülen izidir. (3) TEK EV: merkez bankasının zorunlu hamleleri yalnız
+14.2'de, oklar yalnız 14.5'te yazılır; alt bölüm bir satır ve "hâl N" atfı verir. (4) Yön
+tersine döner, büyüklük asimetriktir — "tersi tersini verir" yazılmaz.
+
+**Kurucu ilke — BİR SİLME KALIBI METİNDEKİ BİR İŞARETE ÇARPARSA SINIRI BAŞKA BİR BÖLÜMDE
+BİTER; ve PARÇA SINAMASI GEÇTİ, BİRLEŞİK SINAMA GEÇTİ DEMEK DEĞİLDİR.** Ders kapısı
+(`dogrula.py`) metni sınamadan önce etiketleri `<[^>]+>` ile siliyordu. 1.K'deki
+"$1 - k\,\zeta < 0$" formülündeki "<" kalıbı bir sonraki ">"e kadar uzattı — o ">" Bölüm
+2'nin ilk figür etiketindeydi. Aradaki metin, 1.K'nin son paragraflarından Bölüm 2'nin
+yarısına kadar, eşlemeden ve sayı ENVANTERİNDEN düştü: o aralıktaki bir sayı yanlış
+olsaydı kapı görmezdi. Kusuru görünür yapan tek şey yan dosya girdilerinin "metinde yok"
+diye düşmesiydi (34 hata); bir sonraki ">" aynı paragrafta dursaydı hiçbir şey
+düşmeyecek, kapı yeşil geçip birkaç satırı sessizce sınamayacaktı. Tek parça sınaması
+(`--parca b01`) geçiyordu, çünkü parçanın sonunda kapanan ">" yoktu — yani kusur yalnız
+BİRLEŞTİRİLMİŞ metinde doğar. Etiket artık harfle ya da "/" ile başlamak zorunda
+(`ETIKET`); aynı kalıp biçim ölçütünde de vardı ve değişti. Bir ayıklama kalıbı yazılırken
+sorulacak soru "neyi siler" kadar "nerede DURUR"dur; sınırı açık uçlu bir kalıp, metnin
+içindeki sıradan bir karakterle bütün bir bölümü kör eder.
+
+**Kurucu ilke — PARALEL YAZIMDA BÖLÜMLER ARASI KUSUR, PARÇA DENETÇİSİNİN GÖREMEDİĞİ
+YERDE BİRİKİR; donmuş kopya incelemesinin girdisi o birikimdir.** On bir parça paralel
+yazıldı ve her biri kendi bağımsız denetçisinden geçti; denetçiler yalnız kendi
+parçalarını değiştirebildikleri için bölümler arası çelişkiyi düzeltemediler, "AÇIK"
+diye yazdılar (14.5'in bir hücresi 6.K'nin türetimiyle çelişiyor; 14.2'nin bir hâli
+9.K'nin koşulunu taşımıyor; aynı ölçüm iki alt bölümde iki ayrı etiketle anılıyor). O
+liste donmuş kopya incelemesine bulgu ADAYI olarak verildi ve bütünlük merceği
+çelişkilerin çoğunu oradan doğruladı. İnceleme yedi mercekle koştu (bütünlük · iki
+iktisat · kaynak ve vaka · okur ve istek · yapı · kısaltma), her merceğin bulgusu ayrı
+bir ajanla çürütülmeye çalışıldı: 216 ham bulgu, 203'ü doğrulandı ya da kısmen doğrulandı, 13'ü çürütüldü; düzeltmeler parça
+başına bir düzelticiyle üç turda uygulandı (182 uygulandı, 16 yalnız süre gerekçesiyle
+atlandı) ve her tur kapıdan geçti. Bir düzelticinin yanılgısı da kayda değer: tablo
+hücrelerini kısaltma önerilerini "uzunluk kararı" diye atladı, oysa sorun dersin süresi
+değil hücrenin telefonda okunmasıydı — bir karar yalnız verildiği soruya uygulanır. İki vaka sınıfı kayda değer: dersin KENDİ verisiyle
+çelişen bir olgu cümlesi ("açık artırım 13.09.2018'de geldi" — dersin PPK serisi ilk açık
+artırımı Haziran 2018'de gösteriyor) ve kaydı olmayan, üstelik yanlış bir vaka ayrıntısı
+(1992'de İsveç ERM üyesi değildi; kron ECU'ya tek taraflı bağlıydı). Bir vaka cümlesi
+yazılırken önce dersin kendi serisine bakılır.
+
+AÇIK: (i) 14.2'nin vakaları sayısız ve nitel; sterlinin 1992'de ERM'den çıkışı ve
+Malezya 1998'in kaynak kaydı yok, yalnız adıyla ve "bu derste ölçülmedi" diye anılıyor;
+Japonya 2022 vakasında Japonya Bankası'nın getiri hedefi kaynakla doğrulanmadığı için
+yazılmadı. (ii) 14.4 alıştırma 2'nin rejim
+etiketi (13.09.2018 haftası R3) `olcum_b01.rejim()` ile yeniden koşturularak doğrulandı
+ama haftalık etiketler ölçüm dosyasında tutulmuyor, yani kapı onu sınayamıyor; eklemek
+figürleri yeniden çizdirir. (iii) 14.5'in iki tablosu telefonda kendi içinde yatay
+kayıyor (355 piksellik kapta ~490–530 piksel) ve ikinci tablonun "işaret ne zaman döner"
+hücreleri 40 sözcüğü aşabiliyor.

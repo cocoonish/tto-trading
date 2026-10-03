@@ -31,17 +31,22 @@
   },
   {
    "tur": "sabit",
-   "parca": "[5.K](#ky-b05) (9,5)",
+   "parca": "[1.K](#ky-b01) (6,5)",
+   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "[4.K](#ky-b04) (5,5)",
+   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "[6.K](#ky-b06) (7,5)",
    "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
   },
   {
    "tur": "sabit",
    "parca": "[7.K](#ky-b07) (3,5)",
-   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
-  },
-  {
-   "tur": "sabit",
-   "parca": "[8.K](#ky-b08) (5,5)",
    "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
   },
   {

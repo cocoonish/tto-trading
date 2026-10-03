@@ -12,7 +12,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "3.3'teki bulgu, uluslararası faiz ile ülke riskine ayrışan reel faizin bu ekonomilerde döngü karşıtı olması",
+   "parca": "3.3'teki döngü karşıtı reel faiz bulgusuyla tutarlıdır",
    "kaynak": "neumeyerperri2005"
   },
   {
@@ -27,12 +27,12 @@
   },
   {
    "tur": "kaynak",
-   "parca": "gelişmiş ekonomide beklenmedik artırımdan sonra paranın sık sık değer kaybetmesinin (3.2) bir açıklaması bilgi etkisidir",
-   "kaynak": "gkkl2021"
+   "parca": "Bauer ve Swanson (2023), Fed sürprizlerinden sonra özel kesim tahmin revizyonlarının standart modellerin tersine işaret taşımasının yalnız Fed'in özel bilgisini açığa vurmasıyla değil, Fed'in ve profesyonel tahmincilerin aynı ekonomik habere tepki vermesiyle de tutarlı olduğunu gösterdi.",
+   "kaynak": "bauer_swanson2023"
   },
   {
    "tur": "kaynak",
-   "parca": "Bauer ve Swanson (2023), Fed sürprizlerinden sonra özel kesim tahmin revizyonlarının standart modellerin tersine işaret taşımasının yalnız Fed'in özel bilgisini açığa vurmasıyla değil, Fed'in ve profesyonel tahmincilerin aynı ekonomik habere tepki vermesiyle de tutarlı olduğunu gösterdi; habere koşullanan regresyonlar, kendi tahminci anketleri ve FOMC açıklamalarına piyasa tepkileri bilgi etkisine karşı çıkan kanıt veriyor.",
+   "parca": "Habere koşullanan regresyonlar, kendi tahminci anketleri ve FOMC açıklamalarına piyasa tepkileri bilgi etkisine karşı çıkan kanıt veriyor.",
    "kaynak": "bauer_swanson2023"
   },
   {
