@@ -4082,9 +4082,9 @@ kullanılmaz — tazelik kuralı tanım değişikliğini göremez. On dört arı
 enjeksiyonunun on dördü yakalanıyor; ilk turda kaçan ikisi aynı dersi verdi:
 kaynak metnini soran bir sınama ("koşul satırda geçiyor mu") davranışı
 sınamaz, ve hafta sonunu hiç içermeyen bir fikstür hafta sonu kuralını
-sınayamaz. AÇIK: FX haber endeksi (`indices/`) Yahoo günlük döviz barını
-kullanıyor ve kalibrasyonu bir gün kaymış seriyle yapılmış; düzeltmek o
-projenin kalibrasyonunu değiştirir, karar kullanıcıda. Düzeltme kayıtları
+sınayamaz. FX haber endeksinin (`indices/`) bir gün kaymış seriyle yapılmış
+kalibrasyonu 03.10.2026'da kapandı (aşağıda, "BİR KALİBRASYONUN HEDEFİ").
+Düzeltme kayıtları
 02.10 (on iki satır, gösterge, üç cümle) ve 28.09 sayısında; aradaki sayıların
 döviz satırları için 02.10'daki genel kayıt geçerli, sayı sayı kayıt yazılmadı.
 İnceleme (donmuş commit'e karşı tek mercek, ölçülerek) yayından önce iki
@@ -4168,3 +4168,84 @@ oturumdan açılamadı, metin bunu söylüyor); `ortak/fx_kapanis.gunluk_duzelt`
 saatlik barın ulaşmadığı 730 günden eski geçmişte pazartesi barını cumaya
 yazıyor, o barın kapanışı ise hafta sonu açılışından sonraki fiyattır (OAT–Bund
 analizinde ölçülen kaymanın üretimdeki eşi; ölçülmedi, düzeltilmedi).
+
+**KARAR (03.10.2026, kullanıcı) ve Kurucu ilke — BİR KALİBRASYONUN HEDEFİ,
+ÖLÇTÜĞÜ SORUNUN YÖNÜDÜR; GEÇMİŞE BAKAN BİR HEDEF ÖNGÖRÜYÜ DEĞİL YANSIMAYI
+ÖLÇER.** FX haber endeksinin 22.07 kalibrasyonu, 02.10'da açık bırakılan kur
+kusurunun üstünde, kendi başına üç kusur daha taşıyordu ve dördü aynı sayfada
+"haber tonu haftayı fiyatlar" hükmünü kuruyordu. (1) Döviz fiyatı Yahoo'nun
+günlük barından okunuyordu; o barın kapanışı günün başıdır. Bulutta ölçüldü
+(`data/kalibrasyon_kesif.json`): dokuz paritede aynı günün günlük barı New York
+17:00 kapanışından medyanda 17–34 bp, ertesi günün barı 2–6 bp sapıyor. Kural
+02.10'da `ortak/fx_kapanis`a yazılmış ve bültene, kur hatlarına uygulanmıştı;
+bu hat aynı kaynağı ayrıca okuyordu ve sorulmamıştı — "bu kaynağı başka kim
+okuyor" sorusu bir kez daha listeden değil kaynağın kendisinden sorulmalıydı.
+(2) Hedef GERİYE bakıyordu: getiri `pct_change(5)`, yani o güne kadar BİTEN
+beş gün. Eski kayıtlı parametrelerle ölçüldü: geçmiş beş günle medyan ρ +0,07,
+altın +0,61, gümüş +0,59, S&P 500 +0,46; sonraki beş günle medyan −0,07. Sayfa
+yansımayı öngörü diye yayımlıyordu ve "5 günlük ufuk daha güçlü" bulgusu bunun
+doğal sonucuydu: beş günlük geçmiş getiri haberin biriktiği pencerenin ta
+kendisidir. (3) Gecikme parametresi (0 · 1 gün) kıyaslanan korelasyonu hiç
+değiştirmiyordu ve yedi varlıkta okura "1 gün gecikme" diye basılan değer eşit
+sonuçlar arasında sıranın seçtiğiydi — ölçülmemiş bir şeyin ölçülmüş gibi
+görünmesinin en sessiz biçimi. (4) Seçim aynı veriyle yapılıp aynı veriyle
+ölçülüyordu ve seçimin kendisi sınanmıyordu.
+
+Yerine konan ölçü üç parçalı ve her parçası bir kusurun karşılığı. Endeks
+fiyatın KAPANIŞ ANINDA yeniden kurulur (dövizde New York 17:00 saatlik bardan,
+öbürlerinde kendi borsası; yalnız o ana kadar yayımlanmış haber, normalizasyon
+ve yumuşatma yok — okurun gördüğü sayının kendisi). Hedef ileri yönlü
+(P_{D+5}/P_D − 1; ikincil ufuk 1 gün, ufuk SEÇİLMEZ) ve geriye bakan ölçü ayrı
+adıyla "tepki" olarak yan yana durur. Öngörü ÖRNEK DIŞI ölçülür (100 gün eğitim,
+21 günde bir yeniden seçim, eğitimin son h günü atılır) ve plasebo SEÇİM DAHİL
+bütün yordamı her dairesel kaydırmada yeniden koşturur; seçimden sonra
+kaydırmak seçimin şişirdiği sonucu şansın içinde saklardı. Varlıklar arası ortak
+hareket aile sınamasıyla (aynı kaydırma hepsine) şansın içinde kalır. Ve bir
+fiyat-yalnız rakip var: haber tonu geçen haftayı yansıtıyorsa, sonraki haftayı
+öngören şey haber değil fiyatın kendi devamı ya da geri dönüşü olabilir.
+
+KURAL ÖLÇÜMDEN ÖNCE KODA YAZILDI ve kullanıcı seçti: aile p ≤ 0,05 ise örnek
+dışı ρ'su hem sıfırın hem rakibin üstündeki varlık kendi parametresini alır;
+öbür her varlık `config.DEFAULT_PARAMS` ile kurulur (o varsayılan bu
+değişiklikten önce de depodaydı, ölçüme göre seçilmedi). Teşhis koşusu yalnız
+ESKİ parametrelerin ve bar hizasının ölçüsünü verdi; yeni ızgaranın sonucu kural
+commit edildikten sonra ölçüldü. Rakip ilk yazımda yalnız DEVAM işaretini
+taşıyordu — donmuş kopyaya karşı inceleme buldu: dönüş yönlü bir fiyat
+örüntüsünü haber tonu yakalarsa rakip onu temsil edemez ve kural haberi "fiyatın
+üstünde" sayardı. Rakip artık iki işaretli (dört yarı ömür × devam/dönüş, aynı
+yürüyen seçimle) ve kural değiştiği için ölçüm koşusu (#66) koşmadan iptal
+edildi: kural ölçümden önce yazılır, ölçüm başladıktan sonra değişmez.
+
+SONUÇ (03.10.2026, 192 aday, 15 varlık, 52 hafta): aile sınaması geçmedi —
+sonraki 5 günle örnek dışı ρ ortalaması +0,008, plasebo p 0,450 (39 kaydırma;
+1 günlük ufukta +0,016, p 0,262). Kural gereği 15 varlığın 15'i tek
+varsayılanla kuruluyor. Tepki ise güçlü ve beşinde anlamlı (gümüş +0,69, altın
++0,64, S&P 500 +0,60, BIST 100 +0,41, AUD/USD +0,37): haber tonu geçen haftanın
+fiyatını ANLATIYOR, sonrakini SÖYLEMİYOR. Öngörüde anlamlı tek varlık USD/JPY
+(+0,23, p 0,050) ve şansın beklediği sayı 0,75; tek başına hiçbir şey söylemez.
+Sayfa (Şekil 04, 05, 09) bunu sayısıyla yazıyor, beş tarihli düzeltme kaydı eski
+sayıları ve sebebini taşıyor.
+
+Üç mekanizma kayda geçsin. KİMLİK SANİYE ÇÖZÜNÜRLÜĞÜNDE: 22.07 dosyası 15
+varlığın damgasını aynı saniyenin farklı mikrosaniyelerine yazmıştı; mikrosaniye
+kimlik aynı kalibrasyonu iki kimlik yapar ve ertesi koşuda sahte bir
+"kalibrasyon değişti" basardı (`kalibrasyon_damga`). KALİBRASYON DEĞİŞTİĞİ GÜN
+sayfanın çağırdığı her anahtar yine yazılır: okumadan okumaya fark ve oynaklık
+yalnız aynı kalibrasyonun okumaları arasında kurulur, o gün olağandışı hareket
+listesi boş ve dönüş cümlesi "kıyaslanamaz" der — inceleme, ilk yazımda o gün
+dokuz anahtarın düştüğünü buldu (yayın kapısında ENGEL). Ve YENİDEN ÜRETİLEBİLİRLİK:
+girdiler donmuş gzip (mtime 0) olarak depoda, özetleri karnede; `--arsivden` aynı
+karneyi yazmadan yeniden kurar ve fark varsa düşer; `fx.yml`in kalibrasyon kipi
+ölçer, arşivden yeniden koşturur, hattı koşturur, `dogrula.py`yi koşturur ve
+yalnız hepsi geçerse commit eder. `dogrula.py` (yalnız standart kütüphane, sayfa
+sınavı 26) kuralı karneden BAĞIMSIZ yeniden uygular: 199 ölçüt. Duman 14 madde;
+on altı arıza enjeksiyonunun on altısı, kapının sekiz enjeksiyonunun sekizi
+kendi maddesinde yakalandı.
+
+AÇIK: (i) canlı endeks bir sonraki günlük koşuda yeni kalibrasyona geçer ve
+tarihçe orada bir kez kırılır (Şekil 02 o günü çizgiyle işaretler); o koşu
+gözlenmedi. (ii) Sitedeki fiyatlı her şekil (03–05, 09) `fiyat.py`den okuyor;
+rejim ve korelasyon panelleri fiyat kullanmıyor. Günlük döviz barını okuyan iki
+yer kaldı ve ikisi de okura gitmiyor: Streamlit paneli ve koşu kaydının bilgi
+satırı (`price_fetcher`). (iii) Örneklem 52 hafta ve tek dönem; ızgara 192 aday ile
+sınırlı ve aramanın kendisi bir seçim.

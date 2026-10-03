@@ -7,6 +7,32 @@ tags: ['fx', 'sentiment', 'nlp']
 durum: 'aktif'
 kaynak: 'GDELT + Google News RSS + piyasa verisi'
 guncelleme: 'hafta içi her sabah (anlık endeks ve fiyat karşılaştırması); pazartesi (rejim ve korelasyon panelleri, kapanan hafta)'
+duzeltmeler:
+  - tarih: '2026-10-03'
+    alan: 'Şekil 09 · varlık başına korelasyon (22.07.2026 kalibrasyonu)'
+    eski: 'BIST 100 +0,54 · GBP/USD +0,53 · gümüş +0,43'
+    yeni: 'sonraki 5 günle örnek dışı ρ: en yüksek USD/JPY +0,23 (plasebo p 0,050); 15 varlığın ortalaması +0,008, plasebo p 0,450'
+    sebep: "Eski sayılar endeksi o güne kadar BİTEN 5 günlük getiriyle kıyaslıyordu, yani haber tonunun geçen haftanın fiyatını ne kadar yansıttığını ölçüyordu, sonraki haftayı değil; parametre de aynı veriye bakılarak seçilmişti. Yansıma bugün de güçlü ölçülüyor (gümüş +0,69, altın +0,64, S&P 500 +0,60). Sonraki 5 günü öngörme ise parametre yalnız geçmişle seçilip plasebo ile sınandığında şanstan ayırt edilemiyor."
+  - tarih: '2026-10-03'
+    alan: 'Şekil 09 · seçilen getiri ufku'
+    eski: "15 varlığın 14'ü 5 günlük ufku seçti (istisna USD/SEK): haber tonu haftayı fiyatlar"
+    yeni: 'ufuk seçilmiyor: ana ufuk 5 gün, ikincisi 1 gün; ikisinde de 15 varlığın ortak sınaması şanstan ayrışmıyor (plasebo p 0,450 · 0,262)'
+    sebep: "Ufuk, geçmiş getiriyle kurulan korelasyonu büyüten değere göre seçiliyordu. 5 günlük geçmiş getiri haber akışının biriktiği pencereyle örtüştüğü için doğal olarak daha büyük çıkar; bu bir öngörü bulgusu değildi."
+  - tarih: '2026-10-03'
+    alan: 'Şekil 09 · kazanan parametrelerde 1 günlük gecikme (7 varlık)'
+    eski: 'USD/JPY, GBP/USD, USD/CAD, USD/NOK, S&P 500, ABD 2 yıllık, BIST 100: gecikme 1 gün'
+    yeni: 'gecikme yok: endeks fiyatın kapanış anına kadar yayımlanmış haberden kurulur'
+    sebep: '0 ile 1 günlük gecikme kıyaslanan korelasyonu değiştirmiyordu; yazılan değer bir ölçüm değil eşit sonuçlar arasında sıranın seçtiği değerdi.'
+  - tarih: '2026-10-03'
+    alan: 'Şekil 04 · örnek ölçü'
+    eski: 'EUR/USD r = +0,18 (n = 66): ilişki pozitif ama zayıf'
+    yeni: "EUR/USD ρ = −0,06 (n = 51, p 0,685); 15 varlığın 9'unda artı, hiçbiri %5 düzeyinde anlamlı değil"
+    sebep: "Döviz fiyatı günlük bardan okunuyordu ve o barın kapanışı günün sonunu değil başını taşır; getiri bir gün kaymıştı. Endeks de fiyatın kapanış anına değil takvim gününe hizalıydı. Nokta artık haftanın son kapanış anındaki endeks, getiri o kapanıştan sonra başlıyor."
+  - tarih: '2026-10-03'
+    alan: 'Şekil 05 · 1 ve 5 günlük ufuk'
+    eski: 'haber tonu ertesi günü değil, haftayı fiyatlar; tek istisna USD/CAD (1 gün +0,09, 5 gün −0,07)'
+    yeni: "1 günlük ortalamalar −0,15 ile +0,12, 5 günlükler −0,31 ile +0,20 arasında; 5 günlük çizginin plasebo bandının dışında kaldığı günlerin payı %16,5 (şansın beklediği %10); USD/CAD 1 gün −0,002, 5 gün +0,146"
+    sebep: 'Döviz getirisi bir gün kaymıştı ve endeks takvim gününe hizalıydı (Şekil 04 ile aynı sebep). Yirmi günlük pencerede şansın ürettiği salınımın genişliği ölçülmüyordu; şekil artık onu gölge olarak çiziyor.'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
@@ -157,7 +183,7 @@ yalnız geçmişe bakılarak yeniden seçilir ve seçilen setin değeri bir sonr
 okunur; eğitimin son 5 günü atılır, çünkü onların hedefi test dönemine taşar. Sonucun
 şansla açıklanıp açıklanamayacağı **plasebo** ile sınanır: getiri serisi zamanda
 dairesel kaydırılır ve seçim dahil bütün yordam her kaydırmada yeniden koşar
-(<Deger proje="fx-haber-endeksi" anahtar="kal_aile_k" ondalik={0}>—</Deger> çekiliş; en küçük p <Deger proje="fx-haber-endeksi" anahtar="kal_p_taban" ondalik={3}>—</Deger>). Bütün varlıkların ortalaması
+(<Deger proje="fx-haber-endeksi" anahtar="kal_aile_k" ondalik={0}>39</Deger> çekiliş; en küçük p <Deger proje="fx-haber-endeksi" anahtar="kal_p_taban" ondalik={3}>0,025</Deger>). Bütün varlıkların ortalaması
 için aynı kaydırma hepsine birden uygulanır (**aile sınaması**), böylece varlıklar arası
 ortak hareket şansın içinde kalır. Bir de yalnız fiyattan kurulan rakip var — geçmiş
 günlük getirilerin üstel ortalaması, hem devam hem dönüş yönünde, aynı yürüyen
@@ -168,7 +194,7 @@ Kural ölçümden ÖNCE yazıldı: aile sınaması p ≤ 0,05 ise, örnek dış�
 hem yalnız fiyattan kurulan rakibin üstünde olan varlık kendi kalibre parametresini
 alır; öbür her varlık tek, önceden yazılmış varsayılanla kurulur
 (<Deger proje="fx-haber-endeksi" anahtar="kal_varsayilan" ondalik={1}>yön gücü · yarı ömür 2 gün · ham skor · nötr filtre yok · momentum yok</Deger>). Son ölçüm:
-<Deger proje="fx-haber-endeksi" anahtar="kal_hukum_cumle" ondalik={1}>Kalibrasyonun hükmü ölçülemedi.</Deger>
+<Deger proje="fx-haber-endeksi" anahtar="kal_hukum_cumle" ondalik={1}>Aile sınaması geçmedi: 15 varlığın sonraki 5 günle örnek dışı ρ ortalaması +0,008, plasebo p 0,450. Kural gereği bütün varlıklar tek, önceden yazılmış varsayılan parametreyle kuruluyor.</Deger>
 
 **6 — Günlük seri ve rejim.** Rejim ve çapraz korelasyon panelleri (Şekil 03, 06–08)
 için makalelerden ayrıca **günlük** bir seri kurulur: 7 günlük pencere, zaman ağırlığı,
@@ -202,9 +228,9 @@ Her nokta bir hafta: x = haftanın son işlem gününün kapanış anındaki end
 kapanıştan ertesi haftanın son işlem günü kapanışına getiri. Tatille kısalan haftada
 da gözlemler örtüşmez. Kutudaki Spearman ρ ve p o varlığın kendi ölçüsüdür; parametresi
 kalibrasyonla seçilmiş bir varlıkta "seçim sonrası" yazar, çünkü o varlığın parametresi
-aynı verinin bir kısmına bakılarak seçildi. Son ölçü <Deger proje="fx-haber-endeksi" anahtar="s04_varlik" ondalik={0}>—</Deger> varlıkta: ρ'su artı
-olan varlık <Deger proje="fx-haber-endeksi" anahtar="s04_pozitif" ondalik={0}>—</Deger>, %5 düzeyinde anlamlı olan <Deger proje="fx-haber-endeksi" anahtar="s04_anlamli" ondalik={0}>—</Deger>, medyan ρ
-<Deger proje="fx-haber-endeksi" anahtar="s04_medyan" ondalik={2} isaret={true}>—</Deger> (en uzun seride <Deger proje="fx-haber-endeksi" anahtar="s04_hafta" ondalik={0}>—</Deger> hafta). On beş varlıkta
+aynı verinin bir kısmına bakılarak seçildi. Son ölçü <Deger proje="fx-haber-endeksi" anahtar="s04_varlik" ondalik={0}>15</Deger> varlıkta: ρ'su artı
+olan varlık <Deger proje="fx-haber-endeksi" anahtar="s04_pozitif" ondalik={0}>9</Deger>, %5 düzeyinde anlamlı olan <Deger proje="fx-haber-endeksi" anahtar="s04_anlamli" ondalik={0}>0</Deger>, medyan ρ
+<Deger proje="fx-haber-endeksi" anahtar="s04_medyan" ondalik={2} isaret={true}>+0,01</Deger> (en uzun seride <Deger proje="fx-haber-endeksi" anahtar="s04_hafta" ondalik={0}>51</Deger> hafta). On beş varlıkta
 tesadüfen anlamlı çıkması beklenen sayı yaklaşık birdir; tek bir varlıktaki
 "anlamlı" sonuç bu yüzden tek başına bir şey söylemez.
 
@@ -223,10 +249,10 @@ günün** (petrol yeşili, düz) getirisi arasında 20 günlük yuvarlanan Pears
 Gölge, aynı hesabın plasebo aralığıdır: getiri zamanda kaydırılarak tekrarlanır ve her
 günün %5–%95 aralığı çizilir. Yirmi günlük bir pencerede şansın kendisi geniş salınım
 üretir; çizginin bandın içinde kalan iniş çıkışları "sinyal açıldı/kapandı" diye
-okunamaz. Son ölçüde <Deger proje="fx-haber-endeksi" anahtar="s05_varlik" ondalik={0}>—</Deger> varlıkta 1 günlük ortalamalar <Deger proje="fx-haber-endeksi" anahtar="s05_1g_min" ondalik={2} isaret={true}>—</Deger>
-ile <Deger proje="fx-haber-endeksi" anahtar="s05_1g_max" ondalik={2} isaret={true}>—</Deger>, 5 günlükler <Deger proje="fx-haber-endeksi" anahtar="s05_5g_min" ondalik={2} isaret={true}>—</Deger> ile <Deger proje="fx-haber-endeksi" anahtar="s05_5g_max" ondalik={2} isaret={true}>—</Deger> arasında;
-5 günlük çizgi günlerin %<Deger proje="fx-haber-endeksi" anahtar="s05_bant_disi" ondalik={1}>—</Deger>'inde bandın dışında (şansın
-beklediği pay %10).
+okunamaz. Son ölçüde <Deger proje="fx-haber-endeksi" anahtar="s05_varlik" ondalik={0}>15</Deger> varlıkta 1 günlük ortalamalar <Deger proje="fx-haber-endeksi" anahtar="s05_1g_min" ondalik={2} isaret={true}>−0,15</Deger>
+ile <Deger proje="fx-haber-endeksi" anahtar="s05_1g_max" ondalik={2} isaret={true}>+0,12</Deger>, 5 günlükler <Deger proje="fx-haber-endeksi" anahtar="s05_5g_min" ondalik={2} isaret={true}>−0,31</Deger> ile <Deger proje="fx-haber-endeksi" anahtar="s05_5g_max" ondalik={2} isaret={true}>+0,20</Deger> arasında;
+5 günlük çizginin bandın dışında kaldığı günlerin payı %<Deger proje="fx-haber-endeksi" anahtar="s05_bant_disi" ondalik={1}>16,5</Deger>
+(şansın beklediği pay %10).
 
 ## Şekil 06-08 — Rejim dedektörü
 
@@ -308,15 +334,15 @@ arasında, parametre seçimi yalnız geçmiş veriyle yapılarak ölçülen örn
 aynı ölçekte durur; aradaki fark bu sayfanın asıl bulgusudur.
 
 Son kalibrasyon (<Deger proje="fx-haber-endeksi" anahtar="kal_tarih" ondalik={1}>03.10.2026</Deger>, <Deger proje="fx-haber-endeksi" anahtar="kal_varlik" ondalik={0}>15</Deger> varlık): en güçlü tepki
-<Deger proje="fx-haber-endeksi" anahtar="tepki1_ad" ondalik={1}>—</Deger> <Deger proje="fx-haber-endeksi" anahtar="tepki1_rho" ondalik={2} isaret={true}>—</Deger> (plasebo p <Deger proje="fx-haber-endeksi" anahtar="tepki1_p" ondalik={3}>—</Deger>), ardından
-<Deger proje="fx-haber-endeksi" anahtar="tepki2_ad" ondalik={1}>—</Deger> <Deger proje="fx-haber-endeksi" anahtar="tepki2_rho" ondalik={2} isaret={true}>—</Deger> ve <Deger proje="fx-haber-endeksi" anahtar="tepki3_ad" ondalik={1}>—</Deger> <Deger proje="fx-haber-endeksi" anahtar="tepki3_rho" ondalik={2} isaret={true}>—</Deger>; tepkisi
-%5 düzeyinde anlamlı varlık sayısı <Deger proje="fx-haber-endeksi" anahtar="tepki_anlamli" ondalik={0}>—</Deger>. Öngörü tarafında en yüksek örnek
-dışı ρ <Deger proje="fx-haber-endeksi" anahtar="ongoru1_ad" ondalik={1}>—</Deger> <Deger proje="fx-haber-endeksi" anahtar="ongoru1_rho" ondalik={2} isaret={true}>—</Deger> (plasebo p <Deger proje="fx-haber-endeksi" anahtar="ongoru1_p" ondalik={3}>—</Deger>);
-%5 düzeyinde anlamlı varlık sayısı <Deger proje="fx-haber-endeksi" anahtar="ongoru_anlamli" ondalik={0}>—</Deger>, şansın beklediği sayı
-<Deger proje="fx-haber-endeksi" anahtar="ongoru_beklenen" ondalik={2}>—</Deger>. Örnek dışı ρ'su yalnız fiyattan kurulan rakibi geçen varlık sayısı
-<Deger proje="fx-haber-endeksi" anahtar="ongoru_rakip_ustu" ondalik={0}>—</Deger>. Bütün varlıkların ortalaması (aile sınaması):
-<Deger proje="fx-haber-endeksi" anahtar="kal_aile_rho" ondalik={3} isaret={true}>—</Deger>, plasebo p <Deger proje="fx-haber-endeksi" anahtar="kal_aile_p" ondalik={3}>—</Deger>; <Deger proje="fx-haber-endeksi" anahtar="kal_aile_pozitif" ondalik={0}>—</Deger>
-varlıkta artı. <Deger proje="fx-haber-endeksi" anahtar="kal_hukum_cumle" ondalik={1}>Kalibrasyonun hükmü ölçülemedi.</Deger>
+<Deger proje="fx-haber-endeksi" anahtar="tepki1_ad" ondalik={1}>gümüş</Deger> <Deger proje="fx-haber-endeksi" anahtar="tepki1_rho" ondalik={2} isaret={true}>+0,69</Deger> (plasebo p <Deger proje="fx-haber-endeksi" anahtar="tepki1_p" ondalik={3}>0,024</Deger>), ardından
+<Deger proje="fx-haber-endeksi" anahtar="tepki2_ad" ondalik={1}>altın</Deger> <Deger proje="fx-haber-endeksi" anahtar="tepki2_rho" ondalik={2} isaret={true}>+0,64</Deger> ve <Deger proje="fx-haber-endeksi" anahtar="tepki3_ad" ondalik={1}>S&P 500</Deger> <Deger proje="fx-haber-endeksi" anahtar="tepki3_rho" ondalik={2} isaret={true}>+0,60</Deger>; tepkisi
+%5 düzeyinde anlamlı varlık sayısı <Deger proje="fx-haber-endeksi" anahtar="tepki_anlamli" ondalik={0}>5</Deger>. Öngörü tarafında en yüksek örnek
+dışı ρ <Deger proje="fx-haber-endeksi" anahtar="ongoru1_ad" ondalik={1}>USD/JPY</Deger> <Deger proje="fx-haber-endeksi" anahtar="ongoru1_rho" ondalik={2} isaret={true}>+0,23</Deger> (plasebo p <Deger proje="fx-haber-endeksi" anahtar="ongoru1_p" ondalik={3}>0,050</Deger>);
+%5 düzeyinde anlamlı varlık sayısı <Deger proje="fx-haber-endeksi" anahtar="ongoru_anlamli" ondalik={0}>1</Deger>, şansın beklediği sayı
+<Deger proje="fx-haber-endeksi" anahtar="ongoru_beklenen" ondalik={2}>0,75</Deger>. Örnek dışı ρ'su yalnız fiyattan kurulan rakibi geçen varlık sayısı
+<Deger proje="fx-haber-endeksi" anahtar="ongoru_rakip_ustu" ondalik={0}>5</Deger>. Bütün varlıkların ortalaması (aile sınaması):
+<Deger proje="fx-haber-endeksi" anahtar="kal_aile_rho" ondalik={3} isaret={true}>+0,008</Deger>, plasebo p <Deger proje="fx-haber-endeksi" anahtar="kal_aile_p" ondalik={3}>0,450</Deger>; <Deger proje="fx-haber-endeksi" anahtar="kal_aile_pozitif" ondalik={0}>8</Deger>
+varlıkta artı. <Deger proje="fx-haber-endeksi" anahtar="kal_hukum_cumle" ondalik={1}>Aile sınaması geçmedi: 15 varlığın sonraki 5 günle örnek dışı ρ ortalaması +0,008, plasebo p 0,450. Kural gereği bütün varlıklar tek, önceden yazılmış varsayılan parametreyle kuruluyor.</Deger>
 
 Hover her varlıkta hükmü, plasebo p'leri, seçimsiz varsayılanın ve yalnız fiyattan
 kurulan rakibin ρ'sunu, yürüyen pencerenin katlarından kaçının artı çıktığını yazar.
@@ -384,12 +410,12 @@ kümesinin sürdüğüne bakın — tek kaynaklı tekrar zinciri mi, geniş taba
   bırakmaz. Sıralama eşikle değil büyüklükle yapılır — sabit eşik ölçüldü ve
   işlemedi: snapshot'tan snapshot'a on beş varlığın dokuz-on ikisi kategori
   değiştiriyor, yani eşik her gün on sahte olay üretirdi.
-- **Kalibrasyon tarihi ile veri tarihi ayrıdır.** Endeksler <Deger proje="fx-haber-endeksi" anahtar="kal_tarih" ondalik={1}>03.10.2026</Deger> kalibrasyonunun
-  parametreleriyle kuruluyor, haftalık arşiv ise <Deger proje="fx-haber-endeksi" anahtar="veri_sonu" ondalik={1}>27.09.2026</Deger>'ye kadar. Bu bilinçli: parametreler
+- **Kalibrasyon tarihi ile veri tarihi ayrıdır.** Son okuma <Deger proje="fx-haber-endeksi" anahtar="endeks_kalibrasyon" ondalik={1}>22.07.2026</Deger> kalibrasyonunun
+  parametreleriyle kuruldu, haftalık arşiv ise <Deger proje="fx-haber-endeksi" anahtar="veri_sonu" ondalik={1}>27.09.2026</Deger> tarihinde bitiyor. Bu bilinçli: parametreler
   her veri tazelemesinde yeniden aranırsa tarihçedeki her nokta farklı bir modelden
   gelir ve seri kendi içinde kıyaslanamaz hale gelir. Kalibrasyon elle ve seyrek
   yenilenir; yenilendiği gün karnenin tarihi değişir ve Şekil 02 o günü işaretler.
-- Rejim tarihçesi (Şekil 08) yeni birikmeye başladı: pipeline her koşuda rejimi
+- Rejim tarihçesi (Şekil 08) yeni birikmeye başladı: hat her koşuda rejimi
   endeks tarihçesine yazıyor, ama şu an elde yalnız <Deger proje="fx-haber-endeksi" anahtar="snapshot_sayisi" ondalik={0}>6</Deger> koşu var.
   Bu seri istatistiksel olarak yorumlanabilir hale gelene dek (birkaç düzine koşu)
   panele *trend* diye bakmayın; tek tek noktalar olarak okuyun.
