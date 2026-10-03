@@ -1,0 +1,975 @@
+{
+ "varlik": {
+  "EURUSD": {
+   "ileri": {
+    "5": {
+     "oos": -0.0684,
+     "oos_n": 152,
+     "oos_p": 0.625,
+     "kat_pozitif": 1,
+     "kat": 8,
+     "varsayilan": -0.1319,
+     "varsayilan_p": 0.825,
+     "fiyat_rakibi": -0.0339,
+     "is_max": -0.0283,
+     "is_max_params": "ağırlıklı ortalama · yarı ömür 1 gün · ham skor · |skor| < 0,1 atılır · momentum payı 0,2",
+     "kalibre_sira": 3,
+     "kismi_varsayilan": -0.1104,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0491,
+     "oos_n": 152,
+     "oos_p": 0.3333,
+     "kat_pozitif": 3,
+     "kat": 8,
+     "varsayilan": 0.0006,
+     "varsayilan_p": 0.4762,
+     "fiyat_rakibi": 0.0154,
+     "is_max": 0.0869,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 1 gün · ham skor · |skor| < 0,1 atılır · momentum payı 0,2",
+     "kalibre_sira": 15,
+     "kismi_varsayilan": 0.0178,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": -0.067,
+     "p": 0.8095
+    },
+    "1": {
+     "rho": -0.0912,
+     "p": 0.8409
+    }
+   },
+   "gun": 252,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 2613,
+    "hafta_disi_atilan": 473,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "USDJPY": {
+   "ileri": {
+    "5": {
+     "oos": 0.2266,
+     "oos_n": 154,
+     "oos_p": 0.05,
+     "kat_pozitif": 6,
+     "kat": 8,
+     "varsayilan": 0.0987,
+     "varsayilan_p": 0.225,
+     "fiyat_rakibi": 0.2078,
+     "is_max": 0.2279,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 3 gün · ham skor · nötr filtre yok · momentum payı 0,2",
+     "kalibre_sira": 109,
+     "kismi_varsayilan": 0.1279,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": -0.0632,
+     "oos_n": 154,
+     "oos_p": 0.7857,
+     "kat_pozitif": 2,
+     "kat": 8,
+     "varsayilan": -0.0856,
+     "varsayilan_p": 0.9048,
+     "fiyat_rakibi": 0.1323,
+     "is_max": 0.0531,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 3 gün · ham skor · nötr filtre yok · momentum payı 0,2",
+     "kalibre_sira": 109,
+     "kismi_varsayilan": -0.0226,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.1338,
+     "p": 0.0714
+    },
+    "1": {
+     "rho": 0.0656,
+     "p": 0.1364
+    }
+   },
+   "gun": 254,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 2326,
+    "hafta_disi_atilan": 393,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "USDCHF": {
+   "ileri": {
+    "5": {
+     "oos": -0.092,
+     "oos_n": 154,
+     "oos_p": 0.8,
+     "kat_pozitif": 4,
+     "kat": 8,
+     "varsayilan": 0.0263,
+     "varsayilan_p": 0.375,
+     "fiyat_rakibi": 0.2256,
+     "is_max": 0.1674,
+     "is_max_params": "yoğunluk oranı · yarı ömür 5 gün · ham skor · |skor| < 0,1 atılır · momentum yok",
+     "kalibre_sira": 170,
+     "kismi_varsayilan": 0.1386,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0432,
+     "oos_n": 154,
+     "oos_p": 0.2619,
+     "kat_pozitif": 5,
+     "kat": 8,
+     "varsayilan": 0.0041,
+     "varsayilan_p": 0.4048,
+     "fiyat_rakibi": 0.0584,
+     "is_max": 0.1131,
+     "is_max_params": "ağırlıklı ortalama · yarı ömür 1 gün · ham skor · |skor| < 0,1 atılır · momentum payı 0,2",
+     "kalibre_sira": 3,
+     "kismi_varsayilan": 0.0725,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": -0.0642,
+     "p": 0.7381
+    },
+    "1": {
+     "rho": 0.0529,
+     "p": 0.1364
+    }
+   },
+   "gun": 254,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 1682,
+    "hafta_disi_atilan": 344,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 1
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "GBPUSD": {
+   "ileri": {
+    "5": {
+     "oos": -0.0081,
+     "oos_n": 153,
+     "oos_p": 0.4,
+     "kat_pozitif": 4,
+     "kat": 8,
+     "varsayilan": -0.0978,
+     "varsayilan_p": 0.85,
+     "fiyat_rakibi": 0.0547,
+     "is_max": 0.0795,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 5 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 156,
+     "kismi_varsayilan": -0.0168,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": -0.0421,
+     "oos_n": 153,
+     "oos_p": 0.7857,
+     "kat_pozitif": 1,
+     "kat": 8,
+     "varsayilan": -0.119,
+     "varsayilan_p": 0.9524,
+     "fiyat_rakibi": 0.0493,
+     "is_max": -0.0022,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 5 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 156,
+     "kismi_varsayilan": -0.0915,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.2055,
+     "p": 0.0714
+    },
+    "1": {
+     "rho": -0.0026,
+     "p": 0.5227
+    }
+   },
+   "gun": 253,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 2107,
+    "hafta_disi_atilan": 432,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 1
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "AUDUSD": {
+   "ileri": {
+    "5": {
+     "oos": 0.0234,
+     "oos_n": 154,
+     "oos_p": 0.45,
+     "kat_pozitif": 1,
+     "kat": 8,
+     "varsayilan": 0.0433,
+     "varsayilan_p": 0.425,
+     "fiyat_rakibi": -0.0598,
+     "is_max": 0.0235,
+     "is_max_params": "ağırlıklı ortalama · yarı ömür 5 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 144,
+     "kismi_varsayilan": 0.0027,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": -0.029,
+     "oos_n": 154,
+     "oos_p": 0.7143,
+     "kat_pozitif": 2,
+     "kat": 8,
+     "varsayilan": -0.0575,
+     "varsayilan_p": 0.7857,
+     "fiyat_rakibi": -0.1126,
+     "is_max": 0.0259,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 12,
+     "kismi_varsayilan": -0.0823,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.3701,
+     "p": 0.0238
+    },
+    "1": {
+     "rho": 0.0851,
+     "p": 0.0682
+    }
+   },
+   "gun": 254,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 1966,
+    "hafta_disi_atilan": 360,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "NZDUSD": {
+   "ileri": {
+    "5": {
+     "oos": -0.0802,
+     "oos_n": 154,
+     "oos_p": 0.725,
+     "kat_pozitif": 1,
+     "kat": 8,
+     "varsayilan": 0.0293,
+     "varsayilan_p": 0.375,
+     "fiyat_rakibi": -0.0608,
+     "is_max": -0.0313,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 5 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 156,
+     "kismi_varsayilan": -0.0778,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0162,
+     "oos_n": 154,
+     "oos_p": 0.4524,
+     "kat_pozitif": 4,
+     "kat": 8,
+     "varsayilan": -0.069,
+     "varsayilan_p": 0.7857,
+     "fiyat_rakibi": -0.1151,
+     "is_max": -0.0037,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 12,
+     "kismi_varsayilan": -0.0925,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.0244,
+     "p": 0.3333
+    },
+    "1": {
+     "rho": -0.0036,
+     "p": 0.4773
+    }
+   },
+   "gun": 254,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 2222,
+    "hafta_disi_atilan": 427,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 4
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "USDCAD": {
+   "ileri": {
+    "5": {
+     "oos": 0.0202,
+     "oos_n": 154,
+     "oos_p": 0.525,
+     "kat_pozitif": 4,
+     "kat": 8,
+     "varsayilan": 0.0485,
+     "varsayilan_p": 0.4,
+     "fiyat_rakibi": 0.2141,
+     "is_max": 0.1904,
+     "is_max_params": "yoğunluk oranı · yarı ömür 3 gün · tanh dönüşümü · |skor| < 0,1 atılır · momentum payı 0,2",
+     "kalibre_sira": 127,
+     "kismi_varsayilan": 0.1729,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0656,
+     "oos_n": 154,
+     "oos_p": 0.2619,
+     "kat_pozitif": 5,
+     "kat": 8,
+     "varsayilan": 0.1462,
+     "varsayilan_p": 0.0714,
+     "fiyat_rakibi": 0.1282,
+     "is_max": 0.1358,
+     "is_max_params": "yoğunluk oranı · yarı ömür 2 gün · ham skor · |skor| < 0,1 atılır · momentum yok",
+     "kalibre_sira": 74,
+     "kismi_varsayilan": 0.1282,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": -0.0203,
+     "p": 0.619
+    },
+    "1": {
+     "rho": 0.0974,
+     "p": 0.1136
+    }
+   },
+   "gun": 254,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 2167,
+    "hafta_disi_atilan": 383,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 1
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "USDNOK": {
+   "ileri": {
+    "5": {
+     "oos": 0.0883,
+     "oos_n": 154,
+     "oos_p": 0.2,
+     "kat_pozitif": 4,
+     "kat": 8,
+     "varsayilan": 0.1597,
+     "varsayilan_p": 0.075,
+     "fiyat_rakibi": -0.2644,
+     "is_max": 0.0278,
+     "is_max_params": "ağırlıklı ortalama · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum payı 0,2",
+     "kalibre_sira": 1,
+     "kismi_varsayilan": 0.0243,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": -0.0653,
+     "oos_n": 154,
+     "oos_p": 0.8095,
+     "kat_pozitif": 3,
+     "kat": 8,
+     "varsayilan": 0.0385,
+     "varsayilan_p": 0.3095,
+     "fiyat_rakibi": -0.1256,
+     "is_max": -0.0237,
+     "is_max_params": "ağırlıklı ortalama · yarı ömür 5 gün · tanh dönüşümü · nötr filtre yok · momentum yok",
+     "kalibre_sira": 148,
+     "kismi_varsayilan": -0.0621,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": -0.0821,
+     "p": 0.619
+    },
+    "1": {
+     "rho": -0.0435,
+     "p": 0.6818
+    }
+   },
+   "gun": 254,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 558,
+    "hafta_disi_atilan": 104,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "USDSEK": {
+   "ileri": {
+    "5": {
+     "oos": -0.0316,
+     "oos_n": 143,
+     "oos_p": 0.6,
+     "kat_pozitif": 2,
+     "kat": 8,
+     "varsayilan": -0.0634,
+     "varsayilan_p": 0.625,
+     "fiyat_rakibi": 0.039,
+     "is_max": 0.0441,
+     "is_max_params": "yoğunluk oranı · yarı ömür 1 gün · kök büyütmesi · |skor| < 0,1 atılır · momentum payı 0,2",
+     "kalibre_sira": 35,
+     "kismi_varsayilan": -0.033,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0713,
+     "oos_n": 143,
+     "oos_p": 0.3333,
+     "kat_pozitif": 4,
+     "kat": 8,
+     "varsayilan": 0.0632,
+     "varsayilan_p": 0.2381,
+     "fiyat_rakibi": -0.0378,
+     "is_max": 0.0562,
+     "is_max_params": "yön gücü · yarı ömür 5 gün · tanh dönüşümü · |skor| < 0,1 atılır · momentum yok",
+     "kalibre_sira": 186,
+     "kismi_varsayilan": 0.0142,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.0341,
+     "p": 0.381
+    },
+    "1": {
+     "rho": 0.0702,
+     "p": 0.2093
+    }
+   },
+   "gun": 251,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 218,
+    "hafta_disi_atilan": 35,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "XAUUSD": {
+   "ileri": {
+    "5": {
+     "oos": 0.0541,
+     "oos_n": 145,
+     "oos_p": 0.375,
+     "kat_pozitif": 4,
+     "kat": 7,
+     "varsayilan": -0.0207,
+     "varsayilan_p": 0.5,
+     "fiyat_rakibi": 0.1099,
+     "is_max": 0.1919,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 2 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 60,
+     "kismi_varsayilan": 0.2885,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0217,
+     "oos_n": 145,
+     "oos_p": 0.4048,
+     "kat_pozitif": 2,
+     "kat": 7,
+     "varsayilan": -0.0217,
+     "varsayilan_p": 0.5238,
+     "fiyat_rakibi": -0.0828,
+     "is_max": 0.1549,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 12,
+     "kismi_varsayilan": 0.1354,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.6439,
+     "p": 0.0244
+    },
+    "1": {
+     "rho": 0.3113,
+     "p": 0.0238
+    }
+   },
+   "gun": 245,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 13:30 (günlük bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 4074,
+    "hafta_disi_atilan": 653,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "XAGUSD": {
+   "ileri": {
+    "5": {
+     "oos": -0.1604,
+     "oos_n": 145,
+     "oos_p": 0.775,
+     "kat_pozitif": 2,
+     "kat": 7,
+     "varsayilan": -0.1918,
+     "varsayilan_p": 0.875,
+     "fiyat_rakibi": 0.103,
+     "is_max": 0.082,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 12,
+     "kismi_varsayilan": 0.1108,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": -0.0114,
+     "oos_n": 145,
+     "oos_p": 0.619,
+     "kat_pozitif": 3,
+     "kat": 7,
+     "varsayilan": -0.0208,
+     "varsayilan_p": 0.6667,
+     "fiyat_rakibi": -0.0304,
+     "is_max": 0.0858,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum payı 0,2",
+     "kalibre_sira": 13,
+     "kismi_varsayilan": 0.0778,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.6918,
+     "p": 0.0244
+    },
+    "1": {
+     "rho": 0.3183,
+     "p": 0.0238
+    }
+   },
+   "gun": 245,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 13:30 (günlük bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 2923,
+    "hafta_disi_atilan": 474,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "SPX": {
+   "ileri": {
+    "5": {
+     "oos": 0.1399,
+     "oos_n": 145,
+     "oos_p": 0.125,
+     "kat_pozitif": 2,
+     "kat": 7,
+     "varsayilan": 0.1441,
+     "varsayilan_p": 0.15,
+     "fiyat_rakibi": -0.3068,
+     "is_max": 0.1445,
+     "is_max_params": "yön gücü · yarı ömür 2 gün · tanh dönüşümü · nötr filtre yok · momentum payı 0,2",
+     "kalibre_sira": 89,
+     "kismi_varsayilan": 0.2179,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0903,
+     "oos_n": 145,
+     "oos_p": 0.119,
+     "kat_pozitif": 1,
+     "kat": 7,
+     "varsayilan": 0.051,
+     "varsayilan_p": 0.1905,
+     "fiyat_rakibi": -0.1585,
+     "is_max": 0.07,
+     "is_max_params": "yön gücü · yarı ömür 5 gün · tanh dönüşümü · nötr filtre yok · momentum yok",
+     "kalibre_sira": 184,
+     "kismi_varsayilan": 0.0479,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.5979,
+     "p": 0.0244
+    },
+    "1": {
+     "rho": 0.3626,
+     "p": 0.0238
+    }
+   },
+   "gun": 245,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "New York 16:00 (günlük bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 3697,
+    "hafta_disi_atilan": 609,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "UST2Y": {
+   "ileri": {
+    "5": {
+     "oos": 0.0596,
+     "oos_n": 145,
+     "oos_p": 0.25,
+     "kat_pozitif": 4,
+     "kat": 7,
+     "varsayilan": 0.0612,
+     "varsayilan_p": 0.3,
+     "fiyat_rakibi": -0.1968,
+     "is_max": 0.0191,
+     "is_max_params": "yön gücü · yarı ömür 3 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 132,
+     "kismi_varsayilan": 0.0172,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0321,
+     "oos_n": 145,
+     "oos_p": 0.3095,
+     "kat_pozitif": 3,
+     "kat": 7,
+     "varsayilan": 0.0563,
+     "varsayilan_p": 0.1667,
+     "fiyat_rakibi": 0.0652,
+     "is_max": -0.0075,
+     "is_max_params": "yön gücü · yarı ömür 3 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 132,
+     "kismi_varsayilan": -0.0018,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.1272,
+     "p": 0.122
+    },
+    "1": {
+     "rho": 0.0832,
+     "p": 0.0952
+    }
+   },
+   "gun": 245,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "Chicago 14:00 (günlük bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 3464,
+    "hafta_disi_atilan": 523,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 0
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "UST10Y": {
+   "ileri": {
+    "5": {
+     "oos": 0.0285,
+     "oos_n": 145,
+     "oos_p": 0.375,
+     "kat_pozitif": 4,
+     "kat": 7,
+     "varsayilan": 0.0913,
+     "varsayilan_p": 0.2,
+     "fiyat_rakibi": 0.1065,
+     "is_max": 0.0101,
+     "is_max_params": "boğa/ayı oranı · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum yok",
+     "kalibre_sira": 12,
+     "kismi_varsayilan": -0.0137,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": 0.0936,
+     "oos_n": 145,
+     "oos_p": 0.1667,
+     "kat_pozitif": 5,
+     "kat": 7,
+     "varsayilan": 0.1795,
+     "varsayilan_p": 0.0238,
+     "fiyat_rakibi": 0.0644,
+     "is_max": 0.0511,
+     "is_max_params": "yoğunluk oranı · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum payı 0,2",
+     "kalibre_sira": 25,
+     "kismi_varsayilan": 0.0266,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.0771,
+     "p": 0.2439
+    },
+    "1": {
+     "rho": 0.125,
+     "p": 0.0238
+    }
+   },
+   "gun": 245,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "Chicago 14:00 (günlük bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 3768,
+    "hafta_disi_atilan": 545,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 2
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  },
+  "BIST100": {
+   "ileri": {
+    "5": {
+     "oos": -0.0776,
+     "oos_n": 144,
+     "oos_p": 0.725,
+     "kat_pozitif": 2,
+     "kat": 7,
+     "varsayilan": -0.124,
+     "varsayilan_p": 0.775,
+     "fiyat_rakibi": 0.0274,
+     "is_max": 0.0365,
+     "is_max_params": "yön gücü · yarı ömür 1 gün · ham skor · |skor| < 0,1 atılır · momentum payı 0,2",
+     "kalibre_sira": 39,
+     "kismi_varsayilan": -0.036,
+     "K": 39,
+     "p_taban": 0.025
+    },
+    "1": {
+     "oos": -0.033,
+     "oos_n": 144,
+     "oos_p": 0.6667,
+     "kat_pozitif": 2,
+     "kat": 7,
+     "varsayilan": 0.0555,
+     "varsayilan_p": 0.2619,
+     "fiyat_rakibi": 0.0374,
+     "is_max": 0.0709,
+     "is_max_params": "ağırlıklı ortalama · yarı ömür 1 gün · ham skor · nötr filtre yok · momentum payı 0,2",
+     "kalibre_sira": 1,
+     "kismi_varsayilan": 0.0663,
+     "K": 41,
+     "p_taban": 0.0238
+    }
+   },
+   "tepki": {
+    "5": {
+     "rho": 0.4083,
+     "p": 0.025
+    },
+    "1": {
+     "rho": 0.1977,
+     "p": 0.0238
+    }
+   },
+   "gun": 244,
+   "ilk": "2025-10-06",
+   "son": "2026-09-25",
+   "fiyat_tanim": "İstanbul 18:10 (günlük bar)",
+   "denetim": {
+    "hafta": 52,
+    "makale": 1611,
+    "hafta_disi_atilan": 222,
+    "skorsuz": 0,
+    "gece_yarisi_damgali": 1
+   },
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "hukum": "öngörmüyor"
+  }
+ },
+ "aile": {
+  "5": {
+   "istatistik": 0.0082,
+   "varlik": 15,
+   "p": 0.45,
+   "K": 39,
+   "pozitif": 8
+  },
+  "1": {
+   "istatistik": 0.0159,
+   "varlik": 15,
+   "p": 0.2619,
+   "K": 41,
+   "pozitif": 9
+  }
+ },
+ "olcum_ani": "2026-10-03T16:53:45.265235+00:00",
+ "yontem": {
+  "ufuklar": [
+   5,
+   1
+  ],
+  "ilk_egitim": 100,
+  "adim": 21,
+  "plasebo_aralik": 5,
+  "esik_p": 0.05,
+  "fiyat_yariomur": [
+   1,
+   2,
+   3,
+   5
+  ],
+  "izgara": 192,
+  "varsayilan": "yön gücü · yarı ömür 2 gün · ham skor · nötr filtre yok · momentum yok"
+ },
+ "girdi": {
+  "arsiv": "kalibrasyon_arsiv.json.gz",
+  "arsiv_oz": "0d114a5a257d5a4d56e253e6ec59262f37414cb3198cdb7d20bc5564f4913eac",
+  "fiyat": "kalibrasyon_fiyat.json.gz",
+  "fiyat_oz": "29e0bdcf998ddcc4a26518f3a0d4baab5ef1d30fed4699c4a18f8f714926be85"
+ }
+}
