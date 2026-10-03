@@ -380,7 +380,17 @@ def cek_kume(kodlar: dict[str, str], yenile: bool = False) -> pd.DataFrame:
                         ttl_saat=0 if yenile else CACHE_TTL_SAAT)
             for m in k.uyarilar:
                 uyar("BAYAT: kur — " + m)
-            out[ad] = k.seri
+            # ÖLÇÜLEMEYEN CUMA SEANSTIR, TATİL DEĞİL (03.10.2026): günlük bar
+            # kısmında cumartesi barı olmayan cuma ölçülemez (ortak/fx_kapanis)
+            # ve BOŞ satır olarak kalır — kapanış yok, seans var. Satır hiç
+            # olmasaydı gün sayan ölçüler (metrik.gozlem_gunu_ortancasi,
+            # tatil_payi) her cumayı tatil sayardı: depodaki kur.csv'yle ölçüldü,
+            # yıl gün ortancası 260 → 210, kalan tatil payı 0 → 11, ileri taşıma
+            # %9,0 → %3,6.
+            s = k.seri
+            bos = pd.DatetimeIndex([pd.Timestamp(g) for g in (k.cuma_olculemeyen or [])])
+            bos = bos[(bos >= s.index[0]) & (bos <= s.index[-1])] if len(s) else bos[:0]
+            out[ad] = s.reindex(s.index.union(bos))
             continue
         cyol = _cache_yolu(kod, KUR_BAS)
         if _taze(cyol, CACHE_TTL_SAAT) and not yenile:

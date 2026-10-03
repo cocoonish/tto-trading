@@ -262,7 +262,11 @@ def _usdtry_temel() -> tuple[pd.Series, dict]:
     df = oku("usdtry_yahoo_gunluk")
     ist = df["usdtry_ist18"].dropna()
     ham = df["usdtry_gunbasi"].dropna()
-    duz = _fx.gunluk_duzelt(ham)
+    # Dersin eşlemesi AÇIKÇA istenir: üretim tanımı (03.10.2026) cumartesi barı
+    # olmayan cumayı ölçülemez sayar; ders o cumaları pazartesi barıyla tutar,
+    # künyede sayar (`cuma_pazartesi_barindan`) ve ölçü ölçü `cuma_dus` ile
+    # karar verir — sayıları ve metni bu eşlemeyle kuruldu (donmuş ölçüm).
+    duz = _fx.gunluk_duzelt(ham, pazartesi_cumaya=True)
     gecis = ist.index.min()
     eski = duz[duz.index < gecis]
     s = pd.concat([eski, ist]).sort_index()
@@ -467,7 +471,7 @@ def em_kur_temizlik(kod: str) -> list:
 @lru_cache(maxsize=8)
 def _em_kur(kod: str) -> pd.Series:
     raw = oku("em_kur_yahoo_gunluk")[f"{kod}_gunbasi"].dropna()
-    duz = _fx.gunluk_duzelt(raw)
+    duz = _fx.gunluk_duzelt(raw, pazartesi_cumaya=True)   # dersin eşlemesi, bkz. _usdtry_temel
     g = EM_GUN_SONU_GECIS.get(kod)
     if g is not None:
         ham = raw[(raw.index < g) & (raw.index.dayofweek < 5)]

@@ -1138,14 +1138,14 @@ class Denetim:
             for r in (g.get("satirlar") or []):
                 if not r.get("kapanis_tanimi"):
                     continue                           # döviz değil ya da eski sayı
-                if not r.get("kapanis_ani"):
-                    yedek.append(r.get("ad"))
-                    continue
                 # Son iki gözlemin ARASINDA ölçülemeyen bir hafta içi seans
                 # varsa satırın "günlük değişimi" iki seansı kapsar ve son gün
                 # doğru olduğu için aşağıdaki ölçüt bunu görmez. Eski günlük bar
                 # yolunda o gün tek seans olarak vardı; saatlik barı kapanışa
-                # yetişmeyen gün seriden düştüğü için kapsam daraldı.
+                # yetişmeyen gün seriden düştüğü için kapsam daraldı. Yedek
+                # satır da sorulur: günlük bar yolunda cumartesi barı olmayan
+                # cuma ölçülemez (fx_kapanis, 03.10.2026) ve çarşamba sabahının
+                # pazartesi satırı perşembeden ölçülür.
                 try:
                     t_son = date.fromisoformat(str(r.get("tarih"))[:10])
                     t_onc = (t_son - timedelta(days=int(r.get("gap_gun") or 1))).isoformat()
@@ -1156,6 +1156,9 @@ class Denetim:
                            if t_onc < x < t_son.isoformat() and x[5:] not in FX_KURESEL_TATIL]
                     if ara:
                         kapsar.append(f"{r.get('ad')} {t_onc} → {t_son.isoformat()} ({', '.join(ara)} ölçülemedi)")
+                if not r.get("kapanis_ani"):
+                    yedek.append(r.get("ad"))
+                    continue
                 tur = F.kesim_turu(r.get("kod") or "")
                 gun = olc.date()
                 while gun.weekday() >= 5 or F.kapanis_ani(gun, tur) > olc:
@@ -1165,7 +1168,8 @@ class Denetim:
                     geride.append(f"{r.get('ad')} {r.get('tarih')} (beklenen {gun.isoformat()}){ek}")
         if yedek:
             self.uyari.append("Döviz satırlarının saatlik barı alınamadı: " + ", ".join(yedek)
-                              + ". Bu satırlar günlük bardan (Londra gece yarısı) kuruldu ve bir gün geride; "
+                              + ". Bu satırlar günlük bardan (Londra gece yarısı) kuruldu ve en az bir gün "
+                              "geride (cuma kapanışı bu yoldan ölçülemez, salı sabahı iki seans); "
                               "yazıda bu satırların günlük değişimi son seansa ait sayılmamalı.")
         if geride:
             self.uyari.append("Döviz satırı son seansın kapanışını taşımıyor: " + " · ".join(geride[:8])

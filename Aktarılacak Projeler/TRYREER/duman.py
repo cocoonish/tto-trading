@@ -86,6 +86,70 @@ def cerceve(tmp: Path, son_ay: str, damga_ay: str | None,
     return json.loads((d / "ozet.json").read_text(encoding="utf-8"))
 
 
+def kur_tanimi_maddeleri(tmp: Path) -> list[tuple[bool, str, str]]:
+    """(7) Yerel aylık kur önbelleği TANIMIYLA okunur ve yazılır (ağa çıkmaz:
+    ortak/usdtry'nin yerine sahte bir modül konur)."""
+    import contextlib
+    import io
+    import types
+
+    import pandas as pd
+    sys.path.insert(0, str(KOK))
+    with contextlib.redirect_stdout(io.StringIO()):
+        import usdtry_reer_analysis as R
+    u = R._kur_modulu()
+    yol = tmp / "usdtry_reer_data.csv"
+    asil_yol, asil_modul = R.USDTRY_LOCAL_CSV, R._kur_modulu
+    R.USDTRY_LOCAL_CSV = str(yol)
+    m: list[tuple[bool, str, str]] = []
+
+    def oku():
+        with contextlib.redirect_stdout(io.StringIO()):
+            return R.load_usdtry_local()
+
+    def yaz(ek: str, tanim: str = ""):
+        v = f",{tanim}" if ek else ""
+        yol.write_text(f"Dönem,USDTRY,High,Low{ek}\n2026-07-01,47.0,47.5,46.6{v}\n"
+                       f"2026-08-01,47.8,48.2,47.5{v}\n", encoding="utf-8")
+
+    def cek(tanim):
+        kur = types.SimpleNamespace(seri=pd.Series([47.0, 47.2, 47.9], index=pd.to_datetime(
+            ["2026-07-30", "2026-07-31", "2026-08-03"]), name="usdtry"), uyarilar=[], tanim=tanim)
+        R._kur_modulu = lambda: types.SimpleNamespace(SUTUN=u.SUTUN, seri=lambda **_: kur)
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                return R.fetch_usdtry_yfinance()
+        finally:
+            R._kur_modulu = asil_modul
+
+    try:
+        yaz("")
+        m.append((oku() is None, "tanımsız yerel aylık kur taze sayılmıyor",
+                  "kur_tanimi sütunu olmayan dosya bugünkü tanım diye okundu"))
+        yaz(",kur_tanimi", u.ONCEKI_SUTUN)
+        m.append((oku() is None, "önceki tanımla yazılmış yerel aylık kur taze sayılmıyor",
+                  f"{u.ONCEKI_SUTUN} ile yazılmış dosya okundu"))
+        yaz(",kur_tanimi", u.SUTUN)
+        df = oku()
+        m.append((df is not None and len(df) == 2 and df["kur_tanimi"].unique().tolist() == [u.SUTUN],
+                  "bugünkü tanımla yazılmış yerel aylık kur okunuyor ve tanımını taşıyor",
+                  f"okunan: {None if df is None else df.to_dict('list')}"))
+        eski = cek(u.ONCEKI_SUTUN)
+        eski.to_csv(yol, index=False)
+        m.append((eski["kur_tanimi"].unique().tolist() == [u.ONCEKI_SUTUN] and oku() is None,
+                  "eski tanımla dönen seri bugünkü diye işaretlenmiyor (sonraki koşu yeniden çeker)",
+                  f"işaret: {eski['kur_tanimi'].unique().tolist()}"))
+        yeni = cek(u.SUTUN)
+        yeni.to_csv(yol, index=False)
+        df = oku()
+        m.append((df is not None and len(df) == 2,
+                  "bugünkü tanımla çekilen aylık kur bir sonraki koşuda yerelden okunuyor",
+                  f"okunan: {None if df is None else len(df)} ay"))
+    finally:
+        R.USDTRY_LOCAL_CSV, R._kur_modulu = asil_yol, asil_modul
+    return m
+
+
 def sayfa_anahtarlari() -> set[str]:
     """Proje sayfasının <Deger> ile ADIYLA çağırdığı anahtarlar."""
     if not SAYFA.exists():
@@ -164,6 +228,16 @@ def kos() -> int:
             "tazelik eşiği main.py ile ozet_uret.py'de aynı",
             f"main={m_ana.group(1) if m_ana else '?'} · "
             f"ozet={m_ozet.group(1) if m_ozet else '?'}")
+
+        # (7) AYLIK KUR ÖNBELLEĞİ GÜNLÜK SERİNİN TANIMINI TAŞIR.
+        # 03.10.2026'da ölçüldü: yerel usdtry_reer_data.csv REDK'nin son
+        # ayını kapsadıkça ortak/usdtry'ye hiç gidilmiyordu ve dosya hangi
+        # kapanış tanımıyla yazıldığını söylemiyordu. 02.10.2026 (saatlik bar)
+        # ve 03.10.2026 (cumartesi barı olmayan cuma ölçülmez) değişiklikleri
+        # bu hatta bu yüzden ulaşmamıştı: aylık ortalama kur 260 ayın
+        # medyanında %0,09, en çok %1,7 (11.2021) eski tanımda kalıyordu.
+        for kosul, ad, aciklama in kur_tanimi_maddeleri(tmp):
+            sor(kosul, ad, aciklama)
 
     if _DUSEN:
         print(f"\nDUMAN SINAMASI DÜŞTÜ ({len(_DUSEN)} madde)")

@@ -34,6 +34,9 @@ BURADA DURAN HER MADDE BİR ARIZAYA KARŞILIK GELİR
     damga yarına düşer.
 10. YAPISAL KİLİT — ağa çıkan giriş noktasının içinde ağsız iş tutulamaz;
     tutulursa hiçbir kapı onu koşturmaz.
+11. ÖLÇÜLEMEYEN CUMA SEANSTIR — kapanışı ölçülemeyen cuma kur çerçevesinde
+    boş satırdır; gün sayan ölçüler onu seans sayar, değer okuyanlar okumaz.
+    Sayılmasa her cuma tatil olur (yıl gün ortancası 260 → 210).
 
 Koşum:  python3 duman.py
 """
@@ -936,6 +939,70 @@ def bolum_aylik_ritim() -> None:
          _yeni < veri.TOLERANS_GUN["tufe"] <= _eski)
 
 
+def bolum_olculemeyen_cuma() -> None:
+    """ÖLÇÜLEMEYEN CUMA SEANSTIR, TATİL DEĞİL (03.10.2026).
+
+    USD/TRY'nin saatlik barın ulaşmadığı geçmişindeki cumaları ölçülemez
+    (ortak/fx_kapanis: cumartesi barı yok) ve kur çerçevesinde BOŞ satırdır.
+    Gün sayan iki ölçü (yıl gün ortancası, kalan günlerin tatil payı) o
+    satırları sayar; saymasalar her cumayı tatil sanırlardı. Depodaki kur.csv
+    ile ölçüldü: yıl gün ortancası 260 → 210, kalan tatil payı 0 → 11, ileri
+    taşıma %9,0 → %3,6. Değer okuyan her ölçü yalnız ölçülmüş günleri okur.
+    """
+    print("\n▶ Ölçülemeyen cuma — seans sayılır, değer okunmaz")
+    gecis = pd.Timestamp("2023-12-18")
+    tam = _kur_serisi(bas=pd.Timestamp("2015-01-05"))
+    cuma = (tam.index.dayofweek == 4) & (tam.index < gecis)
+    seans = tam.copy()
+    seans[cuma] = np.nan                       # veri.cek_kume'nin bıraktığı boş satırlar
+    kur = seans.dropna()
+
+    yg = {ad: metrik.gozlem_gunu_ortancasi(s, BU_YIL) for ad, s in
+          (("tam", tam), ("seans", seans), ("gözlem", kur))}
+    sina("yıl gün ortancası boş cuma satırlarını SEANS sayıyor",
+         yg["seans"] == yg["tam"] != yg["gözlem"], f"{yg}")
+    tp = {ad: metrik.tatil_payi(s, 9, 4, BU_YIL)["ortanca"] for ad, s in
+          (("tam", tam), ("seans", seans), ("gözlem", kur))}
+    sina("tatil payı ölçülemeyen cumayı tatil saymıyor",
+         tp["seans"] == tp["tam"] == 0 < tp["gözlem"], f"{tp}")
+    oz = metrik.yil_ozeti(kur, 2022, seans)
+    sina("yıl özeti ölçülmüş günü ve seansı ayrı sayıyor",
+         oz["n"] == int(((kur.index.year == 2022)).sum()) < oz["n_seans"]
+         == int((tam.index.year == 2022).sum()), f"{oz['n']} · {oz['n_seans']}")
+
+    # Uçtan uca: boş satırlı kur.csv ile tam kur.csv aynı gün sayımını verir.
+    a, b = _kutu(tam, sekil=False), _kutu(seans, sekil=False)
+    ma, mb = a.get("m", {}), b.get("m", {})
+    sina("hattın yıl gün ortancası boş cuma satırlarıyla değişmiyor",
+         ma.get("yil_gun_ortancasi") is not None
+         and ma.get("yil_gun_ortancasi") == mb.get("yil_gun_ortancasi"),
+         f"tam {ma.get('yil_gun_ortancasi')} · boş cumalı {mb.get('yil_gun_ortancasi')}")
+    ka = {k: v.get("kalan_tatil_payi") for k, v in (ma.get("bu_yil_olcum") or {}).items()}
+    kb = {k: v.get("kalan_tatil_payi") for k, v in (mb.get("bu_yil_olcum") or {}).items()}
+    sina("hattın kalan tatil payı boş cuma satırlarıyla değişmiyor",
+         bool(ka) and ka == kb, f"tam {ka} · boş cumalı {kb}")
+
+    # Veri katmanı: ortak/usdtry'nin adıyla döndürdüğü cumalar BOŞ SATIR olur
+    # (serinin aralığında); satır hiç açılmasaydı yukarıdaki sayımlar çökerdi.
+    import types
+    sahte = types.SimpleNamespace(seri=lambda **_: types.SimpleNamespace(
+        seri=kur, uyarilar=[], cuma_olculemeyen=[t.date().isoformat() for t in tam.index[cuma]]
+        + ["2014-12-26"]))
+    eski_modul = sys.modules.get("usdtry")
+    sys.modules["usdtry"] = sahte
+    try:
+        K = veri.cek_kume({"usdtry": "USDTRY=X"})
+    finally:
+        if eski_modul is None:
+            sys.modules.pop("usdtry", None)
+        else:
+            sys.modules["usdtry"] = eski_modul
+    bos = K.index[K["usdtry"].isna()]
+    sina("cek_kume ölçülemeyen cumayı boş satır olarak taşıyor (aralığın dışındakini değil)",
+         bos.equals(tam.index[cuma]) and K["usdtry"].dropna().equals(kur.rename(K["usdtry"].name)),
+         f"boş satır {len(bos)} (beklenen {int(cuma.sum())}); ilk {bos[:1].tolist()}")
+
+
 def main() -> int:
     print("OVP hattı — duman sınaması (ağa çıkmaz)")
     bolum_ima()
@@ -953,6 +1020,7 @@ def main() -> int:
     bolum_cumle()
     bolum_revizyon()
     bolum_aylik_ritim()
+    bolum_olculemeyen_cuma()
     print(f"\n{GECTI} geçti · {DUSTU} düştü")
     if _KUSUR:
         print("Düşenler: " + " | ".join(_KUSUR))

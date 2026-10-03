@@ -149,10 +149,30 @@ def yukle() -> pd.DataFrame:
     return ilan_tasi(d)
 
 
+def _onceki(seri: pd.Series, n: int) -> tuple[pd.Series, pd.Series]:
+    """Eksende n satır ÖNCEKİ seansın değeri ve o değerin GÜNÜ; o seans
+    ölçülmediyse ondan önceki son ÖLÇÜLMÜŞ değer (as-of).
+
+    NEDEN. Pencere SEANS sayar, gözlem değil. 03.10.2026'dan beri USD/TRY'nin
+    saatlik barın ulaşmadığı geçmişteki cumaları (o gün 18.12.2023 öncesi)
+    ölçülemez (`ortak/fx_kapanis`: cumartesi barı yok, pazartesi barının başı
+    hafta sonu açılışından sonradır) ve seride boş.
+    Gözlem sayan bir pencere o dönemde 21 gözlemi ~26 seansa yayardı ("1 aylık"
+    beş haftaya döner), satır kaydıran pencere ise boş cumada boş sonuç
+    verirdi (2019 → grafiklerin %25'i delik). Eksen tamken ikisi de aynı sonucu
+    verir."""
+    olcum_gunu = pd.Series(seri.index.where(seri.notna()), index=seri.index).ffill()
+    return seri.ffill().shift(n), olcum_gunu.shift(n)
+
+
 def deval_hizi(kur: pd.Series, gun: int) -> pd.Series:
-    """ACT/365 yıllıklandırılmış kur değişim hızı — USDTRYDeval ile aynı tanım."""
-    onceki = kur.shift(gun)
-    takvim = (kur.index.to_series() - kur.index.to_series().shift(gun)).dt.days
+    """ACT/365 yıllıklandırılmış kur değişim hızı — USDTRYDeval ile aynı tanım.
+
+    Pencere seans ekseninde `gun` satır; başlangıç o seansın ya da ondan önceki
+    son ölçülmüş kur (`_onceki`), yıllıklandırma gerçek takvim günüyle. Kuru
+    ölçülmemiş gün sonuç taşımaz (uydurma yok)."""
+    onceki, t0 = _onceki(kur, gun)
+    takvim = (kur.index.to_series() - t0).dt.days
     return ((kur / onceki) ** (365.0 / takvim) - 1) * 100
 
 
@@ -163,19 +183,40 @@ def carry_endeksi(d: pd.DataFrame) -> pd.DataFrame:
     takvim günü tahakkuku) değerlenir, her gün kura bölünüp USD'ye çevrilir.
     TLREF öncesi dönem yok sayılır — vekil faizle tarih uzatmak, endeksin
     "gerçekleşme" iddiasını bozar.
+
+    TAHAKKUK KURDAN BAĞIMSIZ. TL bacağı TLREF'in ölçüldüğü her seansta tahakkuk
+    eder; kur yalnız USD'ye çevrilen günlerde gerekir. USD/TRY'nin saatlik barın
+    ulaşmadığı geçmişteki cumaları ölçülemez (`ortak/fx_kapanis`); iki
+    seriyi birlikte boşaltmak o cumaların TLREF'ini atlar ve perşembenin faizini
+    dört gün işletirdi (PPK perşembe karar verir, cuma TLREF'i yeni faizdir).
+    Endeks ilk ÖLÇÜLMÜŞ kur gününde 100 ile başlar ve yalnız kuru ölçülmüş
+    günlerde değer taşır (uydurma yok).
     """
-    e = d[["usdtry", "tlref"]].dropna().copy()
-    gun = e.index.to_series().diff().dt.days.fillna(0)
-    e["tl_birikim"] = (1 + e["tlref"].shift() / 100 * gun / 365).fillna(1).cumprod()
+    t = d["tlref"].dropna()
+    gun = t.index.to_series().diff().dt.days.fillna(0)
+    birikim = (1 + t.shift() / 100 * gun / 365).fillna(1).cumprod()
+    kur = d["usdtry"].reindex(t.index)
+    bas = kur.first_valid_index()
+    e = pd.DataFrame({"usdtry": kur, "tlref": t, "tl_birikim": birikim / birikim.loc[bas]}).loc[bas:]
+    e = e.dropna(subset=["usdtry"]).copy()
     e["endeks"] = 100 * e["tl_birikim"] * e["usdtry"].iloc[0] / e["usdtry"]
     e["zirveden"] = 100 * (e["endeks"] / e["endeks"].cummax() - 1)
     return e
 
 
 def yillik_getiri(endeks: pd.Series, gun: int) -> pd.Series:
-    onceki = endeks.shift(gun)
-    takvim = (endeks.index.to_series() - endeks.index.to_series().shift(gun)).dt.days
+    """`gun` seanslık ACT/365 yıllıklandırılmış getiri; pencere `deval_hizi` ile aynı cetvel."""
+    onceki, t0 = _onceki(endeks, gun)
+    takvim = (endeks.index.to_series() - t0).dt.days
     return ((endeks / onceki) ** (365.0 / takvim) - 1) * 100
+
+
+def seans_ekseni(d: pd.DataFrame, e: pd.DataFrame) -> pd.Series:
+    """Endeksin SEANS ekseni: TLREF'in ölçüldüğü günler (endeksin tahakkuk
+    takvimi); kuru ölçülmemiş seansta endeks boş. Pencereler bu eksende seans
+    sayar (`_onceki`); endeks ilk değerinden önce eksen başlamaz."""
+    eksen = d.index[d["tlref"].notna() & (d.index >= e.index[0])]
+    return e["endeks"].reindex(eksen)
 
 
 def hesapla(d: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
@@ -196,7 +237,8 @@ def hesapla(d: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame, 
     d["makas_tlref_b_d1a"] = d["tlref_b"] - d["d1a"]
 
     e = carry_endeksi(d)
-    e["getiri_1y"] = yillik_getiri(e["endeks"], 252)
+    ek = seans_ekseni(d, e)             # pencereler SEANS sayar (bkz. _onceki)
+    e["getiri_1y"] = yillik_getiri(ek, 252).reindex(e.index)
     d = d.join(e[["endeks", "zirveden", "getiri_1y"]])
 
     son = d.dropna(subset=["usdtry"]).iloc[-1]
@@ -257,7 +299,7 @@ def hesapla(d: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame, 
     # değil: ISO yazımı sözlük sırasında tesadüfen kronolojikti, "GG.AA.YYYY"
     # metni güne göre dizilir ("07.04.2020" < "31.03.2021" doğru ama
     # "09.06.2022" < "21.12.2021" yanlış).
-    a1 = e["endeks"].pct_change(21).dropna() * 100
+    a1 = ((ek / _onceki(ek, 21)[0] - 1) * 100).dropna()
     secilen: list[tuple[pd.Timestamp, float]] = []
     for t, v in a1.sort_values().items():
         if any(abs((t - s_).days) < 45 for s_, _ in secilen):
@@ -269,8 +311,21 @@ def hesapla(d: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame, 
 
     getiri = e["endeks"].pct_change().dropna()
     yil = 252
-    sharpe3y = (getiri.tail(3 * yil).mean() / getiri.tail(3 * yil).std() * np.sqrt(yil)
-                if len(getiri) > 3 * yil else np.nan)
+    # Üç yıl SEANSLA: son 3×252 seansın içindeki getiriler (gözlem sayan pencere
+    # ölçülemeyen cumaların olduğu dönemde geriye uzar). Ölçülemeyen bir seansın
+    # üstünden geçen getiri İKİ seanslık risktir (31.08.2026 ölçüsü: hafta sonu
+    # seans değildir, ama atlanan cuma seanstır); ortalama ve oynaklık seans
+    # başına kurulur. Bütün getiriler tek seanslıyken klasik formülün aynısı.
+    # Ölçüldü (02.10.2026 verisi, 18.12.2023 öncesi cumalar boş): gözlem sayan
+    # klasik formül 4,94, seans sayan 5,94 verir.
+    seans = pd.Series(np.arange(len(ek)), index=ek.index).reindex(e.index).diff().reindex(getiri.index)
+    uc = getiri.index >= ek.index[-3 * yil] if len(ek) > 3 * yil else np.zeros(len(getiri), dtype=bool)
+    r, k = getiri[uc], seans[uc]
+    if len(r) > 1:
+        mu = r.sum() / k.sum()
+        sharpe3y = mu / np.sqrt(((r - mu * k) ** 2).sum() / (k.sum() - 1)) * np.sqrt(yil)
+    else:
+        sharpe3y = np.nan
 
     ozet: dict = {"_tarih": gun(son.name)}
 

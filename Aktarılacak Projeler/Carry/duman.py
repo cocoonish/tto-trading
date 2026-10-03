@@ -44,6 +44,17 @@ BURADA DURAN HER MADDE BİR ARIZAYA KARŞILIK GELİR (09.09.2026'da ölçüldü)
  9. YAPISAL KİLİT — `yukle` gözlemi ilan'dan ayıran `ilan_tasi`den geçer;
     `hesapla` çerçeveyi argüman alır (bu sınamanın kapısı); kaynakta ISO
     biçim kalıbı yok; kapıdan sonra tanım yok.
+10. ÖLÇÜLEMEYEN CUMA (03.10.2026) — USD/TRY'nin saatlik barın ulaşmadığı
+    geçmişteki cumaları (o gün 18.12.2023 öncesi) artık boş (`ortak/fx_kapanis`:
+    cumartesi barı yoksa cuma ölçülemez). 02.10.2026 verisiyle ölçüldü, eski
+    kodla: satır kaydıran pencere 2019 → makas grafiklerinin %25'ini
+    boşaltıyor, gözlem sayan pencere 3 yıllık Sharpe'ı 5,94 yerine 4,92
+    veriyordu (iki seanslık getiri tek gözlem, pencere bir ay geriye uzuyor),
+    kurla birlikte boşaltılan TLREF ise endeksi 82,2 yerine 81,8 yapıyordu
+    (perşembe faizi dört gün işliyor).
+    Kural: pencere SEANS sayar ve başlangıcı son ölçülmüş değerdir; tahakkuk
+    TLREF'in her seansında, kurdan bağımsız; iki seanslık getiri seans başına
+    ölçülür; grafik boş noktayı çizmez, komşu ölçümleri birleştirir.
 
 Koşum:  python3 duman.py
 """
@@ -317,6 +328,65 @@ def _yapisal():
     assert not sonra, f"kapıdan sonra tanım: {sonra}"
 
 
+# ===========================================================================
+# 10 · ÖLÇÜLEMEYEN CUMA — pencere seans sayar, tahakkuk kurdan bağımsız
+# ===========================================================================
+GECIS = pd.Timestamp("2023-12-18")      # 03.10.2026'da üretimde saatlik barın başladığı gün (730 iş günü)
+
+
+def _cumasiz(d: pd.DataFrame) -> tuple[pd.DataFrame, pd.DatetimeIndex]:
+    d = d.copy()
+    cuma = d.index[(d.index.dayofweek == 4) & (d.index < GECIS)]
+    d.loc[cuma, "usdtry"] = np.nan
+    return d, cuma
+
+
+def _olculemeyen_cuma():
+    tam = _cerceve()
+    d, cuma = _cumasiz(tam)
+    # (a) PENCERE SEANS SAYAR: boş cumada sonuç yok, başka hiçbir günde delik yok;
+    # başlangıcı cuma olan pencere son ölçülmüş kurdan (perşembe) ve gerçek takvim günüyle.
+    r = hesap.deval_hizi(d["usdtry"], 21)
+    delik = r.index[r.isna()].difference(d.index[:21])
+    beklenen = cuma.difference(d.index[:21])
+    assert delik.equals(beklenen), ("boş cuma dışında delik var", sorted(set(delik) ^ set(beklenen))[:5])
+    i = next(j for j in range(21, len(d)) if d.index[j - 21] in cuma and d.index[j].dayofweek == 0)
+    t, perse = d.index[i], d.index[i - 22]
+    assert perse.dayofweek == 3, perse
+    bek = ((d["usdtry"].iloc[i] / d.loc[perse, "usdtry"]) ** (365.0 / (t - perse).days) - 1) * 100
+    assert abs(r.iloc[i] - bek) < 1e-9, (t, r.iloc[i], bek)
+    # Eksen tamken eski satır kaydırmayla birebir.
+    eski = ((tam["usdtry"] / tam["usdtry"].shift(21))
+            ** (365.0 / (tam.index.to_series() - tam.index.to_series().shift(21)).dt.days) - 1) * 100
+    assert np.allclose(hesap.deval_hizi(tam["usdtry"], 21).dropna(), eski.dropna(), rtol=1e-12)
+    # (b) TAHAKKUK KURDAN BAĞIMSIZ: perşembe kararı cuma TLREF'ine işler; kurun
+    # ölçülmediği cuma o TLREF'i atlatmamalı (perşembe faizi dört gün işlemez).
+    f = tam.copy()
+    karar = f.index[(f.index.dayofweek == 3) & (f.index < GECIS)][40]
+    f.loc[f.index > karar, "tlref"] = 46.9
+    e_tam = hesap.carry_endeksi(f)
+    e_bos = hesap.carry_endeksi(_cumasiz(f)[0])
+    ortak = e_bos.index
+    assert len(ortak) < len(e_tam) and np.allclose(e_bos["tl_birikim"], e_tam.loc[ortak, "tl_birikim"], rtol=1e-12), \
+        "kurun ölçülmediği günün TLREF'i tahakkuktan düştü"
+    assert np.allclose(e_bos["endeks"], e_tam.loc[ortak, "endeks"], rtol=1e-12)
+    # (c) ÖZET: boş cumalarla da her anahtar ölçülür; 3 yıllık Sharpe eksen tamken klasik formül.
+    oz = hesap.hesapla(d)[2]
+    for a in ("endeks", "getiri_1y", "sharpe_3y", "zirveden", "d1a", "d3a"):
+        assert oz[a] != hesap.OLCULEMEDI, (a, oz[a])
+    assert oz["kotu_aylar"], "en kötü aylar boş"
+    _, e, oz_t = hesap.hesapla(tam.copy())
+    g = e["endeks"].pct_change().dropna().tail(3 * 252)
+    assert oz_t["sharpe_3y"] == round(float(g.mean() / g.std() * np.sqrt(252)), 2), oz_t["sharpe_3y"]
+    # Aynı süreç, cumaları boş: seans sayan pencere ve seans başına ölçü Sharpe'ı
+    # DEĞİŞTİRMEZ (fikstürde 1,33 = 1,33); gözlem sayan pencere 1,39 verirdi.
+    assert oz["sharpe_3y"] == oz_t["sharpe_3y"], (oz["sharpe_3y"], oz_t["sharpe_3y"])
+    # (d) GRAFİK boş noktayı çizmez, komşu ölçümleri birleştirir (kur bacaklı makaslar).
+    src = (BURASI / "grafik.py").read_text(encoding="utf-8")
+    assert not re.search(r'y=d19\["makas_', src) and src.count("**olculen(d19[") == 3, \
+        "kur bacaklı makas boş cumayla çiziliyor (çizgi her hafta kopar)"
+
+
 sina("anahtar başına saat: her sayısal anahtar kendi gözlem gününü taşır", _anahtar_basina_saat)
 sina("sayfanın çağırdığı her anahtar özette ve saatiyle", _sayfa_anahtarlari)
 sina("okur tarihi GG.AA.YYYY; ISO yok; en kötü aylar tarihle sıralı", _okur_tarihi)
@@ -326,6 +396,7 @@ sina("şekil damgası bağlayıcı (en eski) bacak, min() yapısal", _sekil_damg
 sina("bütünüyle boş kolon '—' yazılır, atlanmaz, saatsiz", _olculemeyen_bos)
 sina("basit gecelik → bileşik konvansiyon", _konvansiyon)
 sina("yapısal kilit: ilan_tasi, hesapla(d), ISO kalıbı yok, kapı sonrası tanım yok", _yapisal)
+sina("ölçülemeyen cuma: pencere seans sayar, tahakkuk kurdan bağımsız, grafik boş noktayı çizmez", _olculemeyen_cuma)
 
 if __name__ == "__main__":
     for im, ad in SONUC:

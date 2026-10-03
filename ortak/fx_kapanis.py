@@ -38,12 +38,33 @@ HAFTA SONU. Yalnız yerel HAFTA İÇİ günleri kapanış taşır. İstanbul 18:
 cumartesinin penceresi (cuma 18:00 → cumartesi 18:00) cuma akşamının
 barlarını içerir; o barlar bir kapanış değil, pazartesinin penceresine aittir.
 
-ESKİ GEÇMİŞ. Yahoo saatlik barı en çok 730 gün geriye verir. Daha eskisi için
-günlük bar düzeltilerek okunur: kapanmış bir barın "kapanışı" o günün
-başındaki, yani bir ÖNCEKİ takvim gününün sonundaki fiyattır; değer, bardan
-önceki son hafta içi güne yazılır (pazartesi barı → cuma; cumartesi barı
-varsa o, cumaya daha yakın olduğu için önce gelir). Bu kısım Londra gece
-yarısı kapanışıdır, saatlik kısım kararın saatidir; geçiş günü künyeye yazılır.
+ESKİ GEÇMİŞ. Yahoo saatlik barı en çok 730 gün geriye verir; bu İŞ günüdür
+(üretimin `730d` çağrısı 03.10.2026'da 18.12.2023'e iniyordu: tam 730 hafta
+içi gün) ve pencere her iş günü bir gün ileri kayar — saatlik kapanış
+arşivlenmez. Daha eskisi için günlük bar düzeltilerek okunur:
+kapanmış bir barın "kapanışı" o günün başındaki, yani bir ÖNCEKİ takvim
+gününün sonundaki fiyattır; değer bardan önceki son hafta içi güne yazılır —
+YALNIZ bar o günün ERTESİ takvim günüyse. Bu kısım Londra gece yarısı
+kapanışıdır, saatlik kısım kararın saatidir; geçiş günü künyeye yazılır.
+
+CUMA. Cumanın ertesi günü cumartesidir; cumartesi barı yoksa cumaya
+yazılabilecek tek bar pazartesi barıdır ve onun başı (pazartesi 00:00 Londra,
+Yahoo'nun saatlik döviz haftasının da başladığı an) pazar akşamki hafta sonu
+açılışından SONRAdır. O cuma ölçülemez: seriye girmez, adıyla döner
+(`attrs["olculemeyen"]`). 03.10.2026'da ölçüldü (`bulten/kesif_fx_cuma.py`,
+veri.yml keşfi #317): on beş sembolün 2005'ten bu yana günlük geçmişinde
+cumartesi ya da pazar barı SIFIR; saatlik barla örtüşen pencerede (18.12.2023
+→ 01.10.2026) G10'un 1.716 cumasının hiçbirinde cumartesi barı yok ve
+pazartesi barından gelen cuma değeri saatlik kapanıştan medyanda 7,4 bp (p90
+26,4 · azami 143,7) sapıyor, pazartesi–perşembe 3,9 bp (p90 12,9); bu kısmın
+kendi tanımına (Londra gece yarısı) göre 7,6 bp'ye karşı 1,7. Değer pazartesi
+00:00 Londra fiyatından medyanda 2,2 bp uzakta: cumaya hafta sonu boşluğu
+(medyan 7,4 bp, p90 26,1) yazılıyor, haftanın değişimi cumanın değişimine
+taşınıyordu. Lira kurlarında aynı ölçü 432 cumada medyan 13,4 bp (taban 4,8).
+Haftalık bar kaynak DEĞİL: on beş sembolün on ikisinde haftalık kapanış cumanın
+günlük barıyla birebir (o da günün başı), kalan üçünde hiçbir kapanışa
+yaklaşmıyor. Gerçek bir cuma kapanışı taşıyan tek günlük bar cumartesi barıdır
+(13.09.2026 pazar koşusunda ölçüldü; kaynak onu ertesi gün geri çekiyor).
 """
 
 from __future__ import annotations
@@ -146,15 +167,30 @@ def saatlik_kapanislar(kapanis: pd.Series, tur: str, simdi: dt.datetime | None =
     return Kapanislar(seri, tur, ani, olculemeyen, canli)
 
 
-def gunluk_duzelt(gunluk: pd.Series) -> pd.Series:
+def gunluk_duzelt(gunluk: pd.Series, pazartesi_cumaya: bool = False) -> pd.Series:
     """Saatlik barın ulaşmadığı ESKİ geçmiş için günlük bar, düzeltilerek.
 
     `gunluk`: Yahoo günlük barının kapanışları, barın (Londra) GÜNÜYLE
     indeksli. Kapanmış bir barın "kapanışı" o günün başındaki fiyattır, yani
-    önceki takvim gününün sonu; değer bardan önceki son hafta içi güne yazılır.
-    Bugünün barı (canlı) çağıran tarafından ÖNCEDEN çıkarılmış olmalı."""
+    önceki takvim gününün sonu; değer bardan önceki son hafta içi güne yazılır,
+    YALNIZ bar o günün ertesi takvim günüyse (barın başı o günün sonudur).
+    Cumanın değeri yalnız cumartesi barından gelir; pazar ya da pazartesi barının
+    başı cumanın sonu değildir (pazartesininki hafta sonu açılışından sonradır,
+    pazar barı hiç ölçülmedi — 2005'ten bu yana kaynakta yok). Böyle bir cuma
+    ölçülemez: seriye girmez, `attrs["olculemeyen"]`de ISO günüyle döner
+    (`Kapanislar.olculemeyen` ile aynı sözleşme; okura yalnız serinin SAĞ
+    UCUNDA uyarı olarak basılır, tarihçenin ortasında künyede sayılır).
+    Bugünün barı (canlı) çağıran tarafından ÖNCEDEN çıkarılmış olmalı.
+
+    `pazartesi_cumaya=True` 03.10.2026 öncesi eşlemeyi olduğu gibi verir
+    (pazartesi barı → cuma) ve o cumaları `attrs["pazartesi_barindan"]`da adıyla
+    döndürür. YALNIZ bu tuzağı kendisi ölçüp okura anlatan DONMUŞ ölçüm içindir
+    (MakroKurFaiz dersi, `ortak_olc.usdtry` cuma tuzağı: sayıları o eşlemeyle
+    kuruldu ve dersin metni onu anlatıyor); üretim serisi bu bayrağı taşımaz,
+    duman sınaması bunu kaynak metninden ve davranıştan sorar."""
     s = pd.to_numeric(gunluk, errors="coerce").dropna()
     if not len(s):
+        s.attrs = {"olculemeyen": [], "pazartesi_barindan": []}
         return s
     idx = pd.DatetimeIndex(s.index)
     if idx.tz is not None:
@@ -166,13 +202,22 @@ def gunluk_duzelt(gunluk: pd.Series) -> pd.Series:
         while h.dayofweek >= 5:
             h -= pd.Timedelta(days=1)
         hedef.append(h)
-    out = pd.DataFrame({"hedef": hedef, "bar": gun, "v": s.values})
-    # Aynı güne iki bar düşerse (cumartesi ve pazartesi → cuma) güne YAKIN olan
-    # (önce gelen) bar kazanır: cumartesi barının başı cuma gecesidir, pazartesi
-    # barının başı hafta sonu açılışından sonra.
-    out = out.sort_values("bar").drop_duplicates("hedef", keep="first")
+    out = pd.DataFrame({"hedef": hedef, "bar": gun, "v": s.values}).sort_values("bar")
+    # Bar hedefin ERTESİ günü değilse (cuma ← pazar/pazartesi barı) başı hedefin
+    # sonu değildir. Eski eşlemede aynı güne iki bar düştüğünde (cumartesi ve
+    # pazartesi → cuma) güne YAKIN olan, önce gelen bar kazanıyordu; o kural
+    # yalnız cumartesi barı VARSA doğruydu ve 2005'ten bu yana hiç yok.
+    ertesi = (out["bar"] - out["hedef"]) == pd.Timedelta(days=1)
+    olculemeyen: list[str] = []
+    if not pazartesi_cumaya:
+        gecerli = out[ertesi]
+        olculemeyen = sorted(t.date().isoformat() for t in set(out.loc[~ertesi, "hedef"]) - set(gecerli["hedef"]))
+        out = gecerli
+    out = out.drop_duplicates("hedef", keep="first")
+    pazartesi = sorted(t.date().isoformat() for t in out.loc[(out["bar"] - out["hedef"]) != pd.Timedelta(days=1), "hedef"])
     r = pd.Series(out["v"].values, index=pd.DatetimeIndex(out["hedef"]), dtype="float64").sort_index()
     r.name = "kapanis"
+    r.attrs = {"olculemeyen": olculemeyen, "pazartesi_barindan": pazartesi}
     return r
 
 

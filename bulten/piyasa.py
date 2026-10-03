@@ -213,7 +213,12 @@ def _seans_izsiz(s: dict) -> dict:
 # İstanbul 18:00, öbürleri New York 17:00 — karar 02.10.2026, kullanıcı).
 # Sürüm önbellekte durur: eski tanımla yazılmış bir önbellek taze sayılmaz ve
 # döviz serileri ondan devredilmez — iki tanım aynı seride yan yana duramaz.
-DOVIZ_KAPANIS_SURUM = "saatlik-1"
+# `saatlik-2` (03.10.2026): günlük bar kısmında cumartesi barı olmayan CUMA
+# ölçülemez (pazartesi barının başı hafta sonu açılışından sonradır; ölçüm
+# `ortak/fx_kapanis.py` başlığında). `saatlik-1` görüntüsünden devredilen satırın
+# saatlik bardan önceki cumaları düşürülür (`_eski_tanimi_cevir`).
+DOVIZ_KAPANIS_SURUM = "saatlik-2"
+ONCEKI_DOVIZ_SURUM = "saatlik-1"
 
 
 def _fx_mi(kod: str) -> bool:
@@ -264,6 +269,10 @@ def doviz_kapanislari(seri: dict, saatlik: dict, simdi: datetime) -> dict:
             birlesik = duz
             s["kapanis_tanimi"] = "Londra gece yarısı (günlük bar; saatlik bar alınamadı)"
             s["kapanis_ani"] = None
+            # Bu yolda cumartesi barı olmayan cuma ölçülemez (fx_kapanis); denetim
+            # son iki gözlemin arasındaki cumayı "iki seansı kapsıyor" diye adıyla söyler.
+            if duz.attrs.get("olculemeyen"):
+                s["kapanis_olculemeyen"] = list(duz.attrs["olculemeyen"])[-5:]
         if kp is not None and kp.canli:
             s["canli"] = {"zaman": kp.canli[0], "deger": kp.canli[1]}
         s["tarih"] = [x.date().isoformat() for x in birlesik.index]
@@ -316,15 +325,21 @@ def _onbellek_birlestir(yeni: dict, eski: dict, meta_yok=()) -> dict | None:
     }
 
 
-def _eski_tanimi_cevir(seri: dict, zaman) -> dict:
+def _eski_tanimi_cevir(seri: dict, zaman, surum: str | None = DOVIZ_KAPANIS_SURUM) -> dict:
     """Eski tanımla yazılmış döviz serilerini (kapanış tanımı yok: D tarihli
     değer D gününün BAŞIDIR) yedek yolun tanımına çevirir: değer bir önceki
     hafta içi güne alınır, kapanış anı yoktur ve denetimin döviz ölçütü satırı
     adıyla "bir gün geride" diye gösterir. `zaman`: serinin yazıldığı koşu —
     o günün (Londra) barı canlıydı, düzeltmeye girmez.
 
+    `surum`: görüntünün döviz kapanış sürümü. `saatlik-1` satırında saatlik
+    bardan önceki (yedek satırda bütün) cumalar pazartesi barının başıdır; o
+    cumalar düşer — iki tanım aynı seride yan yana duramaz.
+
     Seriler ATILMAZ: atılsaydı on iki döviz satırı birden düşer ve sayım kapısı
     (asgari enstrüman) ilgisiz bir sebeple bültenin TAMAMINI durdururdu."""
+    if surum == ONCEKI_DOVIZ_SURUM:
+        seri = _cumasiz(seri)
     eski_tanim = sorted(k for k, v in seri.items() if _fx_mi(k) and not v.get("kapanis_tanimi"))
     if not eski_tanim:
         return seri
@@ -345,10 +360,39 @@ def _eski_tanimi_cevir(seri: dict, zaman) -> dict:
                    "tarih": [x.date().isoformat() for x in duz.index],
                    "kapanis": [float(v) for v in duz.values],
                    "kapanis_tanimi": "Londra gece yarısı (günlük bar; saatlik bar alınamadı)",
-                   "kapanis_ani": None}
+                   "kapanis_ani": None,
+                   **({"kapanis_olculemeyen": list(duz.attrs["olculemeyen"])[-5:]}
+                      if duz.attrs.get("olculemeyen") else {})}
     print("  ! önbellekteki döviz serileri günlük barın kapanış alanıyla yazılmış; değer bir önceki "
           "hafta içi güne alınarak (saatlik bar alınamadı, bir gün geride) verildi: " + ", ".join(eski_tanim))
     return seri
+
+
+def _cumasiz(seri: dict) -> dict:
+    """`saatlik-1` görüntüsünün döviz satırları: saatlik bardan önceki cumalar
+    (kapanış anı olmayan yedek satırda bütün cumalar) pazartesi barının başıydı
+    ve düşer; düşen cuma satırın ölçülemeyen günlerine adıyla eklenir. Kaynak
+    bar elde olmadığı için cumartesi barından gelmiş bir cuma ayırt edilemez —
+    2005'ten bu yana kaynakta hiç cumartesi barı yok (ölçüm fx_kapanis'te)."""
+    out = {}
+    for k, v in seri.items():
+        if not (_fx_mi(k) and v.get("kapanis_tanimi")):
+            out[k] = v
+            continue
+        sinir = None if not v.get("kapanis_ani") else v.get("kapanis_gecis")
+        if v.get("kapanis_ani") and not sinir:
+            out[k] = v                                   # tamamı saatlik: cuması ölçülmüş
+            continue
+        tut, dusen = [], []
+        for t, x in zip(v.get("tarih") or [], v.get("kapanis") or []):
+            cuma = date.fromisoformat(t).weekday() == 4 and (sinir is None or t < sinir)
+            (dusen if cuma else tut).append((t, x))
+        if not dusen:
+            out[k] = v
+            continue
+        ol = sorted(set(v.get("kapanis_olculemeyen") or []) | {t for t, _ in dusen})[-5:]
+        out[k] = {**v, "tarih": [t for t, _ in tut], "kapanis": [x for _, x in tut], "kapanis_olculemeyen": ol}
+    return out
 
 
 def _eski_goruntu(d: dict, kodlar) -> dict:
@@ -357,7 +401,7 @@ def _eski_goruntu(d: dict, kodlar) -> dict:
     denetim "boş seans yok" derdi."""
     d = dict(d)
     d["seri"] = _eski_tanimi_cevir({k: _seans_izsiz(v) for k, v in (d.get("seri") or {}).items()},
-                                  d.get("zaman"))
+                                  d.get("zaman"), d.get("doviz_kapanis"))
     d["meta_olculemedi"] = sorted(kodlar)
     return d
 
@@ -686,7 +730,7 @@ def _ham_veri(tazele: bool = False) -> dict:
         # Çekimden dönmeyen döviz sembolü önbellekten devredilir; eski tanımla
         # yazılmışsa önce yedek yolun tanımına çevrilir (kapanış anı yok →
         # denetim satırı adıyla gösterir). Atmak satırı bültenden silerdi.
-        eski = _eski_tanimi_cevir(_eh.get("seri") or {}, _eh.get("zaman"))
+        eski = _eski_tanimi_cevir(_eh.get("seri") or {}, _eh.get("zaman"), _eh.get("doviz_kapanis"))
     except Exception:
         pass
     # BOŞ SEANS ONARIMI — yerleşmemiş bar düştükten SONRA (onarım kapanmamış bir

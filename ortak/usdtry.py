@@ -27,6 +27,14 @@ gerekçe ve ölçüm o modülün başlığında), daha eskisi düzeltilmiş gün
 (Londra gece yarısı) — geçiş günü künyede (`kur_kapanis_gecis`). Önbellek
 sütununun adı tanımı taşır: eski tanımla yazılmış önbellek taze sayılmaz.
 
+CUMA (03.10.2026). Günlük bar kısmında cumartesi barı olmayan cuma ÖLÇÜLEMEZ:
+cumaya yazılabilecek tek bar pazartesi barıdır ve onun başı hafta sonu
+açılışından sonradır (2005'ten bu yana cumartesi barı hiç yok; ölçüm
+`ortak/fx_kapanis` başlığında). O cumalar seriye girmez; sayıları künyede
+(`kur_cuma_olculemeyen`), serinin sağ ucuna düşen olursa uyarıda adıyla
+yazılır. Kapsam ölçüsünün paydası onları beklemez — adıyla bilinen bir boşluk
+kırpılmış seri değildir. Tanım değişti, sütun adı da değişti (`usdtry_ist18_2`).
+
 KAPANMAMIŞ BAR. Bir günün kapanışı ancak kapanış anı (İstanbul 18:00 = 15:00
 UTC) geçtikten sonra vardır; o andan önce bugünün değeri seriye alınmaz (bir
 ölçüm ancak KAPANMIŞ bir seansı ölçebilir).
@@ -61,8 +69,16 @@ TUR = _fx.kesim_turu(SEMBOL)                       # "tr": İstanbul 18:00
 # Önbellek CSV'sinin sütun adı kapanış TANIMINI taşır; adı farklı bir önbellek
 # (eski tanım: günlük barın kapanış alanı) taze sayılmaz, yalnız ağ düşerse
 # son çare olarak döner ve bunu uyarısında adıyla söyler.
-SUTUN = "usdtry_ist18"
-YEDEK_SUTUN = "usdtry_gunluk_yedek"   # saatlik bar alınamadığı koşunun serisi (taze sayılmaz)
+# `_2` (03.10.2026): günlük bar kısmında cumartesi barı olmayan cuma artık
+# ölçülemez sayılır. 02.10 tanımıyla yazılmış önbellekte o cumalar pazartesi
+# barının başını taşıyor; o önbellek taze sayılsaydı yeni tanım TTL boyunca
+# devreye girmezdi.
+SUTUN = "usdtry_ist18_2"
+YEDEK_SUTUN = "usdtry_gunluk_yedek_2"   # saatlik bar alınamadığı koşunun serisi (taze sayılmaz)
+# 02.10.2026 tanımının sütunları: saatlik kısım bugünküyle aynı, ama saatlik
+# barın ulaşmadığı geçmişte (ve yedek seride) cuma değeri pazartesi barının başı.
+ONCEKI_SUTUN = "usdtry_ist18"
+ONCEKI_YEDEK_SUTUN = "usdtry_gunluk_yedek"
 # Eski tanımla (sütun adı başka) yazılmış önbelleğin okura giden adı: D tarihli
 # değer D gününün BAŞINDAKİ fiyattır (günlük barın kapanış alanı).
 ESKI_KAPANIS = "günün başı, Londra gece yarısı (günlük bar)"
@@ -96,6 +112,14 @@ class Kur:
     kapanis: str = _fx.KESIM_ADI[TUR]     # kapanış tanımı (okura yazılır)
     gecis: str | None = None              # saatlik kapanışın başladığı gün (öncesi günlük bar)
     canli: tuple | None = None            # (ölçüm anı UTC, son kotasyon) — yalnız bilgi
+    # Günlük bar kısmında ölçülemeyen (seriye girmeyen) cumalar, ISO günüyle,
+    # serinin aralığında. SEANSTIR, tatil değil: gün sayan tüketici (OVP'nin
+    # yıl gün sayısı ve tatil payı) onları seans sayar; künye sayısını yazar.
+    cuma_olculemeyen: list | None = None
+    # Serinin TANIMI: kurulduğu önbellek sütununun adı (`SUTUN` = bugünkü
+    # tanım). Bu seriden kendi önbelleğini türeten tüketici (TRYREER'in aylık
+    # ortalaması) onu yanına yazar ve tanım değişince eskisini taze saymaz.
+    tanim: str | None = None
 
 
 def _yahoo_cek(bas: dt.date, bit: dt.date, simdi: dt.datetime | None = None) -> pd.Series:
@@ -103,11 +127,13 @@ def _yahoo_cek(bas: dt.date, bit: dt.date, simdi: dt.datetime | None = None) -> 
 
     Dönen serinin `attrs`ı geçiş gününü ve canlı kotasyonu taşır. Saatlik bar
     alınamazsa seri yalnız düzeltilmiş günlük bardan kurulur ve `attrs`taki
-    uyarı bunu söyler — son gün bir gün geride kalır ama yanlış tarih basmaz."""
+    uyarı bunu söyler — son gün en az bir gün geride kalır ama yanlış tarih
+    basmaz. Günlük bar kısmının ölçülemeyen cumaları `olculemeyen_gunluk`ta."""
     simdi = simdi or dt.datetime.now(dt.timezone.utc)
     gunluk = _gunluk_cek(bas, bit)
     bugun_londra = pd.Timestamp(simdi).tz_convert("Europe/London").date()
     duz = _fx.gunluk_duzelt(gunluk[gunluk.index.date < bugun_londra])
+    cuma = list(duz.attrs.get("olculemeyen") or [])
     try:
         saatlik = _fx.yfinance_saatlik([SEMBOL]).get(SEMBOL)
         kp = _fx.saatlik_kapanislar(saatlik, TUR, simdi) if saatlik is not None else None
@@ -117,13 +143,15 @@ def _yahoo_cek(bas: dt.date, bit: dt.date, simdi: dt.datetime | None = None) -> 
         hata = "saatlik bar boş döndü"
     if kp is None or not len(kp.seri):
         duz.attrs = {"uyari": "saatlik bar alınamadı (" + hata[:120] + "); kapanış düzeltilmiş "
-                              "günlük bardan (Londra gece yarısı), son gün bir gün geride",
-                     "kapanis": "Londra gece yarısı (günlük bar)", "yedek": True}
+                              "günlük bardan (Londra gece yarısı), son gün en az bir gün geride",
+                     "kapanis": "Londra gece yarısı (günlük bar)", "yedek": True,
+                     "olculemeyen_gunluk": cuma}
         return _seri_temizle(duz.values, duz.index, duz.attrs)
     birlesik, gecis = _fx.birlestir(duz, kp)
     return _seri_temizle(birlesik.values, birlesik.index,
                          {"gecis": gecis, "canli": kp.canli, "kapanis": _fx.KESIM_ADI[TUR],
-                          "olculemeyen": kp.olculemeyen})
+                          "olculemeyen": kp.olculemeyen,
+                          "olculemeyen_gunluk": [g for g in cuma if gecis is None or g < gecis]})
 
 
 def _gunluk_cek(bas: dt.date, bit: dt.date) -> pd.Series:
@@ -254,8 +282,14 @@ def haftasonu_barini_dusur(s: pd.Series) -> tuple[pd.Series, list[str]]:
 
 
 def _kapsam_uyarilari(s: pd.Series, bas: dt.date, bugun: dt.date,
-                      eski: pd.Series | None) -> list[str]:
-    """Gelen serinin kapsamı çıktının ihtiyacına yetiyor mu — yetmiyorsa sebepler."""
+                      eski: pd.Series | None, olculemeyen=()) -> list[str]:
+    """Gelen serinin kapsamı çıktının ihtiyacına yetiyor mu — yetmiyorsa sebepler.
+
+    `olculemeyen`: kurala göre seriye girmeyen, ADIYLA bilinen günler (günlük
+    bar kısmının cumaları). Doluluk paydası onları beklemez: bilinen bir boşluk
+    kırpılmış seri değildir — saymak saatlik barın ulaşmadığı geçmişin bütün
+    cumalarını eksik sayar ve sağlıklı seriyi %90'ın altına düşürürdü (03.10.2026
+    sınamasında, 18.12.2023 öncesi cumalar boşken, %82)."""
     u: list[str] = []
     if s.empty:
         return ["seri boş döndü"]
@@ -266,7 +300,9 @@ def _kapsam_uyarilari(s: pd.Series, bas: dt.date, bugun: dt.date,
     if (bugun - son).days > BITIS_PAYI_GUN:
         u.append(f"seri {son:%d.%m.%Y} tarihinde bitiyor, bugün {bugun:%d.%m.%Y} "
                  f"(sonu {(bugun - son).days} gün geride)")
-    beklenen = len(pd.bdate_range(max(ilk, bas), son))
+    pencere_bas = max(ilk, bas)
+    bilinen = {g for g in olculemeyen if pencere_bas <= pd.Timestamp(g).date() <= son}
+    beklenen = len(pd.bdate_range(pencere_bas, son)) - len(bilinen)
     if beklenen and len(s) < DOLULUK_ORANI * beklenen:
         u.append(f"{len(s)} gözlem, hafta içi {beklenen} gün bekleniyordu (seyrek)")
     if eski is not None and len(eski):
@@ -317,15 +353,24 @@ def _oku(yol: Path) -> pd.Series | None:
 
 
 def _onbellek_tanimi(tanim: str | None, yol: Path | None) -> tuple[str, str]:
-    """(kapanış adı, uyarı eki) — önbelleğin sütun adı TANIMI taşır ve üç
-    tanımın üç ayrı cevabı vardır: yedek seri de doğru tarihli bir Londra gece
-    yarısı kapanışıdır, "eski tanım" sayılmaz."""
+    """(kapanış adı, uyarı eki) — önbelleğin sütun adı TANIMI taşır ve her
+    tanımın kendi cevabı vardır: yedek seri de doğru tarihli bir Londra gece
+    yarısı kapanışıdır, "eski tanım" sayılmaz. 02.10.2026 sütunlarının farkı
+    yalnız günlük bar kısmının cumasıdır; ek onu serinin sözleşmesiyle söyler."""
+    kn = _kunye_oku(yol) if yol is not None else {}
     if tanim == SUTUN:
         return _fx.KESIM_ADI[TUR], ""
-    if tanim == YEDEK_SUTUN:
-        kn = _kunye_oku(yol) if yol is not None else {}
-        return (kn.get("kapanis") or "Londra gece yarısı (günlük bar)",
-                "; eldeki seri günlük bardan (Londra gece yarısı) kurulmuştu")
+    if tanim in (YEDEK_SUTUN, ONCEKI_YEDEK_SUTUN):
+        ek = "; eldeki seri günlük bardan (Londra gece yarısı) kurulmuştu"
+        if tanim == ONCEKI_YEDEK_SUTUN:
+            ek += " ve cuma değerleri pazartesi barının başıdır (hafta sonu açılışından sonraki fiyat)"
+        return (kn.get("kapanis") or "Londra gece yarısı (günlük bar)", ek)
+    if tanim == ONCEKI_SUTUN:
+        g = kn.get("gecis")
+        once = f"{pd.Timestamp(g):%d.%m.%Y} öncesinde" if g else "saatlik barın ulaşmadığı geçmişte"
+        return (_fx.KESIM_ADI[TUR],
+                f"; eldeki seride {once} cuma değeri pazartesi barının başıdır (hafta sonu açılışından "
+                "sonraki fiyat)")
     return (ESKI_KAPANIS,
             "; eldeki seri günlük bardan kuruluydu: D tarihli değer D gününün başındaki fiyattır")
 
@@ -358,7 +403,8 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
                 return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                            son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                            gecis=kn.get("gecis"), kapanis=kn.get("kapanis") or _fx.KESIM_ADI[TUR],
-                           uyarilar=list(kn.get("uyarilar") or []))
+                           uyarilar=list(kn.get("uyarilar") or []),
+                           cuma_olculemeyen=kn.get("cuma_olculemeyen"), tanim=SUTUN)
         except ImportError:
             pass
 
@@ -372,12 +418,13 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
                        son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                        uyarilar=["Yahoo Finance erişilemedi; eldeki seri kullanıldı "
                                  f"(son gün {eski.index[-1]:%d.%m.%Y}){ek}"],
-                       kapanis=kap)
+                       kapanis=kap, tanim=eski_tanim)
         raise RuntimeError(f"USD/TRY çekilemedi ve önbellek yok: {e}") from e
 
     meta = dict(getattr(yeni, "attrs", {}) or {})
-    # YEDEK YOL (saatlik bar alınamadı): günlük bardan kurulan seri bir gün
-    # geride biter. Eldeki seri en az onun kadar yeniyse — HANGİ tanımla
+    # YEDEK YOL (saatlik bar alınamadı): günlük bardan kurulan seri en az bir
+    # gün geride biter (salı sabahı iki: pazartesi barının cuması ölçülemez).
+    # Eldeki seri en az onun kadar yeniyse — HANGİ tanımla
     # yazılmış olursa olsun — o döner: yedeği yayımlamak hattın saatini geri
     # çeker ve gerileme kapısı hattı durdurur. Tanım şartı konmaz: geçiş günü
     # önbellek eski sütun adıyla durur ve koruma tam o gün gerekir. Yedek seri
@@ -391,14 +438,18 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
                    son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                    uyarilar=[meta["uyari"].split(";")[0] + f"; eldeki seri kullanıldı "
                              f"(kapanış {kap}, son gün {eski.index[-1]:%d.%m.%Y})"],
-                   kapanis=kap, gecis=kn.get("gecis"))
+                   kapanis=kap, gecis=kn.get("gecis"), cuma_olculemeyen=kn.get("cuma_olculemeyen"),
+                   tanim=eski_tanim)
     yeni = kapanmamis_bari_dusur(yeni, simdi)
     # SIRA ÖNEMLİ: hafta sonu barı kapsam denetiminden ÖNCE düşer. Aksi hâlde
     # doluluk ölçütü (len(s) ÷ iş günü) hafta sonu barını hafta içi gözlem
     # sayar ve eksik bir hafta içi gününü maskeler — ölçüt kendi paydasıyla
     # kandırılır.
     yeni, hs_uyari = haftasonu_barini_dusur(yeni)
-    kusur = _kapsam_uyarilari(yeni, bas_t, bugun, eski)
+    # Günlük bar kısmının ölçülemeyen cumaları ADIYLA bilinir; doluluk paydası
+    # onları beklemez (bkz. _kapsam_uyarilari).
+    gunluk_ol = list(meta.get("olculemeyen_gunluk") or [])
+    kusur = _kapsam_uyarilari(yeni, bas_t, bugun, eski, gunluk_ol)
     if kusur:
         if eski is not None:
             kap, ek = _onbellek_tanimi(eski_tanim, yol)
@@ -406,7 +457,7 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
                        son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                        uyarilar=["Yahoo Finance serisi kapsam sınamasını geçemedi, eldeki "
                                  "seri korundu: " + "; ".join(kusur) + ek],
-                       kapanis=kap)
+                       kapanis=kap, tanim=eski_tanim)
         raise RuntimeError("USD/TRY serisi kapsam sınamasını geçemedi ve önbellek yok: "
                            + "; ".join(kusur))
 
@@ -422,25 +473,43 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
     if sag_uc:
         uyarilar.append("saatlik barı kapanış anına yetişmeyen gün seriye alınmadı: "
                         + ", ".join(f"{pd.Timestamp(g):%d.%m.%Y}" for g in sag_uc[-5:]))
+    # Günlük bar kısmının cuması da aynı kuralla: yalnız SAĞ UÇ uyarıdır (yedek
+    # yolda salı sabahı). Tarihçenin ortasındaki cumalar (saatlik barın
+    # ulaşmadığı geçmişin hepsi) her koşuda okura basılan bir uyarı olamaz;
+    # SAYILARI künyededir.
+    sag_cuma = [g for g in gunluk_ol if pd.Timestamp(g) > yeni.index[-1]]
+    if sag_cuma:
+        uyarilar.append("cuma kapanışı günlük bardan ölçülemedi, seriye alınmadı: "
+                        + ", ".join(f"{pd.Timestamp(g):%d.%m.%Y}" for g in sag_cuma[-5:])
+                        + " (cumartesi barı yok; pazartesi barı hafta sonu açılışından sonraki fiyatı taşır)")
+    cuma_gun = [g for g in gunluk_ol if yeni.index[0] <= pd.Timestamp(g) <= yeni.index[-1]]
     if yol is not None:
         yol.parent.mkdir(parents=True, exist_ok=True)
         gecici = yol.with_name(yol.stem + ".tmp.csv")
         yeni.rename(YEDEK_SUTUN if yedek else SUTUN).to_csv(gecici, index_label="tarih")
         gecici.replace(yol)
-        _kunye_yaz(yol, {"gecis": meta.get("gecis"), "kapanis": meta.get("kapanis"), "uyarilar": uyarilar})
+        _kunye_yaz(yol, {"gecis": meta.get("gecis"), "kapanis": meta.get("kapanis"), "uyarilar": uyarilar,
+                         "cuma_olculemeyen": cuma_gun})
     return Kur(yeni, ilk=yeni.index[0].date(), son=yeni.index[-1].date(),
                n=len(yeni), uyarilar=uyarilar, kapanis=meta.get("kapanis") or _fx.KESIM_ADI[TUR],
-               gecis=meta.get("gecis"), canli=meta.get("canli"))
+               gecis=meta.get("gecis"), canli=meta.get("canli"), cuma_olculemeyen=cuma_gun,
+               tanim=YEDEK_SUTUN if yedek else SUTUN)
 
 
 def kunye(k: Kur) -> dict:
-    """Koşu kaydına / ozet.json'a düşecek künye (okur diline uygun)."""
+    """Koşu kaydına / ozet.json'a düşecek künye (okur diline uygun).
+
+    `kur_cuma_olculemeyen`: günlük bar kısmında ölçülemediği için seriye
+    girmeyen cuma sayısı (cumartesi barı yok; pazartesi barının başı hafta sonu
+    açılışından sonradır). Uyarı değil künyedir: tarihçenin ortasındaki bilinen
+    bir boşluk her koşuda okura uyarı olarak basılamaz, ama sessiz de kalamaz."""
     return {"kur_kaynak": k.kaynak,
             "kur_ilk": k.ilk.strftime("%d.%m.%Y") if k.ilk else None,
             "kur_son": k.son.strftime("%d.%m.%Y") if k.son else None,
             "kur_gozlem": k.n,
             "kur_kapanis": k.kapanis,
             "kur_kapanis_gecis": (pd.Timestamp(k.gecis).strftime("%d.%m.%Y") if k.gecis else None),
+            "kur_cuma_olculemeyen": None if k.cuma_olculemeyen is None else len(k.cuma_olculemeyen),
             "kur_uyari": list(k.uyarilar)}
 
 

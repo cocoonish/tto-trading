@@ -2,7 +2,7 @@
 title: 'Hazine ihraç takvimi ve ihale analizi'
 description: 'Hazine iç borçlanmasının tam panosu: ihale bazlı veri seti üzerinde hacim/tür/maliyet/talep/vade analizi, strateji revizyon takibi, canlı ihraç takvimi ve ihale bazlı backtest — kullanım kılavuzuyla.'
 pubDate: 2026-07-15
-updatedDate: 2026-09-30
+updatedDate: 2026-10-03
 tags: ['hazine', 'tahvil', 'ihale']
 durum: 'aktif'
 kaynak: 'T.C. Hazine ve Maliye Bakanlığı'
@@ -53,6 +53,11 @@ duzeltmeler:
     eski: "WAM 4,13 yıldan 3,07 yıla indi"
     yeni: 'Haziran 2,85 → Temmuz 3,07 yıl'
     sebep: 'Not aylık serinin kendisiyle çelişiyordu; Temmuz vadesi düşmedi, yükseldi.'
+  - tarih: '2026-10-03'
+    alan: 'Şekil 04 — aylık ihraç hacmi dolar bazında (ay sonu kuru)'
+    eski: 'ay cuma ya da hafta sonu bitiyorsa ertesi pazartesinin hafta sonu açılışından sonraki kur'
+    yeni: 'ayın son ölçülmüş kapanışı (o aylarda son perşembe)'
+    sebep: "Saatlik barın ulaşmadığı geçmişte USD/TRY'nin cuma kuru ölçülemiyor: kaynakta cumanın kapanışını taşıyan bar yok ve cumaya yazılan değer ertesi pazartesinin, yani bir sonraki ayın ilk saatlerinin fiyatıydı. 2020–2023 arasında 16 ayın çubuğu değişti: medyan %0,25, en çok Şubat 2021'de %1,2."
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';

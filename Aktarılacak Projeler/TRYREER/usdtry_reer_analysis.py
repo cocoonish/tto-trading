@@ -74,11 +74,28 @@ def load_reer_data():
     return df
 
 
+def _kur_modulu():
+    """ortak/usdtry — USD/TRY'nin TEK tanımı."""
+    try:
+        import usdtry as _u
+    except ImportError:
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), "ortak"))
+        import usdtry as _u
+    return _u
+
+
 def load_usdtry_local():
     """Yerel usdtry_reer_data.csv'den aylık USDTRY serisini oku.
 
     Dosya önceki çalıştırmanın birleştirilmiş çıktısıdır; USDTRY sütunu zaten
     aylık ortalama olarak kayıtlıdır. Dosya yoksa/sütunlar eksikse None döner.
+
+    TANIM. Aylık ortalama, günlük serinin TANIMIYLA birlikte yazılır
+    (`kur_tanimi` = ortak/usdtry önbellek sütunu). Tanımı bugünkü olmayan dosya
+    da None döner: yoksa bu önbellek kapanış tanımı değiştiğinde (02.10.2026
+    saatlik bar, 03.10.2026 cumartesi barı olmayan cuma) eski aylık ortalamayı
+    REDK yeni aya geçene kadar bugünkü tanım diye okurdu — iki değişiklik de
+    bu hatta tam o yüzden ulaşmamıştı.
     """
     if not os.path.exists(USDTRY_LOCAL_CSV):
         return None
@@ -86,11 +103,17 @@ def load_usdtry_local():
         df = pd.read_csv(USDTRY_LOCAL_CSV)
         if not {'Dönem', 'USDTRY'}.issubset(df.columns):
             return None
+        tanim = _kur_modulu().SUTUN
+        eldeki = df['kur_tanimi'].dropna().unique().tolist() if 'kur_tanimi' in df.columns else []
+        if eldeki != [tanim]:
+            print(f"   ℹ️ Yerel USDTRY serisi başka bir kur tanımıyla yazılmış "
+                  f"({', '.join(map(str, eldeki)) or 'tanımsız'}; bugünkü {tanim}) — yeniden çekiliyor")
+            return None
         df['Dönem'] = pd.to_datetime(df['Dönem'], errors='coerce')
         for col in ['High', 'Low']:
             if col not in df.columns:
                 df[col] = np.nan
-        df = df[['Dönem', 'USDTRY', 'High', 'Low']].dropna(subset=['Dönem', 'USDTRY'])
+        df = df[['Dönem', 'USDTRY', 'High', 'Low', 'kur_tanimi']].dropna(subset=['Dönem', 'USDTRY'])
         df = df.sort_values('Dönem').reset_index(drop=True)
         if df.empty:
             return None
@@ -106,12 +129,10 @@ def fetch_usdtry_yfinance():
     KARAR (09.09.2026): her hatta Yahoo Finance; kapsam ölçümü ve kapanmamış
     bar kuralı ortak modülde. Yfinance'in kırpık/yanlış seviyeli seri arızası
     orada seviye ve kapsam sınamasıyla yakalanır; kapsam yetmezse eldeki
-    önbellek döner ve sebep basılır. High/Low aylık kapanışların uç değerleri."""
-    try:
-        import usdtry as _u
-    except ImportError:
-        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), "ortak"))
-        import usdtry as _u
+    önbellek döner ve sebep basılır. High/Low aylık kapanışların uç değerleri.
+    `kur_tanimi`: serinin tanımı (`Kur.tanim`); eski tanımla dönen önbellek
+    bugünkü diye işaretlenmez, bir sonraki koşu onu yeniden çeker."""
+    _u = _kur_modulu()
     print("📥 Yahoo Finance'ten USDTRY verisi çekiliyor (ortak/usdtry)...")
     k = _u.seri(bas="2005-01-03", onbellek=os.path.join(SCRIPT_DIR, "data", "cache", "usdtry_yahoo.csv"))
     for m in k.uyarilar:
@@ -123,7 +144,8 @@ def fetch_usdtry_yfinance():
                                           Low=('Close', 'min')).reset_index()
     monthly['Dönem'] = monthly['YearMonth'].dt.to_timestamp()
     monthly = monthly.rename(columns={'Close': 'USDTRY'})
-    monthly = monthly[['Dönem', 'USDTRY', 'High', 'Low']]
+    monthly['kur_tanimi'] = k.tanim
+    monthly = monthly[['Dönem', 'USDTRY', 'High', 'Low', 'kur_tanimi']]
     print(f"   ✅ {len(monthly)} aylık veri çekildi ({monthly['Dönem'].min().strftime('%Y-%m')} - {monthly['Dönem'].max().strftime('%Y-%m')})")
     return monthly
 
@@ -150,7 +172,8 @@ def fetch_usdtry(reer_last_date=None):
         return fetch_usdtry_yfinance()
     except Exception as e:
         if local is None:
-            raise RuntimeError(f"USDTRY verisi alınamadı: yerel CSV yok, yfinance hatası: {e}")
+            raise RuntimeError(f"USDTRY verisi alınamadı: bugünkü kur tanımıyla yazılmış yerel CSV "
+                               f"yok, yfinance hatası: {e}")
 
         # Buraya ancak yerel serinin REDK'den KISA olduğu bilinerek gelinir
         # (yukarıdaki `yeterli` dalı zaten yeterliyse dönerdi). Yani bu, bilinen

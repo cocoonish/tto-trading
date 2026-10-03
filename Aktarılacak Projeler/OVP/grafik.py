@@ -276,7 +276,8 @@ def sekil_01(o: dict, damga: str | None):
         _cizgi(fig, x, y, f"{ad} iması", PROG[tur], 1, mod="lines+markers",
                birim=" lira", ondalik=2,
                kes=None if tur == "yeni" else "dash")
-    ger = [g for g in (o.get("gerceklesen_yil") or []) if g["n"] >= 200]
+    # Yıl tamlığı SEANSLA (ölçülemeyen cuma dahil; metrik.yil_ozeti).
+    ger = [g for g in (o.get("gerceklesen_yil") or []) if g.get("n_seans", g["n"]) >= 200]
     if ger:
         _cizgi(fig, [g["yil"] for g in ger], [g["ortalama"] for g in ger],
                "Gerçekleşen yıllık ortalama", PROG["gerceklesen"], 1,
@@ -284,7 +285,7 @@ def sekil_01(o: dict, damga: str | None):
     # Yılın TAMAMI dolmadan hesaplanan ortalama yıl ortalaması DEĞİLDİR; ayrı
     # sembol ve ayrı adla çizilir, yoksa okur onu kapanmış bir yılın
     # ortalamasıyla aynı kefeye koyar.
-    kismi = [g for g in (o.get("gerceklesen_yil") or []) if g["n"] < 200]
+    kismi = [g for g in (o.get("gerceklesen_yil") or []) if g.get("n_seans", g["n"]) < 200]
     if kismi:
         _cizgi(fig, [g["yil"] for g in kismi], [g["ortalama"] for g in kismi],
                "Yıl içi ortalama (yıl kapanmadı)", GRI, 1, mod="markers",

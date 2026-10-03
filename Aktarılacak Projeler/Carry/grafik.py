@@ -33,6 +33,17 @@ def eksen_tarihi(okur_tarihi: str) -> str:
     return t.isoformat()
 
 
+def olculen(s):
+    """Serinin yalnız ÖLÇÜLMÜŞ noktaları — çizgi aradaki boş seansı atlayıp
+    komşu ölçümleri birleştirir. Kur bacaklı makaslarda saatlik barın ulaşmadığı
+    geçmişin cumaları boştur (`ortak/fx_kapanis`: cumartesi barı yoksa cuma
+    ölçülemez); boş nokta
+    Plotly'de çizgiyi koparır ve 2019–2023 her hafta kesik görünürdü. Boş günü
+    doldurmak (önceki değerle ya da ara değerle) ölçülmemiş bir nokta çizmek olurdu."""
+    s = s.dropna()
+    return {"x": s.index, "y": s}
+
+
 def yaz(fig, ad):
     # Sabit div kimliği: Plotly rastgele id üretiyor ve veri değişmese de HTML her
     # koşuda değişip commit üretiyordu (01.09: bir günde beş boş commit).
@@ -46,9 +57,9 @@ def main():
 
     # 01 — İleriye bakan taşıma makası
     f = go.Figure()
-    f.add_trace(go.Scatter(x=d19.index, y=d19["makas_politika_d1a"], name="Politika − 1a deval hızı",
+    f.add_trace(go.Scatter(**olculen(d19["makas_politika_d1a"]), name="Politika − 1a deval hızı",
                            line=dict(color=KIRMIZI, width=1.6)))
-    f.add_trace(go.Scatter(x=d19.index, y=d19["makas_tlref_b_d3a"], name="TLREF (bileşik) − 3a deval hızı",
+    f.add_trace(go.Scatter(**olculen(d19["makas_tlref_b_d3a"]), name="TLREF (bileşik) − 3a deval hızı",
                            line=dict(color=YESIL, width=1.6)))
     f.add_hline(y=0, line=dict(color=GRI, width=1, dash="dot"))
     f.update_layout(title="TL taşıma makası — faiz eksi kur hızı (puan)",
@@ -73,7 +84,7 @@ def main():
 
     # 03 — Nakit taşıma vs tahvil taşıması
     f = go.Figure()
-    f.add_trace(go.Scatter(x=d19.index, y=d19["makas_tlref_b_d1a"], name="Nakit: TLREF (bileşik) − 1a deval",
+    f.add_trace(go.Scatter(**olculen(d19["makas_tlref_b_d1a"]), name="Nakit: TLREF (bileşik) − 1a deval",
                            line=dict(color=KIRMIZI, width=1.4)))
     f.add_trace(go.Scatter(x=d19.index, y=d19["carry_2y_tlref"], name="Tahvil: 2y DİBS − TLREF (bileşik)",
                            line=dict(color=YESIL, width=1.4)))

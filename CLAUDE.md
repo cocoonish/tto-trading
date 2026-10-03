@@ -4167,4 +4167,37 @@ ABD vergi yasası penceresinin uçları kaynakla doğrulanmadı (resmî kayıt b
 oturumdan açılamadı, metin bunu söylüyor); `ortak/fx_kapanis.gunluk_duzelt`,
 saatlik barın ulaşmadığı 730 günden eski geçmişte pazartesi barını cumaya
 yazıyor, o barın kapanışı ise hafta sonu açılışından sonraki fiyattır (OAT–Bund
-analizinde ölçülen kaymanın üretimdeki eşi; ölçülmedi, düzeltilmedi).
+analizinde ölçülen kaymanın üretimdeki eşi; 03.10.2026'da ölçülüp düzeltildi,
+aşağıda).
+
+**Kurucu ilke — BİR BARIN DEĞERİ YALNIZ ERTESİ GÜNÜN BARINDAN O GÜNE YAZILIR;
+CUMARTESİ BARI YOKSA CUMA ÖLÇÜLMEMİŞTİR, ve ölçülemeyen cuma TATİL DEĞİL
+SEANSTIR.** `gunluk_duzelt`in "cumartesi ve pazartesi → cuma, güne yakın olan
+kazanır" kuralı yalnız cumartesi barı VARSA doğruydu. Ölçüldü
+(`bulten/kesif_fx_cuma.py`, veri.yml keşfi #317): on beş sembolün 2005'ten bu
+yana günlük geçmişinde cumartesi ya da pazar barı SIFIR; saatlik barla örtüşen
+pencerede (18.12.2023 → 01.10.2026) G10'un 1.716 cumasında pazartesi barından
+gelen değer saatlik kapanıştan medyanda 7,4 bp (p90 26,4 · azami 143,7)
+sapıyor, pazartesi–perşembe 3,9 bp; değer pazartesi 00:00 Londra fiyatından
+2,2 bp uzakta, yani cumaya haftanın hafta sonu boşluğu yazılıyordu. Lira
+kurlarında 432 cumada medyan 13,4 bp (taban 4,8). Pencere dışındaki en büyük
+örnek: 19.03.2021 cumasının USD/TRY'si 8,0954, o cumanın TCMB gösterge kuru
+7,2670 — Merkez Bankası başkanı cumartesi görevden alındı ve seri pazar
+akşamının çöküşünü cumaya yazıyordu. Haftalık bar kaynak değil (o da günün
+başı). Kural: değer önceki hafta içi güne YALNIZ bar o günün ertesi takvim
+günüyse yazılır; öbür cuma seriye girmez, adıyla döner. Tanım değişti,
+önbellekler de (`usdtry_ist18_2`, bülten `saatlik-2`); donmuş ders eski
+eşlemeyi AÇIKÇA ister (`pazartesi_cumaya=True`; 84.168 değerin hiçbiri
+değişmedi). Tüketicide dört ölçülmüş ders: ölçülemeyen cuma BOŞ SATIRDIR ve
+gün sayan ölçü onu sayar (OVP'de saymasa yıl gün ortancası 260 → 210, ileri
+taşıma %9,0 → %3,6); pencere SEANS sayar ve başı son ölçülmüş değerdir
+(gözlem saymak 3 yıllık Sharpe'ı 5,94 yerine 4,92 verirdi); tahakkuk kurdan
+BAĞIMSIZDIR (birlikte boşaltmak PPK'dan sonraki cumanın faizini atlıyor);
+türetilmiş önbellek TANIMI taşır (TRYREER'in aylık dosyasına ne 02.10 ne bu
+düzeltme ulaşmıştı; artık `Kur.tanim` yazılıyor). Yayımlanmış sayıların
+kaydı 03.10.2026'da düşüldü (TL taşıma, hazine ihracı, fonlama, REDK).
+Yirmi üç arıza enjeksiyonunun (eski `gunluk_duzelt`in birebir geri konması
+dahil) yirmi üçü kendi maddesinde yakalandı. AÇIK:
+saatlik pencere 730 İŞ günüdür ve her gün kayar; saatlik kapanış
+arşivlenmediği için her hafta bir cuma ölçülemeyene geçer ve geçmiş sayılar
+yavaşça oynar — saatlik kapanışı biriktiren bir arşiv bunu durdurur.

@@ -252,14 +252,22 @@ def _kapanis_ani():
     sina("kapanış anına yetişmeyen gün ölçülemez sayılıyor",
          "2026-09-30" in k3.olculemeyen and pd.Timestamp("2026-09-30") not in k3.seri.index,
          f"{k3.olculemeyen}")
-    # Günlük bar: kapanış alanı günün başıdır → değer önceki hafta içi güne.
-    gunluk = pd.Series([1.0, 2.0, 3.0, 4.0], index=pd.to_datetime(["2026-09-29", "2026-09-30", "2026-10-01", "2026-10-05"]))
+    # Günlük bar: kapanış alanı günün başıdır → değer önceki hafta içi güne,
+    # YALNIZ bar o günün ertesi günüyse. Pazartesi barının başı hafta sonu
+    # açılışından sonradır: cumartesi barı olmayan cuma ölçülemez (03.10.2026;
+    # bulut keşfi #317, G10'da medyan 7,4 bp sapma). Bu madde eskiden TAM TERSİNİ
+    # sınıyordu — "05.10 pazartesi barı → 02.10 cuma" — yani kusuru kural diye
+    # koruyordu. Fikstür iki haftayı birden taşır: cumartesi barı olan ve olmayan.
+    gunluk = pd.Series([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0],
+                       index=pd.to_datetime(["2026-09-24", "2026-09-25", "2026-09-26", "2026-09-28",
+                                             "2026-09-29", "2026-10-02", "2026-10-05"]))
     d = f.gunluk_duzelt(gunluk)
-    sina("günlük barın değeri bir önceki hafta içi güne yazılıyor",
-         [str(t.date()) for t in d.index] == ["2026-09-28", "2026-09-29", "2026-09-30", "2026-10-02"]
-         and list(d.values) == [1.0, 2.0, 3.0, 4.0], f"{d.to_dict()}")
+    sina("günlük barın değeri bir önceki hafta içi güne yazılıyor; cumartesi barı olmayan cuma ölçülemez",
+         [str(t.date()) for t in d.index] == ["2026-09-23", "2026-09-24", "2026-09-25", "2026-09-28", "2026-10-01"]
+         and list(d.values) == [1.0, 2.0, 3.0, 5.0, 6.0] and d.attrs.get("olculemeyen") == ["2026-10-02"],
+         f"{d.to_dict()} {d.attrs}")
     cmt = pd.Series([5.0, 6.0], index=pd.to_datetime(["2026-10-03", "2026-10-05"]))
-    sina("cumartesi barı pazartesi barından önce gelir (cumaya yakın)",
+    sina("cumartesi barı cumanın değeridir, pazartesi barı değildir",
          float(f.gunluk_duzelt(cmt).loc["2026-10-02"]) == 5.0, f"{f.gunluk_duzelt(cmt).to_dict()}")
     # Yükleyici: kapanmamış gün kuralı kapanış ANIYLA.
     idx = pd.to_datetime(["2026-09-30", "2026-10-01"])
@@ -269,7 +277,12 @@ def _kapanis_ani():
     src = (KOK / "ortak" / "usdtry.py").read_text(encoding="utf-8")
     sina("yükleyici saatlik kapanışı kuruyor", "_fx.saatlik_kapanislar(" in src and "_fx.gunluk_duzelt(" in src,
          "günlük barın kapanış alanı tek başına okunursa seri bir gün geriden gelir")
-    sina("önbellek sütunu tanımı taşıyor", 'SUTUN = "usdtry_ist18"' in src and "eski_tanim == SUTUN" in src,
+    # Satır SINIRIYLA sorulur: düz alt dize `ONCEKI_SUTUN = "usdtry_ist18"`
+    # satırında da tutar ve sürüm geri alınsa bile geçerdi (03.10.2026'da tam
+    # böyle yeşil geçti). Davranış aşağıdaki maddelerde ayrıca sorulur.
+    sina("önbellek sütunu tanımı taşıyor (03.10.2026: cuma kuralıyla _2)",
+         re.search(r'^SUTUN = "usdtry_ist18_2"$', src, re.M) is not None and "eski_tanim == SUTUN" in src
+         and m.SUTUN != m.ONCEKI_SUTUN,
          "eski tanımlı önbellek taze sayılırsa yeni tanım hiç devreye girmez")
     # DAVRANIŞ: eski tanımla (günlük barın kapanış alanı) yazılmış ama TAZE bir
     # önbellek, tazelik kuralından geçse bile kullanılmaz; seri yeniden kurulur

@@ -2,10 +2,32 @@
 title: 'TL taşıma defteri'
 description: 'TL carry tradeinin ölçülen hâli: faiz eksi kur hızı makası, hedgesiz taşımanın gerçekleşen endeksi, nakit ile tahvil taşımasının çelişkisi ve konvansiyon tuzakları.'
 pubDate: 2026-08-26
+updatedDate: 2026-10-03
 tags: ['carry', 'tlref', 'kur', 'dibs', 'faiz']
 durum: 'aktif'
-kaynak: 'Fonlama ve DİBS hatlarının depo serileri (EVDS kökenli)'
+kaynak: 'Fonlama ve DİBS hatlarının depo serileri (TCMB EVDS faizleri, Yahoo Finance USD/TRY)'
 guncelleme: 'hafta içi günlük (fonlama ve DİBS hatları tazelendikçe)'
+duzeltmeler:
+  - tarih: '2026-10-03'
+    alan: 'Carry endeksi — başlangıç günü ve değeri (02.10.2026 verisi)'
+    eski: '100 = 28.12.2018 · 82,4'
+    yeni: '100 = 31.12.2018 · 82,2'
+    sebep: "TLREF'in ilk günü 28.12.2018 bir cumadır ve o günün kuru, 31.12.2018 pazartesi barının başındaki fiyattı (5,2743): hafta sonu açılışından sonraki fiyat, cuma kapanışı değil. Saatlik barın ulaşmadığı geçmişte kaynakta cumanın kapanışını taşıyan bar yok; o cumalar artık ölçülmemiş sayılıyor ve endeks kurun ölçüldüğü ilk günde, 31.12.2018'de 100 ile başlıyor."
+  - tarih: '2026-10-03'
+    alan: 'Ölçülen en kötü 1 aylık pencereler'
+    eski: 'Nisan 2020 (−9,2) · Mart 2021 (−11,0) · Aralık 2021 (−36,1) · Haziran 2022 (−11,4) · Haziran 2023 (−22,1)'
+    yeni: 'Nisan 2020 (−9,0) · Mart 2021 (−11,4) · Aralık 2021 (−30,6) · Haziran 2022 (−11,1) · Haziran 2023 (−22,3)'
+    sebep: "Metindeki sayılar TCMB gösterge kuruyla hesaplanmıştı ve kur 09.09.2026'da piyasa kuruna (Yahoo Finance) geçtiğinde güncellenmemişti; piyasa kuruyla aynı pencereler −8,8 · −12,8 · −32,7 · −11,1 · −22,3 çıkıyordu. O serinin Mart ve Aralık 2021 dipleri cumaydı ve cuma kuru, ertesi pazartesinin hafta sonu açılışından sonraki fiyatıydı: 19.03.2021'de 8,10 (o cumanın TCMB gösterge kuru 7,27; Merkez Bankası başkanı cumartesi görevden alındı ve kur pazar akşamı açılışta sıçradı), 17.12.2021'de 16,61. O cumalar artık ölçülmemiş sayılıyor ve pencere 21 seans sayıyor (boş cuma da bir seanstır); Mart'ın dibi 30.03.2021'e, Aralık'ınki 16.12.2021'e kaydı."
+  - tarih: '2026-10-03'
+    alan: '3 yıllık Sharpe oranı (02.10.2026 verisi)'
+    eski: '5,79'
+    yeni: '5,94'
+    sebep: "Üç yıllık pencere 18.12.2023 öncesine uzanıyor ve o dönemin cumaları artık ölçülmemiş sayılıyor (cuma kuru pazartesi barının başıydı). Pencere gözlem değil seans sayıyor; ölçülmemiş bir seansın üstünden geçen getiri (o cumalar ve kuru ölçülmemiş 02.02.2026) iki seanslık risk olarak işleniyor — hafta sonu seans değildir, atlanan cuma seanstır."
+  - tarih: '2026-10-03'
+    alan: 'Şekil 01 ve 03 — kur hızı bacaklı makas izleri'
+    eski: 'saatlik barın ulaşmadığı geçmişte her cumada bir değer'
+    yeni: 'o cumalar boş; penceresi bir cumada başlayan günde başlangıç, önceki son ölçülmüş kur'
+    sebep: "Cuma değeri pazartesi barının başıydı (hafta sonu açılışından sonraki fiyat). 2019'dan bu yana politika − 1 aylık izinin 239, TLREF − 3 aylık izinin 219 gününde değer değişti (medyan 4,1 ve 1,8 puan); en büyük fark politika izinde, yıllıklandırılmış kur hızının beş haneye çıktığı Aralık 2021'de."
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
@@ -41,8 +63,9 @@ dersinde anlatılır. Bu sayfa o iki dersin VERİ ayağıdır.
 ## Güncel okuma
 
 Veri tarihi: <Deger proje="tl-tasima" anahtar="_tarih" ondalik={0}>25.08.2026</Deger>.
-Kur serisi TCMB gösterge kuru olduğu için bülten panosundaki canlı kur ölçümünden
-bir gün geride kalabilir; farkın sebebi aşağıda "Sınırlar" bölümünde.
+Kur serisi kapanmış seansın İstanbul 18:00 kapanışı olduğu için bülten
+panosundaki canlı kurdan bir gün geride kalabilir; farkın sebebi aşağıda
+"Sınırlar" bölümünde.
 
 | Büyüklük | Değer | Okuma |
 |---|---|---|
@@ -50,7 +73,7 @@ bir gün geride kalabilir; farkın sebebi aşağıda "Sınırlar" bölümünde.
 | TLREF (bileşik) − 3a deval hızı | <Deger proje="tl-tasima" anahtar="makas_tlref_b_d3a" ondalik={1} isaret={true}>+26,4</Deger> puan | gerçekleşen fonlamayla aynı soru |
 | 2y DİBS taşıması (TLREF bileşik) | <Deger proje="tl-tasima" anahtar="carry_2y_tlref" ondalik={2} isaret={true}>−8,47</Deger> puan | negatifse tahvili gecelikten fonlamak zararlı |
 | Aynı taşıma, basit faizle (yanlış) | <Deger proje="tl-tasima" anahtar="carry_2y_tlref_basit" ondalik={2} isaret={true}>+0,61</Deger> puan | konvansiyon hatasının bedeli: işaret bile ters |
-| Carry endeksi (USD bazlı, 100 = <Deger proje="tl-tasima" anahtar="endeks_bas" ondalik={0}>28.12.2018</Deger>) | <Deger proje="tl-tasima" anahtar="endeks" ondalik={1}>81,3</Deger> | hedge'siz taşımanın gerçekleşen hâli |
+| Carry endeksi (USD bazlı, 100 = <Deger proje="tl-tasima" anahtar="endeks_bas" ondalik={0}>31.12.2018</Deger>) | <Deger proje="tl-tasima" anahtar="endeks" ondalik={1}>81,3</Deger> | hedge'siz taşımanın gerçekleşen hâli |
 | Endeksin son 1 yıllık getirisi (USD) | <Deger proje="tl-tasima" anahtar="getiri_1y" ondalik={1} isaret={true}>+26,6</Deger>% | bugünkü rejimin gerçekleşmesi |
 | Zirveden uzaklık | <Deger proje="tl-tasima" anahtar="zirveden" ondalik={1} isaret={true}>−28,0</Deger>% | 2020 zirvesi hâlâ görülmedi |
 
@@ -122,8 +145,9 @@ $$
 d_n = \left[\left(\frac{S_t}{S_{t-n}}\right)^{365/g} - 1\right]\times 100
 $$
 
-formülüyle, $g$ iki gözlem arasındaki gerçek takvim günü olacak şekilde
-hesaplanır — [USD/TRY devalüasyon hızı](/projeler/usdtry-deval/) hattıyla aynı tanım.
+formülüyle hesaplanır: $n$ seans sayılır, $S_{t-n}$ o seansın kurudur (kuru
+ölçülmediyse ondan önceki son ölçülmüş kur) ve $g$ iki kur arasındaki gerçek
+takvim günüdür — [USD/TRY devalüasyon hızı](/projeler/usdtry-deval/) hattıyla aynı tanım.
 Politika faizi adım fonksiyonu olduğu için karar günleri arasında ileri
 taşınır; TLREF taşınmaz, çünkü her gün yeniden gerçekleşen bir ölçümdür.
 Makasın sıfırın altına indiği bölgeler, faizin kur hızını karşılamadığı —
@@ -146,11 +170,14 @@ $$
 E_t = 100 \cdot \frac{S_0}{S_t}\prod_{i\le t}\Bigl(1 + r^{TLREF}_{i-1}\cdot\frac{g_i}{365}\Bigr)
 $$
 
-ile kurulur; $g_i$ gözlemler arası takvim günüdür (hafta sonu tahakkuku cuma
-faiziyle işler — TLREF'in kendi konvansiyonu). Seri TLREF'in başladığı
-<Deger proje="tl-tasima" anahtar="endeks_bas" ondalik={0}>28.12.2018</Deger>'den
-başlar; öncesini vekil faizle uzatmak endeksin "gerçekleşme" iddiasını bozacağı
-için uzatılmaz. Alt panel zirveden düşüştür.
+ile kurulur; $g_i$ ardışık iki TLREF gözlemi arasındaki takvim günüdür (hafta
+sonu tahakkuku cuma faiziyle işler — TLREF'in kendi konvansiyonu). Tahakkuk
+kurdan bağımsızdır ve her TLREF gününde işler; endeks yalnız kuru ölçülmüş
+günde değer taşır. Seri TLREF'in ilk haftasında, kurun ölçüldüğü ilk günden
+(<Deger proje="tl-tasima" anahtar="endeks_bas" ondalik={0}>31.12.2018</Deger>)
+başlar: TLREF'in ilk günü 28.12.2018 bir cumadır ve o yılların cuma kuru
+ölçülmez (aşağıda "Sınırlar"). Öncesini vekil faizle uzatmak endeksin
+"gerçekleşme" iddiasını bozacağı için uzatılmaz. Alt panel zirveden düşüştür.
 
 Endeksin bugünkü değeri <Deger proje="tl-tasima" anahtar="endeks" ondalik={1}>81,3</Deger>:
 yani 2019 başından beri kesintisiz hedge'siz taşıma, dolara karşı hâlâ
@@ -160,8 +187,9 @@ altındadır. Aynı endeksin son bir yıllık getirisi ise
 <Deger proje="tl-tasima" anahtar="getiri_1y" ondalik={1} isaret={true}>+26,6</Deger>%
 — iki sayı birlikte, carry trade'in asıl karakterini anlatır: **uzun sakin
 dönemlerde biriktirir, kısa çöküşlerde topluca geri verir.** Ölçülen en kötü
-1 aylık pencereler bu çöküşlerin tarihleridir: Nisan 2020 (−9,2), Mart 2021
-(−11,0), **Aralık 2021 (−36,1)**, Haziran 2022 (−11,4), Haziran 2023 (−22,1).
+1 aylık (21 seans) pencereler bu çöküşlerin tarihleridir: Nisan 2020 (−9,0),
+Mart 2021 (−11,4), **Aralık 2021 (−30,6)**, Haziran 2022 (−11,1), Haziran 2023
+(−22,3).
 
 Bir uyarı: son üç yılın günlük getirilerinden hesaplanan Sharpe oranı
 <Deger proje="tl-tasima" anahtar="sharpe_3y" ondalik={2}>5,92</Deger> gibi
@@ -254,11 +282,20 @@ bağlanırsa önce oraya, sonra buraya gelecek.
 
 ## Sınırlar ve yorum notları
 
-- **Kur serisi TCMB gösterge kurudur** ve T+1 valörle öğlen sabitlenir; bülten
-  panosundaki kur ise piyasa verisinden canlı ölçülür. İki sayfanın "1 aylık
-  deval hızı" bu yüzden hem tarih hem seviye olarak küçük farklar gösterebilir.
-  Fark bir hata değil, iki ayrı sorunun cevabıdır: resmî kurla ölçülen rejim
-  ve piyasa kuruyla ölçülen an.
+- **Kur serisi piyasa kurudur** (Yahoo Finance USD/TRY): saatlik bardan
+  İstanbul 18:00 kapanışı, saatlik barın ulaşmadığı geçmişte günlük bardan
+  Londra gece yarısı. Bülten panosundaki kur ise canlıdır; bu sayfa yalnız
+  kapanmış seansı okur, iki sayfanın "1 aylık deval hızı" bu yüzden bir gün
+  ayrışabilir.
+- **Saatlik barın ulaşmadığı geçmişte cuma kuru ölçülmez.** O geçmişte günlük
+  barın "kapanışı" günün başındaki fiyattır; cumanın kapanışını taşıyabilecek
+  tek bar, cumartesi barı, kaynakta yoktur ve pazartesi barının başı hafta
+  sonu açılışından sonraki fiyattır — 19.03.2021 cumasına o yoldan yazılan
+  8,10, cumartesi Merkez Bankası başkanının görevden alınmasından sonraki
+  fiyattı (o cumanın TCMB gösterge kuru 7,27). O cumalar boş bırakılır: endeks ve
+  makaslar o günlerde değer taşımaz, pencereler seans sayar, TL tahakkuku her
+  TLREF gününde işler. Saatlik pencere her iş günü ileri kaydığı için boş
+  cumalar haftada bir artar.
 - **Endeks vergi, komisyon ve bid-ask içermez.** Gerçek bir taşıma hesabında
   stopaj ve dönüşüm maliyeti getiriyi aşağı çeker; endeks üst sınırdır.
 - **TLREF 28.12.2018'de başlar.** 2018 Ağustos çöküşü endekste yoktur; "en
@@ -270,8 +307,10 @@ bağlanırsa önce oraya, sonra buraya gelecek.
 
 ## Kaynaklar
 
-- TCMB EVDS — gösterge kur (`TP.DK.USD.A.YTL`), TLREF, AOFM, politika faizi ve
-  koridor serileri ([fonlama hattı](/projeler/fonlama-likidite) üzerinden)
+- TCMB EVDS — TLREF, AOFM, politika faizi ve koridor serileri
+  ([fonlama hattı](/projeler/fonlama-likidite) üzerinden)
+- Yahoo Finance — USD/TRY (`USDTRY=X`), kapanmış seansın İstanbul 18:00
+  kapanışı ([fonlama hattı](/projeler/fonlama-likidite) üzerinden)
 - DİBS kesit ve taşıma kolonları — [DİBS verim eğrisi ve reel faiz](/projeler/dibs-verim-egrisi/)
   hattının `metrik.csv` üretimi
 - TLREF OIS mekaniği ve carry &amp; roll formülleri — masa rehberi;

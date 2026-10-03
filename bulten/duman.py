@@ -2267,8 +2267,8 @@ def main() -> int:
         # Devredilen döviz serisi önce eski tanımdan çevrilir (davranışı
         # `_doviz_yollari` sınar: kısmi çekimde satır düşmez, bir gün geride ve
         # kapanış anı boş devredilir).
-        assert 'eski = _eski_tanimi_cevir(_eh.get("seri") or {}, _eh.get("zaman"))' in src, \
-            "önbellekten devredilen döviz serisi eski tanımdan çevrilmiyor"
+        assert 'eski = _eski_tanimi_cevir(_eh.get("seri") or {}, _eh.get("zaman"), _eh.get("doviz_kapanis"))' in src, \
+            "önbellekten devredilen döviz serisi eski tanımdan (ve önceki sürümün cumasından) çevrilmiyor"
         on = src[src.index("def _bos_seans_onar("):src.index("def _bos_seans_onar(") + 4000]
         assert 'if s.get("kapanis_tanimi"):' in on, "boş seans onarımı döviz serisine dokunuyor"
         yd = src[src.index("def _yerlesmemis_dus("):src.index("def _yerlesmemis_dus(") + 1500]
@@ -2373,6 +2373,194 @@ def main() -> int:
                 else:
                     _sys.modules.pop("yfinance", None)
     sina("döviz: günlük çekimden dönmeyen sembol saatlik barla; eski tanım çevrilerek devredilir; yedek görüntü yeni süreçte taze sayılmaz", _doviz_yollari)
+
+    # DÖVİZ CUMASI (03.10.2026). Günlük bar yolunda cumanın değeri YALNIZ
+    # cumartesi barından gelir: kapanmış barın kapanışı günün BAŞIDIR ve
+    # pazartesi barının başı (pazartesi 00:00 Londra) hafta sonu açılışından
+    # SONRAdır. Bulut keşfi (bulten/kesif_fx_cuma.py, veri.yml #317) on beş
+    # sembolde 2005'ten bu yana SIFIR hafta sonu barı ölçtü; eski eşleme cumaya
+    # pazartesi barını yazıyordu (G10'un 1.716 cumasında saatlik kapanıştan
+    # medyan 7,4 bp, pazartesi–perşembe 3,9). Fikstür İKİ hâli birden taşır —
+    # cumartesi barı OLAN hafta (19–26.09) ve OLMAYAN hafta (28.09–05.10):
+    # hafta sonunu içermeyen bir fikstür hafta sonu kuralını sınayamaz.
+    # Barın değeri günün başıdır = önceki günün gerçek kapanışı; pazartesi
+    # barı hafta sonu açılışından sonraki fiyatı taşır (gerçek kapanıştan ayrı).
+    CUMA_KAPANIS = {"2026-09-21": 10.00, "2026-09-22": 10.10, "2026-09-23": 10.20, "2026-09-24": 10.30,
+                    "2026-09-25": 10.40, "2026-09-28": 10.60, "2026-09-29": 10.70, "2026-09-30": 10.80,
+                    "2026-10-01": 10.90, "2026-10-02": 11.00, "2026-10-05": 11.30, "2026-10-06": 11.40}
+    CUMA_PZT_ACILIS = {"2026-09-28": 10.55, "2026-10-05": 11.20}
+
+    def _cuma_barlari(son: str = "2026-10-07"):
+        import pandas as _pd
+        g = sorted(CUMA_KAPANIS)
+        bar = {b: (CUMA_PZT_ACILIS[b] if b in CUMA_PZT_ACILIS else CUMA_KAPANIS[a])
+               for a, b in zip(g, g[1:])}
+        bar["2026-09-26"] = CUMA_KAPANIS["2026-09-25"]       # cumartesi barı: başı cuma gecesi
+        bar["2026-10-07"] = CUMA_KAPANIS["2026-10-06"]
+        s = _pd.Series(bar).sort_index()
+        s.index = _pd.to_datetime(s.index)
+        return s[s.index < _pd.Timestamp(son)]
+
+    def _doviz_cuma_kurali():
+        import pandas as _pd
+        import piyasa as py
+        F = py._fx_modul()
+        d = F.gunluk_duzelt(_cuma_barlari())
+        beklenen = {_pd.Timestamp(k): v for k, v in CUMA_KAPANIS.items() if k <= "2026-10-05" and k != "2026-10-02"}
+        assert d.to_dict() == beklenen, ("her değer kendi gününün GERÇEK kapanışı olmalı", d.to_dict())
+        assert float(d.loc["2026-09-25"]) == 10.40, "cumartesi barı olan haftanın cuması o bardan gelmeli"
+        assert _pd.Timestamp("2026-10-02") not in d.index and d.attrs.get("olculemeyen") == ["2026-10-02"], \
+            ("cumartesi barı olmayan cuma ölçülemez ve ADIYLA döner", d.attrs)
+        # Pazar barı cumanın kapanışı sayılmaz (2005'ten bu yana kaynakta hiç yok, ölçülmedi).
+        pz = _pd.concat([_cuma_barlari(), _pd.Series([11.0], index=_pd.to_datetime(["2026-10-04"]))]).sort_index()
+        assert _pd.Timestamp("2026-10-02") not in F.gunluk_duzelt(pz).index, "pazar barı cumaya yazıldı"
+        # Dersin eşlemesi yalnız AÇIKÇA istenince ve adıyla: pazartesi barı → cuma.
+        e = F.gunluk_duzelt(_cuma_barlari(), pazartesi_cumaya=True)
+        assert float(e.loc["2026-10-02"]) == 11.20 and float(e.loc["2026-09-25"]) == 10.40 \
+            and e.attrs.get("pazartesi_barindan") == ["2026-10-02"], (e.to_dict(), e.attrs)
+        # KAPSAM sözleşmeden türer: bayrağı yalnız dersin ölçüm katmanı taşır;
+        # üretim (ortak/usdtry, bulten/piyasa, KurSaati, hazirla) taşımaz.
+        kok = BURASI.parent
+        izinli = {"Aktarılacak Projeler/MakroKurFaiz/ortak_olc.py"}
+        kullanan = set()
+        for p in kok.rglob("*.py"):
+            rel = p.relative_to(kok).as_posix()
+            if p.name == "duman.py" or any(x in rel.split("/") for x in ("node_modules", ".venv", ".git")):
+                continue
+            if re.search(r"gunluk_duzelt\([^)]*pazartesi_cumaya\s*=\s*True", p.read_text(encoding="utf-8", errors="ignore")):
+                kullanan.add(rel)
+        assert kullanan == izinli, ("pazartesi eşlemesini isteyen dosyalar değişti", sorted(kullanan ^ izinli))
+    sina("döviz cuması: cumartesi barı olan hafta cumayı ölçer, olmayan hafta ölçmez (adıyla); pazartesi eşlemesi yalnız dersin ölçümünde", _doviz_cuma_kurali)
+
+    def _doviz_cuma_bulten():
+        import json as _json, sys as _sys, tempfile, types
+        import pandas as _pd
+        import piyasa as py
+        import denetim as dn
+        bar = _cuma_barlari("2026-10-08")
+        seri = lambda: {"EURUSD=X": {"tarih": [t.date().isoformat() for t in bar.index], "kapanis": list(bar.values)}}
+        # Saatlik barı alınamamış satır, SALI sabahı: pazartesi barının cuması ölçülemez → perşembede biter.
+        sali = py.doviz_kapanislari(seri(), {}, dt.datetime(2026, 10, 6, 4, 18, tzinfo=dt.timezone.utc))["EURUSD=X"]
+        assert sali["tarih"][-1] == "2026-10-01" and sali["kapanis"][-1] == 10.90 \
+            and sali.get("kapanis_olculemeyen") == ["2026-10-02"] and sali["kapanis_ani"] is None, sali
+        # ÇARŞAMBA sabahı: satır pazartesinde; günlük değişim perşembeden — denetim bunu iki seans diye söyler.
+        out = py.doviz_kapanislari(seri(), {}, dt.datetime(2026, 10, 7, 4, 18, tzinfo=dt.timezone.utc))
+        u = out["EURUSD=X"]
+        assert "2026-10-02" not in u["tarih"] and u["tarih"][-2:] == ["2026-10-01", "2026-10-05"] \
+            and u["kapanis"][-1] == 11.30, u
+        v = next(x for x in py.VARLIKLAR if x.kod == "EURUSD=X")
+        r = py.satir(v, out)
+        assert r["gap_gun"] == 4 and r["kapanis_olculemeyen"] == ["2026-10-02"], r
+        b = {"tarih": "2026-10-07", "olusturma": "2026-10-07T04:18:00+00:00",
+             "piyasa": {"gruplar": [{"id": "g10", "satirlar": [r]}]}}
+        d = dn.Denetim(b); d.uyari = []; d.engel = []; d.doviz_kapanisi()
+        assert any("saatlik barı alınamadı: EUR/USD" in x for x in d.uyari) and not d.engel, d.uyari
+        assert any("iki seansı kapsıyor" in x and "EUR/USD 2026-10-01 → 2026-10-05 (2026-10-02 ölçülemedi)" in x
+                   for x in d.uyari), d.uyari
+        # saatlik-1 görüntüsünden devredilen satır: saatlik bardan önceki cuma
+        # (yedek satırda bütün cumalar) pazartesi barının başıydı ve düşer, adıyla.
+        eski = {"USDJPY=X": {"tarih": ["2025-10-02", "2025-10-03", "2025-10-06", "2026-10-02"],
+                             "kapanis": [1.0, 2.0, 3.0, 4.0], "kapanis_tanimi": "New York 17:00",
+                             "kapanis_ani": "2026-10-02T21:00:00Z", "kapanis_gecis": "2025-10-06"},
+                "EURUSD=X": {"tarih": ["2026-09-24", "2026-09-25", "2026-09-28"], "kapanis": [1.0, 2.0, 3.0],
+                             "kapanis_tanimi": "Londra gece yarısı (günlük bar; saatlik bar alınamadı)",
+                             "kapanis_ani": None},
+                "^GSPC": {"tarih": ["2026-10-02"], "kapanis": [1.0]}}
+        c = py._eski_tanimi_cevir(eski, "2026-10-03T04:18:02", py.ONCEKI_DOVIZ_SURUM)
+        assert c["USDJPY=X"]["tarih"] == ["2025-10-02", "2025-10-06", "2026-10-02"] \
+            and c["USDJPY=X"]["kapanis_olculemeyen"] == ["2025-10-03"], c["USDJPY=X"]
+        assert c["EURUSD=X"]["tarih"] == ["2026-09-24", "2026-09-28"] and c["^GSPC"] == eski["^GSPC"], c
+        assert py._eski_tanimi_cevir(eski, "2026-10-03T04:18:02", py.DOVIZ_KAPANIS_SURUM) == eski, \
+            "bugünkü sürümün satırına dokunuldu"
+        # Önceki sürümle yazılmış ama başka her bakımdan sağlıklı görüntü TAZE sayılmaz.
+        assert py.DOVIZ_KAPANIS_SURUM != py.ONCEKI_DOVIZ_SURUM
+        sahte = types.ModuleType("yfinance")
+        def _indir(*a, **k):
+            raise RuntimeError("ağ yok (duman)")
+        sahte.download = _indir
+        eski_ham, eski_yf = py.HAM, _sys.modules.get("yfinance")
+        with tempfile.TemporaryDirectory() as td:
+            try:
+                py.HAM = Path(td) / "piyasa_ham.json"
+                _sys.modules["yfinance"] = sahte
+                py.HAM.write_text(_json.dumps({
+                    "zaman": dt.datetime.now().isoformat(timespec="seconds"), "doviz_kapanis": py.ONCEKI_DOVIZ_SURUM,
+                    "seri": {"USDTRY=X": {"tarih": ["2026-10-01"], "kapanis": [49.0], "kapanis_tanimi": "İstanbul 18:00",
+                                          "kapanis_ani": "2026-10-01T15:00:00Z"}}}), encoding="utf-8")
+                try:
+                    py._ham_veri()
+                    raise AssertionError("önceki sürümle yazılmış görüntü taze sayıldı")
+                except RuntimeError as e:
+                    assert "ağ yok" in str(e), e
+            finally:
+                py.HAM = eski_ham
+                py._SUREC_YAZILAN.clear()
+                if eski_yf is not None:
+                    _sys.modules["yfinance"] = eski_yf
+                else:
+                    _sys.modules.pop("yfinance", None)
+    sina("döviz cuması: yedek satır cumayı ölçmez ve adıyla taşır, denetim iki seansı söyler; saatlik-1 görüntüsü taze değil, devredilen satırın cuması düşer", _doviz_cuma_bulten)
+
+    def _usdtry_cuma():
+        import os as _os, sys as _s, tempfile as _tf
+        _s.path.insert(0, str(BURASI.parent / "ortak"))
+        import usdtry as _u, pandas as _pd, numpy as _np
+        simdi = dt.datetime(2026, 10, 2, 16, 0, tzinfo=dt.timezone.utc)
+        gecis = _pd.Timestamp("2023-12-18")
+        idx = _pd.bdate_range("2005-01-03", "2026-10-02")
+        cumalar = idx[(idx.dayofweek == 4) & (idx < gecis)]
+        tut = idx[~idx.isin(cumalar)]
+        def tam(a, b):
+            s = _pd.Series(_np.linspace(1.3, 49.0, len(tut)), index=tut)
+            s.attrs = {"kapanis": "İstanbul 18:00", "gecis": "2023-12-18", "olculemeyen": [],
+                       "olculemeyen_gunluk": [t.date().isoformat() for t in cumalar]}
+            return s
+        tmp = Path(_tf.mkdtemp())
+        # (1) Ölçülemeyen cumalar kapsam paydasına GİRMEZ: saysaydı seri %82 dolu
+        # görünür, sağlıklı seri reddedilir ve önbellek yoksa hat düşerdi.
+        k = _u.seri(onbellek=tmp / "a.csv", cek=tam, simdi=simdi)
+        assert not k.onbellekten and k.n == len(tut), (k.n, k.uyarilar)
+        # Seri tanımını taşır (türetilmiş önbelleği olan tüketici onu yanına yazar).
+        assert k.tanim == _u.SUTUN, k.tanim
+        assert _u.seri(onbellek=tmp / "a.csv", cek=tam, simdi=simdi).tanim == _u.SUTUN, "taze önbellek tanımsız döndü"
+        assert k.cuma_olculemeyen == [t.date().isoformat() for t in cumalar] \
+            and _u.kunye(k)["kur_cuma_olculemeyen"] == len(cumalar), (k.cuma_olculemeyen or [])[:3]
+        assert not any("seyrek" in x or "cuma" in x for x in k.uyarilar), \
+            ("tarihçenin ortasındaki cumalar her koşuda okura uyarı olarak basılıyor", k.uyarilar)
+        # (2) Yedek yolda SAĞ UÇTAKİ cuma uyarıdır (salı sabahı), yalnız o gün.
+        sali = dt.datetime(2026, 10, 6, 4, 18, tzinfo=dt.timezone.utc)
+        def yedek(a, b):
+            s = tam(a, b)
+            s = s[s.index <= "2026-10-01"]
+            s.attrs = {"yedek": True, "kapanis": "Londra gece yarısı (günlük bar)",
+                       "uyari": "saatlik bar alınamadı (duman); kapanış düzeltilmiş günlük bardan",
+                       "olculemeyen_gunluk": [t.date().isoformat() for t in cumalar] + ["2026-10-02"]}
+            return s
+        k2 = _u.seri(onbellek=tmp / "b.csv", cek=yedek, simdi=sali)
+        uy = [x for x in k2.uyarilar if "cuma kapanışı" in x]
+        assert len(uy) == 1 and "02.10.2026" in uy[0] and "15.12.2023" not in uy[0], k2.uyarilar
+        assert _pd.read_csv(tmp / "b.csv", index_col=0).columns[0] == _u.YEDEK_SUTUN and k2.tanim == _u.YEDEK_SUTUN
+        # (3) 02.10 tanımıyla yazılmış önbellek (sütun `usdtry_ist18`) taze olsa da
+        # kullanılmaz: o seride eski geçmişin cumaları pazartesi barının başı.
+        assert _u.SUTUN != _u.ONCEKI_SUTUN and _u.YEDEK_SUTUN != _u.ONCEKI_YEDEK_SUTUN
+        yol = tmp / "c.csv"
+        _pd.Series(49.0, index=idx, name=_u.ONCEKI_SUTUN).to_csv(yol, index_label="tarih")
+        cekildi = []
+        def tam2(a, b):
+            cekildi.append(1)
+            return tam(a, b)
+        k3 = _u.seri(onbellek=yol, cek=tam2, simdi=simdi)
+        assert cekildi and not k3.onbellekten and _pd.read_csv(yol, index_col=0).columns[0] == _u.SUTUN, \
+            "02.10 tanımlı önbellek taze sayıldı"
+        # Ağ düşerse o önbellek döner ve okura sözleşmesini söyler.
+        _pd.Series(49.0, index=idx, name=_u.ONCEKI_SUTUN).to_csv(yol, index_label="tarih")
+        def agsiz(a, b):
+            raise RuntimeError("ağ yok (duman)")
+        k4 = _u.seri(onbellek=yol, cek=agsiz, simdi=simdi)
+        assert k4.onbellekten and k4.kapanis == "İstanbul 18:00" \
+            and "cuma değeri pazartesi barının başıdır" in k4.uyarilar[0], (k4.kapanis, k4.uyarilar)
+        assert k4.tanim == _u.ONCEKI_SUTUN, ("eski tanımla dönen seri bugünkü tanımı taşıyor", k4.tanim)
+    sina("usdtry: ölçülemeyen cuma kapsam paydasına girmez, künyede sayılır, yalnız sağ uçta uyarı; 02.10 tanımlı önbellek taze değil; seri tanımını taşır", _usdtry_cuma)
 
     # Denetim: saatlik barı alınamamış ya da son seansın gerisinde kalmış döviz
     # satırı adıyla UYARI (yayını durdurmaz — satırın tarihi doğrudur).

@@ -2,11 +2,17 @@
 title: 'TCMB fonlama ve likidite'
 description: 'Politika faizi ile fiilî TCMB faizi arasındaki farkı ölçen bir pano: AOFM nasıl oluşur, fazla likidite rejiminde onun yerini alan sterilizasyon maliyeti (AOSM), TLREF ve koridor konumu, net açık piyasa fonlaması ve kompozisyonu, swap stoku, zorunlu karşılık tesisi ve kredi/mevduat faizine geçişkenlik.'
 pubDate: 2026-08-21
-updatedDate: 2026-08-21
+updatedDate: 2026-10-03
 tags: ['tcmb', 'faiz', 'likidite', 'aofm', 'tlref', 'zorunlu karşılık', 'para politikası']
 durum: 'aktif'
 kaynak: 'TCMB EVDS3 — açık piyasa işlemleri, faiz kotasyonları, TLREF ve BİST gecelik repo, analitik bilanço, swap stokları, haftalık kredi ve mevduat faizleri'
 guncelleme: 'her iş günü (APİ, faiz, analitik bilanço) + haftalık (kredi/mevduat faizi, ZK tabanı)'
+duzeltmeler:
+  - tarih: '2026-10-03'
+    alan: 'Şekil 04 — swap ile sağlanan TL ve TCMB kaynaklı net TL (dolar stoku × kur)'
+    eski: 'cuma günü ertesi pazartesinin hafta sonu açılışından sonraki kuruyla'
+    yeni: 'cuma günü son ölçülmüş kurla (perşembe kapanışı)'
+    sebep: "Saatlik barın ulaşmadığı geçmişte USD/TRY'nin cuma kuru ölçülemiyor: kaynakta cumanın kapanışını taşıyan bar yok, cumaya yazılan değer pazartesi barının başıydı. 2021–2023 cumalarından 155'inde TL karşılığı değişti: medyan %0,23, en çok 19.03.2021'de %9,6 — o cumanın kuru, Merkez Bankası başkanının cumartesi görevden alınmasından sonraki fiyattı."
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
@@ -486,7 +492,8 @@ $$
 \text{TCMB kaynaklı net TL}_t = \underbrace{\texttt{TP.APIFON3}}_{\text{net APİ}} + \underbrace{\frac{\text{swap}^{\text{alım}}_t \cdot e_t}{1000}}_{\text{sağlanan TL}} - \underbrace{\frac{\text{swap}^{\text{satım}}_t \cdot e_t}{1000}}_{\text{çekilen TL}}
 $$
 
-$e_t$ = USD/TRY (`TP.DK.USD.A.YTL`). Çıpa günü kur
+$e_t$ = USD/TRY (Yahoo Finance `USDTRY=X`, İstanbul 18:00 kapanışı; kuru ölçülmemiş
+günde son ölçülmüş kur). Çıpa günü kur
 <Deger proje="fonlama-likidite" anahtar="kur" ondalik={4}>47,8642</Deger>; swapla
 sağlanan TL <Deger proje="fonlama-likidite" anahtar="swap_alim_mlr_tl" ondalik={1}>0,0</Deger>
 milyar TL, çekilen TL

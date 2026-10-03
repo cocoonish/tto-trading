@@ -163,11 +163,15 @@ def dogrusal_cikis(s0: float, hedef_ort: float, n: int) -> float | None:
 # ===========================================================================
 #  KUR ÖLÇÜLERİ
 # ===========================================================================
-def yil_ozeti(kur: pd.Series, yil: int) -> dict | None:
+def yil_ozeti(kur: pd.Series, yil: int, seans: pd.Series | None = None) -> dict | None:
+    """Yılın ölçülmüş kurlarının özeti. `n` ölçülmüş gün, `n_seans` SEANS
+    (kapanışı ölçülemeyen cuma dahil; bkz. `tatil_payi`) — "yıl kapandı mı"
+    sorusu seansla sorulur, gözlemle değil."""
     s = kur[kur.index.year == yil]
     if s.empty:
         return None
-    return {"yil": yil, "n": int(len(s)), "ortalama": float(s.mean()),
+    n_seans = int((seans.index.year == yil).sum()) if seans is not None else int(len(s))
+    return {"yil": yil, "n": int(len(s)), "n_seans": max(n_seans, int(len(s))), "ortalama": float(s.mean()),
             "ilk": float(s.iloc[0]), "son": float(s.iloc[-1]),
             "ilk_gun": s.index[0].strftime("%Y-%m-%d"),
             "son_gun": s.index[-1].strftime("%Y-%m-%d")}
@@ -180,7 +184,8 @@ def ima_kur(p: dict) -> dict[int, float]:
     return {y: tl[y] / usd[y] for y in sorted(tl) if y in usd and usd[y]}
 
 
-def yontem_sinamasi(kayit: dict, kur: pd.Series, bu_yil: int) -> list[dict]:
+def yontem_sinamasi(kayit: dict, kur: pd.Series, bu_yil: int,
+                    seans: pd.Series | None = None) -> list[dict]:
     """KAPANMIŞ ve GERÇEKLEŞME olarak yayımlanmış yıllarda ima ↔ gerçekleşen.
 
     Kapanmamış ya da tahmin/program olan sütun sınamaya GİRMEZ; girseydi
@@ -192,10 +197,10 @@ def yontem_sinamasi(kayit: dict, kur: pd.Series, bu_yil: int) -> list[dict]:
         for y in sorted(ima):
             if y >= bu_yil or veri.sutun_turu(p, y) != "gerceklesme":
                 continue
-            oz = yil_ozeti(kur, y)
+            oz = yil_ozeti(kur, y, seans)
             # Yılın TAMAMI elde değilse sınama kurulamaz: yarım yılın
-            # ortalaması yıl ortalaması değildir.
-            if oz is None or oz["n"] < 200:
+            # ortalaması yıl ortalaması değildir. Tamlık SEANSLA sorulur.
+            if oz is None or oz["n_seans"] < 200:
                 continue
             out.append({"program": p["kod"], "program_kisa": p["kisa"], "yil": y,
                         "ima": ima[y], "gerceklesen": oz["ortalama"],
@@ -211,6 +216,11 @@ def tatil_payi(kur: pd.Series, ay: int, gun: int, yil: int, geriye: int = 5) -> 
     yıllarda hafta içi gün sayısı ile gerçekten gözlem düşen gün sayısının
     farkı alınır ve ORTANCASI yazılır. Gelecekteki tatilleri saymak bir
     varsayım olurdu; geçmişte kaç tane olduğunu saymak bir ölçümdür.
+
+    SAYILAN SEANSTIR, GÖZLEM DEĞİL: `kur`un satırları kapanışı ölçülemeyen
+    seansları da (boş değerli) taşır. 03.10.2026'dan beri saatlik barın
+    ulaşmadığı geçmişte cumartesi barı olmayan cuma ölçülemez; gözlem saymak
+    o cumaları tatil sayar (ölçüldü: ortanca 0 → 11).
     """
     farklar: list[int] = []
     for y in range(yil - geriye, yil):
@@ -235,15 +245,19 @@ def gozlem_gunu_ortancasi(kur: pd.Series, bu_yil: int, geriye: int = 5) -> int:
     Sabit 252 yazmak yerine ölçmenin sebebi: bu sayı hem takvimden hem resmî
     tatil sayısından geliyor ve ikisi de yıla göre değişiyor. Duyarlılığı
     küçük (yıl sonu seviyesi ±10 günde binde bir oynuyor) ama ölçmenin
-    maliyeti sıfır.
+    maliyeti sıfır. Sayılan SEANSTIR (boş değerli satır dahil, bkz.
+    `tatil_payi`): ölçülemeyen cumalar sayılmasa ortanca 260 → 210 düşer.
     """
     say = [int((kur.index.year == y).sum()) for y in range(bu_yil - geriye, bu_yil)]
     say = [n for n in say if n > 200]
     return int(np.median(say)) if say else 250
 
 
-def bu_yil_olc(p: dict, kur: pd.Series, bu_yil: int) -> dict | None:
-    """İçinde bulunulan yıl: gerçekleşen, sapma, kalan, gereken, iki patika."""
+def bu_yil_olc(p: dict, kur: pd.Series, bu_yil: int, seans: pd.Series | None = None) -> dict | None:
+    """İçinde bulunulan yıl: gerçekleşen, sapma, kalan, gereken, iki patika.
+
+    `seans`: tatil payının sayacağı gün ekseni (ölçülemeyen cuma dahil, bkz.
+    `tatil_payi`); verilmezse ölçülmüş günler."""
     ima = ima_kur(p)
     if bu_yil not in ima:
         return None
@@ -292,7 +306,7 @@ def bu_yil_olc(p: dict, kur: pd.Series, bu_yil: int) -> dict | None:
     # Pencere, son gözlemin ERTESİ gününden yıl sonuna kadardır; ay/gün ikilisi
     # takvimden okunur, elle kaydırılmaz (31'inde bir gün eklemek 32 verirdi).
     ertesi = son_gun + pd.Timedelta(days=1)
-    tp = tatil_payi(kur, int(ertesi.month), int(ertesi.day), bu_yil)
+    tp = tatil_payi(kur if seans is None else seans, int(ertesi.month), int(ertesi.day), bu_yil)
     d["kalan_tatil_payi"] = tp["ortanca"]
     d["kalan_tatil_ornek_yil"] = tp["n"]
     # SIFIR BİR ÖLÇÜM SONUCUDUR: geçmiş pencerelerde hiç tatil düşmediyse
@@ -614,6 +628,10 @@ def kos() -> int:
                 uyar(u)
 
     kur = K["usdtry"].dropna()
+    # SEANSLAR: ölçülmüş günler + kapanışı ölçülemeyen ama SEANS olan günler (boş
+    # satır; veri.cek_kume). Gün sayan iki ölçü (yıl gün sayısı, tatil payı)
+    # bunu sayar; değer okuyan her ölçü `kur`u.
+    seans = K["usdtry"]
     gecelik = F["tlref"].dropna() if "tlref" in F.columns else pd.Series(dtype=float)
     # Endeks İSTEĞE BAĞLI: yoksa taşıma kotasyondan takvim günüyle kurulur ve
     # hangi yolun kullanıldığı özete yazılır. Hattın durması gerekmez —
@@ -640,11 +658,11 @@ def kos() -> int:
     o["ima"] = {p["kod"]: {str(y): v for y, v in ima_kur(p).items()}
                 for p in kayit["programlar"]}
     o["gerceklesen_yil"] = [d for d in
-                            (yil_ozeti(kur, y) for y in sorted(set(kur.index.year)))
+                            (yil_ozeti(kur, y, seans) for y in sorted(set(kur.index.year)))
                             if d]
 
     # ------------------------------------------------------- yöntem sınaması
-    ys = yontem_sinamasi(kayit, kur, bu_yil)
+    ys = yontem_sinamasi(kayit, kur, bu_yil, seans)
     o["yontem"] = ys
     o["yontem_esik_yuzde"] = YONTEM_ESIK_YUZDE
     if not ys:
@@ -662,13 +680,13 @@ def kos() -> int:
                      f"(sınır %{b.sayi(YONTEM_ESIK_YUZDE, 1)}).")
 
     # ------------------------------------------------------- içinde bulunulan yıl
-    yil_gun = gozlem_gunu_ortancasi(kur, bu_yil)
+    yil_gun = gozlem_gunu_ortancasi(seans, bu_yil)
     o["yil_gun_ortancasi"] = yil_gun
     o["bu_yil_olcum"] = {}
     o["zincir"] = {}
     o["kumule"] = {}
     for p in (yeni, eski):
-        bu = bu_yil_olc(p, kur, bu_yil)
+        bu = bu_yil_olc(p, kur, bu_yil, seans)
         if bu is None:
             continue
         o["bu_yil_olcum"][p["kod"]] = bu
