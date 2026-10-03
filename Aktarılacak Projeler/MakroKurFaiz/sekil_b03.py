@@ -6,7 +6,7 @@ from __future__ import annotations
 import math
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         make_subplots, tarih, vir, yuzde, _yaz, baslik_koy, yukseklik)
 
 AYLAR = ("Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık")
 SAYI_YER = {0: "hiçbirinde", 1: "birinde", 2: "ikisinde", 3: "üçünde", 4: "dördünde"}
@@ -98,15 +98,16 @@ def s03_taylor_bandi(o: dict) -> None:
     k_p = _konum(son["aofm_ay_ort_yuzde"], son["bant_pka_alt_yuzde"], son["bant_pka_ust_yuzde"])
     r = ", ".join(yuzde(x, 0) for x in par["r_yildiz_yuzde"])
     # başlık + alt başlık en çok 7 satır (ev stilinin üst boşluğu ancak bu kadarını taşır; ölçüldü)
-    fig.update_layout(legend=dict(y=-0.1), title=dict(text=(
-        f"Şekil 03 — {ayad}'da AOFM, gerçekleşen<br>enflasyonla kurulan bandın {k_g}, beklentiyle<br>"
-        f"kurulan bandın {k_p}"
-        f"<br><sub>Aylık, {ay(t[0] + '-01')}–{ay(t[-1] + '-01')} · TÜİK TÜFE ve reel GSYH, TCMB AOFM ve Piyasa<br>"
-        "Katılımcıları Anketi (PKA), politika faizi ay sonu (09.2018 öncesi BIS)<br>"
+    fig.update_layout(legend=dict(y=-0.1))
+    # Başlık ortak sarma kuralıyla (sekil_ortak.baslik_koy); çizim alanı eskisiyle aynı (860 − 274 = 586).
+    baslik = baslik_koy(fig, f"Şekil 03 — {ayad}'da AOFM, gerçekleşen enflasyonla kurulan bandın {k_g}, "
+                        f"beklentiyle kurulan bandın {k_p}", [
+        f"Aylık, {ay(t[0] + '-01')}–{ay(t[-1] + '-01')} · TÜİK TÜFE ve reel GSYH, TCMB AOFM ve Piyasa "
+        "Katılımcıları Anketi (PKA), politika faizi ay sonu (09.2018 öncesi BIS)",
         f"kural = r* + π + {vir(par['katsayi_pi'], 1)}(π − {vir(par['pi_hedef_yuzde'], 0)}) + "
-        f"{vir(par['katsayi_acik'], 1)}·açık, hedef {yuzde(par['pi_hedef_yuzde'], 0)} · her bant: iki açık<br>"
-        f"sürümü × üç r* ({r}), en düşük ile en yüksek bileşim arası</sub>")))
-    _yaz(fig, "03_taylor_bandi.html", 860)
+        f"{vir(par['katsayi_acik'], 1)}·açık, hedef {yuzde(par['pi_hedef_yuzde'], 0)}",
+        f"her bant: iki açık sürümü × üç r* ({r}), en düşük ile en yüksek bileşim arası"])
+    _yaz(fig, "03_taylor_bandi.html", yukseklik(baslik, 586))
 
 
 def s04_faiz_farki_eurusd(o: dict) -> None:

@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         make_subplots, tarih, vir, yuzde, _yaz, baslik_koy, yukseklik)
 
 DONEM_GOLGE = "rgba(138,138,138,0.16)"
 
@@ -76,10 +76,11 @@ def s17_emtia_paralari(o: dict) -> None:
     i0 = next(i for i, v in enumerate(s["kor36_cad_enerji"]) if v is not None)
     kor_ilk, asgari = t[i0], i0
     hiza = (" · son değerin işareti emtianın ay ortalamasıyla eşlenen kurda da aynı" if hiza_ayni else "")
-    fig.update_layout(title=dict(text=(
-        f"Şekil 17 — {bas}: {bulgu}"
-        f"<br><sub>Aylık, {ay(s['ilk'])}–{ay(s['son'])} · kur ay sonu (AUD, CAD New York 17:00; NOK ECB referans "
-        "kurlarından euro çaprazı)<br>emtia: Dünya Bankası Pink Sheet metal ve enerji endeksi, ay ortalaması "
-        "(nominal dolar)<br>seviye: 2000'in log ortalaması = 100 · korelasyon: aylık log değişimlerden, 36 aylık "
-        f"pencere<br>ilk değer {ay(kor_ilk)} (pencerede en az {asgari} ay){hiza}</sub>")))
-    _yaz(fig, "17_emtia_paralari.html", 900)
+    # Başlık ortak sarma kuralıyla (sekil_ortak.baslik_koy); çizim alanı eskisiyle aynı (900 − 222 = 678).
+    baslik = baslik_koy(fig, f"Şekil 17 — {bas}: {bulgu}", [
+        f"Aylık, {ay(s['ilk'])}–{ay(s['son'])} · kur ay sonu (AUD, CAD New York 17:00; NOK ECB referans "
+        "kurlarından euro çaprazı)",
+        "emtia: Dünya Bankası Pink Sheet metal ve enerji endeksi, ay ortalaması (nominal dolar)",
+        "seviye: 2000'in log ortalaması = 100 · korelasyon: aylık log değişimlerden, 36 aylık pencere",
+        f"ilk değer {ay(kor_ilk)} (pencerede en az {asgari} ay){hiza}"])
+    _yaz(fig, "17_emtia_paralari.html", yukseklik(baslik, 678))

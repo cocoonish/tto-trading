@@ -20,7 +20,7 @@ from __future__ import annotations
 import math
 import re
 
-from sekil_ortak import CLARET, GRI, MAVI, MUREKKEP, TURUNCU, go, make_subplots, tarih, vir, _yaz
+from sekil_ortak import CLARET, GRI, MAVI, MUREKKEP, TURUNCU, baslik_metni, go, make_subplots, tarih, vir, _yaz
 from sekil_b13 import _OLCEK, _imzali, _olcek_rengi, _sar, _yazi_rengi
 
 NO = {"harita": "18", "kayan": "19", "usdjpy": "20"}
@@ -60,8 +60,8 @@ def _dosya(k: str) -> str:
 
 
 def _baslik(k: str, bulgu: str, alt: list[str]) -> str:
-    bas = _sar(f"Şekil {NO[k]} — {bulgu}", BASLIK_EN)
-    return bas + "<br><sub>" + "<br>".join(_sar(s, ALT_EN) for s in alt) + "</sub>"
+    # Ortak sarma kuralı (sekil_ortak.baslik_metni): karakter sayımlı sarma telefonun gömme çerçevesini aşıyordu.
+    return baslik_metni(f"Şekil {NO[k]} — {bulgu}", alt)
 
 
 def _ust_pay(baslik: str) -> int:
@@ -428,7 +428,7 @@ def s_usdjpy(o: dict) -> None:
         subplot_titles=("USD/JPY (dolar başına yen), haftalık",
                         "ABD − Japonya getiri farkı (yüzde puan)",
                         "52 haftalık korelasyon (haftalık değişimler)",
-                        "52 haftalık eğim: farkın 1 baz puanı başına USD/JPY (%)",
+                        "52 haftalık eğim (USD/JPY %, fark 1 bp)",
                         "Dönem içi korelasyon: seviye ve haftalık değişim"))
     _panel_basliklari(fig, 5)
     fig.add_trace(go.Scatter(x=t, y=u["usdjpy"], mode="lines", line=dict(color=MUREKKEP, width=1.6), name="USD/JPY",

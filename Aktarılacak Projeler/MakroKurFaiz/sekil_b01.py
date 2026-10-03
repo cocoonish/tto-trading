@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         make_subplots, tarih, vir, yuzde, _yaz, baslik_koy, yukseklik)
 
 GOLGE = "rgba(138,138,138,0.17)"
 VAKA = "rgba(184,134,11,0.30)"
@@ -68,11 +68,13 @@ def s01_abd_korelasyon(o: dict) -> None:
     fig.update_yaxes(title_text="VIX (endeks puanı)", row=2, col=1)
     # x aralığı veriden: vaka etiketleri eksen aralığını kendiliğinden genişletiyordu (390 px'te 1997'ye)
     fig.update_xaxes(range=[s["ilk"], s["son"]], row="all", col=1)
-    fig.update_layout(legend=dict(y=-0.12), title=dict(text=(
-        "Şekil 01 — ABD faizi ile dolar çoğunlukla<br>aynı yöne gider; VIX yükseldikçe işaret daha<br>"
-        "sık döner, ama her dönüş VIX'le gelmez"
-        "<br><sub>ABD Hazinesi 10 yıllık getirisinin günlük değişimi (bp) ile altı G10<br>"
-        "kurundan eşit ağırlıklı dolar sepetinin günlük değişimi (artış: dolar<br>"
-        "değer kazanır) · kurlar CNBC, New York 17:00 · VIX Yahoo Finance<br>"
-        f"60 iş günlük kayan pencere, haftanın son iş günü · {tarih(s['ilk'])}–{tarih(s['son'])}</sub>")))
-    _yaz(fig, "01_abd_korelasyon.html", 720)
+    fig.update_layout(legend=dict(y=-0.12))
+    # Başlık ortak sarma kuralıyla (sekil_ortak.baslik_koy): elle konan <br>'ler telefonun gömme çerçevesini
+    # aşıyordu; yükseklik satır sayısından, çizim alanı eskisiyle aynı (720 − 274 = 446).
+    baslik = baslik_koy(fig, "Şekil 01 — ABD faizi ile dolar çoğunlukla aynı yöne gider; VIX yükseldikçe işaret "
+                        "daha sık döner, ama her dönüş VIX'le gelmez", [
+        "ABD Hazinesi 10 yıllık getirisinin günlük değişimi (bp) ile altı G10 kurundan eşit ağırlıklı dolar "
+        "sepetinin günlük değişimi (artış: dolar değer kazanır)",
+        "kurlar CNBC, New York 17:00 · VIX Yahoo Finance",
+        f"60 iş günlük kayan pencere, haftanın son iş günü · {tarih(s['ilk'])}–{tarih(s['son'])}"])
+    _yaz(fig, "01_abd_korelasyon.html", yukseklik(baslik, 446))

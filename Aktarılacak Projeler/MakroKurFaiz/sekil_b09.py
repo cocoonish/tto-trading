@@ -6,7 +6,7 @@ from __future__ import annotations
 import re
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         make_subplots, tarih, vir, yuzde, _yaz, baslik_koy, yukseklik)
 
 
 def _paneller_sola(fig, boyut: int = 13) -> None:
@@ -67,15 +67,14 @@ def s16_kur_baskisi(o: dict) -> None:
     fig.update_yaxes(autorange="reversed", row=2, col=1)
     _paneller_sola(fig)
     gecis = re.search(r"\d{2}\.\d{2}\.\d{4}", p["kur_cuma_notu"])
-    gecis_metni = f"; {gecis.group(0)} öncesi perşembe kapanışı" if gecis else ""
-    fig.update_layout(title=dict(text=(
-        f"Şekil 16 — {ay(d[adlar[-1]]['ilk'])}–{ay(d[adlar[-1]]['son'])} döneminde kur baskısı kura değil, rezerve "
-        "ve faize yazılıyor"
-        f"<br><sub>Haftalık ölçüm {tarih(p['ilk'])}–{tarih(p['son'])}, {p['n']} hafta · üst panel ay içi toplam, "
-        f"{ay(s['tarih'][0])}–{ay(s['tarih'][-1])}</sub>"
-        f"<br><sub>kur: USD/TRY log değişimi, Yahoo Finance (İstanbul 18:00{gecis_metni})</sub>"
-        "<br><sub>rezerv: TCMB swap hariç net rezervin değişimi / önceki hafta brüt rezerv, işareti çevrili "
-        "(artı: kayıp)</sub>"
-        "<br><sub>faiz: TCMB ağırlıklı ortalama fonlama maliyetinin değişimi (puan) · her bileşen kendi σ'sına "
-        "bölünür</sub>")))
-    _yaz(fig, "16_kur_baskisi.html", 860)
+    gecis_metni = (f"{gecis.group(0)}'ten İstanbul 18:00, öncesinde Londra gece yarısı barı; perşembe" if gecis
+                   else "İstanbul 18:00")
+    # Başlık ortak sarma kuralıyla (sekil_ortak.baslik_koy); çizim alanı eskisiyle aynı (860 − 222 = 638).
+    baslik = baslik_koy(fig, f"Şekil 16 — {ay(d[adlar[-1]]['ilk'])}–{ay(d[adlar[-1]]['son'])} döneminde kur "
+                        "baskısı kura değil, rezerve ve faize yazılıyor", [
+        f"Haftalık ölçüm {tarih(p['ilk'])}–{tarih(p['son'])}, {p['n']} hafta · üst panel ay içi toplam, "
+        f"{ay(s['tarih'][0])}–{ay(s['tarih'][-1])}",
+        f"kur: USD/TRY log değişimi, Yahoo Finance ({gecis_metni})",
+        "rezerv: TCMB swap hariç net rezervin değişimi / önceki hafta brüt rezerv, işareti çevrili (artı: kayıp)",
+        "faiz: TCMB ağırlıklı ortalama fonlama maliyetinin değişimi (puan) · her bileşen kendi σ'sına bölünür"])
+    _yaz(fig, "16_kur_baskisi.html", yukseklik(baslik, 638))
