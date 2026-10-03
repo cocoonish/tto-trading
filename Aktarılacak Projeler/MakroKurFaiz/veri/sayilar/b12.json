@@ -440,7 +440,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| 17.03.2017 | akşam | Moody's* | görünüm ↓ | 16.03 → 20.03 | −%0,13 | +14,7 bp |",
+   "satir": "| 17.03.2017 ° | akşam | Moody's* | görünüm ↓ | 16.03 → 20.03 | −%0,13 | +14,7 bp |",
    "degerler": [
     {
      "yol": "b12.p12.kararlar.14.dkur_yuzde",
@@ -494,7 +494,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| 13.07.2018 | 23:19 | Fitch | not ↓ | 12.07 → 16.07 | −%0,30 | −2,9 bp |",
+   "satir": "| 13.07.2018 | 23:19 | Fitch* | not ↓ | 12.07 → 16.07 | −%0,30 | −2,9 bp |",
    "degerler": [
     {
      "yol": "b12.p12.kararlar.17.dkur_yuzde",
@@ -584,7 +584,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| 01.11.2019 | — | Fitch* | görünüm ↑ | 30.10 → 04.11 | +%0,56 | −47,3 bp |",
+   "satir": "| 01.11.2019 ° | — | Fitch* | görünüm ↑ | 30.10 → 04.11 | +%0,56 | −47,3 bp |",
    "degerler": [
     {
      "yol": "b12.p12.kararlar.22.dkur_yuzde",
@@ -656,7 +656,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| 11.02.2022 † | — | Fitch* | not ↓ | 09.02 → 14.02 | +%0,38 | +21,2 bp |",
+   "satir": "| 11.02.2022 † ° | — | Fitch* | not ↓ | 09.02 → 14.02 | +%0,38 | +21,2 bp |",
    "degerler": [
     {
      "yol": "b12.p12.kararlar.26.dkur_yuzde",
@@ -764,7 +764,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| 01.11.2024 | akşam | S&P* | not ↑ | 01.11 → 04.11 | +%0,03 | +49,6 bp |",
+   "satir": "| 01.11.2024 ° | akşam | S&P* | not ↑ | 01.11 → 04.11 | +%0,03 | +49,6 bp |",
    "degerler": [
     {
      "yol": "b12.p12.kararlar.32.dkur_yuzde",
@@ -782,12 +782,12 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Longstaff, Pan, Pedersen ve Singleton 26 ülkenin CDS spreadlerinde yalnız üç ana bileşenin değişimin %50'sinden fazlasını açıkladığını bulur",
+   "parca": "Longstaff, Pan, Pedersen ve Singleton (2011) 26 ülkenin CDS spreadlerinde yalnız üç ana bileşenin değişimin %50'sinden fazlasını açıkladığını bulur",
    "kaynak": "lpps2011"
   },
   {
    "tur": "kaynak",
-   "parca": "Du, Pflueger ve Schreger'e göre para politikası taahhüdü zayıf hükümetlerde",
+   "parca": "Du, Pflueger ve Schreger'e (2020) göre para politikası taahhüdü zayıf hükümetlerde",
    "kaynak": "dps2020"
   },
   {
@@ -961,7 +961,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "5 yıllıkta doluluk %21,70, en uzun boşluk 729 iş günü",
+   "parca": "5 yıllıkta 13.01.2023'ten bu yana doluluk %21,70, en uzun boşluk 729 iş günü",
    "degerler": [
     {
      "yol": "b12.p12_vekil.tufex_reel.r5y.is_gunu_dolulugu",
@@ -1065,42 +1065,6 @@
    ]
   },
   {
-   "tur": "olcum",
-   "parca": "33 karar (01.05.2012–01.11.2024): 22 bozulma, 11 iyileşme; 20'si",
-   "degerler": [
-    {
-     "yol": "b12.p12.n",
-     "bicim": "tam",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.ilk",
-     "bicim": "tarih",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.son",
-     "bicim": "tarih",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.n_bozulma",
-     "bicim": "tam",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.n_iyilesme",
-     "bicim": "tam",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.n_dogrulandi",
-     "bicim": "tam",
-     "hane": 2
-    }
-   ]
-  },
-  {
    "tur": "hesap",
    "parca": "23 kararda dakika, 5'inde yalnız \"akşam\", 5'inde saat yok",
    "degerler": [
@@ -1128,53 +1092,6 @@
   },
   {
    "tur": "olcum",
-   "parca": "(kur 22, 5 yıllık 24 olay)",
-   "degerler": [
-    {
-     "yol": "b12.p12.plasebo_kapisi.kur.n_olay",
-     "bicim": "tam",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.plasebo_kapisi.dibs_5y.n_olay",
-     "bicim": "tam",
-     "hane": 2
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
-   "parca": "kurda −2 iş günü 1,83, −1 1,03, olay günü 0,95, +1 0,92, +2 0,84",
-   "degerler": [
-    {
-     "yol": "b12.p12.plasebo_kapisi.kur.oran.-2",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.plasebo_kapisi.kur.oran.-1",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.plasebo_kapisi.kur.oran.0",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.plasebo_kapisi.kur.oran.1",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.plasebo_kapisi.kur.oran.2",
-     "bicim": "sayi",
-     "hane": 2
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
    "parca": "5 yıllıkta 0,98 · 1,02 · 0,75 · 0,78 · 1,10",
    "degerler": [
     {
@@ -1199,22 +1116,6 @@
     },
     {
      "yol": "b12.p12.plasebo_kapisi.dibs_5y.oran.2",
-     "bicim": "sayi",
-     "hane": 2
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
-   "parca": "(p kurda 0,51, faizde 0,84)",
-   "degerler": [
-    {
-     "yol": "b12.p12.plasebo_kapisi.kur.p_rastgele_oran0",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12.plasebo_kapisi.dibs_5y.p_rastgele_oran0",
      "bicim": "sayi",
      "hane": 2
     }
@@ -1295,7 +1196,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "VIX tepki günü +2,16 puan, 250 günlük günlük oynaklık 1,1525 puan",
+   "parca": "VIX tepki günü +2,16 puan, karar gününe kadarki 250 iş gününün günlük oynaklığı 1,1525 puan",
    "degerler": [
     {
      "yol": "b12.p12_dm.vakalar.0.tepki.dvix_puan",
@@ -1334,6 +1235,214 @@
      "bicim": "yz",
      "hane": 0,
      "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "13.01.2023'ten bu yana doluluk",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r5y.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "son 252 iş gününün %34,52'si dolu",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r5y.son_252_is_gunu_dolulugu",
+     "bicim": "yz",
+     "hane": 2,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "33 karar (01.05.2012–01.11.2024): 22 bozulma, 11 iyileşme; 19'u haber ajansı, gazete ya da televizyon haberiyle, kalan 14'ü",
+   "degerler": [
+    {
+     "yol": "b12.p12.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.n_bozulma",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.n_iyilesme",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.n_dogrulandi",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.n_kismen",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "29 kararın günü kaynakta yazılı",
+   "degerler": [
+    {
+     "yol": "b12.p12.gun_dayanagi_sayisi.kaynak",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(kur 27, 5 yıllık 24 olay)",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kurda −2 gözlem 1,66, −1 0,87, olay günü 1,35, +1 0,83, +2 0,78",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.-2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.-1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "sıradan günden 1,40 kat büyüktür",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.pazartesi_abs.gecis_oncesi.oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(p kurda 0,24, faizde 0,84)",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yalnız 18.12.2023 öncesi (kur 24 olay, p 0,15)",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.gecis_oncesi.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.gecis_oncesi.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(kur 24 olay, p 0,14; 5 yıllık 21 olay, p 0,90)",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi_gunu_kaynakta.kur.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi_gunu_kaynakta.kur.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi_gunu_kaynakta.dibs_5y.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi_gunu_kaynakta.dibs_5y.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "o kaymadaki mutlak değişimin %51,05'i en büyük üç gözlemden gelir (en büyüğü 15.08.2018)",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.tepe_katkisi.en_buyuk_pay",
+     "bicim": "yz",
+     "hane": 2,
+     "carpan": 100
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.tepe_katkisi.en_buyuk.0.kayma_gunu",
+     "bicim": "tarih",
+     "hane": 2
     }
    ]
   }
