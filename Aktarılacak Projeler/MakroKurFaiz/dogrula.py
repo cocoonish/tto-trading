@@ -420,7 +420,22 @@ def bicim_sina(govde: str) -> None:
 
 
 # ─────────────────────────────────────────────── 5 · figürler
+def _figur_basliklari(h: str, no: str) -> list[str]:
+    """Figür dosyasındaki 'Şekil NN —' ile başlayan başlık metinleri (Plotly düzeninin JSON'undan)."""
+    out = []
+    for m in re.finditer(r'"text":"((?:[^"\\]|\\.)*)"', h):
+        try:
+            t = json.loads('"' + m.group(1) + '"')
+        except ValueError:
+            continue
+        if t.startswith(f"Şekil {no} —"):
+            out.append(t)
+    return out
+
+
 def figurler(govde: str) -> None:
+    sys.path.insert(0, str(BURASI))
+    from sekil_ortak import tasan_satirlar   # çizim kütüphanesi olmadan da içe aktarılır
     kaynak = (BURASI / "sekil.py").read_text(encoding="utf-8")
     bas = kaynak.index("SEKILLER = {")
     blok = kaynak[bas:kaynak.index("}", bas)]
@@ -445,6 +460,12 @@ def figurler(govde: str) -> None:
             hatalar.append(f"figür bugünkü ölçüm dosyasından çizilmemiş — sekil.py yeniden koşulmalı: {ad}")
         if f"Şekil {no} —" not in h and f"\\u015eekil {no} \\u2014" not in h:
             hatalar.append(f"figürün içindeki başlık 'Şekil {no}' değil: {ad}")
+        # Başlık bloğu telefonun gömme çerçevesine sığmalı (Plotly başlığı sarmaz, sağ ucu kırpılır).
+        # Ölçü çizim katmanının KENDİ tanımıdır (sekil_ortak.tasan_satirlar); orada yalnız uyarıydı ve
+        # elle satırlanmış dört figür ekrana basılan uyarıyla yayına gitmişti.
+        for b in _figur_basliklari(h, no):
+            for t in tasan_satirlar(b):
+                hatalar.append(f"figür başlığı telefonun gömme çerçevesinde taşar: {ad} · {t}")
 
 
 # ─────────────────────────────────────────────── 6 · araçlar

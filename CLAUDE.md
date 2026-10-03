@@ -4121,3 +4121,50 @@ varsa denetim "günlük değişim iki seansı kapsıyor" der (Noel, yılbaşı h
 (5) Bir özetin değeri ve etiketi iki ayrı `seri()` çağrısından geliyordu — iki
 çağrı iki çekimdir. On altı arıza enjeksiyonunun on altısı kendi maddesinde
 yakalandı.
+
+**KARAR (02.10.2026, kullanıcı) — "Makrodan Kura ve Faize" DERSİ UZUN KALIR;
+ve BİR SAF KIYAS, HEDEFİN TÜRÜNDEN TÜRER.** Bütçe açığı, büyüme, enflasyon,
+reel efektif kur, ödemeler dengesi ve emtianın kur ile faize etkisi, EM ve DM
+için (`site/src/content/arastirma/makro-kur-ve-faiz.mdx`; proje
+`Aktarılacak Projeler/MakroKurFaiz/`, parça parça `metin/bNN.mdx` →
+`birlestir.py`). Plan 120 dakika + hızlı yol olarak onaylandı, sonra emtia ve
+kur sürücüleri istendi (petrol ↔ emtia paraları, USD/JPY ↔ ABD–Japonya faiz
+farkı) ve kısaltma istenmedi ("uzun kalabilir"): 31.364 kelime, 156 dakika,
+hızlı yol ≈ 39 dakika. Plan tablosu, bölüm başlıkları ve hızlı yolun süreleri
+kartın kendi kelime sayısından hesaplandı (`lib/ders.ts`in kuralı: kelime/200);
+elle yazılmış bir süre, metin uzadığı gün sessizce yanlışa döner.
+
+Dört ders kayda değer. (1) SIFIR, BİR SEVİYENİN SAF KIYASI DEĞİLDİR. Bölüm 1'in
+blok regresyonu kur–faiz korelasyonunu (bir SEVİYE; ardışık blokların
+özilintisi 0,59) tahmin ediyordu ve "rastgele yürüyüş" diye adlandırılan kıyas
+aslında sıfır korelasyondu: model onu yeniyordu (karesel hata oranı 0,68) ve
+hüküm "ölçülü" yazıldı. Bir seviyenin rastgele yürüyüşü BİR ÖNCEKİ değerdir;
+ona karşı oran 1,25, DM t +1,07 — model kaybediyor, hüküm "tarif edici". Sıfır
+artık bilgi satırı. Kıyas, tahmin edilen büyüklüğün türünden seçilir: bir
+değişimin saf kıyası sıfırdır, bir seviyeninki dünkü değer. (2) PLASEBO
+SINAMASININ RASTGELE GÜNLERİ, TABLONUN SERİSİNDEN ÇEKİLİR: Bölüm 12'de olay
+tepkileri ile rastgele kıyas ayrı seriden kuruluyordu ve beş tepki günü boş
+kalıyordu (22 → 27 olay, p 0,51 → 0,24; sınama yine geçmiyor — hüküm değil,
+dayanağı değişti). (3) BİR HÜCRENİN "KAYNAKLA" ETİKETİ, KAYNAĞIN O KONUYU
+KAPSAMASINI İSTER: Bölüm 13'ün matrisinde not kararının EM hücreleri
+"kaynakla" işaretliydi, oysa Bölüm 12'nin kaynakları EM not kararının piyasa
+tepkisini anlatmıyor; hücre artık plasebo sınamasının kendi sonucuyla
+"kurulmadı". (4) BİRİM KÖKE YAKIN BİR YARI ÖMÜR NOKTA
+OLARAK YAZILMAZ: reel efektif kurun ρ'su 0,997 ve benzetim aralığının üst ucu
+1,0, yani yarı ömrün üst sınırı sonsuz; metin aralığı yazar.
+
+Bir kapı da kondu ve "kural yalnız yoruma yazıldığında dayatılmaz"ın eşi:
+`sekil_ortak.tasan_satirlar` telefonun gömme çerçevesine (353 piksel) sığmayan
+başlık satırını ölçüyordu ama yalnız EKRANA UYARI basıyordu; elle satır
+kırılımı konmuş yedi figür (01, 03, 16–20) o uyarıyla yayına hazırlanmıştı.
+Başlıklar ortak sarma kuralına geçti ve `dogrula.py` her figürün "Şekil NN —"
+başlığını aynı fonksiyonla ENGEL olarak soruyor (sayfa sınavı 26 kendiliğinden
+koşturur). Ölçü çizim katmanının KENDİ tanımı, ikinci bir genişlik kuralı
+yazılmadı; çizim kütüphanesi olmadan da koşar. Arıza enjeksiyonu: uzatılmış
+başlık 738 piksel ölçülüp yakalandı. AÇIK: panel başlıkları (ek açıklamalar)
+kapıda değil, bu dersin 24 figüründe tarayıcıda elle ölçüldü ve sığıyor; 2017
+ABD vergi yasası penceresinin uçları kaynakla doğrulanmadı (resmî kayıt bu
+oturumdan açılamadı, metin bunu söylüyor); `ortak/fx_kapanis.gunluk_duzelt`,
+saatlik barın ulaşmadığı 730 günden eski geçmişte pazartesi barını cumaya
+yazıyor, o barın kapanışı ise hafta sonu açılışından sonraki fiyattır (OAT–Bund
+analizinde ölçülen kaymanın üretimdeki eşi; ölçülmedi, düzeltilmedi).
