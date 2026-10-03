@@ -4294,7 +4294,7 @@ sembolsüz ve atıfsız bir "Kitabın cevabı" kutusuyla açılır: ne olur · n
 tersine döner · merkez bankası; altında türetim, koşul, kaynak ve "Bu derste" satırı) ve
 Bölüm 14 (okuma kuralı · merkez bankasının zorunlu kaldığı on dört hâl · iyi haberin kötü
 haber olduğu hâller · iki çözümlü alıştırma · yirmi beş satırlık genel beklentiler
-tablosu). Ders 156 → 238 dakika; kullanıcı +60'a onay vermişti, aşım bildirildi ve
+tablosu). Ders 156 → 239 dakika; kullanıcı +60'a onay vermişti, aşım bildirildi ve
 "uzun kalabilir" dedi — kısaltma merceğinin önerilerinden yalnız gerçek tekrarlar
 uygulandı.
 
@@ -4321,7 +4321,13 @@ düşmeyecek, kapı yeşil geçip birkaç satırı sessizce sınamayacaktı. Tek
 BİRLEŞTİRİLMİŞ metinde doğar. Etiket artık harfle ya da "/" ile başlamak zorunda
 (`ETIKET`); aynı kalıp biçim ölçütünde de vardı ve değişti. Bir ayıklama kalıbı yazılırken
 sorulacak soru "neyi siler" kadar "nerede DURUR"dur; sınırı açık uçlu bir kalıp, metnin
-içindeki sıradan bir karakterle bütün bir bölümü kör eder.
+içindeki sıradan bir karakterle bütün bir bölümü kör eder. Aynı kapının ikinci kör noktası
+yayından sonra çıktı ve tersi yönden aynı sınıfta: tam sınama yan dosya girdilerini
+birleşik metnin TAMAMINA karşı arıyordu, yani 5.K'nin süresi 9,5'ten 9'a inince eskimiş
+"(≈9,5 dk)" girdisi 14.5'in başlığındaki aynı yazımla eşleşip geçti — bir bölümün girdisi
+başka bölümdeki bir sayıya kefil oluyordu. Yeni ölçüt (2b) her girdiyi kendi parçasında
+arıyor; ilk koşusunda tam o iki eskimiş girdiyi buldu ve 1.250 girdide başka yanlış alarm
+vermedi.
 
 **Kurucu ilke — PARALEL YAZIMDA BÖLÜMLER ARASI KUSUR, PARÇA DENETÇİSİNİN GÖREMEDİĞİ
 YERDE BİRİKİR; donmuş kopya incelemesinin girdisi o birikimdir.** On bir parça paralel
@@ -4348,6 +4354,7 @@ Japonya 2022 vakasında Japonya Bankası'nın getiri hedefi kaynakla doğrulanma
 yazılmadı. (ii) 14.4 alıştırma 2'nin rejim
 etiketi (13.09.2018 haftası R3) `olcum_b01.rejim()` ile yeniden koşturularak doğrulandı
 ama haftalık etiketler ölçüm dosyasında tutulmuyor, yani kapı onu sınayamıyor; eklemek
-figürleri yeniden çizdirir. (iii) 14.5'in iki tablosu telefonda kendi içinde yatay
-kayıyor (355 piksellik kapta ~490–530 piksel) ve ikinci tablonun "işaret ne zaman döner"
-hücreleri 40 sözcüğü aşabiliyor.
+figürleri yeniden çizdirir. (iii) 14.5'in ok tablosu (beş sütun) telefonda kendi
+içinde yatay kayıyor (355 piksellik kapta 493 piksel); ikinci tablo üç sütuna indirildi ve
+"işaret ne zaman döner" ile "bu derste" notları tablonun altında satır adıyla liste oldu
+(ortalama 15, en çok 36 sözcüklük hücreler telefonda okunmuyordu).

@@ -28,6 +28,8 @@ SORULAR:
 1. ARŞİV — veri/ ve veri/bulut/ dosyalarının özleri künyeyle; ölçüm dosyası bu
    özlerle ve bugünkü ölçüm betikleriyle mi üretilmiş.
 2. METİN — yan dosyanın her girdisi (yukarıdaki kurallar).
+2b. YERELLİK — tam sınamada her girdi kendi parçasında da geçmeli; birleşik metinde başka
+   bölümdeki aynı yazıma kefil olan eskimiş girdi böyle bulunur.
 3. ENVANTER — metindeki her ondalık sayı, yüzde ve bp/puan ifadesi kapsanmış mı.
 4. BİÇİM — ASCII tireli eksi yok, yüzde önde.
 5. FİGÜRLER — sekil.py'nin listesi, dosyaların varlığı, ölçüm özü, gömme sırası,
@@ -595,6 +597,25 @@ def parca_figurler(govde: str) -> None:
             hatalar.append(f"gömme biçimi tanınmıyor: {x[:120]}")
 
 
+def parca_yerelligi() -> None:
+    """Tam sınamada yan dosya girdileri birleşik metnin TAMAMINA karşı aranır, yani bir parçanın
+    girdisi başka bir parçadaki aynı yazıma kefil olabilir: 5.K'nin süresi 9,5'ten 9'a inince
+    eski "(≈9,5 dk)" girdisi 14.5'in başlığındaki aynı yazımla eşleşip görünmez kaldı. Her gövde
+    girdisi ve tablo satırı KENDİ parçasında da geçmelidir."""
+    for yp in sorted((VERI / "sayilar").glob("*.json")):
+        mdx = BURASI / "metin" / f"{yp.stem}.mdx"
+        if not mdx.exists():
+            hatalar.append(f"{yp.name}: parçası yok (metin/{yp.stem}.mdx)")
+            continue
+        n = _norm(duz_metin(mdx.read_text(encoding="utf-8")))
+        for g in json.loads(yp.read_text(encoding="utf-8")).get("girdiler", []):
+            if g.get("yer", "govde") != "govde":
+                continue
+            p = g.get("satir", "") if g.get("tur") == "tablo" else g.get("parca", "")
+            if p and _norm(p) not in n:
+                hatalar.append(f"{yp.name} · girdi kendi parçasında yok (başka bölümdeki bir yazıma kefil oluyor): {p[:120]!r}")
+
+
 def parca(ad: str) -> int:
     """Bir bölüm parçasını tek başına sınar: `metin/<ad>.mdx` + `veri/sayilar/<ad>.json`.
     Yazar bölümünü bitirince bunu koşturur; bütün ders `python3 dogrula.py` ile sınanır."""
@@ -655,6 +676,7 @@ def main() -> int:
     ALAN["ozet"] = Alan("kart özeti", on["ozet"])
     ALAN["title"] = Alan("başlık", on["title"])
     yan_dosya(o, arac, kaynaklar)
+    parca_yerelligi()
     envanter()
     bicim_sina(govde)
     figurler(govde)
