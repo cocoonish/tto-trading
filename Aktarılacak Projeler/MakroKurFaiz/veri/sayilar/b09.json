@@ -1,8 +1,13 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈2,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "tablo",
-   "satir": "| 2013 | 4,59 | 4,84 | 4,59 |",
+   "satir": "| 2013 (20.12'den) | 4,59 | 4,84 | 4,59 |",
    "degerler": [
     {
      "yol": "b09.p9a.yillik.2013.en_dusuk",
@@ -627,17 +632,17 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Jeanne ve Rancière, ani duruşa karşı sigorta olarak tutulan rezervin optimal düzeyi için bir formül türetir",
+   "parca": "Jeanne ve Rancière (2011), ani duruşa karşı sigorta olarak tutulan rezervin optimal düzeyi için bir formül türetir",
    "kaynak": "jeanne_ranciere2011"
   },
   {
    "tur": "kaynak",
-   "parca": "Obstfeld, Shambaugh ve Taylor'a göre rezerv stokunun anlamlı öngörücüleri",
+   "parca": "Obstfeld, Shambaugh ve Taylor'a (2010) göre rezerv stokunun anlamlı öngörücüleri",
    "kaynak": "obstfeld_shambaugh_taylor2010"
   },
   {
    "tur": "kaynak",
-   "parca": "Calvo ve Reinhart 154 kur düzenlemesini inceler",
+   "parca": "Calvo ve Reinhart (2002) 154 kur düzenlemesini inceler",
    "kaynak": "calvo_reinhart2002"
   },
   {
@@ -647,12 +652,12 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Lane ve Milesi-Ferretti 1970–2004 döneminde 145 ülke için dış varlık ve yükümlülük tahminleri kurar",
+   "parca": "Lane ve Milesi-Ferretti (2007) 1970–2004 döneminde 145 ülke için dış varlık ve yükümlülük tahminleri kurar",
    "kaynak": "lane_milesiferretti2007"
   },
   {
    "tur": "kaynak",
-   "parca": "Catão ve Milesi-Ferretti'ye göre net dış yükümlülüklerin GSYH'ye oranı anlamlı bir kriz öncüsüdür ve mutlak değerde %50'yi aştığında etkisi büyür",
+   "parca": "Catão ve Milesi-Ferretti'ye (2014) göre net dış yükümlülüklerin GSYH'ye oranı anlamlı bir kriz öncüsüdür ve mutlak değerde %50'yi aştığında etkisi büyür",
    "kaynak": "catao_milesiferretti2014"
   },
   {
@@ -1210,7 +1215,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "$39{,}9/40{,}8 \\approx 0{,}98$ ve $171{,}6/40{,}8 \\approx 4{,}20$",
+   "parca": "$39{,}9/40{,}8 \\approx 0{,}98$ ve $171{,}6/40{,}8 \\approx 4{,}21$ (yuvarlanmamış değerlerle 4,20)",
    "degerler": [
     {
      "yol": "b09.p9a.son_deger.swap_haric_net_mlr_usd",
@@ -1231,6 +1236,11 @@
      "yol": "b09.p9a.son_deger.brut_mlr_usd",
      "bicim": "sayi",
      "hane": 1
+    },
+    {
+     "ifade": "round(v('b09.p9a.son_deger.brut_mlr_usd'), 1) / round(v('b09.p9a.son_deger.odeme_52h_mlr_usd'), 1)",
+     "bicim": "sayi",
+     "hane": 2
     },
     {
      "yol": "b09.p9a.son_deger.kapsama_brut",
@@ -1311,7 +1321,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "$100\\ln(1{,}0407) \\approx 3{,}99$ log puan, $3{,}99/2{,}37 \\approx 1{,}69$ σ",
+   "parca": "$100\\ln(1{,}0407) \\approx 3{,}99$ log puan, $3{,}99/2{,}37 \\approx 1{,}68$ σ (yuvarlanmamış değerlerle 1,69, tablodaki sayı)",
    "degerler": [
     {
      "ifade": "1 + v('b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde') / 100",
@@ -1325,6 +1335,11 @@
     },
     {
      "yol": "b09.p9b.sigma.ds_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "round(100 * math.log(1 + v('b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde') / 100), 2) / round(v('b09.p9b.sigma.ds_yuzde'), 2)",
      "bicim": "sayi",
      "hane": 2
     },
@@ -1429,6 +1444,11 @@
      "hane": 1
     }
    ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "18.12.2023'ten İstanbul 18:00",
+   "neden": "kur serisinin saat geçişi (Bölüm 2.2 sözleşmesi)"
   }
  ]
 }

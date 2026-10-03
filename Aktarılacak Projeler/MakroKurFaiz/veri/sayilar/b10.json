@@ -1,6 +1,26 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈4,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈2,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈0,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "tablo",
    "satir": "| AUD–metal | 0,35 | 0,61 | 0,240 | 5,51 | 0,93 | 0,92 | 0,28 | 0,18 |",
    "degerler": [
@@ -351,22 +371,22 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Hilscher ve Nosbusch'a göre gelişmekte olan ülke devlet tahvili spreadlerinde özellikle ticaret hadlerinin oynaklığı",
+   "parca": "Hilscher ve Nosbusch'a (2010) göre gelişmekte olan ülke devlet tahvili spreadlerinde özellikle ticaret hadlerinin oynaklığı",
    "kaynak": "hilscher_nosbusch2010"
   },
   {
    "tur": "kaynak",
-   "parca": "Chen ve Rogoff'a göre özellikle Avustralya ve Yeni Zelanda'da",
+   "parca": "Chen ve Rogoff'a (2003) göre özellikle Avustralya ve Yeni Zelanda'da",
    "kaynak": "chen_rogoff2003"
   },
   {
    "tur": "kaynak",
-   "parca": "Cashin, Céspedes ve Sahay 1980–2002'de 58 emtia ihracatçısı ülkenin yaklaşık üçte birinde",
+   "parca": "Cashin, Céspedes ve Sahay (2004) 1980–2002'de 58 emtia ihracatçısı ülkenin yaklaşık üçte birinde",
    "kaynak": "cashin_cespedes_sahay2004"
   },
   {
    "tur": "kaynak",
-   "parca": "Chen, Rogoff ve Rossi'ye göre emtia ihracatçısı ülkelerin kurları küresel emtia fiyatlarını",
+   "parca": "Chen, Rogoff ve Rossi'ye (2010) göre emtia ihracatçısı ülkelerin kurları küresel emtia fiyatlarını",
    "kaynak": "chen_rogoff_rossi2010"
   },
   {
@@ -535,23 +555,23 @@
   },
   {
    "tur": "olcum",
-   "parca": "Enerji endeksi −118,9 log puan (−%69,5) düştü",
+   "parca": "Enerji endeksi 118,9 log puan (%69,5) düştü",
    "degerler": [
     {
-     "yol": "b10.p10a.petrol_2014_2016.enerji_degisim_log_yuzde",
      "bicim": "sayi",
-     "hane": 1
+     "hane": 1,
+     "ifade": "abs(v('b10.p10a.petrol_2014_2016.enerji_degisim_log_yuzde'))"
     },
     {
-     "yol": "b10.p10a.petrol_2014_2016.enerji_degisim_yuzde",
      "bicim": "yz",
-     "hane": 1
+     "hane": 1,
+     "ifade": "abs(v('b10.p10a.petrol_2014_2016.enerji_degisim_yuzde'))"
     }
    ]
   },
   {
    "tur": "olcum",
-   "parca": "CAD −27,2, NOK −37,9, AUD (metal −42,5) −29,0 log puan; enerji ithalatçısı euro da −22,4 log puan kaybetti ve dolar endeksi +20,8 log puan yükseldi",
+   "parca": "CAD −27,2, NOK −37,9, AUD (metal −42,5) −29,0, enerji ithalatçısı euro −22,4 log puan değişti; dolar endeksi +20,8 log puan",
    "degerler": [
     {
      "yol": "b10.p10a.petrol_2014_2016.cad.ay_ortalamasi.kur_degisim_log_yuzde",
@@ -1521,7 +1541,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "$(1-\\rho^2)/\\sqrt{n} \\approx 0{,}03$ ve bundan küçük fark sıralama kurmaz",
+   "parca": "$(1-\\text{kor}^2)/\\sqrt{n} \\approx 0{,}03$ (kor: korelasyon) ve bundan küçük fark sıralama kurmaz",
    "degerler": [
     {
      "ifade": "(1 - v('b10.p10c.ciftler.zar_spx.siralama_2015_2026.kor')**2) / math.sqrt(v('b10.p10c.ciftler.zar_spx.siralama_2015_2026.n'))",
@@ -2721,7 +2741,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "yen hareketinin yaklaşık yarısıdır (|ρ| 0,46)",
+   "parca": "yen hareketinin yaklaşık yarısıdır (korelasyonun mutlak değeri 0,46)",
    "degerler": [
     {
      "yol": "b10.p10c.ciftler.jpy_jp_us_2y.tam.kor",
@@ -2821,7 +2841,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "$(1-\\rho^2)/\\sqrt{52} \\approx 0{,}11$; fark $0{,}4243 - 0{,}2269 \\approx 0{,}20$, yaklaşık 1,7 standart hata",
+   "parca": "$(1-\\text{kor}^2)/\\sqrt{52} \\approx 0{,}11$; fark $0{,}4243 - 0{,}2269 \\approx 0{,}20$, yaklaşık 1,7 standart hata",
    "degerler": [
     {
      "ifade": "(1 - v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor')**2) / math.sqrt(52)",
@@ -2890,6 +2910,28 @@
      "ifade": "(1 - v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor')**2) / math.sqrt(52)",
      "bicim": "sayi",
      "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "CAD kıyas paraların en iyisinin (CHF) yalnız 1,9 log puan önünde",
+   "degerler": [
+    {
+     "ifade": "v('b10.p10b.sok_2022.paralar.cad.degisim_log_yuzde') - v('b10.p10b.sok_2022.paralar.chf.degisim_log_yuzde')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "2020–2026'da bp başına 0,025",
+   "degerler": [
+    {
+     "ifade": "abs(v('b03.p3c.donemler.d2020_2026.degisim.egim')) / 10",
+     "bicim": "sayi",
+     "hane": 3
     }
    ]
   }
