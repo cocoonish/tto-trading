@@ -1,6 +1,91 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Mundell (1963), yurt içi faizin dış faizden ayrışamadığı ve para arzının sabit tutulduğu bir ekonomide dört sonucu gösterir",
+   "kaynak": "mundell1963"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Genişleme sermaye girişi ve paranın değer kazanmasıyla ticaret dengesini bozar ama istihdamı değiştirmez; maliye etkisizdir.",
+   "kaynak": "mundell1963"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Para genişlemesi kuru zayıflatarak geliri artırır; para politikası güçlüdür.",
+   "kaynak": "mundell1963"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Merkez bankası pariteyi korurken para arzını dolaylı yoldan büyütür ve maliye güçlü etki yapar.",
+   "kaynak": "mundell1963"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Para politikası yalnız rezervleri değiştirir.",
+   "kaynak": "mundell1963"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Fleming (1962), para stoku sabitken bütçe genişlemesinin kura etkisinin sermaye akımlarının faize duyarlılığına bağlı olduğunu gösterir: sabit kurda ödemeler dengesini bozacak bir harcama artışı dalgalı kurda değer kaybı, iyileştirecek bir artış değer kazancı getirir; bozulma ithalat eğilimi yüksek, faizin gelire ve sermayenin faize duyarlılığı düşükken daha olasıdır.",
+   "kaynak": "fleming1962"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Akımlar faize sonsuz duyarlıysa gelir hiç artmaz",
+   "kaynak": "fleming1962"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Barro (1974), kuşaklar birbirine miras ya da hediye gibi işleyen transferlerle bağlı olduğu sürece devlet tahvillerinin hane halkı için net servet olmadığını gösterir; bu durumda verili bir kamu harcamasının vergiyle mi borçla mı finanse edildiği toplam talebi, faizi ve sermaye birikimini değiştirmez.",
+   "kaynak": "barro1974"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "5.3'teki çarpan bulgusu bunun ampirik karşılığıdır.",
+   "kaynak": "ilzetzki2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Christiano, Eichenbaum ve Rebelo (2011), nominal faiz sıfır alt sınırına takılıyken kamu harcaması çarpanının birden çok büyük olabileceğini bir model içinde gösterir; harcamanın faiz sıfırdayken yapılan payı büyüdükçe çarpan da büyür.",
+   "kaynak": "cer2011"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Catão ve Terrones (2005), 107 ülkenin 1960–2001 verisinde bütçe açığı ile enflasyon arasında yüksek enflasyonlu ve gelişmekte olan ülke gruplarında güçlü ve pozitif bir ilişki bulur; düşük enflasyonlu gelişmiş ekonomilerde bu güçlü ilişki görülmez.",
+   "kaynak": "catao_terrones2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Veride de bir pürüz var: harcama artışlarından sonra reel kur çoğu zaman değer kaybeder.",
+   "kaynak": "monacelliperotti2010"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "5.3'teki harcama şoku bulgularında reel kur çoğu zaman değer kaybeder",
+   "kaynak": "monacelliperotti2010"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "5.3'teki harcama şoku bulgularında reel kur çoğu zaman değer kaybeder",
+   "kaynak": "kimroubini2008"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "para zayıflar (6.4'ün risk primli Mundell–Fleming'i)",
+   "kaynak": "blanchard2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Greenwood ve Vayanos (2014) uzun vadeli tahvil arzının kısa vadeliye göre büyüklüğünün vade farkıyla da pozitif ilişkili olduğunu gösterir.",
+   "kaynak": "greenwoodvayanos2014"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Du, Pflueger ve Schreger (2020), para politikası taahhüdü zayıf hükümetlerde alacaklıların yerel para borcu için baştan risk primi istediğini ve bu primin hükümeti dövizle borçlanmaya ittiğini gösterir (12.1).",
+   "kaynak": "dps2020"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈4,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"

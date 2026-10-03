@@ -1,6 +1,81 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Taylor ilkesi tutuyorsa (3.1) bu toplam fiyat düzeyi terimini aşabilir",
+   "kaynak": "taylor1993"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "kötü enflasyon haberi parayı güçlendirir; enflasyon hedefleyen merkez bankalarında ölçülen işaret budur (4.2)",
+   "kaynak": "clarida_waldman2007"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Yakınsayan bir gelişmekte olan ekonomide Balassa–Samuelson etkisi (7.1) dengenin kendisini reel değer kazancı yönüne kaydırır",
+   "kaynak": "balassa1964"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Yakınsayan bir gelişmekte olan ekonomide Balassa–Samuelson etkisi (7.1)",
+   "kaynak": "samuelson1964"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "reel faiz değişmez; kısa dönemde bağ zayıftır (4.1)",
+   "kaynak": "mishkin1992"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Yüksek nominal faizin yüksek enflasyonla birlikte gitmesi uzun dönem Fisher ilişkisidir (4.1)",
+   "kaynak": "mishkin1992"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Taylor'ın (2000) hipotezini 71 ülkenin 1979–2000 verisiyle sınayan",
+   "kaynak": "taylor2000"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Choudhri ve Hakura (2006), geçişkenlik ile ortalama enflasyon arasında ülkeler ve dönemler boyunca pozitif ve anlamlı bir ilişki buldu; rejimler arası farkı açıklamada enflasyon öbür makro değişkenlerden baskın çıktı. Bulgu bir ilişkidir, katsayı vermez.",
+   "kaynak": "choudhri_hakura2006"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Uribe (2022), ABD'nin savaş sonrası verisinde nominal faizin geçici artışının geleneksel görüşe uygun olarak enflasyonu ve çıktıyı düşürdüğünü, nominal faizi ve enflasyonu uzun dönemde yükselten kalıcı bir artışın ise kısa dönemde de enflasyonu ve çıktıyı yükselttiğini buldu. Hüküm koşulludur ve ABD örneklemine aittir; gelişmekte olan ekonomiye taşınmaz.",
+   "kaynak": "uribe2022"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Türkiye'de ilkenin çiğnendiği dönemin sonucu (4.3) kitabın kısa dönem hükmüyle uyumludur.",
+   "kaynak": "gkl2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Fischer (1993), ülkeler arası ve panel regresyonlarla büyümenin enflasyonla, büyük bütçe açıklarıyla ve çarpık döviz piyasalarıyla ters yönde ilişkili olduğunu ve enflasyonun büyümeyi yatırımı ve verimlilik artışını azaltarak düşürdüğünü gösterdi; nedenselliğin politikadan büyümeye işlediğine dair kanıt \"işaret eder\" düzeyindedir.",
+   "kaynak": "fischer1993"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Bruno ve Easterly (1998) eşiği sordu: yıllık enflasyonun %40'ı aştığı dönemleri yüksek enflasyon krizi saydı; bu krizleri yaşayan ülkeler dışarıda bırakıldığında büyüme ile enflasyon arasında tutarlı bir ilişki bulmadı, kriz sırasında ise büyümenin sert düştüğünü ve enflasyon gerilediğinde beklenmedik ölçüde güçlü toparlandığını gösterdi.",
+   "kaynak": "bruno_easterly1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "kitap \"enflasyon büyümeyi her düzeyde düşürür\" demez, yüksek enflasyonun sürekli büyümeyle bağdaşmadığını söyler.",
+   "kaynak": "fischer1993"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Yüksek enflasyon sürekli büyümeyle bağdaşmaz;",
+   "kaynak": "fischer1993"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "büyümenin en sert düştüğü yer enflasyonun kriz düzeyine çıktığı dönemlerdir.",
+   "kaynak": "bruno_easterly1998"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈1,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"

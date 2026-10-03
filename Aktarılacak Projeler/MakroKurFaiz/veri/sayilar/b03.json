@@ -1,6 +1,56 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Laubach ve Williams (2003) doğal faizi potansiyel çıktı ve trend büyümeyle birlikte tahmin etti; teorinin öngördüğü gibi doğal faiz ile trend büyüme arasında yakın bir bağ buldu, ancak tahminlerin çok belirsiz olduğunu ve gerçek zamanda ciddi ölçüm hatası taşıdığını da gösterdi.",
+   "kaynak": "laubach_williams2003"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kötü haberin dolar kurlarında iyi haberden büyük etki yaptığı bulgusu (2.1) kurun habere tepkisine ve o örnekleme aittir",
+   "kaynak": "abdv2003"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Reel faizin bu ekonomilerde döngü karşıtı olması (3.3)",
+   "kaynak": "neumeyerperri2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "artırım risk primini faizin kendisinden hızlı yükseltirse para zayıflar (Blanchard eşiği, 6.4)",
+   "kaynak": "blanchard2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kitap ile veri arasındaki pürüzün bir açıklaması bilgi etkisidir (3.2)",
+   "kaynak": "gkkl2021"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Bauer ve Swanson (2023), Fed sürprizlerinden sonra özel kesim tahmin revizyonlarının standart modellerin tersine işaret taşımasının yalnız Fed'in özel bilgisini açığa vurmasıyla değil, Fed'in ve profesyonel tahmincilerin aynı ekonomik habere tepki vermesiyle de tutarlı olduğunu gösterdi; habere koşullanan regresyonlar, kendi tahminci anketleri ve FOMC açıklamalarına piyasa tepkileri bilgi etkisine karşı çıkan kanıt veriyor.",
+   "kaynak": "bauer_swanson2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Estrella ve Hardouvelis (1991), getiri eğrisinin pozitif eğiminin tüketimde, dayanıklı tüketim mallarında ve yatırımda gelecekteki artışla ilişkili olduğunu ve eğimin öncü göstergeler endeksinin, reel kısa vadeli faizin, geçmiş büyümenin ve geçmiş enflasyonun ötesinde ek öngörü gücü taşıdığını buldu.",
+   "kaynak": "estrella_hardouvelis1991"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Estrella ve Mishkin (1998) ABD resesyonlarını örneklem dışında sınadı: kısa ufuklarda hisse fiyatları ve bazı bilinen makro göstergeler işe yarıyor, daha uzun ufuklarda getiri eğrisinin eğimi öne çıkan tek gösterge oluyor.",
+   "kaynak": "estrella_mishkin1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "İkisi de bir öngörü ilişkisi verir, \"eğri ters dönerse resesyon gelir\" diye mekanik bir kural ya da eşik vermez; resesyon sınaması ABD resesyonlarıyla kuruludur.",
+   "kaynak": "estrella_mishkin1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "ABD'de uzun ufukta resesyonu önceden haber veren finansal göstergelerin en güçlüsü oldu, ama bir eşik ya da takvim vermez.",
+   "kaynak": "estrella_mishkin1998"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈2,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"

@@ -1,6 +1,21 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Aşırı tepki Dornbusch (1976) modelinin sonucudur",
+   "kaynak": "dornbusch1976"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "İki modeli birleştiren sentez (Frankel 1979; türetim 1.2) işareti \"faiz neden yükseldi?\" sorusuna bağlar: reel faiz farkından açılan fark parayı güçlendirir, beklenen enflasyon farkından açılan zayıflatır",
+   "kaynak": "frankel1979"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Hnatkovska, Lahiri ve Végh (2016), para politikası sıkılaştığında yerli paranın gelişmiş ülkelerde değer kazanma, gelişmekte olan ülkelerde ise değer kaybetme eğiliminde olduğunu belgeler; likidite talebi, mali ve çıktı kanallarını taşıyan modelleri bu karşıtlığı açıklar ve iki grup arasındaki farkın asıl kaynağının likidite talebi etkisindeki ayrım olduğunu gösterir",
+   "kaynak": "hlv2016"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈5,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
