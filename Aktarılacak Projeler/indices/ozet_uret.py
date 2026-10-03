@@ -259,12 +259,16 @@ _tepki = sorted(((k, v["tepki"][_h]["rho"], v["tepki"][_h]["p"]) for k, v in _v.
                  if v["tepki"][_h]["rho"] is not None), key=lambda t: -t[1])
 for i, (k, r, pp) in enumerate(_tepki[:3], start=1):
     kal[f"tepki{i}_ad"], kal[f"tepki{i}_rho"], kal[f"tepki{i}_p"] = AD_TR.get(k, k), round(r, 2), pp
+for i in range(len(_tepki[:3]) + 1, 4):              # sayfa üçünü de adıyla çağırır
+    kal[f"tepki{i}_ad"], kal[f"tepki{i}_rho"], kal[f"tepki{i}_p"] = "—", "—", "—"
 kal["tepki_anlamli"] = sum(1 for _, _, pp in _tepki if pp is not None and pp <= 0.05)
 _oos = sorted(((k, v["ileri"][_h]["oos"], v["ileri"][_h]["oos_p"]) for k, v in _v.items()
                if v["ileri"][_h]["oos"] is not None), key=lambda t: -t[1])
 if _oos:
     k, r, pp = _oos[0]
     kal.update({"ongoru1_ad": AD_TR.get(k, k), "ongoru1_rho": round(r, 2), "ongoru1_p": pp})
+else:
+    kal.update({"ongoru1_ad": "—", "ongoru1_rho": "—", "ongoru1_p": "—"})
 kal["ongoru_anlamli"] = sum(1 for _, _, pp in _oos if pp is not None and pp <= 0.05)
 kal["ongoru_beklenen"] = round(0.05 * len(_oos), 2)
 _rakip_ustu = sum(1 for k, v in _v.items() if v["ileri"][_h]["oos"] is not None

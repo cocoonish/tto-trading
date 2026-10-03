@@ -61,7 +61,7 @@ import index_builder as ib    # noqa: E402
 import kalibrasyon_damga as kd  # noqa: E402
 
 T0 = time.time()
-SURE = 30.0
+SURE = 90.0
 SIMDI = datetime(2026, 10, 3, 15, 0, tzinfo=timezone.utc)
 dusen: list[str] = []
 gecen = 0
@@ -252,6 +252,29 @@ def _veri(anahtar, sinyal: float, tohum: int, n=200, grid_n=4, rakip_guclu=False
             "rakip": rakip, "denetim": {}, "fiyat_tanim": "test", "arsiv": ["a", "b"]}
 
 
+def _veri_donus(anahtar, tohum, n=200, grid_n=4):
+    """Fiyat GERI DONUYOR ve endeks yalniz gecmis fiyati ters isaretle tasiyor:
+    adaylar rakibin DONUS adaylarinin ta kendisi. Devam adaylari egitimde eksi
+    ρ verdigi icin rakip her katta adayla AYNI seriyi secer, ornek disi ρ'lar
+    birebir esit cikar ve "rakibi gecti" (kesin buyuk) saglanamaz. Rakip yalniz
+    devam isaretini tasisaydi ρ'su eksi kalir ve aday kurali gecerdi."""
+    rng = np.random.default_rng(tohum)
+    gun = pd.bdate_range("2025-10-01", periods=n)
+    r = np.zeros(n + 6)
+    for i in range(1, n + 6):
+        r[i] = -0.45 * r[i - 1] + rng.normal(0, 0.01)
+    px = pd.Series(np.exp(np.cumsum(r))[:n], index=gun)
+    rakip = co.fiyat_rakibi(px, gun)
+    lr = np.log(px).diff()                           # adaylari rakipten BAGIMSIZ kur
+    M = np.vstack([-lr.ewm(halflife=hl, min_periods=hl).mean().to_numpy(float)
+                   for hl in co.FIYAT_YARIOMUR[:grid_n]])
+    F5 = (px.shift(-5) / px - 1).to_numpy()
+    F1 = (px.shift(-1) / px - 1).to_numpy()
+    return {"anahtar": anahtar, "M": M, "gunler": gun, "hedef": {5: F5, 1: F1},
+            "tepki": {5: (px / px.shift(5) - 1).to_numpy(), 1: (px / px.shift(1) - 1).to_numpy()},
+            "rakip": rakip, "denetim": {}, "fiyat_tanim": "test", "arsiv": ["a", "b"]}
+
+
 def _grid4():
     g = co.izgara()
     dv = co.varsayilan_sira(g)
@@ -276,6 +299,23 @@ def m9():
     out.append(k["aile"]["5"]["p"] <= co.ESIK_P and all(p[a]["hukum"] == "öngörüyor" for a in anahtarlar))
     p, k = co.kalibre_et([_veri(a, 1.5, 20 + i, rakip_guclu=True) for i, a in enumerate(anahtarlar)], g4)
     out.append(all(p[a]["hukum"] == "öngörmüyor" for a in anahtarlar))     # rakip ayni bilgiyi tasiyor
+    # Rakip iki isareti tasir: devam ve donus (ters isaret) adaylari.
+    px = pd.Series(np.exp(np.cumsum(np.random.default_rng(3).normal(0, 0.01, 60))),
+                   index=pd.bdate_range("2026-01-01", periods=60))
+    rk = co.fiyat_rakibi(px, px.index)
+    m = len(co.FIYAT_YARIOMUR)
+    out.append(rk.shape[0] == 2 * m and np.allclose(rk[m:], -rk[:m], equal_nan=True))
+    # Fiyat donuyor ve endeks yalniz gecmis fiyati ters isaretle tasiyor: aday ileriyi
+    # "ongorur" ama bilgisi haberden degil fiyatin kendi donusunden gelir → ongormuyor.
+    dv = [_veri_donus(a, 50 + i) for i, a in enumerate(anahtarlar)]
+    p, k = co.kalibre_et(dv, g4)
+    out.append(all(p[a]["hukum"] == "öngörmüyor" for a in anahtarlar))
+    # Karsi sinama: ayni veride rakip YALNIZ devam isaretini tasisaydi kural en az
+    # bir varligi "ongoruyor" sayardi — madde iki isaretin farkini gercekten olcuyor.
+    for v in dv:
+        v["rakip"] = v["rakip"][:len(co.FIYAT_YARIOMUR)]
+    p, _ = co.kalibre_et(dv, g4)
+    out.append(any(p[a]["hukum"] == "öngörüyor" for a in anahtarlar))
     return all(out), str(out)
 
 
@@ -317,7 +357,7 @@ def m11():
 
 
 # 12 ─ ozet: kara kutu, gecici dizinde
-def _ozet_kos(tarihce, karne):
+def _ozet_kos(tarihce, karne, sekil_ozet=True):
     d = tempfile.mkdtemp()
     try:
         for f in ("ozet_uret.py", "kalibrasyon_damga.py", "config.py"):
@@ -331,11 +371,12 @@ def _ozet_kos(tarihce, karne):
         json.dump({k: {"params": dict(config.DEFAULT_PARAMS), "timestamp": karne["olcum_ani"]}
                    for k in config.ASSETS}, open(os.path.join(d, "data", "optimized_params.json"), "w"))
         json.dump({"as_of": "2026-09-27", "n_assets": 15}, open(os.path.join(d, "cikti", "rejim_ozet.json"), "w"))
-        json.dump({"sekil04": {"varlik": {k: {"rho": 0.1 * (i % 3 - 1), "n": 50, "p": 0.3}
-                                          for i, k in enumerate(config.ASSETS)}, "uc": "2026-09-25"},
-                   "sekil05": {"ort": {k: {"1g": 0.01, "5g": -0.02, "bant_disi_5g": 0.05}
-                                       for k in config.ASSETS}, "uc": "2026-09-24"}},
-                  open(os.path.join(d, "cikti", "sekil_ozet.json"), "w"))
+        if sekil_ozet:
+            json.dump({"sekil04": {"varlik": {k: {"rho": 0.1 * (i % 3 - 1), "n": 50, "p": 0.3}
+                                              for i, k in enumerate(config.ASSETS)}, "uc": "2026-09-25"},
+                       "sekil05": {"ort": {k: {"1g": 0.01, "5g": -0.02, "bant_disi_5g": 0.05}
+                                           for k in config.ASSETS}, "uc": "2026-09-24"}},
+                      open(os.path.join(d, "cikti", "sekil_ozet.json"), "w"))
         env = dict(os.environ, PYTHONPATH=os.path.join(KOK, "ortak"))
         r = subprocess.run([sys.executable, "-B", "ozet_uret.py"], cwd=d, capture_output=True,
                            text=True, timeout=60, env=env)
@@ -378,7 +419,16 @@ def m12():
     mdx = open(os.path.join(KOK, "site", "src", "content", "projeler", "fx-haber-endeksi.mdx"),
                encoding="utf-8").read()
     cagri = set(re.findall(r'<Deger proje="fx-haber-endeksi" anahtar="([^"]+)"', mdx))
-    eksik = sorted(cagri - set(o))
+    # KAPSAM: sayfanın çağırdığı anahtar YALNIZ aynı kalibrasyon hâlinde değil,
+    # kalibrasyonun DEĞİŞTİĞİ gün (yeniden kalibrasyonun ertesi koşusu — bu hâl
+    # tanımı gereği bir kez yaşanır), tek okumalık tarihçede ve figür defteri
+    # yokken de yazılmalı; yoksa yayın kapısı siteyi tam o gün durdurur.
+    tek = _ozet_kos(ayni[-1:], karne)
+    defsiz = _ozet_kos(ayni, karne, sekil_ozet=False)
+    eksik = {ad: sorted(cagri - set(x)) for ad, x in
+             (("aynı kalibrasyon", o), ("kalibrasyon değişti", o2), ("tek okuma", tek),
+              ("figür defteri yok", defsiz))}
+    eksik = {ad: e for ad, e in eksik.items() if e}
     out.append(not eksik)
     return all(out), f"{out} eksik: {eksik}"
 

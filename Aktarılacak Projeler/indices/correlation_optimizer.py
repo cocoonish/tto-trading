@@ -28,7 +28,8 @@ OLCU (tek tanim, hizali.py):
     yeniden secim; egitimin son h gunu ATILIR (hedefi test donemine tasar); test
     tahminleri egitimin kendi ortalama/sapmasiyla olceklenip havuzlanir.
   * Saf kiyas: (a) secimsiz varsayilan parametre; (b) yalniz FIYATTAN kurulan
-    rakip — gecmis gunluk getirilerin ustel ortalamasi, ayni yuruyen pencereden;
+    rakip — gecmis gunluk getirilerin ustel ortalamasi, DEVAM ve DONUS isaretiyle
+    (sekiz aday), ayni yuruyen pencereden;
     (c) plasebo: hedef dairesel kaydirilir (k = h+20 … n−h−20, BES gun arayla —
     olculdu: 5 gun arali kaydirmalar neredeyse bagimsiz), secim dahil butun
     yordam yeniden kosar; p = (1+b)/(1+K), asla sifir degil.
@@ -39,6 +40,9 @@ KURAL (once yazildi, olcumden sonra degistirilmez — KARAR 03.10.2026, kullanic
   aile p ≤ ESIK_P ise, ornek disi ρ'su hem sifirin hem fiyat-yalniz rakibin
   ustunde olan varlik KENDI kalibre parametresini alir ("ongoruyor"); obur her
   varlik TEK varsayilanla (config.DEFAULT_PARAMS) kurulur ("ongormuyor").
+  Cikarim kapisi AILE sinamasidir; rakip kiyasi ve sifirin ustu birer ZORUNLU
+  KOSULDUR, sinama degil (nokta kiyas: kurali yalniz daraltir, gevsetmez).
+  Rakip olculemediyse kosul saglanmis sayilmaz.
   Asgari veri yoksa "olculemedi" ve yine varsayilan.
 
 Ciktilar: data/optimized_params.json (canli endeks bunu okur; varlik basina
@@ -215,10 +219,17 @@ def secimsiz(s: np.ndarray, y: np.ndarray, spearman) -> float:
 # ── Varlik ve aile ─────────────────────────────────────────────────────────────
 
 def fiyat_rakibi(seri: pd.Series, gunler: pd.Index) -> np.ndarray:
-    """Yalniz fiyattan: gecmis gunluk log getirilerin ustel ortalamasi (D'nin kapanisina kadar)."""
+    """Yalniz fiyattan: gecmis gunluk log getirilerin ustel ortalamasi (D'nin kapanisina kadar).
+
+    IKI ISARET birden aday: devam (momentum) ve donus (ters isaret). Yalniz devam
+    adaylari olsaydi, fiyatin geri dondugu bir donemde rakibin ornek disi ρ'su
+    EKSI cikar ve gecen haftanin fiyatini ters isaretle tasiyan HER seri onu
+    "gecerdi" — oysa o seri haberden degil fiyatin kendi donusunden bilgi tasir.
+    Secim yuruyen pencerede, adaylarla ayni kuralla (egitimde en yuksek ρ)."""
     r = np.log(seri).diff()
-    return np.vstack([r.ewm(halflife=hl, min_periods=hl).mean().reindex(gunler).to_numpy(float)
-                      for hl in FIYAT_YARIOMUR])
+    devam = [r.ewm(halflife=hl, min_periods=hl).mean().reindex(gunler).to_numpy(float)
+             for hl in FIYAT_YARIOMUR]
+    return np.vstack(devam + [-x for x in devam])
 
 
 def girdi(anahtar: str, onbellek: dict, simdi=None) -> dict:
@@ -377,7 +388,7 @@ def kalibre_et(veri: list[dict], grid: list[dict]) -> tuple[dict, dict]:
                 "fiyat_rakibi": _r(rakip["rho"]),
                 "is_max": _r(tam[c_tam]), "is_max_params": kisa_ad(grid[c_tam]),
                 "kalibre_sira": c_tam,
-                "kismi_varsayilan": _r(hizali.kismi_spearman(v["M"][dv], y, v["tepki"][5])),
+                "kismi_varsayilan": _r(hizali.kismi_spearman(v["M"][dv], y, v["tepki"][h])),
                 "K": len(ks), "p_taban": _r(1 / (1 + len(ks)) if ks else math.nan),
             }
             if not math.isnan(gercek["rho"]):
