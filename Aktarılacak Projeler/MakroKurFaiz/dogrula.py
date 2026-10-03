@@ -35,6 +35,10 @@ SORULAR:
 6. ARAÇLAR — arac.json ölçüm dosyasından mı; araç formüllerinin Python eşleri
    bileşenlerdeki formüllerle aynı mı (kaynak metninden).
 7. KAYNAKLAR — metinde anılan her kaynak anahtarı doğrulanmış listede mi.
+7b. ATIF ENVANTERİ — metindeki HER "Yazar (YYYY)" atfı, yan dosyada bir kaynak
+   girdisi olmasa da, doğrulanmış (ya da kısmen doğrulanmış) bir kayda soyadı ve
+   yılıyla eşlenmeli. Yan dosya yalnız yazarın bildirdiği atfı sınar; bildirilmemiş
+   bir atıf o kapıdan sessizce geçerdi.
 
 Koşum:  python3 dogrula.py                (bütün ders)
         python3 dogrula.py --parca b03    (tek bölüm: metin/b03.mdx + veri/sayilar/b03.json)
@@ -47,6 +51,7 @@ import json
 import math
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 BURASI = Path(__file__).resolve().parent
@@ -60,7 +65,7 @@ BILESEN = KOK / "site/src/components"
 OLCUM_BETIKLERI = ["ortak_olc.py", "bulut.py", "hazirla.py", "hazirla_bulut.py"] + [f"olcum_b{i:02d}.py" for i in range(1, 14)]
 
 hatalar: list[str] = []
-sayac = {"arsiv": 0, "metin": 0, "hucre": 0, "kaynak": 0, "sabit": 0, "sayi": 0, "figur": 0, "arac": 0}
+sayac = {"arsiv": 0, "metin": 0, "hucre": 0, "kaynak": 0, "sabit": 0, "sayi": 0, "figur": 0, "arac": 0, "atif": 0}
 AY = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos",
       "Eylül", "Ekim", "Kasım", "Aralık"]
 
@@ -531,6 +536,47 @@ def kaynak_listesi() -> dict:
     return out
 
 
+def _sade(s: str) -> str:
+    s = unicodedata.normalize("NFKD", s.lower().replace("ı", "i"))
+    return "".join(c for c in s if not unicodedata.combining(c))
+
+
+_AD = r"[A-ZÇĞİÖŞÜ][A-Za-zÀ-ÿçğıöşüÇĞİÖŞÜ'’\-]+"
+ATIF = re.compile(rf"({_AD})(?:,? (?:ve|vd\.|and|&) {_AD}| ve diğerleri|, {_AD})*['’]?,? "
+                  rf"\((\d{{4}})[a-z]?(?:[;,] ?\d{{4}}[a-z]?)*\)")
+
+
+# Parantez içi biçim de atıftır: "(Fischer 1993)". Ay adları atıf değildir ("(Eylül 2018)").
+ATIF_PARANTEZ = re.compile(rf"\(({_AD})(?:,? (?:ve|vd\.|and|&) {_AD}| ve diğerleri)*,? (\d{{4}})[a-z]?[;)]")
+
+
+def atif_dizini(kaynaklar: dict) -> dict:
+    """(ilk yazarın soyadı ya da kayıt anahtarının harf kökü, yıl) → kayıt durumları."""
+    d: dict = {}
+    for k, x in kaynaklar.items():
+        yil = re.search(r"\((\d{4})[a-z]?[),]", x.get("kunye", ""))
+        if yil:
+            ilk = re.split(r"[,(]", x["kunye"])[0].strip()
+            if ilk:
+                d.setdefault((_sade(ilk.split()[-1]), yil.group(1)), []).append(x.get("durum"))
+        a = re.match(r"([a-z_]+?)_?(\d{4})", k)
+        if a:
+            d.setdefault((a.group(1).split("_")[0], a.group(2)), []).append(x.get("durum"))
+    return d
+
+
+def atif_envanteri(metin: str, kaynaklar: dict) -> None:
+    dizin = atif_dizini(kaynaklar)
+    n = _norm(metin)
+    adaylar = list(ATIF.finditer(n)) + [x for x in ATIF_PARANTEZ.finditer(n) if x.group(1) not in AY]
+    for x in adaylar:
+        sayac["atif"] += 1
+        durum = dizin.get((_sade(x.group(1).rstrip("'’")), x.group(2)), [])
+        if not any(du in ("dogrulandi", "kismen") for du in durum):
+            neden = "kayıtta yok" if not durum else f"kayıt doğrulanmamış ({', '.join(map(str, durum))})"
+            hatalar.append(f"atıf {neden}: {x.group(0)!r}")
+
+
 def parca_figurler(govde: str) -> None:
     """Parça kipinde figür sırası sınanmaz (bütün ders birleşince sınanır); yalnız
     gömme biçimi ve numara–dosya öneki eşliği."""
@@ -568,6 +614,7 @@ def parca(ad: str) -> int:
     envanter()
     bicim_sina(govde)
     parca_figurler(govde)
+    atif_envanteri(duz, kaynaklar)
     return rapor()
 
 
@@ -606,6 +653,7 @@ def main() -> int:
     bicim_sina(govde)
     figurler(govde)
     araclar(o, arac)
+    atif_envanteri(duz, kaynaklar)
     return rapor()
 
 
@@ -619,7 +667,8 @@ def rapor() -> int:
         return 1
     print(f"✓ Makrodan Kura ve Faize dersi · {sayac['arsiv']} arşiv ölçütü, {sayac['metin']} metin ölçütü, "
           f"{sayac['hucre']} tablo hücresi, {sayac['kaynak']} kaynaklı, {sayac['sabit']} sabit; {sayac['sayi']} sayının "
-          f"hepsi sınanmış ya da kaynağıyla bildirilmiş; {sayac['figur']} figür, {sayac['arac']} araç ölçütü")
+          f"hepsi sınanmış ya da kaynağıyla bildirilmiş; {sayac['atif']} atıf doğrulanmış kayda eşlendi; "
+          f"{sayac['figur']} figür, {sayac['arac']} araç ölçütü")
     return 0
 
 
