@@ -61,7 +61,7 @@ _DURUM = {
     "ayrisan": "kalın çerçeve: korelasyon sıradan günden farklı (|z| ≥ 2)",
     "olculdu_es_hareket_yok": "ölçüldü, eş hareket kurulmadı",
     "vaka": "vaka (1–9 olay; korelasyon yazılmaz)",
-    "kaynak": "kaynak (kurulamadı; bölüm kaynakla anlatır)",
+    "kaynak": "kaynak (bölüm kaynakla anlatır; sebebi notta)",
     "kurulmadi": "kurulmadı (sebebi hücrenin notunda)",
 }
 _LEJANT_SIRA = {"olculdu+": 1, "olculdu-": 2, "ayrisan": 3, "olculdu_es_hareket_yok": 4, "vaka": 5,

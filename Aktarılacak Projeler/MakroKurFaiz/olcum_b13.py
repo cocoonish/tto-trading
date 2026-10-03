@@ -1257,7 +1257,8 @@ def kart_kanit(mat: dict, meta: dict) -> list:
             ("b13.matris.not.R1", "Fitch 2023 tepki günü", ["dm"], True),
             ("b13.matris.not.R2", "Moody's 2025 tepki günü", ["dm"], True),
             ("b12.p12_dm", "DM not kararları, z ve iki günlük pencere", ["dm"], True),
-            ("b12.p12", "Türkiye not kararları", ["em"], True),
+            ("b12.p12.plasebo_kapisi.kur", "Türkiye not kararları: tepki günü kurunun plasebo sınaması "
+             "(geçmedi: kararlar vaka listesidir)", ["em"], True),
             ("b12.p12_vekil.dibs5y_abd10y.donemler.tum_yonetilen_haric", "ülke primi vekili DİBS 5y − ABD 10y ↔ kur "
              "(haftalık)", ["ilk_iki_olcu"], False)],
          _not_eksik(kaynaklar["b12"]["p12"])),

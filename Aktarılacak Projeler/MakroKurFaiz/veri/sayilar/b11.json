@@ -2,6 +2,16 @@
  "girdiler": [
   {
    "tur": "sabit",
+   "parca": "(≈3,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈2,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
    "parca": "(≈1,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
   },
@@ -1331,10 +1341,10 @@
   },
   {
    "tur": "olcum",
-   "parca": "gerçekleşen taşıma ortalama −12,82 puan kaybettirdi: gerçekleşen değer kaybı beklenenin ortalama 16,72 puan üstündeydi (son dönemde gerçekleşen yalnız 27 ayda bilinir)",
+   "parca": "gerçekleşen taşıma ortalama 12,82 puan kaybettirdi: gerçekleşen değer kaybı beklenenin ortalama 16,72 puan üstündeydi (son dönemde gerçekleşen yalnız 27 ayda bilinir)",
    "degerler": [
     {
-     "yol": "b11.p11e.donemler.oncesi.gerceklesen_tasima_ort_puan",
+     "ifade": "abs(v('b11.p11e.donemler.oncesi.gerceklesen_tasima_ort_puan'))",
      "bicim": "puan",
      "hane": 2
     },
@@ -1398,7 +1408,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "Açılış (30.09.2026): $i$ = %44,64 (TLREF %36,92, günlük bileşikle), $i^*$ = %4,59 (ABD Hazinesi 1 yıllık %4,54, yıllık bileşiğe), R +16,68 puan, sapma −17,4, $T_B = T_C = 1$",
+   "parca": "Açılış (30.09.2026): $i$ = %44,64 (TLREF %36,92, günlük bileşikle), $i^*$ = %4,59 (ABD Hazinesi 1 yıllık %4,54, yıllık bileşiğe), R +16,68 puan, sapma −17,41 (REDK aracından), $T_B = T_C = 1$",
    "degerler": [
     {
      "ifade": "v('b11.arac_kur.tarih')",
@@ -1434,22 +1444,6 @@
     {
      "ifade": "a('kur.redk_sapma')",
      "bicim": "sayi",
-     "hane": 1
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
-   "parca": "basit fark 32,38 puan, DİBS 1 yıllığı %33,75 verir",
-   "degerler": [
-    {
-     "yol": "b11.arac_kur.basabas_basit_puan",
-     "bicim": "puan",
-     "hane": 2
-    },
-    {
-     "yol": "b11.arac_kur.basabas_dibs1y_yuzde",
-     "bicim": "yz",
      "hane": 2
     }
    ]
@@ -1660,12 +1654,12 @@
   },
   {
    "tur": "hesap",
-   "parca": "(c) $\\hat\\rho = (17{,}4 + 16{,}68)/1$ = +34,08 puan; $T_B = 2$'de $(17{,}4 + 33{,}36)/1$ = +50,76 puan",
+   "parca": "(c) $\\hat\\rho = (17{,}41 + 16{,}68)/1$ = +34,09 puan; $T_B = 2$'de $(17{,}41 + 33{,}36)/1$ = +50,77 puan",
    "degerler": [
     {
      "ifade": "-a('kur.redk_sapma')",
      "bicim": "sayi",
-     "hane": 1
+     "hane": 2
     },
     {
      "ifade": "a('kur.R')",
@@ -1809,6 +1803,147 @@
      "hane": 2
     }
    ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(en düşük t(β = 0) −1,85, 2018–2026)",
+   "degerler": [
+    {
+     "yol": "b11.p11a.try.satirlar.2018-2026_yonetilen_haric.t_beta0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "EM sütunları ve TRY'nin EM'ye β'sı 14.08.2026'da biter (EM kurlarının son tam haftası); TRY sütunları 25.09.2026'ya kadar",
+   "degerler": [
+    {
+     "yol": "b11.p11c.donemler.sonrasi.em_sepet.son",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b11.p11c.donemler.sonrasi.try.son",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "01.2011–08.2026'da",
+   "degerler": [
+    {
+     "yol": "b11.p11c.try_artik.ilk",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b11.p11c.try_artik.son",
+     "bicim": "ay",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(Şekil 23 toplamı 09.2020'den başlatır)",
+   "degerler": [
+    {
+     "yol": "b11.sekil_20.ilk",
+     "bicim": "ay",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "araç log karşılıkları ayrıca basar (üç aylık taşımayı silen hareket log dilinde 8,10 puan, yüzde dilinde 8,44)",
+   "degerler": [
+    {
+     "ifade": "100 * math.log(1 + tasima(a('kur.i_tl'), a('kur.i_usd'))/100) / 4",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "tasima3(a('kur.i_tl'), a('kur.i_usd'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TLREF'in bileşik hâli yerine basit fark 32,38 puan verir",
+   "degerler": [
+    {
+     "yol": "b11.arac_kur.basabas_basit_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Bileşik hâl TLREF'in bir yıl %36,92'de kalacağını varsayar",
+   "degerler": [
+    {
+     "yol": "b11.arac_kur.i_tlref_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "DİBS 1 yıllık (%39,89, 28.09.2026), başabaş %33,75'tir",
+   "degerler": [
+    {
+     "yol": "b11.arac_kur.dibs_1y_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b11.arac_kur.dibs_1y_gun",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b11.arac_kur.basabas_dibs1y_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$T_C = 1$'deki +34,09 bir ölçüm değil",
+   "degerler": [
+    {
+     "ifade": "ima_prim(-a('kur.redk_sapma'), a('kur.R'), 1, 1)",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "11E'nin ex-ante primi (11,97 puan)",
+   "degerler": [
+    {
+     "yol": "b11.p11e.son.prim_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "%5 düzeyinde sıfırın altında değil",
+   "neden": "anlamlılık düzeyi (yöntem sabiti)"
   }
  ]
 }

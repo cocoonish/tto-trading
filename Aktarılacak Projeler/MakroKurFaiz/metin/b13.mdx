@@ -1,39 +1,44 @@
-## Bölüm 13 — Sentez: veri günü oyun kitabı (≈8 dk)
+## Bölüm 13 — Sentez: veri günü oyun kitabı (≈10 dk)
 
 *Bu bölümde:* on şokun rejimlerdeki ölçülmüş izi, beş adımlı teşhis protokolü, veri günü kartları ve
 kanıtlarının gücü, görüşten enstrümana geçiş, bu dersin ölçemedikleri ve dersin özeti.
 
-### 13.1 Şok × rejim matrisi (≈2 dk)
+### 13.1 Şok × rejim matrisi (≈2,5 dk)
 
 <span id="hy-b13"></span>
 
 Matris on şok türünü rejim sütunlarına yerleştirir; R5 iki sütundur, çünkü küresel kaçışın DM yüzü
 (dolar, ABD getirisi) ile EM yüzü (lira, DİBS) ters işaretli olabilir. DM sütunları ABD, EM sütunları
-Türkiye verisiyle dolar; bütçe satırının EM hücreleri euro çevresinin mali stres pencereleridir,
-etiketleri VIX ölçütü ile olay seçiminden gelir. Rejim, olay haftasının Bölüm 1 etiketidir (Türkiye
-haftası perşembe kapanışıyla örneklenir; cuma olayı bir sonraki haftaya yazılır). Hücrede olay günü
-ortalama mutlak değişiminin aynı rejimin sıradan günlerine **oranı**, 2 yıllık getiri ile yerel paranın
-değeri arasındaki **eş hareket** (artı: faiz ↑ para ↑, B; eksi: faiz ↑ para ↓, C) ve **durum** yazılır;
-seri ancak Bölüm 2'nin plasebo sınamasını geçerse girer, eş hareket 2 yıllık ile kur ikisi de geçtiyse.
+Türkiye verisinden kurulur. Bütçe satırı istisnadır: EM hücreleri euro çevresinin mali stres
+pencereleridir, R5 (ABD) hücresi İngiltere 2022'yi de taşır (gilt × sterlin); bu dış pencerelerin rejim
+etiketi VIX ölçütü ile olay seçiminden gelir. Rejim, olay haftasının Bölüm 1 etiketidir (Türkiye
+haftası perşembe kapanışıyla örneklenir; cuma olayı bir sonraki haftaya yazılır). Hücrede üç şey
+yazılır: olay günü ortalama mutlak değişiminin aynı rejimin sıradan günlerine **oranı**, 2 yıllık
+getiri ile yerel paranın değeri arasındaki **eş hareket** (artı: faiz ↑ para ↑, B; eksi: faiz ↑ para
+↓, C) ve **durum**. Seri ancak Bölüm 2'nin plasebo sınamasını geçerse girer; eş hareket, 2 yıllık ile
+kur ikisi de geçtiyse. Matris 2 yıllığı kullanır; işareti Bölüm 1'in uzun uç kadranıyla aynı şey
+değildir, iki vade ayrıştığında (alıştırma 1) kadran uzun uçtan okunur.
 
 | Şok | R1 | R2 | R3 | R4 | R5 (ABD) | R5 (Türkiye) |
 |---|---|---|---|---|---|---|
 | Bütçe / borçlanma programı | vaka (3) | kaynak (B5) | kurulmadı | vaka (3) | vaka (2) | vaka (1) |
 | GSYH, PMI/ISM | kaynak (B3) | kurulmadı | kurulmadı (plasebo) | kurulmadı (plasebo) | kurulmadı | kurulmadı (plasebo) |
 | İstihdam | kaynak (B3) | kurulmadı | kurulmadı | kurulmadı | kurulmadı | kurulmadı |
-| TÜFE | kaynak (B4) | kurulmadı | kurulmadı (plasebo) | kaynak (B4) | kurulmadı | kurulmadı (plasebo) |
+| TÜFE | kaynak (B4) | kurulmadı | kurulmadı (plasebo) | kaynak (B4 · plasebo) | kurulmadı | kurulmadı (plasebo) |
 | Para politikası (FOMC · PPK) | ölçüldü · +0,71 | vaka (6) | ölçüldü · −0,29 | vaka (7) | ölçüldü · +0,59 | ölçüldü · −0,28 |
 | Cari denge / dış ticaret | kaynak (B8) | kurulmadı | kurulmadı | kaynak (B8) | kurulmadı | kurulmadı |
-| Haftalık rezerv | kaynak (B9) | kurulmadı | kaynak (B9) | kaynak (B9) | kurulmadı | kurulmadı (plasebo) |
-| Not kararı | vaka (1) | vaka (1) | kaynak (B12) | kaynak (B12) | kurulmadı | kurulmadı (plasebo) |
-| Emtia / enerji şoku | kaynak (B10) | kurulmadı (plasebo) | kurulmadı (plasebo) | kaynak (B10) | kurulmadı (plasebo) | kurulmadı (plasebo) |
-| Küresel risk (VIX sıçraması) | ölçüldü · +0,33 | kurulmadı | kurulmadı (plasebo) | kurulmadı (plasebo) | ölçüldü · +0,19 | kaynak (B11) |
+| Haftalık rezerv | kaynak (B9) | kurulmadı | kaynak (B9 · plasebo) | kaynak (B9 · plasebo) | kurulmadı | kurulmadı (plasebo) |
+| Not kararı | vaka (1) | vaka (1) | kurulmadı (plasebo) | kurulmadı (plasebo) | kurulmadı | kurulmadı (plasebo) |
+| Emtia / enerji şoku | kaynak (B10 · plasebo) | kurulmadı (plasebo) | kurulmadı (plasebo) | kaynak (B10 · plasebo) | kurulmadı (plasebo) | kurulmadı (plasebo) |
+| Küresel risk (VIX sıçraması) | ölçüldü · +0,33 | kurulmadı | kurulmadı (plasebo) | kurulmadı (plasebo) | ölçüldü · +0,19 | kaynak (B11 · plasebo) |
 
 **ölçüldü:** en az on olay ve sınamayı geçen en az bir seri; sayı eş harekettir. **vaka (n):** bir ile
-dokuz olay, oranlar yazılır, korelasyon yazılmaz. **kaynak (Bölüm):** bu veriyle kurulamadı, ilgili
-bölüm kaynakla anlatır. **kurulmadı:** yayım takvimi ya da seri elde yok ya da o rejimde olay yok;
-**(plasebo):** olay var ama dört serinin hiçbiri sınamayı geçmedi. Boş hücre bir tahminle
-doldurulmaz. Toplam: 60 hücrenin 6'sı ölçüldü, 8'i vaka, 15'i kaynak, 31'i kurulmadı.
+dokuz olay, oranlar yazılır, korelasyon yazılmaz. **kaynak (Bölüm):** bu veriyle kurulamadı (seri ya
+da olay yok, ya da sınama geçmedi: "· plasebo"); ilgili bölüm konuyu kaynakla anlatır. **kurulmadı:**
+yayım takvimi ya da seri elde yok ya da o rejimde olay yok; **(plasebo):** olay var ama sınanan
+serilerin hiçbiri plasebo sınamasını geçmedi. Boş hücre bir tahminle doldurulmaz. Toplam: 60
+hücrenin 6'sı ölçüldü, 8'i vaka, 13'ü kaynak, 33'ü kurulmadı. Ölçülemeyen 46 hücrenin 21'inde olay
+var ama sınama geçmedi, 21'inde veri yok, 4'ünde o rejimde olay yok.
 
 <GrafikEmbed src="/arastirma/makro-kur-ve-faiz/24_matris.html" baslik="Şok × rejim matrisi: ölçülen, vaka, kaynaklı ve kurulmayan hücreler" no="24" kaynak="ABD Hazinesi · CNBC · Yahoo Finance · TCMB · TÜİK · Fed · Bank of England · Dünya Bankası" genis />
 
@@ -46,7 +51,7 @@ Taralı hücre kaynaklı, noktalı hücre vaka, boş hücre kurulmadı. Bilinen 
 kadranından kurulduğu için R2 ve R4'ün işareti kısmen tanım gereğidir; her hücre bir önceki haftanın
 etiketiyle de hesaplandı.
 
-### 13.2 Öne çıkan ölçümler (≈1 dk)
+### 13.2 Öne çıkan ölçümler (≈1,5 dk)
 
 - **FOMC günü 2 yıllık ile dolar aynı yönde oynar ve bu olay gününe özgüdür.** R1'de 104 karar
   (30.04.2008–16.09.2026): eş hareket +0,71, aynı rejimin sıradan günlerinde +0,33, fark Fisher
@@ -55,28 +60,31 @@ etiketiyle de hesaplandı.
 - **VIX sıçrama günleri** (günlük artışın üst %2'si, eşik 3,99 puan) ABD'de dört seriyi de oynatır ama
   eş hareket sıradan günden ayrışmaz: R1'de +0,33'e karşı +0,35, R5'te +0,19'a karşı +0,18; aynı yön
   payı %46 ve %41. Günler çıktıdan seçildiği için oranın yüksekliği kısmen seçimin kendisidir. Türkiye'de
-  kurun tepesi olay gününde ama rastgele günlere üstünlüğü sınırda (hata payı içinde; tohum değişince
-  hüküm dönebilir), DİBS'in tepesi olay gününde değil: EM hücreleri ölçülmedi.
+  kurun tepesi olay gününde ama rastgele günlere üstünlüğü sınırda (hata payı içinde; rastgele kümeler
+  yeniden çekilince hüküm dönebilir), DİBS'in tepesi olay gününde değil: EM hücreleri ölçülmedi.
 - **PPK günü 2 yıllık ile TL ters yönde oynar, ama bu PPK'ya özgü değil:** R5'te −0,28'e karşı sıradan
   günlerde −0,16; R3 hücresini alıştırma 2 okur.
 - **Beklenen tepkilerin çoğu olay gününde görünmedi:** TÜFE yayımlarında (164), GSYH yayımlarında (55)
-  ve enerji şoku aylarında (35) hiçbir seri sınamayı geçmedi; profillerin tepesi çoğunlukla yayımdan
-  önce ya da sonra (Bölüm 3, 4).
-- **Rezerv şoku haftasında kur sessizdir.** Rezervin büyük oynadığı 79 haftada (yayım değil, hareketin
-  haftası) kurun olay haftası oranı 0,65, komşu haftalarda 0,52–0,57: Bölüm 9'un okumasıyla uyumlu, ama
+  ve enerji şoku aylarında (35 ay; Türkiye serilerinde 20) hiçbir seri sınamayı geçmedi; profillerin
+  tepesi çoğunlukla olaydan önce ya da sonra (TÜFE Bölüm 2 ve 4, GSYH Bölüm 3; enerji şoku ayları
+  yalnız bu matriste sınandı).
+- **Rezerv şoku haftasında kur sessizdir.** Rezervin büyük oynadığı 79 haftada (kurda yönetilen kur dışındaki
+  69; yayım değil, hareketin haftası) kurun olay haftası oranı 0,65, komşu haftalarda 0,52–0,57: Bölüm 9'un okumasıyla uyumlu, ama
   sınamayı geçmediği için hücre ölçülmedi. 2 yıllık DİBS'in oranı her kaymada 1,91 ile 2,23 arası: rezerv
   şokları oynak dönemlere kümelenir.
 - **Bütçe vakalarında uzun uç çoğunlukla prim kadranındadır:** dokuz pencerenin altısında faiz ↑ para ↓
   (İtalya 2011 ve 2018'in iki penceresi, İngiltere 2022, ABD 2017 ve Nisan 2025), üçünde politika
-  kadranı. Vaka tablosudur, test değil (Bölüm 5, 6).
+  kadranı. Sayım mekanik kadrandır: ABD 2017'nin "prim"i vade primi düştüğü için mali prim değildir
+  (Bölüm 5), İspanya 2012'nin "politika"sı primi spreadde taşır (Bölüm 6). Vaka tablosudur, test değil
+  (Bölüm 5, 6).
 
-### 13.3 Beş adımlı teşhis protokolü (≈1 dk)
+### 13.3 Beş adımlı teşhis protokolü (≈0,5 dk)
 
 1. **Sayısal beklenti var mı?** İşaretli sürpriz yalnız Türkiye'de, anketten kurulur: TÜFE'de cari ay
    beklentisi (Bölüm 4), PPK'da toplantı beklentisi (Bölüm 3). Öbür yayımlarda olay günü oynaklığı ve eş
    hareket okunur, "sürpriz" denmez (Bölüm 2).
 2. **Hangi uç oynadı?** 2 yıllık patikayı, uzun uç ve eğim primi taşır (Bölüm 1, 4, 5).
-3. **Kur aynı yöne mi gitti?** Faiz ↑ para ↑ politika (B), faiz ↑ para ↓ prim (C); Türkiye'de kur,
+3. **Kur uzun uçla (ABD 10, Türkiye 5 yıllık; Bölüm 1) aynı yöne mi gitti?** Faiz ↑ para ↑ politika (B), faiz ↑ para ↓ prim (C); Türkiye'de kur,
    26 haftalık ortalama hareketinden sapmasıyla okunur (Bölüm 1).
 4. **Dolar ve VIX ne yaptı?** VIX'in eşiğe göre yeri R5'i söyler; R5'in içinde doların yönü sığınak mı
    primin kaynağı mı olduğunu söyler. Dolar CNBC sepetinden okunur (Bölüm 1, 11).
@@ -90,21 +98,22 @@ etiketiyle de hesaplandı.
 | Bütçe / borçlanma programı | uzun uç ↑, dikleşme; kur bileşime bağlı | prim ↑, kur ↓ (yüksek borç, döviz payı, R5) | uzun–kısa uç farkı; kur ile uzun ucun aynı gün yönü | kısa uç da oynuyorsa konu arz değil tepki fonksiyonu | vaka · vaka |
 | GSYH, PMI/ISM | 2 yıllık ↑, para ↑ | bileşime bağlı: ihracat → para ↑, kredi → cari kaygısı | 2 yıllık; politika beklentisi | patika kımıldamıyorsa | kaynak · kurulmadı (plasebo) |
 | İstihdam | 2 yıllık ↑, dolar ↑ | düşük frekans; tepki ölçülmedi | ABD 2 yıllık; dolar | yayım günü kovaryansı sıradan günden ayrışmıyorsa | kaynak · kurulmadı |
-| TÜFE | R1: faiz ↑, para ↑ | R4: para ↓, başabaş ↑ | 2 yıllık ile uzun uç; kur yönü | kur 2 yıllıkla aynı yöne dönerse | vaka · tarif edici |
-| PPK / FOMC / ECB | FOMC günü 2 yıllık ile dolar aynı yönde | R3'te 2 yıllık ile TL ters yönde; R4'te sıkılaştırma → para ↓ olabilir | karar ile anket beklentisinin farkı (PPK) ya da 2 yıllık (FOMC); kur | eş hareket sıradan günden ayrışmıyorsa | ölçüldü · ölçüldü |
+| TÜFE | R1: faiz ↑, para ↑ | R4'te para ↓, başabaş ↑ beklenir; aylık eğimler bu işareti göstermedi (sürpriz yüksekken TL güçleniyor), yalnız 2021'de Kasım dışarıda kalınca beliriyor (Bölüm 4) | 2 yıllık ile uzun uç; kur yönü | kur 2 yıllıkla aynı yöne dönerse | vaka · tarif edici (ters işaret) |
+| PPK / FOMC / ECB | FOMC günü 2 yıllık ile dolar aynı yönde | şahin anket sürprizinde TL güçlenir (Bölüm 3); R3'te 2 yıllık ile TL ters yönde, ama R3'ün sıradan günlerinde de öyle (z −1,30); R4'te sıkılaştırma → para ↓ olabilir | karar ile anket beklentisinin farkı (PPK) ya da 2 yıllık (FOMC); kur | eş hareket sıradan günden ayrışmıyorsa (FOMC); kur şahin sürprizde zayıflarsa (PPK) | ölçüldü · ölçüldü |
 | Cari denge / dış ticaret | zayıf, yavaş | finansman kalitesi kuru taşır | çekirdek cari; finansman bileşimi | finansman doğrudan yatırım ağırlıklıysa | kaynak · vaka |
 | Haftalık rezerv | çoğunlukla fiyatlanmaz | baskı rezerve yazılıyorsa kur sessiz | swap hariç net rezerv; kur | rezerv birikirken kur zayıfsa | kaynak · tarif edici |
-| Not kararı | küçük (iki gözlem) | spread ve kur; kur profilinin tepesi kararın iki gün öncesinde | spread vekili; kur | karar beklenen yöndeyse | vaka · tarif edici |
+| Not kararı | küçük (iki gözlem) | spread ve kur; olay çalışması kurulmadı (plasebo sınaması geçmedi, Bölüm 12 vaka listesi) | spread vekili; kur | karar beklenen yöndeyse | vaka · kurulmadı (plasebo) |
 
-"Tarif edici" bir ilişkinin ölçüldüğünü ama sınamayı geçmediğini söyler (aylık ve haftalık ilişkilerde
-örneklem dışı kıyas, not kararlarında plasebo); "vaka" testin kurulmadığını; kartın ECB bacağı
-kurulmadı. Not kararında kur tepesinin kararın iki iş günü öncesine düşmesi bir bulgudur, öngörü değil
-(Bölüm 12).
+"Tarif edici" bir ilişkinin ölçüldüğünü ama örneklem dışı sınamayı geçmediğini söyler; "vaka" testin
+kurulmadığını; "(plasebo)" olayın olduğunu ama plasebo sınamasının geçmediğini. PPK kartında EM'nin
+"ölçüldü"sü anket sürprizinin kura eğimine ve olay günü oynaklık oranına aittir; 2 yıllık ile kurun eş
+hareketi tarif edicidir. Kartın ECB bacağı kurulmadı, çünkü ECB karar günleri elde yok (13.6).
 
-### 13.5 Görüşten enstrümana (≈0,5 dk)
+### 13.5 Görüşten enstrümana (≈2 dk)
 
 Bu ders görüşü kurar, uygulamayı yinelemez: eğri görüşü →
-[Kâğıt ve TRY OIS Trading](/arastirma/kagit-ve-ois-trading/), 6.3, kartlar K1–K8; kur ve taşıma →
+[Kâğıt ve TRY OIS Trading](/arastirma/kagit-ve-ois-trading/), 6.3 (oyun kitabı K1–K15; makro görüşün kartları
+K1–K8 ve K15); kur ve taşıma →
 [TL Taşıma](/projeler/tl-tasima/) panosu; kuyruk riski →
 [Opsiyon Book Yönetimi](/arastirma/opsiyon-book-yonetimi/), Modül 10 (risk reversal).
 
@@ -172,7 +181,7 @@ sınamasını geçmedi (Bölüm 3).
   (Bölüm 12).
 - **Konsensüs beklentisi:** işaretli sürpriz yalnız Türkiye TÜFE'sinde ve PPK kararında, anketten;
   piyasa konsensüsü yok. PPK günü 3 aylıktan ima sürprizi plasebo sınamasını geçmedi (Bölüm 3).
-- **Yayım takvimleri:** ABD istihdam ve TÜFE (BLS'nin yayım geçmişine erişilemedi), ISM/PMI ve GSYH;
+- **Yayım takvimleri:** ABD istihdam ve TÜFE (BLS'nin yayım geçmişine erişilemedi), ABD ISM/PMI ve GSYH;
   ECB karar günleri; TCMB ödemeler dengesi; Türkiye işgücü; anketin yayım günleri: ilgili hücreler
   kurulmadı.
 - **Türev fiyatları:** USD/TRY forward ve NDF, çapraz kur swap bazı, onshore/offshore ayrımı; Fama
@@ -186,7 +195,7 @@ sınamasını geçmedi (Bölüm 3).
 - **Genel sınır:** bütün makro → kur ilişkileri örneklem içi tariftir; örneklem dışı kıyası geçen bir
   eşzamanlı eğim bile öngörü değil, maruziyet ölçüsüdür.
 
-### 13.7 Kapanış (≈1 dk)
+### 13.7 Kapanış (≈0,5 dk)
 
 1. Faiz üç terim, kur üç bloktur; terim aynı günün faiz ve kur hareketinden okunur (Bölüm 1).
 2. Pencere ölçülür, varsayılmaz: saat ve hiza bir olay hücresini kurar ya da düşürür (Bölüm 2).
