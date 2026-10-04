@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-02",
+ "_son_guncelleme": "2026-10-04",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -762,6 +762,16 @@
    "beklenti_sayi": null,
    "gorulme": "2026-09-20"
   },
+  "2026-10-08|BDDK: Bankacılık sektörü (40. Hafta 2026)": {
+   "tarih": "2026-10-08",
+   "olay": "BDDK: Bankacılık sektörü (40. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
+  },
   "2026-10-08|TB: Dış ticaret (4. Çeyrek 2026)": {
    "tarih": "2026-10-08",
    "olay": "TB: Dış ticaret (4. Çeyrek 2026)",
@@ -771,6 +781,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-09-17"
+  },
+  "2026-10-08|TB: Dış ticaret beklenti anketi (4. Çeyrek 2026)": {
+   "tarih": "2026-10-08",
+   "olay": "TB: Dış ticaret beklenti anketi (4. Çeyrek 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
   },
   "2026-10-08|TCMB: Haftalık para-banka (40. Hafta 2026)": {
    "tarih": "2026-10-08",
@@ -882,6 +902,16 @@
    "beklenti_sayi": null,
    "gorulme": "2026-09-22"
   },
+  "2026-10-13|TÜİK: Dış ticaret endeksleri (Ağustos 2026)": {
+   "tarih": "2026-10-13",
+   "olay": "TÜİK: Dış ticaret endeksleri (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
+  },
   "2026-10-14|ABD TÜFE (Eylül)": {
    "tarih": "2026-10-14",
    "olay": "ABD TÜFE (Eylül)",
@@ -891,6 +921,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-09-23"
+  },
+  "2026-10-14|HMB: Kamu haznedarlığı ist. (Eylül 2026)": {
+   "tarih": "2026-10-14",
+   "olay": "HMB: Kamu haznedarlığı ist. (Eylül 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
   },
   "2026-10-14|HMB: Menkul kıymet ist. (Eylül 2026)": {
    "tarih": "2026-10-14",
@@ -921,6 +961,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-09-27"
+  },
+  "2026-10-15|BDDK: Bankacılık sektörü (41. Hafta 2026)": {
+   "tarih": "2026-10-15",
+   "olay": "BDDK: Bankacılık sektörü (41. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
   },
   "2026-10-15|HMB: Bütçe dengesi (Eylül 2026)": {
    "tarih": "2026-10-15",
@@ -982,6 +1032,16 @@
    "beklenti_sayi": null,
    "gorulme": "2026-09-29"
   },
+  "2026-10-20|TÜİK: YD-ÜFE (Eylül 2026)": {
+   "tarih": "2026-10-20",
+   "olay": "TÜİK: YD-ÜFE (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
+  },
   "2026-10-21|TCMB: Kapasite kullanımı (Ekim 2026)": {
    "tarih": "2026-10-21",
    "olay": "TCMB: Kapasite kullanımı (Ekim 2026)",
@@ -1001,6 +1061,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-09-30"
+  },
+  "2026-10-22|BDDK: Bankacılık sektörü (42. Hafta 2026)": {
+   "tarih": "2026-10-22",
+   "olay": "BDDK: Bankacılık sektörü (42. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
   },
   "2026-10-22|TCMB PPK faiz kararı": {
    "tarih": "2026-10-22",
@@ -1041,6 +1111,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-02"
+  },
+  "2026-10-23|TCMB: Sektörel güven (Ekim 2026)": {
+   "tarih": "2026-10-23",
+   "olay": "TCMB: Sektörel güven (Ekim 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-04"
   }
  }
 }
