@@ -1,6 +1,6 @@
 {
   "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
-  "_son_guncelleme": "2026-10-01",
+  "_son_guncelleme": "2026-10-04",
   "kayitlar": [
     {
       "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
@@ -450,6 +450,17 @@
       "soz": "1 Ekim'de yürürlüğe giren karar akaryakıt vergi takvimini ikiye böldü. Benzinde eşel mobil uygulaması sona erdi ve özel tüketim vergisi tek adımda değil üç kademede yükseltiliyor: kurşunsuz 95 oktanda litre başına 31 Ekim'e kadar 7,90 lira, kasımda 11,36 lira, 1 Aralık'tan itibaren 14,8277 lira. Bu kademelendirme olmasaydı pompa fiyatı 1 Ekim'de 12,47 lira artacaktı; fiilen 4,15 lira arttı, yani 8,32 liralık artış kasım ve aralığa ötelendi. Motorinde ise ağustosta ilan edilen takvim değişmeden işledi ve vergi litre başına 3 liradan 6 liraya çıktı; pompaya yansıması katma değer vergisiyle birlikte 3,60 lira. Diyoruz ki eylül enflasyonunda henüz görünmeyecek bu ayrım ekim ayının ulaştırma kalemini iki yönde birden çekecek — motorin yukarı, benzin beklenenden az — ve net etki ekimde sınırlı kalıp kasım ile aralığa kayacak. Ham petrolün 100 doların üzerinde kalması bu ötelemenin gerekçesini güçlendiriyor: Brent 30 Eylül kapanışında 103,53 dolar ve aylık artışı %14,41.",
       "ne_bakilacak": "3 Kasım'da yayımlanacak ekim tüketici enflasyonunun ulaştırma kalemi ve manşete katkısı; aralık ayında üç kademenin tamamı yürürlüğe girdiğinde aynı kalemin hızlanıp hızlanmadığı. Benzin tarafındaki ötelenen 8,32 liralık artış kasım ve aralık okumalarında görünmezse kademelendirme fiyata değil yalnız takvime yansımış demektir ve kayıt çürür.",
       "vade": "2026-11-03"
+    },
+    {
+      "konu": "Haftaya bakış ana senaryosu: fon krizi kur ve faiz kanalına geçmeden kapanıyor",
+      "acilis": "2026-10-04",
+      "durum": "acik",
+      "soz": "Eylül TÜFE'si aylık %1,9–2,4 aralığında gelir, döviz çıkışı ekimin ilk günlerinde yavaşlar; TL eğrisi kısa uçtan gevşemeyi sürdürür, 2 yıllık DİBS getirisi %40,5'in altında kalır, dolar/TL haftalık %0,35–0,40 ritmini korur ve BIST'teki toparlanma bankacılık önderliğinde sürer.",
+      "ne_bakilacak": "Teyit: TCMB rezerv verisinden tahmin edilen döviz akımının ekimin ilk haftasında sıfıra yaklaşması ve 8 Ekim menkul kıymet verisinde yabancının hisse ve DİBS'te dengeye dönmesi. Düşer: aylık TÜFE %2,6'yı aşarsa ya da 2 yıllık getiri %41'in üstüne çıkarsa; dolar/TL'nin haftalık artışı %0,6'yı geçerse kuyruk patikası geçerli olur.",
+      "sonuc": "",
+      "vade": "2026-10-08",
+      "kapanis": "",
+      "isabet": ""
     }
   ]
 }
