@@ -545,6 +545,21 @@ def _bicim3_govde():
     # Kayıt defteri okunurken bulten/ yola girmez: girerse sonraki `import
     # denetim` / `import uret` bültenin aynı adlı modülüne düşer.
     assert str(uret.KOK / "bulten") not in sys.path, "bulten/ sys.path'e girdi"
+    # İŞLEM FİKİRLERİ GÖNDERİYE GİRMEZ (karar 04.10.2026): sayfanın kendi
+    # bölümüdür ve kendi uyarı metniyle basılır; gönderi bu alanı okumaz.
+    # Kilit iki kipte de: haftalıkta "Ana senaryo" satırı gönderiye girdiği
+    # için senaryodan türeyen fikir oraya sızmaya en yakın yerdir.
+    isaret = "FIKIRISARETI"
+    fk = [{"baslik": isaret, "gerekce": isaret, "ne_bozar": isaret, "yapi_metni": isaret,
+           "yon_metni": isaret}]
+    karne = {"kayitlar": [{"baslik": isaret, "durum": "acik"}], "sayim": {}}
+    for kip in (False, True):
+        bb = {**b3, "haftalik": kip, "fikirler": fk, "fikir_karne": karne,
+              "fikir_kapat": [{"kimlik": "x", "sebep": isaret}]}
+        if kip:
+            bb["gundem"] = {**bb["gundem"], "risk": "<h3>Ana senaryo</h3><p>Faiz yatay kalır.</p>"}
+        metin = "\n".join(uret.bulten_zinciri(bb))
+        assert isaret not in metin, f"işlem fikri gönderiye girdi ({'haftalık' if kip else 'günlük'})"
 
 
 def _haftalik_gonderi_tur2():

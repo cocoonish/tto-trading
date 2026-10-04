@@ -596,6 +596,10 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # baştan basılmasın, yalnız DEĞİŞENİ tam metinle göstersin (bkz.
         # soz.py'deki not — ardışık iki sayı arasında %91,4 birebir örtüşme
         # ölçüldü). Önceki sayı yoksa kıyas koşmaz ve karne bunu söyler.
+        # İşlem fikirlerinin karnesi: ÖNCEKİ sayılarda açılmış fikirlerin bugünkü
+        # değeri ve mekanik kapanışları (bkz. fikir.py). Bugün açılacak fikirler
+        # yazı katmanının `fikirler` alanındadır ve bir sonraki sayıda buraya girer.
+        "fikir_karne": _fikir_karne(tarih, haftalik),
         "izleme": soz_m.ozet(tarih.isoformat(), _onceki_izleme(tarih.isoformat(), haftalik),
                              haftalik=haftalik,
                              onceki_gun=(((_onceki_haftalik(tarih.isoformat()) or {}).get("tarih") or "")
@@ -645,6 +649,17 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
     b["gundem"] = gundem_tabani(b) if int(b["surum"]) < 3 else {}
     b["gundem_kaynagi"] = "otomatik"        # yorum katmanı yazınca "yazili" olur
     return b
+
+
+def _fikir_karne(tarih: date, haftalik: bool) -> dict:
+    """Fikir karnesi — bir kusuru bülteni DÜŞÜRMEZ: karne kurulamazsa sebebi
+    yazılır, sayfa ve denetim onu adıyla gösterir. AĞA ÇIKMAZ (piyasa ham
+    önbelleği bu koşuda zaten tazelendi)."""
+    try:
+        import fikir as fikir_m
+        return fikir_m.karne(tarih.isoformat(), haftalik=haftalik)
+    except Exception as e:                                      # noqa: BLE001
+        return {"hata": f"{type(e).__name__}: {e}", "kayitlar": [], "sayim": {}}
 
 
 def gundem_tabani(b: dict) -> dict:
@@ -705,6 +720,23 @@ def yaz(b: dict) -> Path:
                     continue
                 if eski.get(alan) and not b.get(alan):
                     b[alan] = eski[alan]
+            # FİKİR KARNESİNİN KAPANIŞLARI DA KORUNUR. Yazılmış bir sayının
+            # yeniden ölçümü (--yeniden-olc) karneyi yeniden kurar; sabah okura
+            # "hedefte kapandı" denmiş bir kayıt, kaynak bir barı geri çektiğinde
+            # aynı gün "açık"a dönebilirdi. Bir kapanış sayıya yazıldıktan sonra
+            # değişmez (bkz. fikir.py) — aynı sayının içinde de.
+            if eski.get("gundem_kaynagi") == "yazili" and isinstance(eski.get("fikir_karne"), dict):
+                import fikir as _fikir
+                kapali = {k.get("kimlik"): k for k in (eski["fikir_karne"].get("kayitlar") or [])
+                          if k.get("durum") in _fikir.KAPANMIS}
+                fk = b.get("fikir_karne") or {}
+                if kapali and isinstance(fk.get("kayitlar"), list):
+                    gorulen = set()
+                    for i, k in enumerate(fk["kayitlar"]):
+                        if k.get("kimlik") in kapali:
+                            fk["kayitlar"][i] = kapali[k["kimlik"]]
+                            gorulen.add(k["kimlik"])
+                    fk["kayitlar"] += [k for kk, k in kapali.items() if kk not in gorulen]
             # Yorum katmanının yazdığı ayrıntılı gündem metni, sonraki
             # deterministik koşularda TABAN metinle ezilmemeli.
             if eski.get("gundem_kaynagi") == "yazili" and eski.get("gundem"):

@@ -99,6 +99,17 @@ def _metinler(b: dict) -> list:
 
     for ad in YAZI_ALANLARI:
         gez(b.get(ad), ad)
+    # İŞLEM FİKİRLERİ (bkz. bulten/fikir.py): kayıt makine alanlarıyla dolu
+    # (kimlik, seri, tur, yon, dayanak, ISO tarihler) ve onları taramak
+    # bültenin iskeletini kod dili sanmak olurdu. Okura giden metin alanları
+    # ADIYLA alınır — liste fikir.py'de tek yerde.
+    import fikir as _fikir
+    for f in b.get("fikirler") or []:
+        if isinstance(f, dict):
+            cikan += [str(f[a]) for a in _fikir.METIN_ALANLARI if str(f.get(a) or "").strip()]
+    for x in b.get("fikir_kapat") or []:
+        if isinstance(x, dict) and str(x.get("sebep") or "").strip():
+            cikan.append(str(x["sebep"]))
     return cikan
 
 
@@ -1307,6 +1318,127 @@ class Denetim:
         else:
             self._ok("vadeli devir düzeltmesi kurulu")
 
+    # ────────────────────────────────────────────── işlem fikirleri
+    # Sayı aralığı (bkz. YAZIM.md "İşlem fikirleri"): günlükte temiz bir fikir
+    # yoksa hiç yazılmaz — eksiklik bilgi satırıdır, uyarı değil (kapanamayan
+    # bir uyarı yazarı bütün uyarıları görmezden gelmeye alıştırır).
+    FIKIR_ARALIK = {"gunluk": (0, 3), "haftalik": (3, 6)}
+    FIKIR_ACIK_AZAMI = 12
+    FIKIR_BASLANGIC = "2026-10-05"     # ilk sayı; öncesinde bölüm yoktu
+    FIKIR_GEREKCE_KELIME = 70
+    FIKIR_BASLIK_KARAKTER = 80
+    FIKIR_STOP_Z = 0.5
+    FIKIR_HEDEF_Z = 2.5
+    FIKIR_BOZAR_KELIME = 50
+
+    def fikirler(self):
+        """İşlem fikirleri (bulten/fikir.py): yapısal tutarlılık ENGEL, ölçülü
+        bütçeler UYARI. Biçim 2 sayısında koşmaz. Yazma kapısı (yaz.py) aynı
+        sözleşmeyi zaten dayatır; bu ölçüt dosyaya başka yoldan giren kaydı ve
+        sayfanın göreceği bütünü sorar."""
+        b = self.b
+        if int(b.get("surum") or 2) < 3:
+            return
+        import fikir as _f
+        kip = "haftalik" if b.get("haftalik") else "gunluk"
+        liste = [f for f in (b.get("fikirler") or []) if isinstance(f, dict)]
+        alt, ust = self.FIKIR_ARALIK[kip]
+        if not liste and str(b.get("tarih") or "") < self.FIKIR_BASLANGIC:
+            return          # bölüm bu tarihten önce yoktu; arşiv sayısı ölçülmez
+        if not liste:
+            (self.uyari if kip == "haftalik" else self.bilgi).append(
+                "Bu sayıda işlem fikri yok" + (f" (haftalıkta {alt}–{ust} beklenir)"
+                                               if kip == "haftalik" else ""))
+        elif len(liste) < alt or len(liste) > ust:
+            self.uyari.append(f"İşlem fikri sayısı {len(liste)} — "
+                              f"{'haftalık' if kip == 'haftalik' else 'günlük'} sayıda {alt}–{ust} beklenir")
+        bolumler = [x.get("id") for x in (b.get("gundem_yazi_bolumleri") or [])] + ["yorum"]
+        engel0, uyari0 = len(self.engel), len(self.uyari)
+        for f in liste:
+            ad = f"fikir '{str(f.get('baslik') or f.get('kimlik'))[:50]}'"
+            eksik = [a for a in ("kimlik", "baslik", "tur", "gerekce", "ne_bozar", "ufuk")
+                     if not str(f.get(a) or "").strip()]
+            if eksik:
+                self.engel.append(f"{ad}: eksik alan {', '.join(eksik)}")
+                continue
+            tur = f.get("tur")
+            if tur not in _f.TURLER:
+                self.engel.append(f"{ad}: tanınmayan tür {tur!r}")
+                continue
+            if tur not in ("olculemez", "opsiyon"):
+                g, h, st, yon = f.get("giris"), f.get("hedef"), f.get("stop"), f.get("yon")
+                if None in (g, h, st) or yon not in _f.YONLER:
+                    self.engel.append(f"{ad}: giriş, hedef, stop ve yön birlikte yazılır")
+                    continue
+                yukari = yon == "yukari"
+                if (h <= g if yukari else h >= g) or (st >= g if yukari else st <= g):
+                    self.engel.append(f"{ad}: hedef kazanç, stop zarar tarafında olmalı "
+                                      f"(giriş {g}, hedef {h}, stop {st}, yön {yon})")
+                    continue
+                rr = f.get("getiri_risk")
+                if isinstance(rr, (int, float)) and rr < 1:
+                    self.uyari.append(f"{ad}: getiri/risk {bicim.sayi(rr, 2)} — hedef stoptan yakın")
+                # Stop mesafesi yapının bir günlük σ'sının altındaysa stop gürültüde
+                # tetiklenir. σ yazma anında yapının kendi serisinden ölçülür
+                # (fikir.yapi_sigma, sonucun biriminde); yoksa ölçülmez.
+                # Ufka ölçekli: stop ufuk boyunca beklenen dağılımın yarısından
+                # yakınsa (σ·√iş günü) gürültüyle dokunma olasılığı ~%60'ı aşar;
+                # hedef 2,5 katından uzaksa ufukta ulaşılması istisnadır.
+                z, hz = f.get("stop_z"), f.get("hedef_z")
+                if isinstance(z, (int, float)) and z < self.FIKIR_STOP_Z:
+                    self.uyari.append(f"{ad}: stop ufka göre gürültü bandında (ufuk boyunca "
+                                      f"beklenen hareketin {bicim.sayi(z, 2)} katı; en az "
+                                      f"{bicim.sayi(self.FIKIR_STOP_Z, 2)})")
+                if isinstance(hz, (int, float)) and hz > self.FIKIR_HEDEF_Z:
+                    self.uyari.append(f"{ad}: hedef ufka göre uzak (ufuk boyunca beklenen "
+                                      f"hareketin {bicim.sayi(hz, 2)} katı; en çok "
+                                      f"{bicim.sayi(self.FIKIR_HEDEF_Z, 2)})")
+                sg, mesafe = f.get("sigma_gun"), f.get("stop_mesafe")
+                if isinstance(sg, (int, float)) and isinstance(mesafe, (int, float)) and mesafe < sg:
+                    yaz_ = ((lambda v: f"{bicim.sayi(v, 1)} bp") if f.get("sonuc_birim") == "bp"
+                            else (lambda v: bicim.yuzde(v, 2)))
+                    self.uyari.append(
+                        f"{ad}: stop mesafesi bir günlük oynaklığın altında "
+                        f"({yaz_(mesafe)} < σ {yaz_(sg)})")
+                # Giriş yazarın değil ölçümün: kayıttaki bacak değeri bu sayının
+                # ölçülen katmanıyla tutmalı (elle düzenlenmiş kaydı yakalar).
+                for x in f.get("bacaklar") or []:
+                    r = _f.bacak_degeri(b, str(x.get("seri") or ""))
+                    if r and isinstance(x.get("deger"), (int, float)) and \
+                            abs(r[0] - x["deger"]) > 1e-6 * max(1.0, abs(r[0])):
+                        self.uyari.append(f"{ad}: bacak {x.get('seri')} kayıtta "
+                                          f"{bicim.sayi(x['deger'], 4)}, ölçülen katmanda "
+                                          f"{bicim.sayi(r[0], 4)} — giriş ölçümden okunur")
+            if len(str(f.get("baslik") or "")) > self.FIKIR_BASLIK_KARAKTER:
+                self.uyari.append(f"{ad}: başlık {len(str(f['baslik']))} karakter "
+                                  f"(en çok {self.FIKIR_BASLIK_KARAKTER})")
+            d = str(f.get("dayanak") or "")
+            if not d:
+                self.uyari.append(f"{ad}: dayanak yok — fikir bu sayının bir okumasına bağlanır")
+            elif d not in bolumler:
+                self.uyari.append(f"{ad}: dayanak {d!r} bu sayının bölümlerinden biri değil")
+            if kip == "haftalik" and not str(f.get("senaryo") or "").strip():
+                self.uyari.append(f"{ad}: haftalık fikir bir senaryoya bağlanır (senaryo alanı)")
+            for alan, tavan in (("gerekce", self.FIKIR_GEREKCE_KELIME),
+                                ("ne_bozar", self.FIKIR_BOZAR_KELIME)):
+                n = len(_duz(str(f.get(alan) or "")).split())
+                if n > tavan:
+                    self.uyari.append(f"{ad}: {alan} {n} kelime (en çok {tavan})")
+        if sum(1 for f in liste if f.get("tur") == "olculemez") > 1:
+            self.uyari.append("Bu sayıda birden çok ölçülemeyen fikir var — karnesi tutulamayan "
+                              "fikir istisnadır; önce ölçülebilir bir vekil denenir")
+        if kip == "haftalik" and len(liste) >= alt and len({f.get("sinif") for f in liste}) < 2:
+            self.uyari.append("Haftalık fikirler tek bir varlık sınıfında — en az iki beklenir")
+        karne = b.get("fikir_karne") or {}
+        if karne.get("hata"):
+            self.uyari.append(f"Fikir karnesi kurulamadı: {karne['hata']}")
+        acik = sum(1 for k in karne.get("kayitlar") or [] if k.get("durum") in ("acik", "olculemez"))
+        if acik + len(liste) > self.FIKIR_ACIK_AZAMI:
+            self.uyari.append(f"Açık fikir sayısı {acik + len(liste)} (en çok {self.FIKIR_ACIK_AZAMI}) "
+                              "— eskiyen fikirleri fikir_kapat ile kapat")
+        if len(self.engel) == engel0 and len(self.uyari) == uyari0:
+            self._ok(f"işlem fikirleri: {len(liste)} yeni · {acik} açık")
+
     def _arsiv_sayisi(self) -> bool:
         """Bu sayı bugünün sayısı değil mi (arşiv). CANLI durumla kıyaslayan
         ölçütler (tema defterinin şu anki hâli, haber endeksinin bugünkü
@@ -1547,6 +1679,13 @@ class Denetim:
         for k, v in (b.get("gundem") or {}).items():
             if str(v or "").strip():
                 out[f"gundem.{k}"] = _duz(str(v))
+        # İşlem fikirlerinin yazarın yazdığı metinleri (üretilen yapı/yön
+        # metinleri değil): gerekçe ve görüşü ne bozar.
+        for i, f in enumerate(b.get("fikirler") or [], 1):
+            if isinstance(f, dict):
+                for a in ("gerekce", "ne_bozar"):
+                    if str(f.get(a) or "").strip():
+                        out[f"fikirler.{i}.{a}"] = _duz(str(f[a]))
         return out
 
     def uslup(self):
@@ -2272,7 +2411,7 @@ class Denetim:
         self.yerlesmemis(); self.doviz_kapanisi(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
         self.revizyon(); self.duzeltme()
         self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset()
-        self.olagandisilik_penceresi(); self.uslup()
+        self.olagandisilik_penceresi(); self.uslup(); self.fikirler()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "

@@ -5,8 +5,9 @@ Bu dosya, günlük ve haftalık bülteni **yazan** katmanın görev tarifidir. B
 koşudan gelir ve yazan taraf ona **dokunmaz**. Yazan taraf şu alanları doldurur:
 `manset`, `ozet.ne_oldu`, `yorum`, `gundem` (günlük: Türkiye · Küresel · Emtia ·
 Bugün ve önümüzdeki günler · Risk; haftalık sayının kendi bölüm seti için bkz.
-"Haftaya bakış (haftalık kip)") ve — yalnız yayımlanmış bir sayı
-düzeltiliyorsa — `duzeltmeler`.
+"Haftaya bakış (haftalık kip)"), okumayı bir işlem yapısına çeviren `fikirler`
+ve açık bir fikrin erken kapanışı `fikir_kapat` (bkz. "İşlem fikirleri (biçim
+3)") ve — yalnız yayımlanmış bir sayı düzeltiliyorsa — `duzeltmeler`.
 
 Hedef kitle profesyonel trader ve portföy yöneticisi. Yazdığın şey bir **sabah
 notudur**: hükümle açılan, her olguyu bir kez söyleyen, ne fiyatlandığını ve
@@ -96,6 +97,10 @@ tekrarla değil YENİ olguyla gelir (bkz. "Ayrıntı: notu ne uzatır, ne uzatma
    asıl haberi (kredi endekslerinin 1,6σ'lık ortak hareketi) ham listede hiç
    görünmüyordu. Manşete bakıp sebep uydurma; hareketin gerçek sürücüsünü bul.
 3. **Yaz.** Aşağıdaki bölümleri doldur; yamayı `yama.json` dosyasına yaz.
+   Okuma temiz bir işlem yapısına çevrilebiliyorsa fikirleri de aynı yamaya
+   yaz: önce `python3 bulten/fikir.py --evren --tarih <sayı günü>` (ölçülebilir
+   bacaklar), sonra `python3 bulten/fikir.py --sina yama.json --tarih <sayı
+   günü>` (bkz. "İşlem fikirleri (biçim 3)" → "İş akışı").
 4. **Denetle — yazmadan.** `python3 bulten/yaz.py yama.json --damga "<okuduğun
    olusturma>" --denetle`: yama bellekte uygulanır, denetim o sonuç üzerinde
    koşar, dosyaya yazılmaz. Çıkış kodu 0 olana kadar düzelt. Denetim güven
@@ -153,12 +158,38 @@ profesyoneli tarafından yazılmış gibi değil; çok tekrar var".
 | `gundem.risk` | Risk haritası · Senaryolar ve risk haritası | ≤220 · 600–1000 | haftalıkta evet; günlükte isteğe bağlı |
 | `gundem.karne` | Haftanın karnesi | — · 250–500 | evet |
 | `gundem.turkiye_makro` | Türkiye: makro, politika ve maliye | — · 700–1100 | evet |
+| `fikirler` | İşlem fikirleri | 0–3 · 3–6 fikir; fikir başına gerekçe ≤60 kelime | beklenir, zorunlu değil: günlükte temiz bir fikir yoksa hiç yazılmaz; haftalıkta yoksa UYARI |
+| `fikir_kapat` | İşlem fikirleri (karnede "erken kapandı") | kayıt başına bir sebep cümlesi | yalnız açık bir fikrin görüşü bozulduysa |
 | `duzeltmeler` | Düzeltmeler | — | yalnız yayımlanmış bir sayı düzeltilirken |
 
 "—" o bölümün o kipte OLMADIĞINI söyler: `karne` ve `turkiye_makro` yalnız
 haftalık sayının bölümleridir (sayının beyanında yalnız orada geçer, yazma kapısı
 günlük sayıda onları reddeder). Haftalık sayının bölüm sırası ve alt bölümleri
-"Haftaya bakış (haftalık kip)" başlığı altında.
+"Haftaya bakış (haftalık kip)" başlığı altında. `fikirler` ve `fikir_kapat` bir
+gündem bölümü DEĞİLDİR: yapılandırılmış listedir, toplam yazı sayımına girmez,
+gönderiye ve ana sayfaya girmez; sözleşmesi "İşlem fikirleri (biçim 3)"
+başlığı altında. Bir biçim 3 yamasının iskeleti:
+
+```json
+{
+  "manset": "…",
+  "ozet": {"ne_oldu": "<ul><li>…</li></ul>"},
+  "yorum": "<p>…</p>",
+  "gundem": {"turkiye": "<p>…</p>", "kuresel": "<p>…</p>", "takvim": "<p>…</p>"},
+  "fikirler": [
+    {"baslik": "TL eğrisinde 2y–5y dikleştirici", "tur": "egri",
+     "bacaklar": [{"seri": "dibs:spot_2y", "katsayi": -1}, {"seri": "dibs:spot_5y", "katsayi": 1}],
+     "yon": "yukari", "hedef": -300, "stop": -415, "ufuk": "2026-10-23",
+     "enstruman": "TRY OIS 2 yıl / 5 yıl",
+     "gerekce": "…", "ne_bozar": "…", "dayanak": "turkiye", "senaryo": "Ana senaryo"}
+  ],
+  "fikir_kapat": [{"kimlik": "2026-10-02-1", "sebep": "…"}]
+}
+```
+
+Fikrin tam hâli ve örnekleri "İşlem fikirleri (biçim 3)" → "Örnekler"de;
+`fikir_kapat` yalnız önceki bir sayıda açılmış ve hâlâ açık bir fikir varsa
+gönderilir.
 
 **Toplam yazı (manşet + madde + okuma + gündem): günlük hedef 1.000–1.700
 kelime, haftalık 6.000–9.000.** Günlükte 2.100, haftalıkta 10.800 kelimeyi aşan
@@ -206,8 +237,12 @@ değil. Türkiye ilk iki paragrafta.
 | Brent/WTI, ürün marjları, altın ve metaller | `emtia` |
 | bugünün ve yakın günlerin yayımları, ihaleler, toplantılar | `takvim` |
 | tetik → etki yönü → izlenecek ölçü (2–3 madde) | `risk` |
+| okumanın işlem yapısı: bacaklar, yön, hedef, stop, ufuk, görüşü ne bozar | `fikirler` (gündem bölümü değil) |
 
 Bir konu kendi evinde tam anlatılır; başka bölümde en çok TEK cümleyle anılır.
+İşlem yapısının tek evi `fikirler`dir: düzyazı eğrinin dikleşeceğini yazabilir,
+dikleştiricinin kurulduğunu yazmaz; fikrin seviyeleri (giriş, hedef, stop,
+kullanım fiyatı) düzyazıda yinelenmez ve düzyazı fikre atıf yapmaz.
 Bölüm günün özetiyle açılmaz; kendi konusundaki yeni bilgiyle açılır. Piyasa
 etkisi olmayan haber yazılmaz (bir ülkenin BM'deki talebi, dijital ruble).
 
@@ -367,8 +402,15 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
     YALNIZ karne bölümündedir ve hesabı verilen (kapanan ya da vadesi geçen)
     kayıt sayısı kadardır, en az bir (öbür bölümlerde
     sıfır; bkz. "Haftaya bakış").
-11. **Fiyatlama dili serbest, tavsiye dili yasak.** "Piyasa X'i fiyatlıyor;
-    risk Y yönünde asimetrik" yazılır; al/sat/hedef/pozisyon yazılmaz.
+11. **Fiyatlama dili serbest, tavsiye dili yasak.** Düzyazıda "piyasa X'i
+    fiyatlıyor; risk Y yönünde asimetrik" yazılır; al/sat, "hedef fiyat",
+    pozisyon dili yazılmaz — bu kural fikirler eklendikten sonra da aynen
+    sürer. Okumanın işlem yapısına çevrilmiş hâli YALNIZ `fikirler` alanında
+    durur ve orada da betimleyici dille yazılır: bacak, yön, seviye ("2 yılda
+    sabit alan, 5 yılda sabit ödeyen"; "eğri dikleşirse kazanır"), emir kipi
+    ve öneri fiili yok. Düzyazı fikre atıf yapmaz, sayılarını yinelemez;
+    sorumluluk cümlesi de yazılmaz — sayfanın fikir bölümü kendi uyarı
+    metnini taşır (bkz. "İşlem fikirleri (biçim 3)").
 12. **Sayılar rakamla** ("52 haftalık", "17 Eylül"); vurgu büyük harfle değil
     `<strong>` ile, paragraf başına en çok bir.
 
@@ -418,6 +460,8 @@ uyarı alıp yayına gidiyordu; taban, haftalık kipin sözleşmesinin kendisidi
 Alt bölüm `<h3>Başlık</h3>` ile açılır ve altında günlükteki kalın başlıklı
 paragraf düzeni sürer. Ayrı bir "kilit gelişmeler" bölümü YOKTUR (biçim 2'nin
 tekrarının ana taşıyıcısı oydu: başka bölümlerin hikâyelerini önceden anlatıyordu).
+Sayfa 3. bölümün (senaryolar) hemen ardından işlem fikirlerini basar
+(`fikirler`): yazı bölümü değildir, tablodaki sıraya ve kelime sayımına girmez.
 
 **1. Haftanın özeti.** Haftanın rakamlarının TEK evi. Her madde: haftalık
 hareket (`h1`) ya da yayımlanan veri + kıyası + anlamı; olağandışılık haftalık
@@ -462,6 +506,22 @@ güncellenir, değişmediyse dokunulmaz — aynı sonucu haftalar boyunca ayrı
 kayıtlarla saymak isabeti hafta sayısıyla ağırlıklandırırdı. Karne böylece ölçülen
 katmandan, tek kayıtla kurulur.
 
+**Senaryodan işlem fikrine.** Sayfa işlem fikirlerini bu bölümün hemen ardında
+basar. Haftalık sayının 3–6 fikri en az iki varlık sınıfına yayılır ve her biri
+`senaryo` alanıyla bir patikaya bağlanır; alanın değeri patikanın `<h3>`
+başlığıyla açılan kısa bir etikettir ("Ana senaryo", "Alternatif: enflasyon
+yukarı şaşırtır", "Kuyruk: rezerv aşınması kur ritmini bozar"). Fikrin "görüşü
+ne bozar" koşulu, bölümde zaten yazılmış bir eşiği kullanır — bağlandığı
+patikanın düşme ölçüsünü ya da o patikayı dışlayan patikanın ölçüsünü (teyit
+ölçüsü, varlık etkisinin bandı): aynı eşik iki yerde iki ayrı sayıyla yazılırsa
+okur hangisinin geçerli olduğunu bilemez. Söz defterindeki kuralın eşi burada da
+geçerli: **birbirini dışlayan iki patikaya ters yönlü iki doğrusal fikir
+yazılmaz** — biri öbürünün sigortası olur
+ve karne görüşü değil senaryo sayısını ölçer. Ana senaryo dışındaki bir patika
+ya asimetrik bir yapıyla (opsiyon: kayıp primle sınırlı) ya da ana patikayla
+çelişmeyen bir yapıyla ifade edilir. Fikir söz defterine ayrıca kaydedilmez;
+karnesi kendi mekanik karnesidir.
+
 **4. Önümüzdeki hafta — gün gün.** Her gün bir paragraf:
 `<p><strong>Pazartesi 5 Ekim.</strong> …</p>`. Günün içinde Türkiye önce.
 Anket beklentisi ve modelin tahmini (Hazine ihaleleri dahil) sayfanın ölçülen
@@ -501,6 +561,19 @@ içinde koridor tavanına döneceğini söylemişti; döndü, çünkü …" — 
 "kurduğumuz kayıt", "çürütme ölçütü" gibi defter dili üslup kapısında ENGEL'dir;
 birinci çoğul "demiştik" de okur dili kapısında yapım dilidir (her alanda ENGEL),
 izinli biçimler "(27.09 notu)" ve üçüncü tekil "27.09 notu … söylemişti".
+
+**Fikirlerin karnesi.** Önceki sayılarda açılmış işlem fikirlerinin karnesini
+sayfa fikir bölümünde kendisi basar (açık fikirlerin bugünkü değeri, yakın
+zamanda kapananların sonucu). Karne bölümü onu en çok TEK paragrafta anabilir:
+sayılar `fikir_karne.sayim`dan okunur (kapanan, hedefte, stopta, ufku dolan,
+erken kapanan; ortalama sonuç bp ve yüzde için ayrı ayrı) ve sayfanın bastığıyla
+birebir aynıdır — yazar kendi sayımını yapmaz. Paragrafın işi söz karnesindekiyle
+aynıdır: hangi fikir hangi mekanizmayla tuttu ya da tutmadı. Fikir açıldığı gün
+ve yapısıyla anılır ("2 Ekim'de açılan 2y–5y dikleştirici"), makine kimliğiyle
+değil. Opsiyon fikrinin vade sonu ödemesi primsizdir ve "kazandı" diye yazılmaz;
+ölçülemeyen fikrin sonucu yoktur.
+Fikir karnesi SIRA KURALI'na bağlı değildir: kapanışı mekaniktir, erken kapanış
+(`fikir_kapat`) aynı yamada yazılır ve bir sonraki sayının karnesine girer.
 
 **6. Türkiye: piyasalar.** Haftalık hareketin kendisi (USD/TRY'nin, 2 ve 10
 yıllığın haftalık farkı ve σ'sı) özetin evidir; bu bölüm onun üzerine YENİ bir
@@ -553,6 +626,7 @@ düzyazı söylemez) · **Doğal gaz** · **Değerli ve sanayi metalleri** ·
 | gelecek yayım, ihale, toplantı: yayım yayım sonuç → anlam | `takvim` |
 | birleşik patika, koşul (ne olursa ne olur) | `risk` |
 | geçmiş çağrının hesabı | `karne` |
+| patikanın işlem yapısı: bacaklar, yön, hedef, stop, ufuk, görüşü ne bozar | `fikirler` (gündem bölümü değil; seviyeleri düzyazıda yinelenmez) |
 
 Bir konu kendi evinde tam anlatılır; başka bölümde en çok tek cümleyle anılır.
 Hürmüz'ün yeri `kuresel`dir, `emtia` onun fiyat etkisini tek cümleyle anar.
@@ -586,7 +660,470 @@ Bir bölüm, bir madde rakamını ancak üzerinde YENİ bir işlem yapıyorsa an
    maddelerini (haftalık bütçeyle), okumanın başını ve ANA SENARYOYU taşır;
    alternatif ve kuyruk gönderiye girmez. Ana senaryonun ilk cümlesi tetiği ve
    etkisini tek başına söyleyecek biçimde yazılır — gönderide kesildiği yer
-   orasıdır.
+   orasıdır. İşlem fikirleri gönderiye GİRMEZ; ana senaryonun gönderiye giden
+   cümlesi bu yüzden bir fikre atıf yapmaz, yapı dili de taşımaz.
+10. **Fikirler patikadan türer.** Haftalık sayı 3–6 işlem fikri taşır, en az
+    iki varlık sınıfında, her biri `senaryo` alanıyla bir patikaya bağlı (bkz.
+    "Senaryodan işlem fikrine" ve "İşlem fikirleri (biçim 3)").
+
+## İşlem fikirleri (biçim 3)
+
+Karar (04.10.2026, kullanıcı): "bültenlere yazdığımız bültene göre trade idea
+ekleyebilir miyiz? bu sadece eurusd long short gibi değil de daha kompleks try
+OIS steepener, OIS-Londra basis'i tarzı profesyonel ifadeler de olabilir … fx
+veya rate tarafında opsiyon vanilla spread her türlü trade idea olabilir" ve
+"hisse tarafı da olabilir bültendeki yazılara senaryolara göre". **Bülten piyasayı okur; işlem fikri o
+okumayı bir YAPIYA çevirir**: hangi bacaklar, hangi yön, referans seviye, hedef,
+stop, ufuk ve görüşü ne bozar. Fikir bir düzyazı bölümü değil yapılandırılmış
+bir listedir (`fikirler`). Sayfa onu kendi bölümünde basar — günlükte yazı
+bölümlerinin sonunda, rejim panosundan önce; haftalıkta senaryoların hemen
+ardında — ve bölüm kendi uyarı metnini taşır (fikir kişiye özel değildir,
+yatırım danışmanlığı kapsamında değildir; referans seviyeler ölçüm anındaki
+kapanışlardır, karne kapanış bazında tutulur). Bölüm yalnız biçim 3 sayıda ve
+yeni fikir ya da karnede kayıt varsa basılır; gönderiye ve ana sayfaya girmez.
+Sözleşmenin tek tanımı `bulten/fikir.py`dir (`dogrula`); bu bölüm onun yazar
+için okunuşudur — ikisi çelişirse araç kazanır ve rehber düzeltilir.
+
+Üç ilke biçimi belirler:
+
+1. **Giriş seviyesini yazar değil ölçüm verir.** Yazar bacakları, yönü ve
+   seviyeleri yazar; referans seviye (`giris`) sayının ölçülen katmanından
+   okunur — fiyat bacağı piyasa fotoğrafının o sayıdaki kapanışından, TL faiz
+   bacağı DİBS eğrisinin ölçüm anındaki düğümünden. Yamada `giris` yazılırsa
+   yok sayılır.
+2. **Karne mekaniktir ve kapanış bazındadır.** Karne yayımdan sonraki ilk
+   kapanıştan (fiili giriş) başlar; ondan sonraki her kapanışta
+   yapının değeri yeniden kurulur; hedef ya da stop bir kapanışta aşılırsa fikir
+   o gün kapanır, ufuk dolarsa son kapanışla kapanır. Gün içi dokunuş ölçülmez.
+   Söz defterinin isabeti yazarın notudur; fikrin sonucu seriden ölçülür.
+3. **Ölçülemeyen uydurulmaz.** TRY OIS, çapraz kur swap bazı, örtük oynaklık ve
+   tek hisse fiyatı elimizde yok: böyle bir fikir ya ölçülebilir bir vekille
+   yazılır ya da `olculemez` türüyle, sebebi yazılarak yayımlanır ve karneye
+   sonuçla girmez.
+
+### Sayı
+
+- **Günlük: 0–3 fikir. Temiz bir fikir yoksa hiç yazılmaz; zorla fikir
+  yazılmaz.** Temiz fikrin üç şartı var: okumanın bir mekanizması var, o
+  mekanizmayı ölçülebilir bir yapı taşıyor ve görüşü bozacak ölçülebilir,
+  tarihli bir koşul yazılabiliyor. Biri eksikse fikir yoktur. Her sabah fikir
+  yazmak karneyi fikir SAYISIYLA doldurur ve okur hangisine gerçekten
+  inanıldığını ayıramaz. Denetim fikirsiz günlük sayıyı bilgi satırı olarak
+  yazar (uyarı değil); 3'ün üstü UYARI.
+- **Haftalık: 3–6 fikir, en az iki varlık sınıfında** (`sinif`: faiz · fx ·
+  hisse · emtia · kredi), **her biri bir senaryoya bağlı** (`senaryo`; bkz.
+  "Haftaya bakış" → "Senaryodan işlem fikrine"). Fikirsiz ya da aralık dışı
+  haftalık sayı, tek sınıflı küme ve senaryosuz fikir UYARI alır.
+- **Açık fikir tavanı 12**, önceki sayılardan açık kalanlarla birlikte; aşılırsa
+  UYARI — eskiyen fikir `fikir_kapat` ile kapatılır, üstüne yenisi yazılmaz.
+- **Aynı görüş iki kez açılmaz.** Açık bir fikir aynı yapıyı aynı yönde
+  taşıyorsa yenisi yazılmaz; görüş değiştiyse eskisi kapatılır. Karne aynı
+  görüşü iki kayıtla sayardı (söz defterindeki "aynı tetiğe bağlı açık kayıt"
+  kuralının eşi).
+- **Ölçülemeyen fikir istisnadır**: sayı başına en çok bir (fazlası UYARI);
+  önce vekil denenir.
+
+### Anatomi: alan alan
+
+Sözleşme `fikir.dogrula()`dır. Yazar şu alanları yazar:
+
+| alan | ne yazılır | kural |
+|---|---|---|
+| `baslik` | yapının adı ve yönü; düz metin, en çok 80 karakter | "TL eğrisinde 2y–5y dikleştirici", "BIST Bankacılık / BIST 100 göreli"; emir kipi yok |
+| `tur` | `yalin` · `egri` · `kelebek` · `goreli` · `opsiyon` · `olculemez` | bkz. "Yapı kataloğu" |
+| `bacaklar` | `[{"seri": …, "katsayi": …}]` | `seri` ölçülebilir evrenin kimliğidir (`--evren`); `katsayi` yalnız eğri ve kelebekte, verilmezse varsayılan; bacağın değeri ve tarihi YAZILMAZ |
+| `yon` | `yukari` · `asagi` | yapının DEĞERİ yükselirse mi düşerse mi kazanır — fiyatın değil, yapının; konvansiyon katalogda |
+| `hedef`, `stop` | sayı, yapının kendi biriminde | bkz. "Seviyeler"; opsiyonda yazılmaz |
+| `ufuk` | `YYYY-AA-GG` | sayının tarihinden 2–183 gün ileride; opsiyonda vade |
+| `gerekce` | düz metin, 1–3 cümle | bkz. "Gerekçe" |
+| `ne_bozar` | düz metin, bir koşul | bkz. "Görüşü ne bozar" |
+| `dayanak` | sayının bir yazı bölümü kimliği ya da `yorum` | fikrin dayandığı okumanın yazıldığı bölüm; sayfa oraya bağ kurar; beyan dışı kimliği yazma kapısı reddeder, boşsa UYARI |
+| `senaryo` | kısa etiket | haftalıkta beklenir; patikanın `<h3>` başlığıyla açılır ("Ana senaryo", "Kuyruk: rezerv aşınması kur ritmini bozar") |
+| `enstruman` | düz metin | gerçek enstrüman ölçülen bacaklardan farklıysa (vekil: "TRY OIS 2 yıl / 5 yıl"); ölçülemezde zorunlu |
+| `opsiyon` | `{"tip", "kullanim", "vade"}` | yalnız opsiyonda; bkz. katalog |
+| `olculemez_sebep` | düz metin | yalnız ölçülemezde ve zorunlu: ne eksik ("çapraz kur swap kotasyonu elimizde yok") |
+| `sinif` | `faiz` · `fx` · `hisse` · `emtia` · `kredi` | isteğe bağlı; verilmezse ilk bacağın sınıfı (ölçülemezde `faiz`) |
+
+**Makine yazar, yazar yazmaz:** `kimlik` (sayının tarihi ve sıra, "2026-10-04-1";
+listedeki sıra kimliği belirler), `acilis`, `giris`, `giris_tarih` (bacakların
+EN ESKİ kapanış günü: yapının değeri ancak bütün bacakların ölçüldüğü güne
+kadar kurulur), `birim`, `sonuc_birim`, `ondalik`, `yapi_metni` ("−DİBS 2 yıl +
+DİBS 5 yıl"), `yon_metni` ("eğri dikleşirse kazanır (dikleştirici)") ve
+`getiri_risk`. Okura `yapi_metni` ile `yon_metni` basılır; makine kimlikleri
+(`kimlik`, `seri`, `tur`, `yon`, sınıf kodları) okura basılmaz ve metin
+alanlarına da yazılmaz — "dibs:spot_2y" değil "2 yıllık DİBS".
+
+Okura giden metin alanları (`baslik`, `gerekce`, `ne_bozar`, `enstruman`,
+`olculemez_sebep`, `senaryo` ve üretilen yapı ve yön metinleri) denetimin okur
+dili, tavsiye, sayı biçimi ve büyük harf ölçütlerinden geçer; `gerekce` ile
+`ne_bozar` ayrıca üslup ölçütünden. Hepsi DÜZ METİNDİR, HTML etiketi taşımaz.
+
+### Yapı kataloğu
+
+Görüş önce dört hareketten birine düşer — **seviye**, **eğim**, **büküm** ya da
+**ayrışma** (iki varlığın göreli fiyatı) — ve ancak sonra yapıya. Kural "Kâğıt ve
+TRY OIS Trading" dersinin oyun kitabındandır (Bölüm 6): görüş FORWARD'A göre
+kurulur ("faiz düşer" değil, "faiz fiyatlanandan hızlı düşer"); aynı hareketi
+birden çok yapı taşıyorsa ve kanıt eşitse **taşıması lehte olan** yapı seçilir;
+görüşü ne bozar fikirden ÖNCE yazılır.
+
+| `tur` | adı | ne zaman | bacak ve katsayı | değer ve birim | `yukari` | `asagi` |
+|---|---|---|---|---|---|---|
+| `yalin` | yalın (tek bacak) | görüş bir seviyedir | 1 getiri ya da 1 fiyat | getiride getiri seviyesi (%), sonuç bp; fiyatta fiyat, sonuç % | getiri yükselir (tahvilde kısa · swapta sabit ödeyen); fiyatta uzun | getiri düşer (tahvilde uzun · swapta sabit alan); fiyatta kısa |
+| `egri` | eğri (spread) | görüş eğimdir: iki vade ayrışır | 2 getiri, kısadan uzuna; varsayılan `[−1, +1]` | Σ kᵢ·yᵢ, bp (varsayılanla uzun − kısa) | dikleştirici | yassılaştırıcı |
+| `kelebek` | kelebek (fly) | görüş bükümdür: bir vade komşularına göre ucuzlar ya da pahalanır | 3 getiri, kanat–gövde–kanat; varsayılan `[−1, +2, −1]` | Σ kᵢ·yᵢ, bp (varsayılanla 2·gövde − kanatlar) | gövdede ödeyen (long fly) | gövdede alan (short fly) |
+| `goreli` | göreli değer | görüş iki varlığın ayrışmasıdır; ortak sürücü dışarıda kalır | 2 fiyat, A / B | oran; sonuç % | A, B karşısında güçlenir | A zayıflar |
+| `opsiyon` | opsiyon | görüş asimetriktir ya da kayıp sınırlanmalıdır | 1 fiyat (dayanak) | dayanak fiyatı; sonuç vade sonu ödemesi | alım, alım yayılımı, risk dönüşümü (alım alınır, satım yazılır) | satım, satım yayılımı, risk dönüşümü (satım alınır, alım yazılır) |
+| `olculemez` | ölçülemeyen | enstrümanın fiyatı da ölçülebilir vekili de yok | yok | yok | — | — |
+
+**Yalın.** Seviye görüşünün en düz ve çoğu zaman en pahalı ifadesi: TL'de uzun
+durasyon ters eğride beklerken öder, kısa uçta seviye hareketi büyüktür. Yalın,
+görüş gerçekten seviyeyse ve eğri ya da kelebek onu daha ucuz taşımıyorsa
+yazılır. Getiri bacağında yön yapının değerine bakar: `asagi` getiri düşerse
+kazanır — tahvilde uzun ya da swapta sabit alan (dersin dilinde receive);
+`yukari` tahvilde kısa ya da swapta sabit ödeyen (pay). Hedef ve stop getiri
+SEVİYESİDİR (giriş %40,15 → hedef 39,40), sonuç bp.
+
+**Eğri.** Bacaklar kısadan uzuna yazılır: varsayılan katsayı SIRAYA göre
+uygulanır ve `[−1, +1]` ile yapının değeri uzun vadenin getirisi eksi kısa
+vadeninki olur, bp. Katsayı DV01 oranıdır: `[−1, +1]` DV01-nötrdür (iki bacağın
+baz puanı eşit tartılır); regresyon ağırlığı da yazılabilir (dersin 2s7s
+örneğinde 7 yıllığın 2 yıllığa betası 0,57 → `[−1, +1,75]`). Yön CEBİRSELDİR,
+ters eğride de: `yukari` yapının değeri yükselirse kazanır, yani dikleştirici;
+`asagi` yassılaştırıcı. TL eğrisi ters olduğu için 2y–5y 04.10.2026 sayısında
+−371 bp'dir;
+dikleştirici onu −300'e doğru, yassılaştırıcı −450'ye doğru taşır — ters eğride
+yassılaştırıcı tersliğin DERİNLEŞMESİNDEN kazanır. Yön metni bacakların
+vadesinden türer, sıra ters yazılırsa yapı metni ve değerin işareti ters çıkar;
+konvansiyon bozulmaz ama okunuş zorlaşır. İki bacak AYNI eğriden olur: TL ile
+ABD getirisi arasındaki fark bir eğri değildir ve bu türle yazılmaz. Bilinçli
+seçilecek bir yan: Türkiye'de seviye hareketi kısa uç ağırlıklı olduğu için
+DV01-nötr dikleştirici gizli bir boğa, yassılaştırıcı gizli bir ayıdır (dersin
+4.3'ü); gerekçe bunu yazabilir.
+
+**Kelebek.** Bacaklar vade sırasıyla, kanat–gövde–kanat yazılır; varsayılan
+katsayı sıraya göre uygulanır, sıra bozulursa +2 yanlış bacağa düşer.
+Varsayılan `[−1, +2, −1]` dersin 50:50 kotasyonudur ve birimi KOTASYON baz
+puanıdır: kotasyonun 1 bp'si gövde DV01'inin yarısı kadar sonuç yazar (dersin
+5.1'i). Gövde DV01'i başına yazmak için `[−0,5, +1, −0,5]`; PCA ağırlığı için
+dersin tam örneklem değerleri (1y2y5y: `[−0,441, +1, −0,736]`; ağırlık sabit
+değildir, dersin 5.3'ü). Dersin konvansiyonu aynen geçerli: **long fly = gövdede
+pay** (gövdede sabit ödeyen, kanatlarda sabit alan; kâğıtta gövde kısa, kanatlar
+uzun) ve bu `yukari`dır: değer (2·gövde − kanatlar) yükselir, gövde kanatlara
+göre ucuzlar. Short fly `asagi`dır. 50:50 kelebek seviye ve eğim yükü taşır; saf
+büküm görüşü PCA ağırlığıyla yazılır.
+
+**Göreli.** Değer A/B oranıdır, sonuç yüzde; `yukari` A, B karşısında
+güçlenirse kazanır. Hisse ve döviz göreli değerinin ölçülebilir biçimleri: BIST
+Bankacılık / BIST 100 ve BIST Sınai / BIST 100 (sektör ayrışması), Türkiye ETF /
+GOÜ hisse (Türkiye'ye özgü primin gelişen piyasalardan ayrışması), BIST 100 /
+USD/TRY (dolar bazlı BIST), altın / gümüş, Brent / WTI, EUR/TRY / USD/TRY (sepetin
+iki bacağı; oran pratikte EUR/USD'dir). Oran nominal-nötrdür, beta-nötr
+DEĞİLDİR: bankacılığın BIST 100'e betası 1'in üstündeyse oran yükselen piyasada
+kendiliğinden yükselir; gerekçe görüşün ayrışma mı piyasa yönü mü olduğunu
+bilerek yazar.
+
+**Opsiyon.** Dayanak tek bir fiyat bacağıdır; faiz opsiyonu (swaption, cap)
+ölçülemeyen türdedir. Tipler ve kullanım fiyatları:
+
+| `opsiyon.tip` | `kullanim` | `yon` |
+|---|---|---|
+| `call` (alım) | `[K]` | `yukari` |
+| `put` (satım) | `[K]` | `asagi` |
+| `call_spread` (alım yayılımı) | `[K1, K2]`, K1 < K2: K1 alınır, K2 yazılır | `yukari` |
+| `put_spread` (satım yayılımı) | `[K1, K2]`, K1 < K2: K2 alınır, K1 yazılır | `asagi` |
+| `risk_reversal` (risk dönüşümü) | `[K_satım, K_alım]`, küçükten büyüğe | `yukari`: alım alınır, satım yazılır · `asagi`: satım alınır, alım yazılır |
+
+`ufuk` vadedir (`opsiyon.vade` ile aynı gün). **Prim ölçülmez** (örtük oynaklık
+verisi yok) ve yazar prim tahmini YAZMAZ; "opsiyon ucuz", "örtük oynaklık
+düşük", "çarpıklık lehte" gibi ölçülmemiş iddialar da yazılmaz. Karne vade sonu
+ÖDEMESİNİ dayanağın kapanışından yazar (dayanağın girişteki seviyesinin yüzdesi,
+primsiz), açıkken içsel değeri gösterir ve opsiyonu kazanç oranına katmaz; hedef
+ve stop bu yüzden yazılmaz, sonuç vadede belirlenir. **Neden opsiyon** gerekçede
+söylenir ve üç cevaptan biridir: **asimetri** (olasılığı düşük ama etkisi büyük
+bir patika; ikili bir olay — PPK, TÜFE), **tavan** (yayılımda yazılan bacak primi
+düşürür, kazancı da sınırlar; tavanın ötesi başka bir rejimse bu bilinçli bir
+seçimdir), **maliyet** (risk dönüşümünde yazılan opsiyon alınanı finanse eder,
+ama yazılan tarafta kayıp sınırsızdır). Kullanım fiyatı spot'a göre değil
+**vadeye kadarki ileri fiyata** göre konumlanır: faiz farkı büyük olan kurda
+ileri kur spot'un belirgin üstündedir. USD/TRY'de kabaca
+F ≈ S · (1 + TLREF · g/365) / (1 + ABD 3 aylık · g/360), g vadeye kalan gün;
+gerçek ileri kur çapraz kur swap faiziyle kurulur ve ölçülmüyor, bu değer
+yaklaşıktır. İleri kurun altındaki bir alım kullanım fiyatı, faiz farkının zaten
+fiyatladığı yükselişi satın alır.
+
+**Ölçülemeyen.** Fiyatı elimizde olmayan enstrümanlar: TRY OIS ve Londra'daki
+örtük TL faizi (OIS–Londra bazı), çapraz kur swap, CDS, örtük oynaklık (VIX ve
+MOVE dahil: işlem görmezler, vadelileri ve opsiyonları ayrı enstrümandır), tek
+hisse. Önce **ölçülebilir vekille** kurmak denenir: TRY OIS eğrisi görüşü DİBS
+spot düğümleriyle yazılır ve gerçek enstrüman `enstruman` alanına girer ("TRY OIS
+2 yıl / 5 yıl"); karne vekille tutulur, sayfa bunu ve OIS–DİBS makasının
+ölçülmediğini söyler. Vekil ancak görüşün mekanizmasını taşıyorsa geçerlidir:
+sektörünü temsil eden bir hisse görüşü sektör endeksiyle yazılabilir, hisseye
+özgü bir görüş (bilanço, temettü, birleşme) yazılamaz; görüşün KENDİSİ iki
+enstrüman arasındaki makassa (OIS–Londra bazı, swap makası) bacaklardan hiçbiri
+onu taşıyamaz. Vekil yoksa `olculemez` türü: `enstruman` ve `olculemez_sebep`
+zorunlu; bacak, yön, hedef ve stop yazılmaz; fikir karneye sonuçla girmez
+("karnesi tutulmuyor") ve ufku dolunca sonuçsuz kapanır ("ufku doldu").
+
+### Ölçülebilir evren
+
+`python3 bulten/fikir.py --evren --tarih <sayı günü>` her serinin kimliğini,
+adını, o sayıdaki değerini, tarihini ve günlük σ'sını basar. Evren iki aileden
+kurulur: piyasa fotoğrafının sembolleri (BIST 100, BIST 30, BIST Bankacılık,
+BIST Sınai, Türkiye ETF; TL ve G10 kurları, dolar endeksi; ABD 3 aylık, 5, 10 ve
+30 yıllık getirisi; küresel hisse endeksleri; metal, enerji ve doğal gaz
+vadelileri; kredi fonları; Bitcoin) ve `dibs:` önekli DİBS düğümleri (gösterge;
+spot 3 ay–9 yıl; 1y1y, 2y1y ve 2y3y forward; TÜFEX reel getiri ve başabaş 2, 3,
+5 ve 7 yıl).
+
+Dışarıda ve sebebiyle: ABD 2 yıllık (vadeli kotasyonundan geliyor ve haftalarca
+aynı kalan bayat kapanışlar taşıyor), VIX ve MOVE (doğrudan işlem görmez), DİBS
+1 yıllık reel getiri ve başabaş (vade kaydığında tek günde kuruluş sıçraması
+yapıyor — 28.09.2026'da 9,06 → 6,42 — ve karne sahte bir stop yazardı). Tek hisse
+yok. Evrende olup o sayıda "—" basan düğüm (04.10'da DİBS 9 yıl ile TÜFEX 3 ve
+7 yıllık reel getiri ve başabaş) o gün bacak olamaz: giriş uydurulmaz, yazma
+kapısı reddeder. Vadeli bacak devir günlerinde giriş kontratı cinsinden izlenir
+(sayfa söyler). 7/24 işlem gören bacağın (Bitcoin) pazar sayısında cumartesi
+kapanışı olabilir; yapının referans günü bacakların en eskisidir.
+
+### Seviyeler: hedef ve stop
+
+Hedef ve stop **yapının biriminde** yazılır:
+
+| yapı | hedef ve stop | sonuç |
+|---|---|---|
+| yalın getiri | getiri seviyesi, % (giriş 40,15 → hedef 39,40) | bp |
+| eğri, kelebek | yapının değeri, bp (giriş −371 → hedef −300) | bp |
+| göreli | oran (giriş 1,2747 → hedef 1,3400) | % |
+| yalın fiyat | fiyat seviyesi | % |
+| opsiyon | yazılmaz | vade sonu ödemesi, % |
+
+- **Giriş ölçümdendir**; yazar yazmaz, düzyazıda da "giriş X" demez. Hedef
+  girişin kazanç, stop zarar tarafında olur (yazma kapısı aksini reddeder).
+- **Stop mesafesi en az bir günlük σ'dır**: bir günlük gürültüde tetiklenen stop
+  görüşü değil gürültüyü ölçer. Tek bacakta σ `--evren`in sütunudur (20 iş
+  günü; fiyatta yüzde, ABD getirisinde bp) ve yalın fikirde denetim mesafeyi o
+  σ ile kıyaslayıp UYARI verir. DİBS düğümlerinde `--evren` σ basmaz; 02.10.2026'ya
+  kadarki 20 iş günü ölçüldü: 1 yıl 26, 2 yıl 32, 5 yıl 25, 7 yıl 31 bp
+  (gösterge tahvilin olay eşiğinin dayandığı σ 30 bp). Çok bacaklı yapının
+  kendi σ'sı ölçülmüyor ve denetimde sorulmuyor, yazarın işidir: eğri ve
+  kelebekte √(Σ kᵢ²·σᵢ²) — bacaklar ilişkisizmiş gibi; TL eğrisinde ölçüye yakın
+  ve biraz üstünde (2y–5y bacaklardan 40 bp, ölçülen 36 bp; 1y2y5y 50:50
+  bacaklardan 73, ölçülen 60) —, göreli yapıda büyük bacağın σ'sı; bacaklar
+  birlikte hareket ettikçe oranın σ'sı ondan küçüktür (02.10'a kadarki 20 günde
+  bankacılık %3,27, BIST 100 %2,08, oran %1,92). EUR/TRY / USD/TRY için EUR/USD
+  satırına bakılır.
+- **Getiri/risk**, hedefe uzaklığın stopa uzaklığa oranıdır ve makine yazar
+  (`--sina` basar). Tipik değer 1,5 ve üstü; **1'in altı UYARI** (hedef stoptan
+  yakın).
+- Zaman stopu ufuktur; ayrıca yazılmaz.
+
+### Ufuk
+
+Sayının tarihinden **2–183 gün** ileride (yazma kapısı dışını reddeder);
+günlükte tipik **1–6 hafta** — sabah notunun okuması bir iki haftalık sınavlarla
+konuşur. Haftalıkta ufuk, fikrin bağlandığı patikanın tetik gününü kapsar (PPK
+22 Ekim'deyse ufuk en erken 22 Ekim: karne o günün kapanışını sayar). Opsiyonda
+ufuk vadedir. Ufuk dolunca fikir son kapanışla kapanır ("ufuk doldu").
+
+### Gerekçe
+
+1–3 cümle, en çok 60 kelime (denetim 70'in üstünü UYARI sayar), düz metin. İki
+şeyi söyler: **hangi okumaya dayanıyor** (mekanizma, bir cümle) ve **neden bu
+yapı** — çıplak yön değil: "neden dikleştirici ve çıplak sabit ödeyen değil:
+seviye riskinin büyük kısmını dışarıda bırakır, eğimi alır"; "neden göreli ve çıplak
+endeks değil: endeksi sürükleyen dış kanal dışarıda kalır"; "neden opsiyon:
+olasılığı düşük bir patikada kayıp primle sınırlı". Yapının seçim sebebini
+yazmayan gerekçe, yönü tekrarlayan bir başlıktır.
+
+Gerekçe gövdenin sayılarını YİNELEMEZ (tek ev): rakam düzyazıdadır, fikirde
+mekanizma ve yapı durur. Olasılık rakamı uydurulmaz; taşıma ve roll iddiası
+ancak ölçülmüşse yazılır. Geçmiş çağrı atfı yok ("(27.09 notu)" — haftalıkta
+karne dışında sıfır), süreç dili yok ("vekilimiz", "defter", "hat"), sayfaya ve
+derse atıf yok.
+
+### Görüşü ne bozar
+
+Ölçülebilir ve tarihli bir koşul: hangi seri, hangi eşik, hangi tarihe kadar
+("2 yıllık DİBS getirisi %41'in üstünde kapanırsa", "tahmini döviz akımı ekimin
+ilk haftasında günlük ortalamada sıfıra yaklaşırsa"); en çok 50 kelime
+(aşılırsa UYARI). Bültende izlenen bir seriye bağlanabiliyorsa ona bağlanır (2
+yıllık DİBS, gösterge tahvil, devalüasyon hızının beş günlük ortalaması, tahmini
+döviz akımı, TÜFE): okur koşulu ertesi sabah sayfada görebilmelidir. Haftalıkta
+koşul senaryo bölümünde zaten yazılmış bir eşiği kullanır (bkz. "Senaryodan
+işlem fikrine"). `ne_bozar` stopla aynı şey değildir: stop fiyattır, `ne_bozar`
+görüştür. Koşul gerçekleşir de stop dokunulmazsa fikir erken kapatılır.
+
+### Yasaklar
+
+- Emir kipi ve birinci çoğul öneri: "alın", "satın", "açın", "öneriyoruz",
+  "tavsiye ediyoruz" (ortak tavsiye kalıbı, ENGEL). Yapı betimleyici fiille
+  yazılır: "2 yılda sabit alan, 5 yılda sabit ödeyen", "eğri dikleşirse kazanır".
+- "Hedef fiyat", "kâr alın", "stop loss koyun". Alan ve sütun adı olarak
+  "hedef" ve "stop" serbesttir.
+- Pozisyon büyüklüğü, nominal, kaldıraç, portföy payı: fikir kişiye özel
+  değildir, boyut okurun risk bütçesine aittir.
+- Kişiye hitap ("portföyünüze", "sizin için").
+- Kesinlik dili: "kesin", "garantili", "risksiz".
+- Prim, örtük oynaklık ve opsiyonun ucuzluğu üzerine ölçülmemiş iddia.
+- Fikrin sayılarını (giriş, hedef, stop, kullanım fiyatı) düzyazı bölümlerinde
+  yinelemek; düzyazıda fikre atıf ("işlem fikri olarak", "fikir olarak
+  öneriyoruz", "aşağıdaki yapı").
+- Uyarı ve sorumluluk cümlesi: bölüm kendi uyarı metnini taşır, yazar yazmaz.
+
+### Erken kapanış: `fikir_kapat`
+
+`[{"kimlik": "2026-10-02-1", "sebep": "…"}]`. Kimlik, önceki bir sayıda açılmış ve
+hâlâ açık bir fikrinkidir (`python3 bulten/fikir.py --karne --tarih <sayı günü>`
+açık fikirleri kimlikleriyle listeler); kimlik okura basılmaz. Erken kapanış bir
+ÇIKIŞ EMRİDİR, çıkış fiyatı değil: karne çıkışı, girişle simetrik olarak, kapatan
+sayının yayımından sonraki ilk kapanışta gerçekleştirir (o güne kadar fikir
+"çıkış emri verildi" diye açık görünür). Kayıttaki referans çıkış seviyesini
+makine bu sayının ölçülen katmanından yazar; bacaklardan biri ölçülemediyse
+kapanış reddedilir. Kapanış sonraki sayıların karnesinde "erken kapandı" diye,
+sebebiyle görünür.
+
+- **Ne zaman:** `ne_bozar` gerçekleşti ama stop dokunulmadı; ya da gerekçenin
+  dayandığı olay ortadan kalktı (toplantı ertelendi, ihale iptal edildi). Fikir
+  kazançtayken "kazancı korumak" için kapatılmaz: seçici çıkış karneyi yapay
+  olarak iyileştirir.
+- **Mekanik kapanış otomatiktir:** hedef ya da stop bir kapanışta aşılırsa, ufuk
+  dolarsa, opsiyon vadesine gelirse. Yazar bunlar için `fikir_kapat` yazmaz;
+  bugünün karnesinin kapanmış saydığı fikir kapatılamaz.
+- `sebep` okur diliyle, olgu olarak yazılır: "Eylül TÜFE'si aylık %2,8 geldi;
+  gevşeme patikası düştü" — "ne_bozar tetiklendi" değil.
+
+**Yayımlanmış fikir değiştirilmez ve yeniden açılmaz.** Görüş değiştiyse eskisi
+kapatılır, yenisi yeni kimlikle açılır. Fikir yalnız BUGÜNÜN sayısına yazılır
+(UTC gün; yazma kapısı geçmiş sayıyı reddeder): arşiv sayısına fikir eklenmez,
+düzeltme yaması fikre dokunmaz — sonrasını bilerek seçilmiş bir fikir karneye
+geriye dönük kazanç toplardı. Aynı gün yeniden uygulanan yama listeyi BÜTÜNÜYLE
+değiştirir ve kimliği listedeki sıra verir; sayı yayımlandıktan sonra liste
+değişmez.
+
+### Karne
+
+`fikir_karne` ölçülen katmanın alanıdır; yazar ona dokunamaz. Önceki sayılarda
+açılmış fikirlerin bugünkü değerini ve mekanik kapanışlarını taşır; bugün açılan
+fikir ilk kez bir sonraki sayının karnesinde görünür. **Karne referanstan değil,
+yayımdan sonraki ilk kapanıştan (fiili giriş) başlar:** referans bir önceki
+seansın kapanışıdır ve yazar onu yazarken gece boyunca olanı görüyor; karne
+referanstan başlasaydı fikre okurun yakalayamayacağı gecelik hareketi
+kazandırırdı. Hedef ve stop fiili girişten SONRAKİ kapanışlarda sorulur; giriş
+kapanışı seviyelerden birinin zaten ötesindeyse fikir "girişte geçersiz" sayılır
+ve sonucu yoktur — seviyeleri referansa çok yakın koymanın bedeli budur. Karne
+kapanış bazındadır ve bir kapanış bir sayıya yazıldıktan sonra donar: kaynağın
+sonradan düzelttiği bir kapanış yayımlanmış sonucu değiştirmez. Bütün fikirlerin
+defteri sitenin "Tradeler" sayfasındadır: neden açıldığı, ne durumda olduğu,
+nasıl ve neden kapandığı, sonucu ve gün gün takibi. Sonuç faiz
+yapılarında bp, fiyat yapılarında yüzdedir; opsiyonun sonucu primsiz ödemedir ve
+kazanç oranına girmez; ölçülemeyenin sonucu yoktur. Okura giden durumlar: açık ·
+hedefte kapandı · stopta kapandı · ufuk doldu · erken kapandı · vadesinde ·
+girişte geçersiz · ölçülemedi · karnesi tutulmuyor · ufku doldu.
+
+Günlük düzyazı karnenin rakamlarını yinelemez. Haftalık "Haftanın karnesi"
+bölümü fikir karnesini sayımıyla tek paragrafta anabilir; sayılar
+`fikir_karne.sayim`dan okunur (bkz. "Haftaya bakış" → "Fikirlerin karnesi").
+
+### İş akışı
+
+1. **Okumayı bitir.** Yorum ve bölümler (haftalıkta senaryolar) yazılmadan fikir
+   yazılmaz: fikir okumadan türer, okuma fikirden değil.
+2. `python3 bulten/fikir.py --evren --tarih <sayı günü>` — bacakların kimliği,
+   bugünkü değeri ve σ'sı. Açık fikirler için `--karne`.
+3. Fikirleri yamaya yaz (`fikirler`; gerekiyorsa `fikir_kapat`).
+4. `python3 bulten/fikir.py --sina yama.json --tarih <sayı günü>` — her fikir
+   için ✓ ile yapı metni, yön metni, giriş ve getiri/risk; ✗ ise mesaj neyin
+   eksik olduğunu söyler (çıkış 2). Yön metnini OKU: yön sözcüğünün kastettiğin
+   yapıyı verdiğini orada görürsün ("eğri dikleşirse kazanır (dikleştirici)").
+5. `python3 bulten/yaz.py yama.json --damga "<olusturma>" --denetle`, sonra yaz.
+   Yazma kapısı aynı sözleşmeyi uygular (red: çıkış 2); denetimin `fikirler`
+   ölçütü yapısal tutarsızlığı ENGEL, bütçeleri (sayı, gerekçe ve koşul uzunluğu,
+   getiri/risk, stop–σ, dayanak, senaryo, sınıf çeşidi, açık fikir tavanı)
+   UYARI sayar.
+6. Ölçüm yeniden kurulduysa (`--yeniden-olc`, haftalık SIRA KURALI) fikirli yama
+   YENİDEN uygulanır: giriş yeni ölçümden okunur; eski giriş kalırsa denetim
+   "bacak kayıtta X, ölçülen katmanda Y" diye uyarır.
+
+### Örnekler
+
+04.10.2026 haftalık sayısının okumasından türetildi ve `--sina` ile o sayıya
+karşı sınandı. YAYIMLANMAZ; biçim örneğidir. Üçü üç ayrı sınıfta, her biri bir
+patikaya bağlı.
+
+**TL eğri yapısı, vekille (ana senaryo).** Okuma: gevşeme kısa uçtan gelir, 1–2
+yıllık bölge %40'ın altına yerleşir; uzun uç dış maliyet tabanına bağlı kalır.
+Dersin "gevşeme fiyatlanandan hızlı" kartının en temiz ifadesi 2s5s
+dikleştiricidir. σ: √(32² + 25²) ≈ 40 bp, stop girişten 44 bp uzakta.
+
+```json
+{"baslik": "TL eğrisinde 2y–5y dikleştirici",
+ "tur": "egri",
+ "bacaklar": [{"seri": "dibs:spot_2y", "katsayi": -1}, {"seri": "dibs:spot_5y", "katsayi": 1}],
+ "yon": "yukari", "hedef": -300, "stop": -415, "ufuk": "2026-10-23",
+ "enstruman": "TRY OIS 2 yıl / 5 yıl",
+ "gerekce": "Ana patikada gevşeme kısa uçtan gelir; uzun uç ise ABD uzun ucunun belirlediği dış maliyet tabanına bağlı kalır. Neden çıplak 2 yıllık değil: uzun uçtaki bir yükseliş orada görüşle ilgisiz bir risk, bu yapıda kazançtır; seviye hareketi kısa uç ağırlıklı olduğu için yapı gevşemeden yine pay alır.",
+ "ne_bozar": "2 yıllık DİBS getirisi %41'in üstünde kapanır ya da eylül TÜFE'si aylık %2,6'yı aşarsa gevşeme patikası düşer.",
+ "dayanak": "turkiye", "senaryo": "Ana senaryo"}
+```
+
+`--sina`: −DİBS 2 yıl + DİBS 5 yıl · eğri dikleşirse kazanır (dikleştirici) ·
+giriş −371 bp · getiri/risk 1,61.
+
+**Hisse göreli (ana senaryo).** Okuma: BIST'teki toparlanma bankacılık
+önderliğinde sürer, çünkü fon tasfiyesi para piyasası fonlarından başlıyor ve
+hisse arzı sonraya kalıyor; alternatif patikada kısa uç yükselir ve bankacılık
+geri kalır. σ çıpası büyük bacağın %3,27'si; stop girişten %3,35 uzakta.
+
+```json
+{"baslik": "BIST Bankacılık / BIST 100 göreli",
+ "tur": "goreli",
+ "bacaklar": [{"seri": "XBANK.IS"}, {"seri": "XU100.IS"}],
+ "yon": "yukari", "hedef": 1.34, "stop": 1.232, "ufuk": "2026-10-30",
+ "gerekce": "Ana patikada kısa uçtaki gevşeme bankaların mevduat maliyetini kredi faizinden önce indirir, fon tasfiyesinin hisse arzı ise dar hacimli sanayi hisselerine düşer. Neden göreli ve çıplak endeks değil: endeksi sürükleyen dış kanal dışarıda kalır, yalnız iç mekanizma alınır.",
+ "ne_bozar": "Eylül TÜFE'si aylık %2,6'yı aşar ya da 2 yıllık DİBS getirisi %41'in üstünde kapanırsa: kısa uçtaki yükseliş mevduat maliyetini kredi faizinden önce yükseltir.",
+ "dayanak": "risk", "senaryo": "Ana senaryo"}
+```
+
+`--sina`: BIST Bankacılık / BIST 100 · BIST Bankacılık, BIST 100 karşısında
+güçlenirse kazanır · giriş 1,2747 · getiri/risk 1,53.
+
+**FX opsiyon (kuyruk).** Okuma: kuyruk patikasında 1 aylık devalüasyon hızının
+beş günlük ortalaması 21,4'ten 25'in üstüne çıkar. Giriş 2 Ekim kapanışı, vadeye
+49 gün: TLREF %36,84 ve ABD 3 aylık %3,99 ile ileri kur ≈ 51,29; 21,4'lük hız
+sürerse spot ≈ 50,55. Alt kullanım fiyatı ileri kurun hizasında (yıllık %32'lik
+bir hız ister), üst kullanım fiyatı kopuşun başladığı yerde. Fikri bozan koşul,
+kuyruğu dışlayan ana patikanın ölçüleridir: döviz akımının teyit eşiği ve kurun
+haftalık ritim bandı.
+
+```json
+{"baslik": "USD/TRY alım yayılımı: kur ritmi bozulursa",
+ "tur": "opsiyon",
+ "bacaklar": [{"seri": "USDTRY=X"}],
+ "yon": "yukari",
+ "opsiyon": {"tip": "call_spread", "kullanim": [51.25, 53.0], "vade": "2026-11-20"},
+ "ufuk": "2026-11-20",
+ "gerekce": "Kuyruk patikasında kur ritmi rezervle korunamaz ve devalüasyon hızı birkaç haftada yükselir. Alt kullanım fiyatı vadeye kadarki ileri kurun hizasında: faiz farkının zaten fiyatladığı yükselişi değil, ritmin bozulmasını alır. Neden opsiyon: olasılığı düşük bir patikada kayıp primle sınırlı, satılan üst bacak primi düşürür.",
+ "ne_bozar": "Tahmini döviz akımı ekimin ilk haftasında günlük ortalamada sıfıra yaklaşır ve dolar/TL'nin haftalık artışı %0,40'ın altında kalırsa kur ritmi korunmuş olur.",
+ "dayanak": "risk", "senaryo": "Kuyruk: rezerv aşınması kur ritmini bozar"}
+```
+
+`--sina`: USD/TRY · alım yayılımı; dayanak yükselirse kazanır · giriş 49,14.
+
+**Ölçülemeyen (kuyruk).** Aynı patikanın faiz tarafı: OIS–Londra bazının vekili
+yok, çünkü görüşün kendisi iki faiz arasındaki makastır.
+
+```json
+{"baslik": "Londra'da TL fonlaması pahalanır",
+ "tur": "olculemez", "sinif": "faiz",
+ "enstruman": "TRY OIS ile Londra'daki örtük TL faizi arasındaki baz (3 ay)",
+ "olculemez_sebep": "çapraz kur swap ve Londra TL kotasyonu elimizde yok",
+ "ufuk": "2026-11-20",
+ "gerekce": "Kuyruk patikasında kur ritmini korumanın bedeli büyürse yurt dışına verilen TL likiditesi daralabilir ve Londra'daki örtük TL faizi yurt içi OIS'in üstüne çıkar. Neden baz ve çıplak OIS değil: yurt içi eğrinin yönünden bağımsız, yalnız Londra'daki sıkışmayı alır.",
+ "ne_bozar": "Tahmini döviz akımı ekimin ilk haftasında günlük ortalamada sıfıra yaklaşırsa.",
+ "dayanak": "risk", "senaryo": "Kuyruk: rezerv aşınması kur ritmini bozar"}
+```
 
 ## Haftalık teknik analiz — SONA ERDİ (27.09.2026 sayısı son sayı)
 
@@ -733,7 +1270,10 @@ mobilyasına atıf yapma — "bu sayfadaki piyasa fotoğrafında", "yukarıdaki 
 "ayrıntısı jeopolitik bölümünde", "bu bültenin takip ettiği" gibi ifadeler
 kullanma. Söylemek istediğin şeyi kendi cümlesi içinde tamamla: "jeopolitik
 bölümünde" yerine gelişmeyi orada bir cümleyle söyle; "fotoğraftaki satır"
-yerine varlığın adını ve hareketini yaz.
+yerine varlığın adını ve hareketini yaz. İşlem fikirleri gönderiye hiç girmez;
+düzyazı onlara atıf yapmaz ("aşağıdaki fikir", "işlem fikri olarak") ve
+seviyelerini yinelemez — gönderiye giden bir cümle, okurun göremeyeceği bir
+fikri anmış olurdu.
 
 Sigorta araçta: `tweet/uret.py` bu izleri taşıyan CÜMLEYİ düşürür (ve
 göndergesi silindiği için öksüz kalan devamını da). Yani kural çiğnendiğinde
@@ -756,8 +1296,15 @@ kısaca verir; "Günün okuması" o sayıları tekrar sıralamaz, aralarındaki
 ilişkiyi kurar. Aynı rakam iki bölümde geçiyorsa birinde kalır — okur ikincisinde
 yeni bir şey öğrenmiyor.
 
-**Tavsiye dili yasak.** "Alın", "satın", "hedef fiyat", "pozisyon açın"
-yazılmaz. Site analiz yayımlar, yatırım tavsiyesi vermez.
+**Tavsiye dili yasak.** "Alın", "satın", "hedef fiyat", "pozisyon açın",
+"öneriyoruz" hiçbir alanda yazılmaz — işlem fikirleri dahil (denetim fikrin metin
+alanlarını da aynı ortak kalıpla tarar ve ENGEL sayar). Site analiz yayımlar,
+yatırım tavsiyesi vermez. İşlem fikri bu ilkenin istisnası değil, onun içinde
+durur: bir okumanın kişiye özel olmayan bir işlem YAPISINA çevrilmiş hâlidir ve
+yalnız `fikirler` alanında, betimleyici dille (bacak, yön, seviye) yazılır.
+Düzyazıda yapı dili de yok: "eğri dikleşir" bir okumadır, "dikleştirici
+kurulur" bir yapıdır ve fikirde durur. Uyarı ve sorumluluk cümlesini yazar
+yazmaz; sayfanın fikir bölümü kendi uyarı metnini taşır.
 
 **Rejim panosunu omurga yap.** `rejim` alanı günün "neredeyiz" cevabını dokuz
 satırda verir (reel faiz ileri/geri, taşıma makası, reel kredi, REDK sapması,

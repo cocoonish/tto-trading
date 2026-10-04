@@ -19,6 +19,12 @@ beyanından; biçim 3 = sabah notu, bkz. bulten/YAZIM.md):
                  kalıbının yapısal eşi: sayfa "Düzeltmeler" bölümünde basar,
                  site /duzeltmeler/ sayfasında bütün bültenlerinkini toplar.
                  Liste bütünüyle yazılır (yama mevcut listeyi DEĞİŞTİRİR).
+    fikirler     biçim 3: [{baslik, tur, bacaklar, yon, hedef, stop, ufuk, gerekce,
+                 ne_bozar, dayanak, …}] — o sayıda açılan işlem fikirleri; giriş
+                 seviyesi ölçülen katmandan, sözleşme bulten/fikir.py ve YAZIM.md.
+                 Yalnız bugünün sayısına; liste bütünüyle yazılır.
+    fikir_kapat  [{kimlik, sebep}] — açık bir fikrin erken kapanışı (çıkış bu
+                 sayının ölçülen katmanından)
     (gundem_kaynagi otomatik "yazili" olur — sayfa yalnız bunu yayımlar)
 
 Kullanım — yama dosyası ya da borudan JSON:
@@ -56,7 +62,17 @@ BULTEN = KOK / "site" / "src" / "data" / "bulten"
 
 # `manset`: sayının başlığı — günün tezi, tek cümle (bkz. YAZIM.md). Bülten
 # sayfasının h1'i yalnız tarihti ve tez ancak üçüncü ekranda başlıyordu.
-YAZILABILIR = ("yorum", "ozet", "gundem", "duzeltmeler", "manset")
+YAZILABILIR = ("yorum", "ozet", "gundem", "duzeltmeler", "manset", "fikirler", "fikir_kapat")
+# İŞLEM FİKİRLERİ (karar 04.10.2026, bkz. bulten/fikir.py): yalnız BUGÜNÜN sayısına
+# yazılır. Geçmiş bir sayıya fikir eklemek, giriş seviyesi o günün kapanışı olan
+# bir fikri sonrasını bilerek seçmek demektir — karne geriye dönük kazanç
+# toplardı. "Bugün" UTC'dir (sayının tarihi ölçüm koşucusunun UTC günüdür);
+# sınamalar bu sabiti değiştirir.
+BUGUN: date | None = None
+
+
+def _bugun() -> str:
+    return (BUGUN or dt.datetime.now(dt.timezone.utc).date()).isoformat()
 MANSET_AZAMI = 110
 DUZELTME_ZORUNLU = ("alan", "eski", "yeni")
 
@@ -185,6 +201,56 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
         # işaretlemek zorunda kalmasın diye burada damgalanır.
         if mevcut:
             b["gundem_kaynagi"] = "yazili"
+
+    if "fikirler" in yama or "fikir_kapat" in yama:
+        if not bicim3:
+            raise SystemExit("işlem fikirleri yalnız biçim 3 sayıda yazılır (sayının `surum` alanı)")
+        if str(b.get("tarih") or "") != _bugun():
+            raise SystemExit(
+                f"işlem fikri yalnız bugünün sayısına yazılır ({_bugun()}); bu sayı "
+                f"{b.get('tarih')}. Geçmiş bir sayıya fikir eklemek ya da onu değiştirmek "
+                "sonrasını bilerek seçmek olur — karne geriye dönük kazanç toplardı.")
+        import fikir as _fikir
+        an = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+        try:
+            if "fikirler" in yama:
+                # YAZILMIŞ SAYININ FİKRİ DEĞİŞMEZ VE SİLİNMEZ. İlk yazımda liste
+                # bütünüyle değiştirilebilir (yazar denetimle döner); sayı bir kez
+                # yazıldıktan sonra mevcut fikirler AYNEN kalır — aynı fikri
+                # taşıyan yama onu korur (kimliği ve yazım anıyla), yeni fikir
+                # eklenebilir, ama seviyesi değişen ya da listeden çıkan fikir
+                # REDDEDİLİR: aynı gün sonradan silinen bir fikir, karnesinin
+                # ilk kapanışını görüp seçilmiş olurdu (inceleme 04.10.2026).
+                eski = [f for f in (b.get("fikirler") or []) if isinstance(f, dict)]
+                if yama["fikirler"] is None:
+                    if eski and not ilk_yazim:
+                        raise SystemExit("yazılmış sayının işlem fikirleri silinemez; görüş "
+                                         "değiştiyse sonraki sayıda fikir_kapat ile kapatılır")
+                    b["fikirler"] = []
+                    degisen.append("fikirler silindi")
+                else:
+                    yeni = _fikir.dogrula_liste(yama["fikirler"], b, yazim_ani=an)
+                    if eski and not ilk_yazim:
+                        yeni = _fikir.ekle_koru(eski, yeni)
+                    b["fikirler"] = yeni
+                    degisen.append(f"fikirler ({len(b['fikirler'])} fikir)")
+            if "fikir_kapat" in yama:
+                if yama["fikir_kapat"] is None:
+                    b["fikir_kapat"] = []
+                    degisen.append("fikir kapanışları silindi")
+                else:
+                    # Bugünün ölçülen karnesi kapanmış saydığı fikir yeniden
+                    # kapatılamaz: mekanik kapanış önce gelir.
+                    kapali = {k.get("kimlik") for k in
+                              ((b.get("fikir_karne") or {}).get("kayitlar") or [])
+                              if k.get("durum") in _fikir.KAPANMIS}
+                    acik = {k: v for k, v in _fikir.acik_fikirler(str(b["tarih"])).items()
+                            if k not in kapali}
+                    b["fikir_kapat"] = _fikir.kapat_dogrula(yama["fikir_kapat"], b, acik,
+                                                            yazim_ani=an)
+                    degisen.append(f"fikir_kapat ({len(b['fikir_kapat'])} kayıt)")
+        except _fikir.FikirHatasi as e:
+            raise SystemExit(f"işlem fikri reddedildi: {e}")
 
     if "duzeltmeler" in yama:
         if yama["duzeltmeler"] is None:

@@ -1749,6 +1749,386 @@ def _takvim_ve_serit():
         _h.onem_puani = _h.onem_puani_gercek
 
 
+
+# ─────────────────────────── işlem fikirleri (bulten/fikir.py)
+
+def _fk_sayi(tarih="2026-10-02", **ek):
+    """İşlem fikri fikstürü: ölçülen katmanı yalnız fikrin okuduğu satırlarla
+    taşıyan biçim 3 sayı. Tarihler AÇIK (duvar saati okunmaz)."""
+    satir = lambda kod, son, sg=1.0, t="2026-10-01": {"kod": kod, "son": son, "tarih": t, "sigma_gun": sg}
+    b = _b3_sayi(tarih=tarih, olusturma=f"{tarih}T04:18:14+00:00", piyasa={"gruplar": [{"id": "x", "satirlar": [
+        satir("XBANK.IS", 15700.0, 3.27), satir("XU100.IS", 12250.0, 2.09),
+        satir("USDTRY=X", 49.03, 0.08), satir("BZ=F", 102.31, 2.75), satir("^TNX", 5.24, 4.96)]}]})
+    b.update(ek)
+    return b
+
+
+_FK_DIBS = {"spot_2y": 40.34, "spot_2y_tarih": "01.10.2026", "spot_7y": 33.47, "spot_7y_tarih": "01.10.2026",
+            "spot_1y": 39.76, "spot_1y_tarih": "01.10.2026", "spot_5y": 36.49, "spot_5y_tarih": "01.10.2026"}
+
+
+def _fikir_yapi():
+    """Yapı sözleşmesi: giriş ölçülen katmandan, birim türden, yön metni
+    konvansiyondan; yanlış taraf / evren dışı / eksik alan REDDEDİLİR."""
+    import fikir as _f
+    b = _fk_sayi()
+    ev = _f.evren()
+    egri = _f.dogrula({"baslik": "x", "tur": "egri", "bacaklar": [{"seri": "dibs:spot_2y"}, {"seri": "dibs:spot_7y"}],
+                       "yon": "asagi", "hedef": -800, "stop": -620, "ufuk": "2026-11-13",
+                       "gerekce": "g", "ne_bozar": "n"}, b, 1, ev, _FK_DIBS)
+    assert egri["giris"] == -687.0 and egri["birim"] == "bp" and egri["giris_tarih"] == "2026-10-01", egri
+    assert "yassılaştırıcı" in egri["yon_metni"] and egri["kimlik"] == "2026-10-02-1", egri["yon_metni"]
+    dik = _f.dogrula({"baslik": "x", "tur": "egri", "bacaklar": [{"seri": "dibs:spot_2y"}, {"seri": "dibs:spot_7y"}],
+                      "yon": "yukari", "hedef": -600, "stop": -720, "ufuk": "2026-11-13",
+                      "gerekce": "g", "ne_bozar": "n"}, b, 2, ev, _FK_DIBS)
+    assert "dikleştirici" in dik["yon_metni"], dik["yon_metni"]
+    kel = _f.dogrula({"baslik": "x", "tur": "kelebek", "bacaklar": [{"seri": "dibs:spot_1y"}, {"seri": "dibs:spot_2y"},
+                      {"seri": "dibs:spot_5y"}], "yon": "yukari", "hedef": 520, "stop": 420, "ufuk": "2026-10-30",
+                      "gerekce": "g", "ne_bozar": "n"}, b, 3, ev, _FK_DIBS)
+    assert kel["giris"] == 443.0 and "gövdede ödeyen" in kel["yon_metni"], kel
+    gor = _f.dogrula({"baslik": "x", "tur": "goreli", "bacaklar": ["XBANK.IS", "XU100.IS"], "yon": "yukari",
+                      "hedef": 1.36, "stop": 1.24, "ufuk": "2026-11-02", "gerekce": "g", "ne_bozar": "n"}, b, 4, ev, _FK_DIBS)
+    assert abs(gor["giris"] - 15700 / 12250) < 1e-6 and gor["birim"] == "oran" and gor["sonuc_birim"] == "%"
+    tek = _f.dogrula({"baslik": "x", "tur": "yalin", "bacaklar": ["dibs:spot_2y"], "yon": "asagi", "hedef": 38,
+                      "stop": 41.5, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"}, b, 5, ev, _FK_DIBS)
+    assert tek["birim"] == "%" and tek["sonuc_birim"] == "bp" and abs(_f.sonuc(tek, 40.0) - 34.0) < 1e-9
+    ops = _f.dogrula({"baslik": "x", "tur": "opsiyon", "bacaklar": ["USDTRY=X"], "yon": "yukari",
+                      "opsiyon": {"tip": "call_spread", "kullanim": [50.5, 52.0], "vade": "2026-12-31"},
+                      "ufuk": "2026-12-31", "gerekce": "g", "ne_bozar": "n"}, b, 6, ev, _FK_DIBS)
+    assert ops["hedef"] is None and abs(_f.opsiyon_odeme(ops, 53.0) - 1.5 / 49.03 * 100) < 1e-9
+    olc = _f.dogrula({"baslik": "x", "tur": "olculemez", "enstruman": "TRY OIS–offshore baz",
+                      "olculemez_sebep": "kotasyon yok", "ufuk": "2026-11-30", "gerekce": "g", "ne_bozar": "n"},
+                     b, 7, ev, _FK_DIBS)
+    assert olc["giris"] is None and olc["yapi_metni"] == "TRY OIS–offshore baz"
+
+    def red(g, parca):
+        try:
+            _f.dogrula({"baslik": "x", "gerekce": "g", "ne_bozar": "n", "ufuk": "2026-10-30", **g}, b, 9, ev, _FK_DIBS)
+        except _f.FikirHatasi as e:
+            assert parca in str(e), (parca, str(e))
+            return
+        raise AssertionError(f"reddedilmedi: {g} ({parca})")
+    red({"tur": "yalin", "bacaklar": ["dibs:spot_2y"], "yon": "asagi", "hedef": 38, "stop": 39}, "zarar tarafında")
+    red({"tur": "yalin", "bacaklar": ["dibs:spot_2y"], "yon": "asagi", "hedef": 42, "stop": 43}, "kazanç tarafında")
+    red({"tur": "yalin", "bacaklar": ["2YY=F"], "yon": "asagi", "hedef": 1, "stop": 9}, "bayat")
+    red({"tur": "yalin", "bacaklar": ["THYAO.IS"], "yon": "yukari", "hedef": 1, "stop": 0}, "--evren")
+    red({"tur": "yalin", "bacaklar": ["dibs:spot_9y"], "yon": "asagi", "hedef": 1, "stop": 99}, "uydurulmaz")
+    red({"tur": "egri", "bacaklar": ["XBANK.IS", "XU100.IS"], "yon": "yukari", "hedef": 1, "stop": 0}, "getiri bacak")
+    red({"tur": "olculemez", "enstruman": "x"}, "olculemez_sebep")
+    red({"tur": "egri", "bacaklar": ["dibs:spot_2y", "^TNX"], "yon": "yukari", "hedef": 1, "stop": -9999},
+        "aynı eğriden")
+    red({"tur": "egri", "bacaklar": ["dibs:spot_7y", "dibs:spot_2y"], "yon": "yukari", "hedef": 9999, "stop": 1},
+        "kısadan uzuna")
+    # Yapının günlük σ'sı sonucun biriminde ve girişten ÖNCEKİ kapanışlardan:
+    # ±%1 salınan bir fiyatta ≈ %1; giriş günü sonrası seriye girmez.
+    gun_ = [f"2026-09-{d:02d}" for d in range(1, 30)]
+    sal = [100.0]
+    for i in range(1, len(gun_)):
+        sal.append(sal[-1] * (1.01 if i % 2 else 1 / 1.01))
+    tf = dict(tek, tur="yalin", birim="fiyat", sonuc_birim="%", bacaklar=[{"seri": "BZ=F", "deger": 100, "tarih": "2026-09-21"}])
+    sg = _f.yapi_sigma(tf, {"BZ=F": {"tarih": gun_, "kapanis": sal[:21] + [500.0] * 8}}, {}, ev)
+    assert sg is not None and 0.95 < sg < 1.1, f"yapı σ'sı yanlış ya da girişten sonrasını okudu: {sg}"
+    red({"tur": "yalin", "bacaklar": ["BZ=F"], "yon": "asagi", "hedef": 90, "stop": 110, "ufuk": "2027-12-01"}, "ufuk")
+    red({"tur": "opsiyon", "bacaklar": ["USDTRY=X"], "yon": "asagi", "ufuk": "2026-12-31",
+         "opsiyon": {"tip": "call", "kullanim": [51], "vade": "2026-12-31"}}, "yönü yukari")
+
+
+def _fikir_karne_mekanik():
+    """Karne kapanış bazında: stop/hedef ilk aşan kapanışta, ufuk dolunca son
+    kapanışla; vadeli bacak getiriyle (devir ölçeklemesine dayanıklı); donmuş
+    kapanış yeniden hesaplanmaz; yazarın kapanışı; yazılmamış sayı sayılmaz."""
+    import fikir as _f
+    b0 = _fk_sayi("2026-09-22")
+    for g in b0["piyasa"]["gruplar"][0]["satirlar"]:
+        g["tarih"] = "2026-09-21"
+    fl = [_f.dogrula(g, b0, i, None, {}) for i, g in enumerate([
+        {"baslik": "Brent kısa", "tur": "yalin", "bacaklar": ["BZ=F"], "yon": "asagi", "hedef": 92, "stop": 108,
+         "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"},
+        {"baslik": "Banka göreli", "tur": "goreli", "bacaklar": ["XBANK.IS", "XU100.IS"], "yon": "yukari",
+         "hedef": 1.40, "stop": 1.20, "ufuk": "2026-09-30", "gerekce": "g", "ne_bozar": "n"},
+        {"baslik": "Kur call", "tur": "opsiyon", "bacaklar": ["USDTRY=X"], "yon": "yukari",
+         "opsiyon": {"tip": "call", "kullanim": [49.0], "vade": "2026-09-29"}, "ufuk": "2026-09-29",
+         "gerekce": "g", "ne_bozar": "n"},
+        {"baslik": "Faiz", "tur": "yalin", "bacaklar": ["^TNX"], "yon": "asagi", "hedef": 5.0, "stop": 5.40,
+         "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"}], 1)]
+    b0.update(gundem_kaynagi="yazili", fikirler=fl)
+    gun = ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-25", "2026-09-28", "2026-09-29", "2026-09-30"]
+    # Brent: devirle GERİYE ÖLÇEKLENMİŞ seri (21.09 ham 102,31 → ölçekli 95,0); getiriyle
+    # ilerler: fiili giriş 22.09 kapanışı (102,31 × 96/95 = 103,39), 24.09'da 111,9 > stop 108.
+    ham = {"BZ=F": {"tarih": gun, "kapanis": [95.0, 96.0, 99.0, 103.9, 101.0, 100.0, 99.0, 98.0],
+                    "devir_gunleri": ["2026-09-28"]},
+           "XBANK.IS": {"tarih": gun, "kapanis": [15700, 15800, 16000, 16200, 16900, 17300, 17300, 17300]},
+           "XU100.IS": {"tarih": gun, "kapanis": [12250] * 8},
+           "USDTRY=X": {"tarih": gun, "kapanis": [49.03, 49.1, 49.2, 49.3, 49.4, 49.5, 49.6, 49.7]},
+           "^TNX": {"tarih": gun, "kapanis": [5.24, 5.25, 5.22, 5.20, 5.21, 5.19, 5.18, 5.17]}}
+    k = {x["kimlik"]: x for x in _f.karne("2026-10-02", onceki=[b0], ham=ham, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"]}
+    br = k["2026-09-22-1"]
+    assert br["durum"] == "stop" and br["kapanis_tarih"] == "2026-09-24" and -8.5 < br["sonuc"] < -8, br
+    assert br["giris_fiili_tarih"] == "2026-09-22", "fiili giriş yayımdan sonraki ilk kapanış değil"
+    gr = k["2026-09-22-2"]
+    assert gr["durum"] == "hedef" and gr["kapanis_tarih"] == "2026-09-28", gr        # 17300/12250 = 1,412
+    op = k["2026-09-22-3"]
+    assert op["durum"] == "vade" and abs(op["sonuc"] - round(0.6 / 49.1 * 100, 2)) < 1e-9, op
+    assert op["sonuc_turu"] == "odeme", op
+    tn = k["2026-09-22-4"]
+    assert tn["durum"] == "acik" and tn["kalan_gun"] == 28 and abs(tn["sonuc"] - 8.0) < 1e-6, tn
+    # Donmuş kapanış: önceki bir sayının karnesi "stop" dediyse veri sonra değişse de kalır.
+    b1 = {"tarih": "2026-09-25", "gundem_kaynagi": "otomatik",
+          "fikir_karne": {"kayitlar": [{"kimlik": "2026-09-22-4", "durum": "stop", "son": 5.41,
+                                        "son_tarih": "2026-09-24", "sonuc": -17.0, "kapanis_tarih": "2026-09-24"}]}}
+    k2 = {x["kimlik"]: x for x in _f.karne("2026-10-02", onceki=[b0, b1], ham=ham, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"]}
+    assert k2["2026-09-22-4"]["durum"] == "stop" and k2["2026-09-22-4"]["sonuc"] == -17.0, k2["2026-09-22-4"]
+    # Yazarın erken kapanışı (yazılmış sayıda) ve yazılmamış sayının fikri.
+    b2 = {"tarih": "2026-09-23", "gundem_kaynagi": "yazili",
+          "fikir_kapat": [{"kimlik": "2026-09-22-4", "sebep": "görüş bozuldu", "tarih": "2026-09-23",
+                           "cikis": 5.22, "cikis_tarih": "2026-09-22"}]}
+    hayalet = dict(b0, tarih="2026-09-24", gundem_kaynagi="otomatik",
+                   fikirler=[dict(fl[0], kimlik="2026-09-24-1")])
+    k3 = {x["kimlik"]: x for x in _f.karne("2026-10-02", onceki=[b0, b2, hayalet], ham=ham, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"]}
+    e = k3["2026-09-22-4"]
+    assert e["durum"] == "geri_cekildi" and e["kapanis_tarih"] == "2026-09-23" and abs(e["sonuc"] - 3.0) < 1e-6, e
+    assert e["sebep"] == "görüş bozuldu", e
+    assert "2026-09-24-1" not in k3, "yazılmamış sayının fikri karneye girdi"
+    # Devir düzeltmesi kurulamadıysa fikir o gün DEĞERLENMEZ.
+    ham_b = dict(ham, **{"BZ=F": dict(ham["BZ=F"], roll_bilinmiyor=True)})
+    br2 = {x["kimlik"]: x for x in _f.karne("2026-09-23", onceki=[b0], ham=ham_b, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"]}["2026-09-22-1"]
+    assert br2["durum"] == "acik" and br2.get("degerlenmedi"), br2
+    # Bayat referans (satır iki seans geride): aradaki kapanış yazarın görebildiği
+    # kapanıştır, fiili giriş olamaz — giriş açılış gününden önceki bir kapanış değildir.
+    bb = _fk_sayi("2026-09-22")
+    for g_ in bb["piyasa"]["gruplar"][0]["satirlar"]:
+        g_["tarih"] = "2026-09-18"
+    eski = _f.dogrula({"baslik": "Bayat", "tur": "yalin", "bacaklar": ["XU100.IS"], "yon": "yukari",
+                       "hedef": 13500, "stop": 11800, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"},
+                      bb, 9, None, {})
+    hb = dict(ham, **{"XU100.IS": {"tarih": ["2026-09-18"] + gun, "kapanis": [12250] * 9}})
+    bk2 = _f.karne("2026-10-02", onceki=[dict(b0, fikirler=[eski])], ham=hb, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"][0]
+    assert bk2["giris_fiili_tarih"] == "2026-09-22", f"fiili giriş açılıştan önceki kapanış: {bk2}"
+    # Yayımdan sonra henüz kapanış yoksa giriş BEKLENİR; giriş kapanışı stopun
+    # ötesindeyse fikir girişte geçersizdir ve sonucu yoktur.
+    kisa = {k_: {"tarih": v_["tarih"][:1], "kapanis": v_["kapanis"][:1]} for k_, v_ in ham.items()}
+    bk = {x["kimlik"]: x for x in _f.karne("2026-09-22", onceki=[b0], ham=kisa, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"]}
+    assert bk["2026-09-22-1"]["durum"] == "acik" and bk["2026-09-22-1"].get("giris_bekleniyor"), bk["2026-09-22-1"]
+    gap = dict(ham, **{"BZ=F": {"tarih": gun, "kapanis": [95.0, 101.0] + [101.0] * 6}})   # 22.09: 108,8 ≥ 108
+    gk = {x["kimlik"]: x for x in _f.karne("2026-10-02", onceki=[b0], ham=gap, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"]}
+    assert gk["2026-09-22-1"]["durum"] == "giriste_gecersiz" and "sonuc" not in gk["2026-09-22-1"], gk["2026-09-22-1"]
+    s = _f.karne("2026-10-02", onceki=[b0], ham=ham, dibs_gecmis=[], metrik=None, fonlama=None)["sayim"]
+    assert s["olculen_kapanan"] == 2 and s["kazanan"] == 1 and s["n_yuzde"] == 2, s   # opsiyon oranın dışında
+
+
+def _fikir_yazma_kapisi():
+    """yaz.py: fikirler yalnız bugünün sayısına; biçim 2 reddedilir; yeniden
+    ölçüm yazılmış fikirleri korur; erken kapanış yalnız açık fikre."""
+    import yaz as _y, fikir as _f, tempfile, json as _j
+    from datetime import date as _dt
+    gercek_bugun, gercek_dibs = _y.BUGUN, _f._dibs_an
+    with tempfile.TemporaryDirectory() as td:
+        h = Path(td) / "2026-10-02.json"
+        b = _fk_sayi(gundem_kaynagi="otomatik")
+        h.write_text(_j.dumps(b), encoding="utf-8")
+        g = [{"baslik": "Kur kısa", "tur": "yalin", "bacaklar": ["USDTRY=X"], "yon": "asagi", "hedef": 48.5,
+              "stop": 49.6, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n", "dayanak": "turkiye"}]
+        try:
+            _f._dibs_an = lambda b_, dibs_gecmis=None: {}
+            _y.BUGUN = _dt(2026, 10, 3)
+            try:
+                _y.uygula(h, {"fikirler": g})
+                raise AssertionError("geçmiş sayıya fikir yazıldı")
+            except SystemExit as e:
+                assert "bugünün sayısına" in str(e), e
+            _y.BUGUN = _dt(2026, 10, 2)
+            yeni, deg = _y.uygula(h, {"fikirler": g})
+            assert yeni["fikirler"][0]["giris"] == 49.03 and "fikirler (1 fikir)" in deg, deg
+            assert "fikirler" in _y.YAZILABILIR and "fikir_kapat" in _y.YAZILABILIR
+            h.write_text(_j.dumps(dict(b, surum=2)), encoding="utf-8")
+            try:
+                _y.uygula(h, {"fikirler": g})
+                raise AssertionError("biçim 2 sayıya fikir yazıldı")
+            except SystemExit as e:
+                assert "biçim 3" in str(e), e
+            h.write_text(_j.dumps(b), encoding="utf-8")
+            try:
+                _y.uygula(h, {"fikir_kapat": [{"kimlik": "2026-09-01-9", "sebep": "x"}]})
+                raise AssertionError("açık olmayan fikir kapatıldı")
+            except SystemExit as e:
+                assert "açık bir fikir değil" in str(e), e
+            try:
+                _y.uygula(h, {"fikirler": [dict(g[0], stop=48.0)]})
+                raise AssertionError("yanlış taraftaki stop yazıldı")
+            except SystemExit as e:
+                assert "zarar tarafında" in str(e), e
+        finally:
+            _y.BUGUN, _f._dibs_an = gercek_bugun, gercek_dibs
+
+
+def _fikir_denetim_ve_olcum():
+    """Denetim: fikirler() kos() listesinde, biçim 2'de koşmaz, yanlış taraf
+    ENGEL; dil ölçütü fikrin METİN alanlarını tarar ama makine alanlarını
+    taramaz. Ölçüm katmanı her sayıya karne bloğunu yazar ve bir kusur
+    bülteni düşürmez."""
+    import denetim as _den, fikir as _f, uret as _u
+    assert "self.fikirler()" in inspect.getsource(_den.Denetim.kos), "fikir ölçütü kos() listesinde yok"
+    f = {"kimlik": "2026-10-02-1", "baslik": "x", "tur": "yalin", "gerekce": "g", "ne_bozar": "n",
+         "ufuk": "2026-10-30", "giris": 49.03, "hedef": 48.5, "stop": 48.9, "yon": "asagi", "dayanak": "turkiye",
+         "bacaklar": [{"seri": "USDTRY=X", "deger": 49.03, "tarih": "2026-10-01"}], "birim": "fiyat"}
+    d = _den.Denetim(_fk_sayi(fikirler=[f])); d.fikirler()
+    assert any("stop zarar tarafında" in e for e in d.engel), d.engel
+    d2 = _den.Denetim(_fk_sayi(surum=2, fikirler=[f])); d2.fikirler()
+    assert not d2.engel and not d2.uyari, "fikir ölçütü arşiv (biçim 2) sayısında koştu"
+    iyi = dict(f, stop=49.6, getiri_risk=0.94)
+    d3 = _den.Denetim(_fk_sayi(fikirler=[iyi])); d3.fikirler()
+    assert not d3.engel and any("getiri/risk" in u for u in d3.uyari), (d3.engel, d3.uyari)
+    tav = dict(iyi, gerekce="Bu yüzden pozisyon açın.")
+    d4 = _den.Denetim(_fk_sayi(fikirler=[tav])); d4.dil()
+    assert any("tavsiye" in e.lower() for e in d4.engel), d4.engel
+    mak = dict(iyi, kimlik="fx_opsiyon_spread_kodu", dayanak="turkiye_makro")
+    d5 = _den.Denetim(_fk_sayi(fikirler=[mak])); d5.dil()
+    assert not d5.engel, f"makine alanı okur dili diye tarandı: {d5.engel}"
+    assert set(_f.METIN_ALANLARI) >= {"baslik", "gerekce", "ne_bozar"}
+    assert '"fikir_karne": _fikir_karne(' in inspect.getsource(_u.uret), "ölçüm katmanı karneyi yazmıyor"
+    gercek = _f.karne
+    try:
+        _f.karne = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("bozuk"))
+        r = _u._fikir_karne(dt.date(2026, 10, 2), False)
+        assert r["hata"].startswith("RuntimeError") and r["kayitlar"] == [], r
+    finally:
+        _f.karne = gercek
+
+
+def _fikir_zaman_tasima_dongu():
+    """İnceleme 04.10.2026: fiili giriş YAZIM ANINDAN sonra kapanan ilk seans ·
+    USD/TRY'nin sonucu taşımayı içerir · ölçülemeyenin yaşam döngüsü · ufuk günü
+    kapanışı beklenir · defter kümülatif · bugün ilk kez kapanan kayıt pencereden
+    bağımsız donar · alt eğri ve işaret kuralları · yazılmış fikir değişmez ·
+    yeniden ölçüm kapanışı geri açmaz."""
+    import fikir as _f, yaz as _y, uret as _u, denetim as _den, tempfile, json as _j
+    from datetime import date as _dt
+    ev = _f.evren()
+    b0 = _fk_sayi("2026-09-22")
+    for g in b0["piyasa"]["gruplar"][0]["satirlar"]:
+        g["tarih"] = "2026-09-21"
+    gun = ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-25", "2026-09-28",
+           "2026-09-29", "2026-09-30"]
+    ham = {"XBANK.IS": {"tarih": gun, "kapanis": [15700, 15800, 15900, 16000, 16050, 16100, 16100, 16100]},
+           "XU100.IS": {"tarih": gun, "kapanis": [12250] * 8},
+           "USDTRY=X": {"tarih": gun, "kapanis": [49.03, 49.03, 49.03, 49.03, 49.03, 49.03, 49.03, 49.03]}}
+    gor = {"baslik": "B", "tur": "goreli", "bacaklar": ["XBANK.IS", "XU100.IS"], "yon": "yukari",
+           "hedef": 1.40, "stop": 1.20, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"}
+    # (1) BIST kapandıktan sonra (16:30 UTC) yazılan fikrin girişi ERTESİ günün kapanışı.
+    gec = _f.dogrula(gor, b0, 1, ev, {}, None, (ham, {}), "2026-09-22T16:30:00+00:00")
+    erk = _f.dogrula(gor, b0, 2, ev, {}, None, (ham, {}), "2026-09-22T05:00:00+00:00")
+    r_gec = _f.degerle(gec, "2026-10-02", ham, {}, ev, {})
+    r_erk = _f.degerle(erk, "2026-10-02", ham, {}, ev, {})
+    assert r_gec["giris_fiili_tarih"] == "2026-09-23" and r_erk["giris_fiili_tarih"] == "2026-09-22", \
+        (r_gec.get("giris_fiili_tarih"), r_erk.get("giris_fiili_tarih"))
+    # (2) Kısa USD/TRY: spot sabitken sonuç taşımadır (TL %36,5 − USD %4,0, takvim günü).
+    kur = _f.dogrula({"baslik": "K", "tur": "yalin", "bacaklar": ["USDTRY=X"], "yon": "asagi", "hedef": 47.0,
+                      "stop": 50.5, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"}, b0, 3, ev, {}, None,
+                     (ham, {}), "2026-09-22T05:00:00+00:00")
+    faiz = {"tlref": {"2026-09-01": 36.5}, "^IRX": {"2026-09-01": 4.0}}
+    rk = _f.degerle(kur, "2026-10-02", ham, {}, ev, faiz)
+    beklenen = round(32.5 / 365 * 8, 2)          # 22.09 → 30.09 = 8 takvim günü
+    assert rk["spot_sonuc"] == 0.0 and abs(rk["tasima"] - beklenen) < 0.011 and \
+        abs(rk["sonuc"] - beklenen) < 0.011, rk
+    assert _f.degerle(kur, "2026-10-02", ham, {}, ev, {}).get("tasima_olculemedi"), "taşıma yokken sessiz"
+    # (3) Ölçülemeyen fikrin erken kapanışı ve ufku.
+    olc = _f.dogrula({"baslik": "O", "tur": "olculemez", "enstruman": "baz", "olculemez_sebep": "yok",
+                      "ufuk": "2026-09-29", "gerekce": "g", "ne_bozar": "n"}, b0, 4, ev, {})
+    e = _f.degerle({**olc, "erken": {"tarih": "2026-09-24", "sebep": "s"}}, "2026-10-02", ham, {}, ev)
+    assert e["durum"] == "geri_cekildi" and e["kapanis_tarih"] == "2026-09-24", e
+    u = _f.degerle(olc, "2026-10-02", ham, {}, ev)
+    assert u["durum"] == "sure_olculemez" and u["kapanis_tarih"] == "2026-09-29", u
+    # (4) Ufuk günü kapanışı gelmeden ufuk kapanışı kurulmaz; beklemeden sonra kurulur.
+    kisa = {k_: {"tarih": v_["tarih"][:6], "kapanis": v_["kapanis"][:6]} for k_, v_ in ham.items()}  # → 28.09
+    uf = dict(erk, ufuk="2026-09-29")
+    a1 = _f.degerle(uf, "2026-09-30", kisa, {}, ev)
+    assert a1["durum"] == "acik" and a1.get("degerlenmedi"), a1
+    a2 = _f.degerle(uf, "2026-10-06", kisa, {}, ev)
+    assert a2["durum"] == "sure" and a2["son_tarih"] == "2026-09-28" and a2.get("not"), a2
+    # (5) Ufuktan sonra gelen giriş sıfır sonuçlu "ufuk doldu" değil, ölçülemedi.
+    a3 = _f.degerle(dict(gec, ufuk="2026-09-22"), "2026-10-02", ham, {}, ev)
+    assert a3["durum"] == "olculemedi", a3
+    # (6) Defter kümülatif: yedi ay önce açılıp kapanan fikir sayımda kalır.
+    eski_b = dict(b0, tarih="2026-01-05", gundem_kaynagi="yazili",
+                  fikirler=[dict(erk, kimlik="2026-01-05-1", acilis="2026-01-05")])
+    kap_b = {"tarih": "2026-01-20", "fikir_karne": {"kayitlar": [
+        {"kimlik": "2026-01-05-1", "durum": "hedef", "sonuc": 3.0, "sonuc_birim": "%", "tur": "goreli",
+         "kapanis_tarih": "2026-01-19"}]}}
+    sy = _f.karne("2026-10-02", onceki=[eski_b, kap_b], ham=ham, dibs_gecmis=[], metrik=None,
+                  fonlama=None)["sayim"]
+    assert sy["kapanan"] == 1 and sy["olculen_kapanan"] == 1, sy
+    # (7) Bugün ilk kez kapanan kayıt, kapanışı pencereden eski olsa da karneye yazılır (donsun).
+    eski2 = dict(b0, tarih="2026-08-03", gundem_kaynagi="yazili",
+                 fikirler=[dict(erk, kimlik="2026-08-03-1", acilis="2026-08-03", ufuk="2026-08-20")])
+    h2 = {k_: {"tarih": ["2026-08-03", "2026-08-04", "2026-08-20"], "kapanis": [12250, 12250, 12250]}
+          for k_ in ("XBANK.IS", "XU100.IS")}
+    h2["XBANK.IS"]["kapanis"] = [15700, 15700, 15600]
+    kk = _f.karne("2026-10-02", onceki=[eski2], ham=h2, dibs_gecmis=[], metrik=None, fonlama=None)
+    assert [k_["kimlik"] for k_ in kk["kayitlar"]] == ["2026-08-03-1"], kk["kayitlar"]
+    # (8) Alt eğri ve işaret kuralları.
+    for g_, parca in (({"tur": "egri", "bacaklar": ["dibs:spot_2y", "dibs:basabas_5y"]}, "aynı eğriden"),
+                      ({"tur": "egri", "bacaklar": [{"seri": "dibs:spot_2y", "katsayi": -1},
+                                                    {"seri": "dibs:spot_5y", "katsayi": -1}]}, "zıt işaretli"),
+                      ({"tur": "kelebek", "bacaklar": [{"seri": "dibs:spot_1y", "katsayi": 1},
+                                                       {"seri": "dibs:spot_2y", "katsayi": 1},
+                                                       {"seri": "dibs:spot_5y", "katsayi": -1}]}, "kanatlar")):
+        try:
+            _f.dogrula({"baslik": "x", "gerekce": "g", "ne_bozar": "n", "ufuk": "2026-10-30", "yon": "yukari",
+                        "hedef": 9999, "stop": -9999, **g_}, _fk_sayi(), 9, ev, _FK_DIBS)
+            raise AssertionError(f"reddedilmedi: {parca}")
+        except _f.FikirHatasi as ex:
+            assert parca in str(ex), (parca, str(ex))
+    # (9) Yazılmış sayının fikri değişmez; aynı yama kimliği ve yazım anını korur; yeni fikir sona eklenir.
+    gercek_bugun, gercek_dibs = _y.BUGUN, _f._dibs_an
+    try:
+        _f._dibs_an = lambda b_, dibs_gecmis=None: {}
+        _y.BUGUN = _dt(2026, 10, 2)
+        with tempfile.TemporaryDirectory() as td:
+            h = Path(td) / "2026-10-02.json"
+            ilk = [{"baslik": "Kur kısa", "tur": "yalin", "bacaklar": ["USDTRY=X"], "yon": "asagi",
+                    "hedef": 48.5, "stop": 49.6, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n",
+                    "dayanak": "turkiye"}]
+            h.write_text(_j.dumps(_fk_sayi(gundem_kaynagi="yazili")), encoding="utf-8")
+            b1, _ = _y.uygula(h, {"fikirler": ilk})
+            h.write_text(_j.dumps(b1), encoding="utf-8")
+            an1 = b1["fikirler"][0]["yazim_ani"]
+            b2, _ = _y.uygula(h, {"fikirler": [dict(ilk[0], gerekce="düzeltilmiş"),
+                                               dict(ilk[0], baslik="Banka", tur="goreli",
+                                                    bacaklar=["XBANK.IS", "XU100.IS"], yon="yukari",
+                                                    hedef=1.40, stop=1.20)]})
+            assert b2["fikirler"][0]["yazim_ani"] == an1 and b2["fikirler"][0]["gerekce"] == "düzeltilmiş"
+            assert [f_["kimlik"] for f_ in b2["fikirler"]] == ["2026-10-02-1", "2026-10-02-2"], b2["fikirler"]
+            try:
+                _y.uygula(h, {"fikirler": [dict(ilk[0], stop=49.9)]})
+                raise AssertionError("yazılmış fikrin stopu değişti")
+            except SystemExit as ex:
+                assert "değiştirilmez" in str(ex), ex
+    finally:
+        _y.BUGUN, _f._dibs_an = gercek_bugun, gercek_dibs
+    # (10) Yeniden ölçüm yazılmış sayının kapanmış karne kaydını geri açmaz.
+    assert hasattr(_u, "CIKTI"), "uret.CIKTI yok: sınama yanlış adı sarar"
+    gercek_cikti = _u.CIKTI
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            _u.CIKTI = Path(td)
+            eski = {"tarih": "2026-10-02", "gundem_kaynagi": "yazili", "gundem": {"turkiye": "<p>x</p>"},
+                    "fikir_karne": {"kayitlar": [{"kimlik": "A", "durum": "hedef", "sonuc": 2.0}]}}
+            (Path(td) / "2026-10-02.json").write_text(_j.dumps(eski), encoding="utf-8")
+            y_ = _u.yaz({"tarih": "2026-10-02", "gundem": {}, "fikir_karne": {"kayitlar": [
+                {"kimlik": "A", "durum": "acik", "sonuc": -1.0}], "sayim": {}}})
+            assert y_.parent == Path(td), y_
+            son = _j.loads(y_.read_text(encoding="utf-8"))["fikir_karne"]["kayitlar"]
+            assert son == [{"kimlik": "A", "durum": "hedef", "sonuc": 2.0}], son
+    finally:
+        _u.CIKTI = gercek_cikti
+    # (11) Denetim: stop ufka göre gürültü bandında ise UYARI.
+    f_ = {"kimlik": "2026-10-02-1", "baslik": "x", "tur": "yalin", "gerekce": "g", "ne_bozar": "n",
+          "ufuk": "2026-10-30", "giris": 49.03, "hedef": 48.5, "stop": 49.1, "yon": "asagi",
+          "dayanak": "turkiye", "bacaklar": [{"seri": "USDTRY=X", "deger": 49.03, "tarih": "2026-10-01"}],
+          "birim": "fiyat", "stop_z": 0.3, "hedef_z": 3.1}
+    d = _den.Denetim(_fk_sayi(fikirler=[f_])); d.fikirler()
+    assert any("gürültü bandında" in u_ for u_ in d.uyari) and any("ufka göre uzak" in u_ for u_ in d.uyari), d.uyari
+
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret
 
@@ -5978,6 +6358,13 @@ def main() -> int:
          _haftalik_olcum)
     sina("inceleme 01.10 (2. tur): günlük 'yeni' basılı listeden · karne ⊆ söz defteri · yazılmış kıyas · dönem alanı · grup kapsamı",
          _inceleme_tur2)
+    sina("işlem fikri: yapı sözleşmesi, giriş ölçümden, yön konvansiyonu, 9 ret hâli", _fikir_yapi)
+    sina("işlem fikri: karne kapanış bazında — stop · hedef · vade · açık · donmuş · erken · yazılmamış · devir",
+         _fikir_karne_mekanik)
+    sina("işlem fikri: yazma kapısı — yalnız bugün, biçim 3, açık fikir, taraf", _fikir_yazma_kapisi)
+    sina("işlem fikri: denetim ve ölçüm katmanı — kapsam, taraf, dil, karne bloğu", _fikir_denetim_ve_olcum)
+    sina("işlem fikri: yazım anı · taşıma · ölçülemez döngüsü · ufuk günü · kümülatif defter · donma · alt eğri · değişmezlik · yeniden ölçüm",
+         _fikir_zaman_tasima_dongu)
 
     for ad in gecen:
         print(f"  ✓ {ad}")
