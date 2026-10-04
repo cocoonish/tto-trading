@@ -4377,13 +4377,18 @@ Tasarımı dört ilke belirliyor, çünkü bir fikir karnesi kendini kandırman�
 yoludur. (1) GİRİŞİ YAZAR DEĞİL ÖLÇÜM VERİR: yazar bacakları ve seviyeleri yazar; referans
 seviyeyi `yaz.py` sayının ölçülen katmanından kurar. Fiyat bacağı piyasa fotoğrafının
 satırından, TL faiz bacağı DİBS defterinin sayının ölçüm anındaki görüntüsünden gelir.
-(2) KARNE YAYIMDAN SONRAKİ İLK KAPANIŞTAN BAŞLAR. Referans bir önceki seansın kapanışıdır
-ve yazar onu yazarken geceyi görüyor (Asya seansı, canlı kur). Karne referanstan başlasaydı
-fikre okurun yakalayamayacağı gecelik hareketi kazandırırdı. Hedef ve stop fiili girişten
-SONRAKİ kapanışlarda sorulur. Giriş kapanışı seviyelerden birinin ötesindeyse fikir
-"girişte geçersiz" sayılır ve sonucu yoktur. Yazarın erken kapanışı (`fikir_kapat`) da
-simetriktir: kapatan sayının yayımından sonraki ilk kapanışta gerçekleşen bir çıkış
-emridir. (3) YALNIZ BUGÜNÜN SAYISINA YAZILIR. Geçmiş bir sayıya fikir eklemek, sonrasını
+(2) KARNE YAZIM ANINDAN SONRA KAPANAN İLK SEANSTAN BAŞLAR. Referans bir önceki seansın
+kapanışıdır ve yazar onu yazarken geceyi görüyor (Asya seansı, canlı kur). Karne referanstan
+başlasaydı fikre okurun yakalayamayacağı gecelik hareketi kazandırırdı. Soru GÜN değil SAAT:
+her fikir yazıldığı anı taşır (`yazim_ani`) ve fiili giriş, bütün bacakların o günkü kapanışı
+o andan sonra olan ilk seanstır — hafta içi akşam yazılan bir fikir o günün BIST ve İstanbul
+18:00 kapanışını çoktan görmüştür. Kapanış saatleri TUTUCUDUR (`fikir.KAPANIS_SAAT`, grubun en
+erken gerçek kapanışı): ölçüm katmanının "bar yerleşti mi" payı (`piyasa.KAPANIS_UTC`, BIST 16)
+kullanılsaydı 15:00–16:00 UTC arasında yazılan fikir gördüğü kapanışı giriş alırdı. Hedef ve
+stop fiili girişten SONRAKİ kapanışlarda sorulur. Giriş kapanışı seviyelerden birinin
+ötesindeyse fikir "girişte geçersiz" sayılır ve sonucu yoktur. Yazarın erken kapanışı
+(`fikir_kapat`) da simetriktir: yazım anından sonraki ilk kapanışta gerçekleşen bir çıkış
+emridir ve fikir gibi o da yazıldıktan sonra geri alınmaz. (3) YALNIZ BUGÜNÜN SAYISINA YAZILIR. Geçmiş bir sayıya fikir eklemek, sonrasını
 bilerek seçmek demektir; `yaz.py` bunu reddediyor. (4) KAPANIŞ DONAR VE DEFTER YAYIMLANMIŞ
 SAYILARIN KENDİSİDİR. Fikir açıldığı sayının JSON'unda durur, mekanik kapanış ilk ölçüldüğü
 sayının `fikir_karne`sinde durur. Sonraki sayılar donmuş kapanışı yeniden hesaplamaz; kaynağın
@@ -4410,15 +4415,15 @@ rutinin `git add -A`'sı. Yazılmamış bir sayının fikri karneye girmez.
   Devir düzeltmesi kurulamadıysa fikir o gün DEĞERLENMEZ: sahte bir stop donmasın.
 
 Kapılar:
-- `yaz.py`: sözleşme, taraf, ufuk 2–183 gün, yalnız bugün, biçim 3.
+- `yaz.py`: sözleşme, taraf, ufuk en az 2 iş günü ve en çok 183 gün, alt eğri ve işaret, metin alanında HTML yok, yalnız bugün, biçim 3; yazılmış fikir ve çıkış emri değişmez (metin düzeltilebilir, yenisi eklenir).
 - `denetim.fikirler`:
   - ENGEL: yapısal tutarsızlık.
-  - UYARI: getiri/risk < 1, stop bir günlük σ'nın altında, dayanaksız fikir, haftalıkta senaryosuz ya da tek sınıf, açık fikir > 12.
+  - UYARI: getiri/risk < 1; stop yapının bir günlük σ'sının altında ya da ufka ölçekli beklenen hareketin yarısından yakın; hedef o hareketin 2,5 katından uzak; dayanaksız ya da boş bölüme dayanan fikir; aynı görüş iki kez; haftalıkta senaryosuz ya da tek sınıf; açık fikir > 12.
   - Bilgi: günlükte fikirsiz sayı. Temiz bir fikir yoksa zorla fikir yazılmaz.
 - Dil ölçütleri yalnız okura giden METİN alanlarını tarar (`fikir.METIN_ALANLARI`). Kimlik, seri ve dayanak makine alanıdır; taranırsa kod dili sanılır.
-- Sayfa sınavında fikrin derlenmiş sayfaya basıldığını soran ölçütler: bülten kartı (25d) ve Tradeler defteri (TRADELER_OLCUT).
+- Sayfa sınavında fikrin derlenmiş sayfaya basıldığını soran ölçütler: bülten kartı (25d) ve Tradeler defteri (25e: her fikrin kartı defterde, kapanmış ölçülebilir fikir kapanan bölümünde).
 - `tweet/duman.py`'de gönderiye girmeme kilidi, günlük ve haftalık iki kipte de.
-- `bulten/duman.py`'de dört madde. On dört arıza enjeksiyonunun on dördü yakalanıyor. Biri ilk turda KAÇTI ve sebep yine fikstürdü: referans satırın bir seans geride olduğu hâl yoktu. O hâlde aradaki kapanış yazarın görebildiği kapanıştır ve fiili giriş olamaz.
+- `bulten/duman.py`'de beş madde. Yirmi üç arıza enjeksiyonunun yirmi üçü kendi maddesinde yakalanıyor. Biri ilk turda KAÇTI ve sebep yine fikstürdü: referans satırın bir seans geride olduğu hâl yoktu. O hâlde aradaki kapanış yazarın görebildiği kapanıştır ve fiili giriş olamaz. Kod değişince eski enjeksiyonların üçünün çapası bulunamadı; betik artık bulunamayan çapayı ADIYLA yazıyor — çapası kaybolan bir enjeksiyon "yakalandı" da "kaçtı" da sayılmaz, koşmamıştır.
 
 **TRADELER (kullanıcı, aynı gün): "sadece verilmekle kalınmamalı, takip edilmeli … tradeler diye bir kategori açıp, neden açıldığı, ne durumda olduğu, kapandıysa neden kapandığı, kâr mı zarar mı nasıl kapandığı tutulmalı".** Sitenin yeni bölümü `/tradeler/` defteri sayıların kendisinden kurar (`site/src/lib/tradeler.ts`). Tanım yalnız yazılmış sayıların `fikirler` alanından gelir. Durum ve gün gün takip her sayının `fikir_karne` kaydından gelir; son durum en son sayınınkidir. Erken kapanış emri `fikir_kapat`tan okunur. Modül HİÇBİR şeyi yeniden hesaplamaz, yalnız seçer ve birleştirir: sonucun, durumun ve fiili girişin tanımı Python'da tek yerde kalır. Python'un ürettiği ikinci bir defter dosyası iki koşunun (ölçüm ve yazı) aynı dosyaya dokunması demekti ve bir gün sayılarla ayrışırdı.
 
@@ -4434,10 +4439,33 @@ Fiili girişleri 05.10 kapanışlarıdır. Sayı pazar akşamı yayımlandı ve 
 AÇIK, adıyla:
 - **Gün içi dokunuş ölçülmez.** Kapanış bazında bir stop, gün içinde dokunulup geri
   dönülmüş seviyeyi görmez.
-- **Geç yazım.** Yazı katmanı Asya kapanışlarından sonra yazılırsa (zincir gecikmesi), o
-  günün Asya kapanışı yazarın görebildiği bir kapanıştır. Fiili giriş kuralı bunu ayırt
-  etmez.
+- **Kapanış saati tablosu yaz saatinde tutucudur.** Kış saatinde gerçek kapanışlar bir
+  saat geç gelir; tablo erken kaldığı için yalnız girişi bir gün geciktirebilir, yazarın
+  gördüğü kapanışı hiçbir zaman giriş yapmaz.
+- **Sayım ortalaması yalnız R.** Faiz yapılarının bp'si yapıya göre farklı DV01 ölçeği taşır
+  (varsayılan kelebekte kotasyon bp'si gövde DV01'inin yarısı); bp ve yüzde ortalamaları
+  ölçülen katmanda duruyor ama sayfaya basılmıyor.
 - **Metal vadelileri.** GC, SI, PL ve HG devir düzeltmesinden geçmiyor; devir günü karnede
   küçük bir sıçrama olarak görünebilir.
 - **Rutin metni.** Rutin hâlâ "yalnız yorum/ozet/gundem alanlarına yazabilirsin" diyor.
   Rehber esastır ve araç `fikirler`i kabul ediyor; metnin güncellenmesi kullanıcının işi.
+
+İNCELEME (donmuş kopyaya karşı dört mercek: masa · ölçüm · kapı · rehber). Mercekler yayından
+önce şu sınıfları buldu ve hepsi kayda değer, çünkü bir karnenin kendini kandırdığı yerler
+bunlar. (1) GÜN DEĞİL SAAT: "yalnız bugünün sayısı" kapısı aynı gün akşam yazılan bir
+fikre o günün kapanışını giriş veriyordu — yazım anı ve tutucu kapanış saati. (2) PENCERE
+SAYIMI KESER: defter ilk yazımda 213 günlük bir pencereden kuruluyordu ve "şimdiye kadar"
+sayımı yedi ay sonra kendi geçmişini kaybedecekti; defter kümülatif. (3) TL'Lİ DÖVİZİN
+SONUCU TAŞIMAYI İÇERİR: kısa USD/TRY bir TL mevduatıdır ve spot getirisi onu tersine
+gösterir (ölçüldü: 49 günde spot −%2,62, taşımalı +%1,69); euro ve sterlinin kısa faizi
+ölçülen katmanda yok, EUR/TRY ve GBP/TRY evrenden çıkarıldı. (4) BİRİMİ FARKLI ORTALAMA
+YOK: ortak ölçü R. (5) EĞRİ AYNI ALT EĞRİDEN: nominal–başabaş farkı "dikleştirici" diye
+etiketleniyordu. (6) σ YAPININ KENDİSİNDEN: bacak σ'larından elle kurulan √Σk²σ² TL'de
+ölçüden büyüktü ve rehber kapının kullanmadığı bir sayıyı öğretiyordu. Kapı merceği
+sözleşmenin uçlarını sordu: fikir metin alanındaki bir HTML etiketi yazma kapısından geçip yayın
+kapısını (22) düşürecekti; tek bir fikir hatası sabahın bütün yamasını reddediyordu (rehber
+artık fikirleri AYRI yamada uygulatıyor); kapatılabilir küme iki yerde ayrı kuruluyordu.
+Yazının kendisi de ölçüldü ve bir cümlesi düştü: "dikleştirici seviye riskini dışarıda
+bırakır" — TL 2y–5y makası son altı ayda 2 yıllığın hareketini −0,51 betayla izledi; bir
+yapının seviye ya da piyasa yönünden bağımsız olduğu ancak beta ölçülüp sıfıra yakın
+çıkarsa yazılır.
