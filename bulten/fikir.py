@@ -48,6 +48,7 @@ Kullanım (yazı katmanı):
 from __future__ import annotations
 
 import json
+import re
 import math
 import sys
 from dataclasses import dataclass
@@ -130,6 +131,11 @@ METIN_ALANLARI = ("baslik", "gerekce", "ne_bozar", "enstruman", "olculemez_sebep
                   "senaryo", "yapi_metni", "yon_metni")
 
 
+# Etiket: harfle ya da "/" ile başlayan "<…>". "<" tek başına (bir eşitsizlik,
+# "%40 < %41") etiket sayılmaz.
+ETIKET = re.compile(r"<[A-Za-z/][^<>]*>")
+
+
 class FikirHatasi(ValueError):
     """Yazma kapısının reddi — mesaj yazara ne eksik olduğunu söyler."""
 
@@ -164,9 +170,17 @@ def evren() -> dict[str, Seri]:
 # KAPANIŞ ANI (UTC saat). Fiili giriş "yazımdan SONRA kapanan ilk seans"tır;
 # günü sormak yetmez — hafta içi 20:00 UTC'de yazılan bir fikir o günün BIST
 # (15:00 UTC) ve İstanbul 18:00 kur kapanışını çoktan görmüştür (inceleme
-# 04.10.2026). Saatler piyasa.KAPANIS_UTC'den; TL kuru İstanbul 18:00, G10 kuru
-# New York 17:00, TL faizi (DİBS) seans sonu.
-KAPANIS_SAAT = {"tr_fx": 15, "g10_fx": 21, "kripto": 24, "dibs": 15}
+# 04.10.2026). Bu tablo GÖRÜNÜRLÜK sorusudur ve TUTUCU yazılır: grubun EN ERKEN
+# gerçek kapanışı, saate aşağı yuvarlanmış (yaz saati). piyasa.KAPANIS_UTC ise
+# ölçüm katmanının "bar yerleşti mi" payını taşır (BIST 16, New York 22) ve
+# burada kullanılsaydı 15:00–16:00 UTC arasında yazılan bir BIST fikri, yazarın
+# gördüğü kapanışı giriş alırdı. Tutucu yönün bedeli yalnız girişin bir gün
+# kaymasıdır. TL kuru İstanbul 18:00, G10 kuru New York 17:00 (yaz 21 UTC), TL
+# faizi (DİBS) seans sonu; Tokyo 06:00, Avrupa 15:30, New York hisse 20:00,
+# ABD tahvil 19:00, COMEX/NYMEX uzlaşması 18:30 UTC.
+KAPANIS_SAAT = {"tr_fx": 15, "g10_fx": 21, "kripto": 24, "dibs": 15,
+                "asya_hisse": 6, "tr_hisse": 15, "ab_hisse": 15, "abd_hisse": 20,
+                "faiz": 19, "kredi": 20, "metal": 18, "enerji": 18}
 
 
 def kapanis_ani(sid: str, gun: str, ev: dict[str, Seri]) -> datetime:
@@ -442,6 +456,20 @@ def dogrula(g: dict, b: dict, sira: int, ev: dict[str, Seri] | None = None,
     if not isinstance(g, dict):
         raise FikirHatasi(f"fikirler[{sira}] bir nesne değil")
     on = f"fikirler[{sira}]"
+    # Metin alanları DÜZ METİNDİR: sayfa onları kaçırarak basar ve kaçmış bir
+    # etiket yayın kapısında (sayfa sınavı 22) ENGEL olur — etiketli bir
+    # gerekçe yazma kapısından geçerse siteyi durdurur (inceleme 04.10.2026).
+    for alan in METIN_ALANLARI:
+        if isinstance(g.get(alan), str) and ETIKET.search(g[alan]):
+            raise FikirHatasi(f"{on}.{alan}: HTML etiketi taşıyor — fikir alanları düz metindir")
+    # Tip sözleşmesi: liste ya da nesne beklenen yerde başka bir değer
+    # yakalanmayan bir istisnayla değil, adıyla reddedilir (çıkış 2).
+    for alan, tip, ad in (("bacaklar", list, "liste"), ("opsiyon", dict, "nesne")):
+        if g.get(alan) is not None and not isinstance(g[alan], tip):
+            raise FikirHatasi(f"{on}.{alan} bir {ad} olmalı")
+    if isinstance(g.get("opsiyon"), dict) and g["opsiyon"].get("kullanim") is not None \
+            and not isinstance(g["opsiyon"]["kullanim"], list):
+        raise FikirHatasi(f"{on}.opsiyon.kullanim bir liste olmalı: [K] ya da [K1, K2]")
     tur = str(g.get("tur") or "").strip()
     if tur not in TURLER:
         raise FikirHatasi(f"{on}: tur {', '.join(TURLER)} olmalı ({tur!r})")
@@ -1161,10 +1189,19 @@ def karne(bugun: str, onceki: list[dict] | None = None, ham: dict | None = None,
 
 
 def acik_fikirler(bugun: str, onceki: list[dict] | None = None) -> dict[str, dict]:
-    """Bugün kapatılabilecek fikirler: defterde kapanışı olmayanlar ve bugünkü
-    ölçülen katmanın da kapanmış saymadığı (yazma kapısı çağırır)."""
+    """Defterde kapanışı ve erken kapanış emri olmayan fikirler."""
     onceki = sayilar(bugun) if onceki is None else onceki
     return {f["kimlik"]: f for f in defter(onceki) if "kapanis" not in f and "erken" not in f}
+
+
+def kapatilabilir(b: dict) -> dict[str, dict]:
+    """Bu sayıda `fikir_kapat` ile kapatılabilecek fikirler: açık fikirler eksi
+    bu sayının karnesinin mekanik olarak KAPANMIŞ saydıkları. Tek tanım: yazma
+    kapısı ve `--sina` ön sınaması buradan okur (ikisi ayrı süzgeç kurunca ön
+    sınama ✓ deyip yazma kapısı reddediyordu — inceleme 04.10.2026)."""
+    kapali = {k.get("kimlik") for k in (b.get("fikir_karne") or {}).get("kayitlar") or []
+              if k.get("durum") in KAPANMIS}
+    return {k: v for k, v in acik_fikirler(str(b["tarih"])).items() if k not in kapali}
 
 
 # ─────────────────────────── komut satırı
@@ -1223,7 +1260,7 @@ def main() -> int:
                          f" (günlük σ {_yaz_sonuc(f['sigma_gun'], f['sonuc_birim'])})"
                          if f.get("sigma_gun") else ""))
             if yama.get("fikir_kapat"):
-                for x in kapat_dogrula(yama["fikir_kapat"], b, acik_fikirler(t)):
+                for x in kapat_dogrula(yama["fikir_kapat"], b, kapatilabilir(b)):
                     print(f"✓ kapanış {x['kimlik']}: çıkış {x.get('cikis')}")
         except FikirHatasi as e:
             print(f"✗ {e}", file=sys.stderr)

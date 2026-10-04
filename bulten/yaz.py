@@ -235,19 +235,26 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
                     b["fikirler"] = yeni
                     degisen.append(f"fikirler ({len(b['fikirler'])} fikir)")
             if "fikir_kapat" in yama:
+                # Çıkış emri de fikir gibi yazıldıktan sonra geri alınmaz: aynı
+                # gün sonradan silinen bir emir, çıkış kapanışını görüp seçilmiş
+                # olurdu. Yazılmış emirler korunur, yenisi eklenir.
+                eski_k = [x for x in (b.get("fikir_kapat") or []) if isinstance(x, dict)]
                 if yama["fikir_kapat"] is None:
+                    if eski_k and not ilk_yazim:
+                        raise SystemExit("yazılmış sayının erken kapanış emirleri silinemez")
                     b["fikir_kapat"] = []
                     degisen.append("fikir kapanışları silindi")
                 else:
-                    # Bugünün ölçülen karnesi kapanmış saydığı fikir yeniden
-                    # kapatılamaz: mekanik kapanış önce gelir.
-                    kapali = {k.get("kimlik") for k in
-                              ((b.get("fikir_karne") or {}).get("kayitlar") or [])
-                              if k.get("durum") in _fikir.KAPANMIS}
-                    acik = {k: v for k, v in _fikir.acik_fikirler(str(b["tarih"])).items()
-                            if k not in kapali}
-                    b["fikir_kapat"] = _fikir.kapat_dogrula(yama["fikir_kapat"], b, acik,
-                                                            yazim_ani=an)
+                    # Kapatılabilir küme TEK tanımdan (`fikir.kapatilabilir`):
+                    # bugünün karnesinin mekanik kapanmış saydığı fikir yeniden
+                    # kapatılamaz; `--sina` aynı kümeyi okur.
+                    korunan = eski_k if not ilk_yazim else []
+                    gelen = [x for x in yama["fikir_kapat"]
+                             if not (isinstance(x, dict) and
+                                     x.get("kimlik") in {k.get("kimlik") for k in korunan})]
+                    yeni_k = _fikir.kapat_dogrula(gelen, b, _fikir.kapatilabilir(b),
+                                                  yazim_ani=an)
+                    b["fikir_kapat"] = korunan + yeni_k
                     degisen.append(f"fikir_kapat ({len(b['fikir_kapat'])} kayıt)")
         except _fikir.FikirHatasi as e:
             raise SystemExit(f"işlem fikri reddedildi: {e}")

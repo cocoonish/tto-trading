@@ -137,7 +137,8 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 | `tekrar.py` | iç ve günler arası tekrar; biçim 3'te **olgu** düzeyinde (aynı ondalık 3+ bölümde · özet∩okuma · kronik) |
 | `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
 | `zincir.py` | veri→ölçüm→yazı zincirinin durumu; eksik halkayı ve çıkış koduyla ne yapılacağını söyler |
-| `yaz.py` | yazı katmanının yazma kapısı: `yorum`, `ozet`, `gundem` ve **`duzeltmeler`** (yayımlanmış sayının yapısal düzeltme kaydı — sayfa "Düzeltmeler" bölümü ve `/duzeltmeler/` listesi buradan) |
+| `yaz.py` | yazı katmanının yazma kapısı: `yorum`, `ozet`, `gundem`, `fikirler` · `fikir_kapat` (yalnız bugünün sayısına) ve **`duzeltmeler`** (yayımlanmış sayının yapısal düzeltme kaydı — sayfa "Düzeltmeler" bölümü ve `/duzeltmeler/` listesi buradan) |
+| `fikir.py` | **işlem fikirleri**: yazı katmanının `fikirler` alanının sözleşmesi (giriş ölçülen katmandan), mekanik karne (yayımdan sonraki ilk kapanıştan, kapanış bazında hedef/stop/ufuk, donar) — defter yayımlanmış sayıların kendisi; `--evren` ölçülebilir seriler |
 
 **Kurucu ilke — saat.** Bir `ozet.json` tek bir yayım ritmi taşımaz: aynı dosyada
 günlük ve haftalık seriler yan yana durur. Bir anahtarın saati, önce açıkça
@@ -4358,3 +4359,85 @@ figürleri yeniden çizdirir. (iii) 14.5'in ok tablosu (beş sütun) telefonda k
 içinde yatay kayıyor (355 piksellik kapta 493 piksel); ikinci tablo üç sütuna indirildi ve
 "işaret ne zaman döner" ile "bu derste" notları tablonun altında satır adıyla liste oldu
 (ortalama 15, en çok 36 sözcüklük hücreler telefonda okunmuyordu).
+
+**KARAR (04.10.2026, kullanıcı) — BÜLTEN OKUMASINI İŞLEM FİKRİNE ÇEVİRİR; KARNEYİ
+ÖLÇÜLEN KATMAN TUTAR.** "Bültenlere yazdığımız bültene göre trade idea ekleyebilir
+miyiz? … try OIS steepener, OIS–Londra basis'i tarzı profesyonel ifadeler … fx veya rate
+tarafında opsiyon vanilla spread her türlü trade idea olabilir" ve "hisse tarafı da olabilir
+bültendeki yazılara senaryolara göre". Bu karar "tavsiye dili yasak" kuralının kapsamını
+değiştirdi ve nasıl değiştirdiği kayda geçsin. Düzyazıda kural AYNEN sürüyor (emir kipi,
+"hedef fiyat", "pozisyon açın" dört kapıda da ENGEL). İşlem yapısı YALNIZ yapılandırılmış
+`fikirler` alanında duruyor ve betimleyici dille yazılıyor: bacak, yön, referans, hedef,
+stop, ufuk, görüşü ne bozar. Sayfa bölümü kendi uyarı metnini taşıyor (kişiye özel değil,
+yatırım danışmanlığı kapsamında değil). Hakkında sayfası buna göre düzeltildi. Gönderiye
+GİRMİYOR. Bu bir hukuk görüşü değildir; metnin SPK mevzuatına göre gözden geçirilmesi
+kullanıcıya önerildi.
+
+Tasarımı dört ilke belirliyor, çünkü bir fikir karnesi kendini kandırmanın en kolay
+yoludur. (1) GİRİŞİ YAZAR DEĞİL ÖLÇÜM VERİR: yazar bacakları ve seviyeleri yazar; referans
+seviyeyi `yaz.py` sayının ölçülen katmanından kurar. Fiyat bacağı piyasa fotoğrafının
+satırından, TL faiz bacağı DİBS defterinin sayının ölçüm anındaki görüntüsünden gelir.
+(2) KARNE YAYIMDAN SONRAKİ İLK KAPANIŞTAN BAŞLAR. Referans bir önceki seansın kapanışıdır
+ve yazar onu yazarken geceyi görüyor (Asya seansı, canlı kur). Karne referanstan başlasaydı
+fikre okurun yakalayamayacağı gecelik hareketi kazandırırdı. Hedef ve stop fiili girişten
+SONRAKİ kapanışlarda sorulur. Giriş kapanışı seviyelerden birinin ötesindeyse fikir
+"girişte geçersiz" sayılır ve sonucu yoktur. Yazarın erken kapanışı (`fikir_kapat`) da
+simetriktir: kapatan sayının yayımından sonraki ilk kapanışta gerçekleşen bir çıkış
+emridir. (3) YALNIZ BUGÜNÜN SAYISINA YAZILIR. Geçmiş bir sayıya fikir eklemek, sonrasını
+bilerek seçmek demektir; `yaz.py` bunu reddediyor. (4) KAPANIŞ DONAR VE DEFTER YAYIMLANMIŞ
+SAYILARIN KENDİSİDİR. Fikir açıldığı sayının JSON'unda durur, mekanik kapanış ilk ölçüldüğü
+sayının `fikir_karne`sinde durur. Sonraki sayılar donmuş kapanışı yeniden hesaplamaz; kaynağın
+sonradan düzelttiği bir kapanış yayımlanmış sonucu değiştirmez. Ayrı bir defter dosyası
+YOK, çünkü ikinci bir kayıt bir gün sayılarla sessizce ayrışırdı. Sayıyı okuyan her şey
+zaten onu taşıyor: birleştirme sürücüsü, yeniden ölçüm koruması (`yaz.YAZILABILIR`) ve
+rutinin `git add -A`'sı. Yazılmamış bir sayının fikri karneye girmez.
+
+"Uydurma yok" ilkesinin bu alandaki karşılığı:
+- **Ölçülemeyen enstrüman.** Elimizde TRY OIS, çapraz kur swap bazı, örtük oynaklık ve tek
+  hisse fiyatı yok. Böyle bir fikir ya ölçülebilir bir VEKİLLE yazılır ya da `olculemez`
+  türüyle, sebebi yazılarak yayımlanır ve sonucu olmaz. Vekil örneği: TRY OIS dikleştirici
+  → DİBS spot düğümleri ve `enstruman` alanı; karne vekille tutulur, OIS–DİBS makası
+  ölçülmez.
+- **Opsiyon primi ölçülmez.** Karne vade sonu ödemesini dayanağın kapanışından yazar,
+  fiili girişin yüzdesi olarak. Bu sonuç "kazandı" sayılmaz; kazanç oranının dışındadır.
+- **Evren dışında kalanlar, sebebiyle.** Ölçülebilir evren (`python3 bulten/fikir.py --evren`)
+  piyasa fotoğrafının sembolleri ve DİBS düğümlerinden oluşur. Dışarıda olanlar:
+  - 2YY=F: bayat vadeli kotasyon.
+  - VIX ve MOVE: endeks olarak işlem görmez.
+  - DİBS 1 yıllık reel getiri ve başabaş: düğüm kayınca tek gün sıçrar.
+- **Vadeli bacak.** Bacak, devirde geriye ölçeklenen seriden GETİRİYLE ilerletilir, kayıtlı
+  seviyeyle değil. Satır devir gününü ve "son değer giriş kontratı cinsinden" notunu taşır.
+  Devir düzeltmesi kurulamadıysa fikir o gün DEĞERLENMEZ: sahte bir stop donmasın.
+
+Kapılar:
+- `yaz.py`: sözleşme, taraf, ufuk 2–183 gün, yalnız bugün, biçim 3.
+- `denetim.fikirler`:
+  - ENGEL: yapısal tutarsızlık.
+  - UYARI: getiri/risk < 1, stop bir günlük σ'nın altında, dayanaksız fikir, haftalıkta senaryosuz ya da tek sınıf, açık fikir > 12.
+  - Bilgi: günlükte fikirsiz sayı. Temiz bir fikir yoksa zorla fikir yazılmaz.
+- Dil ölçütleri yalnız okura giden METİN alanlarını tarar (`fikir.METIN_ALANLARI`). Kimlik, seri ve dayanak makine alanıdır; taranırsa kod dili sanılır.
+- Sayfa sınavında fikrin derlenmiş sayfaya basıldığını soran ölçütler: bülten kartı (25d) ve Tradeler defteri (TRADELER_OLCUT).
+- `tweet/duman.py`'de gönderiye girmeme kilidi, günlük ve haftalık iki kipte de.
+- `bulten/duman.py`'de dört madde. On dört arıza enjeksiyonunun on dördü yakalanıyor. Biri ilk turda KAÇTI ve sebep yine fikstürdü: referans satırın bir seans geride olduğu hâl yoktu. O hâlde aradaki kapanış yazarın görebildiği kapanıştır ve fiili giriş olamaz.
+
+**TRADELER (kullanıcı, aynı gün): "sadece verilmekle kalınmamalı, takip edilmeli … tradeler diye bir kategori açıp, neden açıldığı, ne durumda olduğu, kapandıysa neden kapandığı, kâr mı zarar mı nasıl kapandığı tutulmalı".** Sitenin yeni bölümü `/tradeler/` defteri sayıların kendisinden kurar (`site/src/lib/tradeler.ts`). Tanım yalnız yazılmış sayıların `fikirler` alanından gelir. Durum ve gün gün takip her sayının `fikir_karne` kaydından gelir; son durum en son sayınınkidir. Erken kapanış emri `fikir_kapat`tan okunur. Modül HİÇBİR şeyi yeniden hesaplamaz, yalnız seçer ve birleştirir: sonucun, durumun ve fiili girişin tanımı Python'da tek yerde kalır. Python'un ürettiği ikinci bir defter dosyası iki koşunun (ölçüm ve yazı) aynı dosyaya dokunması demekti ve bir gün sayılarla ayrışırdı.
+
+İlk gerçek fikirler 04.10.2026 haftalık sayısına aynı gün (UTC) yazıldı:
+- TL 2y–5y dikleştirici (TRY OIS vekili)
+- BIST Bankacılık / BIST 100 göreli
+- ABD 5y–30y dikleştirici
+- USD/TRY 51,25/53,00 alım yayılımı (kuyruk)
+- TRY OIS–offshore bazı (ölçülemez)
+
+Fiili girişleri 05.10 kapanışlarıdır. Sayı pazar akşamı yayımlandı ve TÜFE pazartesi sabahı geliyor, yani karne verinin ARDINDAN başlar. Bu kuralın bir sonucudur, kusuru değildir.
+
+AÇIK, adıyla:
+- **Gün içi dokunuş ölçülmez.** Kapanış bazında bir stop, gün içinde dokunulup geri
+  dönülmüş seviyeyi görmez.
+- **Geç yazım.** Yazı katmanı Asya kapanışlarından sonra yazılırsa (zincir gecikmesi), o
+  günün Asya kapanışı yazarın görebildiği bir kapanıştır. Fiili giriş kuralı bunu ayırt
+  etmez.
+- **Metal vadelileri.** GC, SI, PL ve HG devir düzeltmesinden geçmiyor; devir günü karnede
+  küçük bir sıçrama olarak görünebilir.
+- **Rutin metni.** Rutin hâlâ "yalnız yorum/ozet/gundem alanlarına yazabilirsin" diyor.
+  Rehber esastır ve araç `fikirler`i kabul ediyor; metnin güncellenmesi kullanıcının işi.

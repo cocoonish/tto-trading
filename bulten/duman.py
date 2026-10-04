@@ -1957,6 +1957,31 @@ def _fikir_yazma_kapisi():
                 raise AssertionError("yanlış taraftaki stop yazıldı")
             except SystemExit as e:
                 assert "zarar tarafında" in str(e), e
+            # Metin alanı düz metindir: etiketli gerekçe yazma kapısında reddedilir
+            # (kaçmış etiket yayın kapısını düşürür). "<" tek başına etiket değildir.
+            for alan, deger in (("gerekce", "<p>g</p>"), ("baslik", "<strong>Kur</strong> kısa")):
+                try:
+                    _y.uygula(h, {"fikirler": [dict(g[0], **{alan: deger})]})
+                    raise AssertionError(f"etiketli {alan} yazıldı")
+                except SystemExit as e:
+                    assert "HTML etiketi" in str(e), e
+            esit = _y.uygula(h, {"fikirler": [dict(g[0], ne_bozar="2 yıllık %40 < %41 kalırsa")]})[0]
+            assert esit["fikirler"][0]["ne_bozar"].startswith("2 yıllık"), "eşitsizlik etiket sanıldı"
+            # Tip sözleşmesi: liste beklenen yerde sayı — yakalanmayan istisna değil, adıyla red.
+            ops = {"baslik": "O", "tur": "opsiyon", "bacaklar": ["USDTRY=X"], "yon": "yukari",
+                   "opsiyon": {"tip": "call", "kullanim": 51.25, "vade": "2026-10-30"},
+                   "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"}
+            for bozuk, aranan in ((ops, "kullanim bir liste"), (dict(g[0], bacaklar="USDTRY=X"), "bacaklar bir liste"),
+                                  (dict(ops, opsiyon="call"), "opsiyon bir nesne")):
+                try:
+                    _y.uygula(h, {"fikirler": [bozuk]})
+                    raise AssertionError(f"tip hatası geçti: {aranan}")
+                except SystemExit as e:
+                    assert aranan in str(e), e
+            # Kapatılabilir küme TEK tanım: yazma kapısı da ön sınama da onu okur.
+            assert "kapatilabilir(b)" in inspect.getsource(_y.uygula), "yazma kapısı kendi süzgecini kuruyor"
+            assert "kapat_dogrula(yama[\"fikir_kapat\"], b, kapatilabilir(b))" in inspect.getsource(_f.main), \
+                "--sina ön sınaması kapatılabilir kümeyi okumuyor"
         finally:
             _y.BUGUN, _f._dibs_an = gercek_bugun, gercek_dibs
 
@@ -1985,6 +2010,30 @@ def _fikir_denetim_ve_olcum():
     d5 = _den.Denetim(_fk_sayi(fikirler=[mak])); d5.dil()
     assert not d5.engel, f"makine alanı okur dili diye tarandı: {d5.engel}"
     assert set(_f.METIN_ALANLARI) >= {"baslik", "gerekce", "ne_bozar"}
+    # Dosyaya başka yoldan giren etiketli metin alanı ENGEL (yayın kapısını düşürürdü).
+    d5b = _den.Denetim(_fk_sayi(fikirler=[dict(iyi, getiri_risk=1.5, gerekce="<p>g</p>")])); d5b.fikirler()
+    assert any("HTML etiketi" in e for e in d5b.engel), d5b.engel
+    # Dayanağı boş bir bölüm: sayfa bağı kurmaz, denetim adıyla söyler.
+    bos = _fk_sayi(fikirler=[dict(iyi, getiri_risk=1.5, dayanak="turkiye")])
+    bos["gundem"] = {"turkiye": ""}
+    d6 = _den.Denetim(bos); d6.fikirler()
+    assert any("dayanak bölümü (turkiye) bu sayıda boş" in u for u in d6.uyari), d6.uyari
+    dolu = _fk_sayi(fikirler=[dict(iyi, getiri_risk=1.5, dayanak="turkiye")])
+    dolu["gundem"] = {"turkiye": "<p>okuma</p>"}
+    d6b = _den.Denetim(dolu); d6b.fikirler()
+    assert not any("dayanak bölümü" in u for u in d6b.uyari), d6b.uyari
+    # Aynı görüş iki kez: açık karne kaydıyla ve aynı listede.
+    ayni = dict(iyi, getiri_risk=1.5, yapi_metni="USD/TRY", yon_metni="USD/TRY düşerse kazanır")
+    s7 = _fk_sayi(fikirler=[ayni])
+    s7["fikir_karne"] = {"kayitlar": [{"durum": "acik", "acilis": "2026-09-29", "yapi_metni": "USD/TRY",
+                                       "yon_metni": "USD/TRY düşerse kazanır"}]}
+    d7 = _den.Denetim(s7); d7.fikirler()
+    assert any("açık bir fikirde (2026-09-29) zaten var" in u for u in d7.uyari), d7.uyari
+    d7b = _den.Denetim(_fk_sayi(fikirler=[ayni, dict(ayni, kimlik="2026-10-02-2")])); d7b.fikirler()
+    assert any("bu sayıda iki kez yazılmış" in u for u in d7b.uyari), d7b.uyari
+    ters = dict(ayni, kimlik="2026-10-02-2", yon_metni="USD/TRY yükselirse kazanır")
+    d7c = _den.Denetim(_fk_sayi(fikirler=[ayni, ters])); d7c.fikirler()
+    assert not any("iki kez" in u for u in d7c.uyari), d7c.uyari
     assert '"fikir_karne": _fikir_karne(' in inspect.getsource(_u.uret), "ölçüm katmanı karneyi yazmıyor"
     gercek = _f.karne
     try:
@@ -2103,6 +2152,26 @@ def _fikir_zaman_tasima_dongu():
                 raise AssertionError("yazılmış fikrin stopu değişti")
             except SystemExit as ex:
                 assert "değiştirilmez" in str(ex), ex
+            # (9b) Erken kapanış emri de yazıldıktan sonra geri alınmaz; yenisi eklenir.
+            acik_kayit = dict(b1["fikirler"][0], kimlik="2026-09-29-1", acilis="2026-09-29")
+            gercek_kap = _f.kapatilabilir
+            try:
+                _f.kapatilabilir = lambda b_: {"2026-09-29-1": acik_kayit,
+                                               "2026-09-29-2": dict(acik_kayit, kimlik="2026-09-29-2")}
+                h.write_text(_j.dumps(_fk_sayi(gundem_kaynagi="yazili")), encoding="utf-8")
+                k1, _ = _y.uygula(h, {"fikir_kapat": [{"kimlik": "2026-09-29-1", "sebep": "s"}]})
+                h.write_text(_j.dumps(k1), encoding="utf-8")
+                for yama_ in ({"fikir_kapat": None},):
+                    try:
+                        _y.uygula(h, yama_)
+                        raise AssertionError("yazılmış çıkış emri silindi")
+                    except SystemExit as ex:
+                        assert "silinemez" in str(ex), ex
+                k2, _ = _y.uygula(h, {"fikir_kapat": [{"kimlik": "2026-09-29-2", "sebep": "t"}]})
+                assert [x["kimlik"] for x in k2["fikir_kapat"]] == ["2026-09-29-1", "2026-09-29-2"], \
+                    k2["fikir_kapat"]
+            finally:
+                _f.kapatilabilir = gercek_kap
     finally:
         _y.BUGUN, _f._dibs_an = gercek_bugun, gercek_dibs
     # (10) Yeniden ölçüm yazılmış sayının kapanmış karne kaydını geri açmaz.
@@ -2128,6 +2197,21 @@ def _fikir_zaman_tasima_dongu():
           "birim": "fiyat", "stop_z": 0.3, "hedef_z": 3.1}
     d = _den.Denetim(_fk_sayi(fikirler=[f_])); d.fikirler()
     assert any("gürültü bandında" in u_ for u_ in d.uyari) and any("ufka göre uzak" in u_ for u_ in d.uyari), d.uyari
+    # (12) Görünürlük saati her grup için AÇIK ve tutucu: ölçüm katmanının
+    # "bar yerleşti" payından (piyasa.KAPANIS_UTC) geç olamaz — geç olsaydı
+    # kapanıştan sonra yazılan fikir gördüğü kapanışı giriş alırdı.
+    import piyasa as _p
+    gruplar = {s_.grup for s_ in ev.values()}
+    eksik = sorted(g_ for g_ in gruplar if g_ not in _f.KAPANIS_SAAT)
+    assert not eksik, f"görünürlük saati tanımsız grup: {eksik}"
+    gec_ = {g_: (_f.KAPANIS_SAAT[g_], _p.KAPANIS_UTC[g_]) for g_ in gruplar
+            if g_ in _p.KAPANIS_UTC and _f.KAPANIS_SAAT[g_] > _p.KAPANIS_UTC[g_]}
+    assert not gec_, f"görünürlük saati ölçüm payından geç: {gec_}"
+    bist = {"seri": "XU100.IS"}
+    assert _f.kapanis_ani("XU100.IS", "2026-10-05", ev).hour == 15 and \
+        _f._ilk_kapanis_sonra([("2026-10-05", 1.0), ("2026-10-06", 1.0)],
+                              _f._an("2026-10-05T15:30:00+00:00"), "2026-10-05",
+                              {"bacaklar": [bist]}, ev)[0] == "2026-10-06", "BIST kapanışından sonra yazılan fikir o kapanışı aldı"
 
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret

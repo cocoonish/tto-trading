@@ -673,6 +673,259 @@ sina("sayfası derlenmemiş sayı aranan sayısına girmiyor",
 
 
 # ---------------------------------------------------------------------------
+print("\n▶ İşlem fikri okura ulaştı mı (25d): açılan her fikrin kartı, karnenin her kaydı")
+# KARAR (04.10.2026): bülten okumasını işlem fikirlerine çeviriyor ve karnesini
+# mekanik tutuyor. Bölümü basan da koşulunu (biçim 3, yer, içindekiler) kuran da
+# bileşendir; JSON doğruyken fikir okura hiç ulaşmayabilir. Fikstür DERLENMİŞ
+# biçimi taşır: kapsam niteliği her etikette (`data-astro-cid-…`), başlık kartın
+# çapalı öğesinde. Sentetik ağaç şart — ölçüt deponun o anki dist'ini okusaydı,
+# fikirsiz bir günde madde ölçtüğü hâle hiç koşmazdı.
+fikir_okura_ulasti = _mod.fikir_okura_ulasti
+_FK_CID = ' data-astro-cid-vzeo3fk4'
+
+
+def _fk_json(fikirler, kayitlar=(), yazili=True, surum=3):
+    import json as _json
+    return _json.dumps({
+        "gundem_kaynagi": "yazili" if yazili else "kural", "surum": surum,
+        "fikirler": [{"kimlik": k, "baslik": t} for k, t in fikirler],
+        "fikir_karne": {"kayitlar": [{"kimlik": k, "baslik": t} for k, t in kayitlar], "sayim": {}},
+    }, ensure_ascii=False)
+
+
+def _fk_kart(kimlik, baslik):
+    return (f'<article class="fk-kart"{_FK_CID}><h3 class="fk-baslik" id="fikir-{kimlik}"{_FK_CID}>'
+            f'{baslik}</h3><p class="fk-ust"{_FK_CID}>Faiz · Eğri</p></article>')
+
+
+def _fk_sayfa(govde):
+    return (f'<main><section class="blok yazi-bolumu"{_FK_CID} id="y-risk"><h2{_FK_CID}>Risk</h2></section>'
+            f'<section class="blok fikirler"{_FK_CID} id="fikirler"><h2{_FK_CID}>İşlem fikirleri</h2>'
+            f'{govde}</section><section{_FK_CID} id="rejim"><p>Yassılaştırıcı başka yerde de geçer</p></section></main>')
+
+
+_FK1 = ("2026-10-03-1", "TL eğrisinde 2y–7y yassılaştırıcı")
+_FK2 = ("2026-10-03-2", "USD/TRY alım yayılımı")
+_FKK = ("2026-09-22-1", "Brent kısa")
+_FK_YOL = "site/src/data/bulten/2026-10-03.json"
+_FK_SAYFA = "site/dist/bulten/2026-10-03/index.html"
+
+# (1) SAĞLIK HÂLİ — iki kart ve bir karne satırı basılmış.
+_k = fikir_okura_ulasti(_agac({
+    _FK_YOL: _fk_json([_FK1, _FK2], [_FKK]),
+    _FK_SAYFA: _fk_sayfa(_fk_kart(*_FK1) + _fk_kart(*_FK2)
+                         + f'<table{_FK_CID}><tr><td class="p-ad"{_FK_CID}><span>{_FKK[1]}</span>'
+                           f'<span class="p-tarih-ic"{_FK_CID}>açılış 22.09</span></td></tr></table>'),
+}))
+sina("basılmış fikir ve karne kaydı geçer", _k == ([], 3, 3), f"gelen {_k}")
+
+# (2) ARIZA HÂLİ — ikinci fikrin kartı basılmamış (bileşen listeyi kesti).
+_k = fikir_okura_ulasti(_agac({
+    _FK_YOL: _fk_json([_FK1, _FK2]),
+    _FK_SAYFA: _fk_sayfa(_fk_kart(*_FK1)),
+}))
+sina("basılmamış fikir ENGEL üretiyor",
+     len(_k[0]) == 1 and "USD/TRY alım yayılımı" in _k[0][0] and _k[1:] == (2, 1), f"gelen {_k}")
+
+# (3) ARIZA HÂLİ — kartlar hiç basılmadı ama AYNI başlıklı eski bir fikir
+# karnede duruyor. Başlığı bölümün herhangi bir yerinde arayan bir ölçüt bunu
+# "ulaştı" sayardı; ölçüt kartın KENDİ başlığına bakar.
+_k = fikir_okura_ulasti(_agac({
+    _FK_YOL: _fk_json([_FK1], [("2026-09-22-1", _FK1[1])]),
+    _FK_SAYFA: _fk_sayfa(f'<table{_FK_CID}><tr><td class="p-ad"{_FK_CID}>{_FK1[1]}</td></tr></table>'),
+}))
+sina("karnedeki aynı başlık kartın yokluğunu örtmüyor",
+     len(_k[0]) == 1 and "kartı sayfada YOK" in _k[0][0], f"gelen {_k}")
+
+# (4) ARIZA HÂLİ — bölüm hiç basılmadı (koşul ya da yer kusuru): karne kaydı da düşer.
+_k = fikir_okura_ulasti(_agac({
+    _FK_YOL: _fk_json([], [_FKK]),
+    _FK_SAYFA: f'<main><section{_FK_CID} id="rejim"><p>{_FKK[1]}</p></section></main>',
+}))
+sina("basılmamış fikir bölümü karne kaydını da ENGEL yapıyor",
+     len(_k[0]) == 1 and "fikir bölümü sayfada YOK" in _k[0][0], f"gelen {_k}")
+
+# (5) YANLIŞ ALARM OLMASIN — kaçış. Astro `&`yi `&amp;`, kesme işaretini
+# `&#39;` basar (sıra: önce `&`); kaçış çözülmeden aranan başlık kartta DURSA
+# DA bulunamazdı. Satır kaydırma da tekleşir.
+_KACIS = ("2026-10-03-3", "Bankacılık & sigorta'nın göreli gücü")
+_k = fikir_okura_ulasti(_agac({
+    _FK_YOL: _fk_json([_KACIS]),
+    _FK_SAYFA: _fk_sayfa(_fk_kart(_KACIS[0], _KACIS[1].replace("&", "&amp;").replace("'", "&#39;")
+                                  .replace(" göreli", "\n      göreli"))),
+}))
+sina("kaçışlı ve satıra bölünmüş başlık yanlış alarm üretmiyor", _k == ([], 1, 1), f"gelen {_k}")
+
+# (6) KAPSAM — yazılmamış ya da biçim 2 sayı sorulmaz; fikir taşıyan yazılmış
+# bir sayının derlenmiş sayfası YOKSA ise ölçüt SUSMAZ (koşmamış ölçüt geçmiş
+# sayılmaz — 20/21'in kuralı).
+_k = fikir_okura_ulasti(_agac({
+    "site/src/data/bulten/2026-10-01.json": _fk_json([_FK1], yazili=False),
+    "site/src/data/bulten/2026-10-02.json": _fk_json([_FK1], surum=2),
+    "site/dist/bulten/baska/index.html": "<p>x</p>",
+}))
+sina("yazılmamış ve biçim 2 sayı sorulmuyor", _k == ([], 0, 0), f"gelen {_k}")
+_k = fikir_okura_ulasti(_agac({_FK_YOL: _fk_json([_FK1]), "site/dist/bulten/baska/index.html": "<p>x</p>"}))
+sina("derlenmemiş fikirli sayı sessizce atlanmıyor",
+     len(_k[0]) == 1 and "derlenmiş sayfası yok" in _k[0][0], f"gelen {_k}")
+
+# (7) YAPISAL KİLİT — ölçüt sınavın ana akışında çağrılıyor (yazılıp listeye
+# konmayan bir ölçüt hiç koşmaz).
+_ss = _YOL.read_text(encoding="utf-8")
+sina("25d sınavın ana akışında koşuyor", "fikir_okura_ulasti(KOK)" in _ss[_ss.find("def main"):])
+# Bugün depoda fikir taşıyan bir sayı olmayabilir; o günlerde 25d gerçek ağaçta
+# hiçbir şey aramaz. Bileşenin sözleşmesi yapısal olarak kilitli: bölüm var,
+# kart çapası kimlikten, içindekiler ve basım AYNI diziden (yaziAkisi).
+_bg_fk = (_YOL.parents[1] / "src/components/BultenGovde.astro").read_text(encoding="utf-8")
+sina("bileşen fikir bölümünü ve kart çapasını basıyor",
+     'id="fikirler"' in _bg_fk and 'id={`fikir-${f.kimlik}`}' in _bg_fk)
+sina("içindekiler ve basım aynı diziden (yaziAkisi)",
+     _bg_fk.count("yaziAkisi.map(") == 2 and "yaziBolumleri.map((x: any) => ({ id: `y-" not in _bg_fk)
+
+
+# ---------------------------------------------------------------------------
+print(f"\n▶ İşlem fikri deftere ulaştı mı ({_mod.TRADELER_OLCUT}): Tradeler sayfası, kart ve kapanış bölümü")
+# Kullanıcı (04.10.2026): fikirler "sadece verilmekle kalınmamalı, takip
+# edilmeli". Defter (/tradeler/) sayıların kendisinden kurulur; onu basan da,
+# fikri açık ya da kapanan bölüme koyan da BİLEŞENDİR. Fikstür derlenmiş biçimi
+# taşır (kapsam niteliği her etikette, başlık bülten kartına bağ içinde) ve
+# kapanmış durumların kümesi deponun GERÇEK bulten/fikir.py'sinden okunur —
+# ölçüt tanımı orada arıyor, fikstür onu kopyalasaydı ayrışmayı göremezdi.
+trade_okura_ulasti = _mod.trade_okura_ulasti
+_TR_CID = ' data-astro-cid-tr4d3k4r'
+_FIKIR_PY = (_YOL.parents[2] / "bulten/fikir.py").read_text(encoding="utf-8")
+
+
+def _tr_json(fikirler=(), kayitlar=(), yazili=True, surum=3):
+    import json as _json
+    return _json.dumps({
+        "gundem_kaynagi": "yazili" if yazili else "kural", "surum": surum,
+        "fikirler": [{"kimlik": k, "baslik": t} for k, t in fikirler],
+        "fikir_karne": {"kayitlar": [{"kimlik": k, "baslik": t, "tur": tur, "durum": d}
+                                      for k, t, tur, d in kayitlar], "sayim": {}},
+    }, ensure_ascii=False)
+
+
+def _tr_kart(kimlik, baslik):
+    return (f'<article class="tr-kart"{_TR_CID}><h3 class="tr-baslik" id="trade-{kimlik}"{_TR_CID}>'
+            f'<a href="/bulten/2026-10-03/#fikir-{kimlik}"{_TR_CID}>{baslik}</a></h3>'
+            f'<p class="tr-ust"{_TR_CID}>Faiz · Eğri</p></article>')
+
+
+def _tr_sayfa(acik="", kapanan="", karnesiz=""):
+    return (f'<main><section class="tr-bolum"{_TR_CID} id="acik"><h2{_TR_CID}>Açık tradeler</h2>{acik}</section>'
+            f'<section class="tr-bolum"{_TR_CID} id="kapanan"><h2{_TR_CID}>Kapanan tradeler</h2>{kapanan}</section>'
+            f'<section class="tr-bolum"{_TR_CID} id="karnesiz"><h2{_TR_CID}>Karnesi tutulmayanlar</h2>{karnesiz}</section>'
+            '</main>')
+
+
+_TR1 = ("2026-10-03-1", "TL eğrisinde 2y–7y yassılaştırıcı")
+_TR2 = ("2026-10-03-2", "Brent kısa")
+_TR_YAZ = "site/src/data/bulten/2026-10-03.json"
+_TR_OLC = "site/src/data/bulten/2026-10-07.json"       # yazılmamış sayı: karne yine ölçüdür
+_TR_SAYFA = "site/dist/tradeler/index.html"
+
+
+def _tr_agac(dosyalar):
+    return _agac({"bulten/fikir.py": _FIKIR_PY, **dosyalar})
+
+
+# (1) SAĞLIK HÂLİ — iki fikir defterde, biri yazılmamış bir sayının karnesinde
+# stopta kapandı ve "Kapanan tradeler"de duruyor.
+_k = trade_okura_ulasti(_tr_agac({
+    _TR_YAZ: _tr_json([_TR1, _TR2]),
+    _TR_OLC: _tr_json(kayitlar=[(*_TR2, "yalin", "stop"), (*_TR1, "egri", "acik")], yazili=False),
+    _TR_SAYFA: _tr_sayfa(acik=_tr_kart(*_TR1), kapanan=_tr_kart(*_TR2)),
+}))
+sina("defterdeki fikir ve kapanış bölümündeki kapanmış fikir geçer", _k == ([], 3, 3), f"gelen {_k}")
+
+# (2) ARIZA HÂLİ — ikinci fikrin kartı defterde yok (bileşen listeyi kesti).
+_k = trade_okura_ulasti(_tr_agac({
+    _TR_YAZ: _tr_json([_TR1, _TR2]),
+    _TR_SAYFA: _tr_sayfa(acik=_tr_kart(*_TR1)),
+}))
+sina("defterde kartı olmayan fikir ENGEL",
+     len(_k[0]) == 1 and "Brent kısa" in _k[0][0] and "kartı YOK" in _k[0][0] and _k[1:] == (2, 1), f"gelen {_k}")
+
+# (3) ARIZA HÂLİ — stopta kapanmış fikir AÇIK listede bekliyor (grup kuralı
+# Python'un kapanmış kümesinden ayrıştı). Sayı doğru, defter yanlış.
+_k = trade_okura_ulasti(_tr_agac({
+    _TR_YAZ: _tr_json([_TR1, _TR2]),
+    _TR_OLC: _tr_json(kayitlar=[(*_TR2, "yalin", "stop")], yazili=False),
+    _TR_SAYFA: _tr_sayfa(acik=_tr_kart(*_TR1) + _tr_kart(*_TR2)),
+}))
+sina("kapanmış fikir açık listedeyse ENGEL",
+     len(_k[0]) == 1 and "bölümünde DEĞİL" in _k[0][0], f"gelen {_k}")
+
+# (4) ARIZA HÂLİ — kart yok ama aynı başlıklı başka bir kart duruyor; başlığı
+# sayfanın herhangi bir yerinde arayan ölçüt bunu "ulaştı" sayardı.
+_k = trade_okura_ulasti(_tr_agac({
+    _TR_YAZ: _tr_json([_TR1]),
+    _TR_SAYFA: _tr_sayfa(acik=_tr_kart("2026-09-22-1", _TR1[1])),
+}))
+sina("aynı başlıklı başka kart kartın yokluğunu örtmüyor",
+     len(_k[0]) == 1 and "kartı YOK" in _k[0][0], f"gelen {_k}")
+
+# (5) YANLIŞ ALARM OLMASIN — kaçış ve satır kaydırma (25d'nin süzgeci).
+_TR_KACIS = ("2026-10-03-3", "Bankacılık & sigorta'nın göreli gücü")
+_k = trade_okura_ulasti(_tr_agac({
+    _TR_YAZ: _tr_json([_TR_KACIS]),
+    _TR_SAYFA: _tr_sayfa(acik=_tr_kart(_TR_KACIS[0], _TR_KACIS[1].replace("&", "&amp;").replace("'", "&#39;")
+                                       .replace(" göreli", "\n      göreli"))),
+}))
+sina("defterde kaçışlı ve satıra bölünmüş başlık yanlış alarm üretmiyor", _k == ([], 1, 1), f"gelen {_k}")
+
+# (6) KAPSAM — yazılmamış ve biçim 2 sayının fikri sorulmaz; karnesi
+# tutulmayan fikrin ufku dolması (sure_olculemez) kapanan bölümü istemez;
+# fikir varken derlenmiş defter YOKSA ölçüt susmaz.
+_k = trade_okura_ulasti(_tr_agac({
+    "site/src/data/bulten/2026-10-01.json": _tr_json([_TR1], yazili=False),
+    "site/src/data/bulten/2026-10-02.json": _tr_json([_TR2], surum=2),
+    _TR_OLC: _tr_json(kayitlar=[("2026-09-22-4", "TRY OIS–Londra bazı", "olculemez", "sure_olculemez")], yazili=False),
+    "site/dist/baska/index.html": "<p>x</p>",
+}))
+sina("yazılmamış, biçim 2 ve karnesiz fikir defter ölçütünde sorulmuyor", _k == ([], 0, 0), f"gelen {_k}")
+_k = trade_okura_ulasti(_tr_agac({_TR_YAZ: _tr_json([_TR1]), "site/dist/baska/index.html": "<p>x</p>"}))
+sina("fikir varken derlenmemiş defter sessizce atlanmıyor",
+     len(_k[0]) == 1 and "derlenmiş sayfası yok" in _k[0][0], f"gelen {_k}")
+
+# (7) TEK TANIM — kapanmış durumlar ve durum etiketleri: site eşi (lib/fikir.ts)
+# Python'un tanımıyla birebir. Ayrışırsa defter kapanmış bir fikri açık sayar
+# ve 25e bunu ancak o hâl veride doğduğu gün görürdü.
+import ast as _ast
+import re as _re
+_kapanmis_py = _mod._fikir_kapanmis_durumlar(_YOL.parents[2])
+_fk_ts = (_YOL.parents[1] / "src/lib/fikir.ts").read_text(encoding="utf-8")
+_m = _re.search(r"FIKIR_KAPANMIS = new Set\(\[(.*?)\]\)", _fk_ts, _re.S)
+_kapanmis_ts = set(_re.findall(r"'([a-z_]+)'", _m.group(1))) if _m else set()
+sina("lib/fikir FIKIR_KAPANMIS = bulten/fikir KAPANMIS", _kapanmis_ts == _kapanmis_py,
+     f"site {sorted(_kapanmis_ts)} · Python {sorted(_kapanmis_py)}")
+_m = _re.search(r"FIKIR_DURUM: Record<string, string> = \{(.*?)\};", _fk_ts, _re.S)
+_durum_ts = set(_re.findall(r"([a-z_]+):", _m.group(1))) if _m else set()
+sina("her karne durumunun okur etiketi var", (_kapanmis_py | {"acik", "olculemez"}) <= _durum_ts,
+     f"eksik {sorted((_kapanmis_py | {'acik', 'olculemez'}) - _durum_ts)}")
+# Uyarı ve yöntem metni TEK yerde: bülten bölümü ikinci kopyayı taşımaz.
+sina("bülten bölümü uyarı/yöntem metnini kendisi yazmıyor (lib/fikir)",
+     "const FIKIR_UYARI" not in _bg_fk and "FIKIR_YONTEM" in _bg_fk and "Referans seviye yazarın değil" not in _bg_fk)
+sina("bülten bölümü deftere bağ veriyor", "bolumBul('/tradeler/')" in _bg_fk)
+
+# (8) YAPISAL KİLİT — ölçüt ana akışta; kart çapası kimlikten; kapanış bölümü var.
+sina(f"{_mod.TRADELER_OLCUT} sınavın ana akışında koşuyor", "trade_okura_ulasti(KOK)" in _ss[_ss.find("def main"):])
+_tk = (_YOL.parents[1] / "src/components/TradeKart.astro").read_text(encoding="utf-8")
+_tp = (_YOL.parents[1] / "src/pages/tradeler/index.astro").read_text(encoding="utf-8")
+sina("defter kartı çapası kimlikten (trade-<kimlik>)", 'id={`trade-${t.kimlik}`}' in _tk)
+sina("defter kapanan bölümünü basıyor", 'id="kapanan"' in _tp and "t.grup === 'kapanan'" in _tp)
+
+# (9) BÖLÜM NUMARALARI — Tradeler bülteni izler; numaralar boşluksuz ve tekil
+# (başlık, alt bilgi, 404, hakkında ve kicker'lar bu listeden okur).
+_bl = (_YOL.parents[1] / "src/lib/bolumler.ts").read_text(encoding="utf-8")
+_no = _re.findall(r"no: '(\d{2})', ad: '([^']+)'", _bl)
+sina("bölüm numaraları 01'den boşluksuz ve tekil",
+     [n for n, _a in _no] == [f"{i:02d}" for i in range(1, len(_no) + 1)], f"gelen {_no}")
+sina("Tradeler Bülten'in hemen ardında", [a for _n, a in _no][:2] == ["Bülten", "Tradeler"], f"gelen {_no[:3]}")
+
+
+# ---------------------------------------------------------------------------
 print("\n▶ Şekil yüksekliği (3): çerçeve figürü kırpıyor mu")
 # ÖLÇÜLEN ARIZA (25.09.2026): fonlama Şekil 04'ün alt yazısındaki koşullu
 # cümle (alım yönlü swap stoku sıfırken basılıyor) kalktı, figür 1159'dan

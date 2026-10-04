@@ -102,6 +102,29 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       derlenmiş 17 sayı): 108 dikkat olayının 108'i okura ulaşmıyor, 37
       önemli olayın 37'si ulaşıyor — kaynak da veri de doğruydu, kusur yalnız
       çıktıda görünüyordu. Bulunamayan olay ENGEL.
+  (25b) YAZI OKURA ULAŞTI MI — yazı katmanının her metin alanı (manşet,
+      okuma, özet, gündem bölümleri) derlenmiş sayfada geçmeli; yoksa ENGEL.
+  (25c) HABER OKURA ULAŞTI MI — ölçüm katmanının seçtiği her haber maddesinin
+      başlığı sayfada geçmeli; yoksa ENGEL.
+  (25d) İŞLEM FİKRİ OKURA ULAŞTI MI — her YAZILMIŞ biçim 3 sayının açtığı
+      her fikrin başlığı (`fikirler[].baslik`) o sayının derlenmiş sayfasında,
+      KENDİ kartının başlığında (çapa `fikir-<kimlik>`) geçmeli; karnedeki her
+      kaydın başlığı (`fikir_karne.kayitlar[].baslik`) "İşlem fikirleri"
+      bölümünde geçmeli. Bölümü basan da koşulunu kuran da bileşendir; kaynak
+      ve veri doğruyken fikir okura hiç ulaşmayabilir. Kıyasın iki tarafı 25b'nin
+      süzgecinden geçer (etiket sökülür, kaçış çözülür, boşluk tekleşir).
+      Bulunamayan fikir ya da kayıt ENGEL; fikir taşıyan bir sayının derlenmiş
+      sayfası yoksa da ENGEL (koşmamış ölçüt geçmiş sayılmaz).
+  (25e) İŞLEM FİKRİ DEFTERE ULAŞTI MI — Tradeler sayfası (`/tradeler/`) fikirleri
+      yayımlanmış sayıların kendisinden kurar (lib/tradeler) ve 25d'nin eşidir:
+      her YAZILMIŞ biçim 3 sayının açtığı her fikrin başlığı derlenmiş defterde,
+      KENDİ kartının başlığında (çapa `trade-<kimlik>`) geçmeli; ve karnesinde
+      KAPANMIŞ bir kaydı olan her ölçülebilir fikrin kartı "Kapanan tradeler"
+      bölümünde (`id="kapanan"`) durmalı — kapanan bir zarar açık listede
+      bekliyorsa sayı doğru, defter yanlıştır. Kapanmış durumların kümesi
+      bulten/fikir.py'nin `KAPANMIS`ından okunur (tek tanım). Bulunamayan kart,
+      yanlış bölümdeki kart ve fikir varken derlenmemiş defter ENGEL; dist/ yoksa
+      KOŞMADI uyarısı. Süzgeç 25b/25d ile aynı.
   (27) BASIM SÖZLEŞMESİ — derlenmiş çıktıda ENGEL: gösterge şeridinde yüzde
       birimli bir seviyenin farkının yüzde diye basılması ("−%0,24"; bir
       oranın farkı PUANDIR), takvimde aynı yayımın iki satırı, ve BÜYÜK HARF
@@ -854,6 +877,202 @@ def haber_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
                     bulunan += 1
                 else:
                     bulgu.append(f"{kaynak.stem} · {bol.get('id')} — haber sayfada YOK: {t[:70]!r}")
+    return bulgu, aranan, bulunan
+
+
+def _fikir_karti(html: str, kimlik: str, onek: str = "fikir-") -> str | None:
+    """Kartın başlık öğesinin metni: `id="<onek><kimlik>"` taşıyan öğenin
+    açılışından kendi kapanış etiketine kadar. Öğe yoksa None. Bülten kartı
+    `fikir-`, Tradeler defteri `trade-` önekini taşır (25d · 25e)."""
+    m = re.search(r'\bid="' + re.escape(onek) + re.escape(kimlik) + r'"', html)
+    if not m:
+        return None
+    bas = html.rfind("<", 0, m.start())
+    etiket = re.match(r"<([A-Za-z][\w-]*)", html[bas:])
+    if bas < 0 or not etiket:
+        return None
+    ac = html.find(">", m.end())
+    kapa = html.find(f"</{etiket.group(1)}>", ac)
+    if ac < 0 or kapa < 0:
+        return None
+    return _etiketsiz(html[ac + 1:kapa])
+
+
+def _fikir_bolumu(html: str) -> str | None:
+    """"İşlem fikirleri" bölümünün metni: `id="fikirler"`den bölümün sonuna."""
+    m = re.search(r'\bid="fikirler"', html)
+    if not m:
+        return None
+    son = html.find("</section>", m.end())
+    return _etiketsiz(html[m.end():son if son >= 0 else len(html)])
+
+
+def fikir_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
+    """(25d) İŞLEM FİKRİ OKURA ULAŞTI MI. Her YAZILMIŞ biçim 3 sayının açtığı
+    her fikrin başlığı o sayının derlenmiş sayfasında, kendi kartının
+    başlığında geçmeli; karnenin her kaydı fikir bölümünde geçmeli.
+
+    Neden kartın KENDİSİNE bakıyor: aynı başlıkla açılmış daha eski bir fikir
+    karnede durabilir (aynı yassılaştırıcı iki hafta arayla iki kez açılabilir);
+    başlığı bölümün herhangi bir yerinde aramak, kartlar hiç basılmadığı gün
+    karne satırını bulup "ulaştı" derdi. Çapa kimlikten kurulur ve tekildir.
+
+    Kıyasın iki tarafı 25b ile aynı süzgeçten geçer: etiketler boşluksuz
+    sökülür, HTML kaçışları çözülür (`&#39;` → `'`, `&amp;` → `&`), boşluklar
+    tekleşir — kaçış çözülmeden aranan bir başlık sayfada dursa da bulunamazdı.
+    Kısa başlık için asgari uzunluk YOK: arama kartın başlık öğesiyle sınırlı,
+    tesadüfi eşleşme alanı yok.
+
+    Fikir taşıyan bir sayının derlenmiş sayfası yoksa da bulgu yazılır: o
+    fikirler ölçülemedi ve koşmamış bir ölçüt "geçti" sayılmaz."""
+    veri = kok / "site/src/data/bulten"
+    dist = kok / "site/dist/bulten"
+    bulgu: list[str] = []
+    aranan = bulunan = 0
+    for kaynak in sorted(veri.glob("*.json")):
+        try:
+            b = json.loads(kaynak.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if b.get("gundem_kaynagi") != "yazili":
+            continue
+        try:
+            surum = int(b.get("surum") or 2)
+        except (TypeError, ValueError):
+            surum = 2
+        if surum < 3:
+            continue
+        fikirler = [f for f in (b.get("fikirler") or []) if isinstance(f, dict)]
+        karne = b.get("fikir_karne") if isinstance(b.get("fikir_karne"), dict) else {}
+        kayitlar = [k for k in (karne.get("kayitlar") or []) if isinstance(k, dict)]
+        if not fikirler and not kayitlar:
+            continue
+        sayfa = dist / kaynak.stem / "index.html"
+        if not sayfa.exists():
+            aranan += len(fikirler) + len(kayitlar)
+            bulgu.append(f"{kaynak.stem} — {len(fikirler)} fikir ve {len(kayitlar)} karne kaydı "
+                         "taşıyan sayının derlenmiş sayfası yok; ölçülemedi")
+            continue
+        html = sayfa.read_text(encoding="utf-8")
+        for f in fikirler:
+            t = _etiketsiz(str(f.get("baslik") or ""))
+            if not t:
+                continue
+            aranan += 1
+            kart = _fikir_karti(html, str(f.get("kimlik") or ""))
+            if kart is not None and t in kart:
+                bulunan += 1
+            elif kart is None:
+                bulgu.append(f"{kaynak.stem} · fikir {t[:70]!r} — kartı sayfada YOK "
+                             f"(çapa fikir-{f.get('kimlik')})")
+            else:
+                bulgu.append(f"{kaynak.stem} · fikir {t[:70]!r} — kartın başlığında YOK "
+                             f"(kartta {kart[:70]!r})")
+        bolum = _fikir_bolumu(html) if kayitlar else None
+        for k in kayitlar:
+            t = _etiketsiz(str(k.get("baslik") or ""))
+            if not t:
+                continue
+            aranan += 1
+            if bolum is not None and t in bolum:
+                bulunan += 1
+            else:
+                bulgu.append(f"{kaynak.stem} · karne kaydı {t[:70]!r} — "
+                             + ("fikir bölümü sayfada YOK" if bolum is None else "fikir bölümünde YOK"))
+    return bulgu, aranan, bulunan
+
+
+TRADELER_OLCUT = "25e"
+
+
+def _fikir_kapanmis_durumlar(kok: Path) -> set[str]:
+    """bulten/fikir.py'nin `KAPANMIS` demeti — kaynak metninden, içe aktarmadan
+    (modül piyasa ve gözlem katmanını çeker; sınav yayın koşucusunda ağa
+    çıkmadan koşmalı). Tanım tek yerde; site eşi lib/fikir.ts FIKIR_KAPANMIS,
+    ikisi duman sınavında kıyaslanır."""
+    import ast
+    agac = ast.parse((kok / "bulten/fikir.py").read_text(encoding="utf-8"))
+    for dugum in agac.body:
+        if isinstance(dugum, ast.Assign) and any(getattr(h, "id", "") == "KAPANMIS" for h in dugum.targets):
+            return set(ast.literal_eval(dugum.value))
+    raise RuntimeError("bulten/fikir.py: KAPANMIS tanımı bulunamadı")
+
+
+def _bolum_araligi(html: str, kimlik: str) -> tuple[int, int] | None:
+    """`id="<kimlik>"` taşıyan bölümün [başı, sonu) aralığı (bölümler iç içe değil)."""
+    m = re.search(r'<section\b[^>]*\bid="' + re.escape(kimlik) + r'"', html)
+    if not m:
+        return None
+    son = html.find("</section>", m.end())
+    return m.start(), (son if son >= 0 else len(html))
+
+
+def trade_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
+    """(25e) İŞLEM FİKRİ DEFTERE ULAŞTI MI. 25d'nin eşi: bülten kartı fikrin
+    açıldığı günü, Tradeler defteri bugününü gösterir ve ikisini de basan bir
+    BİLEŞENDİR — kaynak ve veri doğruyken fikir defterde hiç görünmeyebilir ya
+    da kapanmışken açık listede bekleyebilir.
+
+    İki soru. (1) Her YAZILMIŞ biçim 3 sayının açtığı her fikrin başlığı
+    defterde, kendi kartının başlığında (`trade-<kimlik>`) geçiyor mu — başlığı
+    sayfanın herhangi bir yerinde aramak, aynı başlıklı ikinci bir fikrin
+    yokluğunu örterdi. (2) Karnesinde KAPANMIŞ bir kaydı olan her ölçülebilir
+    fikrin kartı "Kapanan tradeler" bölümünde mi: kapanış donar (fikir.defter),
+    defterin grubu bunu taşımıyorsa okur kapanmış bir zararı açık sanır. Karne
+    yazılmamış sayılarda da ölçüdür; (2) bütün sayıların karnesini okur.
+
+    Kıyasın iki tarafı 25b'nin süzgecinden geçer. Fikir varken derlenmiş defter
+    yoksa bulgu yazılır: koşmamış ölçüt geçmiş sayılmaz."""
+    veri = kok / "site/src/data/bulten"
+    sayfa = kok / "site/dist/tradeler/index.html"
+    kapanmis_durum = _fikir_kapanmis_durumlar(kok)
+    fikirler: list[tuple[str, str, str]] = []      # (sayı, kimlik, başlık)
+    kapanan: dict[str, tuple[str, str]] = {}      # kimlik → (sayı, başlık)
+    for kaynak in sorted(veri.glob("*.json")):
+        try:
+            b = json.loads(kaynak.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        try:
+            surum = int(b.get("surum") or 2)
+        except (TypeError, ValueError):
+            surum = 2
+        if b.get("gundem_kaynagi") == "yazili" and surum >= 3:
+            for f in b.get("fikirler") or []:
+                if isinstance(f, dict) and f.get("kimlik") and _etiketsiz(str(f.get("baslik") or "")):
+                    fikirler.append((kaynak.stem, str(f["kimlik"]), _etiketsiz(str(f["baslik"]))))
+        karne = b.get("fikir_karne") if isinstance(b.get("fikir_karne"), dict) else {}
+        for x in karne.get("kayitlar") or []:
+            if (isinstance(x, dict) and x.get("kimlik") and x.get("tur") != "olculemez"
+                    and x.get("durum") in kapanmis_durum and str(x["kimlik"]) not in kapanan):
+                kapanan[str(x["kimlik"])] = (kaynak.stem, _etiketsiz(str(x.get("baslik") or "")))
+    aranan = len(fikirler) + len(kapanan)
+    if not aranan:
+        return [], 0, 0
+    if not sayfa.exists():
+        return [f"{len(fikirler)} açılmış fikir ve {len(kapanan)} kapanmış karne kaydı var ama "
+                "Tradeler defterinin derlenmiş sayfası yok (dist/tradeler/index.html); ölçülemedi"], aranan, 0
+    html = sayfa.read_text(encoding="utf-8")
+    bulgu: list[str] = []
+    bulunan = 0
+    for stem, kimlik, t in fikirler:
+        kart = _fikir_karti(html, kimlik, "trade-")
+        if kart is not None and t in kart:
+            bulunan += 1
+        elif kart is None:
+            bulgu.append(f"{stem} · fikir {t[:70]!r} — defterde kartı YOK (çapa trade-{kimlik})")
+        else:
+            bulgu.append(f"{stem} · fikir {t[:70]!r} — defter kartının başlığında YOK (kartta {kart[:70]!r})")
+    aralik = _bolum_araligi(html, "kapanan")
+    for kimlik, (stem, t) in sorted(kapanan.items()):
+        m = re.search(r'\bid="trade-' + re.escape(kimlik) + r'"', html)
+        if m and aralik and aralik[0] <= m.start() < aralik[1]:
+            bulunan += 1
+        elif not m:
+            bulgu.append(f"{stem} karnesinde kapanmış {t[:70]!r} — defterde kartı YOK (çapa trade-{kimlik})")
+        else:
+            bulgu.append(f"{stem} karnesinde kapanmış {t[:70]!r} — defterde 'Kapanan tradeler' "
+                         + ("bölümü YOK" if not aralik else "bölümünde DEĞİL (açık listede ya da başka yerde)"))
     return bulgu, aranan, bulunan
 
 
@@ -1904,7 +2123,7 @@ def main() -> int:
     print("\n▶ Olay okura ulaştı mı (dist/: her önemli/dikkat olayın cümlesi sayfada)")
     if not (KOK / "site/dist/bulten").exists():
         print("  – dist/bulten yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
-        uyari.append("ölçüt 25 (olay okura ulaştı mı) KOŞMADI — dist/bulten yok")
+        uyari.append("ölçüt 25 (olay, yazı, haber ve işlem fikri okura ulaştı mı · 25–25d) KOŞMADI — dist/bulten yok")
     else:
         kayip, aranan, bulundu = olay_okura_ulasti(KOK)
         for k in kayip:
@@ -1918,6 +2137,24 @@ def main() -> int:
         for k in hkayip:
             hata.append(f"ulaşmayan haber — {k}")
         print(f"  haber: aranan {haranan} · sayfada {hbulundu} · kayıp {len(hkayip)}")
+        # (25d) işlem fikirleri: açılan her fikrin kartı, karnenin her kaydı.
+        fkayip, faranan, fbulundu = fikir_okura_ulasti(KOK)
+        for k in fkayip:
+            hata.append(f"ulaşmayan işlem fikri — {k}")
+        print(f"  işlem fikri (25d): aranan {faranan} · sayfada {fbulundu} · kayıp {len(fkayip)}")
+
+    # ------------------------------------------------------------ (25e)
+    # TRADELER DEFTERİ — 25d'nin eşi: açılan her fikir defterde kendi kartıyla,
+    # kapanan her ölçülebilir fikir "Kapanan tradeler" bölümünde.
+    print(f"\n▶ İşlem fikri deftere ulaştı mı ({TRADELER_OLCUT}, dist/tradeler: kart ve kapanış bölümü)")
+    if not (KOK / "site/dist").exists():
+        print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append(f"ölçüt {TRADELER_OLCUT} (işlem fikri deftere ulaştı mı) KOŞMADI — dist/ yok")
+    else:
+        tkayip, taranan, tbulundu = trade_okura_ulasti(KOK)
+        for k in tkayip:
+            hata.append(f"deftere ulaşmayan işlem fikri — {k}")
+        print(f"  aranan {taranan} · defterde {tbulundu} · kayıp {len(tkayip)}")
 
     # ------------------------------------------------------------ (23)
     # SOLUK METİN. global.css'in kendi yorumu "--ink-30 metinde kullanılmaz"

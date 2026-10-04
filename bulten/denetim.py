@@ -1365,6 +1365,14 @@ class Denetim:
             if tur not in _f.TURLER:
                 self.engel.append(f"{ad}: tanınmayan tür {tur!r}")
                 continue
+            # Metin alanı düz metindir: sayfa kaçırarak basar ve kaçmış etiket
+            # yayın kapısını (sayfa sınavı 22) düşürür. Yazma kapısı reddeder;
+            # bu ölçüt dosyaya başka yoldan giren kaydı sorar.
+            etiketli = [a for a in _f.METIN_ALANLARI
+                        if isinstance(f.get(a), str) and _f.ETIKET.search(f[a])]
+            if etiketli:
+                self.engel.append(f"{ad}: HTML etiketi taşıyan metin alanı ({', '.join(etiketli)})")
+                continue
             if tur not in ("olculemez", "opsiyon"):
                 g, h, st, yon = f.get("giris"), f.get("hedef"), f.get("stop"), f.get("yon")
                 if None in (g, h, st) or yon not in _f.YONLER:
@@ -1417,6 +1425,14 @@ class Denetim:
                 self.uyari.append(f"{ad}: dayanak yok — fikir bu sayının bir okumasına bağlanır")
             elif d not in bolumler:
                 self.uyari.append(f"{ad}: dayanak {d!r} bu sayının bölümlerinden biri değil")
+            else:
+                # Sayfa yalnız metni dolu bölümü basar ve dayanak bağı ona
+                # kurulur: isteğe bağlı bir bölüme (günlükte risk, emtia)
+                # dayanıp onu yazmamak bağı sessizce düşürür.
+                metin = b.get("yorum") if d == "yorum" else (b.get("gundem") or {}).get(d)
+                if not _duz(str(metin or "")).strip():
+                    self.uyari.append(f"{ad}: dayanak bölümü ({d}) bu sayıda boş — sayfada "
+                                      "bağ kurulmaz; fikir yazılmış bir okumaya dayanır")
             if kip == "haftalik" and not str(f.get("senaryo") or "").strip():
                 self.uyari.append(f"{ad}: haftalık fikir bir senaryoya bağlanır (senaryo alanı)")
             for alan, tavan in (("gerekce", self.FIKIR_GEREKCE_KELIME),
@@ -1432,6 +1448,25 @@ class Denetim:
         karne = b.get("fikir_karne") or {}
         if karne.get("hata"):
             self.uyari.append(f"Fikir karnesi kurulamadı: {karne['hata']}")
+        # Aynı görüş iki kez açılmaz (YAZIM.md "Sayı"): aynı yapı aynı yönde
+        # açık bir kayıtla ya da aynı listede ikinci kez yazılırsa karne tek
+        # görüşü iki kayıtla sayar. Yapı ve yön metni bacakları, katsayıları ve
+        # yönü taşır; makine üretir, yazar elle yazamaz.
+        def _anahtar(x):
+            return (str(x.get("yapi_metni") or ""), str(x.get("yon_metni") or ""))
+        acik_yapi = {_anahtar(k): k for k in karne.get("kayitlar") or []
+                     if k.get("durum") == "acik" and k.get("yapi_metni")}
+        gorulen = set()
+        for f in liste:
+            if f.get("tur") == "olculemez" or not f.get("yapi_metni"):
+                continue
+            a = _anahtar(f)
+            if a in acik_yapi or a in gorulen:
+                self.uyari.append(f"fikir '{str(f.get('baslik'))[:50]}': aynı yapı aynı yönde "
+                                  + (f"açık bir fikirde ({acik_yapi[a].get('acilis')}) zaten var"
+                                     if a in acik_yapi else "bu sayıda iki kez yazılmış")
+                                  + " — görüş değiştiyse eskisi kapatılır")
+            gorulen.add(a)
         acik = sum(1 for k in karne.get("kayitlar") or [] if k.get("durum") in ("acik", "olculemez"))
         if acik + len(liste) > self.FIKIR_ACIK_AZAMI:
             self.uyari.append(f"Açık fikir sayısı {acik + len(liste)} (en çok {self.FIKIR_ACIK_AZAMI}) "
