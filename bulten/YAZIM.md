@@ -822,10 +822,13 @@ katsayısı aynı, gövdeninki ters işaretlidir (yazma kapısı aksini reddeder
 güçlenirse kazanır. Hisse ve döviz göreli değerinin ölçülebilir biçimleri: BIST
 Bankacılık / BIST 100 ve BIST Sınai / BIST 100 (sektör ayrışması), Türkiye ETF /
 GOÜ hisse (Türkiye'ye özgü primin gelişen piyasalardan ayrışması), altın /
-gümüş, Brent / WTI. TL'li bir döviz bacağı göreli yapıya girmez: kısa ya da uzun
-dövizin sonucu taşımayı içermek zorundadır ve oranın getirisi taşımayı göstermez
-(BIST 100 / USD/TRY gibi dolar bazlı bir görüş de bu yüzden yazılmaz; taşıma
-yalnız yalın USD/TRY bacağında ölçülür, bkz. "Seviyeler"). Oran nominal-nötrdür,
+gümüş, Brent / WTI. **Dolar cinsinden BIST:** BIST 100 / USD/TRY (ya da öbür bir
+BIST endeksi / USD/TRY) o endeksin dolar değeridir; TL hisseye yatırılmıştır,
+nakit tutulmaz ve oran taşıma içermez, yani ölçülebilir bir göreli yapıdır. TL'li
+döviz bacağı BAŞKA bir göreli yapıya girmez: dolar fiyatlı bir bacağın (Türkiye
+ETF'i, altın) karşısında kısa USD/TRY bir TL mevduatıdır ve oranın getirisi o
+taşımayı göstermez; taşıma yalnız yalın USD/TRY bacağında ölçülür (bkz.
+"Seviyeler"). Yazma kapısı bu ayrımı sorar. Oran nominal-nötrdür,
 beta-nötr DEĞİLDİR: BIST Bankacılık / BIST 100 oranı son bir yılın günlük
 verisinde BIST 100'ün 0,29'luk betasını taşıyor (02.10.2026'ya kadar 250 gün),
 yani genel bir satışta oran düşer. Gerekçe görüşün ayrışma mı piyasa yönü mü
@@ -922,13 +925,17 @@ Hedef ve stop **yapının biriminde** yazılır:
   oran %1,92; TL 2y–5y makası 35,5 bp). Denetim üç şey sorar, üçü de UYARI:
   stop mesafesi bir günlük σ'nın altındaysa (stop tek günlük gürültüde
   tetiklenir); stop, ufuk boyunca beklenen hareketin (σ · √ufka kalan iş günü)
-  yarısından yakınsa (gürültüyle dokunma olasılığı yüksek); hedef o hareketin 2,5
-  katından uzaksa (ufukta ulaşılması istisnadır). `--sina` ve yazma anı bu üç
+  yarısından yakınsa (yönsüz gürültü ufuk içinde o stopa yarı yarıya dokunur:
+  günlük kapanışlarda 5 · 20 · 60 iş gününde %46 · %53 · %57); hedef o hareketin
+  2,5 katından uzaksa (yönsüz gürültüyle ulaşma olasılığı %1'in altında). İki
+  eşik bir seviye değil olasılık sınırıdır ve görüşün kendisini (sürüklenmeyi)
+  hesaba katmaz. `--sina` ve yazma anı bu üç
   oranı kayda yazar (`stop_z`, `hedef_z`). Örnek (04.10.2026 sayısı): 2y–5y
   makasında σ 35,5 bp ve ufka 15 iş günü var, beklenen hareket ≈ 137 bp; 89
   bp'lik stop 0,65, 121 bp'lik hedef 0,88 kattır.
-- **TL'li döviz bacağı yalnız yalın yapıda ve opsiyonda kullanılır.** Göreli bir
-  yapıda (BIST 100 / USD/TRY) karne taşımasız oranı yazardı; yazma kapısı reddeder.
+- **TL'li döviz bacağı yalın yapıda, opsiyonda ve dolar cinsinden BIST'te
+  kullanılır** (BIST endeksi / USD/TRY; bkz. "Göreli"). Dolar fiyatlı bir bacağın
+  karşısında göreli yapıda karne taşımasız oranı yazardı; yazma kapısı reddeder.
 - **USD/TRY'nin sonucu taşımayı içerir.** Kısa USD/TRY bir TL mevduatıdır ve
   yılda kabaca faiz farkı kadar taşır; spot getirisi tek başına onu tersine
   gösterir. Yalın USD/TRY fikrinin sonucu spot getirisi artı taşımadır (TLREF

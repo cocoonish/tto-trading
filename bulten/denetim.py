@@ -1394,9 +1394,15 @@ class Denetim:
                 # Stop mesafesi yapının bir günlük σ'sının altındaysa stop gürültüde
                 # tetiklenir. σ yazma anında yapının kendi serisinden ölçülür
                 # (fikir.yapi_sigma, sonucun biriminde); yoksa ölçülmez.
-                # Ufka ölçekli: stop ufuk boyunca beklenen dağılımın yarısından
-                # yakınsa (σ·√iş günü) gürültüyle dokunma olasılığı ~%60'ı aşar;
-                # hedef 2,5 katından uzaksa ufukta ulaşılması istisnadır.
+                # Ufka ölçekli (σ·√iş günü). Eşikler sezgi değil, sürüklenmesiz
+                # rastgele yürüyüşün GÜNLÜK KAPANIŞLARDA benzetimiyle anlam
+                # kazanır (200 bin yol, 04.10.2026): 0,5 kat uzaktaki stopa
+                # gürültü ufuk içinde n = 5 · 20 · 60 iş gününde %46 · %53 · %57
+                # olasılıkla dokunur (1,0 katta %22 · %26 · %28), yani 0,5'in
+                # altında görüş değil gürültü ölçülür; 2,5 kat uzaktaki hedefe
+                # gürültüyle ulaşma olasılığı %0,7 · %0,9 · %1,0. Eşik bir
+                # seviye değil olasılık sınırıdır; sürüklenme (görüşün kendisi)
+                # hesaba girmez, girerse görüş ölçülmüş olurdu.
                 z, hz = f.get("stop_z"), f.get("hedef_z")
                 if isinstance(z, (int, float)) and z < self.FIKIR_STOP_Z:
                     self.uyari.append(f"{ad}: stop ufka göre gürültü bandında (ufuk boyunca "

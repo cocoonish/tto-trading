@@ -2273,14 +2273,28 @@ def _fikir_zaman_tasima_dongu():
         assert "HTML etiketi" in str(ex), ex
     dk = _den.Denetim(_fk_sayi(fikir_kapat=[{"kimlik": "X", "sebep": "<strong>s</strong>"}])); dk.fikirler()
     assert any("sebep HTML etiketi" in e_ for e_ in dk.engel), dk.engel
-    # (11g) TL'li döviz bacağı göreli yapıya girmez (taşıma yalnız yalında ölçülür).
-    try:
-        _f.dogrula({"baslik": "x", "tur": "goreli", "bacaklar": ["XU100.IS", "USDTRY=X"], "yon": "yukari",
-                    "hedef": 300, "stop": 200, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"},
-                   _fk_sayi(), 9, ev, {})
-        raise AssertionError("göreli yapıya USD/TRY bacağı girdi")
-    except _f.FikirHatasi as ex:
-        assert "yalnız yalın yapıda" in str(ex), ex
+    # (11g) TL'li döviz bacağı göreli yapıya yalnız Borsa İstanbul'da TL fiyatlı
+    # bir bacakla girer (varlığın dolar değeri; TL nakit tutulmaz, taşıma
+    # doğmaz). Dolar fiyatlı bir bacakla (Türkiye ETF'i, altın) kısa USD/TRY bir
+    # TL mevduatıdır ve oran onu göstermez: reddedilir. Sıra önemsiz.
+    def _goreli(bacaklar):
+        return {"baslik": "x", "tur": "goreli", "bacaklar": bacaklar, "yon": "yukari",
+                "hedef": 300, "stop": 200, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"}
+    for bac in (["TUR", "USDTRY=X"], ["USDTRY=X", "GC=F"]):
+        try:
+            _f.dogrula(_goreli(bac), _fk_sayi(), 9, ev, {})
+            raise AssertionError(f"dolar fiyatlı bacakla göreli USD/TRY girdi: {bac}")
+        except _f.FikirHatasi as ex:
+            assert "TL taşımasını" in str(ex), ex
+    for bac in (["XU100.IS", "USDTRY=X"], ["USDTRY=X", "XBANK.IS"]):
+        try:
+            _f.dogrula(_goreli(bac), _fk_sayi(), 9, ev, {})
+        except _f.FikirHatasi as ex:
+            assert "TL taşımasını" not in str(ex), (bac, ex)
+    # Yön metni oranı dolar değeri olarak okur; bacak sırası yönü çevirir.
+    assert _f.yon_metni({"tur": "goreli", "yon": "yukari",
+                         "bacaklar": [{"seri": "USDTRY=X"}, {"seri": "XBANK.IS"}]}, ev) \
+        == "dolar cinsinden BIST Bankacılık düşerse kazanır"
     # (11h) Ölçüm fikir yazıldıktan SONRA yenilendiyse bacak farkı uyarı değil
     # bilgi: yazılmış fikrin girişi değişmez, uyarı düzeltilemezdi.
     fy = {"kimlik": "2026-10-02-1", "baslik": "x", "tur": "yalin", "gerekce": "g", "ne_bozar": "n",

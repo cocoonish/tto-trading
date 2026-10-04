@@ -401,6 +401,12 @@ def yon_metni(f: dict, ev: dict[str, Seri] | None = None) -> str:
                 f"risk dönüşümü (satım alınır, alım yazılır): vadede alt kullanım fiyatının ({k[0]}) "
                 f"altında kazanır, üst kullanım fiyatının ({k[1]}) üstünde kaybeder")
     if tur == "goreli":
+        ids = [x["seri"] for x in f["bacaklar"]]
+        tl = [x for x in ids if x not in TASIMA]
+        if len(tl) == 1 and len(ids) == 2 and tl[0].endswith(".IS"):
+            # TL fiyatlı varlık / USD/TRY: oran varlığın dolar değeridir.
+            artarsa = yukari if ids[0] == tl[0] else not yukari
+            return f"dolar cinsinden {_ad(tl[0], ev)} {'yükselirse' if artarsa else 'düşerse'} kazanır"
         a, b_ = [_ad(x["seri"], ev) for x in f["bacaklar"]]
         return f"{a}, {b_} karşısında {'güçlenirse' if yukari else 'zayıflarsa'} kazanır"
     if tur == "yalin":
@@ -541,14 +547,20 @@ def dogrula(g: dict, b: dict, sira: int, ev: dict[str, Seri] | None = None,
         raise FikirHatasi(f"{on}: {tur} yalnız getiri bacaklarıyla kurulur")
     if tur in ("goreli", "opsiyon") and set(tipler) != {"fiyat"}:
         raise FikirHatasi(f"{on}: {tur} yalnız fiyat bacaklarıyla kurulur")
-    # TL'li döviz bacağının sonucu taşımayı içerir ve taşıma yalnız YALIN yapıda
-    # ölçülür: göreli bir yapıda (BIST 100 / USD/TRY) karne taşımasız oranı
-    # yazar ve EUR/TRY'yi evrenden çıkaran yanılgının aynısını üretir. Rehber
-    # bunu yasaklıyordu, kod sormuyordu (inceleme 04.10.2026).
+    # TL'li döviz bacağının sonucu, TL NAKİT tutuluyorsa taşımayı içerir ve
+    # taşıma yalnız YALIN yapıda ölçülür. Göreli yapıda bunun tek istisnası
+    # Borsa İstanbul'da TL fiyatlı bir bacaktır: BIST 100 / USD/TRY o varlığın
+    # DOLAR değeridir, TL hisseye yatırılmıştır ve nakit tutulmaz, yani oran
+    # taşıma içermez (çürütme turu, 04.10.2026; yasağın ilk hâli bu yapıyı da
+    # kapatıyordu). Öbür göreli yapılarda (Türkiye ETF'i ve altın dolar
+    # fiyatlıdır) kısa USD/TRY bacağı bir TL mevduatıdır ve oran onu göstermez.
     tasimali = [x for x in ids if x in TASIMA]
-    if tasimali and tur not in ("yalin", "opsiyon"):
-        raise FikirHatasi(f"{on}: {ev[tasimali[0]].ad} bacağı yalnız yalın yapıda ya da opsiyonda "
-                          "kullanılır — sonucu TL taşımasını içerir ve taşıma yalnız orada ölçülür")
+    obur = [x for x in ids if x not in TASIMA]
+    dolar_degeri = tur == "goreli" and len(obur) == 1 and obur[0].endswith(".IS")
+    if tasimali and tur not in ("yalin", "opsiyon") and not dolar_degeri:
+        raise FikirHatasi(f"{on}: {ev[tasimali[0]].ad} bacağı yalın yapıda, opsiyonda ya da Borsa "
+                          "İstanbul'da TL fiyatlı bir bacakla göreli yapıda (varlığın dolar değeri) "
+                          "kullanılır — başka bir yapıda sonucu ölçülmeyen TL taşımasını içerir")
     if len(set(ids)) != len(ids):
         raise FikirHatasi(f"{on}: aynı seri iki bacakta")
     if tur in ("egri", "kelebek"):

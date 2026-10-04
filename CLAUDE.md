@@ -4411,8 +4411,10 @@ rutinin `git add -A`'sı. Yazılmamış bir sayının fikri karneye girmez.
   - VIX ve MOVE: endeks olarak işlem görmez.
   - DİBS 1 yıllık reel getiri ve başabaş: düğüm kayınca tek gün sıçrar.
   - EUR/TRY ve GBP/TRY: euro ve sterlinin kısa faizi ölçülen katmanda yok, TL taşıması
-    kurulamaz. Aynı sebeple USD/TRY yalnız yalın yapıda ve opsiyonda kullanılır (göreli bir
-    yapıda karne taşımasız oranı yazardı; yazma kapısı reddeder).
+    kurulamaz. Aynı sebeple USD/TRY yalın yapıda, opsiyonda ve dolar cinsinden BIST'te
+    (BIST endeksi / USD/TRY) kullanılır. Bu sonuncusu varlığın dolar değeridir: TL hisseye
+    yatırılmıştır, nakit tutulmaz ve taşıma doğmaz. Dolar fiyatlı bir bacakla (Türkiye
+    ETF'i, altın) göreli yapıda karne taşımasız oranı yazardı; yazma kapısı reddeder.
 - **Vadeli bacak.** Bacak, devirde geriye ölçeklenen seriden GETİRİYLE ilerletilir, kayıtlı
   seviyeyle değil. Satır devir gününü ve "son değer giriş kontratı cinsinden" notunu taşır.
   Devir düzeltmesi kurulamadıysa fikir o gün DEĞERLENMEZ: sahte bir stop donmasın.
@@ -4510,3 +4512,21 @@ kaybetti). Seviyeler, kimlik ve yazım anı değişmedi. Otuz beş arıza enjeks
 kendi maddesinde yakalanıyor; geçici bir fikstür sayısıyla derlenen sayfada yeni hâllerin
 hepsi (karnesiz kapanış, girişsiz geri çekilme, değerlenmeyen gün, ufuk beklemesi, taşımasız
 sonuç, çıkış emri listesi) gözle okundu ve 25d 13 kaydın 13'ünü buldu; fikstür silindi.
+
+GEÇ GELEN HÜKÜMLER (04.10.2026 gece). İlk incelemenin (donmuş kopyaya karşı dört mercek)
+bulguları çürütme turu bitmeden uygulanmıştı; iş akışı arka planda sürdü ve konteyner
+yeniden başlayınca durdu. Kırk beş hükmün kırk dördü kayıttaydı ve sonradan okundu: biri
+YANLIŞ (aynı görüşün söz defterinde ve fikir karnesinde ayrı ayrı durması bir tasarımdır,
+iki defter iki ayrı büyüklüğü ölçer — buna göre bir şey değiştirilmemişti), on altısı
+KISMEN doğru. Kısmen doğruların yanlış yarısına dayanan iki uygulama vardı ve ikisi de
+düzeltildi. (1) USD/TRY göreli yasağı fazla genişti: BIST 100 / USD/TRY endeksin dolar
+değeridir, TL nakit tutulmaz ve taşıma doğmaz; yasak bu meşru yapıyı yanlış gerekçeyle
+kapatıyordu. Kapı artık yalnız dolar fiyatlı bacakla kurulan göreli yapıyı reddediyor ve
+yön metni oranı "dolar cinsinden BIST 100 yükselirse kazanır" diye okuyor. (2) Stop ve hedef
+uyarılarının eşikleri (0,5 ve 2,5 kat) gerekçesizdi ve kodun yorumu ölçülmemiş bir sayı
+taşıyordu ("~%60"). Eşikler sürüklenmesiz rastgele yürüyüşün günlük kapanışlarda
+benzetimiyle anlam kazandı: 0,5 kattaki stopa gürültü ufuk içinde %46–57 olasılıkla
+dokunur, 2,5 kattaki hedefe %1'in altında ulaşır. Eşikler değişmedi, gerekçeleri yazıldı.
+Ders: inceleme bitmeden uygulanan bir düzeltme, hükümler gelince yeniden sorulur; arka
+plandaki bir doğrulama turu kaybolabilir, kaydı (journal) kaybolmaz ve okunmadan iş bitmiş
+sayılmaz.
