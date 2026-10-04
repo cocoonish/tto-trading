@@ -657,7 +657,18 @@ def _fikir_karne(tarih: date, haftalik: bool) -> dict:
     önbelleği bu koşuda zaten tazelendi)."""
     try:
         import fikir as fikir_m
-        return fikir_m.karne(tarih.isoformat(), haftalik=haftalik)
+        # Aynı sayının önceki ölçümünde kapanmış kayıtlar donar (fikir.karne
+        # `sabit`): yeniden ölçüm — yedek cron ya da --yeniden-olc — onları
+        # yeniden hesaplamaz; sayı yazılmış olsun ya da olmasın.
+        sabit = {}
+        try:
+            eski = json.loads((CIKTI / f"{tarih.isoformat()}.json").read_text(encoding="utf-8"))
+            for k in ((eski.get("fikir_karne") or {}).get("kayitlar") or []):
+                if isinstance(k, dict) and k.get("kimlik") and k.get("durum") in fikir_m.KAPANMIS:
+                    sabit[str(k["kimlik"])] = k
+        except (OSError, ValueError, AttributeError):
+            pass
+        return fikir_m.karne(tarih.isoformat(), haftalik=haftalik, sabit=sabit)
     except Exception as e:                                      # noqa: BLE001
         return {"hata": f"{type(e).__name__}: {e}", "kayitlar": [], "sayim": {}}
 
@@ -725,7 +736,9 @@ def yaz(b: dict) -> Path:
             # "hedefte kapandı" denmiş bir kayıt, kaynak bir barı geri çektiğinde
             # aynı gün "açık"a dönebilirdi. Bir kapanış sayıya yazıldıktan sonra
             # değişmez (bkz. fikir.py) — aynı sayının içinde de.
-            if eski.get("gundem_kaynagi") == "yazili" and isinstance(eski.get("fikir_karne"), dict):
+            # İkinci katman: karne `sabit` ile zaten kurulur (fikir.karne); bu
+            # blok karne başka bir yoldan kurulduysa da kapanışı korur.
+            if isinstance(eski.get("fikir_karne"), dict):
                 import fikir as _fikir
                 kapali = {k.get("kimlik"): k for k in (eski["fikir_karne"].get("kayitlar") or [])
                           if k.get("durum") in _fikir.KAPANMIS}

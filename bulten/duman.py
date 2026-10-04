@@ -2091,7 +2091,7 @@ def _fikir_zaman_tasima_dongu():
     kisa = {k_: {"tarih": v_["tarih"][:6], "kapanis": v_["kapanis"][:6]} for k_, v_ in ham.items()}  # → 28.09
     uf = dict(erk, ufuk="2026-09-29")
     a1 = _f.degerle(uf, "2026-09-30", kisa, {}, ev)
-    assert a1["durum"] == "acik" and a1.get("degerlenmedi"), a1
+    assert a1["durum"] == "acik" and a1.get("ufuk_bekleniyor") and not a1.get("degerlenmedi"), a1
     a2 = _f.degerle(uf, "2026-10-06", kisa, {}, ev)
     assert a2["durum"] == "sure" and a2["son_tarih"] == "2026-09-28" and a2.get("not"), a2
     # (5) Ufuktan sonra gelen giriş sıfır sonuçlu "ufuk doldu" değil, ölçülemedi.
@@ -2188,8 +2188,37 @@ def _fikir_zaman_tasima_dongu():
             assert y_.parent == Path(td), y_
             son = _j.loads(y_.read_text(encoding="utf-8"))["fikir_karne"]["kayitlar"]
             assert son == [{"kimlik": "A", "durum": "hedef", "sonuc": 2.0}], son
+            # (10b) YAZILMAMIŞ sayıda da: 03:23 ölçümünün kapanışı 03:51 yedek
+            # ölçümünde geri açılmaz, ve SAYIM aynı hesaptan (kayıt "kapandı",
+            # sayım "açık" demesin). Karne `sabit` ile kurulur (fikir.karne).
+            otom = {"tarih": "2026-10-02", "gundem_kaynagi": "otomatik",
+                    "fikir_karne": {"kayitlar": [{"kimlik": "2026-09-22-1", "durum": "stop", "sonuc": -3.0,
+                                                  "sonuc_birim": "%", "tur": "goreli",
+                                                  "kapanis_tarih": "2026-09-29"}]}}
+            (Path(td) / "2026-10-02.json").write_text(_j.dumps(otom), encoding="utf-8")
+            gercek_karne, alinan = _f.karne, {}
+            try:
+                _f.karne = lambda *a_, **k_: alinan.update(k_) or {"kayitlar": [], "sayim": {}}
+                _u._fikir_karne(dt.date(2026, 10, 2), False)
+            finally:
+                _f.karne = gercek_karne
+            assert set((alinan.get("sabit") or {})) == {"2026-09-22-1"}, f"ölçüm katmanı sabit vermiyor: {alinan}"
+            y2 = _u.yaz({"tarih": "2026-10-02", "gundem": {}, "fikir_karne": {"kayitlar": [
+                {"kimlik": "2026-09-22-1", "durum": "acik", "sonuc": 1.0}], "sayim": {}}})
+            son2 = _j.loads(y2.read_text(encoding="utf-8"))["fikir_karne"]["kayitlar"]
+            assert son2[0]["durum"] == "stop", f"yazılmamış sayının kapanışı geri açıldı: {son2}"
     finally:
         _u.CIKTI = gercek_cikti
+    erk_s = dict(erk, kimlik="2026-09-22-1")
+    sabit_k = _f.karne("2026-10-02", onceki=[dict(b0, gundem_kaynagi="yazili", fikirler=[erk_s])], ham=ham,
+                       dibs_gecmis=[], metrik=None, fonlama=None,
+                       sabit={"2026-09-22-1": {"kimlik": "2026-09-22-1", "durum": "stop", "sonuc": -3.0,
+                                               "sonuc_birim": "%", "tur": "goreli", "sonuc_r": -1.0,
+                                               "kapanis_tarih": "2026-09-29"},
+                              "x": {"kimlik": "x", "durum": "acik"}})
+    assert [k_["durum"] for k_ in sabit_k["kayitlar"]] == ["stop"], sabit_k["kayitlar"]
+    assert sabit_k["sayim"]["stop"] == 1 and sabit_k["sayim"]["acik"] == 0 and sabit_k["sayim"]["n_r"] == 1, \
+        f"sayım sabit kaydı görmüyor: {sabit_k['sayim']}"
     # (11) Denetim: stop ufka göre gürültü bandında ise UYARI.
     f_ = {"kimlik": "2026-10-02-1", "baslik": "x", "tur": "yalin", "gerekce": "g", "ne_bozar": "n",
           "ufuk": "2026-10-30", "giris": 49.03, "hedef": 48.5, "stop": 49.1, "yon": "asagi",
@@ -2197,6 +2226,72 @@ def _fikir_zaman_tasima_dongu():
           "birim": "fiyat", "stop_z": 0.3, "hedef_z": 3.1}
     d = _den.Denetim(_fk_sayi(fikirler=[f_])); d.fikirler()
     assert any("gürültü bandında" in u_ for u_ in d.uyari) and any("ufka göre uzak" in u_ for u_ in d.uyari), d.uyari
+    # (11b) Çıkış emri girişle AYNI kapanışa düşerse sonuç YOK (başabaş değil):
+    # kazanç oranına ve R ortalamasına girmez, kapanışı ve sebebi yazılır.
+    ce = _f.degerle({**erk, "erken": {"tarih": "2026-09-22", "sebep": "vazgeçildi",
+                                      "yazim_ani": "2026-09-22T06:00:00+00:00"}}, "2026-10-02", ham, {}, ev)
+    assert ce["durum"] == "geri_cekildi" and ce.get("giris_oncesi") and "sonuc" not in ce \
+        and ce["sebep"] == "vazgeçildi", ce
+    assert "giris_oncesi" in _f.DONAN_ALANLAR and "tasima_olculemedi" in _f.DONAN_ALANLAR
+    ce_b = dict(b0, gundem_kaynagi="yazili", fikirler=[dict(erk, kimlik="2026-09-22-7")],
+                fikir_kapat=[{"kimlik": "2026-09-22-7", "tarih": "2026-09-22", "sebep": "v",
+                              "yazim_ani": "2026-09-22T06:00:00+00:00"}])
+    ce_s = _f.karne("2026-10-02", onceki=[ce_b], ham=ham, dibs_gecmis=[], metrik=None, fonlama=None)["sayim"]
+    assert ce_s["geri_cekildi"] == 1 and ce_s["olculen_kapanan"] == 0 and ce_s["n_r"] == 0, ce_s
+    # (11c) Devir düzeltmesi kurulamayan gün: fiili giriş ve son değer önceki
+    # ölçümden KENDİ tarihleriyle taşınır; "giriş bekleniyor" denmez.
+    rb = dict(ham, **{"XBANK.IS": dict(ham["XBANK.IS"], roll_bilinmiyor=True)})
+    oo = {"kimlik": erk["kimlik"], "durum": "acik", "giris_fiili": 1.2898, "giris_fiili_tarih": "2026-09-22",
+          "son": 1.3061, "son_tarih": "2026-09-29", "sonuc": 1.26, "sonuc_r": 0.18}
+    rr = _f.degerle(erk, "2026-10-02", rb, {}, ev, None, oo)
+    assert rr["degerlenmedi"] and rr["giris_fiili"] == 1.2898 and rr["son_tarih"] == "2026-09-29" \
+        and rr["sonuc"] == 1.26 and not rr.get("giris_bekleniyor"), rr
+    rb_k = _f.karne("2026-10-02", onceki=[dict(b0, gundem_kaynagi="yazili", fikirler=[erk]),
+                                          {"tarih": "2026-09-30", "fikir_karne": {"kayitlar": [oo]}}],
+                    ham=rb, dibs_gecmis=[], metrik=None, fonlama=None)["kayitlar"][0]
+    assert rb_k.get("giris_fiili") == 1.2898, f"karne önceki kaydı degerle'ye vermiyor: {rb_k}"
+    # (11d) Ufka kadar hiç kapanış yoksa kaynak gecikmiş olabilir: ufuk kapanışı
+    # gibi UFUK_BEKLEME_GUN beklenir; ufuktan sonra kapanış varsa hemen donar.
+    bos = {k_: {"tarih": v_["tarih"][:1], "kapanis": v_["kapanis"][:1]} for k_, v_ in ham.items()}  # yalnız 21.09
+    gb = dict(gec, ufuk="2026-09-25")
+    g1 = _f.degerle(gb, "2026-09-27", bos, {}, ev)
+    assert g1["durum"] == "acik" and g1.get("giris_bekleniyor") and g1.get("ufuk_bekleniyor"), g1
+    assert _f.degerle(gb, "2026-10-02", bos, {}, ev)["durum"] == "olculemedi"
+    # (11e) Taşıması ölçülemeyen USD/TRY sonucu kazanç oranına girmez.
+    tk = {"kimlik": "T", "durum": "stop", "tur": "yalin", "sonuc": 1.3, "sonuc_birim": "%",
+          "tasima_olculemedi": True, "sonuc_r": 0.6, "kapanis_tarih": "2026-09-29"}
+    t_s = _f.karne("2026-10-02", onceki=[], ham=ham, dibs_gecmis=[], metrik=None, fonlama=None,
+                   sabit={"T": tk})["sayim"]
+    assert t_s["kapanan"] == 1 and t_s["olculen_kapanan"] == 0, t_s
+    # (11f) Çıkış emrinin sebebi düz metindir: yazma kapısı ve denetim etiketi
+    # reddeder (iki sayfada kaçırılarak basılır, kaçmış etiket yayını durdurur).
+    try:
+        _f.kapat_dogrula([{"kimlik": erk["kimlik"], "sebep": "<p>görüş bozuldu</p>"}], b0,
+                         {erk["kimlik"]: erk}, dibs_d={})
+        raise AssertionError("etiketli çıkış sebebi kabul edildi")
+    except _f.FikirHatasi as ex:
+        assert "HTML etiketi" in str(ex), ex
+    dk = _den.Denetim(_fk_sayi(fikir_kapat=[{"kimlik": "X", "sebep": "<strong>s</strong>"}])); dk.fikirler()
+    assert any("sebep HTML etiketi" in e_ for e_ in dk.engel), dk.engel
+    # (11g) TL'li döviz bacağı göreli yapıya girmez (taşıma yalnız yalında ölçülür).
+    try:
+        _f.dogrula({"baslik": "x", "tur": "goreli", "bacaklar": ["XU100.IS", "USDTRY=X"], "yon": "yukari",
+                    "hedef": 300, "stop": 200, "ufuk": "2026-10-30", "gerekce": "g", "ne_bozar": "n"},
+                   _fk_sayi(), 9, ev, {})
+        raise AssertionError("göreli yapıya USD/TRY bacağı girdi")
+    except _f.FikirHatasi as ex:
+        assert "yalnız yalın yapıda" in str(ex), ex
+    # (11h) Ölçüm fikir yazıldıktan SONRA yenilendiyse bacak farkı uyarı değil
+    # bilgi: yazılmış fikrin girişi değişmez, uyarı düzeltilemezdi.
+    fy = {"kimlik": "2026-10-02-1", "baslik": "x", "tur": "yalin", "gerekce": "g", "ne_bozar": "n",
+          "ufuk": "2026-10-30", "giris": 49.0, "hedef": 48.5, "stop": 49.6, "yon": "asagi",
+          "dayanak": "turkiye", "getiri_risk": 1.5, "yazim_ani": "2026-10-02T05:00:00+00:00",
+          "bacaklar": [{"seri": "USDTRY=X", "deger": 49.0, "tarih": "2026-10-01"}], "birim": "fiyat"}
+    for olus, kova in (("2026-10-02T06:00:00+00:00", "bilgi"), ("2026-10-02T04:00:00+00:00", "uyari")):
+        dy = _den.Denetim(_fk_sayi(fikirler=[fy], olusturma=olus)); dy.fikirler()
+        hepsi = {"bilgi": dy.bilgi, "uyari": dy.uyari}
+        assert any("bacak USDTRY=X" in u_ for u_ in hepsi[kova]) and \
+            not any("bacak USDTRY=X" in u_ for k_, v_ in hepsi.items() if k_ != kova for u_ in v_), (olus, hepsi)
     # (12) Görünürlük saati her grup için AÇIK ve tutucu: ölçüm katmanının
     # "bar yerleşti" payından (piyasa.KAPANIS_UTC) geç olamaz — geç olsaydı
     # kapanıştan sonra yazılan fikir gördüğü kapanışı giriş alırdı.

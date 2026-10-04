@@ -111,7 +111,7 @@ KAPANMIS = ("hedef", "stop", "sure", "geri_cekildi", "vade", "olculemedi", "sure
             "giriste_gecersiz")
 DONAN_ALANLAR = ("durum", "son", "son_tarih", "sonuc", "sonuc_turu", "kapanis_tarih",
                  "giris_fiili", "giris_fiili_tarih", "sebep", "sonuc_r", "spot_sonuc", "tasima",
-                 "not")
+                 "tasima_olculemedi", "giris_oncesi", "not")
 SINIFLAR = ("faiz", "fx", "hisse", "emtia", "kredi")
 OPSIYON_TIP = ("call", "put", "call_spread", "put_spread", "risk_reversal")
 UFUK_ASGARI_GUN = 2
@@ -541,6 +541,14 @@ def dogrula(g: dict, b: dict, sira: int, ev: dict[str, Seri] | None = None,
         raise FikirHatasi(f"{on}: {tur} yalnız getiri bacaklarıyla kurulur")
     if tur in ("goreli", "opsiyon") and set(tipler) != {"fiyat"}:
         raise FikirHatasi(f"{on}: {tur} yalnız fiyat bacaklarıyla kurulur")
+    # TL'li döviz bacağının sonucu taşımayı içerir ve taşıma yalnız YALIN yapıda
+    # ölçülür: göreli bir yapıda (BIST 100 / USD/TRY) karne taşımasız oranı
+    # yazar ve EUR/TRY'yi evrenden çıkaran yanılgının aynısını üretir. Rehber
+    # bunu yasaklıyordu, kod sormuyordu (inceleme 04.10.2026).
+    tasimali = [x for x in ids if x in TASIMA]
+    if tasimali and tur not in ("yalin", "opsiyon"):
+        raise FikirHatasi(f"{on}: {ev[tasimali[0]].ad} bacağı yalnız yalın yapıda ya da opsiyonda "
+                          "kullanılır — sonucu TL taşımasını içerir ve taşıma yalnız orada ölçülür")
     if len(set(ids)) != len(ids):
         raise FikirHatasi(f"{on}: aynı seri iki bacakta")
     if tur in ("egri", "kelebek"):
@@ -727,6 +735,10 @@ def kapat_dogrula(liste, b: dict, acik: dict[str, dict], dibs_d: dict | None = N
                               f"(açık: {', '.join(sorted(acik)) or 'yok'})")
         if not sebep:
             raise FikirHatasi(f"fikir_kapat[{i}]: sebep boş — erken kapanış gerekçesini yazar")
+        # Sebep de DÜZ METİNDİR: iki sayfa onu kaçırarak basar ve kaçmış etiket
+        # yayın kapısını (sayfa sınavı 22) düşürür (inceleme 04.10.2026).
+        if ETIKET.search(sebep):
+            raise FikirHatasi(f"fikir_kapat[{i}].sebep: HTML etiketi taşıyor — sebep düz metindir")
         f = _f(acik[k], ev)
         kayit = {"kimlik": k, "sebep": sebep, "tarih": b.get("tarih")}
         if yazim_ani:
@@ -966,9 +978,16 @@ def _ilk_kapanis_sonra(y: list[tuple[str, float]], an: datetime | None, taban: s
     return None
 
 
+# Değerlenemeyen günde önceki ölçümden taşınan alanlar (kendi tarihleriyle).
+TASINAN_ALANLAR = ("giris_fiili", "giris_fiili_tarih", "son", "son_tarih", "sonuc", "sonuc_r",
+                   "spot_sonuc", "tasima", "tasima_olculemedi", "ic_deger")
+
+
 def degerle(f: dict, bugun: str, ham: dict, dibs: dict, ev: dict[str, Seri],
-            faiz: dict | None = None) -> dict:
-    """Bir fikrin bugünkü karne satırı."""
+            faiz: dict | None = None, onceki_kayit: dict | None = None) -> dict:
+    """Bir fikrin bugünkü karne satırı. `onceki_kayit`: bir önceki sayının
+    karnesindeki açık kayıt — fikir bugün değerlenemezse son ölçülen değerler
+    oradan, KENDİ tarihleriyle taşınır."""
     ff = _f(f, ev)
     satir = {a: f.get(a) for a in ("kimlik", "acilis", "baslik", "tur", "sinif", "yon",
                                    "giris", "giris_tarih", "hedef", "stop", "ufuk",
@@ -1018,8 +1037,17 @@ def degerle(f: dict, bugun: str, ham: dict, dibs: dict, ev: dict[str, Seri],
     ufuk = f["ufuk"]
     kalan = (date.fromisoformat(ufuk) - date.fromisoformat(bugun)).days
     if bilinmiyor:
+        # Fiili giriş ve son ölçülen değer KAYBOLMAZ: önceki ölçümün değerleri
+        # kendi tarihleriyle taşınır, kayıt "değerlenmedi" der. Eskiden kayıt
+        # yalnız durum ve kalan gün taşıyordu; sayfa girilmiş bir fikri "giriş
+        # bekleniyor" diye basıyor, son değeri ve sonucu siliyordu (inceleme
+        # 04.10.2026 — roll_bilinmiyor 31.08'de NG=F'te gerçekten görüldü).
         satir.update({"durum": "acik", "degerlenmedi": "vadeli devir düzeltmesi kurulamadı",
                       "kalan_gun": kalan})
+        o = onceki_kayit if isinstance(onceki_kayit, dict) and onceki_kayit.get("durum") == "acik" else {}
+        satir.update({a: o[a] for a in TASINAN_ALANLAR if o.get(a) is not None})
+        if o.get("giris_bekleniyor"):
+            satir["giris_bekleniyor"] = True
         return satir
     y = yol(f, ham, dibs, ev)
     opsiyon = f["tur"] == "opsiyon"
@@ -1071,10 +1099,17 @@ def degerle(f: dict, bugun: str, ham: dict, dibs: dict, ev: dict[str, Seri],
     # fiili girişten SONRAKİ kapanışlarda sorulur.
     giris = _ilk_kapanis_sonra(y, _an(f.get("yazim_ani")), f["acilis"], f, ev)
     if giris is None or giris[0] > ufuk:
-        if bugun > ufuk:
+        # Ufuktan SONRA bir kapanış seride varsa, ufka kadar giriş gerçekten
+        # olmadı: ölçülemedi ve donar. Hiç kapanış yoksa kaynak gecikmiş
+        # olabilir — ufuk kapanışıyla aynı kural: UFUK_BEKLEME_GUN beklenir
+        # (eskiden ufkun ertesi günü donuyordu; inceleme 04.10.2026).
+        bekledi = (date.fromisoformat(bugun) - date.fromisoformat(ufuk)).days > UFUK_BEKLEME_GUN
+        if bugun > ufuk and (giris is not None or bekledi):
             satir.update({"durum": "olculemedi", "kapanis_tarih": ufuk})
         else:
             satir.update({"durum": "acik", "giris_bekleniyor": True, "kalan_gun": kalan})
+            if bugun > ufuk:
+                satir["ufuk_bekleniyor"] = True
         return satir
     t0, v0 = giris
     satir.update({"giris_fiili": _yuvarla(v0), "giris_fiili_tarih": t0})
@@ -1093,7 +1128,13 @@ def degerle(f: dict, bugun: str, ham: dict, dibs: dict, ev: dict[str, Seri],
         sonraki = [(t, v) for t, v in y if t >= t0]
         cikis = _ilk_kapanis_sonra(sonraki, _an(erken.get("yazim_ani")), erken["tarih"], f, ev)
         if cikis and cikis[0] == t0:
-            return kapat("geri_cekildi", t0, v0, t0, v0)
+            # Çıkış emri girişle AYNI kapanışa düştü: yapı hiç taşınmadı. Mekanik
+            # sonuç sıfırdır ama bu bir ölçüm değildir — "başabaş" diye basılıp
+            # kazanç oranının paydasına ve R ortalamasına girerdi (inceleme
+            # 04.10.2026). Sonucu yoktur; kapanışı ve sebebi yazılır.
+            satir.update({"durum": "geri_cekildi", "son": _yuvarla(v0), "son_tarih": t0,
+                          "kapanis_tarih": t0, "sebep": erken.get("sebep"), "giris_oncesi": True})
+            return satir
     son = (t0, v0)
     ufku_gecen = False
     for t, v in y:
@@ -1120,7 +1161,10 @@ def degerle(f: dict, bugun: str, ham: dict, dibs: dict, ev: dict[str, Seri],
             if son[0] < ufuk and not ufku_gecen:
                 satir["not"] = "ufuk günü kapanışı seride yok; son ölçülen kapanışla kapandı"
             return satir
-        satir["degerlenmedi"] = "ufuk günü kapanışı henüz yok"
+        # Değerlenmemiş değil: son kapanışa kadar değerlendi, ufuk günü
+        # kapanışını BEKLİYOR. İkisi tek alanda dururken sayfa "değerlenmedi"
+        # yazıp yanında sonuç basıyordu (inceleme 04.10.2026).
+        satir["ufuk_bekleniyor"] = True
     t, v = son
     satir.update({"durum": "acik", "son": _yuvarla(v), "son_tarih": t, "kalan_gun": kalan})
     if opsiyon:
@@ -1134,16 +1178,39 @@ def degerle(f: dict, bugun: str, ham: dict, dibs: dict, ev: dict[str, Seri],
 
 def karne(bugun: str, onceki: list[dict] | None = None, ham: dict | None = None,
           dibs_gecmis: list[dict] | None = None, haftalik: bool = False,
-          metrik: Path | None = DIBS_METRIK, fonlama: Path | None = FONLAMA_GUNLUK) -> dict:
+          metrik: Path | None = DIBS_METRIK, fonlama: Path | None = FONLAMA_GUNLUK,
+          sabit: dict[str, dict] | None = None) -> dict:
     """Ölçülen katmanın fikir bloğu: açık fikirler (bugünkü değerleriyle), yeni
-    kapananlar ve bütün kapanmış fikirlerin sayımı. AĞA ÇIKMAZ."""
+    kapananlar ve bütün kapanmış fikirlerin sayımı. AĞA ÇIKMAZ.
+
+    `sabit`: AYNI sayının daha önceki bir ölçümünde KAPANMIŞ sayılan kayıtlar
+    (kimlik → kayıt). Bir kapanış sayıya yazıldıktan sonra değişmez — aynı
+    sayının içinde de: sabah 03:23 ölçümünde okura "stopta kapandı" denmiş bir
+    kayıt, kaynak bir barı geri çektiği için 03:51 yedek ölçümünde "açık"a
+    dönmemeli. Koruma eskiden yalnız YAZILMIŞ sayıda ve karne kurulduktan SONRA
+    yapılıyordu: yazılmamış sayıda kapanış kayboluyor, yazılmış sayıda da sayım
+    yeni ölçümden kalıyordu (kayıt "kapandı", sayım "açık" diyordu — inceleme
+    04.10.2026). Sabit kayıt sayımdan ÖNCE yerine konur, tek hesap."""
     onceki = sayilar(bugun) if onceki is None else onceki
     ham = ham_seriler() if ham is None else ham
     dibs = dibs_seriler(dibs_gecmis, metrik)
     faiz = faiz_serileri(ham, fonlama)
     ev = evren()
     fikirler = defter(onceki)
-    kayitlar = [degerle(f, bugun, ham, dibs, ev, faiz) for f in fikirler]
+    # Her fikrin en son ölçülen kaydı (sayı sırasıyla): değerlenemeyen günde
+    # son değerler oradan taşınır (bkz. degerle).
+    son_kayit: dict[str, dict] = {}
+    for b in onceki:
+        for x in (b.get("fikir_karne") or {}).get("kayitlar") or []:
+            if isinstance(x, dict) and x.get("kimlik"):
+                son_kayit[str(x["kimlik"])] = x
+    kayitlar = [degerle(f, bugun, ham, dibs, ev, faiz, son_kayit.get(f["kimlik"])) for f in fikirler]
+    sabit = {k: v for k, v in (sabit or {}).items()
+             if isinstance(v, dict) and v.get("durum") in KAPANMIS}
+    if sabit:
+        gorulen = {k.get("kimlik") for k in kayitlar}
+        kayitlar = [sabit.get(k.get("kimlik"), k) for k in kayitlar]
+        kayitlar += [v for k, v in sorted(sabit.items()) if k not in gorulen]
     pencere = KAPANAN_PENCERE["haftalik" if haftalik else "gunluk"]
     sinir = (date.fromisoformat(bugun) - timedelta(days=pencere)).isoformat()
     # DONMA GÖSTERİMDEN BAĞIMSIZDIR: bugün İLK KEZ kapanmış sayılan kayıt
@@ -1159,8 +1226,10 @@ def karne(bugun: str, onceki: list[dict] | None = None, ham: dict | None = None,
     kapanan = [k for k in kayitlar if k.get("durum") in KAPANMIS]
     # Oran YALNIZ sonucu ölçülmüş, primi olmayan fikirlerden: opsiyonun ödemesi
     # primsiz olduğu için "kazandı" sayılamaz, ölçülemeyen fikrin sonucu yoktur.
+    # Taşıması ölçülemeyen USD/TRY kaydı da girmez: sonucu yalnız spottur,
+    # pozisyonun sonucu değildir (inceleme 04.10.2026).
     olculen = [k for k in kapanan if k.get("tur") not in ("opsiyon", "olculemez")
-               and k.get("sonuc") is not None]
+               and k.get("sonuc") is not None and not k.get("tasima_olculemedi")]
     sayim = {
         "acik": sum(1 for k in kayitlar if k.get("durum") == "acik"),
         "olculemez_acik": sum(1 for k in kayitlar if k.get("durum") == "olculemez"),
@@ -1173,6 +1242,8 @@ def karne(bugun: str, onceki: list[dict] | None = None, ham: dict | None = None,
         "geri_cekildi": sum(1 for k in kapanan if k.get("durum") == "geri_cekildi"),
         "giriste_gecersiz": sum(1 for k in kapanan if k.get("durum") == "giriste_gecersiz"),
         "vade": sum(1 for k in kapanan if k.get("durum") == "vade"),
+        "olculemedi": sum(1 for k in kapanan if k.get("durum") == "olculemedi"),
+        "sure_olculemez": sum(1 for k in kapanan if k.get("durum") == "sure_olculemez"),
     }
     # Ortalamalar birim birim (bp ile yüzde toplanmaz) ve RİSK KATI olarak (R =
     # sonuç / fiili girişten stop mesafesi): farklı oynaklıktaki yapıların bp'si

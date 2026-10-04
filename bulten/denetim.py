@@ -1341,6 +1341,11 @@ class Denetim:
             return
         import fikir as _f
         kip = "haftalik" if b.get("haftalik") else "gunluk"
+        # Erken kapanış emrinin sebebi de düz metindir ve iki sayfada kaçırılarak
+        # basılır: etiketli sebep yayın kapısını düşürür (inceleme 04.10.2026).
+        for x in b.get("fikir_kapat") or []:
+            if isinstance(x, dict) and isinstance(x.get("sebep"), str) and _f.ETIKET.search(x["sebep"]):
+                self.engel.append(f"çıkış emri '{x.get('kimlik')}': sebep HTML etiketi taşıyor — düz metindir")
         liste = [f for f in (b.get("fikirler") or []) if isinstance(f, dict)]
         alt, ust = self.FIKIR_ARALIK[kip]
         if not liste and str(b.get("tarih") or "") < self.FIKIR_BASLANGIC:
@@ -1410,13 +1415,21 @@ class Denetim:
                         f"({yaz_(mesafe)} < σ {yaz_(sg)})")
                 # Giriş yazarın değil ölçümün: kayıttaki bacak değeri bu sayının
                 # ölçülen katmanıyla tutmalı (elle düzenlenmiş kaydı yakalar).
+                # Ölçüm fikir YAZILDIKTAN SONRA yenilendiyse fark beklenir:
+                # yazılmış fikrin girişi değişmez (yaz.py imza koruması), yani
+                # uyarı yazarın düzeltemeyeceği bir şeyi söylerdi (inceleme
+                # 04.10.2026). O hâlde bilgi satırıdır.
+                yazim, olcum = _f._an(f.get("yazim_ani")), _f._an(b.get("olusturma"))
+                sonra_olculdu = bool(yazim and olcum and olcum > yazim)
                 for x in f.get("bacaklar") or []:
                     r = _f.bacak_degeri(b, str(x.get("seri") or ""))
                     if r and isinstance(x.get("deger"), (int, float)) and \
                             abs(r[0] - x["deger"]) > 1e-6 * max(1.0, abs(r[0])):
-                        self.uyari.append(f"{ad}: bacak {x.get('seri')} kayıtta "
-                                          f"{bicim.sayi(x['deger'], 4)}, ölçülen katmanda "
-                                          f"{bicim.sayi(r[0], 4)} — giriş ölçümden okunur")
+                        (self.bilgi if sonra_olculdu else self.uyari).append(
+                            f"{ad}: bacak {x.get('seri')} kayıtta {bicim.sayi(x['deger'], 4)}, "
+                            f"ölçülen katmanda {bicim.sayi(r[0], 4)} — "
+                            + ("ölçüm fikir yazıldıktan sonra yenilendi; giriş yazım anındaki ölçümdür"
+                               if sonra_olculdu else "giriş ölçümden okunur"))
             if len(str(f.get("baslik") or "")) > self.FIKIR_BASLIK_KARAKTER:
                 self.uyari.append(f"{ad}: başlık {len(str(f['baslik']))} karakter "
                                   f"(en çok {self.FIKIR_BASLIK_KARAKTER})")

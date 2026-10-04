@@ -755,6 +755,28 @@ _k = fikir_okura_ulasti(_agac({
                                   .replace(" göreli", "\n      göreli"))),
 }))
 sina("kaçışlı ve satıra bölünmüş başlık yanlış alarm üretmiyor", _k == ([], 1, 1), f"gelen {_k}")
+# (5b) YANLIŞ ALARM OLMASIN — eşitsizlik. Fikrin metni DÜZ METİNDİR ve HTML
+# taşıyamaz, ama "<" ve ">" bir faiz fikrinde doğal: "2y < 5y". Başlığı etiket
+# söker gibi süzmek "< 5y … >" aralığını siler ve kart dursa da ENGEL verirdi
+# (inceleme 04.10.2026). Sayfa `&lt;`/`&gt;` basar.
+_ESIT = ("2026-10-03-4", "Makas 2y < 5y kalırken 5y > 7y tümseği")
+_k = fikir_okura_ulasti(_agac({
+    _FK_YOL: _fk_json([_ESIT], [_ESIT]),
+    _FK_SAYFA: _fk_sayfa(_fk_kart(_ESIT[0], _ESIT[1].replace("<", "&lt;").replace(">", "&gt;"))),
+}))
+sina("eşitsizlik taşıyan fikir başlığı yanlış alarm üretmiyor (25d)", _k == ([], 2, 2), f"gelen {_k}")
+# (5c) ÇIKIŞ EMRİ — bu sayıda verilen erken kapanış emrinin sebebi fikir
+# bölümünde basılmalı; basılmazsa okur emri hiçbir sayfada görmezdi.
+import json as _jfk
+_EMIR = _jfk.dumps({"gundem_kaynagi": "yazili", "surum": 3, "fikirler": [],
+                    "fikir_karne": {"kayitlar": [], "sayim": {}},
+                    "fikir_kapat": [{"kimlik": "2026-09-29-1", "sebep": "TÜFE eşiği aştı, görüş bozuldu"}]},
+                   ensure_ascii=False)
+_k = fikir_okura_ulasti(_agac({_FK_YOL: _EMIR, _FK_SAYFA: _fk_sayfa(
+    f'<ul class="fk-emir"{_FK_CID}><li{_FK_CID}><a href="#x">Banka</a>: TÜFE eşiği aştı, görüş bozuldu.</li></ul>')}))
+sina("bu sayıda verilen çıkış emri fikir bölümünde (25d)", _k == ([], 1, 1), f"gelen {_k}")
+_k = fikir_okura_ulasti(_agac({_FK_YOL: _EMIR, _FK_SAYFA: _fk_sayfa("<p>boş</p>")}))
+sina("basılmayan çıkış emri ENGEL (25d)", len(_k[0]) == 1 and "çıkış emri" in _k[0][0], f"gelen {_k}")
 
 # (6) KAPSAM — yazılmamış ya da biçim 2 sayı sorulmaz; fikir taşıyan yazılmış
 # bir sayının derlenmiş sayfası YOKSA ise ölçüt SUSMAZ (koşmamış ölçüt geçmiş
@@ -874,6 +896,13 @@ _k = trade_okura_ulasti(_tr_agac({
                                        .replace(" göreli", "\n      göreli"))),
 }))
 sina("defterde kaçışlı ve satıra bölünmüş başlık yanlış alarm üretmiyor", _k == ([], 1, 1), f"gelen {_k}")
+_k = trade_okura_ulasti(_tr_agac({
+    _TR_YAZ: _tr_json([("2026-10-03-4", "Makas 2y < 5y kalırken 5y > 7y tümseği")]),
+    _TR_OLC: _tr_json(kayitlar=[("2026-10-03-4", "Makas 2y < 5y kalırken 5y > 7y tümseği", "egri", "stop")],
+                      yazili=False),
+    _TR_SAYFA: _tr_sayfa(kapanan=_tr_kart("2026-10-03-4", "Makas 2y &lt; 5y kalırken 5y &gt; 7y tümseği")),
+}))
+sina("eşitsizlik taşıyan fikir başlığı defterde yanlış alarm üretmiyor (25e)", _k == ([], 2, 2), f"gelen {_k}")
 
 # (6) KAPSAM — yazılmamış ve biçim 2 sayının fikri sorulmaz; karnesi
 # tutulmayan fikrin ufku dolması (sure_olculemez) kapanan bölümü istemez;
@@ -915,6 +944,15 @@ _tk = (_YOL.parents[1] / "src/components/TradeKart.astro").read_text(encoding="u
 _tp = (_YOL.parents[1] / "src/pages/tradeler/index.astro").read_text(encoding="utf-8")
 sina("defter kartı çapası kimlikten (trade-<kimlik>)", 'id={`trade-${t.kimlik}`}' in _tk)
 sina("defter kapanan bölümünü basıyor", 'id="kapanan"' in _tp and "t.grup === 'kapanan'" in _tp)
+# Karnesi tutulmayan fikir de kapanır: rozet durumdan, kapanmışsa "açık" demez
+# (inceleme 04.10.2026 — erken kapatılan baz fikri "açık" basılıyordu).
+sina("karnesiz kartın rozeti kapanmış durumu tanıyor",
+     "const karnesizKapali = karnesiz && FIKIR_KAPANMIS.has(durum)" in _tk
+     and "karnesizKapali ? FIKIR_DURUM[durum]" in _tk)
+# Karne kurulamadıysa ya da bu sayıda çıkış emri verildiyse bölüm yeni fikir
+# yokken de basılır (kusur ve emir görünür kalır).
+sina("fikir bölümü karne hatasında ve çıkış emrinde de açılıyor",
+     "fikirKapat.length > 0" in _bg_fk and "(bicim3 && !!fikirKarne.hata)" in _bg_fk)
 
 # (9) BÖLÜM NUMARALARI — Tradeler bülteni izler; numaralar boşluksuz ve tekil
 # (başlık, alt bilgi, 404, hakkında ve kicker'lar bu listeden okur).

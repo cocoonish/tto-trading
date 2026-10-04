@@ -56,7 +56,7 @@ export const FIKIR_UYARI = 'Bu bölümdeki işlem fikirleri bültenin piyasa oku
   + 'Kişiye özel değildir; yatırım danışmanlığı kapsamında değildir. Yatırım danışmanlığı hizmeti, '
   + 'yetkili kuruluşlarla imzalanacak sözleşme çerçevesinde kişinin risk ve getiri tercihleri dikkate '
   + 'alınarak sunulur. Referans seviyeler bültenin ölçüm anındaki kapanışlardır; karne kapanış bazında '
-  + 'tutulur ve gün içi dokunuşu ölçmez.';
+  + 'tutulur ve gün içi dokunuşu ölçmez. Geçmiş sonuçlar gelecekteki sonuçların göstergesi değildir.';
 
 export const FIKIR_YONTEM = 'Referans seviye yazarın değil ölçümün: fiyat bacağı piyasa fotoğrafının o '
   + 'sayıdaki kapanışından, TL faiz bacağı DİBS eğrisinin ölçüm anındaki düğümünden okunur. Karne '
@@ -65,8 +65,15 @@ export const FIKIR_YONTEM = 'Referans seviye yazarın değil ölçümün: fiyat 
   + 'olurdu. Giriş kapanışı seviyelerden birinin ötesindeyse fikir girişte geçersiz sayılır. Girişten '
   + 'sonraki her kapanışta yapının değeri yeniden kurulur; hedef ya da stop bir kapanışta aşılırsa fikir '
   + 'o gün kapanır, ufuk dolarsa son kapanışla kapanır; yazarın erken kapanışı da kapatan sayının '
-  + 'yayımından sonraki ilk kapanışta gerçekleşir. Bir kapanış bir sayıya yazıldıktan sonra değişmez. '
-  + 'Faiz yapılarında sonuç baz puan, fiyat yapılarında yüzdedir. Vadeli bacaklar devir günlerinde giriş '
+  + 'yayımından sonraki ilk kapanışta gerçekleşir; emir girişle aynı kapanışa düşerse yapı hiç taşınmamıştır '
+  + 've sonucu yoktur. Bir kapanış bir sayıya yazıldıktan sonra değişmez. '
+  + 'Faiz yapılarında sonuç baz puan, fiyat yapılarında yüzdedir; R, sonucun fiili girişten stopa olan mesafeye '
+  + 'oranıdır ve farklı birimdeki yapıları aynı ölçüde toplar. Dolar/TL fikrinin sonucu spot hareketi ile '
+  + 'TL ve ABD doları kısa faizleri arasındaki farktan gelen taşımanın toplamıdır (TLREF ve ABD 3 aylık hazine '
+  + 'bonosu faizi, takvim günüyle); hedef ve stop spot kapanışında sorulur, bu yüzden stopta kapanan bir fikir '
+  + 'taşıma sayesinde kârla kapanabilir. Taşıma ölçülemediği gün sonuç yalnız spottur ve kazanç oranına girmez. '
+  + 'Öbür fikirlerde sonuç işlem maliyetini, alış-satış makasını, fonlama ve taşıma maliyetini, vadeli devir '
+  + 'maliyetini ve temettüyü içermez. Vadeli bacaklar devir günlerinde giriş '
   + 'kontratı cinsinden izlenir. Opsiyon fikrinde prim ölçülmez (örtük oynaklık verisi yok): karne vade '
   + 'sonu ödemesini dayanağın kapanışından yazar ve kazanç oranına katmaz. TRY OIS, çapraz kur swap bazı '
   + 've tek hisse gibi elimizde fiyatı olmayan enstrümanlar ya ölçülebilir bir vekille izlenir ya da '
@@ -104,7 +111,10 @@ export const kalanYaz = (n: unknown): string =>
 export const fkKullanimParca = (f: any): { parca: string[]; ayrac: string } => {
   const o = f?.opsiyon ?? {};
   const k = (Array.isArray(o.kullanim) ? o.kullanim : []).filter(sayiMi);
-  const n = sayiMi(f?.ondalik) ? f.ondalik : 2;
+  // Kullanım fiyatı yazarın yazdığı hanede (en az iki, en çok dört): dayanağın
+  // kotasyon hanesi (dolar/TL dört) 51,25'i "51,2500" diye basıyordu.
+  const hane = (x: number) => (String(x).split('.')[1] ?? '').length;
+  const n = Math.min(4, Math.max(2, ...k.map(hane)));
   if (o.tip === 'risk_reversal' && k.length === 2) return { parca: [`satım ${sayi(k[0], n)}`, `alım ${sayi(k[1], n)}`], ayrac: ' · ' };
   return { parca: k.length ? k.map((x: number) => sayi(x, n)) : ['—'], ayrac: ' – ' };
 };
@@ -137,6 +147,14 @@ export const opsiyonSonucNotu = (k: any): string =>
  *  kendisidir). Site HESAPLAMAZ, yalnız basar: iki parça ölçülen katmanda
  *  ayrı ayrı yuvarlanır ve farkla kurulan bir parça okura ondan ayrışan bir
  *  sayı yazardı. */
+/** Taşıması ölçülemeyen dolar/TL kaydının notu (açıkta ve kapanmışta). */
+export const tasimaOlculemediNotu = (kapanmis: boolean): string =>
+  `Taşıma payı ölçülemedi; sonuç yalnız spot hareketidir${kapanmis ? ' ve kazanç oranına girmez' : ''}.`;
+
+/** Ufuk günü kapanışı seriye henüz girmemiş fikrin notu. */
+export const UFUK_BEKLENIYOR = 'ufuk kapanışı bekleniyor';
+export const UFUK_BEKLENIYOR_NOT = 'Ufuk günü kapanışı henüz seriye girmedi; fikir o kapanışla kapanacak.';
+
 export const tasimaAyrisimi = (k: any): { spot: string; tasima: string } | null =>
   sayiMi(k?.tasima) && sayiMi(k?.spot_sonuc)
     ? { spot: fkSonuc(k.spot_sonuc, k), tasima: fkSonuc(k.tasima, k) }
@@ -147,6 +165,9 @@ export const tasimaAyrisimi = (k: any): { spot: string; tasima: string } | null 
  *  ölçülemeyen ve girişte geçersiz kalan fikrin sonucu yoktur: ikisinde de null. */
 export const sonucHukmu = (k: any): { etiket: string; sinif: 'kar' | 'zarar' | 'basabas' } | null => {
   if (!k || k.tur === 'opsiyon' || k.tur === 'olculemez' || !sayiMi(k.sonuc)) return null;
+  // Taşıması ölçülemeyen dolar/TL sonucu yalnız spottur: kâr/zarar hükmü kurulmaz
+  // (Python sayımı da onu kazanç oranına katmaz).
+  if (k.tasima_olculemedi) return null;
   if (k.sonuc > 0) return { etiket: 'Kâr', sinif: 'kar' };
   if (k.sonuc < 0) return { etiket: 'Zarar', sinif: 'zarar' };
   return { etiket: 'Başabaş', sinif: 'basabas' };

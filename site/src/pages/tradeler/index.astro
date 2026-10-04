@@ -19,7 +19,7 @@ import Base from '../../layouts/Base.astro';
 import TradeKart from '../../components/TradeKart.astro';
 import { kicker, bolumBul } from '../../lib/bolumler';
 import { defter, type Trade } from '../../lib/tradeler';
-import { FIKIR_UYARI, FIKIR_YONTEM, sayiMi, fkSonuc, fkR } from '../../lib/fikir';
+import { FIKIR_UYARI, FIKIR_YONTEM, FIKIR_KAPANMIS, sayiMi, fkR } from '../../lib/fikir';
 import { tarihYaz, yuzde } from '../../lib/bicim';
 
 const BOLUM = bolumBul('/tradeler/');
@@ -36,7 +36,10 @@ const kapanisa = (a: Trade, b: Trade) =>
   metin(b.f.kapanis_tarih ?? b.f.son_tarih).localeCompare(metin(a.f.kapanis_tarih ?? a.f.son_tarih)) || sira(a, b);
 const acik = tradeler.filter((t) => t.grup === 'acik').sort(acilisa);
 const kapanan = tradeler.filter((t) => t.grup === 'kapanan').sort(kapanisa);
-const karnesiz = tradeler.filter((t) => t.grup === 'olculemez').sort(acilisa);
+// Karnesi tutulmayanlarda açıklar önce, kapanmışlar (erken kapanan, ufku dolan) sonra.
+const karnesizAcik = (t: Trade) => (FIKIR_KAPANMIS.has(String(t.son?.durum ?? '')) ? 1 : 0);
+const karnesiz = tradeler.filter((t) => t.grup === 'olculemez')
+  .sort((a, b) => karnesizAcik(a) - karnesizAcik(b) || (karnesizAcik(a) ? kapanisa(a, b) : acilisa(a, b)));
 
 // SAYIM — en son karnenin sayımı. Kapananların dökümü sayımın taşıdığı
 // anahtarlardan; sayım bir durumu ayrı saymıyorsa (bugün vade, ölçülemedi ve
@@ -58,7 +61,8 @@ if (sayim) {
     if (n > 0) dokum.push(`${ad} ${n}`);
   }
   const top = sn('kapanan');
-  if (top !== null && top - ayri > 0) dokum.push(`vadesinde, ölçülemedi ya da karnesiz ${top - ayri}`);
+  // Sayımın ayrı saymadığı bir durum (eski bir karnede) kalırsa adı uydurulmaz.
+  if (top !== null && top - ayri > 0) dokum.push(`öbür ${top - ayri}`);
 }
 const olculen = sn('olculen_kapanan');
 const kazanan = sn('kazanan');
@@ -109,20 +113,22 @@ const oran = olculen && kazanan !== null ? yuzde((100 * kazanan) / olculen, 0) :
               <dd>{olculen ? `${kazanan ?? '—'} / ${olculen}` : '—'}</dd>
               <span class="tr-alt">{oran ? `oran ${oran}` : 'ölçülen sonuçla kapanan fikir yok'}</span>
             </div>
-            {sn('n_r') !== null && (
+            {sn('n_r') ? (
               <div>
                 <dt>Ortalama sonuç · R</dt>
                 <dd>{sn('n_r') && sayiMi(s.ortalama_r) ? fkR(s.ortalama_r) : '—'}</dd>
                 <span class="tr-alt">fikir {sn('n_r')} · stop mesafesi cinsinden</span>
               </div>
-            )}
+            ) : null}
           </dl>
           {dokum.length > 0 && <p class="tr-dokum">Kapananlar: {dokum.join(' · ')}.</p>}
           <p class="tr-dokum-not">
             Sayım {tz(sayimTarih)} ölçümünden; o ölçümden sonra açılan fikirler sayıma ilk karneleriyle
-            girer. Kazanç oranı ve ortalama yalnız sonucu ölçülen kapanmış fikirlerden kurulur, faiz
-            yapıları baz puanla, fiyat yapıları yüzdeyle ayrı ayrı: opsiyon fikirleri (prim ölçülmediği
-            için) ve karnesi tutulmayan fikirler bu orana ve ortalamaya girmez.
+            girer. Kazanç oranı ve ortalama yalnız sonucu ölçülen kapanmış fikirlerden kurulur; ortalama
+            R cinsindendir (sonucun stop mesafesine oranı), böylece baz puanla ve yüzdeyle ölçülen yapılar
+            aynı ölçüde toplanır. Opsiyon fikirleri (prim ölçülmediği için), karnesi tutulmayan fikirler,
+            girişle aynı kapanışta geri çekilen fikirler ve taşıması ölçülemeyen dolar/TL sonucu bu orana ve
+            ortalamaya girmez.
           </p>
         </section>
       )}

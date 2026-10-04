@@ -927,6 +927,8 @@ Hedef ve stop **yapının biriminde** yazılır:
   oranı kayda yazar (`stop_z`, `hedef_z`). Örnek (04.10.2026 sayısı): 2y–5y
   makasında σ 35,5 bp ve ufka 15 iş günü var, beklenen hareket ≈ 137 bp; 89
   bp'lik stop 0,65, 121 bp'lik hedef 0,88 kattır.
+- **TL'li döviz bacağı yalnız yalın yapıda ve opsiyonda kullanılır.** Göreli bir
+  yapıda (BIST 100 / USD/TRY) karne taşımasız oranı yazardı; yazma kapısı reddeder.
 - **USD/TRY'nin sonucu taşımayı içerir.** Kısa USD/TRY bir TL mevduatıdır ve
   yılda kabaca faiz farkı kadar taşır; spot getirisi tek başına onu tersine
   gösterir. Yalın USD/TRY fikrinin sonucu spot getirisi artı taşımadır (TLREF
@@ -935,8 +937,9 @@ Hedef ve stop **yapının biriminde** yazılır:
   ve sterlinin kısa faizi ölçülen katmanda olmadığı için EUR/TRY ve GBP/TRY
   evrende yoktur.
 - **Seviyeler referanstan değil, fiili girişten sınanır.** Referans ile fiili
-  giriş arasında günlükte bir, haftalıkta (cuma kapanışı → pazartesi kapanışı)
-  iki seanslık hareket vardır; giriş kapanışı hedef ya da stopun ötesine düşerse
+  giriş arasında hem günlükte hem haftalıkta (cuma kapanışı → pazartesi
+  kapanışı) bir seanslık hareket vardır — hafta sonunda seans yoktur, yalnız 7/24
+  işleyen bacakta aralık üç takvim gününü kapsar; giriş kapanışı hedef ya da stopun ötesine düşerse
   fikir "girişte geçersiz" kapanır. Stop, bu aralığın olağan hareketini de
   karşılayacak uzaklıkta konur.
 - **Getiri/risk**, hedefe uzaklığın stopa uzaklığa oranıdır ve makine yazar
@@ -1010,7 +1013,10 @@ hâlâ açık bir fikrinkidir (`python3 bulten/fikir.py --karne --tarih <sayı g
 açık fikirleri kimlikleriyle listeler); kimlik okura basılmaz. Erken kapanış bir
 ÇIKIŞ EMRİDİR, çıkış fiyatı değil: karne çıkışı, girişle simetrik olarak, kapatan
 sayının yayımından sonraki ilk kapanışta gerçekleştirir (o güne kadar fikir
-"çıkış emri verildi" diye açık görünür). Kayıttaki referans çıkış seviyesini
+"çıkış emri verildi" diye açık görünür; emri veren sayının kendi sayfası onu
+"Bu sayıda verilen çıkış emirleri" altında basar). Emir fiili girişle aynı
+kapanışa düşerse yapı hiç taşınmamıştır ve fikrin sonucu yoktur. `sebep` DÜZ
+METİNDİR: etiket taşırsa yazma kapısı reddeder. Kayıttaki referans çıkış seviyesini
 makine bu sayının ölçülen katmanından yazar; bacaklardan biri ölçülemediyse
 kapanış reddedilir. Kapanış sonraki sayıların karnesinde "erken kapandı" diye,
 sebebiyle görünür.
@@ -1056,11 +1062,14 @@ nasıl ve neden kapandığı, sonucu ve gün gün takibi. Sonuç faiz
 yapılarında bp, fiyat yapılarında yüzdedir; ikisi toplanamadığı için karnenin
 ortak ölçüsü **R**'dir: sonucun, fiili girişten stopa uzaklığa oranı (+1 R stop
 kadar kazanç, −1 R stopta kapanış). Ortalama yalnız R'den kurulur. USD/TRY'de
-sonuç spot getirisi artı taşımadır ve iki parça ayrıca basılır. Opsiyonun sonucu
+sonuç spot getirisi artı taşımadır ve iki parça ayrıca basılır; taşıma o gün
+ölçülemediyse sonuç yalnız spottur, sayfa bunu söyler ve kayıt kazanç oranına
+girmez. Opsiyonun sonucu
 primsiz ödemedir ("ödeme" vadede, "içsel değer" erken kapanışta) ve kazanç
 oranına girmez; ölçülemeyenin sonucu yoktur. Ufuk günü kapanışı henüz yoksa
-fikir kapanmaz, beş takvim günü beklenir; vadeli bir bacağın devri o gün
-kurulamadıysa fikir o gün değerlenmez ve sebebi yazılır. Okura giden durumlar:
+fikir kapanmaz, beş takvim günü beklenir (ufka kadar hiç kapanış gelmediyse de);
+vadeli bir bacağın devri o gün kurulamadıysa fikir o gün değerlenmez, son
+ölçülen değerler kendi tarihleriyle taşınır ve sebebi yazılır. Okura giden durumlar:
 açık · hedefte kapandı · stopta kapandı · ufuk doldu · erken kapandı · vadesinde ·
 girişte geçersiz · ölçülemedi · karnesi tutulmuyor · ufku doldu.
 
@@ -1087,9 +1096,10 @@ basar (bkz. "Haftaya bakış" → "Fikirlerin karnesi").
    ölçütü yapısal tutarsızlığı ENGEL, bütçeleri (sayı, gerekçe ve koşul uzunluğu,
    getiri/risk, stop–σ, dayanak, senaryo, sınıf çeşidi, açık fikir tavanı)
    UYARI sayar.
-6. Ölçüm yeniden kurulduysa (`--yeniden-olc`, haftalık SIRA KURALI) fikirli yama
-   YENİDEN uygulanır: giriş yeni ölçümden okunur; eski giriş kalırsa denetim
-   "bacak kayıtta X, ölçülen katmanda Y" diye uyarır.
+6. Fikir yaması ölçüm SON kez kurulduktan sonra uygulanır (haftalık SIRA KURALI:
+   önce söz defteri, sonra yeniden ölçüm, sonra fikirler). Yazılmış bir fikrin
+   girişi değişmez: ölçüm fikir yazıldıktan sonra yenilenirse giriş yazıldığı
+   andaki ölçüm olarak kalır ve denetim farkı bilgi satırı olarak yazar.
 
 ### Örnekler
 

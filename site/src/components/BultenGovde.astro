@@ -24,11 +24,12 @@ import { OLAGANDISI_SIGMA, sigmaBasligi } from '../lib/anaSayfa';
 import { sayi, yuzde, degisim, ondalikSay, istanbulSaat, istanbulIsoGun, tarihUzun, tarihYaz, tariheCevir, gunAdi, duzMetin } from '../lib/bicim';
 import { type BultenKaydi } from '../lib/yayinlar';
 import { bolumBul } from '../lib/bolumler';
-import { fikirKartBaglari } from '../lib/tradeler';
+import { fikirKartBaglari, defter as tradeDefteri } from '../lib/tradeler';
 import {
   FIKIR_SINIF, FIKIR_TUR, FIKIR_DURUM, FIKIR_ACIK, FIKIR_UYARI, FIKIR_YONTEM,
   sayiMi, fkSeviye, fkSonuc, fkYon, kalanYaz, fkKullanimParca, noktali,
   FIKIR_SONUCSUZ, GIRIS_BEKLENIYOR_KISA, GIRIS_BEKLENIYOR_NE, fkR, opsiyonSonucNotu, tasimaAyrisimi,
+  tasimaOlculemediNotu, UFUK_BEKLENIYOR_NOT,
 } from '../lib/fikir';
 import { FERAGAT } from '../consts';
 import type { HatSayfa } from '../lib/hatSayfa';
@@ -261,7 +262,15 @@ const fikirKarne: any = nesne(b.fikir_karne) ? b.fikir_karne : { kayitlar: [], s
 const fikirKayit: any[] = bicim3 && Array.isArray(fikirKarne.kayitlar) ? fikirKarne.kayitlar.filter(nesne) : [];
 const fikirAcik = fikirKayit.filter((k: any) => FIKIR_ACIK.has(String(k.durum)));
 const fikirKapanan = fikirKayit.filter((k: any) => !FIKIR_ACIK.has(String(k.durum)));
-const fikirVar = fikirler.length > 0 || fikirKayit.length > 0;
+// Bu sayıda verilen çıkış emirleri (yazarın erken kapanışı): emir bu sayıda
+// verilir, gerçekleşmesi bir sonraki ölçümün karnesinde görünür — sayfa emri
+// verildiği sayıda da basar (inceleme 04.10.2026: emir hiçbir sayıda okunmuyordu).
+const fikirKapat: any[] = bicim3 && b.gundem_kaynagi === 'yazili' && Array.isArray(b.fikir_kapat)
+  ? b.fikir_kapat.filter((x: any) => nesne(x) && x.kimlik) : [];
+// Karne kurulamadıysa bölüm yine açılır ve bunu söyler (yeni fikir yokken
+// bölüm hiç basılmıyor, kusur görünmüyordu).
+const fikirVar = fikirler.length > 0 || fikirKayit.length > 0 || fikirKapat.length > 0
+  || (bicim3 && !!fikirKarne.hata);
 const FIKIR_BOLUM = { id: 'fikirler', ad: 'İşlem fikirleri', kisa: 'Fikirler' };
 const yaziAkisi: any[] = (() => {
   const liste: any[] = yaziBolumleri.map((x: any) => ({ ...x, fikir: false }));
@@ -296,7 +305,12 @@ const kacir = (s: unknown) => String(s ?? '').trim()
 const duzNb = (s: unknown) => sayiBag(kacir(s));
 // Karnedeki fikir, açıldığı sayının kartına bağlanır — yalnız o kart orada
 // gerçekten basılıyorsa (biçim 3, yazılmış sayı, fikir listesinde).
-const fikirAcildigi: Map<string, string> = fikirKayit.length > 0 ? fikirKartBaglari() : new Map();
+const fikirAcildigi: Map<string, string> = fikirKayit.length > 0 || fikirKapat.length > 0 ? fikirKartBaglari() : new Map();
+const fikirTrade = (kimlik: unknown) => tradeDefteri().tradeler.find((t) => t.kimlik === String(kimlik)) ?? null;
+const fikirBaslik = (kimlik: unknown): string => String(fikirTrade(kimlik)?.f?.baslik ?? '').trim();
+// Bu sayıda emri verilen fikir, karnesinde (ölçüm yazıdan önce kurulduğu için)
+// henüz "açık" görünür: satır emri adıyla söyler.
+const fikirKapatKimlik = new Set(fikirKapat.map((x: any) => String(x.kimlik)));
 // Bütün tradelerin defteri: bölüm adı ve adresi site bölümlerinin tek kaynağından.
 const TRADELER = bolumBul('/tradeler/');
 const fikirSayim: any = nesne(fikirKarne.sayim) ? fikirKarne.sayim : {};
@@ -1314,7 +1328,9 @@ const bolumler = [
                         {bag ? <a href={bag}>{k.baslik}</a> : <span>{k.baslik}</span>}
                         <span class="p-tarih-ic">açılış {gunAy(k.acilis)}{k.yapi_metni && !olculemez ? ` · ${k.yapi_metni}` : ''}</span>
                         {k.degerlenmedi && <span class="p-not p-not-uyari">Bu ölçümde değerlenmedi: {noktali(k.degerlenmedi)}</span>}
-                        {k.cikis_bekleniyor && <span class="p-not p-not-uyari">Çıkış emri verildi; çıkış, emrin yayımından sonraki ilk kapanış.</span>}
+                        {(k.cikis_bekleniyor || fikirKapatKimlik.has(String(k.kimlik))) && <span class="p-not p-not-uyari">Çıkış emri verildi; çıkış, emrin yayımından sonraki ilk kapanış.</span>}
+                        {k.ufuk_bekleniyor && <span class="p-not">{UFUK_BEKLENIYOR_NOT}</span>}
+                        {k.tasima_olculemedi && <span class="p-not p-not-uyari">{tasimaOlculemediNotu(false)}</span>}
                         {Array.isArray(k.devir) && k.devir.length > 0 && (
                           <span class="p-not">son değer giriş kontratı cinsinden (devir {k.devir.map((d: string) => gunAy(d)).join(', ')})</span>
                         )}
@@ -1334,7 +1350,9 @@ const bolumler = [
                             {sayiMi(k.giris_fiili)
                               ? <><span class="nb">{fkSeviye(k.giris_fiili, k)}</span> → <span class="nb">{fkSeviye(k.son, k)}</span>
                                   <span class="p-tarih-ic"><span class="nb">giriş {gunAy(k.giris_fiili_tarih)}</span>{k.son_tarih && <> · <span class="nb">son {gunAy(k.son_tarih)}</span></>}</span></>
-                              : <><span class="fk-not-hucre">{GIRIS_BEKLENIYOR_KISA}</span><span class="p-tarih-ic">{GIRIS_BEKLENIYOR_NE}</span></>}
+                              : k.degerlenmedi
+                                ? <><span class="fk-not-hucre">değerlenmedi</span><span class="p-tarih-ic">bu ölçümde</span></>
+                                : <><span class="fk-not-hucre">{GIRIS_BEKLENIYOR_KISA}</span><span class="p-tarih-ic">{GIRIS_BEKLENIYOR_NE}</span></>}
                             {sayiMi(k.giris) && <span class="p-tarih-ic">referans {fkSeviye(k.giris, k)}{k.giris_tarih ? ` (${gunAy(k.giris_tarih)})` : ''}</span>}
                           </td>
                           {opsiyon
@@ -1401,6 +1419,9 @@ const bolumler = [
                         {k.durum === 'giriste_gecersiz' && sayiMi(k.son) && (
                           <span class="p-tarih-ic">giriş kapanışı {fkSeviye(k.son, k)}: seviyelerin ötesinde</span>
                         )}
+                        {k.durum === 'geri_cekildi' && k.giris_oncesi && <span class="p-tarih-ic">çıkış emri girişle aynı kapanışa düştü; sonuç yok</span>}
+                        {k.tasima_olculemedi && <span class="p-not p-not-uyari">{tasimaOlculemediNotu(true)}</span>}
+                        {k.not && <span class="p-tarih-ic">{k.not}</span>}
                         {k.durum === 'geri_cekildi' && k.sebep && <span class="p-not fk-sebep">{noktali(k.sebep)}</span>}
                       </td>
                     </tr>
@@ -1412,13 +1433,31 @@ const bolumler = [
         </>
       )}
 
+      {fikirKapat.length > 0 && (
+        <>
+          <h3>Bu sayıda verilen çıkış emirleri</h3>
+          <ul class="fk-emir">
+            {fikirKapat.map((x: any) => {
+              const bag = fikirAcildigi.get(String(x.kimlik));
+              const tr = fikirTrade(x.kimlik);
+              const ad = fikirBaslik(x.kimlik);
+              const ref = sayiMi(x.cikis) && tr ? `Referans çıkış ${fkSeviye(x.cikis, tr.f)}${x.cikis_tarih ? ` (${tz(x.cikis_tarih)} kapanışı)` : ''}; ` : '';
+              return (
+                <li>{ad ? (bag ? <a href={bag}>{ad}</a> : <span>{ad}</span>) : <span>açık bir fikir</span>}{x.sebep ? `: ${noktali(x.sebep)}` : '.'} {ref ? `${ref}çıkış` : 'Çıkış'} bu sayının yayımından sonraki ilk kapanıştır.</li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+
       {sayiMi(fikirSayim.olculen_kapanan) && fikirSayim.olculen_kapanan > 0 && (
         <p class="fk-sayim">
           Şimdiye kadar ölçülen sonuçla kapanan fikir: {fikirSayim.olculen_kapanan}; kazançla
           kapanan: {sayiMi(fikirSayim.kazanan) ? fikirSayim.kazanan : '—'}.
           {sayiMi(fikirSayim.n_r) && fikirSayim.n_r > 0 && sayiMi(fikirSayim.ortalama_r) &&
             ` Stop mesafesi cinsinden ortalama ${fkR(fikirSayim.ortalama_r)} (${fikirSayim.n_r} fikir).`}
-          {' '}Opsiyon fikirleri (prim ölçülmediği için) ve karnesi tutulmayan fikirler bu sayıma girmez.
+          {' '}Opsiyon fikirleri (prim ölçülmediği için), karnesi tutulmayan fikirler, girişle aynı kapanışta geri
+          çekilen fikirler ve taşıması ölçülemeyen dolar/TL sonucu bu sayıma girmez.
         </p>
       )}
 
@@ -2545,6 +2584,8 @@ const bolumler = [
   .fk-not-hucre { color: var(--ink-60); font-style: italic; }
   .fk-sebep { text-align: right; max-width: 16rem; margin-left: auto; }
   .fk-sayim { font-size: 0.86rem; color: var(--ink-70); line-height: 1.5; max-width: var(--olcu-metin); margin: 0.9rem 0 0.6rem; }
+  .fk-emir { font-size: 0.92rem; line-height: 1.5; max-width: var(--olcu-metin); margin: 0.4rem 0 0.8rem; padding-left: 1.1rem; }
+  .fk-emir li { margin: 0.25rem 0; }
   .fk-yontem { margin: 0.8rem 0 0; }
   @media (max-width: 640px) {
     .fk-kart { padding-left: 0.7rem; }

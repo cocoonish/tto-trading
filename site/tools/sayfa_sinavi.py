@@ -805,6 +805,17 @@ def _etiketsiz(html: str) -> str:
     return _sade_metin(unescape(re.sub(r"<[^>]+>", "", html)))
 
 
+def _duz_metin(s: str) -> str:
+    """Kaynağı DÜZ METİN olan bir alan (işlem fikrinin başlığı): etiket
+    sökülmez, kaçış çözülmez — yalnız boşluk tekleşir. Fikrin metin alanları
+    HTML taşıyamaz (yazma kapısı `fikir.ETIKET` ile reddeder), yani "2y < 5y"
+    gibi bir eşitsizlik okura olduğu gibi basılır. `_etiketsiz` ise "<"den
+    sonraki ilk ">"e kadar her şeyi siler: başlığın kendisini kırpar ve sayfa
+    tarafı (`&lt;` çözülüp kalır) onunla hiç eşleşmezdi — yayını durduran bir
+    yanlış alarm (inceleme 04.10.2026)."""
+    return _sade_metin(s)
+
+
 def yazi_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
     """(25b) YAZI OKURA ULAŞTI MI. Yazı katmanının her metin alanı (özet,
     günün okuması, manşet, gündem bölümleri) o sayının derlenmiş sayfasında
@@ -945,17 +956,21 @@ def fikir_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
         fikirler = [f for f in (b.get("fikirler") or []) if isinstance(f, dict)]
         karne = b.get("fikir_karne") if isinstance(b.get("fikir_karne"), dict) else {}
         kayitlar = [k for k in (karne.get("kayitlar") or []) if isinstance(k, dict)]
-        if not fikirler and not kayitlar:
+        # Bu sayıda verilen çıkış emirleri: sebep fikir bölümünde basılmalı
+        # (emir verildiği sayıda okunmuyordu — inceleme 04.10.2026).
+        kapat = [x for x in (b.get("fikir_kapat") or [])
+                 if isinstance(x, dict) and _duz_metin(str(x.get("sebep") or ""))]
+        if not fikirler and not kayitlar and not kapat:
             continue
         sayfa = dist / kaynak.stem / "index.html"
         if not sayfa.exists():
-            aranan += len(fikirler) + len(kayitlar)
+            aranan += len(fikirler) + len(kayitlar) + len(kapat)
             bulgu.append(f"{kaynak.stem} — {len(fikirler)} fikir ve {len(kayitlar)} karne kaydı "
                          "taşıyan sayının derlenmiş sayfası yok; ölçülemedi")
             continue
         html = sayfa.read_text(encoding="utf-8")
         for f in fikirler:
-            t = _etiketsiz(str(f.get("baslik") or ""))
+            t = _duz_metin(str(f.get("baslik") or ""))
             if not t:
                 continue
             aranan += 1
@@ -968,9 +983,17 @@ def fikir_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
             else:
                 bulgu.append(f"{kaynak.stem} · fikir {t[:70]!r} — kartın başlığında YOK "
                              f"(kartta {kart[:70]!r})")
-        bolum = _fikir_bolumu(html) if kayitlar else None
+        bolum = _fikir_bolumu(html) if kayitlar or kapat else None
+        for x in kapat:
+            t = _duz_metin(str(x["sebep"]))
+            aranan += 1
+            if bolum is not None and t in bolum:
+                bulunan += 1
+            else:
+                bulgu.append(f"{kaynak.stem} · çıkış emri {t[:70]!r} — "
+                             + ("fikir bölümü sayfada YOK" if bolum is None else "fikir bölümünde YOK"))
         for k in kayitlar:
-            t = _etiketsiz(str(k.get("baslik") or ""))
+            t = _duz_metin(str(k.get("baslik") or ""))
             if not t:
                 continue
             aranan += 1
@@ -1039,13 +1062,13 @@ def trade_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
             surum = 2
         if b.get("gundem_kaynagi") == "yazili" and surum >= 3:
             for f in b.get("fikirler") or []:
-                if isinstance(f, dict) and f.get("kimlik") and _etiketsiz(str(f.get("baslik") or "")):
-                    fikirler.append((kaynak.stem, str(f["kimlik"]), _etiketsiz(str(f["baslik"]))))
+                if isinstance(f, dict) and f.get("kimlik") and _duz_metin(str(f.get("baslik") or "")):
+                    fikirler.append((kaynak.stem, str(f["kimlik"]), _duz_metin(str(f["baslik"]))))
         karne = b.get("fikir_karne") if isinstance(b.get("fikir_karne"), dict) else {}
         for x in karne.get("kayitlar") or []:
             if (isinstance(x, dict) and x.get("kimlik") and x.get("tur") != "olculemez"
                     and x.get("durum") in kapanmis_durum and str(x["kimlik"]) not in kapanan):
-                kapanan[str(x["kimlik"])] = (kaynak.stem, _etiketsiz(str(x.get("baslik") or "")))
+                kapanan[str(x["kimlik"])] = (kaynak.stem, _duz_metin(str(x.get("baslik") or "")))
     aranan = len(fikirler) + len(kapanan)
     if not aranan:
         return [], 0, 0

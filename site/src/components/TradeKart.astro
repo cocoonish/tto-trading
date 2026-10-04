@@ -9,7 +9,7 @@
  *
  * Bütün sayılar ölçülen katmandan (lib/tradeler → `fikir_karne`) gelir ve
  * olduğu gibi basılır; yazım lib/fikir'den, bülten bölümüyle ortak. Başlığın
- * çapası `trade-<kimlik>` — sayfa sınavı (TRADELER_OLCUT) her yazılmış fikrin
+ * çapası `trade-<kimlik>` — sayfa sınavı (25e) her yazılmış fikrin
  * başlığını bu öğede arar; kimlik okura basılmaz.
  */
 import type { Trade } from '../lib/tradeler';
@@ -17,6 +17,7 @@ import {
   FIKIR_SINIF, FIKIR_TUR, FIKIR_DURUM, FIKIR_KAPANIS_NEDEN,
   sayiMi, fkSeviye, fkSonuc, fkYon, kalanYaz, fkKullanimParca, noktali, sonucHukmu,
   FIKIR_SONUCSUZ, GIRIS_BEKLENIYOR, GIRIS_BEKLENIYOR_NE, fkR, opsiyonSonucNotu, tasimaAyrisimi,
+  FIKIR_KAPANMIS, tasimaOlculemediNotu, UFUK_BEKLENIYOR, UFUK_BEKLENIYOR_NOT,
 } from '../lib/fikir';
 import { tarihYaz, yuzde, sayi } from '../lib/bicim';
 
@@ -33,13 +34,17 @@ const opsiyon = f.tur === 'opsiyon';
 const durum = metin(k?.durum);
 const kapanmis = grup === 'kapanan';
 const karnesiz = grup === 'olculemez';
+// Karnesi tutulmayan fikir de KAPANIR (yazarın erken kapanışı, ufku): grubu
+// türünden gelir ama durumu kapanmıştır. Eskiden rozet her hâlde "açık" diyordu ve
+// erken kapatılmış bir fikrin sebebi hiçbir yerde basılmıyordu (inceleme 04.10.2026).
+const karnesizKapali = karnesiz && FIKIR_KAPANMIS.has(durum);
 
 // Künye: sınıf · tür · açılış · ufuk/vade (açıkta) ya da kapanış (kapanmışta) · senaryo.
 const ust = [
   FIKIR_SINIF[metin(f.sinif)] ?? '',
   karnesiz ? '' : FIKIR_TUR[metin(f.tur)] ?? '',
   f.acilis ? `açılış ${tz(f.acilis)}` : '',
-  kapanmis
+  kapanmis || karnesizKapali
     ? (f.kapanis_tarih ? `kapanış ${tz(f.kapanis_tarih)}` : '')
     : (f.ufuk ? `${opsiyon ? 'vade' : 'ufuk'} ${tz(opsiyon ? (f.opsiyon?.vade ?? f.ufuk) : f.ufuk)}` : ''),
   metin(f.senaryo),
@@ -47,7 +52,7 @@ const ust = [
 
 // Durum rozeti ve bayraklar (makine alanından değil, anlamından).
 const rozet = karnesiz
-  ? (durum === 'sure_olculemez' ? FIKIR_DURUM.sure_olculemez : 'açık · karnesi tutulmuyor')
+  ? (karnesizKapali ? FIKIR_DURUM[durum] ?? durum : 'açık · karnesi tutulmuyor')
   : FIKIR_DURUM[durum] ?? FIKIR_DURUM.acik;
 const bayrak: string[] = [];
 if (!karnesiz && !kapanmis) {
@@ -55,6 +60,7 @@ if (!karnesiz && !kapanmis) {
   else if (k.giris_bekleniyor) bayrak.push(GIRIS_BEKLENIYOR);
   if (t.cikisBekleniyor) bayrak.push('çıkış emri verildi');
   if (k?.degerlenmedi) bayrak.push('son ölçümde değerlenmedi');
+  if (k?.ufuk_bekleniyor) bayrak.push(UFUK_BEKLENIYOR);
 }
 const devir = Array.isArray(k?.devir) && k.devir.length > 0
   ? `Son değer giriş kontratı cinsinden (vade devri ${k.devir.map((d: string) => tz(d)).join(', ')}).`
@@ -68,15 +74,19 @@ const nasil = (() => {
   if (!kapanmis) return '';
   if (durum === 'geri_cekildi') {
     const sebep = metin(f.sebep ?? t.erken?.sebep);
-    return sebep
-      ? `Yazar erken kapattı. Gerekçesi: ${noktali(sebep)} Çıkış, kapatan sayının yayımından sonraki ilk kapanıştır.`
-      : 'Yazar erken kapattı; çıkış, kapatan sayının yayımından sonraki ilk kapanıştır.';
+    const cikis = f.giris_oncesi
+      ? 'Çıkış emri fiili girişle aynı kapanışa düştü; yapı hiç taşınmadı.'
+      : 'Çıkış, kapatan sayının yayımından sonraki ilk kapanıştır.';
+    return sebep ? `Yazar erken kapattı. Gerekçesi: ${noktali(sebep)} ${cikis}` : `Yazar erken kapattı. ${cikis}`;
   }
   return FIKIR_KAPANIS_NEDEN[durum] ?? '';
 })();
 const sonucYazi = (() => {
   if (!kapanmis) return '';
-  if (sonucsuz) return durum === 'giriste_gecersiz' ? 'Sonuç yok: yapı kurulamadı.' : 'Sonuç yok.';
+  if (sonucsuz) {
+    return durum === 'giriste_gecersiz' ? 'Sonuç yok: yapı kurulamadı.'
+      : f.giris_oncesi ? 'Sonuç yok: yapı hiç taşınmadı.' : 'Sonuç yok.';
+  }
   if (opsiyon) return `${yuzde(f.sonuc, 2)} — ${opsiyonSonucNotu(f)}`;
   return fkSonuc(f.sonuc, f);
 })();
@@ -94,7 +104,7 @@ const takipSonuc = (x: any): string => {
 const takipDurum = (x: any): string => {
   const d = FIKIR_DURUM[metin(x?.durum)] ?? '—';
   const ek = [x?.giris_bekleniyor && 'giriş bekleniyor', x?.cikis_bekleniyor && 'çıkış emri verildi',
-    x?.degerlenmedi && 'değerlenmedi'].filter(Boolean);
+    x?.degerlenmedi && 'değerlenmedi', x?.ufuk_bekleniyor && UFUK_BEKLENIYOR].filter(Boolean);
   return ek.length ? `${d} · ${ek.join(' · ')}` : d;
 };
 const tasima = tasimaAyrisimi(k);
@@ -126,12 +136,22 @@ const bagsizVar = t.takip.some((x) => !x.href);
   )}
 
   {kapanmis && nasil && <p class="tr-metin"><span class="tr-et">Nasıl kapandı.</span> {nasil}</p>}
+  {kapanmis && metin(f.not) && <p class="tr-not">{noktali(f.not)}</p>}
 
   {karnesiz ? (
     <>
       {f.enstruman && <p class="tr-satir"><span class="tr-et">Enstrüman:</span> {f.enstruman}</p>}
       <p class="tr-satir tr-karnesiz-not">Karnesi tutulmuyor: {noktali(f.olculemez_sebep || 'elimizde fiyatı yok')}</p>
       {sayiMi(k?.kalan_gun) && k.kalan_gun >= 0 && <p class="tr-not">Ufka {kalanYaz(k.kalan_gun)} ({tz(t.sonOlcum)} ölçümünde).</p>}
+      {durum === 'geri_cekildi' && (
+        <p class="tr-metin"><span class="tr-et">Nasıl kapandı.</span> Yazar erken kapattı{f.kapanis_tarih ? ` (${tz(f.kapanis_tarih)})` : ''}.{metin(f.sebep ?? t.erken?.sebep) ? ` Gerekçesi: ${noktali(metin(f.sebep ?? t.erken?.sebep))}` : ''}</p>
+      )}
+      {durum === 'sure_olculemez' && <p class="tr-metin"><span class="tr-et">Nasıl kapandı.</span> {FIKIR_KAPANIS_NEDEN.sure_olculemez}</p>}
+      {!karnesizKapali && t.erken && (
+        <p class="tr-not tr-not-uyari">
+          Kapanış emri <a href={t.erken.href}>{tz(t.erken.sayi)} sayısında</a> verildi{t.erken.sebep ? `: ${noktali(t.erken.sebep)}` : '.'}
+        </p>
+      )}
     </>
   ) : (
     <>
@@ -146,7 +166,7 @@ const bagsizVar = t.takip.some((x) => !x.href);
           <dt>{durum === 'giriste_gecersiz' ? 'Giriş kapanışı' : 'Fiili giriş'}</dt>
           {sayiMi(k?.giris_fiili)
             ? <dd>{fkSeviye(k.giris_fiili, f)}{k.giris_fiili_tarih && <span class="tr-alt">{tz(k.giris_fiili_tarih)} kapanışı</span>}</dd>
-            : <dd class="tr-dd-metin">{kapanmis ? 'olmadı' : k ? 'bekleniyor' : 'ilk ölçümde'}<span class="tr-alt">{GIRIS_BEKLENIYOR_NE}</span></dd>}
+            : <dd class="tr-dd-metin">{kapanmis ? 'olmadı' : k?.degerlenmedi ? 'değerlenmedi' : k ? 'bekleniyor' : 'ilk ölçümde'}<span class="tr-alt">{k?.degerlenmedi && !kapanmis ? 'bu ölçümde' : GIRIS_BEKLENIYOR_NE}</span></dd>}
         </div>
         {durum === 'giriste_gecersiz' ? (
           <>
@@ -200,8 +220,10 @@ const bagsizVar = t.takip.some((x) => !x.href);
           </div>
         </dl>
       )}
-      {!kapanmis && k?.degerlenmedi && <p class="tr-not tr-not-uyari">Son ölçümde değerlenmedi: {noktali(k.degerlenmedi)}</p>}
-      {tasima && <p class="tr-not">Sonucun ayrışımı: spot {tasima.spot} · taşıma {tasima.tasima}.</p>}
+      {!kapanmis && k?.degerlenmedi && <p class="tr-not tr-not-uyari">Son ölçümde değerlenmedi: {noktali(k.degerlenmedi)}{sayiMi(k?.giris_fiili) && k?.son_tarih ? ` Değerler ${tz(k.son_tarih)} kapanışına kadar ölçülenler.` : ''}</p>}
+      {!kapanmis && k?.ufuk_bekleniyor && <p class="tr-not">{UFUK_BEKLENIYOR_NOT}</p>}
+      {tasima && <p class="tr-not">Sonucun ayrışımı: spot {tasima.spot} · taşıma {tasima.tasima}. Hedef ve stop spot kapanışında sorulur.</p>}
+      {k?.tasima_olculemedi && <p class="tr-not tr-not-uyari">{tasimaOlculemediNotu(kapanmis)}</p>}
       {devir && <p class="tr-not">{devir}</p>}
       {f.enstruman && (
         <p class="tr-not">Enstrüman: {f.enstruman}. Karne {f.yapi_metni || 'ölçülebilir bacaklar'} ile vekil olarak tutulur; enstrümanla vekil arasındaki fark ölçülmez.</p>

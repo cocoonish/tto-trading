@@ -4410,6 +4410,9 @@ rutinin `git add -A`'sı. Yazılmamış bir sayının fikri karneye girmez.
   - 2YY=F: bayat vadeli kotasyon.
   - VIX ve MOVE: endeks olarak işlem görmez.
   - DİBS 1 yıllık reel getiri ve başabaş: düğüm kayınca tek gün sıçrar.
+  - EUR/TRY ve GBP/TRY: euro ve sterlinin kısa faizi ölçülen katmanda yok, TL taşıması
+    kurulamaz. Aynı sebeple USD/TRY yalnız yalın yapıda ve opsiyonda kullanılır (göreli bir
+    yapıda karne taşımasız oranı yazardı; yazma kapısı reddeder).
 - **Vadeli bacak.** Bacak, devirde geriye ölçeklenen seriden GETİRİYLE ilerletilir, kayıtlı
   seviyeyle değil. Satır devir gününü ve "son değer giriş kontratı cinsinden" notunu taşır.
   Devir düzeltmesi kurulamadıysa fikir o gün DEĞERLENMEZ: sahte bir stop donmasın.
@@ -4469,3 +4472,41 @@ Yazının kendisi de ölçüldü ve bir cümlesi düştü: "dikleştirici seviye
 bırakır" — TL 2y–5y makası son altı ayda 2 yıllığın hareketini −0,51 betayla izledi; bir
 yapının seviye ya da piyasa yönünden bağımsız olduğu ancak beta ölçülüp sıfıra yakın
 çıkarsa yazılır.
+
+İKİNCİ İNCELEME (donmuş 4534d61c, üç mercek: okur · kapı · sözleşme; 22 ham bulgu, çürütmeye
+giren 14'ün 14'ü doğru ya da kısmen doğru, hiçbiri çürütülmedi). Ders tek cümle: bir karnenin
+kusurları HESAPTA değil KENARLARINDADIR — sayının olmadığı, iki kez yazıldığı ya da başka bir
+sayfada okunduğu yerlerde. (1) YAYINI DURDURAN İKİ YANLIŞ ALARM ADAYI. Sayfa sınavı 25d/25e
+fikrin JSON başlığını HTML süzgecinden geçiriyordu: düz metin olan "2y < 5y … > x" başlığı
+kırpılıp sayfayla hiç eşleşmezdi ve yayın dururdu; düz metin alanı artık yalnız boşluk
+tekleştirilerek kıyaslanıyor (`_duz_metin`). Erken kapanış emrinin `sebep`i HTML reddi
+taşımıyordu; etiketli bir sebep iki sayfada kaçırılarak basılır ve 22. ölçüt yayını
+durdururdu — yazma kapısı ve denetim artık reddediyor. (2) KAPANIŞ AYNI SAYININ İÇİNDE DE
+DONAR. Koruma yalnız YAZILMIŞ sayıda ve karne kurulduktan SONRA yapılıyordu: yazılmamış sayının
+03:23 kapanışı 03:51 yedek ölçümünde geri açılabiliyor, yazılmış sayıda da sayım yeni ölçümden
+kalıyordu (kayıt "kapandı", sayım "açık"). Ölçüm katmanı aynı günün önceki dosyasındaki kapanmış
+kayıtları `fikir.karne(sabit=…)`e verir; sayım tek hesaptan çıkar. (3) SIFIR BİR ÖLÇÜM DEĞİLSE
+YAZILMAZ. Çıkış emri girişle aynı kapanışa düşen fikir "başabaş 0" diye kazanç oranının
+paydasına ve R ortalamasına giriyordu; yapı hiç taşınmadı ve sonucu yoktur (`giris_oncesi`).
+Taşıması ölçülemeyen USD/TRY sonucu yalnız spottur: kâr/zarar hükmü kurulmaz, orana girmez,
+bayrak donan alanlarda. (4) DEĞERLENEMEYEN GÜN DEĞER SİLMEZ. Devir düzeltmesi kurulamayan
+gün kayıt girişi ve son değeri kaybedip "giriş bekleniyor" diyordu; önceki ölçümün değerleri
+kendi tarihleriyle taşınır. "Ufuk kapanışı bekleniyor" ayrı bir bayraktır, "değerlenmedi"
+değildir; ufka kadar hiç kapanış gelmeyen fikir de beş gün bekler. (5) BİR DURUM İKİ SAYFADA
+AYNI OKUNMALI. Erken kapatılan karnesiz fikir Tradeler'de "açık" basılıyordu (grup türden,
+rozet durumu sormuyordu); emri veren sayının kendi sayfası emri hiç basmıyordu; karne hatasında
+bölüm hiç açılmıyordu. Üçü düzeltildi, 25d artık emrin sebebini de arıyor. (6) KURAL ile KOD
+ÜÇ YERDE AYRIŞMIŞTI: rehber TL'li döviz bacağını göreli yapıdan yasaklıyordu, kod kabul
+ediyordu; rehber "yeniden ölçümden sonra yamayı yeniden uygula, giriş güncellenir" diyordu, kod
+yazılmış girişi (doğru olarak) değiştirmiyor ve denetim kapanamayan bir uyarı veriyordu —
+ölçüm fikir yazıldıktan sonra yenilendiyse fark artık bilgi satırı; rehber haftalıkta "iki
+seans" diyordu, cuma→pazartesi tek seanstır. Yöntem metni maliyetleri (işlem, makas, fonlama,
+devir, temettü), USD/TRY'de stopun spotta sorulduğunu ("stopta kapanan fikir taşımayla kârla
+kapanabilir") ve "geçmiş sonuçlar gelecekteki sonuçların göstergesi değildir" cümlesini taşıyor.
+04.10 sayısının iki gerekçesi aynı gün (UTC) metin olarak düzeltildi: gereken hız ölçülen
+%21,4 ile aynı yöntemle (bileşik, ≈%40; basit %34 iki ayrı konvansiyonu kıyaslıyordu) ve
+bankacılığın 0,29'luk betası bir yılın ortalaması olarak (o haftaki satışta bankacılık daha az
+kaybetti). Seviyeler, kimlik ve yazım anı değişmedi. Otuz beş arıza enjeksiyonunun otuz beşi
+kendi maddesinde yakalanıyor; geçici bir fikstür sayısıyla derlenen sayfada yeni hâllerin
+hepsi (karnesiz kapanış, girişsiz geri çekilme, değerlenmeyen gün, ufuk beklemesi, taşımasız
+sonuç, çıkış emri listesi) gözle okundu ve 25d 13 kaydın 13'ünü buldu; fikstür silindi.
