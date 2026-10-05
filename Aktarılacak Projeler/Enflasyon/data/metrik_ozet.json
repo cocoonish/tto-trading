@@ -1,6 +1,6 @@
 {
- "son_ay": "2026-08-01",
- "son_ay_ad": "Ağustos 2026",
+ "son_ay": "2026-09-01",
+ "son_ay_ad": "Eylül 2026",
  "sa_yontem": "STL(log, period=12, seasonal=13, robust) + hareketli tatil ön-arındırması",
  "dogrulama": {
   "esik_yillik_pp": 0.05,
@@ -9,21 +9,23 @@
   "yillik": {
    "n": 36,
    "maks_fark_pp": 0.0,
-   "son_ay_biz": 31.5073,
-   "son_ay_evds": 31.5073,
-   "evds_son_ay": "2026-08"
+   "son_ay_biz": 29.7315,
+   "son_ay_evds": 29.7315,
+   "evds_son_ay": "2026-09"
   },
   "aylik": {
    "n": 36,
    "maks_fark_pp": 0.0,
-   "son_ay_biz": 1.8442,
-   "son_ay_evds": 1.8442,
-   "evds_son_ay": "2026-08"
+   "son_ay_biz": 1.8404,
+   "son_ay_evds": 1.8404,
+   "evds_son_ay": "2026-09"
   }
  },
  "kosular_arasi": {
-  "var": false,
-  "not": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm arasındaki revizyon bu kez ölçülemedi",
+  "var": true,
+  "n": 12,
+  "maks_pp": 0.644,
+  "ort_pp": 0.127,
   "onceki_kosum": "2026-09-03"
  },
  "vintage": {
@@ -31,66 +33,66 @@
   "seriler": {
    "tufe": {
     "n": 6,
-    "mm_maks_pp": 0.033,
-    "mm_ort_pp": 0.02,
-    "saar3_maks_pp": 0.362,
-    "saar3_ort_pp": 0.256
+    "mm_maks_pp": 0.08,
+    "mm_ort_pp": 0.052,
+    "saar3_maks_pp": 0.625,
+    "saar3_ort_pp": 0.264
    },
    "cekirdek_b": {
     "n": 6,
-    "mm_maks_pp": 0.51,
-    "mm_ort_pp": 0.148,
-    "saar3_maks_pp": 2.179,
+    "mm_maks_pp": 0.169,
+    "mm_ort_pp": 0.062,
+    "saar3_maks_pp": 2.342,
     "saar3_ort_pp": 0.901
    },
    "cekirdek_c": {
     "n": 6,
-    "mm_maks_pp": 0.573,
-    "mm_ort_pp": 0.141,
-    "saar3_maks_pp": 5.448,
-    "saar3_ort_pp": 1.022
+    "mm_maks_pp": 0.302,
+    "mm_ort_pp": 0.067,
+    "saar3_maks_pp": 0.259,
+    "saar3_ort_pp": 0.14
    },
    "hizmet": {
     "n": 6,
-    "mm_maks_pp": 4.332,
-    "mm_ort_pp": 1.083,
-    "saar3_maks_pp": 17.036,
-    "saar3_ort_pp": 6.478
+    "mm_maks_pp": 1.298,
+    "mm_ort_pp": 0.574,
+    "saar3_maks_pp": 10.061,
+    "saar3_ort_pp": 4.172
    },
    "temel_mal": {
     "n": 6,
-    "mm_maks_pp": 0.421,
-    "mm_ort_pp": 0.114,
-    "saar3_maks_pp": 2.708,
-    "saar3_ort_pp": 1.107
+    "mm_maks_pp": 0.427,
+    "mm_ort_pp": 0.192,
+    "saar3_maks_pp": 2.642,
+    "saar3_ort_pp": 1.046
    },
    "kira": {
     "n": 6,
-    "mm_maks_pp": 4.472,
-    "mm_ort_pp": 2.088,
-    "saar3_maks_pp": 11.529,
-    "saar3_ort_pp": 7.543
+    "mm_maks_pp": 2.909,
+    "mm_ort_pp": 1.744,
+    "saar3_maks_pp": 9.934,
+    "saar3_ort_pp": 7.981
    },
    "enerji": {
     "n": 6,
-    "mm_maks_pp": 5.596,
-    "mm_ort_pp": 2.021,
-    "saar3_maks_pp": 44.185,
-    "saar3_ort_pp": 10.385
+    "mm_maks_pp": 7.598,
+    "mm_ort_pp": 2.638,
+    "saar3_maks_pp": 52.864,
+    "saar3_ort_pp": 14.116
    },
    "gida": {
     "n": 6,
-    "mm_maks_pp": 0.14,
-    "mm_ort_pp": 0.041,
-    "saar3_maks_pp": 6.728,
-    "saar3_ort_pp": 1.675
+    "mm_maks_pp": 0.174,
+    "mm_ort_pp": 0.091,
+    "saar3_maks_pp": 2.08,
+    "saar3_ort_pp": 0.877
    },
    "islenmemis_gida": {
     "n": 6,
-    "mm_maks_pp": 0.069,
-    "mm_ort_pp": 0.041,
-    "saar3_maks_pp": 0.741,
-    "saar3_ort_pp": 0.347
+    "mm_maks_pp": 0.236,
+    "mm_ort_pp": 0.108,
+    "saar3_maks_pp": 1.739,
+    "saar3_ort_pp": 1.039
    },
    "islenmis_gida": {
     "n": 6,
@@ -101,10 +103,10 @@
    },
    "alkol_tutun_altin": {
     "n": 6,
-    "mm_maks_pp": 0.886,
-    "mm_ort_pp": 0.266,
-    "saar3_maks_pp": 3.474,
-    "saar3_ort_pp": 1.628
+    "mm_maks_pp": 1.074,
+    "mm_ort_pp": 0.298,
+    "saar3_maks_pp": 4.215,
+    "saar3_ort_pp": 1.955
    },
    "yonetilen_haric": {
     "n": 6,
@@ -125,444 +127,26 @@
    "seri": "hizmet",
    "ad": "Hizmet",
    "n": 6,
-   "mm_maks_pp": 4.332,
-   "mm_ort_pp": 1.083,
-   "saar3_maks_pp": 17.036,
-   "saar3_ort_pp": 6.478
+   "mm_maks_pp": 1.298,
+   "mm_ort_pp": 0.574,
+   "saar3_maks_pp": 10.061,
+   "saar3_ort_pp": 4.172
   },
   "en_oynak_etiketli": {
    "seri": "enerji",
    "ad": "Enerji",
    "n": 6,
-   "mm_maks_pp": 5.596,
-   "mm_ort_pp": 2.021,
-   "saar3_maks_pp": 44.185,
-   "saar3_ort_pp": 10.385
+   "mm_maks_pp": 7.598,
+   "mm_ort_pp": 2.638,
+   "saar3_maks_pp": 52.864,
+   "saar3_ort_pp": 14.116
   }
  },
  "kesit_tani": {
   "n": 45,
   "kalemler": {
    "g3_011": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": 0.94,
-     "bayram": -0.14,
-     "kurban": -0.64
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.711,
-    "ad": "011. Gıda"
-   },
-   "g3_012": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": 0.11,
-     "bayram": -0.94,
-     "kurban": -0.1
-    },
-    "mevsim_p": 0.025,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.005,
-    "ad": "012. Alkolsüz İçecekler"
-   },
-   "g3_021": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -1.22,
-     "bayram": -0.65,
-     "kurban": -0.15
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.719,
-    "ad": "021. Alkollü İçecekler"
-   },
-   "g3_023": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.05,
-     "bayram": 0.38,
-     "kurban": 0.8
-    },
-    "mevsim_p": 0.0054,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.463,
-    "ad": "023. Tütün Ve Tütün Ürünleri"
-   },
-   "g3_031": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.22,
-     "bayram": -0.07,
-     "kurban": 0.07
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 6.288,
-    "ad": "031. Giyim"
-   },
-   "g3_032": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": 0.46,
-     "bayram": 0.07,
-     "kurban": 0.16
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.313,
-    "ad": "032. Ayakkabılar"
-   },
-   "g3_041": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.09,
-     "bayram": -0.46,
-     "kurban": -0.08
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.092,
-    "ad": "041. Konut İçin Yapılan Gerçek Kira Ödemeleri"
-   },
-   "g3_043": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": 0.01,
-     "bayram": -0.81,
-     "kurban": -0.45
-    },
-    "mevsim_p": 0.8937,
-    "mevsimsel": false,
-    "ad": "043. Konutun Bakımı, Onarımı Ve Güvenliği"
-   },
-   "g3_044": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.54,
-     "bayram": -0.65,
-     "kurban": 0.8
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.778,
-    "ad": "044. Konutla İlgili Su Temini Ve Çeşitli Hizmetler"
-   },
-   "g3_045": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.41,
-     "bayram": -0.75,
-     "kurban": 0.38
-    },
-    "mevsim_p": 0.0215,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.938,
-    "ad": "045. Elektrik, Gaz Ve Diğer Yakıtlar"
-   },
-   "g3_051": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.7,
-     "bayram": 0.02,
-     "kurban": -0.69
-    },
-    "mevsim_p": 0.0902,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.459,
-    "ad": "051. Mobilya, Mefruşat Ve Halılar"
-   },
-   "g3_052": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.11,
-     "bayram": -0.42,
-     "kurban": -0.26
-    },
-    "mevsim_p": 0.8704,
-    "mevsimsel": false,
-    "ad": "052. Ev Tekstilleri"
-   },
-   "g3_053": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.6,
-     "bayram": -0.36,
-     "kurban": -0.52
-    },
-    "mevsim_p": 0.0014,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.945,
-    "ad": "053. Ev Aletleri"
-   },
-   "g3_054": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": 0.04,
-     "bayram": -0.59,
-     "kurban": -0.28
-    },
-    "mevsim_p": 0.6,
-    "mevsimsel": false,
-    "ad": "054. Züccaciye, Yemek Takımı Ve Ev Gereçleri"
-   },
-   "g3_055": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": 0.64,
-     "bayram": -0.94,
-     "kurban": 0.1
-    },
-    "mevsim_p": 0.0126,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.06,
-    "ad": "055. Ev Ve Bahçe Alet Ve Ekipmanları"
-   },
-   "g3_056": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": -1.3878,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -2.28,
-     "bayram": 0.71,
-     "kurban": -0.26
-    },
-    "mevsim_p": 0.3332,
-    "mevsimsel": false,
-    "ad": "056. Rutin Ev Bakımı İçin Mal Ve Hizmetler"
-   },
-   "g3_061": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.97,
-     "bayram": -0.38,
-     "kurban": -0.62
-    },
-    "mevsim_p": 0.0101,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 4.016,
-    "ad": "061. İlaçlar Ve Sağlık Ürünleri"
-   },
-   "g3_062": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.99,
-     "bayram": -0.56,
-     "kurban": -1.02
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.955,
-    "ad": "062. Ayaktan Tedavi Hizmetleri"
-   },
-   "g3_063": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -1.33,
-     "bayram": -0.88,
-     "kurban": -1.47
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.589,
-    "ad": "063. Yatarak Tedavi Hizmetleri"
-   },
-   "g3_064": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -1.2,
-     "bayram": -0.4,
-     "kurban": -0.52
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.987,
-    "ad": "064. Diğer Sağlık Hizmetleri"
-   },
-   "g3_071": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": 0.35,
-     "bayram": -0.57,
-     "kurban": -0.18
-    },
-    "mevsim_p": 0.8558,
-    "mevsimsel": false,
-    "ad": "071. Araç Satın Alımı"
-   },
-   "g3_072": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.53,
-     "bayram": -0.35,
-     "kurban": -0.77
-    },
-    "mevsim_p": 0.1594,
-    "mevsimsel": false,
-    "ad": "072. Kişisel Ulaşım Araçlarının Kullanımı"
-   },
-   "g3_073": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.29,
-     "bayram": 0.79,
-     "kurban": 0.29
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 3.64,
-    "ad": "073. Yolcu Taşıma Hizmetleri"
-   },
-   "g3_074": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.05,
-     "bayram": -0.55,
-     "kurban": 0.9
-    },
-    "mevsim_p": 0.0,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.23,
-    "ad": "074. Posta Ve Mal Taşımacılığı Hizmetleri"
-   },
-   "g3_081": {
-    "n": 260,
-    "tatil_katsayi": {
-     "ramazan": 0.0,
-     "bayram": 0.0,
-     "kurban": 0.0
-    },
-    "tatil_t": {
-     "ramazan": -0.8,
-     "bayram": -0.07,
-     "kurban": 0.35
-    },
-    "mevsim_p": 0.1517,
-    "mevsimsel": false,
-    "ad": "081. Bilgi Ve İletişim Ekipmanları"
-   },
-   "g3_083": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -570,49 +154,467 @@
     },
     "tatil_t": {
      "ramazan": 0.9,
-     "bayram": 0.31,
-     "kurban": 0.67
+     "bayram": -0.06,
+     "kurban": -0.61
     },
-    "mevsim_p": 0.0079,
+    "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.667,
-    "ad": "083. Bilgi Ve İletişim Hizmetleri"
+    "mevsimsel_genlik_pp": 1.66,
+    "ad": "011. Gıda"
    },
-   "g3_092": {
-    "n": 260,
+   "g3_012": {
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.35,
-     "bayram": -1.9,
-     "kurban": -0.24
+     "ramazan": 0.09,
+     "bayram": -0.95,
+     "kurban": -0.13
     },
-    "mevsim_p": 0.8243,
+    "mevsim_p": 0.0236,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 0.991,
+    "ad": "012. Alkolsüz İçecekler"
+   },
+   "g3_021": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -1.17,
+     "bayram": -0.7,
+     "kurban": -0.1
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 3.874,
+    "ad": "021. Alkollü İçecekler"
+   },
+   "g3_023": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.05,
+     "bayram": 0.39,
+     "kurban": 0.79
+    },
+    "mevsim_p": 0.0056,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 1.387,
+    "ad": "023. Tütün Ve Tütün Ürünleri"
+   },
+   "g3_031": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.23,
+     "bayram": -0.08,
+     "kurban": 0.07
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 6.284,
+    "ad": "031. Giyim"
+   },
+   "g3_032": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": 0.45,
+     "bayram": 0.07,
+     "kurban": 0.15
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 2.562,
+    "ad": "032. Ayakkabılar"
+   },
+   "g3_041": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.1,
+     "bayram": -0.5,
+     "kurban": -0.04
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 1.737,
+    "ad": "041. Konut İçin Yapılan Gerçek Kira Ödemeleri"
+   },
+   "g3_043": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.01,
+     "bayram": -0.75,
+     "kurban": -0.4
+    },
+    "mevsim_p": 0.9112,
+    "mevsimsel": false,
+    "ad": "043. Konutun Bakımı, Onarımı Ve Güvenliği"
+   },
+   "g3_044": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.54,
+     "bayram": -0.68,
+     "kurban": 0.76
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 1.731,
+    "ad": "044. Konutla İlgili Su Temini Ve Çeşitli Hizmetler"
+   },
+   "g3_045": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.42,
+     "bayram": -0.75,
+     "kurban": 0.37
+    },
+    "mevsim_p": 0.0193,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 3.252,
+    "ad": "045. Elektrik, Gaz Ve Diğer Yakıtlar"
+   },
+   "g3_051": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.7,
+     "bayram": 0.01,
+     "kurban": -0.7
+    },
+    "mevsim_p": 0.0809,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 1.886,
+    "ad": "051. Mobilya, Mefruşat Ve Halılar"
+   },
+   "g3_052": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.14,
+     "bayram": -0.4,
+     "kurban": -0.25
+    },
+    "mevsim_p": 0.8694,
+    "mevsimsel": false,
+    "ad": "052. Ev Tekstilleri"
+   },
+   "g3_053": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.64,
+     "bayram": -0.32,
+     "kurban": -0.52
+    },
+    "mevsim_p": 0.0011,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 1.021,
+    "ad": "053. Ev Aletleri"
+   },
+   "g3_054": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": 0.06,
+     "bayram": -0.58,
+     "kurban": -0.27
+    },
+    "mevsim_p": 0.6222,
+    "mevsimsel": false,
+    "ad": "054. Züccaciye, Yemek Takımı Ve Ev Gereçleri"
+   },
+   "g3_055": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": 0.63,
+     "bayram": -0.94,
+     "kurban": 0.05
+    },
+    "mevsim_p": 0.0106,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 0.973,
+    "ad": "055. Ev Ve Bahçe Alet Ve Ekipmanları"
+   },
+   "g3_056": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": -1.3622,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -2.24,
+     "bayram": 0.71,
+     "kurban": -0.27
+    },
+    "mevsim_p": 0.3239,
+    "mevsimsel": false,
+    "ad": "056. Rutin Ev Bakımı İçin Mal Ve Hizmetler"
+   },
+   "g3_061": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.96,
+     "bayram": -0.37,
+     "kurban": -0.6
+    },
+    "mevsim_p": 0.0118,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 4.078,
+    "ad": "061. İlaçlar Ve Sağlık Ürünleri"
+   },
+   "g3_062": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.99,
+     "bayram": -0.55,
+     "kurban": -1.02
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 3.124,
+    "ad": "062. Ayaktan Tedavi Hizmetleri"
+   },
+   "g3_063": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -1.37,
+     "bayram": -0.87,
+     "kurban": -1.5
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 2.619,
+    "ad": "063. Yatarak Tedavi Hizmetleri"
+   },
+   "g3_064": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -1.21,
+     "bayram": -0.37,
+     "kurban": -0.48
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 2.976,
+    "ad": "064. Diğer Sağlık Hizmetleri"
+   },
+   "g3_071": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": 0.36,
+     "bayram": -0.58,
+     "kurban": -0.19
+    },
+    "mevsim_p": 0.8506,
+    "mevsimsel": false,
+    "ad": "071. Araç Satın Alımı"
+   },
+   "g3_072": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.57,
+     "bayram": -0.35,
+     "kurban": -0.78
+    },
+    "mevsim_p": 0.1544,
+    "mevsimsel": false,
+    "ad": "072. Kişisel Ulaşım Araçlarının Kullanımı"
+   },
+   "g3_073": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.29,
+     "bayram": 0.81,
+     "kurban": 0.31
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 3.9,
+    "ad": "073. Yolcu Taşıma Hizmetleri"
+   },
+   "g3_074": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": 0.03,
+     "bayram": -0.65,
+     "kurban": 0.86
+    },
+    "mevsim_p": 0.0,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 1.207,
+    "ad": "074. Posta Ve Mal Taşımacılığı Hizmetleri"
+   },
+   "g3_081": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": -0.84,
+     "bayram": -0.07,
+     "kurban": 0.32
+    },
+    "mevsim_p": 0.1483,
+    "mevsimsel": false,
+    "ad": "081. Bilgi Ve İletişim Ekipmanları"
+   },
+   "g3_083": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": 0.91,
+     "bayram": 0.31,
+     "kurban": 0.68
+    },
+    "mevsim_p": 0.0068,
+    "mevsimsel": true,
+    "mevsimsel_genlik_pp": 1.652,
+    "ad": "083. Bilgi Ve İletişim Hizmetleri"
+   },
+   "g3_092": {
+    "n": 261,
+    "tatil_katsayi": {
+     "ramazan": 0.0,
+     "bayram": 0.0,
+     "kurban": 0.0
+    },
+    "tatil_t": {
+     "ramazan": 0.36,
+     "bayram": -1.9,
+     "kurban": -0.23
+    },
+    "mevsim_p": 0.8074,
     "mevsimsel": false,
     "ad": "092. Diğer Eğlence Malları"
    },
    "g3_093": {
-    "n": 93,
+    "n": 94,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 1.37,
-     "bayram": 0.25,
-     "kurban": -0.24
+     "ramazan": 1.39,
+     "bayram": 0.27,
+     "kurban": -0.21
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 7.23,
+    "mevsimsel_genlik_pp": 7.421,
     "ad": "093. Bahçe Ürünleri Ve Ev Hayvanları"
    },
    "g3_094": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -621,11 +623,11 @@
     "tatil_t": {
      "ramazan": -0.64,
      "bayram": 0.49,
-     "kurban": -0.97
+     "kurban": -0.96
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.957,
+    "mevsimsel_genlik_pp": 1.715,
     "ad": "094. Eğlence Ve Dinlence Hizmetleri"
    },
    "g3_095": {
@@ -646,104 +648,104 @@
     "ad": "095. Kültürel Mallar"
    },
    "g3_096": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.68,
-     "bayram": 0.7,
-     "kurban": 0.6
+     "ramazan": -1.67,
+     "bayram": 0.67,
+     "kurban": 0.58
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.804,
+    "mevsimsel_genlik_pp": 0.857,
     "ad": "096. Kültürel Hizmetler"
    },
    "g3_097": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.1,
-     "bayram": -0.86,
-     "kurban": 0.21
+     "ramazan": 0.09,
+     "bayram": -0.87,
+     "kurban": 0.19
     },
-    "mevsim_p": 0.4254,
+    "mevsim_p": 0.415,
     "mevsimsel": false,
     "ad": "097. Gazete, Kitap Ve Kırtasiye Malzemeleri"
    },
    "g3_098": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 1.44,
+     "ramazan": 1.43,
      "bayram": 0.83,
-     "kurban": -1.52
+     "kurban": -1.54
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.206,
+    "mevsimsel_genlik_pp": 1.251,
     "ad": "098. Paket Turlar Ve Tatiller"
    },
    "g3_101": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
-     "ramazan": 2.9356,
-     "bayram": -10.5313,
+     "ramazan": 2.9175,
+     "bayram": -10.6932,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 3.45,
-     "bayram": -1.98,
-     "kurban": 0.5
+     "ramazan": 3.4,
+     "bayram": -2.0,
+     "kurban": 0.43
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 3.408,
+    "mevsimsel_genlik_pp": 3.665,
     "ad": "101. Okul Öncesi Ve Temel Eğitim İlkokul"
    },
    "g3_102": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
-     "ramazan": 2.2083,
+     "ramazan": 2.1707,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 2.54,
-     "bayram": -1.54,
-     "kurban": -0.71
+     "ramazan": 2.48,
+     "bayram": -1.57,
+     "kurban": -0.76
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.894,
+    "mevsimsel_genlik_pp": 3.504,
     "ad": "102. Ortaöğretim Eğitimi Ortaokul Ve Lise"
    },
    "g3_104": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.43,
-     "bayram": -0.28,
-     "kurban": -0.62
+     "ramazan": -0.48,
+     "bayram": -0.3,
+     "kurban": -0.67
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 7.148,
+    "mevsimsel_genlik_pp": 8.711,
     "ad": "104. Yükseköğretim Eğitimi"
    },
    "g3_105": {
@@ -764,138 +766,137 @@
     "ad": "105. Seviyeye Göre Tanımlanamayan Eğitim"
    },
    "g3_111": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.03,
-     "bayram": 0.01,
-     "kurban": -0.93
+     "ramazan": -0.02,
+     "bayram": 0.06,
+     "kurban": -0.97
     },
-    "mevsim_p": 0.0005,
+    "mevsim_p": 0.0008,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.908,
+    "mevsimsel_genlik_pp": 0.905,
     "ad": "111. Yiyecek Ve İçecek Sunum Hizmetleri"
    },
    "g3_112": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.36,
-     "bayram": 0.59,
-     "kurban": 1.57
+     "ramazan": -1.38,
+     "bayram": 0.64,
+     "kurban": 1.58
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.953,
+    "mevsimsel_genlik_pp": 2.621,
     "ad": "112. Konaklama Hizmetleri"
    },
    "g3_121": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.56,
-     "bayram": 0.9,
-     "kurban": -0.8
+     "ramazan": -1.57,
+     "bayram": 0.93,
+     "kurban": -0.79
     },
-    "mevsim_p": 0.0026,
+    "mevsim_p": 0.0023,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.544,
+    "mevsimsel_genlik_pp": 1.503,
     "ad": "121. Sigorta"
    },
    "g3_122": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.06,
+     "ramazan": 0.05,
      "bayram": 0.06,
-     "kurban": 0.08
+     "kurban": 0.07
     },
-    "mevsim_p": 0.0915,
-    "mevsimsel": true,
-    "mevsimsel_genlik_pp": 5.924,
+    "mevsim_p": 0.1085,
+    "mevsimsel": false,
     "ad": "122. Finansal Hizmetler"
    },
    "g3_131": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.27,
-     "bayram": 0.09,
+     "ramazan": -1.23,
+     "bayram": 0.04,
      "kurban": -1.02
     },
-    "mevsim_p": 0.0418,
+    "mevsim_p": 0.0431,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.705,
+    "mevsimsel_genlik_pp": 2.2,
     "ad": "131. Kişisel Bakım"
    },
    "g3_132": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.21,
-     "bayram": 1.24,
+     "ramazan": -0.26,
+     "bayram": 1.3,
      "kurban": 0.95
     },
-    "mevsim_p": 0.9296,
+    "mevsim_p": 0.9409,
     "mevsimsel": false,
     "ad": "132. Diğer Kişisel Eşyalar"
    },
    "g3_133": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.25,
-     "bayram": -0.61,
-     "kurban": 0.2
+     "ramazan": -0.24,
+     "bayram": -0.67,
+     "kurban": 0.13
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.916,
+    "mevsimsel_genlik_pp": 2.136,
     "ad": "133. Sosyal Koruma"
    },
    "g3_139": {
-    "n": 260,
+    "n": 261,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.18,
-     "bayram": 0.75,
-     "kurban": -1.66
+     "ramazan": -1.16,
+     "bayram": 0.74,
+     "kurban": -1.67
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.346,
+    "mevsimsel_genlik_pp": 2.311,
     "ad": "139. Diğer Hizmetler"
    }
   },
@@ -903,236 +904,241 @@
    "g3_056": {
     "ad": "056. Rutin Ev Bakımı İçin Mal Ve Hizmetler",
     "t": {
-     "ramazan": -2.28
+     "ramazan": -2.24
     },
     "katsayi_pp": {
-     "ramazan": -1.3878
+     "ramazan": -1.3622
     }
    },
    "g3_101": {
     "ad": "101. Okul Öncesi Ve Temel Eğitim İlkokul",
     "t": {
-     "ramazan": 3.45,
-     "bayram": -1.98
+     "ramazan": 3.4,
+     "bayram": -2.0
     },
     "katsayi_pp": {
-     "ramazan": 2.9356,
-     "bayram": -10.5313
+     "ramazan": 2.9175,
+     "bayram": -10.6932
     }
    },
    "g3_102": {
     "ad": "102. Ortaöğretim Eğitimi Ortaokul Ve Lise",
     "t": {
-     "ramazan": 2.54
+     "ramazan": 2.48
     },
     "katsayi_pp": {
-     "ramazan": 2.2083
+     "ramazan": 2.1707
     }
    }
   },
   "tatil_gecen_n": 3,
-  "arindirilmayan_n": 10,
+  "arindirilmayan_n": 11,
   "arindirilmayan": [
    {
     "kod": "g3_043",
     "ad": "043. Konutun Bakımı, Onarımı Ve Güvenliği",
-    "mevsim_p": 0.8937
+    "mevsim_p": 0.9112
    },
    {
     "kod": "g3_052",
     "ad": "052. Ev Tekstilleri",
-    "mevsim_p": 0.8704
+    "mevsim_p": 0.8694
    },
    {
     "kod": "g3_054",
     "ad": "054. Züccaciye, Yemek Takımı Ve Ev Gereçleri",
-    "mevsim_p": 0.6
+    "mevsim_p": 0.6222
    },
    {
     "kod": "g3_056",
     "ad": "056. Rutin Ev Bakımı İçin Mal Ve Hizmetler",
-    "mevsim_p": 0.3332
+    "mevsim_p": 0.3239
    },
    {
     "kod": "g3_071",
     "ad": "071. Araç Satın Alımı",
-    "mevsim_p": 0.8558
+    "mevsim_p": 0.8506
    },
    {
     "kod": "g3_072",
     "ad": "072. Kişisel Ulaşım Araçlarının Kullanımı",
-    "mevsim_p": 0.1594
+    "mevsim_p": 0.1544
    },
    {
     "kod": "g3_081",
     "ad": "081. Bilgi Ve İletişim Ekipmanları",
-    "mevsim_p": 0.1517
+    "mevsim_p": 0.1483
    },
    {
     "kod": "g3_092",
     "ad": "092. Diğer Eğlence Malları",
-    "mevsim_p": 0.8243
+    "mevsim_p": 0.8074
    },
    {
     "kod": "g3_097",
     "ad": "097. Gazete, Kitap Ve Kırtasiye Malzemeleri",
-    "mevsim_p": 0.4254
+    "mevsim_p": 0.415
+   },
+   {
+    "kod": "g3_122",
+    "ad": "122. Finansal Hizmetler",
+    "mevsim_p": 0.1085
    },
    {
     "kod": "g3_132",
     "ad": "132. Diğer Kişisel Eşyalar",
-    "mevsim_p": 0.9296
+    "mevsim_p": 0.9409
    }
   ],
-  "arindirilmayan_agirlik": 16.48,
+  "arindirilmayan_agirlik": 18.01,
   "yogunlasma": {
-   "hhi": 0.0779,
-   "esdeger_kalem": 12.8,
-   "en_buyuk_pay": 22.0,
+   "hhi": 0.0762,
+   "esdeger_kalem": 13.1,
+   "en_buyuk_pay": 21.3,
    "en_buyuk_kod": "g3_011",
    "en_buyuk_ad": "011. Gıda",
-   "ilk3_pay": 36.4
+   "ilk3_pay": 36.2
   },
   "medyan_kalem": {
    "bas": "2021-01",
-   "ay": 68,
+   "ay": 69,
    "en_sik_kod": "g3_011",
    "en_sik_ad": "011. Gıda",
-   "en_sik_n": 17,
-   "en_sik_pay": 25.0,
-   "son_kod": "g3_011",
-   "son_ad": "011. Gıda"
+   "en_sik_n": 13,
+   "en_sik_pay": 18.8,
+   "son_kod": "g3_023",
+   "son_ad": "023. Tütün Ve Tütün Ürünleri"
   }
  },
  "hedef_yillik": 5.0,
  "hedef_aylik": 0.4074,
- "tatil_ana_maks_t": 1.24,
+ "tatil_ana_maks_t": 1.23,
  "tatil_ana_gecen": 0,
- "enerji_sa_ham_maks_pp": 1.755,
- "enerji_sa_ham_son_pp": -1.212,
- "enerji_mevsim_p": 0.0249,
+ "enerji_sa_ham_maks_pp": 1.607,
+ "enerji_sa_ham_son_pp": -1.076,
+ "enerji_mevsim_p": 0.0266,
  "ocak_ham_ort": 2.58,
  "ocak_sa_ort": 1.66,
- "ocak_duzeltme_pp": 0.916,
+ "ocak_duzeltme_pp": 0.917,
  "ocak_n": 21,
- "tufe__aylik_ham": 1.8441538810369584,
- "tufe__aylik_sa": 2.0830026111677835,
- "tufe__saar3_sa": 29.195881507286824,
- "tufe__saar6_sa": 31.151252502072712,
- "tufe__yillik": 31.507342820912854,
- "tufe__saar3_ham": 20.09667151330463,
- "tufe__saar6_ham": 27.878212977020176,
- "tufe__ecb3": 31.518020263192636,
+ "tufe__aylik_ham": 1.8404452690166995,
+ "tufe__aylik_sa": 1.4906245136268481,
+ "tufe__saar3_sa": 25.309122433886234,
+ "tufe__saar6_sa": 30.1535573447415,
+ "tufe__yillik": 29.73151102175646,
+ "tufe__saar3_ham": 24.209976136583954,
+ "tufe__saar6_ham": 27.63214370835778,
+ "tufe__ecb3": 28.13131136603191,
  "tufe__oynak": false,
  "tufe__mevsimsel": true,
  "tufe__mevsim_p": 0.0,
- "cekirdek_b__aylik_ham": 1.842170124250564,
- "cekirdek_b__aylik_sa": 2.0583181472104917,
- "cekirdek_b__saar3_sa": 30.002172828256924,
- "cekirdek_b__saar6_sa": 30.21191707188633,
- "cekirdek_b__yillik": 30.684217476905374,
- "cekirdek_b__saar3_ham": 22.762153683726936,
- "cekirdek_b__saar6_ham": 29.07742582030901,
- "cekirdek_b__ecb3": 31.98414404599226,
+ "cekirdek_b__aylik_ham": 2.0001492648704877,
+ "cekirdek_b__aylik_sa": 1.2883687479913641,
+ "cekirdek_b__saar3_sa": 24.132385070473838,
+ "cekirdek_b__saar6_sa": 29.060197812196353,
+ "cekirdek_b__yillik": 28.99480887210948,
+ "cekirdek_b__saar3_ham": 24.400300333750913,
+ "cekirdek_b__saar6_ham": 30.47310052006045,
+ "cekirdek_b__ecb3": 28.438482961118815,
  "cekirdek_b__oynak": false,
  "cekirdek_b__mevsimsel": true,
- "cekirdek_b__mevsim_p": 0.0024,
- "cekirdek_c__aylik_ham": 1.8104574569530962,
- "cekirdek_c__aylik_sa": 2.034553942657391,
- "cekirdek_c__saar3_sa": 30.0259144953126,
- "cekirdek_c__saar6_sa": 30.30157004280929,
- "cekirdek_c__yillik": 30.065548350636394,
- "cekirdek_c__saar3_ham": 22.298856082759833,
- "cekirdek_c__saar6_ham": 29.515277103886373,
- "cekirdek_c__ecb3": 31.478752471605254,
+ "cekirdek_b__mevsim_p": 0.002,
+ "cekirdek_c__aylik_ham": 2.137393130343468,
+ "cekirdek_c__aylik_sa": 1.7068527203316863,
+ "cekirdek_c__saar3_sa": 27.159117238387086,
+ "cekirdek_c__saar6_sa": 29.454243385845924,
+ "cekirdek_c__yillik": 28.71184198090917,
+ "cekirdek_c__saar3_ham": 25.58614147864615,
+ "cekirdek_c__saar6_ham": 30.801519097991093,
+ "cekirdek_c__ecb3": 29.739033998186805,
  "cekirdek_c__oynak": false,
  "cekirdek_c__mevsimsel": true,
  "cekirdek_c__mevsim_p": 0.0,
- "hizmet__aylik_ham": 3.082668519073728,
- "hizmet__aylik_sa": 3.0145891777186407,
- "hizmet__saar3_sa": 39.97875523319656,
- "hizmet__saar6_sa": 39.73835348223946,
- "hizmet__yillik": 40.28436358043032,
- "hizmet__saar3_ham": 36.83268777777074,
- "hizmet__saar6_ham": 36.22635622436281,
- "hizmet__ecb3": 36.161528884958315,
+ "hizmet__aylik_ham": 2.1513506082892153,
+ "hizmet__aylik_sa": 0.856145749064785,
+ "hizmet__saar3_sa": 37.36432790528576,
+ "hizmet__saar6_sa": 34.42301458995702,
+ "hizmet__yillik": 37.66209707299002,
+ "hizmet__saar3_ham": 39.34507693117541,
+ "hizmet__saar6_ham": 35.596654782652195,
+ "hizmet__ecb3": 38.206835848610396,
  "hizmet__oynak": false,
  "hizmet__mevsimsel": true,
  "hizmet__mevsim_p": 0.0,
- "temel_mal__aylik_ham": -0.2774759570400076,
- "temel_mal__aylik_sa": 0.7485728539092795,
- "temel_mal__saar3_sa": 15.896753205948766,
- "temel_mal__saar6_sa": 16.002974519100288,
- "temel_mal__yillik": 15.893949757714632,
- "temel_mal__saar3_ham": 1.7881999513667868,
- "temel_mal__saar6_ham": 19.21268485569616,
- "temel_mal__ecb3": 17.536253985791483,
+ "temel_mal__aylik_ham": 2.117305557927085,
+ "temel_mal__aylik_sa": 1.2162718667709793,
+ "temel_mal__saar3_sa": 13.416090086231902,
+ "temel_mal__saar6_sa": 15.243221490860659,
+ "temel_mal__yillik": 15.901162790697665,
+ "temel_mal__saar3_ham": 5.89303701501398,
+ "temel_mal__saar6_ham": 23.225452920688383,
+ "temel_mal__ecb3": 16.34154857499661,
  "temel_mal__oynak": false,
  "temel_mal__mevsimsel": true,
  "temel_mal__mevsim_p": 0.0,
- "kira__aylik_ham": 3.0393932870571128,
- "kira__aylik_sa": 1.8031658913558068,
- "kira__saar3_sa": 25.69494562230461,
- "kira__saar6_sa": 36.71776891975984,
- "kira__yillik": 43.106385508021106,
- "kira__saar3_ham": 40.07832172607524,
- "kira__saar6_ham": 35.651705103981726,
- "kira__ecb3": 35.558233226888646,
+ "kira__aylik_ham": 3.105590062111796,
+ "kira__aylik_sa": 6.774234082719244,
+ "kira__saar3_sa": 40.25629381458322,
+ "kira__saar6_sa": 44.651340627567215,
+ "kira__yillik": 41.34057971014491,
+ "kira__saar3_ham": 42.53098614219994,
+ "kira__saar6_ham": 37.48214483984853,
+ "kira__ecb3": 37.03852489098212,
  "kira__oynak": false,
  "kira__mevsimsel": true,
  "kira__mevsim_p": 0.0,
- "enerji__aylik_ham": 5.459728882481896,
- "enerji__aylik_sa": 3.9066872470584713,
- "enerji__saar3_sa": 1.1668816268132653,
- "enerji__saar6_sa": 49.21180849056566,
- "enerji__yillik": 39.22628595049395,
- "enerji__saar3_ham": 30.635305970634153,
- "enerji__saar6_ham": 63.55929338306059,
- "enerji__ecb3": 6.170565988982513,
+ "enerji__aylik_ham": 6.252973560796593,
+ "enerji__aylik_sa": 4.768540236408092,
+ "enerji__saar3_sa": 39.95560430882785,
+ "enerji__saar6_sa": 46.56764273407899,
+ "enerji__yillik": 46.11645948219463,
+ "enerji__saar3_ham": 72.7006410140973,
+ "enerji__saar6_ham": 68.28231695651957,
+ "enerji__ecb3": 9.149118821791348,
  "enerji__oynak": true,
  "enerji__mevsimsel": true,
- "enerji__mevsim_p": 0.0249,
- "gida__aylik_ham": 0.222530990215275,
- "gida__aylik_sa": 2.2506689416518677,
- "gida__saar3_sa": 31.69577561223256,
- "gida__saar6_sa": 33.22475941550951,
- "gida__yillik": 33.79313414961131,
- "gida__saar3_ham": 8.262968181720831,
- "gida__saar6_ham": 14.823087977584626,
- "gida__ecb3": 34.424248754121045,
+ "enerji__mevsim_p": 0.0266,
+ "gida__aylik_ham": -0.20102747375475571,
+ "gida__aylik_sa": 0.09537749040118282,
+ "gida__saar3_sa": 19.149573171135703,
+ "gida__saar6_sa": 28.746542838159183,
+ "gida__yillik": 27.620679805769765,
+ "gida__saar3_ham": 6.681767787541992,
+ "gida__saar6_ham": 10.366066270754292,
+ "gida__ecb3": 26.58976228369361,
  "gida__oynak": false,
  "gida__mevsimsel": true,
  "gida__mevsim_p": 0.0,
- "islenmemis_gida__aylik_ham": -2.0311706247188255,
- "islenmemis_gida__aylik_sa": 2.743290985747948,
- "islenmemis_gida__saar3_sa": 31.748671688184203,
- "islenmemis_gida__saar6_sa": 27.860228416517785,
- "islenmemis_gida__yillik": 34.14166563225842,
- "islenmemis_gida__saar3_ham": -9.808394296617218,
- "islenmemis_gida__saar6_ham": 1.1119361640010483,
- "islenmemis_gida__ecb3": 26.917575337996745,
+ "islenmemis_gida__aylik_ham": -2.333028362305578,
+ "islenmemis_gida__aylik_sa": -0.7045772463235012,
+ "islenmemis_gida__saar3_sa": 25.904056912579108,
+ "islenmemis_gida__saar6_sa": 24.442213235069076,
+ "islenmemis_gida__yillik": 24.151967435549505,
+ "islenmemis_gida__saar3_ham": -7.948432799763605,
+ "islenmemis_gida__saar6_ham": -9.411582446630062,
+ "islenmemis_gida__ecb3": 26.76907072067496,
  "islenmemis_gida__oynak": true,
  "islenmemis_gida__mevsimsel": true,
  "islenmemis_gida__mevsim_p": 0.0,
- "islenmis_gida__aylik_ham": 1.9893835830414153,
- "islenmis_gida__aylik_sa": 1.9893835830414819,
- "islenmis_gida__saar3_sa": 24.937948177895187,
- "islenmis_gida__saar6_sa": 27.077133849297862,
- "islenmis_gida__yillik": 33.54011651500646,
- "islenmis_gida__saar3_ham": 24.937948177895073,
- "islenmis_gida__saar6_ham": 27.07713384929791,
- "islenmis_gida__ecb3": 30.68202318386808,
+ "islenmis_gida__aylik_ham": 1.3942623549164201,
+ "islenmis_gida__aylik_sa": 1.3942623549163757,
+ "islenmis_gida__saar3_sa": 19.175308602232978,
+ "islenmis_gida__saar6_sa": 29.051978484828478,
+ "islenmis_gida__yillik": 30.324638768999822,
+ "islenmis_gida__saar3_ham": 19.17530860223289,
+ "islenmis_gida__saar6_ham": 29.051978484828588,
+ "islenmis_gida__ecb3": 23.965551257368855,
  "islenmis_gida__oynak": false,
  "islenmis_gida__mevsimsel": false,
- "islenmis_gida__mevsim_p": 0.2259,
- "alkol_tutun_altin__aylik_ham": 7.089993777412529,
- "alkol_tutun_altin__aylik_sa": 4.62338149358843,
- "alkol_tutun_altin__saar3_sa": 35.50908379980964,
- "alkol_tutun_altin__saar6_sa": 21.4657620671163,
- "alkol_tutun_altin__yillik": 31.102677961923874,
- "alkol_tutun_altin__saar3_ham": 52.782215464836035,
- "alkol_tutun_altin__saar6_ham": 32.3255192229283,
- "alkol_tutun_altin__ecb3": 25.55003181909803,
+ "islenmis_gida__mevsim_p": 0.1944,
+ "alkol_tutun_altin__aylik_ham": 0.8562999208462152,
+ "alkol_tutun_altin__aylik_sa": 1.4933414590940997,
+ "alkol_tutun_altin__saar3_sa": 23.685431630827637,
+ "alkol_tutun_altin__saar6_sa": 22.459368732557984,
+ "alkol_tutun_altin__yillik": 31.383577052868382,
+ "alkol_tutun_altin__saar3_ham": 43.90095478672962,
+ "alkol_tutun_altin__saar6_ham": 26.069559864573712,
+ "alkol_tutun_altin__ecb3": 26.130119954151574,
  "alkol_tutun_altin__oynak": false,
  "alkol_tutun_altin__mevsimsel": true,
  "alkol_tutun_altin__mevsim_p": 0.0003,
@@ -1163,198 +1169,198 @@
   "Yİ-ÜFE"
  ],
  "arindirilmayan_ana_metin": "İşlenmiş gıda ve Yİ-ÜFE",
- "dagilim__medyan": 2.0725812311092717,
- "dagilim__medyan_ham": 1.1399723149580598,
- "dagilim__difuzyon_0": 84.56440454109398,
- "dagilim__difuzyon_hedef": 78.41072335938016,
- "dagilim__difuzyon_mansete_gore": 59.73943769166608,
+ "dagilim__medyan": 1.5262424765610572,
+ "dagilim__medyan_ham": 1.4757314680542422,
+ "dagilim__difuzyon_0": 65.27985345991819,
+ "dagilim__difuzyon_hedef": 65.27985345991819,
+ "dagilim__difuzyon_mansete_gore": 47.13537824822787,
  "dagilim__kesit_n": 43.0,
- "dagilim__kirpma_05": 1.5297572172718175,
- "dagilim__kirpma_08": 1.8138311635282072,
- "dagilim__kirpma_10": 1.740124472174928,
- "dagilim__medyan_saar3": 29.86429758947553,
- "dagilim__kirpma_05_saar3": 24.504064550799008,
- "dagilim__kirpma_08_saar3": 25.526032710240763,
- "dagilim__kirpma_10_saar3": 26.04411187266895,
- "dagilim__son_ay": "2026-08",
+ "dagilim__kirpma_05": 1.7507470466126351,
+ "dagilim__kirpma_08": 1.6610562193993776,
+ "dagilim__kirpma_10": 1.6863058622948957,
+ "dagilim__medyan_saar3": 24.882327557854822,
+ "dagilim__kirpma_05_saar3": 23.90769343441579,
+ "dagilim__kirpma_08_saar3": 23.100603945420907,
+ "dagilim__kirpma_10_saar3": 23.227616253881365,
+ "dagilim__son_ay": "2026-09",
  "katki_yillik": {
-  "oktg10": 8.541526078450229,
-  "oktg09": 2.826955179835785,
-  "oktg18": 4.399167785231689,
-  "oktg22": 1.018018692850867,
-  "oktg23": 14.721696487436148
+  "oktg10": 7.210729132735266,
+  "oktg09": 3.186135735381515,
+  "oktg18": 4.245889631466466,
+  "oktg22": 1.0430915198092394,
+  "oktg23": 14.051210590630376
  },
  "katki_aylik": {
-  "oktg10": 0.055231071262445086,
-  "oktg09": 0.4035369790963673,
-  "oktg18": -0.06797457533315912,
-  "oktg22": 0.21419147136427244,
-  "oktg23": 1.2414166760879872
+  "oktg10": -0.04917396247061549,
+  "oktg09": 0.47977811268110254,
+  "oktg18": 0.5071990139604685,
+  "oktg22": 0.02761824153042281,
+  "oktg23": 0.8752911636902626
  },
- "katki_ay_artik_pp": 0.0039,
- "katki_ay_artik_tum_pp": 0.0058,
- "katki_yil_artik_pp": 0.0022,
- "katki_yil_artik_tum_pp": 0.0065,
+ "katki_ay_artik_pp": 0.0082,
+ "katki_ay_artik_tum_pp": 0.1269,
+ "katki_yil_artik_pp": 0.0107,
+ "katki_yil_artik_tum_pp": 0.0911,
  "baz": {
   "son3_sa": {
-   "12ay_sonra": 29.19588150728689,
-   "aylik_varsayim": 2.157609646905745,
-   "yil_sonu": 32.95169512804259
+   "12ay_sonra": 25.30912243388603,
+   "aylik_varsayim": 1.897897715283503,
+   "yil_sonu": 31.5306452762796
   },
   "son12_ort": {
-   "12ay_sonra": 31.507342820912633,
-   "aylik_varsayim": 2.30868443980623,
-   "yil_sonu": 33.73989872924854
+   "12ay_sonra": 29.731511021756397,
+   "aylik_varsayim": 2.1928371176138883,
+   "yil_sonu": 32.676084943511505
   },
   "gecen_yil": {
-   "12ay_sonra": 31.507342820912854,
-   "aylik_varsayim": 3.2344897823703977,
-   "yil_sonu": 31.507342820912854
+   "12ay_sonra": 29.73151102175646,
+   "aylik_varsayim": 2.5501749194504653,
+   "yil_sonu": 29.73151102175646
   }
  },
  "yilsonu": {
-  "kumulatif": 22.07,
-  "anket": 29.43,
-  "kalan_ay": 4,
-  "gereken_aylik": 1.47,
-  "momentum_aylik": 2.16,
-  "acik_puan": 0.68
+  "kumulatif": 24.32,
+  "anket": 29.61,
+  "kalan_ay": 3,
+  "gereken_aylik": 1.4,
+  "momentum_aylik": 1.9,
+  "acik_puan": 0.5
  },
  "reel__faiz": 37.0,
- "reel__ex_post": 4.176692389387782,
- "reel__ex_ante": 10.760772899991933,
- "reel__egilime_gore": 6.040531943948246,
- "reel__ileri_ex_ante": 9.794120138947736,
- "reel__faiz_tarih": "2026-09-01",
- "reel__faiz_gun": "2026-09-08",
- "reel__ex_post_tarih": "2026-08-01",
+ "reel__ex_post": 5.60271665765506,
+ "reel__ex_ante": 10.751818916734024,
+ "reel__egilime_gore": 9.32963006925689,
+ "reel__ileri_ex_ante": 9.21230561189994,
+ "reel__faiz_tarih": "2026-10-01",
+ "reel__faiz_gun": "2026-10-02",
+ "reel__ex_post_tarih": "2026-09-01",
  "reel__ex_post_faiz": 37.0,
- "bek__pka_yilsonu": 29.43,
- "bek__pka_yilsonu_tarih": "2026-08-01",
- "bek__pka_12a": 23.69,
- "bek__pka_12a_tarih": "2026-08-01",
- "bek__pka_24a": 18.03,
- "bek__pka_24a_tarih": "2026-08-01",
- "bek__pka_5y": 11.14,
- "bek__pka_5y_tarih": "2026-08-01",
- "bek__pka_12a_medyan": 23.95,
- "bek__pka_12a_medyan_tarih": "2026-08-01",
- "bek__pka_12a_std": 2.69,
- "bek__pka_12a_std_tarih": "2026-08-01",
- "bek__pka_12a_n": 63.0,
- "bek__pka_12a_n_tarih": "2026-08-01",
- "bek__pka_faiz_12a": 29.59,
- "bek__pka_faiz_12a_tarih": "2026-08-01",
- "bek__reel_kesim_12a": 32.8,
- "bek__reel_kesim_12a_tarih": "2026-08-01",
- "bek__hanehalki_12a": 45.58,
- "bek__hanehalki_12a_tarih": "2026-08-01",
+ "bek__pka_yilsonu": 29.61,
+ "bek__pka_yilsonu_tarih": "2026-09-01",
+ "bek__pka_12a": 23.7,
+ "bek__pka_12a_tarih": "2026-09-01",
+ "bek__pka_24a": 18.32,
+ "bek__pka_24a_tarih": "2026-09-01",
+ "bek__pka_5y": 12.09,
+ "bek__pka_5y_tarih": "2026-09-01",
+ "bek__pka_12a_medyan": 24.0,
+ "bek__pka_12a_medyan_tarih": "2026-09-01",
+ "bek__pka_12a_std": 2.13,
+ "bek__pka_12a_std_tarih": "2026-09-01",
+ "bek__pka_12a_n": 61.0,
+ "bek__pka_12a_n_tarih": "2026-09-01",
+ "bek__pka_faiz_12a": 29.22,
+ "bek__pka_faiz_12a_tarih": "2026-09-01",
+ "bek__reel_kesim_12a": 32.5,
+ "bek__reel_kesim_12a_tarih": "2026-09-01",
+ "bek__hanehalki_12a": 45.6,
+ "bek__hanehalki_12a_tarih": "2026-09-01",
  "beklenti_isabet": {
   "h0": {
    "p36": {
     "n": 36,
-    "mae": 0.512,
-    "yanlilik": 0.056,
-    "rmse": 0.63
+    "mae": 0.509,
+    "yanlilik": 0.059,
+    "rmse": 0.629
    },
    "p60": {
     "n": 60,
-    "mae": 1.077,
-    "yanlilik": 0.533,
-    "rmse": 1.959
+    "mae": 1.08,
+    "yanlilik": 0.526,
+    "rmse": 1.96
    }
   },
   "h1": {
    "p36": {
     "n": 36,
-    "mae": 0.638,
-    "yanlilik": 0.242,
-    "rmse": 0.786
+    "mae": 0.633,
+    "yanlilik": 0.224,
+    "rmse": 0.784
    },
    "p60": {
     "n": 60,
-    "mae": 1.397,
-    "yanlilik": 0.903,
-    "rmse": 2.533
+    "mae": 1.4,
+    "yanlilik": 0.898,
+    "rmse": 2.534
    }
   },
   "h2": {
    "p36": {
     "n": 36,
-    "mae": 0.662,
-    "yanlilik": 0.351,
-    "rmse": 0.839
+    "mae": 0.625,
+    "yanlilik": 0.304,
+    "rmse": 0.801
    },
    "p60": {
     "n": 60,
-    "mae": 1.469,
-    "yanlilik": 1.082,
+    "mae": 1.47,
+    "yanlilik": 1.077,
     "rmse": 2.722
    }
   },
   "son_ay": {
-   "ay": "2026-08",
-   "ad": "Ağustos 2026",
-   "anket": 1.67,
+   "ay": "2026-09",
+   "ad": "Eylül 2026",
+   "anket": 2.12,
    "gercek": 1.84,
-   "surpriz": 0.17
+   "surpriz": -0.28
   },
   "ileri": {
    "h1": {
-    "ay": "2026-09",
-    "ad": "Eylül 2026",
-    "oran": 2.08
-   },
-   "h2": {
     "ay": "2026-10",
     "ad": "Ekim 2026",
     "oran": 1.97
+   },
+   "h2": {
+    "ay": "2026-11",
+    "ad": "Kasım 2026",
+    "oran": 1.13
    }
   }
  },
  "atalet": {
-  "hizmet": 0.448,
-  "temel_mal": 0.124,
-  "tufe": 0.349,
-  "kira": 0.507
+  "hizmet": 0.401,
+  "temel_mal": 0.393,
+  "tufe": 0.503,
+  "kira": 0.236
  },
  "ito": {
-  "n": 31,
+  "n": 32,
   "ilk_ay": "2024-02-01",
-  "sabit": 0.0759,
-  "egim": 0.862,
-  "se_sabit": 0.272,
-  "se_egim": 0.0891,
-  "se_artik": 0.5529,
-  "r": 0.874,
-  "r2": 0.763,
-  "r_bir_ay_onceden": -0.0,
-  "son_ito_aylik": 1.658,
-  "ima_aylik": 1.5051,
-  "ima_alt": 0.3361,
-  "ima_ust": 2.6742,
-  "ima_yari_genislik": 1.169,
+  "sabit": 0.0711,
+  "egim": 0.8631,
+  "se_sabit": 0.2635,
+  "se_egim": 0.0871,
+  "se_artik": 0.5437,
+  "r": 0.875,
+  "r2": 0.766,
+  "r_bir_ay_onceden": 0.02,
+  "son_ito_aylik": 2.116,
+  "ima_aylik": 1.8975,
+  "ima_alt": 0.763,
+  "ima_ust": 3.0321,
+  "ima_yari_genislik": 1.1346,
   "ornek_disi_sinandi": false,
-  "son_ay": "2026-08-01"
+  "son_ay": "2026-09-01"
  },
  "agirlik_son_yil": {
   "yil": "2026",
   "katki": {
-   "oktg10": 24.42,
-   "oktg09": 7.0,
-   "oktg18": 26.95,
-   "oktg22": 3.16,
-   "oktg23": 38.47
+   "oktg10": 24.46,
+   "oktg09": 7.02,
+   "oktg18": 26.92,
+   "oktg22": 3.21,
+   "oktg23": 38.4
   },
   "artik_pp": 0.0025,
   "kip": "öncüle en yakın"
  },
  "agirlik_kayma_pp": {
-  "oktg10": -0.54,
-  "oktg09": -3.21,
-  "oktg18": -2.93,
-  "oktg22": -0.82,
-  "oktg23": 7.51
+  "oktg10": -0.43,
+  "oktg09": -3.11,
+  "oktg18": -3.05,
+  "oktg22": -0.8,
+  "oktg23": 7.39
  },
- "uyari_sayisi": 1
+ "uyari_sayisi": 4
 }
