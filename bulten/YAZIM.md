@@ -1293,11 +1293,16 @@ gecikme ölçülür, kaydedilir ve haber verilir. Rehbere yazılmış bir kural,
 "rutin metnine yazıldı" kadar zayıftır; bu bölümün varlık sebebi de zaten o.
 
 **Rutini bir aracı yeniden kuramaz.** Mevcut iki rutin (hafta içi 04:15 UTC,
-pazar 14:45 UTC) hesabın arayüzünden oluşturuldu; aracının onları güncelleme ya
-da silme yetkisi yok. Aracının kurduğu bir rutin ise depoya erişemez: yeni
-oturuma depo bağlanmadığı için özel depo klonlanamaz. Yani rutin metnini
-değiştirmenin tek yolu **claude.ai arayüzü**; oradan değiştirilecek bir şey
-yoksa yeni kural buraya yazılır ve rutin onu okuyarak öğrenir.
+pazar 14:45 UTC) hesabın kendisi tarafından oluşturuldu; aracının onları
+güncelleme ya da silme yetkisi yok. 05.10.2026'da yeniden denendi ve ret
+gerekçesi adıyla geldi: rutin "aracı tarafından değil, hesap tarafından
+kuruldu; aracı yalnız kendi kurduğu rutini güncelleyebilir". Metni OKUMAK ise
+mümkün (`get_trigger`): bir oturum rutinin bugünkü metnini bu tabloyla
+kıyaslayıp sapmayı bildirebilir. Aracının kurduğu bir rutin depoya erişemez:
+yeni oturuma depo bağlanmadığı için özel depo klonlanamaz. Yani rutin metnini
+değiştirmenin tek yolu **claude.ai arayüzü** (Routines sayfası, rutinin kendi
+düzenleme ekranı); oradan değiştirilecek bir şey yoksa yeni kural buraya
+yazılır ve rutin onu okuyarak öğrenir.
 
 ## Tekrar — iki eksen
 
