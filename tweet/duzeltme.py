@@ -31,6 +31,16 @@ Aynı kayıt birkaç bülten dosyasında çoğalsa da (yazı katmanı listeyi b�
 yeniden yazar) tek gönderi çıkar; düzeltmenin düzeltmesi başka bir eski→yeni
 çifti olduğu için ayrı anahtarla, AYNI ana gönderinin altına gider.
 
+METİN TEKİLLİĞİ (`metin_ozu`): anahtar eski→yeni çiftine bağlı, X ise METNE
+bakar — aynı hedefe aynı metni ikinci kez kabul etmez (403, kopya içerik). İki
+kayıt aynı hedefe aynı `gonderi_metni`ni taşırsa (bir yanıt iki düzeltmeyi
+birden anlatıyor) ikincisi aday OLMAZ: koşu içinde adıyla uyarılır, defterde
+o metin o hedefe zaten gitmişse sessizce geçilir. Önce bu ikiz her sabah 403
+alıp koşuyu düşürüyor, arkadaki geçerli düzeltmeleri ve etkileşim okumasını
+21 gün boyunca götürüyordu. Öz defter kaydına yazılır (`metin_oz`); anahtar
+tanımı değişmez. Ters hâl — aynı eski→yeni çiftine iki AYRI metin — tek
+yanıt üretir ve ikinci metin koşu içinde adıyla uyarılır.
+
 PENCERE: kaydın KENDİ tarihinden (`tarih`) sonraki PENCERE_GUN gün — kayıt
 hangi sayının dosyasında durursa dursun; bülten ve analiz için tek kural
 (`_pencerede`). Bülten dosyasının günü yalnız gelecekteki dosyayı eler. Pencere
@@ -72,6 +82,22 @@ def anahtar(hedef: str, eski: str, yeni: str) -> str:
     """İçeriğe bağlı defter anahtarı — sıraya değil (sıra her yamada kayar)."""
     oz = hashlib.sha1(f"{eski}|{yeni}".encode("utf-8")).hexdigest()[:8]
     return f"{ON_EK}:{hedef}:{oz}"
+
+
+def metin_ozu(govde: str) -> str:
+    """Yanıt metninin özü: gönderimdeki normalleştirmeden (boşluk tekleştirme +
+    tipografi, `metin` ile aynı yol) sonra sha256[:12]. Aynı hedefte başlık ve
+    sorumluluk notu sabit olduğu için X'in kopya içerik kararını bu belirler."""
+    return hashlib.sha256(uret._tipografi(re.sub(r"\s+", " ", str(govde)).strip())
+                          .encode("utf-8")).hexdigest()[:12]
+
+
+def _anahtar_hedefi(k: str) -> str | None:
+    """duzeltme:<hedef>:<oz> → <hedef> (hedef anahtarı ':' taşır, öz taşımaz)."""
+    if not k.startswith(ON_EK + ":"):
+        return None
+    govde = k[len(ON_EK) + 1:]
+    return govde.rsplit(":", 1)[0] if ":" in govde else None
 
 
 def kimlikli(defter: dict, hedef: str) -> str | None:
