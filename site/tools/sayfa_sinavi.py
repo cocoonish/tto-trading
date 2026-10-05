@@ -144,7 +144,10 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       iki kez basılmış, kendi grubunun (ön bilgideki `ritim`, arşivse Arşiv)
       dışında, gruplar lib/ritim.ts sırasının dışında, ya da grup içinde
       kartın köşesindeki veri tarihi bir öncekinden YENİ (tarihsiz kart
-      tarihlilerden sonra). Sıra anahtarı okurun gördüğü tarihin kendisidir;
+      tarihlilerden sonra), hiçbir kartta okunabilir veri tarihi yok (sınanamayan
+      sıra geçmiş sayılmaz), ya da pano kartı köşede veri dışı bir tarih
+      (yayım/güncelleme günü) basıyor. Ana sayfanın hat tablosu da aynı sırayı
+      derlenmiş çıktıda taşımalı. Sıra anahtarı okurun gördüğü tarihin kendisidir;
       ayrıştırma lib/bicim.tariheCevir ile aynı üç yazımı tanır. UYARI: bir
       panonun `ritim` beyanı, ölçüm katmanının ritim eşiğinin (bulten/ayar.py
       RITIM) düştüğü kümeyle ayrışıyor — etiket kusurudur, yanlış sayı değil;
@@ -1454,6 +1457,36 @@ DIZIN_BOLUM = re.compile(r'<section\b[^>]*\bdata-ritim="([\w-]+)"[^>]*>(.*?)</se
 DIZIN_KART = re.compile(r"<article\b.*?</article>", re.S)
 DIZIN_HREF = re.compile(r'<h3\b[^>]*>\s*<a\b[^>]*\bhref="/projeler/([^/"#?]+)/"')
 DIZIN_VERI = re.compile(r'<time\b[^>]*\bclass="tarih"[^>]*>\s*veri\s+([^<]+?)\s*</time>')
+DIZIN_TARIH = re.compile(r'<time\b[^>]*\bclass="tarih"')
+HT_GOVDE = re.compile(r'<table\b[^>]*\bclass="ht-tablo[^"]*"[^>]*>.*?<tbody\b[^>]*>(.*?)</tbody>', re.S)
+HT_SATIR = re.compile(r"<tr\b.*?</tr>", re.S)
+HT_TARIH = re.compile(r'<td\b[^>]*\bclass="ht-tarih"[^>]*>\s*([^<\s]*)')
+
+
+def hat_tablosu_bulgulari(html: str) -> list[str]:
+    """Ana sayfa hat tablosu: satırlar Projeler kartlarıyla AYNI karşılaştırıcıyla
+    (veri tarihi azalarak, tarihsiz sonda) mı basılmış — derlenmiş çıktıda (ENGEL).
+    Kaynakta yalnız çağrının varlığını sormak ters argümanı ya da sonradan
+    yapılan bir ters çevirmeyi görmezdi."""
+    out: list[str] = []
+    m = HT_GOVDE.search(html)
+    satirlar = HT_SATIR.findall(m.group(1)) if m else []
+    if not satirlar:
+        return ["hat tablosu bulunamadı ya da boş — sıra sınanamadı (koşmamış ölçüt geçmiş sayılmaz)"]
+    onceki = None
+    tarihsiz = False
+    for i, sat in enumerate(satirlar, 1):
+        t = HT_TARIH.search(sat)
+        gun = _dizin_gunu(t.group(1)) if t else None
+        if gun is None:
+            tarihsiz = True
+            continue
+        if tarihsiz:
+            out.append(f"hat tablosu satır {i}: tarihsiz satırdan SONRA tarihli satır ({t.group(1)})")
+        if onceki is not None and gun > onceki:
+            out.append(f"hat tablosu satır {i}: veri {t.group(1)} bir önceki satırdan yeni — sıra bozuk")
+        onceki = gun if onceki is None else min(onceki, gun)
+    return out
 
 
 def proje_dizini_bulgulari(html: str, beyan: dict, kodlar: list[str]) -> list[str]:
@@ -1462,6 +1495,7 @@ def proje_dizini_bulgulari(html: str, beyan: dict, kodlar: list[str]) -> list[st
     gorulen: dict[str, int] = {}
     onceki_sira = -1
     bolum_var = False
+    kart_say = tarihli_say = 0
     for bm in DIZIN_BOLUM.finditer(html):
         bolum_var = True
         kod, govde = bm.group(1), bm.group(2)
@@ -1480,6 +1514,7 @@ def proje_dizini_bulgulari(html: str, beyan: dict, kodlar: list[str]) -> list[st
                 out.append(f"grup '{kod}': pano bağı okunamayan kart")
                 continue
             slug = h.group(1)
+            kart_say += 1
             gorulen[slug] = gorulen.get(slug, 0) + 1
             a = beyan.get(slug)
             if a is None:
@@ -1489,10 +1524,14 @@ def proje_dizini_bulgulari(html: str, beyan: dict, kodlar: list[str]) -> list[st
                 if bek != kod:
                     out.append(f"{slug}: '{kod}' grubunda, beklenen '{bek}'")
             v = DIZIN_VERI.search(kart)
+            if not v and DIZIN_TARIH.search(kart):
+                out.append(f"{slug}: pano kartı köşede veri dışı bir tarih basıyor "
+                           "(yayım ya da güncelleme günü veri tarihi gibi okunur)")
             gun = _dizin_gunu(v.group(1)) if v else None
             if gun is None:
                 tarihsiz_goruldu = True
                 continue
+            tarihli_say += 1
             if tarihsiz_goruldu:
                 out.append(f"{slug}: grup '{kod}' içinde tarihsiz karttan SONRA tarihli kart (veri {v.group(1)})")
             if son_gun is not None and gun > son_gun:
@@ -1500,6 +1539,9 @@ def proje_dizini_bulgulari(html: str, beyan: dict, kodlar: list[str]) -> list[st
             son_gun = gun if son_gun is None else min(son_gun, gun)
     if not bolum_var:
         out.append("dizinde ritim grubu yok (data-ritim taşıyan bölüm bulunamadı)")
+    elif kart_say and not tarihli_say:
+        out.append("dizinde hiçbir kartın köşesinde okunabilir veri tarihi yok — grup içi "
+                   "sıra sınanamadı (koşmamış ölçüt geçmiş sayılmaz)")
     for slug in sorted(beyan):
         n = gorulen.get(slug, 0)
         if n == 0:
@@ -2411,6 +2453,14 @@ def main() -> int:
         for x in pd:
             hata.append(f"proje dizini — {x}")
         print(f"  pano {len(beyan)} · dizin ihlali {len(pd)} · ritim beyanı uyarısı {len(ru)}")
+    ana = KOK / "site/dist/index.html"
+    if not ana.exists():
+        uyari.append(f"ölçüt {PROJE_DIZIN_OLCUT} (ana sayfa hat tablosu sırası) KOŞMADI — dist yok")
+    else:
+        ht = hat_tablosu_bulgulari(ana.read_text(encoding="utf-8"))
+        for x in ht:
+            hata.append(f"ana sayfa — {x}")
+        print(f"  ana sayfa hat tablosu sıra ihlali {len(ht)}")
 
     # ------------------------------------------------------------ (26)
     # YAZININ KENDİ DOĞRULAYICISI — yayımlanan sayı ile onu üreten ölçüm.

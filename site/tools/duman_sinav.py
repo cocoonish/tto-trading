@@ -1263,9 +1263,14 @@ _u = _ru({"g": {"ritim": "gunluk"}}, {"g": 11}, 8)
 sina("ritim beyanı: haftalık eşikli panoya 'gunluk' beyanı → UYARI", len(_u) == 1 and "'haftalik'" in _u[0], f"gelen {_u}")
 _u = _ru({"x": {"ritim": "aylik"}}, {}, 8)
 sina("ritim beyanı: ölçüm katmanında eşiği olmayan pano adıyla uyarılır", len(_u) == 1 and "sınanamadı" in _u[0], f"gelen {_u}")
+# Canlı ağaçtaki ayrışma bir UYARIDIR (sayfa sınavı 28): ritim eşiğini
+# değiştiren bir bülten commit'i siteyi durdurmamalı. Bu dosya yayın kapısının
+# İLK adımı olduğu için canlı ağaca "sıfır uyarı" şartı koymak o uyarıyı ENGEL'e
+# çevirirdi; ölçütün kendisini yukarıdaki sentetik maddeler sınıyor. Canlı
+# sonuç yalnız bilgi olarak basılır.
 _rt, _gs = _mod._ayar_ritim(_mod.KOK)
 _u = _ru(_mod.proje_beyanlari(_mod.KOK), _rt, _gs)
-sina("ritim beyanı: bugünkü ağaçta 18 panonun hepsi eşiğiyle uyumlu (yanlış alarm yok)", _u == [], f"gelen {_u}")
+print(f"  · bilgi: bugünkü ağaçta ritim beyanı ayrışması {len(_u)}" + (f" — {_u}" if _u else ""))
 _bey = _mod.proje_beyanlari(_mod.KOK)
 sina("her pano `ritim` beyan ediyor ve beyan lib/ritim.ts kodlarından",
      bool(_bey) and all(a.get("ritim") in _kodlar[:-1] for a in _bey.values()), f"gelen {_bey}")
@@ -1277,8 +1282,46 @@ sina("Projeler sayfası grupları lib/projeDizini'nden kuruyor ve data-ritim bas
 _kk = (_SITE / "src/components/KayitKarti.astro").read_text(encoding="utf-8")
 sina("pano kartı köşede 'veri <tarih>' basıyor (ölçüt 28'in okuduğu yer)",
      '<time class="tarih" datetime={veri.iso || undefined}>veri {veri.tarih}</time>' in _kk)
-_ht = (_SITE / "src/components/HatlarTablosu.astro").read_text(encoding="utf-8")
-sina("ana sayfa hat tablosu aynı karşılaştırıcıyla diziliyor", "tazelikSirasi(" in _ht)
+# Hiçbir kartta veri tarihi okunamıyorsa (kartlar yayım tarihine düşmüş, ya da
+# köşe biçimi değişmiş) grup içi sıra SINANAMAZ: ters sıra da "temiz" çıkardı.
+_ters = (_pb("gunluk", _pk("b"), _pk("a")) + _pb("aylik", _pk("d"), _pk("c")) + _pb("arsiv", _pk("e")))
+_b = _pd(_ters, _beyan, _kodlar)
+sina("dizin: hiçbir kartta veri tarihi okunamıyorsa → ENGEL (sınanamayan sıra geçmez)",
+     any("okunabilir veri tarihi yok" in x for x in _b), f"gelen {_b}")
+_yayim = _pk("d").replace("</span>  </div>", '</span> <time class="tarih" datetime="2026-08-23">23 Ağustos 2026</time> </div>')
+_b = _pd(_dogru.replace(_pk("d", "25.09.2026"), _yayim), _beyan, _kodlar)
+sina("dizin: pano kartı köşede veri dışı tarih basıyor → ENGEL",
+     any("veri dışı bir tarih" in x for x in _b), f"gelen {_b}")
+_b = _pd(_dogru.replace(_pk("d", "25.09.2026"), _pk("d").replace("</span>  </div>", '</span> <span class="tarih">veri yok</span> </div>')),
+         _beyan, _kodlar)
+sina("dizin: tarihsiz pano kartı 'veri yok' basar, geçer", _b == [], f"gelen {_b}")
+
+# Ana sayfa hat tablosu: derlenmiş çıktıda aynı sıra (kaynakta çağrının
+# varlığı ters argümanı ya da sonradan ters çevirmeyi görmezdi).
+_hb = _mod.hat_tablosu_bulgulari
+
+
+def _htr(tarih: str) -> str:
+    yas = '<span class="ht-yas" data-astro-cid-x>bugün</span>' if tarih != "—" else ""
+    return (f'<tr data-astro-cid-x> <td class="ht-hat" data-astro-cid-x><a href="/projeler/a/">A</a></td>'
+            f'<td class="ht-tarih" data-astro-cid-x>{tarih}{yas}</td> </tr>')
+
+
+def _htab(*tarihler: str) -> str:
+    return (f'<table class="ht-tablo" data-astro-cid-x><thead><tr><th class="ht-tarih">Veri tarihi</th></tr></thead>'
+            f'<tbody data-astro-cid-x>{"".join(_htr(t) for t in tarihler)}</tbody></table>')
+
+
+sina("hat tablosu: doğru sıra (gün, ay sonu, tarihsiz sonda) geçer",
+     _hb(_htab("05.10.2026", "30.09.2026", "09.2026", "—")) == [])
+_b = _hb(_htab("30.09.2026", "05.10.2026"))
+sina("hat tablosu: yer değiştirmiş iki satır → ENGEL", any("sıra bozuk" in x for x in _b), f"gelen {_b}")
+_b = _hb(_htab("05.10.2026", "—", "30.09.2026"))
+sina("hat tablosu: tarihsizden sonra tarihli → ENGEL", any("tarihsiz satırdan SONRA" in x for x in _b), f"gelen {_b}")
+_b = _hb("<main></main>")
+sina("hat tablosu: tablo yok → ENGEL (koşmamış ölçüt geçmez)", any("bulunamadı" in x for x in _b), f"gelen {_b}")
+sina(f"{_mod.PROJE_DIZIN_OLCUT}: hat tablosu sırası ana akışta koşuyor",
+     "hat_tablosu_bulgulari(" in _ss[_ss.find("def main"):])
 sina(f"{_mod.PROJE_DIZIN_OLCUT} sınavın ana akışında koşuyor", "proje_dizini_bulgulari(" in _ss[_ss.find("def main"):])
 
 

@@ -78,7 +78,12 @@ const parca = (m: string) => {
             </td>
             <td class="ht-tarih">
               {h.tarih || '—'}
-              {yasMetni(h.yas) && <span class="ht-yas">{yasMetni(h.yas)}</span>}
+              {yasMetni(h.yas) && (
+                <span class="ht-yas"
+                  data-ht-yas={/^\d{2}\.\d{2}\.\d{4}$/.test(h.tarih) ? h.tarih : undefined}>
+                  {yasMetni(h.yas)}
+                </span>
+              )}
             </td>
           </tr>
         ))
@@ -209,3 +214,16 @@ const parca = (m: string) => {
     thead th.sag, .ht-deger { padding-right: 0.5rem; }
   }
 </style>
+
+<script>
+  // Yaş derleme anında yazılır ve yeniden derleme olmayan günlerde (hafta
+  // sonu) kayar; sayfa açılınca aynı tarihten aynı kuralla yeniden hesaplanır
+  // (KayitKarti ile aynı yol). Aylık damgada gün cinsinden yaş yazılmaz.
+  import { tariheCevir, gunFarki, yasMetni } from '../lib/bicim';
+  document.querySelectorAll<HTMLElement>('[data-ht-yas]').forEach((el) => {
+    const d = tariheCevir(el.dataset.htYas);
+    const y = d ? yasMetni(gunFarki(d)) : '';
+    if (y) el.textContent = y;
+    else el.remove();
+  });
+</script>

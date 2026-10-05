@@ -53,16 +53,20 @@ const guncelGoster = guncel && guncel !== yayim ? guncel : null;
     {durum === 'taslak' && <span class="rozet rozet--taslak">Hazırlanıyor</span>}
     {durum === 'aktif' && tur === 'proje' && <span class="rozet rozet--aktif">Canlı</span>}
     {durum === 'arsiv' && <span class="rozet rozet--arsiv">Arşiv</span>}
-    {veri ? (
-      <time class="tarih" datetime={veri.iso || undefined}>veri {veri.tarih}</time>
-    ) : yayim && (
+    {veri ? (veri.tarih ? (
+      <>
+        <time class="tarih" datetime={veri.iso || undefined}>veri {veri.tarih}</time>
+        {veri.yas && <span class="tarih-yas" data-kart-yas={veri.iso}>· {veri.yas}</span>}
+      </>
+    ) : (
+      <span class="tarih">veri yok</span>
+    )) : yayim && (
       <time class="tarih" datetime={isoGun(pubDate)}>{yayim}</time>
     )}
   </div>
   <h3><a href={href}>{title}</a></h3>
   <p>{kartMetni}</p>
   <div class="alt">
-    {veri?.yas && <span class="ek">{veri.yas}</span>}
     {guncelGoster && <span>güncellendi {guncelGoster}</span>}
     {ekBilgi.map((e) => <span class="ek">{e}</span>)}
     {tur === 'proje' && guncelleme && <span>↻ {guncelleme}</span>}
@@ -70,3 +74,16 @@ const guncelGoster = guncel && guncel !== yayim ? guncel : null;
     {etiketler && tags.length > 4 && <span class="ek">+{tags.length - 4}</span>}
   </div>
 </article>
+
+<script>
+  // Yaş derleme anında yazılır ve hafta sonu donar ("bugün" pazartesiye
+  // kadar "bugün" kalırdı). Sayfa açılınca aynı tarihten, aynı kuralla
+  // (lib/bicim) yeniden hesaplanır.
+  import { tariheCevir, gunFarki, yasMetni } from '../lib/bicim';
+  document.querySelectorAll<HTMLElement>('[data-kart-yas]').forEach((el) => {
+    const d = tariheCevir(el.dataset.kartYas);
+    const y = d ? yasMetni(gunFarki(d)) : '';
+    if (y) el.textContent = `· ${y}`;
+    else el.remove();
+  });
+</script>

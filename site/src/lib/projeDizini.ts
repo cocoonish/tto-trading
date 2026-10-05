@@ -37,8 +37,10 @@ export interface DizinKarti<T> {
   /** Kartta basılan veri tarihi ("05.10.2026", "09.2026"); yoksa boş. */
   tarih: string;
   gun: Date | null;
-  /** Kartın tarih alanı (KayitKarti `veri`); tarih yoksa tanımsız. */
-  veri?: { tarih: string; iso: string; yas: string };
+  /** Kartın tarih alanı (KayitKarti `veri`). Pano kartında HER ZAMAN vardır:
+   *  tarih boşsa kart "veri yok" basar ve yayım tarihine geri DÜŞMEZ — köşe
+   *  sayfanın tanımında veri tarihidir, yayım günü orada yanıltır. */
+  veri: { tarih: string; iso: string; yas: string };
 }
 
 export interface DizinGrubu<T> {
@@ -64,13 +66,11 @@ export function projeDizini<T extends ProjeGirdisi>(projeler: T[]): DizinGrubu<T
       proje: p,
       tarih: h.tarih,
       gun,
-      veri: h.tarih
-        ? {
-            tarih: h.tarih,
-            iso: gun ? (ay ? isoGun(gun).slice(0, 7) : isoGun(gun)) : '',
-            yas: ay ? '' : yasMetni(h.yas),
-          }
-        : undefined,
+      veri: {
+        tarih: h.tarih,
+        iso: gun ? (ay ? isoGun(gun).slice(0, 7) : isoGun(gun)) : '',
+        yas: h.tarih && !ay ? yasMetni(h.yas) : '',
+      },
     });
   }
   for (const g of gruplar) {

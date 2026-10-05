@@ -26,7 +26,7 @@ let sayac = 0;
       grafik ve sayılar bu sayfalara işlenir. Panolar yayım ritmine göre
       gruplanır; grup içinde verisi en yeni olan pano en üstte durur. Kartın
       köşesindeki "veri" tarihi panonun manşet büyüklüğünün kendi tarihidir,
-      ↻ işareti kaynağın yayım takvimini gösterir.
+      ↻ işareti panonun ne sıklıkla tazelendiğini gösterir.
     </p>
   </header>
 
@@ -178,5 +178,9 @@ let sayac = 0;
     font-size: 1rem;
     line-height: 1.6;
     color: var(--ink-70);
+  }
+  /* Telefon tabanı: mono ölçü etiketleri en az 0,75rem (global.css ile aynı kural). */
+  @media (max-width: 640px) {
+    .harita-no, .harita-sayi, .grup-olcu { font-size: 0.75rem; }
   }
 </style>
