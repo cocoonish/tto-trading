@@ -10,7 +10,7 @@
   "SWAP ÇAPA KAPSAMI DÜŞÜK: günlük serinin yalnız %34'i haftalık IRFCL çapasına dayanıyor (hedef %50); geri kalanı ay sonu çapasından taşınıyor. Haftalık arşiv doldurulduğunda bu kalemin hatası belirgin şekilde küçülür."
  ],
  "tani": {
-  "zincirleme_dt": 2.161,
+  "zincirleme_dt": 1.825,
   "swap_haftalik_capa_orani": 0.343,
   "son_ons_capa": "2026-09-25",
   "capa_boslugu": -2.515,
