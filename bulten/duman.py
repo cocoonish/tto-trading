@@ -3710,6 +3710,17 @@ def main() -> int:
         assert [x["etiket"] for x in
                 celis("20 Ekim'de Hazine bono ihalesi düzenleyecek.")] == ["20 Ekim"], \
             "planda OLMAYAN ilerideki ihale yakalanmıyor"
+        # (4c) BUGÜN, PLANA SORULUR. İhale günü sabahı ölçüm ihaleden önce
+        # kurulur ve gerçekleşme tablosu o günü henüz taşıyamaz; "geçmiş gün,
+        # gerçekleşme yok" hükmü bugüne uygulanırsa planda KAYITLI ihaleyi
+        # anlatan sabah notu yayını durdurur (05.10.2026'da oldu). Planda
+        # OLMAYAN bir gün için "bugün" iddiası yakalanmaya devam etmeli.
+        _5e = dict(tarih="2026-10-05", simdi=dt.date(2026, 10, 5))
+        assert not celis("Bugün Hazine iki yıllık tahvil ihalesi düzenliyor.", **_5e), \
+            "bugünün PLANDA kayıtlı ihalesi geçmiş gün sayılıyor"
+        assert celis("Bugün Hazine bono ihalesi düzenliyor.",
+                     tarih="2026-10-07", simdi=dt.date(2026, 10, 7)), \
+            "planda OLMAYAN bugünkü ihale iddiası yakalanmıyor"
 
         # (5) STRATEJİ OKUNAMAZSA None — denetim uyarır, ENGEL üretmez.
         gercek = itk.ARSIV

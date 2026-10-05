@@ -295,7 +295,11 @@ def celiskiler(b: dict, simdi: dt.date | None = None) -> list[dict] | None:
             continue
         if olan is not None and x["gun"] in olan:
             continue                      # gerçekten yapılmış: hüküm yok
-        if olan is not None and x["gun"] <= bugun:
+        # BUGÜN GEÇMİŞ DEĞİLDİR. Sabah notu ölçümü ihaleden önce kurulur;
+        # bugünün ihalesi henüz gerçekleşme tablosunda olamaz ve PLANA
+        # sorulur. `<=` yazıldığında 05.10.2026 sabahı planda kayıtlı iki
+        # ihaleyi anlatan meşru paragraf ENGEL aldı.
+        if olan is not None and x["gun"] < bugun:
             bul.append(x)                 # geçmiş gün, gerçekleşme yok
         elif x["gun"] not in gunler:
             bul.append(x)                 # ileriki gün, planda da yok
