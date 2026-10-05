@@ -120,7 +120,8 @@ _BIRIM_ARKA = re.compile(r"\s*(?:bp\b|baz\s+puan|puan|σ|yıl|kat\b|%)", re.I)
 # içermeyen 1–3 haneli tam sayı. "…%5,089." ile biten satır ENGEL ALMAZ; "6/7."
 # bir oran yazımıdır. Endeks adı ("BIST 100.", "S&P 500.") meşru bir cümle
 # sonudur — önceki sözcük endeks adıysa muaf.
-SIRA_KESIK = re.compile(r"(?<![%\d,.+−/-])\b\d{1,3}\.$", re.M)
+# ":" geriye bakışta: saatle biten meşru cümle ("TSİ 14:00.") kesik değildir.
+SIRA_KESIK = re.compile(r"(?<![%\d,.+−/:-])\b\d{1,3}\.$", re.M)
 _ENDEKS_ADI = {"bist", "s&p", "nikkei", "ftse", "stoxx", "dax", "cac", "msci", "russell",
                "nasdaq", "ibex", "kospi", "asx", "smi", "aex", "mib", "topix", "dow"}
 
