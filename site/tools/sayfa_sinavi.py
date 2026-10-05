@@ -138,6 +138,17 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       global.css'in kendi yorumu "yalnız çizgi ve kenarlıkta" diyor; metin
       için en soluk kabul edilen jeton --ink-60 (4,59:1).
       `text-decoration-color` kapsam dışı (alt çizgi, metin değil).
+  (28) PROJE DİZİNİ — Projeler sayfası panoları yayım ritmine göre gruplar ve
+      grup içinde verisi en yeni olanı üste koyar (kullanıcı isteği,
+      05.10.2026). Derlenmiş /projeler/ sayfasında ENGEL: bir pano hiç ya da
+      iki kez basılmış, kendi grubunun (ön bilgideki `ritim`, arşivse Arşiv)
+      dışında, gruplar lib/ritim.ts sırasının dışında, ya da grup içinde
+      kartın köşesindeki veri tarihi bir öncekinden YENİ (tarihsiz kart
+      tarihlilerden sonra). Sıra anahtarı okurun gördüğü tarihin kendisidir;
+      ayrıştırma lib/bicim.tariheCevir ile aynı üç yazımı tanır. UYARI: bir
+      panonun `ritim` beyanı, ölçüm katmanının ritim eşiğinin (bulten/ayar.py
+      RITIM) düştüğü kümeyle ayrışıyor — etiket kusurudur, yanlış sayı değil;
+      ritim eşiği değiştiren bir bülten commit'i siteyi durdurmamalı.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
 Çıkış:  0 = geçti · 1 = en az bir sınav düştü
@@ -1334,6 +1345,170 @@ def yazi_dogrulayicilari(kok: Path) -> list[tuple[str, int, str]]:
     return out
 
 
+# ---------------------------------------------------------------- (28)
+# PROJE DİZİNİ. Ritim kümelerinin sınırları ölçülerek kondu: bulten/ayar.RITIM
+# eşikleri üç kümede duruyor (4–6 gün · 11 gün · 32–75 gün; bir de çeyreklik
+# 100) ve günlük sınır deponun kendi `GUNLUK_RITIM_GUN`udur. Aradaki boşluklar
+# geniş: 6→11, 11→32, 75→100. Gözlem defterinde (bulten/gecmis) ana saatin
+# ilerlemeleri arası medyan günlük kümede 1,0–1,6 gün, haftalıkta 7,0, aylıkta
+# 14–21 gün (05.10.2026).
+RITIM_HAFTALIK_SINIR = 14
+RITIM_AYLIK_SINIR = 80
+PROJE_DIZIN_OLCUT = "28"
+
+
+def _ayar_ritim(kok: Path) -> tuple[dict, int]:
+    """bulten/ayar.py'nin RITIM sözlüğü ve GUNLUK_RITIM_GUN — kaynak metninden,
+    içe aktarmadan (sınav bülten bağımlılıkları olmadan koşmalı)."""
+    import ast
+    agac = ast.parse((kok / "bulten/ayar.py").read_text(encoding="utf-8"))
+    ritim = gunluk = None
+    for d in agac.body:
+        if not isinstance(d, ast.Assign):
+            continue
+        adlar = {getattr(h, "id", "") for h in d.targets}
+        if "RITIM" in adlar:
+            ritim = ast.literal_eval(d.value)
+        elif "GUNLUK_RITIM_GUN" in adlar:
+            gunluk = ast.literal_eval(d.value)
+    if ritim is None or gunluk is None:
+        raise RuntimeError("bulten/ayar.py: RITIM ya da GUNLUK_RITIM_GUN bulunamadı")
+    return ritim, gunluk
+
+
+def ritim_sinifi(esik: int, gunluk_sinir: int) -> str:
+    if esik <= gunluk_sinir:
+        return "gunluk"
+    if esik <= RITIM_HAFTALIK_SINIR:
+        return "haftalik"
+    if esik <= RITIM_AYLIK_SINIR:
+        return "aylik"
+    return "ceyreklik"
+
+
+def ritim_kodlari(kok: Path) -> list[str]:
+    """lib/ritim.ts RITIMLER sırası + en sonda 'arsiv' — tek tanım TS'te."""
+    m = re.search(r"export const RITIMLER\s*=\s*\[([^\]]*)\]",
+                  (kok / "site/src/lib/ritim.ts").read_text(encoding="utf-8"))
+    if not m:
+        raise RuntimeError("site/src/lib/ritim.ts: RITIMLER bulunamadı")
+    return re.findall(r"'([a-z]+)'", m.group(1)) + ["arsiv"]
+
+
+def proje_beyanlari(kok: Path) -> dict[str, dict[str, str]]:
+    """Her pano ön bilgisinin `ritim` ve `durum` alanı (slug → alan)."""
+    out = {}
+    for f in sorted((kok / "site/src/content/projeler").glob("*.md*")):
+        t = f.read_text(encoding="utf-8")
+        fm = t.split("\n---", 1)[0] if t.startswith("---") else ""
+        alan = {}
+        for a in ("ritim", "durum"):
+            m = re.search(rf"^{a}:\s*['\"]?([\w-]+)", fm, re.M)
+            if m:
+                alan[a] = m.group(1)
+        out[f.stem] = alan
+    return out
+
+
+def ritim_uyumu(beyan: dict, ritim: dict, gunluk_sinir: int) -> list[str]:
+    """Beyan ↔ ölçüm katmanının ritim eşiği (UYARI)."""
+    out = []
+    for slug, a in sorted(beyan.items()):
+        r = a.get("ritim")
+        if r is None:
+            continue            # şema derlemede düşürür; burada ikinci kez sayılmaz
+        if slug not in ritim:
+            out.append(f"{slug}: ölçüm katmanında ritim eşiği yok, `ritim: {r}` beyanı sınanamadı")
+            continue
+        sinif = ritim_sinifi(int(ritim[slug]), gunluk_sinir)
+        if sinif != r:
+            out.append(f"{slug}: beyan `ritim: {r}`, ölçüm katmanının ritim eşiği "
+                       f"{ritim[slug]} gün → '{sinif}' kümesi")
+    return out
+
+
+def _dizin_gunu(t: str):
+    """lib/bicim.tariheCevir'in eşi: GG.AA.YYYY · AA.YYYY (ayın son günü) · YYYY-AA-GG."""
+    import calendar
+    from datetime import date
+    t = (t or "").strip()
+    m = re.fullmatch(r"(\d{2})\.(\d{2})\.(\d{4})", t)
+    if m:
+        try:
+            return date(int(m[3]), int(m[2]), int(m[1]))
+        except ValueError:
+            return None
+    m = re.fullmatch(r"(\d{2})\.(\d{4})", t)
+    if m and 1 <= int(m[1]) <= 12:
+        return date(int(m[2]), int(m[1]), calendar.monthrange(int(m[2]), int(m[1]))[1])
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})", t)
+    if m:
+        try:
+            return date(int(m[1]), int(m[2]), int(m[3]))
+        except ValueError:
+            return None
+    return None
+
+
+DIZIN_BOLUM = re.compile(r'<section\b[^>]*\bdata-ritim="([\w-]+)"[^>]*>(.*?)</section>', re.S)
+DIZIN_KART = re.compile(r"<article\b.*?</article>", re.S)
+DIZIN_HREF = re.compile(r'<h3\b[^>]*>\s*<a\b[^>]*\bhref="/projeler/([^/"#?]+)/"')
+DIZIN_VERI = re.compile(r'<time\b[^>]*\bclass="tarih"[^>]*>\s*veri\s+([^<]+?)\s*</time>')
+
+
+def proje_dizini_bulgulari(html: str, beyan: dict, kodlar: list[str]) -> list[str]:
+    """Derlenmiş /projeler/ sayfası: kapsam, grup, grup sırası, grup içi tarih sırası (ENGEL)."""
+    out: list[str] = []
+    gorulen: dict[str, int] = {}
+    onceki_sira = -1
+    bolum_var = False
+    for bm in DIZIN_BOLUM.finditer(html):
+        bolum_var = True
+        kod, govde = bm.group(1), bm.group(2)
+        if kod not in kodlar:
+            out.append(f"bilinmeyen grup '{kod}'")
+            continue
+        if kodlar.index(kod) <= onceki_sira:
+            out.append(f"grup '{kod}' sırası lib/ritim.ts sırasının dışında")
+        onceki_sira = max(onceki_sira, kodlar.index(kod))
+        son_gun = None
+        tarihsiz_goruldu = False
+        for km in DIZIN_KART.finditer(govde):
+            kart = km.group(0)
+            h = DIZIN_HREF.search(kart)
+            if not h:
+                out.append(f"grup '{kod}': pano bağı okunamayan kart")
+                continue
+            slug = h.group(1)
+            gorulen[slug] = gorulen.get(slug, 0) + 1
+            a = beyan.get(slug)
+            if a is None:
+                out.append(f"{slug}: ön bilgisi olmayan pano dizinde")
+            else:
+                bek = "arsiv" if a.get("durum") == "arsiv" else a.get("ritim")
+                if bek != kod:
+                    out.append(f"{slug}: '{kod}' grubunda, beklenen '{bek}'")
+            v = DIZIN_VERI.search(kart)
+            gun = _dizin_gunu(v.group(1)) if v else None
+            if gun is None:
+                tarihsiz_goruldu = True
+                continue
+            if tarihsiz_goruldu:
+                out.append(f"{slug}: grup '{kod}' içinde tarihsiz karttan SONRA tarihli kart (veri {v.group(1)})")
+            if son_gun is not None and gun > son_gun:
+                out.append(f"{slug}: grup '{kod}' içinde veri {v.group(1)} bir önceki karttan yeni — sıra bozuk")
+            son_gun = gun if son_gun is None else min(son_gun, gun)
+    if not bolum_var:
+        out.append("dizinde ritim grubu yok (data-ritim taşıyan bölüm bulunamadı)")
+    for slug in sorted(beyan):
+        n = gorulen.get(slug, 0)
+        if n == 0:
+            out.append(f"{slug}: pano dizinde yok")
+        elif n > 1:
+            out.append(f"{slug}: pano dizinde {n} kez")
+    return out
+
+
 def main() -> int:
     hata: list[str] = []
 
@@ -2218,6 +2393,24 @@ def main() -> int:
         print(f"  sayfa {len(ciftler)} · ihlal {len(bs)}")
         if BASIM_ATLANAN:
             print(f"  ! büyük harf ölçütü desteklemediği seçicileri atladı (sayfa başına {sorted(BASIM_ATLANAN)})")
+
+    # ------------------------------------------------------------ (28)
+    # PROJE DİZİNİ — ritim grupları ve grup içinde veri tarihine göre sıra.
+    print(f"\n▶ Proje dizini ({PROJE_DIZIN_OLCUT}, dist/projeler: grup, kapsam, grup içi tarih sırası · ritim beyanı)")
+    beyan = proje_beyanlari(KOK)
+    ritim_esik, gunluk_sinir = _ayar_ritim(KOK)
+    ru = ritim_uyumu(beyan, ritim_esik, gunluk_sinir)
+    for x in ru:
+        uyari.append(f"ritim beyanı — {x}")
+    dizin = KOK / "site/dist/projeler/index.html"
+    if not dizin.exists():
+        print("  – dist/projeler yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append(f"ölçüt {PROJE_DIZIN_OLCUT} (proje dizini) KOŞMADI — dist/projeler yok")
+    else:
+        pd = proje_dizini_bulgulari(dizin.read_text(encoding="utf-8"), beyan, ritim_kodlari(KOK))
+        for x in pd:
+            hata.append(f"proje dizini — {x}")
+        print(f"  pano {len(beyan)} · dizin ihlali {len(pd)} · ritim beyanı uyarısı {len(ru)}")
 
     # ------------------------------------------------------------ (26)
     # YAZININ KENDİ DOĞRULAYICISI — yayımlanan sayı ile onu üreten ölçüm.

@@ -1197,6 +1197,91 @@ _hh = _hh[:_hh.find("</section>")]
 sina("pazar düzeni haber tonunu basar (ölçüt 25'in aradığı olay)", "haberTonu.map" in _hh)
 
 
+# ---------------------------------------------------------------------------
+# (28) PROJE DİZİNİ — kullanıcı isteği (05.10.2026): panolar yayım ritmine
+# göre gruplanır, grup içinde verisi en yeni olan üstte. Fikstür derlenmiş
+# biçimi taşır (bölümde Astro kapsam niteliği, kartta köşedeki veri tarihi).
+print("\n▶ Proje dizini (28)")
+_pd = _mod.proje_dizini_bulgulari
+_kodlar = _mod.ritim_kodlari(_mod.KOK)
+
+
+def _pk(slug: str, veri: str | None = None) -> str:
+    t = f'<time class="tarih" datetime="2026-10-05">veri {veri}</time>' if veri else ""
+    return (f'<article class="kayit yuksel" style="--d: 0ms"> <div class="ust"> <span class="sira">No 01</span>'
+            f' <span class="rozet rozet--aktif">Canlı</span> {t} </div> <h3><a href="/projeler/{slug}/">{slug}</a></h3>'
+            f' <p>Bu pano 05.10.2026 tarihli veri setini kullanır.</p> <div class="alt"> <span class="ek">bugün</span> </div> </article>')
+
+
+def _pb(kod: str, *kartlar: str) -> str:
+    return (f'<section class="grup" id="{kod}" data-ritim="{kod}" data-astro-cid-ab12cd34> <div class="bolum-baslik">'
+            f'<h2>x</h2></div> <div class="kayit-izgara">{"".join(kartlar)}</div> </section>')
+
+
+_beyan = {"a": {"ritim": "gunluk", "durum": "aktif"}, "b": {"ritim": "gunluk", "durum": "aktif"},
+          "c": {"ritim": "aylik", "durum": "aktif"}, "d": {"ritim": "aylik", "durum": "aktif"},
+          "e": {"ritim": "haftalik", "durum": "arsiv"}}
+_dogru = (_pb("gunluk", _pk("a", "05.10.2026"), _pk("b", "2026-10-04")) + _pb("aylik", _pk("c", "09.2026"), _pk("d", "25.09.2026"))
+          + _pb("arsiv", _pk("e", "07.2026")))
+_b = _pd(_dogru, _beyan, _kodlar)
+sina("dizin: doğru sıra, ISO ve AA.YYYY (ayın son günü) yazımı geçer", _b == [], f"gelen {_b}")
+_b = _pd(_pb("gunluk", _pk("b", "2026-10-04"), _pk("a", "05.10.2026")) + _dogru.split("</section>", 1)[1], _beyan, _kodlar)
+sina("dizin: grup içinde eski veri yeniden önce → ENGEL", any("sıra bozuk" in x for x in _b), f"gelen {_b}")
+_b = _pd(_pb("gunluk", _pk("a", "05.10.2026"), _pk("b", "2026-10-04")) + _pb("aylik", _pk("d", "25.09.2026"), _pk("c", "09.2026"))
+         + _pb("arsiv", _pk("e", "07.2026")), _beyan, _kodlar)
+sina("dizin: '09.2026' ayın son gününe demirlenir, 25.09 ondan önce basılamaz", any("c:" in x and "sıra bozuk" in x for x in _b), f"gelen {_b}")
+_b = _pd(_dogru.replace(_pk("d", "25.09.2026"), ""), _beyan, _kodlar)
+sina("dizin: basılmayan pano → ENGEL", any("d: pano dizinde yok" in x for x in _b), f"gelen {_b}")
+_b = _pd(_dogru.replace(_pk("d", "25.09.2026"), _pk("d", "25.09.2026") * 2), _beyan, _kodlar)
+sina("dizin: iki kez basılan pano → ENGEL", any("2 kez" in x for x in _b), f"gelen {_b}")
+_b = _pd(_pb("gunluk", _pk("a", "05.10.2026"), _pk("b", "2026-10-04"), _pk("c", "09.2026")) + _pb("aylik", _pk("d", "25.09.2026"))
+         + _pb("arsiv", _pk("e", "07.2026")), _beyan, _kodlar)
+sina("dizin: kendi ritim grubunun dışındaki pano → ENGEL", any("c: 'gunluk' grubunda" in x for x in _b), f"gelen {_b}")
+_b = _pd(_dogru.replace(_pb("arsiv", _pk("e", "07.2026")), _pb("haftalik", _pk("e", "07.2026"))), _beyan, _kodlar)
+sina("dizin: arşivdeki pano ritim grubunda → ENGEL (yeri Arşiv)", any("beklenen 'arsiv'" in x for x in _b), f"gelen {_b}")
+_parca = _dogru.split("</section>")
+_b = _pd(_parca[1] + "</section>" + _parca[0] + "</section>" + _parca[2] + "</section>", _beyan, _kodlar)
+sina("dizin: gruplar lib/ritim.ts sırasının dışında → ENGEL", any("sırasının dışında" in x for x in _b), f"gelen {_b}")
+_b = _pd(_dogru.replace(_pk("d", "25.09.2026"), _pk("d")), _beyan, _kodlar)
+sina("dizin: tarihsiz kart grubun sonunda geçer", _b == [], f"gelen {_b}")
+_b = _pd(_dogru.replace(_pk("c", "09.2026"), _pk("c")), _beyan, _kodlar)
+sina("dizin: tarihsiz karttan sonra tarihli kart → ENGEL", any("tarihsiz karttan SONRA" in x for x in _b), f"gelen {_b}")
+_b = _pd("<main></main>", _beyan, _kodlar)
+sina("dizin: grup bölümü olmayan sayfa → ENGEL (koşmamış ölçüt geçmiş sayılmaz)",
+     any("ritim grubu yok" in x for x in _b), f"gelen {_b}")
+# Yalnız İKİNCİ karta: hepsine girseydi tarihler eşitlenir ve ilk 'veri' sözcüğünü
+# okuyan bozuk bir ölçüt de geçerdi (ilk enjeksiyon tam bu yüzden kaçtı).
+_b = _pd(_dogru.replace(_pk("b", "2026-10-04"),
+                        _pk("b", "2026-10-04").replace('<span class="sira">', 'veri 01.01.2030 <span class="sira">')),
+         _beyan, _kodlar)
+sina("dizin: kart metnindeki 'veri …' sözcüğü sıra anahtarı sayılmaz (yalnız köşedeki tarih)", _b == [], f"gelen {_b}")
+
+_ru = _mod.ritim_uyumu
+_rb = {"g": {"ritim": "gunluk"}, "h": {"ritim": "haftalik"}, "a": {"ritim": "aylik"}, "c": {"ritim": "ceyreklik"}}
+sina("ritim beyanı: ölçülmüş kümeler (6 · 11 · 75 · 100 gün) uyumlu", _ru(_rb, {"g": 6, "h": 11, "a": 75, "c": 100}, 8) == [])
+_u = _ru({"g": {"ritim": "gunluk"}}, {"g": 11}, 8)
+sina("ritim beyanı: haftalık eşikli panoya 'gunluk' beyanı → UYARI", len(_u) == 1 and "'haftalik'" in _u[0], f"gelen {_u}")
+_u = _ru({"x": {"ritim": "aylik"}}, {}, 8)
+sina("ritim beyanı: ölçüm katmanında eşiği olmayan pano adıyla uyarılır", len(_u) == 1 and "sınanamadı" in _u[0], f"gelen {_u}")
+_rt, _gs = _mod._ayar_ritim(_mod.KOK)
+_u = _ru(_mod.proje_beyanlari(_mod.KOK), _rt, _gs)
+sina("ritim beyanı: bugünkü ağaçta 18 panonun hepsi eşiğiyle uyumlu (yanlış alarm yok)", _u == [], f"gelen {_u}")
+_bey = _mod.proje_beyanlari(_mod.KOK)
+sina("her pano `ritim` beyan ediyor ve beyan lib/ritim.ts kodlarından",
+     bool(_bey) and all(a.get("ritim") in _kodlar[:-1] for a in _bey.values()), f"gelen {_bey}")
+_cc = (_SITE / "src/content.config.ts").read_text(encoding="utf-8")
+sina("şema `ritim`i lib/ritim.ts RITIMLER'inden zorunlu kılıyor", "ritim: z.enum(RITIMLER)" in _cc)
+_pi = (_SITE / "src/pages/projeler/index.astro").read_text(encoding="utf-8")
+sina("Projeler sayfası grupları lib/projeDizini'nden kuruyor ve data-ritim basıyor",
+     "projeDizini(" in _pi and "data-ritim={g.kod}" in _pi and "veri={k.veri}" in _pi)
+_kk = (_SITE / "src/components/KayitKarti.astro").read_text(encoding="utf-8")
+sina("pano kartı köşede 'veri <tarih>' basıyor (ölçüt 28'in okuduğu yer)",
+     '<time class="tarih" datetime={veri.iso || undefined}>veri {veri.tarih}</time>' in _kk)
+_ht = (_SITE / "src/components/HatlarTablosu.astro").read_text(encoding="utf-8")
+sina("ana sayfa hat tablosu aynı karşılaştırıcıyla diziliyor", "tazelikSirasi(" in _ht)
+sina(f"{_mod.PROJE_DIZIN_OLCUT} sınavın ana akışında koşuyor", "proje_dizini_bulgulari(" in _ss[_ss.find("def main"):])
+
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

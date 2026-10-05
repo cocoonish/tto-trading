@@ -7,7 +7,7 @@ her sayı kendi tarihini taşır. Metin kısa, sayılar canlı, şekillerin hesa
 anlatılmış olmalıdır.
 
 Rehber esastır; kural buraya yazılır ve araca konur. Ölçülebilen her kural
-`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 2c, 11, 11b, 11c, 11d, 12, 17).
+`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 2c, 11, 11b, 11c, 11d, 12, 17, 28).
 
 ---
 
@@ -34,6 +34,21 @@ metin serbesttir (11c, uyarı).
 | `durum` | evet | `aktif` · `taslak` · `arsiv` |
 | `kaynak` | evet — şema ve 11d engel | **okur adıyla** ("TCMB EVDS", "TÜİK"); seri kodları gövdedeki Kaynaklar bölümüne, kod biçiminde |
 | `guncelleme` | evet — şema ve 11d engel | yayım ritmi, küçük harfle başlar; kaynağın yayım saati biliniyorsa parantezde yazılır: `her iş günü (TCMB gösterge kuru, 15:30)`, `aylık (TÜİK, ayın 3'ü 10:00)`; bilinmiyorsa ritim tek başına yeter (`aylık`); şekil numarası geçmez |
+| `ritim` | evet — şema | Projeler sayfasındaki grubu: `gunluk` · `haftalik` · `aylik` · `ceyreklik` (`site/src/lib/ritim.ts`). Panonun ANA saatinin ne sıklıkla ilerlediğidir, içindeki en hızlı bacağın değil (bütçe kuru günlük taşır ama ana saati aylıktır). Sınav 28 beyanı ölçüm katmanının ritim eşiğiyle (`bulten/ayar.py` → `RITIM`) kıyaslar; ayrışma uyarıdır |
+
+## Projeler sayfasındaki yer
+
+Liste sayfası panoları `ritim`e göre gruplar (her iş günü · haftalık · aylık ·
+üç aylık; arşivdeki pano en sonda kendi grubunda) ve grup içinde **verisi en
+yeni olanı** üste koyar. Sıra anahtarı kartın köşesinde basılan tarihin
+kendisidir — panonun manşet büyüklüğünün saati (`lib/anaSayfa` → HAT_MANSET);
+kart yayım ya da metin güncelleme tarihini basmaz, çünkü liste o tarihe göre
+dizilmez. Hattın son koşusu sıra anahtarı değildir: veri ilerlemeden koşan hat
+"bugün" görünürdü. Eşit tarihte başlık sırası; tarihsiz kart grubun sonunda.
+Tek tanım `site/src/lib/projeDizini.ts`; ana sayfanın hat tablosu aynı
+karşılaştırıcıyla dizilir. Sınav 28 derlenmiş sayfada her panonun bir kez ve
+kendi grubunda basıldığını, grupların sırasını ve grup içi tarih sırasını
+ENGEL olarak sorar.
 
 ## Gövde
 

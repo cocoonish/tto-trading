@@ -4697,3 +4697,32 @@ Karar, kayıt için: günlük gündem bütçesi 05.10 akşamı kullanıcı karar
 çıktı (Emtia satırı o gün bu yüzden düşüyordu); tavan sabit olduğu için
 bedeli takvimin sonraki günlerine ait birimlerin önce düşmesidir — 05.10
 yeniden üretiminde Emtia girdi, Salı–Perşembe takvim birimlerinden üçü düştü.
+
+**KARAR (05.10.2026, kullanıcı) — PROJELER SAYFASI YAYIM RİTMİNE GÖRE
+GRUPLANIR, GRUP İÇİNDE VERİSİ EN YENİ OLAN ÜSTTE.** "Çok düzensiz kaldı; en son
+yenilenen en üstte olsun, yenilenme sıklığına göre de ayıralım." Liste yayım
+tarihine (`pubDate`) göre diziliyordu ve kartın köşesi yayım gününü basıyordu;
+yani okurun gördüğü tek tarih panonun tazeliğiyle ilgisizdi. Ritim artık
+panonun ön bilgisinde ZORUNLU bir alan (`ritim`: `gunluk` · `haftalik` · `aylik`
+· `ceyreklik`, kodlar `site/src/lib/ritim.ts`te tek yerde) — serbest metin olan
+`guncelleme`den türetilemez. Beyan ölçüye bağlı: sayfa sınavının 28. ölçütü onu
+`bulten/ayar.RITIM` eşiğinin düştüğü kümeyle kıyaslar (≤ `GUNLUK_RITIM_GUN` ·
+≤14 · ≤80 · üstü; eşikler 4–6 · 11 · 32–75 · 100 gün diye üç-dört kümede ve
+sınırlar boşluklarda). Kümeler gözlem defterindeki tarihçeyle ölçüldü: ana
+saatin ilerlemeleri arası medyan günlük kümede 1,0–1,6 gün, haftalıkta 7,0,
+aylıkta 14–21 gün. Ayrışma UYARI, ENGEL değil: ritim eşiği değiştiren bir bülten
+commit'i bir etiket yüzünden siteyi durdurmamalı. Grup İÇİ sıranın anahtarı
+kartın köşesinde basılan tarihin KENDİSİDİR (panonun manşet büyüklüğünün saati);
+kart artık yayım ve metin güncelleme tarihini basmaz, çünkü liste o tarihe göre
+dizilmez. Son KOŞU anahtar olamaz: türev hatlar her koşuda çalışır ve veri
+ilerlemeden "bugün" görünürdü. Aylık damga (AA.YYYY) ayın son gününe demirlenir
+ve kartta gün cinsinden yaş basılmaz. Tek tanım `lib/projeDizini.ts`; ana
+sayfanın hat tablosu aynı karşılaştırıcıyla dizilir (gruplamadan). Ölçüt 28
+derlenmiş sayfaya bakar: her pano bir kez ve kendi grubunda, gruplar
+`RITIMLER` sırasında, grup içinde tarih azalarak, tarihsiz kart sonda — ENGEL.
+Fikstür bir kez yanlış GEÇTİ: kart metnindeki "veri …" sözcüğünü sıra anahtarı
+sanan mutasyon, enjekte edilen sahte tarih bütün kartlara girdiği için sırayı
+bozmuyordu; tek karta indirilince yakalandı (on bir mutasyonun on biri).
+Yan bulgu, AYRI iş: aynı perşembe yayımından beslenen YP mevduatı 25.09'a
+geçmişken kredi hattı 18.09'da kaldı ve yeniden deneme hakkı doldu (4/4);
+sayfa bunu artık kartın köşesinde açıkça gösteriyor.
