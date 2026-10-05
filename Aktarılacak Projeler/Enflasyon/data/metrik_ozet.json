@@ -22,10 +22,8 @@
   }
  },
  "kosular_arasi": {
-  "var": true,
-  "n": 12,
-  "maks_pp": 0.0,
-  "ort_pp": 0.0,
+  "var": false,
+  "not": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm arasındaki revizyon bu kez ölçülemedi",
   "onceki_kosum": "2026-10-05"
  },
  "vintage": {
@@ -1232,7 +1230,7 @@
  "reel__egilime_gore": 9.32963006925689,
  "reel__ileri_ex_ante": 9.21230561189994,
  "reel__faiz_tarih": "2026-10-01",
- "reel__faiz_gun": "2026-10-02",
+ "reel__faiz_gun": "2026-10-05",
  "reel__ex_post_tarih": "2026-09-01",
  "reel__ex_post_faiz": 37.0,
  "bek__pka_yilsonu": 29.61,
@@ -1362,5 +1360,5 @@
   "oktg22": -0.8,
   "oktg23": 7.39
  },
- "uyari_sayisi": 3
+ "uyari_sayisi": 4
 }
