@@ -1013,8 +1013,22 @@ def _u6_haftalik_iskelet():
     t = uret.bulten_zinciri(_haftalik_fikstur())[0]
     assert len(t) <= uret.TEK_TAVAN and "…" not in t, len(t)
     assert not [d for d in uret.DUSEN if d[0] == "tavan"], "haftalık gövde `_kapat`ta kırpıldı"
-    assert any(d[0] == "ne_oldu" and d[1].startswith("bütçe: ") for d in uret.DUSEN), \
-        "fikstür tavanı aşmıyor: dinamik pay sınanmadı"
+    # Taşınca İLK düşen Seviyeler'dir (05.10.2026, kullanıcı kararı); maddeler ondan sonra.
+    butce = [d[0] for d in uret.DUSEN if d[1].startswith("bütçe: ")]
+    assert butce and butce[0] == "pano", f"taşmada ilk düşen Seviyeler değil: {butce[:4]}"
+    # Dinamik pay: maddeler uzayınca dördüncü ve sonrakiler düşer, ama ancak
+    # Seviyeler tümüyle düştükten SONRA; ilk üç madde kalır.
+    uzun = _haftalik_fikstur()
+    uzun["ozet"] = {"ne_oldu": "<ul>" + "".join(
+        f"<li><strong>Konu {i}.</strong> " + "Haftanın olgusu %1,{0} ile ölçüldü ve anlatıldı. ".format(i) * 5
+        + "</li>" for i in range(16)) + "</ul>"}   # madde sayısı artar (madde başına pay 250)
+    uret.DUSEN.clear()
+    t2 = uret.bulten_zinciri(uzun)[0]
+    butce2 = [d[0] for d in uret.DUSEN if d[1].startswith("bütçe: ")]
+    assert "ne_oldu" in butce2, "fikstür tavanı aşmıyor: dinamik pay sınanmadı"
+    assert "pano" not in butce2[butce2.index("ne_oldu"):] and "Seviyeler:" not in t2, \
+        f"madde düşerken Seviyeler hâlâ duruyordu: {butce2}"
+    assert all(f"· Konu {i}." in t2 for i in range(3)), "ilk üç madde düştü"
     assert "\nSenaryolar\nAna senaryo: Eylül enflasyonu beklenti aralığında gelirse" in t
     assert "\nAlternatif: enflasyon yukarı şaşırtır. Tetik: Aylık TÜFE %2,6'yı aşar." in t, \
         "alternatif satırı tetiğini taşımıyor"
@@ -1723,6 +1737,47 @@ def _i13_tez_uyarisi_yayindan_once():
         {"slug": "s", "govde": govde.replace("Karar sürprizsiz,", "Karar %37,0'de sürprizsiz,")})
 
 
+
+def _m1_analiz_duzeltme_yaniti():
+    """Kullanıcı kararı 05.10.2026: analiz ön bilgisindeki X düzeltme yanıtı
+    YAZILDIĞI GÜN tweet kapısından geçer (analiz sınavında UYARI). Bülten kaydı
+    bunu yazma anında `bulten/yaz.py`de yapıyordu; analizde kusur ancak gönderim
+    sabahı görünür ve tweet koşusu 21 gün her gün kırmızı biterdi. Uyarı
+    siteyi durdurmaz; gonderi alanı olmayan yazı alt süreç bile açmaz."""
+    kok = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(kok / "site" / "tools"))
+    try:
+        import analiz_sinavi as asv
+    finally:
+        sys.path.remove(str(kok / "site" / "tools"))
+
+    def yazi(td: str, ad: str, kayit: str) -> Path:
+        yol = Path(td) / f"{ad}.mdx"
+        yol.write_text("---\ntitle: 'x'\npubDate: 2026-10-05\nozet: 'x'\nduzeltmeler:\n"
+                       "  - tarih: '2026-10-05'\n    alan: 'hedef üstü kalem oranı'\n"
+                       "    eski: '%83,1'\n    yeni: '%78,4'\n" + kayit + "---\n\ngövde\n",
+                       encoding="utf-8")
+        return yol
+    hedef = "    gonderi: 'analiz:tufe-eylul-ppk-2026-09-03'\n"
+    with tempfile.TemporaryDirectory() as td:
+        temiz = yazi(td, "temiz", hedef + "    gonderi_metni: 'Hedef üstü kalem oranı %83,1 değil %78,4: "
+                     "Ağustos yayılım ölçüleri Aralık 2025 verisinden okunmuştu.'\n")
+        kirli = yazi(td, "kirli", hedef + "    gonderi_metni: 'Ayrıntı x.com/tto adresinde; dolar alın. "
+                     "Oran %83,1 değil %78,4.'\n")
+        yarim = yazi(td, "yarim", hedef)
+        yok = yazi(td, "yok", "")
+        assert not [x for x in asv.duzeltme_yaniti(temiz) if x.startswith("ENGEL")], \
+            f"temiz düzeltme yanıtı ENGEL aldı: {asv.duzeltme_yaniti(temiz)}"
+        _e, u, _y = asv.sina(kirli)
+        assert any(x.startswith("X düzeltme yanıtı: ENGEL") for x in u), f"kirli yanıt yakalanmadı: {u}"
+        assert not _e or not any("düzeltme yanıtı" in x for x in _e), "düzeltme yanıtı siteyi durduruyor (ENGEL)"
+        assert any("birlikte yazılır" in x for x in asv.duzeltme_yaniti(yarim)), "yarım kayıt uyarısız"
+        _e, u, _y = asv.sina(yok)
+        assert not [x for x in u if "düzeltme yanıtı" in x], "gonderi alanı olmayan yazıya uyarı"
+    # Ayrıştırıcı ve metin gönderimle AYNI yoldan: ikinci bir tanım yok.
+    kaynak = (kok / "tweet" / "duzeltme.py").read_text(encoding="utf-8")
+    assert "def sina_analiz" in kaynak and "on_bilgi_duzeltmeleri(ham)" in kaynak
+
 # ── İnceleme (05.10.2026, donmuş 1a87fb37): kapı, düzeltme ve gönderim katmanı ──
 
 def _sahte_gonderim(bd: Path, ad_: Path, ar: Path, dfy: Path, post, get=None,
@@ -2387,12 +2442,12 @@ def _l1_rehber_dusme_sirasi():
     # Haftalık: kural 9'un "Tavan aşılırsa …" cümlesi ↔ `_haftalik3` öncelikleri.
     uret.DUSEN.clear()
     sira, kalan = _dusme_sirasi(uret._haftalik3(_haftalik_fikstur()))
-    assert sira == ["ne_oldu", "pano", "takvim", "karne", "senaryo", "ne_oldu"], \
+    assert sira == ["pano", "ne_oldu", "takvim", "karne", "senaryo", "ne_oldu"], \
         f"haftalık düşme sırası rehberden ayrıştı: {sira}"
     assert sorted(kalan) == sorted(["baslik", "senaryo", "takvim", "karne"]), kalan
-    i = yazim.index("Tavan aşılırsa önce dördüncü ve sonraki maddeler")
+    i = yazim.index("Tavan aşılırsa önce Seviyeler")
     _sirali_mi(yazim[i:i + 400], [
-        "dördüncü ve sonraki maddeler", "Seviyeler", "takvimin sonraki günleri",
+        "Seviyeler", "dördüncü ve sonraki", "takvimin sonraki günleri",
         "karnenin kayıtları", "alternatif", "ilk üç madde", "ana senaryo, takvimin ilk",
         "karnenin sayım satırı düşmez"])
 
@@ -2472,6 +2527,7 @@ def main() -> int:
     sina("İ cikti#9 şeritte değer ile etiket uzun tireyle ayrılır", _i11_serit_ayraci)
     sina("İ cikti#10 tavanda 'Kanıtın gücü' satırı en son düşer", _i12_kanit_satiri_en_son)
     sina("İ sartname#8 tez açılışı analiz sınavında UYARI (05.10'dan), önizleme uyarıyı basar", _i13_tez_uyarisi_yayindan_once)
+    sina("M1 analiz düzeltme yanıtı yazıldığı gün tweet kapısından geçer (UYARI, siteyi durdurmaz)", _m1_analiz_duzeltme_yaniti)
     sina("J dogruluk#1/kapi#1/kapi#3/sartname#1 sıra kesiği: saat · oran · sayım · enstrüman adı geçer, gerçek kesik ENGEL", _j1_sira_kesik_mesru)
     sina("J kapi#5 işaretsiz oran: 'milyar/TL' tutarı oran değil; çıplak 'dolar' muaf değil", _j2_oran_birimi)
     sina("J kapi#6 hashtag harf ister ('#1' değil, '#_TCMB' evet) · tam genişlik · KaTeX notu yalnız '$'", _j3_hashtag_ve_not)

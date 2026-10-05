@@ -176,6 +176,13 @@ yazılır: `gonderi: 'analiz:<slug>'` ve `gonderi_metni: '<kısa düz metin>'`.
 altına "Düzeltme — Analiz, <tarih>: <başlık>" yanıtını atar (sayfa bu iki alanı
 basmaz). Hedef gönderim defterinde kimliksizse yanıt atılmaz ve koşu uyarır;
 pencere dışında kalan ya da tarihi çözülemeyen kayıt da adıyla uyarılır.
+Yanıt metni yazının YAYIMLANDIĞI GÜN tweet kapısından geçer: analiz sınavı
+(`site/tools/analiz_sinavi.py`, sayfa sınavının 10. ölçütü) metni gönderimdeki
+kapıya sokar ve kusurunu "X düzeltme yanıtı: …" UYARI'sı olarak basar — siteyi
+durdurmaz, ama yazar kusuru o gün görür; sınanmadan gönderim sabahına kalan
+kusurlu bir metin tweet koşusunu 21 gün her sabah kırmızı bitirirdi.
+Geçmiş gönderilere düzeltme yanıtı atılmaz (kullanıcı kararı, 05.10.2026);
+alan yalnız bundan sonra yazılan düzeltmeler içindir.
 Değerler tek satır yazılır: katlanmış YAML (`sebep: >`) okunamaz ve o yazının
 düzeltmesi X'e gitmez (koşu dosya adıyla uyarır).
 

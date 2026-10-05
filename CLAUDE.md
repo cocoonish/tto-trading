@@ -4679,13 +4679,21 @@ adı ("STOXX Europe 600.") muaf; gerçek kesik ("perşembe: 38.") hâlâ ENGEL.
 Ölçüldü: 92 metinde eski ve yeni kapının ENGEL/UYARI farkı 0; 03.09–05.10'un
 28 bülteni ve 9 analiz yeni kodla üretildi, ENGEL 0, "…" 0. Ders: bir rehbere
 yeni bir yazım kuralı koyan değişiklik, o yazımı okuyan HER kapıyı o yazımın
-kendi örneğine karşı koşturur. AÇIK, adıyla: analiz düzeltme yanıtının
-yazma anı kapısı yok (analiz ön bilgisi `yaz.py`den geçmiyor; ENGEL alan bir
-analiz düzeltmesi pencere boyunca tweet koşusunu kırmızı bitirebilir);
+kendi örneğine karşı koşturur. Analiz düzeltme yanıtının yazma anı kapısı
+05.10 akşamı kullanıcı kararıyla kondu: analiz ön bilgisi `yaz.py`den
+geçmediği için metin analiz sınavında (`duzeltme.py --sina-analiz`, ayrı
+alt süreç) tweet kapısından geçer ve UYARI olur — siteyi durdurmaz, kusur
+21 sabah boyunca kırmızı koşuya dönüşmeden yazıldığı gün görünür. Aynı
+akşamın iki kararı daha: haftalık gönderide tavan aşılınca İLK düşen
+Seviyeler satırıdır, sonra dördüncü ve sonraki maddeler (04.10'da eski sıra
+"Dolar ve euro" ile "Kredi" maddelerini düşürüp altı göstergelik satırı
+tutuyordu); ve geçmiş gönderilere düzeltme yanıtı ATILMAZ — mekanizma
+yalnız bundan sonra yazılan düzeltmeler içindir (3 Eylül'ün %83,1'i dahil).
+AÇIK, adıyla:
 `SAYIM_ONCESI` elle tutulan küçük bir kümedir ve yeni bir meşru sayım kalıbı
 sabah gönderimini yine durdurabilir; `hedef_yok` ayrımı X'in 403 gövde
-metnine dayanır (değişirse davranış tutucu yöne, ölümcül hataya döner);
-günlük gündem bütçesi 05.10 akşamı kullanıcı kararıyla 800'den 850'ye
+metnine dayanır (değişirse davranış tutucu yöne, ölümcül hataya döner).
+Karar, kayıt için: günlük gündem bütçesi 05.10 akşamı kullanıcı kararıyla 800'den 850'ye
 çıktı (Emtia satırı o gün bu yüzden düşüyordu); tavan sabit olduğu için
 bedeli takvimin sonraki günlerine ait birimlerin önce düşmesidir — 05.10
 yeniden üretiminde Emtia girdi, Salı–Perşembe takvim birimlerinden üçü düştü.

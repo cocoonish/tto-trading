@@ -729,8 +729,8 @@ Bir bölüm, bir madde rakamını ancak üzerinde YENİ bir işlem yapıyorsa an
    satır) → **Karne** (sayım ölçülen katmandan; kapanan kayıtların cümlesi) →
    **Seviyeler** (bu hafta ilerleyen ve maddelerde geçmeyen gösterge kartları).
    Okuma, konu bölümlerinin satırları ve öne çıkanlar haftalık gönderiye
-   girmez. Tavan aşılırsa önce dördüncü ve sonraki maddeler, sonra
-   Seviyeler, sonra takvimin sonraki günleri, karnenin kayıtları, alternatif
+   girmez. Tavan aşılırsa önce Seviyeler, sonra dördüncü ve sonraki
+   maddeler, sonra takvimin sonraki günleri, karnenin kayıtları, alternatif
    ve kuyruk senaryo, en son ilk üç madde düşer; ana senaryo, takvimin ilk
    günü ve karnenin sayım satırı düşmez. Buna göre:
    - Her senaryo alt bölümünün **İLK tam cümlesi** gönderiye gider: ana

@@ -85,6 +85,21 @@ def _tweet_analiz():
     return _an
 
 
+def duzeltme_yaniti(yol: Path) -> list[str]:
+    """Analiz ön bilgisindeki X düzeltme yanıtlarının tweet kapısı sonucu
+    (`tweet/duzeltme.py --sina-analiz`); koşturulamazsa bu da bir satırdır —
+    sınanmamış bir yanıt sınanmış gibi geçmez."""
+    import subprocess
+    try:
+        r = subprocess.run([sys.executable, str(KOK / "tweet" / "duzeltme.py"), "--sina-analiz", str(yol)],
+                           capture_output=True, text=True, timeout=120, cwd=str(KOK))
+    except Exception as e:                                       # noqa: BLE001
+        return [f"tweet kapısı koşturulamadı ({type(e).__name__}: {e}) — yanıt sınanmadı"]
+    if r.returncode != 0:
+        return [f"tweet kapısı koşturulamadı (çıkış {r.returncode}): {(r.stderr or r.stdout).strip()[-160:]}"]
+    return [x for x in r.stdout.splitlines() if x.startswith(("ENGEL ", "UYARI "))]
+
+
 def sina(yol: Path) -> tuple[list[str], list[str], bool]:
     """(engeller, uyarılar, rehber_sonrasi)."""
     metin = yol.read_text(encoding="utf-8")
@@ -209,6 +224,16 @@ def sina(yol: Path) -> tuple[list[str], list[str], bool]:
             u = f"tez ölçütü koşturulamadı ({type(e).__name__}: {e})"
         if u:
             uyari.append(u.split(": ", 1)[-1] if u.startswith(slug + ": ") else u)
+    # ── X'e gidecek düzeltme yanıtı (UYARI). Ön bilgideki bir düzeltme kaydı
+    # `gonderi` + `gonderi_metni` taşıyorsa metin gönderimdeki tweet kapısından
+    # BUGÜN geçirilir (05.10.2026, kullanıcı kararı): bülten kaydı yazma anında
+    # `bulten/yaz.py`den geçiyor, analiz ön bilgisi ise elle yazılıyor ve kusur
+    # ancak gönderim sabahı görünürdü — tweet koşusu 21 gün her gün kırmızı.
+    # AYRI ALT SÜREÇ: tweet/duzeltme.py sys.path'e tweet/ koyup sys.modules
+    # ['uret']'i bağlıyor (bulten/yaz.py'deki gerekçenin aynısı). UYARI, ENGEL
+    # değil: yanıt X'e gitmez ama site yayını durmaz.
+    if re.search(r"^\s*(?:-\s+)?gonderi(?:_metni)?\s*:", metin.split("\n---", 1)[0], re.M):
+        uyari += [f"X düzeltme yanıtı: {x}" for x in duzeltme_yaniti(yol)]
     if "<Deger" in metin and "import Deger" not in metin:
         engel.append("<Deger> kullanılıyor ama içe aktarılmamış")
     if "<GrafikEmbed" in metin and "import GrafikEmbed" not in metin:

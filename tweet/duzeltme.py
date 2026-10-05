@@ -332,6 +332,51 @@ def sina(hedef: str, govde: str) -> tuple[list[str], list[str]]:
     return denetim_m.denetle(metin({"hedef": hedef, "metin_ham": govde}), "duzeltme")
 
 
+def sina_analiz(yol: Path, defter: dict) -> list[str]:
+    """Bir analiz dosyasının X'e gidecek düzeltme kayıtlarını YAZILDIĞI GÜN sınar
+    (site/tools/analiz_sinavi.py çağırır; UYARI olur, siteyi durdurmaz). Bülten
+    kaydı yazma anında `bulten/yaz.py`den geçer; analiz ön bilgisi elle yazıldığı
+    için kusurlu bir metin ancak gönderim sabahı görünürdü ve tweet koşusu
+    pencere boyunca (21 gün) her gün kırmızı biterdi. Ayrıştırıcı ve gönderilen
+    metin gönderimdekinin aynısıdır (`on_bilgi_duzeltmeleri` · `sina`).
+    Dönüş: okura değil yazara giden satırlar ("ENGEL …" · "UYARI …")."""
+    ham = yol.read_text(encoding="utf-8")
+    if not re.search(r"^\s*(?:-\s+)?gonderi(?:_metni)?\s*:", _duzeltme_blogu(ham), re.M):
+        return []
+    try:
+        kayitlar = on_bilgi_duzeltmeleri(ham)
+    except analiz_m._on_bilgi.OnBilgiHatasi as e:
+        return [f"UYARI düzeltme kaydı okunamadı ({str(e)[:80]}) — X'e gitmez"]
+    out: list[str] = []
+    for i, d in enumerate(kayitlar, 1):
+        hedef, govde = d.get("gonderi"), d.get("gonderi_metni")
+        if not (hedef or govde):
+            continue
+        ad = f"düzeltme {i} ({str(d.get('alan') or '—')!r})"
+        if not (hedef and govde):
+            out.append(f"UYARI {ad}: gonderi ve gonderi_metni birlikte yazılır — X'e gitmez")
+            continue
+        if not HEDEF_RE.match(str(hedef)):
+            out.append(f"UYARI {ad}: hedef {hedef!r} bir gönderim defteri anahtarı değil — X'e gitmez")
+            continue
+        if not (defter.get(hedef) or {}).get("idler"):
+            out.append(f"UYARI {ad}: hedef {hedef!r} gönderim defterinde kimliksiz — yanıt atılamaz")
+        engel, uyari = sina(str(hedef), str(govde))
+        out += [f"ENGEL {ad}: {x}" for x in engel] + [f"UYARI {ad}: {x}" for x in uyari]
+    return out
+
+
+if __name__ == "__main__" and len(sys.argv) >= 3 and sys.argv[1] == "--sina-analiz":
+    # Alt süreçte çağrılır (site/tools/analiz_sinavi.py) — `--sina` ile aynı sebep.
+    try:
+        _defter = json.loads((BURASI / "defter.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        _defter = {}
+    for _x in sina_analiz(Path(sys.argv[2]), _defter):
+        print(_x)
+    raise SystemExit(0)
+
+
 if __name__ == "__main__" and len(sys.argv) >= 3 and sys.argv[1] == "--sina":
     # Alt süreçte çağrılır (bulten/yaz.py): bu modül sys.path'i ve sys.modules
     # ['uret']'i değiştirir; yazma kapısının kendi sürecine yüklenmemeli.

@@ -1138,7 +1138,7 @@ def _gunluk3(b: dict) -> list[dict]:
 # Karne → Seviyeler. Konu bölümü satırları, okuma ve öne çıkanlar haftalıkta
 # ÇIKAR: gönderi önümüzdeki haftanın yalnız pazartesisini ve ana senaryonun
 # sayısız, kesik ilk cümlesini taşıyordu. Her blok kendi bütçesiyle; taşınca
-# önce maddeler sondan düşer (dinamik pay), sonra seviyeler, sonra takvimin son
+# önce seviyeler, sonra dördüncü ve sonraki maddeler sondan (dinamik pay), sonra takvimin son
 # günleri ve karnenin kayıtları — ana senaryo, takvimin ilk günü ve karnenin
 # sayımı düşmez.
 SENARYO_SATIR = SATIR_ESNEK
@@ -1316,7 +1316,11 @@ def _haftalik3(b: dict) -> list[dict]:
     bloklar.append(_blok("takvim", _takvim_gunleri(b), baslik="Önümüzdeki hafta"))
     bloklar.append(_blok("karne", _karne(b)))
     govde = _yaz(bloklar)
-    bloklar.append(_blok("pano", [(p, 20) for p in _pano(b, govde)], on="Seviyeler: ", ayrac=" · "))
+    # Seviyeler İLK düşer (05.10.2026, kullanıcı kararı): maddeler haftanın olayını
+    # sebebiyle anlatır, Seviyeler ham sayı listesidir ve aynı sayılar sitede durur.
+    # 04.10'da eski sıra (maddeler 10 < seviyeler 20) "Dolar ve euro" ile "Kredi"
+    # maddelerini düşürüp altı göstergelik satırı tutuyordu.
+    bloklar.append(_blok("pano", [(p, 5) for p in _pano(b, govde)], on="Seviyeler: ", ayrac=" · "))
     if not maddeler:
         raise SystemExit("haftalık sayının maddeleri boş — tweet kurulamaz")
     return bloklar
