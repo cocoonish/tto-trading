@@ -1373,7 +1373,14 @@ gerekçesi adıyla geldi: rutin "aracı tarafından değil, hesap tarafından
 kuruldu; aracı yalnız kendi kurduğu rutini güncelleyebilir". Metni OKUMAK ise
 mümkün (`get_trigger`): bir oturum rutinin bugünkü metnini bu tabloyla
 kıyaslayıp sapmayı bildirebilir. Aracının kurduğu bir rutin depoya erişemez:
-yeni oturuma depo bağlanmadığı için özel depo klonlanamaz. Yani rutin metnini
+yeni oturuma depo bağlanmadığı için özel depo klonlanamaz. Bu da 05.10.2026'da
+yeniden ölçüldü ("yenisini kur, eskisini sil" yolu kullanıcı isteğiyle
+denendi): aracının kurduğu sınama rutini `sources: []` ile kuruldu, oturumu
+`routine-lineage-none` ve `routine:agent-minted` etiketlerini taşıdı, hiçbir
+MCP aracı almadı (`connectors` girdisi bu hesapta kapalı; `add_repo` yok) ve
+28 saniyede depoya dokunamadan bitti. Bu yüzden eski rutinler SİLİNMEDİ — yenisi
+çalışmayacaktı; ayrıca bir rutini silmek başlattığı bütün oturumları da siler.
+Sınama rutini silindi. Yani rutin metnini
 değiştirmenin tek yolu **claude.ai arayüzü** (Routines sayfası, rutinin kendi
 düzenleme ekranı); oradan değiştirilecek bir şey yoksa yeni kural buraya
 yazılır ve rutin onu okuyarak öğrenir.
