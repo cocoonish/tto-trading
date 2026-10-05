@@ -85,7 +85,9 @@ GOSTERGELER = [
     # okuyamıyordu. Üç kart düzeyi (gösterge, 1,96 yıl), eğriyi (5 yıl) ve
     # ayrıştırmayı (2 yıllık başabaş; reel bacak Fisher ilişkisinden,
     # (1 + nominal) / (1 + başabaş) − 1 — 30.09'da %8,11) verir.
-    # Gönderinin pano satırı ilk BEŞ kartı aldığı için bunlar onu değiştirmez.
+    # Gönderinin pano satırı kartları sayfa sırasıyla okur ve yalnız BUGÜN
+    # YENİ olanı (`bugun_yeni`) alır, değeri gövdede geçen kartı atlar
+    # (tweet/uret._pano, 05.10.2026); kart sırası onu değiştirmez.
     ("dibs-verim-egrisi", "gosterge_ytm", "DİBS gösterge getirisi (2 yıl)", "%", 2, ""),
     ("dibs-verim-egrisi", "spot_5y", "DİBS 5 yıllık getiri", "%", 2, ""),
     ("dibs-verim-egrisi", "basabas_2y", "2 yıllık başabaş enflasyon", "%", 2, ""),

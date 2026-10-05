@@ -224,6 +224,17 @@ madde en büyük olgu + sayı + kıyası; her madde bir olgu, onun ölçeği ve 
 (en çok ~45 kelime). Türkiye ilk iki maddede. Tabloda zaten basılı her rakamı
 buraya taşıma — yalnız argümanı taşıyanı.
 
+**Günün sınavı ilk ekranda.** Bugün önem derecesi 1 bir yayım varsa (TÜFE,
+PPK, tarım dışı istihdam…) o yayım ya `manset`te ya ilk maddede BİR KEZ geçer:
+saati (TSİ), sayısal beklentisi ve beklentinin kaynağı ("TÜİK eylül TÜFE'sini
+TSİ 10:00'da yayımlıyor; AA Finans anketinde aylık beklenti %2,18"). Zaman
+akışında okur gönderinin yalnız ilk ~280 karakterini görür; 02.10'da tarım dışı
+istihdamın beklentisi 3.301 karakterlik gönderinin 2.811. karakterindeydi. ABD
+yayımı günlerinde bu kural "Türkiye ilk iki maddede" kuralıyla çakışırsa sınav
+MANŞETE taşınır, maddelerin sırası değişmez. Gönderi ayrıca takvimin ilk
+"Bugün…" paragrafını maddelerin hemen arkasına TAŞIR (kopyalamaz) — o paragraf
+günün sınavını iki yönlü sonucuyla anlatır, beklenti sayısını yinelemez.
+
 ### `yorum` — Günün okuması
 Tek tez, dört adım: **tez** (bir cümle) → **mekanizma** (neden oldu) →
 **fiyatlanan ve risk asimetrisi** ("piyasa X fiyatlıyor; risk Y yönünde
@@ -266,13 +277,33 @@ sıralama zorunlu. Bölümlerin alt konuları:
 
 `takvim`: her yayım için **hangi sonuç neyi değiştirir** — beklenti sayısını
 yineleme, tablo basıyor; ÖNCEKİ değer kıyas için yazılabilir (tablo onu
-basmaz). Haftalık sayıda önümüzdeki haftanın her takvim maddesi
+basmaz). **Saatler İstanbul saatiyle** yazılır ve takvimdeki İLK saat bölgeyi
+adıyla taşır: "TSİ 10:00" (sonrakiler yalnız "17:00"). Başka bir saat dilimi
+yazılmaz; ABD yayımı da TSİ'ye çevrilir. Gönderi yazarın cümlesini değiştirmez
+— saat nasıl yazıldıysa X'te öyle okunur. Paragraf `<strong>Bugün HH:MM ·
+olay.</strong>` ile açılır; gönderi takvimin ilk "Bugün…" paragrafını
+maddelerin arkasına taşır, kalanı "Beklenen:" satırında durur. Haftalık sayıda önümüzdeki haftanın her takvim maddesi
 burada tek tek işlenir ve sayısal beklentisi olan her maddenin takvim kaydında
 `beklenti_sayi` alanının dolu olduğunu doğrula (sürpriz ölçümü o alanla çalışır;
 serbest metinden sayı türetilmez). Beklenti yoksa yokluğunu YAZMA — tablo "—"
 basar.
 
 `risk`: 2–4 madde, her biri: tetik · etki yönü · olasılığını artıran ölçü.
+**Günlük maddenin KALIBI sözleşmedir**, çünkü gönderinin "Neye bakılacak"
+bloğu ondan kurulur (en çok iki madde):
+
+    <li><strong>tetik</strong> → etki; izlenecek: ölçü ve eşiği.</li>
+
+Madde 170 karakteri aşmaz (aşan madde gönderiye bütünüyle girmez, kesilmez).
+Kalıba uymayan ya da uzun madde sayfada kalır, gönderiye girmez; denetim onu
+UYARI olarak listeler (kalıbın tek tanımı `tweet/uret.RISK_KALIBI`). Takvimde
+zaten anılan bir yayıma işaret eden madde gönderide yinelenmez — risk maddesi
+takvimin iki yönlü sonucunu tekrar etmez, onun anlatmadığı bir kanalı yazar.
+Eşik bir İZLEME seviyesidir, işlem fikri değil: açık bir fikrin giriş, hedef
+ya da stop seviyesini taşıyan madde gönderiye girmez; tavsiye dili yok.
+Üçüncü taraf bir sayı adlı kaynakla yazılır, ve hesabın yayımlanmış kendi
+ölçümüyle aynı büyüklükte farklı bir seviye yazılmaz (OAT–Bund farkı 1 Ekim
+kapanışında 140,9 bp iken risk maddesi ajansın 130 bp'sini taşıyordu).
 
 ### Ayrıntı: notu ne uzatır, ne uzatmaz
 
@@ -353,6 +384,19 @@ yazma reddedilir — neyin neye düzeltildiğini söylemeyen kayıt okura hesap
 vermez. Liste yamada bütünüyle yazılır. Düzeltme yoksa alan hiç gönderilmez.
 Sebep okur diliyle yazılır: "ölçü kusuru" değil, kusurun ne olduğu.
 
+**X'e düzeltme yanıtı (isteğe bağlı, yazarın kararı).** Hatalı sayı X'e de
+gittiyse kayda iki alan daha yazılır: `gonderi` — düzeltilen gönderinin defter
+anahtarı (`"bulten:2026-10-04"`, `"analiz:<slug>"`) — ve `gonderi_metni` — X'e
+gidecek kısa düz metin ("Gümüşün haftalık değişimi −%5,96 değil −%6,64; hafta
+kapanışı bir seans geriden okunmuştu."). İkisi birlikte yazılır; hedef
+`tweet/defter.json`da kimlikli değilse yazma reddedilir. `tweet/gonder.py`
+sonraki koşuda orijinalin altına "Düzeltme — <hedefin başlığı>" yanıtını atar;
+aynı eski→yeni çifti bir kez gider. Metin sayfa yapısını anmaz ("gösterge
+şeridi", "Türkiye bölümü", "satır" — X okurunun elinde o sayfa yok), HTML ve
+link taşımaz. İçerik hatası için gönderi SİLİNMEZ; silip yeniden atma yalnız
+biçim hatası içindir. Hangi düzeltmenin X'e gideceğine yazar karar verir — araç
+`eski` değeri arşivde arayıp kendiliğinden yanıt atmaz.
+
 ---
 
 ## Yazım kuralları — sabah notu
@@ -388,7 +432,11 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    hareket HABER olarak düzyazıya girmez (tablo zaten basıyor); tek istisnası
    bir tezin sınavıdır — "bankalar −%4,58 iken TL tahvili satılmadı" gibi,
    beklenen hareketin OLMAMASI tek cümleyle yazılır; 2σ ve üstü sebebiyle girer,
-   sebep netleşmediyse bir kez "sebebi netleşmedi" denir. 1σ altı tek günlük
+   sebep netleşmediyse bir kez "sebebi netleşmedi" denir — o hareketin
+   MADDESİNDE, aynı cümlede ("Dolar/TL %0,23 (2,9σ) artışla 49,14'te kapandı;
+   sebebi netleşmedi."). Okumanın ortasına konan çekince gönderide öncülünden
+   kopar ya da hiç girmez: 05.10'da "Sebebi netleşmedi" okumanın 790.
+   karakterindeydi ve gönderi 642'de bitiyordu. 1σ altı tek günlük
    hareketten rejim hükmü kurulmaz; "kesin / kanıt / ta kendisi" yalnız 2σ ve
    üstünde ya da çok günlü birikimde.
 7. **52 hafta konumu** yalnız uçlarda (%95 ve üstü, %5 ve altı) ve sayı başına
@@ -400,7 +448,11 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    "kredi büyümesi (13h)").
 9. **Kaynak ve kişi adıyla.** Her dış iddia adlı kaynakla (Reuters, FT,
    Bloomberg, kurumun adı) ve kişinin adıyla: "bir yatırım bankası", "bir
-   bölge başkanı… bir diğeri", "haber akışına göre" yazılmaz.
+   büyük/önde gelen/ABD'li yatırım bankası(nın)", "bir bölge başkanı… bir
+   diğeri", "haber akışına göre" yazılmaz (üslup ölçütü Y17 niteleyiciyi ve
+   çekimi de yakalar). Gönderi gündem satırında kaynağı adıyla anan cümleyi
+   bütçe içinde öncelikli seçer — linksiz bir gönderide güveni kaynağın adı
+   taşır.
 10. **Geçmiş çağrılar** söz defterinde durur. Günlük sayıda düzyazıda sayı
     başına en çok bir atıf, "(20.09 notu)" biçiminde; haftalık sayıda atıf
     YALNIZ karne bölümündedir ve hesabı verilen (kapanan ya da vadesi geçen)
@@ -662,12 +714,34 @@ Bir bölüm, bir madde rakamını ancak üzerinde YENİ bir işlem yapıyorsa an
    (birikim, sonuç, sonraki sınav) yeniden kurulur. Denetim haftalık sayıyı
    haftanın yazılmış günlükleriyle ayrıca kıyaslar; örtüşme günler arası
    eşiği aşarsa UYARI verir.
-9. **X gönderisi sayfadan kurulur.** Haftalık gönderi manşeti, özetin
-   maddelerini (haftalık bütçeyle), okumanın başını ve ANA SENARYOYU taşır;
-   alternatif ve kuyruk gönderiye girmez. Ana senaryonun ilk cümlesi tetiği ve
-   etkisini tek başına söyleyecek biçimde yazılır — gönderide kesildiği yer
-   orasıdır. İşlem fikirleri gönderiye GİRMEZ; ana senaryonun gönderiye giden
-   cümlesi bu yüzden bir fikre atıf yapmaz, yapı dili de taşımaz.
+9. **X gönderisi sayfadan kurulur (iskelet, 05.10.2026).** Haftalık gönderi
+   3.800 karakter içinde şu sırayı taşır: manşet → özetin maddeleri (kalan
+   payı alır; taşınca sondan düşer) → **Senaryolar** (ana · alternatif ·
+   kuyruk, her biri TEK satır) → **Önümüzdeki hafta** (gün gün, her gün tek
+   satır) → **Karne** (sayım ölçülen katmandan; kapanan kayıtların cümlesi) →
+   **Seviyeler** (bu hafta ilerleyen ve maddelerde geçmeyen gösterge kartları).
+   Okuma, konu bölümlerinin satırları ve öne çıkanlar haftalık gönderiye
+   girmez. Buna göre:
+   - Her senaryo alt bölümünün **İLK tam cümlesi** gönderiye gider: ana
+     senaryonun ilk cümlesi tetiği ve etkisini tek başına söyler (en çok 330
+     karakter; aşarsa alt başlık yazılır). Alternatif ve kuyruk
+     `<strong>Tetik.</strong>` paragrafıyla açılıyorsa satır "Alternatif:
+     <alt başlığın tezi>. Tetik: <ilk cümle>" olur — tetiğin ilk cümlesi tek
+     başına okunur biçimde yazılır.
+   - Takvimde **her gün paragrafının İLK cümlesi olayı, saati ve iki yönlü
+     sonucu taşır** (~170 karakter): "TÜİK TSİ 10:00'da eylül TÜFE'sini
+     yayımlıyor; beklenti üstü bir aylık rakam kısa ucu yükseltir, altı indirim
+     fiyatlamasını güçlendirir." "Haftanın ağırlığı ilk gününde" gibi bir giriş
+     ikinci cümleye iner (gönderi sayısız ilk cümlenin ardından ikinciyi de
+     alır, ama ancak o kadarını).
+   - Karnede kapanan her kaydın paragrafı `<strong>Konu.</strong>` ile açılır
+     ve ilk cümlesi sonucu söyler ("… söyleyen çağrı (16.09 notu) tutmadı.").
+     "Önümüzdeki hafta sınanacaklar" ve "Açık ana senaryo" paragrafları
+     gönderiye girmez (takvim ve senaryoyla çakışırlar).
+   İşlem fikirleri gönderiye GİRMEZ; senaryoların gönderiye giden cümleleri
+   (ana, alternatif, kuyruk) bu yüzden bir fikre atıf yapmaz, yapı dili ve
+   fikrin seviyelerini taşımaz — fikir seviyesi taşıyan senaryo satırı
+   gönderiden düşer.
 10. **Fikirler patikadan türer.** Haftalık sayı 3–6 işlem fikri taşır, en az
     iki varlık sınıfında, her biri `senaryo` alanıyla bir patikaya bağlı (bkz.
     "Senaryodan işlem fikrine" ve "İşlem fikirleri (biçim 3)").
@@ -1345,16 +1419,33 @@ KEZ anılır ve sebebi yazılır — bir madde de sayılır, aynı hareketi ikin
 bölümde yeniden anlatma. Biçim 3'te yüzdesi büyük ama kendi oynaklığına göre
 sıradan (|σ| < 1) hareket anılmak zorunda değildir (kural 6: 1σ altı
 düzyazıya girmez). Sebebi bilinmiyorsa bir kez "sebebi netleşmedi" yaz —
+hareketin maddesinde, aynı cümlede (kural 6) —
 en görünür manşeti sürücü diye göstermek en kötü seçenek. (2026-08-17 haftasında ABD Hazinesi'nin
 tahvil geri alımı USD ve faizlerdeki asıl sürücüydü ve bülten bunu tamamen
 atlamıştı; `onem_puani` ve ABD Hazine kaynağı bu yüzden eklendi.)
 
 **Metin kendi ayakları üstünde dursun.** Yazdığın `yorum` ve `gundem`
 bölümleri yalnız sitede okunmuyor: aynı metin X'e tek gönderi olarak da çıkıyor
-ve orada ne sayfa, ne tablo, ne de başka bir bölüm var. Biçim 3'te gönderi
-başlığın altında `manset` ile, sonra `ozet.ne_oldu` maddeleriyle açılır (madde
-başına ~330 karakter), okuma ondan sonra ve kısaltılmış gelir; "öne çıkanlar"
-satırı maddelerin saydığı hareketi yinelemez. Maddeler gönderinin gövdesidir:
+ve orada ne sayfa, ne tablo, ne de başka bir bölüm var.
+
+**Gönderinin anatomisi (biçim 3 günlük, 05.10.2026).** Başlık ve `manset` →
+`ozet.ne_oldu` maddeleri (madde başına ~330 karakter; maddeler bütçede
+ÖNCELİKLİDİR) → takvimin ilk "Bugün…" paragrafı (taşınır, "Beklenen:"den
+çıkar) → okumanın baştan sığan paragrafları → **Gündem** (konu başına tek
+satır; maddeyle aynı konuyu yineleyen ve maddelerde olmayan hiçbir sayı
+taşımayan satır düşer) → **Neye bakılacak** (risk bölümünün kalıba uyan en çok
+iki maddesi) → **Olağandışı hareketler** (sayfanın σ listesinden, 2σ ve üstü,
+maddelerde anılmayan; seans tarihiyle) → **Pano** (yalnız bugün ilerleyen ve
+değeri gövdede geçmeyen gösterge kartları) → **Beklenen** (takvimin kalanı) →
+sorumluluk notu. Haftalık iskelet "Haftaya bakış" kural 9'da.
+**Gönderi kesmez, seçer.** Seçim birimi madde, TAM cümle ya da satırdır; "…"
+hiçbir koşulda üretilmez. Sığmayan birim bütünüyle düşer ve düşüş görünür
+kalır (`gonder.py --kuru` listeler). Tavan aşılırsa önce olağandışı satırı,
+sonra pano, sonra gündem satırları, sonra eşik maddeleri düşer; maddeler ve
+"Beklenen" en son. Yani bir cümle ne kadar uzunsa gönderiye girme olasılığı o
+kadar düşer: maddenin ilk cümlesi, gündem paragrafının ilk cümlesi ve risk
+maddesi kısa ve kendi başına okunur yazılır. Okumanın paragraf içi kalın ara
+başlığı gönderide "Mekanizma:" diye basılır. Maddeler gönderinin gövdesidir:
 olgu ve rakam oradadır, okuma onları yeniden saymaz. Gönderi
 `tweet/denetim.py` kapısından geçer (tavsiye dili, link — tweetlerde HİÇ link
 kullanılmaz, çıplak alan adı dahil —, HTML kalıntısı, site

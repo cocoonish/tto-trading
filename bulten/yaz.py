@@ -19,6 +19,11 @@ beyanından; biçim 3 = sabah notu, bkz. bulten/YAZIM.md):
                  kalıbının yapısal eşi: sayfa "Düzeltmeler" bölümünde basar,
                  site /duzeltmeler/ sayfasında bütün bültenlerinkini toplar.
                  Liste bütünüyle yazılır (yama mevcut listeyi DEĞİŞTİRİR).
+                 İsteğe bağlı iki alan düzeltmeyi X'e de götürür (05.10.2026):
+                 "gonderi" — hedef gönderinin defter anahtarı ("bulten:2026-10-04",
+                 "analiz:<slug>"; tweet/defter.json'da KİMLİKLİ olmalı) ve
+                 "gonderi_metni" — X'e gidecek kısa düz metin. İkisi birlikte
+                 yazılır; tweet/gonder.py hedefin altına "Düzeltme" yanıtı atar.
     fikirler     biçim 3: [{baslik, tur, bacaklar, yon, hedef, stop, ufuk, gerekce,
                  ne_bozar, dayanak, …}] — o sayıda açılan işlem fikirleri; giriş
                  seviyesi ölçülen katmandan, sözleşme bulten/fikir.py ve YAZIM.md.
@@ -52,6 +57,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -75,6 +81,43 @@ def _bugun() -> str:
     return (BUGUN or dt.datetime.now(dt.timezone.utc).date()).isoformat()
 MANSET_AZAMI = 110
 DUZELTME_ZORUNLU = ("alan", "eski", "yeni")
+# Düzeltme yanıtının hedefi: gönderim defteri. Hedef KİMLİKSİZSE (özel kanaldan
+# atılmış ve defterde kimliği olmayan gönderi, ya da hiç gönderilmemiş sayı)
+# yanıt atılamaz — yazma o anda reddedilir, ertesi sabah sessizce düşmez.
+TWEET_DEFTER = KOK / "tweet" / "defter.json"
+GONDERI_HEDEF = re.compile(r"^(bulten|analiz|teknik|ozel):\S+$")
+GONDERI_METNI_AZAMI = 600
+
+
+def _gonderi_dogrula(i: int, d: dict) -> dict:
+    """`gonderi` + `gonderi_metni`: ikisi birlikte, hedef defterde kimlikli,
+    metin düz ve kısa. Boşsa {} döner (alanlar yazılmaz)."""
+    hedef = str(d.get("gonderi") or "").strip()
+    govde = str(d.get("gonderi_metni") or "").strip()
+    if not hedef and not govde:
+        return {}
+    if not hedef or not govde:
+        raise SystemExit(f"duzeltmeler[{i}]: gonderi ve gonderi_metni BİRLİKTE yazılır "
+                         "(hedef gönderinin defter anahtarı + X'e gidecek kısa metin)")
+    if not GONDERI_HEDEF.match(hedef):
+        raise SystemExit(f"duzeltmeler[{i}]: gonderi bir defter anahtarı olmalı "
+                         f"('bulten:YYYY-MM-DD' ya da 'analiz:<slug>'): {hedef!r}")
+    try:
+        defter = json.loads(TWEET_DEFTER.read_text(encoding="utf-8"))
+    except Exception as e:                                     # noqa: BLE001
+        raise SystemExit(f"duzeltmeler[{i}]: gönderim defteri okunamadı ({e}) — hedef "
+                         "doğrulanamadan düzeltme yanıtı yazılmaz")
+    if not ((defter.get(hedef) or {}).get("idler") or []):
+        raise SystemExit(f"duzeltmeler[{i}]: {hedef} gönderim defterinde KİMLİKSİZ — "
+                         "yanıt atılacak gönderi yok; gonderi alanını kaldır")
+    if re.search(r"<[a-zA-Z/][^>]*>", govde):
+        raise SystemExit(f"duzeltmeler[{i}]: gonderi_metni düz metindir, HTML taşımaz")
+    if re.search(r"https?://|\bwww\.", govde, re.I):
+        raise SystemExit(f"duzeltmeler[{i}]: gonderi_metni link taşımaz (tweetlerde HİÇ link yok)")
+    if len(govde) > GONDERI_METNI_AZAMI:
+        raise SystemExit(f"duzeltmeler[{i}]: gonderi_metni {len(govde)} karakter "
+                         f"(en çok {GONDERI_METNI_AZAMI}) — düzeltme kısa yazılır")
+    return {"gonderi": hedef, "gonderi_metni": govde}
 
 
 def duzeltmeleri_dogrula(liste) -> list[dict]:
@@ -98,7 +141,8 @@ def duzeltmeleri_dogrula(liste) -> list[dict]:
             raise SystemExit(f"duzeltmeler[{i}]: tarih YYYY-MM-DD olmalı ({t!r})")
         temiz.append({"tarih": t, "alan": str(d["alan"]).strip(),
                       "eski": str(d["eski"]).strip(), "yeni": str(d["yeni"]).strip(),
-                      "sebep": str(d.get("sebep") or "").strip()})
+                      "sebep": str(d.get("sebep") or "").strip(),
+                      **_gonderi_dogrula(i, d)})
     return temiz
 
 

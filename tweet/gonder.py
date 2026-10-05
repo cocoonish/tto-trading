@@ -5,6 +5,7 @@
     python3 tweet/gonder.py                # bugünün yazılmış içeriğini gönder
     python3 tweet/gonder.py --kuru         # göndermeden zinciri bas
     python3 tweet/gonder.py --tarih 2026-08-30 --tur bulten
+    python3 tweet/gonder.py --tur duzeltme --kuru   # bekleyen düzeltme yanıtları
 
 Sigortalar (araçta, rutin metninde değil):
 
@@ -14,6 +15,13 @@ Sigortalar (araçta, rutin metninde değil):
 · BAYAT KORUMASI: --tarih verilmedikçe yalnız BUGÜNÜN (UTC) içeriği
   gönderilir. Eski bir bülteni gece yarısından sonra tweetlemek okura "yeni"
   diye eski haber satmaktır; kaçan gün sessizce atlanır, defterlenmez.
+· DÜZELTME YANITI (tweet/duzeltme.py): yazarın `gonderi` alanıyla işaretlediği
+  düzeltme kaydı, hedef gönderinin altına yanıt olarak gider; anahtar içeriğe
+  bağlı (duzeltme:<hedef>:<sha1>), yani aynı düzeltme iki kez gitmez.
+· GÖRSEL YOK (kullanıcı kararı 05.10.2026): gövdede yalnız metin ve yanıt
+  alanı gider; `media` alanı kurulamaz (_govde ikinci kilit).
+· ETKİLEŞİM ÖLÇÜMÜ (tweet/metrik.py): gönderim bittikten sonra, AYNI erişim
+  jetonuyla, haftada bir; hiçbir koşulda gönderimi etkilemez.
 · ANAHTAR YOKSA DÜŞMEZ: TW_* ortam değişkenleri boşsa kuru çıktı basılır ve
   0 ile çıkılır — anahtarlar repo secret'ına eklenene dek iş akışı yeşil
   kalır, zincir metni logda görünür.
@@ -47,6 +55,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import uret  # noqa: E402
 import analiz as analiz_m  # noqa: E402
 import denetim as denetim_m  # noqa: E402
+import duzeltme as duzeltme_m  # noqa: E402
+import metrik as metrik_m  # noqa: E402
 
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
@@ -152,8 +162,28 @@ def _defter_yaz(defter_yolu: Path, defter: dict) -> None:
                            encoding="utf-8")
 
 
-def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:
+# Gönderi gövdesinde izin verilen alanlar. GÖRSEL YOK (kullanıcı kararı
+# 05.10.2026): `media` alanı burada hiç kurulamaz. Görsel yasağı bir zamanlar
+# yalnız X'in jeton kapsamına dayanıyordu (30.08'de iki medya ucu 403 verdi ve
+# özel gönderi görselsiz gitti) — kapsam açıldığı gün görsel sessizce gidecekti.
+GOVDE_ALANLARI = frozenset({"text", "reply"})
+
+
+def _govde(metin: str, ust: str | None) -> dict:
+    """X gönderi gövdesi: metin ve (varsa) yanıtlanan kimlik. Başka alan yok."""
+    govde: dict = {"text": metin}
+    if ust:
+        govde["reply"] = {"in_reply_to_tweet_id": str(ust)}
+    fazla = set(govde) - GOVDE_ALANLARI
+    if fazla:                                     # ikinci kilit: kod değişse bile
+        raise SystemExit(f"gönderi gövdesinde izinsiz alan {sorted(fazla)} — görsel/medya "
+                         "gönderilmez (kullanıcı kararı); gönderim durdu, defter yazılmadı.")
+    return govde
+
+
+def _gonder_zincir(zincir: list[str], erisim: str, ust: str | None = None) -> list[str]:
     """Zinciri sırayla gönderir, her tweet öncekine yanıt olur. ID listesi döner.
+    `ust` verilirse zincirin İLK parçası o kimliğe yanıt olur (düzeltme yanıtı).
     429 ve 5xx'te BİR kez bekleyip yeniden dener — geçici bir kesinti için sabahı
     kaybetmemek; iki kez düşerse gerçekten düşmüştür."""
     import requests
@@ -166,9 +196,7 @@ def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:
                              "kullanılmaz; gönderim durdu, defter yazılmadı.")
     idler: list[str] = []
     for i, metin in enumerate(zincir):
-        govde: dict = {"text": metin}
-        if idler:
-            govde["reply"] = {"in_reply_to_tweet_id": idler[-1]}
+        govde = _govde(metin, idler[-1] if idler else ust)
         for deneme in (1, 2):
             yanit = requests.post(
                 UC, json=govde, timeout=30,
@@ -221,8 +249,10 @@ def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]]) -> tuple[list, 
         tur = anahtar.split(":")[0]
         engel, uyari = denetim_m.denetle("\n".join(zincir), tur)
         if dusen_cumleler:
-            uyari = list(uyari) + [f"{len(dusen_cumleler)} cümle site atfı yüzünden düştü: "
-                                   + " | ".join(f"[{b}] {c[:70]}…" for b, c in dusen_cumleler[:3])]
+            # DUSEN yalnız site atfını değil bütçe, şerit ve tam birim
+            # düşüşlerini de taşır; her kaydın etiketi sebebini söyler.
+            uyari = list(uyari) + [f"{len(dusen_cumleler)} birim gönderiden düştü (etiket sebebi söyler): "
+                                   + " | ".join(f"[{b}] {c[:70]}" for b, c in dusen_cumleler[:3])]
         print(denetim_m.rapor(engel, uyari, anahtar))
         if engel:
             print(f"::error::{anahtar}: tweet denetimi ENGEL üretti — bu öğe gönderilmedi.")
@@ -232,9 +262,20 @@ def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]]) -> tuple[list, 
     return gecen, dusen
 
 
+def _metrik_oku(erisim: str, defter: dict, yol: Path | None = None) -> None:
+    """tweet/metrik.py'yi çağırır; ne olursa olsun gönderimi ETKİLEMEZ. metrik
+    kendi içinde de yutuyor — bu ikinci sarmalayıcı içe aktarma ya da imza
+    kayması gibi kodun kendi kusuruna karşı."""
+    try:
+        print("· " + metrik_m.haftalik(erisim, defter, **({"yol": yol} if yol else {}),
+                                       bulten_dizin=uret.BULTENLER))
+    except BaseException as e:                                 # noqa: BLE001
+        print(f"::warning::etkileşim ölçümü düştü ({type(e).__name__}: {str(e)[:120]}) — gönderim etkilenmedi")
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("--tur", choices=("bulten", "analiz", "hepsi"), default="hepsi")
+    p.add_argument("--tur", choices=("bulten", "analiz", "duzeltme", "hepsi"), default="hepsi")
     p.add_argument("--tarih", help="varsayılan: bugün (UTC); bayat koruması "
                                    "yalnız varsayılanda uygulanır")
     p.add_argument("--kuru", action="store_true", help="gönderme, yalnız bas")
@@ -288,6 +329,24 @@ def main() -> int:
                 analiz_m.UYARILAR.clear()
                 is_listesi.append((anahtar, z, list(uret.DUSEN)))
 
+    # DÜZELTME KANALI (05.10.2026). Yazarın `gonderi` ile işaretlediği düzeltme
+    # kayıtları, hedef gönderinin İLK kimliğine yanıt olarak gider. Pencere son
+    # duzeltme_m.PENCERE_GUN gün; geçmiş gönderilere kendiliğinden yanıt yok.
+    ust_kimlik: dict[str, str] = {}
+    if a.tur in ("duzeltme", "hepsi"):
+        # Bu kanalın kendi kusuru (okunamayan bir ön bilgi, bozuk bir kayıt)
+        # sabahın bültenini X'ten alıkoyamaz: kanal düşerse uyarı basılır,
+        # öbür öğeler gider.
+        try:
+            adaylar, d_uyari = duzeltme_m.adaylar(dt.date.fromisoformat(tarih), defter)
+        except Exception as e:                                 # noqa: BLE001
+            adaylar, d_uyari = [], [f"düzeltme kanalı okunamadı ({type(e).__name__}: {str(e)[:120]})"]
+        for u in d_uyari:
+            print(f"::warning::{u}")
+        for ad in adaylar:
+            ust_kimlik[ad["anahtar"]] = ad["ust"]
+            is_listesi.append((ad["anahtar"], [duzeltme_m.metin(ad)], []))
+
     if not is_listesi:
         print(f"{tarih}: gönderilecek yeni içerik yok "
               "(yazılmış değil ya da defterde kayıtlı).")
@@ -314,17 +373,23 @@ def main() -> int:
                            "ozet": hashlib.sha256("\n".join(zincir).encode("utf-8")).hexdigest()[:12]}
         _defter_yaz(defter_yolu, defter)
         try:
-            idler = _gonder_zincir(zincir, erisim)
+            idler = _gonder_zincir(zincir, erisim, ust=ust_kimlik.get(anahtar))
         except SystemExit:
             defter.pop(anahtar, None)
             _defter_yaz(defter_yolu, defter)
             raise
         zaman = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
         defter[anahtar] = {"idler": idler, "zaman": zaman}
+        if anahtar in ust_kimlik:
+            defter[anahtar]["yanit"] = ust_kimlik[anahtar]
         _defter_yaz(defter_yolu, defter)
         if defter_yolu.resolve() == DEFTER.resolve():
             _arsivle(anahtar, zincir, idler, zaman)
         print(f"✓ {anahtar} gönderildi — {len(idler)} tweet, kök: {idler[0]}")
+    # ETKİLEŞİM ÖLÇÜMÜ — yalnız bu koşu zaten bir erişim jetonu aldıysa (ek jeton
+    # dönüşü yok) ve gerçek defterle; gönderimden SONRA, defter commit'inden ÖNCE.
+    if erisim is not None and defter_yolu.resolve() == DEFTER.resolve():
+        _metrik_oku(erisim, defter)
     if dusen:
         print(f"\n{len(dusen)} öğe kapıdan geçemedi: " + ", ".join(k for k, _ in dusen))
         return 1

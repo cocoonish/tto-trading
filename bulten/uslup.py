@@ -139,10 +139,17 @@ KALIPLAR: tuple[Kalip, ...] = (
           _k(r"(?:günün|haftanın)\s+en\s+(?:büyük|olağandışı)\s+(?:(?:ikinci|üçüncü|dördüncü|beşinci|altıncı)\s+)?"
              r"(?:\w+\s+)?hareket\w*|listes\w*\s+(?:en|üçüncü)"),
           2, "sıralamayı tablo söyler; düzyazıda yalnız en büyüğü", True),
+    # Y17 niteleyiciyi ve çekimi de yakalar (05.10.2026): "bir büyük yatırım
+    # bankası" (14.09 gönderisi), "bir ABD'li yatırım bankasının analistleri"
+    # (18.09 yazı katmanı), "bir yatırım bankasına göre" eski kalıptan geçiyordu
+    # — kalıp yalnız "bir (küresel)? yatırım bankası"yı ve ardından sözcük
+    # sınırını soruyordu. Adsız kaynak, linksiz bir gönderide güvenin tek
+    # dayanağını (kaynağın adını) siler.
     Kalip("Y17", "adsız kaynak",
-          _k(r"\b(?:[Bb]ir\s+(?:kaynağa|değerlendirmeye)\s+göre|[Hh]aber\s+akış(?:ına\s+göre|ında)|"
-             r"[Bb]ir\s+(?:küresel\s+)?(?:yatırım\s+bankası|finans\s+yayını|yatırım\s+stratejisti|"
-             r"uluslararası\s+kuruluş|bölge\s+başkanı)|bir\s+diğeri|bir\s+başkası)\b"),
+          _k(r"\b(?:[Bb]ir\s+(?:kaynağa|değerlendirmeye)\s+göre\b|[Hh]aber\s+akış(?:ına\s+göre|ında)\b|"
+             r"[Bb]ir\s+(?:[\w'’-]+\s+){0,2}?(?:yatırım\s+bankas\w*|finans\s+yayın\w*|"
+             r"yatırım\s+stratejist\w*|uluslararası\s+kuruluş\w*|bölge\s+başkan\w*)|"
+             r"bir\s+diğeri\b|bir\s+başkası\b)"),
           0, "kaynağı ve kişiyi adıyla yaz (Reuters, FT, Williams …)"),
     Kalip("Y18", "sayının yazıyla yazılması",
           _k(r"\b(?:[Oo]n\s+(?:yedi|üç|dört|beş|altı|sekiz|dokuz)\s+(?:Eylül|Ağustos|Ekim|Kasım|Aralık))"

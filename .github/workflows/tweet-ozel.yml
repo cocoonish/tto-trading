@@ -1,10 +1,11 @@
-# Tek seferlik özel tweet — elle tetiklenir, görselli gönderim.
+# Tek seferlik özel tweet — elle tetiklenir, YALNIZ METİN.
 #
-# Düzenli bülten tweetlerinin (tweet.yml) dışındaki gönderiler: tema/veri
-# tweetleri, grafikli duyurular. Metin depoda bir dosyada durur (gözden
-# geçirilebilir), görseller istenirse bir grafik betiğiyle koşu içinde
-# üretilir. Kimlik ve jeton kasası tweet.yml ile ortak; dönen refresh token
-# burada da commit'lenir.
+# Düzenli bülten tweetlerinin (tweet.yml) dışındaki gönderiler: tema ve veri
+# tweetleri. Metin depoda bir dosyada durur (gözden geçirilebilir). Görsel YOK
+# (kullanıcı kararı 05.10.2026): grafik betiği ve resim girdileri kaldırıldı,
+# tweet/ozel.py --resim verilirse durur, gönderim gövdesi medya alanı kuramaz.
+# Kimlik ve jeton kasası tweet.yml ile ortak; dönen refresh token burada da
+# commit'lenir.
 
 name: Özel tweet
 
@@ -15,24 +16,12 @@ on:
         description: 'Tweet metni dosyası (depo yolu) — boş bırakılırsa iş düşer; gönderilmiş bir dosya varsayılan olarak durmaz'
         type: string
         default: ''
-      # Grafik İSTİSNADIR: varsayılan boş. Önceden kredi betiğine bağlıydı ve
-      # ilgisiz her gönderimde matplotlib koşup 403 alan bir yükleme deniyordu
-      # (GitHub boş dizgeyi de varsayılana çevirdiği için kapatmak da mümkün
-      # değildi). Grafik isteyen çağrı yolunu açıkça verir.
-      grafik_betigi:
-        description: 'Önce koşulacak grafik betiği (boş = grafik üretme)'
-        type: string
-        default: ''
-      resimler:
-        description: 'Eklenecek PNGler (boşlukla ayrık depo yolları)'
-        type: string
-        default: ''
       gonder:
         description: 'Gerçekten gönder (kapalıysa kuru koşu)'
         type: boolean
         default: false
       sil_id:
-        description: 'Önce bu id''li tweeti sil (düzeltme akışı)'
+        description: 'Önce bu id''li tweeti sil (yalnız BİÇİM hatası; içerik hatası düzeltme yanıtıyla)'
         type: string
         default: ''
       anahtar:
@@ -64,27 +53,21 @@ jobs:
           python-version: '3.11'
 
       - name: Bağımlılıklar
-        run: pip install --quiet requests cryptography matplotlib pandas
+        run: pip install --quiet requests cryptography
 
       - name: Duman sınaması
         run: python tweet/duman.py
 
-      - name: Grafikler
-        if: inputs.grafik_betigi != ''
-        run: python ${{ inputs.grafik_betigi }}
-
       - name: Gönder
         run: |
           if [ -z "${{ inputs.metin }}" ]; then echo "::error::metin dosyası verilmedi"; exit 1; fi
-          RESIMLER=""
-          for r in ${{ inputs.resimler }}; do RESIMLER="$RESIMLER --resim $r"; done
           SIL=""
           if [ -n "${{ inputs.sil_id }}" ]; then SIL="--sil ${{ inputs.sil_id }}"; fi
           ANAHTAR=""
           if [ -n "${{ inputs.anahtar }}" ]; then ANAHTAR="--anahtar ${{ inputs.anahtar }}"; fi
           ZORLA=""
           if [ -n "${{ inputs.sil_id }}" ]; then ZORLA="--zorla"; fi
-          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER $SIL $ANAHTAR $ZORLA \
+          python tweet/ozel.py --metin "${{ inputs.metin }}" $SIL $ANAHTAR $ZORLA \
             ${{ inputs.gonder == true && '--gonder' || '' }}
 
       # Jeton kasası: gönderim koşusu refresh token'ı döndürür; kaybolmasın.

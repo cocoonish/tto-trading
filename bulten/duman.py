@@ -955,23 +955,46 @@ def _bicim3_gonderi_ve_birlestirme():
                                   if (y.haftalik_tweet or y.tweet) and y.id != "takvim"], h3
     assert "turkiye_makro" in [i for i, _ in h3] and "turkiye_makro" not in [i for i, _ in b3], \
         "yalnız haftalık bölüm günlük gönderiye sızıyor ya da haftalıktan düşüyor"
+    # RİSK GÜNDEM DÖNGÜSÜNE GİRMEZ; günlükte yalnız EŞİK BLOĞU olarak girer
+    # (05.10.2026, bilinçli yeniden yazım). Kayıttaki günlük gönderi etiketi
+    # boş kalır: etiketle döngüye alınan risk 800 karakterlik bütçeyi aşıp hiç
+    # basılmıyor, girse bile 260 kırpması maddelerin birini kesiyordu. Kendi
+    # kod yolu ("Neye bakılacak", en çok 2 × 170) ve kalıbı var.
     assert "risk" in [i for i, _ in h3] and "risk" not in [i for i, _ in b3], \
-        "ana senaryo haftalık gönderide yok ya da günlüğe sızdı"
-    # HAFTALIK GÖNDERİDE kayıttaki HER etiketli bölüm görünür (ilk yazımda gündem
-    # bütçesi dördüncü satırı — haftalıkta zorunlu Emtia — yapısal olarak düşürüyordu)
-    # ve gönderi tavanı aşmaz. Bölümler bütçenin üstünde dolu: kırpma sınanır.
-    dolgu = " ".join(["Uzun uç ABD getirileriyle yukarı gitti ve kısa uç gevşedi."] * 30)
+        "risk günlük gündem döngüsüne girdi (yalnız eşik bloğu olarak girer) ya da haftalık kayıttan düştü"
+    gb = {"tarih": "2026-10-05", "surum": 3, "haftalik": False,
+          "ozet": {"ne_oldu": "<ul><li>Madde bir %1,25.</li></ul>"},
+          "gundem": {"risk": "<ul><li><strong>Kuzey Denizi grevi</strong> → Brent ve ürün marjı; "
+                             "izlenecek: Forties sisteminde üretim kesintisi duyurusu.</li></ul>"}}
+    gm = tu.bulten_zinciri(gb)[0]
+    assert "Neye bakılacak\n· Kuzey Denizi grevi → Brent" in gm, "günlük risk eşik bloğu olarak girmedi"
+    assert not any(l.startswith(("Risk", "İzlenecek:")) for l in gm.split("\n")), \
+        "risk gündem satırı olarak da basıldı"
+    # HAFTALIK İSKELET (05.10.2026): senaryolar · gün gün takvim · karne ·
+    # seviyeler; konu bölümü satırları ve öne çıkanlar haftalıkta ÇIKAR.
+    # Bölümler bütçenin üstünde dolu: birim seçimi ve dinamik pay sınanır.
+    dolgu = " ".join(["Uzun uç ABD getirileriyle %5,2 seviyesine gitti ve kısa uç gevşedi."] * 30)
     hb = {"tarih": "2026-10-04", "surum": 3, "haftalik": True, "manset": "Eğri dikleşti",
           "ozet": {"ne_oldu": "<ul>" + "<li>%s</li>" % dolgu[:340] * 9 + "</ul>"},
           "yorum": "<p>" + dolgu + "</p>",
+          "izleme": {"karne": {"notlanan": 10, "tuttu": 5, "kismen": 3, "tutmadi": 2}},
           "gundem": {y.id: "<h3>Alt</h3><p>" + dolgu + "</p>" for y in _a.kip_bolumleri("haftalik")}}
+    hb["gundem"]["risk"] = ("<h3>Ana senaryo: kısa uç gevşer</h3><p>" + dolgu[:200] + "</p>"
+                            "<h3>Alternatif: kur baskısı</h3><p><strong>Tetik.</strong> Kur haftalık %0,6'yı aşar.</p>")
+    hb["gundem"]["takvim"] = "".join(f"<p><strong>{g}.</strong> TÜİK 10:00'da veri yayımlıyor. {dolgu}</p>"
+                                     for g in ("Pazartesi 5 Ekim", "Salı 6 Ekim", "Cuma 9 Ekim"))
     metin = tu.bulten_zinciri(hb)[0]
-    for _i, et in h3:
-        assert f"\n{et}: " in metin, f"haftalık gönderide etiketli bölüm düştü: {et}"
+    for blok in ("\nSenaryolar\nAna senaryo: ", "\nAlternatif: kur baskısı. Tetik: Kur haftalık",
+                 "\nÖnümüzdeki hafta\nPazartesi 5 Ekim: ", "\nKarne — notlanan 10: tuttu 5"):
+        assert blok in metin, f"haftalık iskelette blok yok: {blok.strip()!r}"
+    for et in ("Türkiye:", "Türkiye makro:", "Küresel:", "Emtia:", "Haftanın öne çıkanları",
+               "Haftanın olağandışı"):
+        assert f"\n{et}" not in metin, f"haftalıkta çıkması gereken satır kaldı: {et}"
+    assert "…" not in metin, "haftalık gönderi '…' üretti"
     assert len(metin) <= tu.TEK_TAVAN, len(metin)
     assert sum(1 for l in metin.split("\n") if l.startswith("· ")) >= 5, "haftalık gönderi maddelerin çoğunu düşürüyor"
     assert tu.gundem_bolumleri({"surum": 2}) == tu.GUNDEM_BOLUMLERI
-    src = inspect.getsource(tu.bulten_zinciri)
+    src = inspect.getsource(tu._gunluk3) + inspect.getsource(tu._gundem_satirlari)
     assert 'get("takvim")' in src and "gundem_bolumleri(b)" in src, "gönderi biçim 3 beyanını okumuyor"
 
     import birlestir as _bl, tempfile, json as _j
@@ -991,6 +1014,41 @@ def _bicim3_gonderi_ve_birlestirme():
         o.write_text(_j.dumps({"gundem_kaynagi": "otomatik", "yorum": "x " * 5000}), encoding="utf-8")
         _bl._bulten_coz("", str(a), str(o))
         assert _j.loads(a.read_text(encoding="utf-8"))["gundem_kaynagi"] == "yazili"
+
+
+def _gonderi_kaynak_ve_risk_kalibi():
+    """05.10.2026 gönderi önerileri (U7 · U10): Y17 adsız kaynağı niteleyiciyle
+    ve çekimiyle de yakalar; günlük risk maddesinin kalıbı (gönderinin eşik
+    bloğu) bülten denetiminde UYARI olarak sorulur ve kalıbın tek tanımı gönderi
+    üreticisindedir."""
+    import uslup as _us, denetim as _den
+    dolgu = " Kur ve faiz sakin kaldı." * 40
+    for c in ("Aynı hafta bir büyük yatırım bankası beklentisini değiştirdi.",
+              "Bir ABD'li yatırım bankasının analistleri artırım bekliyor.",
+              "Bir yatırım bankasına göre petrol yükselecek.",
+              "Bir önde gelen yatırım bankası notu düşürdü."):
+        r = _us.olc({"a": c + dolgu})
+        assert any("Y17" in u for u in r["uyari"]), f"adsız kaynak kaçtı: {c!r}"
+    r = _us.olc({"a": "Goldman Sachs yatırım bankası olarak notu düşürdü." + dolgu})
+    assert not any("Y17" in u for u in r["uyari"]), "adıyla anılan kaynak Y17 sayıldı"
+    risk_iyi = ("<ul><li><strong>Kuzey Denizi grevi</strong> → Brent ve ürün marjı; "
+                "izlenecek: Forties sisteminde üretim kesintisi duyurusu.</li></ul>")
+    risk_kotu = ("<ul><li>Kuzey Denizi grevi Brent'i etkileyebilir.</li>"
+                 "<li><strong>Tasfiye genişlerse</strong> → önce banka hisseleri, sonra kur; izlenecek: "
+                 + "BDDK'nın kararı ve dolar/TL'de 2σ'yı aşan günlük artış, " * 3 + "ve SPK.</li></ul>")
+    def uyar(risk, haftalik=False):
+        d = _den.Denetim({"tarih": "2026-10-05", "surum": 3, "haftalik": haftalik,
+                          "gundem": {"risk": risk}})
+        d.risk_kalibi()
+        return [u for u in d.uyari if "Risk haritası" in u]
+    assert not uyar(risk_iyi), f"kalıba uyan madde uyarıldı: {uyar(risk_iyi)}"
+    u = uyar(risk_kotu)
+    assert any("kalıba uymuyor" in x for x in u) and any("karakteri aşıyor" in x for x in u), u
+    assert not uyar(risk_kotu, haftalik=True), "haftalık senaryo bölümü günlük risk kalıbıyla sorulmuş"
+    assert "def risk_kalibi" in inspect.getsource(_den) and "self.risk_kalibi()" in inspect.getsource(_den.Denetim.kos), \
+        "risk kalıbı ölçütü kos() listesinde değil — yazılmış ama koşmayan ölçüt"
+    assert not re.search(r"compile\([^\n]*izlenecek", inspect.getsource(_den)), \
+        "bülten denetimi risk kalıbının ikinci bir kopyasını tutuyor"
 
 
 # ── MAKİNE KATMANI (01.10.2026) — "yeni"nin tanımı ve veri notu kalıbı ──────
@@ -1655,15 +1713,22 @@ def _ayrinti_genislemesi():
     assert (tekil, gecis) == (4, 6), (tekil, gecis)
     assert _t.ayrinti({}) == (0, 0)
 
-    # (2) TL tahvil kartları şeritte; gönderinin pano satırı ilk BEŞ kartı
-    # alır ve onlar değişmedi (gönderi sözleşmesi).
+    # (2) TL tahvil kartları şeritte. Gönderinin pano satırı kartları SAYFA
+    # sırasıyla okur ve yalnız BUGÜN YENİ olanı alır (05.10.2026; eski sözleşme
+    # "ilk beş kart"tı ve 28 gönderinin 28'inde aynı beş kalemi basıyordu).
+    # Kilit tüketicisiyle: kartın `bugun_yeni` alanı gönderiyi gerçekten sürer.
     anah = [(h, a) for h, a, *_ in _u.GOSTERGELER]
     for k in (("dibs-verim-egrisi", "gosterge_ytm"), ("dibs-verim-egrisi", "spot_5y"),
               ("dibs-verim-egrisi", "basabas_2y")):
         assert k in anah, f"TL tahvil kartı şeritte yok: {k}"
-    assert anah[:5] == [("usdtry-deval", "kur"), ("usdtry-deval", "d1a"),
-                        ("tcmb-net-rezerv", "h_net"), ("tcmb-net-rezerv", "h_swap_haric"),
-                        ("tcmb-net-rezerv", "g_net")], f"şeridin ilk beş kartı değişti: {anah[:5]}"
+    import importlib.util as _iu
+    _sp = _iu.spec_from_file_location("tweet_uret_pano", BURASI.parent / "tweet" / "uret.py")
+    _tu = _iu.module_from_spec(_sp)
+    _sp.loader.exec_module(_tu)
+    kartlar = [{"ad": f"Kart {i}", "metin": f"{i},5{i}", "birim": "%", "fark_metin": "+0,10",
+                "bugun_yeni": i == 7, "veri_tarihi": "02.10.2026", "anahtar": f"k{i}"} for i in range(1, 9)]
+    pano = _tu._pano({"tarih": "2026-10-05", "gostergeler": kartlar}, "")
+    assert pano == ["Kart 7 %7,57 (+0,10 puan; 2 Eki)"], f"pano kartı bugun_yeni'den seçmiyor: {pano}"
 
     # (3) DİBS olay eşiği ölçülen dağılımın İÇİNDE: 25 günlük farkta gösterge
     # ve başabaşın azamisi 0,65–0,66 puandı. Eşik 0,75'e dönerse kanal hiç
@@ -4881,6 +4946,56 @@ def main() -> int:
         assert any("duzeltmeler kaydı boş" in u for u in d2.uyari), d2.uyari
     sina("yaz/denetim: düzeltme kaydı biçimce tam, yarım kayıt engel", _duzeltme)
 
+    # ── yaz.py: düzeltmenin X'e giden iki alanı (05.10.2026). Hedef gönderim
+    #    defterinde KİMLİKLİ olmalı (yanıt atılacak gönderi), iki alan birlikte
+    #    yazılır, metin düz ve linksiz; kayıt yeniden yazılınca alanlar korunur.
+    def _duzeltme_gonderisi():
+        import yaz
+        import tempfile, json as _j
+        b = {"gundem_kaynagi": "yazili", "gundem": {"kilit": "x"}}
+        temel = {"alan": "Gümüş haftalık değişim", "eski": "−%5,96", "yeni": "−%6,64", "sebep": "s"}
+        metin = "Gümüşün haftalık değişimi −%5,96 değil −%6,64."
+        with tempfile.TemporaryDirectory() as td:
+            hedef = Path(td) / "b.json"
+            hedef.write_text(_j.dumps(b), encoding="utf-8")
+            defter = Path(td) / "defter.json"
+            defter.write_text(_j.dumps({"bulten:2026-10-04": {"idler": ["777"], "zaman": "z"},
+                                        "analiz:borclanma-vade-2026-08-31": {"idler": [], "zaman": ""}}),
+                              encoding="utf-8")
+            eski = yaz.TWEET_DEFTER
+            try:
+                yaz.TWEET_DEFTER = defter
+                yeni, _ = yaz.uygula(hedef, {"duzeltmeler": [
+                    {**temel, "gonderi": "bulten:2026-10-04", "gonderi_metni": metin}]})
+                d = yeni["duzeltmeler"][0]
+                assert d["gonderi"] == "bulten:2026-10-04" and d["gonderi_metni"] == metin, d
+                yeni, _ = yaz.uygula(hedef, {"duzeltmeler": [temel]})
+                assert "gonderi" not in yeni["duzeltmeler"][0], "alansız kayda gonderi yazıldı"
+                for ret, iz in (({"gonderi": "analiz:borclanma-vade-2026-08-31", "gonderi_metni": metin}, "KİMLİKSİZ"),
+                                ({"gonderi": "bulten:2026-01-01", "gonderi_metni": metin}, "KİMLİKSİZ"),
+                                ({"gonderi": "bulten:2026-10-04"}, "BİRLİKTE"),
+                                ({"gonderi_metni": metin}, "BİRLİKTE"),
+                                ({"gonderi": "4 Ekim bülteni", "gonderi_metni": metin}, "defter anahtarı"),
+                                ({"gonderi": "bulten:2026-10-04", "gonderi_metni": "<p>x</p>"}, "HTML"),
+                                ({"gonderi": "bulten:2026-10-04", "gonderi_metni": "bkz. https://a.b"}, "link"),
+                                ({"gonderi": "bulten:2026-10-04", "gonderi_metni": "x" * 601}, "kısa")):
+                    try:
+                        yaz.uygula(hedef, {"duzeltmeler": [{**temel, **ret}]})
+                    except SystemExit as e:
+                        assert iz in str(e), (iz, str(e))
+                    else:
+                        raise AssertionError(f"reddedilmedi: {ret}")
+                yaz.TWEET_DEFTER = Path(td) / "yok.json"
+                try:
+                    yaz.uygula(hedef, {"duzeltmeler": [{**temel, "gonderi": "bulten:2026-10-04", "gonderi_metni": metin}]})
+                except SystemExit as e:
+                    assert "okunamadı" in str(e), str(e)
+                else:
+                    raise AssertionError("defter okunamazken hedef doğrulanmadan yazıldı")
+            finally:
+                yaz.TWEET_DEFTER = eski
+    sina("yaz: düzeltme yanıtı alanları — hedef kimlikli, ikisi birlikte, düz metin, korunur", _duzeltme_gonderisi)
+
     # ── yaz.py: yazı katmanının TEK giriş kapısı — sözleşmesi sınanır
     def _yaz():
         import yaz, tempfile, json as _j, subprocess as _sp, os as _os, time as _t
@@ -6638,6 +6753,8 @@ def main() -> int:
     sina("biçim 3: olgu tekrarı, özet∩okuma, kronik olgu, açılış örtüşmesi", _bicim3_tekrar)
     sina("biçim 3: atıf penceresi sayının kipi, haber tonunda yalnız |z|≥2", _bicim3_atif_ve_ton)
     sina("biçim 3: gönderi kayıt defterinden, birleştirmede yeni yazım kazanır", _bicim3_gonderi_ve_birlestirme)
+    sina("gönderi (05.10): Y17 niteleyici ve çekim · risk maddesi kalıbı UYARI, tek tanım üreticide",
+         _gonderi_kaynak_ve_risk_kalibi)
     sina("makine: 'yeni' bir önceki sayının ölçüm anına bağlı (donmuş hat ertesi gün susar)", _yeni_zaman_kapisi)
     sina("makine: veri notu kalıbı — dönem, birim bir kez, puan farkı, bağlam parantezde", _veri_notu_kalibi)
     sina("makine: gecikme ilk gün + haftada bir; günlük hatta 'yeni veri' yok", _gecikme_sikligi_ve_yeni_veri)

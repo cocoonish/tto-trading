@@ -122,6 +122,20 @@ def _duz(html: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", duz)).strip()
 
 
+def _tweet_uret():
+    """Gönderi üreticisi DOSYA YOLUNDAN yüklenir (bültenin kendi `uret`
+    modülüyle ad çakışmasın; sys.path'e tweet/ eklenmez). Risk maddesinin
+    kalıbı orada tek tanım."""
+    import importlib.util as _iu
+    ad = "_tto_tweet_uret"
+    if ad not in sys.modules:
+        spec = _iu.spec_from_file_location(ad, KOK / "tweet" / "uret.py")
+        mod = _iu.module_from_spec(spec)
+        sys.modules[ad] = mod
+        spec.loader.exec_module(mod)
+    return sys.modules[ad]
+
+
 def _kelime(html: str) -> int:
     return len(_duz(html).split())
 
@@ -1792,6 +1806,32 @@ class Denetim:
         if not r["engel"] and not r["uyari"]:
             self._ok(f"üslup temiz (cümle ort. {r['sayim'].get('cumle_ort', '—')} kelime)")
 
+    def risk_kalibi(self):
+        """Günlük risk maddesi gönderinin "Neye bakılacak" bloğuna kalıbıyla
+        girer: `<strong>tetik</strong> → etki; izlenecek: ölçü`, en çok 170
+        karakter. Kalıba uymayan madde gönderiye girmez (üretici atlar) — UYARI,
+        çünkü sayfada okunuyor ve yayını durdurmak kusurdan pahalı olurdu.
+        Kalıbın TEK tanımı gönderi üreticisinde (`tweet/uret.RISK_KALIBI`);
+        dosya yolundan yüklenir, burada ikinci bir kopya tutulmaz."""
+        if int(self.b.get("surum") or 2) < 3 or self.b.get("haftalik"):
+            return
+        risk = str((self.b.get("gundem") or {}).get("risk") or "")
+        if not _duz(risk):
+            return
+        tu = _tweet_uret()
+        uyan, uymayan = tu.risk_maddeleri(risk)
+        uzun = [r for r in uyan if len(tu.risk_satiri(r)) > tu.ESIK_MADDE]
+        if uymayan:
+            self.uyari.append(
+                f"Risk haritasının {len(uymayan)} maddesi kalıba uymuyor ('<strong>tetik</strong> → "
+                "etki; izlenecek: ölçü') ve gönderiye girmez: " + " · ".join(repr(x[:60]) for x in uymayan[:2]))
+        if uzun:
+            self.uyari.append(
+                f"Risk haritasının {len(uzun)} maddesi {tu.ESIK_MADDE} karakteri aşıyor ve gönderiye "
+                "girmez (madde bütünüyle düşer, kesilmez): " + " · ".join(repr(r['tetik']) for r in uzun[:2]))
+        if not uymayan and not uzun:
+            self._ok(f"risk haritası: {len(uyan)} madde kalıpta")
+
     def manset(self):
         """Sayının başlığı (isteğe bağlı): tek cümle, en çok 110 karakter.
         Yokluğu kusur değildir — sayfa o zaman tarihi başlık yapar."""
@@ -2497,7 +2537,7 @@ class Denetim:
         self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
         self.yerlesmemis(); self.doviz_kapanisi(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
         self.revizyon(); self.duzeltme()
-        self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset()
+        self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset(); self.risk_kalibi()
         self.olagandisilik_penceresi(); self.uslup(); self.fikirler()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")

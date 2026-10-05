@@ -14,6 +14,14 @@
 # HTML kalıntısı, site atfı, sayı ortasında kesik cümle, sorumluluk notu.
 # Gönderilen metin tweet/arsiv/ altında saklanır. Site tarafına HİÇBİR ŞEY
 # yazılmaz: sayfa X gönderisini okura göstermiyor (kullanıcı kararı).
+#
+# Aynı koşu iki şey daha yapar (05.10.2026), ikisi de gonder.py'nin içinde:
+# yazarın işaretlediği DÜZELTME kayıtları hedef gönderinin altına yanıt olarak
+# gider (tweet/duzeltme.py), ve gönderim bittikten sonra AYNI erişim jetonuyla
+# haftada bir ETKİLEŞİM ölçülür (tweet/metrik.py → tweet/metrik.json). Ölçüm
+# ayrı bir iş akışı ya da cron DEĞİL: ayrı bir okuma refresh token'ı bir kez
+# daha döndürürdü, ve yeni bir cron yayin_takvimi.json'un bu dosyaya bağlı
+# cron indekslerini kaydırırdı. Okuma hiçbir koşulda gönderimi düşürmez.
 
 name: Tweet zinciri
 
@@ -94,10 +102,13 @@ jobs:
           git add tweet/defter.json 2>/dev/null || true
           git add tweet/oauth2.enc  2>/dev/null || true
           git add tweet/arsiv 2>/dev/null || true
+          # Etkileşim ölçümü kendi satırında: dosya ilk ölçümden önce yok ve
+          # tek satırda verilseydi defter ile jetonu da sahnelenmez yapardı.
+          git add tweet/metrik.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "defter ve jeton değişmedi"
           else
-            git commit -m "tweet: $(date -u +'%Y-%m-%d') defter/arşiv/jeton (otomatik)"
+            git commit -m "tweet: $(date -u +'%Y-%m-%d') defter/arşiv/jeton/metrik (otomatik)"
             # Yarışta düşen push defter commit'ini kaybederdi; ertesi koşu aynı
             # içeriği yeniden atardı. Üç deneme, sonuncusu da düşerse iş DÜŞER
             # (sessiz kayıp yok: e-posta gider, defter elle kurtarılır).

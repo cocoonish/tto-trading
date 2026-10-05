@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Tek seferlik özel tweet — metin dosyasından, istenirse görsellerle.
+"""Tek seferlik özel tweet — metin dosyasından; YALNIZ METİN.
 
-    python3 tweet/ozel.py --metin tweet/ozel/x.txt --resim a.png --resim b.png
+    python3 tweet/ozel.py --metin tweet/ozel/x.txt
     ... --gonder            # verilmezse KURU: yalnız basar
 
 Düzenli bültenlerin dışında kalan gönderiler için (tema tweetleri, veri
@@ -13,13 +13,20 @@ araç kanalıyla (gonder.py) AYNI biçimde türetilir — bülten → bulten:<ta
 analiz slug'ına eşleşen kök → analiz:<slug>, aksi ozel:<kök>; kökteki günde
 yayımlanan analiz varsa ozel: yedeğine düşülmez, --anahtar istenir (yoksa araç
 kanalı aynı yazıyı bir daha atar). Anahtar defterde kimlikliyse ikinci
-gönderim durur (--zorla yalnız --sil ile, düzeltme akışı); gönderimden sonra
-defter, metin arşivi ve sitenin aynası gonder.py ile aynı yoldan yazılır —
-böylece siteye X bağı kurulur ve araç kanalı aynı yazıyı ikinci kez atmaz.
+gönderim durur (--zorla yalnız --sil ile, biçim hatası akışı); gönderimden
+sonra defter ve metin arşivi gonder.py ile aynı yoldan yazılır — araç kanalı
+aynı yazıyı ikinci kez atmaz. Siteye HİÇBİR ŞEY yazılmaz (07.09.2026 kararı:
+site X gönderisini okura göstermiyor).
 
-Görseller X API v2 medya ucuna yüklenir (POST /2/media/upload). Bu uç
-'media.write' kapsamı ister; refresh token o kapsamsız üretildiyse 403 döner
-ve hata ne yapılacağını söyler.
+GÖRSEL YOK (kullanıcı kararı 05.10.2026). `--resim` verilirse koşu durur;
+medya yükleme kodu kaldırıldı ve gönderim gonder._gonder_zincir'den geçer —
+oradaki gövde kilidi `media` alanını hiçbir koşulda kurmaz. Kural eskiden
+yalnız X'in jeton kapsamına dayanıyordu (30.08'de iki medya ucu 403 verdi ve
+tweet görselsiz gitti): kapsam açıldığı gün görsel sessizce giderdi.
+
+İçerik hatası için gönderi silinmez: düzeltme kaydına `gonderi` yazılır ve
+gonder.py orijinalin altına "Düzeltme" yanıtı atar (tweet/duzeltme.py).
+`--sil` yalnız BİÇİM hatası içindir.
 """
 from __future__ import annotations
 
@@ -30,47 +37,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 KOK = Path(__file__).resolve().parents[1]
-import gonder  # noqa: E402 — _erisim_al, JETON_DOSYA, UC, defter/arşiv/ayna ortak
+import gonder  # noqa: E402 — _erisim_al, JETON_DOSYA, UC, _gonder_zincir, defter/arşiv ortak
 
-# v2 medya ucu 'media.write' kapsamı ister; X'in yeni konsolunun kapsam
-# listesinde media.write SEÇENEĞİ YOK (30.08'de görüldü). Eski v1.1 ucu ise
-# OAuth 2.0 kullanıcı jetonunu tweet.write kapsamıyla kabul ediyor — önce v2
-# denenir, 403'te v1.1'e düşülür.
-MEDYA_UC = "https://api.x.com/2/media/upload"
-MEDYA_UC_ESKI = "https://upload.twitter.com/1.1/media/upload.json"
-
-
-def _yukle(erisim: str, yol: Path) -> str:
-    import requests
-
-    def dene(uc: str):
-        with yol.open("rb") as f:
-            return requests.post(
-                uc, timeout=60,
-                headers={"Authorization": f"Bearer {erisim}"},
-                files={"media": (yol.name, f, "image/png")},
-                data={"media_category": "tweet_image"})
-
-    yanit = dene(MEDYA_UC)
-    if yanit.status_code == 403:
-        print(f"· v2 medya ucu 403 (media.write yok) — v1.1 ucuna düşülüyor")
-        yanit = dene(MEDYA_UC_ESKI)
-    if yanit.status_code == 403:
-        # Jeton kapsamı görsele yetmiyor ve konsol media.write sunmuyor
-        # (30.08 ölçüldü). Görsel EKLENTİDİR: yüklenemiyorsa tweet metniyle
-        # devam eder — koşuyu düşürmek metni de rehin alırdı.
-        print("::warning::görsel yüklenemedi (iki uçta 403, media.write "
-              "kapsamı yok) — tweet görselsiz gönderiliyor")
-        return None
-    if yanit.status_code not in (200, 201):
-        raise SystemExit(f"medya yükleme düştü (HTTP {yanit.status_code}): "
-                         f"{yanit.text[:300]}")
-    veri = yanit.json().get("data") or yanit.json()
-    kimlik = veri.get("id") or veri.get("media_id_string") or veri.get("media_id")
-    if not kimlik:
-        raise SystemExit(f"medya yanıtında id yok: {yanit.text[:200]}")
-    print(f"· görsel yüklendi: {yol.name} → {kimlik}")
-    return str(kimlik)
+GORSEL_YOK = ("görsel gönderilmez (kullanıcı kararı 05.10.2026: tweetlerde resim yok) — "
+              "--resim kaldırıldı; metni görselsiz gönder")
 
 
 AYLAR = ("ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos",
@@ -124,12 +94,14 @@ def anahtar_turet(metin_yolu: Path, ilk: str, tur: str, gonder: bool) -> str:
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--metin", required=True, help="tweet metni dosyası")
-    p.add_argument("--resim", action="append", default=[],
-                   help="eklenecek PNG (tekrarlanabilir, en çok 4)")
+    # Girdi tanımlı kalır ki verilirse argparse'ın belirsiz "unrecognized
+    # arguments" hatası yerine kararın kendisi okunsun.
+    p.add_argument("--resim", action="append", default=[], help=argparse.SUPPRESS)
     p.add_argument("--gonder", action="store_true",
                    help="gerçekten gönder (verilmezse kuru)")
-    p.add_argument("--sil", help="önce bu id'li tweeti sil (düzeltme akışı: "
-                                 "eski gönderi kaldırılıp yenisi atılır)")
+    p.add_argument("--sil", help="önce bu id'li tweeti sil (BİÇİM hatası akışı: eski "
+                                 "gönderi kaldırılıp yenisi atılır; içerik hatası "
+                                 "için düzeltme yanıtı kullanılır)")
     p.add_argument("--anahtar", help="defter anahtarı: analiz:<slug> ya da ozel:<ad>; "
                                      "verilmezse türetilir (bülten → bulten:<tarih>, analiz "
                                      "slug'ına eşleşen kök → analiz:<slug>, aksi ozel:<kök>); "
@@ -137,6 +109,8 @@ def main() -> int:
     p.add_argument("--zorla", action="store_true",
                    help="anahtar defterde olsa da gönder (yalnız --sil ile: düzeltme)")
     a = p.parse_args()
+    if a.resim:
+        raise SystemExit(GORSEL_YOK)
     if a.zorla and not a.sil:
         raise SystemExit("--zorla yalnız --sil ile: eski gönderi silinmeden aynı anahtara "
                          "ikinci gönderi mükerrer olur")
@@ -160,12 +134,6 @@ def main() -> int:
     print(tw_denetim.rapor(engel, uyari, Path(a.metin).name))
     if engel:
         raise SystemExit("tweet denetimi ENGEL üretti — gönderim durdu.")
-    if len(a.resim) > 4:
-        raise SystemExit("en çok 4 görsel")
-    resimler = [Path(r) for r in a.resim]
-    for r in resimler:
-        if not r.exists():
-            raise SystemExit(f"görsel yok: {r}")
 
     anahtar = a.anahtar
     if not anahtar:
@@ -178,7 +146,7 @@ def main() -> int:
         raise SystemExit(f"{anahtar} defterde kimlikli — zaten gönderildi "
                          f"({defter[anahtar]['idler'][0]}). Düzeltme: --sil <id> --zorla.")
 
-    print(f"── özel tweet ({len(metin)} karakter, {len(resimler)} görsel"
+    print(f"── özel tweet ({len(metin)} karakter"
           + (f", {anahtar}" if anahtar else "") + (" · KURU" if not a.gonder else "") + ")")
     print(metin)
     if not a.gonder:
@@ -194,19 +162,11 @@ def main() -> int:
         else:
             print(f"::warning::eski tweet silinemedi ({yanit.status_code}): "
                   f"{yanit.text[:150]} — yenisi yine de gönderiliyor")
-    govde: dict = {"text": metin}
-    if resimler:
-        idler = [k for k in (_yukle(erisim, r) for r in resimler) if k]
-        if idler:
-            govde["media"] = {"media_ids": idler}
-    yanit = requests.post(gonder.UC, json=govde, timeout=30,
-                          headers={"Authorization": f"Bearer {erisim}"})
-    if yanit.status_code not in (200, 201):
-        raise SystemExit(f"tweet gönderilemedi (HTTP {yanit.status_code}): "
-                         f"{yanit.text[:300]}")
-    kimlik = str(yanit.json()["data"]["id"])
+    # Gönderim araç kanalının yolundan: link kilidi, gövde kilidi (medya yok),
+    # 429/5xx'te bir yeniden deneme ve 402/403 teşhisi tek yerde.
+    kimlik = str(gonder._gonder_zincir([metin], erisim)[0])
     print(f"✓ gönderildi — id: {kimlik}")
-    # Defter + arşiv + ayna: gonder.py ile aynı yol, aynı biçim.
+    # Defter + arşiv: gonder.py ile aynı yol, aynı biçim (siteye yazılmaz).
     import datetime as _dt
     zaman = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
     defter[anahtar] = {"idler": [kimlik], "zaman": zaman, "tur": "ozel",

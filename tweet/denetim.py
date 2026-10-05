@@ -10,13 +10,19 @@ durabilir. Bunların hiçbirini sayfa denetimi göremez; tweet metnini ancak
 tweet metni üzerinde koşan bir denetim görür.
 
 İki sınıf bulgu:
-  ENGEL  gönderim durur (tavsiye dili, link, HTML kalıntısı, site atfı,
-         sayı ortasında kesilmiş cümle, boş bölüm etiketi, uzunluk, okur dili,
-         sorumluluk notu eksik)
-  UYARI  loga yazılır, gönderim sürer (tekrar eden cümle, ASCII eksi, çift boşluk)
+  ENGEL  gönderim durur (tavsiye dili, link, hashtag/cashtag/@, emoji ve
+         matematik kalın harf, HTML kalıntısı, site atfı, satır sonunda "…",
+         sayıda ya da sıra sayısında kesik, kapanmamış parantez/tırnak, boş
+         bölüm etiketi, uzunluk, okur dili, sorumluluk notu eksik)
+  UYARI  loga yazılır, gönderim sürer (tekrar eden cümle, ASCII eksi, ters
+         işaret sırası "%+", yüzde işaretsiz oran, ":" ile biten paragraf,
+         bülten gönderisinin ilk 280 karakterinde ölçüm yok, düzeltme
+         metninde sayfa yapısı sözcüğü, çift boşluk)
+
+Tavsiye, okur dili ve site izi NFKC'ye normalleştirilmiş metinde taranır.
 
 Kullanım:
-    engel, uyari = denetle(metin, tur)      # tur: bulten | analiz
+    engel, uyari = denetle(metin, tur)      # tur: bulten | analiz | duzeltme | ozel
     python3 tweet/denetim.py dosya.txt      # tek metni sına, çıkış 1 = engel
 
 Kalıplar tek yerde durur: okur dili ortak/okur_dili.py'den, tavsiye dili
@@ -55,7 +61,21 @@ except Exception:                                              # noqa: BLE001
 ILK_SATIR = {
     "bulten": re.compile(r"^(Sabah Notu|Haftaya Bakış) — \d{1,2} [A-ZÇĞİÖŞÜ][a-zçğıöşü]+ \d{4}"),
     "analiz": re.compile(r"^Analiz — \d{1,2} [A-ZÇĞİÖŞÜ][a-zçğıöşü]+ \d{4}"),
+    # Düzeltme yanıtı (05.10.2026): yayımlanmış bir gönderinin altına, yazarın
+    # kendi metniyle — bkz. tweet/duzeltme.py.
+    "duzeltme": re.compile(r"^Düzeltme — \S"),
 }
+
+# Alt sınır türe göre: bir düzeltme yanıtı "neyin, neyden, neye" diye üç kısa
+# öğe taşır ve 200 karakterin altında kalması DOĞALDIR. 200'lük taban
+# düzeltmelerin altıda birini (ölçüldü: 85 kaydın 14'ü) sahte ENGEL'e sokardı.
+EN_AZ_TUR = {"duzeltme": 60}
+
+# Düzeltme metninde sayfa yapısı sözcükleri (gösterge şeridi, bölüm, satır…)
+# okura sitenin iç düzenini anlatır; X okurunun elinde o sayfa yok. UYARI:
+# "satır" ve "bölüm" piyasa anlamıyla da geçebilir, yazan kişi bakar.
+SAYFA_YAPISI = re.compile(
+    r"(?<![0-9A-Za-zÇĞİIÖŞÜçğıiöşü])(?:gösterge şerid|bölüm|satır|söz defter|kurumsal gündem)", re.I)
 
 # Aralık tiresi: "%1,25-%2,10", "3-5 gün" → Türkçe yazımda uzun tire (–). UYARI.
 # ISO tarih ("2026-09-01") aralık değildir: yıl ve ay tireleri dışarıda.
@@ -69,7 +89,40 @@ SORUMLULUK = re.compile(r"yatırım tavsiyesi değildir", re.I)
 # Emoji ve süsleme: 30.08 kararı — yok. Aralıklar: semboller, piktogramlar,
 # bayraklar, varyasyon seçicisi. Tipografik işaretler (−, ·, →, σ, ≈, ±) serbest.
 EMOJI = re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF\u2300-\u23FF\u25A0-\u25FF"
-                   "\u2B00-\u2BFF\u203C\u2049\u2122\u2139\u3030\u303D\u3297\u3299\u00A9\u00AE\u2022\uFE0F⭐⬆⬇✅❌]")
+                   "\u2B00-\u2BFF\u203C\u2049\u2122\u2139\u3030\u303D\u3297\u3299\u00A9\u00AE\u2022\uFE0F⭐⬆⬇✅❌"
+                   # Matematik alfanümerik (U+1D400–1D7FF): "𝐚𝐥ı𝐧", "𝗝𝗨𝗦𝗧 𝗜𝗡" — kalın/italik
+                   # harf süsü. Hem süslemedir hem de ham metinde tavsiye ve okur
+                   # dili kalıplarını DELER; o taramalar ayrıca NFKC'de koşar.
+                   "\U0001D400-\U0001D7FF]")
+
+# TIKLANIR X ÖĞELERİ (05.10.2026 kararı: hashtag, cashtag ve bahsetme de yasak).
+# Link DEĞİLDİR: mesajları ayrı tutulur ki gönderim kilidi "link" diye yanlış
+# teşhis koymasın. Cashtag twitter-text tanımını izler — 1–6 harf, isteğe bağlı
+# ".xx"/"_xx" eki; rakamlı ($XU100) ya da para birimi ("107,63 $") tanınmaz.
+# "$r_t$" gibi bir eşleşme ayrıca formül (KaTeX) kalıntısıdır.
+HASHTAG = re.compile(r"(?<![\w&])#[^\s#]")
+CASHTAG = re.compile(r"(?<![\w$])\$[A-Za-z]{1,6}(?:[._][A-Za-z]{1,2})?(?![A-Za-z0-9])")
+BAHSETME = re.compile(r"(?<![\w@.])@[A-Za-z0-9_]{2,}")
+
+# İşaret sırası: sözleşme "−%1,88" / "+%0,4" (ortak/bicim.py); "%+20,9" ters.
+# UYARI: sayı doğru, yazımı kusurlu (biçim sızıntısı yayını durdurmaz).
+TERS_ISARET = re.compile(r"%[+−-]\d")
+
+# Yüzde işaretsiz "aylık/yıllık + ondalık" ("yıllık 31,51"). Önündeki vade adı
+# ("10 yıllık 4,12", "iki yıllık") ve arkasındaki birim (bp, baz puan, puan, σ,
+# yıl, kat, sonradan yazılmış %) muaf. UYARI.
+ORAN_ISARETSIZ = re.compile(r"\b(aylık|yıllık)\s+([+−-]?\d+,\d+)(?![\d,])", re.I)
+_SAYI_SOZCUGU = {"bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz", "on",
+                 "yirmi", "otuz", "kırk", "elli"}
+_BIRIM_ARKA = re.compile(r"\s*(?:bp\b|baz\s+puan|puan|σ|yıl|kat\b|%)", re.I)
+
+# Satır sonunda sıra sayısında kesik ("TCMB'nin 35."): yüzde ve ondalık
+# içermeyen 1–3 haneli tam sayı. "…%5,089." ile biten satır ENGEL ALMAZ; "6/7."
+# bir oran yazımıdır. Endeks adı ("BIST 100.", "S&P 500.") meşru bir cümle
+# sonudur — önceki sözcük endeks adıysa muaf.
+SIRA_KESIK = re.compile(r"(?<![%\d,.+−/-])\b\d{1,3}\.$", re.M)
+_ENDEKS_ADI = {"bist", "s&p", "nikkei", "ftse", "stoxx", "dax", "cac", "msci", "russell",
+               "nasdaq", "ibex", "kospi", "asx", "smi", "aex", "mib", "topix", "dow"}
 
 # Sayıdan hemen önce ASCII tire: "-1,88" yerine "−1,88" olmalı. Aralık tiresi
 # ("%1,25-%2,10") ayrı kalıpla (ARALIK_TIRESI) yakalanır — Türkçe yazımda aralık
@@ -139,8 +192,17 @@ HTML_KALINTI = re.compile(r"<[a-zA-Z/][^>]*>|&nbsp;|&amp;|&lt;|&gt;|&#\d+;|&quot
 # Bölüm etiketi yalnız kalmış: "Gündem" ya da "Pano:" satırının ardında içerik yok.
 BOS_ETIKET = re.compile(r"^(?:[A-ZÇĞİÖŞÜ][^\n:]{1,40}):\s*$", re.M)
 
-# Kırpma bir sayının ortasında bitmiş: "…%1," "…48,2…" "…(0," gibi.
-SAYIDA_KESIK = re.compile(r"(?:[\d,.%(]|\bve|\bile|\bama|\bveya)\s*…\s*$", re.M)
+# Kırpma bir sayının ortasında bitmiş: "…%1," "…48,2…" "…(0," gibi; birimle
+# biten sayı da ("+35 bp…", "0,4 puan…", "2,1σ…", "(−0,3…") aynı kesiktir.
+SAYIDA_KESIK = re.compile(r"(?:[\d,.%(]|\b(?:bp|puan|ve|ile|ama|veya)|σ|\([^()\n]*\d[^()\n]*)\s*…\s*$", re.M)
+
+# Üreticiler "…" ÜRETMEZ (05.10.2026: tam birim seçimi; sığmayan birim düşer).
+# Satır sonundaki her "…" bu yüzden bir kırpma izidir — sayıda olsun olmasın.
+SATIR_SONU_UC_NOKTA = re.compile(r"…[ \t]*$", re.M)
+
+# Kapanmamış parantez ya da tırnak — bir cümlenin ortasından kesildiğinin izi
+# ("GSYH (II."). Tırnak olarak yalnız " “” «» sayılır; Türkçe kesme işareti
+# (') sayılmaz. Satır başına sorulur: gönderinin satırları ayrı birimlerdir.
 
 # Cümle sınırı — uret._CUMLE ile aynı mantık: noktadan önce rakam olmayacak,
 # sonrasında büyük harf gelecek (sıra sayısı ve binlik ayracı cümle sanılmaz).
@@ -180,15 +242,88 @@ def _sade(c: str) -> str:
     return re.sub(r"[^a-z0-9çğıöşü ]", " ", c.lower()).strip()
 
 
+def acik_kalan(satir: str) -> str | None:
+    """Satırda kapanmamış parantez ya da tırnak varsa onu döndürür.
+
+    Parantez derinlikle sayılır: ")" açık parantez yokken gelirse ("1)" gibi
+    sıralama) yok sayılır — kapanmamış açık parantezi örtmesin. Düz tırnak (")
+    tek sayıda geçiyorsa açık kalmıştır; “” ve «» çift olarak sayılır."""
+    derinlik = 0
+    for ch in satir:
+        if ch == "(":
+            derinlik += 1
+        elif ch == ")" and derinlik:
+            derinlik -= 1
+    if derinlik:
+        return "("
+    if satir.count('"') % 2:
+        return '"'
+    if satir.count("“") > satir.count("”"):
+        return "“"
+    if satir.count("«") > satir.count("»"):
+        return "«"
+    return None
+
+
+def sira_kesik(metin: str) -> str | None:
+    """Satır sonunda sıra sayısında kesilmiş cümle ("…TCMB'nin 35."); yoksa None.
+    Önceki sözcük bir endeks adıysa ("BIST 100.") meşru cümle sonudur."""
+    for m in SIRA_KESIK.finditer(metin):
+        satir_basi = metin.rfind("\n", 0, m.start()) + 1
+        onceki = metin[satir_basi:m.start()].rstrip().split()
+        if onceki and onceki[-1].strip("(\"'“«").lower() in _ENDEKS_ADI:
+            continue
+        return metin[max(satir_basi, m.start() - 25):m.end()]
+    return None
+
+
+def oran_isaretsiz(metin: str) -> list[str]:
+    """Yüzde işareti olmadan yazılmış aylık/yıllık oran ("yıllık 31,51")."""
+    out = []
+    for m in ORAN_ISARETSIZ.finditer(metin):
+        onceki = metin[:m.start()].rstrip().split()
+        son = (onceki[-1].replace("İ", "i").replace("I", "ı").lower().strip("(")
+               if onceki else "")
+        if re.fullmatch(r"[\d.,]+(?:[–-]\d+)?", son) or son in _SAYI_SOZCUGU:
+            continue                                          # "10 yıllık", "iki yıllık" → vade adı
+        if _BIRIM_ARKA.match(metin, m.end()):
+            continue                                          # "yıllık 4,1 bp" → fark birimli
+        out.append(m.group(0))
+    return out
+
+
+def tiklanir_oge(metin: str) -> str | None:
+    """Hashtag, cashtag ya da @ bahsetme — X'te tıklanır öğe; yoksa None."""
+    for kalip in (HASHTAG, CASHTAG, BAHSETME):
+        m = kalip.search(metin)
+        if m:
+            return m.group(0)
+    return None
+
+
+def _olcum_sayilari(metin: str) -> set[str]:
+    """Ölçüm sayıları — üreticinin tanımıyla (uret._sayilar) TEK tanım."""
+    try:
+        import uret as _ur
+        return _ur._sayilar(metin)
+    except Exception:                                          # noqa: BLE001
+        return set(re.findall(r"%?\d+(?:[.,]\d+)+%?|%\d+|\b\d+\s*(?:bp|baz puan|puan)\b", metin))
+
+
 def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     """(engeller, uyarılar). Boş engel listesi = gönderilebilir."""
     engel: list[str] = []
     uyari: list[str] = []
     m = (metin or "").strip()
 
+    # Tavsiye, okur dili ve site izi NFKC'de taranır: "Dolar 𝐚𝐥ı𝐧." ham metinde
+    # kalıbı deler, normalleştirilmiş metinde "Dolar alın." olur.
+    n = _normalize(m)
+
     # ── uzunluk
-    if len(m) < EN_AZ:
-        engel.append(f"metin çok kısa ({len(m)} karakter, en az {EN_AZ})")
+    en_az = EN_AZ_TUR.get(tur, EN_AZ)
+    if len(m) < en_az:
+        engel.append(f"metin çok kısa ({len(m)} karakter, en az {en_az})")
     if len(m) > EN_COK:
         engel.append(f"metin çok uzun ({len(m)} karakter, en çok {EN_COK})")
 
@@ -203,6 +338,11 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
         uyari.append("boşluklu nokta ile alan adı benzeri parça ('x .com')")
     if EMOJI.search(m):
         engel.append(f"emoji/süsleme var: {EMOJI.search(m).group(0)!r}")
+    oge = tiklanir_oge(n)
+    if oge:
+        formul = oge.startswith("$") and re.search(re.escape(oge) + r"[^\s$]*\$", n)
+        engel.append(f"tıklanır X öğesi ({oge!r}) — hashtag, cashtag ve @ bahsetme kullanılmaz"
+                     + ("; formül (KaTeX) kalıntısı olabilir" if formul or "_" in oge else ""))
     kalinti = HTML_KALINTI.search(m)
     if kalinti:
         engel.append(f"HTML kalıntısı: {kalinti.group(0)!r}")
@@ -210,7 +350,7 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     # izler kesin ENGEL; "yukarıda"/"aşağıda" ise Türkçede "daha yüksek/düşük"
     # anlamına da gelir ("İTO sistematik olarak yukarıda geliyor") — o ikisi
     # gönderimi durdurmaz, kayda düşer ve yazan kişi kararını kendisi verir.
-    alt = m.lower()
+    alt = n.lower()
     belirsiz = {"yukarıda", "aşağıda"}
     # Sol sözcük sınırı üreticiyle TEK tanım (uret.SOL_SINIR): "kapasitede"
     # içindeki "sitede" bir site atfı değildir.
@@ -224,7 +364,7 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     if kesin:
         engel.append("siteye/bültene atıf var: " + ", ".join(repr(i) for i in kesin[:4]))
     for kalip in _site_kaliplari():                       # "yukarıdaki tablo" → kesin atıf
-        k = kalip.search(m)
+        k = kalip.search(n)
         if k:
             engel.append(f"sayfa mobilyasına atıf: {k.group(0)!r}")
             break
@@ -233,12 +373,12 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
             uyari.append("'yukarıda/aşağıda' geçiyor — sayfaya atıf mı, seviye mi? Okuyup karar ver.")
 
     # ── tavsiye dili (bülten denetimiyle aynı kalıp)
-    t = TAVSIYE.search(m)
+    t = TAVSIYE.search(n)
     if t:
         engel.append(f"tavsiye dili: {t.group(0)!r}")
 
     # ── okur dili (ortak tanım)
-    bulgu = okur_dili.tara(m)
+    bulgu = okur_dili.tara(n)
     if bulgu:
         dokum = " · ".join(f"{a}: {e!r}" for a, e, _ in bulgu[:4])
         engel.append("okura değil kendimize yazan dil — " + dokum)
@@ -247,6 +387,22 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     if SAYIDA_KESIK.search(m):
         engel.append("kırpma bir sayının ya da bağlacın ortasında bitmiş ("
                      + SAYIDA_KESIK.search(m).group(0).strip() + ")")
+    elif SATIR_SONU_UC_NOKTA.search(m):
+        satir = m[:SATIR_SONU_UC_NOKTA.search(m).end()].rsplit("\n", 1)[-1]
+        engel.append(f"satır '…' ile bitiyor — gönderi tam birimlerden kurulur: {satir[-40:]!r}")
+    for satir in m.split("\n"):
+        acik = acik_kalan(satir)
+        if acik:
+            engel.append(f"kapanmamış {acik!r} — cümle ortasından kesilmiş: {satir[-50:]!r}")
+            break
+    sk = sira_kesik(m)
+    if sk:
+        engel.append(f"satır sıra sayısında kesilmiş: {sk!r}")
+    for p in re.split(r"\n\s*\n", m):
+        son = p.strip().rsplit("\n", 1)[-1]
+        if son.endswith(":") and not BOS_ETIKET.fullmatch(son):
+            uyari.append(f"paragraf ':' ile bitiyor — ardındaki birim düşmüş olabilir: {son[-50:]!r}")
+            break
     bos = BOS_ETIKET.findall(m)
     if bos:
         engel.append("içeriksiz bölüm etiketi: " + ", ".join(repr(b) for b in bos[:3]))
@@ -257,8 +413,18 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     ilk = ILK_SATIR.get(tur)
     if ilk and not ilk.search(m.split("\n", 1)[0]):
         engel.append(f"{tur} gönderisi başlık satırıyla açılmıyor: {m.split(chr(10), 1)[0][:50]!r}")
-    if tur == "bulten" and not re.search(r"^Gündem", m, re.M):
+    # Gündem yalnız GÜNLÜK gönderide aranır: haftalık iskelet (05.10.2026)
+    # senaryolar, takvim ve karneyle kurulur, konu satırı taşımaz.
+    if tur == "bulten" and m.startswith("Sabah Notu") and not re.search(r"^Gündem", m, re.M):
         uyari.append("bülten gönderisinde 'Gündem' bölümü yok")
+    # İLK 280: okurun çoğu "daha fazla göster"e basmadan karar verir; o alan bir
+    # ölçüm taşımalı. Ölçü üreticinin "ölçüm" tanımıyla aynı (uret._sayilar).
+    if tur == "bulten" and not _olcum_sayilari(m[:280]):
+        uyari.append("ilk 280 karakterde ölçülmüş sayı yok — manşet ya da ilk madde bir ölçüm taşımalı")
+    if tur == "duzeltme":
+        y = SAYFA_YAPISI.search(n)
+        if y:
+            uyari.append(f"düzeltme metni sayfa yapısını anıyor ({y.group(0)!r}) — X okurunun elinde o sayfa yok")
 
     # ── tekrar: aynı cümle (≥ 8 kelime) iki kez
     gorulen: dict[str, int] = {}
@@ -291,6 +457,12 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     if araliklar:
         uyari.append(f"aralık tiresi ASCII {len(araliklar)} yerde (uzun tire – bekleniyor): "
                      + ", ".join(repr(a.strip()) for a in araliklar[:3]))
+    ters = TERS_ISARET.findall(m)
+    if ters:
+        uyari.append(f"işaret yüzden sonra {len(ters)} yerde ({ters[0]!r}) — sözleşme '−%1,88', '+%0,4'")
+    isaretsiz = oran_isaretsiz(m)
+    if isaretsiz:
+        uyari.append(f"yüzde işaretsiz oran {len(isaretsiz)} yerde ({isaretsiz[0]!r}) — '%' önde yazılır")
     if "  " in m:
         uyari.append("çift boşluk var")
     if re.search(r"\s[,.;:!?]", m):
@@ -317,7 +489,7 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("dosya", help="tweet metni (düz metin dosyası, '-' = stdin)")
-    p.add_argument("--tur", choices=("bulten", "analiz"), default="analiz")
+    p.add_argument("--tur", choices=("bulten", "analiz", "duzeltme", "ozel"), default="analiz")
     a = p.parse_args()
     metin = sys.stdin.read() if a.dosya == "-" else Path(a.dosya).read_text(encoding="utf-8")
     engel, uyari = denetle(metin, a.tur)

@@ -6,7 +6,9 @@ piyasa gelişmesini mekanizmasına, tarihsel emsaline ve fiyat etkisine kadar
 açan uzun yazıdır; bültenden farkı kapsam değil **derinlik**tir.
 
 Rehber esastır; kural buraya yazılır ve araca konur. Buradaki her zorunluluk
-`site/tools/analiz_sinavi.py` tarafından ölçülür ve sayfa sınavı düşer.
+`site/tools/analiz_sinavi.py` tarafından ölçülür ve sayfa sınavı düşer;
+gönderiye ilişkin kurallar (yönetici özeti → X gönderisi) `tweet/analiz.py`
+tarafından gönderi kurulurken sorulur ve gönderim kaydına UYARI düşer.
 Rehberde olup araçta olmayan kural yoktur; araçta olup burada yazmayan da.
 
 Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
@@ -58,9 +60,38 @@ tarih iki yerde görünür ve listede hangi yazının hangi güne ait olduğu ok
    düşer. Özetteki sayılar yazının tarihine ait SABİT sayılardır (bkz.
    "Sayılar"): analiz yayımlandığı günün metnidir. Özet, gövdedeki bir
    kutuyu tekrarlamaz; onu soğurur. **Tweet bu bloktan
-   kurulur** — tez, tablo satırları ve rakamlar X'e olduğu gibi çıkar; bu
+   kurulur** (`tweet/analiz.py`) ve yazının cümlelerini değiştirmez; bu
    yüzden özet kendi ayakları üstünde durmalı, "yukarıdaki grafik", "bu
-   yazının 4. bölümü" gibi sayfa mobilyasına atıf içermemelidir.
+   yazının 4. bölümü" gibi sayfa mobilyasına atıf içermemelidir. Gönderiye
+   nasıl girdiği:
+   - **Tezin (`p.tez`) ilk cümlesi bir ölçüm sayısı taşır** — ondalıklı
+     sayı, yüzde ya da birimli tam sayı ("bp", "puan"). Zaman akışında
+     okurun "Daha fazla göster"e basmadan gördüğü ~280 karakter başlık ile
+     tezin açılışıdır; "Karar sürprizsiz, metin ise tek yönlü değil." gibi
+     sayısız bir açılış, gönderinin ölçüm taşıdığını o alanda göstermez.
+     Hüküm cümlesi ölçümle birlikte kurulur ("Karar sürprizsiz: politika
+     faizi %37,0'de, beşinci kez sabit; metin ise …"). Ön bilgideki `ozet`
+     yönetici özeti olmayan yazının gönderisidir ve aynı kurala uyar. Araç
+     cümle sırasını değiştirmez; kural gönderi kurulurken sorulur ve
+     uymayan yazı gönderim kaydına UYARI düşer.
+   - **Soru sütunu cümle düzeninde yazılır** ("Gelir mi", "Kanıtın gücü");
+     gönderi büyük harfe çevirmez. Soru biçimindeki başlık (soru eki mi/mı/
+     mu/mü ya da ne, nerede, nereye, nereden, neden, nasıl, kaç, kaça,
+     kadar, hangi, kim, niçin, niye) "?" ile, isim öbeği başlık iki noktayla
+     basılır: "Gelir mi? Evet, …" · "Kanıtın gücü: Orta. …".
+   - **Satır ve tez TAM cümleyle kısalır**, "…" hiç basılmaz: satır başına
+     ~420, tez ~900 karakterlik pay dolunca sonraki cümle düşer; ilk cümlesi
+     bile sığmayan satır bütünüyle düşer. Gönderi tavanı (3.800) aşılırsa
+     tablo satırları SONDAN düşer — en önemli satırlar üstte durur.
+   - **Rakam şeridi yalnız metinde GEÇMEYEN ölçümleri taşır**, değer önde:
+     "Kilit ölçümler: %13,7 bir ayda …; −12 bp 6 aylık düğüm …". Tezde ya
+     da bir satırda zaten geçen değer şeride ikinci kez basılmaz; hiçbiri
+     kalmazsa şerit gönderide yoktur (çoğu yazıda böyle). Etiket
+     KIRPILMAZ: uzun etiketli kalem ya tam basılır ya hiç — kısaltma küme
+     sayısı, eşik ve ölçü saati gibi çekinceleri düşürür; etiketi kısa
+     yazmak yazarın işidir. Bileşik kalemde (`%10,76 · %4,17` | `reel faiz:
+     ankete göre · gerçekleşene göre`) değer ve etiket aynı sayıda " · "
+     taşır, yoksa kalem gönderiden düşer.
 2. **Giriş** — sorunun ne olduğu, neden şimdi.
 3. **Bölümler** — `## ` başlıklarıyla; numaralı (`## Bölüm 3 — …` ya da
    `## 3. …`) ya da düz. Her bölüm önce mekanizma, sonra ölçüm. Her grafiğin
@@ -130,6 +161,12 @@ Sayfa bunu sonda "Düzeltmeler" kutusu olarak basar, `/duzeltmeler/` sayfası
 bütün yayınların kayıtlarını toplar. Metindeki sayı yeni değere çekilir,
 `updatedDate` ilerletilir; sürüm tarihçesi anlatılmaz ("ilk sürümde şöyleydi"
 yok — kayıt zaten söylüyor).
+
+Hatalı sayı analiz gönderisiyle X'e de gittiyse kayda isteğe bağlı iki alan
+yazılır: `gonderi: 'analiz:<slug>'` ve `gonderi_metni: '<kısa düz metin>'`.
+`tweet/gonder.py` kayıt tarihinden sonraki 21 gün içinde orijinal gönderinin
+altına "Düzeltme — Analiz, <tarih>: <başlık>" yanıtını atar (sayfa bu iki alanı
+basmaz). Hedef gönderim defterinde kimliksizse yanıt atılmaz ve koşu uyarır.
 
 ## Yayın akışı
 
