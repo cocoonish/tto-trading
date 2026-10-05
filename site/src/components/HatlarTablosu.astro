@@ -39,6 +39,11 @@ const satirlar = hatlar
     tazelikSirasi({ gun: tariheCevir(a.tarih), baslik: a.baslik }, { gun: tariheCevir(b.tarih), baslik: b.baslik }),
   );
 
+// Tarayıcı yaşı yalnız GÜN damgasında yeniden hesaplar (aylık damgada yaş yok).
+// Düzenli ifade burada durur: şablonun öznitelik ifadesindeki `{2}` gibi
+// süslü parantezleri Astro derleyicisi ifade sınırı sanıyor.
+const TAM_GUN = /^\d{2}\.\d{2}\.\d{4}$/;
+
 // Değer ile birim ayrı öğe: telefonda birim değerin ALTINA iner. Tek nowrap
 // dizge ("230,8 mlr USD") 390 pikselde değer sütununu 142 piksele çıkarıyor,
 // tarih sütunu kabın dışına düşüp "29.09.202" diye kesiliyordu (320 px'te
@@ -80,7 +85,7 @@ const parca = (m: string) => {
               {h.tarih || '—'}
               {yasMetni(h.yas) && (
                 <span class="ht-yas"
-                  data-ht-yas={/^\d{2}\.\d{2}\.\d{4}$/.test(h.tarih) ? h.tarih : undefined}>
+                  data-ht-yas={TAM_GUN.test(h.tarih ?? '') ? h.tarih : undefined}>
                   {yasMetni(h.yas)}
                 </span>
               )}
