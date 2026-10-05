@@ -4438,8 +4438,8 @@ Kapılar:
 - TL 2y–5y dikleştirici (TRY OIS vekili)
 - BIST Bankacılık / BIST 100 göreli
 - ABD 5y–30y dikleştirici
-- USD/TRY 51,25/53,00 alım yayılımı (kuyruk)
-- TRY OIS–offshore bazı (ölçülemez)
+- USD/TRY 51,25/53,00 alım yayılımı (kuyruk) — 05.10'da SİLİNDİ (aşağıda)
+- TRY OIS–offshore bazı (ölçülemez) — 05.10'da SİLİNDİ (aşağıda)
 
 Fiili girişleri 05.10 kapanışlarıdır. Sayı pazar akşamı yayımlandı ve TÜFE pazartesi sabahı geliyor, yani karne verinin ARDINDAN başlar. Bu kuralın bir sonucudur, kusuru değildir.
 
@@ -4557,7 +4557,15 @@ doldurmak için kuyruk fikri açılmaz. Ölçülemeyen fikir yazma kapısında r
 yalnız o günden önceki kayıt için tanımlı kalıyor. Sigorta yazarın ilk ekranında:
 `zincir.py` yazılmamış biçim 3 sayıda açık fikirleri ve kuralı basıyor, eski rutin
 cümlesini adıyla anıyor; aynı not denetimin uyarısında. 04.10'un iki fikri (USD/TRY
-51,25/53,00 alım yayılımı · TRY OIS–offshore bazı) 05.10 sayısına yazılan çıkış emriyle
-girişten önce geri çekildi: fiili girişleri 05.10 kapanışıydı, yani hiç taşınmadılar ve
-sonuçları yoktur. Yayımlanmış sayıdan silinmediler — okur onları gördü. Sekiz arıza
+51,25/53,00 alım yayılımı · TRY OIS–offshore bazı) önce 05.10 sayısına yazılan çıkış
+emriyle geri çekildi; kullanıcı aynı sabah "bunlara hiç çıkış da yazma, direkt
+silelim" dedi ve ikisi 04.10 sayısının `fikirler`inden SİLİNDİ, çıkış emri de
+05.10'dan kaldırıldı, 05.10 karnesi yeniden kuruldu (kalan üç kaydın üçü silmeden
+önceki kayıtlarla birebir aynı; sayım açık 4 → 3, ölçülemez 1 → 0). Bu, "yazılmış
+fikir değişmez/silinmez" kuralının TEK istisnasıdır ve kullanıcının açık kararıdır:
+yazma kapısı silmeyi hâlâ reddeder, silme elle yapıldı ve araç yolu açılmadı. Silmeyi
+bedelsiz kılan şey zamanlamaydı — ikisinin fiili girişi 05.10 kapanışıydı, yani karne
+hiç başlamamıştı ve kaybolan bir ölçülmüş sonuç yok. Public deponun GEÇMİŞİ iki
+fikri hâlâ taşıyor (04.10 sayısının yayımlandığı commit'ler); geçmişi yeniden yazmak
+istenmedi. Sekiz arıza
 enjeksiyonunun sekizi yeni maddede yakalanıyor.

@@ -3475,57 +3475,11 @@
     "durum": "acik",
     "giris_bekleniyor": true,
     "kalan_gun": 25
-   },
-   {
-    "kimlik": "2026-10-04-4",
-    "acilis": "2026-10-04",
-    "baslik": "USD/TRY 51,25/53,00 alım yayılımı: kur ritmi bozulursa",
-    "tur": "opsiyon",
-    "sinif": "fx",
-    "yon": "yukari",
-    "giris": 49.1404,
-    "giris_tarih": "2026-10-02",
-    "ufuk": "2026-11-20",
-    "yapi_metni": "USD/TRY",
-    "yon_metni": "alım yayılımı: dayanak vadede alt kullanım fiyatının (51,25) üstünde kapanırsa öder; ödeme üst kullanım fiyatında (53,00) tavana ulaşır",
-    "dayanak": "risk",
-    "senaryo": "Kuyruk — kırılma dalı",
-    "opsiyon": {
-     "tip": "call_spread",
-     "kullanim": [
-      51.25,
-      53.0
-     ],
-     "vade": "2026-11-20"
-    },
-    "ondalik": 4,
-    "birim": "fiyat",
-    "sonuc_birim": "%",
-    "durum": "acik",
-    "giris_bekleniyor": true,
-    "kalan_gun": 46
-   },
-   {
-    "kimlik": "2026-10-04-5",
-    "acilis": "2026-10-04",
-    "baslik": "Londra'da TL fonlaması pahalanır: TRY OIS–offshore bazı",
-    "tur": "olculemez",
-    "sinif": "faiz",
-    "yon": "",
-    "ufuk": "2026-11-20",
-    "yapi_metni": "3 aylık offshore örtük TL faizinde ödeyen, TRY OIS'te sabit alan (baz genişlerse kazanır)",
-    "yon_metni": "",
-    "enstruman": "3 aylık offshore örtük TL faizinde ödeyen, TRY OIS'te sabit alan (baz genişlerse kazanır)",
-    "dayanak": "risk",
-    "senaryo": "Kuyruk — savunma dalı",
-    "olculemez_sebep": "çapraz kur swap ve Londra TL kotasyonu elimizde yok",
-    "durum": "olculemez",
-    "kalan_gun": 46
    }
   ],
   "sayim": {
-   "acik": 4,
-   "olculemez_acik": 1,
+   "acik": 3,
+   "olculemez_acik": 0,
    "kapanan": 0,
    "olculen_kapanan": 0,
    "kazanan": 0,
@@ -6698,22 +6652,6 @@
  "yazi_zamani": "2026-10-05T04:54:42+00:00",
  "yazi_surumu": 3,
  "ilk_yazi_zamani": "2026-10-05T04:27:45+00:00",
- "fikir_kapat": [
-  {
-   "kimlik": "2026-10-04-4",
-   "sebep": "Girişten önce geri çekildi: yapının dayandığı kuyruk patikasının tetiği, kur ritminin bozulması, bugünkü veride görünmüyor. Ritim bozulmaya başladığı gün yapı yeniden değerlendirilir.",
-   "tarih": "2026-10-05",
-   "yazim_ani": "2026-10-05T04:51:35+00:00",
-   "cikis": 49.1404,
-   "cikis_tarih": "2026-10-02"
-  },
-  {
-   "kimlik": "2026-10-04-5",
-   "sebep": "Girişten önce geri çekildi: Londra'da TL fonlamasının sıkıştığını gösteren bir işaret yok ve bu yapının sonucu elimizdeki verilerle ölçülemiyor.",
-   "tarih": "2026-10-05",
-   "yazim_ani": "2026-10-05T04:51:35+00:00"
-  }
- ],
  "fikirler": [
   {
    "kimlik": "2026-10-05-1",

@@ -721,7 +721,7 @@ için okunuşudur — ikisi çelişirse araç kazanır ve rehber düzeltilir.
   ayırır: "kur ritmi bozulursa", "Londra'da fonlama sıkışırsa" diye kurulan
   bir fikrin tetiği henüz görünmüyorsa fikir değil İZLEMEDİR — söz defterine
   ya da risk bölümüne yazılır, tetik veride görününce fikre çevrilir (04.10'da
-  böyle açılan iki fikir 05.10'da girişten önce geri çekildi). 3'ün üstü
+  böyle açılan iki fikir 05.10'da kullanıcı kararıyla sayıdan silindi). 3'ün üstü
   UYARI.
 - **Haftalık: 3–6 fikir, en az iki varlık sınıfında** (`sinif`: faiz · fx ·
   hisse · emtia · kredi), **her biri bir senaryoya bağlı** (`senaryo`; bkz.
@@ -1126,9 +1126,10 @@ basar (bkz. "Haftaya bakış" → "Fikirlerin karnesi").
 
 ### Örnekler
 
-04.10.2026 haftalık sayısına yazılan beş fikirden dördü; yayımlanmış kayıt
-sayının dosyasında durur (yazıldıktan sonra değişmez), burada okunuşu anlatılır.
-Dördü üç ayrı sınıfta ve her biri bir patikaya bağlı.
+04.10.2026 haftalık sayısındaki fikirlerden ikisi ve bir yapı örneği. Yayımlanmış
+kayıt sayının dosyasında durur (yazıldıktan sonra değişmez), burada okunuşu
+anlatılır. Üçüncü örnek (FX opsiyon) aynı sayıya yazılmış, ertesi gün kullanıcı
+kararıyla silinmiştir: yalnız yapının biçimini göstermek için duruyor.
 
 **TL eğri yapısı, vekille (ana senaryo).** Okuma: gevşeme kısa uçtan gelir, 1–2
 yıllık bölge %40'ın altına yerleşir; uzun uç dış maliyet tabanına bağlı kalır.
@@ -1178,10 +1179,10 @@ güçlenirse kazanır · giriş 1,2747 · getiri/risk 1,26 · stop mesafesi %4,6
 (günlük σ %1,92).
 
 **FX opsiyon (kuyruk).** Yapının biçimi için örnektir, ZAMANLAMASI için
-değil: bu fikir 04.10'da açıldı ve 05.10'da girişten önce geri çekildi, çünkü
-kuyruk patikasının tetiği (kur ritminin bozulması) o gün veride görünmüyordu
-("Sayı" → temiz fikrin ikinci şartı). Aynı yapı, ritim bozulmaya başladığı gün
-açılır. Okuma: kuyruk patikasında 1 aylık devalüasyon hızının
+değil: bu fikir 04.10 sayısına yazıldı ve 05.10'da kullanıcı kararıyla sayıdan
+silindi, çünkü kuyruk patikasının tetiği (kur ritminin bozulması) o gün veride
+görünmüyordu ("Sayı" → temiz fikrin ikinci şartı). Aynı yapı, ritim bozulmaya
+başladığı gün açılır. Okuma: kuyruk patikasında 1 aylık devalüasyon hızının
 beş günlük ortalaması 21,4'ten 25'in üstüne çıkar. Fiili giriş 5 Ekim kapanışı,
 vadeye 46 gün: TLREF %36,84 ve ABD 3 aylık %3,99 ile ileri kur ≈ 51,2. Alt
 kullanım fiyatı ileri kurun hizasında ve yıllıklandırılmış yaklaşık %34'lük bir
@@ -1207,7 +1208,7 @@ giriş 49,14.
 **Ölçülemeyen fikir yazılmaz.** 04.10'da aynı patikanın faiz tarafı (TRY
 OIS–Londra bazı) `olculemez` türüyle açılmıştı; görüşün kendisi iki faiz
 arasındaki makas olduğu için vekili yoktu ve karnesi tutulamıyordu. 05.10'da
-girişten önce geri çekildi ve tür yeni fikre kapandı: vekili olmayan bir görüş
+kullanıcı kararıyla sayıdan silindi ve tür yeni fikre kapandı: vekili olmayan bir görüş
 risk bölümünde ya da söz defterinde izlenir, fikir olarak açılmaz.
 
 ## Haftalık teknik analiz — SONA ERDİ (27.09.2026 sayısı son sayı)
@@ -1267,7 +1268,7 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 | "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın ve bölüm üst sınırının 1,5 katının üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar. Eski asgarilerle doğru kimliklere yazılan ~1.700 kelimelik not 01.10.2026 akşamından beri yeni hedef aralığın (1.000–1.700) içinde kalır; tekrarı olgu ölçüleri yakalar, toplam tavan (2.100) eski 4.000+ kelimelik düzene dönüşü durdurur |
 | Haftalık: "`ozet.ne_bekleniyor` önümüzdeki haftayı anlatır; takvimi `beklenti` bölümünde tek tek işle" | Biçim 3'te ileriye bakış `gundem.takvim` (haftalık başlığı "Önümüzdeki hafta — gün gün"); özet yalnız `ne_oldu` | **Araçla kapatıldı**: `yaz.py` biçim 3'te `ne_bekleniyor`u ve `beklenti` kimliğini reddeder |
 | Haftalık: "on iki bölüm, haftalık yorum en az 600 kelime" (01.10.2026'da okundu) | Haftalık sayının kendi dokuz alanı ve 6.000–9.000 kelimelik hedefi (bkz. "Haftaya bakış (haftalık kip)") | **Araçla kapatıldı**: `yaz.py` sayının beyanındaki kimlikler dışını reddeder ve mesajı haftalık kipi adıyla anar; denetim haftalık aralıkları ve alt bölüm sayısını ölçer (UYARI), 10.800 kelimenin üstünü ve **4.500 kelimenin altını** ENGEL sayar — eski talimatla doğru kimliklere yazılan ~2.800 kelimelik bir sayı artık yayına gitmez |
-| "`yaz.py` yalnız `yorum`, `ozet`, `gundem` alanlarına yazmana izin verir" (04.10.2026'da okundu) | Biçim 3'te `fikirler` ve `fikir_kapat` da yazı katmanının alanıdır (bkz. "İşlem fikirleri"); günlükte temiz fikir yoksa yazılmaz, haftalıkta 3–6 fikir beklenir | **Kısmen araçla**: `yaz.py` iki alanı kabul eder ve sözleşmeyi dayatır; haftalık sayıda fikirsizlik UYARI, günlükte bilgi satırı. Rutine harfiyen uyan yazar günlükte hiç fikir yazmaz ve bunu hiçbir kapı ENGEL saymaz — bilerek, çünkü zorla fikir yazılmaz |
+| "`yaz.py` yalnız `yorum`, `ozet`, `gundem` alanlarına yazmana izin verir" (04.10.2026'da okundu) | Biçim 3'te `fikirler` ve `fikir_kapat` da yazı katmanının alanıdır (bkz. "İşlem fikirleri"); her sayıda en az bir fikir beklenir (günlük 1–3, haftalık 3–6), temiz fikir yoksa zorla yazılmaz | **Kısmen araçla**: `yaz.py` iki alanı kabul eder ve sözleşmeyi dayatır; `zincir.py` yazarın ilk ekranında açık fikirleri ve kuralı basar ve bu satırı adıyla anar; bugünün sayısında fikirsizlik UYARI (05.10.2026'dan beri günlükte de). Rutine harfiyen uyan yazar yine fikirsiz yazabilir ve bunu hiçbir kapı ENGEL saymaz — bilerek, çünkü zorla fikir yazılmaz |
 | Haftalık 7. adım: "Haftalık yorum, karnenin o haftaki dökümünü bir paragrafla verir: kaç çağrı tuttu, kaçı tutmadı, en öğretici yanılgı" (01.10.2026'da okundu) | `yorum` Haftanın okumasıdır (tek tez, beş adım). Sayımı sayfanın ölçülen karne dizini basar; `gundem.karne` sayım yapmaz, yalnız neden tuttuğunu ya da tutmadığını yazar. Geçmiş çağrı atfı yalnız karnede; kapatılacak kayıt ölçümden önce deftere işlenir (karne SIRA KURALI) | **Kısmen araçla**: üslup Y03 haftalık sayıda karne dışındaki her geçmiş çağrı atfını ("yazmıştık", "(27.09 notu)") UYARI'yla sayar; okumadaki sayım paragrafı ölçülmüyor |
 
 **Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının

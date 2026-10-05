@@ -107,9 +107,9 @@ ABD_VADE = {"^IRX": 0.25, "^FVX": 5.0, "^TNX": 10.0, "^TYX": 30.0}
 
 TURLER = ("yalin", "egri", "kelebek", "goreli", "opsiyon", "olculemez")
 # ÖLÇÜLEMEYEN FİKİR AÇILMAZ (karar 05.10.2026, kullanıcı: "ölçemeyeceğimiz
-# trade'i açmamamız gerekli"). Tür yalnız bu tarihten ÖNCE açılmış kayıtlar
-# için tanımlı kalır: 04.10'da açılan TRY OIS–offshore bazı fikri karnede ve
-# Tradeler defterinde kendi türüyle okunmaya devam eder.
+# trade'i açmamamız gerekli"). Bu türde açılmış tek kayıt (04.10, TRY
+# OIS–offshore bazı) aynı gün kullanıcı kararıyla sayıdan silindi; tür, karne ve
+# sayfa onu okuyabildiği için tanımlı kalır, yazma kapısı yenisini reddeder.
 OLCULEMEZ_YASAK = "2026-10-05"
 # Karnenin kapanmış durumları (donar; bir sonraki sayı yeniden hesaplamaz).
 KAPANMIS = ("hedef", "stop", "sure", "geri_cekildi", "vade", "olculemedi", "sure_olculemez",
