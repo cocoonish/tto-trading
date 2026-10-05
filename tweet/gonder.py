@@ -17,7 +17,9 @@ Sigortalar (araçta, rutin metninde değil):
   diye eski haber satmaktır; kaçan gün sessizce atlanır, defterlenmez.
 · DÜZELTME YANITI (tweet/duzeltme.py): yazarın `gonderi` alanıyla işaretlediği
   düzeltme kaydı, hedef gönderinin altına yanıt olarak gider; anahtar içeriğe
-  bağlı (duzeltme:<hedef>:<sha1>), yani aynı düzeltme iki kez gitmez. Hedef
+  bağlı (duzeltme:<hedef>:<sha1>), yani aynı düzeltme iki kez gitmez; kayıt
+  metnin özünü de taşır (`metin_oz`), aynı hedefe aynı metin ikinci kez
+  kurulmaz (X kopyayı 403 ile reddeder). Hedef
   X'te silinmişse (403 gövdesi "deleted/not visible") bu bir jeton arızası
   sayılmaz: kayıt "hedef_yok" diye terminal yazılır, koşu sürer.
 · GÖRSEL YOK (kullanıcı kararı 05.10.2026): gövdede yalnız metin ve yanıt
@@ -379,6 +381,10 @@ def main() -> int:
     # kayıtları, hedef gönderinin İLK kimliğine yanıt olarak gider. Pencere son
     # duzeltme_m.PENCERE_GUN gün; geçmiş gönderilere kendiliğinden yanıt yok.
     ust_kimlik: dict[str, str] = {}
+    # Düzeltme yanıtının metin özü defter kaydına yazılır (her durumda: gönderiliyor,
+    # gönderildi, hedef_yok): adaylar aynı hedefe aynı metni ikinci kez kurmaz —
+    # X kopya içeriği 403 ile reddeder ve o 403 koşuyu düşürürdü (duzeltme.metin_ozu).
+    metin_oz: dict[str, str] = {}
     if a.tur in ("duzeltme", "hepsi"):
         # Bu kanalın kendi kusuru (okunamayan bir ön bilgi, bozuk bir kayıt)
         # sabahın bültenini X'ten alıkoyamaz: kanal düşerse uyarı basılır,
@@ -400,6 +406,7 @@ def main() -> int:
                       f"({type(e).__name__}: {str(e)[:120]}) — bu yanıt gönderilmedi, öbür öğeler gider")
                 continue
             ust_kimlik[ad["anahtar"]] = ad["ust"]
+            metin_oz[ad["anahtar"]] = ad.get("metin_oz") or duzeltme_m.metin_ozu(ad["metin_ham"])
             is_listesi.append((ad["anahtar"], [t], []))
 
     if not is_listesi:
@@ -424,8 +431,10 @@ def main() -> int:
         # aynı içeriği körlemesine yeniden atmaz. HTTP hatasında işaret silinir
         # (gönderilmediği kesin), kimlik gelince kayıt tamamlanır.
         simdi = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+        oz_alani = {"metin_oz": metin_oz[anahtar]} if anahtar in metin_oz else {}
         defter[anahtar] = {"durum": "gönderiliyor", "zaman": simdi,
-                           "ozet": hashlib.sha256("\n".join(zincir).encode("utf-8")).hexdigest()[:12]}
+                           "ozet": hashlib.sha256("\n".join(zincir).encode("utf-8")).hexdigest()[:12],
+                           **oz_alani}
         _defter_yaz(defter_yolu, defter)
         try:
             idler = _gonder_zincir(zincir, erisim, ust=ust_kimlik.get(anahtar))
@@ -434,7 +443,8 @@ def main() -> int:
             # anahtarı her koşuda yeniden kurmaz; yazar `gonderi`yi başka bir
             # hedefe çevirirse anahtar değişir. Arkadaki öğeler ve metrik sürer.
             defter[anahtar] = {"durum": "hedef_yok", "hedef": ust_kimlik.get(anahtar),
-                               "zaman": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
+                               "zaman": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+                               **oz_alani}
             _defter_yaz(defter_yolu, defter)
             print(f"::warning::{anahtar}: {e}")
             continue
@@ -443,7 +453,7 @@ def main() -> int:
             _defter_yaz(defter_yolu, defter)
             raise
         zaman = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
-        defter[anahtar] = {"idler": idler, "zaman": zaman}
+        defter[anahtar] = {"idler": idler, "zaman": zaman, **oz_alani}
         if anahtar in ust_kimlik:
             defter[anahtar]["yanit"] = ust_kimlik[anahtar]
         _defter_yaz(defter_yolu, defter)

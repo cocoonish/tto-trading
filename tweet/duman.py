@@ -1384,7 +1384,7 @@ def _k12_etkilesim_olcumu():
     defter = {
         "bulten:2026-10-12": {"idler": ["1"], "zaman": "2026-10-11T19:40:00+00:00"},   # 10 sa → yok
         "bulten:2026-10-11": {"idler": ["2"], "zaman": "2026-10-11T04:30:00+00:00"},   # 25 sa → 24s
-        "analiz:x":          {"idler": ["3"], "zaman": "2026-10-04T05:00:00+00:00"},   # 8 g → 7g
+        "analiz:x":          {"idler": ["3"], "zaman": "2026-10-04T05:00:00+00:00"},   # 8 g, 24s yok → 24s (xapi#4)
         "bulten:2026-09-01": {"idler": ["4"], "zaman": "2026-09-01T04:30:00+00:00"},   # 41 g → yok
         "analiz:kimliksiz":  {"idler": [], "zaman": ""},
     }
@@ -1406,7 +1406,7 @@ def _k12_etkilesim_olcumu():
         r = mt.haftalik("j", defter, yol, simdi, istek, ar, bd)
         k = json.loads(yol.read_text(encoding="utf-8"))
         bant = {(o["anahtar"], o["bant"]) for o in k["olcumler"]}
-        assert bant == {("bulten:2026-10-11", "24s"), ("analiz:x", "7g")}, (bant, r)
+        assert bant == {("bulten:2026-10-11", "24s"), ("analiz:x", "24s")}, (bant, r)
         assert set(istekler[0]["ids"].split(",")) == {"2", "3"} and "expansions" not in istekler[0], istekler
         o = [x for x in k["olcumler"] if x["kimlik"] == "2"][0]
         assert o["yas_saat"] == 25.2 and o["bicim"] == 3 and o["uzunluk"] == len("Sabah Notu — 11 Ekim 2026\nMetin.")
@@ -1865,8 +1865,10 @@ def _j5_duzeltme_penceresi():
     defter = {"bulten:2026-09-01": {"idler": ["111"], "zaman": "z"}}
 
     def k(tarih, eski, yeni="y"):
+        # Metin kayda özgü: aynı hedefe aynı metin X'te kopya içeriktir ve
+        # adaylar onu tek yanıta indirir (xapi#1) — pencere maddesi onu sınamaz.
         return {"tarih": tarih, "alan": "a", "eski": eski, "yeni": yeni, "sebep": "s",
-                "gonderi": "bulten:2026-09-01", "gonderi_metni": "Kısa düzeltme metni, tam cümle."}
+                "gonderi": "bulten:2026-09-01", "gonderi_metni": f"Kısa düzeltme metni {eski}, tam cümle."}
     with tempfile.TemporaryDirectory() as td:
         bd, ad_ = Path(td) / "b", Path(td) / "a"
         bd.mkdir(); ad_.mkdir()
@@ -2090,6 +2092,227 @@ def _j11_kuru_dusen_tam():
     assert "kapidan_gecir(is_listesi, tam=kuru)" in src, "kuru koşu tam dökümü bağlanmamış"
 
 
+# ── X: X API ve yan kanallar merceği (05.10.2026, donmuş 1a87fb37) ──────────
+
+_KOPYA_GOVDE = {"detail": "You are not allowed to create a Tweet with duplicate content.",
+                "title": "Forbidden", "status": 403}
+
+
+def _x1_ayni_metin_ikizi():
+    """xapi#1: aynı hedefe aynı gonderi_metni taşıyan iki kayıt (eski→yeni farklı)
+    TEK yanıt üretir. Önce ikincisi X'ten kopya içerik 403'ü alıyor, 403 jeton
+    kapsamı sanılıp koşu SystemExit ile düşüyordu: arkadaki geçerli düzeltme ve
+    etkileşim okuması gitmiyor, aynı şey 21 gün her sabah tekrarlıyordu. Koşu
+    içi ikiz adıyla uyarılır; defterde o hedefe giden metin (gönderildi ·
+    gönderiliyor · hedef_yok) ertesi gün yeniden kurulmaz; boşluk/tipografi
+    farkı ayrı metin sayılmaz; farklı metin ve farklı hedef etkilenmez."""
+    import duzeltme as dz
+    bugun = dt.datetime.now(dt.timezone.utc).date()
+    ortak = "Gümüş ve altının haftalık değişimi düzeltildi: doğru değerler −%6,64 ve −%1,38."
+
+    def kayit(eski, hedef, metin=ortak):
+        return {"tarih": bugun.isoformat(), "alan": eski, "eski": eski, "yeni": "y", "sebep": "s",
+                "gonderi": hedef, "gonderi_metni": metin}
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        bd, ad_, ar = td / "b", td / "a", td / "arsiv"
+        for d in (bd, ad_, ar):
+            d.mkdir()
+        (bd / f"{bugun.isoformat()}.json").write_text(json.dumps({"duzeltmeler": [
+            kayit("e1", "bulten:2026-10-04"), kayit("e2", "bulten:2026-10-04"),
+            kayit("e3", "bulten:2026-10-02", "Brent kapanışı 66,30 dolardı; 63,21 değil.")]}), encoding="utf-8")
+        defter = {"bulten:2026-10-04": {"idler": ["777"], "zaman": "z"},
+                  "bulten:2026-10-02": {"idler": ["888"], "zaman": "z"}}
+        dfy = td / "defter.json"
+        dfy.write_text(json.dumps(defter), encoding="utf-8")
+        giden: list[str] = []
+
+        def post(url, json=None, **_):              # X'in kopya içerik kuralı
+            if json["text"] in giden:
+                return _SahteYanit(403, _KOPYA_GOVDE)
+            giden.append(json["text"])
+            return _SahteYanit(201, {"data": {"id": str(8000 + len(giden))}})
+
+        def get(url, **_):
+            return _SahteYanit(200, {"data": {"username": "u"}})
+        kod, out, metrik = _sahte_gonderim(bd, ad_, ar, dfy, post, get, gercek_defter=True)
+        assert kod == 0, f"ikiz koşuyu düşürdü: {kod!r} {out[-300:]}"
+        assert len(giden) == 2 and any("66,30" in t for t in giden), giden
+        assert len(metrik) == 1, "etkileşim okuması koşmadı"
+        assert re.search(r"::warning::.*aynı metinle ikinci bir düzeltme kaydı \(alan 'e2'\).*'e1'", out), out[-400:]
+        df = json.loads(dfy.read_text(encoding="utf-8"))
+        k1, k2 = dz.anahtar("bulten:2026-10-04", "e1", "y"), dz.anahtar("bulten:2026-10-04", "e2", "y")
+        assert df[k1]["metin_oz"] == dz.metin_ozu(ortak) and k2 not in df, df
+        # ertesi koşu: ikiz yeniden aday OLMAZ (X'e POST yok, uyarı yok)
+        kod, out, _ = _sahte_gonderim(bd, ad_, ar, dfy, post, get, gercek_defter=True)
+        assert kod == 0 and len(giden) == 2 and "aynı metin" not in out, (kod, giden, out[-300:])
+        # defterdeki her durum metni bağlar; boşluk ve tire/eksi farkı aynı metin
+        for durum in ({"idler": ["5"], "zaman": "z"}, {"durum": "gönderiliyor", "zaman": "z"},
+                      {"durum": "hedef_yok", "hedef": "777", "zaman": "z"}):
+            d3 = {**defter, k1: {**durum, "metin_oz": dz.metin_ozu(ortak)}}
+            a, u = dz.adaylar(bugun, d3, bd, ad_)
+            assert [x["eski"] for x in a] == ["e3"] and not u, (durum, a, u)
+        assert dz.metin_ozu("  Brent  kapanışı -%2,1\n idi.") == dz.metin_ozu("Brent kapanışı −%2,1 idi.")
+        # farklı metin aynı hedefe gider; aynı metin FARKLI hedefe de gider
+        (bd / f"{bugun.isoformat()}.json").write_text(json.dumps({"duzeltmeler": [
+            kayit("e1", "bulten:2026-10-04"), kayit("e2", "bulten:2026-10-04", ortak + " Ek kayıt."),
+            kayit("e4", "bulten:2026-10-02")]}), encoding="utf-8")
+        a, u = dz.adaylar(bugun, defter, bd, ad_)
+        assert sorted(x["eski"] for x in a) == ["e1", "e2", "e4"] and not u, (a, u)
+
+
+def _x4_24s_bandi_okuma_gunu():
+    """xapi#4: okuma koşusunda atılan gönderi bir sonraki okumada '24s', ondan
+    sonrakinde '7g' alır (önce doğrudan '7g'ye düşüyordu); 7 günü geçmiş ama 24s
+    kaydı olmayan gönderi 10 güne kadar '24s' alır, 10 günü geçen '7g'; eski
+    cetvelin '7g' kaydına sonradan '24s' yazılmaz. Benzetim: 70 gün, günde bir
+    gönderi (0–50 dk gecikme), her gönderimden sonra okuma — 10 günü geçen her
+    gönderinin '24s' kaydı var."""
+    import random
+    import metrik as mt
+
+    def istek(url, params, erisim):
+        return _SahteYanit(200, {"data": [{"id": i, "public_metrics": {"impression_count": 1}}
+                                          for i in params["ids"].split(",")]})
+    t0 = dt.datetime(2026, 10, 12, 5, 40, tzinfo=dt.timezone.utc)
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        yol, ar = td / "m.json", td / "ar"
+        ar.mkdir()
+        defter = {"bulten:2026-10-12": {"idler": ["1"], "zaman": "2026-10-12T05:35:00+00:00"},   # okuma koşusunun gönderisi
+                  "bulten:2026-10-11": {"idler": ["2"], "zaman": "2026-10-11T19:40:00+00:00"},   # 10 sa
+                  "bulten:2026-09-30": {"idler": ["3"], "zaman": "2026-09-30T05:35:00+00:00"},   # 12 g, 24s yok
+                  "bulten:2026-10-03": {"idler": ["4"], "zaman": "2026-10-03T05:35:00+00:00"}}   # 9 g, eski 7g kaydı
+        yol.write_text(json.dumps({"surum": 1, "son_deneme": "2026-10-04T05:40:00+00:00", "olcumler": [
+            {"anahtar": "bulten:2026-10-03", "bant": "7g", "yas_saat": 170.0}]}), encoding="utf-8")
+
+        def bantlar():
+            return {(o["anahtar"], o["bant"]) for o in json.loads(yol.read_text(encoding="utf-8"))["olcumler"]}
+        mt.haftalik("j", defter, yol, t0, istek, ar, None)
+        assert ("bulten:2026-09-30", "7g") in bantlar() and ("bulten:2026-09-30", "24s") not in bantlar(), bantlar()
+        assert ("bulten:2026-10-03", "24s") not in bantlar(), "eski 7g kaydına 24s yazıldı"
+        mt.haftalik("j", defter, yol, t0 + dt.timedelta(days=7, minutes=40), istek, ar, None)
+        b = bantlar()
+        assert ("bulten:2026-10-12", "24s") in b and ("bulten:2026-10-12", "7g") not in b, b
+        assert ("bulten:2026-10-11", "24s") in b, b
+        mt.haftalik("j", defter, yol, t0 + dt.timedelta(days=14, minutes=55), istek, ar, None)
+        assert ("bulten:2026-10-12", "7g") in bantlar(), bantlar()
+    random.seed(3)
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        yol, ar = td / "m.json", td / "ar"
+        ar.mkdir()
+        defter = {}
+        bas = dt.datetime(2026, 10, 5, 5, 35, tzinfo=dt.timezone.utc)
+        for g in range(70):
+            an = bas + dt.timedelta(days=g, minutes=random.randint(0, 50))
+            defter[f"bulten:{an.date()}"] = {"idler": [str(g + 1)], "zaman": an.isoformat()}
+            mt.haftalik("j", defter, yol, an + dt.timedelta(minutes=1), istek, ar, None)
+        olc = json.loads(yol.read_text(encoding="utf-8"))["olcumler"]
+        var24 = {o["anahtar"] for o in olc if o["bant"] == "24s"}
+        son = bas + dt.timedelta(days=69)
+        aday = [k for k, v in defter.items() if dt.datetime.fromisoformat(v["zaman"]) < son - mt.UST_24S]
+        eksik = [k for k in aday if k not in var24]
+        assert len(aday) > 50 and not eksik, f"{len(eksik)}/{len(aday)} gönderide 24s yok: {eksik[:5]}"
+        assert max(o["yas_saat"] for o in olc if o["bant"] == "24s") < 24 * 10, "24s bandı 10 günü aştı"
+
+
+def _x6_gecici_hata_yeniden_deneme():
+    """xapi#6: geçici okuma hatası (503 · 429 · ağ/zaman aşımı) haftalık sınırı
+    beklemeden en erken 12 saat sonraki koşuda BİR kez daha denenir ve başarıdan
+    sonra haftalık ritim döner; kalıcı hata (402 · 403 · 400 · bozuk yanıt)
+    haftalık sınırda kalır. Aynı koşuda (12 saat dolmadan) yeniden deneme yok."""
+    import requests
+    import metrik as mt
+    simdi = dt.datetime(2026, 10, 12, 5, 40, tzinfo=dt.timezone.utc)
+    defter = {"bulten:2026-10-10": {"idler": ["1"], "zaman": "2026-10-10T05:35:00+00:00"}}
+
+    def tamam(url, params, erisim):
+        return _SahteYanit(200, {"data": [{"id": "1", "public_metrics": {"impression_count": 5}}]})
+
+    def firlat(e):
+        def f(*_):
+            raise e
+        return f
+    gecici = (lambda *_: _SahteYanit(503, {}), lambda *_: _SahteYanit(429, {}),
+              firlat(ConnectionError("ağ yok")), firlat(requests.Timeout("zaman aşımı")))
+    kalici = (lambda *_: _SahteYanit(402, {"title": "CreditsDepleted"}), lambda *_: _SahteYanit(403, {}),
+              lambda *_: _SahteYanit(400, {}), lambda *_: _SahteYanit(200, None))
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        ar = td / "ar"
+        ar.mkdir()
+        for ad, hata, beklenen in [(f"geçici#{i}", h, True) for i, h in enumerate(gecici)] + \
+                                  [(f"kalıcı#{i}", h, False) for i, h in enumerate(kalici)]:
+            yol = td / f"{ad}.json"
+            n = {"i": 0}
+
+            def say(f):
+                def g(*a):
+                    n["i"] += 1
+                    return f(*a)
+                return g
+            mt.haftalik("j", defter, yol, simdi, say(hata), ar, None)
+            assert n["i"] == 1, (ad, n)
+            # 12 saat dolmadan (aynı sabahın ikinci koşusu) yeniden deneme yok
+            mt.haftalik("j", defter, yol, simdi + dt.timedelta(hours=6), say(tamam), ar, None)
+            assert n["i"] == 1, f"{ad}: aynı sabah yeniden denendi"
+            mt.haftalik("j", defter, yol, simdi + dt.timedelta(days=1), say(tamam), ar, None)
+            assert (n["i"] == 2) is beklenen, f"{ad}: ertesi gün istek {n['i'] - 1} (beklenen {int(beklenen)})"
+            k = json.loads(yol.read_text(encoding="utf-8"))
+            if beklenen:
+                assert k["olcumler"] and "gecici_hata_ani" not in k and "son_hata" not in k, k
+                # başarıdan sonra haftalık ritim: altı gün sonra istek yok
+                mt.haftalik("j", defter, yol, simdi + dt.timedelta(days=7), say(tamam), ar, None)
+                assert n["i"] == 2, f"{ad}: başarıdan sonra haftalık sınır delindi"
+            else:
+                assert "gecici_hata_ani" not in k and k.get("son_hata"), k
+        # geçici hata sürerse her gönderim koşusunda bir deneme (döngü yok)
+        yol = td / "surekli.json"
+        n = {"i": 0}
+
+        def hep503(*_):
+            n["i"] += 1
+            return _SahteYanit(503, {})
+        for g in range(3):
+            mt.haftalik("j", defter, yol, simdi + dt.timedelta(days=g), hep503, ar, None)
+        assert n["i"] == 3, n
+
+
+def _x7_ayni_cift_iki_metin():
+    """xapi#7: aynı hedefe aynı eski→yeni çiftiyle iki AYRI metin (depodaki 08.09
+    emsali: Altın ve Gümüş, ikisi de '−%0,34'→'−%1,38') tek yanıt üretir ve
+    ikinci metin ADIYLA uyarılır (önce sessizce düşüyordu). Aynı kaydın iki
+    dosyada çoğalması (metin aynı, alan farklı) uyarı üretmez; kayıt gönderildikten
+    sonra metni değişse uyarı pencere boyunca her koşuda basılmaz."""
+    import duzeltme as dz
+    bugun = dt.date(2026, 10, 5)
+    defter = {"bulten:2026-09-08": {"idler": ["111"], "zaman": "z"}}
+
+    def k(alan, metin):
+        return {"tarih": "2026-10-05", "alan": alan, "eski": "−%0,34", "yeni": "−%1,38",
+                "gonderi": "bulten:2026-09-08", "gonderi_metni": metin}
+    altin = k("Altın", "Altının günlük değişimi −%0,34 değil −%1,38.")
+    gumus = k("Gümüş", "Gümüşün günlük değişimi −%0,34 değil −%1,38.")
+    with tempfile.TemporaryDirectory() as td:
+        bd, ad_ = Path(td) / "b", Path(td) / "a"
+        bd.mkdir(); ad_.mkdir()
+        (bd / "2026-09-08.json").write_text(json.dumps({"duzeltmeler": [altin, gumus]}), encoding="utf-8")
+        a, u = dz.adaylar(bugun, defter, bd, ad_)
+        assert len(a) == 1 and a[0]["metin_ham"].startswith("Altın"), a
+        assert len(u) == 1 and "'Gümüş'" in u[0] and "'Altın'" in u[0] and "eski→yeni" in u[0], u
+        # çoğalma: aynı kayıt iki dosyada, alan farklı, metin aynı → uyarı yok
+        (bd / "2026-09-08.json").write_text(json.dumps({"duzeltmeler": [altin]}), encoding="utf-8")
+        (bd / "2026-10-05.json").write_text(json.dumps({"duzeltmeler": [{**altin, "alan": "Altın (XAU)"}]}), encoding="utf-8")
+        a, u = dz.adaylar(bugun, defter, bd, ad_)
+        assert len(a) == 1 and not u, (a, u)
+        # gönderildikten sonra metin değişti: aday yok, uyarı yok (kronik değil)
+        (bd / "2026-10-05.json").write_text(json.dumps({"duzeltmeler": [gumus]}), encoding="utf-8")
+        d2 = {**defter, a[0]["anahtar"]: {"idler": ["9"], "zaman": "z", "metin_oz": a[0]["metin_oz"]}}
+        a2, u2 = dz.adaylar(bugun, d2, bd, ad_)
+        assert not a2 and not u2, (a2, u2)
+
+
 # ── L: rehber ↔ kod (05.10.2026 belge turu) ──────────────────────────────────
 # Rehberin gönderi anatomisini anlatan cümleleri kodun önceliklerini ve
 # bütçelerini OKURA (yazara) söyler; ikisi ayrışırsa yazar yanlış cümleyi kısa
@@ -2260,6 +2483,10 @@ def main() -> int:
     sina("J dogruluk#7 düzeltme metni öğe başına; bozuk arşivde başlık anahtardan", _j9_duzeltme_metni_oge_basina)
     sina("J sartname#6(6) sahte defterle metrik okuması koşmaz", _j10_metrik_sahte_defterde_yok)
     sina("J sartname#2(5) kuru koşu düşen birimlerin tamamını basar", _j11_kuru_dusen_tam)
+    sina("X xapi#1 aynı hedefe aynı metin tek yanıt: koşu düşmez, arkadaki gider, metrik koşar, ertesi gün POST yok", _x1_ayni_metin_ikizi)
+    sina("X xapi#4 okuma günü gönderisi sonraki okumada 24s (≤10 g), sonra 7g; 70 günlük benzetimde eksik 0", _x4_24s_bandi_okuma_gunu)
+    sina("X xapi#6 geçici okuma hatası ertesi koşuda bir kez yeniden denenir; kalıcı hata haftalık sınırda", _x6_gecici_hata_yeniden_deneme)
+    sina("X xapi#7 aynı eski→yeni çifti, iki metin: tek yanıt + adıyla uyarı; çoğalma ve sonradan düzeltme sessiz", _x7_ayni_cift_iki_metin)
     sina("L rehber ↔ kod: günlük ve haftalık düşme sırası rehberin cümlesiyle aynı", _l1_rehber_dusme_sirasi)
     sina("L rehber ↔ kod: rehberin bütçe sayıları koddaki sabitler", _l2_rehber_butceleri)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")

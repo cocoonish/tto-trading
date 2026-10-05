@@ -208,20 +208,31 @@ def _analiz_kayitlari(bugun: dt.date, dizin: Path) -> tuple[list[dict], list[str
     return out, uyari
 
 
+def _kayit_adi(aday: dict) -> str:
+    """Uyarıda kaydın adı: alan + kaynak (iki kayıt aynı dosyada durabilir)."""
+    return f"{str(aday.get('alan') or '—')!r} ({aday['kaynak']})"
+
+
 def adaylar(bugun: dt.date, defter: dict, bulten_dizin: Path | None = None,
             analiz_dizin: Path | None = None) -> tuple[list[dict], list[str]]:
     """(gönderilecek düzeltmeler, uyarılar). Dizinler çağrı anında okunur
     (uret.BULTENLER, analiz.ANALIZ_DIZIN) — duman fikstürü onları yamar.
 
-    Her aday: {anahtar, hedef, ust, metin_ham, eski, yeni, kaynak}. Defterde
-    olan anahtar atlanır; hedefi kimliksiz kayıt GÖNDERİLMEZ ve adıyla uyarılır
-    (yazma kapısı bunu zaten reddeder; analiz ön bilgisi o kapıdan geçmez)."""
+    Her aday: {anahtar, hedef, ust, metin_ham, eski, yeni, kaynak, alan, metin_oz}.
+    Defterde olan anahtar ve hedefe zaten gitmiş metin atlanır; hedefi kimliksiz
+    kayıt GÖNDERİLMEZ ve adıyla uyarılır (yazma kapısı bunu zaten reddeder;
+    analiz ön bilgisi o kapıdan geçmez)."""
     bd = bulten_dizin or uret.BULTENLER
     ad = analiz_dizin or analiz_m.ANALIZ_DIZIN
     an_kayit, an_uyari = _analiz_kayitlari(bugun, ad)
     kayitlar = _bulten_kayitlari(bugun, bd) + an_kayit
     secilen: dict[str, dict] = {}
     uyari: list[str] = list(an_uyari)
+    # Defterde bir hedefe ZATEN giden (ya da gönderimi kesilmiş, hedefi silinmiş)
+    # metinler: (hedef, metin özü). X aynı metni ikinci kez almaz.
+    giden_metin = {(h, v.get("metin_oz")) for kk, v in defter.items()
+                   if (h := _anahtar_hedefi(kk)) and isinstance(v, dict) and v.get("metin_oz")}
+    secilen_metin: dict[tuple[str, str], str] = {}
     for d in kayitlar:
         hedef = str(d.get("gonderi") or "").strip()
         govde = str(d.get("gonderi_metni") or "").strip()
@@ -252,10 +263,30 @@ def adaylar(bugun: dt.date, defter: dict, bulten_dizin: Path | None = None,
             uyari.append(f"{d['kaynak']}: düzeltme hedefi {hedef} defterde kimliksiz — yanıt atılamaz")
             continue
         k = anahtar(hedef, str(d.get("eski") or ""), str(d.get("yeni") or ""))
-        if k in defter or k in secilen:
+        oz = metin_ozu(govde)
+        if k in defter:
+            continue
+        if k in secilen:
+            # Aynı eski→yeni çifti, AYRI metin: yalnız ilk kaydın metni gider.
+            # Uyarı yalnız koşu içi çakışmada — gönderildikten sonra yapılan biçim
+            # düzeltmesi (`k in defter`) pencere boyunca her koşuda uyarı basmaz.
+            if oz != secilen[k]["metin_oz"]:
+                uyari.append(f"{d['kaynak']}: {hedef} için aynı eski→yeni çiftiyle ikinci bir "
+                             f"gonderi_metni var (alan {str(d.get('alan') or '—')!r}) — yalnız "
+                             f"{_kayit_adi(secilen[k])} kaydının metni gider; iki metni tek kayıtta birleştir")
+            continue
+        if (hedef, oz) in giden_metin:
+            continue                                   # bu metin bu hedefe zaten gitti
+        if (hedef, oz) in secilen_metin:
+            ilk = secilen[secilen_metin[(hedef, oz)]]
+            uyari.append(f"{d['kaynak']}: {hedef} için aynı metinle ikinci bir düzeltme kaydı "
+                         f"(alan {str(d.get('alan') or '—')!r}) — tek yanıt gider ({_kayit_adi(ilk)} kaydı); "
+                         "X aynı metni ikinci kez kabul etmez")
             continue
         secilen[k] = {"anahtar": k, "hedef": hedef, "ust": ust, "metin_ham": govde,
-                      "eski": d.get("eski"), "yeni": d.get("yeni"), "kaynak": d["kaynak"]}
+                      "eski": d.get("eski"), "yeni": d.get("yeni"), "kaynak": d["kaynak"],
+                      "alan": d.get("alan"), "metin_oz": oz}
+        secilen_metin[(hedef, oz)] = k
     return list(secilen.values()), uyari
 
 

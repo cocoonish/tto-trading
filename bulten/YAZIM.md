@@ -394,7 +394,11 @@ kapanışı bir seans geriden okunmuştu."). İkisi birlikte yazılır; hedef
 ENGEL alırsa yazma reddedilir. `tweet/gonder.py` kaydın tarihinden sonraki 21
 gün içinde — kayıt hangi sayının dosyasında durursa dursun — orijinalin altına
 "Düzeltme — <hedefin başlığı>" yanıtını atar; pencere dışında kalan kayıt
-gitmez ve koşu onu adıyla uyarır. Aynı eski→yeni çifti bir kez gider. Hedef
+gitmez ve koşu onu adıyla uyarır. Aynı eski→yeni çifti bir kez gider; bir
+hedefe aynı metin de bir kez gider (X aynı metni ikinci kez kabul etmez): iki
+düzeltmeyi birden anlatan metin iki kayda aynen yazılırsa tek yanıt gider, aynı
+eski→yeni çiftine iki ayrı metin yazılırsa yalnız ilki gider ve koşu ikincisini
+adıyla uyarır — iki metni tek kayıtta birleştir. Hedef
 X'te silinmişse yanıt atılmaz, kayıt "hedef yok" diye defterlenir. Metin sayfa yapısını anmaz ("gösterge
 şeridi", "Türkiye bölümü", "satır" — X okurunun elinde o sayfa yok), HTML ve
 link taşımaz. İçerik hatası için gönderi SİLİNMEZ; silip yeniden atma yalnız

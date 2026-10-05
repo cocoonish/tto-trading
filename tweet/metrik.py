@@ -19,14 +19,24 @@ Yeni cron eklenmedi: yayin_takvimi.json tweet.yml'in cron indekslerine bağlı.
 ASLA GÖNDERİMİ ETKİLEMEZ. `haftalik()` hiçbir koşulda istisna yükseltmez;
 402 (kredi), 403 (kapsam), ağ hatası ve bozuk yanıt yutulur, sebebi
 metrik.json'a `son_hata` olarak yazılır (ölçülemeyen boş bırakılır, sebebi
-yazılır). gonder.py çağrıyı ayrıca sarar.
+yazılır). gonder.py çağrıyı ayrıca sarar. GEÇİCİ hata (429, 5xx, ağ) ayrıca
+`gecici_hata_ani` yazar ve haftalık sınırı beklemeden en erken 12 saat sonraki
+gönderim koşusunda bir kez daha denenir (`zamani_geldi`); kalıcı hata bekler.
 
 CETVEL. Gösterim birikimli bir sayıdır; farklı yaşlardaki gönderiler
-kıyaslanamaz. Her gönderi iki SABİT eşikte kaydedilir — yaşı 24 saati ilk
-geçtiği okumada ("24s", yaş < 7 gün) ve 7 günü ilk geçtiği okumada ("7g", yaş
-< 30 gün) — ve gerçek yaş ölçümün yanına saat olarak yazılır. Okuma haftalık
-olduğu için "24s" bandındaki yaş 1–7 gün arası dağılır; kıyas yapan okur yaşı
-görür. Bir eşik okumada kaçırıldıysa o bant boş kalır (uydurulmaz).
+kıyaslanamaz. Her gönderi iki SABİT eşikte kaydedilir — yaşı 24 saati geçtikten
+sonraki ilk okumada ("24s") ve 7 günü geçtikten sonraki ilk okumada ("7g", yaş
+< 30 gün) — ve gerçek yaş ölçümün yanına saat olarak yazılır; kıyas yapan okur
+yaşı görür. "24s"nin üst sınırı 7 değil 10 GÜNDÜR (`UST_24S`) ve "7g" ancak
+"24s" ÖNCEKİ bir okumada yazılmışsa ya da yaş 10 günü geçtiyse yazılır. Sebep
+ölçüldü: okuma gönderimden SONRA ve haftada bir koşar, yani okuma koşusunda
+atılan gönderi bir sonraki okumada tanım gereği ≥ 7 günlüktür; üst sınır 7
+günken o gönderi (ve cron gecikmesiyle bir sonrakinin gönderisi) "24s"yi HİÇ
+almıyor, doğrudan "7g"ye düşüyordu — günlük gönderide ~%21, okuma gününe bağlı
+yanlı bir eksik. Haftalık okumada "24s" yaşı bu yüzden ~1–10 gün arası dağılır.
+Bir eşik okumada kaçırıldıysa (yaş > 10 gün) o bant boş kalır (uydurulmaz).
+İlk okumada ve atlanan ya da başarısız bir okumadan sonra "7g" 30 güne kadar
+yaşları birlikte taşır; bant içi kıyas da `yas_saat` ile yapılır.
 
 Alanlar: tür · biçim sürümü · karakter uzunluğu · gönderim anı ve İstanbul
 saati · gösterim · beğeni · yanıt · yeniden paylaşım · alıntı · yer imi. Hesap
@@ -47,9 +57,16 @@ UC = "https://api.x.com/2/tweets"
 
 HAFTA = dt.timedelta(days=7)
 PENCERE = dt.timedelta(days=30)
-# (bant adı, eşik, üst sınır): bant yalnız yaş [eşik, üst) aralığındayken yazılır.
-BANTLAR = (("24s", dt.timedelta(hours=24), dt.timedelta(days=7)),
-           ("7g", dt.timedelta(days=7), PENCERE))
+# "24s" bandının üst sınırı: 7 gün + 24 saat + okuma aralığının payı. Ölçüldü
+# (gerçek defterin gönderim deseni, 14 başlangıç fazı): 9 günde %1,4, 10 günde
+# %0 gönderi "24s"yi kaçırıyor; 7 günde %21.
+UST_24S = dt.timedelta(days=10)
+# (bant adı, eşik, üst sınır) — belge; kural `bant_sec`te (7g'nin kapısı var).
+BANTLAR = (("24s", dt.timedelta(hours=24), UST_24S),
+           ("7g", HAFTA, PENCERE))
+# Geçici okuma hatasından sonra yeniden deneme: haftalık sınırı beklemeden, en
+# erken bu kadar sonra (bir sonraki gönderim koşusu; aynı koşuda döngü yok).
+YENIDEN_DENEME = dt.timedelta(hours=12)
 ISTANBUL = dt.timezone(dt.timedelta(hours=3))          # 2016'dan beri yaz saati yok
 ALANLAR = (("gosterim", "impression_count"), ("begeni", "like_count"),
            ("yanit", "reply_count"), ("yeniden", "retweet_count"),
@@ -73,16 +90,40 @@ def yukle(yol: Path = METRIK) -> dict:
 
 
 def zamani_geldi(kayit: dict, simdi: dt.datetime) -> bool:
-    """Haftada bir: son DENEME (başarılı ya da değil) yedi günden eskiyse."""
+    """Haftada bir: son DENEME (başarılı ya da değil) yedi günden eskiyse. Tek
+    istisna GEÇİCİ hata (429, 5xx, ağ): son deneme geçici hatayla bittiyse
+    (`gecici_hata_ani` son denemeden eski değil) en erken YENIDEN_DENEME sonra
+    bir kez daha denenir. Önce tek bir 503 bir hafta beklemeye çeviriyordu ve
+    o haftanın gönderileri "24s" bandını kalıcı kaybediyordu. Kalıcı hata
+    (402 kredi, 403 kapsam, öbür 4xx) haftalık sınırda kalır: her koşuda yeniden
+    sormak her koşuda aynı hatayı üretir."""
     son = _an(kayit.get("son_deneme"))
-    return son is None or simdi - son >= HAFTA
+    if son is None or simdi - son >= HAFTA:
+        return True
+    gecici = _an(kayit.get("gecici_hata_ani"))
+    return gecici is not None and gecici >= son and simdi - gecici >= YENIDEN_DENEME
+
+
+def bant_sec(yas: dt.timedelta, yazilmis_bantlar: set[str]) -> str | None:
+    """Bu okumada yazılacak TEK bant (ya da None). `yazilmis_bantlar` gönderinin
+    ÖNCEKİ okumalarda yazılmış bantları. "24s": yaş [24 sa, 10 g) ve henüz yok.
+    "7g": yaş ≥ 7 g, henüz yok ve ya "24s" önceki bir okumada yazılmış ya da yaş
+    ≥ 10 g (24s artık kaçırılmıştır). Aynı okuma iki ayrı yaşın ölçüsü sayılmaz;
+    "7g"si yazılmış gönderiye sonradan "24s" yazılmaz (eski cetvelin kayıtları)."""
+    if not yazilmis_bantlar & {"24s", "7g"} and BANTLAR[0][1] <= yas < UST_24S:
+        return "24s"
+    if "7g" not in yazilmis_bantlar and HAFTA <= yas < PENCERE \
+            and ("24s" in yazilmis_bantlar or yas >= UST_24S):
+        return "7g"
+    return None
 
 
 def okunacaklar(defter: dict, kayit: dict, simdi: dt.datetime) -> list[dict]:
-    """Son 30 günün kimlikli gönderilerinden, bir bandı bu okumada dolacak olanlar.
-    Bir gönderi aynı okumada iki bandı birden geçtiyse yalnız ÜSTTEKİ yazılır —
-    aynı okuma iki ayrı yaşın ölçüsü sayılmaz; kaçırılan bant boş kalır."""
-    yazilmis = {(o.get("anahtar"), o.get("bant")) for o in kayit.get("olcumler") or []}
+    """Son 30 günün kimlikli gönderilerinden, bir bandı bu okumada dolacak olanlar
+    (`bant_sec`). Kaçırılan bant boş kalır."""
+    yazilmis: dict[str, set[str]] = {}
+    for o in kayit.get("olcumler") or []:
+        yazilmis.setdefault(o.get("anahtar"), set()).add(o.get("bant"))
     out = []
     for anahtar, v in defter.items():
         idler = (v or {}).get("idler") or []
@@ -92,12 +133,10 @@ def okunacaklar(defter: dict, kayit: dict, simdi: dt.datetime) -> list[dict]:
         yas = simdi - gonderim
         if not (dt.timedelta(0) <= yas < PENCERE):
             continue
-        for bant, esik, ust in reversed(BANTLAR):
-            if esik <= yas < ust:
-                if (anahtar, bant) not in yazilmis:
-                    out.append({"anahtar": anahtar, "kimlik": str(idler[0]),
-                                "gonderim": gonderim, "bant": bant, "yas": yas})
-                break
+        bant = bant_sec(yas, yazilmis.get(anahtar, set()))
+        if bant:
+            out.append({"anahtar": anahtar, "kimlik": str(idler[0]),
+                        "gonderim": gonderim, "bant": bant, "yas": yas})
     return out
 
 
@@ -141,6 +180,15 @@ def haftalik(erisim: str, defter: dict, yol: Path = METRIK, simdi: dt.datetime |
         return f"metrik okunamadı ({type(e).__name__}: {str(e)[:120]}) — gönderim etkilenmedi"
 
 
+def gecici_mi(kod: int | None = None, hata: BaseException | None = None) -> bool:
+    """Geçici okuma hatası: HTTP 429 ya da 5xx, ya da ağ hatası (OSError —
+    requests.RequestException ve Timeout/ConnectionError alt sınıfları dahil).
+    Bozuk yanıt (ValueError), 402 ve 403 kalıcı sayılır."""
+    if hata is not None:
+        return isinstance(hata, OSError)
+    return kod is not None and (kod == 429 or kod >= 500)
+
+
 def _haftalik(erisim, defter, yol, simdi, istek, arsiv, bulten_dizin) -> str:
     kayit = yukle(yol)
     if not zamani_geldi(kayit, simdi):
@@ -148,6 +196,7 @@ def _haftalik(erisim, defter, yol, simdi, istek, arsiv, bulten_dizin) -> str:
     liste = okunacaklar(defter, kayit, simdi)
     kayit["surum"] = 1
     kayit["son_deneme"] = simdi.isoformat(timespec="seconds")
+    kayit.pop("gecici_hata_ani", None)         # yalnız BU denemenin sonucu yazar
     kayit.setdefault("olcumler", [])
     if not liste:
         kayit.pop("son_hata", None)
@@ -159,11 +208,17 @@ def _haftalik(erisim, defter, yol, simdi, istek, arsiv, bulten_dizin) -> str:
         kod = getattr(yanit, "status_code", None)
         if kod != 200:
             kayit["son_hata"] = f"HTTP {kod}"
+            if gecici_mi(kod=kod):
+                kayit["gecici_hata_ani"] = kayit["son_deneme"]
             _yaz(yol, kayit)
-            return f"metrik: X {kod} — okunamadı, sebebi kayda yazıldı; gönderim etkilenmedi"
+            return (f"metrik: X {kod} — okunamadı, sebebi kayda yazıldı"
+                    + ("; geçici, sonraki koşuda yeniden denenir" if gecici_mi(kod=kod) else "")
+                    + "; gönderim etkilenmedi")
         veri = {str(t.get("id")): t.get("public_metrics") or {} for t in (yanit.json().get("data") or [])}
     except Exception as e:                                     # noqa: BLE001
         kayit["son_hata"] = f"{type(e).__name__}: {str(e)[:120]}"
+        if gecici_mi(hata=e):
+            kayit["gecici_hata_ani"] = kayit["son_deneme"]
         _yaz(yol, kayit)
         return f"metrik: istek düştü ({kayit['son_hata']}) — gönderim etkilenmedi"
     yeni = 0

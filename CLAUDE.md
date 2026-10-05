@@ -4651,7 +4651,16 @@ Okuma hiçbir koşulda gönderimi etkilemez (402, 403, ağ hatası yutulur ve
 `son_hata`ya yazılır) ve sahte defterle koşmaz. İlk gerçek koşu 05.10.2026
 15:14 UTC'de 36 gönderiyi hatasız okudu, yani `tweet.read` kapsamı yetiyor;
 okumanın API kredisi maliyeti kayda geçmiyor ve ÖLÇÜLMEDİ. Eşik ve "en iyi
-saat" hükmü yok: önce birikim. (5) ANALİZ ŞERİDİ. 17.09'daki "rakam şeridi ve
+saat" hükmü yok: önce birikim. Geç gelen X merceği üç açığı ölçüp kapattı:
+"24s" bandı 10 güne kadar yazılır ve "7g" ancak ondan sonra (okuma gönderimden
+sonra ve haftada bir koştuğu için okuma koşusunun gönderisi bir sonraki okumada
+tanım gereği ≥ 7 günlüktü ve günlük gönderilerin ~%21'i "24s"yi hiç almıyordu),
+geçici okuma hatası (429 · 5xx · ağ) haftayı beklemeden ertesi gönderim
+koşusunda bir kez yeniden denenir, ve bir hedefe aynı düzeltme metni ikinci kez
+kurulmaz (`metin_oz`; X kopyayı 403 ile reddediyor, o 403 kapsam arızası sanılıp
+koşuyu pencere boyunca her sabah düşürüyor, arkadaki düzeltmeleri ve okumayı
+götürüyordu) — aynı eski→yeni çiftine yazılan ikinci metin ise adıyla uyarılır.
+(5) ANALİZ ŞERİDİ. 17.09'daki "rakam şeridi ve
 tez KALIR" niyeti bilerek değişti: şerit yalnız tezde ya da bir satırda
 GEÇMEYEN ölçümü taşır, hiçbiri kalmazsa basılmaz (bugün yönetici özetli 12
 yazının 3'ünde yok); korunan şey şerit değil, gönderide başka yerde olmayan
