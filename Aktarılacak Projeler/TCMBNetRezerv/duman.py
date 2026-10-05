@@ -204,9 +204,9 @@ sina("düşen haftalık çekim uyarı listesine giriyor",
 # ---------------------------------------------------------------------------
 # Ölçüldü: brüt altınla kurulan Γ net pozisyondan fazla düşülüyordu, çünkü
 # TCMB'nin altın cinsinden yükümlülükleri (zorunlu karşılık, bankalar, yurt
-# dışı bankalar, Hazine) de yeniden değerleniyor. Yayımlanan akımın Γ'ya
-# eğimi −0,29 (t −3,6); net altınla +0,13 (t 1,1). 27.02'den birikim −11,8
-# değil −20,6 milyar dolar çıktı.
+# dışı bankalar, Hazine) de yeniden değerleniyor. Brüt altınla kurulan
+# akımın Γ'ya eğimi 2026'da −0,27 (t −3,5); net altınla +0,15 (t 1,3)
+# (Londra fiyatıyla, birleşik bloklar hariç).
 print("\n▶ Net altın")
 
 import inspect as _inspect
@@ -275,9 +275,24 @@ _rng = np.random.default_rng(7)
 _iz = pd.bdate_range("2026-01-05", periods=150)
 _gam = pd.Series(_rng.normal(0, 1.5, 150), index=_iz)
 _temiz = pd.Series(_rng.normal(0, 1.0, 150), index=_iz)
-sina("sızıntı tanısı temiz akımda susuyor", not ae.sizinti_tanisi(_temiz, _gam))
+sina("sızıntı tanısı temiz akımda susuyor", not ae.sizinti_tanisi(_temiz, _gam, None))
 sina("sızıntı tanısı fazla düşülen akımda (−0,4·Γ) ateşliyor",
-     bool(ae.sizinti_tanisi(_temiz - 0.4 * _gam, _gam)))
+     bool(ae.sizinti_tanisi(_temiz - 0.4 * _gam, _gam, None)))
+# Birleşik (çok seanslı) tek nokta: Γ ve akım birlikte büyük. Ölçüldü
+# (19.03.2026): kaldıracı tek başına eğimi taşıyordu. `haric` ile düşülür.
+_gam2, _ak2 = _gam.copy(), _temiz.copy()
+_gam2.iloc[100], _ak2.iloc[100] = -8.5, -12.0
+_bir2 = pd.Series(False, index=_iz)
+_bir2.iloc[100] = True
+sina("tek birleşik nokta maskesiz tanıyı ateşliyor (sınamanın kendisi arızayı üretiyor)",
+     bool(ae.sizinti_tanisi(_ak2, _gam2, None)))
+sina("birleşik etiket regresyondan düşülünce tanı susuyor",
+     not ae.sizinti_tanisi(_ak2, _gam2, _bir2))
+_imza_s = _inspect.signature(ae.sizinti_tanisi).parameters["haric"]
+sina("sızıntı tanısında birleşik maskenin varsayılanı YOK",
+     _imza_s.default is _inspect.Parameter.empty)
+sina("iki çağrı yeri de birleşik maskeyi veriyor",
+     _inspect.getsource(ae).count('out["akim_birlesik"])') >= 2)
 
 # ---------------------------------------------------------------------------
 # 25–29. Bayram arifesi: ortadaki taşıma birleşik akım olur (05.10.2026)
@@ -316,6 +331,167 @@ _df2 = _df.copy(); _df2.loc[_ix[1], "net_doviz_alimi"] = float("nan")
 _b2, _ = ae.birlesik_akim(_df2, _kk, ["net_doviz_alimi"])
 sina("bloktaki boş gün birleşik değeri de boş bırakır (sıfır sayılmaz)",
      pd.isna(_b2.loc[_ix[2], "net_doviz_alimi"]))
+
+# ---------------------------------------------------------------------------
+# Tanılar — kör ya da kaymış bir tanı "sorun yok" diye okunur
+# ---------------------------------------------------------------------------
+# (1) Zincirleme sapması: miktar sabitken Σ Γ = Q·[P(T) − P(çıpa)] KİMLİKTİR,
+# yani D_T tam sıfır olmalı. Γ(L) fiyatı L+1'e yürüttüğü için T son akım
+# etiketinin ERTESİ günüdür; P(son etiket) ile kurulan doğrudan etki son
+# günün fiyat etkisini eksik sayar ve sapma kimlikten doğar (05.10.2026'ya kadar
+# böyleydi: yayımlanan +2,16, doğrusu +1,46).
+print("\n▶ Tanılar")
+_ix = _gunler(8)
+_q = pd.Series(10.0, index=_ix)
+_p = pd.Series([4000.0, 4010, 3990, 4050, 4100, 4080, 4120, 4150], index=_ix)
+_g = ae.altin_fiyat_etkisi(_q, _p, None)["altin_fiyat_etkisi"]
+_dt, _ = ae.zincirleme_tanisi(_g, _q, _p, str(_ix[0].date()))
+sina("zincirleme sapması sabit miktarda SIFIR (doğrudan etki son etiketin ertesi gününe)",
+     _dt is not None and abs(_dt) < 1e-12, f"D_T {_dt}")
+
+# (2) Değerleme fiyatı tanısı: "ima" çapasında miktar V/P'den kurulur, sapma
+# cebirsel olarak sıfırdır — o çapa tanıya bir şey söylemez ve sayılmamalı;
+# bağımsız yayımlanan miktarda (IRFCL PDF) sapma uyarı üretmeli.
+_ix = _gunler(10)
+_fy = pd.Series(4000.0, index=_ix)
+_capa = pd.DataFrame({"ons": [25.0, 25.0], "kaynak": ["ima", "irfcl_pdf"]},
+                     index=[_ix[3], _ix[8]])
+_deger = pd.Series(float("nan"), index=_ix)
+_deger[_ix[3]] = 25.0 * 4000.0            # ima: V/Q = P (cebirsel)
+_deger[_ix[8]] = 25.0 * 4400.0            # PDF: değerleme fiyatı %10 yukarıda
+_etki = pd.DataFrame({"bennet_fark": [0.0] * 10, "altin_fiyat_etkisi": [0.0] * 10}, index=_ix)
+_u = ae.altin_tanilari(_capa, _deger, _fy, _etki, bugun=_ix[-1])
+_fiyat_u = [x for x in _u if x.startswith("ALTIN FİYAT TANISI")]
+sina("fiyat tanısı bağımsız çapada ateşliyor, ima çapasını saymıyor",
+     len(_fiyat_u) == 1 and _ix[8].strftime("%d.%m.%Y") in _fiyat_u[0], f"{_fiyat_u}")
+sina("fiyat tanısı sayıyı biçim sözleşmesiyle yazıyor (yüzde önde, ondalık virgül)",
+     bool(_fiyat_u) and "%10,0" in _fiyat_u[0] and "4.400" in _fiyat_u[0], f"{_fiyat_u}")
+import contextlib, io  # noqa: E401,E402
+_kor = io.StringIO()
+with contextlib.redirect_stdout(_kor):
+    ae.altin_tanilari(_capa.iloc[:1], _deger, _fy, _etki, bugun=_ix[-1])
+sina("çapaların hepsi ima ise tanının KÖR olduğu koşu çıktısına yazılıyor",
+     "ölçülemedi" in _kor.getvalue(), repr(_kor.getvalue()[:120]))
+
+# ---------------------------------------------------------------------------
+# Birikim çıpası: birleşik bloğun İÇİNE düşen çıpa önceki etiketleri sayar
+# ---------------------------------------------------------------------------
+print("\n▶ Birikim çıpası ve birleşik bloklar")
+_ix = _gunler(6)
+_ak = pd.Series([1.0, float("nan"), 3.0, -1.0, 2.0, 0.5], index=_ix)
+_bl = [([_ix[1]], _ix[2])]                    # blok: 1 boş, toplam 2'ye
+_ok = ae.birikimli_akim(_ak, str(_ix[1].date()), _bl)
+sina("bloğun ilk boş etiketi geçerli çıpa (birikim toplamı kapsar)",
+     abs(float(_ok.dropna().iloc[0]) - 3.0) < 1e-12, f"{list(_ok)}")
+try:
+    ae.birikimli_akim(_ak, str(_ix[2].date()), _bl)
+    _hata = False
+except RuntimeError:
+    _hata = True
+sina("çıpa birleşik hedef etiketse görünür hata (önceki etiketi saymaz)", _hata)
+sina("çıpa Londra fiyatından önceyse uyarı, sonraysa sessiz",
+     bool(ae.cipa_tanisi("2023-06-01", pd.Timestamp("2023-11-17")))
+     and not ae.cipa_tanisi("2026-02-27", pd.Timestamp("2023-11-17"))
+     and not ae.cipa_tanisi("2023-06-01", None))
+
+# ---------------------------------------------------------------------------
+# Londra fiyatı — değerleme saatindeki uluslararası fiyat (05.10.2026)
+# ---------------------------------------------------------------------------
+# Ölçüldü: TCMB bilançosu altını Londra sabah fiksingi saatinde (10:30)
+# değerliyor; BİST ağırlıklı ortalaması değerlemeyi açıklamıyordu (katsayı
+# 0,06, t 0,6) ve akıma günde ~0,6 milyar USD gürültü yazıyordu.
+print("\n▶ Londra fiyatı")
+
+
+def _barlar(gunler, saatler, deger, sembol="IGLN.L"):
+    """Londra YEREL saatinde başlayan saatlik barlar (indeks UTC başlangıç)."""
+    ix, v = [], []
+    for gun in gunler:
+        for h in saatler:
+            yerel = pd.Timestamp(f"{gun} {h:02d}:00", tz="Europe/London")
+            ix.append(yerel.tz_convert("UTC"))
+            v.append(deger(gun, h))
+    return pd.Series(v, index=pd.DatetimeIndex(ix))
+
+
+# Yaz saati (Temmuz) ve kış saati (Ocak): bar başlangıcı 09:00 ve 10:00
+# (Londra) → bitişi 10:00 ve 11:00; 11:00'de başlayan bar dışarıda kalır.
+_b = _barlar(["2026-07-06", "2026-01-05"], [8, 9, 10, 11],
+             lambda gun, h: {8: 1.0, 9: 10.0, 10: 20.0, 11: 99.0}[h])
+_lg = ae.londra_gunluk({"IGLN.L": _b}, pd.Timestamp("2026-07-10 00:00", tz="UTC"))
+sina("gün değeri 10:00 ve 11:00'de BİTEN iki barın ortalaması (yaz ve kış saati)",
+     list(_lg["IGLN.L"].round(9)) == [15.0, 15.0], f"{_lg.to_dict()}")
+# Kapanmamış bar ölçüm değildir: 10:00–11:00 barı 10:30 UTC+1'de (yaz) kapanmadı.
+_simdi = pd.Timestamp("2026-07-06 10:30", tz="Europe/London").tz_convert("UTC")
+_b_yaz = _barlar(["2026-07-06"], [8, 9, 10, 11],
+                 lambda gun, h: {8: 1.0, 9: 10.0, 10: 20.0, 11: 99.0}[h])
+_lg2 = ae.londra_gunluk({"IGLN.L": _b_yaz}, _simdi)
+sina("kapanmamış bar kullanılmaz (tek kapanmış bar alınır)",
+     len(_lg2) == 1 and abs(float(_lg2["IGLN.L"].iloc[0]) - 10.0) < 1e-12, f"{_lg2.to_dict()}")
+_b_yarim = _b.copy()
+_b_yarim.index = _b_yarim.index + pd.Timedelta(minutes=30)
+_lg3 = ae.londra_gunluk({"IGLN.L": _b_yarim}, pd.Timestamp("2026-07-10", tz="UTC"))
+sina("saat başında bitmeyen bar alınmaz", _lg3.empty, f"{_lg3.to_dict()}")
+
+# Arşiv kazanır: yayımlanmış bir akımın girdisi yeni indirmeyle değişmez.
+_ar = pd.DataFrame({"IGLN.L": [10.0, 11.0]},
+                   index=pd.DatetimeIndex(["2026-07-06", "2026-07-07"], name="tarih"))
+_yn = pd.DataFrame({"IGLN.L": [10.5, 11.0, 12.0], "SGLD.L": [50.0, 55.0, 60.0]},
+                   index=pd.DatetimeIndex(["2026-07-06", "2026-07-07", "2026-07-08"]))
+_bir, _fark = ae.londra_arsiv_birlestir(_ar, _yn)
+sina("arşivdeki değer korunur, yeni gün ve boş hücre eklenir",
+     float(_bir.loc["2026-07-06", "IGLN.L"]) == 10.0
+     and float(_bir.loc["2026-07-08", "IGLN.L"]) == 12.0
+     and float(_bir.loc["2026-07-06", "SGLD.L"]) == 50.0, f"{_bir.to_dict()}")
+sina("arşivle ayrışan hücre sayılır (tanı)", _fark == 1, f"fark {_fark}")
+
+# Ölçek: TCMB değerleme fiyatı / ETC, son çapaların medyanı; çapa yetmezse yok.
+_etc = pd.Series([10.0] * 20, index=pd.bdate_range("2026-01-05", periods=20))
+_df_ = pd.Series([4000.0, 4010.0, 3990.0],
+                 index=pd.DatetimeIndex(["2026-01-09", "2026-01-16", "2026-01-23"]))
+_k, _n = ae.londra_olcek(_etc, _df_)
+sina("ölçek çapaların medyanı (400)", _k == 400.0 and _n == 3, f"{_k}, {_n}")
+_k2, _n2 = ae.londra_olcek(_etc, _df_.iloc[:2])
+sina("üç çapadan azsa ölçek YOK (seviye uydurulmaz)", _k2 is None and _n2 == 2)
+
+# Birleşik seri: Londra'nın ilk gününden önce BİST, seviyesi o günde ölçeklenir;
+# sonrası yalnız Londra, eksik gün taşınır (BİST'e dönülmez).
+_ix = _gunler(6)
+_bist = pd.Series([100.0, 102.0, 101.0, 103.0, 104.0, 105.0], index=_ix)
+_lo = pd.Series([float("nan"), float("nan"), 202.0, float("nan"), 210.0, 212.0], index=_ix)
+_fs = ae.fiyat_serisi(_bist, pd.Series(dtype=float), _ix, _lo)
+sina("dikişte sahte hareket yok: S−1 → S değişimi BİST değişiminin ölçeklisi",
+     abs(float(_fs["altin_fiyat"].iloc[2] - _fs["altin_fiyat"].iloc[1]) - 2.0 * (101.0 - 102.0)) < 1e-9,
+     f"{list(_fs['altin_fiyat'])}")
+sina("Londra başladıktan sonra eksik gün BİST'le değil taşımayla dolar",
+     float(_fs["altin_fiyat"].iloc[3]) == 202.0
+     and _fs["altin_fiyat_kaynak"].iloc[3] == "ffill"
+     and _fs["altin_fiyat_kaynak"].iloc[4] == "londra", f"{list(_fs['altin_fiyat_kaynak'])}")
+sina("Londra serisi yoksa BİST serisi aynen kalır",
+     list(ae.fiyat_serisi(_bist, pd.Series(dtype=float), _ix, None)["altin_fiyat"]) == list(_bist))
+_imza_l = _inspect.signature(ae.fiyat_serisi).parameters["londra"]
+_imza_h = _inspect.signature(ae.arindirma_hatti).parameters["londra_fiyati"]
+sina("Londra girdisinin varsayılanı YOK (iki imzada da)",
+     _imza_l.default is _inspect.Parameter.empty and _imza_h.default is _inspect.Parameter.empty)
+sina("hat Londra serisini kurup ayrıştırmaya veriyor",
+     "londra_fiyati=londra_p" in _net_kaynak and "londra_hazirla(" in _net_kaynak)
+
+# İndirme düşerse sebep okura yazılır ve arşivin son günü söylenir.
+_ar2 = pd.DataFrame({"IGLN.L": [10.0], "SGLD.L": [50.0]},
+                    index=pd.DatetimeIndex(["2026-07-06"], name="tarih"))
+_p_, _a_, _u_, _ = ae.londra_hazirla(None, pd.Timestamp("2026-07-10", tz="UTC"),
+                                     pd.Series(dtype=float), _ar2, "kaynak yanıt vermedi")
+sina("indirme düşünce okura sebep ve arşivin son günü yazılır",
+     any("ALINAMADI" in x and "06.07.2026" in x for x in _u_), f"{_u_}")
+_p_, _a_, _u_, _ = ae.londra_hazirla(None, pd.Timestamp("2026-07-10", tz="UTC"),
+                                     pd.Series(dtype=float), None, "kaynak yanıt vermedi")
+sina("arşiv de yoksa seri kurulmaz ve okura söylenir",
+     _p_ is None and any("KURULAMADI" in x for x in _u_), f"{_u_}")
+_oz_kaynak = (pathlib.Path(__file__).with_name("ozet_uret.py")).read_text(encoding="utf-8")
+sina("fiyat kaynağının her kodunun okur adı var (sayfaya kod etiketi gitmez)",
+     all(f'"{k}":' in _oz_kaynak for k in ("londra", "agort03", "kap03", "ffill")))
+sina("Londra fiyatının indirmesi bağımlılık listesinde",
+     "yfinance" in (pathlib.Path(__file__).with_name("requirements.txt")).read_text(encoding="utf-8"))
 
 # ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")

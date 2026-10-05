@@ -402,9 +402,14 @@ CAPA_BOSLUK_SON_N = 4
 TAZELIK_TOLERANS_ISGUNU = {
     "analitik bilanço (TP.AB.A*)": 7,
     "USD/TRY (TP.DK.USD.A.YTL)": 7,
-    "altın fiyatı (TP.ALTINPIYASA.*)": 7,
+    "Londra altın fiyatı (IGLN·SGLD)": 7,
     "swap stoku (TP.SWAPTEKTAR.*)": 7,
 }
+# EVDS DIŞI cephe kaynağı: (c) "toptan durma" ve (d) göreli yaş EVDS
+# beslemesinin ortak takvimini sorar. Londra fiyatı aynı gün sabah gelir ve
+# EVDS'ten bir gün ileride biter; ortak kümeye girseydi EVDS'in tamamı
+# durduğunda "hepsi aynı tarihte bitiyor" koşulu hiç sağlanmazdı.
+CEPHE_EVDS_DISI = {"Londra altın fiyatı (IGLN·SGLD)"}
 TAZELIK_TOLERANS_GUN = {
     "haftalık rezerv (TP.AB.C*/TOPLAM)": 12,
     "Stand-By 2A (TP.AB.N*)": 12,
@@ -532,6 +537,40 @@ def fetch_irfcl_aylik(start: str, end: str) -> pd.DataFrame:
     df["toplam_M"] = df["ii2_M"].fillna(0.0) + df["ii3_M"].fillna(0.0)
     df.index.name = "tarih"
     return df
+
+
+# Londra altın fiyatının indirme penceresi. Arşiv depoda biriktiği için
+# yalnız son günler gerekir; 60 gün, hattın iki ay koşmaması hâlinde bile
+# boşluk bırakmaz.
+LONDRA_INDIRME_DONEM = "60d"
+
+
+def londra_saatlik_indir() -> tuple[dict | None, str | None]:
+    """Ağa çıkan TEK parça: iki fiziki altın ETC'sinin saatlik barları.
+
+    Dönüş (barlar, okur için sebep). Teknik ayrıntı koşu kaydına basılır;
+    okura giden uyarıya istisna adı yazılmaz.
+    """
+    try:
+        try:
+            import fx_kapanis
+        except ImportError:
+            import pathlib
+            import sys
+            sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / "ortak"))
+            import fx_kapanis
+        s = fx_kapanis.yfinance_saatlik(list(altin_etkisi.LONDRA_ETC),
+                                        donem=LONDRA_INDIRME_DONEM)
+    except Exception as e:                  # noqa: BLE001 — sebebi yazılır
+        print(f"UYARI: Londra altın kotasyonları indirilemedi "
+              f"({type(e).__name__}: {e}).")
+        return None, "kaynak yanıt vermedi"
+    if not s:
+        return None, "kaynak boş yanıt verdi"
+    eksik = [k for k in altin_etkisi.LONDRA_ETC if k not in s]
+    if eksik:
+        print(f"UYARI: Londra altın kotasyonu gelmeyen sembol: {', '.join(eksik)}")
+    return s, None
 
 
 def fetch_grup(seriler: dict[str, str], start: str, end: str,
@@ -1260,12 +1299,13 @@ def tazelik_denetimi(veriler: dict[str, pd.Index | pd.Series],
     # Aynı tarihte bitmeleri normaldir (ortak iş günü takvimi); anormal olan o
     # ortak tarihin eskimesidir. Tek tek uyarı basmak bu durumda "her kaynak
     # ayrı ayrı bozuldu" gibi okunur; asıl teşhis "besleme düştü"dür.
-    if len(cephe_son) >= 2 and len(set(cephe_son.values())) == 1:
-        ortak = next(iter(cephe_son.values()))
+    cephe_evds = {k: v for k, v in cephe_son.items() if k not in CEPHE_EVDS_DISI}
+    if len(cephe_evds) >= 2 and len(set(cephe_evds.values())) == 1:
+        ortak = next(iter(cephe_evds.values()))
         yas = _isgunu_yasi(ortak, ref)
         if yas > CEPHE_ORTAK_DURUS_ISGUNU:
             uyarilar.append(
-                f"BESLEME DURMUŞ OLABİLİR: {len(cephe_son)} cephe kaynağının "
+                f"BESLEME DURMUŞ OLABİLİR: {len(cephe_evds)} cephe kaynağının "
                 f"HEPSİ aynı tarihte ({ortak:%d.%m.%Y}, {yas} iş günü önce) "
                 f"bitiyor. Tek bir seri değil EVDS beslemesinin tamamı durmuş "
                 "olabilir; sayfadaki bütün güncel sayılar o tarihe aittir."
@@ -1274,7 +1314,7 @@ def tazelik_denetimi(veriler: dict[str, pd.Index | pd.Series],
     # --- (d) Göreli yaş: kaynaklar birbirine göre nerede? ------------------
     # Duvar saati denetimini tamamlar. Cephe hâlâ tazeyken haftalık tablo
     # alışılmadık ölçüde geride kalıyorsa yayın takvimi kaymış olabilir.
-    en_taze = max(cephe_son.values()) if cephe_son else None
+    en_taze = max(cephe_evds.values()) if cephe_evds else None
     if en_taze is not None:
         for ad in TAZELIK_TOLERANS_GUN:
             son = _son_gozlem(veriler.get(ad))
@@ -1460,6 +1500,18 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
     gozlem = (pd.read_csv(GOZLEM_CSV, index_col=0, parse_dates=True)
               if os.path.exists(GOZLEM_CSV) else None)
 
+    # Altın fiyatı: TCMB'nin değerleme saatindeki Londra fiyatı (bkz.
+    # altin_etkisi.LONDRA_ETC). Ağa çıkan tek parça indirme; gerisi ağa
+    # çıkmayan `londra_hazirla`da ve duman onu koşturur.
+    londra_saatlik, londra_hata = londra_saatlik_indir()
+    londra_p, londra_arsiv, londra_uyari, londra_kunye = altin_etkisi.londra_hazirla(
+        londra_saatlik, pd.Timestamp.now(tz="UTC"),
+        altin_etkisi.deger_fiyati_capalari(gozlem),
+        altin_etkisi.londra_arsiv_oku(), londra_hata)
+    if londra_arsiv is not None and not londra_arsiv.empty:
+        londra_arsiv.to_csv(altin_etkisi.LONDRA_ARSIV, float_format="%.5f",
+                            date_format="%Y-%m-%d")
+
     # --- Günlük takvim: analitik bilanço + kurun BİRLİKTE bulunduğu iş günleri
     idx = raw.index[raw["dis_varliklar_TL"].notna() & raw["usdtry"].notna()]
     idx = idx[idx >= pd.to_datetime(daily_start, dayfirst=True)]
@@ -1503,6 +1555,7 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
         swap_haric=g["swap_haric_usd"],
         kamu_doviz_usd=g["kamu_doviz_mev_usd"],
         yukumluluk_gram=altin_yuk,
+        londra_fiyati=londra_p,
         cipa=cipa,
     )
     for c in arind.columns:
@@ -1552,13 +1605,14 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
         "haftalık rezerv (TP.AB.C*/TOPLAM)": rez_usd["toplam_M"],
         "Stand-By 2A (TP.AB.N*)": raw["net_uluslararasi_rezerv_TL"],
         "swap stoku (TP.SWAPTEKTAR.*)": swap_g.get("swap_alim_M"),
-        "altın fiyatı (TP.ALTINPIYASA.*)": fiyat_ham.get("altin_agort"),
+        "Londra altın fiyatı (IGLN·SGLD)": londra_p,
         "USD/TRY (TP.DK.USD.A.YTL)": raw["usdtry"],
         "haftalık IRFCL gözlemi": (capalar[capalar["tip"] == "haftalık"]["c_usd"]
                                    if len(capalar) else None),
         "aylık IRFCL (TP.DOVVARNC.*)": aylik_irfcl["toplam_M"],
     })
     uyarilar += kimlik_denetimi(raw, g, rez_usd, swap_pdf)
+    uyarilar += londra_uyari
     uyarilar += altin_uyari
     if pdf_uyarisi:
         uyarilar.append(pdf_uyarisi)
@@ -1645,6 +1699,15 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
         # değil. Sayfadaki "kapatılmamış tanım farkı" cümlesi bunu kullanır.
         "kur_varyant_fark": (round(float(kur_varyant.iloc[-1]), 3)
                              if len(kur_varyant) else None),
+        # Altın fiyatının kaynağı: Londra serisinin başladığı gün, ETC başına
+        # ölçek (TCMB değerleme fiyatı / ETC) ve kaç çapadan kurulduğu.
+        "londra_fiyat": {
+            "bas": (f"{pd.Timestamp(arind.attrs['londra_bas']):%Y-%m-%d}"
+                    if arind.attrs.get("londra_bas") is not None else None),
+            "geri_olcek": (round(float(arind.attrs["geri_olcek"]), 6)
+                           if arind.attrs.get("geri_olcek") is not None else None),
+            **londra_kunye,
+        },
     }
 
     return {"raw": raw, "haftalik": haftalik, "gunluk": g, "gozlem": capalar,

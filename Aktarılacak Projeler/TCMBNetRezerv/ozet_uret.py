@@ -61,11 +61,6 @@ gs, hs = g.iloc[-1], h.iloc[-1]
 _gunler = list(g["Tarih"])
 
 
-def _onceki_isgunu(t: pd.Timestamp) -> pd.Timestamp:
-    i = _gunler.index(t)
-    return _gunler[i - 1] if i > 0 else t
-
-
 def _yuvarla(x, basamak=1):
     """NaN'i JSON'a 'None' değil, sayfada görülebilir '-' olarak taşır."""
     return None if pd.isna(x) else round(float(x), basamak)
@@ -164,13 +159,14 @@ else:
 
 # Birikimli serinin ilk geçerli günü = çıpa (altin_etkisi.CIPA_TARIHI ya da
 # --capa ile verilen tarih). Sabiti burada TEKRAR YAZMIYORUZ: veriden okunur.
-# Birikim, çıpa gününün KENDİ akımını da içerir; yani gerçek başlangıç noktası
-# çıpanın bir önceki iş gününün KAPANIŞIDIR. Etiket bunu söylesin diye
-# `ak_cipa` o güne yazılır (hesap değişmiyor, etiket dürüstleşiyor).
+# Akım L etiketi L KAPANIŞINDAN L+1 kapanışına kadarki hareketi taşır; yani
+# birikimin ilk etiketi çıpa ise başlangıç noktası ÇIPANIN KENDİ KAPANIŞIDIR.
+# (05.10.2026'ya kadar burada "çıpanın bir önceki iş gününün kapanışı"
+# yazılıyordu; etiket konvansiyonuyla çelişiyordu.) İki anahtar aynı günü
+# taşır — sayfa ikisini de çağırdığı için ikisi de yazılır.
 bir = g.dropna(subset=["net_doviz_alimi_birikimli"])
-cipa = (_onceki_isgunu(bir.iloc[0]["Tarih"]).strftime("%d.%m.%Y")
-        if len(bir) else "-")
 cipa_ham = bir.iloc[0]["Tarih"].strftime("%d.%m.%Y") if len(bir) else "-"
+cipa = cipa_ham
 
 # --- Altın tanısı: yayımlanan altın değeri / yayımlanan ons = ima edilen
 # değerleme fiyatı. Piyasa serisinden sistematik biraz düşük olması BEKLENİR
@@ -197,6 +193,13 @@ if os.path.exists(goz_yol):
 # denetimin KOŞTUĞU gün bugüne yakın mı.
 uyari_yol = os.path.join(BASE, "uyarilar.json")
 tani: dict = {}
+# altin_fiyat_kaynak sütununun okur adları (sayfaya kod etiketi basılmaz).
+FIYAT_KAYNAK_ADI = {
+    "londra": "Londra sabah fiyatı",
+    "agort03": "BİST ağırlıklı ortalama",
+    "kap03": "BİST kapanışı",
+    "ffill": "son fiyat taşındı",
+}
 veri_tarihi = gs["Tarih"].date()
 if not os.path.exists(uyari_yol):
     uyari_sayisi, uyari_metni = None, "denetim çıktısı bulunamadı"
@@ -226,6 +229,8 @@ else:
 if _bayat:
     uyari_metni = ("GİRDİ BAYAT: " + " · ".join(_bayat) + " · " + uyari_metni)
     uyari_sayisi = None
+
+_lf = tani.get("londra_fiyat") or {}
 
 ozet = {
     "_tarih": gs["Tarih"].strftime("%d.%m.%Y"),
@@ -317,7 +322,15 @@ ozet = {
 
     # --- Altın girdileri ve tanıları ---
     "alt_fiyat": _yuvarla(gs["altin_fiyat"], 0),
-    "alt_fiyat_kaynak": str(gs["altin_fiyat_kaynak"]),
+    # Kaynağın OKUR adı: kod etiketi ("agort03", "ffill") sayfaya gitmez.
+    "alt_fiyat_kaynak": FIYAT_KAYNAK_ADI.get(str(gs["altin_fiyat_kaynak"]),
+                                            str(gs["altin_fiyat_kaynak"])),
+    # Londra serisinin künyesi: hangi günden beri ve kaç TCMB değerleme
+    # çapasından ölçeklendiği (bkz. altin_etkisi.LONDRA_ETC).
+    "alt_londra_bas": (pd.to_datetime(_lf["bas"]).strftime("%d.%m.%Y")
+                       if _lf.get("bas") else "-"),
+    "alt_londra_capa": (min(v.get("capa") or 0 for v in _lf["etc"].values())
+                        if _lf.get("etc") else None),
     "alt_ons": _yuvarla(gs["ons"], 2),
     "alt_ons_kaynak": str(gs["ons_kaynak"]),
     # Net pozisyondaki fiyat etkisi NET altının etkisidir: brüt miktardan

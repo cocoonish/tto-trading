@@ -49,6 +49,11 @@ pd_notna = pd.notna
 AKIM_BANT_GUNLUK = altin_etkisi.AKIM_BANT_GUNLUK
 AKIM_BANT_BIRIKIMLI = altin_etkisi.AKIM_BANT_BIRIKIMLI_6AY
 
+# Figür başlıklarındaki sayı ve tarih ortak/bicim sözleşmesiyle yazılır
+# (ondalık virgül, eksi U+2212, GG.AA.YYYY); kütüphanenin varsayılanı
+# bizim sözleşmemiz değildir.
+_B = altin_etkisi._bicim()
+
 # Ev paleti (site/src/styles/global.css ile uyumlu)
 TEAL = "#1d5c5c"      # birincil seri
 BORDO = "#8e1f2f"     # ikincil / negatif
@@ -83,9 +88,10 @@ def ev_duzeni(fig: go.Figure, baslik: str, yukseklik: int = 620) -> go.Figure:
         height=yukseklik,
         paper_bgcolor="#ffffff",
         plot_bgcolor="#ffffff",
+        separators=",.",
     )
     fig.update_xaxes(title_text="Tarih", showgrid=True, gridcolor=IZGARA,
-                     hoverformat="%d %b %Y")
+                     hoverformat="%d.%m.%Y")
     return fig
 
 
@@ -118,7 +124,7 @@ def sekil_swap_haric(daily: pd.DataFrame) -> go.Figure:
     # yuvarlanmış kopya en garantili yol.
     sh = d["swap_haric_net_rezerv_usd"].round(2)
     delta = d["delta"].round(2)
-    delta_metin = [f"{v:+.2f}" if pd_notna(v) else "" for v in delta]
+    delta_metin = [_B.sayi(v, 2, isaret=True) if pd_notna(v) else "" for v in delta]
     renkler = [TEAL_RGBA if (v is not None and v >= 0) else BORDO_RGBA
                for v in delta.fillna(0)]
 
@@ -153,7 +159,7 @@ def sekil_swap_haric(daily: pd.DataFrame) -> go.Figure:
 
     t, v = _son(d["swap_haric_net_rezerv_usd"])
     baslik = ("TCMB swap hariç net rezerv — günlük (piyasa tanımı)"
-              f"<br><sup>Son: {t:%d %b %Y} · {v:.2f} mlr USD · "
+              f"<br><sup>Son: {t:%d.%m.%Y} · {_B.sayi(v, 2)} mlr USD · "
               "net dış varlık = (Dış Varlıklar − Dış Yükümlülükler − Bankalar "
               "Döviz Mevduatı)/USDTRY, eksi toplam swap stoku</sup>")
     ev_duzeni(fig, baslik)
@@ -208,9 +214,9 @@ def sekil_brut_kirilim(daily: pd.DataFrame) -> go.Figure:
     t, v = _son(d["brut_usd"])
     pay = d["altin_usd"].iloc[-1] / v * 100 if v else float("nan")
     baslik = ("Brüt rezervin altın / döviz kırılımı"
-              f"<br><sup>Son: {t:%d %b %Y} · brüt {v:.1f} mlr USD · "
-              f"altın {d['altin_usd'].iloc[-1]:.1f} mlr USD (%{pay:.0f}) · "
-              f"altın fiyatı {d['altin_fiyat'].iloc[-1]:,.0f} USD/ons</sup>")
+              f"<br><sup>Son: {t:%d.%m.%Y} · brüt {_B.sayi(v, 1)} mlr USD · "
+              f"altın {_B.sayi(d['altin_usd'].iloc[-1], 1)} mlr USD ({_B.yuzde(pay, 0)}) · "
+              f"altın fiyatı {_B.sayi(d['altin_fiyat'].iloc[-1], 0)} USD/ons</sup>")
     ev_duzeni(fig, baslik)
     fig.update_yaxes(title_text="Milyar USD", secondary_y=False,
                      showgrid=True, gridcolor=IZGARA, rangemode="tozero",
@@ -253,16 +259,26 @@ def sekil_altin_ayristirma(daily: pd.DataFrame) -> go.Figure:
     üç yıllık haftalık bar dizisinin içine altı aylık bir çizgi koymak sağ
     ekseni okunmaz hâle getiriyordu.
     """
-    d = daily.dropna(subset=["net_doviz_alimi", "altin_fiyat_etkisi"]).copy()
+    # KİMLİK TAM ÇERÇEVEDE KURULUR. Kamu hareketi ve Δ swap hariç akımla
+    # AYNI birleştirme kuralından geçer; önce satır atılıp sonra fark
+    # alınsaydı birleştirmede boşaltılan günün hareketi bir önceki satırın
+    # haftasına yazılır, barlar ile çizgi o haftalarda ayrışırdı (ölçüldü:
+    # 22.05 ve 26.05.2026 haftalarında ±2,98 mlr USD).
+    tam = daily.copy()
+    tam["kamu_delta"] = tam["kamu_doviz_mev_usd"].shift(-1) - tam["kamu_doviz_mev_usd"]
+    # Kimliğin sol tarafı — yığının örtüşmesi gereken çizgi.
+    tam["d_swap_haric"] = (tam["swap_haric_net_rezerv_usd"].shift(-1)
+                           - tam["swap_haric_net_rezerv_usd"])
+    tam["revizyon"] = tam.get("swap_capa_revizyon",
+                              pd.Series(0.0, index=tam.index)).fillna(0.0)
+    tam, _ = altin_etkisi.birlesik_akim(
+        tam, tam["altin_fiyat_kaynak"].astype(str),
+        ["kamu_delta", "d_swap_haric", "revizyon"])
+    d = tam.dropna(subset=["net_doviz_alimi", "altin_fiyat_etkisi"]).copy()
     bir_gecerli = d["net_doviz_alimi_birikimli"].dropna()
     if len(bir_gecerli):
         d = d.loc[bir_gecerli.index[0]:]
-    d["kamu_delta"] = d["kamu_doviz_mev_usd"].shift(-1) - d["kamu_doviz_mev_usd"]
-    # Kimliğin sol tarafı — yığının örtüşmesi gereken çizgi.
-    d["d_swap_haric"] = (d["swap_haric_net_rezerv_usd"].shift(-1)
-                         - d["swap_haric_net_rezerv_usd"])
-    d["revizyon"] = d.get("swap_capa_revizyon", pd.Series(0.0, index=d.index)) \
-        .fillna(0.0)
+    d["revizyon"] = d["revizyon"].fillna(0.0)
     # Net alım barından revizyonu ayır (toplam değişmez, okuma düzelir).
     d["net_temiz"] = d["net_doviz_alimi_altin_haric"] - d["revizyon"]
 
@@ -340,10 +356,10 @@ def sekil_altin_ayristirma(daily: pd.DataFrame) -> go.Figure:
 
     t, v = _son(d["net_doviz_alimi_birikimli"])
     cipa = bir_gecerli.index[0] if len(bir_gecerli) else None
-    cipa_s = f"{cipa:%d %b %Y}" if cipa is not None else "-"
+    cipa_s = f"{cipa:%d.%m.%Y}" if cipa is not None else "-"
     baslik = ("Rezerv değişiminin ayrıştırılması"
               f"<br><sup>Haftalık toplam · çıpa {cipa_s} · birikimli net alım "
-              f"{v:+.1f} mlr USD ({t:%d %b %Y}) · akım ARTIK olarak tanımlıdır, "
+              f"{_B.sayi(v, 1, isaret=True)} mlr USD ({t:%d.%m.%Y}) · akım ARTIK olarak tanımlıdır, "
               "kimliğin kapanması bir doğrulama değildir"
               + ("<br>Son bar YARIM HAFTA: hafta kapanmadı, kovadaki iş günü "
                  "sayısı hover'da yazar — yanındaki tam haftalarla toplamı "
@@ -369,9 +385,9 @@ def sekil_akim(daily: pd.DataFrame) -> go.Figure:
 
     Üç şey görünür kılınır:
       1. GÜNLÜK rakamların belirsizlik bandı (±AKIM_BANT_GUNLUK). Altın
-         değerleme fiyatı farkı tek başına bu mertebede sahte akım üretir;
-         bandın içinde kalan bir günlük hareket "TCMB döviz aldı" diye
-         okunmamalıdır.
+         değerleme fiyatı farkı, swap çapası, parite ve faiz geliri
+         kalemlerinin birlikte ürettiği ölçüm gürültüsüdür; bandın içinde
+         kalan bir günlük hareket "TCMB döviz aldı" diye okunmamalıdır.
       2. BİRİKİMLİ çizginin bandı. Bu rakam kendi belirsizlik bandı kadar
          büyüktür — işareti bile garanti değildir.
       3. GEÇİCİ günler. Son miktar (ons) çapasından sonraki barlar soluk
@@ -394,6 +410,25 @@ def sekil_akim(daily: pd.DataFrame) -> go.Figure:
     ffill = (d.get("altin_fiyat_kaynak", pd.Series("", index=d.index))
              .astype(str) == "ffill")
     belirsiz = gecici | ffill
+    # Birleşik akım: fiyat kaynağının kapalı olduğu gün (İngiltere tatili,
+    # öncesinde BİST'in kapalı olduğu arife) bir önceki etiketin hareketini
+    # de taşır; o gün tek günlük bir işlem gibi okunmasın.
+    birlesik = (d["akim_birlesik"].astype(str).str.lower().isin(["true", "1"])
+                if "akim_birlesik" in d.columns
+                else pd.Series(False, index=d.index))
+    tum = list(daily.index)
+    bir_not = []
+    for t, b in zip(d.index, birlesik):
+        if not b:
+            bir_not.append("")
+            continue
+        i = tum.index(t)
+        j = i - 1
+        while j >= 0 and pd.isna(daily["net_doviz_alimi"].iloc[j]):
+            j -= 1
+        bas = tum[j + 1] if j + 1 < i else t
+        bir_not.append(f"<br><i>birden çok etiketin toplamı: {bas:%d.%m.%Y} "
+                       f"kapanışından itibaren (fiyat kaynağı kapalı gün)</i>")
     renkler = [
         ("rgba(29,92,92,0.28)" if b else TEAL_RGBA) if v >= 0
         else ("rgba(142,31,47,0.28)" if b else BORDO_RGBA)
@@ -408,8 +443,17 @@ def sekil_akim(daily: pd.DataFrame) -> go.Figure:
     fig.add_trace(go.Bar(
         x=d.index, y=nfp, name="Net döviz alımı (altın fiyat etkisi hariç)",
         marker_color=renkler,
-        hovertemplate="Net alım: <b>%{y:+.2f}</b> mlr USD<extra></extra>",
+        marker_pattern_shape=["/" if b else "" for b in birlesik],
+        customdata=bir_not,
+        hovertemplate="Net alım: <b>%{y:+.2f}</b> mlr USD%{customdata}<extra></extra>",
     ), secondary_y=False)
+    if birlesik.any():
+        fig.add_trace(go.Bar(
+            x=[d.index[0]], y=[None],
+            name=f"taralı barlar: birden çok etiketin toplamı ({int(birlesik.sum())} bar)",
+            marker_color=TEAL_RGBA, marker_pattern_shape="/", showlegend=True,
+            hoverinfo="skip",
+        ), secondary_y=False)
     if belirsiz.any():
         fig.add_trace(go.Bar(
             x=[d.index[0]], y=[None],
@@ -433,7 +477,7 @@ def sekil_akim(daily: pd.DataFrame) -> go.Figure:
           + list((bk - AKIM_BANT_BIRIKIMLI).round(2))[::-1],
         fill="toself", fillcolor="rgba(29,92,92,0.13)",
         line=dict(width=0), hoverinfo="skip",
-        name=f"birikimli belirsizlik bandı (±{AKIM_BANT_BIRIKIMLI:.1f} mlr USD)",
+        name=f"birikimli belirsizlik bandı (±{_B.sayi(AKIM_BANT_BIRIKIMLI, 1)} mlr USD)",
     ), secondary_y=True)
     fig.add_trace(go.Scatter(
         x=d.index, y=bk,
@@ -449,8 +493,10 @@ def sekil_akim(daily: pd.DataFrame) -> go.Figure:
               # net_rezerv.py --kontrol-dogrula): akım BAŞLANGIÇ gününe
               # etiketlenir. Alt başlık bir ara bunun tersini yazıyordu.
               f"<br><sup>Değer, etiketlenen günün kapanışından bir SONRAKİ iş "
-              f"gününün kapanışına kadarki hareketi gösterir · birikimli {v:+.1f} ± {AKIM_BANT_BIRIKIMLI:.1f} mlr "
-              f"USD ({t:%d %b %Y}) · gri şerit ±{AKIM_BANT_GUNLUK:.1f} mlr "
+              f"gününün kapanışına kadarki hareketi gösterir (taralı barlar "
+              f"birden çok etiketin toplamıdır) · birikimli "
+              f"{_B.sayi(v, 1, isaret=True)} ± {_B.sayi(AKIM_BANT_BIRIKIMLI, 1)} mlr "
+              f"USD ({t:%d.%m.%Y}) · gri şerit ±{_B.sayi(AKIM_BANT_GUNLUK, 1)} mlr "
               "USD'lik günlük ölçüm gürültüsü</sup>")
     ev_duzeni(fig, baslik)
     fig.update_yaxes(title_text="Günlük net alım (milyar USD)",
@@ -522,7 +568,7 @@ def sekil_swap(daily: pd.DataFrame) -> go.Figure:
     t, v = _son(d["swap_toplam_usd"])
     tip = d["swap_capa_tipi"].dropna().iloc[-1] if "swap_capa_tipi" in d else "-"
     baslik = ("TCMB toplam swap stoku ve kırılımı"
-              f"<br><sup>Son: {t:%d %b %Y} · toplam {v:.2f} mlr USD · son çapa "
+              f"<br><sup>Son: {t:%d.%m.%Y} · toplam {_B.sayi(v, 2)} mlr USD · son çapa "
               f"{tip} · serinin %{haftalik_oran:.0f}'i haftalık IRFCL çapasına "
               "dayanıyor (gölgeli bölgeler; hata bandı haftalık ±0,02 · aylık "
               "±0,20 mlr USD) · pozitif stok = TCMB vadede döviz satıyor</sup>")
@@ -588,9 +634,9 @@ def sekil_tanim_farki(daily: pd.DataFrame) -> go.Figure:
     t, v = _son(cuma["tanim_farki"])
     cf = cuma["tanim_farki"].dropna()
     baslik = ("İki net rezerv tanımı yan yana"
-              f"<br><sup>Son Cuma: {t:%d %b %Y} · fark {v:+.2f} mlr USD · fark "
-              f"SABİT DEĞİL: {len(cf)} Cuma'da {cf.min():+.2f} ile "
-              f"{cf.max():+.2f} arasında, medyanı yukarı sürükleniyor · fark "
+              f"<br><sup>Son Cuma: {t:%d.%m.%Y} · fark {_B.sayi(v, 2, isaret=True)} mlr USD · fark "
+              f"SABİT DEĞİL: {len(cf)} Cuma'da {_B.sayi(cf.min(), 2, isaret=True)} ile "
+              f"{_B.sayi(cf.max(), 2, isaret=True)} arasında, medyanı yukarı sürükleniyor · fark "
               "tamamen varlık bacağındadır</sup>")
     ev_duzeni(fig, baslik)
     fig.update_yaxes(title_text="Net rezerv (milyar USD)", secondary_y=False,

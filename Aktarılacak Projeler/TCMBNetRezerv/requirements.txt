@@ -4,3 +4,4 @@ plotly>=5.18.0
 requests>=2.31.0
 pdfplumber>=0.10.0
 tcmb>=0.5.0
+yfinance>=0.2.30  # Londra altın fiyatı — IGLN.L · SGLD.L saatlik barları (05.10.2026)
