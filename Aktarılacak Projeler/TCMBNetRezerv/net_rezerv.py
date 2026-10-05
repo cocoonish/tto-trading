@@ -107,9 +107,12 @@ serisinden bir iş günü geride biter.
 ===========================================================================
 Bilinen sınırlar (kapatılmadı, yazıldı)
 ===========================================================================
-1. Altın, TCMB'nin haftalık Londra kotasyonuyla değil günlük piyasa
-   fiyatıyla ölçülüyor → altın/döviz kırılımında günlük yarım milyar dolar
-   mertebesinde artık kalır. Brüt ve net seviye bundan ETKİLENMEZ.
+1. Altın, TCMB'nin değerleme saatindeki (Londra sabah, ~10:30) fiyattan
+   ölçülüyor ama kotasyonun kendisinden değil: iki fiziki altın ETC'sinin
+   10:00 ve 11:00 barları, TCMB'nin IRFCL değerleme fiyatına ölçekli
+   (altin_etkisi.LONDRA_*). Kırılımda ve günlük akımda küçük bir artık kalır;
+   brüt ve net seviye bundan ETKİLENMEZ. 17.11.2023 öncesi BİST ortalamasıyla
+   geriye uzatılır ve o dönemin akımı fiyat saatinin sızıntısını taşır.
 2. Hafta içi altın MİKTAR değişimi hiçbir günlük resmi kaynakta yayımlanmaz;
    ancak Cuma'da yakalanır.
 3. Yabancı merkez bankası swap stoku yalnız IRFCL frekansında tazelenir.

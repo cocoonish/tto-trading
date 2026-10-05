@@ -54,7 +54,10 @@ gs, hs = g.iloc[-1], h.iloc[-1]
 # net sonuç veriyor: kayma 0'da |ort| hata 0,45 mlr USD, ±1'de 2,2 — yani
 # referans da akımı BAŞLANGIÇ gününe etiketliyor, tıpkı bizim gibi. Aylık
 # toplamda da aynı: Haziran 2026 için etiket bazlı toplamımız 22,26, referans
-# 22,3; kapanış bazlı toplam 21,3 tutuyor.
+# 22,3; kapanış bazlı toplam 21,3 tutuyor. (Bu sayılar BRÜT altınla kurulan
+# tanıma aittir; 05.10.2026'dan beri net altın ve Londra fiyatıyla Haziran 17,9
+# ve aradaki 4,4 o ayın altın yükümlülüklerinin yeniden değerlemesi (−4,6) —
+# referans brüt tanımı kullanıyor görünüyor. Etiket hükmü değişmedi.)
 #
 # Dolayısıyla sunum katmanı HAM etiketi kullanır. Hizayı varsaymak yerine
 # ölçmek gerekiyordu; ölçüm --kontrol-dogrula çıktısında durur.
@@ -118,8 +121,8 @@ for i, (_, r) in enumerate(son5.iterrows(), start=1):
     son5_alanlar[f"ak_g{i}"] = round(float(r["net_doviz_alimi"]), 1)
 
 # Aylık toplam ETİKET bazlıdır: etiketi o takvim ayına düşen akımların toplamı.
-# Ölçüldü (Haziran 2026): etiket bazlı 22,26 — referans 22,3; kapanış bazlı
-# 21,3. Yani ayın son etiketinin ertesi aya taşan hareketi AY İÇİNDE sayılır,
+# Ölçüldü (Haziran 2026, brüt altın tanımıyla): etiket bazlı 22,26 — referans
+# 22,3; kapanış bazlı 21,3. Yani ayın son etiketinin ertesi aya taşan hareketi AY İÇİNDE sayılır,
 # çünkü referans da öyle sayıyor.
 ay_toplam, ay_ad, ay_n = None, None, 0
 if ak_etiket is not None:

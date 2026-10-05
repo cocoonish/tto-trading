@@ -308,7 +308,11 @@ ZINCIRLEME_TANI_ORAN = 0.50
 # değerleme fiyatı farkı, swap çapası, parite, faiz geliri) mertebelerinden
 # türetilmiş 1σ mertebe tahminleridir. Yayımlanan her akım rakamının yanında
 # görünür.
-AKIM_BANT_GUNLUK = 0.40        # mlr USD; günlük ±0,3–0,5 aralığının ortası
+# Günlük bant 05.10.2026'dan beri bütçe aralığının (±0,2–0,4; net altın,
+# Londra sabah fiyatı) ÜST UCUNDA tutuluyor: bağımsız referansa karşı ölçülen
+# hata (0,45) brüt altın ve BİST fiyatıyla kurulan tanıma aitti, yeni tanımın
+# karşılığı ölçülmedi. Ölçülmeden daraltılan bir bant, iddiayı büyütür.
+AKIM_BANT_GUNLUK = 0.40        # mlr USD
 AKIM_BANT_HAFTALIK = 0.50      # mlr USD
 AKIM_BANT_AYLIK = 1.00         # mlr USD
 AKIM_BANT_BIRIKIMLI_6AY = 2.00 # mlr USD; notun ±1,5–2,5 aralığının ortası
