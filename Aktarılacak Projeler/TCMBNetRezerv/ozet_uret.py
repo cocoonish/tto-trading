@@ -6,7 +6,8 @@ buradan okunur. Böylece veri tazelenince sayfa metni MDX'e dokunmadan
 güncellenir.
 
 Anahtar grupları:
-  g_* / h_*        eski (Stand-By 2A) tanım — MDX'te kullanılıyor, KIRILMAZ
+  g_* / h_*        günlük ve haftalık seviye (net_rezerv_usd sütunları) — adları
+                   MDX'te kullanılıyor, KIRILMAZ
   p_*              piyasa tanımı: seviye, kırılım, swap
   ak_*             altın fiyat etkisinden arındırılmış akım
   alt_*            altın girdileri ve tanıları
@@ -53,8 +54,9 @@ gs, hs = g.iloc[-1], h.iloc[-1]
 # karşı yapılan hiza taraması (net_rezerv.py --kontrol-dogrula, kayma −1/0/+1)
 # net sonuç veriyor: kayma 0'da |ort| hata 0,45 mlr USD, ±1'de 2,2 — yani
 # referans da akımı BAŞLANGIÇ gününe etiketliyor, tıpkı bizim gibi. Aylık
-# toplamda da aynı: Haziran 2026 için etiket bazlı toplamımız 22,26, referans
-# 22,3; kapanış bazlı toplam 21,3 tutuyor.
+# toplamda da aynı: Haziran 2026'nın aylık toplamında etiket bazlı toplam
+# referansla tutuyor, kapanış bazlı toplam (yaklaşık bir milyar USD aşağıda)
+# tutmuyor.
 #
 # Dolayısıyla sunum katmanı HAM etiketi kullanır. Hizayı varsaymak yerine
 # ölçmek gerekiyordu; ölçüm --kontrol-dogrula çıktısında durur.
@@ -62,7 +64,7 @@ _gunler = list(g["Tarih"])
 
 
 def _yuvarla(x, basamak=1):
-    """NaN'i JSON'a 'None' değil, sayfada görülebilir '-' olarak taşır."""
+    """NaN → None (JSON'da null); sayfada <Deger> onu boş gösterir, sayı uydurulmaz."""
     return None if pd.isna(x) else round(float(x), basamak)
 
 
@@ -118,9 +120,9 @@ for i, (_, r) in enumerate(son5.iterrows(), start=1):
     son5_alanlar[f"ak_g{i}"] = round(float(r["net_doviz_alimi"]), 1)
 
 # Aylık toplam ETİKET bazlıdır: etiketi o takvim ayına düşen akımların toplamı.
-# Ölçüldü (Haziran 2026): etiket bazlı 22,26 — referans 22,3; kapanış bazlı
-# 21,3. Yani ayın son etiketinin ertesi aya taşan hareketi AY İÇİNDE sayılır,
-# çünkü referans da öyle sayıyor.
+# Ölçüldü (Haziran 2026): etiket bazlı toplam referansla tutuyor, kapanış bazlı
+# toplam tutmuyor. Yani ayın son etiketinin ertesi aya taşan hareketi AY İÇİNDE
+# sayılır, çünkü referans da öyle sayıyor.
 ay_toplam, ay_ad, ay_n = None, None, 0
 if ak_etiket is not None:
     maske = ((ak["Tarih"].dt.year == ak_etiket.year)

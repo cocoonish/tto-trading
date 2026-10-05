@@ -569,8 +569,8 @@ def sekil_swap(daily: pd.DataFrame) -> go.Figure:
     tip = d["swap_capa_tipi"].dropna().iloc[-1] if "swap_capa_tipi" in d else "-"
     baslik = ("TCMB toplam swap stoku ve kırılımı"
               f"<br><sup>Son: {t:%d.%m.%Y} · toplam {_B.sayi(v, 2)} mlr USD · son çapa "
-              f"{tip} · serinin %{haftalik_oran:.0f}'i haftalık IRFCL çapasına "
-              "dayanıyor (gölgeli bölgeler; hata bandı haftalık ±0,02 · aylık "
+              f"{tip} · haftalık IRFCL çapasına dayanan pay %{haftalik_oran:.0f} "
+              "(gölgeli bölgeler; hata bandı haftalık ±0,02 · aylık "
               "±0,20 mlr USD) · pozitif stok = TCMB vadede döviz satıyor</sup>")
     ev_duzeni(fig, baslik)
     fig.update_yaxes(title_text="Swap stoku (milyar USD)", showgrid=True,

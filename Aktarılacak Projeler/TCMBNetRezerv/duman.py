@@ -225,15 +225,37 @@ sina("Γ brüt altınla kuruluyor: 25 × 100 / 1000 = 2,5",
 sina("yalnız yeniden değerleme varsa net alım SIFIR",
      bool((_a["net_doviz_alimi"].iloc[:-1].abs() < 1e-12).all()),
      f"gelen {list(_a['net_doviz_alimi'].iloc[:-1])}")
-sina("altın değeri tanısı Q·P (rezervdeki kalem)",
+sina("altın değeri tanısı Q·P (ima edilen değer)",
      abs(float(_a["altin_deger_ima"].iloc[0]) - 100.0) < 1e-12,
      f"gelen {_a['altin_deger_ima'].iloc[0]}")
 _imza_a = list(_inspect.signature(ae.akim_ayristir).parameters)
 sina("ayrıştırma tek bir altın miktarı alıyor (brüt; yükümlülük girdisi yok)",
      _imza_a == ["ons", "fiyat", "fiyat_kaynak", "swap_haric", "kamu_doviz_usd"],
      f"imza {_imza_a}")
-sina("hat altın yükümlülüğü çekip ayrıştırmaya vermiyor",
-     "YUKUMLULUK_SERIES" not in _net_kaynak and "yukumluluk_gram" not in _net_kaynak)
+# Brütlük ayrıştırmanın İÇİNDE değil, ona hangi Q'nun verildiğinde belirlenir:
+# `akim_ayristir` kendisine verilen miktarı kullanır. Canlı hattın çağrısı
+# AĞAÇTAN sorulur — ilk argüman IRFCL miktar serisinin kendisi (q["ons"]) ve
+# q yalnız `ons_serisi`nden kurulur; araya bir çıkarma girerse düşer.
+import ast as _ast
+_ae_agac = _ast.parse(_pathlib_kaynak := pathlib.Path(ae.__file__).read_text(encoding="utf-8"))
+_ah = next(n for n in _ast.walk(_ae_agac)
+           if isinstance(n, _ast.FunctionDef) and n.name == "arindirma_hatti")
+_cagri = [n for n in _ast.walk(_ah) if isinstance(n, _ast.Call)
+          and isinstance(n.func, _ast.Name) and n.func.id == "akim_ayristir"]
+_ilk = _cagri[0].args[0] if len(_cagri) == 1 and _cagri[0].args else None
+_q_atama = [n for n in _ast.walk(_ah) if isinstance(n, _ast.Assign)
+            and any(isinstance(t, _ast.Name) and t.id == "q" for t in n.targets)]
+sina("canlı hat ayrıştırmaya IRFCL miktarının kendisini veriyor (q[\"ons\"], q = ons_serisi(…))",
+     _ilk is not None and _ast.unparse(_ilk) == "q['ons']" and len(_q_atama) == 1
+     and isinstance(_q_atama[0].value, _ast.Call)
+     and _ast.unparse(_q_atama[0].value.func) == "ons_serisi",
+     f"çağrı {len(_cagri)} · ilk argüman {_ast.unparse(_ilk) if _ilk is not None else '—'} · "
+     f"q ataması {[_ast.unparse(n.value) for n in _q_atama]}")
+_YUK_KOD = ("TP.BL0891", "TP.BL137", "TP.BL128", "TP.BL142", "TP.BL0823")
+_sizan = [k for k in _YUK_KOD if k in _net_kaynak or k in _pathlib_kaynak]
+sina("hat altın yükümlülüğü çekip ayrıştırmaya vermiyor (ad ve EVDS kodu)",
+     "YUKUMLULUK_SERIES" not in _net_kaynak and "yukumluluk_gram" not in _net_kaynak
+     and not _sizan, f"kaynakta: {_sizan}")
 sina("çevrimdışı yeniden üretim aynı ayrıştırmayı çağırıyor",
      "akim_ayristir(" in _inspect.getsource(ae._gunlukten_uret))
 
@@ -341,8 +363,9 @@ sina("çıpa Londra fiyatından önceyse uyarı, sonraysa sessiz",
 # Londra fiyatı — değerleme saatindeki uluslararası fiyat (05.10.2026)
 # ---------------------------------------------------------------------------
 # Ölçüldü: TCMB bilançosu altını Londra sabah fiksingi saatinde (10:30)
-# değerliyor; BİST ağırlıklı ortalaması değerlemeyi açıklamıyordu (katsayı
-# 0,06, t 0,6) ve akıma günde ~0,6 milyar USD gürültü yazıyordu.
+# değerliyor; BİST ağırlıklı ortalaması değerlemeyi açıklamıyordu (saatlik
+# ortak regresyonda katsayı 0,13, t 0,9 — sayfa, "Fiyat serisi") ve akıma
+# gürültü yazıyordu.
 print("\n▶ Londra fiyatı")
 
 

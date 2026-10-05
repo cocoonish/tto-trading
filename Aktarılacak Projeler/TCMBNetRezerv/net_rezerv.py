@@ -29,7 +29,8 @@ Kaynağı tamamen analitik bilanço (HER İŞ GÜNÜ yayımlanır) olduğu için
     F       son Cuma ≤ t − GECIKME_GUN  (bkz. GECIKME_GUN gerekçesi)
 
   Neden çapa: A02 (Dış Varlıklar) resmi rezerv varlıklarından sistematik
-  olarak 2,4–2,9 milyar USD fazladır — rezerv tanımına girmeyen diğer döviz
+  olarak fazladır (yıllık medyanla 2023–2025'te ≈2,0–2,2, 2026'da 2,2–3,1 milyar
+  USD) — rezerv tanımına girmeyen diğer döviz
   alacaklarını da içerir. Bu boşluk bir SABİTLE değil, her hafta tazelenen
   gerçek çapayla düşülür; hafta içi hareket analitik bilançodan gelir.
 
@@ -1661,11 +1662,11 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
             )
         if haftalik_oran < SWAP_HAFTALIK_CAPA_HEDEF:
             uyarilar.append(
-                f"SWAP ÇAPA KAPSAMI DÜŞÜK: günlük serinin yalnız "
-                f"%{haftalik_oran * 100:.0f}'i haftalık IRFCL çapasına "
-                f"dayanıyor (hedef %{SWAP_HAFTALIK_CAPA_HEDEF * 100:.0f}); "
-                "geri kalanı ay sonu çapasından taşınıyor. Haftalık arşiv "
-                "doldurulduğunda bu kalemin hatası belirgin şekilde küçülür."
+                f"SWAP ÇAPA KAPSAMI DÜŞÜK: günlük serinin haftalık IRFCL "
+                f"çapasına dayanan payı %{haftalik_oran * 100:.0f} (hedef "
+                f"%{SWAP_HAFTALIK_CAPA_HEDEF * 100:.0f}); geri kalanı ay sonu "
+                "çapasından taşınıyor ve o günlerde swap kaleminin hata bandı "
+                "haftalık çapalı günlerin yaklaşık on katı."
             )
 
     # Yayımlanmayan ama denetlenen tanılar — uyarilar.json'a yazılır, sayfaya

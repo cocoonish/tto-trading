@@ -621,8 +621,9 @@ unutulmuştu). Ve ölçülemeyen bir seans sayfada görünür: akım serisinin
 seviyeden kaç seans geride kaldığı ve SEBEBİ tek cümleyle yazılır, besleme
 yetiştiğinde cümle kendiliğinden döner. (05.10.2026: ortadaki taşımanın "piyasa
 kapalı, fiyat kımıldamadı, Γ = 0 bir ölçümdür" önermesi bilanço için YANLIŞ
-çıktı — BİST kapalıyken TCMB altını yine yeniden değerliyor; iki günün akımı
-artık birleştiriliyor. Bkz. aşağıda "altın fiyat etkisi brüt altınla".)
+çıktı — BİST kapalıyken TCMB altını yine yeniden değerliyor; BİST döneminde iki
+günün akımı birleştiriliyor, Londra fiyatıyla arife günleri kendi fiyatıyla
+ölçülüyor. Bkz. aşağıda "altın fiyat etkisi brüt altınla".)
 
 **Kurucu ilke — bir ŞEKLİN tarihi, HATTIN tarihi değildir.** FX haber endeksi
 sayfasında on figürün hepsi "veri 03.09.2026" diye damgalanıyordu; oysa dördü
@@ -4756,7 +4757,11 @@ neredeyse İKİ KATINA çıktı. Kullanıcı doğru kabul ettiği seriyi göster
 seri BRÜT tanımla kurulu ve günlük, aylık ve birikimli sayılarımızla brüt
 tanımda örtüşüyor, net tanımda örtüşmüyor. Karar: akım piyasa tablolarının
 tanımıyla, brüt altınla kurulur; yükümlülük altınının yeniden değerlemesi
-akımda kalır ve sayfanın "Bilinen sınırlar"ında eğimiyle yazılıdır. Ders: kendi
+akımda kalır ve sayfanın "Bilinen sınırlar"ında eğimiyle ve birikimli payıyla
+yazılıdır: altının yönüyle birikir, 27.02–01.10 penceresinde birikimli sayıyı +7–9
+milyar USD yukarı çekiyor (eğim × birikimli fiyat etkisi +7,2; yükümlülük
+kalemleriyle doğrudan hesap +8,7). Bir ölçüm hatası değil, tanımın bileşenidir;
+hata bütçesinde ve birikimli bantta (±2,0) yoktur ve sayfa bunu söyler. Ders: kendi
 içinde tutarlı bir "düzeltme", okurun kıyas yaptığı seriden ayrışıyorsa yeni
 bir kusurdur; bir ölçünün tanımı değiştirilmeden önce o tanımla KİMİN
 sayısıyla kıyaslanacağı sorulur. Kullanıcının referans verisi depoya, sayfaya
@@ -4777,14 +4782,15 @@ vadeli GC=F devir günlerinde sıçrıyor. Açılan ve devirsiz olan: Londra'dak
 FİZİKİ altın ETC'si (IGLN.L, SGLD.L), 10:00 ve 11:00'de biten saatlik barların
 ortalaması, TCMB'nin IRFCL değerleme fiyatına ölçekli (son 12 çapanın oran
 medyanı; haftalık kayma medyanda %0,02, ücret erimesi yılda %0,11). Seri IRFCL
-değerleme fiyatını 31 çapada medyan %0,12, en kötü %0,41 sapmayla izliyor (aynı
-kuralla ölçeklenen BİST %0,62 · %5,0) — ölçek aynı çapalardan kurulduğu için bu bir tutarlılık
+değerleme fiyatını Londra'nın ve BİST'in ikisinin de kote edildiği 31 çapada
+medyan %0,12, en kötü %0,41 sapmayla izliyor (aynı kuralla ölçeklenen BİST aynı
+çapalarda %0,62 · %5,0) — ölçek aynı çapalardan kurulduğu için bu bir tutarlılık
 denetimi, kanıt değil. Kanıt varlık tarafında: dış varlıkların günlük değişimi
 brüt Γ'ya Londra fiyatıyla 1,13 ile (t 22, 17.11.2023'ten beri), BİST
 fiyatıyla 0,81 ile tepki veriyor; fark en çok 2024'te (1,12'ye karşı 0,19),
 2026'da iki fiyat yakın (1,09 ve 1,02).
 Akımın kuruluşunda iki fiyatla kurulan Γ ortak regresyonda: Londra 0,69
-(t 8,9), BİST 0,04 (t 0,6); 2026'da günlük akımın standart sapması 2,44 → 2,35.
+(t 8,9), BİST 0,04 (t 0,6); 2026'da iki fiyatla da ölçülen 181 günde günlük akımın standart sapması 2,43 → 2,33.
 Ürün fiyatları DEPODA birikiyor (`altin_londra.csv`) çünkü kaynağın saatlik
 geçmişi 730 günle sınırlı; arşiv kazanır, yeni indirme yalnız eksik günü
 doldurur. Londra öncesi (17.11.2023'ten önce) BİST getirisiyle geriye
@@ -4810,10 +4816,28 @@ net altınlı ara sürüm hiç yayımlanmadı ve kayıt ona atıf yapmaz. Bülte
 kayıtları yayımlanan cümlenin KENDİ penceresinde yeniden hesaplandı ve yalnız
 değişen sayı kayıt aldı; hükmü hâlâ doğru olan cümleye kayıt yazılmadı. Biri
 ayrıca yazarın kusurunu buldu: 04.10'un "eylülün tamamı" sayısı ilk 21 iş
-gününün toplamıydı.
+gününün toplamıydı. Donmuş kopyaya karşı doğrulama turu atlanan bir sınıfı
+buldu: fiyat kaynağı yalnız akımı değil altın/döviz KIRILIMINI da değiştirir
+(Altın(t) = C1(F)·P(t)/P(F)); altının dolar değeri ve altın payı geçen bülten
+cümleleri ve panonun kırılım satırı da kayıt aldı. Bir girdinin kaynağı
+değiştiğinde kayıt listesi o girdiyi okuyan HER sayıdan türetilir, akımdan değil.
+Kapsamı tek tek kayda sığmayan kısım (23 Ağustos'tan bu yana sayılarda geçen
+altın payı ve altın değeri; altın payında medyanda 0,2, en çok 2,3 puan) 02.10 kur
+kaydının emsaliyle 05.10 sayısında GENEL bir kayıt aldı; hükmü dönen tek cümle
+(27.09: "altın payı bir haftada 0,5 puan arttı" → düştü) ayrıca. İkinci tur farkın
+kaynağını da düzeltti: 24–30 Eylül'ün 4,5 → 6,1'lik değişiminin büyük kısmı fiyat
+SAATİNDEN değil, yayım anında 22–24 Eylül'ün BİST fiyatı henüz gelmemiş ve
+taşınmış olmasından geliyordu (geç kotasyonla 6,6; Londra fiyatı onu 6,1'e
+geri çekiyor) — bir düzeltme kaydının sebebi, eski ile yeni sayının arasındaki
+BÜTÜN farkı açıklamalı. Kilit de araca kondu: duman, canlı hattın ayrıştırmaya
+verdiği miktarı AĞAÇTAN sorar (`q["ons"]`, `q = ons_serisi(…)`) ve yükümlülük
+kalemlerinin beş EVDS kodunu hat kaynağında arar; ilk yazımdaki madde yalnız eski
+sürümün iki adını arıyordu ve araya giren bir çıkarmayı geçiriyordu (arıza
+enjeksiyonuyla ölçüldü).
 
-AÇIK, adıyla: (i) ay sınırına düşen birleşik blok (30.01→02.02 Yahoo boşluğu,
-30.04→04.05 İngiltere tatili) bir günün akımını sonraki aya yazar. İkinci bir kaynakla (aynı saatte vadeli
+AÇIK, adıyla: (i) ay sınırına düşen birleşik blok (30.01→02.02.2026 Yahoo boşluğu,
+30.04→04.05.2026 ve 28–29.03→01.04.2024 İngiltere tatilleri) bir günün akımını
+sonraki aya yazar. İkinci bir kaynakla (aynı saatte vadeli
 kotasyon, komşu günlerin bazıyla) doldurmak mümkün ama yeni bir kaynak
 sözleşmesi ister, yapılmadı. (ii) Aylık toplamlarda bunun dışında kalan
 farklar açıklanmadı; altın hareketinin sert olduğu ayda fiyat saatinin küçük

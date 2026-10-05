@@ -18,9 +18,9 @@ cinsinden yükümlülükleri (zorunlu karşılık altını, bankaların ve Hazin
 altını) da yeniden değerlenir ve bu tanımda akımda kalır; bkz. "Bilinen sınır".
 
 Laspeyres, taban ağırlıklı standart ayrıştırmadır; ECB'nin rezerv değerleme
-kutusundaki formül tam olarak budur. (Eskiden burada "ECB ve IMF COFER'in
-resmi uygulaması" yazıyordu — COFER atfı YANLIŞTI: COFER resmi döviz
-rezervlerinin PARA KOMPOZİSYONU istatistiğidir ve altını kapsamaz.)
+kutusundaki formül tam olarak budur. COFER'e atıf YAPILMAZ: COFER resmi döviz
+rezervlerinin PARA KOMPOZİSYONU istatistiğidir ve altını kapsamaz (sayfanın
+yöntem tablosu da yalnız ECB'yi anar).
 Simetrik (Bennet) varyant tanı olarak da hesaplanır:
     Γ_B(L) = ½·[Q(L) + Q(L+1)] · [P(L+1) − P(L)]
 İkisinin farkı tam olarak −½·ΔQ·ΔP'dir ve sıradan günlerde 0,01 milyar USD'nin
@@ -139,8 +139,11 @@ veriyor; eskiden burada
 çelişiyor). BİST fiyatıyla aynı ölçü aynı dönemde 0,81, 2024'te yalnız 0,19
 (2026'da 1,02, yani iki fiyat bu yıl yakın): fiyatın gürültüsü katsayıyı
 sıfıra çekiyordu, yani düşük katsayı TCMB'nin değil ölçünün kusuruydu. Değerleme fiyatının KENDİSİ elimizde değil: Londra sabah
-fiyatı onu 17.11.2023'ten beri 31 IRFCL çapasında medyan %0,12, en kötü %0,41
-sapmayla izliyor (aynı kuralla ölçeklenen BİST ortalaması %0,62 / %5,0). Ölçek aynı
+fiyatı onu 17.11.2023'ten beri Londra'nın ve BİST'in ikisinin de kote edildiği
+31 IRFCL çapasında medyan %0,12, en kötü %0,41 sapmayla izliyor (aynı kuralla
+ölçeklenen BİST ortalaması aynı çapalarda %0,62 / %5,0; sapma |ima / fiyat − 1|;
+05.10.2026 ölçümü, ölçek haftalık yenilendiği için kayar). Yalnız Londra'nın
+kote edildiği 32 çapada %0,11 / %0,41. Ölçek aynı
 çapalardan kurulduğu için bu bir tutarlılık denetimidir, bağımsız kanıt
 yukarıdaki varlık regresyonudur. Kalan sapma bir kalibrasyon sabitiyle
 KAPATILMAZ — kapatmak, ölçüm hatasını modele gömmek olur.
@@ -153,7 +156,10 @@ düşüldüğü için bu yeniden değerleme akımda kalır: ölçüldü (05.10.2
 fiyatıyla, 2026'nın 176 iş günü, birleşik akım blokları hariç) günlük
 akımın brüt Γ'ya eğimi −0,28 (t −3,7); Londra fiyatının bütün döneminde
 (17.11.2023'ten, 681 gün) −0,27 (t −5,4) — altın yükseldiğinde akım bir
-miktar aşağı, düştüğünde yukarı yazılır. Net altına geçmek (05.10.2026'da denendi) bu eğimi sıfırlıyordu ama
+miktar aşağı, düştüğünde yukarı yazılır. Etki birikir: 27.02–01.10 penceresinde
+birikimli akımın +7–9 milyar USD'si bu bileşendir (eğim × ΣΓ +7,2; yükümlülük
+kalemleriyle doğrudan hesap +8,7). Ölçüm hatası değil, tanımın bileşenidir;
+AKIM_BANT_* bütçesinde yoktur. Net altına geçmek (05.10.2026'da denendi) bu eğimi sıfırlıyordu ama
 akımı piyasanın kullandığı tanımdan ayırıyordu; karar tanımın brüt kalması
 yönünde verildi ve eğim bir sınır olarak yazıldı.
 
@@ -250,7 +256,7 @@ ONS_TANI_ESIK_USD = 0.20
 # düzeni değiştiğinde yanlış satırdan okunmuş bir miktar demektir — ölçüldü:
 # Mart 2023 enstantanelerinde Q_pdf 30–32 mn ons okunuyor, komşu haftalarda
 # 23; ima edilen değerleme fiyatı 1.643 USD/ons çıkıyor, o tarihte piyasa
-# 1.838. Böyle bir çapa KABUL EDİLİRSE sahte bir miktar etkisi (Λ) doğurur ve
+# 1.847 (uyarı satırının yazdığı değer). Böyle bir çapa KABUL EDİLİRSE sahte bir miktar etkisi (Λ) doğurur ve
 # doğrudan "net döviz alımı" barına yazılır.
 #
 # Süzgeç sessiz DEĞİLDİR: reddedilen her çapa uyarı üretir ve o hafta kademe 2
@@ -274,7 +280,8 @@ ONS_SICRAMA_ESIK_ORAN = 0.04
 
 # Tarihsel çapa tanıları tek tek DEĞİL, özetlenerek yayımlanır: son
 # TANI_YAKIN_CAPA çapa için satır satır, öncesi için tek bir özet satırı
-# (sayı + en kötü örnek). Ayrıntının tamamı koşu çıktısına basılır. Gerekçe:
+# (sayı + en kötü örnek); tek tek satırlar yalnız operatörün koşu kaydına
+# basılır (okura gitmez, okur dili kuralı). Gerekçe:
 # uyarı listesi sayfada görünür bir denetim satırıdır; 90 satırlık bir liste
 # hiç uyarı olmamasıyla aynı işi görür (alarm körlüğü).
 TANI_YAKIN_CAPA = 8
@@ -409,9 +416,10 @@ def fiyat_serisi(agort: pd.Series, kap: pd.Series,
 # altında kalması altın yükümlülüklerinin yeniden değerlemesidir (modül notu,
 # "Bilinen sınır"). Değerleme saati
 # ayrıca TCMB'nin KENDİ yayımladığı değerleme fiyatıyla (IRFCL: altın değeri /
-# ons) karşılaştırıldı: aşağıdaki seri onu 31 çapada medyan %0,12, en kötü
-# %0,41 sapmayla izliyor; aynı kuralla ölçeklenen BİST ortalaması %0,62 /
-# %5,0, vadeli GC=F %0,5
+# ons) karşılaştırıldı: aşağıdaki seri onu Londra'nın ve BİST'in ikisinin de
+# kote edildiği 31 çapada medyan %0,12, en kötü %0,41 sapmayla izliyor; aynı
+# kuralla ölçeklenen BİST ortalaması aynı çapalarda %0,62 / %5,0 (05.10.2026),
+# vadeli GC=F %0,5
 # (kontrat devri). Ölçek aynı çapalardan kurulduğu için bu bağımsız bir kanıt
 # değil, tutarlılık denetimidir.
 # KAYNAK: LBMA'nın kendi ucu buluttan 403, Bundesbank'ta seri yok, Dukascopy
@@ -570,31 +578,32 @@ def londra_hazirla(saatlik: dict[str, pd.Series] | None,
         birlesik, fark = londra_arsiv_birlestir(arsiv, yeni)
         if fark:
             uyarilar.append(
-                f"LONDRA ALTIN FİYATI ARŞİVİ: kaydedilmiş {fark} değerle yeni "
-                f"indirme arasında {b.yuzde(LONDRA_ARSIV_FARK * 100, 1)}'i aşan "
-                "fark var; arşivdeki değer korundu (o günlerin akımı "
-                "yayımlandı).")
+                f"LONDRA ALTIN FİYATI: {fark} değerin fiyatı kaynakta sonradan "
+                f"{b.yuzde(LONDRA_ARSIV_FARK * 100, 1)} eşiğinden fazla değişti; "
+                "o günlerin akımı yayımlandığı için ilk kaydedilen fiyat "
+                "korundu.")
     else:
         birlesik = arsiv
         son = (f"{arsiv.index.max():%d.%m.%Y}" if arsiv is not None and len(arsiv)
                else "yok")
+        # Teknik sebep yalnız operatörün koşu kaydına; okura giden satır günü söyler.
+        print(f"  [Londra fiyatı] indirilemedi: {indirme_hatasi or 'boş yanıt'}")
         uyarilar.append(
-            "LONDRA ALTIN FİYATI ALINAMADI: bu koşuda saatlik kotasyonlar "
-            f"indirilemedi ({indirme_hatasi or 'boş yanıt'}). Arşivin son günü "
-            f"{son}; sonraki günlerin fiyat etkisi ölçülemedi ve akımları boş "
+            f"LONDRA ALTIN FİYATI ALINAMADI: {son} sonrasının Londra fiyatı "
+            "alınamadı; o günlerin fiyat etkisi ölçülemedi ve akımları boş "
             "kaldı.")
     if birlesik is None or birlesik.empty:
         uyarilar.append(
-            "LONDRA ALTIN FİYATI KURULAMADI: arşiv boş; fiyat etkisi bütün "
-            "dönemde BİST ağırlıklı ortalamasıyla hesaplandı (değerleme saatinde "
-            "değil, günlük gürültüsü yüksek).")
+            "LONDRA ALTIN FİYATI KURULAMADI: hiçbir gün için Londra fiyatı "
+            "yok; fiyat etkisi bütün dönemde BİST ağırlıklı ortalamasıyla "
+            "hesaplandı (değerleme saatinde değil, günlük gürültüsü yüksek).")
         return None, birlesik, uyarilar, {}
     p, kunye = londra_fiyat(birlesik, deger_fiyati)
     if p is None:
         uyarilar.append(
             "LONDRA ALTIN FİYATI ÖLÇEKLENEMEDİ: TCMB'nin değerleme fiyatıyla "
             f"eşleşen yeterli haftalık çapa yok (en az {LONDRA_OLCEK_ASGARI}); "
-            "fiyat etkisi bu koşuda BİST ağırlıklı ortalamasıyla hesaplandı.")
+            "fiyat etkisi BİST ağırlıklı ortalamasıyla hesaplandı.")
     kunye = {"etc": kunye, "son_gun": f"{birlesik.index.max():%Y-%m-%d}",
              "gun": int(len(birlesik))}
     return p, birlesik, uyarilar, kunye
@@ -1008,8 +1017,7 @@ def altin_tanilari(capalar: pd.DataFrame, altin_deger_M: pd.Series,
             uyarilar.append(
                 f"{baslik} — {len(eski)} TARİHSEL çapada (son "
                 f"{TANI_YAKIN_CAPA} çapanın dışında); en büyüğü "
-                f"{en_kotu[0]:%d.%m.%Y}, {_bicim().sayi(abs(en_kotu[1]), 2)} mlr USD. "
-                "Ayrıntı koşu çıktısında."
+                f"{en_kotu[0]:%d.%m.%Y}, {_bicim().sayi(abs(en_kotu[1]), 2)} mlr USD."
             )
 
     # (1) Yayımlanan ons ile ima edilen ons tutuyor mu? İKİ ölçüt birlikte:
