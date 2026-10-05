@@ -28,10 +28,11 @@ sayılar onu yeniden hesaplamaz, kaynağın sonradan düzelttiği bir kapanış
 yayımlanmış sonucu değiştirmez.
 
 (3) ÖLÇÜLEMEYEN UYDURULMAZ. Elimizde TRY OIS, çapraz kur swap bazı, örtük
-oynaklık ve tek hisse fiyatı yok. Böyle bir fikir ya ölçülebilir bir VEKİLLE
+oynaklık ve tek hisse fiyatı yok. Böyle bir fikir ölçülebilir bir VEKİLLE
 yazılır (TRY OIS dikleştirici → DİBS spot eğrisi; karne "vekille ölçüldü" der
-ve OIS–DİBS makasının ölçülmediğini söyler) ya da `olculemez` türüyle, sebebi
-yazılarak yayımlanır ve karneye sonuçla girmez. Opsiyonun primi ölçülmez:
+ve OIS–DİBS makasının ölçülmediğini söyler) ya da HİÇ yazılmaz (karar
+05.10.2026, OLCULEMEZ_YASAK). `olculemez` türü yalnız şemada, karne ve sayfa
+okuyabilsin diye tanımlı kalır. Opsiyonun primi ölçülmez:
 karne vade sonu ÖDEMESİNİ dayanağın kapanışından kurar ve net sonucu yazmaz.
 
 Defter ayrı bir dosya DEĞİLDİR: fikirler açıldıkları sayının JSON'unda
@@ -124,7 +125,6 @@ UFUK_AZAMI_GUN = 183
 YONLER = ("yukari", "asagi")
 # Yeni kapanan fikir sayfada bu kadar gün "kapanan" altında durur.
 KAPANAN_PENCERE = {"gunluk": 10, "haftalik": 14}
-# Ölçülemeyen fikir bu kadar gün sonra listeden düşer (sonucu yoktur, ufku vardır).
 GRUP_SINIF = {"tr_fx": "fx", "g10_fx": "fx", "tr_hisse": "hisse", "abd_hisse": "hisse",
               "ab_hisse": "hisse", "asya_hisse": "hisse", "faiz": "faiz", "metal": "emtia",
               "enerji": "emtia", "kredi": "kredi", "kripto": "fx"}

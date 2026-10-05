@@ -103,7 +103,7 @@ tekrarla değil YENİ olguyla gelir (bkz. "Ayrıntı: notu ne uzatır, ne uzatma
    `fikirler` ve `fikir_kapat` da yazılabilir alanlardır. Fikirleri yazı
    katmanı yazıldıktan SONRA, AYRI bir yamayla yaz (bir fikrin reddi o zaman
    sabahın notunu durdurmaz): önce `python3 bulten/fikir.py --evren --tarih <sayı günü>` (ölçülebilir
-   bacaklar), sonra `python3 bulten/fikir.py --sina yama.json --tarih <sayı
+   bacaklar), sonra `python3 bulten/fikir.py --sina fikir.json --tarih <sayı
    günü>` (bkz. "İşlem fikirleri (biçim 3)" → "İş akışı").
 4. **Denetle — yazmadan.** `python3 bulten/yaz.py yama.json --damga "<okuduğun
    olusturma>" --denetle`: yama bellekte uygulanır, denetim o sonuç üzerinde
@@ -579,7 +579,7 @@ ve yapısıyla anılır ("2 Ekim'de açılan 2y–5y dikleştirici"), makine kim
 değil. Opsiyon fikrinin vade sonu ödemesi primsizdir ve "kazandı" diye yazılmaz;
 ölçülemeyen fikrin sonucu yoktur.
 Fikir karnesi SIRA KURALI'na bağlı değildir: kapanışı mekaniktir, erken kapanış
-(`fikir_kapat`) aynı yamada yazılır ve bir sonraki sayının karnesine girer.
+(`fikir_kapat`) fikirlerin ayrı yamasında yazılır ve bir sonraki sayının karnesine girer.
 
 **6. Türkiye: piyasalar.** Haftalık hareketin kendisi (USD/TRY'nin, 2 ve 10
 yıllığın haftalık farkı ve σ'sı) özetin evidir; bu bölüm onun üzerine YENİ bir
@@ -851,7 +851,8 @@ yani genel bir satışta oran düşer. Gerekçe görüşün ayrışma mı piyasa
 olduğunu bilerek yazar ve yapıyı "dış kanal dışarıda kalır" diye anlatmaz.
 
 **Opsiyon.** Dayanak tek bir fiyat bacağıdır; faiz opsiyonu (swaption, cap)
-ölçülemeyen türdedir. Tipler ve kullanım fiyatları:
+ölçülemez ve fikir olarak açılmaz (karar 05.10.2026) — görüş risk bölümünde ya
+da söz defterinde izlenir. Tipler ve kullanım fiyatları:
 
 | `opsiyon.tip` | `kullanim` | `yon` |
 |---|---|---|
@@ -880,7 +881,7 @@ FX swap'ın örtük TL faiziyle kurulur; o faiz yurt içi TLREF'ten ayrışabili
 (offshore bazı) ve ölçülmüyor, yani bu değer yaklaşıktır ve gerekçede "yaklaşık"
 diye yazılır. İleri kurun altındaki bir alım kullanım fiyatı, faiz farkının zaten
 fiyatladığı yükselişi satın alır. Gerekçe, kullanım fiyatının istediği hızı
-ölçülen hızla kıyaslar: alt kullanım fiyatına varmak için gereken yıllıklandırılmış
+AYNI YÖNTEMLE (bileşik yıllıklandırma) ölçülen hızla kıyaslar: alt kullanım fiyatına varmak için gereken yıllıklandırılmış
 artış, bültenin 1 aylık devalüasyon hızının yanında yazılır.
 
 **Ölçülemeyen.** Fiyatı elimizde olmayan enstrümanlar: TRY OIS ve Londra'daki
@@ -1111,11 +1112,11 @@ basar (bkz. "Haftaya bakış" → "Fikirlerin karnesi").
    yazı katmanı yazıldıktan SONRA uygula. Aynı yamada bir fikir reddedilirse
    yama bütünüyle reddedilir ve sabahın notu da yazılmaz; ayrı yamada red
    yalnız fikri durdurur.
-4. `python3 bulten/fikir.py --sina yama.json --tarih <sayı günü>` — her fikir
+4. `python3 bulten/fikir.py --sina fikir.json --tarih <sayı günü>` — her fikir
    için ✓ ile yapı metni, yön metni, giriş ve getiri/risk; ✗ ise mesaj neyin
    eksik olduğunu söyler (çıkış 2). Yön metnini OKU: yön sözcüğünün kastettiğin
    yapıyı verdiğini orada görürsün ("eğri dikleşirse kazanır (dikleştirici)").
-5. `python3 bulten/yaz.py yama.json --damga "<olusturma>" --denetle`, sonra yaz.
+5. `python3 bulten/yaz.py fikir.json --damga "<olusturma>" --denetle`, sonra yaz.
    Yazma kapısı aynı sözleşmeyi uygular (red: çıkış 2); denetimin `fikirler`
    ölçütü yapısal tutarsızlığı ENGEL, bütçeleri (sayı, gerekçe ve koşul uzunluğu,
    getiri/risk, stop–σ, dayanak, senaryo, sınıf çeşidi, açık fikir tavanı)
@@ -1127,9 +1128,9 @@ basar (bkz. "Haftaya bakış" → "Fikirlerin karnesi").
 
 ### Örnekler
 
-04.10.2026 haftalık sayısındaki fikirlerden ikisi ve bir yapı örneği. Yayımlanmış
-kayıt sayının dosyasında durur (yazıldıktan sonra değişmez), burada okunuşu
-anlatılır. Üçüncü örnek (FX opsiyon) aynı sayıya yazılmış, ertesi gün kullanıcı
+İlk iki örnek 04.10.2026 haftalık sayısının dosyasındaki kayıtlardır
+(2026-10-04-1, -2); yayımlanmış kaydın seviyeleri değişmez, metni düzeltilebilir
+ve geçerli metin dosyadakidir, burada okunuşu anlatılır. Üçüncü örnek (FX opsiyon) aynı sayıya yazılmış, ertesi gün kullanıcı
 kararıyla silinmiştir: yalnız yapının biçimini göstermek için duruyor.
 
 **TL eğri yapısı, vekille (ana senaryo).** Okuma: gevşeme kısa uçtan gelir, 1–2
@@ -1169,7 +1170,7 @@ fiyatlandığı vade 3 aydır, 2 yıl değil.
  "hedef": 1.35,
  "stop": 1.215,
  "ufuk": "2026-10-30",
- "gerekce": "Ana patikada kısa uçtaki gevşeme bankaların mevduat maliyetini kredi faizinden önce indirir; fon tasfiyesinin sırası para piyasası fonlarından başladığı için hisse arzı sonraya kalıyor. Göreli yapı faiz mekanizmasını öne alır ama endeksten tam bağımsız değildir: oran son bir yılın günlük verisinde BIST 100'ün 0,29'luk betasını taşıyor, yani genel bir satışta bankacılık endeksten daha çok kaybeder.",
+ "gerekce": "Ana patikada kısa uçtaki gevşeme bankaların mevduat maliyetini kredi faizinden önce indirir; fon tasfiyesi para piyasası fonlarından başladığı için hisse arzı sonraya kalıyor. Göreli yapı faiz mekanizmasını öne alır ama endeksten tam bağımsız değildir: oran son bir yılın günlük verisinde BIST 100'ün 0,29'luk betasını taşıyor, yani genel bir satışta bankacılık endeksten ortalamada daha çok kaybeder. Bu haftaki satışta tersi oldu (bankacılık −%3,86, BIST 100 −%4,88); beta yılın ortalamasıdır.",
  "ne_bozar": "Eylül TÜFE'si %2,6'yı aşar ya da 3 aylık DİBS getirisi %38,5'in üstüne çıkarsa mevduatın yeniden fiyatlandığı kısa vade pahalanır ve bankaların marj avantajı kapanır.",
  "dayanak": "risk",
  "senaryo": "Ana senaryo"}

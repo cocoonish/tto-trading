@@ -4426,7 +4426,7 @@ Kapılar:
   - ENGEL: yapısal tutarsızlık.
   - UYARI: getiri/risk < 1; stop yapının bir günlük σ'sının altında ya da ufka ölçekli beklenen hareketin yarısından yakın; hedef o hareketin 2,5 katından uzak; dayanaksız ya da boş bölüme dayanan fikir; aynı görüş iki kez; haftalıkta senaryosuz ya da tek sınıf; açık fikir > 12.
   - Fikirsiz sayı: bugünün sayısında UYARI (günlük 1–3, haftalık 3–6 beklenir), arşiv sayısında bilgi — oraya fikir yazılamaz, uyarı kapanamazdı. Zorla fikir yazılmaz (karar 05.10.2026, aşağıda).
-  - ENGEL: 05.10.2026'dan sonra açılmış ölçülemez fikir (`fikir.OLCULEMEZ_YASAK`).
+  - ENGEL: 05.10.2026'dan beri (o gün dahil) açılmış ölçülemez fikir (`fikir.OLCULEMEZ_YASAK`).
 - Dil ölçütleri yalnız okura giden METİN alanlarını tarar (`fikir.METIN_ALANLARI`). Kimlik, seri ve dayanak makine alanıdır; taranırsa kod dili sanılır.
 - Sayfa sınavında fikrin derlenmiş sayfaya basıldığını soran ölçütler: bülten kartı (25d) ve Tradeler defteri (25e: her fikrin kartı defterde, kapanmış ölçülebilir fikir kapanan bölümünde).
 - `tweet/duman.py`'de gönderiye girmeme kilidi, günlük ve haftalık iki kipte de.

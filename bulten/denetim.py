@@ -1319,9 +1319,12 @@ class Denetim:
             self._ok("vadeli devir düzeltmesi kurulu")
 
     # ────────────────────────────────────────────── işlem fikirleri
-    # Sayı aralığı (bkz. YAZIM.md "İşlem fikirleri"): günlükte temiz bir fikir
-    # yoksa hiç yazılmaz — eksiklik bilgi satırıdır, uyarı değil (kapanamayan
-    # bir uyarı yazarı bütün uyarıları görmezden gelmeye alıştırır).
+    # Sayı aralığı (bkz. YAZIM.md "İşlem fikirleri"; karar 05.10.2026): her
+    # sayıda en az bir fikir — günlük 1–3, haftalık 3–6. Bugünün sayısında
+    # fikirsizlik UYARI, arşivde bilgi. Uyarı temiz fikir olmayan gün kapanamaz
+    # ve bu bilerek kabul edildi: zorla fikir yazılmaz, sebep bildirime yazılır.
+    # "Bugün" yerel tarihtir (`_arsiv_sayisi`), yazma kapısınınki UTC; UTC'nin
+    # batısındaki bir makinede gece yarısından sonra ikisi ayrışabilir.
     FIKIR_ARALIK = {"gunluk": (1, 3), "haftalik": (3, 6)}
     FIKIR_ACIK_AZAMI = 12
     FIKIR_BASLANGIC = "2026-10-05"     # ilk sayı; öncesinde bölüm yoktu
