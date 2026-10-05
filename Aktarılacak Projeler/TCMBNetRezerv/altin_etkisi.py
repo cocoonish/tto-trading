@@ -12,9 +12,10 @@ Altın değeri V(t) = Q(t) · P(t)   (Q = miktar, milyon troy ons; P = USD/ons)
     Λ(L) = P(L+1) · [Q(L+1) − Q(L)]      ← MİKTAR etkisi (milyar USD)
     Γ + Λ = V(L+1) − V(L)                ← kimlik, artık yok
 
-AKIMDA Q NET ALTINDIR: brüt miktar (IRFCL) eksi TCMB'nin altın cinsinden
-yükümlülükleri (haftalık bilanço, safi gram; bkz. YUKUMLULUK_KALEMLERI). Akım
-NET pozisyondan kurulur ve o yükümlülükler de yeniden değerlenir.
+AKIMDA Q BRÜT ALTINDIR (IRFCL miktarı; karar 05.10.2026, kullanıcı). Piyasa
+tablolarının günlük net döviz alımı bu tanımla kurulur. TCMB'nin altın
+cinsinden yükümlülükleri (zorunlu karşılık altını, bankaların ve Hazine'nin
+altını) da yeniden değerlenir ve bu tanımda akımda kalır; bkz. "Bilinen sınır".
 
 Laspeyres, taban ağırlıklı standart ayrıştırmadır; ECB'nin rezerv değerleme
 kutusundaki formül tam olarak budur. (Eskiden burada "ECB ve IMF COFER'in
@@ -140,11 +141,22 @@ fiyatı onu IRFCL çapalarında medyan %0,09, en kötü %0,31 sapmayla izliyor
 (BİST ortalaması %0,57 / %4,4 idi). Kalan sapma bir kalibrasyon sabitiyle
 KAPATILMAZ — kapatmak, ölçüm hatasını modele gömmek olur.
 
+ALTIN YÜKÜMLÜLÜKLERİ AKIMDA KALIR. TCMB'nin yükümlülüklerinin bir kısmı altın
+cinsindendir (haftalık bilanço, safi gram: zorunlu karşılık altını, yurt içi
+ve yurt dışı bankaların altını, Hazine'nin altını; 2026'da 9–10 milyon ons) ve
+fiyat değişince onlar da yeniden değerlenir. Fiyat etkisi brüt altınla
+düşüldüğü için bu yeniden değerleme akımda kalır: ölçüldü (05.10.2026, Londra
+fiyatıyla, 2026'nın 176 iş günü, birleşik akım blokları hariç) günlük
+akımın brüt Γ'ya eğimi −0,28 (t −3,7); Londra fiyatının bütün döneminde
+(17.11.2023'ten, 681 gün) −0,27 (t −5,4) — altın yükseldiğinde akım bir
+miktar aşağı, düştüğünde yukarı yazılır. Net altına geçmek (05.10.2026'da denendi) bu eğimi sıfırlıyordu ama
+akımı piyasanın kullandığı tanımdan ayırıyordu; karar tanımın brüt kalması
+yönünde verildi ve eğim bir sınır olarak yazıldı.
+
 LONDRA SERİSİNDEN ÖNCESİ ARINMIŞ DEĞİLDİR. 17.11.2023 öncesinde fiyat BİST
-ortalamasıdır ve o dönemin günlük akımı net Γ'ya −0,84 (t −4,9) eğimle
-tepki veriyor: fiyat etkisi akıma sızıyor. Bir birikim o dönemden
-başlatılırsa `cipa_tanisi` uyarı basar; yayımlanan çıpa (27.02.2026) bu
-dönemin çok sonrasındadır.
+ortalamasıdır ve TCMB'nin değerleme saatinde değildir; o dönemin günlük akımı
+fiyatın gürültüsünü taşır. Bir birikim o dönemden başlatılırsa `cipa_tanisi`
+uyarı basar; yayımlanan çıpa (27.02.2026) bu dönemin çok sonrasındadır.
 
 Parite (USD dışı kur) etkisi bu sürümde arındırılmaz: TCMB rezervinin para
 kompozisyonu yayımlanmadığı için tahmin edilebilir ama hesaplanamaz;
@@ -308,11 +320,7 @@ ZINCIRLEME_TANI_ORAN = 0.50
 # değerleme fiyatı farkı, swap çapası, parite, faiz geliri) mertebelerinden
 # türetilmiş 1σ mertebe tahminleridir. Yayımlanan her akım rakamının yanında
 # görünür.
-# Günlük bant 05.10.2026'dan beri bütçe aralığının (±0,2–0,4; net altın,
-# Londra sabah fiyatı) ÜST UCUNDA tutuluyor: bağımsız referansa karşı ölçülen
-# hata (0,45) brüt altın ve BİST fiyatıyla kurulan tanıma aitti, yeni tanımın
-# karşılığı ölçülmedi. Ölçülmeden daraltılan bir bant, iddiayı büyütür.
-AKIM_BANT_GUNLUK = 0.40        # mlr USD
+AKIM_BANT_GUNLUK = 0.40        # mlr USD; günlük ±0,3–0,5 aralığının ortası
 AKIM_BANT_HAFTALIK = 0.50      # mlr USD
 AKIM_BANT_AYLIK = 1.00         # mlr USD
 AKIM_BANT_BIRIKIMLI_6AY = 2.00 # mlr USD; notun ±1,5–2,5 aralığının ortası
@@ -322,46 +330,6 @@ AKIM_BANT_BIRIKIMLI_6AY = 2.00 # mlr USD; notun ±1,5–2,5 aralığının ortas
 # sistematik. Kimlikten düşülmediği için yayımlanan birikimli net alım bu
 # kadar YUKARI yanlıdır. Hesaba GİRMEZ; yalnız ozet.json'a ve sayfaya taşınır.
 FAIZ_GELIRI_YILLIK_MLR = 2.30
-
-# --- Altın cinsinden YÜKÜMLÜLÜKLER (05.10.2026) ----------------------------
-# Akım NET pozisyondan kuruluyor (dış varlıklar eksi döviz yükümlülükleri), ve
-# TCMB'nin yükümlülüklerinin bir kısmı ALTIN cinsinden: bankaların zorunlu
-# karşılık altını, bankaların TCMB'deki altın ve teminat altını, yurt dışı
-# bankaların altın mevduatı, Hazine'nin altın mevduatı. Fiyat değişince
-# onlar da yeniden değerlenir; net pozisyondaki fiyat etkisi BRÜT altının
-# değil NET altının (brüt − yükümlülük) etkisidir. Brüt miktarla kurulan Γ
-# net pozisyondan fazla düşüyordu. Ölçüldü (05.10.2026, Londra fiyatıyla,
-# 2026'nın 176 iş günü, birleşik akım blokları hariç): brüt Γ ile kurulan
-# akımın Γ'ya eğimi −0,27 (t −3,5) — altın yükseldiğinde sahte satış,
-# düştüğünde sahte alım; yükümlülük tarafı (A11 + A14) bu kalemlerin kendi
-# fiyat etkisine 0,88 ile (t 7,2) tepki veriyor. Net altınla eğim +0,15
-# (t 1,3); Londra fiyatının bütün döneminde (17.11.2023'ten, 681 gün) brüt
-# −0,26 (t −5,2), net +0,14 (t 1,8). Kaynak bir kalibrasyon sabiti DEĞİL,
-# TCMB'nin haftalık bilançosunda yayımladığı safi gram kalemleri.
-ONS_GRAM = 31.1034768          # bir troy ons, gram
-# Sütun → bilanço kalemi. Analitik bilançodaki yeri: Hazine kalemi kamu döviz
-# mevduatına (P.1ba), yurt içi banka kalemleri bankalar döviz mevduatına
-# (P.1bb), yurt dışı banka kalemi dış yükümlülüklere (P.1a) düşer; üçü de net
-# pozisyonun düştüğü yükümlülüklerdir. Standart dışı Hazine altını (diğer
-# pasifler) bu kümede değil: karşılığı rezerv varlığı değil.
-YUKUMLULUK_KALEMLERI = {
-    "hazine_g": "Hazine altın mevduatı",
-    "banka_teminat_g": "yurt içi bankaların teminat altını",
-    "banka_g": "yurt içi bankaların altın mevduatı",
-    "zk_g": "zorunlu karşılık altını",
-    "yd_banka_g": "yurt dışı bankaların altın mevduatı",
-}
-
-# Fiyat etkisinin akıma SIZIP SIZMADIĞI (tanı): son SIZINTI_PENCERE iş gününde
-# net alımın Γ'ya eğimi (birleşik akım blokları hariç). Brüt altınla kurulan
-# akım 2026'da −0,27 / t −3,5 veriyor; net altın ve Londra fiyatıyla +0,15 /
-# t 1,3. Eşik ikili: eğim büyük VE istatistiksel olarak ayırt edilebilir
-# olmalı — yalnız eğim, gürültülü bir pencerede sahte alarm üretir. Kayan
-# pencereyle ölçüldü (Haziran 2024'ten 585 pencere): iki pencere ateşliyor,
-# ikisi de Mart 2026'nın %10'luk altın düşüşü haftasında.
-SIZINTI_PENCERE = 120
-SIZINTI_ESIK_EGIM = 0.15
-SIZINTI_ESIK_T = 3.0
 
 
 # ---------------------------------------------------------------------------
@@ -428,10 +396,12 @@ def fiyat_serisi(agort: pd.Series, kap: pd.Series,
 # ---------------------------------------------------------------------------
 # NİYE (05.10.2026, ölçüldü). Analitik bilanço altını her gün Londra sabah
 # fiksingi saatindeki (10:30) uluslararası fiyatla yeniden değerliyor. Akımın
-# kuruluşunda (Δswap hariç − Δkamu) bu saatin fiyatıyla kurulan net Γ'nin
-# katsayısı 1,09 (t 9,2, 679 gün), BİST ağırlıklı ortalamasınınki 0,06 (t 0,6):
-# BİST serisi değerlemeyi açıklamıyor, akıma yalnız gürültü yazıyordu — günde
-# ~0,63 milyar USD (akımın standart sapması 1,857 → 1,748). Değerleme saati
+# kuruluşunda (Δswap hariç − Δkamu) iki fiyatla kurulan Γ ortak regresyona
+# sokulunca bu saatinki 0,69 (t 8,9, 681 gün), BİST ağırlıklı ortalamasınınki
+# 0,04 (t 0,6): BİST serisi değerlemeyi açıklamıyor, akıma yalnız gürültü
+# yazıyordu (akımın standart sapması 1,96 → 1,78 milyar USD). Katsayının 1'in
+# altında kalması altın yükümlülüklerinin yeniden değerlemesidir (modül notu,
+# "Bilinen sınır"). Değerleme saati
 # ayrıca TCMB'nin KENDİ yayımladığı değerleme fiyatıyla (IRFCL: altın değeri /
 # ons) doğrulandı: aşağıdaki seri onu medyan %0,09, en kötü %0,31 sapmayla
 # izliyor; BİST ortalaması %0,57 / %4,4, vadeli GC=F %0,5 (kontrat devri).
@@ -857,116 +827,6 @@ def birlesik_akim(df: pd.DataFrame, kaynak: pd.Series,
     return out, isaret
 
 
-def yukumluluk_ons_serisi(gram: pd.DataFrame | None,
-                          index: pd.DatetimeIndex) -> pd.DataFrame:
-    """Altın cinsinden yükümlülükler, milyon troy ons, günlük takvimde.
-
-    Kaynak TCMB haftalık bilançosu (Cuma, safi gram). Çapalar arasında zamana
-    göre doğrusal ara değer, son çapadan sonra taşıma — brüt miktar serisiyle
-    (`ons_serisi`) AYNI kural, aynı fonksiyon.
-
-    Bir kalem bilançoda ilk göründüğü haftadan önce YOKTU (yurt dışı bankaların
-    altın mevduatı 05.04.2024'te açıldı): o haftalar sıfırdır. İlk görünüşten
-    SONRA boş gelen hafta ise çapa olmaz — boşu sıfır saymak, yükümlülüğü
-    o hafta için silmek demek olurdu.
-
-    Veri hiç yoksa ya da bir kalem hiç yoksa HATA verir: net altın kurulamazsa
-    Γ brüt altınla kurulur ve ölçülmüş bir kusuru geri getirir; sessizce brüte
-    düşmek yerine hat görünür biçimde durur.
-    """
-    if gram is None or gram.empty:
-        raise RuntimeError(
-            "ALTIN YÜKÜMLÜLÜĞÜ YOK: TCMB haftalık bilançosunun altın kalemleri "
-            "alınamadı; net altın kurulamıyor, fiyat etkisi hesaplanmadı.")
-    eksik = [c for c in YUKUMLULUK_KALEMLERI if c not in gram.columns]
-    if eksik:
-        raise RuntimeError(
-            "ALTIN YÜKÜMLÜLÜĞÜ EKSİK: " + ", ".join(YUKUMLULUK_KALEMLERI[c] for c in eksik)
-            + " alınamadı; net altın kurulamıyor.")
-    g = gram[list(YUKUMLULUK_KALEMLERI)].astype(float).sort_index()
-    for c in g.columns:
-        ilk = g[c].first_valid_index()
-        if ilk is None:
-            raise RuntimeError(
-                f"ALTIN YÜKÜMLÜLÜĞÜ BOŞ: {YUKUMLULUK_KALEMLERI[c]} hiç gözlem taşımıyor.")
-        g.loc[g.index < ilk, c] = 0.0
-    capa = g.dropna(how="any").sum(axis=1) / ONS_GRAM / 1e6
-    capalar = pd.DataFrame({"ons": capa, "kaynak": "haftalik_bilanco"})
-    q = ons_serisi(capalar, index)
-    out = pd.DataFrame({"ons_yukumluluk": q["ons"],
-                        "ons_yukumluluk_kaynak": q["ons_kaynak"]})
-    out.attrs["son_capa"] = capa.index[-1] if len(capa) else None
-    return out
-
-
-def sizinti_tanisi(akim: pd.Series, gamma: pd.Series,
-                   haric: pd.Series | None,
-                   pencere: int = SIZINTI_PENCERE) -> list[str]:
-    """Fiyat etkisi akıma sızıyor mu: son `pencere` günde akımın Γ'ya eğimi.
-
-    Doğru arındırılmış bir akım altın fiyatından bağımsız olmalıdır. Eğim
-    belirgin biçimde sıfırdan ayrışırsa fiyat etkisi ya fazla ya eksik
-    düşülüyor demektir — altın yükümlülüklerinin değerlemesi, miktar serisi ya
-    da fiyat kaynağı kaymış olabilir.
-
-    `haric` (birleşik akım etiketleri, `akim_birlesik`) regresyondan DÜŞÜLÜR
-    ve argümanın varsayılanı yoktur. Birleşik bir etiket birden çok seansın
-    toplamıdır; hem akımı hem Γ'yı birlikte büyütür ve tek başına eğimi
-    taşır. Ölçüldü (05.10.2026, BİST fiyatlı seri): 19.03.2026 birleşik
-    noktasının kaldıracı (n·h) 50, öbür noktaların en büyüğü 5; o tek nokta
-    02.03–28.08 penceresini +0,64 / t +3,15 ile sahte bir uyarıya taşıyordu,
-    çıkarılınca +0,04 / t 0,15. Düşme pencereden ÖNCE yapılır: pencere yine
-    `pencere` gözlem tutar.
-    """
-    if haric is not None:
-        maske = haric.reindex(akim.index)
-        maske = maske.astype(str).str.lower().isin(["true", "1"])
-        akim = akim[~maske]
-    d = pd.concat([akim, gamma], axis=1).dropna().tail(pencere)
-    if len(d) < pencere // 2:
-        return []
-    y = d.iloc[:, 0].to_numpy()
-    x = d.iloc[:, 1].to_numpy()
-    xm = x - x.mean()
-    sxx = float((xm ** 2).sum())
-    if sxx <= 0:
-        return []
-    b = float((xm * (y - y.mean())).sum() / sxx)
-    e = y - y.mean() - b * xm
-    se = (float((e ** 2).sum()) / (len(d) - 2) / sxx) ** 0.5
-    t = b / se if se > 0 else 0.0
-    if abs(b) >= SIZINTI_ESIK_EGIM and abs(t) >= SIZINTI_ESIK_T:
-        _b = _bicim()
-        yon = "ters" if b < 0 else "aynı"
-        return [
-            f"ALTIN ETKİSİ SIZINTISI: son {len(d)} iş gününde günlük net alım, altın "
-            f"fiyat etkisiyle {yon} yönde hareket ediyor (eğim {_b.sayi(b, 2, isaret=True)}, "
-            f"t {_b.sayi(t, 1, isaret=True)}). Fiyat etkisi akımdan doğru ölçüde "
-            "düşülmüyor olabilir."
-        ]
-    return []
-
-
-def yukumluluk_tazelik_tanisi(son: pd.Timestamp | None,
-                              bugun: pd.Timestamp | None = None) -> list[str]:
-    """Yükümlülük çapası ne kadar eskidi — brüt miktar çapasıyla aynı eşik.
-
-    Referans DUVAR SAATİDİR (bkz. altin_tanilari (4)); `bugun` yalnız sınama için.
-    """
-    if son is None:
-        return []
-    ref = bugun if bugun is not None else pd.Timestamp.today().normalize()
-    yas = (ref - son).days
-    if yas > ONS_TASIMA_UYARI_GUN:
-        return [
-            f"ALTIN YÜKÜMLÜLÜĞÜ TAZELİĞİ: TCMB'nin altın cinsinden yükümlülükleri en "
-            f"son {son:%d.%m.%Y} tarihli haftalık bilançodan okundu ({yas} gün önce, "
-            f"eşik {ONS_TASIMA_UYARI_GUN}). O günden beri taşınıyor; haftalık "
-            "bilanço yayımı kesilmiş olabilir."
-        ]
-    return []
-
-
 def altin_fiyat_etkisi(ons: pd.Series, fiyat: pd.Series,
                        fiyat_kaynak: pd.Series | None) -> pd.DataFrame:
     """Laspeyres fiyat/miktar ayrıştırması. Etiket L, değer L→L+1 (mlr USD).
@@ -1081,9 +941,9 @@ def cipa_tanisi(cipa: str, londra_bas: pd.Timestamp | None) -> list[str]:
     Londra serisinden ÖNCEKİ günlerde fiyat BİST ağırlıklı ortalamasıdır ve
     TCMB'nin değerleme saatinde değildir; o dönemin günlük akımı fiyat
     etkisinden arınmış DEĞİLDİR (ölçüldü 05.10.2026: 2023 başı–16.11.2023
-    akımın net Γ'ya eğimi −0,84, t −4,9; Londra fiyatıyla 17.11.2023–
-    01.10.2026 +0,14, t 1,8). Oradan başlatılan bir birikim fiyat hareketini
-    de taşır."""
+    akımın Γ'ya eğimi −0,88, t −7,1; Londra fiyatıyla 17.11.2023–01.10.2026
+    −0,27, t −5,4 — kalan eğim altın yükümlülüklerinin yeniden değerlemesi).
+    Oradan başlatılan bir birikim fiyat hareketini de taşır."""
     t0 = pd.Timestamp(cipa)
     if londra_bas is None:
         return []          # Londra serisi yok: kaynak uyarısı zaten basıldı
@@ -1299,19 +1159,16 @@ def zincirleme_tanisi(gamma: pd.Series, ons: pd.Series, fiyat: pd.Series,
 # ---------------------------------------------------------------------------
 # Tek çağrılık boru hattı (net_rezerv.py bunu kullanır)
 # ---------------------------------------------------------------------------
-def akim_ayristir(ons: pd.Series, ons_yukumluluk: pd.Series, fiyat: pd.Series,
+def akim_ayristir(ons: pd.Series, fiyat: pd.Series,
                   fiyat_kaynak: pd.Series, swap_haric: pd.Series,
                   kamu_doviz_usd: pd.Series) -> pd.DataFrame:
-    """Net altın + ayrıştırma + akım + arife birleştirmesi — TEK tanım.
+    """Ayrıştırma + akım + birleşik akım — TEK tanım.
 
     Hem canlı hat (`arindirma_hatti`) hem çevrimdışı yeniden üretim
     (`_gunlukten_uret`) bunu çağırır; iki ayrı kopya bir gün sessizce ayrışırdı.
-    Γ ve Λ NET altınla (brüt − yükümlülük) kurulur; `altin_deger_ima` BRÜT
-    altının değeri olarak kalır (rezervdeki altın kaleminin tanısı).
+    Γ ve Λ BRÜT altınla kurulur (modül notu, "AKIMDA Q BRÜT ALTINDIR").
     """
-    q_net = ons - ons_yukumluluk
-    etki = altin_fiyat_etkisi(q_net, fiyat, fiyat_kaynak)
-    etki["altin_deger_ima"] = ons * fiyat / 1000.0
+    etki = altin_fiyat_etkisi(ons, fiyat, fiyat_kaynak)
     akim = net_doviz_alimi(swap_haric, kamu_doviz_usd,
                            etki["altin_fiyat_etkisi"],
                            etki["altin_miktar_etkisi"])
@@ -1322,7 +1179,6 @@ def akim_ayristir(ons: pd.Series, ons_yukumluluk: pd.Series, fiyat: pd.Series,
          "net_doviz_alimi_altin_haric"])
     for _bos, _hedef in arife_bloklari(fiyat_kaynak.reindex(out.index)):
         out.loc[_bos, "bennet_fark"] = float("nan")
-    out["ons_net"] = q_net
     out["akim_birlesik"] = birlesik
     return out
 
@@ -1330,31 +1186,29 @@ def akim_ayristir(ons: pd.Series, ons_yukumluluk: pd.Series, fiyat: pd.Series,
 def arindirma_hatti(index: pd.DatetimeIndex, agort: pd.Series, kap: pd.Series,
                     altin_deger_M: pd.Series, aylik_ons: pd.Series | None,
                     gozlem: pd.DataFrame | None, swap_haric: pd.Series,
-                    kamu_doviz_usd: pd.Series, yukumluluk_gram: pd.DataFrame | None,
+                    kamu_doviz_usd: pd.Series,
                     londra_fiyati: pd.Series | None,
                     cipa: str = CIPA_TARIHI) -> tuple[pd.DataFrame, list[str]]:
     """Fiyat + miktar + ayrıştırma + akım + birikim — tek çağrıda.
 
-    `yukumluluk_gram` ZORUNLUDUR (varsayılanı yok): unutulan bir çağrı yeri
-    Γ'yı brüt altınla kurup ölçülmüş kusuru geri getirirdi. `londra_fiyati`
-    de öyle (bkz. `fiyat_serisi`): unutulan çağrı yeri değerleme saatinde
-    olmayan BİST fiyatına sessizce dönerdi.
+    `londra_fiyati` ZORUNLUDUR (varsayılanı yok; bkz. `fiyat_serisi`):
+    unutulan bir çağrı yeri değerleme saatinde olmayan BİST fiyatına sessizce
+    dönerdi.
 
     Dönen DataFrame sütunları:
-      altin_fiyat, altin_fiyat_kaynak, ons, ons_kaynak, ons_yukumluluk,
-      ons_yukumluluk_kaynak, ons_net, altin_fiyat_etkisi, altin_miktar_etkisi,
+      altin_fiyat, altin_fiyat_kaynak, ons, ons_kaynak, altin_fiyat_etkisi,
+      altin_miktar_etkisi,
       altin_deger_ima, bennet_fark, net_doviz_alimi, net_doviz_alimi_altin_haric,
       akim_birlesik, net_doviz_alimi_birikimli, altin_fiyat_etkisi_birikimli
     """
     f = fiyat_serisi(agort, kap, index, londra_fiyati)
     capalar = ons_capalari(gozlem, altin_deger_M, f["altin_fiyat"], aylik_ons)
     q = ons_serisi(capalar, index)
-    qy = yukumluluk_ons_serisi(yukumluluk_gram, index)
-    ayr = akim_ayristir(q["ons"], qy["ons_yukumluluk"], f["altin_fiyat"],
-                        f["altin_fiyat_kaynak"], swap_haric, kamu_doviz_usd)
+    ayr = akim_ayristir(q["ons"], f["altin_fiyat"], f["altin_fiyat_kaynak"],
+                        swap_haric, kamu_doviz_usd)
     etki = ayr
 
-    out = pd.concat([f, q, qy, ayr], axis=1)
+    out = pd.concat([f, q, ayr], axis=1)
     bloklar = arife_bloklari(f["altin_fiyat_kaynak"].reindex(index))
     try:
         out["net_doviz_alimi_birikimli"] = birikimli_akim(
@@ -1369,12 +1223,7 @@ def arindirma_hatti(index: pd.DatetimeIndex, agort: pd.Series, kap: pd.Series,
 
     # Akımın hangi günlerinin GEÇİCİ olduğu (son çapadan sonrası) — grafikler
     # ve sayfa bunu görünür kılar; revizyon politikası modül notunda.
-    # Net altın İKİ çapadan kurulur (brüt miktar ve yükümlülük); hangisi daha
-    # eskiyse akım ondan sonra geçicidir.
     son_capa = capalar.index[-1] if not capalar.empty else None
-    son_yuk = qy.attrs.get("son_capa")
-    if son_capa is not None and son_yuk is not None:
-        son_capa = min(son_capa, son_yuk)
     out["akim_gecici"] = (pd.Series(index > son_capa, index=index)
                           if son_capa is not None
                           else pd.Series(False, index=index))
@@ -1384,14 +1233,10 @@ def arindirma_hatti(index: pd.DatetimeIndex, agort: pd.Series, kap: pd.Series,
     uyarilar = altin_tanilari(capalar, altin_deger_M, f["altin_fiyat"], etki)
     uyarilar += fiyat_tasima_tanisi(f["altin_fiyat_kaynak"])
     uyarilar += uyari_cipa
-    uyarilar += yukumluluk_tazelik_tanisi(qy.attrs.get("son_capa"))
-    uyarilar += sizinti_tanisi(out["net_doviz_alimi"], out["altin_fiyat_etkisi"],
-                               out["akim_birlesik"])
 
     # Zincirleme tanısı (yayımlanmaz, denetlenir) — bkz. zincirleme_tanisi.
-    # Γ net altınla kurulduğu için doğrudan etki de net miktarla ölçülür.
     d_t, uyari_zincir = zincirleme_tanisi(etki["altin_fiyat_etkisi"],
-                                          out["ons_net"], f["altin_fiyat"], cipa)
+                                          q["ons"], f["altin_fiyat"], cipa)
     uyarilar += uyari_zincir
     out.attrs["zincirleme_dt"] = d_t
     out.attrs["son_ons_capa"] = son_capa
@@ -1411,7 +1256,7 @@ def _gunlukten_uret(gunluk: pd.DataFrame, cipa: str) -> pd.DataFrame:
     bir --capa ile) gerçekten kendi hesabını yapar.
     """
     gerekli = ["altin_fiyat", "altin_fiyat_kaynak", "ons", "ons_kaynak",
-               "ons_yukumluluk", "swap_haric_usd", "kamu_doviz_mev_usd",
+               "swap_haric_usd", "kamu_doviz_mev_usd",
                "altin_usd", "doviz_usd"]
     eksik = [c for c in gerekli if c not in gunluk.columns]
     if eksik:
@@ -1419,14 +1264,12 @@ def _gunlukten_uret(gunluk: pd.DataFrame, cipa: str) -> pd.DataFrame:
             "gunluk.csv beklenen sütunları taşımıyor: " + ", ".join(eksik) +
             ". Önce `python net_rezerv.py` koşturun."
         )
-    etki = akim_ayristir(gunluk["ons"], gunluk["ons_yukumluluk"],
+    etki = akim_ayristir(gunluk["ons"],
                          gunluk["altin_fiyat"], gunluk["altin_fiyat_kaynak"],
                          gunluk["swap_haric_usd"], gunluk["kamu_doviz_mev_usd"])
     akim = etki
     out = pd.DataFrame(index=gunluk.index)
     out["altin_ons_mn"] = gunluk["ons"]
-    out["altin_ons_yukumluluk_mn"] = gunluk["ons_yukumluluk"]
-    out["altin_ons_net_mn"] = etki["ons_net"]
     out["altin_fiyat"] = gunluk["altin_fiyat"]
     out["altin_fiyat_kaynak"] = gunluk["altin_fiyat_kaynak"]
     out["ons_kaynak"] = gunluk["ons_kaynak"]
@@ -1517,13 +1360,11 @@ def main() -> None:
     # başına çalıştığında net_rezerv.py'nin denetimi DEVREDE DEĞİLDİR, koruma
     # tek noktaya bağlı kalmasın.
     uyarilar = fiyat_tasima_tanisi(out["altin_fiyat_kaynak"])
-    uyarilar += sizinti_tanisi(out["net_alim_satim"], out["altin_fiyat_etkisi"],
-                               out["akim_birlesik"])
     _ld = gunluk["altin_fiyat_kaynak"].astype(str)
     _ld = _ld[_ld == "londra"]
     uyarilar += cipa_tanisi(args.capa, _ld.index[0] if len(_ld) else None)
     d_t, uyari_zincir = zincirleme_tanisi(out["altin_fiyat_etkisi"],
-                                          out["altin_ons_net_mn"],
+                                          out["altin_ons_mn"],
                                           out["altin_fiyat"], args.capa)
     uyarilar += uyari_zincir
     print()

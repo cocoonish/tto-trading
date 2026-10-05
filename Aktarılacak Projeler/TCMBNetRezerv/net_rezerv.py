@@ -300,19 +300,6 @@ ALTIN_FIYAT_SERIES = {
 # öncesi geri doldurma için (altin_etkisi.ons_capalari kademe 3).
 IRFCL_ONS_SERIES = {"ons_M": "TP.REZVARPD.K11"}
 
-# TCMB'nin ALTIN CİNSİNDEN YÜKÜMLÜLÜKLERİ — haftalık bilanço (bie_mbblnch,
-# Cuma), SAFİ GRAM. Net pozisyondaki altın fiyat etkisi NET altının etkisidir
-# (brüt − bu kalemler); bkz. altin_etkisi.YUKUMLULUK_KALEMLERI. Kodlar EVDS
-# kataloğundan okundu, tahmin edilmedi; 05.10.2026 bulut keşfinde beşi de
-# 02.12.2022'den (yurt dışı bankalar 05.04.2024'ten) 25.09.2026'ya veri verdi.
-ALTIN_YUKUMLULUK_SERIES = {
-    "hazine_g": "TP.BL0823",         # P3112  Hazine altın mevduatı
-    "banka_teminat_g": "TP.BL128",   # P32122 yurt içi bankalar, teminat altın
-    "banka_g": "TP.BL137",           # P3213  yurt içi bankalar, altın
-    "zk_g": "TP.BL0891",             # P3232  zorunlu karşılık bloke, altın
-    "yd_banka_g": "TP.BL142",        # P4.2   yurt dışı bankalar, altın
-}
-
 # --- Adlandırılmış sabitler (çıplak sayı bırakılmaz) -----------------------
 
 # Haftalık çapa gecikmesi, TAKVİM GÜNÜ. Bir Cuma F'nin haftalık istatistiği
@@ -1471,7 +1458,6 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
     fiyat_ham = fetch_grup(ALTIN_FIYAT_SERIES, piyasa_start, end)
     ons_aylik = fetch_grup(IRFCL_ONS_SERIES, piyasa_start, end,
                            ay_sonuna_kaydir=True)
-    altin_yuk = fetch_grup(ALTIN_YUKUMLULUK_SERIES, piyasa_start, end)
     aylik_irfcl = fetch_irfcl_aylik(start, end)
 
     swap_pdf, pdf_tarih = None, None
@@ -1557,7 +1543,6 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
         gozlem=gozlem,
         swap_haric=g["swap_haric_usd"],
         kamu_doviz_usd=g["kamu_doviz_mev_usd"],
-        yukumluluk_gram=altin_yuk,
         londra_fiyati=londra_p,
         cipa=cipa,
     )

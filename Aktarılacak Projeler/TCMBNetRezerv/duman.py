@@ -200,99 +200,42 @@ sina("düşen haftalık çekim uyarı listesine giriyor",
      f"(ekleme {_ekleme}, liste kurulumu {_kurulum})")
 
 # ---------------------------------------------------------------------------
-# 18–24. Net altın: fiyat etkisi BRÜT değil NET altınla kurulur (05.10.2026)
+# 18–22. Brüt altın: fiyat etkisi IRFCL'in brüt altın miktarıyla (karar
+# 05.10.2026, kullanıcı)
 # ---------------------------------------------------------------------------
-# Ölçüldü: brüt altınla kurulan Γ net pozisyondan fazla düşülüyordu, çünkü
-# TCMB'nin altın cinsinden yükümlülükleri (zorunlu karşılık, bankalar, yurt
-# dışı bankalar, Hazine) de yeniden değerleniyor. Brüt altınla kurulan
-# akımın Γ'ya eğimi 2026'da −0,27 (t −3,5); net altınla +0,15 (t 1,3)
-# (Londra fiyatıyla, birleşik bloklar hariç).
-print("\n▶ Net altın")
+# Günlük net döviz alımı piyasada brüt altınla kurulur ve sayfanın tanımı da
+# budur. Net altına geçiş (yükümlülük kalemleri düşülerek) aynı gün denendi
+# ve geri alındı; tanımın sessizce yeniden değişmemesi için imza ve hat
+# kaynağı sınanır. Altın yükümlülüklerinin yeniden değerlemesi akımda kalır ve
+# sayfada sınır olarak yazılıdır.
+print("\n▶ Brüt altın")
 
 import inspect as _inspect
 
 i5 = _gunler(5)
 _qb = pd.Series([25.0] * 5, index=i5)
-_qy = pd.Series([10.0] * 5, index=i5)
 _p = pd.Series([4000.0, 4100.0, 4050.0, 4050.0, 4150.0], index=i5)
 _k = pd.Series(["agort03"] * 5, index=i5)
-_sev = pd.Series([60.0, 61.5, 60.75, 60.75, 62.25], index=i5)   # yalnız yeniden değerleme
+_sev = pd.Series([100.0, 102.5, 101.25, 101.25, 103.75], index=i5)   # yalnız yeniden değerleme
 _kamu = pd.Series([6.0] * 5, index=i5)
-_a = ae.akim_ayristir(_qb, _qy, _p, _k, _sev, _kamu)
-sina("Γ net altınla kuruluyor: (25 − 10) × 100 / 1000 = 1,5",
-     abs(float(_a["altin_fiyat_etkisi"].iloc[0]) - 1.5) < 1e-12,
-     f"gelen {_a['altin_fiyat_etkisi'].iloc[0]} (brüt altın 2,5 verirdi)")
+_a = ae.akim_ayristir(_qb, _p, _k, _sev, _kamu)
+sina("Γ brüt altınla kuruluyor: 25 × 100 / 1000 = 2,5",
+     abs(float(_a["altin_fiyat_etkisi"].iloc[0]) - 2.5) < 1e-12,
+     f"gelen {_a['altin_fiyat_etkisi'].iloc[0]}")
 sina("yalnız yeniden değerleme varsa net alım SIFIR",
      bool((_a["net_doviz_alimi"].iloc[:-1].abs() < 1e-12).all()),
      f"gelen {list(_a['net_doviz_alimi'].iloc[:-1])}")
-sina("altın değeri tanısı BRÜT kalıyor (rezervdeki kalem)",
+sina("altın değeri tanısı Q·P (rezervdeki kalem)",
      abs(float(_a["altin_deger_ima"].iloc[0]) - 100.0) < 1e-12,
      f"gelen {_a['altin_deger_ima'].iloc[0]}")
-_imza = _inspect.signature(ae.arindirma_hatti).parameters["yukumluluk_gram"]
-sina("yükümlülük girdisinin varsayılanı YOK (unutulan çağrı yeri brüte dönmez)",
-     _imza.default is _inspect.Parameter.empty)
-sina("hat yükümlülük serisini çekip ayrıştırmaya veriyor",
-     "yukumluluk_gram=altin_yuk" in _net_kaynak
-     and "altin_yuk = fetch_grup(ALTIN_YUKUMLULUK_SERIES" in _net_kaynak)
-_kod_m = _re.search(r"ALTIN_YUKUMLULUK_SERIES = \{(.*?)\n\}", _net_kaynak, _re.S)
-_kodlar = set(_re.findall(r'"(\w+)":', _kod_m.group(1))) if _kod_m else set()
-sina("çekilen kalemler = yükümlülük tanımının kalemleri (tek liste)",
-     _kodlar == set(ae.YUKUMLULUK_KALEMLERI), f"çekilen {_kodlar}")
+_imza_a = list(_inspect.signature(ae.akim_ayristir).parameters)
+sina("ayrıştırma tek bir altın miktarı alıyor (brüt; yükümlülük girdisi yok)",
+     _imza_a == ["ons", "fiyat", "fiyat_kaynak", "swap_haric", "kamu_doviz_usd"],
+     f"imza {_imza_a}")
+sina("hat altın yükümlülüğü çekip ayrıştırmaya vermiyor",
+     "YUKUMLULUK_SERIES" not in _net_kaynak and "yukumluluk_gram" not in _net_kaynak)
 sina("çevrimdışı yeniden üretim aynı ayrıştırmayı çağırıyor",
      "akim_ayristir(" in _inspect.getsource(ae._gunlukten_uret))
-
-# Yükümlülük serisi: gram → ons, kalem açılmadan önceki haftalar sıfır,
-# açıldıktan SONRA boş gelen hafta çapa olmaz, eksik kalem hata verir.
-_cuma = pd.DatetimeIndex(["2026-01-02", "2026-01-09", "2026-01-16"])
-_gram = pd.DataFrame({c: [ae.ONS_GRAM * 1e6] * 3 for c in ae.YUKUMLULUK_KALEMLERI},
-                     index=_cuma)
-_gram.loc[_cuma[0], "yd_banka_g"] = float("nan")       # kalem henüz açılmamış
-_gram.loc[_cuma[1], "banka_g"] = float("nan")          # açıldıktan sonra boş
-_ys = ae.yukumluluk_ons_serisi(_gram, pd.bdate_range("2026-01-02", "2026-01-20"))
-sina("gram → milyon ons: beş kalem × 1 mn ons = 5 (son çapada)",
-     abs(float(_ys.loc["2026-01-16", "ons_yukumluluk"]) - 5.0) < 1e-9,
-     f"gelen {_ys.loc['2026-01-16', 'ons_yukumluluk']}")
-sina("açılmadan önceki hafta sıfır sayılır (ilk çapa 4 mn ons)",
-     abs(float(_ys.loc["2026-01-02", "ons_yukumluluk"]) - 4.0) < 1e-9,
-     f"gelen {_ys.loc['2026-01-02', 'ons_yukumluluk']}")
-sina("açıldıktan sonra boş gelen hafta çapa değil, ara değer",
-     _ys.loc["2026-01-09", "ons_yukumluluk_kaynak"] == "ara_deger",
-     f"gelen {_ys.loc['2026-01-09', 'ons_yukumluluk_kaynak']}")
-try:
-    ae.yukumluluk_ons_serisi(_gram.drop(columns=["zk_g"]), _cuma)
-    _hata, _tur = False, "hata yok"
-except RuntimeError:
-    _hata, _tur = True, ""
-except Exception as _ex:                       # noqa: BLE001 — teşhis adıyla düşsün
-    _hata, _tur = False, f"adlandırılmamış {type(_ex).__name__}"
-sina("eksik kalem sessizce brüte düşmez, ADIYLA hata verir", _hata, _tur)
-sina("yükümlülük çapası sağlıklı haftada uyarı üretmez, atlanan yayımda üretir",
-     not ae.yukumluluk_tazelik_tanisi(_CUMA, bugun=_CUMA + pd.Timedelta(days=13))
-     and bool(ae.yukumluluk_tazelik_tanisi(_CUMA, bugun=_CUMA + pd.Timedelta(days=20))))
-
-# Sızıntı tanısı: fazla düşülen fiyat etkisi akımda ters yönlü eğim bırakır.
-_rng = np.random.default_rng(7)
-_iz = pd.bdate_range("2026-01-05", periods=150)
-_gam = pd.Series(_rng.normal(0, 1.5, 150), index=_iz)
-_temiz = pd.Series(_rng.normal(0, 1.0, 150), index=_iz)
-sina("sızıntı tanısı temiz akımda susuyor", not ae.sizinti_tanisi(_temiz, _gam, None))
-sina("sızıntı tanısı fazla düşülen akımda (−0,4·Γ) ateşliyor",
-     bool(ae.sizinti_tanisi(_temiz - 0.4 * _gam, _gam, None)))
-# Birleşik (çok seanslı) tek nokta: Γ ve akım birlikte büyük. Ölçüldü
-# (19.03.2026): kaldıracı tek başına eğimi taşıyordu. `haric` ile düşülür.
-_gam2, _ak2 = _gam.copy(), _temiz.copy()
-_gam2.iloc[100], _ak2.iloc[100] = -8.5, -12.0
-_bir2 = pd.Series(False, index=_iz)
-_bir2.iloc[100] = True
-sina("tek birleşik nokta maskesiz tanıyı ateşliyor (sınamanın kendisi arızayı üretiyor)",
-     bool(ae.sizinti_tanisi(_ak2, _gam2, None)))
-sina("birleşik etiket regresyondan düşülünce tanı susuyor",
-     not ae.sizinti_tanisi(_ak2, _gam2, _bir2))
-_imza_s = _inspect.signature(ae.sizinti_tanisi).parameters["haric"]
-sina("sızıntı tanısında birleşik maskenin varsayılanı YOK",
-     _imza_s.default is _inspect.Parameter.empty)
-sina("iki çağrı yeri de birleşik maskeyi veriyor",
-     _inspect.getsource(ae).count('out["akim_birlesik"])') >= 2)
 
 # ---------------------------------------------------------------------------
 # 25–29. Bayram arifesi: ortadaki taşıma birleşik akım olur (05.10.2026)
