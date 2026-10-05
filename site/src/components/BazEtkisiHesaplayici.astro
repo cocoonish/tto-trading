@@ -10,9 +10,16 @@
  * Veri: /projeler/<proje>/ozet.json  → `tufe_12a_tam` (4 ondalıklı başlangıç yıllık;
  * yoksa `tufe_12a`),
  * `baz_dusen` (12 ay × düşen aylık oran, ozet_uret.py yazar), `donem`,
- * `baz_momentum_aylik`, `baz_son12_aylik`. Sabit sayı gömülmez: veri
- * tazelendiğinde araç da tazelenir. JSON yüklenemezse araç sayı UYDURMAZ,
- * görünür biçimde devre dışı kalır.
+ * `baz_momentum_aylik`, `baz_son12_aylik`, `baz_mevsim` (12 ay × mevsim
+ * çarpanı, son yılın kalıbı, `baz_dusen` sırasıyla) ve `baz_kalip_yil`.
+ * Sabit sayı gömülmez: veri tazelendiğinde araç da tazelenir. JSON
+ * yüklenemezse araç sayı UYDURMAZ, görünür biçimde devre dışı kalır.
+ *
+ * BİRİM. Kutular HAM aylık orandır (düşen aylar gibi). Momentum, son 12 ay ve
+ * hedef patikaları mevsimsiz HIZDIR; kutuya (1+hız)(1+μ)−1 olarak, o ayın
+ * mevsim çarpanıyla yazılır — sayfanın senaryo tablosuyla aynı hesap. Çarpan
+ * yoksa bu üç patika kapanır: düz bir hız, ham bazla farklı birimde kıyaslanıp
+ * tablodan puanlarca ayrışan bir sonuç verirdi (05.10.2026).
  *
  * Saf istemci tarafı, kütüphanesiz vanilla JS (TahvilHesaplayici kalıbı).
  */
@@ -41,6 +48,10 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
           <input type="number" id="bh-tek" value="2.00" step="0.05" min="-5" max="20" />
         </label>
         <button type="button" class="bh-btn" id="bh-uygula">Tümüne uygula →</button>
+        <label class="bh-mevsim">
+          <input type="checkbox" id="bh-mevsim" checked />
+          <span>Arındırılmış hız say: her aya o ayın mevsim çarpanı eklenir<span id="bh-kalip"></span></span>
+        </label>
       </div>
 
       <div class="bh-satir bh-hazir">
@@ -78,7 +89,7 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
       <thead>
         <tr>
           <th>Ay</th>
-          <th>Gelen aylık %</th>
+          <th>Gelen aylık % (ham)</th>
           <th>Düşen aylık %</th>
           <th>Yıllık %</th>
           <th>Δ (puan)</th>
@@ -94,9 +105,10 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
     Baz etkisi bir öngörü değil, bir <em>muhasebe kimliğidir</em>: düşen ayların
     (payda) katkısı bugünkü fiyatlama davranışından bağımsızdır ve tamamen
     bilinir. "Geçen yıl tekrar" patikası seçildiğinde yıllık oran on iki ay boyunca
-    sabit kalmalıdır — aracın kendini doğrulaması budur. Aylık girdiler iki ondalıkla
-    tutulduğu için sonuç, hattın kendi senaryo hesabından yüzde birlik puan
-    mertebesinde ayrışabilir. Hesap tarayıcınızda çalışır, veri gönderilmez.
+    sabit kalmalıdır — aracın kendini doğrulaması budur. Kutular ham aylık orandır;
+    mevsimsiz bir hız, ham bazla kıyaslanmadan önce o ayın mevsim çarpanıyla çevrilir.
+    Aylık girdiler iki ondalıkla tutulduğu için sonuç, panonun senaryo hesabından yüzde
+    birlik puan mertebesinde ayrışabilir. Hesap tarayıcınızda çalışır, veri gönderilmez.
   </p>
 </div>
 
@@ -126,6 +138,12 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
     let baslangic = 0; // π⁽¹²⁾_t, yüzde
     let dusen: Dusen[] = [];
     let hazirlar: Record<string, number | null> = {};
+    // Gelen ayların mevsim çarpanı (yüzde, `dusen` sırasıyla). null: okunamadı —
+    // o zaman mevsimsiz hız patikaları kapanır, düz hızla sessizce çalışılmaz.
+    let mevsim: number[] | null = null;
+    // Mevsimsiz bir hızı on iki ayın HAM karşılığına çevirir: (1+v)(1+μ)−1.
+    const hamaCevir = (v: number) =>
+      (mevsim ?? []).map((c) => ((1 + v / 100) * (1 + c / 100) - 1) * 100);
 
     const uyariGoster = (m: string) => {
       const u = el<HTMLElement>('bh-uyari');
@@ -164,6 +182,28 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
         son12: typeof oz.baz_son12_aylik === 'number' ? oz.baz_son12_aylik : null,
         hedef: (Math.pow(1 + hedefYillik / 100, 1 / 12) - 1) * 100,
       };
+      const mv = oz.baz_mevsim;
+      mevsim =
+        Array.isArray(mv) && mv.length === dusen.length && mv.every((x: unknown) => typeof x === 'number' && Number.isFinite(x))
+          ? (mv as number[])
+          : null;
+      const kutu = el<HTMLInputElement>('bh-mevsim');
+      if (mevsim) {
+        const yil = typeof oz.baz_kalip_yil === 'string' && /^\d{4}$/.test(oz.baz_kalip_yil) ? oz.baz_kalip_yil : '';
+        el<HTMLElement>('bh-kalip').textContent = yil ? ` (${yil} mevsimselliği)` : '';
+      } else {
+        // Çarpan yoksa hız patikaları KAPANIR; tek oran yalnız ham uygulanır.
+        kutu.checked = false;
+        kutu.disabled = true;
+        document
+          .querySelectorAll<HTMLButtonElement>('[data-hazir="momentum"], [data-hazir="son12"], [data-hazir="hedef"]')
+          .forEach((b) => (b.disabled = true));
+        const n = el<HTMLElement>('bh-girdi-not');
+        girdiNotuSabit =
+          'Mevsim çarpanı yüklenemedi: hız patikaları kapalı, tek oran ham uygulanır.';
+        n.textContent = girdiNotuSabit;
+        n.hidden = false;
+      }
       el<HTMLElement>('bh-kaynak').textContent =
         `başlangıç: ${oz.donem ?? oz._tarih ?? ''} · yıllık %${tr(baslangic)}`;
 
@@ -185,13 +225,15 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
       document
         .querySelectorAll('#bh-aylar input, #bh-tek')
         .forEach((i) => i.addEventListener('input', hesapla));
-      uygula(parseFloat(el<HTMLInputElement>('bh-tek').value));
+      tekUygula();
     };
 
     // Boş kutu sessizce %0 sayılırsa bu GÖRÜNMEZ BİR VARSAYIM olur; aracın
     // "sayı uydurmaz" disiplini buna izin vermiyor. Boş ya da aralık dışı girdi
     // kutuda işaretlenir ve altta kaç kutunun etkilendiği yazılır.
     let girdiNotu = '';
+    // Kurulumda bir kez yazılan not (mevsim çarpanı okunamadı); her hesapta kalır.
+    let girdiNotuSabit = '';
     const girenler = () => {
       const kutular = [...document.querySelectorAll<HTMLInputElement>('.bh-giren')];
       let bos = 0,
@@ -292,12 +334,15 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
       el<HTMLOutputElement>('bh-ayristirma').textContent =
         `${trIsaretli(sonYillik - baslangic, 1)} puan = ${trIsaretli(sonGelen, 1)} gelen ${trIsaretli(sonBaz, 1)} baz`;
       const gn = el<HTMLElement>('bh-girdi-not');
-      gn.textContent = girdiNotu;
-      gn.hidden = !girdiNotu;
+      const not = [girdiNotuSabit, girdiNotu].filter(Boolean).join(' · ');
+      gn.textContent = not;
+      gn.hidden = !not;
       cizgi(yol);
     }
 
-    el<HTMLButtonElement>('bh-uygula').addEventListener('click', () => {
+    // Tek oran: seçenek işaretliyse oran mevsimsiz HIZ sayılır ve her aya o ayın
+    // çarpanıyla ham karşılığı yazılır; işaretsizse on iki aya ham yazılır.
+    function tekUygula() {
       const g = el<HTMLInputElement>('bh-tek');
       const x = parseFloat(g.value);
       // HTML number girdisinde min/max KISITLAYICI DEĞİLDİR (elle 999 yazılabilir);
@@ -306,8 +351,12 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
         ust = parseFloat(g.max);
       const y = Number.isFinite(x) ? Math.min(Math.max(x, alt), ust) : 0;
       if (y !== x) g.value = y.toFixed(2);
-      uygula(y);
-    });
+      const mevsimli = mevsim !== null && el<HTMLInputElement>('bh-mevsim').checked;
+      uygula(mevsimli ? hamaCevir(y) : y);
+    }
+
+    el<HTMLButtonElement>('bh-uygula').addEventListener('click', tekUygula);
+    el<HTMLInputElement>('bh-mevsim').addEventListener('change', tekUygula);
     document.querySelectorAll<HTMLButtonElement>('[data-hazir]').forEach((b) =>
       b.addEventListener('click', () => {
         const ad = b.dataset.hazir!;
@@ -315,10 +364,13 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
           uygula(dusen.map((d) => d.oran));
           return;
         }
+        // Momentum, son 12 ay ve hedef mevsimsiz HIZDIR: kutulara ancak mevsim
+        // çarpanıyla çevrilerek girer. Çarpan yoksa düğme zaten kapalıdır.
         const v = hazirlar[ad];
-        if (v === null || v === undefined) return;
+        if (v === null || v === undefined || mevsim === null) return;
         el<HTMLInputElement>('bh-tek').value = v.toFixed(2);
-        uygula(v);
+        el<HTMLInputElement>('bh-mevsim').checked = true;
+        uygula(hamaCevir(v));
       })
     );
 
@@ -432,6 +484,30 @@ const { proje = 'enflasyon', hedef = 5 } = Astro.props;
   .bh-tek {
     max-width: 15rem;
     flex: 1 1 10rem;
+  }
+  /* Birim seçeneği: kutunun altında tek satır; bileşenin genel `label` (sütun) ve
+     `input` (tam genişlik) kuralları onay kutusuna uygulanmaz. */
+  .bh-mevsim {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    font-size: 0.78rem;
+    color: var(--ink-70);
+  }
+  .bh-mevsim input {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    flex: 0 0 auto;
+  }
+  .bh-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .bh-btn:disabled:hover {
+    border-color: var(--ink-30);
+    color: var(--ink-70);
   }
   input:focus {
     outline: 2px solid var(--claret);

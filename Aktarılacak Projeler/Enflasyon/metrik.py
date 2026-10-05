@@ -19,7 +19,9 @@ Bu dosyanın ürettikleri (data/ altına):
   katki.csv         beş grubun yıllık ve aylık katkısı (tam toplanabilir)
   dagilim.csv       kırpılmış ortalama (α=0,05/0,08/0,10), ağırlıklı medyan,
                     difüzyon endeksleri
-  baz_senaryo.csv   önümüzdeki 12 ayın üç senaryolu yıllık enflasyon patikası
+  baz_senaryo.csv   önümüzdeki 12 ayın üç senaryolu yıllık enflasyon patikası;
+                    arındırılmış hız her ay o takvim ayının geçmiş bir yıldaki
+                    mevsim çarpanıyla ham aya çevrilir, kalıp yılları sütun adında
   reel_faiz.csv     ex-post / ex-ante / ana eğilime göre reel faiz
   beklenti.json     PKA isabet ölçüleri (MAE, yanlılık, RMSE; 36 ve 60 ay)
   metrik_ozet.json  ozet_uret.py'nin okuduğu tekil sayılar
@@ -486,7 +488,85 @@ def difuzyon(deger: pd.Series, agirlik: pd.Series, esik: float) -> float:
 # ===========================================================================
 # 7. Baz etkisi patikası
 # ===========================================================================
-def baz_patikasi(p: pd.Series, p_sa: pd.Series, ufuk: int = 12) -> pd.DataFrame:
+# BİRİM: KİMLİĞİN PAYDASI HAM, SENARYONUN HIZI ARINDIRILMIŞ. Düşen aylar
+# yayımlanmış ham aylık oranlardır; momentum senaryosunun hızı mevsimsellikten
+# arındırılmıştır, son 12 ay ortalamasında ise mevsim on iki ayda kendiliğinden
+# sadeleşir. İkisi kimliğe ancak AYNI birimde girer: gelen aya, o takvim ayının
+# geçmiş bir yıldaki mevsim çarpanı uygulanır. Çarpan yıldan yıla değişiyor
+# (Kasım'ınki 2022'de −0,43, 2025'te −0,98 puan), bu yüzden tek bir kalıp
+# seçilip gizlenmez: ana kıyas son yılın kalıbıdır, sonuç kalıp yılları ADIYLA
+# ve aralık olarak yayımlanır — son iki yıl ve ondan önceki iki yıl.
+# 05.10.2026'da ölçüldü: hesap arındırılmış hızı çarpansız, ham endekse
+# bileştiriyordu; Eylül 2026 verisiyle yıl sonunu %31,53 gösterdi, aynı veride
+# mevsime tutarlı hesap son iki yılın kalıbıyla %28,98–29,50, 2022–2023'ünküyle
+# %30,02–30,52 veriyor (Eylül TÜFE analizinin ölçüm katmanı, TufeAnaliz/olcum.py).
+BAZ_KALIP_YIL = 4      # denenen kalıp sayısı: ufkun k = 1 … 4 yıl önceki aynı ayları
+BAZ_KALIP_GRUP = 2     # aralık grubu: son iki yılın kalıbı · ondan önceki iki yılınki
+BAZ_HIZ = ("son3_sa", "son12_ort")   # hızı mevsimsiz olan, çarpanla ham aya çevrilen senaryolar
+
+
+def mevsim_carpani(p: pd.Series, p_sa: pd.Series) -> pd.Series:
+    """Ayın mevsim çarpanı μ_t = (1+π_t)/(1+π^SA_t) − 1 (oran, yüzde değil).
+
+    Ham aylık değişimin arındırılmış aylık değişime oranıdır. Arındırılmış bir
+    hız ham bir bazla ya da ham bir eşikle kıyaslanacaksa önce bu çarpanla ham
+    aya çevrilir: 1+π = (1+π^SA)·(1+μ). Mevsimselliği anlamsız çıkıp
+    arındırılmadan geçen seride çarpan sıfırdır ve çeviri hiçbir şey değiştirmez."""
+    m = p / p.shift(1) - 1
+    m_sa = p_sa / p_sa.shift(1) - 1
+    return ((1 + m) / (1 + m_sa) - 1).dropna()
+
+
+def baz_kaliplari(mev: pd.Series, ufuk_aylar: list,
+                  n_yil: int = BAZ_KALIP_YIL) -> dict[int, list[float]]:
+    """Kalıp yılı → ufkun her ayı için mevsim çarpanı.
+
+    k. kalıp, ufuktaki her ayın k yıl ÖNCEKİ aynı takvim ayının çarpanını alır.
+    Adı, ufkun ilk ayının k yıl önceki karşılığının yılıdır: Eylül verisinde yıl
+    sonuna kalan Ekim–Aralık'ın çarpanları o yıldan, ufkun gelecek yıla düşen
+    ayları onu izleyen yıldan gelir (Eylül 2026 verisinde "2025 kalıbı" Ekim
+    2025–Eylül 2026). k = 1'in ayları düşen ayların ta kendisidir. Bir ayı
+    ölçülemeyen kalıp YAZILMAZ — eksik ayı sıfır saymak o ayı mevsimsiz saymaktır."""
+    out: dict[int, list[float]] = {}
+    for k in range(1, n_yil + 1):
+        kayma = pd.DateOffset(months=12 * k)
+        c = [mev.get(u - kayma, np.nan) for u in ufuk_aylar]
+        if any(pd.isna(x) for x in c):
+            continue
+        out[int((ufuk_aylar[0] - kayma).year)] = [float(x) for x in c]
+    return out
+
+
+def kalip_gruplari(yillar: list[int], genislik: int = BAZ_KALIP_GRUP) -> dict[str, list[int]]:
+    """Kalıp yılları → aralık grupları, yeniden eskiye: son iki yıl ('yakin') ve
+    ondan önceki iki yıl ('eski'). Eksik kalan grup boş liste döner."""
+    y = sorted(yillar, reverse=True)
+    return {"yakin": y[:genislik], "eski": y[genislik:2 * genislik]}
+
+
+def kalip_adi(yillar: list[int]) -> str | None:
+    """Okurun göreceği ad: [2025, 2024] → "2024–2025", [2025] → "2025".
+    Ardışık olmayan yıllar tire ile birleştirilmez — "2023–2025" araya
+    girmeyen 2024'ü de anar."""
+    if not yillar:
+        return None
+    y = sorted(yillar)
+    if len(y) == 1:
+        return str(y[0])
+    if y[-1] - y[0] == len(y) - 1:
+        return f"{y[0]}–{y[-1]}"
+    return ", ".join(str(x) for x in y[:-1]) + f" ve {y[-1]}"
+
+
+def kalip_yillari(B: pd.DataFrame) -> list[int]:
+    """Baz senaryo tablosunun taşıdığı kalıp yılları, yeniden eskiye."""
+    return sorted((int(c[len("mevsim_"):]) for c in B.columns
+                   if c.startswith("mevsim_") and c[len("mevsim_"):].isdigit()),
+                  reverse=True)
+
+
+def baz_patikasi(p: pd.Series, p_sa: pd.Series, ufuk: int = 12,
+                 n_kalip: int = BAZ_KALIP_YIL) -> pd.DataFrame:
     """1+π^(12)_{t+h} = (1+π^(12)_t) · Π(1+π_{t+s}) / Π(1+π_{t+s-12})
 
     Paydadaki çarpım TAMAMEN BİLİNİR — baz etkisi bir öngörü değil, muhasebe
@@ -500,30 +580,140 @@ def baz_patikasi(p: pd.Series, p_sa: pd.Series, ufuk: int = 12) -> pd.DataFrame:
       son12_ort  — son 12 ayın ortalama aylık temposu sabit devam eder
       gecen_yil  — geçen yılın aynı aylık oranları tekrarlanır; bu senaryoda
                    yıllık enflasyon SABİT kalır ve aracın kendini doğrulamasıdır
+
+    İlk ikisinin hızı mevsimsizdir; gelen ay ham aya çevrilir:
+    1+π_{t+s} = (1+hız)·(1+μ), μ o takvim ayının kalıp yılındaki çarpanı
+    (`mevsim_carpani`, `baz_kaliplari`). Son yılın kalıbı ANA kıyastır.
+
+    Sütunlar (yüzde):
+      dusen_aylik              hesaptan düşen ayın ham aylık oranı
+      <senaryo>                yıllık patika, ana kalıpla
+      <senaryo>_aylik          gelen ayın HAM varsayımı, ana kalıpla
+      <senaryo>_hiz            mevsimsiz hız (gecen_yil'de yok)
+      <senaryo>_<yıl>          yıllık patika, o yılın kalıbıyla
+      mevsim_<yıl>             o kalıbın gelen aya uyguladığı çarpan
     """
     m = (p / p.shift(1) - 1).dropna()
     m_sa = (p_sa / p_sa.shift(1) - 1).dropna()
     son = p.index[-1]
-    dusen = [float(m.get(son - pd.DateOffset(months=12 - s), np.nan))
-             for s in range(1, ufuk + 1)]
+    ufuk_aylar = [son + pd.DateOffset(months=h) for h in range(1, ufuk + 1)]
+    dusen = [float(m.get(u - pd.DateOffset(months=12), np.nan)) for u in ufuk_aylar]
     yil_son = float(p.iloc[-1] / p.iloc[-13] - 1)
-    sen = {
-        "son3_sa": [float((1 + m_sa.tail(3)).prod() ** (1 / 3) - 1)] * ufuk,
-        "son12_ort": [float((1 + m.tail(12)).prod() ** (1 / 12) - 1)] * ufuk,
-        "gecen_yil": list(dusen),
+    hiz = {
+        "son3_sa": float((1 + m_sa.tail(3)).prod() ** (1 / 3) - 1),
+        "son12_ort": float((1 + m.tail(12)).prod() ** (1 / 12) - 1),
     }
+    kalip = baz_kaliplari(mevsim_carpani(p, p_sa), ufuk_aylar, n_kalip)
+    if not kalip:
+        # Son yılın kalıbı düşen ayların kendisidir; o da ölçülemiyorsa düşen
+        # aylar da yoktur. Çarpansız bileştirmeye DÜŞÜLMEZ: o, düzeltilen birim
+        # hatasının kendisi olurdu.
+        raise SystemExit("DUR: baz senaryosu için hiçbir yılın mevsim kalıbı "
+                         "ölçülemedi; arındırılmış hız ham bazla aynı birime "
+                         "çevrilemiyor.")
+    ana = max(kalip)
+    patika: dict[str, list[float]] = {"gecen_yil": list(dusen)}
+    for ad, v in hiz.items():
+        for y, c in kalip.items():
+            patika[f"{ad}_{y}"] = [(1 + v) * (1 + x) - 1 for x in c]
+        patika[ad] = patika[f"{ad}_{ana}"]
     kayit = []
-    for h in range(1, ufuk + 1):
-        t = son + pd.DateOffset(months=h)
-        satir = {"tarih": t}
+    for h, t in enumerate(ufuk_aylar, start=1):
         payda = float(np.prod([1 + x for x in dusen[:h]]))
-        satir["dusen_aylik"] = dusen[h - 1] * 100
-        for ad, patika in sen.items():
-            pay = float(np.prod([1 + x for x in patika[:h]]))
-            satir[ad] = ((1 + yil_son) * pay / payda - 1) * 100
-            satir[f"{ad}_aylik"] = patika[h - 1] * 100
+        satir: dict = {"tarih": t, "dusen_aylik": dusen[h - 1] * 100}
+
+        def yol(ad: str) -> float:
+            pay = float(np.prod([1 + x for x in patika[ad][:h]]))
+            return ((1 + yil_son) * pay / payda - 1) * 100
+
+        for ad in (*BAZ_HIZ, "gecen_yil"):
+            satir[ad] = yol(ad)
+            satir[f"{ad}_aylik"] = patika[ad][h - 1] * 100
+            if ad in hiz:
+                satir[f"{ad}_hiz"] = hiz[ad] * 100
+        for ad in BAZ_HIZ:
+            for y in sorted(kalip, reverse=True):
+                satir[f"{ad}_{y}"] = yol(f"{ad}_{y}")
+        for y in sorted(kalip, reverse=True):
+            satir[f"mevsim_{y}"] = kalip[y][h - 1] * 100
         kayit.append(satir)
     return pd.DataFrame(kayit).set_index("tarih")
+
+
+def baz_ozeti(B: pd.DataFrame) -> dict:
+    """Özetin `baz` bloğu — ölçüm katmanı da duman sınaması da bunu çağırır.
+
+    Her senaryo için ana kalıpla yıl sonu ve 12 ay sonrası; hızı mevsimsiz
+    senaryolarda kalıp gruplarının ARALIĞI (en düşük, en yüksek) ve grupların
+    okur adı. `aylik_varsayim` momentum ve son 12 ayda mevsimsiz hızdır (sayfa
+    onu "aylık hız" diye basar), geçen yılın tekrarında ilk gelen ayın ham oranı."""
+    yillar = kalip_yillari(B)
+    grup = kalip_gruplari(yillar)
+    aralik = B.index.month == 12
+
+    def yil_sonu(s: pd.Series) -> float | None:
+        return float(s[aralik].iloc[0]) if aralik.any() else None
+
+    o: dict = {"kalip": {"yillar": yillar, "ana": yillar[0] if yillar else None,
+                         **{g: {"yillar": gy, "ad": kalip_adi(gy)}
+                            for g, gy in grup.items()}}}
+    for ad in (*BAZ_HIZ, "gecen_yil"):
+        d = {"12ay_sonra": float(B[ad].iloc[-1]),
+             "aylik_varsayim": float(B[f"{ad}_hiz" if ad in BAZ_HIZ else f"{ad}_aylik"].iloc[0]),
+             "yil_sonu": yil_sonu(B[ad])}
+        if ad in BAZ_HIZ:
+            d["aralik"] = {}
+            for g, gy in grup.items():
+                if not gy:
+                    continue
+                ys = [yil_sonu(B[f"{ad}_{y}"]) for y in gy]
+                on2 = [float(B[f"{ad}_{y}"].iloc[-1]) for y in gy]
+                d["aralik"][g] = {
+                    "yil_sonu": ([min(ys), max(ys)] if None not in ys else None),
+                    "12ay_sonra": [min(on2), max(on2)]}
+        o[ad] = d
+    return o
+
+
+def yilsonu_aritmetigi(t: pd.Series, hedef: float, B: pd.DataFrame | None,
+                       mom: float | None) -> dict | None:
+    """Anketin yıl sonu beklentisine varmak için kalan aylarda ne gerekir.
+
+    `gereken_aylik` kalan aylarda sabit HAM aylık orandır; momentum ise
+    ARINDIRILMIŞ bir hız. İkisi doğrudan çıkarılamaz: Kasım ve Aralık'ın ham
+    aylıkları mevsimsel olarak düşüktür ve ham bir gereklilik arındırılmış bir
+    hızla kıyaslanınca açık olduğundan büyük görünür. Açık bu yüzden aynı
+    birimde kurulur: gereklilik, kalan ayların ana kalıp çarpanlarıyla
+    arındırılmış karşılığına çevrilir (`gereken_sa`) ve
+    açık = momentum − gereken_sa. 05.10.2026'da ölçüldü: Eylül 2026 verisinde
+    eski açık (momentum − ham gereklilik) +0,50 puan diyordu; aynı birimde
+    momentum gerekliliğin 0,16 puan ALTINDA."""
+    son = t.index[-1]
+    ara = pd.Timestamp(f"{son.year - 1}-12-01")
+    kalan = 12 - son.month
+    if ara not in t.index or kalan <= 0:
+        return None
+    kum = float(t.loc[son] / t.loc[ara] - 1) * 100
+    ger = ((1 + hedef / 100) / (1 + kum / 100)) ** (1 / kalan) - 1
+    ger_sa = ana = None
+    if B is not None and not B.empty:
+        yillar = kalip_yillari(B)
+        bu_yil = B[B.index.year == son.year]
+        if yillar and len(bu_yil) == kalan:
+            ana = yillar[0]
+            pf = float(np.prod([1 + x / 100 for x in bu_yil[f"mevsim_{ana}"]]))
+            ger_sa = ((1 + hedef / 100) / (1 + kum / 100) / pf) ** (1 / kalan) - 1
+    return {
+        "kumulatif": round(kum, 2),
+        "anket": round(hedef, 2),
+        "kalan_ay": int(kalan),
+        "gereken_aylik": round(ger * 100, 2),
+        "gereken_sa": round(ger_sa * 100, 2) if ger_sa is not None else None,
+        "kalip_yil": ana,
+        "momentum_aylik": round(float(mom), 2) if mom is not None else None,
+        "acik_puan": (round(float(mom) - ger_sa * 100, 2)
+                      if mom is not None and ger_sa is not None else None),
+    }
 
 
 # ===========================================================================
@@ -2166,36 +2356,19 @@ def ozet_topla(a, g, SA, M, K, D, B, R, bek, atalet, ito, w_katki, w_ana,
         o["katki_yil_artik_pp"] = round(float(K["yil_artik"].abs().tail(24).max()) * 100, 4)
         o["katki_yil_artik_tum_pp"] = round(float(K["yil_artik"].abs().max()) * 100, 4)
     if not B.empty:
-        o["baz"] = {ad: {"12ay_sonra": float(B[ad].iloc[-1]),
-                         "aylik_varsayim": float(B[f"{ad}_aylik"].iloc[0]),
-                         "yil_sonu": (float(B[ad][B.index.month == 12].iloc[0])
-                                      if (B.index.month == 12).any() else None)}
-                    for ad in ("son3_sa", "son12_ort", "gecen_yil")}
+        o["baz"] = baz_ozeti(B)
     # ---- YIL SONU ARİTMETİĞİ: anketin yıl sonu tahmini KAÇ AYLIK NE ORANA
     # denk geliyor? Senaryolar "şu hızda gidersek nereye varırız" diyor;
     # buradaki soru tersi: "oraya varmak için ne gerekir". İkisi yan yana
-    # konmadan anketin iddiasının büyüklüğü görünmüyor — kalan aylara bölünmüş
-    # bir yıl sonu hedefi, aylık momentumla doğrudan karşılaştırılabilir.
+    # konmadan anketin iddiasının büyüklüğü görünmüyor.
     _t = a["tufe"].dropna() if "tufe" in a.columns else pd.Series(dtype=float)
     _by = a["pka_yilsonu"].dropna() if "pka_yilsonu" in a.columns else pd.Series(dtype=float)
     if len(_t) and len(_by):
-        _son = _t.index[-1]
-        _ara = pd.Timestamp(f"{_son.year - 1}-12-01")
-        _kalan = 12 - _son.month
-        if _ara in _t.index and _kalan > 0:
-            _kum = float(_t.loc[_son] / _t.loc[_ara] - 1) * 100
-            _hedef = float(_by.iloc[-1])
-            _ger = ((1 + _hedef / 100) / (1 + _kum / 100)) ** (1 / _kalan) - 1
-            _mom = (o.get("baz", {}).get("son3_sa", {}) or {}).get("aylik_varsayim")
-            o["yilsonu"] = {
-                "kumulatif": round(_kum, 2),
-                "anket": round(_hedef, 2),
-                "kalan_ay": int(_kalan),
-                "gereken_aylik": round(_ger * 100, 2),
-                "momentum_aylik": round(float(_mom), 2) if _mom is not None else None,
-                "acik_puan": (round(float(_mom) - _ger * 100, 2)
-                              if _mom is not None else None),
-            }
+        _ys = yilsonu_aritmetigi(
+            _t, float(_by.iloc[-1]), B if not B.empty else None,
+            (o.get("baz", {}).get("son3_sa", {}) or {}).get("aylik_varsayim"))
+        if _ys:
+            o["yilsonu"] = _ys
     if not R.empty:
         for kol in ("faiz", "ex_post", "ex_ante", "egilime_gore", "ileri_ex_ante"):
             v = R[kol].dropna()

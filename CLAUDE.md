@@ -4697,3 +4697,47 @@ Karar, kayıt için: günlük gündem bütçesi 05.10 akşamı kullanıcı karar
 çıktı (Emtia satırı o gün bu yüzden düşüyordu); tavan sabit olduğu için
 bedeli takvimin sonraki günlerine ait birimlerin önce düşmesidir — 05.10
 yeniden üretiminde Emtia girdi, Salı–Perşembe takvim birimlerinden üçü düştü.
+
+**Kurucu ilke — ARINDIRILMIŞ BİR HIZ, HAM BİR BAZLA, HAM BİR EŞİKLE YA DA HAM
+BİR GEREKLİLİKLE KIYASLANMADAN ÖNCE MEVSİM ÇARPANIYLA HAM AYA ÇEVRİLİR; ve
+hangi yılın mevsimselliği varsayıldıysa ADIYLA, aralık olarak yazılır.**
+05.10.2026'da Eylül TÜFE analizinin ölçüm katmanı (`TufeAnaliz/olcum.py`)
+Enflasyon panosunun baz senaryosunu yeniden kurarken ölçtü: `baz_patikasi`
+momentum ve son 12 ay senaryolarında mevsimsiz hızı çarpansız, HAM endekse
+bileştiriyordu; kimliğin paydası ise ham düşen aylardı. Pano Eylül 2026
+verisiyle yıl sonunu %31,53 gösteriyordu; mevsime tutarlı hesap son iki yılın
+kalıbıyla %28,98–29,50, 2022–2023'ünküyle %30,02–30,52. Kimlik doğru, girdiler
+doğru, yalnız birim farklı — her sayı kendi içinde tutarlı göründüğü için hiçbir
+kapı görmedi. Aynı sınıf dört yerde daha vardı ve hepsi birlikte düzeltildi
+("başka nerede var" sorusu tüketiciler sayılarak cevaplandı): "baz elverişli"
+sınıflaması düşen ham ayı düz bir arındırılmış hızla kıyaslıyor ve mevsimsel
+olarak düşük Kasım–Aralık'ı elverişsiz sayıyordu (Şekil 09'un alt panelindeki
+yatay çizgi aynı kıyasın resmiydi); yıl sonu açığı arındırılmış momentumdan HAM
+gerekliliği çıkarıyordu (+0,50 puan; aynı birimde momentum gerekliliğin 0,16
+puan ALTINDA, `ys_gereken_sa` %2,06); hesap aracının hazır patikaları düz hızı
+ham kutulara yazıyordu; bültenin takvim cümlesi momentumun yıl sonunu kalıpsız
+tek sayıyla basıyordu (artık aralığı kalıp adıyla basar, aralık yoksa o parçayı
+basmaz). Yöntem analizinkiyle birebir: μ = (1+π)/(1+π^SA) − 1; k. kalıp ufuktaki
+her ayın k yıl önceki aynı ayıdır (k = 1…4), adı ufkun ilk ayının k yıl önceki
+karşılığının yılı; ana kıyas son yıl. Tek değerli `baz_*_yilsonu` ve `baz_*_12ay`
+anlamını KORUR (hâlâ "senaryonun yıl sonu", artık doğru birimde) — bülten ve eski
+yazılar onları okuyor; aralık `_alt`/`_ust` ve `_eski_alt`/`_eski_ust`
+anahtarlarında, adlar `baz_kalip_*`'te. Kalıp ölçülemezse hat DURUR: düz hıza
+düşmek, düzeltilen hatanın kendisi olurdu. Yayım: hesap katmanı ağa çıktığı için
+(EVDS çapraz doğrulama, üç haneli kırılım) yalnız değişen blok — `baz_senaryo.csv`
+ve özetin `baz` + `yilsonu` bölümleri — depodaki `aylik.csv` ve `sa.csv`'den AYNI
+fonksiyonlarla yeniden kuruldu; eski kod aynı veriden yayımlanmış CSV'yi 1e−15
+farkla verdi, yeni kod analizin bütün sayılarını birebir. Çizim katmanı tam
+koştu; on altı şeklin farkı yalnız Plotly kimliğiydi ve dışarıda bırakıldı. Özet
+farkı yeni 17 · düşen 0 · değişen 16 (hepsi `baz_*` ve `ys_acik_puan`); pano ön
+bilgisinde iki tarihli düzeltme kaydı (okur %31,53'e ve elverişli ay listesine
+göre karar vermiş olabilir). Duman on dokuz yeni madde; on sekiz arıza
+enjeksiyonunun on sekizi kendi maddesinde yakalandı — ilki 05.10 kusurunun
+birebir kendisi. Sentetik seride hız ve kalıp bilinir: sabit hızda ve sabit
+kalıpta momentum düşen ayları birebir yeniden üretmeli, yıllık oran sabit
+kalmalı. AÇIK, adıyla: 03.09 (Ağustos TÜFE) ve 17.09 (PPK özeti) analizleri aynı
+hesabın "önce düşer, Kasım–Aralık'ta geri tırmanır" V'sini ve yıl sonu %32,95'i
+yayımladı; o V birim hatasının ürünüydü. Analizin sayısı sabittir ve düzeltmesi
+yazının kendi kaydıyla yapılır, ama Ağustos verisinin arındırma kestirimi
+(vintage) yeniden kurulmadan doğru sayı yazılamaz — bu değişiklikte yapılmadı.
+İki yazıya gömülü Şekil 09 canlıdır ve bugünden itibaren V'siz patikayı çizer.

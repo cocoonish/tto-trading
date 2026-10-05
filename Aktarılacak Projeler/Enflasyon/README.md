@@ -48,7 +48,8 @@ Bu projeye `.evds_key` **kopyalanmaz**; kardeş projedeki dosya okunur.
 | Katkı ayrıştırma | `metrik.katki_hesapla` | aylık tam (`Σ C = π`), yıllık ileriye bileşiklenmiş |
 | Kırpılmış ortalama / medyan | `metrik.kirpilmis`, `agirlikli_medyan` | α ∈ {0,05; 0,08; 0,10}; 43–45 üç haneli COICOP grubu |
 | Difüzyon | `metrik.difuzyon` | üç eşik: %0, hedefle uyumlu tempo, manşetin kendisi |
-| Baz etkisi patikası | `metrik.baz_patikasi` | üç senaryo; "geçen yıl tekrar" senaryosu yıllığı sabit bırakır (kendini doğrulama) |
+| Baz etkisi patikası | `metrik.baz_patikasi` | üç senaryo; "geçen yıl tekrar" senaryosu yıllığı sabit bırakır (kendini doğrulama); mevsimsiz hız gelen aya o takvim ayının kalıp yılındaki mevsim çarpanıyla ham olarak girer |
+| Mevsim çarpanı ve kalıplar | `metrik.mevsim_carpani`, `baz_kaliplari`, `baz_ozeti` | μ = (1+π)/(1+π^SA) − 1; son dört yılın kalıbı, ana kıyas son yıl, aralık son iki yıl · önceki iki yıl |
 | Beklenti isabeti | `metrik.beklenti_isabeti` | MAE / yanlılık / RMSE, h = 0,1,2 ay, 36 ve 60 aylık pencere |
 | Reel faiz | `metrik.reel` | **tam Fisher**; `i − π` yaklaşımı kullanılmaz |
 | Hizmet ataleti | `metrik.atalet_olc` | 36 aylık yuvarlanan AR(1) katsayısı ρ |
@@ -98,6 +99,19 @@ Yöntemin bağımsız sınavı: 2026 için hizmet ağırlığında **+7,5**, ene
 yayımladığı **+7,4 / −3,2 / −3,0** ile örtüşüyor. Kimlik artığı eşiği
 (0,05 puan) aşarsa hat **DURUR** (`metrik.py` `SystemExit`) — sessizce yanlış
 ağırlıkla katkı yayımlanmaz.
+
+**Baz senaryosunda birim: gelen ay düşen ayla AYNI birimde.** Kimliğin paydası (düşen
+aylar) ham aylık oranlardır; momentum senaryosunun hızı arındırılmıştır, son 12 ay
+ortalamasında mevsim on iki ayda sadeleşir. Hız ham aya o takvim ayının geçmiş bir
+yıldaki mevsim çarpanıyla çevrilir: 1+π = (1+π^SA)·(1+μ), μ = (1+π_t)/(1+π^SA_t) − 1.
+Kalıp, ufuktaki her ayın k yıl önceki aynı ayıdır (k = 1…4) ve adı ufkun ilk ayının k yıl
+önceki karşılığının yılıdır. Ana kıyas son yılın kalıbı (tek değerli `baz_*_yilsonu`,
+`baz_*_12ay`); sayfa aralığı kalıp yıllarının adıyla basar (son iki yıl · önceki iki yıl).
+Çarpansız bileşik birim hatasıdır: 05.10.2026'da ölçüldü, Eylül 2026 verisinde yıl sonunu
+%31,53 gösteriyordu; aynı veride mevsime tutarlı hesap son iki yılın kalıbıyla
+%28,98–29,50, 2022–2023'ünküyle %30,02–30,52. Aynı kural "baz elverişli" sınıflamasına
+(düşen ay, momentumun aynı aydaki ham karşılığıyla kıyaslanır) ve yıl sonu açığına
+(`ys_acik_puan` = momentum − gereken arındırılmış hız, `ys_gereken_sa`) uygulanır.
 
 **Doğrudan mı dolaylı mı arındırma.** Genel endeks **doğrudan** arındırılır;
 katkı ve dağılım hesabındaki alt kalemler **kendi içlerinde** arındırılır.
@@ -168,7 +182,8 @@ data/alt_kalem.csv      kesitin 45 üç haneli grup endeksi (dağılım ölçül
 data/agirlik.json       tahmin edilen ağırlıklar (katkı grupları, ana gruplar, alt kesit)
 data/katki.csv          aylık ve yıllık katkılar + artıklar
 data/dagilim.csv        kırpılmış ortalama, medyan, difüzyon
-data/baz_senaryo.csv    12 aylık üç senaryo patikası
+data/baz_senaryo.csv    12 aylık üç senaryo patikası; her kalıp yılının patikası ve
+                        çarpanı ayrı sütunda (son3_sa_2025 · mevsim_2025 …)
 data/reel_faiz.csv      dört reel faiz ölçüsü
 data/beklenti.json      PKA isabet ölçüleri
 kesif_ito.py            EVDS'te daha uzun bir İTO serisi var mı? (keşif; sonucu

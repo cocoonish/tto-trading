@@ -584,7 +584,17 @@ def sekil_08(R, M, o, damga):
 
 
 def sekil_09(a, B, damga):
-    """Baz etkisi patikası."""
+    """Baz etkisi patikası — gelen ay, düşen ayla AYNI birimde (ham).
+
+    Momentum ve son 12 ay senaryolarının hızı mevsimsizdir; her ay o takvim
+    ayının kalıp yılındaki mevsim çarpanıyla ham aya çevrilmiş olarak gelir
+    (metrik.baz_patikasi). Ana kalıp (son yıl) kesikli, en eski kalıp noktalı
+    çizilir: kalıba duyarlılık şeklin kendisinde görünür. Alt panelde düşen ay,
+    momentumun AYNI aydaki ham karşılığıyla kıyaslanır — düz bir mevsimsiz hız
+    çizgisi, mevsimsel olarak düşük ayları "elverişsiz" gösteriyordu."""
+    yz = metrik.bicim.yuzde
+    yillar = metrik.kalip_yillari(B)
+    ana, en_eski = yillar[0], yillar[-1]
     fig = make_subplots(rows=2, cols=1, vertical_spacing=0.09,
                         subplot_titles=("Önümüzdeki 12 ayın yıllık enflasyon patikası — üç senaryo",
                                         "Hesabın dışına düşen aylar: baz elverişli mi?"))
@@ -592,20 +602,31 @@ def sekil_09(a, B, damga):
     ger = ger[ger.index >= "2024-01-01"]
     _cizgi(fig, ger, "Gerçekleşen 12 aylık", INK, row=1, kalin=2.0)
     kopru = pd.concat([ger.tail(1)])
-    for ad, renk, etiket in (
-            ("son3_sa", CLARET, f"arındırılmış son 3 ayın temposu sürerse (aylık %{B['son3_sa_aylik'].iloc[0]:.2f})"),
-            ("son12_ort", TEAL, f"son 12 ayın ortalaması sürerse (aylık %{B['son12_ort_aylik'].iloc[0]:.2f})"),
-            ("gecen_yil", GOLD, "geçen yılın aylık oranları tekrarlarsa (yıllık sabit kalır)")):
+    hm, h12 = float(B["son3_sa_hiz"].iloc[0]), float(B["son12_ort_hiz"].iloc[0])
+    cizgiler = [
+        ("son3_sa", CLARET, f"momentum, arındırılmış aylık {yz(hm, 2)}: {ana} mevsimselliğiyle",
+         "dash", 2.2),
+        (f"son3_sa_{en_eski}", CLARET, f"momentum, {en_eski} mevsimselliğiyle", "dot", 1.4),
+        ("son12_ort", TEAL, f"son 12 ayın ortalaması, aylık {yz(h12, 2)}: {ana} mevsimselliğiyle",
+         "dash", 2.2),
+        ("gecen_yil", GOLD, "geçen yılın aylık oranları tekrarlarsa (yıllık sabit kalır)",
+         "dot", 2.2)]
+    for ad, renk, etiket, kesik, kalin in cizgiler:
+        if ad == f"son3_sa_{ana}" or ad not in B.columns:
+            continue                     # tek kalıp varsa en eski = ana, iki kez çizilmez
         s = pd.concat([kopru, B[ad]])
-        _cizgi(fig, s, etiket, renk, row=1, kalin=2.2,
-               kesik="dot" if ad == "gecen_yil" else "dash")
-    d = B["dusen_aylik"]
-    renkler = [TEAL if v < B["son3_sa_aylik"].iloc[0] else CLARET for v in d.values]
+        _cizgi(fig, s, etiket, renk, row=1, kalin=kalin, kesik=kesik)
+    d, ileri = B["dusen_aylik"], B["son3_sa_aylik"]
+    renkler = [TEAL if v < w else CLARET for v, w in zip(d.values, ileri.values)]
     fig.add_trace(go.Bar(x=d.index, y=d.values, name="hesaptan düşen aylık oran",
                          marker_color=renkler,
                          hovertemplate="%{y:.2f}%<extra>bir yıl önceki aylık</extra>"),
                   row=2, col=1)
-    fig.add_hline(y=float(B["son3_sa_aylik"].iloc[0]), line=dict(color=INK, width=1, dash="dot"),
+    fig.add_trace(go.Scatter(x=ileri.index, y=ileri.values, mode="lines+markers",
+                             name=f"momentumun o aydaki ham karşılığı ({ana} mevsimselliğiyle)",
+                             line=dict(color=INK, width=1.2, dash="dot"),
+                             marker=dict(color=INK, size=5),
+                             hovertemplate="%{y:.2f}%<extra>momentumun ham karşılığı</extra>"),
                   row=2, col=1)
     fig.update_yaxes(title_text="yıllık %", row=1, col=1)
     fig.update_yaxes(title_text="aylık %", row=2, col=1)
@@ -615,10 +636,10 @@ def sekil_09(a, B, damga):
     return _duzen(
         fig, "Baz etkisi: önümüzdeki 12 ayın mekaniği",
         [f"1+π₁₂(t+h) = (1+π₁₂(t))·Π(1+π ileri)/Π(1+π düşen) · veri: {damga}",
-         "Baz etkisi bir öngörü değil muhasebe kimliğidir; her senaryonun aylık varsayımı "
-         "lejantta yazılıdır",
-         "Alt panelde çubuklar hesaptan DÜŞEN (bir yıl önceki) aylık oranlar, kesikli "
-         "çizgi ileri varsayım",
+         "Arındırılmış hız, ham bazla kıyaslanmadan önce her ay o takvim ayının mevsim "
+         "çarpanıyla ham aya çevrilir; kalıp yılı lejantta",
+         "Alt panelde çubuklar hesaptan DÜŞEN (bir yıl önceki) aylık oranlar, noktalı "
+         "çizgi momentumun aynı aydaki ham karşılığı",
          "Çubuk çizginin ÜSTÜNDEYSE o ay yıllık enflasyon mekanik olarak geriler — "
          "baz elverişlidir"],
         n_panel=2)

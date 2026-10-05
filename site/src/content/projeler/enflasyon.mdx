@@ -2,11 +2,22 @@
 title: 'Enflasyon panosu'
 description: 'Merkezinde manşet değil momentum olan bir enflasyon panosu: mevsimsellikten arındırılmış aylık değişimin 3 ve 6 aylık yıllıklandırılmışı (SAAR), çekirdek, kırpılmış ortalama, difüzyon, katkı ayrıştırması, hizmet ataleti, beklenti isabeti, reel faiz ve interaktif baz etkisi hesabı.'
 pubDate: 2026-08-20
-updatedDate: 2026-08-20
+updatedDate: 2026-10-05
 tags: ['enflasyon', 'tüfe', 'momentum', 'saar', 'tcmb', 'çekirdek']
 durum: 'aktif'
 kaynak: 'TCMB EVDS3 — TÜİK TÜFE (2025=100) ve ÖKTG ağacı, Yİ-ÜFE, Piyasa Katılımcıları Anketi, İYA, TCMB AOFM'
 guncelleme: 'aylık — TÜFE yayınıyla (ayın 3''ü, 10:00); faiz tarafı iş günü'
+duzeltmeler:
+  - tarih: '2026-10-05'
+    alan: 'Şekil 09 · baz senaryolarında yıl sonu ve 12 ay sonrası (Eylül 2026 verisi)'
+    eski: 'momentum: yıl sonu %31,53, 12 ay sonra %25,31 · son 12 ay ortalaması: yıl sonu %32,68, 12 ay sonra %29,73'
+    yeni: 'momentum: yıl sonu 2024–2025 mevsimselliğiyle %28,98–29,50, 2022–2023 mevsimselliğiyle %30,02–30,52; 12 ay sonra %25,34–25,35 · son 12 ay ortalaması: yıl sonu 2024–2025 mevsimselliğiyle %30,11–30,63, 2022–2023 mevsimselliğiyle %31,15–31,66; 12 ay sonra %29,76–29,78'
+    sebep: "Senaryoların aylık hızı mevsimsellikten arındırılmış bir hızdır, hesaptan düşen aylar ise ham aylık oranlardır. Hız ham aylara mevsim çarpanı uygulanmadan eklendiği için Kasım ve Aralık'ın mevsimsel olarak düşük ham aylıkları elverişsiz baz gibi okunuyordu. Gelen her ay artık o takvim ayının geçmiş bir yıldaki mevsim çarpanıyla ham aya çevriliyor; sonuç kalıp yıllarının adıyla, aralık olarak veriliyor."
+  - tarih: '2026-10-05'
+    alan: 'Şekil 09 · bazın elverişli ve elverişsiz olduğu aylar (Eylül 2026 verisi)'
+    eski: 'elverişli: Ekim ve Ocak–Nisan · elverişsiz: Kasım–Aralık ve Mayıs–Eylül'
+    yeni: 'elverişli: Ekim, Aralık–Şubat ve Nisan–Ağustos · elverişsiz: Kasım, Mart ve Eylül'
+    sebep: 'Düşen ham aylık, düz bir arındırılmış hızla kıyaslanıyordu; artık momentumun aynı aydaki ham karşılığıyla kıyaslanıyor.'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
@@ -764,7 +775,7 @@ düşmemiş.
   src="/projeler/enflasyon/09_baz_etkisi.html"
   baslik="Üç senaryoda yıllık enflasyon patikası ve hesaptan düşen aylık oranlar"
   no="09"
-  yukseklik={1059}
+  yukseklik={1083}
 />
 
 ### Bu patika nasıl hesaplanıyor?
@@ -785,38 +796,77 @@ $$
 
 **Paydadaki çarpım tamamen bilinir** — düşen aylar zaten gerçekleşmiştir. Belirsizliğin
 tamamı **paydadır**: önümüzdeki 12 ayın aylık patikası. Grafikteki üç senaryo bu payı üç
-farklı varsayımla doldurur:
+farklı varsayımla doldurur.
 
-| Senaryo | Aylık varsayım (%) | Yıl sonu (%) | 12 ay sonra (%) |
-| --- | --- | --- | --- |
-| Momentum — arındırılmış son 3 ayın temposu | <Deger proje="enflasyon" anahtar="baz_momentum_aylik" ondalik={2}>2,25</Deger> | <Deger proje="enflasyon" anahtar="baz_momentum_yilsonu" ondalik={2}>33,97</Deger> | <Deger proje="enflasyon" anahtar="baz_momentum_12ay" ondalik={2}>30,62</Deger> |
-| Son 12 ayın ortalaması | <Deger proje="enflasyon" anahtar="baz_son12_aylik" ondalik={2}>2,32</Deger> | <Deger proje="enflasyon" anahtar="baz_son12_yilsonu" ondalik={2}>34,45</Deger> | <Deger proje="enflasyon" anahtar="baz_son12_12ay" ondalik={2}>31,75</Deger> |
-| Geçen yılın aylık oranları tekrarlarsa | ay ay değişir | <Deger proje="enflasyon" anahtar="baz_tekrar_yilsonu" ondalik={2}>31,75</Deger> | <Deger proje="enflasyon" anahtar="baz_tekrar_12ay" ondalik={2}>31,75</Deger> |
+**Gelen ay, düşen ayla aynı birimde.** Düşen aylar yayımlanmış **ham** aylık oranlardır.
+Momentum senaryosunun hızı ise mevsimsellikten arındırılmıştır; son 12 ayın ortalamasında
+da mevsim on iki ayda kendiliğinden sadeleşir. Arındırılmış bir hız ham bir bazla doğrudan
+kıyaslanamaz: Kasım ve Aralık gibi mevsimsel olarak düşük aylar, bu yıl da aynı
+mevsimselliği taşıyacakken elverişsiz baz gibi görünür. Bu yüzden gelen her ay, o takvim
+ayının geçmiş bir yıldaki **mevsim çarpanıyla** ham aya çevrilir:
+
+$$
+1+\pi_{t+s} \;=\; \bigl(1+\pi^{SA}\bigr)\bigl(1+\mu_{t+s}\bigr),
+\qquad
+\mu_{\tau} \;=\; \frac{1+\pi_{\tau}}{1+\pi^{SA}_{\tau}} - 1
+$$
+
+Burada $\pi^{SA}$ senaryonun mevsimsiz aylık hızı, $\mu$ aynı takvim ayının bir **kalıp
+yılındaki** ham aylık değişiminin arındırılmış aylık değişime oranıdır. Kalıp, ufuktaki her
+ayın aynı sayıda yıl önceki aynı ayını kullanır; adı, ufkun ilk ayına karşılık gelen ayın
+yılıdır. Çarpanlar yıldan yıla değiştiği için sonuç tek bir kalıba bağlanmaz: ana kıyas son
+yılın kalıbıdır, tablo son iki yılın ve ondan önceki iki yılın kalıplarıyla kurulan
+**aralığı** verir.
+
+| Senaryo | Aylık hız (%) | Yıl sonu, <Deger proje="enflasyon" anahtar="baz_kalip_yakin" ondalik={0}>2024–2025</Deger> mevsimselliği (%) | Yıl sonu, <Deger proje="enflasyon" anahtar="baz_kalip_eski" ondalik={0}>2022–2023</Deger> mevsimselliği (%) | 12 ay sonra, <Deger proje="enflasyon" anahtar="baz_kalip_yakin" ondalik={0}>2024–2025</Deger> mevsimselliği (%) |
+| --- | --- | --- | --- | --- |
+| Momentum — arındırılmış son 3 ayın temposu | <Deger proje="enflasyon" anahtar="baz_momentum_aylik" ondalik={2}>1,90</Deger> | <Deger proje="enflasyon" anahtar="baz_momentum_yilsonu_alt" ondalik={2}>28,98</Deger>–<Deger proje="enflasyon" anahtar="baz_momentum_yilsonu_ust" ondalik={2}>29,50</Deger> | <Deger proje="enflasyon" anahtar="baz_momentum_yilsonu_eski_alt" ondalik={2}>30,02</Deger>–<Deger proje="enflasyon" anahtar="baz_momentum_yilsonu_eski_ust" ondalik={2}>30,52</Deger> | <Deger proje="enflasyon" anahtar="baz_momentum_12ay_alt" ondalik={2}>25,34</Deger>–<Deger proje="enflasyon" anahtar="baz_momentum_12ay_ust" ondalik={2}>25,35</Deger> |
+| Son 12 ayın ortalaması | <Deger proje="enflasyon" anahtar="baz_son12_aylik" ondalik={2}>2,19</Deger> | <Deger proje="enflasyon" anahtar="baz_son12_yilsonu_alt" ondalik={2}>30,11</Deger>–<Deger proje="enflasyon" anahtar="baz_son12_yilsonu_ust" ondalik={2}>30,63</Deger> | <Deger proje="enflasyon" anahtar="baz_son12_yilsonu_eski_alt" ondalik={2}>31,15</Deger>–<Deger proje="enflasyon" anahtar="baz_son12_yilsonu_eski_ust" ondalik={2}>31,66</Deger> | <Deger proje="enflasyon" anahtar="baz_son12_12ay_alt" ondalik={2}>29,76</Deger>–<Deger proje="enflasyon" anahtar="baz_son12_12ay_ust" ondalik={2}>29,78</Deger> |
+| Geçen yılın aylık oranları tekrarlarsa | ay ay değişir | <Deger proje="enflasyon" anahtar="baz_tekrar_yilsonu" ondalik={2}>29,73</Deger> | <Deger proje="enflasyon" anahtar="baz_tekrar_yilsonu" ondalik={2}>29,73</Deger> | <Deger proje="enflasyon" anahtar="baz_tekrar_12ay" ondalik={2}>29,73</Deger> |
+
+Son yılın kalıbıyla (<Deger proje="enflasyon" anahtar="baz_kalip_yil" ondalik={0}>2025</Deger>)
+momentum senaryosunda yıl sonu
+%<Deger proje="enflasyon" anahtar="baz_momentum_yilsonu" ondalik={2}>28,98</Deger>, 12 ay sonrası
+%<Deger proje="enflasyon" anahtar="baz_momentum_12ay" ondalik={2}>25,34</Deger>; son 12 ay
+senaryosunda yıl sonu
+%<Deger proje="enflasyon" anahtar="baz_son12_yilsonu" ondalik={2}>30,11</Deger>, 12 ay sonrası
+%<Deger proje="enflasyon" anahtar="baz_son12_12ay" ondalik={2}>29,76</Deger>. Şekildeki kesikli
+çizgiler ve hesap aracının hazır patikaları bu kalıpla kurulu; noktalı kırmızı çizgi aynı
+momentumu tablodaki en eski kalıpla çizer. Yıl sonu aralığının genişliği mevsimselliğin
+derinliğine duyarlılıktır: bu yılın kalan aylarının mevsimselliği ancak gerçekleşince
+ölçülür.
 
 Üçüncü senaryo bir **kendini doğrulama**dır: geçen yılın oranları birebir tekrarlarsa
-pay ile payda sadeleşir ve yıllık enflasyon on iki ay boyunca sabit kalır. Tablodaki iki
-sütunun da <Deger proje="enflasyon" anahtar="tufe_12a" ondalik={2}>31,75</Deger> çıkması
-hesabın doğru kurulduğunun kanıtıdır.
+pay ile payda sadeleşir ve yıllık enflasyon on iki ay boyunca sabit kalır. Tablodaki üç
+sütunun da <Deger proje="enflasyon" anahtar="tufe_12a" ondalik={2}>29,73</Deger> çıkması
+hesabın doğru kurulduğunun kanıtıdır. Bu senaryo mevsim kalıbına bağlı değildir: düşen
+ayların kendisi gelen ay olarak tekrarlanır.
 
-**Alt panel: baz elverişli mi?** Çubuklar hesaptan **düşen** (bir yıl önceki) aylık
-oranlardır; kesikli çizgi ileri varsayımdır. Bir çubuk çizginin **üstündeyse** o ay
-yıllık enflasyon mekanik olarak geriler — baz elverişlidir. Kıyas ölçütü ileri
-varsayımdır; momentum senaryosunun aylık temposunu
-(%<Deger proje="enflasyon" anahtar="baz_kiyas_aylik" ondalik={2}>2,25</Deger>) alırsak önümüzdeki
-12 ayda baz **elverişli** olduğu aylar
-<Deger proje="enflasyon" anahtar="baz_elverisli_aylar" ondalik={0}>Eylül–Ekim, Ocak–Şubat ve Nisan</Deger>
-(<Deger proje="enflasyon" anahtar="baz_elverisli_n" ondalik={0}>5</Deger> ay), **elverişsiz** olduğu
-aylar <Deger proje="enflasyon" anahtar="baz_elverissiz_aylar" ondalik={0}>Ağustos, Kasım–Aralık, Mart ve Mayıs–Temmuz</Deger>.
+**Alt panel: baz elverişli mi?** Çubuklar hesaptan **düşen** (bir yıl önceki) ham aylık
+oranlardır; noktalı çizgi momentum senaryosunun **aynı aydaki ham karşılığıdır**:
+arındırılmış tempo (aylık %<Deger proje="enflasyon" anahtar="baz_kiyas_aylik" ondalik={2}>1,90</Deger>)
+o ayın son yıl kalıbındaki mevsim çarpanıyla çevrilir. Bir çubuk çizginin **üstündeyse** o
+ay yıllık enflasyon mekanik olarak geriler — baz elverişlidir. Son yılın kalıbında çarpan
+düşen ayın kendi çarpanı olduğu için bu kıyas, düşen ayın arındırılmış hâlini momentumla
+kıyaslamakla aynı sonucu verir: ham aylığı mevsimsel olarak düşük bir ay, arındırılmış hâli
+momentumdan yüksekse yine elverişlidir. Bu ölçüyle önümüzdeki 12 ayda baz **elverişli**
+olduğu aylar
+<Deger proje="enflasyon" anahtar="baz_elverisli_aylar" ondalik={0}>Ekim, Aralık–Şubat ve Nisan–Ağustos</Deger>
+(<Deger proje="enflasyon" anahtar="baz_elverisli_n" ondalik={0}>9</Deger> ay), **elverişsiz** olduğu
+aylar <Deger proje="enflasyon" anahtar="baz_elverissiz_aylar" ondalik={0}>Kasım, Mart ve Eylül</Deger>.
 Ay adları bu listeden gelir, metne gömülü değildir: TÜFE bir ay ilerlediğinde pencere
-kayar ve cümle sessizce yanlışa dönerdi. Bu asimetri, **aynı aylık tempoda bile** yıllık
-enflasyonun düz değil basamaklı bir patika izleyeceği anlamına gelir.
+kayar ve cümle sessizce yanlışa dönerdi. Çubukla çizginin farkı her ay başkadır; bu
+yüzden **aynı arındırılmış tempoda bile** yıllık enflasyon düz değil basamaklı bir patika
+izler.
 
 <div class="not">
   <span class="etiket">"Baz etkisiyle enflasyon düşecek" cümlesi tek başına anlamsızdır</span>
   Baz etkisi bir öngörü değil, bir <strong>muhasebe kimliğidir</strong>. Kimliğin
   paydası bilinir; payı bilinmez. İleri aylık patika varsayımı yazılmadan kurulan her
   baz etkisi cümlesi, varsayımını gizleyen bir tahmindir. Bu yüzden hem grafikte hem
-  hesap aracında her senaryonun <strong>aylık varsayımı görünürdür</strong>.
+  hesap aracında her senaryonun <strong>aylık varsayımı görünürdür</strong>. Varsayımın
+  birimi de görünür olmalıdır: mevsim çarpanıyla ham aya çevrilmeyen arındırılmış bir
+  hız, mevsimselliği baz etkisi sanır.
 </div>
 
 ## Hesap aracı — baz etkisini kendiniz kurun
@@ -829,21 +879,27 @@ ve siz değiştiremezsiniz; pay (önümüzdeki 12 ayın aylık patikası) sizind
 **Nasıl kullanılır.**
 
 1. **Tek oran** kutusuna aylık bir tempo yazıp "Tümüne uygula" deyin — 12 ayın tamamı o
-   oranla doldurulur. "Enflasyon aylık %2'de kalırsa yıl sonu ne olur?" sorusunun cevabı
-   budur.
+   oranla doldurulur. Kutunun altındaki seçenek işaretliyse (öntanımlı) oran
+   **arındırılmış hız** sayılır ve her aya o ayın son yıl kalıbındaki mevsim çarpanı
+   eklenir: "enflasyonun arındırılmış hızı aylık %2'de kalırsa yıl sonu ne olur?"
+   sorusunun cevabı budur. İşaret kaldırılırsa oran on iki aya **ham** yazılır: "her ay
+   %2 açıklanırsa" sorusunun cevabı.
 2. **Hazır patikalar** dört düğmedir: *Momentum* (arındırılmış son 3 ayın temposu),
    *Son 12 ay ort.*, *Geçen yıl tekrar* (aracın kendini doğrulaması — yıllık oran sabit
    kalmalı) ve *Hedefle uyumlu* (%5 yıllığın aylık karşılığı, $(1{,}05)^{1/12}-1$).
-3. **Ay ay** girmek isterseniz alttaki 12 kutuyu tek tek düzenleyin: Ocak'a asgari ücret
-   zammı, Temmuz'a yönetilen fiyat ayarlaması koyup gerisini momentumda bırakabilirsiniz.
+   Geçen yıl tekrar dışındakiler mevsimsiz hızlardır ve kutulara son yılın mevsim
+   çarpanıyla ham aya çevrilerek yazılır.
+3. **Ay ay** girmek isterseniz alttaki 12 kutuyu tek tek düzenleyin. Kutular **ham**
+   aylık orandır, yani TÜİK'in açıkladığı biçimdedir: Ocak'a asgari ücret zammı, Temmuz'a
+   yönetilen fiyat ayarlaması koyup gerisini momentumda bırakabilirsiniz.
 4. Sağdaki iki büyük sayı **yıl sonu** ve **12 ay sonra** yıllık enflasyondur; altındaki
    satır değişimi ikiye ayırır.
 
-Aylık girdiler iki ondalıkla tutulur, bu yüzden hazır patikaların sonucu Şekil 09'un
-senaryo tablosundan yüzde birlik puan mertebesinde ayrışabilir; fark yöntemsel değil,
-yuvarlamadır. Aracın kendi doğrulaması da bu hassasiyetle çalışır: "Geçen yıl tekrar"
-seçildiğinde on iki ayın tamamı
-<Deger proje="enflasyon" anahtar="tufe_12a" ondalik={2}>31,75</Deger> civarında düz
+Hazır patikalar son yılın kalıbını kullanır; sonuçları yukarıdaki son yıl kalıbı
+sayılarından yüzde birlik puan mertebesinde ayrışabilir, çünkü aylık girdiler iki ondalıkla
+tutulur — fark yöntemsel değil, yuvarlamadır. Aracın kendi doğrulaması da bu hassasiyetle
+çalışır: "Geçen yıl tekrar" seçildiğinde on iki ayın tamamı
+<Deger proje="enflasyon" anahtar="tufe_12a" ondalik={2}>29,73</Deger> civarında düz
 gitmelidir.
 
 **Ayrıştırma nasıl yapılıyor?** Yıllık enflasyondaki değişim, kalıntısız biçimde iki

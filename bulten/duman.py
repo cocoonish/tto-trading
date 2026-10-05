@@ -1753,11 +1753,23 @@ def _editor_bulgulari():
     gercek = _g.anlik
     try:
         _g.anlik = lambda hat: {"pka_tarih": "08.2026", "bek_n": 63, "bek_yilsonu": 29.43, "bek_12a": 23.69,
-                                "baz_momentum_yilsonu": 32.95, "baz_tekrar_yilsonu": 31.51,
+                                "baz_momentum_yilsonu": 28.98, "baz_tekrar_yilsonu": 29.73,
+                                "baz_momentum_yilsonu_alt": 28.98, "baz_momentum_yilsonu_ust": 29.5,
+                                "baz_kalip_yakin": "2024–2025",
                                 "bek_faiz_12a": 29.59} if hat == "enflasyon" else {"politika": 37.0}
         m = _u._beklenti_metni("TÜİK: TÜFE (Eylül 2026)")
         assert "PKA Ağustos" in m and "yıl sonu: momentum" in m, m
         assert "PKA Ağustos" in _u._beklenti_metni("TCMB: PPK faiz kararı")
+        # 05.10.2026: momentumun yıl sonu mevsim kalıbına bağlı; cümle kalıbı
+        # ADIYLA ve aralığı birlikte taşır.
+        assert "%28,98–29,50 (2024–2025 mevsimselliğiyle)" in m, m
+        # Aralık yoksa (eski ya da ölçülemeyen özet) kalıpsız tek sayı BASILMAZ.
+        _g.anlik = lambda hat: {"pka_tarih": "08.2026", "bek_yilsonu": 29.43,
+                                "baz_momentum_yilsonu": 31.53, "baz_tekrar_yilsonu": 29.73,
+                                "baz_momentum_yilsonu_alt": "—", "baz_momentum_yilsonu_ust": "—",
+                                "baz_kalip_yakin": "—"} if hat == "enflasyon" else {}
+        m2 = _u._beklenti_metni("TÜİK: TÜFE (Ekim 2026)")
+        assert "momentum" not in m2 and "31,53" not in m2, m2
     finally:
         _g.anlik = gercek
     assert '"ad": "bugün"' not in _i.getsource(_gv.egri), "eğri serisi yine 'bugün' adını taşıyor"

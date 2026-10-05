@@ -228,10 +228,19 @@ def _beklenti_metni(olay: str, ulke: str = "TR") -> str:
                      f"%{olay_m._s(enf['bek_yilsonu'], 2)}")
         if enf.get("bek_12a") is not None:
             p.append(f"12 ay sonrası %{olay_m._s(enf['bek_12a'], 2)}")
-        if enf.get("baz_momentum_yilsonu") is not None and enf.get("baz_tekrar_yilsonu") is not None:
-            p.append(f"baz etkisi modelimiz, yıl sonu: momentum senaryosu "
-                     f"%{olay_m._s(enf['baz_momentum_yilsonu'], 2)}, tekrar senaryosu "
-                     f"%{olay_m._s(enf['baz_tekrar_yilsonu'], 2)}")
+        # MEVSİM KALIBI ADIYLA (05.10.2026). Momentumun yıl sonu, arındırılmış
+        # hızın hangi yılın mevsimselliğiyle ham aya çevrildiğine bağlı; pano onu
+        # kalıp yıllarının adıyla, ARALIK olarak yayımlıyor. Aralık ya da kalıp
+        # adı ölçülemediyse ("—") momentum parçası BASILMAZ: kalıpsız tek bir
+        # sayı, hangi mevsimselliği varsaydığını gizler.
+        _alt, _ust = enf.get("baz_momentum_yilsonu_alt"), enf.get("baz_momentum_yilsonu_ust")
+        _kalip, _tek = enf.get("baz_kalip_yakin"), enf.get("baz_tekrar_yilsonu")
+        if (all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in (_alt, _ust, _tek))
+                and isinstance(_kalip, str) and any(ch.isdigit() for ch in _kalip)):
+            _ar = (f"%{olay_m._s(_alt, 2)}" if round(_alt, 2) == round(_ust, 2)
+                   else f"%{olay_m._s(_alt, 2)}–{olay_m._s(_ust, 2)}")
+            p.append(f"baz etkisi modelimiz, yıl sonu: momentum senaryosu {_ar} "
+                     f"({_kalip} mevsimselliğiyle), tekrar senaryosu %{olay_m._s(_tek, 2)}")
     if "ppk" in s or "faiz kararı" in s:
         if fon.get("politika") is not None:
             p.append(f"mevcut politika faizi %{olay_m._s(fon['politika'], 2)}")

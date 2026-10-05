@@ -490,6 +490,177 @@ sina("proje sayfası yayım tarihini ve günlük bacağın gününü çağırıy
      _mdx.exists() and 'anahtar="yayim_tarihi"' in _mdx.read_text(encoding="utf-8")
      and 'anahtar="faiz_gun"' in _mdx.read_text(encoding="utf-8"))
 
+# ---------------------------------------------------------------------------
+# 7. BAZ SENARYOSU: GELEN AY, DÜŞEN AYLA AYNI BİRİMDE
+# ---------------------------------------------------------------------------
+# 05.10.2026: momentum ve son 12 ay senaryoları arındırılmış hızı mevsim
+# çarpanı uygulamadan HAM endekse bileştiriyordu. Pano Eylül 2026 verisiyle yıl
+# sonunu %31,53 gösterdi; mevsime tutarlı hesap son iki yılın kalıbıyla
+# %28,98–29,50 veriyor. Her sayı kendi içinde tutarlı göründüğü için hiçbir
+# kapı yakalamadı. Sentetik seride arındırılmış hız ve mevsim kalıbı BİLİNİR;
+# beklenen her sayı kurgudan bağımsız hesaplanır, hattın kodundan değil.
+print("\n▶ Baz senaryosu: arındırılmış hız ham bazla aynı birimde")
+
+# Aylık log-mevsim kalıbı (Ocak…Aralık, yüzde): toplamı sıfır, Kasım–Aralık düşük.
+_MEV = np.array([1.6, 0.5, 0.0, 0.8, -0.4, -1.0, -0.2, -0.2, 0.5, 0.4, -0.9, -1.1]) / 100
+
+
+def _baz_seri(son: str = "2026-09-01", hiz=0.02, genlik=lambda y: 1.0, son3=None):
+    """Arındırılmış endeks (sabit hız; `son3` verilirse son üç ayın hızı) ve ham
+    endeks = arındırılmış × mevsim düzeyi. Mevsim çarpanı kurgu gereği
+    exp(genlik(yıl)·_MEV[ay]) − 1'dir."""
+    ay = pd.date_range(end=son, periods=96, freq="MS")
+    g = np.full(len(ay), hiz)
+    if son3 is not None:
+        g[-3:] = son3
+    p_sa = pd.Series(100 * np.cumprod(1 + g), index=ay)
+    lm = np.array([genlik(t.year) * _MEV[t.month - 1] for t in ay])
+    return p_sa * np.exp(np.cumsum(lm)), p_sa
+
+
+def _mu(t, genlik=lambda y: 1.0) -> float:
+    return float(np.exp(genlik(t.year) * _MEV[t.month - 1]) - 1)
+
+
+# (a) Kalıp her yıl aynı ve hız sabitse momentum, düşen ayları birebir yeniden
+#     üretir: yıllık oran on iki ay boyunca SABİT kalmalı. Çarpansız bileşik
+#     burada Kasım–Aralık'ta oranı yükseltir — 05.10'daki kusurun imzası.
+_p, _ps = _baz_seri()
+_B = metrik.baz_patikasi(_p, _ps)
+_y0 = float(_p.iloc[-1] / _p.iloc[-13] - 1) * 100
+_sapma = max(float((_B[c] - _y0).abs().max())
+             for c in _B.columns if c == "son3_sa" or re.fullmatch(r"son3_sa_\d{4}", c))
+sina("baz: sabit hız + sabit kalıpta momentum yıllığı sabit tutuyor (birim tutarlı)",
+     _sapma < 1e-9, f"yıllıktan azami sapma {_sapma:.4f} puan")
+sina("baz: geçen yıl tekrar senaryosu yıllığı sabit tutuyor (kendini doğrulama)",
+     float((_B["gecen_yil"] - _y0).abs().max()) < 1e-9)
+sina("baz: senaryonun aylık varsayımı HAM birimde (hız × o ayın çarpanı)",
+     np.allclose(_B["son3_sa_aylik"].values, _B["dusen_aylik"].values, atol=1e-9),
+     str(_B[["son3_sa_aylik", "dusen_aylik"]].round(3).head(3).to_dict()))
+
+# (b) Kalıp yılları ADIYLA ve takvim ayına HİZALI. Genlik yıldan yıla büyüyor
+#     (gerçek veride Kasım çarpanı 2022'de −0,43, 2025'te −0,98 puan); her
+#     kalıbın çarpanı kurgudan bağımsız olarak beklenen değerle sınanır.
+_gen = lambda y: 1.0 + 0.25 * (y - 2019)
+_p2, _ps2 = _baz_seri(genlik=_gen)
+_B2 = metrik.baz_patikasi(_p2, _ps2)
+_yil2 = metrik.kalip_yillari(_B2)
+sina("baz: Eylül verisinde kalıplar 2025, 2024, 2023, 2022 (ilk gelen ayın k yıl öncesi)",
+     _yil2 == [2025, 2024, 2023, 2022], str(_yil2))
+_hiza = max(abs(_B2[f"mevsim_{y}"].iloc[i] / 100 - _mu(u - pd.DateOffset(months=12 * k), _gen))
+            for k, y in enumerate(_yil2, start=1) for i, u in enumerate(_B2.index))
+sina("baz: her kalıbın çarpanı k yıl önceki AYNI takvim ayından", _hiza < 1e-12,
+     f"azami fark {_hiza:.2e}")
+_p3, _ps3 = _baz_seri(son="2026-12-01")
+_yil3 = metrik.kalip_yillari(metrik.baz_patikasi(_p3, _ps3))
+sina("baz: Aralık verisinde kalıplar 2026…2023 (ufuk ocakta başlar)",
+     _yil3 == [2026, 2025, 2024, 2023], str(_yil3))
+sina("baz: kalıp adı okur yazımıyla (2024–2025 · 2025 · ardışık değilse tire yok)",
+     metrik.kalip_adi([2025, 2024]) == "2024–2025" and metrik.kalip_adi([2025]) == "2025"
+     and metrik.kalip_adi([2025, 2023]) == "2023 ve 2025",
+     f"{metrik.kalip_adi([2025, 2024])} · {metrik.kalip_adi([2025, 2023])}")
+
+# (c) Aralık: son iki yıl ve önceki iki yıl AYRI gruplar; ana değer son yılın.
+_oz2 = metrik.baz_ozeti(_B2)
+_ara2 = _B2.index.month == 12
+# Yıllar çıktının KENDİ sırasından (yeniden eskiye) okunur: adlandırma bozulsa
+# bile bu maddeler çökmeden kendi sorularını sorar.
+_ys = [float(_B2[f"son3_sa_{y}"][_ara2].iloc[0]) for y in sorted(_yil2, reverse=True)][:4]
+_ys += [float("nan")] * (4 - len(_ys))
+_ar = _oz2["son3_sa"]["aralik"]
+sina("baz: yıl sonu aralığı — son iki yıl ve önceki iki yıl ayrı, uçlar doğru",
+     np.allclose(_ar["yakin"]["yil_sonu"], [min(_ys[0], _ys[1]), max(_ys[0], _ys[1])])
+     and np.allclose(_ar["eski"]["yil_sonu"], [min(_ys[2], _ys[3]), max(_ys[2], _ys[3])])
+     and _oz2["kalip"]["yakin"]["ad"] == "2024–2025" and _oz2["kalip"]["eski"]["ad"] == "2022–2023",
+     str({k: [round(x, 2) for x in v["yil_sonu"]] for k, v in _ar.items()}))
+sina("baz: tek değerli yıl sonu ANA kalıbın (son yıl) sonucu",
+     abs(_oz2["son3_sa"]["yil_sonu"] - _ys[0]) < 1e-12)
+sina("baz: sayfanın 'aylık hız'ı mevsimsiz hız (çarpanlı ham değil)",
+     abs(_oz2["son3_sa"]["aylik_varsayim"] - 2.0) < 1e-9,
+     str(_oz2["son3_sa"]["aylik_varsayim"]))
+
+# (d) Kalıp ölçülemiyorsa hat DURUR; düz hızla bileştirmeye düşmek, düzeltilen
+#     birim hatasının ta kendisi olurdu.
+try:
+    metrik.baz_patikasi(_p, _ps.iloc[-6:])
+    _durdu = False
+except SystemExit:
+    _durdu = True
+sina("baz: mevsim kalıbı ölçülemezse çarpansız bileştirmeye düşmüyor (DUR)", _durdu)
+
+# (e) Baz elverişli mi? Düşen ay, momentumun AYNI aydaki ham karşılığıyla
+#     kıyaslanır. Arındırılmış hız 2,0 → son üç ayda 1,5: düşen ayların
+#     arındırılmış hâli (2,0) momentumdan yüksek, yani Ekim–Haziran'ın HEPSİ
+#     elverişli — mevsimsel olarak düşük Kasım ve Aralık dahil. Düz hızla kıyas
+#     onları "elverişsiz" sayardı.
+_p4, _ps4 = _baz_seri(son3=0.015)
+_B4 = metrik.baz_patikasi(_p4, _ps4)
+_dus4 = [{"kod": t.strftime("%m.%Y"), "oran": float(o)} for t, o in zip(_B4.index, _B4["dusen_aylik"])]
+# Özet üreticisinin kendi yolu: CSV'den okunan tablo + kıyas sütununu kendisi seçer.
+_el4 = ozet_uret.baz_elverislilik(_B4.reset_index(), _dus4) or ([], [], None)
+sina("baz: elverişli sınıflaması aynı birimde (Kasım–Aralık mevsimsel düşük ama elverişli)",
+     {10, 11, 12, 1, 2, 3, 4, 5, 6} <= set(_el4[0]) and _el4[2] == "baz_momentum_aylik",
+     f"elverişli {_el4[0]} · elverişsiz {_el4[1]} · hız {_el4[2]}")
+
+# (f) Yıl sonu açığı aynı birimde: anketin yıl sonu beklentisi momentum
+#     senaryosunun ana kalıpla yıl sonuna EŞİTSE gereken arındırılmış hız
+#     momentumdur ve açık sıfırdır. Ham gereklilikle kıyas sıfırdan uzak çıkar.
+_hedef = float(_B["son3_sa"][_B.index.month == 12].iloc[0])
+_ya = metrik.yilsonu_aritmetigi(_p, _hedef, _B, 2.0)
+sina("baz: yıl sonu açığı aynı birimde (gereken arındırılmış hız = momentum → açık 0)",
+     _ya is not None and abs(_ya["acik_puan"]) < 0.006 and abs(_ya["gereken_sa"] - 2.0) < 0.006,
+     str(_ya))
+
+# (g) Sayfanın adıyla çağırdığı aralık anahtarı ölçülemese de YAZILIR.
+_O_yedek = dict(ozet_uret.O)
+ozet_uret.O.clear()
+ozet_uret.koy_aralik("baz_x_yilsonu", None)
+ozet_uret.koy_aralik("baz_y_yilsonu", [28.98, 29.501])
+_yazilan = dict(ozet_uret.O)
+ozet_uret.O.clear()
+ozet_uret.O.update(_O_yedek)
+sina("özet: ölçülemeyen aralık uçları yer tutucuyla yazılıyor, ölçülen iki ondalık",
+     _yazilan.get("baz_x_yilsonu_alt") == "—" and _yazilan.get("baz_x_yilsonu_ust") == "—"
+     and _yazilan.get("baz_y_yilsonu_ust") == 29.5, str(_yazilan))
+
+# Sayfanın çağırdığı anahtarlar ölçüm katmanının bloğundan DOĞRU yere yazılıyor:
+# yakın aralık yakın anahtara, eski aralık eski anahtara, tek değer ana kalıba.
+ozet_uret.O.clear()
+ozet_uret.baz_anahtarlari(_oz2)
+_ba = dict(ozet_uret.O)
+ozet_uret.O.clear()
+ozet_uret.O.update(_O_yedek)
+_r2 = lambda x: round(x, 2)
+sina("özet: baz anahtarları kalıp adı, ana değer ve iki aralıkla doğru yerde",
+     _ba.get("baz_kalip_yil") == "2025" and _ba.get("baz_kalip_yakin") == "2024–2025"
+     and _ba.get("baz_kalip_eski") == "2022–2023"
+     and _ba.get("baz_momentum_yilsonu") == _r2(_ys[0])
+     and _ba.get("baz_momentum_yilsonu_alt") == _r2(min(_ys[0], _ys[1]))
+     and _ba.get("baz_momentum_yilsonu_ust") == _r2(max(_ys[0], _ys[1]))
+     and _ba.get("baz_momentum_yilsonu_eski_alt") == _r2(min(_ys[2], _ys[3]))
+     and _ba.get("baz_momentum_yilsonu_eski_ust") == _r2(max(_ys[2], _ys[3]))
+     and _ba.get("baz_momentum_aylik") == 2.0,
+     str({k: v for k, v in _ba.items() if k.startswith(("baz_kalip", "baz_momentum"))}))
+
+# (h) Şekil 09 aynı birimde: alt panelin çizgisi momentumun ay ay ham
+#     karşılığıdır (düz yatay çizgi değil), lejant kalıp yılını ve Türkçe
+#     sayıyı yazar.
+_f9 = grafik.sekil_09(_p2.to_frame("tufe"), _B2, "Eylül 2026")
+_cizgi9 = [tr for tr in _f9.data if getattr(tr, "yaxis", None) == "y2" and tr.type == "scatter"]
+sina("şekil 09: alt panel çizgisi momentumun AYNI aydaki ham karşılığı",
+     len(_cizgi9) == 1 and np.allclose(list(_cizgi9[0].y), list(_B2["son3_sa_aylik"])),
+     f"{len(_cizgi9)} çizgi")
+sina("şekil 09: yatay sabit kıyas çizgisi yok", not any(
+    getattr(s, "type", "") == "line" and getattr(s, "y0", None) == getattr(s, "y1", None)
+    for s in (_f9.layout.shapes or ())))
+_adlar9 = [tr.name or "" for tr in _f9.data]
+_senaryo9 = [a for a in _adlar9 if a.startswith(("momentum", "son 12"))]
+sina("şekil 09: lejant her mevsimli senaryonun kalıp yılını adıyla yazıyor",
+     len(_senaryo9) == 4 and all(re.search(r"\b20\d\d mevsimselliğiyle", a) for a in _senaryo9)
+     and "2025 mevsimselliğiyle" in _senaryo9[0], str(_senaryo9))
+sina("şekil 09: lejanttaki sayılar ondalık virgülle", not any(re.search(r"\d\.\d", a) for a in _adlar9),
+     str([a for a in _adlar9 if re.search(r"\d\.\d", a)]))
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

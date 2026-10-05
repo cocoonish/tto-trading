@@ -63,6 +63,78 @@ def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
         O[anahtar] = round(float(deger), ondalik)
 
 
+# Sayfanın adıyla çağırdığı ama bu koşuda ölçülemeyen değer. Anahtar SİLİNMEZ
+# (yayın kapısı eksik anahtarı ENGEL sayar ve okur donmuş yedeği ölçülmüş
+# sanırdı); bileşen sayı olmayan değeri olduğu gibi basar. DIBS hattıyla aynı
+# sözleşme.
+OLCULEMEDI = "—"
+
+
+def koy_aralik(onek: str, cift) -> None:
+    """Aralığı `<onek>_alt` ve `<onek>_ust` olarak HER KOŞUDA yazar; ölçülemeyen
+    uç OLCULEMEDI olur."""
+    ok = (isinstance(cift, (list, tuple)) and len(cift) == 2
+          and all(isinstance(x, (int, float)) and not pd.isna(x) for x in cift))
+    if not ok:
+        uyar(f"'{onek}' aralığı ölçülemedi — '—' yazıldı.")
+    for i, uc in enumerate(("alt", "ust")):
+        O[f"{onek}_{uc}"] = round(float(cift[i]), 2) if ok else OLCULEMEDI
+
+
+def baz_siniflandir(dusen: list[dict], ileri: list[float]) -> tuple[list[int], list[int]]:
+    """Düşen ayları elverişli/elverişsiz diye ayırır: (elverişli, elverişsiz) ay no.
+
+    İki taraf da HAM aylık orandır: düşen ay yayımlanmış oran, `ileri` senaryonun
+    AYNI aydaki ham varsayımı (mevsimsiz hız × o ayın mevsim çarpanı). Düşen ay
+    yüksekse yıllık oran mekanik olarak geriler — baz elverişlidir. Düz bir
+    mevsimsiz hızla kıyaslamak birim hatasıdır: mevsimsel olarak düşük bir
+    Kasım'ı, bu yılın Kasım'ı da aynı mevsimi taşıyacakken "elverişsiz" sayar."""
+    elv, elz = [], []
+    for d, v in zip(dusen, ileri):
+        ay = int(d["kod"][:2])
+        (elv if d["oran"] > v else elz).append(ay)
+    return elv, elz
+
+
+def baz_anahtarlari(baz: dict) -> None:
+    """Ölçüm katmanının `baz` bloğunu sayfanın adıyla çağırdığı anahtarlara yazar.
+
+    Tek değerli `_yilsonu`/`_12ay` ana kalıbın (son yıl) sonucudur; aralıklar
+    son iki yılın (`_alt`/`_ust`) ve önceki iki yılın (`_eski_alt`/`_eski_ust`)
+    kalıplarıyla; kalıp adları okur yazımıyla. Ölçülemeyen ad ve aralık YİNE
+    yazılır (OLCULEMEDI)."""
+    kalip = baz.get("kalip") or {}
+    O["baz_kalip_yil"] = str(kalip["ana"]) if kalip.get("ana") else OLCULEMEDI
+    O["baz_kalip_yakin"] = (kalip.get("yakin") or {}).get("ad") or OLCULEMEDI
+    O["baz_kalip_eski"] = (kalip.get("eski") or {}).get("ad") or OLCULEMEDI
+    for ad, k in (("son3_sa", "momentum"), ("son12_ort", "son12"),
+                  ("gecen_yil", "tekrar")):
+        d = baz.get(ad) or {}
+        koy(f"baz_{k}_12ay", d.get("12ay_sonra"))
+        koy(f"baz_{k}_aylik", d.get("aylik_varsayim"))
+        koy(f"baz_{k}_yilsonu", d.get("yil_sonu"))
+        if ad == "gecen_yil":
+            continue                 # tekrar senaryosu mevsime bağlı değil
+        ar = d.get("aralik") or {}
+        koy_aralik(f"baz_{k}_yilsonu", (ar.get("yakin") or {}).get("yil_sonu"))
+        koy_aralik(f"baz_{k}_yilsonu_eski", (ar.get("eski") or {}).get("yil_sonu"))
+        koy_aralik(f"baz_{k}_12ay", (ar.get("yakin") or {}).get("12ay_sonra"))
+
+
+# Kıyas ölçütü: senaryonun AY AY HAM varsayımı — önce momentum, yoksa son 12 ay.
+# (`*_hiz` mevsimsiz hızdır; düşen ayla kıyaslanamaz.)
+BAZ_KIYAS = (("son3_sa_aylik", "baz_momentum_aylik"), ("son12_ort_aylik", "baz_son12_aylik"))
+
+
+def baz_elverislilik(bz: pd.DataFrame, dusen: list[dict]) -> tuple[list[int], list[int], str] | None:
+    """(elverişli, elverişsiz, hızın özet anahtarı) — ya da kıyas sütunu yoksa None."""
+    for kol, hiz in BAZ_KIYAS:
+        if kol in bz.columns:
+            elv, elz = baz_siniflandir(dusen, list(bz[kol]))
+            return elv, elz, hiz
+    return None
+
+
 # TÜİK, TÜFE'yi ertesi ayın 3'ünde saat 10:00'da açıklar (3'ü tatile denk
 # gelirse ilk iş günü). Yayım gecikmesi bu takvimden ölçülür.
 YAYIM_GUNU = 3
@@ -371,13 +443,17 @@ def main() -> int:
             (m["reel__faiz"] - m["tufe__yillik"]) - (m.get("reel__ex_post") or 0))
 
     # ---------------------------------------------------------------- baz etkisi
+    # MEVSİM KALIBI ADIYLA. Momentum ve son 12 ay senaryolarında mevsimsiz hız,
+    # her ay o takvim ayının geçmiş bir yıldaki mevsim çarpanıyla ham aya
+    # çevrilir (metrik.baz_patikasi); düşen aylar ham olduğu için kimlik ancak
+    # böyle aynı birimde kurulur. Tek değerli anahtarlar (`_yilsonu`, `_12ay`)
+    # ANA kalıbın, yani son yılınkinin sonucudur; sayfa aralığı kalıp yıllarının
+    # adıyla basar. Aralık ölçülemezse anahtar YİNE yazılır (OLCULEMEDI): sayfa
+    # onu adıyla çağırıyor, eksik anahtar yayın kapısında ENGEL olur ve donmuş
+    # yedek okura ölçülmüş gibi görünürdü.
     baz = m.get("baz") or {}
-    for ad, k in (("son3_sa", "momentum"), ("son12_ort", "son12"),
-                  ("gecen_yil", "tekrar")):
-        d = baz.get(ad) or {}
-        koy(f"baz_{k}_12ay", d.get("12ay_sonra"))
-        koy(f"baz_{k}_aylik", d.get("aylik_varsayim"))
-        koy(f"baz_{k}_yilsonu", d.get("yil_sonu"))
+    kalip = baz.get("kalip") or {}
+    baz_anahtarlari(baz)
 
     # Sayfadaki BazEtkisiHesaplayici bileşeninin beslemesi. Kimliğin paydası
     # (düşen aylar) tamamen bilinen bir dizidir; araç yalnız payı kullanıcıdan
@@ -392,23 +468,31 @@ def main() -> int:
             for t, o in zip(bz["tarih"], bz["dusen_aylik"])
         ]
         O["baz_ufuk"] = len(O["baz_dusen"])
-        # Baz elverişli mi? Düşen ay ileri varsayımdan YÜKSEKse yıllık enflasyon
-        # mekanik olarak geriler. Kıyas ölçütü momentum senaryosunun aylık
-        # varsayımıdır (yoksa son 12 ay ortalaması).
-        ileri = O.get("baz_momentum_aylik", O.get("baz_son12_aylik"))
-        if ileri is not None:
-            elv, elz = [], []
-            for d in O["baz_dusen"]:
-                ay = int(d["kod"][:2])
-                (elv if d["oran"] > ileri else elz).append(ay)
+        # Aracın hazır patikaları mevsimsiz bir hızı ham kutulara bu çarpanlarla
+        # yazar (ana kalıp, `baz_dusen` ile aynı sırada, yüzde). Çarpan yoksa
+        # araç o patikaları görünür biçimde kapatır; çarpansız düz hız, sayfanın
+        # tablosundan farklı birimde bir sonuç üretirdi.
+        _ana = kalip.get("ana")
+        if _ana and f"mevsim_{_ana}" in bz.columns:
+            O["baz_mevsim"] = [round(float(x), 4) for x in bz[f"mevsim_{_ana}"]]
+        else:
+            uyar("baz senaryosunun mevsim çarpanı okunamadı — 'baz_mevsim' atlandı.")
+        # Baz elverişli mi? Düşen ay, senaryonun AYNI AYDAKİ ham varsayımından
+        # yüksekse yıllık enflasyon mekanik olarak geriler. Kıyas ölçütü
+        # momentum senaryosunun o aydaki ham karşılığıdır (yoksa son 12 ayın);
+        # `baz_kiyas_aylik` o senaryonun mevsimsiz hızıdır.
+        _el = baz_elverislilik(bz, O["baz_dusen"])
+        if _el:
+            elv, elz, _hiz = _el
             O["baz_elverisli_aylar"] = ay_araliklari(elv)
             O["baz_elverissiz_aylar"] = ay_araliklari(elz)
-            koy("baz_kiyas_aylik", ileri)
+            koy("baz_kiyas_aylik", O.get(_hiz))
             O["baz_elverisli_n"] = len(elv)
-        # MOMENTUM PATİKASININ DİBİ: yıllık enflasyon bu senaryoda önce
-        # DÜŞÜP sonra geri tırmanıyor, çünkü elverişli baz Eylül–Ekim'de,
-        # elverişsiz baz Kasım–Aralık'ta. Yalnız yıl sonunu yazmak bu V'yi
-        # gizler ve aradaki dip, kararın alındığı aylara denk geliyor.
+        # MOMENTUM PATİKASININ ŞEKLİ: yalnız yıl sonunu yazmak aradaki dibi
+        # gizler ve o dip kararın alındığı aylara denk gelebilir. (05.10.2026
+        # öncesi burada "önce düşer, Kasım–Aralık'ta geri tırmanır" yazıyordu;
+        # o V, mevsimsel olarak düşük Kasım–Aralık bazının çarpansız bir hızla
+        # kıyaslanmasının ürünüydü — mevsime tutarlı patikada tırmanış yok.)
         if "son3_sa" in bz.columns:
             _s = bz["son3_sa"].dropna()
             if len(_s):
@@ -446,13 +530,16 @@ def main() -> int:
 
     # YIL SONU ARİTMETİĞİ: anketin yıl sonu tahmini kalan aylarda ne oran ister,
     # bugünkü momentum ne veriyor. İkisi arasındaki açık, "beklenti mi momentum
-    # mu" tartışmasının tek sayıya indirgenmiş hâli.
+    # mu" tartışmasının tek sayıya indirgenmiş hâli — AYNI birimde: gereken ham
+    # oran (`ys_gereken_aylik`) arındırılmış momentumla değil, kendi arındırılmış
+    # karşılığıyla (`ys_gereken_sa`, ana kalıp) kıyaslanır.
     ys = m.get("yilsonu") or {}
     if ys:
         koy("ys_kumulatif", ys.get("kumulatif"), 2)
         koy("ys_anket", ys.get("anket"), 2)
         koy("ys_kalan_ay", ys.get("kalan_ay"), 0)
         koy("ys_gereken_aylik", ys.get("gereken_aylik"), 2)
+        koy("ys_gereken_sa", ys.get("gereken_sa"), 2)
         koy("ys_momentum_aylik", ys.get("momentum_aylik"), 2)
         koy("ys_acik_puan", ys.get("acik_puan"), 2)
 
