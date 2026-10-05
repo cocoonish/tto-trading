@@ -7287,25 +7287,18 @@
    "tarih": "2026-10-05",
    "alan": "30 Eylül seansının tahmini döviz akımı (manşet dahil)",
    "eski": "1,4 milyar dolar çıkış",
-   "yeni": "0,9 milyar dolar çıkış",
-   "sebep": "Tahmini döviz akımı altın fiyat etkisini TCMB'nin brüt altınıyla düşüyordu. Altının yaklaşık 10 milyon onsu TCMB'nin altın cinsinden yükümlülüğü (zorunlu karşılık altını, bankaların ve Hazine'nin altını) ve fiyat değişince o da yeniden değerleniyor; net pozisyondaki etki net altınınkidir. Yeni değerler net altınla ve o günden bu yana gelen haftalık miktar verisiyle hesaplandı."
+   "yeni": "1,3 milyar dolar çıkış",
+   "sebep": "Tahmini döviz akımında altın fiyatı BİST'in gün içi ağırlıklı ortalamasından okunuyordu; TCMB altını Londra sabah fiyatıyla değerliyor ve fiyat artık o saatten okunuyor."
   },
   {
    "tarih": "2026-10-05",
    "alan": "30 Eylül'den önceki iki seansın tahmini döviz akımı",
    "eski": "+1,2 ve +0,6 milyar dolar giriş",
-   "yeni": "29 Eylül +0,9 milyar dolar giriş, 28 Eylül 0,6 milyar dolar çıkış",
-   "sebep": "Tahmini döviz akımı altın fiyat etkisini TCMB'nin brüt altınıyla düşüyordu. Altının yaklaşık 10 milyon onsu TCMB'nin altın cinsinden yükümlülüğü (zorunlu karşılık altını, bankaların ve Hazine'nin altını) ve fiyat değişince o da yeniden değerleniyor; net pozisyondaki etki net altınınkidir. Yeni değerler net altınla ve o günden bu yana gelen haftalık miktar verisiyle hesaplandı."
-  },
-  {
-   "tarih": "2026-10-05",
-   "alan": "Eylül'ün tahmini döviz çıkışı",
-   "eski": "9,7 milyar dolar (21 iş günü)",
-   "yeni": "13,3 milyar dolar (eylülün 22 seansı)",
-   "sebep": "Tahmini döviz akımı altın fiyat etkisini TCMB'nin brüt altınıyla düşüyordu. Altının yaklaşık 10 milyon onsu TCMB'nin altın cinsinden yükümlülüğü (zorunlu karşılık altını, bankaların ve Hazine'nin altını) ve fiyat değişince o da yeniden değerleniyor; net pozisyondaki etki net altınınkidir. Yeni değerler net altınla ve o günden bu yana gelen haftalık miktar verisiyle hesaplandı."
+   "yeni": "+0,8 ve +1,3 milyar dolar giriş",
+   "sebep": "Tahmini döviz akımında altın fiyatı BİST'in gün içi ağırlıklı ortalamasından okunuyordu; TCMB altını Londra sabah fiyatıyla değerliyor ve fiyat artık o saatten okunuyor."
   }
  ],
- "yazi_zamani": "2026-10-05T18:35:56+00:00",
+ "yazi_zamani": "2026-10-05T20:54:22+00:00",
  "yazi_surumu": 4,
  "ilk_yazi_zamani": "2026-10-02T04:24:47+00:00"
 }

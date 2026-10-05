@@ -364,13 +364,21 @@ _b = _barlar(["2026-07-06", "2026-01-05"], [8, 9, 10, 11],
 _lg = ae.londra_gunluk({"IGLN.L": _b}, pd.Timestamp("2026-07-10 00:00", tz="UTC"))
 sina("gün değeri 10:00 ve 11:00'de BİTEN iki barın ortalaması (yaz ve kış saati)",
      list(_lg["IGLN.L"].round(9)) == [15.0, 15.0], f"{_lg.to_dict()}")
-# Kapanmamış bar ölçüm değildir: 10:00–11:00 barı 10:30 UTC+1'de (yaz) kapanmadı.
+# Kapanmamış bar ölçüm değildir ve gün PENCERESİ kapanmadan yazılmaz: 10:30'da
+# (yaz) 10:00–11:00 barı kapanmadı; tek kapanmış barla yazılan gün arşive
+# girer, arşiv kazandığı için o günün kaydı tek bar olarak kalırdı.
 _simdi = pd.Timestamp("2026-07-06 10:30", tz="Europe/London").tz_convert("UTC")
 _b_yaz = _barlar(["2026-07-06"], [8, 9, 10, 11],
                  lambda gun, h: {8: 1.0, 9: 10.0, 10: 20.0, 11: 99.0}[h])
 _lg2 = ae.londra_gunluk({"IGLN.L": _b_yaz}, _simdi)
-sina("kapanmamış bar kullanılmaz (tek kapanmış bar alınır)",
-     len(_lg2) == 1 and abs(float(_lg2["IGLN.L"].iloc[0]) - 10.0) < 1e-12, f"{_lg2.to_dict()}")
+sina("pencere kapanmadan gün yazılmaz (tek kapanmış barla arşive girmez)",
+     _lg2.empty, f"{_lg2.to_dict()}")
+# Pencere kapandı ama hedef barlardan biri kaynakta yok: eldeki bar alınır.
+_b_eksik = _barlar(["2026-07-06"], [8, 9], lambda gun, h: {8: 1.0, 9: 10.0}[h])
+_lg2b = ae.londra_gunluk({"IGLN.L": _b_eksik},
+                         pd.Timestamp("2026-07-06 11:05", tz="Europe/London").tz_convert("UTC"))
+sina("pencere kapandıktan sonra eksik hedef barda eldeki bar alınır",
+     len(_lg2b) == 1 and abs(float(_lg2b["IGLN.L"].iloc[0]) - 10.0) < 1e-12, f"{_lg2b.to_dict()}")
 _b_yarim = _b.copy()
 _b_yarim.index = _b_yarim.index + pd.Timedelta(minutes=30)
 _lg3 = ae.londra_gunluk({"IGLN.L": _b_yarim}, pd.Timestamp("2026-07-10", tz="UTC"))
@@ -433,6 +441,11 @@ sina("arşiv de yoksa seri kurulmaz ve okura söylenir",
 _oz_kaynak = (pathlib.Path(__file__).with_name("ozet_uret.py")).read_text(encoding="utf-8")
 sina("fiyat kaynağının her kodunun okur adı var (sayfaya kod etiketi gitmez)",
      all(f'"{k}":' in _oz_kaynak for k in ("londra", "agort03", "kap03", "ffill")))
+# Miktar kaynağının kodları ons_serisi'nin ve çapa kademelerinin ürettikleri.
+sina("miktar kaynağının her kodunun okur adı var (sayfaya kod etiketi gitmez)",
+     all(f'"{k}":' in _oz_kaynak
+         for k in ("irfcl_pdf", "ima", "evds_aylik", "ara_deger", "tasima"))
+     and 'ONS_KAYNAK_ADI.get(str(gs["ons_kaynak"])' in _oz_kaynak)
 sina("Londra fiyatının indirmesi bağımlılık listesinde",
      "yfinance" in (pathlib.Path(__file__).with_name("requirements.txt")).read_text(encoding="utf-8"))
 

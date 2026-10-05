@@ -169,8 +169,10 @@ cipa_ham = bir.iloc[0]["Tarih"].strftime("%d.%m.%Y") if len(bir) else "-"
 cipa = cipa_ham
 
 # --- Altın tanısı: yayımlanan altın değeri / yayımlanan ons = ima edilen
-# değerleme fiyatı. Piyasa serisinden sistematik biraz düşük olması BEKLENİR
-# (TCMB haftanın son iş günü Londra kotasyonuyla değerler).
+# değerleme fiyatı. Londra fiyatı aynı çapalara ölçeklendiği için fark %0,1
+# mertebesindedir; büyümesi beslemenin ya da değerleme referansının değiştiğini
+# gösterir. Sayfa farkı "%x farklı" diye yazar: işaretsiz (MUTLAK) değer, yoksa
+# eksi çıktığında "%−0,1" basılırdı.
 ima_fiyat, ima_sapma = None, None
 goz_yol = os.path.join(BASE, "irfcl_gozlem.csv")
 if os.path.exists(goz_yol):
@@ -182,7 +184,7 @@ if os.path.exists(goz_yol):
             ima_fiyat = float(gz.iloc[-1]["altin_M"]) / float(gz.iloc[-1]["mn_ons"])
             piyasa = g.set_index("Tarih")["altin_fiyat"].reindex([t]).iloc[0]
             if pd.notna(piyasa) and piyasa:
-                ima_sapma = round((ima_fiyat / float(piyasa) - 1.0) * 100, 1)
+                ima_sapma = round(abs(ima_fiyat / float(piyasa) - 1.0) * 100, 1)
             ima_fiyat = round(ima_fiyat, 0)
 
 # --- Denetim sonucu (net_rezerv.py yazar) ----------------------------------
@@ -199,6 +201,14 @@ FIYAT_KAYNAK_ADI = {
     "agort03": "BİST ağırlıklı ortalama",
     "kap03": "BİST kapanışı",
     "ffill": "son fiyat taşındı",
+}
+# ons_kaynak sütununun okur adları (aynı gerekçe; bkz. altin_etkisi.ons_serisi).
+ONS_KAYNAK_ADI = {
+    "irfcl_pdf": "haftalık IRFCL tablosu",
+    "ima": "haftalık altın değerinden ima edilen miktar",
+    "evds_aylik": "aylık IRFCL",
+    "ara_deger": "haftalık gözlemler arası ara değer",
+    "tasima": "son haftalık gözlemden taşındı",
 }
 veri_tarihi = gs["Tarih"].date()
 if not os.path.exists(uyari_yol):
@@ -332,7 +342,7 @@ ozet = {
     "alt_londra_capa": (min(v.get("capa") or 0 for v in _lf["etc"].values())
                         if _lf.get("etc") else None),
     "alt_ons": _yuvarla(gs["ons"], 2),
-    "alt_ons_kaynak": str(gs["ons_kaynak"]),
+    "alt_ons_kaynak": ONS_KAYNAK_ADI.get(str(gs["ons_kaynak"]), str(gs["ons_kaynak"])),
     "alt_fiyat_etkisi_gunluk": (_yuvarla(aks["altin_fiyat_etkisi"], 2)
                                 if aks is not None else None),
     "alt_fiyat_etkisi_birikimli": (_yuvarla(aks["altin_fiyat_etkisi_birikimli"])

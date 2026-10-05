@@ -23,7 +23,8 @@ resmi uygulaması" yazıyordu — COFER atfı YANLIŞTI: COFER resmi döviz
 rezervlerinin PARA KOMPOZİSYONU istatistiğidir ve altını kapsamaz.)
 Simetrik (Bennet) varyant tanı olarak da hesaplanır:
     Γ_B(L) = ½·[Q(L) + Q(L+1)] · [P(L+1) − P(L)]
-İkisinin farkı tam olarak −½·ΔQ·ΔP'dir ve günlük 0,01 milyar USD altındadır;
+İkisinin farkı tam olarak −½·ΔQ·ΔP'dir ve sıradan günlerde 0,01 milyar USD'nin
+altındadır (en büyüğü 19.03.2026'da 0,23: miktarın bir günde sert düştüğü gün);
 eşiği aşarsa miktar serisinde bozulma var demektir → görünür uyarı.
 
 ZİNCİRLEME TANISI. Laspeyres zinciri "gezinir": günlük fiyat etkilerinin
@@ -131,20 +132,23 @@ fiyatı P_ima = altın_değeri / ons hesaplanır ve P_ima/P − 1 izlenir; eşik
 --------------------------------------------------------------------------
 TCMB altını günlük bilançoda HER GÜN yeniden değerler (ölçüldü, 05.10.2026,
 Londra fiyatıyla: dış varlıkların günlük değişimi BRÜT altının fiyat
-etkisine Q·ΔP 17.11.2023'ten bu yana 1,15 ile (t 22, 681 gün), yıl yıl
-2024'te 1,12, 2025'te 1,29, 2026'da 1,11 ile tepki veriyor; eskiden burada
+etkisine Q·ΔP 17.11.2023'ten bu yana 1,13 ile (t 22, 681 gün; birleşik
+bloklar hariç), yıl yıl 2024'te 1,12, 2025'te 1,27, 2026'da 1,09 ile tepki
+veriyor; eskiden burada
 "haftanın son iş günü Londra kotasyonuyla değerler" yazıyordu ve bu ölçümle
-çelişiyor). BİST fiyatıyla aynı ölçü 2024'te 0,16 veriyordu: fiyatın
-gürültüsü katsayıyı sıfıra çekiyordu, yani düşük katsayı TCMB'nin değil
-ölçünün kusuruydu. Değerleme fiyatının KENDİSİ elimizde değil: Londra sabah
-fiyatı onu IRFCL çapalarında medyan %0,09, en kötü %0,31 sapmayla izliyor
-(BİST ortalaması %0,57 / %4,4 idi). Kalan sapma bir kalibrasyon sabitiyle
+çelişiyor). BİST fiyatıyla aynı ölçü aynı dönemde 0,81, 2024'te yalnız 0,19
+(2026'da 1,02, yani iki fiyat bu yıl yakın): fiyatın gürültüsü katsayıyı
+sıfıra çekiyordu, yani düşük katsayı TCMB'nin değil ölçünün kusuruydu. Değerleme fiyatının KENDİSİ elimizde değil: Londra sabah
+fiyatı onu 17.11.2023'ten beri 31 IRFCL çapasında medyan %0,12, en kötü %0,41
+sapmayla izliyor (aynı kuralla ölçeklenen BİST ortalaması %0,62 / %5,0). Ölçek aynı
+çapalardan kurulduğu için bu bir tutarlılık denetimidir, bağımsız kanıt
+yukarıdaki varlık regresyonudur. Kalan sapma bir kalibrasyon sabitiyle
 KAPATILMAZ — kapatmak, ölçüm hatasını modele gömmek olur.
 
 ALTIN YÜKÜMLÜLÜKLERİ AKIMDA KALIR. TCMB'nin yükümlülüklerinin bir kısmı altın
 cinsindendir (haftalık bilanço, safi gram: zorunlu karşılık altını, yurt içi
-ve yurt dışı bankaların altını, Hazine'nin altını; 2026'da 9–10 milyon ons) ve
-fiyat değişince onlar da yeniden değerlenir. Fiyat etkisi brüt altınla
+ve yurt dışı bankaların altını, Hazine'nin altını; 2026'da 8,5–10,4 milyon
+ons) ve fiyat değişince onlar da yeniden değerlenir. Fiyat etkisi brüt altınla
 düşüldüğü için bu yeniden değerleme akımda kalır: ölçüldü (05.10.2026, Londra
 fiyatıyla, 2026'nın 176 iş günü, birleşik akım blokları hariç) günlük
 akımın brüt Γ'ya eğimi −0,28 (t −3,7); Londra fiyatının bütün döneminde
@@ -238,8 +242,9 @@ ONS_TANI_ESIK_USD = 0.20
 # Kademe 1 (IRFCL PDF) miktar çapasının MAKULLÜK süzgeci ve tanı eşiği.
 #
 # Çapa kabul edilince ima edilen değerleme fiyatı P_deg = C1/Q_pdf olur. Bu,
-# günlük piyasa serisinden sistematik olarak biraz farklı olmalıdır (farklı
-# kotasyon saati; mertebe yüzde bir buçuk). AMA yüzde sekizi aşan bir fark
+# günlük piyasa serisinden biraz farklı olabilir (BİST döneminde farklı kotasyon
+# saati yüzünden yüzde bir buçuk mertebesindeydi; Londra fiyatı değerleme
+# fiyatına ölçeklendiği için artık %0,1 mertebesinde). AMA yüzde sekizi aşan bir fark
 # fiyat farkıyla açıklanamaz: haftalık altın hareketinin kendisi bile nadiren
 # o kadardır ve değerleme gecikmesi birkaç günlüktür. Böyle bir çapa, PDF
 # düzeni değiştiğinde yanlış satırdan okunmuş bir miktar demektir — ölçüldü:
@@ -259,8 +264,8 @@ ONS_TANI_ESIK_ORAN = 0.02
 #   · USD karşılığı — sıçramanın Λ'ya yazacağı etki maddi olmalı;
 #   · ORANSAL büyüklük — çapa dizisi HETEROJENDİR (kademe 1/2/3 birbirini
 #     izler) ve iki komşu çapa farklı kademelerdense aralarındaki fark büyük
-#     ölçüde değerleme/piyasa fiyatı farkından gelir (yüzde bir buçuk mertebe
-#     = 25 mn ons tabanında ~0,4 mn ons ≈ 1,6 milyar USD). Tek başına USD
+#     ölçüde değerleme/piyasa fiyatı farkından gelir (BİST döneminde yüzde bir
+#     buçuk mertebe = 25 mn ons tabanında ~0,4 mn ons ≈ 1,6 milyar USD). Tek başına USD
 #     eşiği bu KAYNAK GEÇİŞİ artefaktını "miktar sıçraması" diye raporluyordu:
 #     arşiv 10'dan 47 gözleme çıkınca 60'tan fazla uyarı üretti ve denetim
 #     satırı okunamaz hâle geldi. Oransal eşik artefaktın üstünde durur.
@@ -274,9 +279,10 @@ ONS_SICRAMA_ESIK_ORAN = 0.04
 # hiç uyarı olmamasıyla aynı işi görür (alarm körlüğü).
 TANI_YAKIN_CAPA = 8
 
-# |P_ima / P_AGORT − 1| eşiği. TCMB'nin haftalık değerleme fiyatı ile günlük
-# piyasa ortalaması arasında yüzde bir buçuk mertebesinde sistematik fark
-# BEKLENİR (farklı kotasyon saati); %3 aşımı beslemenin donduğunu gösterir.
+# |P_ima / P − 1| eşiği. Londra fiyatı TCMB'nin değerleme fiyatına ölçeklendiği
+# için beklenen fark %0,1 mertebesindedir (BİST döneminde, farklı kotasyon
+# saati yüzünden, yüzde bir buçuktu); %3 aşımı beslemenin donduğunu ya da
+# TCMB'nin değerleme referansını değiştirdiğini gösterir.
 FIYAT_TANI_ESIK = 0.03
 
 # |Laspeyres − Bennet| / |Laspeyres| eşiği — ORANSAL. Mutlak eşik kullanmak
@@ -403,8 +409,11 @@ def fiyat_serisi(agort: pd.Series, kap: pd.Series,
 # altında kalması altın yükümlülüklerinin yeniden değerlemesidir (modül notu,
 # "Bilinen sınır"). Değerleme saati
 # ayrıca TCMB'nin KENDİ yayımladığı değerleme fiyatıyla (IRFCL: altın değeri /
-# ons) doğrulandı: aşağıdaki seri onu medyan %0,09, en kötü %0,31 sapmayla
-# izliyor; BİST ortalaması %0,57 / %4,4, vadeli GC=F %0,5 (kontrat devri).
+# ons) karşılaştırıldı: aşağıdaki seri onu 31 çapada medyan %0,12, en kötü
+# %0,41 sapmayla izliyor; aynı kuralla ölçeklenen BİST ortalaması %0,62 /
+# %5,0, vadeli GC=F %0,5
+# (kontrat devri). Ölçek aynı çapalardan kurulduğu için bu bağımsız bir kanıt
+# değil, tutarlılık denetimidir.
 # KAYNAK: LBMA'nın kendi ucu buluttan 403, Bundesbank'ta seri yok, Dukascopy
 # 503, Stooq JavaScript doğrulaması istiyor (keşif 05.10.2026). Erişilen ve
 # devirsiz olan: Londra borsasındaki iki FİZİKİ altın ETC'si, USD cinsinden.
@@ -432,9 +441,15 @@ def londra_gunluk(saatlik: dict[str, pd.Series],
     `saatlik[sembol]`: indeksi barın BAŞLANGICI (UTC), değeri kapanış. Bar
     kapanışı başlangıç + 1 saattir ve `simdi`den sonra kapanan bar
     KULLANILMAZ (kapanmamış bar ölçüm değildir). İndeks: Londra takvim günü.
+
+    Gün, PENCERESİ kapanmadan (son hedef barın bittiği saat, Londra 11:00)
+    yazılmaz: arşiv kazandığı için 10:00 ile 11:00 arasında koşan bir hattın
+    yazdığı tek barlık değer o günün kaydı olarak kalırdı. Pencere kapandıktan
+    sonra hedef barlardan biri kaynakta yoksa eldeki bar alınır.
     """
     simdi = pd.Timestamp(simdi)
     simdi = simdi.tz_localize("UTC") if simdi.tzinfo is None else simdi.tz_convert("UTC")
+    son_saat = max(LONDRA_BAR_BITIS)
     sutunlar = {}
     for sembol, s in saatlik.items():
         if s is None or len(s) == 0:
@@ -450,7 +465,13 @@ def londra_gunluk(saatlik: dict[str, pd.Series],
         df = df[(df["dk"] == 0) & df["saat"].isin(LONDRA_BAR_BITIS)]
         if df.empty:
             continue
-        sutunlar[sembol] = df.groupby("gun")["v"].mean()
+        gunluk = df.groupby("gun")["v"].mean()
+        pencere = (pd.DatetimeIndex(gunluk.index) + pd.Timedelta(hours=son_saat)) \
+            .tz_localize("Europe/London").tz_convert("UTC")
+        gunluk = gunluk[pencere <= simdi]
+        if gunluk.empty:
+            continue
+        sutunlar[sembol] = gunluk
     if not sutunlar:
         return pd.DataFrame(columns=list(LONDRA_ETC), dtype=float)
     out = pd.DataFrame(sutunlar).sort_index()
@@ -733,7 +754,8 @@ def olculemeyen_fiyat_gunleri(kaynak: pd.Series) -> pd.Series:
     Γ(L) = Q(L)·[P(L+1) − P(L)]; iki ucundan biri TAŞINMIŞSA fark ölçülmüş
     değildir. Taşımanın iki sebebi olabilir ve ikisi aynı görünür:
 
-      · ORTADAKİ taşıma — BİST kapalıydı (çoğu bayram arifesi yarım günü),
+      · ORTADAKİ taşıma — fiyat kaynağı kapalıydı (Londra serisinde İngiltere
+        tatili; ondan önceki BİST döneminde çoğu bayram arifesi yarım günü),
         ama TCMB bilançosunu yine yayımladı ve altını uluslararası fiyatla
         yeniden değerledi. Burada maskelenmez: iki günün TOPLAMI doğrudur,
         günlere dağılımı ölçülemez — `arife_bloklari` ile birleştirilir.
@@ -992,8 +1014,8 @@ def altin_tanilari(capalar: pd.DataFrame, altin_deger_M: pd.Series,
 
     # (1) Yayımlanan ons ile ima edilen ons tutuyor mu? İKİ ölçüt birlikte:
     # (a) ima edilen DEĞERLEME fiyatı piyasa serisinden oransal olarak ne kadar
-    # ayrışıyor — yüzde bir buçuk mertebesindeki fark BEKLENİR, çünkü TCMB
-    # haftanın son iş günü kotasyonuyla değerler; (b) farkın Λ'ya yazacağı USD
+    # ayrışıyor — Londra fiyatıyla beklenen fark %0,1 mertebesindedir (BİST
+    # döneminde yüzde bir buçuktu); (b) farkın Λ'ya yazacağı USD
     # etkisi maddi mi. Yalnız USD ölçütü kullanmak, 100+ milyar dolarlık bir
     # altın stokunda BEKLENEN fiyat farkını her hafta "tanı" diye raporlardı.
     pdf = capalar[capalar["kaynak"] == "irfcl_pdf"]["ons"]

@@ -622,7 +622,7 @@ seviyeden kaç seans geride kaldığı ve SEBEBİ tek cümleyle yazılır, besle
 yetiştiğinde cümle kendiliğinden döner. (05.10.2026: ortadaki taşımanın "piyasa
 kapalı, fiyat kımıldamadı, Γ = 0 bir ölçümdür" önermesi bilanço için YANLIŞ
 çıktı — BİST kapalıyken TCMB altını yine yeniden değerliyor; iki günün akımı
-artık birleştiriliyor. Bkz. aşağıda "net pozisyonun fiyat etkisi".)
+artık birleştiriliyor. Bkz. aşağıda "altın fiyat etkisi brüt altınla".)
 
 **Kurucu ilke — bir ŞEKLİN tarihi, HATTIN tarihi değildir.** FX haber endeksi
 sayfasında on figürün hepsi "veri 03.09.2026" diye damgalanıyordu; oysa dördü
@@ -4739,96 +4739,82 @@ ENGEL). Ana sayfanın hat tablosu da aynı karşılaştırıcıyla dizildiği i�
 donmasın diye tarayıcıda yeniden hesaplanıyor — statik bir sitede göreli
 zaman, derlendiği günün yaşıdır.
 
-**Kurucu ilke — NET bir pozisyonun fiyat etkisi, NET miktarın etkisidir; ve bir
-arındırmanın doğruluğu, arındırılmış serinin arındırılan etkiye EĞİMİYLE
-ölçülür.** Kullanıcı (05.10.2026): "TCMB net rezerv takibinde günlükte altın
-fiyat etkisinde hata var gibi geldi." Vardı ve kurulduğu günden beri vardı.
-Günlük net döviz alımı NET pozisyondan (dış varlıklar eksi döviz
-yükümlülükleri, swap hariç) kuruluyor, altın fiyat etkisi ise BRÜT altınla
-(IRFCL, 25,6 milyon ons) düşülüyordu. TCMB'nin yükümlülüklerinin bir kısmı
-altın cinsinden — zorunlu karşılık altını 216,7 t, yurt içi bankaların altını
-ve teminat altını 42,7 t, yurt dışı bankaların altını 30,0 t, Hazine'nin
-altını 23,3 t (haftalık bilanço, safi gram) — ve fiyat değişince onlar da
-yeniden değerleniyor. Fazla düşülen pay brüt altının yaklaşık %39'u.
-Teşhis aritmetikte değildi: formül yayımlanan sayıları 1,8e−15 ile yeniden
-üretiyordu. Kusuru gösteren ölçü bir REGRESYONDU — doğru arındırılmış bir
-akım altın fiyatından bağımsız olmalıdır; yayımlanan akımın Γ'ya eğimi 2026'da
-−0,29 (t −3,6), tam örneklemde −0,46 (t −10,7): altın yükseldiğinde sahte
-satış, düştüğünde sahte alım. Yükümlülük tarafı (A11 + A14) Γ'ya 0,32 ile
-tepki veriyordu ve bu kalemlerin KENDİ fiyat etkisine 0,99 ile (t 7,2) —
-açıklanmayan pay kalmıyor. Net altınla akımın eğimi +0,13 (t 1,1). Düzeltme
-bir kalibrasyon sabiti DEĞİL (regresyondan "yüzde 30 fazla düşülüyor" demek
-kolaydı ve yanlış olurdu: pay zamanla değişiyor, zorunlu karşılık altını
-158 t'dan 217 t'a çıktı), TCMB'nin kendi yayımladığı beş kalem. Kodlar
-katalogdan okundu, tahmin edilmedi (EVDS bilanço kataloğu
-`Research/analiz-tcmb-api/data/` altında önbellekteydi), bulut keşfiyle
-yoklandı, hat onları her koşuda çekiyor. Etkisi büyük (Londra fiyatıyla
-birlikte, aşağıda): 27.02'den birikimli net alım −11,8 değil −20,2 milyar dolar,
-aynı dönemin altın fiyat etkisi −25,0 değil −16,6. Sayfa düzeltme kayıtları
-taşıyor, alıntılayan üç bülten sayısı (01.10 · 02.10 · 04.10) da; X'e düzeltme
-yanıtı atılmadı (kullanıcı kararı: geçmişe düzeltme yok). Λ da net altınla
-kurulur ve gerekçesi TUTARLILIKTIR, ilk yazımdaki örnek değil: N^fp'nin altın
-bileşeni tanım gereği Λ_net'tir ve N = N^fp − Λ_net altın dışı net pozisyonun
-değişimidir. İlk yazım "bir bankanın altın yatırması net altını değiştirmez,
-brüt Λ bunu döviz satışı diye yazıyordu" diyordu; ölçüm onu yalnız kısmen
-destekledi: yükümlülük altınının haftalık değişimi varlığa 0,008 ile (t 0,1;
-199 hafta) yansıyor, yani çoğu FİZİKİ yatırma değil, TCMB'nin kâğıt üstündeki
-altın satışı (yükümlülük büyürken fiziki altın yerinde) — Λ_net bunu doğru
-yazıyor. Çıpadan bu yana ΣΛ −8,9'un −5,0'ı yükümlülük bacağından.
+**KARAR (05.10.2026, kullanıcı) — TCMB NET REZERVDE ALTIN FİYAT ETKİSİ BRÜT
+ALTINLA DÜŞÜLÜR; ve bir arındırmanın "doğru" tanımı, akımın KİMİN tanımıyla
+kıyaslanacağı sorulmadan seçilmez.** Kullanıcı: "TCMB net rezerv takibinde
+günlükte altın fiyat etkisinde hata var gibi geldi." Kontrol iki şey buldu;
+biri kaldı, biri aynı gün geri alındı ve geri alınanın dersi daha değerli.
+
+Geri alınan: bir REGRESYON sezgisi. "Doğru arındırılmış akım altın fiyatından
+bağımsız olmalı" diye akımın Γ'ya eğimi ölçüldü (2026'da −0,28, t −3,7) ve
+sebebi bulundu — TCMB'nin yükümlülüklerinin bir kısmı altın cinsinden
+(zorunlu karşılık altını, yurt içi ve yurt dışı bankaların, Hazine'nin altını;
+haftalık bilanço, safi gram; 2026'da 8,5–10,4 milyon ons) ve fiyat değişince
+onlar da yeniden değerleniyor. Fiyat etkisi NET altınla (brüt − yükümlülük)
+düşülecek biçimde değiştirildi, eğim sıfırlandı — ve çıpadan birikimli net alım
+neredeyse İKİ KATINA çıktı. Kullanıcı doğru kabul ettiği seriyi gösterdi; o
+seri BRÜT tanımla kurulu ve günlük, aylık ve birikimli sayılarımızla brüt
+tanımda örtüşüyor, net tanımda örtüşmüyor. Karar: akım piyasa tablolarının
+tanımıyla, brüt altınla kurulur; yükümlülük altınının yeniden değerlemesi
+akımda kalır ve sayfanın "Bilinen sınırlar"ında eğimiyle yazılıdır. Ders: kendi
+içinde tutarlı bir "düzeltme", okurun kıyas yaptığı seriden ayrışıyorsa yeni
+bir kusurdur; bir ölçünün tanımı değiştirilmeden önce o tanımla KİMİN
+sayısıyla kıyaslanacağı sorulur. Kullanıcının referans verisi depoya, sayfaya
+ve commit'lere YAZILMADI (kullanıcı isteği). Tanım araçta kilitli: ayrıştırma
+(`altin_etkisi.akim_ayristir`) tek bir altın miktarı alır, hat yükümlülük
+kalemi çekmez ve duman ikisini de sınar — bir sonraki oturum eğimi görüp net
+altına "düzeltmesin". Yükümlülük kalemlerinin EVDS kodları (TP.BL0891 ·
+TP.BL137 · TP.BL128 · TP.BL142 · TP.BL0823; katalogdan okundu, bulutta
+yoklandı) `kesif_altin_yukumluluk.py`de duruyor.
+
+Kalan: FİYATIN SAATİ. Altın fiyatı BİST'in gün içi ağırlıklı ortalamasından
+okunuyordu; TCMB analitik bilançoda altını Londra sabah fiksingi saatinde
+(10:30) değerliyor: dış varlıkların günlük değişimi saatlik fiyatlarla ortak
+regresyona sokulunca o saatin katsayısı 1,07 (t 8), BİST ağırlıklı
+ortalamasınınki 0,13 (t 0,9). Spot kaynakların hiçbiri buluttan açılmadı (LBMA
+403, Bundesbank'ta seri yok, Dukascopy 503, Stooq JavaScript doğrulaması);
+vadeli GC=F devir günlerinde sıçrıyor. Açılan ve devirsiz olan: Londra'daki iki
+FİZİKİ altın ETC'si (IGLN.L, SGLD.L), 10:00 ve 11:00'de biten saatlik barların
+ortalaması, TCMB'nin IRFCL değerleme fiyatına ölçekli (son 12 çapanın oran
+medyanı; haftalık kayma medyanda %0,02, ücret erimesi yılda %0,11). Seri IRFCL
+değerleme fiyatını 31 çapada medyan %0,12, en kötü %0,41 sapmayla izliyor (aynı
+kuralla ölçeklenen BİST %0,62 · %5,0) — ölçek aynı çapalardan kurulduğu için bu bir tutarlılık
+denetimi, kanıt değil. Kanıt varlık tarafında: dış varlıkların günlük değişimi
+brüt Γ'ya Londra fiyatıyla 1,13 ile (t 22, 17.11.2023'ten beri), BİST
+fiyatıyla 0,81 ile tepki veriyor; fark en çok 2024'te (1,12'ye karşı 0,19),
+2026'da iki fiyat yakın (1,09 ve 1,02).
+Akımın kuruluşunda iki fiyatla kurulan Γ ortak regresyonda: Londra 0,69
+(t 8,9), BİST 0,04 (t 0,6); 2026'da günlük akımın standart sapması 2,44 → 2,35.
+Ürün fiyatları DEPODA birikiyor (`altin_londra.csv`) çünkü kaynağın saatlik
+geçmişi 730 günle sınırlı; arşiv kazanır, yeni indirme yalnız eksik günü
+doldurur. Londra öncesi (17.11.2023'ten önce) BİST getirisiyle geriye
+uzatılıyor; o dönemin akımının Γ'ya eğimi −0,88 (t −7,1), Londra döneminde
+−0,27 — sayfada adıyla yazılı, birikim etkilenmiyor.
 
 İkinci kusur aynı denetimde çıktı ve bu dosyada YAZILI bir ilkeyi çürüttü:
 "ortadaki fiyat taşıması tatildir, fiyat kımıldamamıştır, Γ = 0 bir
 ölçümdür". Bayram arifesi yarım günlerinde BİST kapalı ama TCMB bilançosunu
-yayımlıyor ve altını yine yeniden değerliyor (dış varlıklar günlük Γ'ya 1,08
-ile tepki veriyor; sayfa ve kod "TCMB altını haftanın son iş günü Londra
-kotasyonuyla değerler" diyordu, o da ölçümle çelişiyordu). Düşülmeyen yeniden
-değerleme arifeden önceki günün akımına sızıyordu: 11 vakada korelasyon 0,89
-(sıradan günlerde ardışık akım korelasyonu 0,11); 28.10.2025'te akım bir gün
-−1,91, ertesi gün +7,45 milyar dolar yazılmıştı. İki günün TOPLAMI doğru,
-dağılımı ölçülemez — toplam ikinci güne yazılıyor, önceki gün boş, birikim
-değişmiyor (`arife_bloklari`). Bir ilke yazıldığı günün verisiyle
-doğrulanmıştı; doğrulanan şey "taşınan günde fiyat sıfır" idi, "taşınan günde
-bilanço değerlemiyor" hiç sorulmamıştı.
-Sigortalar: yükümlülük girdisinin VARSAYILANI YOK ve eksik kalem hattı adıyla
-durdurur (net altın kurulamazsa sessizce brüte düşmek ölçülmüş kusuru geri
-getirirdi); hattın koşusunda sızıntı tanısı son 120 günün eğimini ölçer ve
-|eğim| ≥ 0,15 ile |t| ≥ 3 birlikte tutarsa okura uyarı basar (eski seride
-ateşliyor, yenisinde susuyor); duman 39 madde, on üç arıza enjeksiyonunun on
-üçü kendi maddesinde — biri ilk turda ÇÖKEREK yakalandı (KeyError) ve madde
-artık hatanın türünü adıyla söylüyor.
+yayımlıyor ve altını yine yeniden değerliyor. Düşülmeyen yeniden değerleme
+arifeden önceki günün akımına sızıyordu: 11 vakada korelasyon 0,89 (sıradan
+günlerde ardışık akım korelasyonu 0,11); 28.10.2025'te akım bir gün −1,91,
+ertesi gün +7,45 milyar dolar yazılmıştı. İki günün TOPLAMI doğru, dağılımı
+ölçülemez — toplam ikinci güne yazılıyor, önceki gün boş, birikim değişmiyor
+(`arife_bloklari`). Londra fiyatı arife kusurunu KÖKÜNDEN söktü (Londra o
+günlerde açık); birleşik blok artık yalnız İngiltere tatillerinde ve Yahoo'nun
+bir günü düşürdüğü yerde (02.02.2026) doğuyor. Bir kusurun belirtisini onaran
+düzeltme (birleştirme), kökü onarılınca kapsamı daralır; ikisini aynı gün
+yazmak, sonraki oturumun belirtiyi kural sanmasını önler.
 
-Aynı gün açık kalan fiyat kaynağı da kapandı ve arife kusurunu KÖKÜNDEN
-söktü. TCMB analitik bilançoda altını Londra sabah fiksingi saatinde (10:30)
-değerliyor: saatlik fiyatlarla ortak regresyonda o saatin katsayısı 1,07 (t 8),
-BİST ağırlıklı ortalamasınınki 0,13 (t 0,9). Spot kaynakların hiçbiri buluttan
-açılmadı (LBMA 403, Bundesbank'ta seri yok, Dukascopy 503, Stooq JavaScript
-doğrulaması); vadeli GC=F devir günlerinde sıçrıyor. Açılan ve devirsiz olan:
-Londra'daki iki FİZİKİ altın ETC'si (IGLN.L, SGLD.L), 10:00 ve 11:00'de biten
-saatlik barların ortalaması, TCMB'nin IRFCL değerleme fiyatına ölçekli (son 12
-çapanın oran medyanı; haftalık kayma medyanda %0,02, ücret erimesi yılda
-%0,11). Seri IRFCL değerleme fiyatını medyan %0,09, en kötü %0,31 sapmayla
-izliyor (BİST %0,57 · %4,4). Dış varlıkların günlük değişimi brüt Γ'ya 1,15 ile
-(t 22, 17.11.2023'ten beri) tepki veriyor; BİST fiyatıyla aynı ölçü 2024'te
-0,16'ydı. Akımın net Γ'ya eğimi Londra döneminde +0,14 (t 1,8), 2026'da +0,15
-(t 1,3); günlük standart sapma 2026'da 2,46 → 2,26. Ürün fiyatları DEPODA
-birikiyor (`altin_londra.csv`) çünkü kaynağın saatlik geçmişi 730 günle sınırlı;
-arşiv kazanır, yeni indirme yalnız eksik günü doldurur. Londra öncesi
-(17.11.2023'ten önce) BİST getirisiyle geriye uzatılıyor ve o dönemin akımı
-sızıntı TAŞIYOR (eğim −0,84, t −4,9) — sayfada adıyla yazılı, birikim
-etkilenmiyor. Bayram arifesi birleştirmesi Londra döneminde kendiliğinden
-kalktı: Londra o günlerde açık ve her gün kendi fiyatını alıyor; birleşik blok
-artık yalnız İngiltere tatillerinde (2026'da dört blok) ve Yahoo'nun bir günü
-düşürdüğü yerde (02.02.2026) doğuyor. Bir kusurun belirtisini onaran düzeltme
-(birleştirme), kökü onarılınca kapsamı daralır; ikisini aynı gün yazmak,
-sonraki oturumun belirtiyi kural sanmasını önler.
 Düzeltme kayıtlarının "eskisi" CANLI SİTENİN sayısıdır, ara bir dalın değil:
-net altın düzeltmesi main'e girmeden Londra fiyatı geldi ve kayıtlar yayımlanan
-sayıdan son sayıya yazıldı. Bülten kayıtları yayımlanan cümlenin KENDİ
-penceresinde yeniden hesaplandı (01.10: 1–28.09 etiketleri; 02.10: 1–29.09;
-04.10: eylülün 22 etiketi ve beş günlük iki pencere). 04.10'un "çıkış
-yavaşladı" hükmü yeni sayılarla kurulamıyor (7,1'e karşı 7,2; fark bandın
-içinde) ve üç cümle ayrı kayıt aldı. AÇIK: Londra fiyatıyla kurulan akımın
-bağımsız bir referansa karşı hatası ölçülmedi (elimizdeki referans brüt tanımı
-kullanıyor görünüyor: Haziran'da 22,3'e karşı 17,9, aradaki 4,4 o ayın
-yükümlülük yeniden değerlemesiyle −4,6 aynı mertebede); günlük bant bu yüzden
-aralığın üst ucunda (±0,4) tutuluyor.
+net altınlı ara sürüm hiç yayımlanmadı ve kayıt ona atıf yapmaz. Bülten
+kayıtları yayımlanan cümlenin KENDİ penceresinde yeniden hesaplandı ve yalnız
+değişen sayı kayıt aldı; hükmü hâlâ doğru olan cümleye kayıt yazılmadı. Biri
+ayrıca yazarın kusurunu buldu: 04.10'un "eylülün tamamı" sayısı ilk 21 iş
+gününün toplamıydı.
+
+AÇIK, adıyla: (i) ay sınırına düşen birleşik blok (30.01→02.02 Yahoo boşluğu,
+30.04→04.05 İngiltere tatili) bir günün akımını sonraki aya yazar. İkinci bir kaynakla (aynı saatte vadeli
+kotasyon, komşu günlerin bazıyla) doldurmak mümkün ama yeni bir kaynak
+sözleşmesi ister, yapılmadı. (ii) Aylık toplamlarda bunun dışında kalan
+farklar açıklanmadı; altın hareketinin sert olduğu ayda fiyat saatinin küçük
+farkı büyür, swap ve kamu bacağı ayrıca sınanmadı.
