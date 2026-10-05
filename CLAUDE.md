@@ -22,10 +22,14 @@ TTO Trading/
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
 ├── teknik/                      # Haftalık teknik analiz ARŞİVİ — yayın 27.09.2026 sayısıyla
 │                                #   sona erdi; yaz.py yalnız arşiv sayısına düzeltme yazar
-├── tweet/                       # X gönderileri: uret.py bülten, analiz.py analiz
-│                                #   yazısını yönetici özetinden kurar; denetim.py KALİTE
-│                                #   KAPISI; gonder.py defterli/bayat-korumalı gönderir,
-│                                #   metni arsiv/'e yazar; siteye HİÇBİR ŞEY yazmaz
+├── tweet/                       # X gönderileri (yalnız metin: link, görsel, hashtag,
+│                                #   cashtag, @ yok): uret.py bülten, analiz.py analiz
+│                                #   yazısını yönetici özetinden kurar; duzeltme.py
+│                                #   yazarın işaretlediği düzeltme kaydını ana gönderiye
+│                                #   yanıt yapar; denetim.py KALİTE KAPISI; gonder.py
+│                                #   defterli/bayat-korumalı gönderir, metni arsiv/'e
+│                                #   yazar, aynı jetonla haftada bir etkileşimi okur
+│                                #   (metrik.py → metrik.json); siteye HİÇBİR ŞEY yazmaz
 ├── analiz/                      # Analiz yazım rehberi (YAZIM.md) + şablon (sablon.mdx);
 │                                #   kapısı site/tools/analiz_sinavi.py
 └── Research/                    # Ham araştırma dosyaları (Excel vb.)
@@ -108,7 +112,8 @@ Aynı fonksiyon kapsamı da sınar (sitede çıkan her zamanlanmış yayının X
    kökü SERİ anahtarıdır: aynı kökten yazılar sayfada "bu serinin diğer yazıları"
    kutusuyla birbirine bağlanır — konu kökü yazıdan yazıya aynı yazılır.
    **X gönderisi kendiliğinden çıkar:** `tweet/analiz.py` yayın günü `pubDate`i
-   bugün olan yazının yönetici özetini (tez, tablo satırları, rakamlar; sayılar
+   bugün olan yazının yönetici özetini (tez, tablo satırları ve metinde
+   geçmeyen ölçümler — rakam şeridi, hiçbiri kalmazsa basılmaz; sayılar
    sayfadaki gibi sabit) gönderiye çevirir; defter aynı yazıyı ikinci kez göndermez.
 
 ## Grafik güncelleme akışı
@@ -137,7 +142,7 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 | `tekrar.py` | iç ve günler arası tekrar; biçim 3'te **olgu** düzeyinde (aynı ondalık 3+ bölümde · özet∩okuma · kronik) |
 | `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
 | `zincir.py` | veri→ölçüm→yazı zincirinin durumu; eksik halkayı ve çıkış koduyla ne yapılacağını söyler |
-| `yaz.py` | yazı katmanının yazma kapısı: `yorum`, `ozet`, `gundem`, `fikirler` · `fikir_kapat` (yalnız bugünün sayısına) ve **`duzeltmeler`** (yayımlanmış sayının yapısal düzeltme kaydı — sayfa "Düzeltmeler" bölümü ve `/duzeltmeler/` listesi buradan) |
+| `yaz.py` | yazı katmanının yazma kapısı: `yorum`, `ozet`, `gundem`, `fikirler` · `fikir_kapat` (yalnız bugünün sayısına) ve **`duzeltmeler`** (yayımlanmış sayının yapısal düzeltme kaydı — sayfa "Düzeltmeler" bölümü ve `/duzeltmeler/` listesi buradan; isteğe bağlı `gonderi` + `gonderi_metni` X'e düzeltme yanıtıdır: hedef tweet defterinde kimlikli değilse ya da yanıtın tam metni tweet kapısında ENGEL alırsa kayıt reddedilir) |
 | `fikir.py` | **işlem fikirleri**: yazı katmanının `fikirler` alanının sözleşmesi (giriş ölçülen katmandan), mekanik karne (yayımdan sonraki ilk kapanıştan, kapanış bazında hedef/stop/ufuk, donar) — defter yayımlanmış sayıların kendisi; `--evren` ölçülebilir seriler |
 
 **Kurucu ilke — saat.** Bir `ozet.json` tek bir yayım ritmi taşımaz: aynı dosyada
@@ -550,14 +555,18 @@ aracı ya da node'u bulamazsa
 artık yeşil geçmez, düşer. Eskiden ham kaynak
 kopyalanıyor, derleme yalnız public depoda yapılıyordu: derleme düşerse site
 sessizce eski sürümde kalıyordu (30.08.2026). Aynı ilke tweette:
-`tweet/denetim.py` her gönderiyi (bülten, teknik, analiz, özel) gönderimden
+`tweet/denetim.py` her gönderiyi (bülten, analiz, düzeltme yanıtı, özel) gönderimden
 önce sınar — tavsiye dili, link (**tweetlerde HİÇ link kullanılmaz** —
 kullanıcı kararı; açık adres, www, çıplak alan adı ve X adresi dahil, tanım
 `tweet/denetim.LINK`, gönderim katmanı `gonder._gonder_zincir` ikinci kez
-kilitler), emoji, HTML kalıntısı, site atfı, sayı
-ortasında kesik cümle, boş bölüm etiketi, sorumluluk notu, okur dili — ve engel
-varsa gönderim durur. Sorumluluk notu her gönderinin son satırıdır ve kırpmadan
-muaftır (`uret._kapat`).
+kilitler), hashtag, cashtag ve @, emoji ve matematik kalın harf, HTML
+kalıntısı, site atfı, satır sonunda "…", sayıda ya da sıra sayısında kesik
+cümle, kapanmamış parantez ya da tırnak, boş bölüm etiketi, sorumluluk notu,
+okur dili — ve engel varsa gönderim durur. Tavsiye, okur dili ve site izi
+NFKC'ye normalleştirilmiş metinde taranır; bağlayıcı liste `tweet/denetim.py`
+başlığındadır. Sorumluluk notu her gönderinin son satırıdır: üretici onu
+gövdeden SONRA ekler (`uret._kapat`; gövde kesilecekse kesim tam cümle
+sınırında), kapı notun son satırda olduğunu ayrıca sorar.
 
 **Kurucu ilke — okur dili HER YAYINDA geçerlidir, tek yerden tanımlanır.**
 Kural yalnız site yazıları için değil: bülten, teknik bülten, tweetler ve
@@ -580,8 +589,9 @@ cron, iş akışı) — okurun elinde bu şeylerin hiçbiri yok. **Yapım dili**
 sürüm tarihçemizin anlatısı ("bu yazının ilk sürümünde şu hata vardı",
 "önceki sürümde şöyle yazıyordu", "kod hatasıydı, düzeltildi"). Kalıplar
 `ortak/okur_dili.py`de TEK yerde durur ve dört kapı da onu içe aktarır:
-`sayfa_sinavi.py` (9. ölçüt), `bulten/denetim.py` (ENGEL), `tweet/ozel.py` +
-`tweet/gonder.py` (gönderim durur), `teknik/yaz.py` (yazma reddedilir). Üç ayrı
+`sayfa_sinavi.py` (9. ölçüt), `bulten/denetim.py` (ENGEL), `tweet/denetim.py`
+(`ozel.py` ve `gonder.py` gönderimden önce çağırır; gönderim durur),
+`teknik/yaz.py` (yazma reddedilir). Üç ayrı
 liste tutulsaydı bir gün sessizce ayrışır ve hangisinin neyi gördüğü kimsenin
 aklında kalmazdı. Muafiyetler de tanımın parçası: etiket içi, kod bloğu,
 backtick, markdown bağlantı hedefi ve kaynağın kendi BÜYÜK harfli alan adları
@@ -863,7 +873,8 @@ izlenen her hattın adının tanımlı olduğunu, kaydın da onu taşıdığın�
 hiçbir yere yazılmaz.** Bülten, teknik ve analiz künyelerinde "Paylaşım ·
 X gönderisi ↗" satırı vardı ve hakkında sayfası her yayının X'te de çıktığını
 söylüyordu. Kaldırıldı. Tweet ATILMAYA devam ediyor — değişen, sitenin
-gönderiye bağ vermesi ve X'ten söz etmesi. Kaldırma yalnız metni silmekle
+gönderiye bağ vermesi ve X'ten söz etmesi (X'e giden türler — düzeltme yanıtı
+dahil — ve görsel yasağı: bkz. KARAR 05.10.2026, tweet hattı). Kaldırma yalnız metni silmekle
 bitmiyor, çünkü bağı METİN DEĞİL BİLEŞEN kuruyordu: künye satırı `lib/x.ts`
 üzerinden tweet defterinin site aynasını (`site/src/data/tweet/defter.json`)
 okuyordu ve o ayna gönderim katmanınca her gönderide yazılıyordu. Zincirin
@@ -2538,7 +2549,10 @@ bir kez daha aynı. Ölçü KIRPILMAMIŞ gövdeden alınıyor (`_ham()`), pay te
 hesaplanıyor (`kapasite`), ve duman sınamasına tavanı AŞAN sentetik bir özet
 kondu: şerit kalmalı, ilk satır durmalı, son satır düşmeli. Arıza enjeksiyonuyla
 doğrulandı (ölçü geri kırpılmış metne bağlanınca madde DÜŞÜYOR). Bir kısaltma
-kuralı, kısaltmayı YAPAN fonksiyonun çıktısıyla ölçülemez.
+kuralı, kısaltmayı YAPAN fonksiyonun çıktısıyla ölçülemez. (Şeridin "korunur"
+niyeti 05.10.2026'da bilerek değişti: şerit artık yalnız metinde geçmeyen
+ölçümü taşır — bkz. KARAR 05.10.2026, tweet hattı. Kırpılmamış gövdeden ölçme
+kuralı aynen duruyor.)
 
 İkincisi yazının kendi bulgusu ve kayda değer. Politika faizi 22.01.2026'dan
 beri %37,0'de sabit; aynı yıl içinde piyasanın lirayı gecelik fonladığı oran
@@ -3674,7 +3688,7 @@ gönderisinde TMSF, ÖTV, PCE rakamı hiç geçmiyordu — kapı "temiz" dedi. G
 artık manşet ve `ne_oldu` maddeleriyle açılır, öne çıkanlar maddelerin
 saydığını yinelemez, pano farkı sayfanın kuralıyla (kur yüzde · oran puan ·
 ilerlemeyen gösterge farksız; 18.09 tarihli "Net rezerv (−6,5)" altı gönderide
-tekrar etmişti). Arama endeksi de manşeti ve maddeleri almıyordu. Yeni duman
+tekrar etmişti; 05.10.2026'dan beri ilerlemeyen kart panoya hiç girmez). Arama endeksi de manşeti ve maddeleri almıyordu. Yeni duman
 maddesi gizli bir yol kusurunu da çıkardı: kayıt defterini okumak için
 `bulten/` `sys.path`in BAŞINA ekleniyordu ve tweet sürecinde sonraki `import
 denetim` bültenin aynı adlı modülüne düşüyordu — üretim yalnız içe aktarma
@@ -3711,7 +3725,8 @@ AÇIK: (i) ABD 2 yıllık satırı (`2YY=F`) bayat vadeli kotasyon taşıyor —
 haftalarca birebir aynı kapanışlar, 30.09'da +33,7 bp "sıçrama"; devir
 denetimi yalnız beş enerji vadelisini kapsıyor. Kaynak değişikliği önce bulut
 keşfiyle yoklanmalı (aday: ABD Hazinesi günlük getiri eğrisi); o güne kadar
-satır σ listesine girebilir. (ii) Takvimin anket bacağı Enflasyon hattından,
+satır σ listesine GİRMEZ (`bulten/piyasa.SIGMA_GUVENILMEZ`, 05.10.2026; kaynak
+değişince kayıt oradan silinir). (ii) Takvimin anket bacağı Enflasyon hattından,
 piyasa tablosununki DİBS hattından geliyor ve ikisi ayın yarısında farklı
 ankettir; artık ikisi de ayını yazıyor, tek kaynağa bağlamak 17.09'da açık
 bırakılan DİBS etiket sorusunun cevabını ister. (iii) Önizleme de donmuş
@@ -3739,7 +3754,8 @@ Genişleme ölçülen katmanın iki boşluğunu da gösterdi. TL faizinin günl�
 sayfaya hiç düşmüyordu: DİBS gösterge ve başabaş olay eşiği (0,75 · 1,0 puan) 25
 günlük farkın ölçülen en büyüğünün (0,66 · 0,65) bile üstündeydi, yani kanal hiç
 olay üretmiyordu; eşikler ölçüden kuruldu (≈1,5σ · 2,5σ) ve gösterge şeridine üç
-DİBS kartı girdi (gönderinin ilk beş kartı bilerek aynı). Ve kronik olgu ölçüsü
+DİBS kartı girdi (gönderinin panosu ise 05.10.2026'dan beri yalnız bugün
+ilerleyen, farkı sıfır olmayan ve gövdede geçmeyen kartı alır — `tweet/uret._pano`). Ve kronik olgu ölçüsü
 yanlış alarm veriyordu: biçim 3 olağandışılığı "(1,5σ)" diye yazar ve σ
 katsayıları başka serilerde günden güne tesadüfen aynı çıkar — 01.10'da uyarının
 beş değerinden üçü buydu. σ katsayısı artık olgu anahtarında ayrı tutulur ve
@@ -4590,3 +4606,75 @@ yalnız ham petrol tutar; 12 Ekim tatili raporu perşembeye kaydırır) Avrupa A
 stoklarına taşındı ve G7 öncesi "0,0479" çıpası kaldırıldı — 30.09 ile 01.10 arasında
 iki vadelinin de kontrat devri vardı ve seri o günü düzeltmiyordu, yani 0,0479 başka
 kontratların oranıydı. `enstruman` imzanın parçası olduğu için değişmedi.
+
+**KARAR (05.10.2026, kullanıcı: "Hepsini yapalım") — TWEET HATTI: GÖNDERİ
+KESMEZ, SEÇER; X'E YALNIZ METİN GİDER; ve YAYININ ÖNÜNDE DURAN YENİ BİR KAPI,
+AYNI DEĞİŞİKLİĞİN REHBERE YAZDIRDIĞI CÜMLEYİ KUSUR SAYAMAZ.** On iki öneri
+birlikte girdi; altısı kayıtta durmalı ki sonraki oturum geri almasın.
+(1) TAM BİRİM. Üretici "…" ÜRETMEZ: seçim birimi madde, tam cümle ya da
+satırdır, sığmayan birim bütünüyle düşer ve düştüğü görünür (`uret.DUSEN`,
+`gonder.py --kuru` tamamını basar); arşivdeki 41 gönderinin 14'ü cümleyi
+ortasından kesmişti. Bütçe, 17.09 dersinin bülten eşi olarak KIRPILMAMIŞ
+gövdeden ölçülür (`_sigdir`); `_kapat`ın tam cümle kesimi yalnız son çaredir
+ve bültende kesilen kısım da DUSEN'e yazılır; kapı satır sonundaki "…"yu ENGEL sayar.
+Günlük iskelet (maddeler öncelikli → "Bugün" paragrafı → okuma → Gündem →
+Neye bakılacak → olağandışı → Pano → Beklenen) ve HAFTALIK İSKELET (maddeler
+→ Senaryolar → Önümüzdeki hafta, gün gün → Karne → Seviyeler; okuma, konu
+satırları ve öne çıkanlar haftalıkta yok, ana senaryo düşmez) `bulten/YAZIM.md`de
+düşme sırasıyla birlikte; tavan 3.800 değişmedi. Rehberin yazdığı düşme
+sırası ve bütçe sayıları `tweet/duman.py`de kodun kendisine karşı sınanır (sıra
+`_sigdir` sıfır kapasiteyle koşturularak ölçülür): ilk belge turunda rehber
+günlük düşme sırasında okumayı hiç anmıyordu, haftalık sıra hiç yazılı değildi. Pano yalnız bugün ilerleyen,
+farkı sıfır olmayan ve gövdede geçmeyen kartı alır — "ilk beş kart" kilidi
+tüketicisiyle birlikte kalktı. (2) YALNIZ METİN, KİLİT ARAÇTA. Görsel,
+hashtag, cashtag ve @ yasağı rutin metnine değil koda yazıldı: `ozel.py
+--resim` koşuyu durdurur, `gonder._govde` `text` ve `reply` dışında alan
+kuramaz (`media` yok), görsel üreten betik ve PNG'ler silindi, kapı dördünü
+NFKC'de (tam genişlik "＃" ve "＠" dahil) ENGEL sayar; hashtag kalıbı en az bir
+harf ister ("#1 sırada" meşru). (3) DÜZELTME YANITI AÇIK TETİKLE. Yayımlanmış
+bir sayının düzeltmesi X'e yalnız yazar kayda `gonderi` (hedefin defter
+anahtarı) ve `gonderi_metni` yazarsa gider; araç arşivde eski değeri arayıp
+kendiliğinden yanıt ATMAZ. Yanıt hedefin ilk kimliğine gider; pencere kaydın
+KENDİ tarihinden 21 gündür, dosyanın tarihinden değil; hedefin defterde
+kimlikli olduğu ve yanıtın tam metninin tweet kapısından geçtiği YAZMA ANINDA
+alt süreçte sorulur (`yaz.py` → `duzeltme.py --sina`; süreç içi içe aktarma
+`import denetim`i bültenin modülüne düşürürdü); silinmiş hedef `hedef_yok`
+diye terminal defterlenir. Geçmiş gönderilere düzeltme ATILMADI — mekanizma
+kuruldu, hiçbir kayda `gonderi` yazılmadı; geriye dönük yanıt ayrı bir
+kullanıcı kararıdır. (4) ETKİLEŞİM ÖLÇÜMÜ GÖNDERİMİN İÇİNDE, CRON'SUZ.
+`gonder.py` gönderim BİTTİKTEN sonra, aynı erişim jetonuyla, haftada bir son
+30 günün gönderilerini okur (`metrik.py` → `metrik.json`, `tweet.yml`de ayrı
+`git add` satırı). Ayrı iş akışı kurulmadı: refresh token tek kullanımlıktır
+ve ikinci bir koşu onu döndürüp commit'lemezse ertesi sabahın gönderimini
+yakar; yeni bir cron da `yayin_takvimi.json`un cron indekslerini kaydırırdı.
+Okuma hiçbir koşulda gönderimi etkilemez (402, 403, ağ hatası yutulur ve
+`son_hata`ya yazılır) ve sahte defterle koşmaz. İlk gerçek koşu 05.10.2026
+15:14 UTC'de 36 gönderiyi hatasız okudu, yani `tweet.read` kapsamı yetiyor;
+okumanın API kredisi maliyeti kayda geçmiyor ve ÖLÇÜLMEDİ. Eşik ve "en iyi
+saat" hükmü yok: önce birikim. (5) ANALİZ ŞERİDİ. 17.09'daki "rakam şeridi ve
+tez KALIR" niyeti bilerek değişti: şerit yalnız tezde ya da bir satırda
+GEÇMEYEN ölçümü taşır, hiçbiri kalmazsa basılmaz (bugün yönetici özetli 12
+yazının 3'ünde yok); korunan şey şerit değil, gönderide başka yerde olmayan
+ölçümdür. Tavanda tablo satırları sondan düşer, "Kanıtın gücü" en son; düşen
+satırın ölçümü şeride döner. Tezin ilk cümlesinin ölçüm taşıması analiz
+sınavında UYARI (5 Ekim 2026'dan itibaren yayımlananlar). (6) KAPININ YANLIŞ
+ALARMI ARIZANIN KENDİSİDİR. Donmuş kopyaya karşı beş mercekli incelemenin en
+öğretici bulgusunu üç mercek BAĞIMSIZ buldu: yeni "sıra sayısında kesik"
+ENGEL'i satır sonundaki saati ("… TSİ 21:00.") kesik sayıyordu — ve aynı
+değişiklik rehbere takvim saatini tam bu biçimde ("TSİ 10:00") yazdırıyordu.
+Rehbere uyan ilk yazar günün gönderisini kendi eliyle durduracaktı, defter
+yazılmadığı için sonraki koşular da aynı engele takılacaktı. Kapı
+UYARI'ya indirilmedi, hassaslaştırıldı: saat ve oran (":"), sayım ve
+düzeltme yüklemi ("sayısı 61.", "doğrusu 4."), sonu rakamla biten enstrüman
+adı ("STOXX Europe 600.") muaf; gerçek kesik ("perşembe: 38.") hâlâ ENGEL.
+Ölçüldü: 92 metinde eski ve yeni kapının ENGEL/UYARI farkı 0; 03.09–05.10'un
+28 bülteni ve 9 analiz yeni kodla üretildi, ENGEL 0, "…" 0. Ders: bir rehbere
+yeni bir yazım kuralı koyan değişiklik, o yazımı okuyan HER kapıyı o yazımın
+kendi örneğine karşı koşturur. AÇIK, adıyla: analiz düzeltme yanıtının
+yazma anı kapısı yok (analiz ön bilgisi `yaz.py`den geçmiyor; ENGEL alan bir
+analiz düzeltmesi pencere boyunca tweet koşusunu kırmızı bitirebilir);
+`SAYIM_ONCESI` elle tutulan küçük bir kümedir ve yeni bir meşru sayım kalıbı
+sabah gönderimini yine durdurabilir; `hedef_yok` ayrımı X'in 403 gövde
+metnine dayanır (değişirse davranış tutucu yöne, ölümcül hataya döner);
+günlük gündem bütçesi (800) 05.10 Emtia satırını düşürüyor ve artırılması
+kullanıcı kararı bekliyor.

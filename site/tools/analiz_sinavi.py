@@ -9,6 +9,11 @@ koşar:
     python3 site/tools/analiz_sinavi.py            # bütün analizler
     python3 site/tools/analiz_sinavi.py --yeni     # yalnız rehber sonrası yazılar
 
+Gönderiye ilişkin kurallardan "tezin ilk cümlesi ölçüm taşır" burada da UYARI
+olarak sorulur (5 Ekim 2026'dan itibaren yayımlanan yazılar); gönderi
+kurulurken (`tweet/analiz.py`) ikinci kez sorulur. Ölçüt gönderinin kendi
+yolundan beslenir, ikinci bir tanım tutulmaz.
+
 Kapsam kararı: rehber 1 Eylül 2026'da yazıldı. O günden SONRA yayımlanan
 yazılar biçim ölçütlerinin (tarihli slug, tarihli başlık, zorunlu ön bilgi,
 yönetici özeti, kapanış bölümü) kapısından geçer; daha eskiler yalnız BİLGİ
@@ -26,6 +31,10 @@ ANALIZ = KOK / "site" / "src" / "content" / "analiz"
 
 # Rehberin yazıldığı gün: bu tarihten SONRAKİ yazılar kapıdan geçer.
 REHBER_TARIHI = date(2026, 9, 1)
+# "Tezin ilk cümlesi ölçüm taşır" kuralının konduğu gün. Kural GERİYE YÜRÜMEZ:
+# 1 Eylül eşiği bugün temiz geçen dört yayımlanmış yazıya (sayıları sabit,
+# gönderileri çoktan atılmış) kalıcı, kapanamaz bir uyarı basardı.
+TEZ_KURAL_TARIHI = date(2026, 10, 5)
 YONETICI_ESIGI = 20_000            # bayt — CLAUDE.md kuralı
 
 AYLAR = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
@@ -59,6 +68,21 @@ def on_bilgi(metin: str) -> dict:
 
 def tarih_tr(g: date) -> str:
     return f"{g.day} {AYLAR[g.month - 1]} {g.year}"
+
+
+def _tweet_analiz():
+    """Gönderi kurucusu (`tweet/analiz.py`). tweet/ yolun SONUNA eklenir
+    (`append`, `insert(0)` değil): bulten/uret.py ile aynı adı taşıyan
+    tweet/uret.py'nin bu süreçte başka bir `uret`i gölgelemesi ya da onun
+    gölgesinde kalması istenmez; yüklenen `uret`in gönderi üreticisi olduğu
+    ayrıca sınanır."""
+    tweet = KOK / "tweet"
+    if str(tweet) not in sys.path:
+        sys.path.append(str(tweet))
+    import analiz as _an  # noqa: E402
+    if Path(_an.uret.__file__).resolve() != (tweet / "uret.py").resolve():
+        raise ImportError(f"'uret' başka bir modüle bağlandı: {_an.uret.__file__}")
+    return _an
 
 
 def sina(yol: Path) -> tuple[list[str], list[str], bool]:
@@ -173,6 +197,18 @@ def sina(yol: Path) -> tuple[list[str], list[str], bool]:
         engel.append(f"okur dili ({aile}) satır {sat}: {esl!r}")
     if not IZLEME.search(metin):
         uyari.append("izleme listesi bölümü yok")
+    # ── tezin ilk cümlesi ölçüm taşır (UYARI). Ölçüt gönderinin tezini kuran
+    # yolun AYNISINDAN beslenir (`tweet/analiz.tez_uyarisi`): yönetici özeti
+    # tezi ya da `ozet` → site atfı süzgeci → tez payı → ilk cümle. Kural
+    # önce yalnız gönderi kurulurken soruluyordu, yani yazar onu yayından
+    # SONRA görüyordu. Gönderi kurulurken ikinci kez sorulur.
+    if pub and pub >= TEZ_KURAL_TARIHI:
+        try:
+            u = _tweet_analiz().tez_uyarisi({"slug": slug, "govde": _on_bilgi.govde(metin), **fm})
+        except Exception as e:                                   # noqa: BLE001
+            u = f"tez ölçütü koşturulamadı ({type(e).__name__}: {e})"
+        if u:
+            uyari.append(u.split(": ", 1)[-1] if u.startswith(slug + ": ") else u)
     if "<Deger" in metin and "import Deger" not in metin:
         engel.append("<Deger> kullanılıyor ama içe aktarılmamış")
     if "<GrafikEmbed" in metin and "import GrafikEmbed" not in metin:

@@ -17,7 +17,9 @@ Sigortalar (araçta, rutin metninde değil):
   diye eski haber satmaktır; kaçan gün sessizce atlanır, defterlenmez.
 · DÜZELTME YANITI (tweet/duzeltme.py): yazarın `gonderi` alanıyla işaretlediği
   düzeltme kaydı, hedef gönderinin altına yanıt olarak gider; anahtar içeriğe
-  bağlı (duzeltme:<hedef>:<sha1>), yani aynı düzeltme iki kez gitmez.
+  bağlı (duzeltme:<hedef>:<sha1>), yani aynı düzeltme iki kez gitmez. Hedef
+  X'te silinmişse (403 gövdesi "deleted/not visible") bu bir jeton arızası
+  sayılmaz: kayıt "hedef_yok" diye terminal yazılır, koşu sürer.
 · GÖRSEL YOK (kullanıcı kararı 05.10.2026): gövdede yalnız metin ve yanıt
   alanı gider; `media` alanı kurulamaz (_govde ikinci kilit).
 · ETKİLEŞİM ÖLÇÜMÜ (tweet/metrik.py): gönderim bittikten sonra, AYNI erişim
@@ -47,6 +49,7 @@ import datetime as dt
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -181,6 +184,33 @@ def _govde(metin: str, ust: str | None) -> dict:
     return govde
 
 
+class HedefYok(SystemExit):
+    """Dış hedefe (düzeltme yanıtı) yanıt verilemedi: X yanıtlanan gönderinin
+    silindiğini ya da görünmediğini söyledi. Jeton sağlamdır — bu bir kapsam
+    arızası DEĞİLDİR. `main` yalnız bunu yakalar: kayıt terminal olarak yazılır
+    ("hedef_yok"), arkadaki öğeler ve metrik okuması sürer. Yakalanmadığı her
+    yerde SystemExit gibi davranır (ölümcül)."""
+
+
+# X'in silinmiş/görünmez hedef gövdesi: "You attempted to reply to a Tweet that
+# is deleted or not visible to you." Yalnız `detail`/`title` alanında aranır.
+HEDEF_YOK_RE = re.compile(r"deleted|not visible", re.I)
+
+
+def _hedef_yok_mu(yanit) -> bool:
+    try:
+        d = yanit.json() or {}
+    except Exception:                                          # noqa: BLE001
+        return False
+    if not isinstance(d, dict):
+        return False
+    alanlar = [d.get("detail"), d.get("title")]
+    for h in d.get("errors") or []:
+        if isinstance(h, dict):
+            alanlar += [h.get("detail"), h.get("title"), h.get("message")]
+    return any(isinstance(x, str) and HEDEF_YOK_RE.search(x) for x in alanlar)
+
+
 def _gonder_zincir(zincir: list[str], erisim: str, ust: str | None = None) -> list[str]:
     """Zinciri sırayla gönderir, her tweet öncekine yanıt olur. ID listesi döner.
     `ust` verilirse zincirin İLK parçası o kimliğe yanıt olur (düzeltme yanıtı).
@@ -211,6 +241,13 @@ def _gonder_zincir(zincir: list[str], erisim: str, ust: str | None = None) -> li
                 "X: 'credits depleted' — geliştirici hesabında API kredisi yok. "
                 "Konsolun faturalama/credits bölümünden bakiye yüklenmeli; "
                 "kredi gelince koşu aynı içeriği baştan dener (defter yazılmadı).")
+        if yanit.status_code == 403 and i == 0 and ust and _hedef_yok_mu(yanit):
+            # Gövde ÖNCE okunur: silinmiş hedefe yanıt bir jeton arızası değildir.
+            # Yalnız DIŞ hedefte (zincir içi parça 1 saniye önce atılmış olabilir,
+            # geçici görünmezliği kalıcı karara çevrilmez); öbür 403'ler aşağıda.
+            raise HedefYok(
+                f"yanıtlanan gönderi ({ust}) X'te silinmiş ya da görünmüyor — "
+                "düzeltme yanıtı atılamadı (jeton sağlam, işlem gerekmiyor).")
         if yanit.status_code == 403:
             # TANI: jeton hiç mi geçmiyor, yoksa yalnız YAZMA mı yasak?
             kim = requests.get("https://api.x.com/2/users/me", timeout=30,
@@ -240,10 +277,13 @@ def _gonder_zincir(zincir: list[str], erisim: str, ust: str | None = None) -> li
     return idler
 
 
-def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]]) -> tuple[list, list]:
+def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]],
+                  tam: bool = False) -> tuple[list, list]:
     """Kalite kapısı ÖĞE BAŞINA: kirli öğe düşer ve loga yazılır, temiz öğeler
     gönderilir. Eskiden tek öğedeki engel bütün gönderimi durduruyordu — bir
-    analiz gönderisindeki kusur, o sabahın bültenini de X'ten alıkoyuyordu."""
+    analiz gönderisindeki kusur, o sabahın bültenini de X'ten alıkoyuyordu.
+    `tam` (kuru koşu): düşen birimlerin TAMAMI basılır; normal koşuda uyarı
+    satırı ilk üçünü özetler."""
     gecen, dusen = [], []
     for anahtar, zincir, dusen_cumleler in is_listesi:
         tur = anahtar.split(":")[0]
@@ -254,6 +294,10 @@ def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]]) -> tuple[list, 
             uyari = list(uyari) + [f"{len(dusen_cumleler)} birim gönderiden düştü (etiket sebebi söyler): "
                                    + " | ".join(f"[{b}] {c[:70]}" for b, c in dusen_cumleler[:3])]
         print(denetim_m.rapor(engel, uyari, anahtar))
+        if tam and dusen_cumleler:
+            print(f"  · düşen birimler ({len(dusen_cumleler)}):")
+            for b, c in dusen_cumleler:
+                print(f"    [{b}] {c}")
         if engel:
             print(f"::error::{anahtar}: tweet denetimi ENGEL üretti — bu öğe gönderilmedi.")
             dusen.append((anahtar, engel))
@@ -264,8 +308,10 @@ def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]]) -> tuple[list, 
 
 def _metrik_oku(erisim: str, defter: dict, yol: Path | None = None) -> None:
     """tweet/metrik.py'yi çağırır; ne olursa olsun gönderimi ETKİLEMEZ. metrik
-    kendi içinde de yutuyor — bu ikinci sarmalayıcı içe aktarma ya da imza
-    kayması gibi kodun kendi kusuruna karşı."""
+    kendi içinde de yutuyor — bu ikinci sarmalayıcı çağrı anındaki kusura karşı
+    (imza kayması, öznitelik hatası). Modül düzeyindeki içe aktarma hatası bu
+    sarmalayıcının DIŞINDADIR: duman sınaması onu gönderimden önce yakalar ve
+    gönderim durur."""
     try:
         print("· " + metrik_m.haftalik(erisim, defter, **({"yol": yol} if yol else {}),
                                        bulten_dizin=uret.BULTENLER))
@@ -344,8 +390,17 @@ def main() -> int:
         for u in d_uyari:
             print(f"::warning::{u}")
         for ad in adaylar:
+            # Metin de öğe başına kurulur: bir adayın kusuru (bozuk arşiv, beklenmedik
+            # alan) bültenin ve öbür adayların önünü kesmez. Atlanan aday deftere
+            # yazılmaz, sonraki koşu yeniden dener.
+            try:
+                t = duzeltme_m.metin(ad)
+            except Exception as e:                             # noqa: BLE001
+                print(f"::warning::{ad['anahtar']}: düzeltme metni kurulamadı "
+                      f"({type(e).__name__}: {str(e)[:120]}) — bu yanıt gönderilmedi, öbür öğeler gider")
+                continue
             ust_kimlik[ad["anahtar"]] = ad["ust"]
-            is_listesi.append((ad["anahtar"], [duzeltme_m.metin(ad)], []))
+            is_listesi.append((ad["anahtar"], [t], []))
 
     if not is_listesi:
         print(f"{tarih}: gönderilecek yeni içerik yok "
@@ -355,7 +410,7 @@ def main() -> int:
     # KALİTE KAPISI — tweet/denetim.py, öğe başına. Bültenin sayfa denetimi
     # metni sınıyor ama gönderi o metnin KIRPILMIŞ hâli; kırpmanın kusurunu
     # ancak gönderi metnine bakan bir denetim görür.
-    gecen, dusen = kapidan_gecir(is_listesi)
+    gecen, dusen = kapidan_gecir(is_listesi, tam=kuru)
 
     erisim: str | None = None
     for anahtar, zincir in gecen:
@@ -374,6 +429,15 @@ def main() -> int:
         _defter_yaz(defter_yolu, defter)
         try:
             idler = _gonder_zincir(zincir, erisim, ust=ust_kimlik.get(anahtar))
+        except HedefYok as e:
+            # Silinmiş hedef: kayıt TERMİNAL yazılır (idler yok) — adaylar aynı
+            # anahtarı her koşuda yeniden kurmaz; yazar `gonderi`yi başka bir
+            # hedefe çevirirse anahtar değişir. Arkadaki öğeler ve metrik sürer.
+            defter[anahtar] = {"durum": "hedef_yok", "hedef": ust_kimlik.get(anahtar),
+                               "zaman": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
+            _defter_yaz(defter_yolu, defter)
+            print(f"::warning::{anahtar}: {e}")
+            continue
         except SystemExit:
             defter.pop(anahtar, None)
             _defter_yaz(defter_yolu, defter)

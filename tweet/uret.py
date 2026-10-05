@@ -127,11 +127,21 @@ def _site_izi_var(cumle: str) -> bool:
 # sınırın yalnız %24'ü ondalıklıydı ve satır, sınır bulamadığı için kelime
 # ortasından kesiliyordu. Sıra sayısını ("38. haftanın") SAĞDAKİ küçük harf
 # ayırır; binlik ayracı ("1.000") boşluk taşımadığı için zaten sınır değildir.
+# SIRA SAYISI + ÖZEL AD (05.10.2026 incelemesi): "yılın 7. PPK toplantısı",
+# "Netflix 3. Çeyrek" — sağdaki büyük harf sıra sayısını cümle sonu sanıyor ve
+# satıra "…sıradaki sınav yılın 7." gibi KESİK bir hüküm giriyordu (eski
+# bölücü rakamdan sonra hiç bölmüyordu; 1–3 haneli tam sayı yeniden yarattı).
+# Belirsizlik BİRLEŞTİRMEYLE çözülür: nokta 1–3 haneli çıplak tam sayıyı
+# kapatıyor ve ardından büyük HARF geliyorsa sınır sayılmaz. Birleşik birim
+# tam cümleler taşır, kesik üretemez. Ondalık ("%5,089. Aynı"), saat ("16:45.
+# Türkiye'de") ve rakamla süren cümle ("sayısı 61. 2 yıllık") bölünmeye devam
+# eder. Ölçüldü: 38 bülten ve 14 analiz gönderisinde 0 değişiklik.
 # Bir sınır ancak parantez ve tırnak DENGELİ bir parçayı kapatıyorsa sınırdır:
 # "GSYH (II. Çeyrek)" içindeki nokta cümle sonu değildir — orada kesmek okura
 # kapanmamış bir parantez bırakırdı.
 _KIRP_CUMLE = re.compile(r"[.!?](?=\s+[A-ZÇĞİÖŞÜ\"«“(0-9%−])")
 _KISALTMA = {"vb", "vs", "ör", "örn", "bkz", "yy", "dr", "prof", "doç", "st", "no", "sn"}
+_SIRA_SAYISI = re.compile(r"(?<![%\d,.+−/:-])\b\d{1,3}$")
 
 
 def _dengeli(s: str) -> bool:
@@ -149,6 +159,10 @@ def _birim_araliklari(m: str) -> list[tuple[int, int]]:
             soz = onceki.group(1)
             if soz.lower() in _KISALTMA or (len(soz) == 1 and soz.isupper()):
                 continue                      # kısaltma ya da baş harf ("A. Yılmaz")
+        if c.group(0) == "." and _SIRA_SAYISI.search(m[:c.start()]):
+            sag = m[c.end():].lstrip()[:1]
+            if sag.isalpha() and sag.isupper():
+                continue                      # sıra sayısı + özel ad ("yılın 7. PPK")
         if not _dengeli(m[bas:c.end()]):
             continue                          # parantez/tırnak içindeki nokta
         out.append((bas, c.end()))
@@ -308,7 +322,7 @@ def _kaynakli(c: str) -> bool:
 
 
 def _satir_sec(metin: str | list[str], sinir: int, esnek: int | None = None,
-               kaynak_oncelik: bool = False) -> str:
+               kaynak_oncelik: bool = False, n_ilk: int | None = None) -> str:
     """Bir satırın TAM cümlelerini seçer; özgün sıra korunur.
 
     İlk cümle her zaman satırın açılışıdır; `esnek` verilmişse ilk cümle o
@@ -316,7 +330,17 @@ def _satir_sec(metin: str | list[str], sinir: int, esnek: int | None = None,
     bir sonraki cümle de alınır. Sonra bitişik cümleler sınıra kadar eklenir;
     `kaynak_oncelik` varsa kaynağı adıyla anan cümleler önce denenir (atlanan
     bir cümleden sonra geriye atıflı cümle seçilmez). Girdi bir birim listesi
-    olabilir (`_html_birimleri`: kalın etiket ilk cümlesine bağlı)."""
+    olabilir (`_html_birimleri`: kalın etiket ilk cümlesine bağlı).
+
+    KAYNAK ÖNCELİĞİ İLK PARAGRAFLA SINIRLIDIR, KAYNAKSIZ SEÇİM BİTİŞİKTİR
+    (05.10.2026 incelemesi). Öncelik bölümün TAMAMINDAKİ kaynaklı cümleleri
+    öne alıyor, sığmayan kaynaksız cümleyi de `continue` ile atlıyordu: satır
+    dört ayrı paragraftan toplanmış bir kolaja dönüyordu ("Euro yine de
+    zayıfladı" Lagarde cümlesinden koparılıp ABD eğrisinin arkasına düştü,
+    likidite paragrafının son cümlesi "TL faizi ve eğri" satırına eklendi).
+    Kaynaklı aday yalnız satırın etiketini taşıyan İLK paragraftan gelir
+    (`n_ilk`: ilk paragrafın birim sayısı; verilmezse hepsi); kaynaksız
+    cümleler özgün sırayla eklenir ve sığmayan ilkinde durulur."""
     c = cumleler(metin) if isinstance(metin, str) else [x for x in metin if x]
     if not c:
         return ""
@@ -329,15 +353,21 @@ def _satir_sec(metin: str | list[str], sinir: int, esnek: int | None = None,
         uz += 1 + len(c[1])
     sinir_ = max(sinir, uz)
     kalan = list(range(sec[-1] + 1, len(c)))
-    if kaynak_oncelik:
-        sira = [i for i in kalan if _kaynakli(c[i])] + [i for i in kalan if not _kaynakli(c[i])]
-    else:
-        sira = kalan
-    for i in sira:
+    sinir_ilk = len(c) if n_ilk is None else n_ilk
+    oncelikli = ([i for i in kalan if i < sinir_ilk and _kaynakli(c[i])]
+                 if kaynak_oncelik else [])
+    for i in oncelikli:
         if uz + 1 + len(c[i]) > sinir_:
-            if not kaynak_oncelik:
-                break                       # bitişik seçim: sığmayan cümlede durulur
+            continue                        # öncelikli aday sığmazsa sıradakine bakılır
+        if (i - 1) not in sec and _anaforik(c[i]):
+            continue                        # göndergesi seçilmemiş cümle öksüz kalır
+        sec.append(i)
+        uz += 1 + len(c[i])
+    for i in kalan:
+        if i in sec:
             continue
+        if uz + 1 + len(c[i]) > sinir_:
+            break                           # bitişik seçim: sığmayan cümlede durulur
         if (i - 1) not in sec and _anaforik(c[i]):
             continue                        # göndergesi seçilmemiş cümle öksüz kalır
         sec.append(i)
@@ -438,7 +468,9 @@ def _kokler(metin: str) -> set[str]:
 # atar (tesadüfi çakışma); burada soru "satır maddelerde olmayan bir ölçüm
 # taşıyor mu" olduğu için kısa sayı da sayılır — 05.10 Emtia satırının tek yeni
 # ölçümü "4,2 dolar" distilat marjıydı ve 4 karakter filtresiyle satır sayısız
-# sayılıp düşüyordu.
+# sayılıp düşüyordu. Kalıp tek başına yetmedi: kaynak öncelikli seçim 4,2'yi
+# hiç almıyordu; sayı artık `_gundem_satirlari`ndaki bitişik yedek seçimle
+# korunur (satır o gün yine de gündem bütçesine düşebilir — bütçe ayrı karar).
 OLGU_SAYI = re.compile(r"%?\d+(?:[.,]\d+)+%?")
 
 
@@ -465,10 +497,15 @@ def _etiketle(etiket: str, metin: str) -> str:
 
 
 def _tipografi(metin: str) -> str:
-    """Yalnız gönderi metnine: aralık tiresi '–', sayı önünde eksi '−'."""
+    """Yalnız gönderi metnine: aralık tiresi '–', sayı önünde eksi '−', işaret
+    yüzden ÖNCE ("%+4,5" → "+%4,5", "%-3,41" → "−%3,41"; ortak/bicim
+    sözleşmesi). Kaynak MDX ters sırayı taşıyabiliyor (14 analizin 3'ünde 17
+    yer) ve aynı gönderide iki biçim yan yana duruyordu; sayı değişmez, yeni
+    hüküm yok — tire→eksi dönüşümüyle aynı sınıftan bir yazım düzeltmesi."""
     # Yıl-ay yazımı ("2024-05") aralık değildir: dört haneli sayıdan sonraki tire kalır.
     m = re.sub(r"(?<!\d{4})(?<!\d{4}-\d{2})(?<=\d)-(?=%?\d)", "–", metin)   # 2026-09-01 dokunulmaz
     m = re.sub(r"(?<![\w.,])-(?=[%\d])", "−", m)
+    m = re.sub(r"%([+−])(?=\d)", r"\1%", m)    # ASCII tire önce '−'ye döndü
     return m
 
 
@@ -607,7 +644,17 @@ def _olagandisi(b: dict, anilan: str, haftalik: bool) -> tuple[str, list[str]]:
     Ham yüzde listesi yapısal olarak oynak enstrümanları anlatıyordu (136
     kalemin 85'i VIX, MOVE ve enerji vadelisi) ve σ'yı hiç basmıyordu; getiri
     satırlarını dışladığı için 24.09'un 2,8–3,2σ'lık ABD faizi hareketi hiç
-    girmedi. Liste sayfayla AYNI: gönderiye özel bir dışlama YOK. Seans etiketi
+    girmedi. Liste sayfayla AYNI: gönderiye özel bir dışlama LİSTESİ YOK (bayat
+    kotasyonlu seri ölçüm katmanında, `piyasa.SIGMA_GUVENILMEZ`, listeye hiç
+    girmez). Tek istisna sayının KENDİ kaydıdır: aynı sayının `duzeltmeler`
+    kaydı bir enstrümanı adıyla AÇIYORSA (`alan` "ABD 2 yıllık getiri, …")
+    o enstrüman olağandışı hareket diye anılmaz — sayfa bu satırı Düzeltmeler
+    kutusunun yanında basar, gönderide o kutu yok; 01.10'da gönderinin TEK
+    olağandışı satırı bültenin kendi "piyasa hareketi değil" dediği +33,7 bp
+    idi. Makas kaydı ("Brent–WTI farkı", "Brent − ABD ham petrolü") Brent'i
+    düşürmez. Bilinen sınır: başka bir sayının değerini düzelten kayıt o
+    günün doğru σ'sını da gönderiden düşürür — tutucu bir hata, satır sayfada
+    kalır (geçmiş 100 kayıtta ≥2σ ile kesişen tek vaka iki 2YY=F kaydı). Seans etiketi
     her satırın KENDİ bar tarihinden — pazartesi sayısı cuma seansını "Günün"
     diye basıyordu (5/5); karma seansta gün satır başına yazılır. Maddelerde
     zaten anılan hareket yinelenmez."""
@@ -617,9 +664,13 @@ def _olagandisi(b: dict, anilan: str, haftalik: bool) -> tuple[str, list[str]]:
              and h.get("deger") is not None and abs(h["sigma"]) >= OLAGANDISI_SIGMA]
     satirlar = _satir_tarihleri(b)
     alt = anilan.lower()
+    duzeltilen = [str(d.get("alan") or "") for d in (b.get("duzeltmeler") or [])
+                  if isinstance(d, dict)]
     secilen = []
     for h in liste:
         ad = str(h.get("ad") or "")
+        if ad and any(re.match(re.escape(ad) + r"(?=,|\s(?![−–-]))", a) for a in duzeltilen):
+            continue
         deger = abs(float(h["deger"]))
         # Ad, σ katsayısı ya da iki haneli değer maddede geçiyorsa anılmıştır.
         izler = (ad.lower(), f"{abs(h['sigma']):.1f}".replace(".", ",") + "σ",
@@ -647,7 +698,8 @@ def _olagandisi(b: dict, anilan: str, haftalik: bool) -> tuple[str, list[str]]:
 
 def _pano(b: dict, govde: str) -> list[str]:
     """PANO (günlük) / SEVİYELER (haftalık): gösterge kartlarından, yalnız
-    BUGÜN YENİ olan (`bugun_yeni is True`), değeri gövdede zaten geçmeyen kart.
+    BUGÜN İLERLEYEN (`bugun_yeni is True`), kendi kıyasında DEĞERİ DEĞİŞEN
+    (ölçülmüş sıfır fark girmez) ve değeri gövdede zaten geçmeyen kart.
 
     Eski satır her gün ilk beş kartı basıyordu: 28 gönderinin 28'inde aynı beş
     kalem, ardışık gönderilerde 135 kalemin 61'i değer ve tarihiyle aynıydı ve
@@ -665,6 +717,18 @@ def _pano(b: dict, govde: str) -> list[str]:
         if len(parcalar) >= PANO_EN_COK:
             break
         if g.get("bugun_yeni") is not True or not (g.get("metin") and g.get("ad")):
+            continue
+        # "YENİ" YALNIZ TARİHİN İLERLEMESİ DEĞİLDİR (05.10.2026): politika faizi ve
+        # AOFM her gün yayımlanır, tarihi ilerler, değeri aylardır aynıdır —
+        # 01.10, 02.10 ve 04.10'da iki kart PANO_EN_COK'un iki yerini tutup
+        # gerçekten yeni bir veriyi (yabancı 4 haftalık akım) dışarıda bıraktı.
+        # Fark ÖLÇÜLMÜŞ ve kartın hanesinde sıfırsa (`fark_metin` boş) kart girmez;
+        # kıyas ölçülemediyse (`fark` None) "değişmedi" sayılmaz, kart girer.
+        # Kör nokta adıyla: günlükte iki yazılmış sayı arasında seri A→B→B
+        # giderse değişim panoda görünmez — sayfanın kartı da aynı kıyası taşır.
+        f = g.get("fark")
+        if (isinstance(f, (int, float)) and not isinstance(f, bool)
+                and not str(g.get("fark_metin") or "").strip()):
             continue
         metin = str(g["metin"])
         if metin.replace("−", "-") in govde.replace("−", "-"):
@@ -727,11 +791,20 @@ def risk_satiri(r: dict) -> str:
     return satir if re.search(r"[.!?]$", satir) else satir + "."
 
 
-def _fikir_seviyeleri(b: dict) -> set[str]:
-    """Açık işlem fikirlerinin seviyeleri (giriş · hedef · stop), kendi
-    yazımlarıyla. Fikir gönderiye girmez (karar 04.10.2026); eşik bloğu ya da
-    senaryo satırı bir fikrin seviyesini taşırsa o satır düşer."""
-    out: set[str] = set()
+def _fikir_seviyeleri(b: dict) -> set[tuple[float, str]]:
+    """Açık işlem fikirlerinin seviyeleri (giriş · hedef · stop) SAYI olarak,
+    birimleriyle: {(|değer| fikrin hanesine yuvarlı, birim)}. Fikir gönderiye
+    girmez (karar 04.10.2026); eşik bloğu ya da senaryo satırı bir fikrin
+    seviyesini taşırsa o satır düşer.
+
+    İlk yazım seviyeleri DİZGE olarak kuruyor ve dört karakterden kısa yazımı
+    atıyordu: bp fikirlerinin (05.10'da üç açık fikrin ikisi) "71", "47",
+    "250" seviyeleri kümede hiç yoktu ve evin doğal yazımı ("71 bp'yi aşması",
+    "−250 bp'ye daralması") süzgeçten geçiyordu (05.10.2026 incelemesi).
+    İşaret ATILIR: ev yazımı ters makası işaretsiz yazar ("371 baz puan ters");
+    bedeli, fikir −250 açıkken "CDS 250 bp" satırının da düşmesi — bir
+    düşürmedir ve DUSEN'de görünür."""
+    out: set[tuple[float, str]] = set()
     kayitlar = list(b.get("fikirler") or [])
     kayitlar += [k for k in ((b.get("fikir_karne") or {}).get("kayitlar") or [])
                  if isinstance(k, dict)]
@@ -739,18 +812,45 @@ def _fikir_seviyeleri(b: dict) -> set[str]:
         if not isinstance(f, dict):
             continue
         hane = int(f.get("ondalik") or 2)
+        birim = str(f.get("birim") or "")
         for alan in ("giris", "hedef", "stop"):
             v = f.get(alan)
-            if isinstance(v, (int, float)):
-                s = f"{abs(v):.{hane}f}".replace(".", ",")
-                for y in {s, s.rstrip("0").rstrip(",")}:
-                    if len(y) >= 4:
-                        out.add(y)
+            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                out.add((round(abs(float(v)), hane), birim))
     return out
 
 
-def _fikir_tasir(metin: str, seviyeler: set[str]) -> bool:
-    return any(re.search(r"(?<![\d,])" + re.escape(s) + r"(?![\d])", metin) for s in seviyeler)
+# Metindeki BÜTÜN sayı: binlik noktalı ya da düz tam kısım, isteğe bağlı ondalık
+# virgül. "71", "71,8"in ya da "2.071"in içinde eşleşmez; tarih ("07.09")
+# sayı sayılmaz. Ayrıştırıcı burada yerel durur — `bulten.denetim` içe
+# aktarılmaz (tweet sürecinde `denetim` ad çakışması, 01.10.2026).
+_METIN_SAYI = re.compile(r"(?<![\d.,])[−+-]?(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d+))?(?![\d]|,\d|\.\d)")
+_BP_ARKA = re.compile(r"\s*(?:bp|baz puan)", re.I)
+
+
+def _fikir_tasir(metin: str, seviyeler: set[tuple[float, str]]) -> bool:
+    """Satır bir fikir seviyesini taşıyor mu — SAYI olarak kıyas. Ondalıklı
+    yazım birimden bağımsız eşleşir (eski davranış: "0,0480", "71,0"); TAM
+    SAYI yalnız fikrin birimiyle eşleşir — bp'de ardından "bp"/"baz puan",
+    yüzdede önünde "%" (`OLCU_TAMSAYI`daki "tam sayı birimiyle bir ölçümdür"
+    ilkesinin eşi). Birimsiz kıyas "47 bin varil", "%47'sinde" gibi
+    tesadüfleri de düşürüyordu (7.700 gündem cümlesinde 44'e karşı 20)."""
+    if not seviyeler:
+        return False
+    for m in _METIN_SAYI.finditer(metin or ""):
+        tam, ond = m.group(1).replace(".", ""), m.group(2)
+        v = float(f"{tam}.{ond}") if ond else float(tam)
+        uyan = {br for d, br in seviyeler if abs(d - v) < 1e-9}
+        if not uyan:
+            continue
+        if ond:
+            return True
+        once = metin[max(0, m.start() - 2):m.start()]
+        if "bp" in uyan and _BP_ARKA.match(metin, m.end()):
+            return True
+        if "%" in uyan and "%" in once:
+            return True
+    return False
 
 
 def _esik_blogu(b: dict, takvim_etiketleri: list[str]) -> list[str]:
@@ -815,8 +915,10 @@ def _bugun_mu(etiket: str, birimler: list[str]) -> bool:
 # birimin bir DÜŞME ÖNCELİĞİ vardır (küçük olan önce düşer; None düşmez).
 # Ölçü KIRPILMAMIŞ gövdedir: taşarsa öncelik sırasıyla BİRİM düşer, `_kapat`ın
 # sondan kırpmasına hiçbir blok bırakılmaz (17.09.2026: analiz gönderisinde
-# kırpma rakam şeridini sessizce yiyordu; 04.10 haftalığında "Önümüzdeki
-# hafta"nın iki yönlü sonucu aynı yoldan gidiyordu).
+# kırpma rakam şeridini sessizce yiyordu). 04.10 haftalığında "Önümüzdeki
+# hafta"nın iki yönlü sonucu blok düzeniyle KAPANMADI: artık cümle seçiminde
+# kayboluyor (gün satırı ilk cümleyi alır) ve onu yalnız yazım kuralı ile
+# `iki_yonlu_mu` uyarısı (DUSEN + bulten/denetim.takvim_kalibi) korur.
 
 def _blok(id_: str, birimler: list[tuple[str, int | None]], baslik: str = "",
           on: str = "", ayrac: str = "\n") -> dict:
@@ -860,16 +962,37 @@ def _baslik_blogu(b: dict, baslik: str) -> dict:
 
 
 def _madde_birimleri(b: dict, sinir: int, oncelik) -> list[tuple[str, int | None]]:
+    """`ne_oldu` maddeleri → gönderi birimleri. Maddenin kalın etiketi kendi
+    başına birim OLMAZ, ilk cümlesine bağlanır (`_takvim_paragraflari`
+    kalıbı, etiket olduğu gibi). Eski yol düz metni `_kirp`la kesiyordu ve
+    "Rezerv." etiketini ayrı cümle sayıyordu: ilk içerik cümlesi bütçeyi
+    aşınca ya da site atfı yüzünden düşünce gönderide içeriksiz "· Rezerv."
+    satırı basılıyor, DUSEN'e de bir şey yazılmıyordu (05.10.2026 incelemesi).
+    Seçim sıkı önektir: ilk (bağlı) birim sınırı aşarsa madde bütünüyle düşer."""
     out = []
-    for i, m in enumerate(_maddeler((b.get("ozet") or {}).get("ne_oldu") or "")):
-        m = _site_disi(_duz(m), "ne_oldu")
-        if not m:
+    for m in _maddeler((b.get("ozet") or {}).get("ne_oldu") or ""):
+        e = re.match(r"\s*<strong>(.*?)</strong>\s*(.*)$", m, re.S)
+        etiket = _duz(e.group(1)) if e else ""
+        c = cumleler(_duz(e.group(2) if e else m))
+        if etiket and c:
+            c = [f"{etiket} {c[0]}"] + c[1:]
+        elif etiket:
+            DUSEN.append(("ne_oldu", "etiketten sonra içerik yok: " + etiket))
             continue
-        k = _kirp(m, sinir)
-        if not k:
-            DUSEN.append(("ne_oldu", "ilk cümlesi madde bütçesini aşıyor: " + m))
+        c = _site_disi_birim(c, "ne_oldu")
+        if not c:
+            continue                     # içerik atıf yüzünden düştü (DUSEN'de)
+        sec, uz = [], 0
+        for x in c:
+            ek = len(x) + (1 if sec else 0)
+            if uz + ek > sinir:
+                break
+            sec.append(x)
+            uz += ek
+        if not sec:
+            DUSEN.append(("ne_oldu", "ilk cümlesi madde bütçesini aşıyor: " + " ".join(c)))
             continue
-        out.append(("· " + k, oncelik(len(out))))
+        out.append(("· " + " ".join(sec), oncelik(len(out))))
     return out
 
 
@@ -886,16 +1009,30 @@ def _gundem_satirlari(b: dict, sinir: int, blok_sinir: int, maddeler: str = "",
     madde_kok = [_kokler(m) for m in maddeler.split("\n") if m.strip()]
     satirlar, toplam = [], 0
     for anahtar, etiket in dolu:
-        birimler = [c for p in _html_birimleri(str(gundem.get(anahtar) or ""), anahtar) for c in p]
+        paragraflar = _html_birimleri(str(gundem.get(anahtar) or ""), anahtar)
+        birimler = [c for p in paragraflar for c in p]
         if not birimler:
             continue
-        secim = _satir_sec(birimler, sinir, esnek=SATIR_ESNEK, kaynak_oncelik=kaynak_oncelik)
+        secim = _satir_sec(birimler, sinir, esnek=SATIR_ESNEK, kaynak_oncelik=kaynak_oncelik,
+                           n_ilk=len(paragraflar[0]))
         if not secim:
             DUSEN.append((anahtar, "ilk cümlesi satır bütçesini aşıyor: " + birimler[0]))
             continue
         if maddeler:
-            konu = _kokler(cumleler(secim)[0])
-            if not (_sayilar(secim) - madde_sayi) and any(konu & mk for mk in madde_kok):
+            def ayni_konu(x: str) -> bool:
+                return (not (_sayilar(x) - madde_sayi)
+                        and any(_kokler(cumleler(x)[0]) & mk for mk in madde_kok))
+            if ayni_konu(secim) and kaynak_oncelik:
+                # BİTİŞİK YEDEK (05.10.2026 incelemesi): kaynak öncelikli seçim
+                # yeni sayı taşımayan kaynaklı cümleleri öne alıp satırın tek
+                # yeni ölçümünü dışarıda bırakabiliyor — 05.10 Emtia'da G7 +
+                # Husi cümleleri seçildi, "distilat marjı 4,2 dolar" kaldı ve
+                # satır "aynı konu" diye düştü. Aynı birimlerle bitişik seçim
+                # maddelerde olmayan bir sayı taşıyorsa satır onunla kurulur.
+                yedek = _satir_sec(birimler, sinir, esnek=SATIR_ESNEK)
+                if yedek and not ayni_konu(yedek):
+                    secim = yedek
+            if ayni_konu(secim):
                 DUSEN.append((anahtar, "maddeyle aynı konu, yeni sayı yok: " + secim))
                 continue
         satir = _etiketle(etiket, secim)
@@ -922,8 +1059,12 @@ def _site_disi_birim(birimler: list[str], bolum: str) -> list[str]:
     return kalan
 
 
-def _birim_onek(birimler: list[str], sinir: int) -> list[str]:
-    """Sınıra sığan birim öneki (ilk birim sınırı aşsa da tek başına kalır)."""
+def _birim_onek(birimler: list[str], sinir: int, dusen_bolum: str = "") -> list[str]:
+    """Sınıra sığan birim öneki (ilk birim sınırı aşsa da tek başına kalır).
+    `dusen_bolum` verilmişse önekin dışında kalan her birim DUSEN'e yazılır —
+    hiçbir yolda sessiz düşüş kalmaz (05.10.2026: 'Bugün' paragrafının payı
+    aşan cümleleri hiçbir yerde görünmüyordu). Verilmezse kalanı çağıran
+    kullanır (Beklenen'in payı aşan birimleri düşük öncelikle bloğa girer)."""
     out, uz = [], 0
     for c in birimler:
         ek = len(c) + (1 if out else 0)
@@ -931,6 +1072,8 @@ def _birim_onek(birimler: list[str], sinir: int) -> list[str]:
             break
         out.append(c)
         uz += ek
+    if dusen_bolum:
+        DUSEN.extend((dusen_bolum, "takvim payı: " + c) for c in birimler[len(out):])
     return out
 
 
@@ -949,7 +1092,7 @@ def _gunluk3(b: dict) -> list[dict]:
     bugun: list[str] = []
     if bugun_i is not None:
         _e, bir = paragraflar.pop(bugun_i)
-        bugun = _birim_onek(_site_disi_birim(bir, "takvim"), BEKLENTI_SINIR)
+        bugun = _birim_onek(_site_disi_birim(bir, "takvim"), BEKLENTI_SINIR, "takvim")
     bloklar.append(_blok("bugun", [(c, None if i == 0 else 72) for i, c in enumerate(bugun)],
                          ayrac=" "))
     temel, ek = _okuma_sec(b.get("yorum") or "", OKUMA_SINIR_3)
@@ -959,17 +1102,28 @@ def _gunluk3(b: dict) -> list[dict]:
     gundem = _gundem_satirlari(b, GUNDEM_PARCA, GUNDEM_SINIR_3, maddeler=madde_metni,
                                kaynak_oncelik=True)
     bloklar.append(_blok("gundem", [(s, 40) for s in gundem], baslik="Gündem"))
-    # Beklenen: takvimin geri kalanı; bütçe "Bugün" paragrafıyla PAYLAŞILIR
-    # (taşınan metin yeni içerik değildir), ama bir tabanın altına inmez.
+    # Beklenen: takvimin geri kalanı; GÜVENCELİ pay "Bugün" paragrafıyla
+    # PAYLAŞILIR (taşınan metin yeni içerik değildir), ama bir tabanın altına
+    # inmez. Payı AŞAN birimler silinmez: en düşük öncelikle (5) bloğa girer,
+    # yalnız gerçekten boş yer varsa gönderide kalır ve sığmayanı `_sigdir`
+    # "bütçe:" diye DUSEN'e yazar (05.10.2026: tavanın 470 karakter altında
+    # kalan gönderide aynı günün ikinci yayımı — ABD ISM 17:00 — sessizce
+    # düşüyordu). Sabit payı kaldırmak çare değildi: ölçüldü, 01.10'da uzak
+    # takvim birimleri Gündem'i, Neye bakılacak'ı ve panoyu yerinden ediyordu.
     kalan = _site_disi_birim([c for _e, bir in paragraflar for c in bir], "takvim")
     bek_sinir = max(BEKLENTI_SINIR - len(" ".join(bugun)), BEKLENTI_TABAN)
     bek = _birim_onek(kalan, bek_sinir) if kalan else []
+    tasan = kalan[len(bek):]
     gonderide = " ".join(bugun + bek)
     esik = _esik_blogu(b, [e for e in tum_etiketler if e in gonderide])
     bloklar.append(_blok("risk", [(s, 50) for s in esik], baslik="Neye bakılacak"))
     takvim = _blok("takvim", [(c, None if i == 0 else 75) for i, c in enumerate(bek)],
                    on="Beklenen: ", ayrac=" ")
     govde = _yaz(bloklar + [takvim])
+    # Risk süzgeci (`gonderide`) ve pano tekilleştirmesi (`govde`) yalnız
+    # güvenceli kısımdan kurulur: sonra düşebilecek bir takvim birimi yüzünden
+    # risk maddesi ya da pano kartı haksız yere elenmesin.
+    takvim["birim"] += [(c, 5) for c in tasan]
     on, ola = _olagandisi(b, madde_metni, haftalik=False)
     bloklar.append(_blok("olagandisi", [(p, 20) for p in ola], on=on, ayrac=" · "))
     bloklar.append(_blok("pano", [(p, 30) for p in _pano(b, govde)], on="Pano: ", ayrac=" · "))
@@ -1042,6 +1196,59 @@ def _senaryolar(b: dict) -> list[tuple[str, int | None]]:
     return out
 
 
+# İKİ YÖNLÜ SONUÇ İŞARETİ (05.10.2026 incelemesi). Takvimin her gün satırı
+# "olay, saat, iki yönlü sonuç" taşır (bulten/YAZIM.md, haftalık kural 9);
+# yazar kurala uymayınca araç sessizce bir takvim listesi üretiyordu (04.10:
+# beş gün satırının beşi tek yönlü ya da sonuçsuz, iz yok). İşaret ölçülerek
+# tanımlandı — basit bir "üstünde|altında|aşarsa" listesi kuralın kendi
+# örneğini ("beklenti üstü … altı …") ve "güçlü gelirse … zayıf gelirse"yi
+# kaçırıyor, "100 doların üstünde kaldı" gibi betimlemeyi yakalıyordu:
+#   koşul eki   -(I)rsA · -mAzsA · -(y)sA (gelirse, çıkarsa, taşırsa,
+#               gelmezse, güçlüyse, yüksekse, değilse); "Borsa", "Bursa",
+#               "hisse", "Fransa" eşleşmez
+#   karşıtlık   "ise"
+#   çift        üst/alt aynı satırda ("beklenti üstü … altı …")
+# Ölçüt bir KAPI değil UYARIDIR (bulten/denetim.takvim_kalibi) ve DUSEN'e
+# yazılır; seçim kuralına dokunmaz — koşul cümlelerini öncelikli almak
+# ölçüldü, Çarşamba, Perşembe ve Cuma satırlarını düşürüyordu.
+_KOSUL_SON = re.compile(r"(?:[aeıioöuü]rs[ae]|m[ae]zs[ae]|[aeıioöuü]ys[ae]|[kftpçşhl]s[ae])$")
+# Bülten arşivinde (gündem metinleri) eki taşıyıp koşul OLMAYAN sözcükler:
+# "neredeyse" (57 kez), yönelme hâli "endekse", "terse". Ölçüldü; kalanlar
+# (kalırsa, çıkarsa, gelirse, yoksa, …) gerçekten koşuldur.
+_KOSUL_DEGIL = {"neredeyse", "endekse", "terse"}
+_UST = re.compile(r"\büst(?:ü|ünde|ünden|üne|e)\b", re.I)
+_ALT = re.compile(r"\balt(?:ı|ında|ından|ına|a)\b", re.I)
+
+
+def iki_yonlu_mu(metin: str) -> bool:
+    """Satır iki yönlü bir sonuç (koşul, karşıtlık ya da üst/alt çifti) taşıyor mu."""
+    for w in re.findall(r"[^\W\d_]+", metin or ""):
+        k = _kucuk(w)
+        if (len(k) >= 5 and not k.startswith(("bors", "burs")) and k not in _KOSUL_DEGIL
+                and _KOSUL_SON.search(k)):
+            return True
+    if re.search(r"\bise\b", _kucuk(metin or "")):
+        return True
+    return bool(_UST.search(metin or "") and _ALT.search(metin or ""))
+
+
+def gun_etiketi_mi(etiket: str) -> bool:
+    """Gün paragrafı mı ("Pazartesi 5 Ekim.") — "Ötesi" ve "Planı değişen
+    takvim" gibi etiketler bir yayımın günü değildir, iki yönlü sonuç sorulmaz."""
+    ilk = (_kucuk(etiket or "").split() or [""])[0].strip(".:")
+    return ilk in GUNLER
+
+
+def takvim_satiri(etiket: str, birimler: list[str]) -> str:
+    """Haftalık gönderiye giden gün satırı — TEK tanım: `_takvim_gunleri` ve
+    bülten denetimi (`takvim_kalibi`) bunu çağırır. Etiketli paragrafın ilk
+    cümlesi (sayı taşımıyorsa bir sonraki de); boşsa ilk cümle bütçeyi aşıyor."""
+    govde = birimler[0][len(etiket):].strip()
+    metin = _site_disi(" ".join([govde] + birimler[1:]), "takvim")
+    secim = _satir_sec(metin, 0, esnek=TAKVIM_ESNEK) if metin else ""
+    return f"{etiket.rstrip('.:')}: {secim}" if secim else ""
+
+
 def _takvim_gunleri(b: dict) -> list[tuple[str, int | None]]:
     """Önümüzdeki hafta gün gün: her etiketli gün paragrafının ilk cümlesi
     (sayı taşımıyorsa bir sonraki de); etiketsiz devam paragrafı girmez."""
@@ -1049,13 +1256,12 @@ def _takvim_gunleri(b: dict) -> list[tuple[str, int | None]]:
     for etiket, birimler in _takvim_paragraflari(str((b.get("gundem") or {}).get("takvim") or "")):
         if not etiket or not birimler:
             continue
-        govde = birimler[0][len(etiket):].strip()
-        metin = _site_disi(" ".join([govde] + birimler[1:]), "takvim")
-        secim = _satir_sec(metin, 0, esnek=TAKVIM_ESNEK) if metin else ""
-        if not secim:
+        satir = takvim_satiri(etiket, birimler)
+        if not satir:
             DUSEN.append(("takvim", f"{etiket}: ilk cümlesi satır bütçesini aşıyor"))
             continue
-        satir = f"{etiket.rstrip('.:')}: {secim}"
+        if gun_etiketi_mi(etiket) and not iki_yonlu_mu(satir):
+            DUSEN.append(("takvim", f"{etiket.rstrip('.:')}: gönderiye giden cümle iki yönlü sonuç taşımıyor"))
         if toplam + len(satir) > TAKVIM_SINIR:
             DUSEN.append(("takvim", "takvim bütçesi: " + satir))
             continue
@@ -1073,7 +1279,10 @@ def _karne(b: dict) -> list[tuple[str, int | None]]:
     out: list[tuple[str, int | None]] = []
     k = (b.get("izleme") or {}).get("karne") or {}
     if isinstance(k.get("notlanan"), int) and k["notlanan"] > 0:
-        out.append((f"Karne — notlanan {k['notlanan']}: tuttu {k.get('tuttu', 0)} · "
+        # Sayım KÜMÜLATİFTİR (bulten/soz: bütün kayıtlardan) ve hemen altında
+        # haftanın kapanan kayıtları durur; etiketsiz "notlanan 39" haftalık
+        # gönderide haftada 39 öngörü notlanmış gibi okunuyordu (05.10.2026).
+        out.append((f"Karne — şimdiye kadar notlanan {k['notlanan']}: tuttu {k.get('tuttu', 0)} · "
                     f"kısmen {k.get('kismen', 0)} · tutmadı {k.get('tutmadi', 0)}", None))
     ham = str((b.get("gundem") or {}).get("karne") or "")
     toplam = 0

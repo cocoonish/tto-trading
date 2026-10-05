@@ -117,7 +117,36 @@ def _gonderi_dogrula(i: int, d: dict) -> dict:
     if len(govde) > GONDERI_METNI_AZAMI:
         raise SystemExit(f"duzeltmeler[{i}]: gonderi_metni {len(govde)} karakter "
                          f"(en çok {GONDERI_METNI_AZAMI}) — düzeltme kısa yazılır")
+    _tweet_kapisi(i, hedef, govde)
     return {"gonderi": hedef, "gonderi_metni": govde}
+
+
+# Tweet kapısı yazma anında: gönderim anında ENGEL alacak bir düzeltme, pencere
+# boyunca (21 gün) her tweet koşusunu kırmızı bitirirdi; kusur ancak yazıldığı
+# anda düzeltilebilir. AYRI ALT SÜREÇ şart: tweet/denetim.py ve tweet/duzeltme.py
+# sys.path'in başına tweet/ koyup sys.modules['uret']'i tweet'in üreticisine
+# bağlıyor — süreç içinde yüklenseler aşağıdaki `import denetim` bültenin değil
+# tweet'in denetimini getirirdi (ölçüldü). Alt süreç başlatılamazsa yazma
+# reddedilir; sessiz geçiş yok.
+TWEET_SINA = KOK / "tweet" / "duzeltme.py"
+
+
+def _tweet_kapisi(i: int, hedef: str, govde: str) -> None:
+    import subprocess
+    try:
+        r = subprocess.run([sys.executable, str(TWEET_SINA), "--sina", hedef],
+                           input=govde, capture_output=True, text=True, timeout=120,
+                           cwd=str(KOK))
+    except Exception as e:                                     # noqa: BLE001
+        raise SystemExit(f"duzeltmeler[{i}]: tweet kapısı koşturulamadı ({type(e).__name__}: {e}) — "
+                         "düzeltme yanıtı doğrulanmadan yazılmaz")
+    if r.returncode == 1:
+        engel = [x[6:] for x in r.stdout.splitlines() if x.startswith("ENGEL ")]
+        raise SystemExit(f"duzeltmeler[{i}]: gonderi_metni tweet kapısından geçmedi — "
+                         + " · ".join(engel or [r.stdout.strip()[-200:]]))
+    if r.returncode != 0:
+        raise SystemExit(f"duzeltmeler[{i}]: tweet kapısı koşturulamadı (çıkış {r.returncode}): "
+                         f"{(r.stderr or r.stdout).strip()[-200:]} — düzeltme yanıtı doğrulanmadan yazılmaz")
 
 
 def duzeltmeleri_dogrula(liste) -> list[dict]:

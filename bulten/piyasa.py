@@ -1303,6 +1303,25 @@ def turetilmis(seri: dict) -> list[dict]:
     return out
 
 
+# σ SIRALAMASINA GİREMEYEN SERİLER — TEK TANIM (05.10.2026, tweet incelemesi).
+# Kotasyonu bilinen biçimde BAYAT olan bir serinin günlük farkı hareketi değil,
+# birikmiş farkın kapanmasını ölçer: ABD 2 yıllık (2YY=F) haftalarca aynı
+# kapanışı taşıyıp bir gün yetişiyor ve olağandışı listesinin başına sahte bir
+# 2–4σ'lık "hareket" olarak oturuyordu (01.09 +4,5σ · 13.09 +4,1σ · 01.10 +4,0σ
+# · 02.10 −2,5σ; 01.10 ve 02.10 sayılarının kendi düzeltme kaydı ikisini de
+# "piyasa hareketi değil" diye reddediyor). Sayfa, gönderi ve denetim AYNI
+# `sigma` listesini okur; seri listeye GİRMEZ, `sigma_disi`nde sebebiyle durur
+# (ölçü silinmez, görünür kalır). Piyasa fotoğrafındaki satır yerinde kalır.
+# Kapsam DAR ve bilerek: VIX, MOVE ve TL çaprazları işlem fikri evreninin
+# dışındadır (fikir.DISLANAN) ama σ'ları MEŞRUDUR — o liste buraya taşınmaz.
+# Kaynak değiştiğinde (CLAUDE.md AÇIK: ABD Hazinesi günlük getiri eğrisi) kayıt
+# buradan silinir.
+SIGMA_GUVENILMEZ = {
+    "2YY=F": "vadeli kotasyon seyrek güncelleniyor; günlük fark birikmiş farkın "
+             "kapanmasını ölçüyor, piyasa hareketini değil",
+}
+
+
 def en_cok_hareket(satirlar: list[dict], n: int = 6, haftalik: bool = False) -> dict:
     """Günün ve haftanın en büyük hareketleri — yorumun nereye bakacağını söyler.
 
@@ -1332,7 +1351,10 @@ def en_cok_hareket(satirlar: list[dict], n: int = 6, haftalik: bool = False) -> 
     getiriler = [s for s in satirlar if s["tip"] == "getiri" and s.get("h1") is not None]
     z_alan, dg_alan, oyn_alan = (("h1_sigma", "h1", "sigma_hafta") if haftalik
                                  else ("d1_sigma", "d1", "sigma_gun"))
-    sigmali = [s for s in satirlar if s.get(z_alan) is not None]
+    sigmali = [s for s in satirlar if s.get(z_alan) is not None
+               and s.get("kod") not in SIGMA_GUVENILMEZ]
+    disi = [s for s in satirlar if s.get(z_alan) is not None
+            and s.get("kod") in SIGMA_GUVENILMEZ]
     return {
         "gunluk": [{"ad": s["ad"], "deger": s["d1"], "birim": "%"} for s in sirala("d1")],
         "haftalik": [{"ad": s["ad"], "deger": s["h1"], "birim": "%"} for s in sirala("h1")],
@@ -1343,6 +1365,9 @@ def en_cok_hareket(satirlar: list[dict], n: int = 6, haftalik: bool = False) -> 
                    "sigma": s[z_alan], "oynaklik": s[oyn_alan]}
                   for s in sorted(sigmali, key=lambda s: abs(s[z_alan]),
                                   reverse=True)[:n]],
+        "sigma_disi": [{"ad": s["ad"], "kod": s["kod"], "deger": s[dg_alan],
+                        "birim": s["degisim_birim"], "sigma": s[z_alan],
+                        "sebep": SIGMA_GUVENILMEZ[s["kod"]]} for s in disi],
     }
 
 

@@ -389,9 +389,13 @@ gittiyse kayda iki alan daha yazılır: `gonderi` — düzeltilen gönderinin de
 anahtarı (`"bulten:2026-10-04"`, `"analiz:<slug>"`) — ve `gonderi_metni` — X'e
 gidecek kısa düz metin ("Gümüşün haftalık değişimi −%5,96 değil −%6,64; hafta
 kapanışı bir seans geriden okunmuştu."). İkisi birlikte yazılır; hedef
-`tweet/defter.json`da kimlikli değilse yazma reddedilir. `tweet/gonder.py`
-sonraki koşuda orijinalin altına "Düzeltme — <hedefin başlığı>" yanıtını atar;
-aynı eski→yeni çifti bir kez gider. Metin sayfa yapısını anmaz ("gösterge
+`tweet/defter.json`da kimlikli değilse yazma reddedilir; yanıtın tam metni
+(başlık ve sorumluluk notu dahil) yazma anında tweet kapısından da geçer ve
+ENGEL alırsa yazma reddedilir. `tweet/gonder.py` kaydın tarihinden sonraki 21
+gün içinde — kayıt hangi sayının dosyasında durursa dursun — orijinalin altına
+"Düzeltme — <hedefin başlığı>" yanıtını atar; pencere dışında kalan kayıt
+gitmez ve koşu onu adıyla uyarır. Aynı eski→yeni çifti bir kez gider. Hedef
+X'te silinmişse yanıt atılmaz, kayıt "hedef yok" diye defterlenir. Metin sayfa yapısını anmaz ("gösterge
 şeridi", "Türkiye bölümü", "satır" — X okurunun elinde o sayfa yok), HTML ve
 link taşımaz. İçerik hatası için gönderi SİLİNMEZ; silip yeniden atma yalnız
 biçim hatası içindir. Hangi düzeltmenin X'e gideceğine yazar karar verir — araç
@@ -450,8 +454,8 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    Bloomberg, kurumun adı) ve kişinin adıyla: "bir yatırım bankası", "bir
    büyük/önde gelen/ABD'li yatırım bankası(nın)", "bir bölge başkanı… bir
    diğeri", "haber akışına göre" yazılmaz (üslup ölçütü Y17 niteleyiciyi ve
-   çekimi de yakalar). Gönderi gündem satırında kaynağı adıyla anan cümleyi
-   bütçe içinde öncelikli seçer — linksiz bir gönderide güveni kaynağın adı
+   çekimi de yakalar). Gönderi gündem satırında, bölümün ilk paragrafında kaynağı
+   adıyla anan cümleyi bütçe içinde öncelikli seçer — linksiz bir gönderide güveni kaynağın adı
    taşır.
 10. **Geçmiş çağrılar** söz defterinde durur. Günlük sayıda düzyazıda sayı
     başına en çok bir atıf, "(20.09 notu)" biçiminde; haftalık sayıda atıf
@@ -721,7 +725,10 @@ Bir bölüm, bir madde rakamını ancak üzerinde YENİ bir işlem yapıyorsa an
    satır) → **Karne** (sayım ölçülen katmandan; kapanan kayıtların cümlesi) →
    **Seviyeler** (bu hafta ilerleyen ve maddelerde geçmeyen gösterge kartları).
    Okuma, konu bölümlerinin satırları ve öne çıkanlar haftalık gönderiye
-   girmez. Buna göre:
+   girmez. Tavan aşılırsa önce dördüncü ve sonraki maddeler, sonra
+   Seviyeler, sonra takvimin sonraki günleri, karnenin kayıtları, alternatif
+   ve kuyruk senaryo, en son ilk üç madde düşer; ana senaryo, takvimin ilk
+   günü ve karnenin sayım satırı düşmez. Buna göre:
    - Her senaryo alt bölümünün **İLK tam cümlesi** gönderiye gider: ana
      senaryonun ilk cümlesi tetiği ve etkisini tek başına söyler (en çok 330
      karakter; aşarsa alt başlık yazılır). Alternatif ve kuyruk
@@ -733,7 +740,9 @@ Bir bölüm, bir madde rakamını ancak üzerinde YENİ bir işlem yapıyorsa an
      yayımlıyor; beklenti üstü bir aylık rakam kısa ucu yükseltir, altı indirim
      fiyatlamasını güçlendirir." "Haftanın ağırlığı ilk gününde" gibi bir giriş
      ikinci cümleye iner (gönderi sayısız ilk cümlenin ardından ikinciyi de
-     alır, ama ancak o kadarını).
+     alır, ama ancak o kadarını). Gönderiye giden gün satırı iki yönlü sonuç
+     (koşul: "gelirse/çıkarsa/yüksekse", "ise" ya da üst/alt çifti)
+     taşımıyorsa denetim UYARI verir ve `--kuru` çıktısında görünür.
    - Karnede kapanan her kaydın paragrafı `<strong>Konu.</strong>` ile açılır
      ve ilk cümlesi sonucu söyler ("… söyleyen çağrı (16.09 notu) tutmadı.").
      "Önümüzdeki hafta sınanacaklar" ve "Açık ana senaryo" paragrafları
@@ -1442,21 +1451,33 @@ ve orada ne sayfa, ne tablo, ne de başka bir bölüm var.
 satır; maddeyle aynı konuyu yineleyen ve maddelerde olmayan hiçbir sayı
 taşımayan satır düşer) → **Neye bakılacak** (risk bölümünün kalıba uyan en çok
 iki maddesi) → **Olağandışı hareketler** (sayfanın σ listesinden, 2σ ve üstü,
-maddelerde anılmayan; seans tarihiyle) → **Pano** (yalnız bugün ilerleyen ve
-değeri gövdede geçmeyen gösterge kartları) → **Beklenen** (takvimin kalanı) →
+maddelerde anılmayan; seans tarihiyle; aynı sayının bir düzeltme kaydının adıyla
+andığı enstrüman girmez — sayfa o satırı düzeltme kutusunun yanında basar,
+gönderide o kutu yok) → **Pano** (bugün ilerleyen, kendi
+kıyasında değeri değişen ve gövdede geçmeyen gösterge kartları — "yeni" yalnız
+tarihin ilerlemesi değildir: her gün yayımlanıp değeri aylardır aynı kalan
+politika faizi okura bilgi taşımaz) → **Beklenen** (takvimin kalanı:
+güvenceli payı "Bugün" paragrafıyla birlikte 600, en az 250 karakter ve en son
+düşer; payı aşan takvim cümleleri yalnız boş yer varsa girer, taşmada İLK onlar
+düşer ve `--kuru` çıktısında görünür) →
 sorumluluk notu. Haftalık iskelet "Haftaya bakış" kural 9'da.
 **Gönderi kesmez, seçer.** Seçim birimi madde, TAM cümle ya da satırdır; "…"
 hiçbir koşulda üretilmez. Sığmayan birim bütünüyle düşer ve düşüş görünür
-kalır (`gonder.py --kuru` listeler). Tavan aşılırsa önce olağandışı satırı,
-sonra pano, sonra gündem satırları, sonra eşik maddeleri düşer; maddeler ve
-"Beklenen" en son. Yani bir cümle ne kadar uzunsa gönderiye girme olasılığı o
+kalır (`gonder.py --kuru` listeler). Tavan aşılırsa önce takvimin payı aşan
+cümleleri, sonra okumanın ardına eklenen "sebebi netleşmedi" devamı, sonra
+olağandışı satırı, sonra pano, sonra gündem satırları, sonra eşik maddeleri,
+sonra okumanın paragrafları düşer; "Bugün" paragrafının ve "Beklenen"in
+sonraki cümleleri ile ilk maddeden sonraki maddeler en son. İlk madde ve
+"Bugün" ile "Beklenen"in ilk cümleleri hiç düşmez. Yani bir cümle ne kadar uzunsa gönderiye girme olasılığı o
 kadar düşer: maddenin ilk cümlesi, gündem paragrafının ilk cümlesi ve risk
 maddesi kısa ve kendi başına okunur yazılır. Okumanın paragraf içi kalın ara
 başlığı gönderide "Mekanizma:" diye basılır. Maddeler gönderinin gövdesidir:
 olgu ve rakam oradadır, okuma onları yeniden saymaz. Gönderi
 `tweet/denetim.py` kapısından geçer (tavsiye dili, link — tweetlerde HİÇ link
-kullanılmaz, çıplak alan adı dahil —, HTML kalıntısı, site
-atfı, sayı ortasında kesik cümle, sorumluluk notu); kapı düşerse gönderim
+kullanılmaz, çıplak alan adı dahil —, hashtag, cashtag ve @, emoji, HTML
+kalıntısı, site atfı, satır sonunda "…", sayıda ya da sıra sayısında kesik
+cümle, sorumluluk notunun yokluğu ya da son satırda olmaması; bağlayıcı liste
+o dosyanın başlığında); kapı düşerse gönderim
 durur ve o sabah X'te hiçbir şey çıkmaz — yani metnin tweete uygunluğu senin
 sorumluluğun. Gönderiyi önceden görmek için: `python3 tweet/gonder.py --kuru`. Bu yüzden sayfa
 mobilyasına atıf yapma — "bu sayfadaki piyasa fotoğrafında", "yukarıdaki pano",

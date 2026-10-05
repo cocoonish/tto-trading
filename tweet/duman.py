@@ -335,7 +335,7 @@ def _analiz_zinciri():
     assert "yukarıdaki grafikte" not in t, "sayfa mobilyasına atıf düşmedi"
     # Şerit yalnız metinde GEÇMEYEN ölçümü taşır, değer önde: %9,99 tezde ve
     # satırda geçiyor (şeride girmez), 0,42 hiçbir yerde yok (girer).
-    assert "Kilit ölçüm: 0,42 bulunamayan anahtar yedeğiyle" in t, f"şerit değer önde ve tekrarsız değil: {t[-300:]}"
+    assert "Kilit ölçüm: 0,42 — bulunamayan anahtar yedeğiyle" in t, f"şerit değer önde ve tekrarsız değil: {t[-300:]}"
     assert "birleşik merkez" not in t and t.count("%9,99") == 2, "metinde geçen değer şeride ikinci kez girdi"
     assert "…" not in t, "analiz gönderisinde '…'"
     assert t.endswith("Analizdir; yatırım tavsiyesi değildir."), "sorumluluk notu sonda değil"
@@ -381,8 +381,8 @@ def _tavan_asiminda_rakam_seridi():
         f"tavan yüzünden düşen satır DUSEN'de görünmüyor: {dusen[:3]}"
     serit = [b for b in t.split("\n\n") if b.startswith("Kilit ölçüm")]
     assert serit, "şerit yok — düşen satırın ölçümü gönderiden kayboldu"
-    assert "%90,5 son satırın ölçümü" in serit[0], f"düşen satırın ölçümü şeride dönmedi: {serit[0]}"
-    assert "%77,7 hiçbir yerde geçmeyen ölçüm" in serit[0], f"metinde geçmeyen ölçüm şeritte yok: {serit[0]}"
+    assert "%90,5 — son satırın ölçümü" in serit[0], f"düşen satırın ölçümü şeride dönmedi: {serit[0]}"
+    assert "%77,7 — hiçbir yerde geçmeyen ölçüm" in serit[0], f"metinde geçmeyen ölçüm şeritte yok: {serit[0]}"
     assert "ilk satırın ölçümü" not in serit[0] and t.count("%10,5") == 1, \
         f"gövdede kalan satırın ölçümü şeride ikinci kez girdi: {serit[0]}"
 
@@ -429,13 +429,13 @@ def _a8_serit():
         ("%1 · %2 · %3", "tek · iki"),                     # eşlenemez: atlanır
         ("6/7", "paragraf aynı"),                          # metinde yok: kalır
     ], metin)
-    assert k == ["−12 bp 6 aylık düğüm", "−22,1 puan eksi makas",
-                 "%10,76 reel faiz: ankete göre · %4,17 gerçekleşene göre", "6/7 paragraf aynı"], k
+    assert k == ["−12 bp — 6 aylık düğüm", "−22,1 puan — eksi makas",
+                 "%10,76 — reel faiz: ankete göre · %4,17 — gerçekleşene göre", "6/7 — paragraf aynı"], k
     assert atlanan and "%1 · %2 · %3" in atlanan[0], atlanan
     s, dusen = an.serit([("%1,0", "a"), ("%2,0", "b" * 800), ("%3,0", "c")], "", 700)
-    assert s == "Kilit ölçümler: %1,0 a; %3,0 c" and dusen == ["%2,0 " + "b" * 800], (s, dusen)
+    assert s == "Kilit ölçümler: %1,0 — a; %3,0 — c" and dusen == ["%2,0 — " + "b" * 800], (s, dusen)
     assert "…" not in s, "uzun etiket kırpıldı"
-    assert an.serit([("%1,0", "a")], "", 700)[0] == "Kilit ölçüm: %1,0 a", "tek kalem tekil yazılmadı"
+    assert an.serit([("%1,0", "a")], "", 700)[0] == "Kilit ölçüm: %1,0 — a", "tek kalem tekil yazılmadı"
     assert an.serit([("%37,0", "politika faizi")], metin, 700)[0] == "", "boş şerit basıldı"
     # Boş şerit gönderide hiç görünmez ve kapıdan 0 ENGEL geçer.
     sahte = {"tez": "Merkez %9,99 ve fark +0,1 puan. " + "Ölçüm aynı kaynaktan ve aynı günden geliyor. " * 3,
@@ -566,7 +566,8 @@ def _denetim():
     _, u = dn.denetle(temiz.replace("Brent", "Brent (2026-09-01 kapanışı, 2026-08-31'e göre)"), "bulten")
     assert not any("aralık tiresi" in x for x in u), f"ISO tarih aralık tiresi sanıldı: {u}"
     _, u = dn.denetle(temiz.replace("Brent −%1,20", "Brent −%1,20 ve TL %37,00 ile %2,80")
-                      + "\n\nGündem: fonlama %37,00 ve büyüme %2,80 açıklandı.", "bulten")
+                      .replace("\n\nÖlçüm ve yorumdur", "\n\nGündem: fonlama %37,00 ve büyüme %2,80 açıklandı."
+                               "\n\nÖlçüm ve yorumdur"), "bulten")
     assert any("aynı sayıları" in x for x in u), f"ortak sayı uyarısı yok: {u}"
     assert dn.EN_COK == __import__("uret").TEK_TAVAN, "tavan tek kaynak değil"
     import uret as ur
@@ -840,6 +841,10 @@ def _u1_tam_birim():
     assert not [d for d in uret.DUSEN if d[0] == "tavan"], "gövde `_kapat`ta sondan kırpıldı"
     import denetim as dn
     assert not dn.denetle(t, "bulten")[0], dn.denetle(t, "bulten")[0]
+    # `_kapat` son çare kesimi de TAM cümlede yapar: "…" yok, not sonda.
+    k = uret._kapat("Uzun cümle %1,5 burada duruyor ve sürüyor. " * 200, uret.SORUMLULUK_BULTEN)
+    assert "…" not in k and len(k) <= uret.TEK_TAVAN and k.endswith(uret.SORUMLULUK_BULTEN), (len(k), k[-60:])
+    assert k[:-len(uret.SORUMLULUK_BULTEN)].rstrip().endswith("sürüyor."), "gövde cümle sınırında bitmiyor"
 
 
 def _u2_ilk280():
@@ -952,7 +957,14 @@ def _u4_maddeler_oncelikli():
     assert sum(1 for l in t.split("\n") if l.startswith("· Konu")) == 6, "madde düştü — maddeler öncelikli değil"
     dusen = [d[0] for d in uret.DUSEN if d[1].startswith("bütçe: ")]
     assert dusen and dusen[0] == "olagandisi", f"taşmada ilk düşen olağandışı satırı değil: {dusen[:4]}"
-    assert dusen.index("olagandisi") < (dusen.index("pano") if "pano" in dusen else 99), dusen
+    # Sıra TAM sorulur (05.10.2026 incelemesi): eski ölçüt pano hiç düşmeyince
+    # `else 99` dalına düşüp geçiyordu ve pano önceliği gündemin üstüne çıkınca
+    # sıra bozulduğu hâlde yeşil kalıyordu.
+    assert "pano" in dusen and "gundem" in dusen, f"fikstür pano ve gündemi düşürmüyor: {dusen}"
+    son_ola = max(i for i, d in enumerate(dusen) if d == "olagandisi")
+    son_pano = max(i for i, d in enumerate(dusen) if d == "pano")
+    assert son_ola < dusen.index("pano") and son_pano < dusen.index("gundem"), \
+        f"düşme sırası olağandışı < pano < gündem değil: {dusen}"
     assert "Beklenen: Salı ve sonrası. Hazine 8 yıllık tahvil satıyor." in t, "Beklenen kırpıldı"
     assert not [d for d in uret.DUSEN if d[0] == "tavan"]
 
@@ -1011,7 +1023,7 @@ def _u6_haftalik_iskelet():
     assert ("\nÖnümüzdeki hafta\nPazartesi 5 Ekim: Haftanın ağırlığı burada. TÜİK 10:00'da veri yayımlıyor; "
             "önceki %1,84, güçlü gelirse kısa uç yükselir, zayıf gelirse indirim fiyatlaması güçlenir ve eğri dikleşir.") in t, \
         "takvimin ilk günü ya da 'sayısız ilk cümle → bir sonraki' kuralı yok"
-    assert "\nKarne — notlanan 39: tuttu 19 · kısmen 15 · tutmadı 5\nKredi ile hisse oynaklığı: Çağrı (16.09 notu) tutmadı." in t
+    assert "\nKarne — şimdiye kadar notlanan 39: tuttu 19 · kısmen 15 · tutmadı 5\nKredi ile hisse oynaklığı: Çağrı (16.09 notu) tutmadı." in t
     assert "sınanacak" not in t and "16 Ekim'de" not in t, "karneye takvim/açık senaryo paragrafı girdi"
     for x in ("\nTürkiye:", "\nKüresel:", "Haftanın öne çıkanları", "olağandışı", "okuması uzun",
               "FIKIRISARETI", "Gündem\n"):
@@ -1025,6 +1037,12 @@ def _u6_haftalik_iskelet():
     hb["gundem"]["risk"] = "<h3>Ana senaryo: kısa uç gevşer</h3><p>" + "Çok uzun bir ana senaryo cümlesi " * 15 + ".</p>"
     t = uret.bulten_zinciri(hb)[0]
     assert "\nSenaryolar\nAna senaryo: kısa uç gevşer." in t, "ana senaryo satırı düştü"
+    # Ana senaryonun önceliği None (düşmez) — tavan her şeyi düşürse de kalır.
+    assert [o for _, o in uret._senaryolar(_haftalik_fikstur(fikirler=[]))][0] is None, \
+        "ana senaryo düşebilir bir öncelik taşıyor"
+    sisman = _haftalik_fikstur(fikirler=[], manset="Manşet %1,5 ölçümü taşıyor. " * 62)
+    t = uret.bulten_zinciri(sisman)[0]
+    assert "\nSenaryolar\nAna senaryo:" in t, "tavan aşımında ana senaryo düştü"
 
 
 def _u7_kaynak_ve_cekince():
@@ -1434,6 +1452,751 @@ def _k12_etkilesim_olcumu():
     assert len(re.findall(r"^\s*- cron:", yml, re.M)) == 3, "tweet.yml cron sayısı değişti (yayın takvimi indeksleri kayar)"
 
 
+# ── İnceleme (05.10.2026, donmuş 1a87fb37): üretici ve analiz düzeltmeleri ──
+
+def _i1_sira_sayisi_ozel_ad():
+    """kapi#2: sıra sayısı + büyük harfli ad ("yılın 7. PPK") cümle sonu
+    sayılmaz — satıra "…sıradaki sınav yılın 7." gibi KESİK bir hüküm girmez.
+    Ondalık, saat ve rakamla süren cümle bölünmeye devam eder."""
+    c = uret.cumleler("…yılın 7. PPK toplantısı geliyor. Kur sakin.")
+    assert "PPK" in c[0] and c[0].endswith("geliyor."), c
+    assert len(uret.cumleler("Netflix 3. Çeyrek bilançosunu açıklıyor. Hisse düştü.")) == 2
+    for metin, ilk in (("Getiri %5,089. Aynı gün düştü.", "Getiri %5,089."),
+                       ("Katılımcı sayısı 61. 2 yıllık sakin.", "Katılımcı sayısı 61."),
+                       ("Karar 16:45. Türkiye'de sakin.", "Karar 16:45.")):
+        assert uret.cumleler(metin)[0] == ilk, (metin, uret.cumleler(metin))
+    s = uret._satir_sec(["Para politikasında sıradaki adım yılın 7. PPK toplantısı. "
+                         "Kur sakin kaldı ve TL faizi geriledi. Reuters'a göre talep güçlü."], 120,
+                        kaynak_oncelik=True)
+    assert not ("yılın 7." in s and "PPK" not in s), f"satır sıra sayısında kesik: {s!r}"
+
+
+def _i2_tipografi_isaret():
+    """cikti#14: işaret yüzden ÖNCE ("%+205,3" → "+%205,3"); aralık, yıl-ay
+    ve "%5+%3" bozulmaz."""
+    assert uret._tipografi("crack %+205,3, sapma %-3,41, toplam %5+%3") \
+        == "crack +%205,3, sapma −%3,41, toplam %5+%3", uret._tipografi("crack %+205,3, sapma %-3,41")
+    assert uret._tipografi("bant %1,25-%2,10, 2024-05'te +%2,8") == "bant %1,25–%2,10, 2024-05'te +%2,8"
+
+
+def _i3_pano_sifir_fark():
+    """cikti#5 · sartname#5: ölçülmüş farkı hanesinde sıfır olan kart
+    (her gün yayımlanan, değeri aylardır aynı politika faizi) Pano'ya da
+    Seviyeler'e de girmez; kıyası ölçülemeyen (`fark` None) yeni kart girer;
+    sıfır farklı kartlar PANO_EN_COK'un yerini tutmaz."""
+    sabit = {"ad": "Politika faizi", "metin": "37,00", "birim": "%", "fark": 0.0, "fark_metin": "",
+             "bugun_yeni": True, "veri_tarihi": "02.10.2026", "anahtar": "politika"}
+    aofm = dict(sabit, ad="Ağırlıklı ort. fonlama maliyeti", anahtar="aofm")
+    yeni = {"ad": "Yeni seri", "metin": "1,23", "birim": "%", "fark": None, "fark_metin": "",
+            "bugun_yeni": True, "veri_tarihi": "02.10.2026", "anahtar": "yeni"}
+    for haftalik, etiket in ((False, "Pano: "), (True, "Seviyeler: ")):
+        t = uret.bulten_zinciri(_gunluk_fikstur(haftalik=haftalik, gostergeler=[sabit, aofm, yeni]))[0]
+        satir = next((l for l in t.split("\n") if l.startswith(etiket)), "")
+        assert "Politika faizi" not in t and "fonlama maliyeti" not in t, f"sıfır farklı kart girdi: {satir}"
+        assert "Yeni seri %1,23" in satir, f"kıyası ölçülemeyen kart düştü: {satir!r}"
+    kartlar = [sabit, aofm] + [{"ad": f"Kart {i}", "metin": f"{i},7{i}", "birim": "%", "fark": 0.1,
+                                "fark_metin": "+0,10", "bugun_yeni": True, "veri_tarihi": "02.10.2026"}
+                               for i in range(1, 6)]
+    t = uret.bulten_zinciri(_gunluk_fikstur(gostergeler=kartlar))[0]
+    pano = next(l for l in t.split("\n") if l.startswith("Pano: "))
+    assert "Kart 5" in pano, f"sıfır farklı kartlar tavandaki yeri tuttu: {pano}"
+
+
+def _i4_duzeltilen_sigma():
+    """cikti#1: aynı sayının düzeltme kaydı bir enstrümanı adıyla AÇIYORSA o
+    enstrüman olağandışı hareket diye anılmaz (01.10: gönderinin TEK olağandışı
+    satırı, bültenin kendi 'piyasa hareketi değil' dediği +33,7 bp idi). Makas
+    kaydı ("Brent–WTI farkı", "Brent − ABD ham petrolü") Brent'i düşürmez;
+    değer eşlemesi aranmaz (gönderim anındaki kayıt sayıyı içermiyordu)."""
+    def ola(sigma, duzeltmeler):
+        piy = {"en_cok_hareket": {"sigma_kip": "gunluk", "sigma": sigma}, "gruplar": []}
+        t = uret.bulten_zinciri(_gunluk_fikstur(piyasa=piy, duzeltmeler=duzeltmeler))[0]
+        return next((l for l in t.split("\n") if l.startswith("Olağandışı")), "")
+    abd = {"ad": "ABD 2 yıllık", "deger": 33.7, "birim": "bp", "sigma": 4.0}
+    d01 = [{"alan": "ABD 2 yıllık getiri, 29.09.2026 kapanışı", "eski": "%4,885", "yeni": "—",
+            "sebep": "Vadeli kotasyon birikmiş farkı kapattı; piyasa hareketi değil."}]
+    assert ola([abd], d01) == "", "bültenin kendi düzelttiği hareket olağandışı satırına girdi"
+    l = ola([dict(abd, deger=-27.5, sigma=-2.5), {"ad": "Nikkei 225", "deger": 3.3, "birim": "%", "sigma": 2.2}],
+            [{"alan": "ABD 2 yıllık getiri, 01.10 kapanışı ve günlük değişim"}])
+    assert "ABD 2 yıllık" not in l and "Nikkei 225 +%3,30" in l, l
+    brent = {"ad": "Brent", "deger": 4.1, "birim": "%", "sigma": 2.5}
+    for alan in ("Brent–WTI farkı, 18.09.2026", "Brent − ABD ham petrolü farkı"):
+        assert "Brent +%4,10" in ola([brent], [{"alan": alan}]), f"makas kaydı Brent'i düşürdü: {alan}"
+    assert ola([brent], [{"alan": "Brent, 2 Ekim kapanışı"}]) == "", "düz düzeltme kaydı eşleşmedi"
+
+
+def _i5_fikir_seviyesi_tam_sayi():
+    """cikti#2: fikir seviyesi SAYI olarak kıyaslanır; bp fikrinin tam sayı
+    yazımı ("71 bp", "−250 bp") eşik bloğundan ve senaryodan düşer; tam sayı
+    yalnız fikrin birimiyle eşleşir ("47 bin varil", "71,8 milyar" düşmez)."""
+    fik = [{"baslik": "x", "birim": "bp", "ondalik": 1, "giris": 57.5, "hedef": 71.0, "stop": 47.0},
+           {"baslik": "y", "birim": "bp", "ondalik": 1, "giris": -371.0, "hedef": -250.0, "stop": -460.0}]
+    b = _gunluk_fikstur(fikirler=fik)
+    b["gundem"]["risk"] = (
+        "<ul><li><strong>ABD uzun uç arzı</strong> → 5s30s eğim; izlenecek: 5s30s'nin 71 bp'yi aşması ya da 47 bp'nin altına dönmesi.</li>"
+        "<li><strong>TL eğri</strong> → kısa uç; izlenecek: 2y–5y farkının −250 bp'ye daralması.</li>"
+        "<li><strong>OPEC+ kesintisi</strong> → Brent; izlenecek: 47 bin varillik kesinti.</li>"
+        "<li><strong>Kredi</strong> → banka; izlenecek: 71,8 milyar liralık stok.</li></ul>")
+    t = uret.bulten_zinciri(b)[0]
+    blok = t.split("Neye bakılacak\n")[1].split("\n\n")[0]
+    assert "71 bp" not in blok and "−250 bp" not in blok, f"fikir seviyesi bloğa girdi: {blok}"
+    assert "47 bin varillik" in blok and "71,8 milyar" in blok, f"birimi tutmayan sayı düşürüldü: {blok}"
+    neden = [d[1] for d in uret.DUSEN if d[0] == "risk" and "işlem fikri seviyesi" in d[1]]
+    assert len(neden) == 2, neden
+    hb = _haftalik_fikstur(fikirler=fik)
+    hb["gundem"]["risk"] = ("<h3>Ana senaryo: eğri dikleşir</h3><p>5s30s 60 bp civarında kalır.</p>"
+                            "<h3>Kuyruk: uzun uç arzı</h3><p><strong>Tetik.</strong> 5s30s 71 bp'yi aşar.</p>")
+    th = uret.bulten_zinciri(hb)[0]
+    assert "Kuyruk:" not in th and any("işlem fikri seviyesi" in d[1] for d in uret.DUSEN), \
+        "tam sayı yazımlı fikir seviyesi senaryo satırında kaldı"
+
+
+def _i6_kaynak_ilk_paragraf():
+    """cikti#3: kaynak önceliği yalnız satırın etiketini taşıyan İLK paragraftan;
+    kaynaksız seçim bitişik — sığmayan cümleden sonraki kısa cümle seçilmez,
+    satır paragraflar arası bir kolaja dönmez."""
+    dolgu = "Bu dolgu cümlesi yeterince uzun ve bir şey söylemiyor ama yer tutuyor. "
+    b = _gunluk_fikstur()
+    b["gundem"]["turkiye"] = ("<p><strong>TL faizi.</strong> 2 yıllık %40,15'e indi. " + dolgu * 4 + "</p>"
+                              "<p><strong>Kur.</strong> Reuters'a göre kur yatay.</p>")
+    t = uret.bulten_zinciri(b)[0]
+    tr = next(l for l in t.split("\n") if l.startswith("Türkiye:"))
+    assert "Reuters" not in tr and "Kur." not in tr, f"ikinci paragrafın kaynaklı cümlesi satıra girdi: {tr}"
+    s = uret._satir_sec(["TL faizi. 2 yıllık %40,15'e indi.", dolgu * 4, "Kısa son."], 120,
+                        esnek=uret.SATIR_ESNEK, kaynak_oncelik=True)
+    assert "Kısa son." not in s, f"sığmayan cümleden sonraki kısa cümle seçildi: {s!r}"
+
+
+def _i7_emtia_bitisik_yedek():
+    """cikti#4: kaynak öncelikli seçim yeni sayı taşımayan cümleleri öne alıp
+    satırın tek yeni ölçümünü dışarıda bırakırsa (05.10 Emtia: 4,2 dolar
+    distilat marjı) bitişik seçime dönülür; yeni sayı varsa satır kalır."""
+    b = _gunluk_fikstur()
+    b["ozet"]["ne_oldu"] = ("<ul><li><strong>Ürün fiyatları.</strong> Dizel ve benzin vadelileri hafta sonu "
+                            "kapanışında yükseldi.</li></ul>")
+    b["gundem"]["emtia"] = (
+        "<p><strong>Ürün ve ham petrol.</strong> G7'nin stok kararı dizel ağırlıklı ve ilk 20 günde önemli bir "
+        "dizel miktarını piyasaya veriyor (Euronews). Cuma distilat marjı 4,2 dolar daraldı, Brent ise yatay "
+        "kaldı; karar ham petrolden çok ürünü hedefledi. Hafta sonu Husiler bir Aramco tesisini hedef aldı ve "
+        "Hürmüz'de bir tanker vuruldu (Reuters).</p>")
+    t = uret.bulten_zinciri(b)[0]
+    em = next((l for l in t.split("\n") if l.startswith("Emtia:")), "")
+    assert "4,2 dolar" in em, f"satırın tek yeni ölçümü düştü: {em!r} · {uret.DUSEN}"
+    assert not any("aynı konu" in d[1] for d in uret.DUSEN if d[0] == "emtia"), uret.DUSEN
+
+
+def _i8_madde_etiketi():
+    """dogruluk#3: maddenin kalın etiketi ilk cümlesine bağlıdır; ilk cümle
+    bütçeyi aşarsa ya da atıf yüzünden düşerse içeriksiz "· Rezerv." satırı
+    BASILMAZ — madde bütünüyle düşer ve DUSEN'de görünür."""
+    uzun = "Swap hariç net rezerv " + "haftalık olarak ve ayrıntılı biçimde ölçülerek " * 9 + "geriledi."
+    for haftalik, sinir in ((True, uret.MADDE_SINIR_HAFTA), (False, uret.MADDE_SINIR)):
+        b = (_haftalik_fikstur if haftalik else _gunluk_fikstur)()
+        b["ozet"]["ne_oldu"] = (f"<ul><li><strong>Rezerv.</strong> {uzun} İkinci cümle %1,1.</li>"
+                                "<li><strong>Kur.</strong> Dolar/TL %0,23 arttı.</li></ul>")
+        assert len(uzun) > sinir
+        t = uret.bulten_zinciri(b)[0]
+        assert not re.search(r"^· [^.\n]{1,40}\.$", t, re.M), f"içeriksiz etiket satırı: {t[:400]}"
+        assert "· Kur. Dolar/TL %0,23 arttı." in t, "sığan madde değişti"
+        assert any(d[0] == "ne_oldu" and "Rezerv." in d[1] for d in uret.DUSEN), "düşen madde DUSEN'de yok"
+    b = _gunluk_fikstur()
+    b["ozet"]["ne_oldu"] = ("<ul><li><strong>Rezerv.</strong> Ayrıntısı piyasa fotoğrafında.</li>"
+                            "<li><strong>Kur.</strong> Dolar/TL %0,23 arttı.</li></ul>")
+    t = uret.bulten_zinciri(b)[0]
+    assert "· Rezerv." not in t, "atıf düşünce etiket yalnız kaldı"
+
+
+def _i9_beklenen_tasan():
+    """sartname#2: Beklenen'in güvenceli payı aşan takvim cümleleri SİLİNMEZ —
+    en düşük öncelikle girer; gönderi tavanın altındaysa gönderide, değilse
+    DUSEN'de görünür. Uzun takvim Gündem'i ve Neye bakılacak'ı yerinden etmez."""
+    b = _gunluk_fikstur()
+    b["gundem"]["takvim"] = (
+        "<p><strong>Bugün 10:00 · TÜFE ve Yİ-ÜFE (Eylül).</strong> " + "Ağustos'ta aylık TÜFE %1,84'tü ve okuma uzun. " * 14 + "</p>"
+        "<p><strong>Bugün 17:00 · ABD ISM hizmet (Eylül).</strong> Ağustos'ta 55,4'tü. İstihdamın zayıflığı "
+        "hizmetlere yansırsa ABD kısa ucu iner ve iki yıllık getiri haftanın dibine doğru çekilir; güçlü bir "
+        "okuma ise uzun uca baskı yapar ve vade primini yeniden açar, eğri dikleşmeyi sürdürür.</p>"
+        "<p><strong>Salı ve sonrası.</strong> Hazine 8 yıllık tahvil satıyor.</p>")
+    t = uret.bulten_zinciri(b)[0]
+    dusen = " ".join(d[1] for d in uret.DUSEN)
+    for c in ("İstihdamın zayıflığı hizmetlere yansırsa", "Hazine 8 yıllık tahvil satıyor."):
+        assert c in t or c in dusen, f"takvim cümlesi sessizce düştü: {c}"
+    assert len(t) < uret.TEK_TAVAN - 400 and "İstihdamın zayıflığı" in t, "boş yer varken taşan takvim cümlesi girmedi"
+    assert any(d[1].startswith("takvim payı: ") for d in uret.DUSEN), "'Bugün' payını aşan cümle DUSEN'de yok"
+    b = _gunluk_fikstur()
+    b["gundem"]["takvim"] += "".join(f"<p><strong>{g}.</strong> " + "Uzak takvim cümlesi %1,1 ile uzun anlatılıyor. " * 6
+                                     + "</p>" for g in ("Çarşamba", "Perşembe", "Cuma", "Ötesi"))
+    b["ozet"]["ne_oldu"] = "<ul>" + ("<li>Madde %2,1 uzun cümle burada duruyor. " * 8 + "</li>") * 6 + "</ul>"
+    t = uret.bulten_zinciri(b)[0]
+    assert "\nGündem\n" in t and "Neye bakılacak" in t, "uzak takvim cümleleri Gündem'i ya da eşik bloğunu yerinden etti"
+    assert len(t) <= uret.TEK_TAVAN
+
+
+def _i10_takvim_iki_yonlu():
+    """cikti#6: haftalık gün satırının iki yönlü sonuç işareti — koşul eki,
+    'ise', üst/alt çifti. Kuralın kendi örneği ve 'güçlü gelirse … zayıf
+    gelirse' temiz; 04.10'un beş gün satırı işaretlenir; 'Borsa', 'hisse',
+    'Fransa', 'neredeyse' işaret sayılmaz; işaretsiz gün DUSEN'de görünür."""
+    temiz = ("TÜİK TSİ 10:00'da eylül TÜFE'sini yayımlıyor; beklenti üstü bir aylık rakam kısa ucu yükseltir, "
+             "altı indirim fiyatlamasını güçlendirir.",
+             "TÜİK 10:00'da veri yayımlıyor; önceki %1,84, güçlü gelirse kısa uç yükselir, zayıf gelirse indirim "
+             "fiyatlaması güçlenir.",
+             "Tutanak sert bir ton taşırsa ekim artırımı geri gelir; yumuşak bir ton uzun ucu ayırır.")
+    for x in temiz:
+        assert uret.iki_yonlu_mu(x), x
+    tek = ("Pazartesi 5 Ekim: Haftanın ağırlığı ilk gününde. TÜİK 10:00'da eylül TÜFE ve Yİ-ÜFE'sini yayımlıyor; "
+           "ağustos okumaları aylık %1,84 ve %2,57'ydi.",
+           "Çarşamba 7 Ekim: Fed'in 15–16 Eylül toplantısının tutanakları 21:00'de yayımlanıyor (investingLive).",
+           "Cuma 9 Ekim: TÜİK ağustos sanayi üretimini yayımlıyor. Reel kredi büyümesi −4,9 puanla daralmada; sanayi "
+           "üretiminde aylık düşüş, kredi sıkılığının üretime geçtiğinin ilk ölçüsü olur.",
+           "Borsa İstanbul'da hisse satışı neredeyse bitti; Fransa ve Bursa sakin.",
+           "Brent eylülde 100 doların üstünde kaldı.")
+    for x in tek:
+        assert not uret.iki_yonlu_mu(x), x
+    hb = _haftalik_fikstur()
+    hb["gundem"]["takvim"] += ("<p><strong>Ötesi.</strong> Planı değişen takvim.</p>"
+                               "<p><strong>Cumartesi 10 Ekim.</strong> OPEC+ toplantısı yapılıyor.</p>")
+    uret.bulten_zinciri(hb)
+    isaret = [d[1] for d in uret.DUSEN if "iki yönlü" in d[1]]
+    assert isaret == ["Cumartesi 10 Ekim: gönderiye giden cümle iki yönlü sonuç taşımıyor"], isaret
+
+
+def _i11_serit_ayraci():
+    """cikti#9: rakam şeridinde değer ile etiket uzun tireyle ayrılır; etiketi
+    rakamla ya da zaman sözcüğüyle başlayan kalem değere yapışmaz."""
+    import analiz as an
+    k, _ = an.serit_kalemleri([("−12 bp", "6 aylık düğüm"), ("%13,7", "bir ayda 30 bp'den hızlı açılma")], "")
+    assert k == ["−12 bp — 6 aylık düğüm", "%13,7 — bir ayda 30 bp'den hızlı açılma"], k
+
+
+def _i12_kanit_satiri_en_son():
+    """cikti#10: tavanda tablo satırları sondan düşer ama "Kanıtın gücü" satırı
+    EN SON düşer — gövdedeki iddiaların çekincesidir."""
+    import analiz as an
+    dolgu = "Ölçülen sayı bu satırda duruyor ve cümle yeterince uzundur. " * 6
+    satirlar = [(f"Soru {i}", f"Satırın kendi ölçümü %{i}0,5 düzeyinde. " + dolgu) for i in range(1, 9)]
+    satirlar.append(("Kanıtın gücü", "Orta. Haber satırları ikinci el ve bağımsız doğrulanmadı."))
+    sahte = {"tez": "Tez cümlesi %1,25 taşır. " + "Tez cümlesi. " * 60, "satirlar": satirlar, "rakamlar": []}
+    eski = an.yonetici_ozeti
+    an.yonetici_ozeti = lambda _g: sahte
+    try:
+        t = an.analiz_zinciri({"slug": "sinama-2026-10-05", "govde": "", "title": "5 Ekim 2026 Sınama — kanıt",
+                               "pubDate": "2026-10-05"})[0]
+        dusen = list(uret.DUSEN)
+    finally:
+        an.yonetici_ozeti = eski
+    assert "Kanıtın gücü: Orta. Haber satırları ikinci el" in t, "kanıt satırı tavanda düştü"
+    assert "Soru 8:" not in t and any(b == "analiz-bütçe" and c.startswith("Soru 8:") for b, c in dusen), \
+        f"kanıt dışı son satır düşmedi ya da görünmüyor: {dusen[:3]}"
+    assert t.index("Soru 1:") < t.index("Kanıtın gücü:"), "satır sırası değişti"
+
+
+def _i13_tez_uyarisi_yayindan_once():
+    """sartname#8: "tezin ilk cümlesi ölçüm taşır" analiz sınavında da UYARI
+    (5 Ekim 2026'dan itibaren, geriye yürümez) ve gönderinin tezini kuran yolun
+    AYNISINDAN beslenir; her tarihte çalışan önizleme uyarıyı basar."""
+    kok = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(kok / "site" / "tools"))
+    try:
+        import analiz_sinavi as asv
+    finally:
+        sys.path.remove(str(kok / "site" / "tools"))
+    govde = ('\n<div class="yonetici">\n<p class="tez">Karar sürprizsiz, metin ise tek yönlü değil. '
+             'Politika faizi %37,0.</p>\n</div>\n')
+    with tempfile.TemporaryDirectory() as td:
+        sonuc = {}
+        for tarih in ("2026-10-05", "2026-09-10"):
+            yol = Path(td) / f"sinama-{tarih}.mdx"
+            yol.write_text(f"---\ntitle: \"x\"\npubDate: {tarih}\nozet: \"x\"\n---\n{govde}", encoding="utf-8")
+            _e, u, _y = asv.sina(yol)
+            sonuc[tarih] = [x for x in u if "tezin ilk cümlesi" in x]
+    assert sonuc["2026-10-05"], "analiz sınavı sayısız tez açılışını uyarmadı"
+    assert not sonuc["2026-09-10"], "kural geriye yürüdü (yayımlanmış yazıya kapanamaz uyarı)"
+    import analiz as an
+    assert "tez_uyarisi" in (kok / "site" / "tools" / "analiz_sinavi.py").read_text(encoding="utf-8")
+    r = subprocess.run([sys.executable, str(kok / "tweet" / "analiz.py"), "ppk-karari-2026-09-10"],
+                       capture_output=True, text=True, timeout=120,
+                       env={**__import__("os").environ, "PYTHONDONTWRITEBYTECODE": "1"})
+    assert r.returncode == 0 and "tezin ilk cümlesi ölçüm sayısı taşımıyor" in r.stdout, \
+        f"önizleme uyarıyı yuttu: {r.stdout[-300:]} {r.stderr[-300:]}"
+    assert an.tez_uyarisi({"slug": "s", "govde": govde}) and not an.tez_uyarisi(
+        {"slug": "s", "govde": govde.replace("Karar sürprizsiz,", "Karar %37,0'de sürprizsiz,")})
+
+
+# ── İnceleme (05.10.2026, donmuş 1a87fb37): kapı, düzeltme ve gönderim katmanı ──
+
+def _sahte_gonderim(bd: Path, ad_: Path, ar: Path, dfy: Path, post, get=None,
+                    argv: list[str] | None = None, gercek_defter: bool = False):
+    """gonder.main'i ağsız koşturur: dizinler, jeton, requests ve metrik sahte.
+    `gercek_defter`: gonder.DEFTER/ARSIV geçici yola alınır ki defter yolu
+    'gerçek defter' sayılsın (metrik ve arşiv dalları koşsun) ama depoya
+    hiçbir şey yazılmasın. (kod, çıktı, metrik çağrıları) döner."""
+    import os
+    import contextlib, io as _io
+    import analiz as an
+    import duzeltme as dz
+    import gonder
+    import requests as _rq
+    metrik: list = []
+    eski = (_rq.post, _rq.get, uret.BULTENLER, an.ANALIZ_DIZIN, gonder._erisim_al, dz.ARSIV,
+            sys.argv, gonder._metrik_oku, gonder.DEFTER, gonder.ARSIV)
+    eski_env = {k: os.environ.get(k) for k in ("TW_CLIENT_ID", "TW_CLIENT_SECRET", "TW_KILIT", "TW_REFRESH_TOKEN")}
+    try:
+        _rq.post = post
+        if get is not None:
+            _rq.get = get
+        uret.BULTENLER, an.ANALIZ_DIZIN, dz.ARSIV = bd, ad_, ar
+        gonder._erisim_al = lambda _d: "sahte-jeton"
+        gonder._metrik_oku = lambda *a, **k: metrik.append(a)
+        if gercek_defter:
+            gonder.DEFTER, gonder.ARSIV = dfy, ar
+        for k in eski_env:
+            os.environ[k] = "x"
+        sys.argv = argv or ["gonder.py", "--tur", "duzeltme", "--defter", str(dfy)]
+        with contextlib.redirect_stdout(_io.StringIO()) as out:
+            try:
+                kod = gonder.main()
+            except SystemExit as e:
+                kod = e
+        return kod, out.getvalue(), metrik
+    finally:
+        (_rq.post, _rq.get, uret.BULTENLER, an.ANALIZ_DIZIN, gonder._erisim_al, dz.ARSIV,
+         sys.argv, gonder._metrik_oku, gonder.DEFTER, gonder.ARSIV) = eski
+        for k, v in eski_env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+
+def _j1_sira_kesik_mesru():
+    """dogruluk#1 · kapi#1 · kapi#3 · sartname#1: saat ("TSİ 14:00."), oran
+    ("1:2."), sayım/düzeltme yüklemi ("sayısı 61.", "değil 4.") ve piyasa.py'deki
+    sayıyla biten enstrüman adı ("STOXX Europe 600.") ENGEL ALMAZ; gerçek kesik
+    ("TCMB'nin 35.", "perşembe: 38.", "Liste: 35.", "Hükümet 12.") ENGEL kalır."""
+    import denetim as dn
+
+    def g(satir: str) -> str:
+        return f"{_K_GOVDE}\n\n{satir}\n\n{_K_NOT}"
+    for satir in ("Basın toplantısı TSİ 15:30.",
+                  "Merkez Bankası 22 Ekim'de karar açıklayacak; kararın saati 14:00, basın toplantısı 15:30.",
+                  "Karar TSİ 14:00.", "Gündem: ECB 14:15, Fed 21:00.", "Fed tutanakları TSİ 21:00.",
+                  "Karar TSİ 16:15, basın toplantısı 16:45.", "Yeni teyit tarihi 3 Eylül 14:30.", "Oran 1:2.",
+                  "Ankete katılımcı sayısı 61.", "Haftanın ihale SAYISI 2.", "Tahmin tutmadı: 5 değil 4.",
+                  "Dokuz yıllık yalnız 19.", "Avrupa'da en zayıf endeks STOXX Europe 600.",
+                  "Haftanın en sert düşüşü BIST 100.", "Çin'de CSI 300."):
+        e = [x for x in _k_engel(g(satir)) if "sıra sayısında" in x]
+        assert not e, f"meşru satır sıra kesiği sayıldı: {satir!r} → {e}"
+    for satir in ("Liste: 35.", "· Plan. Hükümet 12.", "Yönünü değiştirdi. TCMB'nin 35.",
+                  "Ölçümün asıl maddesi perşembe: 38.", "Hafta içinde de 36.", "Para ve banka istatistikleri 39."):
+        assert any("sıra sayısında" in x for x in _k_engel(g(satir))), f"gerçek kesik kaçtı: {satir!r}"
+    # Düzeltme yanıtının doğal kalıbı ("X değil Y.") ENGEL almaz
+    t = "Düzeltme — Sabah Notu, 2 Ekim 2026\n\nHaftanın ihale sayısını 3 yazdık, doğrusu 4.\n\n" + _K_NOT
+    assert not [x for x in dn.denetle(t, "duzeltme")[0] if "sıra" in x], dn.denetle(t, "duzeltme")[0]
+    # piyasa.py METİN olarak: sayıyla biten her enstrüman adının ÖNÜNDEKİ sözcük listede
+    kaynak = (Path(__file__).resolve().parents[1] / "bulten" / "piyasa.py").read_text(encoding="utf-8")
+    adlar = [a for a in re.findall(r'Varlik\(\s*"[^"]*",\s*"([^"]+)"', kaynak) if re.search(r"\s\d{1,3}$", a)]
+    assert len(adlar) >= 5, f"piyasa.py ayrıştırılamadı: {adlar}"
+    eksik = [a for a in adlar if a.rsplit(" ", 1)[0].split()[-1].lower() not in dn._ENDEKS_ADI]
+    assert not eksik, f"sayıyla biten enstrüman adı endeks listesinde yok: {eksik}"
+    for a in adlar:
+        assert dn.sira_kesik(f"Günün en zayıfı {a}.") is None, a
+
+
+def _j2_oran_birimi():
+    """kapi#5: "aylık/yıllık + tutar" (milyar, milyon, trilyon, bin, TL, USD)
+    işaretsiz oran sayılmaz; çıplak para sözcüğü muaf DEĞİL ("31,51 dolar
+    bazında" bir orandır)."""
+    def g(c: str) -> str:
+        return f"{_K_GOVDE}\n\n{c}\n\n{_K_NOT}"
+    for c in ("Cari açık yıllık 40,7 milyar dolara genişledi.", "Aylık 5,2 milyar dolarlık açık.",
+              "Gelir yıllık 1,2 trilyon TL oldu.", "Akaryakıt aylık 1,25 TL arttı.",
+              "Üretim yıllık 3,2 milyon ton.", "Altın yıllık 2,5 bin ton.", "Fon aylık 7,5 USD."):
+        assert not any("yüzde işaretsiz" in x for x in _k_uyari(g(c))), f"tutar oran sayıldı: {c!r}"
+    for c in ("Getiri yıllık 31,51 dolar bazında.", "TÜFE yıllık 31,51 oldu.", "Oran yıllık 31,51 binde bir."):
+        assert any("yüzde işaretsiz" in x for x in _k_uyari(g(c))), f"işaretsiz oran kaçtı: {c!r}"
+
+
+def _j3_hashtag_ve_not():
+    """kapi#6 · sartname#6(4): hashtag en az bir HARF ister ("#1", "#2026" X'te
+    tıklanır değil; "#_TCMB" tıklanır), tam genişlik ＃/＠ NFKC'de yakalanır,
+    KaTeX notu yalnız '$' öğesinde."""
+    import denetim as dn
+
+    def g(c: str) -> str:
+        return f"{_K_GOVDE}\n\n{c}\n\n{_K_NOT}"
+    for c, oge in (("Bugün #_TCMB kararı.", "#_TCMB"), ("Bugün #TCMB kararı.", "#TCMB"),
+                   ("Bugün ＃TCMB kararı.", "#TCMB"), ("＠TCMB açıkladı.", "@TCMB"), ("Etiket #1_a.", "#1_a")):
+        e = [x for x in _k_engel(g(c)) if "tıklanır" in x]
+        assert e and repr(oge) in e[0], f"tıklanır öğe: {c!r} → {e}"
+    for c in ("Hazine'nin ihale sayısı #1 sırada.", "#2026 yılı."):
+        assert not [x for x in _k_engel(g(c)) if "tıklanır" in x], f"yanlış alarm: {c!r}"
+    e = [x for x in _k_engel(g("@TCMB_Bilgi duyurusu.")) if "tıklanır" in x]
+    assert e and "formül" not in e[0], e
+    assert any("formül" in x for x in _k_engel(g("Getiri $r_t ile gösterilir."))), "KaTeX notu düştü"
+    assert dn.tiklanir_oge("#TCMB") == "#TCMB"
+
+
+def _j4_sorumluluk_son_satir():
+    """sartname#7: sorumluluk notu gönderinin SON SATIRIDIR — ortaya taşınmış
+    not da, notun ardına tek satır sonuyla eklenen satır da ENGEL; üreticilerin
+    çıktısı geçer; 'not yok' ile 'yerinde değil' ayrı teşhis."""
+    import denetim as dn
+    temiz = f"{_K_GOVDE}\n\nGündem: kur sakin, fonlama %37,00.\n\n{_K_NOT}"
+    assert not [x for x in dn.denetle(temiz, "bulten")[0] if "sorumluluk" in x], dn.denetle(temiz, "bulten")[0]
+    ortada = f"{_K_GOVDE}\n\n{_K_NOT}\n\nGündem: kur sakin, fonlama %37,00."
+    e = dn.denetle(ortada, "bulten")[0]
+    assert any("son satırda değil" in x for x in e), e
+    ekli = temiz + "\nEk satır burada duruyor."
+    assert any("son satırda değil" in x for x in dn.denetle(ekli, "bulten")[0]), "notun ardındaki satır geçti"
+    yok = dn.denetle(f"{_K_GOVDE}\n\nBitti.", "bulten")[0]
+    assert any("sorumluluk notu yok" in x for x in yok) and not any("son satırda" in x for x in yok), yok
+    for z in (uret.bulten_zinciri(SAHTE_BULTEN)[0],):
+        assert not [x for x in dn.denetle(z, "bulten")[0] if "sorumluluk" in x]
+
+
+def _j5_duzeltme_penceresi():
+    """sartname#4: pencere kaydın KENDİ tarihinden (bülten de analiz gibi): eski
+    dosyada bugün tarihli kayıt gider; 22 gün önceki kayıt gitmez ve ADIYLA
+    uyarılır; 21 gün önceki gider; defterde olan pencere dışı kayıt uyarı
+    üretmez; ileri tarihli kayıt sessizce bekler; tarihsiz analiz kaydı uyarılır."""
+    import duzeltme as dz
+    bugun = dt.date(2026, 10, 5)
+    defter = {"bulten:2026-09-01": {"idler": ["111"], "zaman": "z"}}
+
+    def k(tarih, eski, yeni="y"):
+        return {"tarih": tarih, "alan": "a", "eski": eski, "yeni": yeni, "sebep": "s",
+                "gonderi": "bulten:2026-09-01", "gonderi_metni": "Kısa düzeltme metni, tam cümle."}
+    with tempfile.TemporaryDirectory() as td:
+        bd, ad_ = Path(td) / "b", Path(td) / "a"
+        bd.mkdir(); ad_.mkdir()
+        (bd / "2026-09-01.json").write_text(json.dumps({"duzeltmeler": [k("2026-10-05", "e1")]}), encoding="utf-8")
+        (bd / "2026-10-05.json").write_text(json.dumps({"duzeltmeler": [
+            k("2026-09-13", "e2"), k("2026-09-14", "e3"), k("2026-10-07", "e4")]}), encoding="utf-8")
+        a, u = dz.adaylar(bugun, defter, bd, ad_)
+        eskiler = sorted(x["eski"] for x in a)
+        assert eskiler == ["e1", "e3"], (eskiler, u)
+        assert len(u) == 1 and "2026-09-13" in u[0] and "pencerenin dışında" in u[0] and "bulten:2026-10-05" in u[0], u
+        # defterde olan pencere dışı kayıt: uyarı yok
+        d2 = {**defter, dz.anahtar("bulten:2026-09-01", "e2", "y"): {"idler": ["9"], "zaman": "z"}}
+        assert not dz.adaylar(bugun, d2, bd, ad_)[1], dz.adaylar(bugun, d2, bd, ad_)[1]
+        # tarihsiz analiz kaydı: adıyla uyarı
+        (ad_ / "x-2026-09-10.mdx").write_text(
+            "---\ntitle: 'x'\nduzeltmeler:\n  - alan: 'a'\n    eski: 'e5'\n    yeni: 'y'\n"
+            "    gonderi: 'bulten:2026-09-01'\n    gonderi_metni: 'Kısa düzeltme.'\n---\n", encoding="utf-8")
+        _, u = dz.adaylar(bugun, d2, bd, ad_)
+        assert any("analiz:x-2026-09-10" in x and "tarihi çözülemedi" in x for x in u), u
+
+
+def _j6_katlanmis_yaml():
+    """dogruluk#5: bir analizdeki katlanmış YAML (`sebep: >`) bütün düzeltme
+    kanalını kapatmaz — yalnız o dosya düşer; dosya X'e bir şey göndermiyorsa
+    uyarı da yok, gonderi'li öğede adıyla uyarı."""
+    import duzeltme as dz
+    bugun = dt.date(2026, 10, 5)
+    defter = {"bulten:2026-10-04": {"idler": ["777"], "zaman": "z"}}
+    with tempfile.TemporaryDirectory() as td:
+        bd, ad_ = Path(td) / "b", Path(td) / "a"
+        bd.mkdir(); ad_.mkdir()
+        (bd / "2026-10-05.json").write_text(json.dumps({"duzeltmeler": [{
+            "tarih": "2026-10-05", "alan": "a", "eski": "e", "yeni": "y",
+            "gonderi": "bulten:2026-10-04", "gonderi_metni": "Kısa düzeltme metni."}]}), encoding="utf-8")
+        katli = ("---\ntitle: 'x'\nduzeltmeler:\n  - tarih: '2026-10-01'\n    alan: 'a'\n    sebep: >\n"
+                 "      uzun bir gerekçe\n      iki satır\n{ek}---\nGövde\n")
+        (ad_ / "ilgisiz-2026-09-10.mdx").write_text(katli.format(ek=""), encoding="utf-8")
+        a, u = dz.adaylar(bugun, defter, bd, ad_)
+        assert len(a) == 1 and not u, (a, u)
+        (ad_ / "ilgisiz-2026-09-10.mdx").write_text(
+            katli.format(ek="    gonderi: 'bulten:2026-10-04'\n    gonderi_metni: 'x'\n"), encoding="utf-8")
+        a, u = dz.adaylar(bugun, defter, bd, ad_)
+        assert len(a) == 1 and len(u) == 1 and "analiz:ilgisiz-2026-09-10" in u[0] and "X'e gitmedi" in u[0], (a, u)
+
+
+def _j7_yarim_kayit():
+    """sartname#6(5): yalnız `gonderi` taşıyan (metinsiz) analiz kaydı aday
+    üretmez — boş gövdeli bir "Düzeltme" yanıtı alt sınırdan geçebilirdi."""
+    import duzeltme as dz
+    bugun = dt.date(2026, 10, 5)
+    with tempfile.TemporaryDirectory() as td:
+        bd, ad_ = Path(td) / "b", Path(td) / "a"
+        bd.mkdir(); ad_.mkdir()
+        (ad_ / "x-2026-10-01.mdx").write_text(
+            "---\ntitle: 'x'\nduzeltmeler:\n  - tarih: '2026-10-04'\n    alan: 'a'\n    eski: 'e'\n"
+            "    yeni: 'y'\n    gonderi: 'analiz:x-2026-10-01'\n---\n", encoding="utf-8")
+        a, u = dz.adaylar(bugun, {"analiz:x-2026-10-01": {"idler": ["900"], "zaman": "z"}}, bd, ad_)
+        assert a == [] and any("birlikte" in x for x in u), (a, u)
+
+
+_HEDEF_YOK_GOVDE = {"detail": "You attempted to reply to a Tweet that is deleted or not visible to you.",
+                    "title": "Forbidden", "status": 403}
+
+
+def _j8_hedef_silinmis():
+    """dogruluk#6: silinmiş hedefe yanıt 403'ü jeton arızası DEĞİLDİR — kayıt
+    terminal ('hedef_yok', kimliksiz) yazılır, arkadaki geçerli düzeltme gider,
+    metrik okunur, koşu 0 ile biter; ertesi gün aynı anahtar aday değildir.
+    Gövdesi eşleşmeyen 403 bugünkü gibi ölümcül ve kapsam teşhisini korur."""
+    import duzeltme as dz
+    bugun = dt.datetime.now(dt.timezone.utc).date()
+
+    def kayit(eski, hedef):
+        return {"tarih": bugun.isoformat(), "alan": "a", "eski": eski, "yeni": "y", "sebep": "s",
+                "gonderi": hedef, "gonderi_metni": f"Düzeltme metni {eski}: doğru değer y, tam cümle."}
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        bd, ad_, ar = td / "b", td / "a", td / "arsiv"
+        for d in (bd, ad_, ar):
+            d.mkdir()
+        (bd / f"{bugun.isoformat()}.json").write_text(json.dumps({"duzeltmeler": [
+            kayit("e1", "bulten:2026-10-04"), kayit("e2", "bulten:2026-10-02")]}), encoding="utf-8")
+        defter = {"bulten:2026-10-04": {"idler": ["777"], "zaman": "z"},
+                  "bulten:2026-10-02": {"idler": ["888"], "zaman": "z"}}
+        dfy = td / "defter.json"
+        dfy.write_text(json.dumps(defter), encoding="utf-8")
+        govdeler: list = []
+
+        def post(url, json=None, **_):
+            govdeler.append(json)
+            if (json.get("reply") or {}).get("in_reply_to_tweet_id") == "777":
+                return _SahteYanit(403, _HEDEF_YOK_GOVDE)
+            return _SahteYanit(201, {"data": {"id": str(6000 + len(govdeler))}})
+
+        def get(url, **_):
+            raise AssertionError("silinmiş hedefte /users/me soruldu (jeton teşhisi)")
+        kod, out, metrik = _sahte_gonderim(bd, ad_, ar, dfy, post, get, gercek_defter=True)
+        assert kod == 0, (kod, out[-300:])
+        df = json.loads(dfy.read_text(encoding="utf-8"))
+        k1, k2 = dz.anahtar("bulten:2026-10-04", "e1", "y"), dz.anahtar("bulten:2026-10-02", "e2", "y")
+        assert df[k1].get("durum") == "hedef_yok" and not df[k1].get("idler") and df[k1]["hedef"] == "777", df[k1]
+        assert df[k2]["idler"] and df[k2]["yanit"] == "888", df.get(k2)
+        assert "silinmiş ya da görünmüyor" in out and "oauth2.enc" not in out, out[-400:]
+        assert len(metrik) == 1, "metrik okuması hedef_yok sonrası koşmadı"
+        a, _ = dz.adaylar(bugun, df, bd, ad_)
+        assert not a, f"hedef_yok kaydı yeniden aday oldu: {a}"
+        # gövdesi eşleşmeyen 403: ölümcül, kapsam teşhisi
+        dfy.write_text(json.dumps(defter), encoding="utf-8")
+
+        def post2(url, json=None, **_):
+            return _SahteYanit(403, {"detail": "Forbidden", "title": "Forbidden"})
+
+        def get2(url, **_):
+            return _SahteYanit(200, {"data": {"username": "u"}})
+        kod, out, _ = _sahte_gonderim(bd, ad_, ar, dfy, post2, get2)
+        assert isinstance(kod, SystemExit) and "tweet.write" in str(kod), (kod, out[-200:])
+    # zincir İÇİ parçanın "görünmez" 403'ü hedef_yok sayılmaz (1 saniye önce
+    # atılmış parça geçici görünmez olabilir): yalnız DIŞ hedefte ayrım yapılır
+    import gonder
+    import requests as _rq
+    eski_post, eski_get = _rq.post, _rq.get
+    sayac = {"n": 0}
+
+    def post3(url, json=None, **_):
+        sayac["n"] += 1
+        return (_SahteYanit(201, {"data": {"id": "1"}}) if sayac["n"] == 1
+                else _SahteYanit(403, _HEDEF_YOK_GOVDE))
+    try:
+        _rq.post = post3
+        _rq.get = lambda url, **_: _SahteYanit(200, {"data": {"username": "u"}})
+        import time as _t
+        eski_uyku, _t.sleep = _t.sleep, (lambda *_: None)
+        try:
+            gonder._gonder_zincir(["a", "b"], "j", ust="777")
+        except gonder.HedefYok:
+            raise AssertionError("zincir içi parçanın 403'ü hedef_yok sayıldı")
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError("zincir içi 403 sessiz geçti")
+        finally:
+            _t.sleep = eski_uyku
+    finally:
+        _rq.post, _rq.get = eski_post, eski_get
+
+
+def _j9_duzeltme_metni_oge_basina():
+    """dogruluk#7: düzeltme METNİ öğe başına kurulur — bir adayın kusuru bülteni
+    ve öbür adayları durdurmaz; bozuk arşiv dosyasında başlık anahtardan kurulur."""
+    import duzeltme as dz
+    with tempfile.TemporaryDirectory() as td:
+        ar = Path(td)
+        (ar / "bulten-2026-10-04.txt").write_bytes("# bulten:2026-10-04 · z · u\n\nHaftaya Bakış — 4 Ekim 2026\n".encode() + b"\xff\xfe\x80")
+        assert dz.hedef_basligi("bulten:2026-10-04", ar) == "Haftaya Bakış, 4 Ekim 2026"
+    bugun = dt.datetime.now(dt.timezone.utc).date()
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        bd, ad_, ar = td / "b", td / "a", td / "arsiv"
+        for d in (bd, ad_, ar):
+            d.mkdir()
+        (bd / f"{bugun.isoformat()}.json").write_text(json.dumps({"duzeltmeler": [
+            {"tarih": bugun.isoformat(), "alan": "a", "eski": e, "yeni": "y", "gonderi": "bulten:2026-10-04",
+             "gonderi_metni": f"Düzeltme metni {e}: doğru değer y, tam cümle."} for e in ("e1", "e2")]}),
+            encoding="utf-8")
+        dfy = td / "defter.json"
+        dfy.write_text(json.dumps({"bulten:2026-10-04": {"idler": ["777"], "zaman": "z"}}), encoding="utf-8")
+        govdeler: list = []
+
+        def post(url, json=None, **_):
+            govdeler.append(json)
+            return _SahteYanit(201, {"data": {"id": str(7000 + len(govdeler))}})
+        eski_metin = dz.metin
+
+        def bozuk(ad, *a, **k):
+            if ad["eski"] == "e1":
+                raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "bozuk arşiv")
+            return eski_metin(ad, *a, **k)
+        try:
+            dz.metin = bozuk
+            kod, out, _ = _sahte_gonderim(bd, ad_, ar, dfy, post)
+        finally:
+            dz.metin = eski_metin
+        assert kod == 0 and len(govdeler) == 1 and "e2" in govdeler[0]["text"], (kod, govdeler, out[-300:])
+        assert "düzeltme metni kurulamadı" in out, out[-300:]
+
+
+def _j10_metrik_sahte_defterde_yok():
+    """sartname#6(6): `--defter` ile verilen (sahte) defterle metrik okuması
+    KOŞMAZ — duman api.x.com'a çıkıp gerçek metrik.json'a damga basmasın."""
+    bugun = dt.datetime.now(dt.timezone.utc).date()
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        bd, ad_, ar = td / "b", td / "a", td / "arsiv"
+        for d in (bd, ad_, ar):
+            d.mkdir()
+        (bd / f"{bugun.isoformat()}.json").write_text(json.dumps({"duzeltmeler": [
+            {"tarih": bugun.isoformat(), "alan": "a", "eski": "e", "yeni": "y", "gonderi": "bulten:2026-10-04",
+             "gonderi_metni": "Düzeltme metni: doğru değer y, tam cümle."}]}), encoding="utf-8")
+        dfy = td / "defter.json"
+        dfy.write_text(json.dumps({"bulten:2026-10-04": {"idler": ["777"], "zaman": "z"}}), encoding="utf-8")
+        kod, out, metrik = _sahte_gonderim(
+            bd, ad_, ar, dfy, lambda url, json=None, **_: _SahteYanit(201, {"data": {"id": "1"}}))
+        assert kod == 0 and "gönderildi" in out, (kod, out[-200:])
+        assert metrik == [], "sahte defterle metrik okuması koştu"
+
+
+def _j11_kuru_dusen_tam():
+    """sartname#2(5): kuru koşu düşen birimlerin TAMAMINI basar; normal koşu
+    ilk üçünü özetler."""
+    import contextlib, io as _io
+    import gonder
+    t = f"{_K_GOVDE}\n\nGündem: kur sakin, fonlama %37,00.\n\n{_K_NOT}"
+    dusen = [(f"b{i}", f"düşen birim {i} metni") for i in range(5)]
+    with contextlib.redirect_stdout(_io.StringIO()) as o:
+        gonder.kapidan_gecir([("bulten:2026-10-05", [t], dusen)], tam=True)
+    assert all(f"düşen birim {i} metni" in o.getvalue() for i in range(5)), o.getvalue()
+    with contextlib.redirect_stdout(_io.StringIO()) as o:
+        gonder.kapidan_gecir([("bulten:2026-10-05", [t], dusen)])
+    assert "düşen birim 4 metni" not in o.getvalue() and "5 birim" in o.getvalue(), o.getvalue()
+    src = (Path(__file__).resolve().parent / "gonder.py").read_text(encoding="utf-8")
+    assert "kapidan_gecir(is_listesi, tam=kuru)" in src, "kuru koşu tam dökümü bağlanmamış"
+
+
+# ── L: rehber ↔ kod (05.10.2026 belge turu) ──────────────────────────────────
+# Rehberin gönderi anatomisini anlatan cümleleri kodun önceliklerini ve
+# bütçelerini OKURA (yazara) söyler; ikisi ayrışırsa yazar yanlış cümleyi kısa
+# tutar. İlk belge turunda tam bu çıktı: rehber günlük düşme sırasında okumayı
+# hiç anmıyordu, haftalık düşme sırası ise hiç yazılı değildi. Sıra kodun
+# KENDİSİNDEN ölçülür (`_sigdir` sıfır kapasiteyle, düşen blokların sırası) ve
+# rehberdeki ifadelerin metindeki sırasıyla kıyaslanır.
+
+def _gunluk_sira_fikstur() -> dict:
+    """Bütün günlük blokları birden fazla birimle kuran sentetik biçim 3 sayısı."""
+    uzun = "Bu cümle okumanın ikinci paragrafını tavanın dışına taşır. " * 12
+    return {
+        "tarih": "2026-10-06", "surum": 3, "gundem_kaynagi": "yazili",
+        "manset": "TL eğrisi veriyi bekliyor: 2 yıllık %40,00",
+        "ozet": {"ne_oldu": "<ul>" + "".join(
+            f"<li><strong>Konu {i}.</strong> Olgu %1,{i}{i} ile ölçüldü. İkinci cümle {i},{i}5.</li>"
+            for i in range(1, 4)) + "</ul>"},
+        "yorum": "<p>Okumanın ilk cümlesi kısa. İkinci cümle de kısa.</p>"
+                 f"<p>Hareketin sebebi netleşmedi. {uzun}</p>",
+        "gundem": {
+            "takvim": "<p><strong>Bugün 10:00 · TÜFE.</strong> Beklenti %2,18. Yüksek gelirse kısa uç "
+                      "yükselir.</p>" + "".join(
+                f"<p><strong>Gün {i}.</strong> Yayım {i} gelir. Sonuç {i} iki yönlüdür. "
+                + "Uzun bir takvim cümlesi daha yazıldı. " * 3 + "</p>" for i in range(1, 7)),
+            "risk": "<ul><li><strong>Avrupa siyaseti</strong> → euro; izlenecek: fark 131 bp.</li>"
+                    "<li><strong>Kuzey Denizi grevi</strong> → Brent; izlenecek: kesinti duyurusu.</li></ul>",
+            "turkiye": "<p><strong>Eğri.</strong> Kısa uç %37,64 oldu.</p>",
+            "kuresel": "<p><strong>ABD.</strong> İstihdam 29,5 bin arttı.</p>"},
+        "piyasa": {"en_cok_hareket": {"sigma": [
+            {"ad": "Nikkei", "deger": 2.61, "birim": "%", "sigma": 2.7},
+            {"ad": "Hang Seng", "deger": -2.63, "birim": "%", "sigma": -2.7}]}},
+        "gostergeler": [{"ad": f"Kart {i}", "metin": f"{i},9{i}", "birim": "%", "fark": 0.1,
+                         "fark_metin": "+0,10", "bugun_yeni": True, "veri_tarihi": "05.10.2026"}
+                        for i in range(1, 4)]}
+
+
+def _dusme_sirasi(bloklar: list[dict]) -> tuple[list[str], list[str]]:
+    """Sıfır kapasitede `_sigdir`: düşen blokların sırası (ardışık tekrarsız) ve
+    hiç düşmeyen birimlerin blokları."""
+    uret.DUSEN.clear()
+    uret._sigdir(bloklar, 0)
+    sira: list[str] = []
+    for bolum, _ in uret.DUSEN:
+        if not sira or sira[-1] != bolum:
+            sira.append(bolum)
+    kalan = [bl["id"] for bl in bloklar for _ in bl["birim"]]
+    return sira, kalan
+
+
+def _sirali_mi(metin: str, ifadeler: list[str]) -> None:
+    konum = -1
+    for ifade in ifadeler:
+        i = metin.find(ifade, konum + 1)
+        assert i > konum, f"rehberde sıra bozuk ya da ifade yok: {ifade!r}"
+        konum = i
+
+
+def _l1_rehber_dusme_sirasi():
+    yazim = (uret.KOK / "bulten" / "YAZIM.md").read_text(encoding="utf-8")
+    # Günlük: rehberin "Tavan aşılırsa …" cümlesi ↔ `_gunluk3` öncelikleri.
+    uret.DUSEN.clear()
+    sira, kalan = _dusme_sirasi(uret._gunluk3(_gunluk_sira_fikstur()))
+    beklenen = ["takvim", "yorum", "olagandisi", "pano", "gundem", "risk", "yorum",
+                "bugun", "takvim", "ne_oldu"]
+    assert sira == beklenen, f"günlük düşme sırası rehberden ayrıştı: {sira}"
+    assert sorted(kalan) == sorted(["baslik", "ne_oldu", "bugun", "takvim"]), kalan
+    i = yazim.index("Tavan aşılırsa önce takvimin payı aşan")
+    _sirali_mi(yazim[i:i + 700], [
+        "takvimin payı aşan", '"sebebi netleşmedi" devamı', "olağandışı satırı", "sonra pano",
+        "gündem satırları", "eşik maddeleri", "okumanın paragrafları", '"Bugün" paragrafının',
+        '"Beklenen"in', "ilk maddeden sonraki maddeler", "İlk madde ve"])
+    # Haftalık: kural 9'un "Tavan aşılırsa …" cümlesi ↔ `_haftalik3` öncelikleri.
+    uret.DUSEN.clear()
+    sira, kalan = _dusme_sirasi(uret._haftalik3(_haftalik_fikstur()))
+    assert sira == ["ne_oldu", "pano", "takvim", "karne", "senaryo", "ne_oldu"], \
+        f"haftalık düşme sırası rehberden ayrıştı: {sira}"
+    assert sorted(kalan) == sorted(["baslik", "senaryo", "takvim", "karne"]), kalan
+    i = yazim.index("Tavan aşılırsa önce dördüncü ve sonraki maddeler")
+    _sirali_mi(yazim[i:i + 400], [
+        "dördüncü ve sonraki maddeler", "Seviyeler", "takvimin sonraki günleri",
+        "karnenin kayıtları", "alternatif", "ilk üç madde", "ana senaryo, takvimin ilk",
+        "karnenin sayım satırı düşmez"])
+
+
+def _l2_rehber_butceleri():
+    """Rehberlerin yazara söylediği bütçe sayıları koddaki sabitlerle aynı."""
+    import analiz
+    bulten = (uret.KOK / "bulten" / "YAZIM.md").read_text(encoding="utf-8")
+    analiz_md = (uret.KOK / "analiz" / "YAZIM.md").read_text(encoding="utf-8")
+
+    def tr(n: int) -> str:
+        return f"{n:,}".replace(",", ".")
+    for ad, deger, metin, kalip in (
+        ("MADDE_SINIR", uret.MADDE_SINIR, bulten, "madde başına ~{}"),
+        ("BEKLENTI_SINIR", uret.BEKLENTI_SINIR, bulten, "birlikte {}"),
+        ("BEKLENTI_TABAN", uret.BEKLENTI_TABAN, bulten, "en az {} karakter"),
+        ("ESIK_MADDE", uret.ESIK_MADDE, bulten, "Madde {} karakteri aşmaz"),
+        ("SENARYO_SATIR", uret.SENARYO_SATIR, bulten, "en çok {}\n     karakter"),
+        ("TEK_TAVAN", uret.TEK_TAVAN, bulten, "{} karakter içinde"),
+        ("SATIR_SINIR", analiz.SATIR_SINIR, analiz_md, "satır başına\n     ~{}"),
+        ("TEZ_SINIR", analiz.TEZ_SINIR, analiz_md, "tez ~{}"),
+        ("TEK_TAVAN", uret.TEK_TAVAN, analiz_md, "tavanı ({})"),
+    ):
+        ifade = kalip.format(tr(deger))
+        assert ifade in metin, f"{ad}={deger}: rehberde {ifade!r} yok"
+
+
 def main() -> int:
     print("tweet duman sınaması:")
     sina("biçim 3: maddelerle açılır · pano sayfanın kuralıyla · öne çıkanlar yinelenmez", _bicim3_govde)
@@ -1473,6 +2236,32 @@ def main() -> int:
     sina("K11 hashtag/cashtag/@ ENGEL ('107,63 $' geçer) · görsel yolu kapalı (--resim, medya alanı, betik, PNG, iş akışı)", _k11_tiklanir_ve_gorsel)
     sina("K5 düzeltme yanıtı: açık tetik · alt dize eşleşmez · kimliksiz düşer · tek gönderi · kısa geçer · doğru kimliğe yanıt", _k5_duzeltme_yaniti)
     sina("K12 etkileşim: okuma hatası gönderimi düşürmez · haftalık sınır · yaş bandı · ayrı git add · cron yok", _k12_etkilesim_olcumu)
+    sina("İ kapi#2 sıra sayısı + özel ad cümle sonu değil ('yılın 7. PPK'); ondalık/saat/rakam bölünür", _i1_sira_sayisi_ozel_ad)
+    sina("İ cikti#14 işaret yüzden önce ('%+4,5' → '+%4,5')", _i2_tipografi_isaret)
+    sina("İ cikti#5 pano/seviyeler: ölçülmüş sıfır fark girmez, ölçülemeyen fark girer, tavanı tutmaz", _i3_pano_sifir_fark)
+    sina("İ cikti#1 düzeltme kaydının adıyla açtığı enstrüman olağandışı satırına girmez; makas kaydı düşürmez", _i4_duzeltilen_sigma)
+    sina("İ cikti#2 fikir seviyesi sayıyla: '71 bp' · '−250 bp' düşer, '47 bin varil' · '71,8 milyar' kalır", _i5_fikir_seviyesi_tam_sayi)
+    sina("İ cikti#3 kaynak önceliği ilk paragrafta; kaynaksız seçim bitişik", _i6_kaynak_ilk_paragraf)
+    sina("İ cikti#4 'aynı konu' düşmeden önce bitişik yedek seçim (yeni sayı korunur)", _i7_emtia_bitisik_yedek)
+    sina("İ dogruluk#3 madde etiketi ilk cümleye bağlı: içeriksiz '· Rezerv.' basılmaz", _i8_madde_etiketi)
+    sina("İ sartname#2 Beklenen payını aşan takvim cümlesi silinmez: boş yerde girer, yoksa DUSEN", _i9_beklenen_tasan)
+    sina("İ cikti#6 takvim gün satırı iki yönlü işaret: koşul · ise · üst/alt; tek yönlü gün DUSEN'de", _i10_takvim_iki_yonlu)
+    sina("İ cikti#9 şeritte değer ile etiket uzun tireyle ayrılır", _i11_serit_ayraci)
+    sina("İ cikti#10 tavanda 'Kanıtın gücü' satırı en son düşer", _i12_kanit_satiri_en_son)
+    sina("İ sartname#8 tez açılışı analiz sınavında UYARI (05.10'dan), önizleme uyarıyı basar", _i13_tez_uyarisi_yayindan_once)
+    sina("J dogruluk#1/kapi#1/kapi#3/sartname#1 sıra kesiği: saat · oran · sayım · enstrüman adı geçer, gerçek kesik ENGEL", _j1_sira_kesik_mesru)
+    sina("J kapi#5 işaretsiz oran: 'milyar/TL' tutarı oran değil; çıplak 'dolar' muaf değil", _j2_oran_birimi)
+    sina("J kapi#6 hashtag harf ister ('#1' değil, '#_TCMB' evet) · tam genişlik · KaTeX notu yalnız '$'", _j3_hashtag_ve_not)
+    sina("J sartname#7 sorumluluk notu SON SATIR (ortada ya da ardında satır varsa ENGEL)", _j4_sorumluluk_son_satir)
+    sina("J sartname#4 düzeltme penceresi kaydın tarihinden; pencere dışı adıyla uyarılır", _j5_duzeltme_penceresi)
+    sina("J dogruluk#5 katlanmış YAML yalnız kendi dosyasını düşürür", _j6_katlanmis_yaml)
+    sina("J sartname#6(5) metinsiz düzeltme kaydı aday üretmez", _j7_yarim_kayit)
+    sina("J dogruluk#6 silinmiş hedef: terminal kayıt, arkadaki gider, metrik koşar; düz 403 ölümcül", _j8_hedef_silinmis)
+    sina("J dogruluk#7 düzeltme metni öğe başına; bozuk arşivde başlık anahtardan", _j9_duzeltme_metni_oge_basina)
+    sina("J sartname#6(6) sahte defterle metrik okuması koşmaz", _j10_metrik_sahte_defterde_yok)
+    sina("J sartname#2(5) kuru koşu düşen birimlerin tamamını basar", _j11_kuru_dusen_tam)
+    sina("L rehber ↔ kod: günlük ve haftalık düşme sırası rehberin cümlesiyle aynı", _l1_rehber_dusme_sirasi)
+    sina("L rehber ↔ kod: rehberin bütçe sayıları koddaki sabitler", _l2_rehber_butceleri)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")
     return 1 if SAYAC["dustu"] else 0
 

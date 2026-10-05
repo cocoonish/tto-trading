@@ -13,7 +13,8 @@ tweet metni üzerinde koşan bir denetim görür.
   ENGEL  gönderim durur (tavsiye dili, link, hashtag/cashtag/@, emoji ve
          matematik kalın harf, HTML kalıntısı, site atfı, satır sonunda "…",
          sayıda ya da sıra sayısında kesik, kapanmamış parantez/tırnak, boş
-         bölüm etiketi, uzunluk, okur dili, sorumluluk notu eksik)
+         bölüm etiketi, uzunluk, okur dili, sorumluluk notu eksik ya da
+         son satırda değil)
   UYARI  loga yazılır, gönderim sürer (tekrar eden cümle, ASCII eksi, ters
          işaret sırası "%+", yüzde işaretsiz oran, ":" ile biten paragraf,
          bülten gönderisinin ilk 280 karakterinde ölçüm yok, düzeltme
@@ -85,6 +86,7 @@ ARALIK_TIRESI = re.compile(r"(?<!\d{4})(?<!\d{4}-\d{2})(?<=[\d%])-(?=[%\d])")
 # yatırım tavsiyesi değildir." ve "Analiz ve ölçümdür; yatırım tavsiyesi
 # değildir." ikisi de geçer; aranan çekirdek ifade.
 SORUMLULUK = re.compile(r"yatırım tavsiyesi değildir", re.I)
+SORUMLULUK_SON = re.compile(r"yatırım tavsiyesi değildir\.?$", re.I)
 
 # Emoji ve süsleme: 30.08 kararı — yok. Aralıklar: semboller, piktogramlar,
 # bayraklar, varyasyon seçicisi. Tipografik işaretler (−, ·, →, σ, ≈, ±) serbest.
@@ -100,7 +102,10 @@ EMOJI = re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001
 # teşhis koymasın. Cashtag twitter-text tanımını izler — 1–6 harf, isteğe bağlı
 # ".xx"/"_xx" eki; rakamlı ($XU100) ya da para birimi ("107,63 $") tanınmaz.
 # "$r_t$" gibi bir eşleşme ayrıca formül (KaTeX) kalıntısıdır.
-HASHTAG = re.compile(r"(?<![\w&])#[^\s#]")
+# Hashtag twitter-text'teki gibi harf, rakam ve alt çizgiden oluşur ve en az
+# bir HARF ister: "#1" ya da "#2026" X'te tıklanır değildir; "#_TCMB" ve "#1_a"
+# tıklanırdır. Tam öğe yakalanır (mesaj '#T' değil '#TCMB' der).
+HASHTAG = re.compile(r"(?<![\w&])#\w*[^\W\d_]\w*")
 CASHTAG = re.compile(r"(?<![\w$])\$[A-Za-z]{1,6}(?:[._][A-Za-z]{1,2})?(?![A-Za-z0-9])")
 BAHSETME = re.compile(r"(?<![\w@.])@[A-Za-z0-9_]{2,}")
 
@@ -114,16 +119,34 @@ TERS_ISARET = re.compile(r"%[+−-]\d")
 ORAN_ISARETSIZ = re.compile(r"\b(aylık|yıllık)\s+([+−-]?\d+,\d+)(?![\d,])", re.I)
 _SAYI_SOZCUGU = {"bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz", "on",
                  "yirmi", "otuz", "kırk", "elli"}
-_BIRIM_ARKA = re.compile(r"\s*(?:bp\b|baz\s+puan|puan|σ|yıl|kat\b|%)", re.I)
+# Büyüklük sözcükleri ve bağımsız para kodları da muaf ("yıllık 40,7 milyar
+# dolar", "aylık 1,25 TL"): tutar bir oran değildir. Önek eşleşmesi bilerek —
+# ekli biçimler (milyarlık, milyona) de muaf. Çıplak "dolar/lira" EKLENMEZ:
+# "yıllık 31,51 dolar bazında" gerçek bir işaretsiz orandır. "bin\b" "binde"yi
+# muaf tutmaz — "binde bir" bir oran ifadesidir.
+_BIRIM_ARKA = re.compile(r"\s*(?:bp\b|baz\s+puan|puan|σ|yıl|kat\b|%|milyar|milyon|trilyon|bin(?:\b|lik)|TL\b|USD\b)", re.I)
 
 # Satır sonunda sıra sayısında kesik ("TCMB'nin 35."): yüzde ve ondalık
 # içermeyen 1–3 haneli tam sayı. "…%5,089." ile biten satır ENGEL ALMAZ; "6/7."
 # bir oran yazımıdır. Endeks adı ("BIST 100.", "S&P 500.") meşru bir cümle
 # sonudur — önceki sözcük endeks adıysa muaf.
-# ":" geriye bakışta: saatle biten meşru cümle ("TSİ 14:00.") kesik değildir.
+# ":" geriye bakışta: saat ("TSİ 14:00.") ve oran ("1:2.") yazımı meşru cümle
+# sonudur, kesik değildir. Bitişik iki nokta yalnız: "perşembe: 38." (arada
+# boşluk) yakalanmaya devam eder.
 SIRA_KESIK = re.compile(r"(?<![%\d,.+−/:-])\b\d{1,3}\.$", re.M)
+# Endeks adı: SAYININ ÖNÜNDEKİ sözcük ("STOXX Europe 600." → "europe"). Liste
+# bulten/piyasa.py'deki sayıyla biten enstrüman adlarını kapsar; tweet/duman.py
+# o dosyayı METİN olarak okuyup tutarlılığı sınar (içe aktarma ONBELLEK dizini
+# kurar, gerek yok).
 _ENDEKS_ADI = {"bist", "s&p", "nikkei", "ftse", "stoxx", "dax", "cac", "msci", "russell",
-               "nasdaq", "ibex", "kospi", "asx", "smi", "aex", "mib", "topix", "dow"}
+               "nasdaq", "ibex", "kospi", "asx", "smi", "aex", "mib", "topix", "dow",
+               "europe", "csi", "nifty"}
+# Sayım ya da düzeltme yüklemi: "katılımcı sayısı 61.", "5 değil 4.", "doğrusu 4.",
+# "yalnız 19." tam ve doğru cümle sonlarıdır. Kural yine ENGEL kalır: gerçek
+# kesiklerin önündeki sözcük (TCMB'nin · de · perşembe: · istatistikleri) bu
+# kümede değil. Genel bir "çıplak tam sayı" muafiyeti KONMAZ — "sayısı 61." ile
+# "Hükümet 12." biçimce ayrılamaz; ayıran yalnız önceki sözcüktür.
+SAYIM_ONCESI = {"sayısı", "değil", "doğrusu", "yalnız", "toplam", "sadece"}
 
 # Sayıdan hemen önce ASCII tire: "-1,88" yerine "−1,88" olmalı. Aralık tiresi
 # ("%1,25-%2,10") ayrı kalıpla (ARALIK_TIRESI) yakalanır — Türkçe yazımda aralık
@@ -268,11 +291,15 @@ def acik_kalan(satir: str) -> str | None:
 
 def sira_kesik(metin: str) -> str | None:
     """Satır sonunda sıra sayısında kesilmiş cümle ("…TCMB'nin 35."); yoksa None.
-    Önceki sözcük bir endeks adıysa ("BIST 100.") meşru cümle sonudur."""
+    Önceki sözcük bir endeks adıysa ("BIST 100.") ya da sayım/düzeltme yüklemiyse
+    ("sayısı 61.", "değil 4.") meşru cümle sonudur."""
     for m in SIRA_KESIK.finditer(metin):
         satir_basi = metin.rfind("\n", 0, m.start()) + 1
         onceki = metin[satir_basi:m.start()].rstrip().split()
-        if onceki and onceki[-1].strip("(\"'“«").lower() in _ENDEKS_ADI:
+        ham = onceki[-1].strip("(\"'“«:;,") if onceki else ""
+        # İki küçültme: Latin ad ("BIST" → "bist") ve Türkçe sözcük
+        # ("SAYISI" → "sayısı"); biri ötekinin yerine geçemez.
+        if ham.lower() in _ENDEKS_ADI or ham.replace("İ", "i").replace("I", "ı").lower() in SAYIM_ONCESI:
             continue
         return metin[max(satir_basi, m.start() - 25):m.end()]
     return None
@@ -343,7 +370,8 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     if oge:
         formul = oge.startswith("$") and re.search(re.escape(oge) + r"[^\s$]*\$", n)
         engel.append(f"tıklanır X öğesi ({oge!r}) — hashtag, cashtag ve @ bahsetme kullanılmaz"
-                     + ("; formül (KaTeX) kalıntısı olabilir" if formul or "_" in oge else ""))
+                     + ("; formül (KaTeX) kalıntısı olabilir"
+                        if oge.startswith("$") and (formul or "_" in oge) else ""))
     kalinti = HTML_KALINTI.search(m)
     if kalinti:
         engel.append(f"HTML kalıntısı: {kalinti.group(0)!r}")
@@ -411,6 +439,11 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
         engel.append(f"metin cümle sonuyla bitmiyor: {m[-30:]!r}")
     if not SORUMLULUK.search(m):
         engel.append("sorumluluk notu yok ('… yatırım tavsiyesi değildir.')")
+    elif not SORUMLULUK_SON.search(m.rsplit("\n", 1)[-1]):
+        # Konum da sorulur: not gönderinin SON SATIRIDIR (son paragrafı değil —
+        # "not\nEk satır" de ayrı bir satırdır). Üreticiler notu sona koyuyor;
+        # açık olan elle yazılan metin (ozel.py).
+        engel.append("sorumluluk notu son satırda değil — not gönderinin son satırıdır")
     ilk = ILK_SATIR.get(tur)
     if ilk and not ilk.search(m.split("\n", 1)[0]):
         engel.append(f"{tur} gönderisi başlık satırıyla açılmıyor: {m.split(chr(10), 1)[0][:50]!r}")

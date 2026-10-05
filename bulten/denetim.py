@@ -1832,6 +1832,37 @@ class Denetim:
         if not uymayan and not uzun:
             self._ok(f"risk haritası: {len(uyan)} madde kalıpta")
 
+    def takvim_kalibi(self):
+        """Haftalık gönderinin gün satırı iki yönlü sonuç taşıyor mu — UYARI.
+
+        Kural (YAZIM.md haftalık 9): takvimde her gün paragrafının İLK cümlesi
+        olayı, saati ve iki yönlü sonucu taşır; gönderi o cümleyi alır. Yazar
+        kurala uymayınca araç sessizce bir takvim listesi üretiyordu (04.10:
+        beş gün satırının beşi). `risk_kalibi`nin eşi: satır ve işaret
+        gönderi üreticisinde TEK tanım (`tweet/uret.takvim_satiri`,
+        `iki_yonlu_mu`), dosya yolundan yüklenir. ENGEL değil: sayfa okunuyor,
+        yayını durdurmak kusurdan pahalı olurdu."""
+        if int(self.b.get("surum") or 2) < 3 or not self.b.get("haftalik"):
+            return
+        takvim = str((self.b.get("gundem") or {}).get("takvim") or "")
+        if not _duz(takvim):
+            return
+        tu = _tweet_uret()
+        tek = []
+        for e, bir in tu._takvim_paragraflari(takvim):
+            if not (e and bir and tu.gun_etiketi_mi(e)):
+                continue
+            satir = tu.takvim_satiri(e, bir)
+            if satir and not tu.iki_yonlu_mu(satir):
+                tek.append(e.rstrip(".:"))
+        if tek:
+            self.uyari.append(
+                f"Takvimin {len(tek)} gün satırında gönderiye giden cümle iki yönlü sonuç "
+                "taşımıyor (ilk cümle: olay, saat ve 'güçlü gelirse X, zayıf gelirse Y'): "
+                + " · ".join(tek))
+        else:
+            self._ok("takvim: gün satırları iki yönlü sonuç taşıyor")
+
     def manset(self):
         """Sayının başlığı (isteğe bağlı): tek cümle, en çok 110 karakter.
         Yokluğu kusur değildir — sayfa o zaman tarihi başlık yapar."""
@@ -2537,7 +2568,7 @@ class Denetim:
         self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
         self.yerlesmemis(); self.doviz_kapanisi(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
         self.revizyon(); self.duzeltme()
-        self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset(); self.risk_kalibi()
+        self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset(); self.risk_kalibi(); self.takvim_kalibi()
         self.olagandisilik_penceresi(); self.uslup(); self.fikirler()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")

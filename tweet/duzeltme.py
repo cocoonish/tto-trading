@@ -31,9 +31,19 @@ Aynı kayıt birkaç bülten dosyasında çoğalsa da (yazı katmanı listeyi b�
 yeniden yazar) tek gönderi çıkar; düzeltmenin düzeltmesi başka bir eski→yeni
 çifti olduğu için ayrı anahtarla, AYNI ana gönderinin altına gider.
 
-PENCERE: son PENCERE_GUN günün bülten dosyaları ve son PENCERE_GUN gün içinde
-tarihlenmiş analiz kayıtları. Geçmiş gönderiler için düzeltme ATILMAZ: bugün
-hiçbir kayıt `gonderi` taşımıyor (kullanıcı ayrıca karar verir).
+PENCERE: kaydın KENDİ tarihinden (`tarih`) sonraki PENCERE_GUN gün — kayıt
+hangi sayının dosyasında durursa dursun; bülten ve analiz için tek kural
+(`_pencerede`). Bülten dosyasının günü yalnız gelecekteki dosyayı eler. Pencere
+dışında kalan ya da tarihi çözülemeyen, `gonderi` taşıyan ve defterde henüz
+olmayan kayıt SESSİZCE düşmez: adıyla uyarılır ("X'e gitmedi"). Geçmiş
+gönderiler için kendiliğinden düzeltme ATILMAZ.
+
+Sınama girişi (yazma kapısı bunu alt süreçte çağırır, bkz. bulten/yaz.py):
+
+    echo "<gonderi_metni>" | python3 tweet/duzeltme.py --sina bulten:2026-10-04
+
+gönderimdeki metnin birebir aynısını kurar ve tweet kapısından geçirir;
+ENGEL'de çıkış 1.
 """
 from __future__ import annotations
 
@@ -72,7 +82,20 @@ def kimlikli(defter: dict, hedef: str) -> str | None:
 
 # ── kaynaklar ────────────────────────────────────────────────────────────────
 
+def _pencerede(d: dict, bugun: dt.date) -> bool | None:
+    """Kaydın tarihi penceredeyse True, değilse False (geçmiş ya da ileri),
+    tarih çözülemezse None. Bülten ve analiz için TEK tanım."""
+    try:
+        gun = dt.date.fromisoformat(str(d.get("tarih") or "")[:10])
+    except ValueError:
+        return None
+    return bugun - dt.timedelta(days=PENCERE_GUN) <= gun <= bugun
+
+
 def _bulten_kayitlari(bugun: dt.date, dizin: Path) -> list[dict]:
+    """Bülten dosyalarındaki gonderi'li kayıtlar. Pencere burada SORULMAZ
+    (kaydın tarihinden sorulur, `adaylar`): düzeltme düzelttiği sayının eski
+    dosyasına da yazılabilir. Yalnız gelecekteki dosya elenir."""
     out = []
     if not dizin.exists():
         return out
@@ -81,7 +104,7 @@ def _bulten_kayitlari(bugun: dt.date, dizin: Path) -> list[dict]:
             gun = dt.date.fromisoformat(p.stem)
         except ValueError:
             continue
-        if not (bugun - dt.timedelta(days=PENCERE_GUN) <= gun <= bugun):
+        if gun > bugun:
             continue
         try:
             b = json.loads(p.read_text(encoding="utf-8"))
@@ -125,21 +148,38 @@ def on_bilgi_duzeltmeleri(metin: str) -> list[dict]:
     return out
 
 
-def _analiz_kayitlari(bugun: dt.date, dizin: Path) -> list[dict]:
-    out = []
+def _duzeltme_blogu(metin: str) -> str:
+    """Ön bilginin ham `duzeltmeler:` bloğu (uyarı kararı için)."""
+    m = _FM.match(metin)
+    if not m:
+        return ""
+    blok = re.search(r"^duzeltmeler:\s*\n((?:[ \t].*\n?|\s*\n)*)", m.group(1) + "\n", re.M)
+    return blok.group(1) if blok else ""
+
+
+def _analiz_kayitlari(bugun: dt.date, dizin: Path) -> tuple[list[dict], list[str]]:
+    """(kayıtlar, uyarılar). Bir dosyanın okunamayan ön bilgisi (katlanmış YAML)
+    YALNIZ o dosyayı düşürür; öbür dosyalar ve bülten kayıtları işlenir.
+    Uyarı yalnız o dosyanın düzeltme bloğu X'e bir şey götürmek istiyorsa
+    (gonderi/gonderi_metni) basılır — X'e hiçbir şey göndermeyen bir dosya her
+    koşuda uyarı üretmez. Katlanmış değer düz metin olarak OKUNMAZ: tek tanım
+    ortak/on_bilgi'dir."""
+    out: list[dict] = []
+    uyari: list[str] = []
     if not dizin.exists():
-        return out
+        return out, uyari
     for y in sorted(dizin.glob("*.mdx")):
-        for d in on_bilgi_duzeltmeleri(y.read_text(encoding="utf-8")):
-            if not (d.get("gonderi") or d.get("gonderi_metni")):
-                continue
-            try:
-                gun = dt.date.fromisoformat(str(d.get("tarih") or "")[:10])
-            except ValueError:
-                continue
-            if bugun - dt.timedelta(days=PENCERE_GUN) <= gun <= bugun:
+        ham = y.read_text(encoding="utf-8")
+        try:
+            kayitlar = on_bilgi_duzeltmeleri(ham)
+        except analiz_m._on_bilgi.OnBilgiHatasi as e:
+            if re.search(r"^\s*(?:-\s+)?gonderi(?:_metni)?\s*:", _duzeltme_blogu(ham), re.M):
+                uyari.append(f"analiz:{y.stem}: düzeltme kaydı okunamadı ({str(e)[:80]}) — X'e gitmedi")
+            continue
+        for d in kayitlar:
+            if d.get("gonderi") or d.get("gonderi_metni"):
                 out.append({**d, "kaynak": f"analiz:{y.stem}"})
-    return out
+    return out, uyari
 
 
 def adaylar(bugun: dt.date, defter: dict, bulten_dizin: Path | None = None,
@@ -152,12 +192,28 @@ def adaylar(bugun: dt.date, defter: dict, bulten_dizin: Path | None = None,
     (yazma kapısı bunu zaten reddeder; analiz ön bilgisi o kapıdan geçmez)."""
     bd = bulten_dizin or uret.BULTENLER
     ad = analiz_dizin or analiz_m.ANALIZ_DIZIN
-    kayitlar = _bulten_kayitlari(bugun, bd) + _analiz_kayitlari(bugun, ad)
+    an_kayit, an_uyari = _analiz_kayitlari(bugun, ad)
+    kayitlar = _bulten_kayitlari(bugun, bd) + an_kayit
     secilen: dict[str, dict] = {}
-    uyari: list[str] = []
+    uyari: list[str] = list(an_uyari)
     for d in kayitlar:
         hedef = str(d.get("gonderi") or "").strip()
         govde = str(d.get("gonderi_metni") or "").strip()
+        pencere = _pencerede(d, bugun)
+        if not pencere:
+            # Pencere dışı ya da tarihsiz: gönderilmez. Uyarı yalnız defterde
+            # olmayan (gönderilmiş eski kayıt sonsuza kadar uyarı üretmesin) ve
+            # tarihi GEÇMİŞTE ya da çözülemeyen kayda — ileri tarihli kayıt
+            # vakti gelince gider.
+            k0 = anahtar(hedef, str(d.get("eski") or ""), str(d.get("yeni") or ""))
+            if pencere is False and str(d.get("tarih") or "")[:10] > bugun.isoformat():
+                continue
+            if k0 not in defter:
+                neden = ("tarihi çözülemedi" if pencere is None
+                         else f"{PENCERE_GUN} günlük pencerenin dışında")
+                uyari.append(f"{d['kaynak']}: düzeltme kaydı ({str(d.get('tarih') or '—')[:10]}) "
+                             f"{neden} — X'e gitmedi")
+            continue
         if not hedef or not govde:
             uyari.append(f"{d['kaynak']}: düzeltme kaydında gonderi ve gonderi_metni birlikte "
                          "yazılır — biri eksik, X'e gitmedi")
@@ -184,8 +240,12 @@ def hedef_basligi(hedef: str, arsiv: Path | None = None) -> str:
     satırından ("Haftaya Bakış — 4 Ekim 2026" → "Haftaya Bakış, 4 Ekim 2026";
     analizde başlık satırı da eklenir). Arşiv yoksa anahtardan kurulur."""
     yol = (arsiv or ARSIV) / (hedef.replace(":", "-") + ".txt")
-    if yol.exists():
-        govde = yol.read_text(encoding="utf-8").split("\n", 2)
+    try:
+        ham = yol.read_text(encoding="utf-8") if yol.exists() else None
+    except (OSError, UnicodeDecodeError):
+        ham = None                                             # bozuk arşiv: anahtardan kur
+    if ham is not None:
+        govde = ham.split("\n", 2)
         satirlar = [s.strip() for s in (govde[2] if len(govde) > 2 else "").split("\n") if s.strip()]
         if satirlar:
             bas = satirlar[0].replace(" — ", ", ", 1)
@@ -206,6 +266,24 @@ def metin(aday: dict, arsiv: Path | None = None) -> str:
     govde = uret._tipografi(re.sub(r"\s+", " ", aday["metin_ham"]).strip())
     not_ = uret.SORUMLULUK_TEKNIK if aday["hedef"].startswith("analiz:") else uret.SORUMLULUK_BULTEN
     return f"Düzeltme — {hedef_basligi(aday['hedef'], arsiv)}\n\n{govde}\n\n{not_}"
+
+
+def sina(hedef: str, govde: str) -> tuple[list[str], list[str]]:
+    """Yazma anı sınaması: gönderimdeki metnin BİREBİR aynısı (başlık + metin +
+    sorumluluk notu) kurulur ve tweet kapısından (tur='duzeltme') geçirilir."""
+    import denetim as denetim_m
+    return denetim_m.denetle(metin({"hedef": hedef, "metin_ham": govde}), "duzeltme")
+
+
+if __name__ == "__main__" and len(sys.argv) >= 3 and sys.argv[1] == "--sina":
+    # Alt süreçte çağrılır (bulten/yaz.py): bu modül sys.path'i ve sys.modules
+    # ['uret']'i değiştirir; yazma kapısının kendi sürecine yüklenmemeli.
+    _e, _u = sina(sys.argv[2], sys.stdin.read())
+    for _x in _e:
+        print(f"ENGEL {_x}")
+    for _x in _u:
+        print(f"UYARI {_x}")
+    raise SystemExit(1 if _e else 0)
 
 
 if __name__ == "__main__":                                     # kuru döküm

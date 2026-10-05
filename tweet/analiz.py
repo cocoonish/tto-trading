@@ -179,8 +179,9 @@ def baslikli_satir(soru: str, cevap: str) -> str:
 # Arşivdeki sekiz gönderide şerit değerlerinin 56/63'ü (%88,9) aynı gönderide
 # zaten geçiyordu; Hürmüz'de −%95,3 dört kez basıldı. Şerit artık yalnız tez ve
 # satırlarda GEÇMEYEN ölçümleri taşır; hiçbiri kalmazsa satır basılmaz (boş
-# "Kilit ölçümler:" etiketi kapıda ENGEL'dir). Sonuç adıyla: şerit çoğu yazıda
-# kalkar — 17.09.2026'daki "şerit korunur" niyeti bilerek değişti; korunan şey
+# "Kilit ölçümler:" etiketi kapıda ENGEL'dir). Sonuç adıyla: şerit, metinde
+# geçmeyen ölçüm kalmayan yazıda kalkar (05.10.2026: yönetici özetli 12 yazının
+# 3'ü) — 17.09.2026'daki "şerit korunur" niyeti bilerek değişti; korunan şey
 # artık şerit değil, gönderide BAŞKA YERDE OLMAYAN ölçümdür.
 #
 # "Geçiyor mu" sorusu SAYININ kendisiyle sorulur, tek tanımdan: ondalıklı sayı
@@ -190,12 +191,23 @@ def baslikli_satir(soru: str, cevap: str) -> str:
 # gün", "6/7") metinde birebir aranır; çıplak tam sayı ("3") tarihlerle
 # çakışacağı için aranmaz ve şeritte kalır.
 #
-# Değer ÖNDE yazılır (sayfa da değeri üstte basar). Bileşik kalemde ("%10,76 ·
+# Değer ÖNDE ve uzun tireyle yazılır (sayfa da değeri üstte basar). Bileşik kalemde ("%10,76 ·
 # %4,17" | "reel faiz: ankete göre · gerçekleşene göre") değer ve etiket aynı
 # sayıda " · " taşıyorsa ikili ikili eşlenir; kalem ayracı "; " — iç ayraçla
 # aynı olsaydı "%4,17" yanlış etiketin yanına düşerdi (PPK kararı gönderisi).
 # Bölünemeyen bileşik kalem atlanır. Etiket KIRPILMAZ: kalem ya tam basılır ya
 # hiç — kısaltma küme sayısı, eşik ve ölçü saati gibi çekinceleri düşürür.
+#
+# DEĞER İLE ETİKET ARASINDA UZUN TİRE (05.10.2026 incelemesi). Sayfa değeri
+# ayrı satırda, kalın ve eş aralıklı basar; gönderide yalnız bir boşluk vardı
+# ve etiketi rakamla ya da zaman sözcüğüyle başlayan kalem değere yapışıyordu:
+# "%13,7 bir ayda …" (bir ayda %13,7 diye okunur; sayı gözlemlerin payı), "4 /
+# 30 temmuz özetiyle …" (tarih gibi), "9,9 puan 2 yıl – 9 yıl" (aralık gibi).
+# Değer ÖNDE kalır (A8). Virgül (ondalıkla çakışır), iki nokta (3 etikette
+# geçiyor) ve parantez (14 etikette) ayraç olamaz; etiketin içinde " — " geçse
+# de değerin hemen ardındaki ilk tire ayraç olarak okunur. Ölçüldü: 13 analizde
+# ENGEL 0 → 0, UYARI aynı, gönderiler 2–8 karakter uzuyor.
+SERIT_AYRAC = "—"
 
 def _isaret(m: str, i: int) -> str:
     """Sayının işareti: hemen önündeki eksi (U+2212 ya da kelime/sayı ardı
@@ -240,7 +252,7 @@ def _metinde(deger: str, metin: str, imler: set[tuple[str, str]]) -> bool:
 
 
 def serit_kalemleri(rakamlar: list[tuple[str, str]], metin: str) -> tuple[list[str], list[str]]:
-    """(şeride girecek kalemler — değer önde, metinde geçmeyenler, sıra
+    """(şeride girecek kalemler — değer önde, uzun tireyle, metinde geçmeyenler, sıra
     korunur; eşlenemediği için atlanan bileşik kalemler)."""
     imler = olcu_imleri(metin)
     out, atlanan = [], []
@@ -254,7 +266,7 @@ def serit_kalemleri(rakamlar: list[tuple[str, str]], metin: str) -> tuple[list[s
         ciftler = list(zip(dp, ep)) if len(dp) > 1 else [(deger, etiket)]
         if all(_metinde(d, metin, imler) for d, _ in ciftler):
             continue                 # bütün parçaları metinde: tekrar
-        out.append(" · ".join(f"{d.strip()} {e.strip()}" for d, e in ciftler))
+        out.append(" · ".join(f"{d.strip()} {SERIT_AYRAC} {e.strip()}" for d, e in ciftler))
     return out, atlanan
 
 
@@ -315,15 +327,63 @@ def tez_acilisi_olcu_tasir(tez: str) -> bool:
     return bool(c) and bool(uret._sayilar(c[0]))
 
 
+def _tez_ham(a: dict, yo: dict | None) -> str:
+    """Gönderinin tezini kuran ham metin: yönetici özetinin tezi, özet yoksa
+    ön bilgideki `ozet` (analiz_zinciri'nin dalıyla AYNI koşul)."""
+    if yo and (yo["tez"] or yo["satirlar"]):
+        return yo["tez"]
+    return _duz(str(a.get("ozet") or ""))
+
+
+def tez_uyarisi(a: dict, kisa: str | None = None) -> str | None:
+    """Tezin ilk cümlesi ölçüm taşımıyorsa uyarı metni, yoksa None — TEK tanım.
+
+    Gönderi kurucusu (`_tez`) ve yayından ÖNCE sorulan analiz sınavı
+    (site/tools/analiz_sinavi.py) bunu çağırır: kural yalnız gönderi anında
+    sorulsaydı yazar ilk geri bildirimi yazı yayımlandıktan sonra alırdı
+    (05.10.2026 incelemesi: 14 analizin 10'u kuralı çiğniyordu). Yol
+    gönderinin yoludur — yönetici özeti tezi ya da `ozet` → site atfı süzgeci
+    → tez payı → ilk cümle; iki kapı aynı cümleye bakar."""
+    if kisa is None:
+        kisa = _kirp(_site_disi(_tez_ham(a, yonetici_ozeti(a.get("govde", "")))), TEZ_SINIR)
+    if kisa and not tez_acilisi_olcu_tasir(kisa):
+        return (f"{a.get('slug', '?')}: tezin ilk cümlesi ölçüm sayısı taşımıyor "
+                f"({uret.cumleler(kisa)[0][:80]}) — analiz/YAZIM.md, yönetici özeti")
+    return None
+
+
 def _tez(a: dict, ham: str) -> str:
     tez = _site_disi(ham)
     kisa = _kirp(tez, TEZ_SINIR)
     if tez and not kisa:
         uret.DUSEN.append(("analiz-bütçe", f"tezin ilk cümlesi {TEZ_SINIR} karakteri aşıyor"))
-    if kisa and not tez_acilisi_olcu_tasir(kisa):
-        UYARILAR.append(f"{a.get('slug', '?')}: tezin ilk cümlesi ölçüm sayısı taşımıyor "
-                        f"({uret.cumleler(kisa)[0][:80]}) — analiz/YAZIM.md, yönetici özeti")
+    u = tez_uyarisi(a, kisa)
+    if u:
+        UYARILAR.append(u)
     return kisa
+
+
+# KANIT SATIRI EN SON DÜŞER (05.10.2026 incelemesi). Şablon "Kanıtın gücü"nü
+# tablonun SONUNA koyuyor (11 yazının 10'unda son satır), düşürme de sondan:
+# tavanı aşan her yazıda ilk düşen satır yapısal olarak kanıtın gücüydü ve
+# Hürmüz gönderisi ikinci el haber satırlarını, o haberlerin "bağımsız
+# doğrulanmadı" çekincesi olmadan taşıdı. Kanıt satırı adıyla tanınır
+# (şablonun adı; büyük/küçük harf ve sondaki noktalama yok sayılır) ve ancak
+# tablodan geriye yalnız o kaldığında düşer. Kalanların sırası yazarındır;
+# "haber satırı önce düşsün" sınıflaması yapılmaz — tabloda karşılığı yok.
+KANIT_SORUSU = "kanıtın gücü"
+
+
+def _kanit_mi(soru: str) -> bool:
+    return uret._kucuk((soru or "").strip().rstrip(".?!:").strip()) == KANIT_SORUSU
+
+
+def _dusecek_satir(sorular: list[str]) -> int:
+    """Tavanda düşecek satırın sırası: sondan geriye ilk kanıt DIŞI satır."""
+    for i in range(len(sorular) - 1, -1, -1):
+        if not _kanit_mi(sorular[i]):
+            return i
+    return len(sorular) - 1
 
 
 def analiz_zinciri(a: dict) -> list[str]:
@@ -334,9 +394,10 @@ def analiz_zinciri(a: dict) -> list[str]:
     yo = yonetici_ozeti(a.get("govde", ""))
     baslik = "\n".join(_baslik(a))
     satirlar: list[str] = []
+    sorular: list[str] = []          # satırların soru sütunu (kanıt satırını tanımak için)
     rakamlar: list[tuple[str, str]] = []
     if yo and (yo["tez"] or yo["satirlar"]):
-        tez = _tez(a, yo["tez"])
+        tez = _tez(a, _tez_ham(a, yo))
         for soru, cevap in yo["satirlar"]:
             c = _site_disi(cevap)
             if not c:
@@ -346,17 +407,19 @@ def analiz_zinciri(a: dict) -> list[str]:
                 uret.DUSEN.append(("analiz-bütçe", f"{soru}: ilk cümle {SATIR_SINIR} karakteri aşıyor"))
                 continue
             satirlar.append(baslikli_satir(soru, k))
+            sorular.append(soru)
         rakamlar = yo["rakamlar"]
     else:
         # Yedek yol: yalnız ön bilgideki TEZ (ozet). Açıklama alınmaz; yönetici
         # özeti olmayan bir yazının gönderisi kısa olur ve bunu söyler.
-        tez = _tez(a, _duz(str(a.get("ozet") or "")))
+        tez = _tez(a, _tez_ham(a, yo))
         if not tez:
             raise SystemExit(f"{a['slug']}: yönetici özeti de tez de yok — gönderi kurulamaz")
         UYARILAR.append(f"{a['slug']}: yönetici özeti yok — yalnız tez gönderildi")
     # Tavan aşılıyorsa ORTADAN kısılır: tez kalır, tablo satırları SONDAN
-    # itibaren düşer, şerit her adımda KALAN metne karşı yeniden kurulur —
-    # düşen satırın ölçümü metinden çıktığı için şeride döner.
+    # itibaren düşer — "Kanıtın gücü" satırı en son, çünkü gövdedeki
+    # iddiaların çekincesidir (`_dusecek_satir`) —, şerit her adımda KALAN
+    # metne karşı yeniden kurulur; düşen satırın ölçümü şeride döner.
     #
     # ÖLÇÜ KIRPILMAMIŞ GÖVDEDEN ALINIR. `_kapat` gövdeyi tavana KIRPAR, yani
     # çıktısı tanımı gereği tavanı AŞAMAZ; döngü ölçüyü ondan okuduğu sürece
@@ -378,7 +441,9 @@ def analiz_zinciri(a: dict) -> list[str]:
         return "\n\n".join(b for b in (g, s) if b), dusen
 
     while len(_ham(RAKAM_SINIR)[0]) > kapasite and satirlar:
-        uret.DUSEN.append(("analiz-bütçe", satirlar.pop()))
+        i = _dusecek_satir(sorular)
+        sorular.pop(i)
+        uret.DUSEN.append(("analiz-bütçe", satirlar.pop(i)))
     # Satırlar bittiyse şerit kalan paya sığdırılır (kalem bütünüyle düşer).
     pay = min(RAKAM_SINIR, kapasite - len(_govde()) - 2)
     ham, dusen = _ham(pay)
@@ -406,5 +471,11 @@ if __name__ == "__main__":
     a = p.parse_args()
     secilen = [analizi_oku(ANALIZ_DIZIN / f"{a.slug}.mdx")] if a.slug else bugunun_analizleri()
     for an in secilen:
+        UYARILAR.clear()
         t = analiz_zinciri(an)[0]
         print(f"── {an['slug']} ({len(t)} karakter)\n{t}\n")
+        # Her tarihte çalışan TEK önizleme bu; uyarıları yutmamalı (05.10.2026).
+        for u in UYARILAR:
+            print(f"  ! {u}")
+        for bolum, c in uret.DUSEN:
+            print(f"  düştü [{bolum}] {c[:160]}")

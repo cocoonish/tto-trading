@@ -7,8 +7,9 @@ açan uzun yazıdır; bültenden farkı kapsam değil **derinlik**tir.
 
 Rehber esastır; kural buraya yazılır ve araca konur. Buradaki her zorunluluk
 `site/tools/analiz_sinavi.py` tarafından ölçülür ve sayfa sınavı düşer;
-gönderiye ilişkin kurallar (yönetici özeti → X gönderisi) `tweet/analiz.py`
-tarafından gönderi kurulurken sorulur ve gönderim kaydına UYARI düşer.
+gönderiye ilişkin kurallar (yönetici özeti → X gönderisi) analiz sınavında
+UYARI olarak sorulur (tezin açılışı, özetin tek cümlesi, sayfa mobilyası
+atfı) ve `tweet/analiz.py` gönderi kurulurken aynı tanımla ikinci kez sorar.
 Rehberde olup araçta olmayan kural yoktur; araçta olup burada yazmayan da.
 
 Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
@@ -72,8 +73,11 @@ tarih iki yerde görünür ve listede hangi yazının hangi güne ait olduğu ok
      Hüküm cümlesi ölçümle birlikte kurulur ("Karar sürprizsiz: politika
      faizi %37,0'de, beşinci kez sabit; metin ise …"). Ön bilgideki `ozet`
      yönetici özeti olmayan yazının gönderisidir ve aynı kurala uyar. Araç
-     cümle sırasını değiştirmez; kural gönderi kurulurken sorulur ve
-     uymayan yazı gönderim kaydına UYARI düşer.
+     cümle sırasını değiştirmez; kural yayından önce analiz sınavında UYARI
+     olarak sorulur (5 Ekim 2026'dan itibaren yayımlanan yazılar; kural
+     geriye yürümez), gönderi kurulurken ikinci kez sorulur. Her tarihte
+     önizleme: `python3 tweet/analiz.py <slug>` gönderiyi, uyarıları ve
+     düşen birimleri basar.
    - **Soru sütunu cümle düzeninde yazılır** ("Gelir mi", "Kanıtın gücü");
      gönderi büyük harfe çevirmez. Soru biçimindeki başlık (soru eki mi/mı/
      mu/mü ya da ne, nerede, nereye, nereden, neden, nasıl, kaç, kaça,
@@ -82,11 +86,15 @@ tarih iki yerde görünür ve listede hangi yazının hangi güne ait olduğu ok
    - **Satır ve tez TAM cümleyle kısalır**, "…" hiç basılmaz: satır başına
      ~420, tez ~900 karakterlik pay dolunca sonraki cümle düşer; ilk cümlesi
      bile sığmayan satır bütünüyle düşer. Gönderi tavanı (3.800) aşılırsa
-     tablo satırları SONDAN düşer — en önemli satırlar üstte durur.
-   - **Rakam şeridi yalnız metinde GEÇMEYEN ölçümleri taşır**, değer önde:
-     "Kilit ölçümler: %13,7 bir ayda …; −12 bp 6 aylık düğüm …". Tezde ya
+     tablo satırları SONDAN düşer — en önemli satırlar üstte durur; "Kanıtın
+     gücü" satırı EN SON düşer, çünkü gövdedeki iddiaların çekincesidir.
+   - **Rakam şeridi yalnız metinde GEÇMEYEN ölçümleri taşır**, değer önde ve
+     etiketten uzun tireyle ayrılır:
+     "Kilit ölçümler: %13,7 — bir ayda …; −12 bp — 6 aylık düğüm …". Tezde ya
      da bir satırda zaten geçen değer şeride ikinci kez basılmaz; hiçbiri
-     kalmazsa şerit gönderide yoktur (çoğu yazıda böyle). Etiket
+     kalmazsa şerit gönderide yoktur (05.10.2026'da yönetici özetli 12
+     yazının 3'ünde). Tavan satır düşürdüğünde düşen satırın ölçümü şeride
+     döner — şerit her adımda kalan metne karşı yeniden kurulur. Etiket
      KIRPILMAZ: uzun etiketli kalem ya tam basılır ya hiç — kısaltma küme
      sayısı, eşik ve ölçü saati gibi çekinceleri düşürür; etiketi kısa
      yazmak yazarın işidir. Bileşik kalemde (`%10,76 · %4,17` | `reel faiz:
@@ -166,7 +174,10 @@ Hatalı sayı analiz gönderisiyle X'e de gittiyse kayda isteğe bağlı iki ala
 yazılır: `gonderi: 'analiz:<slug>'` ve `gonderi_metni: '<kısa düz metin>'`.
 `tweet/gonder.py` kayıt tarihinden sonraki 21 gün içinde orijinal gönderinin
 altına "Düzeltme — Analiz, <tarih>: <başlık>" yanıtını atar (sayfa bu iki alanı
-basmaz). Hedef gönderim defterinde kimliksizse yanıt atılmaz ve koşu uyarır.
+basmaz). Hedef gönderim defterinde kimliksizse yanıt atılmaz ve koşu uyarır;
+pencere dışında kalan ya da tarihi çözülemeyen kayıt da adıyla uyarılır.
+Değerler tek satır yazılır: katlanmış YAML (`sebep: >`) okunamaz ve o yazının
+düzeltmesi X'e gitmez (koşu dosya adıyla uyarır).
 
 ## Yayın akışı
 

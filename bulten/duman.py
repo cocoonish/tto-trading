@@ -985,7 +985,7 @@ def _bicim3_gonderi_ve_birlestirme():
                                      for g in ("Pazartesi 5 Ekim", "Salı 6 Ekim", "Cuma 9 Ekim"))
     metin = tu.bulten_zinciri(hb)[0]
     for blok in ("\nSenaryolar\nAna senaryo: ", "\nAlternatif: kur baskısı. Tetik: Kur haftalık",
-                 "\nÖnümüzdeki hafta\nPazartesi 5 Ekim: ", "\nKarne — notlanan 10: tuttu 5"):
+                 "\nÖnümüzdeki hafta\nPazartesi 5 Ekim: ", "\nKarne — şimdiye kadar notlanan 10: tuttu 5"):
         assert blok in metin, f"haftalık iskelette blok yok: {blok.strip()!r}"
     for et in ("Türkiye:", "Türkiye makro:", "Küresel:", "Emtia:", "Haftanın öne çıkanları",
                "Haftanın olağandışı"):
@@ -4996,6 +4996,50 @@ def main() -> int:
                 yaz.TWEET_DEFTER = eski
     sina("yaz: düzeltme yanıtı alanları — hedef kimlikli, ikisi birlikte, düz metin, korunur", _duzeltme_gonderisi)
 
+    # kapi#4 (05.10.2026): düzeltme yanıtı YAZMA ANINDA tweet kapısından geçer —
+    # gönderim anında ENGEL alacak metin 21 gün boyunca her tweet koşusunu
+    # kırmızı bitirirdi. Kapı alt süreçte koşar; bu süreçteki `import denetim`
+    # hâlâ bültenin denetimini vermeli (tweet modülleri yol/modül kirletir).
+    def _duzeltme_tweet_kapisi():
+        import yaz
+        import tempfile, json as _j
+        temel = {"alan": "Gümüş haftalık değişim", "eski": "−%5,96", "yeni": "−%6,64", "sebep": "s"}
+        with tempfile.TemporaryDirectory() as td:
+            hedef = Path(td) / "b.json"
+            hedef.write_text(_j.dumps({"gundem_kaynagi": "yazili", "gundem": {"kilit": "x"}}), encoding="utf-8")
+            defter = Path(td) / "defter.json"
+            defter.write_text(_j.dumps({"bulten:2026-10-04": {"idler": ["777"], "zaman": "z"}}), encoding="utf-8")
+            eski_d, eski_s = yaz.TWEET_DEFTER, yaz.TWEET_SINA
+            try:
+                yaz.TWEET_DEFTER = defter
+                def yaz_(metin):
+                    return yaz.uygula(hedef, {"duzeltmeler": [
+                        {**temel, "gonderi": "bulten:2026-10-04", "gonderi_metni": metin}]})
+                for gecer in ("Altının kapanışı %33,29 değil %32,87.",
+                              "Haftanın ihale sayısını 3 yazdık, doğrusu 4.",
+                              "PPK kararının saati 14:30 değil TSİ 14:00."):
+                    yaz_(gecer)                                   # meşru düzeltme sonu ENGEL almaz
+                for ret in ("Gümüşün haftalık değişimi #gümüş için −%6,64.",
+                            "Gümüş −%6,64; dolar alın."):
+                    try:
+                        yaz_(ret)
+                    except SystemExit as e:
+                        assert "tweet kapısından geçmedi" in str(e), str(e)
+                    else:
+                        raise AssertionError(f"tweet kapısı ENGEL'i yazma anında reddedilmedi: {ret!r}")
+                yaz.TWEET_SINA = Path(td) / "yok.py"
+                try:
+                    yaz_("Altının kapanışı %33,29 değil %32,87.")
+                except SystemExit as e:
+                    assert "koşturulamadı" in str(e), str(e)
+                else:
+                    raise AssertionError("kapı koşturulamazken düzeltme yanıtı yazıldı")
+            finally:
+                yaz.TWEET_DEFTER, yaz.TWEET_SINA = eski_d, eski_s
+        import denetim as _dn
+        assert hasattr(_dn, "Denetim"), "tweet kapısı süreç içine yüklendi: `import denetim` tweet'in denetimini getirdi"
+    sina("yaz: düzeltme yanıtı yazma anında tweet kapısından geçer (alt süreç; meşru sonlar geçer)", _duzeltme_tweet_kapisi)
+
     # ── yaz.py: yazı katmanının TEK giriş kapısı — sözleşmesi sınanır
     def _yaz():
         import yaz, tempfile, json as _j, subprocess as _sp, os as _os, time as _t
@@ -6781,6 +6825,57 @@ def main() -> int:
          _fikir_karar_kapisi)
     sina("işlem fikri: yazım anı · taşıma · ölçülemez döngüsü · ufuk günü · kümülatif defter · donma · alt eğri · değişmezlik · yeniden ölçüm",
          _fikir_zaman_tasima_dongu)
+
+    # ── σ listesine giremeyen seri: tek tanım ölçüm katmanında (05.10.2026)
+    def _sigma_guvenilmez():
+        """Bayat kotasyonlu seri (2YY=F) σ sıralamasına GİRMEZ, `sigma_disi`nde
+        sebebiyle durur; sayfa, gönderi ve denetim aynı `sigma` listesini okur.
+        İşaret YALNIZ 2YY=F'de: VIX, MOVE ve TL çaprazlarının σ'sı meşrudur
+        (fikir.DISLANAN buraya taşınmaz)."""
+        import piyasa
+        assert set(piyasa.SIGMA_GUVENILMEZ) == {"2YY=F"}, piyasa.SIGMA_GUVENILMEZ
+        kodlar = {v.kod for v in piyasa.VARLIKLAR}
+        assert set(piyasa.SIGMA_GUVENILMEZ) <= kodlar
+        satir = lambda kod, ad, z, tip="fiyat": {  # noqa: E731
+            "kod": kod, "ad": ad, "tip": tip, "d1": 1.0, "h1": 1.0, "d1_sigma": z,
+            "h1_sigma": z, "sigma_gun": 1.0, "sigma_hafta": 1.0, "degisim_birim": "%"}
+        s = [satir("2YY=F", "ABD 2 yıllık", 4.0, "getiri"), satir("^NDX", "Nasdaq 100", 2.5),
+             satir("^MOVE", "MOVE", -2.2), satir("GBPTRY=X", "GBP/TRY", 2.1)]
+        for haftalik in (False, True):
+            em = piyasa.en_cok_hareket(s, haftalik=haftalik)
+            adlar = [x["ad"] for x in em["sigma"]]
+            assert "ABD 2 yıllık" not in adlar, adlar
+            assert adlar == ["Nasdaq 100", "MOVE", "GBP/TRY"], adlar
+            assert [x["kod"] for x in em["sigma_disi"]] == ["2YY=F"] and em["sigma_disi"][0]["sebep"]
+    sina("σ listesi: bayat kotasyonlu seri (yalnız 2YY=F) σ sırasına girmez, sigma_disi'nde sebebiyle",
+         _sigma_guvenilmez)
+
+    # ── haftalık takvim gün satırı iki yönlü sonuç taşıyor mu (UYARI, 05.10.2026)
+    def _takvim_kalibi():
+        """`risk_kalibi`nin eşi: gönderiye giden gün satırı (tweet/uret.takvim_satiri)
+        iki yönlü sonuç taşımıyorsa UYARI; işaret ve satır gönderi üreticisinde
+        TEK tanım; günlük sayıda ve "Ötesi" etiketinde sorulmaz; kos() listesinde."""
+        import denetim as _den
+        iki = ("<p><strong>Pazartesi 5 Ekim.</strong> TÜİK 10:00'da eylül TÜFE'sini yayımlıyor; "
+               "beklenti üstü bir aylık rakam kısa ucu yükseltir, altı indirim fiyatlamasını güçlendirir.</p>"
+               "<p><strong>Ötesi.</strong> Planı değişen takvim: Hazine'nin yeni stratejisi.</p>")
+        tek = ("<p><strong>Salı 6 Ekim.</strong> Hazine'nin ekim iç borçlanmasının ikinci günü. "
+               "TLREF'e endeksli 4 yıllık ve sabit kuponlu 8 yıllık tahvil ihaleleri yapılıyor.</p>")
+        def uyar(takvim, haftalik=True):
+            d = _den.Denetim({"tarih": "2026-10-04", "surum": 3, "haftalik": haftalik,
+                              "gundem": {"takvim": takvim}})
+            d.takvim_kalibi()
+            return [u for u in d.uyari if "iki yönlü" in u]
+        assert not uyar(iki), f"iki yönlü gün satırı ya da 'Ötesi' uyarıldı: {uyar(iki)}"
+        u = uyar(iki + tek)
+        assert len(u) == 1 and "Salı 6 Ekim" in u[0] and "Pazartesi" not in u[0], u
+        assert not uyar(tek, haftalik=False), "günlük sayıda haftalık takvim kuralı soruldu"
+        assert "self.takvim_kalibi()" in inspect.getsource(_den.Denetim.kos), \
+            "takvim kalıbı ölçütü kos() listesinde değil — yazılmış ama koşmayan ölçüt"
+        assert not re.search(r"rs\[ae\]", inspect.getsource(_den)), \
+            "bülten denetimi iki yönlü işaretin ikinci bir kopyasını tutuyor"
+    sina("haftalık takvim: gün satırı iki yönlü sonuç taşımıyorsa UYARI (tek tanım gönderi üreticisinde)",
+         _takvim_kalibi)
 
     for ad in gecen:
         print(f"  ✓ {ad}")
