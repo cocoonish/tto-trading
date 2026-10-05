@@ -296,6 +296,41 @@ AKIM_BANT_BIRIKIMLI_6AY = 2.00 # mlr USD; notun ±1,5–2,5 aralığının ortas
 # kadar YUKARI yanlıdır. Hesaba GİRMEZ; yalnız ozet.json'a ve sayfaya taşınır.
 FAIZ_GELIRI_YILLIK_MLR = 2.30
 
+# --- Altın cinsinden YÜKÜMLÜLÜKLER (05.10.2026) ----------------------------
+# Akım NET pozisyondan kuruluyor (dış varlıklar eksi döviz yükümlülükleri), ve
+# TCMB'nin yükümlülüklerinin bir kısmı ALTIN cinsinden: bankaların zorunlu
+# karşılık altını, bankaların TCMB'deki altın ve teminat altını, yurt dışı
+# bankaların altın mevduatı, Hazine'nin altın mevduatı. Fiyat değişince
+# onlar da yeniden değerlenir; net pozisyondaki fiyat etkisi BRÜT altının
+# değil NET altının (brüt − yükümlülük) etkisidir. Brüt miktarla kurulan Γ
+# net pozisyondan fazla düşüyordu. Ölçüldü (2026, 187 iş günü): yayımlanan
+# akımın Γ'ya eğimi −0,29 (t −3,6) — altın yükseldiğinde sahte satış, düştüğünde
+# sahte alım; yükümlülük tarafı (A11 + A14) Γ'ya 0,32 ile tepki veriyordu ve
+# bu kalemlerin kendi fiyat etkisine 0,99 ile (t 7,2) — yani açıklanmayan pay
+# kalmıyor. Net altınla eğim +0,13 (t 1,1). Kaynak bir kalibrasyon sabiti
+# DEĞİL, TCMB'nin haftalık bilançosunda yayımladığı safi gram kalemleri.
+ONS_GRAM = 31.1034768          # bir troy ons, gram
+# Sütun → bilanço kalemi. Analitik bilançodaki yeri: Hazine kalemi kamu döviz
+# mevduatına (P.1ba), yurt içi banka kalemleri bankalar döviz mevduatına
+# (P.1bb), yurt dışı banka kalemi dış yükümlülüklere (P.1a) düşer; üçü de net
+# pozisyonun düştüğü yükümlülüklerdir. Standart dışı Hazine altını (diğer
+# pasifler) bu kümede değil: karşılığı rezerv varlığı değil.
+YUKUMLULUK_KALEMLERI = {
+    "hazine_g": "Hazine altın mevduatı",
+    "banka_teminat_g": "yurt içi bankaların teminat altını",
+    "banka_g": "yurt içi bankaların altın mevduatı",
+    "zk_g": "zorunlu karşılık altını",
+    "yd_banka_g": "yurt dışı bankaların altın mevduatı",
+}
+
+# Fiyat etkisinin akıma SIZIP SIZMADIĞI (tanı): son SIZINTI_PENCERE iş gününde
+# net alımın Γ'ya eğimi. Kusurlu ölçüm −0,29 / t −3,6 veriyordu; düzeltilmiş
+# ölçüm +0,13 / t 1,1. Eşik ikili: eğim büyük VE istatistiksel olarak ayırt
+# edilebilir olmalı — yalnız eğim, gürültülü bir pencerede sahte alarm üretir.
+SIZINTI_PENCERE = 120
+SIZINTI_ESIK_EGIM = 0.15
+SIZINTI_ESIK_T = 3.0
+
 
 # ---------------------------------------------------------------------------
 # Fiyat serisi
@@ -477,8 +512,10 @@ def olculemeyen_fiyat_gunleri(kaynak: pd.Series) -> pd.Series:
     Γ(L) = Q(L)·[P(L+1) − P(L)]; iki ucundan biri TAŞINMIŞSA fark ölçülmüş
     değildir. Taşımanın iki sebebi olabilir ve ikisi aynı görünür:
 
-      · ORTADAKİ taşıma — piyasa kapalıydı (tatil). Fiyat gerçekten kımıldamadı,
-        Γ = 0 doğru bir ölçümdür.
+      · ORTADAKİ taşıma — BİST kapalıydı (çoğu bayram arifesi yarım günü),
+        ama TCMB bilançosunu yine yayımladı ve altını uluslararası fiyatla
+        yeniden değerledi. Burada maskelenmez: iki günün TOPLAMI doğrudur,
+        günlere dağılımı ölçülemez — `arife_bloklari` ile birleştirilir.
       · SONDAKİ taşıma — besleme durmuş olabilir. Fiyatın kımıldayıp
         kımıldamadığını BİLMİYORUZ; Γ = 0 yazmak ölçmediğimiz bir şeyi
         ölçmüş gibi göstermektir.
@@ -490,7 +527,9 @@ def olculemeyen_fiyat_gunleri(kaynak: pd.Series) -> pd.Series:
     Ölçüldü (02.09.2026, 918 iş günü): fiyat 14 günde taşınmış ve Γ'nın
     SIFIR çıktığı günlerin TAMAMI (14/14) bu taşımalardan doğuyor — gerçek
     kotasyonla ölçülmüş tek bir sıfır yok. Yani sayfadaki her sıfır, ölçüm
-    değil taşımanın izidir.
+    değil taşımanın izidir. O gün ortadaki sıfırın "tatil, fiyat kımıldamadı"
+    diye doğru olduğu varsayıldı; 05.10.2026'da yanlış çıktı (bkz.
+    `arife_bloklari`).
     """
     tasindi = (kaynak == "ffill")
     if not tasindi.any():
@@ -502,6 +541,164 @@ def olculemeyen_fiyat_gunleri(kaynak: pd.Series) -> pd.Series:
     uctaki_tasima = tasindi & (kaynak.index > son_gercek)
     # Γ(L) iki ucu da ister: L ya da L+1 uçtaki taşımadaysa fark ölçülemez.
     return uctaki_tasima | uctaki_tasima.shift(-1, fill_value=False)
+
+
+def arife_bloklari(kaynak: pd.Series) -> list[tuple[list[pd.Timestamp], pd.Timestamp]]:
+    """ORTADAKİ taşıma blokları: (boşaltılacak etiketler, birleşik akımın etiketi).
+
+    BİST'in kapalı olduğu ama TCMB'nin bilançosunu yayımladığı günler (çoğu
+    bayram arifesi yarım günü) fiyat serisinde taşınır: P(L) = P(L−1). Γ(L−1)
+    sıfır çıkar, Γ(L) iki günün fiyat hareketini birden taşır. Bilanço ise
+    altını O GÜN de uluslararası fiyatla yeniden değerler; düşülmeyen yeniden
+    değerleme L−1'in akımına, fazladan düşülen L'ninkine yazılır. Ölçüldü
+    (05.10.2026, 11 arife): L−1'in akımı iki günlük fiyat etkisiyle 0,89
+    korelasyonlu, sıradan günlerde ardışık akım korelasyonu 0,11; en büyük
+    vakada akım bir gün −1,91, ertesi gün +7,45 milyar dolar yazılmıştı.
+
+    İki günün TOPLAMI doğrudur (fiyat hareketinin tamamı bir kez düşülür);
+    dağılımı ölçülemez. Kural: blok [L1..Lk] için L1−1..Lk−1 etiketleri boş,
+    toplam Lk etiketine yazılır — birikimli akım değişmez, günlük seri sahte
+    bir zıt çift basmaz. Serinin SAĞ UCUNDAKİ taşıma bu kümede değildir
+    (`olculemeyen_fiyat_gunleri` onu boş bırakır).
+    """
+    k = kaynak.reindex(kaynak.index)
+    tasindi = (k == "ffill").to_numpy()
+    gercek = ~tasindi
+    if not tasindi.any() or not gercek.any():
+        return []
+    son_gercek = int(gercek.nonzero()[0][-1])
+    bloklar: list[tuple[list[pd.Timestamp], pd.Timestamp]] = []
+    i = 0
+    n = len(tasindi)
+    while i < n:
+        if not tasindi[i]:
+            i += 1
+            continue
+        j = i
+        while j + 1 < n and tasindi[j + 1]:
+            j += 1
+        if i >= 1 and j < son_gercek:
+            bos = list(k.index[i - 1:j])          # L1−1 .. Lk−1
+            bloklar.append((bos, k.index[j]))     # toplam Lk'ye
+        i = j + 1
+    return bloklar
+
+
+def birlesik_akim(df: pd.DataFrame, kaynak: pd.Series,
+                  kolonlar: list[str]) -> tuple[pd.DataFrame, pd.Series]:
+    """`arife_bloklari`nın kuralını uygular; ikinci dönüş birleşik etiketlerdir.
+
+    Bloktaki değerlerden biri boşsa birleşik değer de BOŞTUR — boş bir günü
+    sıfır sayıp toplamak, ölçülmemiş bir şeyi ölçülmüş gibi gösterirdi.
+    """
+    out = df.copy()
+    isaret = pd.Series(False, index=df.index)
+    for bos, hedef in arife_bloklari(kaynak.reindex(df.index)):
+        etiketler = bos + [hedef]
+        for c in kolonlar:
+            if c not in out.columns:
+                continue
+            blok = out.loc[etiketler, c]
+            out.loc[hedef, c] = blok.sum() if blok.notna().all() else float("nan")
+            out.loc[bos, c] = float("nan")
+        isaret.loc[hedef] = True
+    return out, isaret
+
+
+def yukumluluk_ons_serisi(gram: pd.DataFrame | None,
+                          index: pd.DatetimeIndex) -> pd.DataFrame:
+    """Altın cinsinden yükümlülükler, milyon troy ons, günlük takvimde.
+
+    Kaynak TCMB haftalık bilançosu (Cuma, safi gram). Çapalar arasında zamana
+    göre doğrusal ara değer, son çapadan sonra taşıma — brüt miktar serisiyle
+    (`ons_serisi`) AYNI kural, aynı fonksiyon.
+
+    Bir kalem bilançoda ilk göründüğü haftadan önce YOKTU (yurt dışı bankaların
+    altın mevduatı 05.04.2024'te açıldı): o haftalar sıfırdır. İlk görünüşten
+    SONRA boş gelen hafta ise çapa olmaz — boşu sıfır saymak, yükümlülüğü
+    o hafta için silmek demek olurdu.
+
+    Veri hiç yoksa ya da bir kalem hiç yoksa HATA verir: net altın kurulamazsa
+    Γ brüt altınla kurulur ve ölçülmüş bir kusuru geri getirir; sessizce brüte
+    düşmek yerine hat görünür biçimde durur.
+    """
+    if gram is None or gram.empty:
+        raise RuntimeError(
+            "ALTIN YÜKÜMLÜLÜĞÜ YOK: TCMB haftalık bilançosunun altın kalemleri "
+            "alınamadı; net altın kurulamıyor, fiyat etkisi hesaplanmadı.")
+    eksik = [c for c in YUKUMLULUK_KALEMLERI if c not in gram.columns]
+    if eksik:
+        raise RuntimeError(
+            "ALTIN YÜKÜMLÜLÜĞÜ EKSİK: " + ", ".join(YUKUMLULUK_KALEMLERI[c] for c in eksik)
+            + " alınamadı; net altın kurulamıyor.")
+    g = gram[list(YUKUMLULUK_KALEMLERI)].astype(float).sort_index()
+    for c in g.columns:
+        ilk = g[c].first_valid_index()
+        if ilk is None:
+            raise RuntimeError(
+                f"ALTIN YÜKÜMLÜLÜĞÜ BOŞ: {YUKUMLULUK_KALEMLERI[c]} hiç gözlem taşımıyor.")
+        g.loc[g.index < ilk, c] = 0.0
+    capa = g.dropna(how="any").sum(axis=1) / ONS_GRAM / 1e6
+    capalar = pd.DataFrame({"ons": capa, "kaynak": "haftalik_bilanco"})
+    q = ons_serisi(capalar, index)
+    out = pd.DataFrame({"ons_yukumluluk": q["ons"],
+                        "ons_yukumluluk_kaynak": q["ons_kaynak"]})
+    out.attrs["son_capa"] = capa.index[-1] if len(capa) else None
+    return out
+
+
+def sizinti_tanisi(akim: pd.Series, gamma: pd.Series,
+                   pencere: int = SIZINTI_PENCERE) -> list[str]:
+    """Fiyat etkisi akıma sızıyor mu: son `pencere` günde akımın Γ'ya eğimi.
+
+    Doğru arındırılmış bir akım altın fiyatından bağımsız olmalıdır. Eğim
+    belirgin biçimde sıfırdan ayrışırsa fiyat etkisi ya fazla ya eksik
+    düşülüyor demektir — altın yükümlülüklerinin değerlemesi, miktar serisi ya
+    da fiyat kaynağı kaymış olabilir.
+    """
+    d = pd.concat([akim, gamma], axis=1).dropna().tail(pencere)
+    if len(d) < pencere // 2:
+        return []
+    y = d.iloc[:, 0].to_numpy()
+    x = d.iloc[:, 1].to_numpy()
+    xm = x - x.mean()
+    sxx = float((xm ** 2).sum())
+    if sxx <= 0:
+        return []
+    b = float((xm * (y - y.mean())).sum() / sxx)
+    e = y - y.mean() - b * xm
+    se = (float((e ** 2).sum()) / (len(d) - 2) / sxx) ** 0.5
+    t = b / se if se > 0 else 0.0
+    if abs(b) >= SIZINTI_ESIK_EGIM and abs(t) >= SIZINTI_ESIK_T:
+        _b = _bicim()
+        yon = "ters" if b < 0 else "aynı"
+        return [
+            f"ALTIN ETKİSİ SIZINTISI: son {len(d)} iş gününde günlük net alım, altın "
+            f"fiyat etkisiyle {yon} yönde hareket ediyor (eğim {_b.sayi(b, 2, isaret=True)}, "
+            f"t {_b.sayi(t, 1, isaret=True)}). Fiyat etkisi akımdan doğru ölçüde "
+            "düşülmüyor olabilir."
+        ]
+    return []
+
+
+def yukumluluk_tazelik_tanisi(son: pd.Timestamp | None,
+                              bugun: pd.Timestamp | None = None) -> list[str]:
+    """Yükümlülük çapası ne kadar eskidi — brüt miktar çapasıyla aynı eşik.
+
+    Referans DUVAR SAATİDİR (bkz. altin_tanilari (4)); `bugun` yalnız sınama için.
+    """
+    if son is None:
+        return []
+    ref = bugun if bugun is not None else pd.Timestamp.today().normalize()
+    yas = (ref - son).days
+    if yas > ONS_TASIMA_UYARI_GUN:
+        return [
+            f"ALTIN YÜKÜMLÜLÜĞÜ TAZELİĞİ: TCMB'nin altın cinsinden yükümlülükleri en "
+            f"son {son:%d.%m.%Y} tarihli haftalık bilançodan okundu ({yas} gün önce, "
+            f"eşik {ONS_TASIMA_UYARI_GUN}). O günden beri taşınıyor; haftalık "
+            "bilanço yayımı kesilmiş olabilir."
+        ]
+    return []
 
 
 def altin_fiyat_etkisi(ons: pd.Series, fiyat: pd.Series,
@@ -773,28 +970,59 @@ def zincirleme_tanisi(gamma: pd.Series, ons: pd.Series, fiyat: pd.Series,
 # ---------------------------------------------------------------------------
 # Tek çağrılık boru hattı (net_rezerv.py bunu kullanır)
 # ---------------------------------------------------------------------------
+def akim_ayristir(ons: pd.Series, ons_yukumluluk: pd.Series, fiyat: pd.Series,
+                  fiyat_kaynak: pd.Series, swap_haric: pd.Series,
+                  kamu_doviz_usd: pd.Series) -> pd.DataFrame:
+    """Net altın + ayrıştırma + akım + arife birleştirmesi — TEK tanım.
+
+    Hem canlı hat (`arindirma_hatti`) hem çevrimdışı yeniden üretim
+    (`_gunlukten_uret`) bunu çağırır; iki ayrı kopya bir gün sessizce ayrışırdı.
+    Γ ve Λ NET altınla (brüt − yükümlülük) kurulur; `altin_deger_ima` BRÜT
+    altının değeri olarak kalır (rezervdeki altın kaleminin tanısı).
+    """
+    q_net = ons - ons_yukumluluk
+    etki = altin_fiyat_etkisi(q_net, fiyat, fiyat_kaynak)
+    etki["altin_deger_ima"] = ons * fiyat / 1000.0
+    akim = net_doviz_alimi(swap_haric, kamu_doviz_usd,
+                           etki["altin_fiyat_etkisi"],
+                           etki["altin_miktar_etkisi"])
+    out = pd.concat([etki, akim], axis=1)
+    out, birlesik = birlesik_akim(
+        out, fiyat_kaynak,
+        ["altin_fiyat_etkisi", "altin_miktar_etkisi", "net_doviz_alimi",
+         "net_doviz_alimi_altin_haric"])
+    for _bos, _hedef in arife_bloklari(fiyat_kaynak.reindex(out.index)):
+        out.loc[_bos, "bennet_fark"] = float("nan")
+    out["ons_net"] = q_net
+    out["akim_birlesik"] = birlesik
+    return out
+
+
 def arindirma_hatti(index: pd.DatetimeIndex, agort: pd.Series, kap: pd.Series,
                     altin_deger_M: pd.Series, aylik_ons: pd.Series | None,
                     gozlem: pd.DataFrame | None, swap_haric: pd.Series,
-                    kamu_doviz_usd: pd.Series,
+                    kamu_doviz_usd: pd.Series, yukumluluk_gram: pd.DataFrame | None,
                     cipa: str = CIPA_TARIHI) -> tuple[pd.DataFrame, list[str]]:
     """Fiyat + miktar + ayrıştırma + akım + birikim — tek çağrıda.
 
+    `yukumluluk_gram` ZORUNLUDUR (varsayılanı yok): unutulan bir çağrı yeri
+    Γ'yı brüt altınla kurup ölçülmüş kusuru geri getirirdi.
+
     Dönen DataFrame sütunları:
-      altin_fiyat, altin_fiyat_kaynak, ons, ons_kaynak,
-      altin_fiyat_etkisi, altin_miktar_etkisi, altin_deger_ima, bennet_fark,
-      net_doviz_alimi, net_doviz_alimi_altin_haric, net_doviz_alimi_birikimli,
-      altin_fiyat_etkisi_birikimli
+      altin_fiyat, altin_fiyat_kaynak, ons, ons_kaynak, ons_yukumluluk,
+      ons_yukumluluk_kaynak, ons_net, altin_fiyat_etkisi, altin_miktar_etkisi,
+      altin_deger_ima, bennet_fark, net_doviz_alimi, net_doviz_alimi_altin_haric,
+      akim_birlesik, net_doviz_alimi_birikimli, altin_fiyat_etkisi_birikimli
     """
     f = fiyat_serisi(agort, kap, index)
     capalar = ons_capalari(gozlem, altin_deger_M, f["altin_fiyat"], aylik_ons)
     q = ons_serisi(capalar, index)
-    etki = altin_fiyat_etkisi(q["ons"], f["altin_fiyat"], f["altin_fiyat_kaynak"])
-    akim = net_doviz_alimi(swap_haric, kamu_doviz_usd,
-                           etki["altin_fiyat_etkisi"],
-                           etki["altin_miktar_etkisi"])
+    qy = yukumluluk_ons_serisi(yukumluluk_gram, index)
+    ayr = akim_ayristir(q["ons"], qy["ons_yukumluluk"], f["altin_fiyat"],
+                        f["altin_fiyat_kaynak"], swap_haric, kamu_doviz_usd)
+    etki = ayr
 
-    out = pd.concat([f, q, etki, akim], axis=1)
+    out = pd.concat([f, q, qy, ayr], axis=1)
     try:
         out["net_doviz_alimi_birikimli"] = birikimli_akim(
             out["net_doviz_alimi"], cipa)
@@ -808,7 +1036,12 @@ def arindirma_hatti(index: pd.DatetimeIndex, agort: pd.Series, kap: pd.Series,
 
     # Akımın hangi günlerinin GEÇİCİ olduğu (son çapadan sonrası) — grafikler
     # ve sayfa bunu görünür kılar; revizyon politikası modül notunda.
+    # Net altın İKİ çapadan kurulur (brüt miktar ve yükümlülük); hangisi daha
+    # eskiyse akım ondan sonra geçicidir.
     son_capa = capalar.index[-1] if not capalar.empty else None
+    son_yuk = qy.attrs.get("son_capa")
+    if son_capa is not None and son_yuk is not None:
+        son_capa = min(son_capa, son_yuk)
     out["akim_gecici"] = (pd.Series(index > son_capa, index=index)
                           if son_capa is not None
                           else pd.Series(False, index=index))
@@ -818,10 +1051,13 @@ def arindirma_hatti(index: pd.DatetimeIndex, agort: pd.Series, kap: pd.Series,
     uyarilar = altin_tanilari(capalar, altin_deger_M, f["altin_fiyat"], etki)
     uyarilar += fiyat_tasima_tanisi(f["altin_fiyat_kaynak"])
     uyarilar += uyari_cipa
+    uyarilar += yukumluluk_tazelik_tanisi(qy.attrs.get("son_capa"))
+    uyarilar += sizinti_tanisi(out["net_doviz_alimi"], out["altin_fiyat_etkisi"])
 
     # Zincirleme tanısı (yayımlanmaz, denetlenir) — bkz. zincirleme_tanisi.
+    # Γ net altınla kurulduğu için doğrudan etki de net miktarla ölçülür.
     d_t, uyari_zincir = zincirleme_tanisi(etki["altin_fiyat_etkisi"],
-                                          q["ons"], f["altin_fiyat"], cipa)
+                                          out["ons_net"], f["altin_fiyat"], cipa)
     uyarilar += uyari_zincir
     out.attrs["zincirleme_dt"] = d_t
     out.attrs["son_ons_capa"] = son_capa
@@ -839,22 +1075,22 @@ def _gunlukten_uret(gunluk: pd.DataFrame, cipa: str) -> pd.DataFrame:
     bir --capa ile) gerçekten kendi hesabını yapar.
     """
     gerekli = ["altin_fiyat", "altin_fiyat_kaynak", "ons", "ons_kaynak",
-               "swap_haric_usd", "kamu_doviz_mev_usd", "altin_usd",
-               "doviz_usd"]
+               "ons_yukumluluk", "swap_haric_usd", "kamu_doviz_mev_usd",
+               "altin_usd", "doviz_usd"]
     eksik = [c for c in gerekli if c not in gunluk.columns]
     if eksik:
         raise RuntimeError(
             "gunluk.csv beklenen sütunları taşımıyor: " + ", ".join(eksik) +
             ". Önce `python net_rezerv.py` koşturun."
         )
-    etki = altin_fiyat_etkisi(gunluk["ons"], gunluk["altin_fiyat"],
-                              gunluk["altin_fiyat_kaynak"])
-    akim = net_doviz_alimi(gunluk["swap_haric_usd"],
-                           gunluk["kamu_doviz_mev_usd"],
-                           etki["altin_fiyat_etkisi"],
-                           etki["altin_miktar_etkisi"])
+    etki = akim_ayristir(gunluk["ons"], gunluk["ons_yukumluluk"],
+                         gunluk["altin_fiyat"], gunluk["altin_fiyat_kaynak"],
+                         gunluk["swap_haric_usd"], gunluk["kamu_doviz_mev_usd"])
+    akim = etki
     out = pd.DataFrame(index=gunluk.index)
     out["altin_ons_mn"] = gunluk["ons"]
+    out["altin_ons_yukumluluk_mn"] = gunluk["ons_yukumluluk"]
+    out["altin_ons_net_mn"] = etki["ons_net"]
     out["altin_fiyat"] = gunluk["altin_fiyat"]
     out["altin_fiyat_kaynak"] = gunluk["altin_fiyat_kaynak"]
     out["ons_kaynak"] = gunluk["ons_kaynak"]
@@ -880,6 +1116,7 @@ def _gunlukten_uret(gunluk: pd.DataFrame, cipa: str) -> pd.DataFrame:
         out["swap_capa_revizyon"] = gunluk["swap_capa_revizyon"]
     out["net_alim_satim"] = akim["net_doviz_alimi"]
     out["net_alim_satim_altin_haric"] = akim["net_doviz_alimi_altin_haric"]
+    out["akim_birlesik"] = akim["akim_birlesik"]
     out["kumulatif"] = birikimli_akim(out["net_alim_satim"], cipa)
     out.index.name = "tarih"
     return out
@@ -942,8 +1179,9 @@ def main() -> None:
     # başına çalıştığında net_rezerv.py'nin denetimi DEVREDE DEĞİLDİR, koruma
     # tek noktaya bağlı kalmasın.
     uyarilar = fiyat_tasima_tanisi(out["altin_fiyat_kaynak"])
+    uyarilar += sizinti_tanisi(out["net_alim_satim"], out["altin_fiyat_etkisi"])
     d_t, uyari_zincir = zincirleme_tanisi(out["altin_fiyat_etkisi"],
-                                          out["altin_ons_mn"],
+                                          out["altin_ons_net_mn"],
                                           out["altin_fiyat"], args.capa)
     uyarilar += uyari_zincir
     print()
