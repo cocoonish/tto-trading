@@ -45,7 +45,7 @@ MADDE_SINIR = 330           # "Bu sabah" maddesi başına
 # 650'den indi: blok kendi bütçesini mevcut bütçelerden alır, `_kapat` hiçbir
 # koşulda "Beklenen"i kırpmaz.
 OKUMA_SINIR_3 = 480         # biçim 3'te okuma
-GUNDEM_SINIR_3 = 800        # biçim 3'te konu bölümleri
+GUNDEM_SINIR_3 = 850        # biçim 3'te konu bölümleri (05.10.2026: 800 → 850, kullanıcı kararı)
 # HAFTALIK KİP: iskelet ve blok bütçeleri `_haftalik3`ün yanında; maddeler
 # kalan payı alır (dinamik pay).
 MADDE_SINIR_HAFTA = 250     # "Bu hafta" maddesi başına

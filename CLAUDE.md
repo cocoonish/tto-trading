@@ -4685,5 +4685,7 @@ analiz düzeltmesi pencere boyunca tweet koşusunu kırmızı bitirebilir);
 `SAYIM_ONCESI` elle tutulan küçük bir kümedir ve yeni bir meşru sayım kalıbı
 sabah gönderimini yine durdurabilir; `hedef_yok` ayrımı X'in 403 gövde
 metnine dayanır (değişirse davranış tutucu yöne, ölümcül hataya döner);
-günlük gündem bütçesi (800) 05.10 Emtia satırını düşürüyor ve artırılması
-kullanıcı kararı bekliyor.
+günlük gündem bütçesi 05.10 akşamı kullanıcı kararıyla 800'den 850'ye
+çıktı (Emtia satırı o gün bu yüzden düşüyordu); tavan sabit olduğu için
+bedeli takvimin sonraki günlerine ait birimlerin önce düşmesidir — 05.10
+yeniden üretiminde Emtia girdi, Salı–Perşembe takvim birimlerinden üçü düştü.
