@@ -1,93 +1,95 @@
 {
- "n": 32,
+ "n": 33,
  "ilk_ay": "2024-01",
- "son_ay": "2026-08",
- "r_ito_uge": 0.877,
+ "son_ay": "2026-09",
+ "r_ito_uge": 0.874,
  "ito": {
-  "r2": 0.837,
-  "adj_r2": 0.831,
-  "sigma": 0.544,
-  "sabit": 0.056,
-  "b_ito": 0.87,
-  "se_ito": 0.07,
-  "t_ito": 12.4,
+  "r2": 0.839,
+  "adj_r2": 0.833,
+  "sigma": 0.535,
+  "sabit": 0.052,
+  "b_ito": 0.871,
+  "se_ito": 0.069,
+  "t_ito": 12.69,
   "p_ito": 0.0
  },
  "uge": {
-  "r2": 0.692,
-  "adj_r2": 0.682,
-  "sigma": 0.747,
-  "sabit": 0.021,
-  "b_uge": 0.834,
-  "se_uge": 0.102,
-  "t_uge": 8.21,
+  "r2": 0.689,
+  "adj_r2": 0.679,
+  "sigma": 0.743,
+  "sabit": 0.097,
+  "b_uge": 0.815,
+  "se_uge": 0.098,
+  "t_uge": 8.29,
   "p_uge": 0.0
  },
  "birlesik": {
-  "r2": 0.841,
-  "adj_r2": 0.83,
-  "sigma": 0.547,
-  "sabit": -0.031,
-  "b_ito": 0.762,
-  "se_ito": 0.146,
-  "t_ito": 5.2,
+  "r2": 0.842,
+  "adj_r2": 0.832,
+  "sigma": 0.538,
+  "sabit": -0.023,
+  "b_ito": 0.765,
+  "se_ito": 0.142,
+  "t_ito": 5.41,
   "p_ito": 0.0,
-  "b_uge": 0.13,
-  "se_uge": 0.154,
-  "t_uge": 0.84,
-  "p_uge": 0.4084
+  "b_uge": 0.124,
+  "se_uge": 0.146,
+  "t_uge": 0.85,
+  "p_uge": 0.4025
  },
  "kapsama": "ito",
  "adj_kazanc": -0.001,
  "yaris": {
-  "n": 20,
+  "n": 21,
   "ilk_ay": "2025-01",
   "en_iyi": "ito_reg",
   "adaylar": {
    "ito_sabit": {
-    "mae": 0.4,
-    "rmse": 0.484,
+    "mae": 0.384,
+    "rmse": 0.472,
     "yanlilik": -0.066,
-    "p_vs_en_iyi": 0.441
+    "p_vs_en_iyi": 0.439
    },
    "uge_sabit": {
-    "mae": 0.591,
-    "rmse": 0.786,
-    "yanlilik": -0.118,
-    "p_vs_en_iyi": 0.083
+    "mae": 0.606,
+    "rmse": 0.792,
+    "yanlilik": -0.156,
+    "p_vs_en_iyi": 0.047
    },
    "ito_reg": {
-    "mae": 0.37,
-    "rmse": 0.46,
-    "yanlilik": 0.022,
+    "mae": 0.355,
+    "rmse": 0.449,
+    "yanlilik": 0.023,
     "p_vs_en_iyi": null
    },
    "uge_reg": {
-    "mae": 0.55,
-    "rmse": 0.747,
-    "yanlilik": -0.033,
-    "p_vs_en_iyi": 0.131
+    "mae": 0.554,
+    "rmse": 0.742,
+    "yanlilik": -0.061,
+    "p_vs_en_iyi": 0.086
    },
    "birlesik_reg": {
-    "mae": 0.424,
-    "rmse": 0.51,
-    "yanlilik": -0.028,
-    "p_vs_en_iyi": 0.168
+    "mae": 0.408,
+    "rmse": 0.498,
+    "yanlilik": -0.031,
+    "p_vs_en_iyi": 0.161
    },
    "esit_ortalama": {
-    "mae": 0.462,
-    "rmse": 0.57,
-    "yanlilik": -0.092,
-    "p_vs_en_iyi": 0.19
+    "mae": 0.464,
+    "rmse": 0.567,
+    "yanlilik": -0.111,
+    "p_vs_en_iyi": 0.119
    },
    "ters_mse": {
-    "mae": 0.45,
-    "rmse": 0.544,
-    "yanlilik": -0.09,
-    "p_vs_en_iyi": 0.174
+    "mae": 0.443,
+    "rmse": 0.535,
+    "yanlilik": -0.1,
+    "p_vs_en_iyi": 0.123
    }
   },
-  "ayirt_edilen": [],
+  "ayirt_edilen": [
+   "uge_sabit"
+  ],
   "en_iyi_ad": "İTO regresyon",
   "ad": {
    "ito_sabit": "İTO + sabit kaydırma",
@@ -98,42 +100,42 @@
    "esit_ortalama": "eşit ağırlıklı bileşim",
    "ters_mse": "ters-MSE bileşim"
   },
-  "hukum": "birleştirmek KAZANDIRMIYOR: en düşük hatayı İTO regresyon veriyor (0,370 puan); bileşim kuralları geride (birleşik regresyon (İTO + ÜGE) 0,424 · eşit ağırlıklı bileşim 0,462 · ters-MSE bileşim 0,450)"
+  "hukum": "birleştirmek KAZANDIRMIYOR: en düşük hatayı İTO regresyon veriyor (0,355 puan); bileşim kuralları geride (birleşik regresyon (İTO + ÜGE) 0,408 · eşit ağırlıklı bileşim 0,464 · ters-MSE bileşim 0,443)"
  },
  "karne": {
-  "ay": "2026-08",
-  "ad": "Ağustos 2026",
-  "ito": 1.66,
-  "uge": 1.97,
+  "ay": "2026-09",
+  "ad": "Eylül 2026",
+  "ito": 2.12,
+  "uge": 1.43,
   "gercek": 1.84,
-  "n_gecmis": 31,
+  "n_gecmis": 32,
   "tahmin": {
-   "ito_sabit": 1.31,
-   "uge_sabit": 1.45,
-   "ito_reg": 1.48,
-   "uge_reg": 1.65,
-   "birlesik_reg": 1.46,
-   "esit_ortalama": 1.38,
-   "ters_mse": 1.35
+   "ito_sabit": 1.78,
+   "uge_sabit": 0.92,
+   "ito_reg": 1.9,
+   "uge_reg": 1.21,
+   "birlesik_reg": 1.77,
+   "esit_ortalama": 1.35,
+   "ters_mse": 1.55
   },
   "sapma": {
-   "ito_sabit": -0.54,
-   "uge_sabit": -0.39,
-   "ito_reg": -0.37,
-   "uge_reg": -0.19,
-   "birlesik_reg": -0.38,
-   "esit_ortalama": -0.46,
-   "ters_mse": -0.5
+   "ito_sabit": -0.06,
+   "uge_sabit": -0.92,
+   "ito_reg": 0.06,
+   "uge_reg": -0.63,
+   "birlesik_reg": -0.07,
+   "esit_ortalama": -0.49,
+   "ters_mse": -0.29
   },
-  "ters_mse_agirlik": 0.74,
+  "ters_mse_agirlik": 0.73,
   "en_iyi": "ito_reg",
   "en_iyi_ad": "İTO regresyon",
-  "merkez": 1.48,
-  "merkez_sapma": -0.37,
-  "yayilim": 0.34,
-  "en_yakin": "uge_reg",
-  "en_yakin_ad": "ÜGE regresyon",
-  "en_yakin_sapma": -0.19,
+  "merkez": 1.9,
+  "merkez_sapma": 0.06,
+  "yayilim": 0.97,
+  "en_yakin": "ito_sabit",
+  "en_yakin_ad": "İTO + sabit kaydırma",
+  "en_yakin_sapma": -0.06,
   "yuzdelikler": [
    5,
    10,
@@ -144,44 +146,44 @@
    95
   ],
   "bulut": [
-   0.75,
-   0.98,
-   1.14,
-   1.43,
-   1.72,
-   2.29,
-   2.42
+   1.16,
+   1.4,
+   1.57,
+   1.83,
+   2.23,
+   2.71,
+   2.83
   ],
-  "gercek_yuzdelik": 77.0,
-  "bant_50": false,
+  "gercek_yuzdelik": 53.0,
+  "bant_50": true,
   "bant_80": true,
   "bant_90": true,
-  "tufe_ito_ustu": true,
-  "tufe_uge_ustu": false,
-  "p_ito_ustu": 26.0,
+  "tufe_ito_ustu": false,
+  "tufe_uge_ustu": true,
+  "p_ito_ustu": 28.0,
   "esik": [
    {
     "esik": 2.5,
-    "yon": ">",
-    "p": 3.0,
-    "tuttu": false
-   },
-   {
-    "esik": 2.0,
     "yon": ">",
     "p": 16.0,
     "tuttu": false
    },
    {
+    "esik": 2.0,
+    "yon": ">",
+    "p": 31.0,
+    "tuttu": false
+   },
+   {
     "esik": 1.5,
     "yon": ">",
-    "p": 35.0,
+    "p": 78.0,
     "tuttu": true
    },
    {
     "esik": 1.0,
     "yon": "<",
-    "p": 13.0,
+    "p": 0.0,
     "tuttu": false
    },
    {
@@ -191,6 +193,6 @@
     "tuttu": false
    }
   ],
-  "hukum": "Ağustos 2026 TÜFE'si %1,84 geldi; İTO regresyon %1,48 diyordu — gerçekleşme tahminin üzerinde, sapma 0,37 puan, %80 bandının içinde."
+  "hukum": "Eylül 2026 TÜFE'si %1,84 geldi; İTO regresyon %1,90 diyordu — gerçekleşme tahminin altında, sapma 0,06 puan, %50 bandının içinde."
  }
 }

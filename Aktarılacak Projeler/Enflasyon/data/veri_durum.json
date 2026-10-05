@@ -1,8 +1,10 @@
 {
- "kosum": "2026-09-09",
- "son_ay": "2026-08-01",
+ "kosum": "2026-10-05",
+ "son_ay": "2026-09-01",
  "aylik_seri": 72,
  "gunluk_seri": 2,
- "aylik_gozlem": 260,
- "uyarilar": []
+ "aylik_gozlem": 261,
+ "uyarilar": [
+  "KISMİ YAYIM: TÜFE / ÖKTG / Yİ-ÜFE ailesinde 4/55 seri ailenin en yeni ayından (Eylül 2026) geride — yönetilen fiyatlar hariç, özel kapsamlı gösterge TÜFE (kontrol kopyası), özel kapsamlı gösterge A · mevsimlik ürünler hariç, özel kapsamlı gösterge F · yönetilen/yönlendirilen fiyatlar hariç. Kaynak aileyi bütünüyle güncellemedi; ölçüm ortak tarihe hizalandığı için pano geride kalan serinin ayında kalır. Yayım günüyse eksik seriler genellikle birkaç saat içinde gelir ve pano bir sonraki koşuda tamamlanır."
+ ]
 }
