@@ -1,0 +1,4761 @@
+{
+ "cipa": "2026-10-05",
+ "veri_ayi": "2026-09",
+ "arsiv": {
+  "enflasyon_ozet.json": "7a9639a87004aa8cc596062a67d6f11f459476f51f9bcce6c36858bc90b03311",
+  "enflasyon_uyarilar.json": "721b5fe97e9a79358c9f04e01316648c77adab5c63d3da5668494fc6ed63f2e8",
+  "aylik.csv": "c865ae516c6ab7fb5617c1be0604706d99774b5267858bfc0524f00d85d99ed0",
+  "sa.csv": "9f062eb2ef0c7c6740fbf896c8fc3f32bf55f35ab550ccb4ea026e06c6009905",
+  "katki.csv": "1fec612964520d9ecb1f5f662248adcd7648322c76566cf834d133016013c895",
+  "agirlik.json": "9f862ccf545000665005c434a869c8a0b5f88806b9aa5480f0f3363bedaf895d",
+  "dagilim.csv": "6e47828eb6173d8b4133a4080017d89681183eff053d667ea3252ef00a1e91f8",
+  "beklenti.json": "46e4435025b0f0588d7d99d3691e6e61eb95034674c82f18de950dc707d16d6b",
+  "baz_senaryo.csv": "bcf7c948de7d591bf8363f81b514ac47b953f09b183c782e31b8cdab87e20720",
+  "reel_faiz.csv": "34e6123d34c7620f287df4fb4fcd7fd564deb6a1dfaadd6bc558f27ef1766866",
+  "gunluk.csv": "67b048431c49798d6cf5b0371fd3d558c92cfb3e55a3ca47a6273093cf791db5",
+  "agac.csv": "36fbc609f5736d8310415ad8845c6efb6e9bc512336452a70430218eff0d0d7c",
+  "veri_durum.json": "dc1a25478ca1d6ac0816414faf4cf7fe788869f4e609f8b230a9bb838e1e6568",
+  "dibs_ozet.json": "81b2ab8ceb46966dcfc6a671140440df4c9443e205dd6fe7fb2aaeef3f752b4d",
+  "fonlama_ozet.json": "8dadceac2d3a966c7ebd3e188a8dd4bef0473175ff5bb44b03c4fb2ed4f2a800",
+  "tufex_ozet.json": "06bb4b469973a310d54087f96ad8466af8adef7281fd4a0d62a7c84b380cb7cb",
+  "ppk_2026-38-TR.json": "6640d037c7f1b0651d48b848ea770db240ed570b3a1d1b74aecbf67fe0609e38",
+  "ppk_2026-42-TR.json": "707b19deecd8eae1a1c96be25aa760b7bbbe7b749d6f2228d233354f0b2c559e",
+  "analiz_2026-09-03.mdx": "d2daae940fa456360b489b2b4e001b3ded4544331aac3e8549857d021716b5e4",
+  "dagilim_0909.csv": "633301f9bdc9ec2bf8f4fb35ab3b7a68c54167e280ac674f695f2f1321918f23"
+ },
+ "olcum_py_oz": "d9b4b741457d1c1541f5bf9736b994c3b7661aeccdf153e86c39e688d2212a5a",
+ "sozlesme": "ondalık virgül · binlik nokta · eksi U+2212 · yüzde önde · puan/bp arkada",
+ "degerler": {
+  "kismi_yayim_geride": {
+   "metin": "yonetilen_haric, oktg01, oktg02, oktg07",
+   "kaynak": "aylik.csv",
+   "tanim": "Eylül değeri arşivde olmayan seriler (yönetilen fiyatlar hariç endeks, özel kapsamlı TÜFE kontrol kopyası, A, F) — yazının hiçbir ölçüsüne girmez"
+  },
+  "kismi_yayim_n": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "kaynak": "aylik.csv",
+   "tanim": "Eylül değeri arşivde olmayan seri sayısı"
+  },
+  "tufe_aylik": {
+   "deger": 1.8404452690166995,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,84",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE (manşet), Eylül 2026 aylık değişim"
+  },
+  "tufe_aylik_agu": {
+   "deger": 1.8441538810369584,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,84",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE (manşet), Ağustos 2026 aylık değişim"
+  },
+  "tufe_12a": {
+   "deger": 29.73151102175646,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,73",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE (manşet), Eylül 2026 yıllık değişim"
+  },
+  "tufe_12a_agu": {
+   "deger": 31.507342820912854,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,51",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE (manşet), Ağustos 2026 yıllık değişim"
+  },
+  "tufe_12a_degisim": {
+   "deger": -1.7758317991563928,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−1,78 puan",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE (manşet), yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "tufe_aylik_degisim": {
+   "deger": -0.003708612020258961,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "0,00 puan",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE (manşet), aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "tufe_aylik_2025_09": {
+   "deger": 3.2344897823703977,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,23",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE (manşet), Eylül 2025 aylık değişim (baz)"
+  },
+  "b_aylik": {
+   "deger": 2.0001492648704877,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,00",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B çekirdek göstergesi, Eylül 2026 aylık değişim"
+  },
+  "b_aylik_agu": {
+   "deger": 1.8470659775007725,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,85",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B çekirdek göstergesi, Ağustos 2026 aylık değişim"
+  },
+  "b_12a": {
+   "deger": 28.99480887210948,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%28,99",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B çekirdek göstergesi, Eylül 2026 yıllık değişim"
+  },
+  "b_12a_agu": {
+   "deger": 30.683702331025064,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,68",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B çekirdek göstergesi, Ağustos 2026 yıllık değişim"
+  },
+  "b_12a_degisim": {
+   "deger": -1.688893458915583,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−1,69 puan",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B çekirdek göstergesi, yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "b_aylik_degisim": {
+   "deger": 0.15308328736971522,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,15 puan",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B çekirdek göstergesi, aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "b_aylik_2025_09": {
+   "deger": 3.33560909002244,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,34",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B çekirdek göstergesi, Eylül 2025 aylık değişim (baz)"
+  },
+  "c_aylik": {
+   "deger": 2.137393130343468,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,14",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C çekirdek göstergesi, Eylül 2026 aylık değişim"
+  },
+  "c_aylik_agu": {
+   "deger": 1.8095747117660599,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,81",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C çekirdek göstergesi, Ağustos 2026 aylık değişim"
+  },
+  "c_12a": {
+   "deger": 28.71184198090917,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%28,71",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C çekirdek göstergesi, Eylül 2026 yıllık değişim"
+  },
+  "c_12a_agu": {
+   "deger": 30.062426843542724,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,06",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C çekirdek göstergesi, Ağustos 2026 yıllık değişim"
+  },
+  "c_12a_degisim": {
+   "deger": -1.3505848626335535,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−1,35 puan",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C çekirdek göstergesi, yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "c_aylik_degisim": {
+   "deger": 0.327818418577408,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,33 puan",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C çekirdek göstergesi, aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "c_aylik_2025_09": {
+   "deger": 3.209129925868126,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,21",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C çekirdek göstergesi, Eylül 2025 aylık değişim (baz)"
+  },
+  "hizmet_aylik": {
+   "deger": 2.1513506082892153,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,15",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet, Eylül 2026 aylık değişim"
+  },
+  "hizmet_aylik_agu": {
+   "deger": 3.0820461952671296,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,08",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet, Ağustos 2026 aylık değişim"
+  },
+  "hizmet_12a": {
+   "deger": 37.66209707299002,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,66",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet, Eylül 2026 yıllık değişim"
+  },
+  "hizmet_12a_agu": {
+   "deger": 40.28541124288885,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,29",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet, Ağustos 2026 yıllık değişim"
+  },
+  "hizmet_12a_degisim": {
+   "deger": -2.6233141698988263,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−2,62 puan",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet, yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "hizmet_aylik_degisim": {
+   "deger": -0.9306955869779143,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,93 puan",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet, aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "hizmet_aylik_2025_09": {
+   "deger": 4.097965480667254,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,10",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet, Eylül 2025 aylık değişim (baz)"
+  },
+  "mal_aylik": {
+   "deger": 2.117305557927085,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,12",
+   "kaynak": "aylik.csv · temel_mal",
+   "tanim": "temel mallar, Eylül 2026 aylık değişim"
+  },
+  "mal_aylik_agu": {
+   "deger": -0.28094670526136456,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "−%0,28",
+   "kaynak": "aylik.csv · temel_mal",
+   "tanim": "temel mallar, Ağustos 2026 aylık değişim"
+  },
+  "mal_12a": {
+   "deger": 15.901162790697665,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%15,90",
+   "kaynak": "aylik.csv · temel_mal",
+   "tanim": "temel mallar, Eylül 2026 yıllık değişim"
+  },
+  "mal_12a_agu": {
+   "deger": 15.889977243494613,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%15,89",
+   "kaynak": "aylik.csv · temel_mal",
+   "tanim": "temel mallar, Ağustos 2026 yıllık değişim"
+  },
+  "mal_12a_degisim": {
+   "deger": 0.011185547203051982,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,01 puan",
+   "kaynak": "aylik.csv · temel_mal",
+   "tanim": "temel mallar, yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "mal_aylik_degisim": {
+   "deger": 2.3982522631884495,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+2,40 puan",
+   "kaynak": "aylik.csv · temel_mal",
+   "tanim": "temel mallar, aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "mal_aylik_2025_09": {
+   "deger": 2.1074502819828034,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,11",
+   "kaynak": "aylik.csv · temel_mal",
+   "tanim": "temel mallar, Eylül 2025 aylık değişim (baz)"
+  },
+  "kira_aylik": {
+   "deger": 3.105590062111796,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,11",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira, Eylül 2026 aylık değişim"
+  },
+  "kira_aylik_agu": {
+   "deger": 3.036492374727673,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,04",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira, Ağustos 2026 aylık değişim"
+  },
+  "kira_12a": {
+   "deger": 41.34057971014491,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%41,34",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira, Eylül 2026 yıllık değişim"
+  },
+  "kira_12a_agu": {
+   "deger": 43.09757942511345,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%43,10",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira, Ağustos 2026 yıllık değişim"
+  },
+  "kira_12a_degisim": {
+   "deger": -1.7569997149685435,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−1,76 puan",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira, yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "kira_aylik_degisim": {
+   "deger": 0.06909768738412314,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,07 puan",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira, aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "kira_aylik_2025_09": {
+   "deger": 4.387291981845687,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,39",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira, Eylül 2025 aylık değişim (baz)"
+  },
+  "enerji_aylik": {
+   "deger": 6.252973560796593,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%6,25",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji, Eylül 2026 aylık değişim"
+  },
+  "enerji_aylik_agu": {
+   "deger": 5.4544151376146655,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%5,45",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji, Ağustos 2026 aylık değişim"
+  },
+  "enerji_12a": {
+   "deger": 46.11645948219463,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%46,12",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji, Eylül 2026 yıllık değişim"
+  },
+  "enerji_12a_agu": {
+   "deger": 39.22218016654049,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,22",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji, Ağustos 2026 yıllık değişim"
+  },
+  "enerji_12a_degisim": {
+   "deger": 6.894279315654138,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+6,89 puan",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji, yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "enerji_aylik_degisim": {
+   "deger": 0.7985584231819276,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,80 puan",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji, aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "enerji_aylik_2025_09": {
+   "deger": 1.239591218773639,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,24",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji, Eylül 2025 aylık değişim (baz)"
+  },
+  "gida_aylik": {
+   "deger": -0.20102747375475571,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "−%0,20",
+   "kaynak": "aylik.csv · gida",
+   "tanim": "gıda ve alkolsüz içecekler, Eylül 2026 aylık değişim"
+  },
+  "gida_aylik_agu": {
+   "deger": 0.21638561408743318,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,22",
+   "kaynak": "aylik.csv · gida",
+   "tanim": "gıda ve alkolsüz içecekler, Ağustos 2026 aylık değişim"
+  },
+  "gida_12a": {
+   "deger": 27.620679805769765,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,62",
+   "kaynak": "aylik.csv · gida",
+   "tanim": "gıda ve alkolsüz içecekler, Eylül 2026 yıllık değişim"
+  },
+  "gida_12a_agu": {
+   "deger": 33.78822591891624,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,79",
+   "kaynak": "aylik.csv · gida",
+   "tanim": "gıda ve alkolsüz içecekler, Ağustos 2026 yıllık değişim"
+  },
+  "gida_12a_degisim": {
+   "deger": -6.167546113146475,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−6,17 puan",
+   "kaynak": "aylik.csv · gida",
+   "tanim": "gıda ve alkolsüz içecekler, yıllık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "gida_aylik_degisim": {
+   "deger": -0.4174130878421889,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,42 puan",
+   "kaynak": "aylik.csv · gida",
+   "tanim": "gıda ve alkolsüz içecekler, aylık oranın Ağustos'tan Eylül'e değişimi"
+  },
+  "gida_aylik_2025_09": {
+   "deger": 4.621974300229104,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,62",
+   "kaynak": "aylik.csv · gida",
+   "tanim": "gıda ve alkolsüz içecekler, Eylül 2025 aylık değişim (baz)"
+  },
+  "hamgida_aylik": {
+   "deger": -2.333028362305578,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "−%2,33",
+   "kaynak": "aylik.csv · islenmemis_gida",
+   "tanim": "işlenmemiş gıda, Eylül 2026 aylık değişim"
+  },
+  "hamgida_aylik_agu": {
+   "deger": -2.0316701523752645,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "−%2,03",
+   "kaynak": "aylik.csv · islenmemis_gida",
+   "tanim": "işlenmemiş gıda, Ağustos 2026 aylık değişim"
+  },
+  "hamgida_12a": {
+   "deger": 24.151967435549505,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,15",
+   "kaynak": "aylik.csv · islenmemis_gida",
+   "tanim": "işlenmemiş gıda, Eylül 2026 yıllık değişim"
+  },
+  "hamgida_12a_agu": {
+   "deger": 34.13786050317038,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,14",
+   "kaynak": "aylik.csv · islenmemis_gida",
+   "tanim": "işlenmemiş gıda, Ağustos 2026 yıllık değişim"
+  },
+  "islgida_aylik": {
+   "deger": 1.3942623549164201,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,39",
+   "kaynak": "aylik.csv · islenmis_gida",
+   "tanim": "işlenmiş gıda, Eylül 2026 aylık değişim"
+  },
+  "islgida_aylik_agu": {
+   "deger": 1.995383813565632,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,00",
+   "kaynak": "aylik.csv · islenmis_gida",
+   "tanim": "işlenmiş gıda, Ağustos 2026 aylık değişim"
+  },
+  "islgida_12a": {
+   "deger": 30.324638768999822,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,32",
+   "kaynak": "aylik.csv · islenmis_gida",
+   "tanim": "işlenmiş gıda, Eylül 2026 yıllık değişim"
+  },
+  "islgida_12a_agu": {
+   "deger": 33.54455059465784,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,54",
+   "kaynak": "aylik.csv · islenmis_gida",
+   "tanim": "işlenmiş gıda, Ağustos 2026 yıllık değişim"
+  },
+  "ata_aylik": {
+   "deger": 0.8562999208462152,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,86",
+   "kaynak": "aylik.csv · alkol_tutun_altin",
+   "tanim": "alkollü içecekler, tütün ve altın, Eylül 2026 aylık değişim"
+  },
+  "ata_aylik_agu": {
+   "deger": 7.089465978269227,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%7,09",
+   "kaynak": "aylik.csv · alkol_tutun_altin",
+   "tanim": "alkollü içecekler, tütün ve altın, Ağustos 2026 aylık değişim"
+  },
+  "ata_12a": {
+   "deger": 31.383577052868382,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,38",
+   "kaynak": "aylik.csv · alkol_tutun_altin",
+   "tanim": "alkollü içecekler, tütün ve altın, Eylül 2026 yıllık değişim"
+  },
+  "ata_12a_agu": {
+   "deger": 31.10377358490566,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,10",
+   "kaynak": "aylik.csv · alkol_tutun_altin",
+   "tanim": "alkollü içecekler, tütün ve altın, Ağustos 2026 yıllık değişim"
+  },
+  "mallar_aylik": {
+   "deger": 1.6262060379707455,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,63",
+   "kaynak": "aylik.csv · mallar",
+   "tanim": "mallar (toplam), Eylül 2026 aylık değişim"
+  },
+  "mallar_aylik_agu": {
+   "deger": 1.021851910077043,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,02",
+   "kaynak": "aylik.csv · mallar",
+   "tanim": "mallar (toplam), Ağustos 2026 aylık değişim"
+  },
+  "mallar_12a": {
+   "deger": 24.770729843332063,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,77",
+   "kaynak": "aylik.csv · mallar",
+   "tanim": "mallar (toplam), Eylül 2026 yıllık değişim"
+  },
+  "mallar_12a_agu": {
+   "deger": 26.197957580518462,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%26,20",
+   "kaynak": "aylik.csv · mallar",
+   "tanim": "mallar (toplam), Ağustos 2026 yıllık değişim"
+  },
+  "ufe_aylik": {
+   "deger": 2.0671977639949324,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,07",
+   "kaynak": "aylik.csv · yi_ufe",
+   "tanim": "Yİ-ÜFE, Eylül 2026 aylık değişim"
+  },
+  "ufe_aylik_agu": {
+   "deger": 2.565130544921712,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,57",
+   "kaynak": "aylik.csv · yi_ufe",
+   "tanim": "Yİ-ÜFE, Ağustos 2026 aylık değişim"
+  },
+  "ufe_12a": {
+   "deger": 27.377511661187715,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,38",
+   "kaynak": "aylik.csv · yi_ufe",
+   "tanim": "Yİ-ÜFE, Eylül 2026 yıllık değişim"
+  },
+  "ufe_12a_agu": {
+   "deger": 27.9460221426058,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,95",
+   "kaynak": "aylik.csv · yi_ufe",
+   "tanim": "Yİ-ÜFE, Ağustos 2026 yıllık değişim"
+  },
+  "ito_aylik": {
+   "deger": 2.116288355806728,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,12",
+   "kaynak": "aylik.csv · ito_ist",
+   "tanim": "İTO İstanbul tüketici fiyatları, Eylül 2026 aylık değişim"
+  },
+  "ito_aylik_agu": {
+   "deger": 1.6580278523699477,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,66",
+   "kaynak": "aylik.csv · ito_ist",
+   "tanim": "İTO İstanbul tüketici fiyatları, Ağustos 2026 aylık değişim"
+  },
+  "ito_12a": {
+   "deger": 33.55025307302964,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,55",
+   "kaynak": "aylik.csv · ito_ist",
+   "tanim": "İTO İstanbul tüketici fiyatları, Eylül 2026 yıllık değişim"
+  },
+  "ito_12a_agu": {
+   "deger": 34.95688940474216,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,96",
+   "kaynak": "aylik.csv · ito_ist",
+   "tanim": "İTO İstanbul tüketici fiyatları, Ağustos 2026 yıllık değişim"
+  },
+  "uge_aylik": {
+   "deger": 1.4296794175502114,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,43",
+   "kaynak": "aylik.csv · ito_uge",
+   "tanim": "İTO İstanbul ücretliler geçinme endeksi, Eylül 2026 aylık değişim"
+  },
+  "uge_aylik_agu": {
+   "deger": 1.9711424170645753,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,97",
+   "kaynak": "aylik.csv · ito_uge",
+   "tanim": "İTO İstanbul ücretliler geçinme endeksi, Ağustos 2026 aylık değişim"
+  },
+  "uge_12a": {
+   "deger": 36.303894291600635,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,30",
+   "kaynak": "aylik.csv · ito_uge",
+   "tanim": "İTO İstanbul ücretliler geçinme endeksi, Eylül 2026 yıllık değişim"
+  },
+  "uge_12a_agu": {
+   "deger": 39.61509002886532,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,62",
+   "kaynak": "aylik.csv · ito_uge",
+   "tanim": "İTO İstanbul ücretliler geçinme endeksi, Ağustos 2026 yıllık değişim"
+  },
+  "tufe_endeks": {
+   "deger": 137.23,
+   "b": 2,
+   "birim": "",
+   "arti": false,
+   "metin": "137,23",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE endeks düzeyi (2025=100), Eylül 2026"
+  },
+  "tufe_12a_2025_09": {
+   "deger": 33.294011471927675,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,29",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE yıllık, Eylül 2025 (bir yıl önce)"
+  },
+  "tufe_12a_tam": {
+   "deger": 29.73151102175646,
+   "b": 4,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,7315",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE yıllık, dört ondalık (hattın EVDS ile birebir denetlediği değer)"
+  },
+  "hizmet_mal_makas": {
+   "deger": 21.760934282292357,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "21,76 puan",
+   "kaynak": "aylik.csv · hizmet, temel_mal",
+   "tanim": "hizmet yıllık − temel mallar yıllık, Eylül 2026"
+  },
+  "hizmet_mal_makas_agu": {
+   "deger": 24.395433999394236,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "24,40 puan",
+   "kaynak": "aylik.csv · hizmet, temel_mal",
+   "tanim": "hizmet yıllık − temel mallar yıllık, Ağustos 2026"
+  },
+  "ufe_tufe_makas": {
+   "deger": -2.3539993605687464,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−2,35 puan",
+   "kaynak": "aylik.csv · yi_ufe, tufe",
+   "tanim": "Yİ-ÜFE yıllık − TÜFE yıllık, Eylül 2026"
+  },
+  "c_tufe_aylik_fark": {
+   "deger": 0.2969478613267684,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,30 puan",
+   "kaynak": "aylik.csv · cekirdek_c, tufe",
+   "tanim": "C aylık − TÜFE aylık, Eylül 2026"
+  },
+  "kira_manset_kati": {
+   "deger": 1.6874123422159841,
+   "b": 2,
+   "birim": "",
+   "arti": false,
+   "metin": "1,69",
+   "kaynak": "aylik.csv · kira, tufe",
+   "tanim": "kiranın Eylül 2026 aylık değişiminin manşet aylığına oranı"
+  },
+  "bc_ust_manset_ay": {
+   "deger": 9.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "9",
+   "kaynak": "aylik.csv · cekirdek_b, cekirdek_c, tufe",
+   "tanim": "Ekim 2024–Eylül 2026'nın 24 ayından kaçında B ve C'nin aylığı ikisi de manşetin üstünde"
+  },
+  "tarihce_ilk_ay": {
+   "metin": "Ocak 2006",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "yıllık TÜFE tarihçesinin ilk ayı (endeks 2005 başından, yıllık oran 12 ay sonra tanımlı)"
+  },
+  "alti30_son_ay": {
+   "metin": "Kasım 2021",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2026'dan önce yıllık TÜFE'nin %30'un altında olduğu son ay"
+  },
+  "alti30_son_deger": {
+   "deger": 21.312527554775574,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%21,31",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "o ayın (Kasım 2021) yıllık TÜFE'si"
+  },
+  "ust30_ay_sayisi": {
+   "deger": 57.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "57",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "yıllık TÜFE'nin kesintisiz %30 ve üstünde kaldığı ay sayısı (Aralık 2021–Ağustos 2026)"
+  },
+  "ust30_ilk_ay": {
+   "metin": "Aralık 2021",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "%30 üstü dönemin ilk ayı"
+  },
+  "esik_30": {
+   "deger": 30.0,
+   "b": 0,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30",
+   "kaynak": "yazının sorusu",
+   "tanim": "yıllık oranın kıyaslandığı yuvarlak düzey (bir ölçüm değil, yazının sorusu)"
+  },
+  "eylul_aylik_2019": {
+   "deger": 0.9932835099198289,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,99",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2019 aylık TÜFE"
+  },
+  "eylul_aylik_2020": {
+   "deger": 0.9733184049555144,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,97",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2020 aylık TÜFE"
+  },
+  "eylul_aylik_2021": {
+   "deger": 1.2526615066047464,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,25",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2021 aylık TÜFE"
+  },
+  "eylul_aylik_2022": {
+   "deger": 3.0758627469511746,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,08",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2022 aylık TÜFE"
+  },
+  "eylul_aylik_2023": {
+   "deger": 4.753114317601748,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,75",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2023 aylık TÜFE"
+  },
+  "eylul_aylik_2024": {
+   "deger": 2.968198451495918,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,97",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2024 aylık TÜFE"
+  },
+  "eylul_aylik_2025": {
+   "deger": 3.2344897823703977,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,23",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2025 aylık TÜFE"
+  },
+  "eylul_aylik_ort_2022_2025": {
+   "deger": 3.5079163246048095,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,51",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül aylık TÜFE'nin 2022–2025 ortalaması (dört Eylül)"
+  },
+  "tufe_yillik_dusuk_beri": {
+   "metin": "Kasım 2021",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "TÜFE yıllık oranının Eylül 2026 düzeyine eşit ya da altında olduğu son ay"
+  },
+  "tufe_yillik_dusuk_beri_deger": {
+   "deger": 21.312527554775574,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%21,31",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "o ayın (Kasım 2021) TÜFE yıllık oranı"
+  },
+  "b_yillik_dusuk_beri": {
+   "metin": "Kasım 2021",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "B yıllık oranının Eylül 2026 düzeyine eşit ya da altında olduğu son ay"
+  },
+  "b_yillik_dusuk_beri_deger": {
+   "deger": 19.78973407544835,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%19,79",
+   "kaynak": "aylik.csv · cekirdek_b",
+   "tanim": "o ayın (Kasım 2021) B yıllık oranı"
+  },
+  "c_yillik_dusuk_beri": {
+   "metin": "Kasım 2021",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "C yıllık oranının Eylül 2026 düzeyine eşit ya da altında olduğu son ay"
+  },
+  "c_yillik_dusuk_beri_deger": {
+   "deger": 17.58045292014303,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%17,58",
+   "kaynak": "aylik.csv · cekirdek_c",
+   "tanim": "o ayın (Kasım 2021) C yıllık oranı"
+  },
+  "hizmet_yillik_dusuk_beri": {
+   "metin": "Mart 2022",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet yıllık oranının Eylül 2026 düzeyine eşit ya da altında olduğu son ay"
+  },
+  "hizmet_yillik_dusuk_beri_deger": {
+   "deger": 36.67896678966789,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,68",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "o ayın (Mart 2022) hizmet yıllık oranı"
+  },
+  "kira_yillik_dusuk_beri": {
+   "metin": "Ekim 2022",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "kira yıllık oranının Eylül 2026 düzeyine eşit ya da altında olduğu son ay"
+  },
+  "kira_yillik_dusuk_beri_deger": {
+   "deger": 41.29483814523183,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%41,29",
+   "kaynak": "aylik.csv · kira",
+   "tanim": "o ayın (Ekim 2022) kira yıllık oranı"
+  },
+  "enerji_yillik_yuksek_beri": {
+   "metin": "Nisan 2026",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "enerji yıllık oranının Eylül 2026 düzeyine eşit ya da üstünde olduğu son ay"
+  },
+  "enerji_yillik_yuksek_beri_deger": {
+   "deger": 47.20768820074748,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%47,21",
+   "kaynak": "aylik.csv · enerji",
+   "tanim": "o ayın (Nisan 2026) enerji yıllık oranı"
+  },
+  "hizmet_aylik_dusuk_beri": {
+   "metin": "Haziran 2026",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "hizmet aylık oranının Eylül 2026 düzeyine eşit ya da altında olduğu son ay"
+  },
+  "hizmet_aylik_dusuk_beri_deger": {
+   "deger": 1.6874814154028916,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,69",
+   "kaynak": "aylik.csv · hizmet",
+   "tanim": "o ayın (Haziran 2026) hizmet aylık oranı"
+  },
+  "karsi_olgu_aylik": {
+   "deger": 2.472696806346364,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,47",
+   "kaynak": "aylik.csv · tufe; sa.csv · tufe",
+   "tanim": "Ağustos'un arındırılmış aylığı Eylül'de sürseydi Eylül'ün mevsim çarpanıyla ham aylık"
+  },
+  "karsi_olgu_12a": {
+   "deger": 30.536917430447417,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,54",
+   "kaynak": "aylik.csv · tufe; sa.csv · tufe",
+   "tanim": "aynı karşı olguda Eylül yıllık TÜFE"
+  },
+  "baz_payi": {
+   "deger": 0.9704253904654365,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,97 puan",
+   "kaynak": "karşı olgu",
+   "tanim": "yıllık düşüşün baz kısmı: Ağustos yıllığı − karşı olgu yıllığı"
+  },
+  "egilim_payi": {
+   "deger": 0.8054064086909563,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,81 puan",
+   "kaynak": "karşı olgu",
+   "tanim": "yıllık düşüşün eğilim kısmı: karşı olgu yıllığı − gerçekleşen Eylül yıllığı"
+  },
+  "karsi_olgu_mom_agu_12a": {
+   "deger": 30.587162464244066,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,59",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "Ağustos'un üç aylık momentumu (Haziran–Ağustos) Eylül'de sürseydi Eylül yıllığı"
+  },
+  "karsi_olgu_mom_eyl_12a": {
+   "deger": 30.252112487190285,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,25",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "Eylül'ün üç aylık momentumu (Temmuz–Eylül) Eylül aylığı yerine konsaydı Eylül yıllığı"
+  },
+  "tcmb_kayma_agu": {
+   "deger": 0.25,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,25 puan",
+   "kaynak": "dış kaynak",
+   "tanim": "TCMB toplantı özeti (17 Eylül 2026): takvim kaymasının Ağustos enflasyonuna etkisi",
+   "dis_kaynak": "TCMB PPK Toplantı Özeti (2026-42), 17 Eylül 2026"
+  },
+  "karsi_olgu_kaymasiz_12a": {
+   "deger": 30.217352170987578,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,22",
+   "kaynak": "sa.csv · tufe ve dış kaynak",
+   "tanim": "Ağustos'un arındırılmış aylığından kaymanın tamamı düşülerek kurulan karşı olgu yıllığı (kaba sınama)"
+  },
+  "esik30_eylul_ham": {
+   "deger": 2.0512116192950014,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,05",
+   "kaynak": "baz aritmetiği",
+   "tanim": "Eylül yıllığının %30'un altına inmesi için Eylül ham aylığının geçmemesi gereken düzey"
+  },
+  "yillik_dusus": {
+   "deger": 1.7758317991563928,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "1,78 puan",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "yıllık TÜFE'nin Ağustos'tan Eylül'e düşüşü"
+  },
+  "eylul_aylik_fark": {
+   "deger": 1.3940445133536983,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "1,39 puan",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Eylül 2025 aylık − Eylül 2026 aylık (baz dışına çıkan ay ile yeni ay farkı)"
+  },
+  "tufe_aylik_sa": {
+   "deger": 1.4906245136268481,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,49",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "TÜFE, mevsimsellikten arındırılmış aylık değişim, Eylül 2026 (hattın arındırması)"
+  },
+  "tufe_aylik_sa_agu": {
+   "deger": 2.1207042742149573,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,12",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "TÜFE, arındırılmış aylık, Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "tufe_3a_saar": {
+   "deger": 25.309122433886234,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%25,31",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "TÜFE, arındırılmış endeksin son 3 aylık değişiminin yıllıklandırılmışı (zincir), Eylül 2026"
+  },
+  "tufe_3a_saar_agu": {
+   "deger": 29.23233854669578,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,23",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "TÜFE, aynı ölçü Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "b_aylik_sa": {
+   "deger": 1.2883687479913641,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,29",
+   "kaynak": "sa.csv · cekirdek_b",
+   "tanim": "B, mevsimsellikten arındırılmış aylık değişim, Eylül 2026 (hattın arındırması)"
+  },
+  "b_aylik_sa_agu": {
+   "deger": 2.017820797900516,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,02",
+   "kaynak": "sa.csv · cekirdek_b",
+   "tanim": "B, arındırılmış aylık, Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "b_3a_saar": {
+   "deger": 24.132385070473838,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,13",
+   "kaynak": "sa.csv · cekirdek_b",
+   "tanim": "B, arındırılmış endeksin son 3 aylık değişiminin yıllıklandırılmışı (zincir), Eylül 2026"
+  },
+  "b_3a_saar_agu": {
+   "deger": 29.824631986991367,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,82",
+   "kaynak": "sa.csv · cekirdek_b",
+   "tanim": "B, aynı ölçü Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "c_aylik_sa": {
+   "deger": 1.7068527203316863,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,71",
+   "kaynak": "sa.csv · cekirdek_c",
+   "tanim": "C, mevsimsellikten arındırılmış aylık değişim, Eylül 2026 (hattın arındırması)"
+  },
+  "c_aylik_sa_agu": {
+   "deger": 2.0181719004428,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,02",
+   "kaynak": "sa.csv · cekirdek_c",
+   "tanim": "C, arındırılmış aylık, Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "c_3a_saar": {
+   "deger": 27.159117238387086,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,16",
+   "kaynak": "sa.csv · cekirdek_c",
+   "tanim": "C, arındırılmış endeksin son 3 aylık değişiminin yıllıklandırılmışı (zincir), Eylül 2026"
+  },
+  "c_3a_saar_agu": {
+   "deger": 29.78047902507246,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,78",
+   "kaynak": "sa.csv · cekirdek_c",
+   "tanim": "C, aynı ölçü Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "hizmet_aylik_sa": {
+   "deger": 0.856145749064785,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,86",
+   "kaynak": "sa.csv · hizmet",
+   "tanim": "hizmet, mevsimsellikten arındırılmış aylık değişim, Eylül 2026 (hattın arındırması)"
+  },
+  "hizmet_aylik_sa_agu": {
+   "deger": 3.14831328511731,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,15",
+   "kaynak": "sa.csv · hizmet",
+   "tanim": "hizmet, arındırılmış aylık, Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "hizmet_3a_saar": {
+   "deger": 37.36432790528576,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,36",
+   "kaynak": "sa.csv · hizmet",
+   "tanim": "hizmet, arındırılmış endeksin son 3 aylık değişiminin yıllıklandırılmışı (zincir), Eylül 2026"
+  },
+  "hizmet_3a_saar_agu": {
+   "deger": 40.523493753970044,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,52",
+   "kaynak": "sa.csv · hizmet",
+   "tanim": "hizmet, aynı ölçü Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "mal_aylik_sa": {
+   "deger": 1.2162718667709793,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,22",
+   "kaynak": "sa.csv · temel_mal",
+   "tanim": "temel mallar, mevsimsellikten arındırılmış aylık değişim, Eylül 2026 (hattın arındırması)"
+  },
+  "mal_aylik_sa_agu": {
+   "deger": 0.7473674740908098,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,75",
+   "kaynak": "sa.csv · temel_mal",
+   "tanim": "temel mallar, arındırılmış aylık, Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "mal_3a_saar": {
+   "deger": 13.416090086231902,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%13,42",
+   "kaynak": "sa.csv · temel_mal",
+   "tanim": "temel mallar, arındırılmış endeksin son 3 aylık değişiminin yıllıklandırılmışı (zincir), Eylül 2026"
+  },
+  "mal_3a_saar_agu": {
+   "deger": 16.153166222832937,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%16,15",
+   "kaynak": "sa.csv · temel_mal",
+   "tanim": "temel mallar, aynı ölçü Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "gida_aylik_sa": {
+   "deger": 0.09537749040118282,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,10",
+   "kaynak": "sa.csv · gida",
+   "tanim": "gıda, mevsimsellikten arındırılmış aylık değişim, Eylül 2026 (hattın arındırması)"
+  },
+  "gida_aylik_sa_agu": {
+   "deger": 2.4117365647557953,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,41",
+   "kaynak": "sa.csv · gida",
+   "tanim": "gıda, arındırılmış aylık, Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "gida_3a_saar": {
+   "deger": 19.149573171135703,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%19,15",
+   "kaynak": "sa.csv · gida",
+   "tanim": "gıda, arındırılmış endeksin son 3 aylık değişiminin yıllıklandırılmışı (zincir), Eylül 2026"
+  },
+  "gida_3a_saar_agu": {
+   "deger": 31.28165034146093,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,28",
+   "kaynak": "sa.csv · gida",
+   "tanim": "gıda, aynı ölçü Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "enerji_aylik_sa": {
+   "deger": 4.768540236408092,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,77",
+   "kaynak": "sa.csv · enerji",
+   "tanim": "enerji, mevsimsellikten arındırılmış aylık değişim, Eylül 2026 (hattın arındırması)"
+  },
+  "enerji_aylik_sa_agu": {
+   "deger": 4.973437657111313,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,97",
+   "kaynak": "sa.csv · enerji",
+   "tanim": "enerji, arındırılmış aylık, Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "enerji_3a_saar": {
+   "deger": 39.95560430882785,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,96",
+   "kaynak": "sa.csv · enerji",
+   "tanim": "enerji, arındırılmış endeksin son 3 aylık değişiminin yıllıklandırılmışı (zincir), Eylül 2026"
+  },
+  "enerji_3a_saar_agu": {
+   "deger": 8.832166113404716,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%8,83",
+   "kaynak": "sa.csv · enerji",
+   "tanim": "enerji, aynı ölçü Ağustos 2026 (bugünkü arındırma sürümü)"
+  },
+  "tufe_3a_saar_degisim": {
+   "deger": 3.923216112809545,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "3,92 puan",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "TÜFE'nin üç aylık yıllıklandırılmış eğiliminin Ağustos'tan Eylül'e düşüşü"
+  },
+  "tufe_mevsim_payi": {
+   "deger": 0.34982075538985136,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,35 puan",
+   "kaynak": "aylik.csv · tufe; sa.csv · tufe",
+   "tanim": "Eylül aylık TÜFE'de mevsimsel bileşen (ham − arındırılmış)"
+  },
+  "hizmet_mevsim_payi": {
+   "deger": 1.2952048592244303,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "1,30 puan",
+   "kaynak": "aylik.csv · hizmet; sa.csv · hizmet",
+   "tanim": "Eylül aylık hizmette mevsimsel bileşen (ham − arındırılmış)"
+  },
+  "c_tufe_aylik_sa_fark": {
+   "deger": 0.21622820670483822,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,22 puan",
+   "kaynak": "sa.csv · cekirdek_c, tufe",
+   "tanim": "C arındırılmış aylık − TÜFE arındırılmış aylık, Eylül 2026"
+  },
+  "c_tufe_aylik_mevsim_payi": {
+   "deger": 0.0807196546219302,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,08 puan",
+   "kaynak": "aylik.csv; sa.csv",
+   "tanim": "C–manşet aylık farkının mevsimsel kısmı (ham fark − arındırılmış fark)"
+  },
+  "sa_rev_tufe_maks": {
+   "deger": 0.08,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,08 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_tufe_maks",
+   "tanim": "TÜFE: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış aylık ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_c_maks": {
+   "deger": 0.302,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,30 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_c_maks",
+   "tanim": "C: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış aylık ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_hizmet_maks": {
+   "deger": 1.298,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "1,30 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_hizmet_maks",
+   "tanim": "hizmet: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış aylık ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_mal_maks": {
+   "deger": 0.427,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,43 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_mal_maks",
+   "tanim": "temel mallar: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış aylık ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_oynak_maks": {
+   "deger": 7.598,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "7,60 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_oynak_maks",
+   "tanim": "enerji: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış aylık ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_tufe_saar3": {
+   "deger": 0.62,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,62 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_tufe_saar3",
+   "tanim": "TÜFE: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış 3 aylık yıllıklandırılmış ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_c_saar3": {
+   "deger": 0.26,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,26 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_c_saar3",
+   "tanim": "C: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış 3 aylık yıllıklandırılmış ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_mal_saar3": {
+   "deger": 2.64,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "2,64 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_mal_saar3",
+   "tanim": "temel mallar: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış 3 aylık yıllıklandırılmış ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_oynak_saar3": {
+   "deger": 52.86,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "52,86 puan",
+   "kaynak": "enflasyon_ozet.json · sa_rev_oynak_saar3",
+   "tanim": "enerji: son 6 ayın her birinde, o ay son gözlemken kestirilen arındırılmış 3 aylık yıllıklandırılmış ile bugünkü kestirim arasındaki farkın en büyüğü (hattın uç nokta testi)"
+  },
+  "sa_rev_surum": {
+   "deger": 6.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "6",
+   "kaynak": "enflasyon_ozet.json · sa_rev_k",
+   "tanim": "uç nokta testinin kestiği ay sayısı"
+  },
+  "hedef_yillik": {
+   "deger": 5.0,
+   "b": 0,
+   "birim": "%",
+   "arti": false,
+   "metin": "%5",
+   "kaynak": "enflasyon_ozet.json · hedef_yillik",
+   "tanim": "TCMB enflasyon hedefi"
+  },
+  "hedef_aylik": {
+   "deger": 0.41,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,41",
+   "kaynak": "enflasyon_ozet.json · hedef_aylik",
+   "tanim": "hedefle uyumlu aylık oran ((1,05)^(1/12) − 1)"
+  },
+  "katki5_oktg23": {
+   "deger": 0.87529116369026,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,88 puan",
+   "kaynak": "katki.csv · c_oktg23",
+   "tanim": "hizmet bileşeninin Eylül 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg18": {
+   "deger": 0.50719901396046,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,51 puan",
+   "kaynak": "katki.csv · c_oktg18",
+   "tanim": "temel mallar bileşeninin Eylül 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg09": {
+   "deger": 0.47977811268110004,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,48 puan",
+   "kaynak": "katki.csv · c_oktg09",
+   "tanim": "enerji bileşeninin Eylül 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg10": {
+   "deger": -0.049173962470610004,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,05 puan",
+   "kaynak": "katki.csv · c_oktg10",
+   "tanim": "gıda ve alkolsüz içecekler bileşeninin Eylül 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg22": {
+   "deger": 0.02761824153042,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,03 puan",
+   "kaynak": "katki.csv · c_oktg22",
+   "tanim": "alkol, tütün ve altın bileşeninin Eylül 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_artik": {
+   "deger": -0.0002673003749400493,
+   "b": 4,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,0003 puan",
+   "kaynak": "katki.csv · pi, c_*",
+   "tanim": "beş bileşen katkı toplamının manşetten farkı, Eylül 2026"
+  },
+  "katki5_oktg23_agu": {
+   "deger": 1.2389100520444098,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "1,24 puan",
+   "kaynak": "katki.csv · c_oktg23",
+   "tanim": "hizmet bileşeninin Ağustos 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg18_agu": {
+   "deger": -0.06873579699597,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,07 puan",
+   "kaynak": "katki.csv · c_oktg18",
+   "tanim": "temel mallar bileşeninin Ağustos 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg09_agu": {
+   "deger": 0.40418442499557006,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,40 puan",
+   "kaynak": "katki.csv · c_oktg09",
+   "tanim": "enerji bileşeninin Ağustos 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg10_agu": {
+   "deger": 0.05379126433532,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,05 puan",
+   "kaynak": "katki.csv · c_oktg10",
+   "tanim": "gıda ve alkolsüz içecekler bileşeninin Ağustos 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_oktg22_agu": {
+   "deger": 0.21745990921089997,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,22 puan",
+   "kaynak": "katki.csv · c_oktg22",
+   "tanim": "alkol, tütün ve altın bileşeninin Ağustos 2026 aylık TÜFE'ye katkısı"
+  },
+  "katki5_artik_agu": {
+   "deger": -0.001455972553279672,
+   "b": 4,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,0015 puan",
+   "kaynak": "katki.csv · pi, c_*",
+   "tanim": "beş bileşen katkı toplamının manşetten farkı, Ağustos 2026"
+  },
+  "katki5_oktg23_degisim": {
+   "deger": -0.3636188883541498,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,36 puan",
+   "kaynak": "katki.csv · c_oktg23",
+   "tanim": "hizmet katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "katki5_oktg18_degisim": {
+   "deger": 0.57593481095643,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,58 puan",
+   "kaynak": "katki.csv · c_oktg18",
+   "tanim": "temel mallar katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "katki5_oktg09_degisim": {
+   "deger": 0.07559368768552999,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,08 puan",
+   "kaynak": "katki.csv · c_oktg09",
+   "tanim": "enerji katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "katki5_oktg10_degisim": {
+   "deger": -0.10296522680593001,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,10 puan",
+   "kaynak": "katki.csv · c_oktg10",
+   "tanim": "gıda ve alkolsüz içecekler katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "katki5_oktg22_degisim": {
+   "deger": -0.18984166768047997,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,19 puan",
+   "kaynak": "katki.csv · c_oktg22",
+   "tanim": "alkol, tütün ve altın katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "katki5_hizmet_pay": {
+   "deger": 47.558663027122186,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%47,6",
+   "kaynak": "katki.csv",
+   "tanim": "hizmetin Eylül aylık TÜFE içindeki payı (katkı / manşet)"
+  },
+  "ana_agirlik_kip": {
+   "metin": "öncüle en yakın",
+   "kaynak": "agirlik.json · ana_grup.2026.kip",
+   "tanim": "2026 ana grup ağırlığı çözüm kipi; 9 ay denklem, 13 bilinmeyen"
+  },
+  "ana_agirlik_ay": {
+   "deger": 9.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "9",
+   "kaynak": "agirlik.json · ana_grup.2026.n_ay",
+   "tanim": "2026 ağırlıklarının çözüldüğü ay sayısı"
+  },
+  "katki13_artik": {
+   "deger": -1.9149802252815817e-06,
+   "b": 4,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,0000 puan",
+   "kaynak": "aylik.csv · ana_01…13; agirlik.json · ana_grup.2026",
+   "tanim": "13 grup katkı toplamının manşetten farkı, Eylül 2026"
+  },
+  "katki13_artik_w25": {
+   "deger": -0.045726681303395855,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,05 puan",
+   "kaynak": "aylik.csv · ana_01…13; agirlik.json · ana_grup.2025",
+   "tanim": "2025 ağırlıklarıyla 13 grup katkı toplamının manşetten farkı, Eylül 2026"
+  },
+  "katki13_w_fark_maks": {
+   "deger": 0.09452824928461784,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,09 puan",
+   "kaynak": "agirlik.json · ana_grup.2026, 2025",
+   "tanim": "tek bir grubun katkısı 2026 yerine 2025 ağırlığıyla hesaplanınca en çok bu kadar değişir, Eylül 2026"
+  },
+  "ana01_katki": {
+   "deger": -0.047596224903030976,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,05 puan",
+   "kaynak": "aylik.csv · ana_01; agirlik.json",
+   "tanim": "Gıda ve alkolsüz içecekler grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana01_aylik": {
+   "deger": -0.20102747375475571,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "−%0,20",
+   "kaynak": "aylik.csv · ana_01",
+   "tanim": "Gıda ve alkolsüz içecekler grubu Eylül 2026 aylık değişim"
+  },
+  "ana02_katki": {
+   "deger": 0.02823869626839811,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,03 puan",
+   "kaynak": "aylik.csv · ana_02; agirlik.json",
+   "tanim": "Alkollü içecekler ve tütün grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana02_aylik": {
+   "deger": 0.8769407705577992,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,88",
+   "kaynak": "aylik.csv · ana_02",
+   "tanim": "Alkollü içecekler ve tütün grubu Eylül 2026 aylık değişim"
+  },
+  "ana03_katki": {
+   "deger": 0.2671569516349221,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,27 puan",
+   "kaynak": "aylik.csv · ana_03; agirlik.json",
+   "tanim": "Giyim ve ayakkabı grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana03_aylik": {
+   "deger": 3.9806996381182236,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,98",
+   "kaynak": "aylik.csv · ana_03",
+   "tanim": "Giyim ve ayakkabı grubu Eylül 2026 aylık değişim"
+  },
+  "ana04_katki": {
+   "deger": 0.3627423692819557,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,36 puan",
+   "kaynak": "aylik.csv · ana_04; agirlik.json",
+   "tanim": "Konut, su, elektrik, gaz grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana04_aylik": {
+   "deger": 2.7147487844408236,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,71",
+   "kaynak": "aylik.csv · ana_04",
+   "tanim": "Konut, su, elektrik, gaz grubu Eylül 2026 aylık değişim"
+  },
+  "ana05_katki": {
+   "deger": 0.11863626236233929,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,12 puan",
+   "kaynak": "aylik.csv · ana_05; agirlik.json",
+   "tanim": "Mobilya, ev eşyası, ev bakımı grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana05_aylik": {
+   "deger": 1.8341370859356498,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,83",
+   "kaynak": "aylik.csv · ana_05",
+   "tanim": "Mobilya, ev eşyası, ev bakımı grubu Eylül 2026 aylık değişim"
+  },
+  "ana06_katki": {
+   "deger": 0.012722589117943963,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,01 puan",
+   "kaynak": "aylik.csv · ana_06; agirlik.json",
+   "tanim": "Sağlık grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana06_aylik": {
+   "deger": 0.34914766892586435,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,35",
+   "kaynak": "aylik.csv · ana_06",
+   "tanim": "Sağlık grubu Eylül 2026 aylık değişim"
+  },
+  "ana07_katki": {
+   "deger": 0.48139876831082884,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,48 puan",
+   "kaynak": "aylik.csv · ana_07; agirlik.json",
+   "tanim": "Ulaştırma grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana07_aylik": {
+   "deger": 2.7900670757813772,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,79",
+   "kaynak": "aylik.csv · ana_07",
+   "tanim": "Ulaştırma grubu Eylül 2026 aylık değişim"
+  },
+  "ana08_katki": {
+   "deger": 0.08913226279458142,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,09 puan",
+   "kaynak": "aylik.csv · ana_08; agirlik.json",
+   "tanim": "Bilgi ve iletişim grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana08_aylik": {
+   "deger": 2.163760896637612,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,16",
+   "kaynak": "aylik.csv · ana_08",
+   "tanim": "Bilgi ve iletişim grubu Eylül 2026 aylık değişim"
+  },
+  "ana09_katki": {
+   "deger": 0.028355718666205797,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,03 puan",
+   "kaynak": "aylik.csv · ana_09; agirlik.json",
+   "tanim": "Eğlence, spor ve kültür grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana09_aylik": {
+   "deger": 0.7233976353453686,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,72",
+   "kaynak": "aylik.csv · ana_09",
+   "tanim": "Eğlence, spor ve kültür grubu Eylül 2026 aylık değişim"
+  },
+  "ana10_katki": {
+   "deger": 0.25627096101491964,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,26 puan",
+   "kaynak": "aylik.csv · ana_10; agirlik.json",
+   "tanim": "Eğitim hizmetleri grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana10_aylik": {
+   "deger": 14.190990053955655,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%14,19",
+   "kaynak": "aylik.csv · ana_10",
+   "tanim": "Eğitim hizmetleri grubu Eylül 2026 aylık değişim"
+  },
+  "ana11_katki": {
+   "deger": 0.1187679194702164,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,12 puan",
+   "kaynak": "aylik.csv · ana_11; agirlik.json",
+   "tanim": "Lokanta ve konaklama grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana11_aylik": {
+   "deger": 1.4075165806927137,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,41",
+   "kaynak": "aylik.csv · ana_11",
+   "tanim": "Lokanta ve konaklama grubu Eylül 2026 aylık değişim"
+  },
+  "ana12_katki": {
+   "deger": 0.06550599571733833,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,07 puan",
+   "kaynak": "aylik.csv · ana_12; agirlik.json",
+   "tanim": "Sigorta ve finansal hizmetler grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana12_aylik": {
+   "deger": 3.401256319901935,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,40",
+   "kaynak": "aylik.csv · ana_12",
+   "tanim": "Sigorta ve finansal hizmetler grubu Eylül 2026 aylık değişim"
+  },
+  "ana13_katki": {
+   "deger": 0.05911491426030618,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,06 puan",
+   "kaynak": "aylik.csv · ana_13; agirlik.json",
+   "tanim": "Kişisel bakım ve çeşitli grubunun Eylül 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana13_aylik": {
+   "deger": 1.083689289669354,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,08",
+   "kaynak": "aylik.csv · ana_13",
+   "tanim": "Kişisel bakım ve çeşitli grubu Eylül 2026 aylık değişim"
+  },
+  "katki13_artik_agu": {
+   "deger": 4.5697917547826705e-06,
+   "b": 4,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,0000 puan",
+   "kaynak": "aylik.csv · ana_01…13; agirlik.json · ana_grup.2026",
+   "tanim": "13 grup katkı toplamının manşetten farkı, Ağustos 2026"
+  },
+  "katki13_artik_w25_agu": {
+   "deger": -0.09054251748552211,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,09 puan",
+   "kaynak": "aylik.csv · ana_01…13; agirlik.json · ana_grup.2025",
+   "tanim": "2025 ağırlıklarıyla 13 grup katkı toplamının manşetten farkı, Ağustos 2026"
+  },
+  "katki13_w_fark_maks_agu": {
+   "deger": 0.05542331478476192,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,06 puan",
+   "kaynak": "agirlik.json · ana_grup.2026, 2025",
+   "tanim": "tek bir grubun katkısı 2026 yerine 2025 ağırlığıyla hesaplanınca en çok bu kadar değişir, Ağustos 2026"
+  },
+  "ana01_katki_agu": {
+   "deger": 0.05206463482762363,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,05 puan",
+   "kaynak": "aylik.csv · ana_01; agirlik.json",
+   "tanim": "Gıda ve alkolsüz içecekler grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana01_aylik_agu": {
+   "deger": 0.21638561408743318,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,22",
+   "kaynak": "aylik.csv · ana_01",
+   "tanim": "Gıda ve alkolsüz içecekler grubu Ağustos 2026 aylık değişim"
+  },
+  "ana02_katki_agu": {
+   "deger": 0.2114527509184354,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,21 puan",
+   "kaynak": "aylik.csv · ana_02; agirlik.json",
+   "tanim": "Alkollü içecekler ve tütün grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana02_aylik_agu": {
+   "deger": 6.892047637341525,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%6,89",
+   "kaynak": "aylik.csv · ana_02",
+   "tanim": "Alkollü içecekler ve tütün grubu Ağustos 2026 aylık değişim"
+  },
+  "ana03_katki_agu": {
+   "deger": -0.251154207432407,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,25 puan",
+   "kaynak": "aylik.csv · ana_03; agirlik.json",
+   "tanim": "Giyim ve ayakkabı grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana03_aylik_agu": {
+   "deger": -3.544258480264928,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "−%3,54",
+   "kaynak": "aylik.csv · ana_03",
+   "tanim": "Giyim ve ayakkabı grubu Ağustos 2026 aylık değişim"
+  },
+  "ana04_katki_agu": {
+   "deger": 0.30050802194288695,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,30 puan",
+   "kaynak": "aylik.csv · ana_04; agirlik.json",
+   "tanim": "Konut, su, elektrik, gaz grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana04_aylik_agu": {
+   "deger": 2.25813134452042,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,26",
+   "kaynak": "aylik.csv · ana_04",
+   "tanim": "Konut, su, elektrik, gaz grubu Ağustos 2026 aylık değişim"
+  },
+  "ana05_katki_agu": {
+   "deger": 0.11353298316686426,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,11 puan",
+   "kaynak": "aylik.csv · ana_05; agirlik.json",
+   "tanim": "Mobilya, ev eşyası, ev bakımı grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana05_aylik_agu": {
+   "deger": 1.7536803153406666,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,75",
+   "kaynak": "aylik.csv · ana_05",
+   "tanim": "Mobilya, ev eşyası, ev bakımı grubu Ağustos 2026 aylık değişim"
+  },
+  "ana06_katki_agu": {
+   "deger": 0.02591442531506904,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,03 puan",
+   "kaynak": "aylik.csv · ana_06; agirlik.json",
+   "tanim": "Sağlık grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana06_aylik_agu": {
+   "deger": 0.7032057911064982,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,70",
+   "kaynak": "aylik.csv · ana_06",
+   "tanim": "Sağlık grubu Ağustos 2026 aylık değişim"
+  },
+  "ana07_katki_agu": {
+   "deger": 0.8087681070223188,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,81 puan",
+   "kaynak": "aylik.csv · ana_07; agirlik.json",
+   "tanim": "Ulaştırma grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana07_aylik_agu": {
+   "deger": 4.824594210486932,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,82",
+   "kaynak": "aylik.csv · ana_07",
+   "tanim": "Ulaştırma grubu Ağustos 2026 aylık değişim"
+  },
+  "ana08_katki_agu": {
+   "deger": 0.1064495478648612,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,11 puan",
+   "kaynak": "aylik.csv · ana_08; agirlik.json",
+   "tanim": "Bilgi ve iletişim grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana08_aylik_agu": {
+   "deger": 2.6034179843475336,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,60",
+   "kaynak": "aylik.csv · ana_08",
+   "tanim": "Bilgi ve iletişim grubu Ağustos 2026 aylık değişim"
+  },
+  "ana09_katki_agu": {
+   "deger": 0.07328343169653943,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,07 puan",
+   "kaynak": "aylik.csv · ana_09; agirlik.json",
+   "tanim": "Eğlence, spor ve kültür grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana09_aylik_agu": {
+   "deger": 1.870047543581621,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,87",
+   "kaynak": "aylik.csv · ana_09",
+   "tanim": "Eğlence, spor ve kültür grubu Ağustos 2026 aylık değişim"
+  },
+  "ana10_katki_agu": {
+   "deger": 0.14598136179413804,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,15 puan",
+   "kaynak": "aylik.csv · ana_10; agirlik.json",
+   "tanim": "Eğitim hizmetleri grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana10_aylik_agu": {
+   "deger": 8.621663606835206,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%8,62",
+   "kaynak": "aylik.csv · ana_10",
+   "tanim": "Eğitim hizmetleri grubu Ağustos 2026 aylık değişim"
+  },
+  "ana11_katki_agu": {
+   "deger": 0.1266577772137233,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,13 puan",
+   "kaynak": "aylik.csv · ana_11; agirlik.json",
+   "tanim": "Lokanta ve konaklama grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana11_aylik_agu": {
+   "deger": 1.4958863126402377,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,50",
+   "kaynak": "aylik.csv · ana_11",
+   "tanim": "Lokanta ve konaklama grubu Ağustos 2026 aylık değişim"
+  },
+  "ana12_katki_agu": {
+   "deger": 0.0010517976770344657,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,00 puan",
+   "kaynak": "aylik.csv · ana_12; agirlik.json",
+   "tanim": "Sigorta ve finansal hizmetler grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana12_aylik_agu": {
+   "deger": 0.05365218057791221,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,05",
+   "kaynak": "aylik.csv · ana_12",
+   "tanim": "Sigorta ve finansal hizmetler grubu Ağustos 2026 aylık değişim"
+  },
+  "ana13_katki_agu": {
+   "deger": 0.12963867923811584,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,13 puan",
+   "kaynak": "aylik.csv · ana_13; agirlik.json",
+   "tanim": "Kişisel bakım ve çeşitli grubunun Ağustos 2026 aylık TÜFE'ye katkısı (2026 tahmini ağırlıkla)"
+  },
+  "ana13_aylik_agu": {
+   "deger": 2.389244350854458,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,39",
+   "kaynak": "aylik.csv · ana_13",
+   "tanim": "Kişisel bakım ve çeşitli grubu Ağustos 2026 aylık değişim"
+  },
+  "ana01_katki_degisim": {
+   "deger": -0.09966085973065461,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,10 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Gıda ve alkolsüz içecekler katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana01_agirlik": {
+   "deger": 23.6729,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%23,7",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Gıda ve alkolsüz içecekler 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana02_katki_degisim": {
+   "deger": -0.1832140546500373,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,18 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Alkollü içecekler ve tütün katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana02_agirlik": {
+   "deger": 3.1622999999999997,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,2",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Alkollü içecekler ve tütün 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana03_katki_degisim": {
+   "deger": 0.518311159067329,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,52 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Giyim ve ayakkabı katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana03_agirlik": {
+   "deger": 8.265500000000001,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%8,3",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Giyim ve ayakkabı 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana04_katki_degisim": {
+   "deger": 0.06223434733906874,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,06 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Konut, su, elektrik, gaz katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana04_agirlik": {
+   "deger": 12.667200000000001,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%12,7",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Konut, su, elektrik, gaz 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana05_katki_degisim": {
+   "deger": 0.005103279195475027,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,01 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Mobilya, ev eşyası, ev bakımı katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana05_agirlik": {
+   "deger": 6.751600000000001,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%6,8",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Mobilya, ev eşyası, ev bakımı 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana06_katki_degisim": {
+   "deger": -0.013191836197125079,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,01 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Sağlık katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana06_agirlik": {
+   "deger": 3.2135999999999996,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%3,2",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Sağlık 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana07_katki_degisim": {
+   "deger": -0.32736933871149,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,33 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Ulaştırma katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana07_agirlik": {
+   "deger": 16.3113,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%16,3",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Ulaştırma 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana08_katki_degisim": {
+   "deger": -0.017317285070279784,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,02 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Bilgi ve iletişim katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana08_agirlik": {
+   "deger": 4.2371,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,2",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Bilgi ve iletişim 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana09_katki_degisim": {
+   "deger": -0.04492771303033363,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,04 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Eğlence, spor ve kültür katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana09_agirlik": {
+   "deger": 4.0409,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,0",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Eğlence, spor ve kültür 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana10_katki_degisim": {
+   "deger": 0.1102895992207816,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,11 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Eğitim hizmetleri katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana10_agirlik": {
+   "deger": 1.7023,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,7",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Eğitim hizmetleri 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana11_katki_degisim": {
+   "deger": -0.007889857743506895,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,01 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Lokanta ve konaklama katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana11_agirlik": {
+   "deger": 8.3694,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%8,4",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Lokanta ve konaklama 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana12_katki_degisim": {
+   "deger": 0.06445419804030386,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,06 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Sigorta ve finansal hizmetler katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana12_agirlik": {
+   "deger": 1.8397000000000001,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,8",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Sigorta ve finansal hizmetler 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "ana13_katki_degisim": {
+   "deger": -0.07052376497780966,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,07 puan",
+   "kaynak": "aylık katkı farkı",
+   "tanim": "Kişisel bakım ve çeşitli katkısının Ağustos'tan Eylül'e değişimi"
+  },
+  "ana13_agirlik": {
+   "deger": 5.7661,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%5,8",
+   "kaynak": "agirlik.json · ana_grup.2026",
+   "tanim": "Kişisel bakım ve çeşitli 2026 yıl başı ağırlığı (hattın kimlikten tahmini)"
+  },
+  "katki13_sira1_ad": {
+   "metin": "Ulaştırma",
+   "kaynak": "aylık katkı sıralaması",
+   "tanim": "Eylül'de en büyük 1. katkı"
+  },
+  "katki13_sira1_pay": {
+   "deger": 26.1566467862436,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%26,2",
+   "kaynak": "katkı / manşet",
+   "tanim": "Ulaştırma katkısının Eylül aylık TÜFE içindeki payı"
+  },
+  "katki13_sira2_ad": {
+   "metin": "Konut, su, elektrik, gaz",
+   "kaynak": "aylık katkı sıralaması",
+   "tanim": "Eylül'de en büyük 2. katkı"
+  },
+  "katki13_sira2_pay": {
+   "deger": 19.709489621267533,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%19,7",
+   "kaynak": "katkı / manşet",
+   "tanim": "Konut, su, elektrik, gaz katkısının Eylül aylık TÜFE içindeki payı"
+  },
+  "katki13_sira3_ad": {
+   "metin": "Giyim ve ayakkabı",
+   "kaynak": "aylık katkı sıralaması",
+   "tanim": "Eylül'de en büyük 3. katkı"
+  },
+  "katki13_sira3_pay": {
+   "deger": 14.515886787421659,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%14,5",
+   "kaynak": "katkı / manşet",
+   "tanim": "Giyim ve ayakkabı katkısının Eylül aylık TÜFE içindeki payı"
+  },
+  "ana07_pay_agu": {
+   "deger": 43.85578206562419,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%43,9",
+   "kaynak": "katkı / manşet",
+   "tanim": "Ulaştırma katkısının Ağustos aylık TÜFE içindeki payı"
+  },
+  "ana10_aylik_2025_09": {
+   "deger": 17.89526184538652,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%17,90",
+   "kaynak": "aylik.csv · ana_10",
+   "tanim": "Eğitim hizmetleri, Eylül 2025 aylık değişim"
+  },
+  "ana10_aylik_2025_08": {
+   "deger": 2.066788841376499,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,07",
+   "kaynak": "aylik.csv · ana_10",
+   "tanim": "Eğitim hizmetleri, Ağustos 2025 aylık değişim"
+  },
+  "ana10_agu_eyl_2026": {
+   "deger": 24.036153085722354,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,04",
+   "kaynak": "aylik.csv · ana_10",
+   "tanim": "Eğitim hizmetleri, Ağustos ve Eylül 2026 birikimli değişim (Temmuz → Eylül)"
+  },
+  "ana10_agu_eyl_2025": {
+   "deger": 20.3319079617186,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%20,33",
+   "kaynak": "aylik.csv · ana_10",
+   "tanim": "Eğitim hizmetleri, Ağustos ve Eylül 2025 birikimli değişim (Temmuz → Eylül)"
+  },
+  "katki13_ilk3_toplam": {
+   "deger": 1.1112980892277067,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "1,11 puan",
+   "kaynak": "aylık katkı",
+   "tanim": "Eylül'de en büyük üç grubun katkı toplamı"
+  },
+  "katki13_ilk3_pay": {
+   "deger": 60.382023194932785,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%60,4",
+   "kaynak": "katkı / manşet",
+   "tanim": "en büyük üç grubun Eylül aylık TÜFE içindeki payı"
+  },
+  "katki13_degisen1_ad": {
+   "metin": "Giyim ve ayakkabı",
+   "kaynak": "katkı farkı sıralaması",
+   "tanim": "katkısı Ağustos'a göre en çok değişen 1. grup"
+  },
+  "katki13_degisen2_ad": {
+   "metin": "Ulaştırma",
+   "kaynak": "katkı farkı sıralaması",
+   "tanim": "katkısı Ağustos'a göre en çok değişen 2. grup"
+  },
+  "katki13_degisen3_ad": {
+   "metin": "Alkollü içecekler ve tütün",
+   "kaynak": "katkı farkı sıralaması",
+   "tanim": "katkısı Ağustos'a göre en çok değişen 3. grup"
+  },
+  "katki13_degisen4_ad": {
+   "metin": "Eğitim hizmetleri",
+   "kaynak": "katkı farkı sıralaması",
+   "tanim": "katkısı Ağustos'a göre en çok değişen 4. grup"
+  },
+  "difuzyon_hedef": {
+   "deger": 65.27985345991819,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%65,3",
+   "kaynak": "dagilim.csv · difuzyon_hedef",
+   "tanim": "arındırılmış aylık değişimi hedefle uyumlu aylık oranın (%0,41) üstünde olan üç haneli grupların ağırlık payı, Eylül 2026"
+  },
+  "difuzyon_0": {
+   "deger": 65.27985345991819,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%65,3",
+   "kaynak": "dagilim.csv · difuzyon_0",
+   "tanim": "arındırılmış aylık değişimi sıfırın üstünde olan grupların ağırlık payı, Eylül 2026"
+  },
+  "difuzyon_manset": {
+   "deger": 47.13537824822787,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%47,1",
+   "kaynak": "dagilim.csv · difuzyon_mansete_gore",
+   "tanim": "arındırılmış aylık değişimi arındırılmış kesit ortalamasının üstünde olan grupların payı, Eylül 2026"
+  },
+  "medyan_aylik": {
+   "deger": 1.5262424765610572,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,53",
+   "kaynak": "dagilim.csv · medyan",
+   "tanim": "ağırlıklı medyan arındırılmış aylık değişim, Eylül 2026"
+  },
+  "kirpma_aylik": {
+   "deger": 1.6610562193993776,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,66",
+   "kaynak": "dagilim.csv · kirpma_08",
+   "tanim": "%16 kırpılmış ortalama (her uçtan %8) arındırılmış aylık değişim, Eylül 2026"
+  },
+  "medyan_3a": {
+   "deger": 24.882327557854826,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,88",
+   "kaynak": "dagilim.csv · medyan_saar3",
+   "tanim": "medyanın son 3 ay ortalamasının yıllıklandırılmışı, Eylül 2026"
+  },
+  "kirpma_3a": {
+   "deger": 23.100603945420907,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%23,10",
+   "kaynak": "dagilim.csv · kirpma_08_saar3",
+   "tanim": "kırpılmış ortalamanın son 3 ay ortalamasının yıllıklandırılmışı, Eylül 2026"
+  },
+  "difuzyon_hedef_agu": {
+   "deger": 73.22513689039316,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%73,2",
+   "kaynak": "dagilim.csv · difuzyon_hedef",
+   "tanim": "arındırılmış aylık değişimi hedefle uyumlu aylık oranın (%0,41) üstünde olan üç haneli grupların ağırlık payı, Ağustos 2026"
+  },
+  "difuzyon_0_agu": {
+   "deger": 81.20878314802462,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%81,2",
+   "kaynak": "dagilim.csv · difuzyon_0",
+   "tanim": "arındırılmış aylık değişimi sıfırın üstünde olan grupların ağırlık payı, Ağustos 2026"
+  },
+  "difuzyon_manset_agu": {
+   "deger": 61.61640513998473,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%61,6",
+   "kaynak": "dagilim.csv · difuzyon_mansete_gore",
+   "tanim": "arındırılmış aylık değişimi arındırılmış kesit ortalamasının üstünde olan grupların payı, Ağustos 2026"
+  },
+  "medyan_aylik_agu": {
+   "deger": 2.164086354767658,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,16",
+   "kaynak": "dagilim.csv · medyan",
+   "tanim": "ağırlıklı medyan arındırılmış aylık değişim, Ağustos 2026"
+  },
+  "kirpma_aylik_agu": {
+   "deger": 1.6267948100492289,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,63",
+   "kaynak": "dagilim.csv · kirpma_08",
+   "tanim": "%16 kırpılmış ortalama (her uçtan %8) arındırılmış aylık değişim, Ağustos 2026"
+  },
+  "medyan_3a_agu": {
+   "deger": 29.13007996406187,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,13",
+   "kaynak": "dagilim.csv · medyan_saar3",
+   "tanim": "medyanın son 3 ay ortalamasının yıllıklandırılmışı, Ağustos 2026"
+  },
+  "kirpma_3a_agu": {
+   "deger": 24.967786019453044,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,97",
+   "kaynak": "dagilim.csv · kirpma_08_saar3",
+   "tanim": "kırpılmış ortalamanın son 3 ay ortalamasının yıllıklandırılmışı, Ağustos 2026"
+  },
+  "difuzyon_hedef_tem": {
+   "deger": 83.33289790334855,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%83,3",
+   "kaynak": "dagilim.csv · difuzyon_hedef",
+   "tanim": "arındırılmış aylık değişimi hedefle uyumlu aylık oranın (%0,41) üstünde olan üç haneli grupların ağırlık payı, Temmuz 2026"
+  },
+  "difuzyon_0_tem": {
+   "deger": 85.22155992774233,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%85,2",
+   "kaynak": "dagilim.csv · difuzyon_0",
+   "tanim": "arındırılmış aylık değişimi sıfırın üstünde olan grupların ağırlık payı, Temmuz 2026"
+  },
+  "difuzyon_manset_tem": {
+   "deger": 45.14762783558591,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%45,1",
+   "kaynak": "dagilim.csv · difuzyon_mansete_gore",
+   "tanim": "arındırılmış aylık değişimi arındırılmış kesit ortalamasının üstünde olan grupların payı, Temmuz 2026"
+  },
+  "medyan_aylik_tem": {
+   "deger": 1.9164641405033267,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,92",
+   "kaynak": "dagilim.csv · medyan",
+   "tanim": "ağırlıklı medyan arındırılmış aylık değişim, Temmuz 2026"
+  },
+  "kirpma_aylik_tem": {
+   "deger": 1.9531974754188697,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,95",
+   "kaynak": "dagilim.csv · kirpma_08",
+   "tanim": "%16 kırpılmış ortalama (her uçtan %8) arındırılmış aylık değişim, Temmuz 2026"
+  },
+  "medyan_3a_tem": {
+   "deger": 29.772957107953516,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,77",
+   "kaynak": "dagilim.csv · medyan_saar3",
+   "tanim": "medyanın son 3 ay ortalamasının yıllıklandırılmışı, Temmuz 2026"
+  },
+  "kirpma_3a_tem": {
+   "deger": 29.24734669280198,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,25",
+   "kaynak": "dagilim.csv · kirpma_08_saar3",
+   "tanim": "kırpılmış ortalamanın son 3 ay ortalamasının yıllıklandırılmışı, Temmuz 2026"
+  },
+  "kesit_n": {
+   "deger": 43.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "43",
+   "kaynak": "dagilim.csv · kesit_n",
+   "tanim": "Eylül kesitindeki üç haneli grup sayısı (45 grubun ikisi — 095, 105 — Eylül'de veri vermedi)"
+  },
+  "difuzyon_hedef_agu_0909": {
+   "deger": 78.41072335938016,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%78,4",
+   "kaynak": "dagilim_0909.csv · difuzyon_hedef",
+   "tanim": "Ağustos'un hedef üstü kalem ağırlığı, 9 Eylül hesabı"
+  },
+  "difuzyon_hedef_rev_agu": {
+   "deger": 5.1855864689869975,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "5,2 puan",
+   "kaynak": "dagilim_0909.csv; dagilim.csv",
+   "tanim": "Ağustos hedef üstü oranının 9 Eylül'den bugüne revizyonu"
+  },
+  "difuzyon_hedef_rev_tem": {
+   "deger": 4.442257119767561,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "4,4 puan",
+   "kaynak": "dagilim_0909.csv; dagilim.csv",
+   "tanim": "Temmuz hedef üstü oranının 9 Eylül'den bugüne revizyonu"
+  },
+  "difuzyon_hedef_degisim": {
+   "deger": 7.945283430474973,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "7,9 puan",
+   "kaynak": "dagilim.csv",
+   "tanim": "hedef üstü kalem ağırlığının Ağustos'tan Eylül'e düşüşü (bugünkü hesap)"
+  },
+  "difuzyon_hedef_degisim_tem": {
+   "deger": 10.107761012955393,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "10,1 puan",
+   "kaynak": "dagilim.csv",
+   "tanim": "hedef üstü kalem ağırlığının Temmuz'dan Ağustos'a düşüşü (bugünkü hesap)"
+  },
+  "difuzyon_hedef_degisim_2ay": {
+   "deger": 18.053044443430366,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "18,1 puan",
+   "kaynak": "dagilim.csv",
+   "tanim": "hedef üstü kalem ağırlığının Temmuz'dan Eylül'e düşüşü (bugünkü hesap)"
+  },
+  "medyan_3a_agu_0909": {
+   "deger": 29.86429758947553,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,86",
+   "kaynak": "dagilim_0909.csv · medyan_saar3",
+   "tanim": "Ağustos'un medyan momentumu, 9 Eylül hesabı"
+  },
+  "medyan_3a_rev_agu": {
+   "deger": 0.7342176254136596,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,73 puan",
+   "kaynak": "dagilim_0909.csv; dagilim.csv",
+   "tanim": "Ağustos medyan momentumunun 9 Eylül'den bugüne revizyonu"
+  },
+  "medyan_3a_degisim": {
+   "deger": 4.247752406207045,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "4,25 puan",
+   "kaynak": "dagilim.csv",
+   "tanim": "medyan momentumunun Ağustos'tan Eylül'e düşüşü (bugünkü hesap)"
+  },
+  "pka_eylul": {
+   "deger": 2.12,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,12",
+   "kaynak": "aylik.csv · pka_ay_cari",
+   "tanim": "TCMB Piyasa Katılımcıları Anketi, Eylül 2026 anketinin Eylül aylık TÜFE beklentisi"
+  },
+  "pka_eylul_h1": {
+   "deger": 2.08,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,08",
+   "kaynak": "aylik.csv · pka_ay_1",
+   "tanim": "Ağustos 2026 anketinin bir sonraki ay (Eylül) için aylık TÜFE beklentisi"
+  },
+  "pka_eylul_h2": {
+   "deger": 2.03,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,03",
+   "kaynak": "aylik.csv · pka_ay_2",
+   "tanim": "Temmuz 2026 anketinin iki ay sonrası (Eylül) için aylık TÜFE beklentisi"
+  },
+  "pka_surpriz": {
+   "deger": -0.27955473098330064,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,28 puan",
+   "kaynak": "aylik.csv · tufe, pka_ay_cari",
+   "tanim": "gerçekleşen − anket (Eylül 2026)"
+  },
+  "pka_mae36": {
+   "deger": 0.5090089552497543,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,51 puan",
+   "kaynak": "aylik.csv",
+   "tanim": "anketin son 36 aydaki (Ekim 2023–Eylül 2026) ortalama mutlak hatası"
+  },
+  "pka_yanlilik36": {
+   "deger": 0.05852927012727657,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,06 puan",
+   "kaynak": "aylik.csv",
+   "tanim": "son 36 ayda ortalama hata (gerçekleşen − anket; artı: anket eksik tahmin etmiş)"
+  },
+  "pka_rmse36": {
+   "deger": 0.6289214109842428,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,63 puan",
+   "kaynak": "aylik.csv",
+   "tanim": "son 36 ayda hata kareleri ortalamasının karekökü"
+  },
+  "pka_surpriz_mae_kati": {
+   "deger": 0.5492137772824294,
+   "b": 2,
+   "birim": "",
+   "arti": false,
+   "metin": "0,55",
+   "kaynak": "aylik.csv",
+   "tanim": "|sürpriz| / ortalama mutlak hata"
+  },
+  "pka_buyuk_hata_ay": {
+   "deger": 21.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "21",
+   "kaynak": "aylik.csv",
+   "tanim": "önceki 35 ayın kaçında anketin mutlak hatası bu ayınkinden büyüktü"
+  },
+  "pka_fazla_tahmin_ay": {
+   "deger": 19.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "19",
+   "kaynak": "aylik.csv",
+   "tanim": "son 36 ayın kaçında gerçekleşme anketin altında kaldı (Eylül dahil)"
+  },
+  "pka_fazla_tahmin_12": {
+   "deger": 6.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "6",
+   "kaynak": "aylik.csv",
+   "tanim": "son 12 ayın kaçında gerçekleşme anketin altında kaldı (Eylül dahil)"
+  },
+  "pka_ekim": {
+   "deger": 1.97,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,97",
+   "kaynak": "aylik.csv · pka_ay_1",
+   "tanim": "Eylül 2026 anketinin Ekim 2026 aylık TÜFE beklentisi"
+  },
+  "pka_kasim": {
+   "deger": 1.13,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,13",
+   "kaynak": "aylik.csv · pka_ay_2",
+   "tanim": "Eylül 2026 anketinin Kasım 2026 aylık TÜFE beklentisi"
+  },
+  "pka_yilsonu": {
+   "deger": 29.61,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,61",
+   "kaynak": "aylik.csv · pka_yilsonu",
+   "tanim": "Eylül 2026 anketinin 2026 yıl sonu yıllık TÜFE beklentisi"
+  },
+  "pka_12a": {
+   "deger": 23.7,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%23,70",
+   "kaynak": "aylik.csv · pka_12a",
+   "tanim": "Eylül 2026 anketinin 12 ay sonrası (Eylül 2027) yıllık TÜFE beklentisi"
+  },
+  "pka_24a": {
+   "deger": 18.32,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%18,32",
+   "kaynak": "aylik.csv · pka_24a",
+   "tanim": "Eylül 2026 anketinin 24 ay sonrası yıllık TÜFE beklentisi"
+  },
+  "pka_yilsonu_agu": {
+   "deger": 29.43,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,43",
+   "kaynak": "aylik.csv · pka_yilsonu",
+   "tanim": "Ağustos 2026 anketinin 2026 yıl sonu beklentisi"
+  },
+  "pka_katilimci": {
+   "deger": 61.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "61",
+   "kaynak": "aylik.csv · pka_12a_n",
+   "tanim": "Eylül anketinin katılımcı sayısı"
+  },
+  "ito_model_merkez": {
+   "deger": 1.9,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,90",
+   "kaynak": "enflasyon_ozet.json · br_k_merkez",
+   "tanim": "hattın İTO regresyonunun Eylül tahmini (İTO yayımından sonra, TÜFE'den önce)"
+  },
+  "ito_model_sapma": {
+   "deger": 0.06,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,06 puan",
+   "kaynak": "enflasyon_ozet.json · br_k_merkez_sapma",
+   "tanim": "İTO regresyonu − gerçekleşen (artı: model yüksek tahmin etti)"
+  },
+  "ito_model_p25": {
+   "deger": 1.57,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,57",
+   "kaynak": "enflasyon_ozet.json · br_k_p25",
+   "tanim": "İTO tahmin bulutunun 25. yüzdeliği"
+  },
+  "ito_model_p75": {
+   "deger": 2.23,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,23",
+   "kaynak": "enflasyon_ozet.json · br_k_p75",
+   "tanim": "İTO tahmin bulutunun 75. yüzdeliği"
+  },
+  "aa_beklenti": {
+   "deger": 2.18,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,18",
+   "kaynak": "dış kaynak",
+   "tanim": "AA Finans anketinde 20 ekonomistin Eylül aylık TÜFE beklentisinin ortalaması",
+   "dis_kaynak": "AA Finans Enflasyon Beklenti Anketi (5 Ekim 2026 sabah bülteninin aktarımı)"
+  },
+  "aa_alt": {
+   "deger": 1.9,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,90",
+   "kaynak": "dış kaynak",
+   "tanim": "AA Finans anketinde en düşük tahmin",
+   "dis_kaynak": "AA Finans Enflasyon Beklenti Anketi (5 Ekim 2026 sabah bülteninin aktarımı)"
+  },
+  "aa_ust": {
+   "deger": 2.6,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,60",
+   "kaynak": "dış kaynak",
+   "tanim": "AA Finans anketinde en yüksek tahmin",
+   "dis_kaynak": "AA Finans Enflasyon Beklenti Anketi (5 Ekim 2026 sabah bülteninin aktarımı)"
+  },
+  "aa_katilimci": {
+   "deger": 20.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "20",
+   "kaynak": "dış kaynak",
+   "tanim": "AA Finans anketine katılan ekonomist sayısı",
+   "dis_kaynak": "AA Finans Enflasyon Beklenti Anketi (5 Ekim 2026 sabah bülteninin aktarımı)"
+  },
+  "aa_surpriz": {
+   "deger": -0.3395547309833007,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,34 puan",
+   "kaynak": "aylik.csv · tufe − dış kaynak",
+   "tanim": "gerçekleşen − AA Finans ortalaması"
+  },
+  "aa_alt_fark": {
+   "deger": -0.05955473098330044,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,06 puan",
+   "kaynak": "aylik.csv · tufe − dış kaynak",
+   "tanim": "gerçekleşen − AA Finans en düşük tahmini (eksi: en düşük tahminin de altında)"
+  },
+  "aa_ima_yillik": {
+   "deger": 30.164059683623456,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,16",
+   "kaynak": "aylik.csv · tufe ve dış kaynak",
+   "tanim": "AA Finans ortalaması (%2,18) gerçekleşseydi Eylül yıllık TÜFE"
+  },
+  "pka_ima_yillik": {
+   "deger": 30.08762747006879,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,09",
+   "kaynak": "aylik.csv · tufe, pka_ay_cari",
+   "tanim": "TCMB anketinin Eylül beklentisi (%2,12) gerçekleşseydi Eylül yıllık TÜFE"
+  },
+  "baz_10": {
+   "deger": 2.5501749194504653,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,55",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Ekim 2025 aylık TÜFE — Ekim 2026'da yıllık orandan düşecek ay"
+  },
+  "baz_11": {
+   "deger": 0.8650223490828779,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,87",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Kasım 2025 aylık TÜFE — Kasım 2026'da yıllık orandan düşecek ay"
+  },
+  "baz_12": {
+   "deger": 0.8874635286571841,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%0,89",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Aralık 2025 aylık TÜFE — Aralık 2026'da yıllık orandan düşecek ay"
+  },
+  "ys_kumulatif": {
+   "deger": 24.3172167889552,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,32",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "Aralık 2025 → Eylül 2026 birikimli TÜFE"
+  },
+  "mom_aylik": {
+   "deger": 1.897897715283503,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,90",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "momentum: arındırılmış son 3 ayın (Temmuz–Eylül) geometrik ortalama aylık değişimi"
+  },
+  "son12_aylik": {
+   "deger": 2.1928371176138883,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,19",
+   "kaynak": "aylik.csv · tufe",
+   "tanim": "son 12 ayın geometrik ortalama aylık değişimi"
+  },
+  "pka_aralik_ima": {
+   "deger": 1.1008496672211932,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,10",
+   "kaynak": "aylik.csv · pka_yilsonu, pka_ay_1, pka_ay_2",
+   "tanim": "anketin yıl sonu, Ekim ve Kasım beklentilerinin birlikte ima ettiği Aralık 2026 aylık TÜFE"
+  },
+  "pka_2027_aylik_ima": {
+   "deger": 1.918115611130955,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,92",
+   "kaynak": "aylik.csv · pka_12a ve yukarıdaki",
+   "tanim": "anketin 12 ay sonrası beklentisine (Eylül 2027) varmak için Ocak–Eylül 2027'de gereken sabit aylık oran"
+  },
+  "ys_gereken_aylik": {
+   "deger": 1.399483775124244,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,40",
+   "kaynak": "aylik.csv · tufe, pka_yilsonu",
+   "tanim": "anketin yıl sonu beklentisine varmak için Ekim–Aralık'ta gereken sabit HAM aylık oran"
+  },
+  "mevsim_kasim_2022": {
+   "deger": -0.42765472948338434,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,43 puan",
+   "kaynak": "aylik.csv; sa.csv · tufe",
+   "tanim": "Kasım 2022 mevsim çarpanı (ham − arındırılmış aylık, çarpımsal)"
+  },
+  "mevsim_kasim_2025": {
+   "deger": -0.9782192929340239,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "−0,98 puan",
+   "kaynak": "aylik.csv; sa.csv · tufe",
+   "tanim": "Kasım 2025 mevsim çarpanı (ham − arındırılmış aylık, çarpımsal)"
+  },
+  "baz_11_sa": {
+   "deger": 1.8614507120102486,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,86",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "Kasım 2025 arındırılmış aylık TÜFE (yıllık orandan düşecek ayın arındırılmış hâli)"
+  },
+  "baz_12_sa": {
+   "deger": 2.2083016782379117,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,21",
+   "kaynak": "sa.csv · tufe",
+   "tanim": "Aralık 2025 arındırılmış aylık TÜFE (yıllık orandan düşecek ayın arındırılmış hâli)"
+  },
+  "yol_momentum_mev25_ekim": {
+   "deger": 29.329432344672625,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,33",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2025 mevsim çarpanlarıyla) senaryosunda Ekim 2026 yıllık TÜFE"
+  },
+  "yol_momentum_mev25_kasim": {
+   "deger": 29.375707655018623,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,38",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2025 mevsim çarpanlarıyla) senaryosunda Kasım 2026 yıllık TÜFE"
+  },
+  "yol_momentum_mev25_aralik": {
+   "deger": 28.982796984292758,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%28,98",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2025 mevsim çarpanlarıyla) senaryosunda Aralık 2026 yıllık TÜFE"
+  },
+  "yol_momentum_mev25_2027_09": {
+   "deger": 25.339622540816965,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%25,34",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2025 mevsim çarpanlarıyla) senaryosunda Eylül 2027 yıllık TÜFE"
+  },
+  "yol_momentum_mev24_ekim": {
+   "deger": 29.34132710380233,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,34",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2024 mevsim çarpanlarıyla) senaryosunda Ekim 2026 yıllık TÜFE"
+  },
+  "yol_momentum_mev24_kasim": {
+   "deger": 29.63786637912742,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,64",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2024 mevsim çarpanlarıyla) senaryosunda Kasım 2026 yıllık TÜFE"
+  },
+  "yol_momentum_mev24_aralik": {
+   "deger": 29.50142338560433,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,50",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2024 mevsim çarpanlarıyla) senaryosunda Aralık 2026 yıllık TÜFE"
+  },
+  "yol_momentum_mev24_2027_09": {
+   "deger": 25.35455902948791,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%25,35",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (2024 mevsim çarpanlarıyla) senaryosunda Eylül 2027 yıllık TÜFE"
+  },
+  "yol_son12_mev25_ekim": {
+   "deger": 29.70377123030934,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,70",
+   "kaynak": "baz aritmetiği",
+   "tanim": "son 12 ay ortalaması (2025 mevsim çarpanlarıyla) senaryosunda Ekim 2026 yıllık TÜFE"
+  },
+  "yol_son12_mev25_kasim": {
+   "deger": 30.1257372070435,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,13",
+   "kaynak": "baz aritmetiği",
+   "tanim": "son 12 ay ortalaması (2025 mevsim çarpanlarıyla) senaryosunda Kasım 2026 yıllık TÜFE"
+  },
+  "yol_son12_mev25_aralik": {
+   "deger": 30.106048616990265,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,11",
+   "kaynak": "baz aritmetiği",
+   "tanim": "son 12 ay ortalaması (2025 mevsim çarpanlarıyla) senaryosunda Aralık 2026 yıllık TÜFE"
+  },
+  "yol_son12_mev25_2027_09": {
+   "deger": 29.763087533359233,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,76",
+   "kaynak": "baz aritmetiği",
+   "tanim": "son 12 ay ortalaması (2025 mevsim çarpanlarıyla) senaryosunda Eylül 2027 yıllık TÜFE"
+  },
+  "yol_anket_ekim": {
+   "deger": 28.997558407669246,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,00",
+   "kaynak": "baz aritmetiği",
+   "tanim": "anket patikası senaryosunda Ekim 2026 yıllık TÜFE"
+  },
+  "yol_anket_kasim": {
+   "deger": 29.336441691535576,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,34",
+   "kaynak": "baz aritmetiği",
+   "tanim": "anket patikası senaryosunda Kasım 2026 yıllık TÜFE"
+  },
+  "yol_anket_aralik": {
+   "deger": 29.610000000000003,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,61",
+   "kaynak": "baz aritmetiği",
+   "tanim": "anket patikası senaryosunda Aralık 2026 yıllık TÜFE"
+  },
+  "yol_anket_2027_09": {
+   "deger": 23.70000000000003,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%23,70",
+   "kaynak": "baz aritmetiği",
+   "tanim": "anket patikası senaryosunda Eylül 2027 yıllık TÜFE"
+  },
+  "yol_momentum_mev23_aralik": {
+   "deger": 30.017118290858402,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,02",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (23 → 2023 mevsim çarpanlarıyla) senaryosunda Aralık 2026 yıllık TÜFE"
+  },
+  "yol_momentum_mev22_aralik": {
+   "deger": 30.52191880161452,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,52",
+   "kaynak": "baz aritmetiği",
+   "tanim": "momentum (22 → 2022 mevsim çarpanlarıyla) senaryosunda Aralık 2026 yıllık TÜFE"
+  },
+  "mom_ham25_ekim": {
+   "deger": 2.232339735526523,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,23",
+   "kaynak": "sa.csv; aylik.csv",
+   "tanim": "momentumun Ekim için ham karşılığı (2025 Ekim çarpanı)"
+  },
+  "mom_ham25_ekkas": {
+   "deger": 1.5645452191975329,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,56",
+   "kaynak": "sa.csv; aylik.csv",
+   "tanim": "momentumun Ekim–Kasım için ham karşılığının geometrik ortalaması (2025 çarpanları)"
+  },
+  "mom_ham25_eka": {
+   "deger": 1.2356565866693092,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,24",
+   "kaynak": "sa.csv; aylik.csv",
+   "tanim": "momentumun Ekim–Aralık için ham karşılığının geometrik ortalaması (2025 çarpanları)"
+  },
+  "esik_aralik_sa25": {
+   "deger": 2.165063992041527,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,17",
+   "kaynak": "baz aritmetiği; sa.csv",
+   "tanim": "yıl sonu %30 eşiğinin arındırılmış karşılığı: Ekim–Aralık'ta geçilmemesi gereken sabit arındırılmış aylık hız (2025 mevsim çarpanlarıyla)"
+  },
+  "esik_aralik_sa24": {
+   "deger": 2.0284982105758687,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,03",
+   "kaynak": "baz aritmetiği; sa.csv",
+   "tanim": "yıl sonu %30 eşiğinin arındırılmış karşılığı: Ekim–Aralık'ta geçilmemesi gereken sabit arındırılmış aylık hız (2024 mevsim çarpanlarıyla)"
+  },
+  "esik_aralik_sa23": {
+   "deger": 1.893425498002066,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,89",
+   "kaynak": "baz aritmetiği; sa.csv",
+   "tanim": "yıl sonu %30 eşiğinin arındırılmış karşılığı: Ekim–Aralık'ta geçilmemesi gereken sabit arındırılmış aylık hız (2023 mevsim çarpanlarıyla)"
+  },
+  "esik_aralik_sa22": {
+   "deger": 1.761896360066162,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,76",
+   "kaynak": "baz aritmetiği; sa.csv",
+   "tanim": "yıl sonu %30 eşiğinin arındırılmış karşılığı: Ekim–Aralık'ta geçilmemesi gereken sabit arındırılmış aylık hız (2022 mevsim çarpanlarıyla)"
+  },
+  "ys_gereken_sa25": {
+   "deger": 2.0627965923690983,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,06",
+   "kaynak": "aylik.csv; sa.csv",
+   "tanim": "anketin yıl sonu beklentisine varmak için gereken sabit arındırılmış aylık hız (2025 çarpanlarıyla)"
+  },
+  "esik_ekim_aylik": {
+   "deger": 2.7624101078481456,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%2,76",
+   "kaynak": "baz aritmetiği",
+   "tanim": "Ekim yıllık TÜFE'nin %30'u aşmaması için Ekim aylığının geçmemesi gereken düzey"
+  },
+  "esik_kasim_aylik": {
+   "deger": 1.80929619722221,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,81",
+   "kaynak": "baz aritmetiği",
+   "tanim": "Kasım yıllık TÜFE'nin %30'u aşmaması için Ekim–Kasım'da geçilmemesi gereken sabit aylık oran"
+  },
+  "esik_aralik_aylik": {
+   "deger": 1.501086532250584,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,50",
+   "kaynak": "baz aritmetiği",
+   "tanim": "yıl sonu yıllık TÜFE'nin %30'u aşmaması için Ekim–Aralık'ta geçilmemesi gereken sabit aylık oran"
+  },
+  "esik_aralik_sa25_mom_fark": {
+   "deger": 0.26716627675802407,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "0,27 puan",
+   "kaynak": "baz aritmetiği",
+   "tanim": "yıl sonu %30 eşiğinin arındırılmış karşılığı (2025 çarpanları) − momentum"
+  },
+  "aofm_gun": {
+   "metin": "02.10.2026",
+   "kaynak": "gunluk.csv · aofm",
+   "tanim": "fonlama maliyetinin son kotasyon günü"
+  },
+  "aofm": {
+   "deger": 37.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,00",
+   "kaynak": "gunluk.csv · aofm",
+   "tanim": "TCMB ağırlıklı ortalama fonlama maliyeti, son kotasyon"
+  },
+  "politika": {
+   "deger": 37.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,00",
+   "kaynak": "fonlama_ozet.json · politika",
+   "tanim": "politika faizi (bir hafta vadeli repo)"
+  },
+  "politika_yalin": {
+   "deger": 37.0,
+   "b": 0,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37",
+   "kaynak": "fonlama_ozet.json · politika",
+   "tanim": "politika faizi (tam sayı yazımı)"
+  },
+  "politika_onceki": {
+   "deger": 38.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,00",
+   "kaynak": "fonlama_ozet.json · politika_onceki",
+   "tanim": "22 Ocak 2026'dan önceki politika faizi"
+  },
+  "politika_son_degisim": {
+   "metin": "22.01.2026",
+   "kaynak": "fonlama_ozet.json",
+   "tanim": "politika faizinin son değiştiği gün"
+  },
+  "politika_sabit_gun": {
+   "deger": 256.0,
+   "b": 0,
+   "birim": "gün",
+   "arti": false,
+   "metin": "256 gün",
+   "kaynak": "takvim",
+   "tanim": "22 Ocak 2026'dan 5 Ekim 2026'ya gün sayısı"
+  },
+  "ppk_kalan_gun": {
+   "deger": 17.0,
+   "b": 0,
+   "birim": "gün",
+   "arti": false,
+   "metin": "17 gün",
+   "kaynak": "takvim",
+   "tanim": "5 Ekim'den 22 Ekim PPK toplantısına gün sayısı"
+  },
+  "tlref": {
+   "deger": 36.84,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,84",
+   "kaynak": "fonlama_ozet.json · tlref",
+   "tanim": "TLREF, 2 Ekim 2026"
+  },
+  "koridor_ust": {
+   "deger": 40.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,00",
+   "kaynak": "fonlama_ozet.json · koridor_ust",
+   "tanim": "gecelik borç verme faizi"
+  },
+  "koridor_alt": {
+   "deger": 35.5,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,50",
+   "kaynak": "fonlama_ozet.json · koridor_alt",
+   "tanim": "gecelik borçlanma faizi"
+  },
+  "reel_expost": {
+   "deger": 5.60271665765506,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%5,60",
+   "kaynak": "Fisher · aofm, TÜFE yıllık",
+   "tanim": "gerçekleşene bakan reel faiz (Eylül yıllık TÜFE ile)"
+  },
+  "reel_expost_agu": {
+   "deger": 4.176692389387782,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%4,18",
+   "kaynak": "reel_faiz.csv · faiz; aylik.csv",
+   "tanim": "gerçekleşene bakan reel faiz, Ağustos TÜFE'siyle"
+  },
+  "reel_exante": {
+   "deger": 10.751818916734024,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%10,75",
+   "kaynak": "Fisher · aofm, pka_12a",
+   "tanim": "ileriye bakan reel faiz (anketin 12 ay sonrası beklentisiyle)"
+  },
+  "reel_exante_agu": {
+   "deger": 10.760772899991933,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%10,76",
+   "kaynak": "reel_faiz.csv · faiz; aylik.csv · pka_12a",
+   "tanim": "ileriye bakan reel faiz, Ağustos anketiyle"
+  },
+  "reel_egilim": {
+   "deger": 9.32963006925689,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%9,33",
+   "kaynak": "Fisher · aofm, arındırılmış 3 aylık eğilim",
+   "tanim": "eğilime bakan reel faiz (arındırılmış son 3 ayın yıllıklandırılmışıyla)"
+  },
+  "reel_egilim_agu": {
+   "deger": 6.0106174202655405,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%6,01",
+   "kaynak": "Fisher · reel_faiz.csv faiz, sa.csv",
+   "tanim": "eğilime bakan reel faiz, Ağustos (bugünkü arındırma sürümü)"
+  },
+  "reel_ileri": {
+   "deger": 9.21230561189994,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%9,21",
+   "kaynak": "Fisher · pka_faiz_12a, pka_24a",
+   "tanim": "12 ay sonrası beklenen politika faizi ile 24 ay sonrası beklenen enflasyon"
+  },
+  "reel_ileri_agu": {
+   "deger": 9.794120138947736,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%9,79",
+   "kaynak": "Fisher · pka_faiz_12a, pka_24a (Ağustos anketi)",
+   "tanim": "ileriye dönük reel politika faizi, Ağustos anketiyle"
+  },
+  "pka_faiz_12a": {
+   "deger": 29.22,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,22",
+   "kaynak": "aylik.csv · pka_faiz_12a",
+   "tanim": "anketin 12 ay sonrası politika faizi beklentisi"
+  },
+  "pka_faiz_indirim": {
+   "deger": 778.0000000000001,
+   "b": 0,
+   "birim": "bp",
+   "arti": false,
+   "metin": "778 bp",
+   "kaynak": "aofm − pka_faiz_12a",
+   "tanim": "anketin 12 ay içinde beklediği toplam indirim"
+  },
+  "dibs_spot_3a": {
+   "deger": 37.64,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,64",
+   "kaynak": "dibs_ozet.json · spot_3a",
+   "tanim": "DİBS sıfır kuponlu 3 aylık getiri, 2 Ekim 2026"
+  },
+  "dibs_spot_6a": {
+   "deger": 38.14,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,14",
+   "kaynak": "dibs_ozet.json · spot_6a",
+   "tanim": "DİBS sıfır kuponlu 6 aylık getiri, 2 Ekim 2026"
+  },
+  "dibs_spot_1y": {
+   "deger": 39.74,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,74",
+   "kaynak": "dibs_ozet.json · spot_1y",
+   "tanim": "DİBS sıfır kuponlu 1 yıllık getiri, 2 Ekim 2026"
+  },
+  "dibs_spot_2y": {
+   "deger": 40.15,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,15",
+   "kaynak": "dibs_ozet.json · spot_2y",
+   "tanim": "DİBS sıfır kuponlu 2 yıllık getiri, 2 Ekim 2026"
+  },
+  "dibs_spot_5y": {
+   "deger": 36.44,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,44",
+   "kaynak": "dibs_ozet.json · spot_5y",
+   "tanim": "DİBS sıfır kuponlu 5 yıllık getiri, 2 Ekim 2026"
+  },
+  "dibs_forward_1y1y": {
+   "deger": 40.57,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,57",
+   "kaynak": "dibs_ozet.json · forward_1y1y",
+   "tanim": "DİBS sıfır kuponlu 1 yıl sonrası 1 yıllık vadeli getiri, 2 Ekim 2026"
+  },
+  "tufex_basabas_1y": {
+   "deger": 31.25,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,25",
+   "kaynak": "tufex_ozet.json · basabas_1y",
+   "tanim": "1 yıllık başabaş enflasyon, 2 Ekim 2026"
+  },
+  "tufex_basabas_2y": {
+   "deger": 30.84,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,84",
+   "kaynak": "tufex_ozet.json · basabas_2y",
+   "tanim": "2 yıllık başabaş enflasyon, 2 Ekim 2026"
+  },
+  "tufex_reel_1y": {
+   "deger": 6.46,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%6,46",
+   "kaynak": "tufex_ozet.json · reel_1y",
+   "tanim": "1 yıllık TÜFEX reel getiri, 2 Ekim 2026"
+  },
+  "tufex_prim_1y": {
+   "deger": 7.55,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "7,55 puan",
+   "kaynak": "tufex_ozet.json · prim_1y",
+   "tanim": "1 yıllık başabaş − anket (enflasyon riski primi), 2 Ekim 2026"
+  },
+  "dibs_kiyas_1ay_1y_degisim_bp": {
+   "deger": 9.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+9 bp",
+   "kaynak": "dibs_ozet.json · kiyas_1ay_1y_degisim_bp",
+   "tanim": "1 yıllık getirinin son bir aydaki değişimi (2 Eylül → 2 Ekim)"
+  },
+  "dibs_kiyas_3ay_1y_degisim_bp": {
+   "deger": -90.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−90 bp",
+   "kaynak": "dibs_ozet.json · kiyas_3ay_1y_degisim_bp",
+   "tanim": "1 yıllık getirinin son üç aydaki değişimi (2 Temmuz → 2 Ekim)"
+  },
+  "politika_bilesik": {
+   "deger": 44.58,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%44,58",
+   "kaynak": "dibs_ozet.json · politika_bilesik",
+   "tanim": "politika faizinin yıllık bileşiğe çevrilmiş hâli (1 hafta vade, haftalık yenileme)"
+  },
+  "dibs_1y_politika_bilesik": {
+   "deger": -483.99999999999966,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−484 bp",
+   "kaynak": "dibs_ozet.json · spot_1y, politika_bilesik",
+   "tanim": "1 yıllık sıfır kuponlu getiri − bileşiğe çevrilmiş politika faizi (aynı konvansiyon), 2 Ekim 2026"
+  },
+  "dibs_3a_politika_bilesik": {
+   "deger": -693.9999999999998,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−694 bp",
+   "kaynak": "dibs_ozet.json · spot_3a, politika_bilesik",
+   "tanim": "3 aylık sıfır kuponlu getiri − bileşiğe çevrilmiş politika faizi, 2 Ekim 2026"
+  },
+  "dibs_6a_politika_bilesik": {
+   "deger": -643.9999999999998,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−644 bp",
+   "kaynak": "dibs_ozet.json · spot_6a, politika_bilesik",
+   "tanim": "6 aylık sıfır kuponlu getiri − bileşiğe çevrilmiş politika faizi, 2 Ekim 2026"
+  },
+  "dibs_1y_politika_ham": {
+   "deger": 274.0000000000002,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+274 bp",
+   "kaynak": "dibs_ozet.json · spot_1y, politika",
+   "tanim": "1 yıllık getiri (bileşik) − politika faizi (basit): KONVANSİYONLARI FARKLI, yön hükmü bundan kurulmaz"
+  },
+  "basabas_1y_gercek_fark": {
+   "deger": 1.5184889782435391,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+1,52 puan",
+   "kaynak": "tufex_ozet.json · basabas_1y; aylik.csv",
+   "tanim": "1 yıllık başabaş (2 Ekim) − Eylül yıllık TÜFE"
+  },
+  "basabas_1y_agu_fark": {
+   "deger": -0.25734282091285365,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,26 puan",
+   "kaynak": "tufex_ozet.json · basabas_1y; aylik.csv",
+   "tanim": "1 yıllık başabaş (2 Ekim) − Ağustos yıllık TÜFE"
+  }
+ },
+ "sinama": {
+  "baz_momentum_azami_fark": 3.552713678800501e-15,
+  "baz_son12_azami_fark": 3.552713678800501e-15,
+  "baz_gecen_yil_azami_fark": 0.0
+ },
+ "seriler": {
+  "01": {
+   "ay": [
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+   ],
+   "tufe": [
+    2.8799,
+    2.244,
+    1.0281,
+    5.0325,
+    2.2733,
+    2.46,
+    2.9966,
+    1.5283,
+    1.3733,
+    2.059,
+    2.0352,
+    3.2345,
+    2.5502,
+    0.865,
+    0.8875,
+    4.8403,
+    2.9638,
+    1.9386,
+    4.1821,
+    1.7147,
+    0.9866,
+    1.7848,
+    1.8442,
+    1.8404
+   ],
+   "b": [
+    2.6834,
+    1.5386,
+    1.1786,
+    5.4677,
+    2.3104,
+    1.2998,
+    3.11,
+    2.2464,
+    1.7535,
+    1.8246,
+    2.0707,
+    3.3356,
+    2.4351,
+    1.2623,
+    0.7825,
+    4.2254,
+    2.157,
+    1.4585,
+    3.4183,
+    2.8689,
+    1.6655,
+    1.6614,
+    1.8471,
+    2.0001
+   ],
+   "c": [
+    2.7934,
+    1.5355,
+    1.0562,
+    5.5819,
+    1.7998,
+    1.4696,
+    3.3431,
+    2.4341,
+    1.9237,
+    1.7461,
+    1.6963,
+    3.2091,
+    2.4194,
+    1.218,
+    0.6199,
+    4.5574,
+    1.5251,
+    1.6388,
+    3.4599,
+    2.9221,
+    1.459,
+    1.8033,
+    1.8096,
+    2.1374
+   ],
+   "pka": [
+    2.39,
+    2.01,
+    1.72,
+    4.07,
+    3.23,
+    2.27,
+    3.07,
+    2.36,
+    1.61,
+    2.11,
+    1.69,
+    2.04,
+    2.34,
+    1.59,
+    1.08,
+    3.76,
+    2.54,
+    2.18,
+    2.93,
+    1.89,
+    1.36,
+    1.68,
+    1.67,
+    2.12
+   ]
+  },
+  "02": {
+   "ana": {
+    "01": {
+     "2026-09": {
+      "katki": -0.047596224903030976,
+      "aylik": -0.20102747375475571,
+      "katki_w25": -0.04942179585402866
+     },
+     "2026-08": {
+      "katki": 0.05206463482762363,
+      "aylik": 0.21638561408743318,
+      "katki_w25": 0.05410965811838409
+     }
+    },
+    "02": {
+     "2026-09": {
+      "katki": 0.02823869626839811,
+      "aylik": 0.8769407705577992,
+      "katki_w25": 0.0326540850355514
+     },
+     "2026-08": {
+      "katki": 0.2114527509184354,
+      "aylik": 6.892047637341525,
+      "katki_w25": 0.24473279238611337
+     }
+    },
+    "03": {
+     "2026-09": {
+      "katki": 0.2671569516349221,
+      "aylik": 3.9806996381182236,
+      "katki_w25": 0.23178327757484588
+     },
+     "2026-08": {
+      "katki": -0.251154207432407,
+      "aylik": -3.544258480264928,
+      "katki_w25": -0.2180931510447356
+     }
+    },
+    "04": {
+     "2026-09": {
+      "katki": 0.3627423692819557,
+      "aylik": 2.7147487844408236,
+      "katki_w25": 0.4292620470529142
+     },
+     "2026-08": {
+      "katki": 0.30050802194288695,
+      "aylik": 2.25813134452042,
+      "katki_w25": 0.3559313367276489
+     }
+    },
+    "05": {
+     "2026-09": {
+      "katki": 0.11863626236233929,
+      "aylik": 1.8341370859356498,
+      "katki_w25": 0.1292532184068962
+     },
+     "2026-08": {
+      "katki": 0.11353298316686426,
+      "aylik": 1.7536803153406666,
+      "katki_w25": 0.12380321085132973
+     }
+    },
+    "06": {
+     "2026-09": {
+      "katki": 0.012722589117943963,
+      "aylik": 0.34914766892586435,
+      "katki_w25": 0.016071715614772945
+     },
+     "2026-08": {
+      "katki": 0.02591442531506904,
+      "aylik": 0.7032057911064982,
+      "katki_w25": 0.03276530903590404
+     }
+    },
+    "07": {
+     "2026-09": {
+      "katki": 0.48139876831082884,
+      "aylik": 2.7900670757813772,
+      "katki_w25": 0.4492945930599003
+     },
+     "2026-08": {
+      "katki": 0.8087681070223188,
+      "aylik": 4.824594210486932,
+      "katki_w25": 0.755502982593416
+     }
+    },
+    "08": {
+     "2026-09": {
+      "katki": 0.08913226279458142,
+      "aylik": 2.163760896637612,
+      "katki_w25": 0.10209919877651212
+     },
+     "2026-08": {
+      "katki": 0.1064495478648612,
+      "aylik": 2.6034179843475336,
+      "katki_w25": 0.12204420757266352
+     }
+    },
+    "09": {
+     "2026-09": {
+      "katki": 0.028355718666205797,
+      "aylik": 0.7233976353453686,
+      "katki_w25": 0.012921548204737199
+     },
+     "2026-08": {
+      "katki": 0.07328343169653943,
+      "aylik": 1.870047543581621,
+      "katki_w25": 0.03342455548459205
+     }
+    },
+    "10": {
+     "2026-09": {
+      "katki": 0.25627096101491964,
+      "aylik": 14.190990053955655,
+      "katki_w25": 0.3507992102995375
+     },
+     "2026-08": {
+      "katki": 0.14598136179413804,
+      "aylik": 8.621663606835206,
+      "katki_w25": 0.200005790331851
+     }
+    },
+    "11": {
+     "2026-09": {
+      "katki": 0.1187679194702164,
+      "aylik": 1.4075165806927137,
+      "katki_w25": 0.1260098124188759
+     },
+     "2026-08": {
+      "katki": 0.1266577772137233,
+      "aylik": 1.4958863126402377,
+      "katki_w25": 0.13450023007489834
+     }
+    },
+    "12": {
+     "2026-09": {
+      "katki": 0.06550599571733833,
+      "aylik": 3.401256319901935,
+      "katki_w25": 0.0118085298048637
+     },
+     "2026-08": {
+      "katki": 0.0010517976770344657,
+      "aylik": 0.05365218057791221,
+      "katki_w25": 0.00018977234918923585
+     }
+    },
+    "13": {
+     "2026-09": {
+      "katki": 0.05911491426030618,
+      "aylik": 1.083689289669354,
+      "katki_w25": 0.04363650992471649
+     },
+     "2026-08": {
+      "katki": 0.12963867923811584,
+      "aylik": 2.389244350854458,
+      "katki_w25": 0.0957797040412258
+     }
+    }
+   },
+   "sira": [
+    "07",
+    "04",
+    "03",
+    "10",
+    "11",
+    "05",
+    "08",
+    "12",
+    "13",
+    "09",
+    "02",
+    "06",
+    "01"
+   ],
+   "ad": {
+    "01": "Gıda ve alkolsüz içecekler",
+    "02": "Alkollü içecekler ve tütün",
+    "03": "Giyim ve ayakkabı",
+    "04": "Konut, su, elektrik, gaz",
+    "05": "Mobilya, ev eşyası, ev bakımı",
+    "06": "Sağlık",
+    "07": "Ulaştırma",
+    "08": "Bilgi ve iletişim",
+    "09": "Eğlence, spor ve kültür",
+    "10": "Eğitim hizmetleri",
+    "11": "Lokanta ve konaklama",
+    "12": "Sigorta ve finansal hizmetler",
+    "13": "Kişisel bakım ve çeşitli"
+   }
+  },
+  "03": {
+   "gercek_ay": [
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+   ],
+   "gercek": [
+    48.5847,
+    47.0927,
+    44.3788,
+    42.118,
+    39.051,
+    38.1038,
+    37.8587,
+    35.405,
+    35.0487,
+    33.5224,
+    32.9502,
+    33.294,
+    32.8669,
+    31.0748,
+    30.8923,
+    30.6528,
+    31.5348,
+    30.8655,
+    32.3717,
+    32.6148,
+    32.109,
+    31.7541,
+    31.5073,
+    29.7315
+   ],
+   "ufuk": [
+    "2026-10",
+    "2026-11",
+    "2026-12",
+    "2027-01",
+    "2027-02",
+    "2027-03",
+    "2027-04",
+    "2027-05",
+    "2027-06",
+    "2027-07",
+    "2027-08",
+    "2027-09"
+   ],
+   "yol": {
+    "anket": [
+     28.997558407669246,
+     29.336441691535576,
+     29.610000000000003,
+     25.997441818235178,
+     24.71783734201436,
+     24.692812212780325,
+     21.98310589493808,
+     22.227010798547965,
+     23.35440515330287,
+     23.516029615078505,
+     23.605729994496883,
+     23.70000000000003
+    ],
+    "momentum_mev25": [
+     29.329432344672625,
+     29.375707655018623,
+     28.982796984292758,
+     28.369870400669072,
+     27.72704360153575,
+     27.739455195217744,
+     26.265351525000224,
+     25.80451043564118,
+     25.339622540817007,
+     25.111623744054732,
+     24.83865568564918,
+     25.339622540816965
+    ],
+    "momentum_mev22": [
+     29.401048424892352,
+     30.167081149279994,
+     30.52191880161452,
+     28.789793185279855,
+     27.61110544087304,
+     27.586253643566394,
+     25.482413034337426,
+     25.431267154701143,
+     25.480624912216165,
+     25.25521203917036,
+     25.186798662939335,
+     25.3730823965612
+    ],
+    "son12_mev25": [
+     29.70377123030934,
+     30.1257372070435,
+     30.106048616990265,
+     29.862581567883772,
+     29.586279639361713,
+     29.973990667891815,
+     28.845963789080642,
+     28.747282382894902,
+     28.64279680525643,
+     28.780463497037513,
+     28.871427431063367,
+     29.763087533359233
+    ]
+   },
+   "aylik": {
+    "momentum": [
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503,
+     1.897897715283503
+    ],
+    "son12": [
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883,
+     2.1928371176138883
+    ],
+    "anket": [
+     1.97,
+     1.13,
+     1.1008496672211932,
+     1.918115611130955,
+     1.918115611130955,
+     1.918115611130955,
+     1.918115611130955,
+     1.918115611130955,
+     1.918115611130955,
+     1.918115611130955,
+     1.918115611130955,
+     1.918115611130955
+    ],
+    "gecen_yil": [
+     2.5501749194504653,
+     0.8650223490828779,
+     0.8874635286571841,
+     4.840279086102073,
+     2.9637950401797175,
+     1.9385699899295172,
+     4.182102576767921,
+     1.714737258000798,
+     0.9866376631448182,
+     1.7847526732825525,
+     1.8441538810369584,
+     1.8404452690166995
+    ],
+    "momentum_mev25": [
+     2.232339735526523,
+     0.9011128207384145,
+     0.5810709169268735,
+     4.342077809739431,
+     2.4481920674127355,
+     1.9484756455805385,
+     2.97984897748107,
+     1.3435005746533113,
+     0.613459744276712,
+     1.5996013167696166,
+     1.6219506986872911,
+     2.249122271465165
+    ],
+    "momentum_mev24": [
+     2.241742305648242,
+     1.0962743495285032,
+     0.78128014322143,
+     4.0222266855056255,
+     2.3087412769261073,
+     1.9429624273463064,
+     2.7940893276935386,
+     1.462225055897437,
+     0.7530612597477448,
+     1.6008575470966013,
+     1.68612509841215,
+     2.167057380376458
+    ],
+    "momentum_mev23": [
+     2.2629201749775785,
+     1.2835412749378605,
+     0.9746112439781518,
+     3.7240996405587534,
+     2.165231338562257,
+     1.9316104053357597,
+     2.6235855611600467,
+     1.5719108212404187,
+     0.8915481385897817,
+     1.6009244891354024,
+     1.7417777497488185,
+     2.0807302131444105
+    ],
+    "momentum_mev22": [
+     2.2889508201869635,
+     1.4621265364599623,
+     1.1624844509396715,
+     3.448968456469581,
+     2.021467544111144,
+     1.918717825258054,
+     2.464186015253511,
+     1.6732789405901283,
+     1.0263763510103274,
+     1.6019069666374675,
+     1.7885274340176283,
+     1.9919885513839164
+    ],
+    "son12_mev25": [
+     2.5282471669505036,
+     1.1931670689327545,
+     0.8721988165905081,
+     4.644091793905258,
+     2.7447242748054768,
+     2.2435614437136486,
+     3.2779200446031442,
+     1.6368352965636213,
+     0.904681392109774,
+     1.8936773120673989,
+     1.9160913833799809,
+     2.5450782792703075
+    ]
+   },
+   "dusen": [
+    2.5501749194504653,
+    0.8650223490828779,
+    0.8874635286571841,
+    4.840279086102073,
+    2.9637950401797175,
+    1.9385699899295172,
+    4.182102576767921,
+    1.714737258000798,
+    0.9866376631448182,
+    1.7847526732825525,
+    1.8441538810369584,
+    1.8404452690166995
+   ]
+  },
+  "04": {
+   "ay": [
+    "2023-10",
+    "2023-11",
+    "2023-12",
+    "2024-01",
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12",
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+   ],
+   "hizmet": [
+    88.5943,
+    89.7404,
+    90.6958,
+    89.7344,
+    94.3633,
+    96.4889,
+    97.0101,
+    95.9304,
+    95.2652,
+    85.6441,
+    77.8305,
+    72.9147,
+    69.8058,
+    67.9045,
+    65.7191,
+    62.9588,
+    59.7744,
+    56.3402,
+    54.6189,
+    51.1812,
+    50.3223,
+    48.5298,
+    45.7625,
+    44.6603,
+    44.4342,
+    44.2059,
+    43.9964,
+    40.2368,
+    39.6639,
+    40.2682,
+    40.2859,
+    41.0802,
+    39.6529,
+    39.7011,
+    40.2854,
+    37.6621
+   ],
+   "mal": [
+    53.037,
+    52.2304,
+    52.8174,
+    53.3581,
+    53.9919,
+    56.4474,
+    57.1429,
+    56.5357,
+    50.6173,
+    38.2509,
+    28.9055,
+    28.2479,
+    28.4584,
+    28.9047,
+    27.4245,
+    23.9387,
+    21.7167,
+    19.3905,
+    20.2797,
+    20.0193,
+    21.0945,
+    20.6938,
+    19.8506,
+    19.8885,
+    19.2321,
+    18.6162,
+    17.7222,
+    17.4507,
+    16.5707,
+    16.0474,
+    16.5179,
+    17.2532,
+    17.3701,
+    16.8175,
+    15.89,
+    15.9012
+   ],
+   "kira": [
+    100.6192,
+    105.8753,
+    108.5465,
+    111.8114,
+    120.8978,
+    123.9056,
+    124.5167,
+    125.1009,
+    123.6441,
+    122.314,
+    121.2254,
+    117.4159,
+    112.5926,
+    108.9691,
+    105.8266,
+    100.6252,
+    97.2203,
+    91.7619,
+    89.1852,
+    84.9462,
+    82.967,
+    78.9697,
+    74.3488,
+    69.0917,
+    66.2747,
+    63.587,
+    61.6145,
+    56.5499,
+    53.9026,
+    52.4573,
+    51.16,
+    49.7739,
+    47.8824,
+    45.2819,
+    43.0976,
+    41.3406
+   ],
+   "tufe": [
+    61.357,
+    61.9802,
+    64.7729,
+    64.8569,
+    67.0692,
+    68.4954,
+    69.8025,
+    75.4459,
+    71.5972,
+    61.781,
+    51.9745,
+    49.385,
+    48.5847,
+    47.0927,
+    44.3788,
+    42.118,
+    39.051,
+    38.1038,
+    37.8587,
+    35.405,
+    35.0487,
+    33.5224,
+    32.9502,
+    33.294,
+    32.8669,
+    31.0748,
+    30.8923,
+    30.6528,
+    31.5348,
+    30.8655,
+    32.3717,
+    32.6148,
+    32.109,
+    31.7541,
+    31.5073,
+    29.7315
+   ]
+  },
+  "defter": {
+   "01_aylik": {
+    "seriler": "TÜFE, B, C aylık; anket (PKA) aylık beklentisi",
+    "bas": "2024-10",
+    "son": "2026-09"
+   },
+   "02_katki": {
+    "seriler": "13 ana grubun aylık katkısı",
+    "aylar": [
+     "2026-08",
+     "2026-09"
+    ],
+    "son": "2026-09"
+   },
+   "03_yillik_yol": {
+    "seriler": "yıllık TÜFE ve baz senaryoları",
+    "gercek_son": "2026-09",
+    "senaryo_son": "2027-09"
+   },
+   "04_hizmet_mal": {
+    "seriler": "hizmet, temel mallar, kira, TÜFE yıllık",
+    "bas": "2023-10",
+    "son": "2026-09"
+   }
+  }
+ }
+}

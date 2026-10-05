@@ -1,0 +1,151 @@
+{
+ "cipa": "2026-10-05",
+ "dosyalar": {
+  "enflasyon_ozet.json": {
+   "sha256": "7a9639a87004aa8cc596062a67d6f11f459476f51f9bcce6c36858bc90b03311",
+   "bayt": 30079,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/ozet.json",
+   "kaynak_commit": "5d98b988518183e3258fe2b460bd61676c2494a5 2026-10-05T09:01:37+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "enflasyon_uyarilar.json": {
+   "sha256": "721b5fe97e9a79358c9f04e01316648c77adab5c63d3da5668494fc6ed63f2e8",
+   "bayt": 1297,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/uyarilar.json",
+   "kaynak_commit": "5d98b988518183e3258fe2b460bd61676c2494a5 2026-10-05T09:01:37+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "aylik.csv": {
+   "sha256": "c865ae516c6ab7fb5617c1be0604706d99774b5267858bfc0524f00d85d99ed0",
+   "bayt": 105621,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/aylik.csv",
+   "kaynak_commit": "5d98b988518183e3258fe2b460bd61676c2494a5 2026-10-05T09:01:37+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "sa.csv": {
+   "sha256": "9f062eb2ef0c7c6740fbf896c8fc3f32bf55f35ab550ccb4ea026e06c6009905",
+   "bayt": 62906,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/sa.csv",
+   "kaynak_commit": "5d98b988518183e3258fe2b460bd61676c2494a5 2026-10-05T09:01:37+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "katki.csv": {
+   "sha256": "1fec612964520d9ecb1f5f662248adcd7648322c76566cf834d133016013c895",
+   "bayt": 74926,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/katki.csv",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "agirlik.json": {
+   "sha256": "9f862ccf545000665005c434a869c8a0b5f88806b9aa5480f0f3363bedaf895d",
+   "bayt": 52407,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/agirlik.json",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "dagilim.csv": {
+   "sha256": "6e47828eb6173d8b4133a4080017d89681183eff053d667ea3252ef00a1e91f8",
+   "bayt": 55731,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/dagilim.csv",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "beklenti.json": {
+   "sha256": "46e4435025b0f0588d7d99d3691e6e61eb95034674c82f18de950dc707d16d6b",
+   "bayt": 813,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/beklenti.json",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "baz_senaryo.csv": {
+   "sha256": "bcf7c948de7d591bf8363f81b514ac47b953f09b183c782e31b8cdab87e20720",
+   "bayt": 1780,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/baz_senaryo.csv",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "reel_faiz.csv": {
+   "sha256": "34e6123d34c7620f287df4fb4fcd7fd564deb6a1dfaadd6bc558f27ef1766866",
+   "bayt": 21841,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/reel_faiz.csv",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "gunluk.csv": {
+   "sha256": "67b048431c49798d6cf5b0371fd3d558c92cfb3e55a3ca47a6273093cf791db5",
+   "bayt": 50678,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/gunluk.csv",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "agac.csv": {
+   "sha256": "36fbc609f5736d8310415ad8845c6efb6e9bc512336452a70430218eff0d0d7c",
+   "bayt": 39222,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/agac.csv",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "veri_durum.json": {
+   "sha256": "dc1a25478ca1d6ac0816414faf4cf7fe788869f4e609f8b230a9bb838e1e6568",
+   "bayt": 693,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/veri_durum.json",
+   "kaynak_commit": "5d98b988518183e3258fe2b460bd61676c2494a5 2026-10-05T09:01:37+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "dibs_ozet.json": {
+   "sha256": "81b2ab8ceb46966dcfc6a671140440df4c9443e205dd6fe7fb2aaeef3f752b4d",
+   "bayt": 13840,
+   "kaynak": "site/public/projeler/dibs-verim-egrisi/ozet.json",
+   "kaynak_commit": "df4756838c5918a7d469feab06eadc1d5520a7c9 2026-10-02T15:15:11+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "fonlama_ozet.json": {
+   "sha256": "8dadceac2d3a966c7ebd3e188a8dd4bef0473175ff5bb44b03c4fb2ed4f2a800",
+   "bayt": 7760,
+   "kaynak": "site/public/projeler/fonlama-likidite/ozet.json",
+   "kaynak_commit": "1b35dee1d557be77a1ed9afd4c70f484df5b1c94 2026-10-02T17:59:46+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "tufex_ozet.json": {
+   "sha256": "06bb4b469973a310d54087f96ad8466af8adef7281fd4a0d62a7c84b380cb7cb",
+   "bayt": 2310,
+   "kaynak": "site/public/projeler/tufex-basabas/ozet.json",
+   "kaynak_commit": "20a0e3afce3f3b23b1affeb668159cbc1a592178 2026-10-05T08:15:30+00:00",
+   "kopyalama_ani": "2026-10-05T11:33:50+00:00"
+  },
+  "ppk_2026-38-TR.json": {
+   "sha256": "6640d037c7f1b0651d48b848ea770db240ed570b3a1d1b74aecbf67fe0609e38",
+   "bayt": 2934,
+   "kaynak": "bulten/veri/ppk/2026/2026-38-TR.json",
+   "kaynak_commit": "974fe1ec9043e343e70f710999fbafa04ab15c07 2026-09-10T18:54:04+00:00",
+   "kopyalama_ani": "2026-10-05T13:38:44+00:00"
+  },
+  "ppk_2026-42-TR.json": {
+   "sha256": "707b19deecd8eae1a1c96be25aa760b7bbbe7b749d6f2228d233354f0b2c559e",
+   "bayt": 25045,
+   "kaynak": "bulten/veri/ppk/2026/2026-42-TR.json",
+   "kaynak_commit": "3366c52de7a6f12ad8429cf42bf9463d5fc8e764 2026-09-17T12:03:33+00:00",
+   "kopyalama_ani": "2026-10-05T13:38:44+00:00"
+  },
+  "analiz_2026-09-03.mdx": {
+   "sha256": "d2daae940fa456360b489b2b4e001b3ded4544331aac3e8549857d021716b5e4",
+   "bayt": 51977,
+   "kaynak": "site/src/content/analiz/tufe-eylul-ppk-2026-09-03.mdx",
+   "kaynak_commit": "f016ae39bf8e16a7d6608cd0c69d1c6bc38e58f1 2026-09-03T10:31:18+00:00",
+   "kopyalama_ani": "2026-10-05T13:38:44+00:00"
+  },
+  "dagilim_0909.csv": {
+   "sha256": "633301f9bdc9ec2bf8f4fb35ab3b7a68c54167e280ac674f695f2f1321918f23",
+   "bayt": 55773,
+   "kaynak": "Aktarılacak Projeler/Enflasyon/data/dagilim.csv",
+   "kaynak_commit": "36cd300d3bd072de151834f90403ade7e092adb0",
+   "kopyalama_ani": "2026-10-05T13:38:44+00:00"
+  }
+ },
+ "kaynak": {
+  "enflasyon": "TÜİK TÜFE (2025=100) ve Yİ-ÜFE, TCMB EVDS ana ve özel kapsamlı göstergeler, üç haneli alt gruplar; TCMB Piyasa Katılımcıları Anketi; TCMB ağırlıklı ortalama fonlama maliyeti (Enflasyon hattı, 05.10.2026 koşusu)",
+  "piyasa": "DİBS Verim Eğrisi, Fonlama ve Likidite, TÜFEX Başabaş panoları — 2 Ekim 2026 kapanışı (veri yayımından önceki seans)",
+  "alinti": "TCMB PPK karar metni (10 Eylül 2026) ve toplantı özeti (17 Eylül 2026) paragrafları; 3 Eylül 2026 tarihli Ağustos TÜFE yazısı",
+  "revizyon": "uç nokta revizyonları hattın uç nokta testinden (ham seri 1–6 ay kesilip yeniden arındırılır) gelir ve arşivlenmiş hat özetinden okunur; Ağustos yayılım ölçülerinin 9 Eylül hâli dagilim_0909.csv"
+ }
+}
