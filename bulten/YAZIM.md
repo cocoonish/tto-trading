@@ -100,8 +100,9 @@ tekrarla değil YENİ olguyla gelir (bkz. "Ayrıntı: notu ne uzatır, ne uzatma
    **Her sayıda en az bir işlem fikri beklenir** (karar 05.10.2026; bkz.
    "İşlem fikirleri (biçim 3)" → "Sayı"). Rutin metni "yaz.py yalnız
    yorum/ozet/gundem alanlarına yazmana izin verir" diyorsa o cümle eskidir:
-   `fikirler` ve `fikir_kapat` da yazılabilir alanlardır. Fikirleri aynı yamaya
-   yaz: önce `python3 bulten/fikir.py --evren --tarih <sayı günü>` (ölçülebilir
+   `fikirler` ve `fikir_kapat` da yazılabilir alanlardır. Fikirleri yazı
+   katmanı yazıldıktan SONRA, AYRI bir yamayla yaz (bir fikrin reddi o zaman
+   sabahın notunu durdurmaz): önce `python3 bulten/fikir.py --evren --tarih <sayı günü>` (ölçülebilir
    bacaklar), sonra `python3 bulten/fikir.py --sina yama.json --tarih <sayı
    günü>` (bkz. "İşlem fikirleri (biçim 3)" → "İş akışı").
 4. **Denetle — yazmadan.** `python3 bulten/yaz.py yama.json --damga "<okuduğun
@@ -1185,8 +1186,9 @@ görünmüyordu ("Sayı" → temiz fikrin ikinci şartı). Aynı yapı, ritim bo
 başladığı gün açılır. Okuma: kuyruk patikasında 1 aylık devalüasyon hızının
 beş günlük ortalaması 21,4'ten 25'in üstüne çıkar. Fiili giriş 5 Ekim kapanışı,
 vadeye 46 gün: TLREF %36,84 ve ABD 3 aylık %3,99 ile ileri kur ≈ 51,2. Alt
-kullanım fiyatı ileri kurun hizasında ve yıllıklandırılmış yaklaşık %34'lük bir
-hız ister; gerekçe bunu ölçülen hızla yan yana yazar.
+kullanım fiyatı ileri kurun hizasında ve bileşik yıllıklandırmayla yaklaşık %40'lık
+bir hız ister; gerekçe bunu aynı yöntemle ölçülen hızla yan yana yazar (basit
+yıllıklandırma ≈%34 verir ve ölçülen bileşik hızla kıyaslanamaz).
 
 ```json
 {"baslik": "USD/TRY 51,25/53,00 alım yayılımı: kur ritmi bozulursa",
@@ -1195,7 +1197,7 @@ hız ister; gerekçe bunu ölçülen hızla yan yana yazar.
  "yon": "yukari",
  "opsiyon": {"tip": "call_spread", "kullanim": [51.25, 53.0], "vade": "2026-11-20"},
  "ufuk": "2026-11-20",
- "gerekce": "Kuyruk patikasında kur ritmi rezervle korunamaz ve devalüasyon hızı birkaç haftada yükselir. Alt kullanım fiyatı, TLREF ile ABD 3 aylık faizinin farkından kurulan vade ileri kurunun (yaklaşık 51,2) hizasında: ödeme, kurun vadeye kadar yıllıklandırılmış yaklaşık %34 hızla, yani ölçülen %21,4'ün belirgin üstünde yükselmesini ister. Opsiyon, düşük olasılıklı patikada kaybı primle sınırlar; satılan üst bacak primi düşürür.",
+ "gerekce": "Kuyruk patikasında kur ritmi rezervle korunamaz ve devalüasyon hızı birkaç haftada yükselir. Alt kullanım fiyatı, TLREF ile ABD 3 aylık faizinin farkından kurulan vade ileri kurunun (yaklaşık 51,2) hizasında: ödeme, kurun vadeye kadar bileşik yıllıklandırmayla yaklaşık %40 hızla, yani aynı yöntemle ölçülen %21,4'ün belirgin üstünde yükselmesini ister. Opsiyon, düşük olasılıklı patikada kaybı primle sınırlar; satılan üst bacak primi düşürür.",
  "ne_bozar": "Tahmini döviz akımı ekimin ilk haftasında günlük ortalamada sıfıra yaklaşır ve dolar/TL'nin haftalık artışı %0,40'ın altında kalırsa kur ritmi korunmuş olur.",
  "dayanak": "risk",
  "senaryo": "Kuyruk — kırılma dalı"}

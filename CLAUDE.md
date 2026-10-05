@@ -4567,5 +4567,26 @@ yazma kapısı silmeyi hâlâ reddeder, silme elle yapıldı ve araç yolu açı
 bedelsiz kılan şey zamanlamaydı — ikisinin fiili girişi 05.10 kapanışıydı, yani karne
 hiç başlamamıştı ve kaybolan bir ölçülmüş sonuç yok. Public deponun GEÇMİŞİ iki
 fikri hâlâ taşıyor (04.10 sayısının yayımlandığı commit'ler); geçmişi yeniden yazmak
-istenmedi. Sekiz arıza
-enjeksiyonunun sekizi yeni maddede yakalanıyor.
+istenmedi.
+İnceleme (dondurulmuş 7ce30301, tek mercek) kural tarafında yayını durduran bir kusur
+bulmadı; doğrulanan ufak bulgular uygulandı. Rehberin 3. adımı fikirleri "aynı yamaya"
+yazdırıyordu, iş akışı bölümü "AYRI yamaya" — bir fikir reddi sabahın notunu da
+durdurduğu için ayrı yama doğrudur. Tekil olgu satırı `gecen` listesindeydi ve yalnız
+`--ayrinti` ile basılıyordu (yaz.py onu vermez); başlıktaki "basılmayan bilgi satırı
+yoktur" iddiası ancak satır `bilgi`ye taşınınca doğru oldu. Zincir bloğu karne
+kurulamadığında "açık fikir yok" diyordu ve çıkış emri bekleyen kaydı kapatılabilir
+gibi listeliyordu. Sınırın kendisi (05.10) sınanmıyordu: `>=` → `>` mutasyonu dört
+maddeyi de geçiyordu. On üç arıza enjeksiyonunun on üçü artık kendi maddesinde
+yakalanıyor. UYGULANMAYAN, gerekçesiyle: denetimin "bugün"ü yerel tarih
+(`date.today()`, üç yerde), yazma kapısınınki UTC; UTC'nin batısındaki bir makinede
+gece yarısından sonra kapanamayan bir uyarı doğabilir. Denetimin tarih sözleşmesi tek
+yerde değiştirilmeli, bu turda değil — koşucular UTC'de ve İstanbul'da etkilenmiyor.
+05.10 fikrinin METNİ de incelemeyle düzeltildi (seviye ve yapı aynı, yazma kapısının
+izin verdiği alanlar): "dizelin büyük kısmı" kaynakta "önemli bir kısmı"; "mart
+kararının öne çekilmesi" kaynaksızdı ve 04.10 sayısının kendi aktarımıyla
+çelişiyordu, çıkarıldı; ham petrol tarafındaki ters işaret (Aramco'nun Asya indirimi)
+eklendi; bozulma ölçütü ABD distilat stoklarından (dolaylı: ABD stratejik rezervi
+yalnız ham petrol tutar; 12 Ekim tatili raporu perşembeye kaydırır) Avrupa ARA dizel
+stoklarına taşındı ve G7 öncesi "0,0479" çıpası kaldırıldı — 30.09 ile 01.10 arasında
+iki vadelinin de kontrat devri vardı ve seri o günü düzeltmiyordu, yani 0,0479 başka
+kontratların oranıydı. `enstruman` imzanın parçası olduğu için değişmedi.

@@ -6649,8 +6649,8 @@
    "sebep": "gümüşün cuma kapanışı düzeltildi"
   }
  ],
- "yazi_zamani": "2026-10-05T04:54:42+00:00",
- "yazi_surumu": 3,
+ "yazi_zamani": "2026-10-05T05:12:32+00:00",
+ "yazi_surumu": 4,
  "ilk_yazi_zamani": "2026-10-05T04:27:45+00:00",
  "fikirler": [
   {
@@ -6658,8 +6658,8 @@
    "acilis": "2026-10-05",
    "baslik": "Kalorifer yakıtı / Brent göreli kısa: G7 dizel salımı",
    "tur": "goreli",
-   "gerekce": "G7'nin 2 Ekim'de açıkladığı 100 milyon varillik salım dizel ağırlıklı ve dizelin büyük kısmı ilk 20 günde piyasaya veriliyor: ek arz ham petrolden çok ürün tarafına geliyor. Karar cuma kalorifer yakıtını %3,04 düşürdü, Brent yatay kaldı. Aramco'nun Akdeniz'e kasım zammı ham petrol tarafını destekliyor. Salım yeni arz değil, mart kararının öne çekilmesi; oranın bir kısmı bu yüzden fiyatlanmış olabilir.",
-   "ne_bozar": "ABD Enerji Bilgi İdaresi'nin 7 ve 14 Ekim haftalık verilerinde distilat stokları düşmeye devam ederse salım piyasaya ulaşmıyor demektir; oran G7 kararından önceki 0,0479 düzeyine dönerse ürün sıkışması salımı yenmiş olur.",
+   "gerekce": "G7'nin 2 Ekim'de açıkladığı 100 milyon varillik salım dört aya yayılıyor ve dizelin önemli bir kısmı ilk 20 günde piyasaya veriliyor (Bloomberg): ek arz ham petrolden çok ürün tarafına geliyor. Karar cuma kalorifer yakıtını %3,04 düşürdü, Brent yatay kaldı. Ham petrol tarafında işaretler karışık: Aramco kasımda Akdeniz'e zam yaptı ama Asya'ya indirimi genişletti; ham petrol düşerse oran bu yapının aleyhine yükselir.",
+   "ne_bozar": "Avrupa'da ARA bölgesi dizel (gasoil) stokları Insights Global'in 8 ve 15 Ekim perşembe verilerinde artmazsa salım piyasaya ulaşmıyor demektir; oran bir kapanışta 0,0480'in üstüne çıkarsa ürün sıkışması salımı yenmiş olur.",
    "ufuk": "2026-10-23",
    "dayanak": "emtia",
    "yazim_ani": "2026-10-05T04:54:42+00:00",

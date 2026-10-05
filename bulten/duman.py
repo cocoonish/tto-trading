@@ -2083,11 +2083,16 @@ def _fikir_karar_kapisi():
         raise AssertionError("ölçülemeyen fikir 05.10 sonrası yazma kapısından geçti")
     except _f.FikirHatasi as e:
         assert "ölçülemeyen fikir açılmaz" in str(e), e
+    try:            # karar günü de yasak: sınır >= ile yazılır (inceleme 05.10.2026)
+        _f.dogrula(dict(olc), _fk_sayi(tarih="2026-10-05"), 1)
+        raise AssertionError("ölçülemeyen fikir karar günü (05.10) yazma kapısından geçti")
+    except _f.FikirHatasi as e:
+        assert "ölçülemeyen fikir açılmaz" in str(e), e
     assert _f.dogrula(dict(olc), _fk_sayi(tarih="2026-10-02"), 1)["tur"] == "olculemez"
     # (d) dosyaya başka yoldan giren ölçülemez fikir ENGEL; eski sayıda değil.
     kayit = {"kimlik": "x-1", "baslik": "Londra bazı", "tur": "olculemez", "gerekce": "g",
              "ne_bozar": "n", "ufuk": "2026-11-20", "dayanak": "turkiye"}
-    for tarih, engel in (("2026-10-06", True), ("2026-10-04", False)):
+    for tarih, engel in (("2026-10-06", True), ("2026-10-05", True), ("2026-10-04", False)):
         de = _den.Denetim(_fk_sayi(tarih=tarih, fikirler=[dict(kayit)])); de.fikirler()
         assert any("ölçülemeyen fikir açılmaz" in e for e in de.engel) == engel, (tarih, de.engel)
     # (e) zincir: yazılmamış biçim 3 sayıda hatırlatma ve açık fikirler; yazılmışta sessiz.
@@ -2104,6 +2109,20 @@ def _fikir_karar_kapisi():
                 _z._fikir_blogu(dt.date(2026, 10, 6))
             o = c.getvalue()
             assert "en az bir fikir" in o and "2026-10-04-1" in o and "yorum/ozet/gundem" in o, o
+            # Karne kurulamadıysa "açık fikir yok" denmez; çıkış emri bekleyen kayıt adıyla.
+            for karne_, beklenen in (({"hata": "RuntimeError: x", "kayitlar": []}, "kurulamadı"),
+                                     ({"kayitlar": [{"kimlik": "2026-10-04-1", "baslik": "x",
+                                                     "durum": "acik", "cikis_bekleniyor": True}]},
+                                      "çıkış emri verildi")):
+                yol.write_text(json.dumps(dict(b, fikir_karne=karne_), ensure_ascii=False), encoding="utf-8")
+                with contextlib.redirect_stdout(io.StringIO()) as c:
+                    _z._fikir_blogu(dt.date(2026, 10, 6))
+                assert beklenen in c.getvalue() and "Açık fikir yok" not in c.getvalue(), c.getvalue()
+            # Bağlantı DAVRANIŞLA: zincirin ek blokları fikir bloğunu koşturur.
+            yol.write_text(json.dumps(b, ensure_ascii=False), encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()) as c:
+                _z._ek_bloklar(dt.date(2026, 10, 6))
+            assert "İŞLEM FİKİRLERİ" in c.getvalue(), "fikir bloğu zincirin ek bloklarında koşmuyor"
             for degis in ({"gundem_kaynagi": "yazili"}, {"surum": 2}):
                 yol.write_text(json.dumps(dict(b, **degis), ensure_ascii=False), encoding="utf-8")
                 with contextlib.redirect_stdout(io.StringIO()) as c:
@@ -2111,7 +2130,11 @@ def _fikir_karar_kapisi():
                 assert not c.getvalue().strip(), (degis, c.getvalue())
     finally:
         _z.BULTENLER = gercek
-    assert '("fikir", _fikir_blogu)' in inspect.getsource(_z._ek_bloklar), "fikir bloğu zincirde koşmuyor"
+    # (f) Tekil olgu ölçüsü yazarın gördüğü bilgi satırıdır (yaz.py --ayrinti vermez).
+    import tekrar as _t
+    dt_ = _den.Denetim(_fk_sayi(yorum="<p>Kur 49,01; gösterge %40,26.</p>"))
+    dt_._olgu_tekrari(_t)
+    assert any("tekil olgu" in m for m in dt_.bilgi), (dt_.bilgi, dt_.gecen)
 
 
 def _fikir_zaman_tasima_dongu():

@@ -2245,8 +2245,10 @@ class Denetim:
         govde = _t.yazi_govdesi(self.b)
         tekil, gecis = _t.ayrinti(govde)
         if gecis:
-            self._ok(f"ayrıntı: {tekil} tekil olgu, {gecis} geçiş "
-                     f"(tekrar %{100 * (1 - tekil / gecis):.0f})")
+            # Bilgi satırı: yazar --ayrinti vermeden de görür (yaz.py öyle
+            # çağırır); geçen ölçütler listesinde yalnız --ayrinti ile basılıyordu.
+            self.bilgi.append(f"ayrıntı: {tekil} tekil olgu, {gecis} geçiş "
+                              f"(tekrar %{100 * (1 - tekil / gecis):.0f})")
         yayilan = _t.olgu_tekrari(govde)
         if yayilan:
             ornek = ", ".join(f"{o} ({'+'.join(y)})" for o, y in yayilan[:5])

@@ -294,14 +294,21 @@ def _fikir_blogu(bugun: dt.date) -> None:
     b = json.loads(dosya.read_text(encoding="utf-8"))
     if int(b.get("surum") or 2) < 3 or b.get("gundem_kaynagi") == "yazili":
         return
-    kayitlar = [k for k in ((b.get("fikir_karne") or {}).get("kayitlar") or [])
+    karne = b.get("fikir_karne") or {}
+    kayitlar = [k for k in (karne.get("kayitlar") or [])
                 if isinstance(k, dict) and k.get("durum") in ("acik", "olculemez")]
     print()
     print("  İŞLEM FİKİRLERİ:")
-    if kayitlar:
+    if karne.get("hata"):
+        # Karne kurulamadıysa "açık fikir yok" demek ölçülmemişi ölçülmüş
+        # göstermek olurdu (inceleme 05.10.2026).
+        _yaz("!", f"Fikir karnesi kurulamadı ({karne['hata']}) — açık fikirler "
+                  "`python3 bulten/fikir.py --karne` ile okunmalı.")
+    elif kayitlar:
         _yaz("·", f"Açık fikir {len(kayitlar)} (karne): görüşü bozulan için `fikir_kapat`.")
         for k in kayitlar[:12]:
             ek = "ölçülemez" if k.get("durum") == "olculemez" else (
+                "çıkış emri verildi" if k.get("cikis_bekleniyor") else
                 "giriş bekleniyor" if k.get("giris_bekleniyor") else "açık")
             _yaz(" ", f"  {k.get('kimlik')} · {str(k.get('baslik') or '')[:60]} "
                       f"({ek}, ufuk {k.get('ufuk') or '—'})")
