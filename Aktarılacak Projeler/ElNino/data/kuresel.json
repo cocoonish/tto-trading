@@ -1,33 +1,33 @@
 {
- "_tarih": "08.2026",
- "_ay": "2026-08",
+ "_tarih": "09.2026",
+ "_ay": "2026-09",
  "kur_bas": "1954-07",
- "kur_son": "2026-08",
+ "kur_son": "2026-09",
  "esik": 1.5,
  "asgari_ay": 5,
  "ufuk": 18,
  "epizot_sayisi": 4,
  "emtia_bas": "1960-01",
- "emtia_son": "2026-08",
+ "emtia_son": "2026-09",
  "emtia_yas_ay": 0,
- "kaynak_pink_tarih": "08.2026",
+ "kaynak_pink_tarih": "09.2026",
  "kaynak_pink_yas_ay": 0,
- "kaynak_pink_kapsam": "Ocak 1960 → Ağustos 2026",
+ "kaynak_pink_kapsam": "Ocak 1960 → Eylül 2026",
  "kaynak_pink_durum": "güncel",
- "kaynak_bls_tarih": "07.2026",
+ "kaynak_bls_tarih": "08.2026",
  "kaynak_bls_yas_ay": 1,
- "kaynak_bls_kapsam": "Ocak 1960 → Temmuz 2026",
+ "kaynak_bls_kapsam": "Ocak 1960 → Ağustos 2026",
  "kaynak_bls_durum": "güncel",
  "kaynak_bis_tarih": "08.2026",
- "kaynak_bis_yas_ay": 0,
+ "kaynak_bis_yas_ay": 1,
  "kaynak_bis_kapsam": "Temmuz 1954 → Ağustos 2026",
  "kaynak_bis_durum": "güncel",
  "kaynak_ecb_tarih": "12.2025",
- "kaynak_ecb_yas_ay": 8,
+ "kaynak_ecb_yas_ay": 9,
  "kaynak_ecb_kapsam": "Ocak 1997 → Aralık 2025",
- "kaynak_ecb_durum": "8 ay geride",
- "reel_gida_son": 6.38,
- "nominal_gida_son": 11.52,
+ "kaynak_ecb_durum": "9 ay geride",
+ "reel_gida_son": 6.99,
+ "nominal_gida_son": 15.76,
  "kuresel": {
   "kayitlar": [
    {
@@ -56,148 +56,148 @@
    }
   ],
   "olculen": 4,
-  "kosulsuz": 0.12,
+  "kosulsuz": 0.13,
   "orneklem_bas": "1961-01",
-  "orneklem_son": "2026-07",
+  "orneklem_son": "2026-08",
   "epizot_ortalama": -3.21,
-  "fark": -3.32
+  "fark": -3.34
  },
  "kur_olculen": 4,
- "kur_kosulsuz": 0.12,
+ "kur_kosulsuz": 0.13,
  "kur_epizot_ortalama": -3.21,
- "kur_fark": -3.32,
+ "kur_fark": -3.34,
  "kur_orneklem_bas": "1961-01",
- "kur_orneklem_son": "2026-07",
+ "kur_orneklem_son": "2026-08",
  "kur_capraz": [
   {
    "gecikme": 0,
-   "korelasyon": -0.231,
-   "n": 786
+   "korelasyon": -0.229,
+   "n": 787
   },
   {
    "gecikme": 1,
-   "korelasyon": -0.199,
-   "n": 786
+   "korelasyon": -0.197,
+   "n": 787
   },
   {
    "gecikme": 2,
-   "korelasyon": -0.161,
-   "n": 786
+   "korelasyon": -0.159,
+   "n": 787
   },
   {
    "gecikme": 3,
    "korelasyon": -0.116,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 4,
    "korelasyon": -0.067,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 5,
    "korelasyon": -0.014,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 6,
    "korelasyon": 0.042,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 7,
-   "korelasyon": 0.096,
-   "n": 786
+   "korelasyon": 0.095,
+   "n": 787
   },
   {
    "gecikme": 8,
-   "korelasyon": 0.144,
-   "n": 786
+   "korelasyon": 0.143,
+   "n": 787
   },
   {
    "gecikme": 9,
-   "korelasyon": 0.185,
-   "n": 786
+   "korelasyon": 0.184,
+   "n": 787
   },
   {
    "gecikme": 10,
    "korelasyon": 0.219,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 11,
    "korelasyon": 0.248,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 12,
    "korelasyon": 0.27,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 13,
-   "korelasyon": 0.284,
-   "n": 786
+   "korelasyon": 0.283,
+   "n": 787
   },
   {
    "gecikme": 14,
    "korelasyon": 0.286,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 15,
    "korelasyon": 0.28,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 16,
    "korelasyon": 0.264,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 17,
    "korelasyon": 0.241,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 18,
-   "korelasyon": 0.212,
-   "n": 786
+   "korelasyon": 0.211,
+   "n": 787
   },
   {
    "gecikme": 19,
-   "korelasyon": 0.178,
-   "n": 786
+   "korelasyon": 0.177,
+   "n": 787
   },
   {
    "gecikme": 20,
-   "korelasyon": 0.141,
-   "n": 786
+   "korelasyon": 0.14,
+   "n": 787
   },
   {
    "gecikme": 21,
    "korelasyon": 0.101,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 22,
    "korelasyon": 0.061,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 23,
    "korelasyon": 0.023,
-   "n": 786
+   "n": 787
   },
   {
    "gecikme": 24,
    "korelasyon": -0.014,
-   "n": 786
+   "n": 787
   }
  ],
  "kur_en_iyi_gecikme": 14,
  "kur_en_iyi_kor": 0.286,
- "kur_capraz_n": 786,
+ "kur_capraz_n": 787,
  "son_epizot_zirve": "2023-12",
  "son_epizot_oni": 1.99,
  "kirilim": [
@@ -208,8 +208,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": 22.25,
-   "kosulsuz": 3.97,
-   "fark": 18.28,
+   "kosulsuz": 3.93,
+   "fark": 18.32,
    "son_epizot_tepe": 155.3,
    "bas": "1961-01"
   },
@@ -232,8 +232,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": 16.86,
-   "kosulsuz": 3.25,
-   "fark": 13.61,
+   "kosulsuz": 3.28,
+   "fark": 13.58,
    "son_epizot_tepe": 46.2,
    "bas": "1961-01"
   },
@@ -244,8 +244,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": 9.17,
-   "kosulsuz": -0.7,
-   "fark": 9.87,
+   "kosulsuz": -0.71,
+   "fark": 9.88,
    "son_epizot_tepe": 21.8,
    "bas": "1961-01"
   },
@@ -256,8 +256,8 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": 10.79,
-   "kosulsuz": 1.74,
-   "fark": 9.05,
+   "kosulsuz": 1.73,
+   "fark": 9.06,
    "son_epizot_tepe": 97.9,
    "bas": "1961-01"
   },
@@ -268,8 +268,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": 8.78,
-   "kosulsuz": 2.82,
-   "fark": 5.96,
+   "kosulsuz": 2.75,
+   "fark": 6.03,
    "son_epizot_tepe": 42.1,
    "bas": "1961-01"
   },
@@ -280,8 +280,8 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": 0.76,
-   "kosulsuz": 1.13,
-   "fark": -0.36,
+   "kosulsuz": 1.15,
+   "fark": -0.39,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -293,7 +293,7 @@
    "olculen": 4,
    "epizot_ortalama": -1.64,
    "kosulsuz": -0.3,
-   "fark": -1.33,
+   "fark": -1.34,
    "son_epizot_tepe": 11.9,
    "bas": "1961-01"
   },
@@ -304,8 +304,8 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -2.3,
-   "kosulsuz": 0.13,
-   "fark": -2.43,
+   "kosulsuz": 0.14,
+   "fark": -2.44,
    "son_epizot_tepe": 10.3,
    "bas": "1961-01"
   },
@@ -317,7 +317,7 @@
    "olculen": 4,
    "epizot_ortalama": -3.28,
    "kosulsuz": -0.79,
-   "fark": -2.48,
+   "fark": -2.49,
    "son_epizot_tepe": 8.6,
    "bas": "1961-01"
   },
@@ -328,8 +328,8 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -3.21,
-   "kosulsuz": 0.12,
-   "fark": -3.32,
+   "kosulsuz": 0.13,
+   "fark": -3.34,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -340,8 +340,8 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -1.89,
-   "kosulsuz": 2.1,
-   "fark": -3.99,
+   "kosulsuz": 2.13,
+   "fark": -4.02,
    "son_epizot_tepe": 13.9,
    "bas": "1961-01"
   },
@@ -352,8 +352,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": -4.98,
-   "kosulsuz": 1.14,
-   "fark": -6.12,
+   "kosulsuz": 1.16,
+   "fark": -6.13,
    "son_epizot_tepe": 7.0,
    "bas": "1961-01"
   },
@@ -364,8 +364,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": -5.18,
-   "kosulsuz": 2.03,
-   "fark": -7.21,
+   "kosulsuz": 2.04,
+   "fark": -7.23,
    "son_epizot_tepe": 2.5,
    "bas": "1961-01"
   },
@@ -376,8 +376,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": -6.79,
-   "kosulsuz": 1.09,
-   "fark": -7.88,
+   "kosulsuz": 1.1,
+   "fark": -7.9,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -400,8 +400,8 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -8.62,
-   "kosulsuz": 0.55,
-   "fark": -9.18,
+   "kosulsuz": 0.58,
+   "fark": -9.2,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -412,8 +412,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": -3.74,
-   "kosulsuz": 8.94,
-   "fark": -12.68,
+   "kosulsuz": 8.93,
+   "fark": -12.67,
    "son_epizot_tepe": 4.2,
    "bas": "1961-01"
   },
@@ -424,8 +424,8 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": -15.56,
-   "kosulsuz": 1.38,
-   "fark": -16.94,
+   "kosulsuz": 1.42,
+   "fark": -16.98,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -436,13 +436,13 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -10.95,
-   "kosulsuz": 7.7,
-   "fark": -18.65,
+   "kosulsuz": 7.73,
+   "fark": -18.67,
    "son_epizot_tepe": 10.0,
    "bas": "1961-01"
   }
  ],
- "kirilim_tarih": "07.2026",
+ "kirilim_tarih": "08.2026",
  "gor_emtia": {
   "kayitlar": [
    {
@@ -471,17 +471,17 @@
    }
   ],
   "olculen": 4,
-  "kosulsuz": -2.05,
+  "kosulsuz": -2.06,
   "orneklem_bas": "1961-01",
-  "orneklem_son": "2026-08",
+  "orneklem_son": "2026-09",
   "epizot_ortalama": -1.36,
-  "fark": 0.68
+  "fark": 0.7
  },
  "gor_emtia_olculen": 4,
- "gor_emtia_kosulsuz": -2.05,
+ "gor_emtia_kosulsuz": -2.06,
  "gor_emtia_epizot_ortalama": -1.36,
- "gor_emtia_fark": 0.68,
- "gor_emtia_son": -21.39,
+ "gor_emtia_fark": 0.7,
+ "gor_emtia_son": -14.65,
  "abd": {
   "kayitlar": [
    {
@@ -512,7 +512,7 @@
   "olculen": 4,
   "kosulsuz": 0.07,
   "orneklem_bas": "1961-01",
-  "orneklem_son": "2026-07",
+  "orneklem_son": "2026-08",
   "epizot_ortalama": -0.51,
   "fark": -0.58
  },
@@ -521,65 +521,26 @@
  "abd_epizot_ortalama": -0.51,
  "abd_fark": -0.58,
  "abd_orneklem_bas": "1961-01",
- "abd_goreceli_son": -0.39,
- "abd_gida_12a": 2.98,
- "abd_tufe_12a": 3.36,
+ "abd_goreceli_son": -0.72,
+ "abd_gida_12a": 2.67,
+ "abd_tufe_12a": 3.4,
  "abd_gecis_beta": 0.319,
  "abd_gecis_r2": 0.201,
- "abd_gecis_n": 796,
+ "abd_gecis_n": 797,
  "gecis_yillik_tr_beta": 0.869,
  "gecis_yillik_tr_r2": 0.965,
- "gecis_yillik_tr_n": 248,
+ "gecis_yillik_tr_n": 249,
  "gecis_yillik_abd_beta": 0.669,
  "gecis_yillik_abd_r2": 0.594,
- "gecis_yillik_abd_n": 786,
- "gecis_yillik_ea_beta": 0.482,
- "gecis_yillik_ea_r2": 0.72,
- "gecis_yillik_ea_n": 348,
+ "gecis_yillik_abd_n": 787,
  "abd_cekirdek_beta": 0.182,
  "abd_cekirdek_r2": 0.108,
  "abd_cekirdek_gecikme": 9,
  "abd_cekirdek_n": 786,
- "tr_cekirdek_beta": 0.352,
- "tr_cekirdek_r2": 0.273,
+ "tr_cekirdek_beta": 0.349,
+ "tr_cekirdek_r2": 0.269,
  "tr_cekirdek_gecikme": 0,
- "tr_cekirdek_n": 259,
- "ea": {
-  "kayitlar": [
-   {
-    "zirve": "1997-12",
-    "zirve_oni": 2.37,
-    "ortalama": 0.11,
-    "ay": 19
-   },
-   {
-    "zirve": "2015-12",
-    "zirve_oni": 2.59,
-    "ortalama": 0.31,
-    "ay": 19
-   },
-   {
-    "zirve": "2023-12",
-    "zirve_oni": 1.99,
-    "ortalama": 0.23,
-    "ay": 19
-   }
-  ],
-  "olculen": 3,
-  "kosulsuz": 0.39,
-  "orneklem_bas": "1997-01",
-  "orneklem_son": "2025-12",
-  "epizot_ortalama": 0.22,
-  "fark": -0.17
- },
- "ea_olculen": 3,
- "ea_kosulsuz": 0.39,
- "ea_epizot_ortalama": 0.22,
- "ea_fark": -0.17,
- "ea_orneklem_bas": "1997-01",
- "ea_goreceli_son": 0.6,
- "ea_gida_son": 2.5,
- "ea_tufe_son": 1.9,
+ "tr_cekirdek_n": 260,
  "fed_yol": [
   {
    "zirve": "1983-01",
@@ -617,18 +578,18 @@
  "gecis_abd_beta": 0.093,
  "gecis_abd_r2": 0.227,
  "gecis_abd_gecikme": 7,
- "gecis_abd_n": 779,
- "gecis_tr_beta": 0.092,
- "gecis_tr_r2": 0.099,
+ "gecis_abd_n": 780,
+ "gecis_tr_beta": 0.091,
+ "gecis_tr_r2": 0.098,
  "gecis_tr_gecikme": 12,
- "gecis_tr_n": 246,
+ "gecis_tr_n": 247,
  "gecis": {
   "abd": {
    "beta": 0.093,
-   "sabit": 3.852,
+   "sabit": 3.851,
    "r2": 0.227,
    "kor": 0.476,
-   "n": 779,
+   "n": 780,
    "gecikme": 7,
    "profil": [
     {
@@ -638,7 +599,7 @@
     },
     {
      "gecikme": 1,
-     "r2": 0.133,
+     "r2": 0.132,
      "beta": 0.071
     },
     {
@@ -698,12 +659,12 @@
     },
     {
      "gecikme": 13,
-     "r2": 0.127,
+     "r2": 0.128,
      "beta": 0.069
     },
     {
      "gecikme": 14,
-     "r2": 0.107,
+     "r2": 0.108,
      "beta": 0.064
     },
     {
@@ -733,12 +694,12 @@
     },
     {
      "gecikme": 20,
-     "r2": 0.026,
-     "beta": 0.031
+     "r2": 0.027,
+     "beta": 0.032
     },
     {
      "gecikme": 21,
-     "r2": 0.018,
+     "r2": 0.019,
      "beta": 0.026
     },
     {
@@ -759,11 +720,11 @@
    ]
   },
   "tr": {
-   "beta": 0.092,
+   "beta": 0.091,
    "sabit": 2.521,
-   "r2": 0.099,
-   "kor": 0.314,
-   "n": 246,
+   "r2": 0.098,
+   "kor": 0.313,
+   "n": 247,
    "gecikme": 12,
    "profil": [
     {
@@ -789,12 +750,12 @@
     {
      "gecikme": 4,
      "r2": 0.003,
-     "beta": 0.016
+     "beta": 0.017
     },
     {
      "gecikme": 5,
      "r2": 0.005,
-     "beta": 0.021
+     "beta": 0.02
     },
     {
      "gecikme": 6,
@@ -804,36 +765,36 @@
     {
      "gecikme": 7,
      "r2": 0.02,
-     "beta": 0.042
+     "beta": 0.041
     },
     {
      "gecikme": 8,
-     "r2": 0.038,
-     "beta": 0.057
+     "r2": 0.037,
+     "beta": 0.056
     },
     {
      "gecikme": 9,
-     "r2": 0.057,
-     "beta": 0.07
+     "r2": 0.056,
+     "beta": 0.069
     },
     {
      "gecikme": 10,
-     "r2": 0.079,
-     "beta": 0.082
+     "r2": 0.078,
+     "beta": 0.081
     },
     {
      "gecikme": 11,
-     "r2": 0.097,
-     "beta": 0.091
+     "r2": 0.096,
+     "beta": 0.09
     },
     {
      "gecikme": 12,
-     "r2": 0.099,
-     "beta": 0.092
+     "r2": 0.098,
+     "beta": 0.091
     },
     {
      "gecikme": 13,
-     "r2": 0.09,
+     "r2": 0.089,
      "beta": 0.087
     },
     {
@@ -843,7 +804,7 @@
     },
     {
      "gecikme": 15,
-     "r2": 0.088,
+     "r2": 0.087,
      "beta": 0.086
     },
     {
@@ -853,13 +814,13 @@
     },
     {
      "gecikme": 17,
-     "r2": 0.07,
-     "beta": 0.077
+     "r2": 0.071,
+     "beta": 0.078
     },
     {
      "gecikme": 18,
-     "r2": 0.063,
-     "beta": 0.073
+     "r2": 0.064,
+     "beta": 0.074
     },
     {
      "gecikme": 19,
@@ -873,7 +834,7 @@
     },
     {
      "gecikme": 21,
-     "r2": 0.041,
+     "r2": 0.042,
      "beta": 0.059
     },
     {
@@ -897,77 +858,67 @@
  "kur_hukum": "olculebilir",
  "kur_hukum_metin": "Küresel gıda emtiasında 4 güçlü El Niño epizodu ölçülebiliyor (örneklem Ocak 1961 ayında başlıyor). Türkiye'de bu sayı ikiydi; hüküm kurulamamasının sebebi kanalın yokluğu değil, yerel örneklemin kısalığıydı.",
  "_uc": {
-  "emtia": "2026-08",
-  "abd": "2026-07",
-  "reel_gida": "2026-07",
-  "kirilim": "2026-07",
+  "emtia": "2026-09",
+  "abd": "2026-08",
+  "reel_gida": "2026-08",
+  "kirilim": "2026-08",
   "faiz_abd": "2026-08",
-  "ea": "2025-12"
+  "ea": null
  },
- "epizot_sayisi_tarih": "07.2026",
- "reel_gida_son_tarih": "07.2026",
- "nominal_gida_son_tarih": "08.2026",
- "kur_olculen_tarih": "07.2026",
- "kur_kosulsuz_tarih": "07.2026",
- "kur_epizot_ortalama_tarih": "07.2026",
- "kur_fark_tarih": "07.2026",
- "kur_en_iyi_gecikme_tarih": "07.2026",
- "kur_en_iyi_kor_tarih": "07.2026",
- "kur_capraz_n_tarih": "07.2026",
- "son_epizot_oni_tarih": "07.2026",
- "gor_emtia_olculen_tarih": "07.2026",
- "gor_emtia_kosulsuz_tarih": "07.2026",
- "gor_emtia_epizot_ortalama_tarih": "07.2026",
- "gor_emtia_fark_tarih": "07.2026",
- "gor_emtia_son_tarih": "08.2026",
- "abd_olculen_tarih": "07.2026",
- "abd_kosulsuz_tarih": "07.2026",
- "abd_epizot_ortalama_tarih": "07.2026",
- "abd_fark_tarih": "07.2026",
- "abd_goreceli_son_tarih": "07.2026",
- "abd_gida_12a_tarih": "07.2026",
- "abd_tufe_12a_tarih": "07.2026",
- "abd_gecis_beta_tarih": "07.2026",
- "abd_gecis_r2_tarih": "07.2026",
- "abd_gecis_n_tarih": "07.2026",
- "gecis_yillik_tr_beta_tarih": "08.2026",
- "gecis_yillik_tr_r2_tarih": "08.2026",
- "gecis_yillik_tr_n_tarih": "08.2026",
- "gecis_yillik_abd_beta_tarih": "07.2026",
- "gecis_yillik_abd_r2_tarih": "07.2026",
- "gecis_yillik_abd_n_tarih": "07.2026",
- "gecis_yillik_ea_beta_tarih": "12.2025",
- "gecis_yillik_ea_r2_tarih": "12.2025",
- "gecis_yillik_ea_n_tarih": "12.2025",
- "abd_cekirdek_beta_tarih": "07.2026",
- "abd_cekirdek_r2_tarih": "07.2026",
- "abd_cekirdek_gecikme_tarih": "07.2026",
- "abd_cekirdek_n_tarih": "07.2026",
- "tr_cekirdek_beta_tarih": "08.2026",
- "tr_cekirdek_r2_tarih": "08.2026",
- "tr_cekirdek_gecikme_tarih": "08.2026",
- "tr_cekirdek_n_tarih": "08.2026",
- "ea_olculen_tarih": "12.2025",
- "ea_kosulsuz_tarih": "12.2025",
- "ea_epizot_ortalama_tarih": "12.2025",
- "ea_fark_tarih": "12.2025",
- "ea_goreceli_son_tarih": "12.2025",
- "ea_gida_son_tarih": "12.2025",
- "ea_tufe_son_tarih": "12.2025",
- "fed_olculen_tarih": "07.2026",
+ "epizot_sayisi_tarih": "08.2026",
+ "reel_gida_son_tarih": "08.2026",
+ "nominal_gida_son_tarih": "09.2026",
+ "kur_olculen_tarih": "08.2026",
+ "kur_kosulsuz_tarih": "08.2026",
+ "kur_epizot_ortalama_tarih": "08.2026",
+ "kur_fark_tarih": "08.2026",
+ "kur_en_iyi_gecikme_tarih": "08.2026",
+ "kur_en_iyi_kor_tarih": "08.2026",
+ "kur_capraz_n_tarih": "08.2026",
+ "son_epizot_oni_tarih": "08.2026",
+ "gor_emtia_olculen_tarih": "08.2026",
+ "gor_emtia_kosulsuz_tarih": "08.2026",
+ "gor_emtia_epizot_ortalama_tarih": "08.2026",
+ "gor_emtia_fark_tarih": "08.2026",
+ "gor_emtia_son_tarih": "09.2026",
+ "abd_olculen_tarih": "08.2026",
+ "abd_kosulsuz_tarih": "08.2026",
+ "abd_epizot_ortalama_tarih": "08.2026",
+ "abd_fark_tarih": "08.2026",
+ "abd_goreceli_son_tarih": "08.2026",
+ "abd_gida_12a_tarih": "08.2026",
+ "abd_tufe_12a_tarih": "08.2026",
+ "abd_gecis_beta_tarih": "08.2026",
+ "abd_gecis_r2_tarih": "08.2026",
+ "abd_gecis_n_tarih": "08.2026",
+ "gecis_yillik_tr_beta_tarih": "09.2026",
+ "gecis_yillik_tr_r2_tarih": "09.2026",
+ "gecis_yillik_tr_n_tarih": "09.2026",
+ "gecis_yillik_abd_beta_tarih": "08.2026",
+ "gecis_yillik_abd_r2_tarih": "08.2026",
+ "gecis_yillik_abd_n_tarih": "08.2026",
+ "abd_cekirdek_beta_tarih": "08.2026",
+ "abd_cekirdek_r2_tarih": "08.2026",
+ "abd_cekirdek_gecikme_tarih": "08.2026",
+ "abd_cekirdek_n_tarih": "08.2026",
+ "tr_cekirdek_beta_tarih": "09.2026",
+ "tr_cekirdek_r2_tarih": "09.2026",
+ "tr_cekirdek_gecikme_tarih": "09.2026",
+ "tr_cekirdek_n_tarih": "09.2026",
+ "fed_olculen_tarih": "08.2026",
  "fed_kosulsuz_18ay_tarih": "08.2026",
- "fed_hukum_tarih": "07.2026",
- "fed_hukum_metin_tarih": "07.2026",
- "gecis_abd_beta_tarih": "07.2026",
- "gecis_abd_r2_tarih": "07.2026",
- "gecis_abd_gecikme_tarih": "07.2026",
- "gecis_abd_n_tarih": "07.2026",
- "gecis_tr_beta_tarih": "07.2026",
- "gecis_tr_r2_tarih": "07.2026",
- "gecis_tr_gecikme_tarih": "07.2026",
- "gecis_tr_n_tarih": "07.2026",
- "kur_hukum_tarih": "07.2026",
- "kur_hukum_metin_tarih": "07.2026",
+ "fed_hukum_tarih": "08.2026",
+ "fed_hukum_metin_tarih": "08.2026",
+ "gecis_abd_beta_tarih": "08.2026",
+ "gecis_abd_r2_tarih": "08.2026",
+ "gecis_abd_gecikme_tarih": "08.2026",
+ "gecis_abd_n_tarih": "08.2026",
+ "gecis_tr_beta_tarih": "08.2026",
+ "gecis_tr_r2_tarih": "08.2026",
+ "gecis_tr_gecikme_tarih": "08.2026",
+ "gecis_tr_n_tarih": "08.2026",
+ "kur_hukum_tarih": "08.2026",
+ "kur_hukum_metin_tarih": "08.2026",
  "reel_gida_tarihce": [
   {
    "ay": "1961-01",
@@ -4087,35 +4038,39 @@
   },
   {
    "ay": "2026-01",
-   "deger": -6.42
+   "deger": -6.34
   },
   {
    "ay": "2026-02",
-   "deger": -3.55
+   "deger": -3.3
   },
   {
    "ay": "2026-03",
-   "deger": -0.91
+   "deger": -0.23
   },
   {
    "ay": "2026-04",
-   "deger": 2.61
+   "deger": 3.04
   },
   {
    "ay": "2026-05",
-   "deger": 4.75
+   "deger": 5.1
   },
   {
    "ay": "2026-06",
-   "deger": 4.17
+   "deger": 4.62
   },
   {
    "ay": "2026-07",
-   "deger": 6.38
+   "deger": 6.83
+  },
+  {
+   "ay": "2026-08",
+   "deger": 6.99
   }
  ],
  "uyarilar": [
-  "Euro Bölgesi HICP (ECB) serisi hattın en yeni ayının 8 ay gerisinde (son gözlem Aralık 2025, hat Ağustos 2026); ondan türeyen sayılar o aya kadar ölçülmüştür ve kaynak yenilendiğinde kendiliğinden ilerler."
+  "Euro Bölgesi HICP (ECB) serisi hattın en yeni ayının 9 ay gerisinde (son gözlem Aralık 2025, hat Eylül 2026); ondan türeyen sayılar o aya kadar ölçülmüştür ve kaynak yenilendiğinde kendiliğinden ilerler."
  ],
  "yontem_notu": "Emtia fiyatları ABD TÜFE'siyle deflate edilir (reel). Epizot tanımı, pencere uzunluğu ve göreceli enflasyon tanımı Türkiye ölçümüyle AYNIDIR; iki taraf aynı cetvelle ölçülmezse karşılaştırma anlamsız olurdu. Fed patikası betimseldir ve ortalaması alınmaz."
 }

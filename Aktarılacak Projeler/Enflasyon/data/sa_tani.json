@@ -194,7 +194,7 @@
    "mevsimsel_genlik_pp": 0.779
   },
   "yi_ufe": {
-   "n": 260,
+   "n": 261,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
@@ -205,7 +205,7 @@
     "bayram": -0.67,
     "kurban": -0.18
    },
-   "mevsim_p": 0.5193,
+   "mevsim_p": 0.5138,
    "mevsimsel": false
   }
  },
@@ -1080,9 +1080,9 @@
  "kosular_arasi": {
   "var": true,
   "n": 12,
-  "maks_pp": 0.644,
-  "ort_pp": 0.127,
-  "onceki_kosum": "2026-09-03"
+  "maks_pp": 0.0,
+  "ort_pp": 0.0,
+  "onceki_kosum": "2026-10-05"
  },
  "vintage": {
   "k_maks": 6,

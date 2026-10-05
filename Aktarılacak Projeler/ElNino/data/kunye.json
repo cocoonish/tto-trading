@@ -1,10 +1,10 @@
 {
  "oni_uc": "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt",
  "oni_bas": "1950-01",
- "oni_son": "2026-07",
- "oni_son_deger": 1.8,
+ "oni_son": "2026-08",
+ "oni_son_deger": 2.16,
  "tufe_bas": "2005-01",
- "tufe_son": "2026-08",
+ "tufe_son": "2026-09",
  "seriler": {
   "tufe": "TP.TUKFIY2025.GENEL",
   "gida": "TP.FE25.OKTG10",
@@ -14,8 +14,12 @@
  },
  "kuresel_durum": "alindi",
  "kuresel_bas": "1954-07",
- "kuresel_son": "2026-08",
- "kuresel_dusen": [],
+ "kuresel_son": "2026-09",
+ "kuresel_dusen": [
+  "ea_gida_12a"
+ ],
  "pink_sutunlari": null,
- "uyarilar": []
+ "uyarilar": [
+  "ECB düştü (010000): HTTP Error 504: Gateway Time-out"
+ ]
 }
