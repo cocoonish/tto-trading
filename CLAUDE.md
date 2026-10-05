@@ -619,7 +619,10 @@ uygulanır: miktar kımıldamadıysa Λ fiyattan bağımsız olarak TAM sıfırd
 TypeError verir, sessizce sahte sıfır üretmez (bir çağrı yeri gerçekten
 unutulmuştu). Ve ölçülemeyen bir seans sayfada görünür: akım serisinin
 seviyeden kaç seans geride kaldığı ve SEBEBİ tek cümleyle yazılır, besleme
-yetiştiğinde cümle kendiliğinden döner.
+yetiştiğinde cümle kendiliğinden döner. (05.10.2026: ortadaki taşımanın "piyasa
+kapalı, fiyat kımıldamadı, Γ = 0 bir ölçümdür" önermesi bilanço için YANLIŞ
+çıktı — BİST kapalıyken TCMB altını yine yeniden değerliyor; iki günün akımı
+artık birleştiriliyor. Bkz. aşağıda "net pozisyonun fiyat etkisi".)
 
 **Kurucu ilke — bir ŞEKLİN tarihi, HATTIN tarihi değildir.** FX haber endeksi
 sayfasında on figürün hepsi "veri 03.09.2026" diye damgalanıyordu; oysa dördü
@@ -4726,3 +4729,57 @@ bozmuyordu; tek karta indirilince yakalandı (on bir mutasyonun on biri).
 Yan bulgu, AYRI iş: aynı perşembe yayımından beslenen YP mevduatı 25.09'a
 geçmişken kredi hattı 18.09'da kaldı ve yeniden deneme hakkı doldu (4/4);
 sayfa bunu artık kartın köşesinde açıkça gösteriyor.
+
+**Kurucu ilke — NET bir pozisyonun fiyat etkisi, NET miktarın etkisidir; ve bir
+arındırmanın doğruluğu, arındırılmış serinin arındırılan etkiye EĞİMİYLE
+ölçülür.** Kullanıcı (05.10.2026): "TCMB net rezerv takibinde günlükte altın
+fiyat etkisinde hata var gibi geldi." Vardı ve kurulduğu günden beri vardı.
+Günlük net döviz alımı NET pozisyondan (dış varlıklar eksi döviz
+yükümlülükleri, swap hariç) kuruluyor, altın fiyat etkisi ise BRÜT altınla
+(IRFCL, 25,6 milyon ons) düşülüyordu. TCMB'nin yükümlülüklerinin bir kısmı
+altın cinsinden — zorunlu karşılık altını 216,7 t, yurt içi bankaların altını
+ve teminat altını 42,7 t, yurt dışı bankaların altını 30,0 t, Hazine'nin
+altını 23,3 t (haftalık bilanço, safi gram) — ve fiyat değişince onlar da
+yeniden değerleniyor. Fazla düşülen pay brüt altının yaklaşık %39'u.
+Teşhis aritmetikte değildi: formül yayımlanan sayıları 1,8e−15 ile yeniden
+üretiyordu. Kusuru gösteren ölçü bir REGRESYONDU — doğru arındırılmış bir
+akım altın fiyatından bağımsız olmalıdır; yayımlanan akımın Γ'ya eğimi 2026'da
+−0,29 (t −3,6), tam örneklemde −0,46 (t −10,7): altın yükseldiğinde sahte
+satış, düştüğünde sahte alım. Yükümlülük tarafı (A11 + A14) Γ'ya 0,32 ile
+tepki veriyordu ve bu kalemlerin KENDİ fiyat etkisine 0,99 ile (t 7,2) —
+açıklanmayan pay kalmıyor. Net altınla akımın eğimi +0,13 (t 1,1). Düzeltme
+bir kalibrasyon sabiti DEĞİL (regresyondan "yüzde 30 fazla düşülüyor" demek
+kolaydı ve yanlış olurdu: pay zamanla değişiyor, zorunlu karşılık altını
+158 t'dan 217 t'a çıktı), TCMB'nin kendi yayımladığı beş kalem. Kodlar
+katalogdan okundu, tahmin edilmedi (EVDS bilanço kataloğu
+`Research/analiz-tcmb-api/data/` altında önbellekteydi), bulut keşfiyle
+yoklandı, hat onları her koşuda çekiyor. Etkisi büyük: 27.02'den birikimli
+net alım −11,8 değil −20,6 milyar dolar, aynı dönemin altın fiyat etkisi
+−25,0 değil −16,2. Sayfa iki düzeltme kaydı taşıyor, alıntılayan üç bülten
+sayısı (01.10 · 02.10 · 04.10) da; X'e düzeltme yanıtı atılmadı (kullanıcı
+kararı: geçmişe düzeltme yok). Aynı kural miktar etkisine uygulanır: bir
+bankanın altın yatırması varlığı ve yükümlülüğü birlikte büyütür, net altını
+değiştirmez — brüt Λ bunu TCMB'nin döviz satışı diye yazıyordu.
+
+İkinci kusur aynı denetimde çıktı ve bu dosyada YAZILI bir ilkeyi çürüttü:
+"ortadaki fiyat taşıması tatildir, fiyat kımıldamamıştır, Γ = 0 bir
+ölçümdür". Bayram arifesi yarım günlerinde BİST kapalı ama TCMB bilançosunu
+yayımlıyor ve altını yine yeniden değerliyor (dış varlıklar günlük Γ'ya 1,08
+ile tepki veriyor; sayfa ve kod "TCMB altını haftanın son iş günü Londra
+kotasyonuyla değerler" diyordu, o da ölçümle çelişiyordu). Düşülmeyen yeniden
+değerleme arifeden önceki günün akımına sızıyordu: 11 vakada korelasyon 0,89
+(sıradan günlerde ardışık akım korelasyonu 0,11); 28.10.2025'te akım bir gün
+−1,91, ertesi gün +7,45 milyar dolar yazılmıştı. İki günün TOPLAMI doğru,
+dağılımı ölçülemez — toplam ikinci güne yazılıyor, önceki gün boş, birikim
+değişmiyor (`arife_bloklari`). Bir ilke yazıldığı günün verisiyle
+doğrulanmıştı; doğrulanan şey "taşınan günde fiyat sıfır" idi, "taşınan günde
+bilanço değerlemiyor" hiç sorulmamıştı.
+Sigortalar: yükümlülük girdisinin VARSAYILANI YOK ve eksik kalem hattı adıyla
+durdurur (net altın kurulamazsa sessizce brüte düşmek ölçülmüş kusuru geri
+getirirdi); hattın koşusunda sızıntı tanısı son 120 günün eğimini ölçer ve
+|eğim| ≥ 0,15 ile |t| ≥ 3 birlikte tutarsa okura uyarı basar (eski seride
+ateşliyor, yenisinde susuyor); duman 39 madde, on üç arıza enjeksiyonunun on
+üçü kendi maddesinde — biri ilk turda ÇÖKEREK yakalandı (KeyError) ve madde
+artık hatanın türünü adıyla söylüyor. AÇIK: fiyat kaynağı (BİST ağırlıklı
+ortalaması) TCMB'nin değerleme fiyatıyla aynı saatte değil; günlük gürültü
+net altın tabanında ~0,3 milyar dolar ve bu kapatılmadı.

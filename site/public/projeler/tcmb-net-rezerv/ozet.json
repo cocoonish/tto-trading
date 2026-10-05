@@ -75,6 +75,8 @@
  "alt_fiyat_kaynak": "agort03",
  "alt_ons": 25.55,
  "alt_ons_kaynak": "tasima",
+ "alt_ons_yukumluluk": 10.05,
+ "alt_ons_net": 15.5,
  "alt_fiyat_etkisi_gunluk": 0.41,
  "alt_fiyat_etkisi_birikimli": -16.2,
  "alt_ima_fiyat": 4291.0,

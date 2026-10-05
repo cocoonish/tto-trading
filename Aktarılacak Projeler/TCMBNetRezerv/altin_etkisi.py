@@ -12,6 +12,10 @@ Altın değeri V(t) = Q(t) · P(t)   (Q = miktar, milyon troy ons; P = USD/ons)
     Λ(L) = P(L+1) · [Q(L+1) − Q(L)]      ← MİKTAR etkisi (milyar USD)
     Γ + Λ = V(L+1) − V(L)                ← kimlik, artık yok
 
+AKIMDA Q NET ALTINDIR: brüt miktar (IRFCL) eksi TCMB'nin altın cinsinden
+yükümlülükleri (haftalık bilanço, safi gram; bkz. YUKUMLULUK_KALEMLERI). Akım
+NET pozisyondan kurulur ve o yükümlülükler de yeniden değerlenir.
+
 Laspeyres, taban ağırlıklı standart ayrıştırmadır; ECB'nin rezerv değerleme
 kutusundaki formül tam olarak budur. (Eskiden burada "ECB ve IMF COFER'in
 resmi uygulaması" yazıyordu — COFER atfı YANLIŞTI: COFER resmi döviz
@@ -109,16 +113,18 @@ Tatil günlerinde son iş gününün fiyatı taşınır ("ffill" olarak işaretl
 
 TANI (sessiz bayatlama dedektörü): her IRFCL gözleminde ima edilen değerleme
 fiyatı P_ima = altın_değeri / ons hesaplanır ve P_ima/P_AGORT − 1 izlenir.
-TCMB altını haftanın son iş günü Londra kotasyonuyla değerlediği için küçük
-(yüzde bir buçuk mertebesinde) bir sistematik fark BEKLENİR; eşik %3.
+TCMB'nin değerleme fiyatı BİST ortalamasıyla aynı saatte kotalanmadığı için
+küçük (yüzde bir buçuk mertebesinde) bir sistematik fark BEKLENİR; eşik %3.
 
 --------------------------------------------------------------------------
 6. BİLİNEN SINIR (kapatılmadı, yazıldı)
 --------------------------------------------------------------------------
-TCMB altını günlük piyasa fiyatıyla değil, haftanın/ayın son iş günü Londra
-kotasyonuyla değerler. Elimizdeki günlük fiyat serisi bu referansın birebir
-aynısı değildir; günlük getiri sapması yüzde yarım mertebesindedir ve 25
-milyon ons tabanında günde yarım milyar dolar mertebesinde sahte akım
+TCMB altını günlük bilançoda HER GÜN yeniden değerler (ölçüldü, 05.10.2026:
+dış varlıkların günlük değişimi Γ'ya 1,08 ile tepki veriyor; eskiden burada
+"haftanın son iş günü Londra kotasyonuyla değerler" yazıyordu ve bu ölçümle
+çelişiyor). Ama değerleme fiyatı elimizdeki günlük seriyle birebir aynı
+değildir; günlük getiri sapması yüzde yarım mertebesindedir ve net altın
+tabanında (~15 milyon ons) günde 0,3 milyar dolar mertebesinde sahte akım
 üretir. Bu fark bir kalibrasyon sabitiyle KAPATILMAZ — kapatmak, ölçüm
 hatasını modele gömmek olur. Aylık ve daha uzun ufuklarda büyük ölçüde
 birbirini götürür.

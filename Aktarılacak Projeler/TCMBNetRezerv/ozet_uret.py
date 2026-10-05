@@ -320,6 +320,12 @@ ozet = {
     "alt_fiyat_kaynak": str(gs["altin_fiyat_kaynak"]),
     "alt_ons": _yuvarla(gs["ons"], 2),
     "alt_ons_kaynak": str(gs["ons_kaynak"]),
+    # Net pozisyondaki fiyat etkisi NET altının etkisidir: brüt miktardan
+    # TCMB'nin altın cinsinden yükümlülükleri düşülür (haftalık bilanço).
+    "alt_ons_yukumluluk": (_yuvarla(gs["ons_yukumluluk"], 2)
+                           if "ons_yukumluluk" in g.columns else None),
+    "alt_ons_net": (_yuvarla(gs["ons_net"], 2)
+                    if "ons_net" in g.columns else None),
     "alt_fiyat_etkisi_gunluk": (_yuvarla(aks["altin_fiyat_etkisi"], 2)
                                 if aks is not None else None),
     "alt_fiyat_etkisi_birikimli": (_yuvarla(aks["altin_fiyat_etkisi_birikimli"])

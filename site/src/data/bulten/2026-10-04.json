@@ -8245,8 +8245,8 @@
  },
  "gundem_kaynagi": "yazili",
  "manset": "İç şok rezervle emildi: BIST 100 haftada −%4,88, kur ritmini bozmadı; zayıf istihdam Fed artırımını sildi",
- "yazi_zamani": "2026-10-04T22:22:21+00:00",
- "yazi_surumu": 4,
+ "yazi_zamani": "2026-10-05T18:35:57+00:00",
+ "yazi_surumu": 5,
  "ilk_yazi_zamani": "2026-10-04T15:00:53+00:00",
  "fikirler": [
   {
@@ -8386,6 +8386,29 @@
    "ufuk_is_gunu": 20,
    "stop_z": 0.68,
    "hedef_z": 0.87
+  }
+ ],
+ "duzeltmeler": [
+  {
+   "tarih": "2026-10-05",
+   "alan": "30 Eylül'e uzanan beş iş gününün tahmini döviz akımı",
+   "eski": "4,5 milyar dolar çıkış",
+   "yeni": "4,9 milyar dolar çıkış",
+   "sebep": "Tahmini döviz akımı altın fiyat etkisini TCMB'nin brüt altınıyla düşüyordu. Altının yaklaşık 10 milyon onsu TCMB'nin altın cinsinden yükümlülüğü (zorunlu karşılık altını, bankaların ve Hazine'nin altını) ve fiyat değişince o da yeniden değerleniyor; net pozisyondaki etki net altınınkidir. Yeni değerler net altınla ve o günden bu yana gelen haftalık miktar verisiyle hesaplandı."
+  },
+  {
+   "tarih": "2026-10-05",
+   "alan": "Bir önceki beş iş gününün (17–23 Eylül) tahmini döviz akımı",
+   "eski": "7,1 milyar dolar çıkış",
+   "yeni": "4,3 milyar dolar çıkış",
+   "sebep": "Tahmini döviz akımı altın fiyat etkisini TCMB'nin brüt altınıyla düşüyordu. Altının yaklaşık 10 milyon onsu TCMB'nin altın cinsinden yükümlülüğü (zorunlu karşılık altını, bankaların ve Hazine'nin altını) ve fiyat değişince o da yeniden değerleniyor; net pozisyondaki etki net altınınkidir. Yeni değerler net altınla ve o günden bu yana gelen haftalık miktar verisiyle hesaplandı."
+  },
+  {
+   "tarih": "2026-10-05",
+   "alan": "Eylül'ün tamamında tahmini döviz çıkışı",
+   "eski": "9,7 milyar dolar",
+   "yeni": "13,3 milyar dolar (eylülün 22 seansı)",
+   "sebep": "Tahmini döviz akımı altın fiyat etkisini TCMB'nin brüt altınıyla düşüyordu. Altının yaklaşık 10 milyon onsu TCMB'nin altın cinsinden yükümlülüğü (zorunlu karşılık altını, bankaların ve Hazine'nin altını) ve fiyat değişince o da yeniden değerleniyor; net pozisyondaki etki net altınınkidir. Yeni değerler net altınla ve o günden bu yana gelen haftalık miktar verisiyle hesaplandı."
   }
  ]
 }
