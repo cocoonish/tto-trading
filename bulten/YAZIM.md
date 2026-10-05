@@ -97,7 +97,10 @@ tekrarla değil YENİ olguyla gelir (bkz. "Ayrıntı: notu ne uzatır, ne uzatma
    asıl haberi (kredi endekslerinin 1,6σ'lık ortak hareketi) ham listede hiç
    görünmüyordu. Manşete bakıp sebep uydurma; hareketin gerçek sürücüsünü bul.
 3. **Yaz.** Aşağıdaki bölümleri doldur; yamayı `yama.json` dosyasına yaz.
-   Okuma temiz bir işlem yapısına çevrilebiliyorsa fikirleri de aynı yamaya
+   **Her sayıda en az bir işlem fikri beklenir** (karar 05.10.2026; bkz.
+   "İşlem fikirleri (biçim 3)" → "Sayı"). Rutin metni "yaz.py yalnız
+   yorum/ozet/gundem alanlarına yazmana izin verir" diyorsa o cümle eskidir:
+   `fikirler` ve `fikir_kapat` da yazılabilir alanlardır. Fikirleri aynı yamaya
    yaz: önce `python3 bulten/fikir.py --evren --tarih <sayı günü>` (ölçülebilir
    bacaklar), sonra `python3 bulten/fikir.py --sina yama.json --tarih <sayı
    günü>` (bkz. "İşlem fikirleri (biçim 3)" → "İş akışı").
@@ -158,7 +161,7 @@ profesyoneli tarafından yazılmış gibi değil; çok tekrar var".
 | `gundem.risk` | Risk haritası · Senaryolar ve risk haritası | ≤220 · 600–1000 | haftalıkta evet; günlükte isteğe bağlı |
 | `gundem.karne` | Haftanın karnesi | — · 250–500 | evet |
 | `gundem.turkiye_makro` | Türkiye: makro, politika ve maliye | — · 700–1100 | evet |
-| `fikirler` | İşlem fikirleri | 0–3 · 3–6 fikir; fikir başına gerekçe ≤60 kelime | beklenir, zorunlu değil: günlükte temiz bir fikir yoksa hiç yazılmaz; haftalıkta yoksa UYARI |
+| `fikirler` | İşlem fikirleri | 1–3 · 3–6 fikir; fikir başına gerekçe ≤60 kelime | her sayıda en az bir fikir beklenir; yoksa UYARI (zorla fikir yazılmaz, sebebi bildirimde yazılır) |
 | `fikir_kapat` | İşlem fikirleri (karnede "erken kapandı") | kayıt başına bir sebep cümlesi | yalnız açık bir fikrin görüşü bozulduysa |
 | `duzeltmeler` | Düzeltmeler | — | yalnız yayımlanmış bir sayı düzeltilirken |
 
@@ -519,7 +522,9 @@ geçerli: **birbirini dışlayan iki patikaya ters yönlü iki doğrusal fikir
 yazılmaz** — biri öbürünün sigortası olur
 ve karne görüşü değil senaryo sayısını ölçer. Ana senaryo dışındaki bir patika
 ya asimetrik bir yapıyla (opsiyon: kayıp primle sınırlı) ya da ana patikayla
-çelişmeyen bir yapıyla ifade edilir. Fikir söz defterine ayrıca kaydedilmez;
+çelişmeyen bir yapıyla ifade edilir — ama yalnız tetiği bugünkü veride görünmeye
+başladıysa: tetiği henüz görünmeyen bir patika fikir değil izlemedir (bkz.
+"İşlem fikirleri (biçim 3)" → "Sayı"). Fikir söz defterine ayrıca kaydedilmez;
 karnesi kendi mekanik karnesidir.
 
 **4. Önümüzdeki hafta — gün gün.** Her gün bir paragraf:
@@ -696,32 +701,42 @@ için okunuşudur — ikisi çelişirse araç kazanır ve rehber düzeltilir.
    yapının değeri yeniden kurulur; hedef ya da stop bir kapanışta aşılırsa fikir
    o gün kapanır, ufuk dolarsa son kapanışla kapanır. Gün içi dokunuş ölçülmez.
    Söz defterinin isabeti yazarın notudur; fikrin sonucu seriden ölçülür.
-3. **Ölçülemeyen uydurulmaz.** TRY OIS, çapraz kur swap bazı, örtük oynaklık ve
-   tek hisse fiyatı elimizde yok: böyle bir fikir ya ölçülebilir bir vekille
-   yazılır ya da `olculemez` türüyle, sebebi yazılarak yayımlanır ve karneye
-   sonuçla girmez.
+3. **Ölçülemeyen fikir açılmaz** (karar 05.10.2026, kullanıcı: "ölçemeyeceğimiz
+   trade'i açmamamız gerekli"). TRY OIS, çapraz kur swap bazı, örtük oynaklık ve
+   tek hisse fiyatı elimizde yok: böyle bir görüş ya ölçülebilir bir vekille
+   yazılır ya da HİÇ yazılmaz. Karnesi tutulamayan bir fikir okura hesap
+   vermez; yazma kapısı `olculemez` türünü reddeder, denetim ENGEL sayar. Tür
+   yalnız bu karardan önce açılmış bir kayıt için tanımlı kalır.
 
 ### Sayı
 
-- **Günlük: 0–3 fikir. Temiz bir fikir yoksa hiç yazılmaz; zorla fikir
-  yazılmaz.** Temiz fikrin üç şartı var: okumanın bir mekanizması var, o
-  mekanizmayı ölçülebilir bir yapı taşıyor ve görüşü bozacak ölçülebilir,
-  tarihli bir koşul yazılabiliyor. Biri eksikse fikir yoktur. Her sabah fikir
-  yazmak karneyi fikir SAYISIYLA doldurur ve okur hangisine gerçekten
-  inanıldığını ayıramaz. Denetim fikirsiz günlük sayıyı bilgi satırı olarak
-  yazar (uyarı değil); 3'ün üstü UYARI.
+- **Her sayıda en az bir fikir: günlük 1–3** (karar 05.10.2026, kullanıcı: "her
+  bültende en az 1 trade fikri oluşturmaya çalışalım"). Okuma her sabah bir
+  yapıya çevrilmeye ÇALIŞILIR. Fikir yine de temiz olmak zorundadır ve temiz
+  fikrin dört şartı var: okumanın bir mekanizması var; **o mekanizmanın
+  gerekçesi bugünkü veride ya da akışta görünüyor**; mekanizmayı ölçülebilir bir
+  yapı taşıyor; görüşü bozacak ölçülebilir, tarihli bir koşul yazılabiliyor.
+  Biri eksikse fikir yoktur ve zorla yazılmaz — o sabah denetim UYARI verir,
+  yazar sebebini bildirimde tek cümleyle yazar. İkinci şart kuyruk fikrini
+  ayırır: "kur ritmi bozulursa", "Londra'da fonlama sıkışırsa" diye kurulan
+  bir fikrin tetiği henüz görünmüyorsa fikir değil İZLEMEDİR — söz defterine
+  ya da risk bölümüne yazılır, tetik veride görününce fikre çevrilir (04.10'da
+  böyle açılan iki fikir 05.10'da girişten önce geri çekildi). 3'ün üstü
+  UYARI.
 - **Haftalık: 3–6 fikir, en az iki varlık sınıfında** (`sinif`: faiz · fx ·
   hisse · emtia · kredi), **her biri bir senaryoya bağlı** (`senaryo`; bkz.
   "Haftaya bakış" → "Senaryodan işlem fikrine"). Fikirsiz ya da aralık dışı
-  haftalık sayı, tek sınıflı küme ve senaryosuz fikir UYARI alır.
+  haftalık sayı, tek sınıflı küme ve senaryosuz fikir UYARI alır. Aralık
+  dört şartı gevşetmez: aralığı doldurmak için kuyruk fikri açılmaz; temiz
+  fikir üçten azsa az yazılır ve aralık uyarısı bildirimde gerekçesiyle anılır.
 - **Açık fikir tavanı 12**, önceki sayılardan açık kalanlarla birlikte; aşılırsa
   UYARI — eskiyen fikir `fikir_kapat` ile kapatılır, üstüne yenisi yazılmaz.
 - **Aynı görüş iki kez açılmaz.** Açık bir fikir aynı yapıyı aynı yönde
   taşıyorsa yenisi yazılmaz; görüş değiştiyse eskisi kapatılır. Karne aynı
   görüşü iki kayıtla sayardı (söz defterindeki "aynı tetiğe bağlı açık kayıt"
   kuralının eşi).
-- **Ölçülemeyen fikir istisnadır**: sayı başına en çok bir (fazlası UYARI);
-  önce vekil denenir.
+- **Ölçülemeyen fikir açılmaz** (yukarıda 3. ilke): önce vekil denenir, vekil
+  yoksa fikir yazılmaz.
 
 ### Anatomi: alan alan
 
@@ -730,7 +745,7 @@ Sözleşme `fikir.dogrula()`dır. Yazar şu alanları yazar:
 | alan | ne yazılır | kural |
 |---|---|---|
 | `baslik` | yapının adı ve yönü; düz metin, en çok 80 karakter | "TL eğrisinde 2y–5y dikleştirici", "BIST Bankacılık / BIST 100 göreli"; emir kipi yok |
-| `tur` | `yalin` · `egri` · `kelebek` · `goreli` · `opsiyon` · `olculemez` | bkz. "Yapı kataloğu" |
+| `tur` | `yalin` · `egri` · `kelebek` · `goreli` · `opsiyon` | bkz. "Yapı kataloğu" (`olculemez` yalnız 05.10.2026'dan önce açılmış kayıtlarda) |
 | `bacaklar` | `[{"seri": …, "katsayi": …}]` | `seri` ölçülebilir evrenin kimliğidir (`--evren`); `katsayi` yalnız eğri ve kelebekte, verilmezse varsayılan; bacağın değeri ve tarihi YAZILMAZ |
 | `yon` | `yukari` · `asagi` | yapının DEĞERİ yükselirse mi düşerse mi kazanır — fiyatın değil, yapının; konvansiyon katalogda |
 | `hedef`, `stop` | sayı, yapının kendi biriminde | bkz. "Seviyeler"; opsiyonda yazılmaz |
@@ -741,7 +756,7 @@ Sözleşme `fikir.dogrula()`dır. Yazar şu alanları yazar:
 | `senaryo` | kısa etiket | haftalıkta beklenir; patikanın `<h3>` başlığıyla açılır ("Ana senaryo", "Kuyruk: rezerv aşınması kur ritmini bozar") |
 | `enstruman` | düz metin | gerçek enstrüman ölçülen bacaklardan farklıysa (vekil: "TRY OIS 2 yıl / 5 yıl"); ölçülemezde zorunlu |
 | `opsiyon` | `{"tip", "kullanim", "vade"}` | yalnız opsiyonda; bkz. katalog |
-| `olculemez_sebep` | düz metin | yalnız ölçülemezde ve zorunlu: ne eksik ("çapraz kur swap kotasyonu elimizde yok") |
+| `olculemez_sebep` | düz metin | yalnız 05.10.2026 öncesi ölçülemez kayıtlarda; yeni fikirde yazılmaz |
 | `sinif` | `faiz` · `fx` · `hisse` · `emtia` · `kredi` | isteğe bağlı; verilmezse ilk bacağın sınıfı (ölçülemezde `faiz`) |
 
 **Makine yazar, yazar yazmaz:** `kimlik` (sayının tarihi ve sıra, "2026-10-04-1";
@@ -774,7 +789,7 @@ görüşü ne bozar fikirden ÖNCE yazılır.
 | `kelebek` | kelebek (fly) | görüş bükümdür: bir vade komşularına göre ucuzlar ya da pahalanır | 3 getiri, kanat–gövde–kanat; varsayılan `[−1, +2, −1]` | Σ kᵢ·yᵢ, bp (varsayılanla 2·gövde − kanatlar) | gövdede ödeyen (long fly) | gövdede alan (short fly) |
 | `goreli` | göreli değer | görüş iki varlığın ayrışmasıdır; ortak sürücü dışarıda kalır | 2 fiyat, A / B | oran; sonuç % | A, B karşısında güçlenir | A zayıflar |
 | `opsiyon` | opsiyon | görüş asimetriktir ya da kayıp sınırlanmalıdır | 1 fiyat (dayanak) | dayanak fiyatı; sonuç vade sonu ödemesi | alım, alım yayılımı, risk dönüşümü (alım alınır, satım yazılır) | satım, satım yayılımı, risk dönüşümü (satım alınır, alım yazılır) |
-| `olculemez` | ölçülemeyen | enstrümanın fiyatı da ölçülebilir vekili de yok | yok | yok | — | — |
+| `olculemez` | ölçülemeyen — 05.10.2026'dan beri AÇILMAZ | enstrümanın fiyatı da ölçülebilir vekili de yok | yok | yok | — | — |
 
 **Yalın.** Seviye görüşünün en düz ve çoğu zaman en pahalı ifadesi: TL'de uzun
 durasyon ters eğride beklerken öder, kısa uçta seviye hareketi büyüktür. Yalın,
@@ -877,9 +892,10 @@ spot düğümleriyle yazılır ve gerçek enstrüman `enstruman` alanına girer 
 sektörünü temsil eden bir hisse görüşü sektör endeksiyle yazılabilir, hisseye
 özgü bir görüş (bilanço, temettü, birleşme) yazılamaz; görüşün KENDİSİ iki
 enstrüman arasındaki makassa (OIS–Londra bazı, swap makası) bacaklardan hiçbiri
-onu taşıyamaz. Vekil yoksa `olculemez` türü: `enstruman` ve `olculemez_sebep`
-zorunlu; bacak, yön, hedef ve stop yazılmaz; fikir karneye sonuçla girmez
-("karnesi tutulmuyor") ve ufku dolunca sonuçsuz kapanır ("ufku doldu").
+onu taşıyamaz. **Vekil yoksa fikir yazılmaz** (karar 05.10.2026). Eski
+`olculemez` türü (`enstruman` ve `olculemez_sebep` zorunlu, bacaksız, karneye
+sonuçla girmeyen kayıt) yalnız bu karardan önce açılmış kayıtlar için
+tanımlıdır; yazma kapısı yenisini reddeder.
 
 ### Ölçülebilir evren
 
@@ -1161,7 +1177,11 @@ fiyatlandığı vade 3 aydır, 2 yıl değil.
 güçlenirse kazanır · giriş 1,2747 · getiri/risk 1,26 · stop mesafesi %4,68
 (günlük σ %1,92).
 
-**FX opsiyon (kuyruk).** Okuma: kuyruk patikasında 1 aylık devalüasyon hızının
+**FX opsiyon (kuyruk).** Yapının biçimi için örnektir, ZAMANLAMASI için
+değil: bu fikir 04.10'da açıldı ve 05.10'da girişten önce geri çekildi, çünkü
+kuyruk patikasının tetiği (kur ritminin bozulması) o gün veride görünmüyordu
+("Sayı" → temiz fikrin ikinci şartı). Aynı yapı, ritim bozulmaya başladığı gün
+açılır. Okuma: kuyruk patikasında 1 aylık devalüasyon hızının
 beş günlük ortalaması 21,4'ten 25'in üstüne çıkar. Fiili giriş 5 Ekim kapanışı,
 vadeye 46 gün: TLREF %36,84 ve ABD 3 aylık %3,99 ile ileri kur ≈ 51,2. Alt
 kullanım fiyatı ileri kurun hizasında ve yıllıklandırılmış yaklaşık %34'lük bir
@@ -1184,22 +1204,11 @@ hız ister; gerekçe bunu ölçülen hızla yan yana yazar.
 üstünde kapanırsa öder; ödeme üst kullanım fiyatında (53,00) tavana ulaşır ·
 giriş 49,14.
 
-**Ölçülemeyen (kuyruk).** Aynı patikanın faiz tarafı: OIS–Londra bazının vekili
-yok, çünkü görüşün kendisi iki faiz arasındaki makastır. `enstruman` yapının
-yönünü de söyler.
-
-```json
-{"baslik": "Londra'da TL fonlaması pahalanır: TRY OIS–offshore bazı",
- "tur": "olculemez",
- "sinif": "faiz",
- "enstruman": "3 aylık offshore örtük TL faizinde ödeyen, TRY OIS'te sabit alan (baz genişlerse kazanır)",
- "olculemez_sebep": "çapraz kur swap ve Londra TL kotasyonu elimizde yok",
- "ufuk": "2026-11-20",
- "gerekce": "Kuyruk patikasının savunma dalı: taşıma pozisyonları çözülmeye başlarsa TCMB kur ritmini korumak için yurt dışına verilen TL likiditesini daraltır, fonlamayı koridor üst bandına yaklaştırır ve Londra'daki örtük TL faizi yurt içi OIS'in üstüne çıkar. Çıplak OIS yerine baz: yurt içi eğrinin yönünden bağımsız, yalnız offshore sıkışmayı alır.",
- "ne_bozar": "Tahmini döviz akımı ekimin ilk haftasında günlük ortalamada sıfıra yaklaşır ve TLREF politika faizinin altında kalırsa offshore sıkışmanın tetiği oluşmaz.",
- "dayanak": "risk",
- "senaryo": "Kuyruk — savunma dalı"}
-```
+**Ölçülemeyen fikir yazılmaz.** 04.10'da aynı patikanın faiz tarafı (TRY
+OIS–Londra bazı) `olculemez` türüyle açılmıştı; görüşün kendisi iki faiz
+arasındaki makas olduğu için vekili yoktu ve karnesi tutulamıyordu. 05.10'da
+girişten önce geri çekildi ve tür yeni fikre kapandı: vekili olmayan bir görüş
+risk bölümünde ya da söz defterinde izlenir, fikir olarak açılmaz.
 
 ## Haftalık teknik analiz — SONA ERDİ (27.09.2026 sayısı son sayı)
 

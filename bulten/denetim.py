@@ -1322,9 +1322,16 @@ class Denetim:
     # Sayı aralığı (bkz. YAZIM.md "İşlem fikirleri"): günlükte temiz bir fikir
     # yoksa hiç yazılmaz — eksiklik bilgi satırıdır, uyarı değil (kapanamayan
     # bir uyarı yazarı bütün uyarıları görmezden gelmeye alıştırır).
-    FIKIR_ARALIK = {"gunluk": (0, 3), "haftalik": (3, 6)}
+    FIKIR_ARALIK = {"gunluk": (1, 3), "haftalik": (3, 6)}
     FIKIR_ACIK_AZAMI = 12
     FIKIR_BASLANGIC = "2026-10-05"     # ilk sayı; öncesinde bölüm yoktu
+    # Rutinlerin metni claude.ai'de durur ve bir aracı onu değiştiremez (27.08
+    # ilkesi); iki rutin de hâlâ "yaz.py yalnız yorum/ozet/gundem alanlarına
+    # yazmana izin verir" diyor. Eski talimatı ADIYLA anmak, yazarın rehberi
+    # rutin metninin önüne koymasını sağlar (beyan dışı kimlik reddinin eşi).
+    FIKIR_ALAN_NOTU = ("Rutin metnindeki 'yalnız yorum/ozet/gundem' cümlesi eskidir: "
+                       "`fikirler` ve `fikir_kapat` da yazılabilir alanlardır — rehber "
+                       "esastır (YAZIM.md › İşlem fikirleri).")
     FIKIR_GEREKCE_KELIME = 70
     FIKIR_BASLIK_KARAKTER = 80
     FIKIR_STOP_Z = 0.5
@@ -1351,9 +1358,23 @@ class Denetim:
         if not liste and str(b.get("tarih") or "") < self.FIKIR_BASLANGIC:
             return          # bölüm bu tarihten önce yoktu; arşiv sayısı ölçülmez
         if not liste:
-            (self.uyari if kip == "haftalik" else self.bilgi).append(
-                "Bu sayıda işlem fikri yok" + (f" (haftalıkta {alt}–{ust} beklenir)"
-                                               if kip == "haftalik" else ""))
+            # HER SAYIDA EN AZ BİR FİKİR (karar 05.10.2026, kullanıcı: "her
+            # bültende en az 1 trade fikri oluşturmaya çalışalım"). İlk biçim 3
+            # günlük sayısı fikirsiz yayımlandı: rutin metni yazara "yalnız
+            # yorum/ozet/gundem" diyordu, rehber günlük fikri isteğe bağlı
+            # sayıyordu ve bu satır bilgi olarak üretilip HİÇ BASILMIYORDU.
+            # UYARI, engel değil: gerekçesi bugün görünmeyen bir fikri zorla
+            # açmak, fikirsiz bir sayıdan pahalıdır. Arşiv sayısına fikir
+            # yazılamaz (yaz.py), yani orada uyarı kapanamazdı: bilgi kalır.
+            if self._arsiv_sayisi():
+                self.bilgi.append("Bu sayıda işlem fikri yok")
+            else:
+                self.uyari.append(
+                    f"Bu sayıda işlem fikri yok — {'haftalık' if kip == 'haftalik' else 'günlük'} "
+                    f"sayıda {alt}–{ust} beklenir"
+                    + (", her biri bir senaryoya bağlı" if kip == "haftalik" else "")
+                    + ". Gerekçesi bugünkü veride görünen, ölçülebilir bir yapı yoksa fikir "
+                    "zorlanmaz; bildirimde sebebini yaz. " + self.FIKIR_ALAN_NOTU)
         elif len(liste) < alt or len(liste) > ust:
             self.uyari.append(f"İşlem fikri sayısı {len(liste)} — "
                               f"{'haftalık' if kip == 'haftalik' else 'günlük'} sayıda {alt}–{ust} beklenir")
@@ -1459,7 +1480,14 @@ class Denetim:
                 n = len(_duz(str(f.get(alan) or "")).split())
                 if n > tavan:
                     self.uyari.append(f"{ad}: {alan} {n} kelime (en çok {tavan})")
-        if sum(1 for f in liste if f.get("tur") == "olculemez") > 1:
+        # Ölçülemeyen fikir 05.10.2026'dan beri açılmaz (fikir.OLCULEMEZ_YASAK);
+        # yazma kapısı reddeder, bu ölçüt dosyaya başka yoldan gireni sorar.
+        # Öncesinde açılmış kayıtlar kendi kuralıyla (en çok bir) ölçülür.
+        olculemez = [f for f in liste if f.get("tur") == "olculemez"]
+        if olculemez and str(b.get("tarih") or "") >= _f.OLCULEMEZ_YASAK:
+            self.engel.append(f"ölçülemeyen fikir açılmaz (karar {_f.OLCULEMEZ_YASAK}): "
+                              + ", ".join(str(f.get("baslik") or f.get("kimlik"))[:50] for f in olculemez))
+        elif len(olculemez) > 1:
             self.uyari.append("Bu sayıda birden çok ölçülemeyen fikir var — karnesi tutulamayan "
                               "fikir istisnadır; önce ölçülebilir bir vekil denenir")
         if kip == "haftalik" and len(liste) >= alt and len({f.get("sinif") for f in liste}) < 2:
@@ -2474,6 +2502,11 @@ class Denetim:
         if self.ayrinti:
             for m in self.gecen:
                 print(f"  ✓ {m}")
+        # Bilgi satırları da BASILIR. Liste üretiliyor ama hiçbir yerde
+        # basılmıyordu: "fikirsiz günlük sayı" satırı yazara hiç ulaşmadı ve
+        # duman maddesi listeyi doğrudan okuduğu için yeşil geçti (05.10.2026).
+        for m in self.bilgi:
+            print(f"  · {m}")
         for m in self.uyari:
             print(f"  ! {m}")
         for m in self.engel:

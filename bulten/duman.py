@@ -2044,6 +2044,76 @@ def _fikir_denetim_ve_olcum():
         _f.karne = gercek
 
 
+def _fikir_karar_kapisi():
+    """Karar 05.10.2026: her sayıda en az bir fikir (yoksa bugünün sayısında
+    UYARI, arşivde bilgi), ölçülemeyen fikir açılmaz (yazma kapısı reddeder,
+    denetim ENGEL), denetimin bilgi satırları BASILIR ve zincir aracı yazarın
+    ilk ekranına fikir hatırlatmasını koyar. İlk biçim 3 günlük sayısı fikirsiz
+    çıktı: "fikir yok" satırı bilgi kovasına düşüyor ve hiç basılmıyordu, eski
+    duman maddesi listeyi doğrudan okuduğu için bunu göremezdi."""
+    import contextlib, io, re as _re, tempfile
+    import denetim as _den, fikir as _f, zincir as _z
+    # (a) kos() bilgi satırlarını basar — listeyi değil ÇIKTIYI sor.
+    d = _den.Denetim(_fk_sayi())
+    for ad in set(_re.findall(r"self\.(\w+)\(\)", inspect.getsource(_den.Denetim.kos))):
+        setattr(d, ad, lambda: None)
+    d.bilgi.append("DUMAN-BILGI-SATIRI")
+    with contextlib.redirect_stdout(io.StringIO()) as c:
+        d.kos()
+    assert "DUMAN-BILGI-SATIRI" in c.getvalue(), "denetim bilgi satırlarını basmıyor"
+    # (b) bugünün sayısında fikir yoksa UYARI (günlük ve haftalık), arşivde bilgi.
+    for haftalik in (False, True):
+        for arsiv in (False, True):
+            dy = _den.Denetim(_fk_sayi(tarih="2026-10-06", haftalik=haftalik))
+            dy._arsiv_sayisi = (lambda a=arsiv: a)
+            dy.fikirler()
+            uy = [u for u in dy.uyari if "işlem fikri yok" in u]
+            bi = [u for u in dy.bilgi if "işlem fikri yok" in u]
+            if arsiv:
+                assert bi and not uy, (haftalik, dy.uyari, dy.bilgi)
+            else:
+                assert uy and not bi, (haftalik, dy.uyari, dy.bilgi)
+                assert "yorum/ozet/gundem" in uy[0], uy
+    assert _den.Denetim.FIKIR_ARALIK["gunluk"][0] >= 1, "günlük sayıda en az bir fikir beklenir"
+    # (c) ölçülemeyen fikir yazma kapısında reddedilir; karardan önceki gün kabul.
+    olc = {"baslik": "Londra bazı", "tur": "olculemez", "enstruman": "TRY OIS–offshore bazı",
+           "olculemez_sebep": "kotasyon yok", "gerekce": "g", "ne_bozar": "n", "ufuk": "2026-11-20"}
+    try:
+        _f.dogrula(dict(olc), _fk_sayi(tarih="2026-10-06"), 1)
+        raise AssertionError("ölçülemeyen fikir 05.10 sonrası yazma kapısından geçti")
+    except _f.FikirHatasi as e:
+        assert "ölçülemeyen fikir açılmaz" in str(e), e
+    assert _f.dogrula(dict(olc), _fk_sayi(tarih="2026-10-02"), 1)["tur"] == "olculemez"
+    # (d) dosyaya başka yoldan giren ölçülemez fikir ENGEL; eski sayıda değil.
+    kayit = {"kimlik": "x-1", "baslik": "Londra bazı", "tur": "olculemez", "gerekce": "g",
+             "ne_bozar": "n", "ufuk": "2026-11-20", "dayanak": "turkiye"}
+    for tarih, engel in (("2026-10-06", True), ("2026-10-04", False)):
+        de = _den.Denetim(_fk_sayi(tarih=tarih, fikirler=[dict(kayit)])); de.fikirler()
+        assert any("ölçülemeyen fikir açılmaz" in e for e in de.engel) == engel, (tarih, de.engel)
+    # (e) zincir: yazılmamış biçim 3 sayıda hatırlatma ve açık fikirler; yazılmışta sessiz.
+    gercek = _z.BULTENLER
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            _z.BULTENLER = Path(td)
+            b = _fk_sayi(tarih="2026-10-06", gundem_kaynagi="otomatik",
+                         fikir_karne={"kayitlar": [{"kimlik": "2026-10-04-1", "baslik": "TL 2y–5y",
+                                                    "durum": "acik", "ufuk": "2026-10-23"}]})
+            yol = Path(td) / "2026-10-06.json"
+            yol.write_text(json.dumps(b, ensure_ascii=False), encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()) as c:
+                _z._fikir_blogu(dt.date(2026, 10, 6))
+            o = c.getvalue()
+            assert "en az bir fikir" in o and "2026-10-04-1" in o and "yorum/ozet/gundem" in o, o
+            for degis in ({"gundem_kaynagi": "yazili"}, {"surum": 2}):
+                yol.write_text(json.dumps(dict(b, **degis), ensure_ascii=False), encoding="utf-8")
+                with contextlib.redirect_stdout(io.StringIO()) as c:
+                    _z._fikir_blogu(dt.date(2026, 10, 6))
+                assert not c.getvalue().strip(), (degis, c.getvalue())
+    finally:
+        _z.BULTENLER = gercek
+    assert '("fikir", _fikir_blogu)' in inspect.getsource(_z._ek_bloklar), "fikir bloğu zincirde koşmuyor"
+
+
 def _fikir_zaman_tasima_dongu():
     """İnceleme 04.10.2026: fiili giriş YAZIM ANINDAN sonra kapanan ilk seans ·
     USD/TRY'nin sonucu taşımayı içerir · ölçülemeyenin yaşam döngüsü · ufuk günü
@@ -6567,6 +6637,8 @@ def main() -> int:
          _fikir_karne_mekanik)
     sina("işlem fikri: yazma kapısı — yalnız bugün, biçim 3, açık fikir, taraf", _fikir_yazma_kapisi)
     sina("işlem fikri: denetim ve ölçüm katmanı — kapsam, taraf, dil, karne bloğu", _fikir_denetim_ve_olcum)
+    sina("işlem fikri: her sayıda en az bir fikir, ölçülemeyen açılmaz, bilgi satırı basılır, zincir hatırlatır",
+         _fikir_karar_kapisi)
     sina("işlem fikri: yazım anı · taşıma · ölçülemez döngüsü · ufuk günü · kümülatif defter · donma · alt eğri · değişmezlik · yeniden ölçüm",
          _fikir_zaman_tasima_dongu)
 

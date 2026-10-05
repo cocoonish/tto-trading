@@ -197,7 +197,7 @@ def _zincir_durumu(bugun: dt.date) -> tuple[int, list[str]]:
 
 def _ek_bloklar(bugun: dt.date) -> None:
     for ad, fn in (("gecikme", _gecikme_blogu), ("tema", _tema_blogu),
-                   ("atlanan", _atlanan_blogu)):
+                   ("atlanan", _atlanan_blogu), ("fikir", _fikir_blogu)):
         try:
             fn(bugun)
         except Exception as e:                                 # noqa: BLE001
@@ -274,6 +274,48 @@ def _tema_blogu(bugun: dt.date) -> None:
               "sonra bulten.yml'i --yeniden-olc ile tetikle, sonra yaz —")
     _yaz(" ", "  yazarken fark edilirse ölçüm ikinci kez kurulur ve bülten "
               "o kadar geç çıkar.")
+
+
+def _fikir_blogu(bugun: dt.date) -> None:
+    """İşlem fikri kararını yazarın İLK gördüğü ekrana koyar.
+
+    05.10.2026'da ilk biçim 3 günlük sayısı fikirsiz yayımlandı: rutin metni
+    "yaz.py yalnız yorum/ozet/gundem alanlarına yazmana izin verir" diyordu,
+    rehber fikri isteğe bağlı sayıyordu ve denetimin "fikir yok" satırı
+    basılmıyordu. Rutin metnini bir aracı değiştiremez (27.08 ilkesi); bu blok
+    yazarın sabah koşturduğu ilk araçta eski talimatı adıyla anar ve 05.10
+    kararını ("her sayıda en az bir fikir; gerekçesi görünmeyen ya da
+    ölçülemeyen fikir açılmaz") yazarın önüne koyar. Yalnız yazılmamış biçim 3
+    sayıda basılır; kodu etkilemez.
+    """
+    dosya = BULTENLER / f"{bugun.isoformat()}.json"
+    if not dosya.exists():
+        return
+    b = json.loads(dosya.read_text(encoding="utf-8"))
+    if int(b.get("surum") or 2) < 3 or b.get("gundem_kaynagi") == "yazili":
+        return
+    kayitlar = [k for k in ((b.get("fikir_karne") or {}).get("kayitlar") or [])
+                if isinstance(k, dict) and k.get("durum") in ("acik", "olculemez")]
+    print()
+    print("  İŞLEM FİKİRLERİ:")
+    if kayitlar:
+        _yaz("·", f"Açık fikir {len(kayitlar)} (karne): görüşü bozulan için `fikir_kapat`.")
+        for k in kayitlar[:12]:
+            ek = "ölçülemez" if k.get("durum") == "olculemez" else (
+                "giriş bekleniyor" if k.get("giris_bekleniyor") else "açık")
+            _yaz(" ", f"  {k.get('kimlik')} · {str(k.get('baslik') or '')[:60]} "
+                      f"({ek}, ufuk {k.get('ufuk') or '—'})")
+    else:
+        _yaz("·", "Açık fikir yok.")
+    if b.get("haftalik"):
+        _yaz("!", "Haftalık sayı 3–6 fikir taşır: en az iki varlık sınıfında, her biri "
+                  "bir senaryoya bağlı.")
+    else:
+        _yaz("!", "Her sayıda en az bir fikir beklenir (1–3, `fikirler`).")
+    _yaz(" ", "  Gerekçesi bugünkü veride görünmeyen fikir açılmaz; ölçülemeyen fikir "
+              "açılmaz (`--evren`).")
+    _yaz(" ", "  Rutin metnindeki 'yalnız yorum/ozet/gundem' cümlesi eskidir — rehber "
+              "esastır (YAZIM.md › İşlem fikirleri).")
 
 
 def _atlanan_blogu(bugun: dt.date) -> None:

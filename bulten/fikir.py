@@ -106,6 +106,11 @@ DIBS = {
 ABD_VADE = {"^IRX": 0.25, "^FVX": 5.0, "^TNX": 10.0, "^TYX": 30.0}
 
 TURLER = ("yalin", "egri", "kelebek", "goreli", "opsiyon", "olculemez")
+# ÖLÇÜLEMEYEN FİKİR AÇILMAZ (karar 05.10.2026, kullanıcı: "ölçemeyeceğimiz
+# trade'i açmamamız gerekli"). Tür yalnız bu tarihten ÖNCE açılmış kayıtlar
+# için tanımlı kalır: 04.10'da açılan TRY OIS–offshore bazı fikri karnede ve
+# Tradeler defterinde kendi türüyle okunmaya devam eder.
+OLCULEMEZ_YASAK = "2026-10-05"
 # Karnenin kapanmış durumları (donar; bir sonraki sayı yeniden hesaplamaz).
 KAPANMIS = ("hedef", "stop", "sure", "geri_cekildi", "vade", "olculemedi", "sure_olculemez",
             "giriste_gecersiz")
@@ -513,6 +518,10 @@ def dogrula(g: dict, b: dict, sira: int, ev: dict[str, Seri] | None = None,
     for alan in ("enstruman", "senaryo"):
         if str(g.get(alan) or "").strip():
             f[alan] = " ".join(str(g[alan]).split())
+    if tur == "olculemez" and bugun.isoformat() >= OLCULEMEZ_YASAK:
+        raise FikirHatasi(f"{on}: ölçülemeyen fikir açılmaz (karar {OLCULEMEZ_YASAK}) — sonucu "
+                          "ölçülemeyen bir yapı karneye giremez; ölçülebilir bir vekil yoksa "
+                          "fikir yazılmaz (python3 bulten/fikir.py --evren)")
     if tur == "olculemez":
         sebep = str(g.get("olculemez_sebep") or "").strip()
         if not sebep or not f.get("enstruman"):

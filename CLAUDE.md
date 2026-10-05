@@ -4399,8 +4399,9 @@ rutinin `git add -A`'sı. Yazılmamış bir sayının fikri karneye girmez.
 
 "Uydurma yok" ilkesinin bu alandaki karşılığı:
 - **Ölçülemeyen enstrüman.** Elimizde TRY OIS, çapraz kur swap bazı, örtük oynaklık ve tek
-  hisse fiyatı yok. Böyle bir fikir ya ölçülebilir bir VEKİLLE yazılır ya da `olculemez`
-  türüyle, sebebi yazılarak yayımlanır ve sonucu olmaz. Vekil örneği: TRY OIS dikleştirici
+  hisse fiyatı yok. Böyle bir fikir ölçülebilir bir VEKİLLE yazılır ya da HİÇ yazılmaz
+  (karar 05.10.2026, aşağıda; `olculemez` türü yalnız o günden önce açılmış kayıt için
+  tanımlı). Vekil örneği: TRY OIS dikleştirici
   → DİBS spot düğümleri ve `enstruman` alanı; karne vekille tutulur, OIS–DİBS makası
   ölçülmez.
 - **Opsiyon primi ölçülmez.** Karne vade sonu ödemesini dayanağın kapanışından yazar,
@@ -4424,7 +4425,8 @@ Kapılar:
 - `denetim.fikirler`:
   - ENGEL: yapısal tutarsızlık.
   - UYARI: getiri/risk < 1; stop yapının bir günlük σ'sının altında ya da ufka ölçekli beklenen hareketin yarısından yakın; hedef o hareketin 2,5 katından uzak; dayanaksız ya da boş bölüme dayanan fikir; aynı görüş iki kez; haftalıkta senaryosuz ya da tek sınıf; açık fikir > 12.
-  - Bilgi: günlükte fikirsiz sayı. Temiz bir fikir yoksa zorla fikir yazılmaz.
+  - Fikirsiz sayı: bugünün sayısında UYARI (günlük 1–3, haftalık 3–6 beklenir), arşiv sayısında bilgi — oraya fikir yazılamaz, uyarı kapanamazdı. Zorla fikir yazılmaz (karar 05.10.2026, aşağıda).
+  - ENGEL: 05.10.2026'dan sonra açılmış ölçülemez fikir (`fikir.OLCULEMEZ_YASAK`).
 - Dil ölçütleri yalnız okura giden METİN alanlarını tarar (`fikir.METIN_ALANLARI`). Kimlik, seri ve dayanak makine alanıdır; taranırsa kod dili sanılır.
 - Sayfa sınavında fikrin derlenmiş sayfaya basıldığını soran ölçütler: bülten kartı (25d) ve Tradeler defteri (25e: her fikrin kartı defterde, kapanmış ölçülebilir fikir kapanan bölümünde).
 - `tweet/duman.py`'de gönderiye girmeme kilidi, günlük ve haftalık iki kipte de.
@@ -4454,6 +4456,7 @@ AÇIK, adıyla:
   küçük bir sıçrama olarak görünebilir.
 - **Rutin metni.** Rutin hâlâ "yalnız yorum/ozet/gundem alanlarına yazabilirsin" diyor.
   Rehber esastır ve araç `fikirler`i kabul ediyor; metnin güncellenmesi kullanıcının işi.
+  Sigorta araçta (05.10.2026, aşağıda): zincir ve denetim eski cümleyi adıyla anıyor.
 
 İNCELEME (donmuş kopyaya karşı dört mercek: masa · ölçüm · kapı · rehber). Mercekler yayından
 önce şu sınıfları buldu ve hepsi kayda değer, çünkü bir karnenin kendini kandırdığı yerler
@@ -4530,3 +4533,31 @@ dokunur, 2,5 kattaki hedefe %1'in altında ulaşır. Eşikler değişmedi, gerek
 Ders: inceleme bitmeden uygulanan bir düzeltme, hükümler gelince yeniden sorulur; arka
 plandaki bir doğrulama turu kaybolabilir, kaydı (journal) kaybolmaz ve okunmadan iş bitmiş
 sayılmaz.
+
+**KARAR (05.10.2026, kullanıcı) — HER SAYIDA EN AZ BİR FİKİR; GEREKÇESİ BUGÜN
+GÖRÜNMEYEN YA DA ÖLÇÜLEMEYEN FİKİR AÇILMAZ; ve BASILMAYAN BİR BİLGİ SATIRI YOKTUR.**
+Kullanıcı: "Bugünkü günlük bültende hiç trade idea yok", ardından "Her bültende en az 1
+trade fikri oluşturmaya çalışalım. Ancak try call opsiyonu ve londra basisi artması gibi
+daha gerekçe görmediğimiz şeyi çok erken açmışız … Ayrıca ölçemeyeceğimiz trade'i
+açmamamız gerekli". İlk biçim 3 günlük sayısı (05.10) fikirsiz yayımlandı ve sebep üç
+katmandı, üçü de bu dosyada adı olan sınıflardan. (1) Rutin metni yazara "yaz.py yalnız
+yorum/ozet/gundem alanlarına yazmana izin verir" diyordu; bir aracı o metni
+değiştiremez (27.08). (2) Rehber günlük fikri isteğe bağlı sayıyordu. (3) Denetimin
+"fikirsiz günlük sayı" satırı `bilgi` listesine düşüyor ve `kos()` o listeyi HİÇ
+BASMIYORDU; duman maddesi listeyi doğrudan okuduğu için yeşil geçti — ölçü var,
+tüketici yok, ve fikstür çıktıya değil listeye bakıyordu. Bilgi satırları artık basılıyor
+ve madde ÇIKTIYI soruyor.
+Yeni kural: bugünün sayısında fikir yoksa UYARI (günlük 1–3, haftalık 3–6); ENGEL
+değil, çünkü gerekçesi görünmeyen bir fikri zorla açmak fikirsiz bir sayıdan
+pahalıdır. Temiz fikrin şartlarına dördüncüsü eklendi: **gerekçe bugünkü veride ya da
+akışta görünür** — "kur ritmi bozulursa", "Londra'da fonlama sıkışırsa" diye kurulan bir
+fikrin tetiği henüz görünmüyorsa o bir İZLEMEDİR, fikir değil; haftalık aralığı
+doldurmak için kuyruk fikri açılmaz. Ölçülemeyen fikir yazma kapısında reddediliyor
+(`fikir.OLCULEMEZ_YASAK`), dosyaya başka yoldan girerse denetim ENGEL sayıyor; tür
+yalnız o günden önceki kayıt için tanımlı kalıyor. Sigorta yazarın ilk ekranında:
+`zincir.py` yazılmamış biçim 3 sayıda açık fikirleri ve kuralı basıyor, eski rutin
+cümlesini adıyla anıyor; aynı not denetimin uyarısında. 04.10'un iki fikri (USD/TRY
+51,25/53,00 alım yayılımı · TRY OIS–offshore bazı) 05.10 sayısına yazılan çıkış emriyle
+girişten önce geri çekildi: fiili girişleri 05.10 kapanışıydı, yani hiç taşınmadılar ve
+sonuçları yoktur. Yayımlanmış sayıdan silinmediler — okur onları gördü. Sekiz arıza
+enjeksiyonunun sekizi yeni maddede yakalanıyor.
