@@ -1,0 +1,24 @@
+# analiz:tufe-eylul-ppk-2026-10-05 · 2026-10-05T15:14:20+00:00 · https://x.com/i/status/2107127248285466730
+
+Analiz — 5 Ekim 2026
+Eylül TÜFE — yıllık oran %30'un altında, ama 22 Ekim PPK'si için asıl haber eğilimde
+
+Eylül TÜFE'si aylık %1,84, yıllık %29,73 geldi; 22 Ekim'de indirim ihtimalini artıran asıl haber yıllık orandaki düşüş değil, eğilimdeki yavaşlama. Yıllık oran 1,78 puan indi ve Kasım 2021'den beri ilk kez %30'un altında; bu düşüşün 0,97 puanı Ağustos'un arındırılmış hızı sürseydi de gelecekti, %30'un altına inişi ise eğilim getirdi. Mevsimsellikten arındırılmış aylık oran %2,12'den %1,49'a, son üç ayın yıllıklandırılmışı %29,23'ten %25,31'e, ağırlıklı medyanınki %29,13'ten %24,88'e indi; hedefin aylık karşılığını aşan kalemlerin ağırlığı Temmuz'da %83,3, Ağustos'ta %73,2, Eylül'de %65,3. Yıl sonu aritmetiği bu hıza elveriyor ama marjı mevsim kalıbına bağlı: bugünkü arındırılmış hız (aylık %1,90) son iki yılın mevsimselliğiyle yıl sonunu %28,98–29,50'de, 2022–2023'ünküyle %30,02–30,52'de bitirir.
+
+İndirim ihtimali arttı mı? Arttı — yıllık orandaki düşüş yüzünden değil, eğilim yüzünden. Arındırılmış aylık oran, üç aylık momentum ve medyan aynı ayda birlikte geriledi; kırpılmış ortalamanın üç aylık yıllıklandırılmışı da %24,97'den %23,10'a indi, aylığı ise yatay kaldı (%1,63 → %1,66). Yıllık oranın %30'un altına inişini de eğilim getirdi.
+
+Ne geldi? Manşet anketin altında, çekirdek manşetin üstünde. Çekirdek C aylık %2,14 ile manşetin 0,30 puan üstünde: düşen gıda manşette, C'nin dışında; giyim ve eğitimin mevsimselliği farkın yalnız 0,08 puanını açıklıyor. Hizmet yıllık %37,66 ile Mart 2022'den beri en düşük; enerji yıllık %46,12 ile yükseliyor.
+
+Sürpriz mi? TCMB anketi %2,12 bekliyordu; −0,28 puanlık sapma anketin son 36 aydaki ortalama mutlak hatasının (0,51 puan) 0,55 katı, yani bu ölçüye göre sürpriz değil. AA Finans anketinin ortalaması %2,18 idi; gerçekleşme o ankette verilen en düşük tahminin de 0,06 puan altında.
+
+Yıllık enflasyon nereye gidiyor? Bugünkü arındırılmış hız sürer ve mevsimsellik geçen yılınki gibi olursa yıllık oran Ekim'de %29,33, Kasım'da %29,38 olur ve yıl eşiğin altında biter; daha sığ eski mevsimsellikle Aralık eşiğin hemen üstüne çıkar. Son 12 ayın ortalama hızı oranı Kasım'da %30,13'e taşır. Anketin patikası %29,00, %29,34 ve %29,61 diyor.
+
+Reel faiz: Gerçekleşene bakan reel faiz %4,18'den %5,60'a, eğilime bakan %6,01'den %9,33'e çıktı: politika faizi değişmeden duruş bu iki ölçüde sıkılaştı. Beklentiye bakan ölçü yerinde (%10,76 → %10,75); anketin faiz ve enflasyon beklentisinden kurulan ileriye dönük ölçü %9,79'dan %9,21'e geriledi.
+
+Eğri ne fiyatlamıştı? 2 Ekim kapanışında 1 yıllık DİBS getirisi %39,74, bileşiğe çevrilmiş politika faizinin (%44,58) 484 bp altındaydı; ama aynı fark 3 ayda daha geniş (694 bp), yani vade kısaldıkça büyüyor ve tek başına indirim fiyatlaması olarak okunamaz. Veri sonrası tepki henüz ölçülmedi.
+
+Kanıtın gücü: Orta. Eğilim ölçüleri mevsimsel arındırmaya dayanıyor ve tek ayın okuması; TCMB, Ağustos–Eylül takvim kaymasının yarattığı Eylül düşüşüne temkinle bakılmasını istemişti ve o payın büyüklüğü ayrıştırılmadı. Manşetin üç aylık momentumu uç nokta testinde en çok 0,62 puan oynuyor, düşüşü 3,92 puan; hizmetin, temel malların ve enerjinin arındırılmış sayıları kanıt değil.
+
+Kilit ölçümler: %2,17 yıl sonu %30 için geçilmemesi gereken arındırılmış aylık hız, 2025 mevsimselliğiyle; 21,76 puan hizmet ile temel mal yıllık makası; %6,25 enerji, aylık
+
+Analizdir; yatırım tavsiyesi değildir.
