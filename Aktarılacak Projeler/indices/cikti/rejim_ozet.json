@@ -1,8 +1,8 @@
 {
  "label": "Transitioning",
- "basket_spread": -0.0005,
- "avg_correlation": 0.0542,
- "pc1_share": 0.2852,
- "as_of": "2026-09-27",
+ "basket_spread": 0.015,
+ "avg_correlation": -0.0266,
+ "pc1_share": 0.2553,
+ "as_of": "2026-10-04",
  "n_assets": 15
 }
