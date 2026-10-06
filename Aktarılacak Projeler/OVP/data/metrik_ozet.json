@@ -1,11 +1,11 @@
 {
  "bu_yil": 2026,
- "kur_tarih": "2026-10-05",
- "faiz_tarih": "2026-10-05",
+ "kur_tarih": "2026-10-06",
+ "faiz_tarih": "2026-10-06",
  "tufe_tarih": "2026-09-01",
  "program_yeni_yayin": "2026-09-30",
  "program_eski_yayin": "2025-09-30",
- "carry_tarih": "2026-10-05",
+ "carry_tarih": "2026-10-06",
  "program_yeni": {
   "kod": "ovp2027",
   "kisa": "OVP 2027–2029",
@@ -123,7 +123,7 @@
   {
    "yil": 2023,
    "n": 260,
-   "ortalama": 23.807198825249305,
+   "ortalama": 23.807201979710506,
    "ilk": 18.74329948425293,
    "son": 29.559600830078125,
    "ilk_gun": "2023-01-02",
@@ -132,7 +132,7 @@
   {
    "yil": 2024,
    "n": 261,
-   "ortalama": 32.87088533744958,
+   "ortalama": 32.8709080356291,
    "ilk": 29.7248592376709,
    "son": 35.349998474121094,
    "ilk_gun": "2024-01-02",
@@ -149,12 +149,12 @@
   },
   {
    "yil": 2026,
-   "n": 196,
-   "ortalama": 45.79698776712223,
+   "n": 198,
+   "ortalama": 45.802308747262664,
    "ilk": 43.02320098876953,
-   "son": 49.14979934692383,
+   "son": 49.175201416015625,
    "ilk_gun": "2026-01-02",
-   "son_gun": "2026-10-05"
+   "son_gun": "2026-10-06"
   }
  ],
  "yontem": [
@@ -172,9 +172,9 @@
    "program_kisa": "OVP 2026–2028",
    "yil": 2024,
    "ima": 32.83284241531664,
-   "gerceklesen": 32.87088533744958,
+   "gerceklesen": 32.8709080356291,
    "n": 261,
-   "fark_yuzde": -0.1157344006478489
+   "fark_yuzde": -0.11580337321743794
   }
  ],
  "yontem_esik_yuzde": 1.0,
@@ -183,56 +183,56 @@
   "ovp2027": {
    "yil": 2026,
    "ovp_ortalama": 46.86765513454146,
-   "gerceklesen_ortalama": 45.79698776712223,
-   "n_gerceklesen": 196,
-   "son_kur": 49.14979934692383,
-   "son_gun": "2026-10-05",
+   "gerceklesen_ortalama": 45.802308747262664,
+   "n_gerceklesen": 198,
+   "son_kur": 49.175201416015625,
+   "son_gun": "2026-10-06",
    "yil_basi": 43.02320098876953,
    "yil_basi_gun": "2026-01-02",
    "onceki_kapanis": 42.96070098876953,
    "onceki_kapanis_gun": "2025-12-31",
-   "sapma_yuzde": -2.2844483350952682,
-   "kalan_gun": 63,
-   "ytd_yuzde": 14.406418460844495,
-   "yil_basindan_yuzde": 14.240219735750337,
-   "toplam_gun": 259,
-   "gereken_ortalama": 50.198620277623505,
-   "gereken_bugune_gore_yuzde": 2.13392718716221,
-   "yil_sonu_dogrusal": 51.21466555423881,
-   "yil_sonu_ustel": 51.22879237837998,
-   "patika_farki_yuzde": 0.027583552461551974,
-   "yil_sonu_kalan_hareket_yuzde": 4.229911533883546,
+   "sapma_yuzde": -2.273095131857006,
+   "kalan_gun": 62,
+   "ytd_yuzde": 14.465547079575458,
+   "yil_basindan_yuzde": 14.299262458067608,
+   "toplam_gun": 260,
+   "gereken_ortalama": 50.26989037133503,
+   "gereken_bugune_gore_yuzde": 2.226099586371766,
+   "yil_sonu_dogrusal": 51.32982729632683,
+   "yil_sonu_ustel": 51.345192294170204,
+   "patika_farki_yuzde": 0.029933858445829742,
+   "yil_sonu_kalan_hareket_yuzde": 4.412774763842342,
    "kalan_tatil_payi": 0,
    "kalan_tatil_ornek_yil": 5,
-   "kalan_gun_tatilsiz": 63,
-   "gereken_ortalama_tatilsiz": 50.198620277623505
+   "kalan_gun_tatilsiz": 62,
+   "gereken_ortalama_tatilsiz": 50.26989037133503
   },
   "ovp2026": {
    "yil": 2026,
    "ovp_ortalama": 46.59650180940893,
-   "gerceklesen_ortalama": 45.79698776712223,
-   "n_gerceklesen": 196,
-   "son_kur": 49.14979934692383,
-   "son_gun": "2026-10-05",
+   "gerceklesen_ortalama": 45.802308747262664,
+   "n_gerceklesen": 198,
+   "son_kur": 49.175201416015625,
+   "son_gun": "2026-10-06",
    "yil_basi": 43.02320098876953,
    "yil_basi_gun": "2026-01-02",
    "onceki_kapanis": 42.96070098876953,
    "onceki_kapanis_gun": "2025-12-31",
-   "sapma_yuzde": -1.715824174005387,
-   "kalan_gun": 63,
-   "ytd_yuzde": 14.406418460844495,
-   "yil_basindan_yuzde": 14.240219735750337,
-   "toplam_gun": 259,
-   "gereken_ortalama": 49.08387882985644,
-   "gereken_bugune_gore_yuzde": -0.13412164025755624,
-   "yil_sonu_dogrusal": 49.0200183289474,
-   "yil_sonu_ustel": 49.020074562790555,
-   "patika_farki_yuzde": 0.00011471607941349049,
-   "yil_sonu_kalan_hareket_yuzde": -0.2639375660877241,
+   "sapma_yuzde": -1.7044049044597998,
+   "kalan_gun": 62,
+   "ytd_yuzde": 14.465547079575458,
+   "yil_basindan_yuzde": 14.299262458067608,
+   "toplam_gun": 260,
+   "gereken_ortalama": 49.132795782069564,
+   "gereken_bugune_gore_yuzde": -0.08623377784935382,
+   "yil_sonu_dogrusal": 49.091736358724965,
+   "yil_sonu_ustel": 49.091759595560774,
+   "patika_farki_yuzde": 4.733349752150673e-05,
+   "yil_sonu_kalan_hareket_yuzde": -0.16968272229115344,
    "kalan_tatil_payi": 0,
    "kalan_tatil_ornek_yil": 5,
-   "kalan_gun_tatilsiz": 63,
-   "gereken_ortalama_tatilsiz": 49.08387882985644
+   "kalan_gun_tatilsiz": 62,
+   "gereken_ortalama_tatilsiz": 49.132795782069564
   }
  },
  "zincir": {
@@ -242,48 +242,48 @@
     "yil": 2026,
     "giris": 42.96070098876953,
     "ovp_ortalama": 46.86765513454146,
-    "cikis": 51.22879237837998,
-    "deval_yuzde": 19.245708750822832,
-    "gun": 63,
+    "cikis": 51.345192294170204,
+    "deval_yuzde": 19.516653854397028,
+    "gun": 62,
     "tufe_yuzde": 28.4,
-    "reel_tl_yuzde": 7.676830759844022,
-    "makas_puan": 9.154291249177167
+    "reel_tl_yuzde": 7.4327266193590535,
+    "makas_puan": 8.883346145602971
    },
    {
     "program": "ovp2027",
     "yil": 2027,
-    "giris": 51.22879237837998,
+    "giris": 51.345192294170204,
     "ovp_ortalama": 56.05191532258065,
-    "cikis": 61.12830389578372,
-    "deval_yuzde": 19.324116493485064,
+    "cikis": 60.998546906636385,
+    "deval_yuzde": 18.800892899883515,
     "gun": 260,
     "tufe_yuzde": 21.0,
-    "reel_tl_yuzde": 1.4044801300552079,
-    "makas_puan": 1.6758835065149356
+    "reel_tl_yuzde": 1.851086339872654,
+    "makas_puan": 2.1991071001164855
    },
    {
     "program": "ovp2027",
     "yil": 2028,
-    "giris": 61.12830389578372,
+    "giris": 60.998546906636385,
     "ovp_ortalama": 63.69392635102822,
-    "cikis": 66.30987634009047,
-    "deval_yuzde": 8.476551963785361,
+    "cikis": 66.44600568123023,
+    "deval_yuzde": 8.9304730208273,
     "gun": 260,
     "tufe_yuzde": 13.5,
-    "reel_tl_yuzde": 4.6309068137524445,
-    "makas_puan": 5.0234480362146385
+    "reel_tl_yuzde": 4.194902356018426,
+    "makas_puan": 4.5695269791727
    },
    {
     "program": "ovp2027",
     "yil": 2029,
-    "giris": 66.30987634009047,
+    "giris": 66.44600568123023,
     "ovp_ortalama": 68.82741573033708,
-    "cikis": 71.38786785280902,
-    "deval_yuzde": 7.6579716220168015,
+    "cikis": 71.24616111251898,
+    "deval_yuzde": 7.224144449430314,
     "gun": 260,
     "tufe_yuzde": 9.0,
-    "reel_tl_yuzde": 1.24656665713061,
-    "makas_puan": 1.3420283779831985
+    "reel_tl_yuzde": 1.6562086456257452,
+    "makas_puan": 1.7758555505696858
    }
   ],
   "ovp2026": [
@@ -292,36 +292,36 @@
     "yil": 2026,
     "giris": 42.96070098876953,
     "ovp_ortalama": 46.59650180940893,
-    "cikis": 49.020074562790555,
-    "deval_yuzde": 14.10445694451079,
-    "gun": 63,
+    "cikis": 49.091759595560774,
+    "deval_yuzde": 14.27131882320538,
+    "gun": 62,
     "tufe_yuzde": 16.0,
-    "reel_tl_yuzde": 1.661234894979624,
-    "makas_puan": 1.8955430554892096
+    "reel_tl_yuzde": 1.5127865807422314,
+    "makas_puan": 1.7286811767946197
    },
    {
     "program": "ovp2026",
     "yil": 2027,
-    "giris": 49.020074562790555,
+    "giris": 49.091759595560774,
     "ovp_ortalama": 50.71242200794101,
-    "cikis": 52.429867538568644,
-    "deval_yuzde": 6.955911442791529,
+    "cikis": 52.355541566665586,
+    "deval_yuzde": 6.648329573014422,
     "gun": 260,
     "tufe_yuzde": 9.0,
-    "reel_tl_yuzde": 1.91115061302789,
-    "makas_puan": 2.044088557208471
+    "reel_tl_yuzde": 2.205070099457651,
+    "makas_puan": 2.351670426985578
    },
    {
     "program": "ovp2026",
     "yil": 2028,
-    "giris": 52.429867538568644,
+    "giris": 52.355541566665586,
     "ovp_ortalama": 53.76299045599151,
-    "cikis": 55.10804897645983,
-    "deval_yuzde": 5.1081216940345175,
+    "cikis": 55.18436744529473,
+    "deval_yuzde": 5.403106899442789,
     "gun": 260,
     "tufe_yuzde": 8.0,
-    "reel_tl_yuzde": 2.751336680131744,
-    "makas_puan": 2.8918783059654825
+    "reel_tl_yuzde": 2.4637728212648646,
+    "makas_puan": 2.596893100557211
    }
   ]
  },
@@ -330,69 +330,69 @@
    "bas_yil": 2026,
    "son_yil": 2029,
    "bas": 42.96070098876953,
-   "son": 71.38786785280902,
-   "kur_yuzde": 66.17016531334232,
+   "son": 71.24616111251898,
+   "kur_yuzde": 65.84031329270819,
    "tufe_yuzde": 92.2085726,
-   "reel_tl_yuzde": 15.669724608841662
+   "reel_tl_yuzde": 15.899788648343804
   },
   "ovp2026": {
    "bas_yil": 2026,
    "son_yil": 2028,
    "bas": 42.96070098876953,
-   "son": 55.10804897645983,
-   "kur_yuzde": 28.275488313996,
+   "son": 55.18436744529473,
+   "kur_yuzde": 28.453135482404313,
    "tufe_yuzde": 36.55520000000001,
-   "reel_tl_yuzde": 6.454632755508771
+   "reel_tl_yuzde": 6.307408913895696
   }
  },
  "carry": {
   "gerceklesen": {
    "yil": 2026,
-   "tl_yuzde": 33.86147552726828,
+   "tl_yuzde": 33.996468096711375,
    "tl_yol": "endeks",
-   "ortalama_gecelik": 38.84070793650793,
-   "kur_yuzde": 14.240219735750337,
-   "net_yuzde": 17.175435968964315,
-   "gun": 276,
-   "n_faiz": 189,
+   "ortalama_gecelik": 38.830011578947364,
+   "kur_yuzde": 14.299262458067608,
+   "net_yuzde": 17.233012020414385,
+   "gun": 277,
+   "n_faiz": 190,
    "bas_gun": "2026-01-02",
-   "son_gun": "2026-10-05",
-   "faiz_son_gun": "2026-10-05",
-   "yillik_yuzde": 23.320103456872722
+   "son_gun": "2026-10-06",
+   "faiz_son_gun": "2026-10-06",
+   "yillik_yuzde": 23.3066108241214
   },
   "faiz_varsayimi": 37.0,
-  "faiz_varsayimi_gun": "2026-10-05",
+  "faiz_varsayimi_gun": "2026-10-06",
   "ileri": [
    {
     "yil": 2026,
     "faiz": 37.0,
-    "deval_yuzde": 19.245708750822832,
-    "basit_yuzde": 14.888830327870961,
-    "bilesik_yuzde": 9.134642931374248,
+    "deval_yuzde": 19.516653854397028,
+    "basit_yuzde": 14.62837653311675,
+    "bilesik_yuzde": 8.887233920337213,
     "reel_faiz_yuzde": 6.697819314641751
    },
    {
     "yil": 2027,
     "faiz": 37.0,
-    "deval_yuzde": 19.324116493485064,
-    "basit_yuzde": 14.813337006756733,
-    "bilesik_yuzde": 9.062930680322602,
+    "deval_yuzde": 18.800892899883515,
+    "basit_yuzde": 15.318998583161614,
+    "bilesik_yuzde": 9.54326628324913,
     "reel_faiz_yuzde": 13.223140495867792
    },
    {
     "yil": 2028,
     "faiz": 37.0,
-    "deval_yuzde": 8.476551963785361,
-    "basit_yuzde": 26.29457474435317,
-    "bilesik_yuzde": 19.969132591570006,
+    "deval_yuzde": 8.9304730208273,
+    "basit_yuzde": 25.76829623589889,
+    "bilesik_yuzde": 19.46921265210588,
     "reel_faiz_yuzde": 20.70484581497798
    },
    {
     "yil": 2029,
     "faiz": 37.0,
-    "deval_yuzde": 7.6579716220168015,
-    "basit_yuzde": 27.25485900942106,
-    "bilesik_yuzde": 20.881321183635237,
+    "deval_yuzde": 7.224144449430314,
+    "basit_yuzde": 27.769730132575464,
+    "bilesik_yuzde": 21.370405074739153,
     "reel_faiz_yuzde": 25.688073394495415
    }
   ]
@@ -2422,5 +2422,5 @@
  "tufe_son": 29.73151102175646,
  "tufe_son_ay": "2026-09-01",
  "uyarilar": [],
- "cerceve_imza": "3062x1·2014-12-31·2026-10-05"
+ "cerceve_imza": "3064x1·2014-12-31·2026-10-06"
 }
