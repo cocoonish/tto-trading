@@ -7323,7 +7323,48 @@
  },
  "gundem_kaynagi": "yazili",
  "manset": "Eylül TÜFE'si beklentinin altında kaldı, kısa uç inanmadı: 2 yıllık gösterge %40,21'e çıktı",
- "yazi_zamani": "2026-10-06T04:27:36+00:00",
- "yazi_surumu": 1,
- "ilk_yazi_zamani": "2026-10-06T04:27:36+00:00"
+ "yazi_zamani": "2026-10-06T04:28:14+00:00",
+ "yazi_surumu": 2,
+ "ilk_yazi_zamani": "2026-10-06T04:27:36+00:00",
+ "fikirler": [
+  {
+   "kimlik": "2026-10-06-1",
+   "acilis": "2026-10-06",
+   "baslik": "EUR/USD yalın kısa: Fransa mali riski ve ABD uzun ucu",
+   "tur": "yalin",
+   "gerekce": "Euronun düşüşü Avrupa'ya özgü: CAC 40 gerilerken DAX yatay kaldı, yani sürücü Fransa'nın mali riski. ABD 10 yıllık getirisinin 2002'den beri en yüksek düzeyde olması faiz farkını dolar lehine tutuyor. Yalın yapı seçildi, çünkü görüş iki kanalı birlikte taşıyor; çapraz kur Fed tarafını dışarıda bırakırdı.",
+   "ne_bozar": "ABD 10 yıllık getirisi 23 Ekim'den önce %5,15'in altında kapanırsa ve CAC 40 kaybını DAX'a göre geri alırsa faiz farkı ile Fransa'ya özgü risk primi birlikte çekilmiş olur.",
+   "ufuk": "2026-10-23",
+   "dayanak": "kuresel",
+   "yazim_ani": "2026-10-06T04:28:14+00:00",
+   "bacaklar": [
+    {
+     "seri": "EURUSD=X",
+     "deger": 1.1227,
+     "tarih": "2026-10-05"
+    }
+   ],
+   "katsayilar": [
+    1.0
+   ],
+   "yon": "asagi",
+   "sinif": "fx",
+   "giris": 1.1227,
+   "giris_tarih": "2026-10-05",
+   "birim": "fiyat",
+   "sonuc_birim": "%",
+   "ondalik": 4,
+   "hedef": 1.105,
+   "stop": 1.134,
+   "yapi_metni": "EUR/USD",
+   "yon_metni": "düşerse kazanır (kısa)",
+   "getiri_risk": 1.57,
+   "stop_mesafe": 1.01,
+   "hedef_mesafe": 1.58,
+   "sigma_gun": 0.26,
+   "ufuk_is_gunu": 13,
+   "stop_z": 1.08,
+   "hedef_z": 1.69
+  }
+ ]
 }
