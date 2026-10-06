@@ -18,10 +18,10 @@ interface Props {
 const { no } = Astro.props;
 ---
 
-<Diyagram no={no} baslik="Fransız siyasi sistemi: kim kimi seçer, atar, düşürebilir" kaynak="Fransa Anayasası, md. 6, 8, 12, 24, 45, 49, 89">
-  <svg viewBox="0 0 360 446" role="img" aria-labelledby="fs-baslik fs-aciklama">
+<Diyagram no={no} baslik="Fransız siyasi sistemi: kim kimi seçer, atar, düşürebilir, feshedebilir" kaynak="Fransa Anayasası, md. 6, 8, 12, 24, 45, 49, 89; seçim kanunu (meclisin süresi)">
+  <svg viewBox="0 0 360 446" role="img" aria-labelledby="fs-baslik" aria-describedby="fs-aciklama">
     <title id="fs-baslik">Fransız siyasi sistemi</title>
-    <desc id="fs-aciklama">Seçmenler cumhurbaşkanını ve Ulusal Meclis'i beş yıllığına doğrudan seçer. Cumhurbaşkanı başbakanı atar ve Ulusal Meclis'i feshedebilir; seçimden sonraki bir yıl içinde yeniden feshedemez. Ulusal Meclis hükümeti gensoruyla, 577 sandalyenin en az 289'unun oyuyla düşürebilir. Senato dolaylı seçilir; yasalarda son söz Ulusal Meclis'tedir, ama anayasa değişikliği Senato'nun onayı olmadan yapılamaz.</desc>
+    <desc id="fs-aciklama">Seçmenler cumhurbaşkanını ve Ulusal Meclis'i beş yıllığına doğrudan seçer. Cumhurbaşkanı başbakanı atar ve Ulusal Meclis'i feshedebilir; fesihten sonra yapılan meclis seçiminin ardından bir yıl geçmeden yeniden feshedemez (yeni seçilen bir cumhurbaşkanı için ayrıca bir bekleme süresi yoktur). Ulusal Meclis hükümeti gensoruyla, üye tamsayısının salt çoğunluğuyla, yani 577 sandalyede 289 oyla düşürebilir (boş sandalye varsa eşik biraz düşer). Senato'nun 348 üyesi dolaylı seçilir; yasalarda iki meclis anlaşamazsa hükümet son sözü Ulusal Meclis'e verebilir, ama anayasa değişikliği olağan yolda (89. madde) Senato'nun onayı olmadan yapılamaz; Senato'yu atlayan halk oylaması yolu (11. madde) tartışmalıdır.</desc>
     <defs>
       <marker id="fs-uc-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0,0 L10,5 L0,10 z" class="uc-teal" />
@@ -53,14 +53,15 @@ const { no } = Astro.props;
     <!-- Ulusal Meclis -->
     <rect x="218" y="104" width="134" height="84" rx="3" class="kutu" />
     <text x="285" y="126" class="ad" text-anchor="middle">Ulusal Meclis</text>
-    <text x="285" y="144" class="benzetme" text-anchor="middle">benzini verir</text>
+    <text x="285" y="144" class="benzetme" text-anchor="middle">benzini verir, keser</text>
     <text x="285" y="161" class="kucuk" text-anchor="middle">577 sandalye</text>
     <text x="285" y="176" class="kucuk" text-anchor="middle">çoğunluk: 289</text>
 
     <!-- Cumhurbaşkanı → Meclis: fesih -->
     <line x1="142" y1="146" x2="216" y2="146" class="ok claret kesik" marker-end="url(#fs-uc-claret)" />
     <text x="180" y="139" class="etk claret-y" text-anchor="middle">feshedebilir</text>
-    <text x="180" y="161" class="kucuk" text-anchor="middle">1 yıl kuralı</text>
+    <text x="180" y="161" class="kucuk" text-anchor="middle">1 yıl içinde</text>
+    <text x="180" y="175" class="kucuk" text-anchor="middle">yeniden olmaz</text>
 
     <!-- Cumhurbaşkanı → Hükümet: atama -->
     <line x1="56" y1="188" x2="56" y2="294" class="ok teal" marker-end="url(#fs-uc-teal)" />
@@ -77,7 +78,8 @@ const { no } = Astro.props;
     <line x1="305" y1="190" x2="305" y2="294" class="ok gri" marker-start="url(#fs-uc-gri)" marker-end="url(#fs-uc-gri)" />
     <text x="298" y="233" class="kucuk" text-anchor="end">yasada</text>
     <text x="298" y="247" class="kucuk" text-anchor="end">son söz</text>
-    <text x="298" y="261" class="kucuk" text-anchor="end">Meclis'te</text>
+    <text x="298" y="261" class="kucuk" text-anchor="end">Meclis'e</text>
+    <text x="298" y="275" class="kucuk" text-anchor="end">verilebilir</text>
 
     <!-- Başbakan ve hükümet -->
     <rect x="8" y="296" width="134" height="84" rx="3" class="kutu" />
@@ -89,9 +91,9 @@ const { no } = Astro.props;
     <!-- Senato -->
     <rect x="218" y="296" width="134" height="84" rx="3" class="kutu" />
     <text x="285" y="318" class="ad" text-anchor="middle">Senato</text>
-    <text x="285" y="336" class="kucuk" text-anchor="middle">dolaylı seçilir</text>
+    <text x="285" y="336" class="kucuk" text-anchor="middle">348 sandalye · dolaylı</text>
     <text x="285" y="354" class="kucuk claret-y" text-anchor="middle">anayasa değişikliğinde</text>
-    <text x="285" y="369" class="kucuk claret-y" text-anchor="middle">onayı şart</text>
+    <text x="285" y="369" class="kucuk claret-y" text-anchor="middle">olağan yolda onayı şart</text>
 
     <!-- Lejant -->
     <line x1="8" y1="406" x2="40" y2="406" class="ok teal" marker-end="url(#fs-uc-teal)" />
@@ -99,7 +101,7 @@ const { no } = Astro.props;
     <line x1="160" y1="406" x2="192" y2="406" class="ok claret kesik" marker-end="url(#fs-uc-claret)" />
     <text x="200" y="410" class="kucuk">düşürebilir · feshedebilir</text>
     <line x1="10" y1="430" x2="40" y2="430" class="ok gri" marker-start="url(#fs-uc-gri)" marker-end="url(#fs-uc-gri)" />
-    <text x="48" y="434" class="kucuk">yasa yapımı: anlaşmazlıkta Meclis karar verir</text>
+    <text x="48" y="434" class="kucuk">yasa: anlaşmazlıkta hükümet son sözü Meclis'e verebilir</text>
   </svg>
 </Diyagram>
 
