@@ -6,10 +6,13 @@
     python3 tweet/gonder.py --kuru         # göndermeden zinciri bas
     python3 tweet/gonder.py --tarih 2026-08-30 --tur bulten
     python3 tweet/gonder.py --tur duzeltme --kuru   # bekleyen düzeltme yanıtları
+    python3 tweet/gonder.py --jeton        # yalnız jeton sağlığı (gönderim yok)
 
 Sigortalar (araçta, rutin metninde değil):
 
 · DEFTER (tweet/defter.json): her (tür, tarih) EN FAZLA BİR KEZ gönderilir.
+· DALIN UCU: koşucuda jeton harcanmadan önce jeton ve defterin dalın ucundaki
+  sürüm olduğu sorulur; değilse koşu durur (dal_ucu_denetimi).
   Defter gönderimden sonra yazılır ve iş akışı onu commit'ler; ikinci koşu
   aynı içeriği görüp geçer. Kuru koşu deftere DOKUNMAZ.
 · BAYAT KORUMASI: --tarih verilmedikçe yalnız BUGÜNÜN (UTC) içeriği
@@ -52,6 +55,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -102,11 +106,53 @@ def _refresh_oku(dosya: Path) -> str | None:
     return os.environ.get("TW_REFRESH_TOKEN") or None
 
 
+# DALIN UCU (06.10.2026). Yazı katmanı ile işlem fikri ayrı yamalarla, otuz
+# saniye arayla push edilir ve iki tweet koşusu tetiklenir. concurrency ikinciyi
+# SIRAYA sokar ama checkout öntanımlı olarak olayın KENDİ commit'ini alır:
+# birinci koşunun döndürdüğü jeton ve yazdığı defter o commit'te yoktur. İkinci
+# koşu harcanmış jetonla açıldı (X 400 "Value passed for the token was invalid")
+# ve eski defterle aynı bülteni ikinci kez atmaya hazırlanıyordu; mükerrer
+# gönderiyi yalnız ölü jeton durdurdu. Birinci kilit iş akışlarında (checkout
+# `ref: main`); bu ikincisi aynı soruyu jeton harcanmadan araçta sorar.
+IZLENEN_YOLLAR = ("tweet/oauth2.enc", "tweet/defter.json")
+
+
+def dal_ucu_denetimi(kok: Path, dal: str = "main", uzak: str = "origin") -> None:
+    """HEAD'deki jeton ve defter, dalın uzaktaki ucuyla aynı mı? Değilse durur:
+    jeton harcanmaz, defter yazılmaz. Uç okunamazsa uyarı basıp geçer — bu
+    ikinci kilittir ve bir ağ kusuru sabahın gönderisini durdurmamalı."""
+    def git(*arg: str) -> subprocess.CompletedProcess:
+        return subprocess.run(["git", "-C", str(kok), *arg],
+                              capture_output=True, text=True, timeout=60)
+    try:
+        f = git("fetch", "--quiet", "--no-tags", uzak, dal)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(f"::warning::dalın ucu okunamadı ({type(e).__name__}) — jeton ve "
+              "defterin güncelliği sınanamadı, gönderim sürüyor")
+        return
+    if f.returncode != 0:
+        print(f"::warning::dalın ucu okunamadı ({f.stderr.strip()[:160]}) — jeton ve "
+              "defterin güncelliği sınanamadı, gönderim sürüyor")
+        return
+    farkli = [yol for yol in IZLENEN_YOLLAR
+              if git("rev-parse", "--verify", "--quiet", f"HEAD:{yol}").stdout.strip()
+              != git("rev-parse", "--verify", "--quiet", f"FETCH_HEAD:{yol}").stdout.strip()]
+    if farkli:
+        raise SystemExit(
+            f"checkout bayat: {', '.join(farkli)} {dal} dalının ucundakiyle aynı değil — "
+            "önceki bir koşu jetonu döndürmüş ya da deftere yazmış. Bu koşu harcanmış "
+            "jetonla açılır ve eski defterle gönderilmiş içeriği yeniden atardı; jeton "
+            f"kullanılmadan durdu. İş akışının checkout'u dalın ucunu almalı (ref: {dal}).")
+
+
 def _erisim_al(dosya: Path) -> str:
     """Refresh token'ı kullanır: erişim jetonu döner, DÖNEN yeni refresh
     token gönderimden önce şifreli dosyaya yazılır (tek kullanımlık jeton
-    koşu ortasında ölürsek de kaybolmasın)."""
+    koşu ortasında ölürsek de kaybolmasın). Koşucuda jeton harcanmadan önce
+    checkout'un dalın ucunda olduğu sorulur (dal_ucu_denetimi)."""
     import requests
+    if os.environ.get("GITHUB_ACTIONS") == "true" and dosya.resolve() == JETON_DOSYA.resolve():
+        dal_ucu_denetimi(KOK)
     refresh = _refresh_oku(dosya)
     if not refresh:
         raise SystemExit(
@@ -328,12 +374,27 @@ def main() -> int:
                                    "yalnız varsayılanda uygulanır")
     p.add_argument("--kuru", action="store_true", help="gönderme, yalnız bas")
     p.add_argument("--defter", help="defter yolu (sınama için)")
+    p.add_argument("--jeton", action="store_true",
+                   help="yalnız jetonu yenile: refresh token geçerli mi (gönderim ve okuma "
+                        "yok; dönen jeton oauth2.enc'e yazılır, iş akışı commit'ler)")
     a = p.parse_args()
 
     defter_yolu = Path(a.defter) if a.defter else DEFTER
     tarih = a.tarih or dt.datetime.now(dt.timezone.utc).date().isoformat()
     anahtar_var = (all(os.environ.get(k) for k in ANAHTARLAR)
                    and (JETON_DOSYA.exists() or os.environ.get("TW_REFRESH_TOKEN")))
+    # JETON SAĞLIK SINAMASI (06.10.2026). Gönderilecek içerik yokken koşu jetona
+    # hiç dokunmaz; harcanmış bir jetonla açılan koşudan sonra kalan jetonun
+    # canlı olup olmadığı ancak bir sonraki GÖNDERİMDE görünürdü. Bu kip onu
+    # gönderim olmadan sorar; dönen jeton her yenilemede olduğu gibi commit'lenir.
+    if a.jeton:
+        if a.kuru or not anahtar_var:
+            raise SystemExit("--jeton kuru koşulmaz ve TW_* anahtarlarını ister: "
+                             "jetonu sınamanın tek yolu onu yenilemektir.")
+        _erisim_al(JETON_DOSYA)
+        print("✓ jeton geçerli — yenilendi; dönen refresh token oauth2.enc'e yazıldı "
+              "(commit edilecek). Gönderim ve okuma yapılmadı.")
+        return 0
     kuru = a.kuru or not anahtar_var
     if not a.kuru and not anahtar_var:
         print("::warning::TW_* anahtarları eksik — kuru koşu. Zincir gönderilmedi; "

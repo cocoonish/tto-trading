@@ -4842,3 +4842,24 @@ kotasyon, komşu günlerin bazıyla) doldurmak mümkün ama yeni bir kaynak
 sözleşmesi ister, yapılmadı. (ii) Aylık toplamlarda bunun dışında kalan
 farklar açıklanmadı; altın hareketinin sert olduğu ayda fiyat saatinin küçük
 farkı büyür, swap ve kamu bacağı ayrıca sınanmadı.
+
+**Kurucu ilke — OLAY TETİKLİ BİR KOŞU OLAYIN COMMIT'İNİ DEĞİL DALIN UCUNU
+OKUMALIDIR; concurrency koşuları sıraya sokar, checkout'u tazelemez.** 06.10.2026
+sabahı yazı katmanı ile işlem fikri, 05.10 kuralı gereği ayrı yamalarla otuz
+saniye arayla push edildi ve iki tweet koşusu tetiklendi (#123, #124). Birincisi
+bülteni gönderdi, jetonu döndürdü, defteri yazdı ve commit'ledi. İkincisi
+`concurrency: tweet` sayesinde birincinin bitmesini bekledi ama `actions/checkout`
+öntanımlı olarak olayın KENDİ commit'ini aldı: o commit'te harcanmış eski jeton ve
+bülteni henüz taşımayan defter vardı. Koşu X'ten 400 ("token was invalid") aldı ve
+kırmızı bitti. Asıl tehlike görünmeyen yarıdaydı: eski defterle aynı bülteni
+İKİNCİ KEZ atmaya hazırlanıyordu ve mükerreri yalnız ölü jeton durdurdu. Kusur
+yeni değildi, ilk kez görüldü: bir tweet koşusu sürerken gelen her push onu
+üretir, ve günlük fikir kuralı bunu her sabaha taşıdı. İki kilit: iki tweet iş
+akışının checkout'u `ref: main` ile dalın ucunu alır, ve `gonder.dal_ucu_denetimi`
+jeton harcanmadan önce HEAD'deki jeton ile defterin dalın ucundakiyle aynı
+olduğunu sorar (değilse adıyla durur; uç okunamazsa uyarıyla geçer — ikinci kilit
+sabahın gönderisini bir ağ kusuruyla durdurmamalı). Gönderilecek içerik yokken
+koşu jetona hiç dokunmadığı için kalan jetonun sağlığı ancak bir sonraki
+gönderimde görünürdü; `tweet.yml`in `jeton` girdisi (`gonder.py --jeton`) onu
+gönderimsiz sınar ve dönen jetonu her yenilemede olduğu gibi commit'ler.
+Dokuz arıza enjeksiyonunun dokuzu `tweet/duman.py`de kendi maddesinde yakalanıyor.

@@ -47,6 +47,10 @@ on:
         description: 'Kuru koşu — gönderme, yalnız zinciri bas'
         type: boolean
         default: false
+      jeton:
+        description: 'Yalnız jeton sağlığı — gönderme, okuma yapma; refresh token yenilenir ve commit''lenir'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -69,7 +73,14 @@ jobs:
       TW_KILIT: ${{ secrets.TW_KILIT }}
       TW_REFRESH_TOKEN: ${{ secrets.TW_REFRESH_TOKEN }}
     steps:
+      # Dalın UCU, olayın commit'i değil (06.10.2026): concurrency art arda
+      # düşen koşuları sıraya sokar ama öntanımlı checkout olayın kendi
+      # commit'ini alır — önceki koşunun döndürdüğü jeton ve yazdığı defter
+      # orada yoktur. Harcanmış jeton koşuyu düşürür, eski defter gönderilmiş
+      # içeriği yeniden attırırdı. gonder.dal_ucu_denetimi ikinci kilittir.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
@@ -82,7 +93,7 @@ jobs:
         run: python tweet/duman.py
 
       - name: Zinciri gönder
-        run: python tweet/gonder.py ${{ github.event.inputs.kuru == 'true' && '--kuru' || '' }}
+        run: python tweet/gonder.py ${{ github.event.inputs.kuru == 'true' && '--kuru' || '' }} ${{ github.event.inputs.jeton == 'true' && '--jeton' || '' }}
 
       # Defter VE jeton dosyası gönderimden SONRA commit'lenir. oauth2.enc'in
       # commit'i KRİTİK: X refresh token'ı her koşuda döndürür, dönen jeton

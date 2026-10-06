@@ -46,7 +46,14 @@ jobs:
       TW_KILIT: ${{ secrets.TW_KILIT }}
       TW_REFRESH_TOKEN: ${{ secrets.TW_REFRESH_TOKEN }}
     steps:
+      # Dalın UCU, olayın commit'i değil (06.10.2026): concurrency art arda
+      # düşen koşuları sıraya sokar ama öntanımlı checkout olayın kendi
+      # commit'ini alır — önceki koşunun döndürdüğü jeton ve yazdığı defter
+      # orada yoktur. Harcanmış jeton koşuyu düşürür, eski defter gönderilmiş
+      # içeriği yeniden attırırdı. gonder.dal_ucu_denetimi ikinci kilittir.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:

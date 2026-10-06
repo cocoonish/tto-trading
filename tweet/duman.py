@@ -2475,6 +2475,147 @@ def _l2_rehber_butceleri():
         assert ifade in metin, f"{ad}={deger}: rehberde {ifade!r} yok"
 
 
+def _g1_dal_ucu():
+    """06.10.2026: art arda iki push iki koşu tetikledi; ikincisi olayın kendi
+    commit'ini aldı, harcanmış jetonla açıldı ve eski defterle gönderilmiş bülteni
+    yeniden atmaya hazırlandı. Dört kilit: (1) iki tweet iş akışının her checkout'u
+    dalın ucunu alır ve ikisi aynı concurrency grubunda; (2) bayat checkout'ta
+    dal_ucu_denetimi jeton ya da defter farkını adıyla durdurur, güncel checkout'ta
+    geçer, uç okunamazsa uyarıyla geçer; (3) koşucuda _erisim_al jetona dokunmadan
+    önce denetimi çağırır, sınama dosyasında çağırmaz; (4) --jeton kipi yalnız
+    jetonu yeniler, kuru koşulmaz."""
+    import io
+    import os
+    import subprocess as sp
+    from contextlib import redirect_stdout
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import gonder
+
+    kok = Path(__file__).resolve().parent.parent
+    for ad in ("tweet.yml", "tweet-ozel.yml"):
+        s = (kok / ".github" / "workflows" / ad).read_text(encoding="utf-8")
+        adimlar = re.findall(r"- uses: actions/checkout@[^\n]*\n((?:[ \t]+(?!-)[^\n]*\n)*)", s)
+        assert adimlar, f"{ad}: checkout adımı yok"
+        for govde in adimlar:
+            assert re.search(r"^\s+ref:\s*main\s*$", govde, re.M), \
+                f"{ad}: checkout dalın ucunu almıyor (ref: main yok) — olayın commit'i bayat jeton taşır"
+        assert re.search(r"concurrency:\s*\n\s+group:\s*tweet\s*\n", s), f"{ad}: concurrency grubu 'tweet' değil"
+    t = (kok / ".github" / "workflows" / "tweet.yml").read_text(encoding="utf-8")
+    assert "inputs.jeton == 'true' && '--jeton'" in t, "tweet.yml: jeton sağlık girdisi gönderime bağlı değil"
+
+    def git(d: Path, *arg: str) -> str:
+        r = sp.run(["git", "-C", str(d), "-c", "user.name=s", "-c", "user.email=s@s",
+                    "-c", "commit.gpgsign=false", *arg], capture_output=True, text=True)
+        assert r.returncode == 0, f"git {' '.join(arg)}: {r.stderr.strip()[:200]}"
+        return r.stdout
+
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        uzak, yazan, bayat = td / "uzak.git", td / "yazan", td / "bayat"
+        sp.run(["git", "init", "-q", "--bare", "--initial-branch=main", str(uzak)], check=True)
+        sp.run(["git", "clone", "-q", str(uzak), str(yazan)], check=True, capture_output=True)
+        git(yazan, "checkout", "-q", "-B", "main")
+        (yazan / "tweet").mkdir()
+        (yazan / "tweet" / "oauth2.enc").write_text("jeton-1")
+        (yazan / "tweet" / "defter.json").write_text("{}\n")
+        git(yazan, "add", "-A"); git(yazan, "commit", "-q", "-m", "ilk"); git(yazan, "push", "-q", "origin", "HEAD:main")
+        sp.run(["git", "clone", "-q", "--branch", "main", str(uzak), str(bayat)], check=True, capture_output=True)
+
+        def denetle(d: Path) -> str:
+            tampon = io.StringIO()
+            with redirect_stdout(tampon):
+                gonder.dal_ucu_denetimi(d)
+            return tampon.getvalue()
+
+        assert "::warning::" not in denetle(bayat), "güncel checkout'ta uyarı basıldı"
+        # Önceki koşu jetonu döndürdü: bayat checkout DURMALI, jeton adıyla.
+        (yazan / "tweet" / "oauth2.enc").write_text("jeton-2")
+        git(yazan, "commit", "-qam", "jeton"); git(yazan, "push", "-q", "origin", "HEAD:main")
+        try:
+            denetle(bayat)
+        except SystemExit as e:
+            assert "oauth2.enc" in str(e) and "defter.json" not in str(e), str(e)
+        else:
+            raise AssertionError("bayat jetonlu checkout durmadı")
+        git(bayat, "pull", "-q", "--ff-only", "origin", "main")
+        denetle(bayat)                                      # dalın ucunda: geçer
+        # Önceki koşu yalnız deftere yazdı: yine durmalı, defter adıyla.
+        (yazan / "tweet" / "defter.json").write_text('{"bulten:2026-10-06": {"idler": ["1"]}}\n')
+        git(yazan, "commit", "-qam", "defter"); git(yazan, "push", "-q", "origin", "HEAD:main")
+        try:
+            denetle(bayat)
+        except SystemExit as e:
+            assert "defter.json" in str(e) and "oauth2.enc" not in str(e), str(e)
+        else:
+            raise AssertionError("bayat defterli checkout durmadı (mükerrer gönderi riski)")
+        # Uç okunamazsa ikinci kilit sabahın gönderisini durdurmaz: uyarı basar.
+        git(bayat, "remote", "set-url", "origin", str(td / "yok.git"))
+        assert "dalın ucu okunamadı" in denetle(bayat), "okunamayan uç sessiz geçti"
+
+    # Bağlantı: koşucuda _erisim_al jetona (ağa) dokunmadan önce denetimi çağırır.
+    import requests as _rq
+    eski = (gonder.dal_ucu_denetimi, _rq.post, os.environ.get("GITHUB_ACTIONS"))
+    postlar: list = []
+
+    def _bayat(_kok):
+        raise SystemExit("checkout bayat (sahte)")
+    try:
+        gonder.dal_ucu_denetimi = _bayat
+        _rq.post = lambda *a, **k: postlar.append(a) or (_ for _ in ()).throw(AssertionError("jeton ucu çağrıldı"))
+        os.environ["GITHUB_ACTIONS"] = "true"
+        try:
+            gonder._erisim_al(gonder.JETON_DOSYA)
+        except SystemExit as e:
+            assert "bayat" in str(e), str(e)
+        else:
+            raise AssertionError("koşucuda _erisim_al dalın ucunu sormadı")
+        assert not postlar, "denetim düşmeden jeton ucu çağrıldı"
+        cagri: list = []
+        gonder.dal_ucu_denetimi = lambda k: cagri.append(k)
+        with tempfile.TemporaryDirectory() as td:
+            try:
+                gonder._erisim_al(Path(td) / "oauth2.enc")
+            except (SystemExit, AssertionError, KeyError):
+                pass
+        assert not cagri, "sınama jeton dosyasında dal denetimi koştu"
+    finally:
+        gonder.dal_ucu_denetimi, _rq.post = eski[0], eski[1]
+        if eski[2] is None:
+            os.environ.pop("GITHUB_ACTIONS", None)
+        else:
+            os.environ["GITHUB_ACTIONS"] = eski[2]
+
+    # --jeton: yalnız yenileme; kuru koşulmaz.
+    anahtarlar = ("TW_CLIENT_ID", "TW_CLIENT_SECRET", "TW_KILIT", "TW_REFRESH_TOKEN")
+    eski_env = {k: os.environ.get(k) for k in anahtarlar}
+    eski_erisim, eski_argv, eski_bulten = gonder._erisim_al, sys.argv, gonder.uret.yazilmis_bulten
+    yenileme: list = []
+    try:
+        for k in anahtarlar:
+            os.environ[k] = "sahte"
+        gonder._erisim_al = lambda d: yenileme.append(d) or "sahte-erisim"
+        gonder.uret.yazilmis_bulten = lambda *_a: (_ for _ in ()).throw(AssertionError("--jeton içerik kurdu"))
+        sys.argv = ["gonder.py", "--jeton"]
+        with redirect_stdout(io.StringIO()) as cikti:
+            kod = gonder.main()
+        assert kod == 0 and len(yenileme) == 1 and "jeton geçerli" in cikti.getvalue(), (kod, yenileme)
+        sys.argv = ["gonder.py", "--jeton", "--kuru"]
+        try:
+            gonder.main()
+        except SystemExit as e:
+            assert "kuru" in str(e), str(e)
+        else:
+            raise AssertionError("--jeton --kuru reddedilmedi")
+        assert len(yenileme) == 1, "kuru jeton sınaması jetona dokundu"
+    finally:
+        gonder._erisim_al, sys.argv, gonder.uret.yazilmis_bulten = eski_erisim, eski_argv, eski_bulten
+        for k, v in eski_env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+
 def main() -> int:
     print("tweet duman sınaması:")
     sina("biçim 3: maddelerle açılır · pano sayfanın kuralıyla · öne çıkanlar yinelenmez", _bicim3_govde)
@@ -2497,6 +2638,8 @@ def main() -> int:
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",
          _gonder_sigortalari)
     sina("jeton kasası: şifreli gidiş-dönüş, yanlış kilit düşer", _jeton_kasasi)
+    sina("G dalın ucu: checkout ref main · bayat jeton/defter durur, uç okunamazsa uyarı · jeton sınaması gönderimsiz",
+         _g1_dal_ucu)
     sina("kalite kapısı öğe başına: kirli düşer, temiz geçer", _kapi_oge_basina)
     sina("gönderim katmanı siteye yazmıyor (X aynası kaldırıldı)", _siteye_sizinti_yok)
     sina("özel gönderi anahtarı: araç kanalıyla aynı biçim, analiz gününde sessiz ozel: yok", _ozel_anahtar)
