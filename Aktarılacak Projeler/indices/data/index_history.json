@@ -2408,70 +2408,70 @@
     "kalibrasyon": "2026-10-03T16:53:45"
   },
   {
-    "timestamp": "2026-10-06T08:18:02.553451+00:00",
+    "timestamp": "2026-10-06T18:26:24.240321+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.617,
-        "category": "Extremely Bearish"
+        "value": -0.4227,
+        "category": "Bearish"
       },
       "USDJPY": {
-        "value": -0.2404,
+        "value": -0.4571,
         "category": "Bearish"
       },
       "USDCHF": {
-        "value": -0.8072,
-        "category": "Extremely Bearish"
+        "value": 0.0157,
+        "category": "Neutral"
       },
       "GBPUSD": {
-        "value": -0.0918,
-        "category": "Neutral"
+        "value": -0.1382,
+        "category": "Bearish"
       },
       "AUDUSD": {
-        "value": 0.0919,
-        "category": "Neutral"
+        "value": 0.1149,
+        "category": "Bullish"
       },
       "NZDUSD": {
-        "value": -0.0902,
+        "value": -0.0452,
         "category": "Neutral"
       },
       "USDCAD": {
-        "value": 0.2966,
-        "category": "Bullish"
+        "value": -0.1208,
+        "category": "Bearish"
       },
       "USDNOK": {
-        "value": -0.2418,
-        "category": "Bearish"
+        "value": 0.0,
+        "category": "Neutral"
       },
       "USDSEK": {
         "value": 0.0,
         "category": "Neutral"
       },
       "XAUUSD": {
-        "value": -0.2904,
-        "category": "Bearish"
+        "value": -0.0804,
+        "category": "Neutral"
       },
       "XAGUSD": {
-        "value": 0.1508,
+        "value": 0.1329,
         "category": "Bullish"
       },
       "SPX": {
-        "value": 0.1185,
+        "value": 0.2529,
         "category": "Bullish"
       },
       "UST2Y": {
-        "value": -0.295,
-        "category": "Bearish"
+        "value": -0.6952,
+        "category": "Extremely Bearish"
       },
       "UST10Y": {
-        "value": -0.0439,
-        "category": "Neutral"
+        "value": -0.106,
+        "category": "Bearish"
       },
       "BIST100": {
-        "value": 0.0128,
-        "category": "Neutral"
+        "value": -0.2546,
+        "category": "Bearish"
       }
     },
-    "veri_sonu": "2026-10-06T08:07:23+00:00",
+    "veri_sonu": "2026-10-06T16:58:46+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": 0.015,
