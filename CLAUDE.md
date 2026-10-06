@@ -4858,8 +4858,25 @@ yeni değildi, ilk kez görüldü: bir tweet koşusu sürerken gelen her push on
 akışının checkout'u `ref: main` ile dalın ucunu alır, ve `gonder.dal_ucu_denetimi`
 jeton harcanmadan önce HEAD'deki jeton ile defterin dalın ucundakiyle aynı
 olduğunu sorar (değilse adıyla durur; uç okunamazsa uyarıyla geçer — ikinci kilit
-sabahın gönderisini bir ağ kusuruyla durdurmamalı). Gönderilecek içerik yokken
-koşu jetona hiç dokunmadığı için kalan jetonun sağlığı ancak bir sonraki
-gönderimde görünürdü; `tweet.yml`in `jeton` girdisi (`gonder.py --jeton`) onu
-gönderimsiz sınar ve dönen jetonu her yenilemede olduğu gibi commit'ler.
-Dokuz arıza enjeksiyonunun dokuzu `tweet/duman.py`de kendi maddesinde yakalanıyor.
+sabahın gönderisini bir ağ kusuruyla durdurmamalı). Karşılaştırma DOSYA düzeyinde,
+commit düzeyinde değil: checkout ile jeton arasında main'e düşen ilgisiz bir commit
+(veri botu, fikir yaması, `tweet/` altında bir kod düzeltmesi) koşuyu durdurmaz.
+Gönderilecek içerik yokken koşu jetona hiç dokunmadığı için kalan jetonun sağlığı
+ancak bir sonraki gönderimde görünürdü; `tweet.yml`in `jeton` girdisi
+(`gonder.py --jeton`) içerik beklemeden jetonu yeniler ve commit'ler — ama
+GÖNDERİMSİZ bir koşu değildir, bekleyen içerik varsa aynı jetonla gönderir. Sebep
+concurrency'nin sınırı (GitHub belgesi): grupta en çok bir koşu ÇALIŞIR, en çok
+bir koşu BEKLER, yeni gelen bekleyeni iptal eder ve iptal "cancelled" biter,
+kırmızı değil. `ref: main` ile her içerik koşusu günün bütün içeriğini dalın
+ucundan kurduğu için içerik koşularının birbirini iptal etmesi kayıp üretmez;
+kayıp yalnız bekleyen bir içerik koşusunun yerine gönderimsiz bir koşu geçtiğinde
+doğar — ilk yazımda `--jeton` tam böyle bir koşuydu, donmuş kopyaya karşı
+inceleme buldu. On üç arıza enjeksiyonunun on üçü `tweet/duman.py`de kendi
+maddesinde yakalanıyor. AÇIK, adıyla: aynı sınırın öbür iki taşıyıcısı
+düzeltmeden önce de vardı ve dokunulmadı — `tweet-ozel.yml` (aynı grupta) ve
+`tweet.yml`in `kuru` dispatch'i gönderimsiz koşulardır; bir içerik koşusu
+çalışırken dispatch edilip bekleyen bülten koşusunun yerine geçerlerse ve bülten
+günün son cron'undan sonra yazılmışsa o günün gönderisi düşer, ertesi gün bayat
+koruması onu reddeder. Elle yapılan bir dispatch'in bir iki dakikalık pencereye
+denk gelmesi gerekiyor. GitHub'ın kuyruğa alma seçeneği belgede anılıyor ama
+sözdizimi doğrulanmadığı için konmadı.

@@ -48,7 +48,7 @@ on:
         type: boolean
         default: false
       jeton:
-        description: 'Yalnız jeton sağlığı — gönderme, okuma yapma; refresh token yenilenir ve commit''lenir'
+        description: 'Jeton sağlığı — içerik olmasa da refresh token yenilenir ve commit''lenir; bekleyen içerik varsa normal gönderilir'
         type: boolean
         default: false
 

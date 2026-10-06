@@ -6,7 +6,7 @@
     python3 tweet/gonder.py --kuru         # göndermeden zinciri bas
     python3 tweet/gonder.py --tarih 2026-08-30 --tur bulten
     python3 tweet/gonder.py --tur duzeltme --kuru   # bekleyen düzeltme yanıtları
-    python3 tweet/gonder.py --jeton        # yalnız jeton sağlığı (gönderim yok)
+    python3 tweet/gonder.py --jeton        # içerik olmasa da jetonu yenile (sağlık)
 
 Sigortalar (araçta, rutin metninde değil):
 
@@ -375,8 +375,9 @@ def main() -> int:
     p.add_argument("--kuru", action="store_true", help="gönderme, yalnız bas")
     p.add_argument("--defter", help="defter yolu (sınama için)")
     p.add_argument("--jeton", action="store_true",
-                   help="yalnız jetonu yenile: refresh token geçerli mi (gönderim ve okuma "
-                        "yok; dönen jeton oauth2.enc'e yazılır, iş akışı commit'ler)")
+                   help="içerik olmasa da jetonu yenile: refresh token geçerli mi (dönen "
+                        "jeton oauth2.enc'e yazılır, iş akışı commit'ler); bekleyen içerik "
+                        "varsa normal akış aynı jetonla sürer")
     a = p.parse_args()
 
     defter_yolu = Path(a.defter) if a.defter else DEFTER
@@ -385,16 +386,20 @@ def main() -> int:
                    and (JETON_DOSYA.exists() or os.environ.get("TW_REFRESH_TOKEN")))
     # JETON SAĞLIK SINAMASI (06.10.2026). Gönderilecek içerik yokken koşu jetona
     # hiç dokunmaz; harcanmış bir jetonla açılan koşudan sonra kalan jetonun
-    # canlı olup olmadığı ancak bir sonraki GÖNDERİMDE görünürdü. Bu kip onu
-    # gönderim olmadan sorar; dönen jeton her yenilemede olduğu gibi commit'lenir.
+    # canlı olup olmadığı ancak bir sonraki GÖNDERİMDE görünürdü. Bu kip jetonu
+    # içerik beklemeden yeniler, ama koşuyu GÖNDERİMSİZ yapmaz: concurrency
+    # grubunda en çok bir koşu bekler ve yeni gelen bekleyeni iptal eder, yani bu
+    # koşu bekleyen bir içerik koşusunun YERİNE geçebilir. Yerine geçtiği koşunun
+    # işi kaybolmasın diye normal akış aynı erişim jetonuyla sürer; defter
+    # mükerrer gönderimi zaten engeller.
+    erisim: str | None = None
     if a.jeton:
         if a.kuru or not anahtar_var:
             raise SystemExit("--jeton kuru koşulmaz ve TW_* anahtarlarını ister: "
                              "jetonu sınamanın tek yolu onu yenilemektir.")
-        _erisim_al(JETON_DOSYA)
+        erisim = _erisim_al(JETON_DOSYA)
         print("✓ jeton geçerli — yenilendi; dönen refresh token oauth2.enc'e yazıldı "
-              "(commit edilecek). Gönderim ve okuma yapılmadı.")
-        return 0
+              "(commit edilecek). Bekleyen içerik varsa aynı jetonla gönderilir.")
     kuru = a.kuru or not anahtar_var
     if not a.kuru and not anahtar_var:
         print("::warning::TW_* anahtarları eksik — kuru koşu. Zincir gönderilmedi; "
@@ -480,7 +485,6 @@ def main() -> int:
     # ancak gönderi metnine bakan bir denetim görür.
     gecen, dusen = kapidan_gecir(is_listesi, tam=kuru)
 
-    erisim: str | None = None
     for anahtar, zincir in gecen:
         _bas(zincir, anahtar + (" · KURU KOŞU" if kuru else ""))
         if kuru:

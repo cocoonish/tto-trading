@@ -2482,8 +2482,12 @@ def _g1_dal_ucu():
     dalın ucunu alır ve ikisi aynı concurrency grubunda; (2) bayat checkout'ta
     dal_ucu_denetimi jeton ya da defter farkını adıyla durdurur, güncel checkout'ta
     geçer, uç okunamazsa uyarıyla geçer; (3) koşucuda _erisim_al jetona dokunmadan
-    önce denetimi çağırır, sınama dosyasında çağırmaz; (4) --jeton kipi yalnız
-    jetonu yeniler, kuru koşulmaz."""
+    önce denetimi çağırır, sınama dosyasında çağırmaz; (4) --jeton kipi içerik
+    olmasa da jetonu yeniler, kuru koşulmaz, ve bekleyen içeriği AYNI jetonla
+    gönderir — concurrency grubunda tek bekleme yeri var, jeton koşusu bekleyen bir
+    içerik koşusunun yerine geçebilir ve onun işini yapmalıdır. Ayrıca ilgisiz bir
+    commit (tweet/ dışı ya da tweet/ altında izlenmeyen yol) denetimi DÜŞÜRMEZ:
+    karşılaştırma dosya düzeyindedir, commit düzeyinde değil."""
     import io
     import os
     import subprocess as sp
@@ -2539,6 +2543,17 @@ def _g1_dal_ucu():
             raise AssertionError("bayat jetonlu checkout durmadı")
         git(bayat, "pull", "-q", "--ff-only", "origin", "main")
         denetle(bayat)                                      # dalın ucunda: geçer
+        # Checkout ile jeton arasında main'e İLGİSİZ commit düşebilir (veri botu,
+        # rutinin otuz saniye sonraki fikir yaması, tweet/ altında bir kod
+        # düzeltmesi). Karşılaştırma dosya düzeyinde: ikisi de durdurmamalı.
+        (yazan / "site").mkdir()
+        (yazan / "site" / "x.json").write_text("{}\n")
+        (yazan / "tweet" / "uret.py").write_text("# kod\n")
+        for yol in ("site/x.json", "tweet/uret.py"):
+            git(yazan, "add", yol); git(yazan, "commit", "-q", "-m", yol)
+            git(yazan, "push", "-q", "origin", "HEAD:main")
+            cikti = denetle(bayat)
+            assert "::warning::" not in cikti, f"ilgisiz commit ({yol}) uyarı bastı: {cikti}"
         # Önceki koşu yalnız deftere yazdı: yine durmalı, defter adıyla.
         (yazan / "tweet" / "defter.json").write_text('{"bulten:2026-10-06": {"idler": ["1"]}}\n')
         git(yazan, "commit", "-qam", "defter"); git(yazan, "push", "-q", "origin", "HEAD:main")
@@ -2585,20 +2600,41 @@ def _g1_dal_ucu():
         else:
             os.environ["GITHUB_ACTIONS"] = eski[2]
 
-    # --jeton: yalnız yenileme; kuru koşulmaz.
+    # --jeton: içerik olmasa da yenileme; kuru koşulmaz; bekleyen içerik aynı jetonla gider.
     anahtarlar = ("TW_CLIENT_ID", "TW_CLIENT_SECRET", "TW_KILIT", "TW_REFRESH_TOKEN")
     eski_env = {k: os.environ.get(k) for k in anahtarlar}
-    eski_erisim, eski_argv, eski_bulten = gonder._erisim_al, sys.argv, gonder.uret.yazilmis_bulten
+    adlar = ("_erisim_al", "_gonder_zincir", "kapidan_gecir")
+    eski_g = {a: getattr(gonder, a) for a in adlar}
+    eski_u = (gonder.uret.yazilmis_bulten, gonder.uret.bulten_zinciri)
+    eski_an, eski_dz, eski_argv = gonder.analiz_m.bugunun_analizleri, gonder.duzeltme_m.adaylar, sys.argv
     yenileme: list = []
+    gonderim: list = []
     try:
         for k in anahtarlar:
             os.environ[k] = "sahte"
         gonder._erisim_al = lambda d: yenileme.append(d) or "sahte-erisim"
-        gonder.uret.yazilmis_bulten = lambda *_a: (_ for _ in ()).throw(AssertionError("--jeton içerik kurdu"))
-        sys.argv = ["gonder.py", "--jeton"]
-        with redirect_stdout(io.StringIO()) as cikti:
-            kod = gonder.main()
-        assert kod == 0 and len(yenileme) == 1 and "jeton geçerli" in cikti.getvalue(), (kod, yenileme)
+        gonder._gonder_zincir = lambda z, e, ust=None: gonderim.append((list(z), e)) or ["99"]
+        gonder.analiz_m.bugunun_analizleri = lambda _g: []
+        gonder.duzeltme_m.adaylar = lambda _g, _d: ([], [])
+        with tempfile.TemporaryDirectory() as td:
+            dfy = Path(td) / "defter.json"
+            # (a) içerik yok: jeton yine yenilenir, gönderim yok, çıkış 0.
+            gonder.uret.yazilmis_bulten = lambda *_a: None
+            sys.argv = ["gonder.py", "--jeton", "--tarih", "2099-01-01", "--defter", str(dfy)]
+            with redirect_stdout(io.StringIO()) as cikti:
+                kod = gonder.main()
+            assert kod == 0 and len(yenileme) == 1 and "jeton geçerli" in cikti.getvalue(), (kod, yenileme)
+            assert not gonderim and not dfy.exists(), "içeriksiz jeton koşusu gönderim yaptı"
+            # (b) bekleyen içerik var: yerine geçtiği koşunun işi yapılır, jeton bir kez yenilenir.
+            gonder.uret.yazilmis_bulten = lambda *_a: {"tarih": "2099-01-01"}
+            gonder.uret.bulten_zinciri = lambda _b: ["metin"]
+            gonder.kapidan_gecir = lambda is_l, tam=False: ([(k_, z_) for k_, z_, _d in is_l], [])
+            with redirect_stdout(io.StringIO()):
+                kod = gonder.main()
+            assert kod == 0 and len(yenileme) == 2, f"jeton koşusu içerikte jetonu iki kez yeniledi: {yenileme}"
+            assert gonderim == [(["metin"], "sahte-erisim")], f"bekleyen içerik gönderilmedi: {gonderim}"
+            assert json.loads(dfy.read_text()).get("bulten:2099-01-01", {}).get("idler") == ["99"], \
+                "jeton koşusunun gönderimi deftere yazılmadı"
         sys.argv = ["gonder.py", "--jeton", "--kuru"]
         try:
             gonder.main()
@@ -2606,9 +2642,12 @@ def _g1_dal_ucu():
             assert "kuru" in str(e), str(e)
         else:
             raise AssertionError("--jeton --kuru reddedilmedi")
-        assert len(yenileme) == 1, "kuru jeton sınaması jetona dokundu"
+        assert len(yenileme) == 2, "kuru jeton sınaması jetona dokundu"
     finally:
-        gonder._erisim_al, sys.argv, gonder.uret.yazilmis_bulten = eski_erisim, eski_argv, eski_bulten
+        for a_, v_ in eski_g.items():
+            setattr(gonder, a_, v_)
+        gonder.uret.yazilmis_bulten, gonder.uret.bulten_zinciri = eski_u
+        gonder.analiz_m.bugunun_analizleri, gonder.duzeltme_m.adaylar, sys.argv = eski_an, eski_dz, eski_argv
         for k, v in eski_env.items():
             if v is None:
                 os.environ.pop(k, None)
@@ -2638,7 +2677,7 @@ def main() -> int:
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",
          _gonder_sigortalari)
     sina("jeton kasası: şifreli gidiş-dönüş, yanlış kilit düşer", _jeton_kasasi)
-    sina("G dalın ucu: checkout ref main · bayat jeton/defter durur, uç okunamazsa uyarı · jeton sınaması gönderimsiz",
+    sina("G dalın ucu: checkout ref main · bayat jeton/defter durur, ilgisiz commit durdurmaz, uç okunamazsa uyarı · jeton koşusu bekleyen içeriği gönderir",
          _g1_dal_ucu)
     sina("kalite kapısı öğe başına: kirli düşer, temiz geçer", _kapi_oge_basina)
     sina("gönderim katmanı siteye yazmıyor (X aynası kaldırıldı)", _siteye_sizinti_yok)
