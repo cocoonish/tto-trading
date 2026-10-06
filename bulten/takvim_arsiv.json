@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-04",
+ "_son_guncelleme": "2026-10-06",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1121,6 +1121,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-04"
+  },
+  "2026-10-27|TÜİK: İşgücü (Eylül 2026)": {
+   "tarih": "2026-10-27",
+   "olay": "TÜİK: İşgücü (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-06"
   }
  }
 }

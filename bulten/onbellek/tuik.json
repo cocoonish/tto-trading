@@ -1,34 +1,6 @@
 {
- "zaman": "2026-10-05T04:19:20",
+ "zaman": "2026-10-06T04:23:23",
  "veri": [
-  {
-   "tarih": "2026-10-05",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: TÜFE (Eylül 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": "Tüketici Fiyat Endeksi (TÜFE)"
-  },
-  {
-   "tarih": "2026-10-05",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: Yİ-ÜFE (Eylül 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": "Yurt İçi Üretici Fiyat Endeksi"
-  },
   {
    "tarih": "2026-10-08",
    "saat": "14:30",
@@ -252,6 +224,20 @@
    "onceki": "",
    "not_": "",
    "resmi_ad": "Haftalık Para ve Banka İstatistikleri "
+  },
+  {
+   "tarih": "2026-10-27",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TÜİK: İşgücü (Eylül 2026)",
+   "onem": 1,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "",
+   "resmi_ad": "İşgücü İstatistikleri"
   }
  ]
 }
