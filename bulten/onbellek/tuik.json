@@ -1,5 +1,5 @@
 {
- "zaman": "2026-10-06T04:23:23",
+ "zaman": "2026-10-07T04:19:47",
  "veri": [
   {
    "tarih": "2026-10-08",
@@ -238,6 +238,20 @@
    "onceki": "",
    "not_": "",
    "resmi_ad": "İşgücü İstatistikleri"
+  },
+  {
+   "tarih": "2026-10-28",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TÜİK: Dış ticaret (Eylül 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "",
+   "resmi_ad": "Dış Ticaret İstatistikleri"
   }
  ]
 }

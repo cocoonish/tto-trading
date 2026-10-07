@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-06",
+ "_son_guncelleme": "2026-10-07",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1131,6 +1131,26 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-06"
+  },
+  "2026-10-28|Fed (FOMC) faiz kararı": {
+   "tarih": "2026-10-28",
+   "olay": "Fed (FOMC) faiz kararı",
+   "saat": "21:00",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-07"
+  },
+  "2026-10-28|TÜİK: Dış ticaret (Eylül 2026)": {
+   "tarih": "2026-10-28",
+   "olay": "TÜİK: Dış ticaret (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-07"
   }
  }
 }
