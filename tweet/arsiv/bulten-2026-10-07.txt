@@ -1,0 +1,30 @@
+# bulten:2026-10-07 · 2026-10-07T04:28:07+00:00 · https://x.com/i/status/2107689397164609855
+
+Sabah Notu — 7 Ekim 2026
+TL eğrisindeki 2 yıllık tümsek bir günde söndü: gösterge %39,71'e indi, 5 yıllık kımıldamadı
+
+· TL faizi. 2 yıllık gösterge getiri salı günü 50 bp geriledi; 3 yıllık spot getiri 48 bp, 1 yıllık 14 bp düştü, 5 yıllık %36,26'da yatay kaldı. 2 yıl ile 5 yıl arasındaki terslik 417 bp'den 357 bp'ye daraldı ve pazartesinin satışı geri alındı.
+· Karahan TBMM'de. TCMB Başkanı Fatih Karahan, Plan ve Bütçe Komisyonu'nda fiyat istikrarı sağlanana kadar sıkı para politikasının süreceğini söyledi ve indirim için zaman vermedi (Bloomberg HT). Para piyasası fonlarından çıkışların büyük ölçüde mevduata yöneldiğini belirtti (AA).
+· Hazine. İki tahvil ihalesinde toplam 87,0 milyar TL borçlanıldı (Bloomberg HT). 8 yıllık sabit kuponlu tahvilde 35,8 milyar TL satıldı; bileşik faiz %36,40 ile bu kâğıdın sekiz ihalesinin en yükseği (endeks24).
+· BIST ve kur. BIST 100 %0,56 düşüşle 12.374'te kapandı; bankacılık %0,66 kazandı, sınai %1,21 kaybetti. Dolar/TL 49,18'de yatay. Euro/TL %0,49 (1,6σ) yükseldi, çünkü euro 17 ayın dibinden toparlandı.
+· ABD ve Kanada. S&P 500 %0,58 artışla 7.819'da rekor kapanış yaptı; ABD 10 yıllık getirisi 4 bp geriledi. Dolar/Kanada doları %0,37 düştü (−2,1σ): Kanada'nın ağustos dış ticaret fazlası 4,2 milyar CAD ile beklenen 1,55 milyarın çok üstünde geldi (Reuters).
+· Bu sabah petrol. Brent yeniden 101 doların üstüne çıktı (Dünya). Meksika Körfezi'nde güçlenen tropik sistem ve Husilerin Suudi Arabistan'daki Cizan ve Necran havalimanlarına saldırısı arz endişesini öne çıkardı (Bloomberg HT).
+
+Bugün TSİ 21:00 · Fed tutanakları. Eylül toplantısının tutanakları artırım için hangi koşulların arandığını gösterecek. Koşullar enerji şokunun ikinci tur etkisine bağlanırsa ABD uzun ucu yeniden yükselir ve TL uzun ucunun dış tabanı yukarı kayar; artırım tartışması geride kaldıysa 10 yıllığın geri çekilmesi sürer.
+
+TL eğrisi pazartesi enflasyon verisine vermediği cevabı salı günü orta vadede verdi. 2 ve 3 yıllık düğümler birlikte geri çekildi, 1 yıllık ve 5 yıllık uç neredeyse yerinde kaldı. Bu bir indirim fiyatlaması değil, bir günlük satışın geri alınmasıdır.
+
+Gündem
+Türkiye: TL faizi ve DİBS. Spot eğride 3 aylık getiri %37,73, 2 yıllık %39,83, 3 yıllık %39,09, 7 yıllık %33,37. 2 yıllık düğüm komşularının üstünde kalmayı sürdürüyor, ama 1 yıllığa farkı 31 bp'ye indi; 1y–2y–3y bükümü eylül ortasında 270 bp'nin üstündeydi.
+Küresel: ABD faizi. Uzun uç, pazartesinin 2002'den beri en yüksek düzeyinden geri çekildi: 5 yıllık 3,8 bp, 30 yıllık 2,4 bp düştü, 5s30s eğimi 61 bp'ye dikleşti. MOVE %7,4 geriledi.
+Emtia: Ham petrol ve ürün. Salı kapanışında Brent 100,58 dolarla yatay, WTI 89,44 dolarda kaldı. Distilat marjı 102,47 dolara çıktı. Vitol'ün CEO'su Batı'daki petrol stoklarının tükendiğini ve kışa girerken yakıt piyasasının sıkı kalacağını söyledi (Bloomberg HT).
+
+Neye bakılacak
+· Likidite fazlası tersine döner → kısa uç rallisi geri alınır; izlenecek: TLREF'in politika faizinin üstüne çıkması.
+· Petrolde arz şoku derinleşir → ekim TÜFE'si ve indirim beklentisi; izlenecek: Brent'in 105 doların üstünde kapanması.
+
+Pano: 1 aylık yıllıklandırılmış deval. hızı %21,3 (+2,5 puan; 6 Eki) · Net rezerv (günlük tahmin) 55,5 mlr USD (−0,1; 5 Eki) · Brüt rezervde altın payı %63,6 (−0,3 puan; 5 Eki) · TLREF %36,81 (−0,01 puan; 6 Eki) · 2 yıllık başabaş enflasyon %30,53 (−0,56 puan; 6 Eki) · Son ihale maliyeti %39,20 (+0,01 puan; 6 Eki)
+
+Beklenen: Perşembe 14:30 · TCMB rezerv ve haftalık veriler. Eylül sonu uluslararası rezervler ve döviz likiditesi tablosu, menkul kıymet ve para-banka istatistikleri. Menkul kıymet verisi 2 Ekim'de biten haftayı kapsıyor, yani bu haftanın TL eğrisi hareketlerini göremez.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
