@@ -2500,6 +2500,38 @@ def main() -> int:
     sina("olay.topla", lambda: olay.topla())
     sina("olay.gecikme_olaylari", lambda: olay.gecikme_olaylari())
     sina("rejim.panosu", lambda: rejim.panosu())
+
+    # REJİM FARKI BİRİMSİZ BASILAMAZ. Sitenin rejim şeridi farkın birimini
+    # `site/src/lib/anaSayfa.ts` içindeki REJIM_FARK_BIRIMI tablosundan okur;
+    # tabloda olmayan birim olduğu gibi kullanılır. 01.10.2026'da Reel efektif
+    # kurun birimi "endeks"ten boşa çekildi ve boş birimin tabloda karşılığı
+    # yoktu: seri aylık olduğu için altı gün fark basılmadı, 07.10'da 103,9 →
+    # 104,3 olunca fark çıplak "+0,4" çıktı, sayfa sınavı 27 bunu ENGEL saydı ve
+    # yazılmış bülten siteye çıkamadı. Arıza veriye bağlıydı ama kusur koddaydı;
+    # o yüzden soru statik sorulur: rejim.py'deki her satırın birimi, sitenin
+    # tablosunda birimli ve yüzde olmayan bir farka eşlenmeli.
+    def _rejim_fark_birimi():
+        import ast as _ast
+        kaynak = (BURASI / "rejim.py").read_text(encoding="utf-8")
+        birimler: dict[str, str] = {}
+        for n in _ast.walk(_ast.parse(kaynak)):
+            if isinstance(n, _ast.Call) and getattr(n.func, "id", None) == "Satir":
+                if len(n.args) < 3 or not isinstance(n.args[2], _ast.Constant):
+                    raise AssertionError(f"rejim.py:{n.lineno} Satir birimi sabit dizge değil — sınanamıyor")
+                ad = n.args[0].value if isinstance(n.args[0], _ast.Constant) else f"satır {n.lineno}"
+                birimler[ad] = n.args[2].value
+        assert birimler, "rejim.py'de Satir çağrısı bulunamadı — ölçüt kör"
+        ts = (BURASI.parent / "site" / "src" / "lib" / "anaSayfa.ts").read_text(encoding="utf-8")
+        m = re.search(r"REJIM_FARK_BIRIMI\s*:\s*Record<string,\s*string>\s*=\s*\{([^}]*)\}", ts)
+        assert m, "anaSayfa.ts içinde REJIM_FARK_BIRIMI bulunamadı — ölçüt kör"
+        # Tırnaklı anahtar ('%', '') birinci, çıplak anahtar (puan) ikinci grupta.
+        tablo = {q or w: v for q, w, v in re.findall(r"(?:'([^']*)'|(\w+))\s*:\s*'([^']*)'", m.group(1))}
+        for ad, birim in birimler.items():
+            fark = tablo.get(birim, birim)
+            assert fark and not fark.startswith("%"), (
+                f"rejim satırı {ad!r} birimi {birim!r}: sitede farkı "
+                f"{'birimsiz' if not fark else 'yüzde'} basılır — REJIM_FARK_BIRIMI'ne ekleyin")
+    sina("rejim: her satırın farkı sitede birimli basılır (REJIM_FARK_BIRIMI)", _rejim_fark_birimi)
     sina("soz.ozet", lambda: soz.ozet(bugun.isoformat()))
     sina("grafik_veri.hazirla", lambda: grafik_veri.hazirla())
     sina("surpriz.gecmis_olaylar", lambda: surpriz.gecmis_olaylar([], {}, bugun))

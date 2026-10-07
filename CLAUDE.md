@@ -4880,3 +4880,23 @@ günün son cron'undan sonra yazılmışsa o günün gönderisi düşer, ertesi 
 koruması onu reddeder. Elle yapılan bir dispatch'in bir iki dakikalık pencereye
 denk gelmesi gerekiyor. GitHub'ın kuyruğa alma seçeneği belgede anılıyor ama
 sözdizimi doğrulanmadığı için konmadı.
+
+**Kurucu ilke — BİR BİRİMİ KALDIRAN DEĞİŞİKLİK, O BİRİMİ ANAHTAR OLARAK OKUYAN
+TABLOYU DA DEĞİŞTİRİR; ve aylık bir seri, kusuru ancak kımıldadığı gün
+gösterir.** 07.10.2026 sabahı bülten 04:27'de yazıldı, gönderisi 04:28'de
+çıktı, ama site güncellenmedi: yayın kapısı (sayfa sınavı 27) rejim şeridinde
+birimsiz bir fark ("+0,4") buldu ve iki yayın koşusu düştü. Kusur 01.10'daki
+biçim 3 commit'indeydi (695df412): rejim panosunda seviyeye "endeks" yazmamak
+için Reel efektif kurun birimi "endeks"ten boşa çekilmişti; sitenin fark
+birimini okuduğu tablo (`lib/anaSayfa.REJIM_FARK_BIRIMI`) `endeks → puan`
+taşıyordu, boş birimin karşılığı yoktu. REDK aylık olduğu için 01–06.10
+arasında fark hiç basılmadı ve kusur görünmedi; Eylül verisiyle 103,9 → 104,3
+olduğu gün çıktı. Kapı DOĞRU davrandı; eksik olan, değişikliği yapan commit'te
+bu bağı soran bir ölçüttü. Tabloya `'' → puan` girdi ve `bulten/duman.py`
+artık rejim.py'deki her satırın birimini sitenin tablosuyla STATİK olarak
+kıyaslıyor (birimsiz ya da yüzde fark → DÜŞER; düzeltme geri alınınca adıyla
+düştüğü ölçüldü). Veriye bağlı bir kapı yalnız verinin getirdiği günü görür;
+aynı soru koddan sorulursa kusur commit anında yakalanır. Gösterge kartı aynı
+satırın farkını hâlâ birimsiz basar ("+0,4"): orada boş birim USD/TRY ile
+paylaşıldığı ve kurun farkı bilerek yüzde yazıldığı için bu düzeltmenin
+kapsamına alınmadı; kapı da onu ENGEL saymıyor.
