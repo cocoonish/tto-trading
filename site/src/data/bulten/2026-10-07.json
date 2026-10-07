@@ -7191,9 +7191,15 @@
    "global_piyasa": "Global — piyasa ve emtia"
   }
  },
- "gundem": {},
- "yorum": null,
- "yorum_zamani": null,
+ "gundem": {
+  "turkiye": "<p><strong>TL faizi ve DİBS.</strong> Spot eğride 3 aylık getiri %37,73, 2 yıllık %39,83, 3 yıllık %39,09, 7 yıllık %33,37. 2 yıllık düğüm komşularının üstünde kalmayı sürdürüyor, ama 1 yıllığa farkı 31 bp'ye indi; 1y–2y–3y bükümü eylül ortasında 270 bp'nin üstündeydi. 2 yıllık başabaş 56 bp düştü, reel getiri %7,13'te yatay kaldı; başabaşın hareketi yine nominal hareketin aynası.</p><p><strong>Enflasyon.</strong> 04.09 notu, üretici fiyatlarındaki hızlanmanın eylül–ekimde tüketici enflasyonundaki gerilemeyi durduracağını söylemişti; eylülde durdurmadı ve çağrı tutmadı. Yurt içi üretici fiyatlarının aylık artışı %2'nin üstünde kaldı, yani maliyet borusu dolu; ama manşeti aşağı çeken gıda oldu ve boru bu ay tüketiciye yazılmadı.</p><p><strong>Likidite.</strong> TCMB'nin piyasadan çektiği net likidite salı günü 281 milyar TL artarak 904 milyar TL'ye çıktı. TLREF %36,81 ile politika faizinin 19 bp altında. Daily Sabah'a göre fon çıkışlarıyla mevduata geçen tutar 16 milyar doları aştı. Karahan fon piyasasının sağlıklı işlediğini ve sistem genelini etkileyen bir sorun görmediklerini söyledi (Hürriyet).</p><p><strong>Hazine.</strong> 87 milyar TL'nin kalanı, yaklaşık 51 milyar TL, 4 yıllık TLREF'e endeksli kâğıttan geldi. Yeni ihraçların ağırlıklı ortalama vadesi 4,44 yıla uzadı; bir önceki ihale gününde 3,45 yıldı. Ekim–Aralık stratejisinde sıradaki ihale 9 Kasım'da.</p><p><strong>Kur.</strong> Dolar/TL'nin 1 aylık yıllıklandırılmış devalüasyon hızı %21,3, son beş iş günü ortalaması %21,2; ritim değişmedi. Euro/TL'deki yükseliş tamamen EUR/USD'nin toparlanmasından geldi.</p><p><strong>Hisse.</strong> Bankacılık endeksi BIST 100'ü 1,2 puan geride bıraktı; faizdeki düşüş en çok bankalara yaradı. iShares Türkiye ETF'i dolar bazında %0,75 kaybetti, gelişen ülke hisse fonu %0,67; satış Türkiye'ye özgü değildi.</p>",
+  "kuresel": "<p><strong>ABD faizi.</strong> Uzun uç, pazartesinin 2002'den beri en yüksek düzeyinden geri çekildi: 5 yıllık 3,8 bp, 30 yıllık 2,4 bp düştü, 5s30s eğimi 61 bp'ye dikleşti. MOVE %7,4 geriledi. Vadeli faiz piyasası ekim artırımı olasılığını bir haftada %51'den %20,5'e indirdi (Dünya). San Francisco Fed Başkanı Mary Daly yeni artırımların enflasyon şoklarının seyrine bağlı olduğunu söyledi (Foreks). ABD Hazinesi bu hafta 119 milyar dolarlık tahvil satıyor (24/7 Wall St.).</p><p><strong>ABD verisi.</strong> Dış ticaret açığı ağustosta 105,6 milyar dolara çıktı; beklenti 102 milyardı (CNBC). Kanada'da ihracatçılar yeni ABD tarifeleri yürürlüğe girmeden sevkiyatı öne çekti (Reuters).</p><p><strong>Dolar ve G10.</strong> Dolar endeksi %0,33 geriledi, EUR/USD 1,1264'e toparlandı. ECB Başekonomisti Philip Lane güçlü ikinci tur enflasyon etkisi görmediklerini söyledi; Fransa'nın bütçe tartışması euro üzerindeki baskının kaynağı olmayı sürdürüyor. USD/JPY 158,07'de.</p><p><strong>Hisse.</strong> S&amp;P 500 rekoru dar bir tabana dayanıyor: Russell 2000 %0,59 düştü ve FT'ye göre ralli giderek bir avuç teknoloji hissesine bağlanıyor. DAX %0,77 yükseldi. Nikkei %1,05 artışla 70.684'te yeni rekor kırdı; Japonya Merkez Bankası Başkanı Kazuo Ueda yeni artırımların mümkün olduğunu söyledi (MarketScreener).</p><p><strong>Bu sabah.</strong> Altın Fed tutanakları öncesi geriledi (Bloomberg HT). AB, Rusya yaptırım listesine yaklaşık 1.650 yeni kişi ve kuruluş eklemeyi bugün karara bağlayacak (Dünya).</p>",
+  "emtia": "<p><strong>Ham petrol ve ürün.</strong> Salı kapanışında Brent 100,58 dolarla yatay, WTI 89,44 dolarda kaldı. Distilat marjı 102,47 dolara çıktı. Vitol'ün CEO'su Batı'daki petrol stoklarının tükendiğini ve kışa girerken yakıt piyasasının sıkı kalacağını söyledi (Bloomberg HT). Trump, ara seçime dört hafta kala federal benzin vergisini askıya almayı düşündüğünü söyledi (FT).</p><p><strong>Metaller.</strong> Ons altın %0,73 artışla 4.187 dolarda kapandı; gümüş ve bakır sınırlı yükseldi.</p><p><strong>Türkiye'ye geçiş.</strong> Pompa fiyatını ham petrolden çok ürün marjı belirlediği için distilat marjındaki genişleme ekim TÜFE'sinde motorin tarafındaki baskıyı sürdürür.</p>",
+  "takvim": "<p><strong>Bugün TSİ 21:00 · Fed tutanakları.</strong> Eylül toplantısının tutanakları artırım için hangi koşulların arandığını gösterecek. Koşullar enerji şokunun ikinci tur etkisine bağlanırsa ABD uzun ucu yeniden yükselir ve TL uzun ucunun dış tabanı yukarı kayar; artırım tartışması geride kaldıysa 10 yıllığın geri çekilmesi sürer.</p><p><strong>Perşembe 14:30 · TCMB rezerv ve haftalık veriler.</strong> Eylül sonu uluslararası rezervler ve döviz likiditesi tablosu, menkul kıymet ve para-banka istatistikleri. Menkul kıymet verisi 2 Ekim'de biten haftayı kapsıyor, yani bu haftanın TL eğrisi hareketlerini göremez. Rezerv tablosunda vadeye kalan döviz yükümlülükleri azalırsa toparlanma kalıcıdır; artarsa toparlanma swapa dayanıyor demektir.</p><p><strong>Cuma 10:00 · Sanayi üretimi (ağustos).</strong> Zayıf bir rakam indirim için büyüme gerekçesini güçlendirir; güçlü bir rakam TCMB'nin sabır mesajını destekler.</p><p><strong>Önümüzdeki hafta.</strong> 13 Ekim'de ödemeler dengesi (ağustos), 14 Ekim'de ABD TÜFE'si (eylül), 15 Ekim'de merkezi yönetim bütçesi (eylül). PPK 22 Ekim'de toplanıyor.</p>",
+  "risk": "<ul><li><strong>Fed tutanakları artırımı canlı tutar</strong> → ABD ve TL uzun ucu yukarı; izlenecek: ABD 10 yıllığın %5,35'in üstünde kapanması.</li><li><strong>Likidite fazlası tersine döner</strong> → kısa uç rallisi geri alınır; izlenecek: TLREF'in politika faizinin üstüne çıkması.</li><li><strong>Petrolde arz şoku derinleşir</strong> → ekim TÜFE'si ve indirim beklentisi; izlenecek: Brent'in 105 doların üstünde kapanması.</li></ul>"
+ },
+ "yorum": "<p>TL eğrisi pazartesi enflasyon verisine vermediği cevabı salı günü orta vadede verdi. 2 ve 3 yıllık düğümler birlikte geri çekildi, 1 yıllık ve 5 yıllık uç neredeyse yerinde kaldı. Bu bir indirim fiyatlaması değil, bir günlük satışın geri alınmasıdır.</p><p><strong>Mekanizma.</strong> Hareketi politika iletişimi taşımadı: Karahan sıkılığı vurguladı ve zaman tarifi vermedi. Daha güçlü aday likidite. Fonlardan çıkan paranın mevduata geçmesi bankaların elindeki TL'yi artırıyor ve bu fazla kısa vadeli kâğıda talep olarak dönüyor. Karşı mekanizma Hazine'de: 8 yıllık ihalenin faizi kâğıdın en yükseği oldu, yani uzun vadede borçlanma maliyeti gerilemedi. Uzun uç rallinin dışında kaldı; dikleşme ön ve orta vadeden geldi.</p><p><strong>Fiyatlanan ve asimetri.</strong> Eğrinin ön ucu indirimi hâlâ fiyatlamıyor. 1 yıllık spot getiri %39,52 ile hem politika faizinin hem TLREF'in üstünde duruyor. Bir yıl sonra başlayan 1 yıllık faiz %40,14; piyasa katılımcıları anketinin 12 ay sonrası için beklediği politika faizi %29,22. İki ölçü aynı konvansiyonda değil, ama aradaki yaklaşık 11 puan risk primini ve TCMB'nin sıkı iletişimini birlikte taşıyor. Risk ön uçta aşağı yönde asimetrik: 22 Ekim'de sabit kalan bir faiz büyük ölçüde fiyatta, likidite fazlası sürerken gelecek bir indirim fiyatta değil. Öbür yönde 2 yıllık enflasyon risk primi 9,55 puan ile güvenin zayıf olduğunu söylüyor; prim daralmadan gelen bir indirim orta vadeyi yeniden satışa açabilir.</p><p><strong>Havlamayan köpek.</strong> Likidite bir günde bu kadar genişlerken kur kımıldamadı. Fazla TL dövize değil mevduata ve kısa vadeli kâğıda gidiyor; devalüasyon hızı beş günlük ortalamasından ayrışmadı. Likidite fazlasının kur kanalına sızdığı ilk iz, bu ortalamanın kalıcı biçimde aşılması olur. Bankacılık hisselerinin endeksi geride bırakması aynı okumanın hisse tarafı: piyasa, mevduat maliyetindeki düşüşü bilançolara henüz indirim gelmeden yazmaya başladı.</p><p><strong>Görüşü ne değiştirir.</strong> Bu akşamki Fed tutanakları ABD uzun ucunu, dolayısıyla TL uzun ucunun dış maliyet tabanını belirleyecek. TLREF'in politika faizine yeniden yaklaşması likidite tezini zayıflatır. Ön ucun indirime ilk tepkisini 22 Ekim'den önce ancak TCMB'nin kendi iletişimi değiştirebilir.</p>",
+ "yorum_zamani": "2026-10-07",
  "tur": "gunluk",
  "surum": 3,
  "gundem_yazi_bolumleri": [
@@ -7219,8 +7225,53 @@
   }
  ],
  "ozet": {
-  "ne_oldu": "Son veri yayımından bu yana kur ve rezerv tarafında: USD/TRY 49,18 seviyesine yükseldi (+0,06); kurun bir aylık yıllıklandırılmış artış hızı %21,3 (+2,5 puan); net rezerv 2,4 milyar dolar azaldı ve 53,4 milyar dolara ulaştı ve swap hariç net rezerv 39,9 milyar dolar (−3,2). Para politikası tarafında politika faizi %37,00; gecelik gerçekleşen faiz (TLREF) %36,81, politika faizinin 0,19 puan altında ve ağırlıklı ortalama fonlama maliyeti %37,00. Enflasyonda son yayımlanan veriye göre yıllık TÜFE %29,73 ve son üç ayın yıllıklandırılmış hızı mevsimsellikten arındırılmış %25,3, ham %24,2. Yabancı yatırımcının dört haftalık net çıkışı 340 milyon dolar ve kur etkisinden arındırılmış kredi büyümesi (13 haftalık yıllıklandırılmış) %26,6.",
-  "ne_bekleniyor": "Önümüzdeki günlerde takvimde birinci derece veri var: 8 Ekim 2026 Perşembe 14:30 — TCMB: IRFCL rezerv (Eylül 2026). Daha ileride: 13 Ekim 2026 TCMB: Ödemeler dengesi (Ağustos 2026); 14 Ekim 2026 ABD TÜFE (Eylül); 15 Ekim 2026 HMB: Bütçe dengesi (Eylül 2026); 22 Ekim 2026 TCMB PPK faiz kararı (mevcut politika faizi %37,00 · anket (PKA Eylül): 12 ay sonrası politika faizi %29,22); 27 Ekim 2026 TÜİK: İşgücü (Eylül 2026). Kurum duyurusu: Treasury Dismantles Major Hamas Financing Network."
+  "ne_oldu": "<ul><li><strong>TL faizi.</strong> 2 yıllık gösterge getiri salı günü 50 bp geriledi; 3 yıllık spot getiri 48 bp, 1 yıllık 14 bp düştü, 5 yıllık %36,26'da yatay kaldı. 2 yıl ile 5 yıl arasındaki terslik 417 bp'den 357 bp'ye daraldı ve pazartesinin satışı geri alındı.</li><li><strong>Karahan TBMM'de.</strong> TCMB Başkanı Fatih Karahan, Plan ve Bütçe Komisyonu'nda fiyat istikrarı sağlanana kadar sıkı para politikasının süreceğini söyledi ve indirim için zaman vermedi (Bloomberg HT). Para piyasası fonlarından çıkışların büyük ölçüde mevduata yöneldiğini belirtti (AA).</li><li><strong>Hazine.</strong> İki tahvil ihalesinde toplam 87,0 milyar TL borçlanıldı (Bloomberg HT). 8 yıllık sabit kuponlu tahvilde 35,8 milyar TL satıldı; bileşik faiz %36,40 ile bu kâğıdın sekiz ihalesinin en yükseği (endeks24).</li><li><strong>BIST ve kur.</strong> BIST 100 %0,56 düşüşle 12.374'te kapandı; bankacılık %0,66 kazandı, sınai %1,21 kaybetti. Dolar/TL 49,18'de yatay. Euro/TL %0,49 (1,6σ) yükseldi, çünkü euro 17 ayın dibinden toparlandı.</li><li><strong>ABD ve Kanada.</strong> S&amp;P 500 %0,58 artışla 7.819'da rekor kapanış yaptı; ABD 10 yıllık getirisi 4 bp geriledi. Dolar/Kanada doları %0,37 düştü (−2,1σ): Kanada'nın ağustos dış ticaret fazlası 4,2 milyar CAD ile beklenen 1,55 milyarın çok üstünde geldi (Reuters).</li><li><strong>Bu sabah petrol.</strong> Brent yeniden 101 doların üstüne çıktı (Dünya). Meksika Körfezi'nde güçlenen tropik sistem ve Husilerin Suudi Arabistan'daki Cizan ve Necran havalimanlarına saldırısı arz endişesini öne çıkardı (Bloomberg HT).</li></ul>"
  },
- "gundem_kaynagi": "otomatik"
+ "gundem_kaynagi": "yazili",
+ "manset": "TL eğrisindeki 2 yıllık tümsek bir günde söndü: gösterge %39,71'e indi, 5 yıllık kımıldamadı",
+ "yazi_zamani": "2026-10-07T04:26:47+00:00",
+ "yazi_surumu": 2,
+ "ilk_yazi_zamani": "2026-10-07T04:26:35+00:00",
+ "fikirler": [
+  {
+   "kimlik": "2026-10-07-1",
+   "acilis": "2026-10-07",
+   "baslik": "TL 1 yıllık getiride yalın düşüş: ön uç indirimi fiyatlamıyor",
+   "tur": "yalin",
+   "gerekce": "Enflasyon beklentinin altında geldi ve likidite fazlası büyüyor, ama 1 yıllık getiri hâlâ politika faizinin ve TLREF'in üstünde. Neden 1 yıllık ve 2 yıllık değil: 2 yıllık düğüm risk primini taşıyor ve iki günde iki yönde sert oynadı; 1 yıllık doğrudan PPK patikasını fiyatlıyor ve gecelik fonlamaya göre taşıması lehte.",
+   "ne_bozar": "22 Ekim PPK'da politika faizi sabit kalırsa ya da TLREF bu tarihten önce politika faizinin üstünde kapanırsa likidite tezi düşer.",
+   "ufuk": "2026-10-23",
+   "dayanak": "yorum",
+   "yazim_ani": "2026-10-07T04:26:47+00:00",
+   "enstruman": "TRY OIS 1 yıl",
+   "bacaklar": [
+    {
+     "seri": "dibs:spot_1y",
+     "deger": 39.52,
+     "tarih": "2026-10-06"
+    }
+   ],
+   "katsayilar": [
+    1.0
+   ],
+   "yon": "asagi",
+   "sinif": "faiz",
+   "giris": 39.52,
+   "giris_tarih": "2026-10-06",
+   "birim": "%",
+   "sonuc_birim": "bp",
+   "ondalik": 2,
+   "hedef": 38.3,
+   "stop": 40.4,
+   "yapi_metni": "DİBS 1 yıl",
+   "yon_metni": "getiri düşerse kazanır (tahvilde uzun · swapta sabit alan)",
+   "getiri_risk": 1.39,
+   "stop_mesafe": 88.0,
+   "hedef_mesafe": 122.0,
+   "sigma_gun": 24.45,
+   "ufuk_is_gunu": 12,
+   "stop_z": 1.04,
+   "hedef_z": 1.44
+  }
+ ]
 }
