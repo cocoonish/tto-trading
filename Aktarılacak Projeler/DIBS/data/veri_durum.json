@@ -1,12 +1,12 @@
 {
- "kosum": "2026-10-06T15:44:53",
- "son_gun": "2026-10-06",
+ "kosum": "2026-10-07T16:02:54",
+ "son_gun": "2026-10-07",
  "son_ay": "2026-09-01",
  "tarihce_bas": "2013-01-01",
- "istek_sayisi": 41,
- "sure_sn": 162.2,
+ "istek_sayisi": 43,
+ "sure_sn": 174.0,
  "evren": {
-  "toplam_kiymet": 6215,
+  "toplam_kiymet": 6225,
   "nominal_sifir_kuponlu": 865,
   "nominal_fiyati_gelen": 865,
   "tufex_anapara": 20,
@@ -20,7 +20,7 @@
   "ortusme_ay": "2026-01-01"
  },
  "ayristirma_test": {
-  "toplam": 10897,
+  "toplam": 10917,
   "saf_dusen": 6067,
   "saf_yanlis": 910,
   "hosgoru_dusen": 13
