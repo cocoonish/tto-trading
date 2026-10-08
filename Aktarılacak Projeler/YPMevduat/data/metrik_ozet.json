@@ -1,89 +1,89 @@
 {
- "son_hafta": "2026-09-25",
- "stok_toplam_mia": 230.11610000000002,
- "stok_gercek_mia": 144.1608,
- "stok_tuzel_mia": 85.95519999999999,
- "maden_gercek_mia": 84.386454,
- "maden_tuzel_mia": 9.40899,
- "genis_toplam_mia": 269.55533299999996,
- "maden_toplam_mia": 93.795444,
- "maden_pay_gercek": 58.5363385885761,
- "maden_pay_tuzel": 10.94638835114106,
- "maden_pay_toplam": 40.760052860273575,
- "gercek_pay": 62.64698558684072,
- "tuzel_pay": 37.3529709568344,
- "genis_fark_mia": 39.43923299999998,
- "genis_fark_pay": 14.63121970582566,
- "stok_tarih": "2026-09-25",
- "ar_toplam_mn": 1342.252641,
- "pe_toplam_mn": -2023.120641,
- "ar_gercek_mn": 1024.349553,
- "pe_gercek_mn": -1654.450553,
- "ar_tuzel_mn": 317.903088,
- "pe_tuzel_mn": -368.670088,
- "ar_gercek_usd_mn": 572.198,
+ "son_hafta": "2026-10-02",
+ "stok_toplam_mia": 228.51379999999997,
+ "stok_gercek_mia": 142.6796,
+ "stok_tuzel_mia": 85.8342,
+ "maden_gercek_mia": 82.783842,
+ "maden_tuzel_mia": 9.101460999999999,
+ "genis_toplam_mia": 266.710332,
+ "maden_toplam_mia": 91.885303,
+ "maden_pay_gercek": 58.02079764731608,
+ "maden_pay_tuzel": 10.603536818657364,
+ "maden_pay_toplam": 40.20995799816029,
+ "gercek_pay": 62.43806719769223,
+ "tuzel_pay": 37.56193280230779,
+ "genis_fark_mia": 38.196532000000005,
+ "genis_fark_pay": 14.321354449815619,
+ "stok_tarih": "2026-10-02",
+ "ar_toplam_mn": 851.047787,
+ "pe_toplam_mn": -2453.275787,
+ "ar_gercek_mn": 423.388156,
+ "pe_gercek_mn": -1904.588156,
+ "ar_tuzel_mn": 427.659631,
+ "pe_tuzel_mn": -548.687631,
+ "ar_gercek_usd_mn": 258.281,
  "pe_gercek_usd_mn": 0.0,
- "ar_gercek_eur_mn": 333.533553,
- "pe_gercek_eur_mn": -148.877553,
- "ar_gercek_diger_mn": 0.116,
+ "ar_gercek_eur_mn": 182.485156,
+ "pe_gercek_eur_mn": -297.574156,
+ "ar_gercek_diger_mn": -21.78,
  "pe_gercek_diger_mn": 0.0,
- "ar_gercek_maden_mn": 118.502,
- "pe_gercek_maden_mn": -1505.573,
- "ar_tuzel_usd_mn": 223.416,
+ "ar_gercek_maden_mn": 4.402,
+ "pe_gercek_maden_mn": -1607.014,
+ "ar_tuzel_usd_mn": 1047.814,
  "pe_tuzel_usd_mn": 0.0,
- "ar_tuzel_eur_mn": 73.706088,
- "pe_tuzel_eur_mn": -198.619088,
- "ar_tuzel_diger_mn": 133.239,
+ "ar_tuzel_eur_mn": -441.966369,
+ "pe_tuzel_eur_mn": -378.366631,
+ "ar_tuzel_diger_mn": -40.98,
  "pe_tuzel_diger_mn": 0.0,
- "ar_tuzel_maden_mn": -112.458,
- "pe_tuzel_maden_mn": -170.051,
- "kum_ay_ar_toplam_mn": 5897.728309,
- "kum_ay_ar_gercek_mn": 1226.081509,
- "kum_ay_ar_tuzel_mn": 4671.6468,
- "kum_ay_pe_toplam_mn": -7144.8953089999995,
- "kum_ay_pe_gercek_mn": -5920.184509,
- "kum_ay_pe_tuzel_mn": -1224.7108,
- "kum_ay_ar_gercek_maden_mn": 203.25599999999997,
- "kum_ay_ar_tuzel_maden_mn": 1046.685,
- "kum_yil_ar_toplam_mn": 16438.589579,
- "kum_yil_ar_gercek_mn": 7545.521051,
- "kum_yil_ar_tuzel_mn": 8893.068528,
- "kum_yil_pe_toplam_mn": -7780.171579000002,
- "kum_yil_ar_gercek_maden_mn": 12535.76,
- "kum_yil_ar_tuzel_maden_mn": 2522.254,
- "kum_4h_ar_toplam_mn": 5897.728309000002,
- "kum_4h_pe_toplam_mn": -7144.895308999998,
- "kum_13h_ar_toplam_mn": 7313.603020999994,
- "kum_13h_pe_toplam_mn": 4396.798978999997,
- "akim_tarih": "2026-09-25",
- "tum_ar_toplam_mia": 55.93,
- "tum_ar_maden_mia": 45.33,
- "tum_ar_maden_disi_mia": 10.6,
- "tum_pe_toplam_mia": 29.18,
- "tum_ar_gercek_mia": 25.96,
- "tum_ar_gercek_maden_mia": 39.34,
- "tum_ar_gercek_maden_disi_mia": -13.38,
- "tum_ar_tuzel_mia": 29.97,
- "tum_ar_tuzel_maden_mia": 5.99,
- "tum_ar_tuzel_maden_disi_mia": 23.98,
+ "ar_tuzel_maden_mn": -137.208,
+ "pe_tuzel_maden_mn": -170.321,
+ "kum_ay_ar_toplam_mn": 851.047787,
+ "kum_ay_ar_gercek_mn": 423.388156,
+ "kum_ay_ar_tuzel_mn": 427.659631,
+ "kum_ay_pe_toplam_mn": -2453.275787,
+ "kum_ay_pe_gercek_mn": -1904.588156,
+ "kum_ay_pe_tuzel_mn": -548.687631,
+ "kum_ay_ar_gercek_maden_mn": 4.402,
+ "kum_ay_ar_tuzel_maden_mn": -137.208,
+ "kum_yil_ar_toplam_mn": 17289.637366,
+ "kum_yil_ar_gercek_mn": 7968.909207000001,
+ "kum_yil_ar_tuzel_mn": 9320.728158999998,
+ "kum_yil_pe_toplam_mn": -10233.447366,
+ "kum_yil_ar_gercek_maden_mn": 12540.162,
+ "kum_yil_ar_tuzel_maden_mn": 2385.046,
+ "kum_4h_ar_toplam_mn": 7025.672064000002,
+ "kum_4h_pe_toplam_mn": -6864.128063999999,
+ "kum_13h_ar_toplam_mn": 11415.334795999994,
+ "kum_13h_pe_toplam_mn": -589.8187960000027,
+ "akim_tarih": "2026-10-02",
+ "tum_ar_toplam_mia": 56.78,
+ "tum_ar_maden_mia": 45.2,
+ "tum_ar_maden_disi_mia": 11.58,
+ "tum_pe_toplam_mia": 26.73,
+ "tum_ar_gercek_mia": 26.38,
+ "tum_ar_gercek_maden_mia": 39.35,
+ "tum_ar_gercek_maden_disi_mia": -12.97,
+ "tum_ar_tuzel_mia": 30.4,
+ "tum_ar_tuzel_maden_mia": 5.85,
+ "tum_ar_tuzel_maden_disi_mia": 24.55,
  "tum_bas": "28.02.2014",
- "tum_son": "25.09.2026",
- "tum_hafta": 657,
- "delta_toplam_mn": -680.7999999999884,
- "kimlik_artik_toplam_mn": 0.06800000001157969,
- "delta_gercek_mn": -630.1000000000058,
- "kimlik_artik_gercek_mn": 0.0009999999940646376,
- "delta_tuzel_mn": -50.80000000000291,
- "kimlik_artik_tuzel_mn": -0.033000000002914476,
- "kimlik_tarih": "2026-09-25",
- "dol_pay_ham": 37.520241346235885,
- "dol_pay_ar": 38.17683614297894,
- "dol_pay_fark": -0.6565947967430574,
- "mevduat_tl_mlr": 18658.094264,
- "mevduat_yp_mlr": 11204.527913200001,
- "mevduat_yp_ar_mlr": 11521.68480254976,
- "dol_tarih": "2026-09-25",
- "dol_ar_tarih": "2026-09-25",
+ "tum_son": "02.10.2026",
+ "tum_hafta": 658,
+ "delta_toplam_mn": -1602.3000000000175,
+ "kimlik_artik_toplam_mn": -0.07200000001739681,
+ "delta_gercek_mn": -1481.1999999999825,
+ "kimlik_artik_gercek_mn": 1.750777300912887e-11,
+ "delta_tuzel_mn": -121.0,
+ "kimlik_artik_tuzel_mn": 0.02800000000002001,
+ "kimlik_tarih": "2026-10-02",
+ "dol_pay_ham": 37.75580417816977,
+ "dol_pay_ar": 38.66452175579615,
+ "dol_pay_fark": -0.9087175776263834,
+ "mevduat_tl_mlr": 18410.569183,
+ "mevduat_yp_mlr": 11167.400200200002,
+ "mevduat_yp_ar_mlr": 11605.613473470577,
+ "dol_tarih": "2026-10-02",
+ "dol_ar_tarih": "2026-10-02",
  "kimlik_kaydirma": 0,
  "kimlik_esik": 25.0,
  "kimlik_esik_bagil": 0.01,
@@ -94,11 +94,11 @@
  "kimlik_esik_mn": 25.0,
  "kimlik_esik_pay": 1.0,
  "kimlik_cumlesi": "Ölçülen pencerede resmî ayrıştırma ile stok değişimi arasındaki en büyük fark 5,8 milyon dolar.",
- "kum_ay_bas": "2026-09-04",
- "kum_ay_hafta": 4,
- "kum_ay_etiket": "Eylül 2026",
+ "kum_ay_bas": "2026-10-02",
+ "kum_ay_hafta": 1,
+ "kum_ay_etiket": "Ekim 2026",
  "kum_yil_bas": "2026-01-02",
- "kum_yil_hafta": 39,
+ "kum_yil_hafta": 40,
  "kum_yil_etiket": "2026",
  "kum_4h_kapsam_gun": 21,
  "kum_13h_kapsam_gun": 84,
@@ -107,15 +107,15 @@
  "dol_cipa": "2026-01-02",
  "dol_cipa_etiket": "2 Ocak 2026",
  "dol_pay_cipa": 38.34126140363322,
- "dol_cumlesi": "Dolarizasyon payının ham ölçüsü ile parite etkisinden arındırılmış ölçüsü son haftada −0,66 puan ayrışıyor.",
- "ayrisma_n_hafta": 657,
+ "dol_cumlesi": "Dolarizasyon payının ham ölçüsü ile parite etkisinden arındırılmış ölçüsü son haftada −0,91 puan ayrışıyor.",
+ "ayrisma_n_hafta": 658,
  "ayrisma_ters_hafta": 239,
- "ayrisma_ters_oran": 0.3637747336377473,
- "ayrisma_ters_oran_ilk_yari": 0.35060975609756095,
+ "ayrisma_ters_oran": 0.36322188449848025,
+ "ayrisma_ters_oran_ilk_yari": 0.3495440729483283,
  "ayrisma_ters_oran_ikinci_yari": 0.3768996960486322,
- "ayrisma_korel": 0.32301329269569856,
- "ayrisma_korel_son_pencere": -0.03182028776925258,
- "ayrisma_cumlesi": "Gerçek ve tüzel kişilerin arındırılmış haftalık akımlarının ters yönde hareket ettiği haftaların payı %36,4.",
+ "ayrisma_korel": 0.3231368080608232,
+ "ayrisma_korel_son_pencere": -0.014968558359537585,
+ "ayrisma_cumlesi": "Gerçek ve tüzel kişilerin arındırılmış haftalık akımlarının ters yönde hareket ettiği haftaların payı %36,3.",
  "taban_manset_kod": "TP.HPBITABLO2.10",
  "taban_genis_kod": "TP.HPBITABLO4.1",
  "taban_lira_kod": "TP.HPBITABLO2.6",
@@ -123,11 +123,11 @@
  "kapsam_akim_bas": "2014-02-28",
  "kapsam_stok_bas": "2024-06-28",
  "kapsam_ortak_bas": "2024-06-28",
- "kapsam_akim_hafta": 657,
- "kapsam_ortak_hafta": 118,
+ "kapsam_akim_hafta": 658,
+ "kapsam_ortak_hafta": 119,
  "kapsam_asimetri_hafta": 539,
  "sifir_tanim_cumlesi": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinde sıfır TANIM GEREĞİDİR: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur.",
- "sifir_dayanaksiz_cumlesi": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 657 haftanın tamamında tam sıfır. Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt edilemiyor.",
+ "sifir_dayanaksiz_cumlesi": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 658 haftanın tamamında tam sıfır. Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt edilemiyor.",
  "sifir_hukumsuz_cumlesi": "Bu koşuda bu sınıfa giren bacak yok.",
  "sifir_cumlesi": "Bu koşuda bu sınıfa giren bacak yok.",
  "sifir_olculen_seri": 33,
@@ -144,12 +144,12 @@
  "sifir_hukumsuz_bas_kanitsiz_seri": 0,
  "sifir_hukumsuz_bas_kirpik_seri": 0,
  "sifir_hukumsuz_hafta": null,
- "sifir_dayanaksiz_hafta": 657.0,
- "sifir_dayanaksiz_kiyas_dolu_min_hafta": 657.0,
- "sifir_dayanaksiz_kiyas_kapsam_min_hafta": 657.0,
+ "sifir_dayanaksiz_hafta": 658.0,
+ "sifir_dayanaksiz_kiyas_dolu_min_hafta": 658.0,
+ "sifir_dayanaksiz_kiyas_kapsam_min_hafta": 658.0,
  "sifir_dayanaksiz_kese_zayif_pay": 100.0,
- "sifir_dayanaksiz_kese_zayif_hafta": 657.0,
- "sifir_dayanaksiz_kese_zayif_sifirdisi_hafta": 657.0,
+ "sifir_dayanaksiz_kese_zayif_hafta": 658.0,
+ "sifir_dayanaksiz_kese_zayif_sifirdisi_hafta": 658.0,
  "sifir_dayanaksiz_kiyas_oteki_seri": 4,
  "sifir_dayanaksiz_kese_seri": 2,
  "sifir_dayanaksiz_kese_hareketli_seri": 2,
@@ -158,11 +158,11 @@
  "sifir_sinir_kese_seri": 2,
  "sifir_sinir_kese_hareketli_seri": 2,
  "sifir_sinir_kese_durgun_seri": 0,
- "sifir_sinir_dilim_hafta": 657.0,
- "sifir_sinir_dilim_medyan_mn": 59.413000000000004,
+ "sifir_sinir_dilim_hafta": 658.0,
+ "sifir_sinir_dilim_medyan_mn": 59.43900000000001,
  "sifir_sinir_dilim_maks_mn": 1225.579,
- "sifir_sinir_manset_medyan_mn": 1018.0344,
- "sifir_sinir_dilim_manset_pay": 5.780156836969926,
+ "sifir_sinir_manset_medyan_mn": 1017.706,
+ "sifir_sinir_dilim_manset_pay": 5.780876606713339,
  "ayristirma": {
   "kaydirma": 0,
   "esik_mn": 25.0,
@@ -170,48 +170,48 @@
   "pencere_hafta": 52,
   "bacak": {
    "gercek": {
-    "n_hafta": 117,
+    "n_hafta": 118,
     "pencere_hafta": 52,
-    "artik_son_mn": 0.0009999999940646376,
+    "artik_son_mn": 1.750777300912887e-11,
     "artik_maks_mn": 1.7160000000058062,
     "artik_maks_tarih": "2026-03-20",
     "artik_pencere_maks_mn": 1.7160000000058062,
     "artik_bagil_maks": 0.0005774382566768927,
     "artik_bagil_maks_tarih": "2025-08-22",
     "artik_bagil_pencere_maks": 0.0005472853419175717,
-    "artik_bagil_son": 3.7330146128665177e-07,
+    "artik_bagil_son": 7.520597576049936e-15,
     "asim_hafta": 0,
     "birim": "mn USD",
     "yayim_taban_mn": 0.10000200000000001,
     "tutuyor": true
    },
    "tuzel": {
-    "n_hafta": 117,
+    "n_hafta": 118,
     "pencere_hafta": 52,
-    "artik_son_mn": -0.033000000002914476,
+    "artik_son_mn": 0.02800000000002001,
     "artik_maks_mn": 4.185999999997051,
     "artik_maks_tarih": "2026-03-20",
     "artik_pencere_maks_mn": 4.185999999997051,
     "artik_bagil_maks": 0.005556472829307211,
     "artik_bagil_maks_tarih": "2026-03-20",
     "artik_bagil_pencere_maks": 0.005556472829307211,
-    "artik_bagil_son": 4.806479652347279e-05,
+    "artik_bagil_son": 2.867832080838058e-05,
     "asim_hafta": 0,
     "birim": "mn USD",
     "yayim_taban_mn": 0.10000200000000001,
     "tutuyor": true
    },
    "toplam": {
-    "n_hafta": 117,
+    "n_hafta": 118,
     "pencere_hafta": 52,
-    "artik_son_mn": 0.06800000001157969,
+    "artik_son_mn": -0.07200000001739681,
     "artik_maks_mn": 5.801999999982854,
     "artik_maks_tarih": "2026-03-20",
     "artik_pencere_maks_mn": 5.801999999982854,
     "artik_bagil_maks": 0.001491964868906083,
     "artik_bagil_maks_tarih": "2026-03-20",
     "artik_bagil_pencere_maks": 0.001491964868906083,
-    "artik_bagil_son": 2.020578233484047e-05,
+    "artik_bagil_son": 2.1789633613344434e-05,
     "asim_hafta": 0,
     "birim": "mn USD",
     "yayim_taban_mn": 0.10000200000000001,
@@ -224,16 +224,16 @@
   "artik_maks_mn": 5.801999999982854,
   "artik_bagil_maks": 0.005556472829307211,
   "artik_bagil_pencere_maks": 0.005556472829307211,
-  "n_hafta": 117,
+  "n_hafta": 118,
   "cumle": "Ölçülen pencerede resmî ayrıştırma ile stok değişimi arasındaki en büyük fark 5,8 milyon dolar."
  },
  "kumule": {
-  "son_hafta": "2026-09-25",
-  "ay_bas": "2026-09-04",
-  "ay_hafta": 4,
-  "ay_etiket": "Eylül 2026",
+  "son_hafta": "2026-10-02",
+  "ay_bas": "2026-10-02",
+  "ay_hafta": 1,
+  "ay_etiket": "Ekim 2026",
   "yil_bas": "2026-01-02",
-  "yil_hafta": 39,
+  "yil_hafta": 40,
   "yil_etiket": "2026",
   "pencere_kisa_hafta": 4,
   "pencere_uzun_hafta": 13,
@@ -244,28 +244,28 @@
   "cipa": "2026-01-02",
   "cipa_etiket": "2 Ocak 2026",
   "ham_cipa": 38.34126140363322,
-  "ham_son": 37.520241346235885,
-  "ar_son": 38.17683614297894,
-  "fark_son": -0.6565947967430574,
-  "pe_kum_son_mn": -6513.69759,
-  "son_hafta": "2026-09-25",
+  "ham_son": 37.75580417816977,
+  "ar_son": 38.66452175579615,
+  "fark_son": -0.9087175776263834,
+  "pe_kum_son_mn": -8966.973377,
+  "son_hafta": "2026-10-02",
   "yontem": "arındırılmış pay, resmî parite etkisinin çıpadan bu yana birikmiş toplamı stoktan düşülerek kuruldu; kur serisi kullanılmadı",
-  "cumle": "Dolarizasyon payının ham ölçüsü ile parite etkisinden arındırılmış ölçüsü son haftada −0,66 puan ayrışıyor."
+  "cumle": "Dolarizasyon payının ham ölçüsü ile parite etkisinden arındırılmış ölçüsü son haftada −0,91 puan ayrışıyor."
  },
  "ayrisma": {
-  "n_hafta": 657,
+  "n_hafta": 658,
   "yeterli": true,
   "ters_hafta": 239,
-  "ayni_hafta": 418,
+  "ayni_hafta": 419,
   "sifir_hafta": 0,
-  "ters_oran": 0.3637747336377473,
-  "ters_oran_ilk_yari": 0.35060975609756095,
+  "ters_oran": 0.36322188449848025,
+  "ters_oran_ilk_yari": 0.3495440729483283,
   "ters_oran_ikinci_yari": 0.3768996960486322,
-  "korel": 0.32301329269569856,
-  "korel_son_pencere": -0.03182028776925258,
+  "korel": 0.3231368080608232,
+  "korel_son_pencere": -0.014968558359537585,
   "pencere_hafta": 52,
-  "gercek_pay_son": 62.64698558684072,
-  "tuzel_pay_son": 37.3529709568344,
+  "gercek_pay_son": 62.43806719769223,
+  "tuzel_pay_son": 37.56193280230779,
   "hukum": "Bu bir ölçümdür, kural değildir: örneklem dışı sınanmadan bir davranış kuralına dönüştürülmez."
  },
  "hizalama": {
@@ -273,20 +273,20 @@
    "gercek": {
     "kaydirmalar": {
      "-1": {
-      "n": 116,
-      "medyan_mutlak_artik": 1293.6529999999943,
+      "n": 117,
+      "medyan_mutlak_artik": 1271.2599999999884,
       "maks_artik": 11830.871999999988,
       "birim": "mn USD"
      },
      "0": {
-      "n": 117,
-      "medyan_mutlak_artik": 0.029999999999986926,
+      "n": 118,
+      "medyan_mutlak_artik": 0.029499999999991644,
       "maks_artik": 1.7160000000058062,
       "birim": "mn USD"
      },
      "1": {
-      "n": 117,
-      "medyan_mutlak_artik": 1271.2730000000001,
+      "n": 118,
+      "medyan_mutlak_artik": 1267.7564999999986,
       "maks_artik": 11830.853000000006,
       "birim": "mn USD"
      }
@@ -296,20 +296,20 @@
    "tuzel": {
     "kaydirmalar": {
      "-1": {
-      "n": 116,
-      "medyan_mutlak_artik": 2007.0469999999991,
+      "n": 117,
+      "medyan_mutlak_artik": 1992.247999999997,
       "maks_artik": 6306.566,
       "birim": "mn USD"
      },
      "0": {
-      "n": 117,
-      "medyan_mutlak_artik": 0.03799999999682768,
+      "n": 118,
+      "medyan_mutlak_artik": 0.037000000000602995,
       "maks_artik": 4.18599999999708,
       "birim": "mn USD"
      },
      "1": {
-      "n": 117,
-      "medyan_mutlak_artik": 1992.2879999999914,
+      "n": 118,
+      "medyan_mutlak_artik": 1967.6214999999943,
       "maks_artik": 6306.549,
       "birim": "mn USD"
      }
@@ -326,8 +326,8 @@
   "bas_olculen_seri": 12,
   "seri": {
    "stok_toplam": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -336,8 +336,8 @@
     "asildi": false
    },
    "stok_gercek": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -346,8 +346,8 @@
     "asildi": false
    },
    "stok_tuzel": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -356,8 +356,8 @@
     "asildi": false
    },
    "mevduat_yi": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -366,8 +366,8 @@
     "asildi": false
    },
    "mevduat_tl": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -376,8 +376,8 @@
     "asildi": false
    },
    "mevduat_yp_tl": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -386,8 +386,8 @@
     "asildi": false
    },
    "genis_toplam": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -396,8 +396,8 @@
     "asildi": false
    },
    "k_gercek": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -406,8 +406,8 @@
     "asildi": false
    },
    "maden_gercek": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -416,8 +416,8 @@
     "asildi": false
    },
    "k_tuzel": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -426,8 +426,8 @@
     "asildi": false
    },
    "maden_tuzel": {
-    "n_gozlem": 118,
-    "sifirdisi_hafta": 118,
+    "n_gozlem": 119,
+    "sifirdisi_hafta": 119,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -436,8 +436,8 @@
     "asildi": false
    },
    "ar_toplam": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -446,8 +446,8 @@
     "asildi": false
    },
    "ar_gercek": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -456,8 +456,8 @@
     "asildi": false
    },
    "ar_gercek_usd": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -466,8 +466,8 @@
     "asildi": false
    },
    "ar_gercek_eur": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -476,8 +476,8 @@
     "asildi": false
    },
    "ar_gercek_diger": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -486,8 +486,8 @@
     "asildi": false
    },
    "ar_gercek_maden": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -496,8 +496,8 @@
     "asildi": false
    },
    "ar_tuzel": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -506,8 +506,8 @@
     "asildi": false
    },
    "ar_tuzel_usd": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -516,8 +516,8 @@
     "asildi": false
    },
    "ar_tuzel_eur": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -526,8 +526,8 @@
     "asildi": false
    },
    "ar_tuzel_diger": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -536,8 +536,8 @@
     "asildi": false
    },
    "ar_tuzel_maden": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -546,8 +546,8 @@
     "asildi": false
    },
    "pe_toplam": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -556,8 +556,8 @@
     "asildi": false
    },
    "pe_gercek": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -566,9 +566,9 @@
     "asildi": false
    },
    "pe_gercek_usd": {
-    "n_gozlem": 657,
+    "n_gozlem": 658,
     "sifirdisi_hafta": 0,
-    "sag_uc_sifir_hafta": 657,
+    "sag_uc_sifir_hafta": 658,
     "ic_sifir_hafta": 0,
     "hal": "tanim",
     "tanim_gerekcesi": true,
@@ -576,8 +576,8 @@
     "asildi": true
    },
    "pe_gercek_eur": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -586,9 +586,9 @@
     "asildi": false
    },
    "pe_gercek_diger": {
-    "n_gozlem": 657,
+    "n_gozlem": 658,
     "sifirdisi_hafta": 0,
-    "sag_uc_sifir_hafta": 657,
+    "sag_uc_sifir_hafta": 658,
     "ic_sifir_hafta": 0,
     "hal": "dayanaksiz",
     "tanim_gerekcesi": false,
@@ -596,8 +596,8 @@
     "asildi": true
    },
    "pe_gercek_maden": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -606,8 +606,8 @@
     "asildi": false
    },
    "pe_tuzel": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -616,9 +616,9 @@
     "asildi": false
    },
    "pe_tuzel_usd": {
-    "n_gozlem": 657,
+    "n_gozlem": 658,
     "sifirdisi_hafta": 0,
-    "sag_uc_sifir_hafta": 657,
+    "sag_uc_sifir_hafta": 658,
     "ic_sifir_hafta": 0,
     "hal": "tanim",
     "tanim_gerekcesi": true,
@@ -626,8 +626,8 @@
     "asildi": true
    },
    "pe_tuzel_eur": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -636,9 +636,9 @@
     "asildi": false
    },
    "pe_tuzel_diger": {
-    "n_gozlem": 657,
+    "n_gozlem": 658,
     "sifirdisi_hafta": 0,
-    "sag_uc_sifir_hafta": 657,
+    "sag_uc_sifir_hafta": 658,
     "ic_sifir_hafta": 0,
     "hal": "dayanaksiz",
     "tanim_gerekcesi": false,
@@ -646,8 +646,8 @@
     "asildi": true
    },
    "pe_tuzel_maden": {
-    "n_gozlem": 657,
-    "sifirdisi_hafta": 657,
+    "n_gozlem": 658,
+    "sifirdisi_hafta": 658,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
     "hal": "olcum",
@@ -675,13 +675,13 @@
    ],
    "bas_kirpik": []
   },
-  "dayanaksiz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 657 haftanın tamamında tam sıfır. Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt edilemiyor.",
+  "dayanaksiz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 658 haftanın tamamında tam sıfır. Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt edilemiyor.",
   "dayanaksiz": {
    "seri": [
     "pe_gercek_diger",
     "pe_tuzel_diger"
    ],
-   "hafta": 657,
+   "hafta": 658,
    "kiyas_oteki_seri": [
     "pe_gercek_eur",
     "pe_gercek_maden",
@@ -689,23 +689,23 @@
     "pe_tuzel_maden"
    ],
    "kiyas_belirsiz_kisa_ad": [],
-   "kiyas_dolu_min_hafta": 657,
-   "kiyas_kapsam_min_hafta": 657,
+   "kiyas_dolu_min_hafta": 658,
+   "kiyas_kapsam_min_hafta": 658,
    "kese_seri": [
     "ar_gercek_diger",
     "ar_tuzel_diger"
    ],
    "kese_olcum": {
     "ar_gercek_diger": {
-     "hafta": 657,
-     "sifirdisi_hafta": 657,
-     "medyan_mn": 20.672,
+     "hafta": 658,
+     "sifirdisi_hafta": 658,
+     "medyan_mn": 20.741500000000002,
      "maks_mn": 363.058
     },
     "ar_tuzel_diger": {
-     "hafta": 657,
-     "sifirdisi_hafta": 657,
-     "medyan_mn": 30.806,
+     "hafta": 658,
+     "sifirdisi_hafta": 658,
+     "medyan_mn": 30.823,
      "maks_mn": 1207.444
     }
    },
@@ -715,8 +715,8 @@
    ],
    "kese_durgun": [],
    "kese_zayif": "ar_gercek_diger",
-   "kese_zayif_hafta": 657,
-   "kese_zayif_sifirdisi_hafta": 657,
+   "kese_zayif_hafta": 658,
+   "kese_zayif_sifirdisi_hafta": 658,
    "kese_zayif_pay": 100.0
   },
   "hukumsuz_cumle": "Bu koşuda bu sınıfa giren bacak yok.",
@@ -742,11 +742,11 @@
     "ar_tuzel_diger"
    ],
    "kese_durgun": [],
-   "dilim_hafta": 657,
-   "dilim_medyan_mn": 59.413000000000004,
+   "dilim_hafta": 658,
+   "dilim_medyan_mn": 59.43900000000001,
    "dilim_maks_mn": 1225.579,
-   "manset_medyan_mn": 1018.0344,
-   "dilim_manset_oran_medyan_pay": 5.780156836969926
+   "manset_medyan_mn": 1017.706,
+   "dilim_manset_oran_medyan_pay": 5.780876606713339
   },
   "sinir_seri": 2,
   "tam_sifir_seri": 4,
@@ -757,17 +757,17 @@
   "kapsam": {
    "kapsam": {
     "kimlik": "TP.HPBITABLO2.11 + TP.HPBITABLO2.12 = TP.HPBITABLO2.10",
-    "n": 118,
+    "n": 119,
     "maks_fark_mn": 0.1000000000349246,
     "maks_tarih": "2024-11-01",
-    "son_fark_mn": 0.10000000000582077,
+    "son_fark_mn": 0.0,
     "esik_mn": 2.0,
     "esik_bagil": 1e-05,
     "yayim_taban_mn": 0.2,
     "yayim_adimi_hal_sol": "olculdu",
     "yayim_adimi_hal_sag": "olculdu",
     "uygulanan_esik_maks_mn": 2.397438,
-    "uygulanan_esik_son_mn": 2.3011610000000005,
+    "uygulanan_esik_son_mn": 2.285138,
     "uygulanan_esik_maks_fark_haftasi_mn": 2.0,
     "asim_hafta": 0,
     "birim": "mn USD",
@@ -775,7 +775,7 @@
    },
    "lira_tabani": {
     "kimlik": "TP.HPBITABLO2.3 + TP.HPBITABLO2.6 = TP.HPBITABLO2.2",
-    "n": 118,
+    "n": 119,
     "maks_fark_bin_tl": 0.0,
     "maks_bagil": 0.0,
     "maks_tarih": "2024-06-28",
@@ -793,48 +793,48 @@
    "pencere_hafta": 52,
    "bacak": {
     "gercek": {
-     "n_hafta": 117,
+     "n_hafta": 118,
      "pencere_hafta": 52,
-     "artik_son_mn": 0.0009999999940646376,
+     "artik_son_mn": 1.750777300912887e-11,
      "artik_maks_mn": 1.7160000000058062,
      "artik_maks_tarih": "2026-03-20",
      "artik_pencere_maks_mn": 1.7160000000058062,
      "artik_bagil_maks": 0.0005774382566768927,
      "artik_bagil_maks_tarih": "2025-08-22",
      "artik_bagil_pencere_maks": 0.0005472853419175717,
-     "artik_bagil_son": 3.7330146128665177e-07,
+     "artik_bagil_son": 7.520597576049936e-15,
      "asim_hafta": 0,
      "birim": "mn USD",
      "yayim_taban_mn": 0.10000200000000001,
      "tutuyor": true
     },
     "tuzel": {
-     "n_hafta": 117,
+     "n_hafta": 118,
      "pencere_hafta": 52,
-     "artik_son_mn": -0.033000000002914476,
+     "artik_son_mn": 0.02800000000002001,
      "artik_maks_mn": 4.185999999997051,
      "artik_maks_tarih": "2026-03-20",
      "artik_pencere_maks_mn": 4.185999999997051,
      "artik_bagil_maks": 0.005556472829307211,
      "artik_bagil_maks_tarih": "2026-03-20",
      "artik_bagil_pencere_maks": 0.005556472829307211,
-     "artik_bagil_son": 4.806479652347279e-05,
+     "artik_bagil_son": 2.867832080838058e-05,
      "asim_hafta": 0,
      "birim": "mn USD",
      "yayim_taban_mn": 0.10000200000000001,
      "tutuyor": true
     },
     "toplam": {
-     "n_hafta": 117,
+     "n_hafta": 118,
      "pencere_hafta": 52,
-     "artik_son_mn": 0.06800000001157969,
+     "artik_son_mn": -0.07200000001739681,
      "artik_maks_mn": 5.801999999982854,
      "artik_maks_tarih": "2026-03-20",
      "artik_pencere_maks_mn": 5.801999999982854,
      "artik_bagil_maks": 0.001491964868906083,
      "artik_bagil_maks_tarih": "2026-03-20",
      "artik_bagil_pencere_maks": 0.001491964868906083,
-     "artik_bagil_son": 2.020578233484047e-05,
+     "artik_bagil_son": 2.1789633613344434e-05,
      "asim_hafta": 0,
      "birim": "mn USD",
      "yayim_taban_mn": 0.10000200000000001,
@@ -847,7 +847,7 @@
    "artik_maks_mn": 5.801999999982854,
    "artik_bagil_maks": 0.005556472829307211,
    "artik_bagil_pencere_maks": 0.005556472829307211,
-   "n_hafta": 117,
+   "n_hafta": 118,
    "cumle": "Ölçülen pencerede resmî ayrıştırma ile stok değişimi arasındaki en büyük fark 5,8 milyon dolar."
   },
   "hizalama": {
@@ -855,20 +855,20 @@
     "gercek": {
      "kaydirmalar": {
       "-1": {
-       "n": 116,
-       "medyan_mutlak_artik": 1293.6529999999943,
+       "n": 117,
+       "medyan_mutlak_artik": 1271.2599999999884,
        "maks_artik": 11830.871999999988,
        "birim": "mn USD"
       },
       "0": {
-       "n": 117,
-       "medyan_mutlak_artik": 0.029999999999986926,
+       "n": 118,
+       "medyan_mutlak_artik": 0.029499999999991644,
        "maks_artik": 1.7160000000058062,
        "birim": "mn USD"
       },
       "1": {
-       "n": 117,
-       "medyan_mutlak_artik": 1271.2730000000001,
+       "n": 118,
+       "medyan_mutlak_artik": 1267.7564999999986,
        "maks_artik": 11830.853000000006,
        "birim": "mn USD"
       }
@@ -878,20 +878,20 @@
     "tuzel": {
      "kaydirmalar": {
       "-1": {
-       "n": 116,
-       "medyan_mutlak_artik": 2007.0469999999991,
+       "n": 117,
+       "medyan_mutlak_artik": 1992.247999999997,
        "maks_artik": 6306.566,
        "birim": "mn USD"
       },
       "0": {
-       "n": 117,
-       "medyan_mutlak_artik": 0.03799999999682768,
+       "n": 118,
+       "medyan_mutlak_artik": 0.037000000000602995,
        "maks_artik": 4.18599999999708,
        "birim": "mn USD"
       },
       "1": {
-       "n": 117,
-       "medyan_mutlak_artik": 1992.2879999999914,
+       "n": 118,
+       "medyan_mutlak_artik": 1967.6214999999943,
        "maks_artik": 6306.549,
        "birim": "mn USD"
       }
@@ -908,8 +908,8 @@
    "bas_olculen_seri": 12,
    "seri": {
     "stok_toplam": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -918,8 +918,8 @@
      "asildi": false
     },
     "stok_gercek": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -928,8 +928,8 @@
      "asildi": false
     },
     "stok_tuzel": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -938,8 +938,8 @@
      "asildi": false
     },
     "mevduat_yi": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -948,8 +948,8 @@
      "asildi": false
     },
     "mevduat_tl": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -958,8 +958,8 @@
      "asildi": false
     },
     "mevduat_yp_tl": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -968,8 +968,8 @@
      "asildi": false
     },
     "genis_toplam": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -978,8 +978,8 @@
      "asildi": false
     },
     "k_gercek": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -988,8 +988,8 @@
      "asildi": false
     },
     "maden_gercek": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -998,8 +998,8 @@
      "asildi": false
     },
     "k_tuzel": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1008,8 +1008,8 @@
      "asildi": false
     },
     "maden_tuzel": {
-     "n_gozlem": 118,
-     "sifirdisi_hafta": 118,
+     "n_gozlem": 119,
+     "sifirdisi_hafta": 119,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1018,8 +1018,8 @@
      "asildi": false
     },
     "ar_toplam": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1028,8 +1028,8 @@
      "asildi": false
     },
     "ar_gercek": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1038,8 +1038,8 @@
      "asildi": false
     },
     "ar_gercek_usd": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1048,8 +1048,8 @@
      "asildi": false
     },
     "ar_gercek_eur": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1058,8 +1058,8 @@
      "asildi": false
     },
     "ar_gercek_diger": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1068,8 +1068,8 @@
      "asildi": false
     },
     "ar_gercek_maden": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1078,8 +1078,8 @@
      "asildi": false
     },
     "ar_tuzel": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1088,8 +1088,8 @@
      "asildi": false
     },
     "ar_tuzel_usd": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1098,8 +1098,8 @@
      "asildi": false
     },
     "ar_tuzel_eur": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1108,8 +1108,8 @@
      "asildi": false
     },
     "ar_tuzel_diger": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1118,8 +1118,8 @@
      "asildi": false
     },
     "ar_tuzel_maden": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1128,8 +1128,8 @@
      "asildi": false
     },
     "pe_toplam": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1138,8 +1138,8 @@
      "asildi": false
     },
     "pe_gercek": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1148,9 +1148,9 @@
      "asildi": false
     },
     "pe_gercek_usd": {
-     "n_gozlem": 657,
+     "n_gozlem": 658,
      "sifirdisi_hafta": 0,
-     "sag_uc_sifir_hafta": 657,
+     "sag_uc_sifir_hafta": 658,
      "ic_sifir_hafta": 0,
      "hal": "tanim",
      "tanim_gerekcesi": true,
@@ -1158,8 +1158,8 @@
      "asildi": true
     },
     "pe_gercek_eur": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1168,9 +1168,9 @@
      "asildi": false
     },
     "pe_gercek_diger": {
-     "n_gozlem": 657,
+     "n_gozlem": 658,
      "sifirdisi_hafta": 0,
-     "sag_uc_sifir_hafta": 657,
+     "sag_uc_sifir_hafta": 658,
      "ic_sifir_hafta": 0,
      "hal": "dayanaksiz",
      "tanim_gerekcesi": false,
@@ -1178,8 +1178,8 @@
      "asildi": true
     },
     "pe_gercek_maden": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1188,8 +1188,8 @@
      "asildi": false
     },
     "pe_tuzel": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1198,9 +1198,9 @@
      "asildi": false
     },
     "pe_tuzel_usd": {
-     "n_gozlem": 657,
+     "n_gozlem": 658,
      "sifirdisi_hafta": 0,
-     "sag_uc_sifir_hafta": 657,
+     "sag_uc_sifir_hafta": 658,
      "ic_sifir_hafta": 0,
      "hal": "tanim",
      "tanim_gerekcesi": true,
@@ -1208,8 +1208,8 @@
      "asildi": true
     },
     "pe_tuzel_eur": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1218,9 +1218,9 @@
      "asildi": false
     },
     "pe_tuzel_diger": {
-     "n_gozlem": 657,
+     "n_gozlem": 658,
      "sifirdisi_hafta": 0,
-     "sag_uc_sifir_hafta": 657,
+     "sag_uc_sifir_hafta": 658,
      "ic_sifir_hafta": 0,
      "hal": "dayanaksiz",
      "tanim_gerekcesi": false,
@@ -1228,8 +1228,8 @@
      "asildi": true
     },
     "pe_tuzel_maden": {
-     "n_gozlem": 657,
-     "sifirdisi_hafta": 657,
+     "n_gozlem": 658,
+     "sifirdisi_hafta": 658,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
      "hal": "olcum",
@@ -1257,13 +1257,13 @@
     ],
     "bas_kirpik": []
    },
-   "dayanaksiz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 657 haftanın tamamında tam sıfır. Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt edilemiyor.",
+   "dayanaksiz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 658 haftanın tamamında tam sıfır. Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt edilemiyor.",
    "dayanaksiz": {
     "seri": [
      "pe_gercek_diger",
      "pe_tuzel_diger"
     ],
-    "hafta": 657,
+    "hafta": 658,
     "kiyas_oteki_seri": [
      "pe_gercek_eur",
      "pe_gercek_maden",
@@ -1271,23 +1271,23 @@
      "pe_tuzel_maden"
     ],
     "kiyas_belirsiz_kisa_ad": [],
-    "kiyas_dolu_min_hafta": 657,
-    "kiyas_kapsam_min_hafta": 657,
+    "kiyas_dolu_min_hafta": 658,
+    "kiyas_kapsam_min_hafta": 658,
     "kese_seri": [
      "ar_gercek_diger",
      "ar_tuzel_diger"
     ],
     "kese_olcum": {
      "ar_gercek_diger": {
-      "hafta": 657,
-      "sifirdisi_hafta": 657,
-      "medyan_mn": 20.672,
+      "hafta": 658,
+      "sifirdisi_hafta": 658,
+      "medyan_mn": 20.741500000000002,
       "maks_mn": 363.058
      },
      "ar_tuzel_diger": {
-      "hafta": 657,
-      "sifirdisi_hafta": 657,
-      "medyan_mn": 30.806,
+      "hafta": 658,
+      "sifirdisi_hafta": 658,
+      "medyan_mn": 30.823,
       "maks_mn": 1207.444
      }
     },
@@ -1297,8 +1297,8 @@
     ],
     "kese_durgun": [],
     "kese_zayif": "ar_gercek_diger",
-    "kese_zayif_hafta": 657,
-    "kese_zayif_sifirdisi_hafta": 657,
+    "kese_zayif_hafta": 658,
+    "kese_zayif_sifirdisi_hafta": 658,
     "kese_zayif_pay": 100.0
    },
    "hukumsuz_cumle": "Bu koşuda bu sınıfa giren bacak yok.",
@@ -1324,11 +1324,11 @@
      "ar_tuzel_diger"
     ],
     "kese_durgun": [],
-    "dilim_hafta": 657,
-    "dilim_medyan_mn": 59.413000000000004,
+    "dilim_hafta": 658,
+    "dilim_medyan_mn": 59.43900000000001,
     "dilim_maks_mn": 1225.579,
-    "manset_medyan_mn": 1018.0344,
-    "dilim_manset_oran_medyan_pay": 5.780156836969926
+    "manset_medyan_mn": 1017.706,
+    "dilim_manset_oran_medyan_pay": 5.780876606713339
    },
    "sinir_seri": 2,
    "tam_sifir_seri": 4,
@@ -1336,32 +1336,32 @@
    "cumle": "Bu koşuda bu sınıfa giren bacak yok."
   },
   "ayrisma": {
-   "n_hafta": 657,
+   "n_hafta": 658,
    "yeterli": true,
    "ters_hafta": 239,
-   "ayni_hafta": 418,
+   "ayni_hafta": 419,
    "sifir_hafta": 0,
-   "ters_oran": 0.3637747336377473,
-   "ters_oran_ilk_yari": 0.35060975609756095,
+   "ters_oran": 0.36322188449848025,
+   "ters_oran_ilk_yari": 0.3495440729483283,
    "ters_oran_ikinci_yari": 0.3768996960486322,
-   "korel": 0.32301329269569856,
-   "korel_son_pencere": -0.03182028776925258,
+   "korel": 0.3231368080608232,
+   "korel_son_pencere": -0.014968558359537585,
    "pencere_hafta": 52,
-   "gercek_pay_son": 62.64698558684072,
-   "tuzel_pay_son": 37.3529709568344,
+   "gercek_pay_son": 62.43806719769223,
+   "tuzel_pay_son": 37.56193280230779,
    "hukum": "Bu bir ölçümdür, kural değildir: örneklem dışı sınanmadan bir davranış kuralına dönüştürülmez."
   },
   "pencere": {
    "akim_bas": "2014-02-28",
-   "akim_hafta": 657,
+   "akim_hafta": 658,
    "stok_bas": "2024-06-28",
    "ortak_bas": "2024-06-28",
-   "ortak_hafta": 118,
+   "ortak_hafta": 119,
    "asimetri_hafta": 539
   }
  },
  "esik": {
-  "kimlik_son_stok_payi": 0.00010864081218132933,
+  "kimlik_son_stok_payi": 0.00010940258312627072,
   "kapsam_mn_usd": 2.0,
   "kapsam_bagil": 1e-05,
   "kimlik_mn_usd": 25.0,
@@ -1376,9 +1376,9 @@
   "KİMLİK BOZUK: Kırılım tablosundaki tüzel kişi stoku ana tablodakiyle aynı (TP.HPBITABLO4.8 = TP.HPBITABLO2.12) — kaynağın iki tablosu aynı haftada farklı değer veriyor. En büyük fark 4,184 milyon dolar (20.03.2026), iki tablonun ölçülen yayım adımları toplamının 41,4 katı; toplam 1 haftada aşılıyor. Bu kadarı yuvarlamadan doğamaz: kaynağın kalem numaralandırması ya da birimi değişmiş olabilir ve bu iki kalemden beslenen sayılar sınanana kadar temkinle okunmalı."
  ],
  "cerceve_imza": {
-  "satir": 657,
+  "satir": 658,
   "sutun": 34,
   "ilk": "2014-02-28",
-  "son": "2026-09-25"
+  "son": "2026-10-02"
  }
 }
