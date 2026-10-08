@@ -1,11 +1,11 @@
 {
- "kosum": "2026-10-01",
- "son_hafta": "2026-09-18",
- "son_gun": "2026-09-29",
+ "kosum": "2026-10-08",
+ "son_hafta": "2026-10-02",
+ "son_gun": "2026-10-07",
  "son_ay": "2026-08-01",
- "son_ceyrek": "2026-04-01",
+ "son_ceyrek": "2026-07-01",
  "haftalik": [
-  1133,
+  1135,
   81
  ],
  "arsiv": [
@@ -13,7 +13,7 @@
   16
  ],
  "gunluk": [
-  3964,
+  3970,
   19
  ],
  "aylik": [
@@ -21,14 +21,8 @@
   13
  ],
  "ceyreklik": [
-  83,
+  84,
   8
  ],
- "uyarilar": [
-  "TAZELİK: 'kredi_tl' son gözlemi 18.09.2026 — bugün 01.10.2026 itibarıyla 13 gün geride (tolerans 12). Haftalık Para ve Banka İstatistikleri (Perşembe, 6 gün) yayını durmuş olabilir.",
-  "TAZELİK: 'kredi_yp' son gözlemi 18.09.2026 — bugün 01.10.2026 itibarıyla 13 gün geride (tolerans 12). Haftalık Para ve Banka İstatistikleri (Perşembe, 6 gün) yayını durmuş olabilir.",
-  "TAZELİK: 'm2' son gözlemi 18.09.2026 — bugün 01.10.2026 itibarıyla 13 gün geride (tolerans 12). Haftalık Para ve Banka İstatistikleri (Perşembe, 6 gün) yayını durmuş olabilir.",
-  "TAZELİK: 'f_ticari_tl' son gözlemi 18.09.2026 — bugün 01.10.2026 itibarıyla 13 gün geride (tolerans 12). Haftalık Para ve Banka İstatistikleri (Perşembe, 6 gün) yayını durmuş olabilir.",
-  "TAZELİK: 'mev_tl' son gözlemi 18.09.2026 — bugün 01.10.2026 itibarıyla 13 gün geride (tolerans 12). Haftalık Para ve Banka İstatistikleri (Perşembe, 6 gün) yayını durmuş olabilir."
- ]
+ "uyarilar": []
 }
