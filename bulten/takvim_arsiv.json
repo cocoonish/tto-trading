@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-07",
+ "_son_guncelleme": "2026-10-08",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1151,6 +1151,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-07"
+  },
+  "2026-10-29|ECB para politikası kararı": {
+   "tarih": "2026-10-29",
+   "olay": "ECB para politikası kararı",
+   "saat": "16:15",
+   "ulke": "EA",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-08"
   }
  }
 }
