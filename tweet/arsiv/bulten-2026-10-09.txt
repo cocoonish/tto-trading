@@ -1,0 +1,27 @@
+# bulten:2026-10-09 · 2026-10-09T04:27:35+00:00 · https://x.com/i/status/2108414039613448591
+
+Sabah Notu — 9 Ekim 2026
+Petrolün savaş primi bir günde geldi: Brent %4,07 yükseldi, Trump'ın taahhüdüyle bu sabah geri çekiliyor
+
+· Rezerv ve yabancı. 2 Ekim haftasında yabancılar 675 milyon dolar net sattı; 485 milyonu DİBS'ten çıktı. Swap hariç net rezerv 2,0 milyar dolar azalarak 37,9 milyar dolara indi. Yabancıların bankalarla TL türev pozisyonu aynı hafta 2,5 milyar dolar geriledi (Bloomberg HT).
+· TL faizi. 3 aylık DİBS getirisi 69 bp düşüşle %36,64'e indi ve TLREF'in altına geçti; 5 yıllık getiri 53 bp yükseldi. Dolar/TL 49,21'de yatay kapandı, BIST 100 %0,75 yükseldi.
+· Petrol. Brent %4,07 (1,8σ) artışla 104,28 dolara, kalorifer yakıtı %5,63 (1,9σ) ve WTI %3,64 (1,5σ) yükseldi. AA'ya göre sürücü ABD'nin İran'a yeni saldırı hazırlığı haberleriydi; Trump aynı gün 3 Kasım ara seçimlerine kadar saldırı olmayacağını yazdı ve petrol bu sabah geriliyor (Bloomberg HT).
+· ABD faizi. 10 yıllık getiri 4,6 bp düşüşle %5,23'e, 30 yıllık 5,5 bp ile %5,61'e indi. Fed'den Waller İstanbul'da ilave artırımın muhtemelen gerekli olduğunu söyledi; ilk işsizlik başvuruları 197 bine geriledi (Bloomberg HT).
+· Hisse. Nasdaq 100 %1,39 (−1,4σ), DAX %1,18 (−1,4σ), Hang Seng %1,43 (−1,5σ) düştü; Dünya satışı teknoloji hisselerine, petrole ve tahvil faizlerine bağlıyor.
+
+Bugün TSİ 10:00 · Ağustos sanayi üretimi. İSO'nun ihracat iklimi endeksi eylülde 52 ayın zirvesine çıkmıştı (Bloomberg HT). Güçlü bir okuma ön uçtaki indirim fiyatlamasını zayıflatır, çünkü talebin soğuduğu tezine karşı kanıttır. Zayıf bir okuma kredideki reel daralmayla birlikte indirim beklentisini destekler.
+
+Türkiye'de haftanın sorusu kurdan rezervin kalitesine kaydı. Kur kımıldamadı, ama kuru sabit tutan bilançonun borçlanılmamış kısmı bir haftada eridi.
+
+Gündem
+Türkiye: TL faizi ve DİBS. Eğri iki ucundan birden hareket etti. Kısa uç gecelik fonlamanın altına inerken 2 yıllık gösterge 8 bp gerileyerek %39,81'e indi, 5 yıllık ise yükseldi; 2 yıl ile 5 yıl arasındaki ters eğim 62 bp azalarak −341 bp'ye daraldı.
+
+Neye bakılacak
+· Swap hariç rezerv düşmeye devam eder → ön uçtaki indirim fiyatı geri alınır; izlenecek: 15 Ekim haftalık verisi, 37 milyar doların altı.
+· İran saldırıları ve kasırga arzı birlikte vurur → dizel marjı ve TÜFE enerji kalemi yükselir; izlenecek: Brent kapanışı, 110 doların üstü.
+
+Pano: 1 aylık yıllıklandırılmış deval. hızı %20,9 (−0,2 puan; 8 Eki) · Net rezerv 53,8 mlr USD (+0,4; 2 Eki) · Net rezerv (günlük tahmin) 56,8 mlr USD (−1,5; 7 Eki) · Brüt rezervde altın payı %61,6 (−0,9 puan; 7 Eki) · TLREF %36,85 (−0,03 puan; 8 Eki) · DİBS 5 yıllık getiri %36,60 (+0,53 puan; 8 Eki)
+
+Beklenen: 13 Ekim 10:00 · Ağustos ödemeler dengesi. Cari denge enerji faturasının yükünü, portföy kalemi eylüldeki fon çıkışından önceki zemini gösterir. Portföy girişi güçlü gelirse son haftaların çıkışı bir pozisyon azaltımı olarak okunur; zayıf gelirse çıkış daha eskiye uzanır. 14 Ekim 15:30 · ABD eylül TÜFE'si. Güçlü gelirse Fed'in ilave artırım tartışması öne çekilir ve uzun uç yeniden yükselir; zayıf gelirse petrolün büyüme vergisi okuması güçlenir. 15 Ekim 11:00 · Eylül bütçe dengesi; 14:30 · haftalık para-banka ve menkul kıymet verisi. İkincisi 9 Ekim haftasının yabancı akımını ve swap hariç rezervi getirir. 22 Ekim'de PPK kararı var.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
