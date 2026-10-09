@@ -1,12 +1,12 @@
 {
  "hafta_segment": 41,
  "hafta_yil": 2026,
- "hafta_son_bas": "28.09.2026",
- "hafta_son_ort": 20.95,
- "hafta_son_egim": -0.2,
+ "hafta_son_bas": "05.10.2026",
+ "hafta_son_ort": 21.65,
+ "hafta_son_egim": 4.9,
  "hafta_zirve_bas": "25.05.2026",
  "hafta_zirve_ort": 31.4,
  "_sekil_tarih": {
-  "usdtry_weekly.html": "08.10.2026"
+  "usdtry_weekly.html": "09.10.2026"
  }
 }
