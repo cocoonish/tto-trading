@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-08",
+ "_son_guncelleme": "2026-10-09",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1161,6 +1161,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-08"
+  },
+  "2026-10-30|TCMB PPK toplantı özeti": {
+   "tarih": "2026-10-30",
+   "olay": "TCMB PPK toplantı özeti",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "mevcut politika faizi %37,00 · anket (PKA Eylül): 12 ay sonrası politika faizi %29,22",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-09"
   }
  }
 }
