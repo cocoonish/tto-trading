@@ -160,8 +160,15 @@ KOSU_KAYDI_UYARI = ("anahtar adı", "biçim")
 KOSU_KAYDI_BICIM = [
     # ondalık nokta: 5.2 · 0.0 · 0.98765 — binlik nokta (1.234) üç haneli
     # kümedir ve tarih (17.08.2018) iki noktalıdır; ikisi de eşleşmez.
+    # AYLIK SAAT DE eşleşmez: "08.2026" bicim sözleşmesinin kendi ay yazımıdır
+    # (ortak/bicim.tarihe_cevir · lib/bicim). Dört haneli kalıp onu 0.98765
+    # gibi bir ondalık sanıyordu ve 08.10.2026'da Bütçe hattının tazelik
+    # uyarısındaki "son gözlemi 08.2026" yüzünden hattın duman sınaması
+    # düştü — aynı dosyanın bir başka maddesi o uyarının AA.YYYY yazmasını
+    # şart koşarken. Ay 01–12, yıl 19xx/20xx; "13.2026" ya da "08.20261"
+    # ay değildir ve yakalanmaya devam eder.
     r"(?<![\w.])\d+\.\d{1,2}(?![\w.])",
-    r"(?<![\w.])\d+\.\d{4,}(?![\w.])",
+    r"(?<![\w.])(?!(?:0[1-9]|1[0-2])\.(?:19|20)\d{2}(?![\w.]))\d+\.\d{4,}(?![\w.])",
     r"(?<![\w.])\d{4}-\d{2}-\d{2}(?![\w.])",     # ISO tarih; okura GG.AA.YYYY
     r"(?:(?<=\s)|(?<=\()|^)-\d",                  # ASCII eksi; U+2212 yazılır
 ]

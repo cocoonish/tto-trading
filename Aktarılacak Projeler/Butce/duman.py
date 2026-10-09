@@ -86,13 +86,19 @@ ISO = re.compile(r"\d{4}-\d{2}(?!-Ç)")          # "2026-06" · "2026-06-30"; "2
 # ===========================================================================
 #  KUTU — özet üreticisi geçici dizinde, dondurulmuş duvar saatiyle
 # ===========================================================================
-def _kutu(bugun: str, fh_kirp: int = 0) -> dict:
+def _kutu(bugun: str, fh_kirp: int = 0, uyarilar: list[str] | None = None) -> dict:
     """ozet_uret.main()'i hattın depodaki veri dosyalarının KOPYASI üzerinde koşturur.
 
     fh_kirp > 0: çeyreklik metrikte finansal hesaplar bacağının son `fh_kirp`
     dolu çeyreği silinir — bacağın GSYH'den geride kaldığı hâl, verinin bugünkü
     durumundan bağımsız olarak kurulur (yarın iki bacak aynı çeyrekte bitse de
     sınama aynı arızayı görmeye devam eder).
+
+    uyarilar verilirse kopyadaki İKİ uyarı listesi (uyarilar.json ve
+    data/veri_durum.json) onunla DEĞİŞTİRİLİR. Depodaki listeler bir ÖNCEKİ
+    koşunun duvar saatiyle yazılmıştır ve duman adımlardan önce koşar: onları
+    okuyan bir madde, onları yenileyecek koşuyu kendi eliyle durdurur
+    (08.10.2026 — bkz. bolum_okur_dili).
     """
     d = pathlib.Path(tempfile.mkdtemp(prefix="butce-duman-"))
     (d / "data").mkdir()
@@ -100,6 +106,12 @@ def _kutu(bugun: str, fh_kirp: int = 0) -> dict:
         if y.is_file():
             shutil.copy(y, d / "data" / y.name)
     shutil.copy(BURASI / "uyarilar.json", d / "uyarilar.json")
+    if uyarilar is not None:
+        for yol in (d / "uyarilar.json", d / "data" / "veri_durum.json"):
+            if yol.exists():
+                j = json.loads(yol.read_text(encoding="utf-8"))
+                j["uyarilar"] = list(uyarilar)
+                yol.write_text(json.dumps(j, ensure_ascii=False, indent=1), encoding="utf-8")
     if fh_kirp:
         C = pd.read_csv(d / "data" / "ceyreklik_metrik.csv", index_col=0, parse_dates=True)
         fh = [k for k in C.columns if k in veri.FH_KOLONLAR
@@ -186,6 +198,23 @@ def bolum_gecikme() -> None:
     sina("öbür aileler gözlemin kendi tarihinden",
          veri.gecikme_gun("finhesap", "2026-03-31", "2026-09-08") == 161
          and veri.gecikme_gun("menkul", "2026-08-28", "2026-09-08") == 11)
+    # AYLIK GÖZLEM AY SONUNDAN SAYILIR. Seri ayın ilk gününde indeksli; yaş
+    # oradan ölçülünce TÜFE her ay yayımdan önceki 4–5 gün sahte "yayın durmuş
+    # olabilir" uyarısı basıyordu (01.10.2026: ağustos "61 gün önce", tolerans
+    # 60) ve uyarı hattın duman sınamasına kadar yürüdü. Takvim 2026'dan:
+    # ağustos verisi 05.10'a, eylül yayımının gününe kadar meşru olarak durur.
+    sina("TÜFE: ağustos verisi 05.10.2026'da ay sonundan 35 gün (66 değil)",
+         veri.gecikme_gun("tufe", "2026-08-01", "2026-10-05") == 35,
+         str(veri.gecikme_gun("tufe", "2026-08-01", "2026-10-05")))
+    _tufe = pd.DataFrame({"tufe": [1.0, 2.0]},
+                         index=pd.to_datetime(["2026-07-01", "2026-08-01"]))
+    _uy = lambda gun: [u for u in veri.tazelik_denetimi({"aylik": _tufe}, gun)
+                       if u.startswith("TAZELİK: TÜFE")]
+    sina("TÜFE: yeni ay yayımlanmadan önceki gün uyarı yok (meşru ritim)",
+         not _uy("2026-10-04"), str(_uy("2026-10-04")))
+    sina("TÜFE: yayım on günden fazla kaçınca uyarı bacağı adıyla söylüyor",
+         bool(_uy("2026-10-16")) and "son gözlemi 08.2026" in _uy("2026-10-16")[0],
+         str(_uy("2026-10-16")))
     kaynak = inspect.getsource(veri.tazelik_denetimi)
     sina("veri katmanının tazelik denetimi aynı tanımdan ölçüyor",
          "gecikme_gun(" in kaynak and "(bugun - son).days" not in kaynak)
@@ -398,16 +427,66 @@ def bolum_sayfa() -> None:
     sina("statik yedeklerde ISO ay yazımı yok", not iso_yedek, str(iso_yedek[:3]))
 
 
+def _sablon_uyarilari() -> list[str]:
+    """Veri katmanının KENDİ şablonunun, her aile bayatken bastığı tazelik uyarıları.
+
+    Çerçeveler depodaki dosyalardan; gün, en geç ailenin son gözleminden en
+    büyük toleransın da ötesinde — yani her aile toleransını aşmış olur ve
+    şablonun her dalı (aylık AA.YYYY, çeyreklik, günlük, yayım günü) bir kez
+    basılır. Ölçülen şey verinin bugünkü hâli değil, ŞABLONUN dilidir.
+    """
+    cer = {}
+    for ad in ("aylik", "ceyreklik", "haftalik", "gunluk"):
+        y = BURASI / "data" / f"{ad}.csv"
+        if y.exists():
+            cer[ad] = pd.read_csv(y, index_col=0, parse_dates=True)
+    sonlar = [df.dropna(how="all").index.max() for df in cer.values() if len(df)]
+    if not sonlar:
+        return []
+    en_genis = max(tol for _etiket, tol, _muaf in veri.TAZELIK.values())
+    return veri.tazelik_denetimi(cer, max(sonlar) + pd.Timedelta(days=en_genis + 30))
+
+
 def bolum_okur_dili() -> None:
     print("\n▶ Okur dili (cümle alanları)")
     od = _ortak("okur_dili")
-    k = _kutu("2026-09-08")
+    # DEPODAKİ UYARI LİSTESİ OKUNMAZ. Madde bir zamanlar fikstürü depodaki
+    # uyarilar.json ile kuruyordu; o liste bir ÖNCEKİ koşunun duvar saatiyle
+    # yazılmıştır ve duman adımlardan ÖNCE koşar. 01.10.2026 koşusu "TÜFE
+    # (aylık) son gözlemi 08.2026" uyarısını yazdı, tarayıcı AA.YYYY'yi ondalık
+    # nokta sandı, madde 08.10'da düştü ve hat iki gün koşamadı — uyarıyı
+    # silecek koşu, uyarı yüzünden hiç başlamadı. Hem de bu dosyanın
+    # bolum_finhesap maddesi o uyarının AA.YYYY yazmasını ŞART koşarken. Doğru
+    # soru veride değil şablondadır: aşağıdaki liste hattın kendi şablonundan,
+    # her aile bayatken, depoya bakmadan kurulur. Canlı listenin dili kopyalama
+    # anında (guncelle.py) ve yayın kapısında (sayfa sınavı 17, iki ağırlıkla)
+    # zaten soruluyor.
+    sablon = _sablon_uyarilari()
+    tazelik = [u for u in sablon if u.startswith("TAZELİK:")]
+    sina("şablon her aile için bir tazelik uyarısı basıyor (ölçüt boş koşmuyor)",
+         len(tazelik) == len(veri.TAZELIK), f"{len(tazelik)} uyarı · {len(veri.TAZELIK)} aile")
+    sina("aylık bacağın uyarısı AA.YYYY saatiyle (08.10.2026'yı düşüren biçim)",
+         any(re.search(r"TÜFE \(aylık\) son gözlemi \d{2}\.\d{4} \(", u) for u in tazelik),
+         str([u for u in tazelik if "TÜFE" in u]))
+    k = _kutu("2026-09-08", uyarilar=sablon)
     o = k["o"]
     bulgu = []
     for ad, metin in od.ozet_cumleleri(o):
         for _i, aile, esl in od.kosu_kaydi_tara([metin]):
             bulgu.append((ad, aile, esl))
     sina("özetin cümle alanları temiz", not bulgu, str(bulgu[:5]))
+    sina("şablon uyarılarının hepsi özetin uyarı metnine girdi",
+         bool(sablon) and all(u in o.get("uyari_metni", "") for u in sablon),
+         str([u for u in sablon if u not in o.get("uyari_metni", "")][:3]))
+    canli: list[str] = []
+    for yol in (BURASI / "uyarilar.json", BURASI / "data" / "veri_durum.json"):
+        try:
+            canli += list(json.loads(yol.read_text(encoding="utf-8")).get("uyarilar") or [])
+        except (OSError, ValueError):
+            pass
+    sizan = [u for u in canli if u not in sablon and u in o.get("uyari_metni", "")]
+    sina("fikstür depodaki (önceki koşunun) uyarı listesini okumuyor",
+         not sizan, str(sizan[:2]))
 
     # EKSİ BİR YAŞ OKURA "-3 gün" DİYE ÇIKMAZ. Kural (veri.gecikme_gun) yalnız
     # "butce" ailesine uygulanmıştı; öbür aileler ham farkı taşıyordu ve

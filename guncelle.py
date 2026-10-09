@@ -1409,15 +1409,30 @@ def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
     return 0
 
 
-# ADIM TAVANI — TOHUM, ölçüm değil.
+# ADIM TAVANI — TOHUM ve ÖLÇÜ.
 #
-# 900 saniye, ölçülen en yavaş hafif-kip HATTININ (kredi 869 sn, 27.08) üstünde
-# duruyor ve o hat DÖRT adıma bölünüyor, yani tek bir adım bu tavana yaklaşmıyor.
 # İşi bir hattı hızlandırmak değil, ASILMIŞ bir adımı bütün bütçeyi yemeden
 # kesmek: 27.08'de EVDS 21 dakika astı ve dört hattın üçünün tamamlanmış işi
-# çöpe gitti. `bulten/hat_suresi.json` biriktiğinde p90×2'ye geçilecek; okuyucu
-# bu yüzden tek yerde (`adim_tavani`) duruyor.
+# çöpe gitti. 900 saniye bir TOHUMDUR: ölçülen en yavaş hafif-kip hattının
+# (kredi 869 sn, 27.08) üstünde konmuştu ve "o hat dört adıma bölünüyor, tek
+# bir adım bu tavana yaklaşmıyor" diye gerekçelendirilmişti. Gerekçe ölçüyle
+# DÜŞTÜ: kredinin süresinin neredeyse tamamı ilk adımda (veri.py, ~519 EVDS
+# isteği) ve süre defterinin on kaydında başarılı koşular 733–894 sn, iki koşu
+# (17.09 · 08.10, ikisi de perşembe yayım günü) tam 901 sn'de KESİLDİ. Tavan
+# dağılımın İÇİNDEYDİ: perşembe yayımını izleyen koşu yaklaşık beşte bir
+# olasılıkla düşüyor, iş akışı kırmızı bitiyor ve e-posta gidiyordu.
+#
+# Plan baştan beri buydu ("defter biriktiğinde p90×2"): tavan hattın kendi
+# ölçülmüş süresinden türer — en az TOHUM, TAVAN_KAT × p90 (başarılı hafif
+# koşular, en az TAVAN_EN_AZ_KAYIT kayıt), en çok TAVAN_AZAMI_SN. Üst sınır
+# bütçeden gelir: tek bir hattın asılması `tazele` adımının (veri.yml, 40 dk)
+# yarısından fazlasını yiyemez. Ölçüldü: en ağır perşembe koşusunda (08.10)
+# öbür hatların toplamı 17,1 dakika; 20 + 17,1 = 37,1 < 40. bulten/duman.py
+# bu sınırı veri.yml'deki adım sınırından ENGEL olarak sınar.
 ADIM_TAVAN_SN = 900
+TAVAN_KAT = 2
+TAVAN_EN_AZ_KAYIT = 5
+TAVAN_AZAMI_SN = 1200
 
 # ZAMAN AŞIMI İMZASI — TEK TANIM.
 # `kos()` asılan bir adımı bu dizgeyle başlayan bir cümleyle bildiriyor ve
@@ -1430,20 +1445,25 @@ ADIM_TAVAN_SN = 900
 ZAMAN_ASIMI_IMZASI = "ZAMAN AŞIMI"
 
 
-def adim_tavani(h: "Hat", tam: bool, gunluk: bool) -> float | None:
+def adim_tavani(h: "Hat", tam: bool, gunluk: bool,
+                yol: Path | None = None) -> float | None:
     """Bir adımın duvar saati tavanı (saniye). None = tavan yok.
 
     TAM ve GÜNLÜK kiplerde TAVAN YOK — bilerek. Bu kipler ölçülerek uzun:
     FX'in tam kipi 26.08'de 1 saat 45 dakikada bitti ve kendi iş akışında
     (fx.yml, 300 dakikalık bütçe) koşuyor. Onlara hafif kipin tavanını
     dayatmak, yayının önünde duran bir denetimin yanlış alarmı olurdu —
-    haftalık FX koşusunu her hafta öldürürdü. Hafif kip ise "depodaki veriden
-    grafik + ozet.json (dakikalar)" diye tanımlı; orada 15 dakikayı aşan bir
-    adım çalışmıyor, ASILMIŞTIR.
+    haftalık FX koşusunu her hafta öldürürdü. Hafif kipte tavan hattın KENDİ
+    ölçülmüş süresinden türer (bkz. ADIM_TAVAN_SN üstündeki not); ölçü
+    yetersizse tohum. `yol`: süre defteri (sınama kendi defterini verir).
     """
     if tam or gunluk:
         return None
-    return ADIM_TAVAN_SN
+    if len(_sureler(h.ad, "hafif", yol, True)) < TAVAN_EN_AZ_KAYIT:
+        return float(ADIM_TAVAN_SN)
+    import math
+    olcu = math.ceil(TAVAN_KAT * p90(h.ad, "hafif", yol) / 60) * 60
+    return float(min(TAVAN_AZAMI_SN, max(ADIM_TAVAN_SN, olcu)))
 
 
 def _agaci_oldur(p: subprocess.Popen):

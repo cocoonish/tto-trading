@@ -156,7 +156,9 @@ def _kosu_kaydi_dili():
     kotu = ["Sayfa metni `kkm_aktif` bayrağına bağlıdır", "bie_pydibsarsiv grubunda 13 seri adı (0.2%)",
             "ÖLÜ SERİ: 'glp_alis' son 252 iş günü", "koparıldı: m3:2024-06-28.", "en büyüğü 17.10.2025, 5.69 mlr USD.",
             "ezilmiş olabilir; `--yenile` ile tazeleyin", "oysa piyasa 1,838 (%-10.6, eşik %8)", "son çapa 2026-08-21",
-            "mevduat_yp_usd_mia, bilanco_pay_ham daha yeni", "0.0 milyar TL ile", "sapma -4 bp", "ozet.json'dan okunur"]
+            "mevduat_yp_usd_mia, bilanco_pay_ham daha yeni", "0.0 milyar TL ile", "sapma -4 bp", "ozet.json'dan okunur",
+            # Dört ve daha çok haneli ondalık — ay yazımı muafiyeti bunları DA yutmasın.
+            "katsayı 0.98765 çıktı", "seviye 08.20261 oldu", "değer 13.2026 oldu"]
     for s in kotu:
         assert od.kosu_kaydi_tara([s]), f"yakalanmadı: {s}"
     iyi = ["AYRI KALEM DEĞİL: ZK bloke hesabı (TP.AB.A19) 3323 iş günü boyunca tam sıfır basmış ve 15.03.2024 tarihinde doluyor.",
@@ -167,7 +169,13 @@ def _kosu_kaydi_dili():
            "Veri taze: yayım gecikmesi tolerans içinde, tazelik uyarısı yok.",
            "TP.PY.P02.1H ile TP.BISPOLFAIZ.TUR arasında fark 0,00 puan; TP.APIFON1.TOP − TP.APIFON2.TOP",
            "koparıldı: M3 (28.06.2024). Seviye grafiğinde kırılma işaretlenir; miktar +1,126 mn ons değişti",
-           "geç likidite penceresi alış faizi son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor"]
+           "geç likidite penceresi alış faizi son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor",
+           # AYLIK SAAT bicim sözleşmesinin kendi yazımıdır (AA.YYYY). 08.10.2026'da
+           # bu cümlenin ilk hâli Bütçe hattının duman sınamasını düşürdü ve hat
+           # iki gün koşamadı; birleşik damga da aynı yazımı taşır.
+           "TAZELİK: TÜFE (aylık) son gözlemi 08.2026 (35 gün önce, tolerans 45 gün). Yayın durmuş olabilir.",
+           "piyasa 09.09.2026 · anket 09.2026 · piyasa 09.10.2026",
+           "program 09.2025 · kur 03.09.2026"]
     for s in iyi:
         assert not od.kosu_kaydi_tara([s]), (s, od.kosu_kaydi_tara([s]))
     # tara() muafiyeti kapatılabilir: backtick içi ad koşu kaydında kod dilidir
@@ -5317,12 +5325,47 @@ def main() -> int:
         # koşuyor — onlara hafif kipin tavanını dayatmak haftalık FX koşusunu
         # her hafta öldüren bir YANLIŞ ALARM olurdu.
         h = g.HAT["kredi"]
-        assert g.adim_tavani(h, False, False) == g.ADIM_TAVAN_SN
         assert g.adim_tavani(h, True, False) is None, "TAM kipe tavan konmuş"
         assert g.adim_tavani(h, False, True) is None, "GÜNLÜK kipe tavan konmuş"
         # Tohum, ölçülen en yavaş hafif-kip hattının (kredi 869 sn) üstünde
         # olmalı; altına düşerse o hat her koşuda kesilir.
         assert g.ADIM_TAVAN_SN >= 900, f"tavan ölçülen en yavaş hattın altına indi: {g.ADIM_TAVAN_SN}"
+
+        # TAVAN HATTIN KENDİ ÖLÇÜSÜNDEN. 900 saniye kredinin ölçülen dağılımının
+        # İÇİNDEYDİ (başarılı 733–894 sn, iki perşembe koşusu 901'de kesildi) ve
+        # her kesilme bir kırmızı koşu, bir e-posta demekti. Sınama deponun
+        # o günkü defterini DEĞİL kendi kurduğu defteri okur.
+        def _defter(kayitlar):
+            y = Path(td) / "hat_suresi.json"
+            y.write_text(json.dumps({"hatlar": {"kredi": [
+                {"an": "2026-10-01T00:00:00+00:00", "sn": sn, "kip": "hafif", "sonuc": s}
+                for sn, s in kayitlar]}}), encoding="utf-8")
+            return y
+        with tempfile.TemporaryDirectory() as td:
+            olcu = lambda k: g.adim_tavani(h, False, False, yol=_defter(k))
+            assert olcu([]) == g.ADIM_TAVAN_SN, f"boş defter tohuma düşmüyor: {olcu([])}"
+            az = [(500.0, "ok")] * (g.TAVAN_EN_AZ_KAYIT - 1)
+            assert olcu(az) == g.ADIM_TAVAN_SN, f"az kayıtla ölçüye geçildi: {olcu(az)}"
+            hizli = [(100.0, "ok")] * 10
+            assert olcu(hizli) == g.ADIM_TAVAN_SN, f"hızlı hat tohumun altına indi: {olcu(hizli)}"
+            orta = [(500.0, "ok")] * 10
+            assert olcu(orta) == 1020.0, f"p90 500 sn → 2×500, dakikaya yukarı: {olcu(orta)}"
+            kredi = ([(733.5, "ok"), (742.0, "ok"), (784.0, "ok"), (811.0, "ok"), (850.0, "ok"),
+                      (889.0, "ok"), (894.0, "ok"), (3.8, "ok")]
+                     + [(901.0, "zaman aşımı")] * 2)
+            k_tavan = olcu(kredi)
+            assert k_tavan == g.TAVAN_AZAMI_SN, f"kredi defteri azamiye dayanmalı: {k_tavan}"
+            assert k_tavan > 894.0, "tavan ölçülen en yavaş başarılı koşunun altında"
+            # Asılan koşu kendi tavanını büyütemez: kesilen kayıt ölçüye girmez.
+            asili = [(100.0, "ok")] * 6 + [(901.0, "zaman aşımı")] * 4
+            assert olcu(asili) == g.ADIM_TAVAN_SN, f"zaman aşımı tavanı büyüttü: {olcu(asili)}"
+        # Azami tavan bütçeden: tek hattın asılması tazele adımının yarısını aşamaz.
+        yml = (BURASI.parent / ".github" / "workflows" / "veri.yml").read_text(encoding="utf-8")
+        m = re.search(r"- name: Gereken hatları tazele\n(?:(?!\n      - name:).)*?"
+                      r"timeout-minutes:\s*(\d+)", yml, re.S)
+        assert m, "veri.yml'de tazele adımının sınırı okunamadı — ölçüt kör"
+        assert g.TAVAN_AZAMI_SN <= int(m.group(1)) * 60 / 2, \
+            f"tek hat {g.TAVAN_AZAMI_SN} sn yiyebilir; tazele adımı {m.group(1)} dk"
         import inspect
         assert "adim_tavan_sn" in inspect.signature(g.kos).parameters, \
             "kos() dışarıdan tavan alamıyor — bütçe ucu kapanmış"

@@ -643,13 +643,24 @@ def beklenen_yayim(ay, gun: int = STOK_YAYIM_GUN) -> pd.Timestamp:
 # geride kalır (09.09.2026'da ölçülen gecikme 161 gün, 2026-Ç2 henüz yok);
 # 200, o ritmin ~üç hafta ötesidir. GSYH ise TÜİK'ten çeyrek sonundan ~60 gün
 # sonra gelir; 170 orada kalır.
+#
+# "tufe" AY SONUNDAN sayılır (`gecikme_gun`), çeyreklik aileler çeyrek
+# sonundan sayıldığı gibi. Seri ayın İLK gününde indeksli ve yaş 08.10.2026'ya
+# kadar oradan ölçülüyordu: tolerans 60 iken her ay, TÜİK yeni ayı yayımlamadan
+# önceki 4–5 gün sahte "Yayın durmuş olabilir" uyarısı doğuyordu (01.10.2026:
+# ağustos verisi "61 gün önce", oysa eylül verisi takvimine göre 05.10'da
+# geldi) ve sayfaya BAYAT VERİ şeridi düşüyordu. TÜİK TÜFE'yi ayın 3'ünde,
+# hafta sonuysa izleyen iş günü yayımlıyor (bülten takviminde 03.09 ve 05.10
+# olarak ölçüldü); bu kuralla 2026'da bir ayın verisi ay sonundan en çok 35
+# gün sonra yenisine yerini bırakıyor. 45, kaçan bir yayımı on gün içinde
+# söyler — OVP hattının aynı bacağa uyguladığı eşik.
 TAZELIK = {
     "butce":    ("Bütçe & iç borç stoku (HMB, aylık)",           45, False),
     "disborc":  ("Brüt dış borç (üç aylık)",                    110, False),
     "menkul":   ("DİBS & eurobond (haftalık, Cuma)",             12, False),
     "ceyrek":   ("GSYH (TÜİK, üç aylık)",                       170, False),
     "finhesap": ("Finansal hesaplar (TCMB, üç aylık)",          200, False),
-    "tufe":     ("TÜFE (aylık)",                                 60, False),
+    "tufe":     ("TÜFE (aylık)",                                 45, False),
     "kur":      ("Döviz kuru (günlük)",                           4, True),
 }
 # Gecikmesi beklenen YAYIM gününden ölçülen aileler → yayım günü.
@@ -676,13 +687,17 @@ def gecikme_gun(aile: str, son, bugun=None) -> int:
     Veri katmanının tazelik denetimi de özet üreticisi de buradan ölçer; iki
     ayrı formül bir gün sessizce ayrışırdı. "butce" için çıpa gözlem ayı değil
     BEKLENEN YAYIM GÜNÜDÜR; veri beklenenden ERKEN geldiyse gecikme sıfırdır
-    (eksi bir yaş yayımlanmaz).
+    (eksi bir yaş yayımlanmaz). Öbür AYLIK aileler ay SONUNDAN sayılır: aylık
+    seri ayın ilk gününde indeksli ve bicim sözleşmesi AA.YYYY'yi ayın son
+    gününe demirler; ay başından saymak yaşı bir ay büyütür (bkz. TAZELIK).
     """
     bugun = pd.Timestamp(bugun).normalize() if bugun is not None \
         else pd.Timestamp.today().normalize()
     son = pd.Timestamp(son).normalize()
     if aile in YAYIM_CIPASI:
         return max(0, (bugun - beklenen_yayim(son, YAYIM_CIPASI[aile])).days)
+    if AILE_BICIM.get(aile) == "ay":
+        son = son + pd.offsets.MonthEnd(0)
     return (bugun - son).days
 
 

@@ -4900,3 +4900,60 @@ aynı soru koddan sorulursa kusur commit anında yakalanır. Gösterge kartı ay
 satırın farkını hâlâ birimsiz basar ("+0,4"): orada boş birim USD/TRY ile
 paylaşıldığı ve kurun farkı bilerek yüzde yazıldığı için bu düzeltmenin
 kapsamına alınmadı; kapı da onu ENGEL saymıyor.
+
+**Kurucu ilke — BİR DUMAN MADDESİ ÖNCEKİ KOŞUNUN ÇIKTISINA DA, VERİNİN O
+GÜNKÜ EVRESİNE DE BAKAMAZ; ve paylaşılan bir tarayıcının yanlış pozitifi,
+onu en sıkı okuyan kapıda hattı durdurur.** 08.10.2026 15:52'den 09.10
+akşamına veri tazelemenin sekiz koşusunun sekizi de kırmızı bitti ve her biri
+bir e-posta gönderdi. Üç kök vardı; ikisi kendini kilitliyordu.
+(1) BÜTÇE. Hattın duman sınaması fikstürünü depodaki `uyarilar.json` ile
+kuruyordu. 01.10 koşusu "TAZELİK: TÜFE (aylık) son gözlemi 08.2026 …" yazdı;
+ortak tarayıcının dört haneli ondalık kalıbı AA.YYYY'yi — bicim sözleşmesinin
+kendi ay yazımını — ondalık nokta sandı ve madde, hat 08.10'da menkul kıymet
+yayımıyla yeniden tetiklendiğinde düştü. Aynı dosyanın başka bir maddesi o
+uyarının AA.YYYY yazmasını ŞART koşuyordu: iki madde aynı çıktıya zıt hüküm
+veriyordu. Duman adımlardan önce koştuğu için uyarıyı silecek koşu hiç
+başlamadı, tetik tüketilmedi ve her pencere hattı yeniden deneyip yeniden
+düştü. Uyarının kendisi de sahteydi: TÜFE yaşı ayın İLK gününden ölçülüyordu
+ve tolerans 60 iken her ay TÜİK'in yeni ayı yayımlamasından önceki 4–5 gün
+"Yayın durmuş olabilir" ve sayfaya BAYAT VERİ şeridi düşüyordu — OVP'de
+17.09'da kapatılan kusurun Bütçe'deki eşi. Üç düzeltme: tarayıcı ay yazımını
+tanır (ay 01–12, yıl 19xx/20xx; "13.2026" ve "08.20261" yakalanmaya devam
+eder), Bütçe fikstürü uyarı listesini hattın KENDİ şablonundan her aile
+bayatken kurar ve depodakini okumaz (okumadığı da sınanıyor), TÜFE yaşı ay
+sonundan sayılır ve tolerans yayım kuralından yeniden türetildi (2026'da bir
+ayın verisi ay sonundan en çok 35 gün sonra yerini bırakıyor → 45).
+(2) MAKROİHTİYATİ. "Öntanımlı eşik bu bacağa yetmiyor" maddesi bağlayıcılığı
+bugünün verisinden soruyordu (anket bacağı hattın saatinin 45 günden fazla
+gerisinde mi). 08.10'da üçüncü çeyrek anketi geldi, bacak iki gün gerisine
+indi, madde düştü; pano 18.09'da dondu ve okura "20 gündür ilerlemedi" yazdı,
+oysa kredi verisi 02.10'a ilerlemişti. Aynı veri bir buçuk ay sonra maddeyi
+kendiliğinden geçirecek, arıza her çeyrek dönecekti. Madde artık kuralın
+ilan ettiği meşru uçta sorar (bacak kaynak toleransı kadar geride: sayfanın
+eşiği işaret basmamalı, öntanımlı 45 basmalı); canlı madde yalnız YANLIŞ
+işareti sorar — kaynağı gerçekten gecikmiş bacağın "°" işareti doğrudur, onu
+ENGEL saymak hattı tam da kaynağın geciktiği gün durdururdu.
+(3) KREDİ. Adım tavanı 900 sn bir tohumdu ve gerekçesi ("dört adım, tek adım
+tavana yaklaşmaz") ölçüyle düştü: süre neredeyse tamamen veri.py'de (~519
+EVDS isteği), defterde başarılı koşular 733–894 sn, perşembe yayımını izleyen
+iki koşu (17.09 · 08.10) tam 901'de kesildi — tavan dağılımın İÇİNDEYDİ.
+Tavan artık planlandığı gibi süre defterinden türüyor: en az tohum, 2 × p90
+(başarılı hafif koşular, en az beş kayıt), en çok 1200 sn. Üst sınır bütçeden:
+tek hattın asılması tazele adımının (40 dk) yarısını yiyemez; en ağır
+perşembede öbür hatların toplamı 17,1 dk ölçüldü. Kesilen koşu ölçüye girmez,
+yani kendi tavanını büyütemez; duman kendi defterini kurar ve azami sınırı
+veri.yml'deki adım sınırından okur. On beş arıza enjeksiyonunun on beşi kendi
+maddesinde yakalandı; biri ilk denemede "beklenen madde görünmedi" dedi ve
+sebep ölçütün körlüğü değil aynı bloğun daha önceki bir assert'inin düşmesiydi.
+Ortak ders: iki madde de doğru bir şeyi yanlış yerden soruyordu — biri bir
+önceki koşunun duvar saatiyle yazılmış dosyadan, öbürü verinin o haftaki
+evresinden. Duman adımlardan önce koşar; okuduğu her canlı girdi, onu
+yenileyecek koşuyu durdurma gücüne sahiptir. Soru şablondadır ve
+sözleşmededir, sahte çerçeveyle sorulur. Zaman yolculuğuyla dört ileri günde
+(16.10 · 20.11 · 06.01 · 02.04) iki hattın dumanı da temiz.
+AÇIK, adıyla: (i) GitHub'ın zamanlanmış koşuları sabah penceresinde 5–7 saat
+gecikmeli başlıyor (02:13 penceresi 05.10–09.10 arasında 08:10–08:56'da);
+sabah zincirini rutin sürüklediği için bülten etkilenmedi, ama yedek
+cron'lar o pencereye artık hiç yetişmiyor. (ii) Kredi'nin yavaşlığının kökü
+istek sayısı (iş günü serileri 2011'den 366 günlük parçalarla: 19 × 16 =
+304 istek); parça boyu EVDS'in satır sınırına karşı ölçülmeden büyütülmedi.

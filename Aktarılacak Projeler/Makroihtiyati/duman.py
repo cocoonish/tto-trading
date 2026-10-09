@@ -18,7 +18,9 @@ BURADA DURAN HER MADDE BİR ARIZAYA KARŞILIK GELİR (09.09.2026'da ölçülenle
     tanımı gereği bundan uzun susar. Eşik sayfada açıkça yazılır ve KREDİ
     hattının kendi ölçtüğü toleranstan (110 gün, dönem sonundan sayılır)
     gelir; kapanamayan bir uyarı, okuru bütün uyarıları görmezden gelmeye
-    alıştırır.
+    alıştırır. Eşiğin bağlayıcılığı SÖZLEŞMEDEN sorulur (bacak, kaynağının
+    toleransı kadar geride); bugünün verisinden sorulduğu hâliyle madde
+    08.10.2026'da yeni anket gelince düştü ve hattı iki gün durdurdu.
  3. BAYATLIK HÜKMÜ — özet `bayat` da `tazelik` de yazmıyordu, sayfanın veri
     durumu şeridi "bayatlık ölçülmüyor" basıyordu; oysa aynı serilerin
     tazeliği kredi hattında zaten ölçülüyor. Hüküm üç hâlli: ölçülemiyorsa
@@ -150,39 +152,124 @@ def bolum_ceyrek() -> None:
 
 
 # ── 2. bayat işareti eşiği ───────────────────────────────────────────────────
-def bolum_bayat_isareti() -> None:
-    print("\n▶ Sayfadaki bayat işareti (Deger eşiği)")
-    *_, o = _hesap()
-    b = _ortak("bicim")
-    mdx = _mdx()
+DEGER_ONTANIMLI_ESIK = 45          # Deger.astro'nun öntanımlı bayatGun'u
+
+
+def _bayat_isaretleri(o: dict, cagri, b, esik_yok: bool = False) -> list[tuple[str, int, int]]:
+    """Sayfanın bayat (°) işaretleyeceği değerler → [(anahtar, gün, eşik)].
+
+    Bileşenin kuralı: g = hattın saati − anahtarın saati; g > bayatGun ise
+    değer bayat işaretlenir (öntanımlı 45). esik_yok: sayfadaki bayatGun yok
+    sayılır — "eşik kaldırılsaydı ne olurdu" sorusu. Canlı madde de sentetik
+    madde de AYNI kuraldan geçer; ikinci bir kopya bir gün ayrışırdı.
+    """
     hat = b.tarihe_cevir(o.get("_tarih"))
-    # Bileşenin kendi kuralı: g = hattın saati − anahtarın saati; g > bayatGun
-    # ise değer "bayat" işaretlenir. Öntanımlı 45 gün.
-    cagri = re.findall(r'<Deger\s+proje="%s"\s+anahtar="([^"]+)"([^>]*)>' % SLUG, mdx)
-    sina("sayfa çağrıları okunabildi", len(cagri) >= 15, str(len(cagri)))
-    kalici: list[str] = []
+    out: list[tuple[str, int, int]] = []
     for anahtar, kuyruk in cagri:
         if TARIHSEL_RX.search(anahtar):
             continue
         kendi = b.tarihe_cevir(o.get(f"{anahtar}_tarih") or o.get("_tarih"))
         if kendi is None or hat is None:
             continue
-        m = re.search(r"bayatGun=\{(\d+)\}", kuyruk)
-        esik = int(m.group(1)) if m else 45
-        if (hat - kendi).days > esik:
-            kalici.append(f"{anahtar}: {(hat - kendi).days} gün > {esik}")
-    sina("sayfada kalıcı bayat işaretli değer yok", not kalici, " · ".join(kalici))
+        m = None if esik_yok else re.search(r"bayatGun=\{(\d+)\}", kuyruk)
+        esik = int(m.group(1)) if m else DEGER_ONTANIMLI_ESIK
+        g = (hat - kendi).days
+        if g > esik:
+            out.append((anahtar, g, esik))
+    return out
+
+
+def _ceyrek_bacagi(o: dict, anahtar: str) -> bool:
+    """Anahtar üç aylık (anket) bacağın mı? Ölçü anahtarın KENDİ saatinin
+    yazımı: üç aylık saat AA.YYYY'dir (bölüm 1), haftalık bacak GG.AA.YYYY."""
+    return bool(AY_RX.match(str(o.get(f"{anahtar}_tarih") or "")))
+
+
+def _isaret_ayir(o: dict, cagri, b, tol: dict) -> tuple[list, list]:
+    """Sayfanın işaretlerini (yanlış, meşru) diye ayırır.
+
+    Bacağı kendi kaynağının toleransını da aşmış bir değerin "°" işareti
+    DOĞRUDUR: kaynak gerçekten gecikmiştir ve kredi hattı da aynı bacağı bayat
+    sayar. Yanlış olan, kaynağın taze saydığı bir değeri sayfanın bayat
+    göstermesidir — eşiğin bacağın ritmine yetmediğinin izi.
+    """
+    isaret = _bayat_isaretleri(o, cagri, b)
+    kaynak_tol = lambda a: tol["ceyrek"] if _ceyrek_bacagi(o, a) else tol["haftalik"]
+    return ([x for x in isaret if x[1] <= kaynak_tol(x[0])],
+            [x for x in isaret if x[1] > kaynak_tol(x[0])])
+
+
+def _anket_ucta(o: dict, b, anket: list[str], gun: int) -> dict:
+    """Özetin bir kopyası: haftalık saatler, üç aylık bacağın `gun` gün önüne
+    taşınır (bacak `gun` gün geride kalır). Bugünün verisinden bağımsız hâl."""
+    t = b.tarihe_cevir(next((o.get(f"{a}_tarih") for a in anket), None))
+    if t is None:
+        return {}
+    uc = f"{t + pd.Timedelta(days=gun):%d.%m.%Y}"
+    s = {k: (uc if k.endswith("_tarih") and isinstance(v, str) and GUN_RX.match(v) else v)
+         for k, v in o.items()}
+    s["_tarih"] = uc
+    return s
+
+
+def bolum_bayat_isareti() -> None:
+    print("\n▶ Sayfadaki bayat işareti (Deger eşiği)")
+    *_, o = _hesap()
+    b = _ortak("bicim")
+    mdx = _mdx()
+    cagri = re.findall(r'<Deger\s+proje="%s"\s+anahtar="([^"]+)"([^>]*)>' % SLUG, mdx)
+    sina("sayfa çağrıları okunabildi", len(cagri) >= 15, str(len(cagri)))
+    tol = hesap.tolerans()
+    if tol is None:
+        sina("kredi hattının toleransı okunabildi", False)
+        return
+    # CANLI MADDE — yalnız YANLIŞ işareti sorar (bkz. _isaret_ayir). Kaynağı
+    # gerçekten gecikmiş bir bacağı ENGEL saymak hattı tam da kaynak geciktiği
+    # gün durdururdu — haftalık bacaklar dahil bütün pano donardı (hattın
+    # kendi kapısı kuralın meşru çıktısını kusur sayamaz). Meşru işaret
+    # adıyla basılır.
+    yanlis, mesru = _isaret_ayir(o, cagri, b, tol)
+    for a, g, e in mesru:
+        print(f"    · {a}: {g} gün geride — kaynağın kendi toleransının da ötesinde, "
+              f"'°' işareti doğru (not)")
+    sina("sayfada kalıcı bayat işaretli değer yok",
+         not yanlis, " · ".join(f"{a}: {g} gün > {e}" for a, g, e in yanlis))
     # Eşik KREDİ hattının ölçtüğü toleranstan gelir; sayfada elle büyütülmüş
     # bir sayı olmasın diye ikisi karşılaştırılır.
-    tol = hesap.tolerans()
     esikler = {int(x) for x in re.findall(r"bayatGun=\{(\d+)\}", mdx)}
     sina("sayfadaki eşik kredi hattının üç aylık toleransıyla aynı",
-         tol is not None and esikler == {tol["ceyrek"]},
-         f"sayfa {sorted(esikler)} · tolerans {tol}")
-    # ARIZAYA KARŞI: eşik kaldırılırsa ölçüt DÜŞMELİ.
-    anket_gun = (hat - b.tarihe_cevir(o["bkea_std_isletme_tarih"])).days
-    sina("öntanımlı eşik bu bacağa yetmiyor (ölçüt gerçekten bağlayıcı)",
-         anket_gun > 45, f"anket bacağı {anket_gun} gün geride")
+         esikler == {tol["ceyrek"]}, f"sayfa {sorted(esikler)} · tolerans {tol}")
+    eksik = [a for a, kuyruk in cagri if _ceyrek_bacagi(o, a)
+             and f"bayatGun={{{tol['ceyrek']}}}" not in kuyruk]
+    sina("üç aylık bacağın her çağrısı eşiği taşıyor", not eksik, str(eksik))
+    # EŞİK BAĞLAYICI MI — SÖZLEŞMEDEN sorulur, bugünün verisinden değil. Madde
+    # bir zamanlar "anket bacağı bugün 45 günden fazla geride mi" diye
+    # soruyordu; bu bir ölçüt değil verinin o günkü evresiydi. 08.10.2026'da
+    # üçüncü çeyrek anketi geldi, bacak hattın saatinin iki gün gerisine indi,
+    # madde düştü ve hat iki gün koşamadı (pano 18.09'da dondu, okura "20
+    # gündür ilerlemedi" yazdı) — oysa aynı veri bir buçuk ay sonra maddeyi
+    # kendiliğinden yeniden geçirecekti. Sorulacak hâl, kuralın İLAN ETTİĞİ
+    # meşru uçtur: üç aylık bacak kaynağının toleransı kadar geride. Orada
+    # sayfanın eşiği işaret basmamalı, öntanımlı 45 basmalı.
+    anket = [a for a, _k in cagri if _ceyrek_bacagi(o, a)]
+    sina("sayfada üç aylık bacağa ait çağrı var", bool(anket), str(anket))
+    uc = _anket_ucta(o, b, anket, tol["ceyrek"])
+    if not uc:
+        sina("üç aylık bacağın saati çözülüyor", False, str(anket))
+        return
+    sayfa_ile = {a for a, _g, _e in _bayat_isaretleri(uc, cagri, b)}
+    esiksiz = {a for a, _g, _e in _bayat_isaretleri(uc, cagri, b, esik_yok=True)}
+    sina("meşru uçta (bacak kaynak toleransı kadar geride) sayfa eşiği işaret basmıyor",
+         not (sayfa_ile & set(anket)), str(sorted(sayfa_ile & set(anket))))
+    sina("öntanımlı eşik bu bacağa yetmiyor (ölçüt bağlayıcı — sözleşmeden)",
+         set(anket) <= esiksiz, f"eşiksiz işaretlenen {sorted(esiksiz)} · anket {anket}")
+    # Kaynak toleransını AŞINCA işaret meşrudur: canlı madde bu hâlde düşseydi
+    # hat, kaynağın geciktiği gün kendi panosunu dondururdu.
+    gec = _anket_ucta(o, b, anket, tol["ceyrek"] + 10)
+    y_gec, m_gec = _isaret_ayir(gec, cagri, b, tol)
+    sina("kaynağı gerçekten gecikmiş bacağın işareti kusur sayılmıyor (meşru)",
+         not y_gec and set(anket) <= {a for a, _g, _e in m_gec},
+         f"yanlış {y_gec} · meşru {m_gec}")
 
 
 # ── 3. bayatlık hükmü ────────────────────────────────────────────────────────
