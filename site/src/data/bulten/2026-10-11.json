@@ -2,7 +2,7 @@
  "tarih": "2026-10-11",
  "gun": "Pazar",
  "tr_tarih": "11 Ekim 2026",
- "olusturma": "2026-10-11T14:58:30+00:00",
+ "olusturma": "2026-10-11T15:10:16+00:00",
  "gostergeler": [
   {
    "ad": "USD/TRY",
@@ -2672,7 +2672,7 @@
   ]
  },
  "temalar": {
-  "_son_guncelleme": "2026-09-27",
+  "_son_guncelleme": "2026-10-11",
   "temalar": [
    {
     "ad": "Debasement trade v2",
@@ -2700,9 +2700,9 @@
      "Bütçe açığı patikasında iyileşme"
     ],
     "izlenecek_gosterge": "ABD on yıllığın REEL getirisi; ve merkez bankası altın talebi (TCMB brüt rezervinde altın payı, 24 Eylül okumasında %63,8)",
-    "son_gozlem": "25 Eylül 2026 kapanışıyla haftalık kesit tezi AÇIKÇA ÇÜRÜTÜYOR ve bu, bölünmenin bittiği ilk hafta. Uzun bacağın dördü de haftayı ekside kapattı: gümüş %2,64, bitcoin %2,54, altın %2,34, platin %0,32 geriledi. Kısa bacak ise kazandı — dolar endeksi %0,75 yükseldi, ABD on yıllığı 18,6 baz puan, otuz yıllığı 17,3 baz puan arttı. Tez uzun bacağın kazanmasını ve kısa bacağın kaybetmesini ister; bu hafta ikisi de tersine döndü. Sebep de tezin tam karşıtı: getirilerin on dokuz yılın zirvesine çıkması, getiri ödemeyen madeni taşımanın maliyetini artırdı. Bakır ayrı duruyor ve ayrımı bir kez daha sanayi tarafına yazıyor — haftalık %2,28 artışla 52 haftalık aralığın %98'inde, gümüş ise %27'sinde. Yılbaşı kesiti dört uzun varlığın DÖRDÜNÜ de ekside tutuyor (altın −%0,46, gümüş −%7,60, platin −%11,64, bitcoin −%3,55). Tek doğrulayıcı bacak merkez bankası talebi: TCMB brüt rezervinde altın payı 24 Eylül itibarıyla %63,8 ve bir hafta öncesine göre 0,5 puan arttı.",
-    "son_guncelleme": "2026-09-27",
-    "gelisme": "<p>Haftalık kesit tezi <strong>açıkça çürütüyor</strong>. Uzun bacağın dördü de ekside: gümüş %2,64, bitcoin %2,54, altın %2,34, platin %0,32 geriledi. Kısa bacak aynı hafta kazandı — dolar endeksi %0,75 yükseldi, on yıllık 18,6, otuz yıllık 17,3 baz puan arttı.</p><p>Sebep tezin tam karşıtı: getirilerin on dokuz yılın zirvesine çıkması, getiri ödemeyen madeni taşımanın maliyetini artırdı. Bakır ayrı duruyor — haftalık %2,28 ile 52 haftalık aralığın %98'inde, gümüş %27'sinde; hareket parasal değil sanayi talebi görünümlü. Yılbaşından beri dört uzun varlığın dördü de ekside. Tek doğrulayıcı bacak merkez bankası talebi: TCMB brüt rezervinde altın payı 24 Eylül'de %63,8, haftalık 0,5 puan arttı.</p>",
+    "son_gozlem": "11 Ekim 2026 haftalık kesiti tezi zayıf biçimde doğruluyor. Uzun bacakta altın ve gümüş haftayı artıda kapattı, bitcoin geriledi; kısa bacakta dolar endeksi yükselmeyi sürdürdü, ABD uzun ucu ise geri çekildi. Ayrışma tezin istediği kanaldan geldi: Fed'in ekim artırımı fiyatlaması çöktü ve Beyaz Saray Fed üyesi Lisa Cook için soruşturma komitesi kurdu. Dolar güçlenirken altının kazanması dolar dışı bir sürücüye işaret ediyor. İzlenecek gösterge değişmedi: ABD on yıllığın reel getirisi ve TCMB brüt rezervinde altın payı (8 Ekim'de %61,2; döviz girişiyle paydanın büyümesi payı düşürdü).",
+    "son_guncelleme": "2026-10-11",
+    "gelisme": "<p>Haftalık kesit tezi <strong>zayıf biçimde doğruluyor</strong>: altın ve gümüş artıda, bitcoin ekside; dolar güçlenirken ABD uzun ucu geri çekildi. Sürücü tezin kanalı: Fed'in ekim artırımı fiyatlaması çöktü ve Beyaz Saray Fed üyesi Lisa Cook için soruşturma komitesi kurdu.</p><p>İzlenecek: ABD on yıllığın reel getirisi ve TCMB brüt rezervinde altın payı (8 Ekim'de %61,2; döviz girişiyle payda büyüdü).</p>",
     "olculer": [
      {
       "kod": "GC=F",
@@ -2965,9 +2965,9 @@
      "Uzun ucun aralık ortasına dönmesi"
     ],
     "izlenecek_gosterge": "ABD on yıllığın 52 haftalık aralıktaki konumu (25 Eylül okumasında %100) ve tahvil oynaklığı ölçüsünün aynı aralıktaki konumu (%68)",
-    "son_gozlem": "25 Eylül 2026 kapanışı: tez yedi haftalık çürütücü serinin ardından ilk kez GÜÇLÜ DOĞRULAMA veriyor. On yıllık getiri hafta içinde 18,6 baz puan artarak %5,184'e, otuz yıllık 17,3 baz puan artarak %5,504'e çıktı; ikisi de 52 haftalık aralığın tepesinde. Otuz yıllıktaki hareket kendi haftalık oynaklığının 2,1 katı ve ölçülen elli bir satırın en olağandışı haftalık hareketi. Tezin gerektirdiği şekil de geldi: eğri dikleşti — beş yıl–otuz yıl makası 47 baz puandan 50'ye, üç ay–on yıl farkı 102 baz puandan 111'e açıldı. Arz kaygısının fiyatlanması tahvil oynaklığında da görünüyor; ölçü haftalık %19,05 sıçrayarak 96,0'a çıktı ve 52 haftalık aralığın %68'ine yükseldi — bir hafta önce %42'ydi. Haber akışında haftanın sürücüleri olarak beklenenden güçlü ABD imalat anketleri, Merkez Bankası yetkililerinin şahin açıklamaları, beş yıllık ihalede zayıf talep ve yüksek petrol sayılıyor. Ayrımı yapacak sınav ekimde: faiz artırımı gelir de uzun uç ona rağmen yükselmeyi sürdürürse fiyatlanan şey politika faizi değil borç arzıdır.",
-    "son_guncelleme": "2026-09-27",
-    "gelisme": "<p>Tez yedi haftalık çürütücü serinin ardından ilk kez <strong>güçlü doğrulama</strong> veriyor. On yıllık getiri haftalık 18,6 baz puan artarak %5,184'e, otuz yıllık 17,3 baz puan artarak %5,504'e çıktı; ikisi de 52 haftalık aralığın tepesinde ve otuz yıllıktaki hareket kendi haftalık oynaklığının 2,1 katı.</p><p>Tezin gerektirdiği şekil de geldi: eğri dikleşti. Beş yıl–otuz yıl makası 47'den 50 baz puana, üç ay–on yıl farkı 102'den 111 baz puana açıldı. Tahvil oynaklığı ölçüsü haftalık %19,05 sıçrayarak 96,0'a çıktı ve 52 haftalık aralıktaki konumu %42'den %68'e yükseldi.</p>",
+    "son_gozlem": "11 Ekim 2026 haftalık kesiti tezi zayıflatıyor. On yıllık 6 Ekim'de 2002'den beri en yüksek düzeyi gördü, sonra haftayı iki ayın en büyük haftalık düşüşüyle kapattı; 5 yıl–30 yıl makası 8 Ekim'deki 61 bp'den 58 bp'ye indi ve MOVE geriledi. Arz tarafında yeni bir işaret var: Citi, Hazine'nin kasım refinansmanında uzun vadeli tahvil satışını azaltacağını bekliyor. Tez arz kesintisini Hazine'nin karşılığı olarak öngörüyordu; o karşılık gelirse uzun uç baskısı yapısal olarak hafifler. İzlenecek gösterge: 5 yıl–30 yıl makası ve 14 Ekim TÜFE'sinden sonra uzun ucun kısa uca göre konumu.",
+    "son_guncelleme": "2026-10-11",
+    "gelisme": "<p>Haftalık kesit tezi <strong>zayıflatıyor</strong>: on yıllık 6 Ekim'deki zirvenin ardından haftayı geri çekilerek kapattı, 5 yıl–30 yıl makası daraldı ve MOVE geriledi. Arz tarafında Citi, Hazine'nin kasım refinansmanında uzun vadeli satışı azaltacağını bekliyor; tezin öngördüğü karşılık gelirse baskı yapısal olarak hafifler.</p><p>İzlenecek: 5 yıl–30 yıl makası ve 14 Ekim TÜFE'sinden sonra uzun ucun kısa uca göre konumu.</p>",
     "olculer": [
      {
       "kod": "^TNX",
@@ -3139,9 +3139,9 @@
      "Kur hızının %30'un üzerine çıkıp gevşemeyi geri aldırması"
     ],
     "izlenecek_gosterge": "Gecelik faizin politika faizine göre konumu (24 Eylül okumasında −0,28 puan) ve kur arındırılmış on üç haftalık kredi büyümesi (18 Eylül'de %26,59)",
-    "son_gozlem": "Fiyat bacağı tamamlandı ve bu hafta politika faizinin ALTINA geçti: 24 Eylül itibarıyla politika faizi %37,00, ağırlıklı ortalama fonlama maliyeti %37,00, gecelik gerçekleşen TLREF ise 25 Eylül'de %36,88 — fark −0,28 puan, bir hafta önceki −0,15 puanın iki katı. Marjinal Merkez Bankası faizi de %36,88'e indi. Yani koridorun üst ucundan başlayan normalleşme, politika faizinin bir tık altında dengelendi. Miktar bacağı ise 17 Eylül'de atılan gevşetici adımların izini taşımaya başladı: kur arındırılmış on üç haftalık yıllıklandırılmış kredi büyümesi 11 Eylül haftasındaki %25,84'ten 18 Eylül haftasında %26,59'a çıktı, reel kredi daralması −5,7 puandan −4,9 puana hafifledi ve makroihtiyati ayrışma 6,1 puandan 3,3 puana indi. Ayrışmanın daralması, hızlanmanın sınıra tabi olmayan kalemlerden değil düzenlenen kalemlerden geldiğini söylüyor — yani fren gevşiyor, kaçış değil. İhtiyaç kredisi faiz makası da 27,14 puandan 26,03 puana indi ve gevşemeyi fiyat tarafında doğruluyor.",
-    "son_guncelleme": "2026-09-27",
-    "gelisme": "<p>Fiyat bacağı tamamlandı ve bu hafta politika faizinin <strong>altına</strong> geçti: 24 Eylül'de politika faizi %37,00 ve ağırlıklı ortalama fonlama maliyeti %37,00 iken gecelik gerçekleşen TLREF 25 Eylül'de %36,88 — fark −0,28 puan, bir hafta öncesinin iki katı.</p><p>Miktar bacağı 17 Eylül adımlarının izini taşımaya başladı: kur arındırılmış on üç haftalık kredi büyümesi %25,84'ten %26,59'a çıktı, reel kredi daralması −5,7'den −4,9 puana hafifledi, makroihtiyati ayrışma 6,1'den 3,3 puana indi ve ihtiyaç kredisi faiz makası 27,14'ten 26,03 puana geriledi. Ayrışmanın daralması hızlanmanın düzenlenen kalemlerden geldiğini söylüyor.</p>",
+    "son_gozlem": "11 Ekim 2026 haftalık kesiti tezi doğruluyor ve tezin ötesine geçiyor. Gecelik faiz politika faizinin altında kaldı ve fazla likidite büyüdü: TCMB'nin net fonlaması bir haftada daha da eksiye indi, kısa vadeli DİBS getirisi TLREF'in altına geçti. Fon krizinden çıkan paranın mevduata yönelmesi (Karahan, 6 Ekim) fiilî gevşemeyi faiz kararı olmadan derinleştiriyor. Miktar bacağında kredi büyümesi yavaşlamayı sürdürdü (kur arındırılmış 13 haftalık %23,1). İzlenecek gösterge: 3 aylık DİBS getirisinin TLREF'e göre konumu ve 22 Ekim PPK metninin bu fonlama ortamını teyit edip etmediği.",
+    "son_guncelleme": "2026-10-11",
+    "gelisme": "<p>Haftalık kesit tezi <strong>doğruluyor</strong> ve tezin ötesine geçiyor: gecelik faiz politika faizinin altında kaldı, fazla likidite büyüdü ve kısa vadeli DİBS getirisi TLREF'in altına geçti. Fonlardan çıkan paranın mevduata yönelmesi fiilî gevşemeyi faiz kararı olmadan derinleştiriyor; kredi büyümesi ise yavaşlamayı sürdürdü.</p><p>İzlenecek: 3 aylık DİBS getirisinin TLREF'e göre konumu ve 22 Ekim PPK metni.</p>",
     "olculer": [
      {
       "ad": "TLREF (gecelik gerçekleşen)",
@@ -3229,9 +3229,9 @@
      "Marjların normale dönmesi"
     ],
     "izlenecek_gosterge": "Ham petrolün haftalık yüzde değişimi (25 Eylül'de WTI −%7,87, Brent −%0,22) ve ürün sözleşmelerinin ham petrole göre yönü",
-    "son_gozlem": "Hafta tezi ilk kez BELİRGİN BİÇİMDE ZAYIFLATTI, ama ölçünün bir kısıtı önce yazılmalı: 25 Eylül'de Brent, benzin, kalorifer yakıtı ve doğal gaz sözleşmelerinin dördü de yeni vadeye devretti. Devir düzeltmesi kurulabildiği için yüzde değişimler geçerli; buna karşılık bu dört satırın SEVİYESİ ve seviyeden türeyen bütün rafineri marjları bir önceki haftanın yayımlanmış seviyeleriyle kıyaslanamaz. Yüzde ölçüsünde haftanın hikâyesi şu: ham petrol sert düştü — WTI %7,87 geriledi ve bu, ölçülen elli bir satırın en büyük üçüncü haftalık hareketi; Brent devir arındırılmış ölçüde %0,22 ile yerinde kaldı. Ürün tarafı ikiye ayrıldı: kalorifer yakıtı %7,84, benzin %3,36 düşerken doğal gaz %8,35 yükseldi. Düşüşün sürücüsü haber akışında açık — ABD ile İran arasında Hürmüz Boğazı'nın yeniden açılmasını içeren aşamalı bir anlaşma ihtimali fiyatlandı. Doğal gazdaki yükseliş bundan bağımsız ve yereldir: Appalachia'da bir boru hattında zorunlu hâl ilan edilmesi ve üretimin gerilemesi fiyatı on üç haftanın zirvesine taşıdı, cuma günü ise kâr satışıyla %4,30 geri verdi. Türkiye'nin ithalat faturası açısından asıl soru, ham petroldeki bu gerilemenin ürün fiyatlarına ne kadarının geçeceğidir; ürün bacağı ham petrolden daha yavaş geriliyor.",
-    "son_guncelleme": "2026-09-27",
-    "gelisme": "<p>Hafta tezi ilk kez belirgin biçimde <strong>zayıflattı</strong>, ama bir kısıt önce yazılmalı: 25 Eylül'de Brent, benzin, kalorifer yakıtı ve doğal gaz sözleşmelerinin dördü de yeni vadeye devretti. Yüzde değişimler geçerli; bu dört satırın seviyesi ve seviyeden türeyen rafineri marjları bir önceki haftanın seviyeleriyle kıyaslanamaz.</p><p>Yüzde ölçüsünde ham petrol sert düştü: WTI %7,87 geriledi, Brent %0,22 ile yerinde kaldı. Ürün tarafı ikiye ayrıldı — kalorifer yakıtı %7,84 ve benzin %3,36 düşerken doğal gaz %8,35 yükseldi. Ham petroldeki düşüşün sürücüsü Hürmüz Boğazı'nın yeniden açılmasını içeren aşamalı bir anlaşma ihtimali; doğal gazdaki yükseliş ise Appalachia'daki boru hattı arızasıyla yerel bir olay.</p>",
+    "son_gozlem": "11 Ekim 2026 haftalık kesiti tezi yeniden doğruluyor, ama kanal değişti. Brent ABD'nin İran'a saldırı hazırlığı haberleriyle 8 Ekim'de tek günde %4 yükseldi ve haftayı 104 doların üstünde kapattı; risk priminin taşıyıcısı yeniden ham petrol. Rafineri marjları ise geriledi: benzin ve birleşik marj 18 Eylül düzeyine döndü, distilat marjı 9 Ekim'de Rusya'dan dizel anlaşmasıyla daraldı. Türkiye için eylül TÜFE'sinde ulaştırma manşete en büyük katkıyı yaptı. İzlenecek gösterge: Brent–WTI farkının genişliği (9 Ekim'de 12,87 dolar) ve ekim TÜFE'sinin ulaştırma kalemi.",
+    "son_guncelleme": "2026-10-11",
+    "gelisme": "<p>Haftalık kesit tezi <strong>yeniden doğruluyor</strong>, ama kanal değişti: Brent 8 Ekim'deki saldırı haberleriyle 104 doların üstüne çıktı ve risk priminin taşıyıcısı yeniden ham petrol. Rafineri marjları geriledi; distilat marjı Rusya'dan dizel anlaşmasıyla daraldı.</p><p>İzlenecek: Brent–WTI farkının genişliği ve ekim TÜFE'sinin ulaştırma kalemi.</p>",
     "olculer": [
      {
       "kod": "BZ=F",
@@ -6492,19 +6492,6 @@
       "onem": 8.3
      },
      {
-      "baslik": "Ataşehir Belediyesi AK Parti’ye geçti: CHP ve Yeni Parti seçime girmedi",
-      "baglanti": "https://tr.euronews.com/2026/10/10/atasehir-belediyesi-ak-partiye-gecti-chp-ve-yeni-parti-secime-girmedi",
-      "kaynak": "Euronews Türkçe",
-      "etiket": "",
-      "zaman": "2026-10-10T10:25:03+00:00",
-      "kurum": false,
-      "ozet": "CHP ve YENİ Parti gruplarının katılmadığı Ataşehir Belediye Başkanvekili seçiminde AK Parti-MHP ortak adayı Serdar Orhan, dördüncü turda 18 oyla başkanvekili seçildi. Seçim sırasında YENİ Parti üyelerinin protestosuna polis müdahale etti, arbede çıktı.",
-      "bolge": "global",
-      "alan": "politika",
-      "kaynak_sayisi": 1,
-      "onem": 7.5
-     },
-     {
       "baslik": "S&P, İngiltere'nin kredi notunu korudu",
       "baglanti": "https://www.bloomberght.com/s-p-ingiltere-nin-kredi-notunu-korudu-3791016",
       "kaynak": "Bloomberg HT",
@@ -6516,19 +6503,6 @@
       "alan": "piyasa",
       "kaynak_sayisi": 1,
       "onem": 7.3
-     },
-     {
-      "baslik": "Küresel piyasalar dünya genelinde açıklanacak enflasyon verilerine odaklandı",
-      "baglanti": "https://www.aa.com.tr/tr/ekonomi/kuresel-piyasalar-dunya-genelinde-aciklanacak-enflasyon-verilerine-odaklandi/4084260",
-      "kaynak": "Anadolu Ajansı — Ekonomi (+4 kaynak)",
-      "etiket": "",
-      "zaman": "2026-10-10T08:23:16+00:00",
-      "kurum": false,
-      "ozet": "Küresel pay piyasalarında gelecek hafta başta ABD olmak üzere dünya genelinde açıklanacak enflasyon verileri yatırımcıların odağına yerleşti.",
-      "bolge": "global",
-      "alan": "politika",
-      "kaynak_sayisi": 5,
-      "onem": 6.9
      },
      {
       "baslik": "Fed rate hike odds for October collapse after Williams cools talk - Startup Fortune",
@@ -6555,6 +6529,32 @@
       "alan": "makro",
       "kaynak_sayisi": 2,
       "onem": 6.5
+     },
+     {
+      "baslik": "US Treasury Accepts $6 Billion in Treasury Buyback Offers, Filling Target in Full - bloomingbit",
+      "baglanti": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFA4d244RXA4dzczRFZ3dmg5LVBCNTVSTXZHc1pCNlJwcnlXN2FpNFpzZXRvc0tFeU9Jc0RRNTZ4ZlBTX1RpYWhHWEt6LTZQWVk1ZHRoTw?oc=5",
+      "kaynak": "Arama — ABD borç yönetimi ve tahvil arzı (+1 kaynak)",
+      "etiket": "",
+      "zaman": "2026-10-08T18:58:03+00:00",
+      "kurum": false,
+      "ozet": "",
+      "bolge": "global",
+      "alan": "makro",
+      "kaynak_sayisi": 2,
+      "onem": 6.5
+     },
+     {
+      "baslik": "Küresel piyasalar dünya genelinde açıklanacak enflasyon verilerine odaklandı",
+      "baglanti": "https://www.aa.com.tr/tr/ekonomi/kuresel-piyasalar-dunya-genelinde-aciklanacak-enflasyon-verilerine-odaklandi/4084260",
+      "kaynak": "Anadolu Ajansı — Ekonomi (+3 kaynak)",
+      "etiket": "",
+      "zaman": "2026-10-10T08:23:16+00:00",
+      "kurum": false,
+      "ozet": "Küresel pay piyasalarında gelecek hafta başta ABD olmak üzere dünya genelinde açıklanacak enflasyon verileri yatırımcıların odağına yerleşti.",
+      "bolge": "global",
+      "alan": "politika",
+      "kaynak_sayisi": 4,
+      "onem": 6.4
      }
     ]
    },
@@ -6636,15 +6636,15 @@
      {
       "baslik": "Ekrem İmamoğlu'ndan Erdoğan'a 10 Yıllık Karne: Enflasyon Hukuk - Bold Medya",
       "baglanti": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNRmliTUhuclY2N1J3VzhlbDJhaWpWZUw3Q3NySEZRc3UxSUlXOUpxWmI1Z2V4a3JHcHpYMnZjb0JsNGg4NWpPNThuRXRmZ3R1aHlORWROWXJrV2NpRVcwdlQ0VjhBckNLU0ZCeEZaRzRqNDhadlNRUE8zSWJ0TjZldHZYRlExak9YUTdSWWVjWFQ1M1Q1SzNiaHRoYTEyaXNhYnF2cTB2Zw?oc=5",
-      "kaynak": "Arama — TCMB ve faiz (+4 kaynak)",
+      "kaynak": "Arama — TCMB ve faiz (+3 kaynak)",
       "etiket": "",
       "zaman": "2026-10-11T14:51:06+00:00",
       "kurum": false,
       "ozet": "",
       "bolge": "tr",
       "alan": "makro",
-      "kaynak_sayisi": 5,
-      "onem": 2.0
+      "kaynak_sayisi": 4,
+      "onem": 1.5
      },
      {
       "baslik": "Merkez Bankası Ekim'de faiz indirecek mi? Ekonomist Erdal sağlam rakam verdi - Yeniçağ Gazetesi",
@@ -6733,15 +6733,15 @@
      {
       "baslik": "Ankara Ticaret Odası'nın meslek komiteleri seçimleri yapıldı",
       "baglanti": "https://www.dunya.com/gundem/ankara-ticaret-odasinin-meslek-komiteleri-secimleri-yapildi-haberi-843406",
-      "kaynak": "Dünya Gazetesi (+1 kaynak)",
+      "kaynak": "Dünya Gazetesi",
       "etiket": "",
       "zaman": "2026-10-11T08:58:00+00:00",
       "kurum": false,
       "ozet": "Ankara Ticaret Odası'nın (ATO) meslek komiteleri ve meclis üyeliği seçimleri tamamlanırken, ATO Yönetim Kurulu Başkanı Gürsel Baran, 45 No'lu Boya Satıcıları ve İmalatçıları Meslek Komitesinden meclis üyesi seçildi.",
       "bolge": "tr",
       "alan": "politika",
-      "kaynak_sayisi": 2,
-      "onem": 2.2
+      "kaynak_sayisi": 1,
+      "onem": 1.7
      },
      {
       "baslik": "Fon gelişmelerinin ardından dikkatler özel sektör tahvilleri piyasasında",
@@ -7117,7 +7117,7 @@
       "baglanti": "https://www.ft.com/content/724ef0e2-4d50-49fd-aef8-abc0534f2f84?syn-25a6b1a6=1",
       "kaynak": "Financial Times",
       "etiket": "",
-      "zaman": "2026-10-11T14:44:42+00:00",
+      "zaman": "2026-10-11T14:59:27+00:00",
       "kurum": false,
       "ozet": "US president’s suggestion that Zelenskyy should be replaced shocked Kyiv and European nations",
       "bolge": "global",
@@ -7178,69 +7178,69 @@
       "onem": 6.3
      },
      {
-      "baslik": "Filistin lideri Abbas genel seçimleri Eylül 2027'ye erteledi",
-      "baglanti": "https://tr.euronews.com/2026/10/10/filistin-lideri-abbas-genel-secimleri-eylul-2027ye-erteledi",
-      "kaynak": "Euronews Türkçe",
+      "baslik": "Küresel piyasalar dünya genelinde açıklanacak enflasyon verilerine odaklandı",
+      "baglanti": "https://www.aa.com.tr/tr/ekonomi/kuresel-piyasalar-dunya-genelinde-aciklanacak-enflasyon-verilerine-odaklandi/4084260",
+      "kaynak": "Anadolu Ajansı — Ekonomi (+3 kaynak)",
       "etiket": "",
-      "zaman": "2026-10-10T14:25:02+00:00",
+      "zaman": "2026-10-10T08:23:16+00:00",
       "kurum": false,
-      "ozet": "Genel seçimlerin 28 Kasım’da yapılması planlanıyordu. Avrupa Birliği ise seçimlerin kasım ayında gerçekleştirilmesini desteklediğini açıklamıştı.",
+      "ozet": "Küresel pay piyasalarında gelecek hafta başta ABD olmak üzere dünya genelinde açıklanacak enflasyon verileri yatırımcıların odağına yerleşti.",
       "bolge": "global",
       "alan": "politika",
-      "kaynak_sayisi": 1,
-      "onem": 1.5
+      "kaynak_sayisi": 4,
+      "onem": 6.4
      },
      {
-      "baslik": "AB, Rusya’dan rekor LNG ithalatı için 7,9 milyar euro ödedi",
-      "baglanti": "https://tr.euronews.com/2026/10/10/ab-rusyadan-rekor-lng-ithalati-icin-79-milyar-euro-odedi",
-      "kaynak": "Euronews Türkçe",
+      "baslik": "Trump's diesel agreement with Putin accused of contradicting Russia sanctions law",
+      "baglanti": "https://www.cnbc.com/2026/10/09/trump-putin-diesel-russia-sanctions-ukraine.html",
+      "kaynak": "CNBC — dünya ekonomisi",
       "etiket": "",
-      "zaman": "2026-10-10T13:45:00+00:00",
+      "zaman": "2026-10-10T02:09:00+00:00",
       "kurum": false,
-      "ozet": "Rusya’dan LNG ithalatının sürmesi, özellikle Moskova’nın Ukrayna’ya karşı savaşını devam ettirdiği bir dönemde, AB’nin Rusya ile enerji bağlarını koparma taahhüdünün inandırıcılığını zedeliyor.",
+      "ozet": "Ukraine President Volodymyr Zelenskyy said in a searing statement that the U.S. easing sanctions on Moscow \"plays into Russia's hands.\"",
       "bolge": "global",
       "alan": "politika",
       "kaynak_sayisi": 1,
-      "onem": 1.5
+      "onem": 6.1
      },
      {
-      "baslik": "Çekya'da seçmenler yerel ve Senato seçimleri için sandığa gidiyor",
-      "baglanti": "https://tr.euronews.com/2026/10/10/cekyada-secmenler-yerel-ve-senato-secimleri-icin-sandiga-gidiyor",
-      "kaynak": "Euronews Türkçe",
+      "baslik": "Putin, ABD'ye ve dünyaya petrol tedarik etmeye hazır olduklarını belirtti",
+      "baglanti": "https://www.aa.com.tr/tr/ekonomi/putin-abdye-ve-dunyaya-petrol-tedarik-etmeye-hazir-olduklarini-belirtti/4084056",
+      "kaynak": "Anadolu Ajansı — Ekonomi",
       "etiket": "",
-      "zaman": "2026-10-10T11:31:18+00:00",
+      "zaman": "2026-10-09T20:16:10+00:00",
       "kurum": false,
-      "ozet": "Milyarder popülist Başbakan Andrej Babiš, kurucusu olduğu Agrofert gıda ve kimya grubunun yanı sıra, partisinin 81 üyeli Senato’da sandalye kazanmasını umuyor.",
+      "ozet": "Rusya Devlet Başkanı Vladimir Putin, ABD ve küresel piyasalara petrol ve petrol ürünleri tedarik etmeye hazır olduklarını bildirdi.",
       "bolge": "global",
       "alan": "politika",
       "kaynak_sayisi": 1,
-      "onem": 1.5
+      "onem": 3.9
      },
      {
-      "baslik": "İrlanda, AB bütçesinde 141 milyar euro kesinti yapılmasını önerdi",
-      "baglanti": "https://tr.euronews.com/2026/10/10/irlanda-ab-butcesinde-141-milyar-euro-kesinti-yapilmasini-onerdi",
-      "kaynak": "Euronews Türkçe",
+      "baslik": "ABD'den Uluslararası Ceza Mahkemesi'ne yaptırım kararı",
+      "baglanti": "https://www.bloomberght.com/abd-den-uluslararasi-ceza-mahkemesi-ne-yaptirim-karari-3791006",
+      "kaynak": "Bloomberg HT",
       "etiket": "",
-      "zaman": "2026-10-10T11:09:10+00:00",
+      "zaman": "2026-10-09T16:35:52+00:00",
       "kurum": false,
-      "ozet": "İrlanda, AB’nin gelecek bütçesini yüzde 8 azaltmayı öneriyor. En büyük kesintiler küresel iş birliği ve rekabet gücü programlarına yapılacak; tarım ve uyum kaynakları yüzde 3 düşecek. Teklifte yılda 55 milyar euro gelir hedefleyen öz kaynak paketi de var. AB liderleri planı 15-16 Ekim’de görüşecek.",
+      "ozet": "ABD Dışişleri Bakanı Marco Rubio, Uluslararası Ceza Mahkemesi'nin (UCM) Amerikan vatandaşları üzerinde yargı yetkisi bulunduğunu kabul etmediklerini belirterek mahkemeye kurumsal düzeyde yaptırım uygulama kararı aldıklarını duyurdu.",
       "bolge": "global",
       "alan": "politika",
       "kaynak_sayisi": 1,
-      "onem": 1.5
+      "onem": 6.3
      },
      {
-      "baslik": "Ataşehir Belediyesi AK Parti’ye geçti: CHP ve Yeni Parti seçime girmedi",
-      "baglanti": "https://tr.euronews.com/2026/10/10/atasehir-belediyesi-ak-partiye-gecti-chp-ve-yeni-parti-secime-girmedi",
-      "kaynak": "Euronews Türkçe",
+      "baslik": "Almanya'da kurumsal iflaslar 13 yılın zirvesinde",
+      "baglanti": "https://www.bloomberght.com/almanya-da-kurumsal-iflaslar-13-yilin-zirvesinde-3790977",
+      "kaynak": "Bloomberg HT (+1 kaynak)",
       "etiket": "",
-      "zaman": "2026-10-10T10:25:03+00:00",
+      "zaman": "2026-10-09T12:06:31+00:00",
       "kurum": false,
-      "ozet": "CHP ve YENİ Parti gruplarının katılmadığı Ataşehir Belediye Başkanvekili seçiminde AK Parti-MHP ortak adayı Serdar Orhan, dördüncü turda 18 oyla başkanvekili seçildi. Seçim sırasında YENİ Parti üyelerinin protestosuna polis müdahale etti, arbede çıktı.",
+      "ozet": "Almanya'da kurumsal iflaslar, ekonomideki toparlanma sinyallerine rağmen Temmuz ayında da artış eğilimini sürdürerek son 13 yılın en yüksek aylık seviyesine ulaştı.",
       "bolge": "global",
       "alan": "politika",
-      "kaynak_sayisi": 1,
-      "onem": 7.5
+      "kaynak_sayisi": 2,
+      "onem": 2.8
      }
     ]
    },
@@ -7290,15 +7290,28 @@
      {
       "baslik": "IMF ve Dünya Bankası'nın Bangkok toplantısında kritik gündem",
       "baglanti": "https://www.bloomberght.com/imf-ve-dunya-bankasi-nin-bangkok-toplantisinda-kritik-gundem-3791032",
-      "kaynak": "Bloomberg HT (+3 kaynak)",
+      "kaynak": "Bloomberg HT (+4 kaynak)",
       "etiket": "",
       "zaman": "2026-10-11T08:39:58+00:00",
       "kurum": false,
       "ozet": "Küresel ekonominin sorunları IMF ve Dünya Bankasının yıllık toplantılarında Bangkok'ta ele alınacak.",
       "bolge": "global",
       "alan": "piyasa",
-      "kaynak_sayisi": 4,
-      "onem": 3.8
+      "kaynak_sayisi": 5,
+      "onem": 4.3
+     },
+     {
+      "baslik": "Rising interest rates: The good, the bad and the ugly for retirees",
+      "baglanti": "https://www.marketwatch.com/story/the-good-the-bad-and-the-ugly-of-rising-interest-rates-ee465a81?mod=mw_rss_topstories",
+      "kaynak": "MarketWatch (+1 kaynak)",
+      "etiket": "",
+      "zaman": "2026-10-10T19:44:00+00:00",
+      "kurum": false,
+      "ozet": "Unlike higher gas prices, which hurt almost everyone, higher borrowing costs have an uneven impact.",
+      "bolge": "global",
+      "alan": "piyasa",
+      "kaynak_sayisi": 2,
+      "onem": 1.0
      },
      {
       "baslik": "Should I put my nest egg in a 30-year Treasury bond?",
@@ -7312,19 +7325,6 @@
       "alan": "piyasa",
       "kaynak_sayisi": 2,
       "onem": 1.0
-     },
-     {
-      "baslik": "Rising interest rates: The good, the bad and the ugly for retirees",
-      "baglanti": "https://www.marketwatch.com/story/the-good-the-bad-and-the-ugly-of-rising-interest-rates-ee465a81?mod=mw_rss_topstories",
-      "kaynak": "MarketWatch",
-      "etiket": "",
-      "zaman": "2026-10-10T19:44:00+00:00",
-      "kurum": false,
-      "ozet": "Unlike higher gas prices, which hurt almost everyone, higher borrowing costs have an uneven impact.",
-      "bolge": "global",
-      "alan": "piyasa",
-      "kaynak_sayisi": 1,
-      "onem": 0.5
      },
      {
       "baslik": "Beyaz Saray'dan Fed Üyesi Lisa Cook'a soruşturma",
@@ -7396,19 +7396,6 @@
     "onem": 8.3
    },
    {
-    "baslik": "Ataşehir Belediyesi AK Parti’ye geçti: CHP ve Yeni Parti seçime girmedi",
-    "baglanti": "https://tr.euronews.com/2026/10/10/atasehir-belediyesi-ak-partiye-gecti-chp-ve-yeni-parti-secime-girmedi",
-    "kaynak": "Euronews Türkçe",
-    "etiket": "",
-    "zaman": "2026-10-10T10:25:03+00:00",
-    "kurum": false,
-    "ozet": "CHP ve YENİ Parti gruplarının katılmadığı Ataşehir Belediye Başkanvekili seçiminde AK Parti-MHP ortak adayı Serdar Orhan, dördüncü turda 18 oyla başkanvekili seçildi. Seçim sırasında YENİ Parti üyelerinin protestosuna polis müdahale etti, arbede çıktı.",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 1,
-    "onem": 7.5
-   },
-   {
     "baslik": "S&P, İngiltere'nin kredi notunu korudu",
     "baglanti": "https://www.bloomberght.com/s-p-ingiltere-nin-kredi-notunu-korudu-3791016",
     "kaynak": "Bloomberg HT",
@@ -7420,19 +7407,6 @@
     "alan": "piyasa",
     "kaynak_sayisi": 1,
     "onem": 7.3
-   },
-   {
-    "baslik": "Küresel piyasalar dünya genelinde açıklanacak enflasyon verilerine odaklandı",
-    "baglanti": "https://www.aa.com.tr/tr/ekonomi/kuresel-piyasalar-dunya-genelinde-aciklanacak-enflasyon-verilerine-odaklandi/4084260",
-    "kaynak": "Anadolu Ajansı — Ekonomi (+4 kaynak)",
-    "etiket": "",
-    "zaman": "2026-10-10T08:23:16+00:00",
-    "kurum": false,
-    "ozet": "Küresel pay piyasalarında gelecek hafta başta ABD olmak üzere dünya genelinde açıklanacak enflasyon verileri yatırımcıların odağına yerleşti.",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 5,
-    "onem": 6.9
    },
    {
     "baslik": "Fed rate hike odds for October collapse after Williams cools talk - Startup Fortune",
@@ -7459,6 +7433,32 @@
     "alan": "makro",
     "kaynak_sayisi": 2,
     "onem": 6.5
+   },
+   {
+    "baslik": "US Treasury Accepts $6 Billion in Treasury Buyback Offers, Filling Target in Full - bloomingbit",
+    "baglanti": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFA4d244RXA4dzczRFZ3dmg5LVBCNTVSTXZHc1pCNlJwcnlXN2FpNFpzZXRvc0tFeU9Jc0RRNTZ4ZlBTX1RpYWhHWEt6LTZQWVk1ZHRoTw?oc=5",
+    "kaynak": "Arama — ABD borç yönetimi ve tahvil arzı (+1 kaynak)",
+    "etiket": "",
+    "zaman": "2026-10-08T18:58:03+00:00",
+    "kurum": false,
+    "ozet": "",
+    "bolge": "global",
+    "alan": "makro",
+    "kaynak_sayisi": 2,
+    "onem": 6.5
+   },
+   {
+    "baslik": "Küresel piyasalar dünya genelinde açıklanacak enflasyon verilerine odaklandı",
+    "baglanti": "https://www.aa.com.tr/tr/ekonomi/kuresel-piyasalar-dunya-genelinde-aciklanacak-enflasyon-verilerine-odaklandi/4084260",
+    "kaynak": "Anadolu Ajansı — Ekonomi (+3 kaynak)",
+    "etiket": "",
+    "zaman": "2026-10-10T08:23:16+00:00",
+    "kurum": false,
+    "ozet": "Küresel pay piyasalarında gelecek hafta başta ABD olmak üzere dünya genelinde açıklanacak enflasyon verileri yatırımcıların odağına yerleşti.",
+    "bolge": "global",
+    "alan": "politika",
+    "kaynak_sayisi": 4,
+    "onem": 6.4
    }
   ],
   "kurum": [
@@ -7491,30 +7491,30 @@
   ],
   "haber": [
    {
-    "baslik": "Ekrem İmamoğlu'ndan Erdoğan'a 10 Yıllık Karne: Enflasyon Hukuk - Bold Medya",
-    "baglanti": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNRmliTUhuclY2N1J3VzhlbDJhaWpWZUw3Q3NySEZRc3UxSUlXOUpxWmI1Z2V4a3JHcHpYMnZjb0JsNGg4NWpPNThuRXRmZ3R1aHlORWROWXJrV2NpRVcwdlQ0VjhBckNLU0ZCeEZaRzRqNDhadlNRUE8zSWJ0TjZldHZYRlExak9YUTdSWWVjWFQ1M1Q1SzNiaHRoYTEyaXNhYnF2cTB2Zw?oc=5",
-    "kaynak": "Arama — TCMB ve faiz (+4 kaynak)",
-    "etiket": "",
-    "zaman": "2026-10-11T14:51:06+00:00",
-    "kurum": false,
-    "ozet": "",
-    "bolge": "tr",
-    "alan": "makro",
-    "kaynak_sayisi": 5,
-    "onem": 2.0
-   },
-   {
     "baslik": "Ukraine’s allies vow to pressure Moscow as Trump claims ‘energy ceasefire’ in place",
     "baglanti": "https://www.ft.com/content/724ef0e2-4d50-49fd-aef8-abc0534f2f84?syn-25a6b1a6=1",
     "kaynak": "Financial Times",
     "etiket": "",
-    "zaman": "2026-10-11T14:44:42+00:00",
+    "zaman": "2026-10-11T14:59:27+00:00",
     "kurum": false,
     "ozet": "US president’s suggestion that Zelenskyy should be replaced shocked Kyiv and European nations",
     "bolge": "global",
     "alan": "politika",
     "kaynak_sayisi": 1,
     "onem": 2.5
+   },
+   {
+    "baslik": "Ekrem İmamoğlu'ndan Erdoğan'a 10 Yıllık Karne: Enflasyon Hukuk - Bold Medya",
+    "baglanti": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNRmliTUhuclY2N1J3VzhlbDJhaWpWZUw3Q3NySEZRc3UxSUlXOUpxWmI1Z2V4a3JHcHpYMnZjb0JsNGg4NWpPNThuRXRmZ3R1aHlORWROWXJrV2NpRVcwdlQ0VjhBckNLU0ZCeEZaRzRqNDhadlNRUE8zSWJ0TjZldHZYRlExak9YUTdSWWVjWFQ1M1Q1SzNiaHRoYTEyaXNhYnF2cTB2Zw?oc=5",
+    "kaynak": "Arama — TCMB ve faiz (+3 kaynak)",
+    "etiket": "",
+    "zaman": "2026-10-11T14:51:06+00:00",
+    "kurum": false,
+    "ozet": "",
+    "bolge": "tr",
+    "alan": "makro",
+    "kaynak_sayisi": 4,
+    "onem": 1.5
    },
    {
     "baslik": "Trump'tan enerjide Rusya-Ukrayna ateşkesi iddiası",
@@ -7545,15 +7545,15 @@
    {
     "baslik": "IMF ve Dünya Bankası'nın Bangkok toplantısında kritik gündem",
     "baglanti": "https://www.bloomberght.com/imf-ve-dunya-bankasi-nin-bangkok-toplantisinda-kritik-gundem-3791032",
-    "kaynak": "Bloomberg HT (+3 kaynak)",
+    "kaynak": "Bloomberg HT (+4 kaynak)",
     "etiket": "",
     "zaman": "2026-10-11T08:39:58+00:00",
     "kurum": false,
     "ozet": "Küresel ekonominin sorunları IMF ve Dünya Bankasının yıllık toplantılarında Bangkok'ta ele alınacak.",
     "bolge": "global",
     "alan": "piyasa",
-    "kaynak_sayisi": 4,
-    "onem": 3.8
+    "kaynak_sayisi": 5,
+    "onem": 4.3
    },
    {
     "baslik": "Trump Suudi Arabistan saldırısı sonrası İran’a yeni saldırıları değerlendiriyor",
@@ -7567,6 +7567,19 @@
     "alan": "piyasa",
     "kaynak_sayisi": 2,
     "onem": 1.5
+   },
+   {
+    "baslik": "ABD Enflasyon Verileri Ve Şirket Bilanço Haftası Başlıyor - Finans Hattı",
+    "baglanti": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1ZaGllN1J2cTMzYVh2ZnZ3TjlDckZVR3gybjZ5V1VQVkRDR2dDZDFtTVVzc1dBY1pmZVh4cXRYN2hydTlhTV9YU1hDbC0tTy14NThwT1ljRlExeGcxUzViNUg4cUdHekhsNnhtUFctV1BEV2U4c0lv?oc=5",
+    "kaynak": "Arama — TCMB ve faiz",
+    "etiket": "",
+    "zaman": "2026-10-11T13:37:46+00:00",
+    "kurum": false,
+    "ozet": "",
+    "bolge": "global",
+    "alan": "makro",
+    "kaynak_sayisi": 1,
+    "onem": 3.0
    },
    {
     "baslik": "Borsanın dev şirketi konkordato başvurusu yaptı!",
@@ -7610,15 +7623,15 @@
    {
     "baslik": "Küresel piyasalar dünya genelinde açıklanacak enflasyon verilerine odaklandı",
     "baglanti": "https://www.aa.com.tr/tr/ekonomi/kuresel-piyasalar-dunya-genelinde-aciklanacak-enflasyon-verilerine-odaklandi/4084260",
-    "kaynak": "Anadolu Ajansı — Ekonomi (+4 kaynak)",
+    "kaynak": "Anadolu Ajansı — Ekonomi (+3 kaynak)",
     "etiket": "",
     "zaman": "2026-10-10T08:23:16+00:00",
     "kurum": false,
     "ozet": "Küresel pay piyasalarında gelecek hafta başta ABD olmak üzere dünya genelinde açıklanacak enflasyon verileri yatırımcıların odağına yerleşti.",
     "bolge": "global",
     "alan": "politika",
-    "kaynak_sayisi": 5,
-    "onem": 6.9
+    "kaynak_sayisi": 4,
+    "onem": 6.4
    },
    {
     "baslik": "US Stock Market Prediction Tomorrow (October 12): Will Dow Jones, S&P 500 & Nasdaq Futures Rise or Fall? Check Wall Street Outlook, Inflation Data, Market Trends & Stocks to Watch - The Sunday Guardian",
@@ -7658,19 +7671,6 @@
     "alan": "politika",
     "kaynak_sayisi": 3,
     "onem": 2.9
-   },
-   {
-    "baslik": "Philippine peso seen trading sideways as U.S. inflation data and Middle East tensions steer sentiment - Traders Union",
-    "baglanti": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPSXZLTURKdUJjb2xSTG9FbEwycW9qcC1lWUMzQ2pYVmdReEJnVXhPLWhoSEZaMjV2aEFuMnlPLTYzX19DY0RtOXdhN0lrTFVIVDhYZUJfci1ZZ1BRcGZxdGd2eGtoYlA1QnE5Wlh3emNUci0wdzlLM3NLS0tHc3RlRzhVN3h6eFlhR19YdXJUa0JmTTBJRWwxc05XaFFYMDhI?oc=5",
-    "kaynak": "Arama — Fed ve ECB",
-    "etiket": "",
-    "zaman": "2026-10-11T12:11:30+00:00",
-    "kurum": false,
-    "ozet": "",
-    "bolge": "global",
-    "alan": "makro",
-    "kaynak_sayisi": 1,
-    "onem": 3.0
    },
    {
     "baslik": "Bank earnings to shed the first light on how higher yields are affecting the economy",
@@ -7723,19 +7723,6 @@
     "alan": "piyasa",
     "kaynak_sayisi": 2,
     "onem": 4.2
-   },
-   {
-    "baslik": "Ankara Ticaret Odası'nın meslek komiteleri seçimleri yapıldı",
-    "baglanti": "https://www.dunya.com/gundem/ankara-ticaret-odasinin-meslek-komiteleri-secimleri-yapildi-haberi-843406",
-    "kaynak": "Dünya Gazetesi (+1 kaynak)",
-    "etiket": "",
-    "zaman": "2026-10-11T08:58:00+00:00",
-    "kurum": false,
-    "ozet": "Ankara Ticaret Odası'nın (ATO) meslek komiteleri ve meclis üyeliği seçimleri tamamlanırken, ATO Yönetim Kurulu Başkanı Gürsel Baran, 45 No'lu Boya Satıcıları ve İmalatçıları Meslek Komitesinden meclis üyesi seçildi.",
-    "bolge": "tr",
-    "alan": "politika",
-    "kaynak_sayisi": 2,
-    "onem": 2.2
    },
    {
     "baslik": "Merkez Bankası Ekim'de faiz indirecek mi? Ekonomist Erdal sağlam rakam verdi - Yeniçağ Gazetesi",
@@ -7827,6 +7814,19 @@
     "alan": "makro",
     "kaynak_sayisi": 2,
     "onem": 5.6
+   },
+   {
+    "baslik": "Ankara Ticaret Odası'nın meslek komiteleri seçimleri yapıldı",
+    "baglanti": "https://www.dunya.com/gundem/ankara-ticaret-odasinin-meslek-komiteleri-secimleri-yapildi-haberi-843406",
+    "kaynak": "Dünya Gazetesi",
+    "etiket": "",
+    "zaman": "2026-10-11T08:58:00+00:00",
+    "kurum": false,
+    "ozet": "Ankara Ticaret Odası'nın (ATO) meslek komiteleri ve meclis üyeliği seçimleri tamamlanırken, ATO Yönetim Kurulu Başkanı Gürsel Baran, 45 No'lu Boya Satıcıları ve İmalatçıları Meslek Komitesinden meclis üyesi seçildi.",
+    "bolge": "tr",
+    "alan": "politika",
+    "kaynak_sayisi": 1,
+    "onem": 1.7
    },
    {
     "baslik": "TCMB ile KKTC Merkez Bankası arasında EÖS mutabakatı sağlandı, bağlantı kasımda - Son Dakika",
@@ -7959,17 +7959,30 @@
     "onem": 0.8
    },
    {
-    "baslik": "Gold Rate Today: List Of Global And Domestic Factors Behind Gold Price Volatility; Check Weekly Trends And Key Reasons Behind It - Jagran Josh",
-    "baglanti": "https://news.google.com/rss/articles/CBMikgJBVV95cUxPNlA5Tk5UVDduOWI3bjNlN0ZCaFV6Wks0RWxFeFp3WmFBWVdUVUU4ekZaNU5DZjVfc2swTnpUa0lMSFBPeW5adHE2WXY1NFgxRTZZdGk5eHJhQTJKWWk3SVFieXoxT2ExY3dVc0wteWwxdEI1VXp6Ylk5VmxGNVVNMWhEd3V1MzBmeXpwdUtiN2FSUHBWaF9TMUtlSDdRci1WeWNMXzQwTjhxUF9LLVVrWHJpLTc3NWpUdXlyX1FZNlpraWFBUl9lMGpaZmJHVjBtNlRGbnBJci1sRy1uOVVMOG0tcE40elVNZ0ZieFpMM0RNcDVveEdRSXRRWnFmYW5KOEZhMDhyc2Z5VDQxeS1oaXhB0gGYAkFVX3lxTE11RzBJY2JhMWo3dE9adXhSVWE1ekVIZW5LaGJXY2VBRnJITFV3NFd2dXItYk1FZDNNRmFDdnVZaTA0dnlyLXRTakF4c21DU2hEOUc1RVNYTzlaRmh3UE1NTHp2WFBib0FHcGxZbzlYVEptTzBUOXM1RDRJcGktYXQ2Ylljb1FWVTBMV3JZNTlCOFBlM2hSUU44aXlMbkZsNHN0YTNCSmN1ai1CRWRRWkt1a0J3QzlNV1hzSHlDNlNlWFV3ZWxhRkJZZXNib1BMSFNCUzBnSXFzWjVhQ0hCSzBwVmJlMFBsZ0FsWjVaN1U4WFBhdVRLaHpEMWlVTVgxYjI5dmZBd0FxOFpXMWZqaFY2X0FsR1RSMV8?oc=5",
+    "baslik": "US hikes interest rates - to Trump's annoyance — Global News Podcast - Hamro Patro",
+    "baglanti": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNeVRtWUkxc1ZNUGx4NW04UVByczVjVGpSbXFrS1pET1Z4VGpiMW84b25vZTJ2Q2Flc3hVQlhrVm1Bbk5WSl9GbnlGS0RuSnphb1hWY3dCQXk1TUtnTl9SWjVKX0hzSUd2SkFWa3A2RUlHWXJLblppUTNuVl9UNE1jX2VScHBwYlU?oc=5",
     "kaynak": "Arama — Fed ve ECB",
     "etiket": "",
-    "zaman": "2026-10-11T03:00:22+00:00",
+    "zaman": "2026-10-11T03:14:28+00:00",
     "kurum": false,
     "ozet": "",
     "bolge": "global",
-    "alan": "piyasa",
+    "alan": "makro",
     "kaynak_sayisi": 1,
-    "onem": 2.0
+    "onem": 0.0
+   },
+   {
+    "baslik": "Rising interest rates: The good, the bad and the ugly for retirees",
+    "baglanti": "https://www.marketwatch.com/story/the-good-the-bad-and-the-ugly-of-rising-interest-rates-ee465a81?mod=mw_rss_topstories",
+    "kaynak": "MarketWatch (+1 kaynak)",
+    "etiket": "",
+    "zaman": "2026-10-10T19:44:00+00:00",
+    "kurum": false,
+    "ozet": "Unlike higher gas prices, which hurt almost everyone, higher borrowing costs have an uneven impact.",
+    "bolge": "global",
+    "alan": "piyasa",
+    "kaynak_sayisi": 2,
+    "onem": 1.0
    },
    {
     "baslik": "Wall Street Sees an Ominous Sign in Bond Market’s Latest Selloff - Bloomberg.com",
@@ -8115,19 +8128,6 @@
     "onem": 1.0
    },
    {
-    "baslik": "Rising interest rates: The good, the bad and the ugly for retirees",
-    "baglanti": "https://www.marketwatch.com/story/the-good-the-bad-and-the-ugly-of-rising-interest-rates-ee465a81?mod=mw_rss_topstories",
-    "kaynak": "MarketWatch",
-    "etiket": "",
-    "zaman": "2026-10-10T19:44:00+00:00",
-    "kurum": false,
-    "ozet": "Unlike higher gas prices, which hurt almost everyone, higher borrowing costs have an uneven impact.",
-    "bolge": "global",
-    "alan": "piyasa",
-    "kaynak_sayisi": 1,
-    "onem": 0.5
-   },
-   {
     "baslik": "TCMB, bir elektronik para şirketinin faaliyet iznini iptal etti",
     "baglanti": "https://www.bloomberght.com/tcmb-bir-elektronik-para-sirketinin-faaliyet-iznini-iptal-etti-3791018",
     "kaynak": "Bloomberg HT (+7 kaynak)",
@@ -8178,6 +8178,19 @@
     "alan": "makro",
     "kaynak_sayisi": 2,
     "onem": 0.5
+   },
+   {
+    "baslik": "Dow, S&P 500, Nasdaq Futures Edge Higher Ahead Of Fed Rate Hike Expectations: CRCL, WING, CAVA, FPS Stocks In Focus - Stocktwits",
+    "baglanti": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxPa24yX09GVG1IakJMbVU5ekJHOVFXOXFrVkg5TEZWeFk3bHZLWjFwX09aRXNTXzFIQlBXLTRNX3V3Y3VJZWt1VTJtVGRTbE9GVVJ1WXNmbmZiN3lKWUhkNzdMRnFUUEVVanlkUHFNLUYyRkt3eHRkakZGVUt6TVgtX3RIa3o4b3pOVWdLVGgtcXBkdTBmbXFTYlZ0aENBWnFJQlJNN3k5R3dJOUhjWEk1aURBVkZ2X2ZsZktyN0FZUlI5UTNBWmNsLW9iazlqX2cwS0FrSy1nN3Q4RVkyTVRCQnBzWWdoWE9oX0gyQW5pT3V1TDEzbENzVDNoZWtfMThmUUhtN3hiY0k?oc=5",
+    "kaynak": "Arama — Fed ve ECB",
+    "etiket": "",
+    "zaman": "2026-10-10T18:56:35+00:00",
+    "kurum": false,
+    "ozet": "",
+    "bolge": "global",
+    "alan": "makro",
+    "kaynak_sayisi": 1,
+    "onem": 5.0
    },
    {
     "baslik": "Fed Minutes Offer a Guide to Future Interest Rate Moves. First, You Must Decode Them. - Barron's",
@@ -8271,19 +8284,6 @@
     "onem": 6.1
    },
    {
-    "baslik": "Why the AI trade is becoming a problem for the bond market - Invezz",
-    "baglanti": "https://news.google.com/rss/articles/CBMingFBVV95cUxQOGFRbk1DRGxhYTZkMzR0VzdnUnhaMEJVczJlRDRHR0g4Nm9vQUJDejN6SlV2V2Z5RmNYXzRKcDJxSkxDWHZKbFJqVlFNNjQyVHdJUGpsLXBSMU9PelZ4ZWRBYUh6ZktBVFM2MTlpOVMxUGUzNlJ6Y1VSYnNJdndELUttaXpZMUQ4MXVRbURaWHJ6QzdkSnRmdUwxd0lldw?oc=5",
-    "kaynak": "Arama — Fed ve ECB",
-    "etiket": "",
-    "zaman": "2026-10-10T15:03:02+00:00",
-    "kurum": false,
-    "ozet": "",
-    "bolge": "global",
-    "alan": "piyasa",
-    "kaynak_sayisi": 1,
-    "onem": 0.0
-   },
-   {
     "baslik": "Almanya, Trump'ın Rusya ile anlaşmasına rağmen yaptırımlara bağlı kalacağını duyurdu",
     "baglanti": "https://www.bloomberght.com/almanya-trump-in-rusya-ile-anlasmasina-ragmen-yaptirimlara-bagli-kalacagini-duyurdu-3791027",
     "kaynak": "Bloomberg HT",
@@ -8295,71 +8295,6 @@
     "alan": "politika",
     "kaynak_sayisi": 1,
     "onem": 6.3
-   },
-   {
-    "baslik": "Filistin lideri Abbas genel seçimleri Eylül 2027'ye erteledi",
-    "baglanti": "https://tr.euronews.com/2026/10/10/filistin-lideri-abbas-genel-secimleri-eylul-2027ye-erteledi",
-    "kaynak": "Euronews Türkçe",
-    "etiket": "",
-    "zaman": "2026-10-10T14:25:02+00:00",
-    "kurum": false,
-    "ozet": "Genel seçimlerin 28 Kasım’da yapılması planlanıyordu. Avrupa Birliği ise seçimlerin kasım ayında gerçekleştirilmesini desteklediğini açıklamıştı.",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 1,
-    "onem": 1.5
-   },
-   {
-    "baslik": "AB, Rusya’dan rekor LNG ithalatı için 7,9 milyar euro ödedi",
-    "baglanti": "https://tr.euronews.com/2026/10/10/ab-rusyadan-rekor-lng-ithalati-icin-79-milyar-euro-odedi",
-    "kaynak": "Euronews Türkçe",
-    "etiket": "",
-    "zaman": "2026-10-10T13:45:00+00:00",
-    "kurum": false,
-    "ozet": "Rusya’dan LNG ithalatının sürmesi, özellikle Moskova’nın Ukrayna’ya karşı savaşını devam ettirdiği bir dönemde, AB’nin Rusya ile enerji bağlarını koparma taahhüdünün inandırıcılığını zedeliyor.",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 1,
-    "onem": 1.5
-   },
-   {
-    "baslik": "Çekya'da seçmenler yerel ve Senato seçimleri için sandığa gidiyor",
-    "baglanti": "https://tr.euronews.com/2026/10/10/cekyada-secmenler-yerel-ve-senato-secimleri-icin-sandiga-gidiyor",
-    "kaynak": "Euronews Türkçe",
-    "etiket": "",
-    "zaman": "2026-10-10T11:31:18+00:00",
-    "kurum": false,
-    "ozet": "Milyarder popülist Başbakan Andrej Babiš, kurucusu olduğu Agrofert gıda ve kimya grubunun yanı sıra, partisinin 81 üyeli Senato’da sandalye kazanmasını umuyor.",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 1,
-    "onem": 1.5
-   },
-   {
-    "baslik": "İrlanda, AB bütçesinde 141 milyar euro kesinti yapılmasını önerdi",
-    "baglanti": "https://tr.euronews.com/2026/10/10/irlanda-ab-butcesinde-141-milyar-euro-kesinti-yapilmasini-onerdi",
-    "kaynak": "Euronews Türkçe",
-    "etiket": "",
-    "zaman": "2026-10-10T11:09:10+00:00",
-    "kurum": false,
-    "ozet": "İrlanda, AB’nin gelecek bütçesini yüzde 8 azaltmayı öneriyor. En büyük kesintiler küresel iş birliği ve rekabet gücü programlarına yapılacak; tarım ve uyum kaynakları yüzde 3 düşecek. Teklifte yılda 55 milyar euro gelir hedefleyen öz kaynak paketi de var. AB liderleri planı 15-16 Ekim’de görüşecek.",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 1,
-    "onem": 1.5
-   },
-   {
-    "baslik": "Ataşehir Belediyesi AK Parti’ye geçti: CHP ve Yeni Parti seçime girmedi",
-    "baglanti": "https://tr.euronews.com/2026/10/10/atasehir-belediyesi-ak-partiye-gecti-chp-ve-yeni-parti-secime-girmedi",
-    "kaynak": "Euronews Türkçe",
-    "etiket": "",
-    "zaman": "2026-10-10T10:25:03+00:00",
-    "kurum": false,
-    "ozet": "CHP ve YENİ Parti gruplarının katılmadığı Ataşehir Belediye Başkanvekili seçiminde AK Parti-MHP ortak adayı Serdar Orhan, dördüncü turda 18 oyla başkanvekili seçildi. Seçim sırasında YENİ Parti üyelerinin protestosuna polis müdahale etti, arbede çıktı.",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 1,
-    "onem": 7.5
    },
    {
     "baslik": "Treasury Auctions Explained: Why Bond Auctions Matter Even If You Dont Trade Bonds - Investing.com UK",
@@ -8451,19 +8386,6 @@
     "alan": "piyasa",
     "kaynak_sayisi": 1,
     "onem": 0.0
-   },
-   {
-    "baslik": "El Niño ne zaman zirveye çıkıp sona erecek?: Sürecin ayrıntılı takvimi",
-    "baglanti": "https://tr.euronews.com/2026/10/10/el-nino-ne-zaman-zirveye-cikip-sona-erecek-surecin-ayrintili-takvimi",
-    "kaynak": "Euronews Türkçe",
-    "etiket": "",
-    "zaman": "2026-10-10T05:02:03+00:00",
-    "kurum": false,
-    "ozet": "El Niño Pasifik’te hâlâ güçleniyor. Bu sıra dışı hava olayı ne zaman zirve yapacak, ne zaman sona erecek?",
-    "bolge": "global",
-    "alan": "politika",
-    "kaynak_sayisi": 1,
-    "onem": 1.5
    },
    {
     "baslik": "Create new pre-apprenticeship scheme to close youth unemployment gap, says Milburn",
@@ -8960,19 +8882,6 @@
     "onem": 6.0
    },
    {
-    "baslik": "Foreign Buyers Took 80% of the Treasury’s $39 Billion Auction - 24/7 Wall St.",
-    "baglanti": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNcElPUTA4SkY1Wjhac2ZueHd5aGQzRDJFZmFSWkVqajE2MVVkcVJSX0NBc1NWRU1LT0FRWm9fN2pzNTc1SnNBUWVVeFl2MU1Kc0VBUFFBMXd1a1l4dWtWS1ExVWhmRHRILTRQQ29wWF9WaV85bnJZVVZMSVQwM056ODNFbWpidm9pbUxuUHNEdGFpZGUtQ2habWQ3OWJmZ2VKdTlmNg?oc=5",
-    "kaynak": "Arama — ABD borç yönetimi ve tahvil arzı",
-    "etiket": "",
-    "zaman": "2026-10-08T15:08:00+00:00",
-    "kurum": false,
-    "ozet": "",
-    "bolge": "global",
-    "alan": "makro",
-    "kaynak_sayisi": 1,
-    "onem": 4.0
-   },
-   {
     "baslik": "New vape tax made me swap e-cigs for dartboards",
     "baglanti": "https://www.bbc.co.uk/news/videos/cmd6dv1446lno?at_medium=RSS&at_campaign=rss",
     "kaynak": "BBC Business",
@@ -9077,7 +8986,9 @@
     "onem": 6.1
    }
   ],
-  "okunamayan": [],
+  "okunamayan": [
+   "Euronews Türkçe"
+  ],
   "bolum_adlari": {
    "kilit": "Kilit gelişmeler",
    "kurum": "Kurum duyuruları — Türkiye",
