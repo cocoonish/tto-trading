@@ -1,6 +1,6 @@
 {
   "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
-  "_son_guncelleme": "2026-10-04",
+  "_son_guncelleme": "2026-10-11",
   "kayitlar": [
     {
       "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
@@ -286,12 +286,13 @@
     {
       "konu": "Motorindeki kademeli vergi takviminin enerji şokuna binmesi",
       "acilis": "2026-09-02",
-      "durum": "acik",
+      "durum": "kapandi",
       "soz": "Motorinde kademeli özel tüketim vergisi 1 Eylül'de litre başına 3 lira olarak yürürlüğe girdi; takvim ekimde 6, kasımda 9, aralıkta 12 lira öngörüyor ve 2027 başında eşel mobil öncesi seviyeye dönüyor. Diyoruz ki dışsal petrol şoku ile bu içsel vergi takvimi eylül–aralık arasında üst üste biniyor; ne anketin yıl sonu beklentisi %29,43 ne de bizim baz etkisi modelimizin %33,97 ile %31,75 arasındaki aralığı bu binişmeyi ayrı bir kalem olarak taşıyor. 3 Eylül'de açıklanacak ağustos verisi binişmenin hiçbir yarısını içermiyor: vergi ayın ilk günü yürürlüğe girdi, yani ilk ölçüm ekim başındaki eylül verisi olacak.",
       "ne_bakilacak": "Eylül enflasyonunun ulaştırma kalemi (ekim başı); yıl sonu anket beklentisinin bu takvime göre yukarı revize edilip edilmediği; ham petrol 90 doların üzerinde kalırsa takvimin ertelenip ertelenmediği.",
       "vade": "2026-10-05",
-      "sonuc": "",
-      "isabet": ""
+      "sonuc": "Eylül verisi binişmenin ilk yarısını gösterdi ama manşeti taşımadı. Ulaştırma aylık %2,79 artışla eylülde manşete en büyük katkıyı (0,49 puan) yaptı; buna karşın aylık TÜFE %1,84 ile AA Finans anketinin %2,18'lik beklentisinin altında kaldı, çünkü gıda aylık %0,20 geriledi. Motorindeki ekim adımı (litre başına 3 liradan 6 liraya) ertelenmeden 1 Ekim'de yürürlüğe girdi; benzinde ise vergi üç kademeye bölündü. Binişmenin ağır yarısı ekim verisine kaldı ve o ölçüm 1 Ekim'de açılan benzin–motorin notunda sürüyor (3 Kasım).",
+      "isabet": "kismen",
+      "kapanis": "2026-10-11"
     },
     {
       "konu": "Tahvil eğrisinin uzun ucundaki 82 baz puanlık gevşeme",
@@ -326,20 +327,24 @@
     {
       "konu": "Üretici enflasyonu hızlanırken tüketici enflasyonunun gerilemesi",
       "acilis": "2026-09-04",
-      "durum": "acik",
+      "durum": "kapandi",
       "soz": "Ağustosta iki ölçü ters yöne gitti: tüketici enflasyonu yıllık %31,75'ten %31,51'e indi, yurt içi üretici fiyatları ise aylık %2,57 artarak yıllık %27,95'e çıktı ve enerji kalemi tek ayda %6,99 yükseldi. Tüketicideki gerileme büyük ölçüde baz etkisinden geliyor — mevsimsellikten arındırılmış üç aylık yıllıklandırılmış ölçü %29,2'ye inerken ham ölçü %20,1'e ÇIKTI. Diyoruz ki maliyet borusu yeniden doluyor ve üreticideki hızlanma birkaç ay gecikmeyle tüketiciye yazılır; bu gerçekleşirse manşetteki gerileme eylül–ekimde duraksar.",
       "ne_bakilacak": "5 Ekim'de yayımlanacak eylül tüketici enflasyonunun aylık okuması ve ulaştırma-konut kalemlerinin manşete göre konumu; üretici enflasyonunun aylık hızının %2'nin altına inip inmediği.",
       "vade": "2026-10-05",
-      "sonuc": ""
+      "sonuc": "Manşetteki gerileme eylülde duraksamadı, hızlandı: yıllık TÜFE %31,51'den %29,73'e indi ve Kasım 2021'den beri ilk kez %30'un altına geçti; mevsimsellikten arındırılmış üç aylık yıllıklandırılmış ölçü %29,2'den %25,3'e geriledi. Üretici tarafındaki baskı sürdü — Yİ-ÜFE aylık %2,07 ile %2'nin üstünde kaldı — ama eylülde tüketiciye geçmedi; gıdanın aylık %0,20 düşüşü maliyet borusunun etkisini manşette örttü.",
+      "isabet": "tutmadi",
+      "kapanis": "2026-10-11"
     },
     {
       "konu": "Resmî enflasyon patikası piyasaya yaklaştı — mesafe kapanacak mı",
       "acilis": "2026-09-06",
-      "durum": "acik",
+      "durum": "kapandi",
       "soz": "Yeni Orta Vadeli Program 2026 yıl sonu enflasyon tahminini %28,4'e, 2027 hedefini %21'e, 2028'i %13,5'e ve 2029'u %9'a koydu; tek haneye iniş iki yıl ötelendi. Bu, resmî patikanın piyasaya doğru kaydırılması demek. Piyasanın kendi fiyatı hâlâ daha yukarıda: iki yıllık başabaş enflasyon %29,35, anketin iki yıllık beklentisi %20,83 ve aradaki enflasyon risk primi 8,53 puan. Diyoruz ki resmî tahminin yukarı çekilmesi tek başına primi daraltmaz; primi daraltacak olan gerçekleşen aylık enflasyonun patikayla uyumlu gelmesidir. Program 2026 için %28,4 diyor, ağustos sonunda yıllık %31,51'deyiz — yani yılın kalan dört ayında belirgin bir yavaşlama varsayılıyor.",
       "ne_bakilacak": "Eylül ve ekim tüketici enflasyonunun aylık okumaları ile iki yıllık enflasyon risk priminin yönü. Prim 8,53 puandan aşağı gelirse resmî patika inandırıcılık kazanıyor demektir; yukarı giderse yeni tahmin de fiyatlanmıyor.",
       "vade": "2026-10-05",
-      "sonuc": ""
+      "sonuc": "Eylülün aylık okuması (%1,84) programın yıl sonu %28,4 patikasıyla uyumlu geldi, ama iki yıllık enflasyon risk primi daralmadı: 9 Ekim'de 9,66 puan, notun yazıldığı gün 8,53 puandı. Resmî tahminin yukarı çekilmesinin primi tek başına daraltmayacağı kısmı tuttu; uyumlu gelen verinin primi daraltacağı kısmı tutmadı. 2 yıllık reel getiri bir haftada yalnız %7,11'den %7,13'e kımıldadı, yani başabaşın hareketi nominal 2 yıllığın aynası olarak kaldı ve prim, enflasyondan çok TL faizinin seviyesini ölçüyor.",
+      "isabet": "kismen",
+      "kapanis": "2026-10-11"
     },
     {
       "konu": "Liranın haftalık hareketi kendi ölçeğine göre olağandışıydı",
@@ -426,12 +431,13 @@
     {
       "konu": "Enerjide risk ham petrolden ürüne kaydı",
       "acilis": "2026-09-20",
-      "durum": "acik",
+      "durum": "kapandi",
       "soz": "18 Eylül'de dört enerji sözleşmesinin dördü de yeni vadeye devretti; devir düzeltmesi kurulabildiği için yüzde değişimler geçerli, seviyeler bir önceki haftayla kıyaslanamaz. Düzeltilmiş ölçüde hafta içinde ham petrol yerinde saydı (Brent −%0,44, WTI %0,65) ama ürünler sıkıştı: benzin %6,28, kalorifer yakıtı %2,18, doğal gaz %2,86 yükseldi ve benzin rafineri marjı 40,65 dolara, üç varillik birleşik marj 62,90 dolara çıktı. Diyoruz ki enerji kaynaklı enflasyon riskinin kanalı bu hafta ham petrolden ÜRÜNE kaydı; Türkiye'nin ithalat faturasında da belirleyici olan giderek ham petrolün seviyesi değil ürün marjı.",
       "ne_bakilacak": "Benzin ve distilat rafineri marjlarının önümüzdeki iki haftada genişlemeyi sürdürüp sürdürmediği; ham petrol gerilerken marjların dar kalmaması. Ham petrol ile ürün aynı yöne dönerse ve marjlar 18 Eylül seviyelerine geri çekilirse kayıt çürür. Motorindeki kademeli vergi takviminin ekim adımıyla birlikte ürün tarafındaki bu sıkışma, 5 Ekim'de açıklanacak eylül enflasyonunun ulaştırma kalemine iki kanaldan birden basıyor.",
       "vade": "2026-10-06",
-      "sonuc": "",
-      "isabet": ""
+      "sonuc": "Kayma geri döndü. 9 Ekim kapanışında benzin rafineri marjı 40,59 dolar, üç varillik birleşik marj 62,78 dolar — ikisi de notun yazıldığı 18 Eylül düzeyinde (40,65 ve 62,90). Aynı sürede ham petrol yükseldi: Brent 9 Ekim'de 104,72 dolarda, ABD'nin İran'a yeni saldırı hazırlığı haberleriyle 8 Ekim'de tek günde %4,07 arttı. Enerji kaynaklı enflasyon riskinin taşıyıcısı yeniden ham petrol; ürün tarafında yalnız distilat marjı yüksek kaldı (107,16 dolar).",
+      "isabet": "tutmadi",
+      "kapanis": "2026-10-11"
     },
     {
       "konu": "Uzun uç 19 yılın zirvesinde — fiyatlanan sıkılaşma mı, vade primi mi",
@@ -454,11 +460,22 @@
     {
       "konu": "Haftaya bakış ana senaryosu: fon krizi kur ve faiz kanalına geçmeden kapanıyor",
       "acilis": "2026-10-04",
-      "durum": "acik",
+      "durum": "kapandi",
       "soz": "Eylül TÜFE'si aylık %1,9–2,4 aralığında gelir, döviz çıkışı ekimin ilk günlerinde yavaşlar; TL eğrisi kısa uçtan gevşemeyi sürdürür, 2 yıllık DİBS getirisi %40,5'in altında kalır, dolar/TL haftalık %0,35–0,40 ritmini korur ve BIST'teki toparlanma bankacılık önderliğinde sürer.",
       "ne_bakilacak": "Teyit: TCMB rezerv verisinden tahmin edilen döviz akımının ekimin ilk haftasında sıfıra yaklaşması ve 8 Ekim menkul kıymet verisinde yabancının hisse ve DİBS'te dengeye dönmesi. Düşer: aylık TÜFE %2,6'yı aşarsa ya da 2 yıllık getiri %41'in üstüne çıkarsa; dolar/TL'nin haftalık artışı %0,6'yı geçerse kuyruk patikası geçerli olur.",
-      "sonuc": "",
+      "sonuc": "Patikanın düşme koşullarının hiçbiri gerçekleşmedi ve dört ayağın üçü tuttu. Eylül TÜFE'si aylık %1,84 ile aralığın hemen altında geldi; 2 yıllık gösterge getiri 9 Ekim'de %39,75 ile %40,5'in altında kaldı; BIST Bankacılık hafta içinde %1,48 kazanırken BIST 100 yatay kaldı (−%0,03). Teyit ölçüsünün döviz akımı ayağı beklenenden güçlü geldi: TCMB bilançosundan tahmin edilen döviz akımı 7 Ekim'e kadarki beş iş gününde 6,7 milyar dolar girişe döndü (bir hafta önce 4,5 milyar dolar çıkış). Yabancı ayağı tutmadı: 2 Ekim haftasında yabancılar 675 milyon dolar net sattı, 485 milyonu DİBS'ten. Dolar/TL haftayı %0,41 artışla kapattı; aralığın hafif üstünde, %0,6 eşiğinin altında.",
       "vade": "2026-10-08",
+      "kapanis": "2026-10-11",
+      "isabet": "kismen"
+    },
+    {
+      "konu": "Haftaya bakış ana senaryosu: fon krizi kapandı, TL eğrisi ön uçtan gevşemeyi fiyatlıyor",
+      "acilis": "2026-10-11",
+      "durum": "acik",
+      "soz": "PPK 22 Ekim'e kadar TL eğrisinin ön ucu politika faizinin altında kalır ve uzun uçtan ayrışmayı sürdürür: 3 aylık DİBS getirisi TLREF'in altında, 2 yıllık gösterge %40'ın altında kalır; 5 yıl ile 2 yıl arasındaki terslik 349 baz puandan daralır. TCMB'nin döviz birikimi sürer, dolar/TL haftalık %0,35–0,45 ritmini korur. 14 Ekim'deki ABD eylül TÜFE'si uzun ucu %5,4'ün üstüne taşımaz.",
+      "ne_bakilacak": "Teyit: TCMB bilançosundan tahmin edilen döviz akımının artıda kalması ve 15 Ekim menkul kıymet verisinde yabancının DİBS'e dönmesi. Düşer: ABD 10 yıllık %5,40'ın üstünde kapanırsa ya da 2 yıllık gösterge getiri %40,5'i aşarsa; dolar/TL'nin haftalık artışı %0,6'yı geçerse ya da tahmini döviz akımı yeniden çıkışa dönerse.",
+      "vade": "2026-10-22",
+      "sonuc": "",
       "kapanis": "",
       "isabet": ""
     }
