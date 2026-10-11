@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-09",
+ "_son_guncelleme": "2026-10-11",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1122,6 +1122,16 @@
    "beklenti_sayi": null,
    "gorulme": "2026-10-04"
   },
+  "2026-10-26|TÜİK: Sektörel güven (Ekim 2026)": {
+   "tarih": "2026-10-26",
+   "olay": "TÜİK: Sektörel güven (Ekim 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-11"
+  },
   "2026-10-27|TÜİK: İşgücü (Eylül 2026)": {
    "tarih": "2026-10-27",
    "olay": "TÜİK: İşgücü (Eylül 2026)",
@@ -1161,6 +1171,36 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-08"
+  },
+  "2026-10-30|BDDK: Bankacılık sektörü (3. Çeyrek 2026)": {
+   "tarih": "2026-10-30",
+   "olay": "BDDK: Bankacılık sektörü (3. Çeyrek 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-11"
+  },
+  "2026-10-30|BDDK: Bankacılık sektörü (43. Hafta 2026)": {
+   "tarih": "2026-10-30",
+   "olay": "BDDK: Bankacılık sektörü (43. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-11"
+  },
+  "2026-10-30|BDDK: Bankacılık sektörü (Eylül 2026)": {
+   "tarih": "2026-10-30",
+   "olay": "BDDK: Bankacılık sektörü (Eylül 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-11"
   },
   "2026-10-30|TCMB PPK toplantı özeti": {
    "tarih": "2026-10-30",
