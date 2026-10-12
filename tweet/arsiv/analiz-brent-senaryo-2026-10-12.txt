@@ -1,0 +1,26 @@
+# analiz:brent-senaryo-2026-10-12 · 2026-10-12T20:48:54+00:00 · https://x.com/i/status/2109748161698783559
+
+Analiz — 12 Ekim 2026
+Brent 125–150 Dolar Senaryosu — bir ayda ne nereye gider: küresel piyasalar ve Türkiye
+
+Vadeli Brent 9 Ekim'de 104,72 dolardı; bir ayda 125'e (+%19,4) ya da 150'ye (+%43,2) çıkarsa bu savaşın dört petrol yükselişinden kurulan ilişkiler ABD 2 yıllık getiri için +20 ve +34 baz puan, ABD havayolları için −%6,0 ve −%14,2, DİBS 2 yıllık için +157 ve +431 baz puan, BIST Bankacılık için −%4,8 ve −%15,1 veriyor; USD/TRY iki senaryoda da yönetilen patikada, 50,02 ve 49,99. Vadeli seride bir ayda +%43,2 1988'den bu yana yalnız iki kez görüldü, ikisinde de 80 doların altından başlayarak (seride 1990'ın ilk dokuz ayı yok; fiziki Brent Körfez Savaşı'nın Ağustos–Eylül 1990'ında da bu hızı aştı); fiziki piyasada ise 125 dolar zaten görüldü: Avrupa Brent spot fiyatı 6 Ekim'de 125,44 dolardı, aynı günün vadelisinin 24,86 dolar üstünde, 2000–2025'te bu fark hiç 11,10 doları aşmamıştı.
+
+Hangi Brent? Senaryo vadeli Brent'i sorar: basının Brent'i ve öbür piyasaların fiyatladığı kotasyon o. Hedef gün 9 Kasım'da ön vade bugünün Ocak 2027 kontratıdır ve o kontrat 101,25 dolarda: 125'e çıkması öbür piyasalar için +%23,5, 150'ye çıkması +%48,1'lik bir hareket.
+
+Ne kadar olağandışı? 1988'den bu yana günlerin %2,63'ünde vadeli Brent bir ayda en az senaryonun alt ucu kadar yükseldi (44 ayrı epizot; seride 1990'ın ilk dokuz ayı yok); üst ucu kadar ise yalnız 24 günde, iki epizotta ve hiçbiri yüz doların üstünden başlamadı.
+
+Küresel faiz ve dolar: ABD 2 yıllık getirisi 125 dolarda +20, 150 dolarda +34 baz puan; 10 yıllık +16 ve +24 bp. Getiriler dört yükselişin dördünde arttı ama yıl boyu da yükseldi; Brent'in büyüklüğünün katkısı 2 yıllıkta küçük, 10 yıllıkta görünmüyor.
+
+Küresel hisseler: S&P 500 dört yükselişin ikisinde arttı, ikisinde düştü; altın dördünün üçünde düştü ve ikisinin de örneklem dışı sınaması geçmiyor. Tutarlı olanlar sektörler ve bölgeler: ABD havayolları −%6,0 ve −%14,2, ABD petrol üreticileri +%9,3 ve +%16,0; Avrupa (STOXX 600 −%0,9 ve −%4,5) ve ABD küçük şirketleri (Russell 2000 −%1,1 ve −%4,9) güçlü kanıtla düşüyor.
+
+Türkiye'de kur, rezerv ve fonlama: USD/TRY dört yükselişin dördünde +%1,1 ile +%1,8 arasında kaldı; büyüklük petrolün hareketine duyarsız. Mart'ta yük rezervdeydi: TCMB şokun ilk 21 iş gününde (2–31 Mart) tahminen 41,76 milyar dolar sattı, repo ihalesine ara verip fonlamayı koridorun tavanına (%40) taşıdı, politika faizine dokunmadı; swap hariç net rezerv 80,49'dan 19,29 milyar dolara indi.
+
+Türkiye'de faiz ve hisse: DİBS 2 yıllık 125 dolarda +157, 150 dolarda +431 baz puan (%41,53 ve %44,27); Mart'taki gibi repo ihalesi kesilirse TLREF koridorun üst bandına, %40'a çıkar. BIST 100 dolar bazında −%1,7 ve −%6,7, Tüpraş +%14,2 ve +%18,4; bankacılık, Pegasus ve THY düşüyor.
+
+Enflasyon ve cari denge: Fiyat o düzeyde kalırsa yalnız petrolün payı TÜFE'ye iki ayda +0,85 (125 dolar) ve +1,73 puan (150 dolar), bir yılda TCMB ekonomistlerinin 12 aylık esnekliğiyle +1,94 ve +4,32 puan. Motorinin ÖTV'si Ekim'de 6, Kasım'da 9 TL: eşel mobil yeniden açılırsa 125 dolarda ham petrolün maliyetini karşılayabilir, 2026'daki gibi açılan rafineri marjıyla geleni karşılayamaz.
+
+Kanıtın gücü: Orta. Ana kaynak bu savaşın dört yükselişi: 229 günün 160'ında devirden arındırılmış Brent'in 21 günlük değişimi pozitifti, ama bağımsız epizot dört ve 150 dolar sütunu fiilen Mart'a dayanıyor.
+
+Kilit ölçümler: 60,5 milyar dolar — şokun ilk 21 iş gününün (2–31 Mart) işlemlerinin swap hariç net rezervden erittiği tutar, 18,0 milyarı altının fiyat etkisi; bugünkü stok 45,1; +14,85 TL — 125 dolarda motorinin litre maliyetindeki artış, rafineri marjı 2026'daki gibi açılırsa (KDV hariç; Kasım ÖTV'si 9 TL)
+
+Analizdir; yatırım tavsiyesi değildir.
