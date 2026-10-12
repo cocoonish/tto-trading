@@ -1,0 +1,5693 @@
+{
+ "cipa": "2026-10-09",
+ "head": "b46a298333623a076b274da6f34a00042ae98d53",
+ "not": "sha256 sıkıştırılmamış CSV metninin özüdür; git_blob kaynak dosyanın `git hash-object` özü.",
+ "uyarilar": [
+  "CNBC sürekli vade yok"
+ ],
+ "dosyalar": {
+  "abd_hazine_1990.csv.gz": {
+   "sha256": "8c31a527e6ebb6dfec0fbe654e739c5dac5ba0d5c0f107c0ec76952999d755ab",
+   "satir": 9194,
+   "aciklama": "ABD Hazinesi par getiri eğrisi (3 ay–30 yıl), 1990+",
+   "kaynak": "ABD Hazinesi Daily Treasury Par Yield Curve (makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "us3m": {
+     "n": 9190,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us1y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us2y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us5y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us10y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us30y": {
+     "n": 8199,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/bulut/abd_hazine_1y.csv.gz",
+     "git_blob": "c2ab521aaaea9c1ea8dc4efc57c3962a8c1d2dc4"
+    }
+   ]
+  },
+  "abd_reel_2003.csv.gz": {
+   "sha256": "7aa5105fd44c522765f73a501f0566956491f64d78308cc9a4bd3599498a60da",
+   "satir": 5941,
+   "aciklama": "ABD Hazinesi reel (TIPS) par getiri eğrisi, 2003+",
+   "kaynak": "ABD Hazinesi Daily Treasury Real Yield Curve (makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "reel5y": {
+     "n": 5941,
+     "ilk": "2003-01-02",
+     "son": "2026-09-30"
+    },
+    "reel7y": {
+     "n": 5941,
+     "ilk": "2003-01-02",
+     "son": "2026-09-30"
+    },
+    "reel10y": {
+     "n": 5941,
+     "ilk": "2003-01-02",
+     "son": "2026-09-30"
+    },
+    "reel20y": {
+     "n": 5550,
+     "ilk": "2004-07-27",
+     "son": "2026-09-30"
+    },
+    "reel30y": {
+     "n": 4156,
+     "ilk": "2010-02-22",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/bulut/abd_reel_getiri.csv.gz",
+     "git_blob": "220ca7420e2a953bf7357f7f4c5c1899b763c19b"
+    }
+   ]
+  },
+  "cnbc_gunluk.csv.gz": {
+   "sha256": "8e932d837eb405bc4cb4bbfedc04177ff89c44419e29976a58d072ca451332eb",
+   "satir": 10898,
+   "aciklama": "CNBC günlük kapanış barları: vadeli emtia, paralar (New York 17:00), getiriler, hisse endeksleri",
+   "kaynak": "CNBC (ts-api.cnbc.com, günlük bar ucu)",
+   "sutun_aciklama": {
+    "altin": "@GC.1",
+    "aud": "AUD=",
+    "bakir": "@HG.1",
+    "benzin": "@RB.1",
+    "bist100": ".XU100",
+    "brent": "@LCO.1",
+    "brl": "BRL=",
+    "bugday": "@W.1",
+    "cac": ".FCHI",
+    "cad": "CAD=",
+    "chf": "CHF=",
+    "clp": "CLP=",
+    "cnh": "CNH=",
+    "cop": "COP=",
+    "czk": "CZK=",
+    "dax": ".GDAXI",
+    "de10y": "DE10Y-DE",
+    "de2y": "DE2Y-DE",
+    "dogalgaz": "@NG.1",
+    "dxy": ".DXY",
+    "egp": "EGP=",
+    "eur": "EUR=",
+    "ftse": ".FTSE",
+    "gb10y": "GB10Y-GB",
+    "gb2y": "GB2Y-GB",
+    "gbp": "GBP=",
+    "gumus": "@SI.1",
+    "hsi": ".HSI",
+    "huf": "HUF=",
+    "idr": "IDR=",
+    "ils": "ILS=",
+    "inr": "INR=",
+    "it10y": "IT10Y-IT",
+    "jp10y": "JP10Y-JP",
+    "jp2y": "JP2Y-JP",
+    "jpy": "JPY=",
+    "kalorifer": "@HO.1",
+    "kospi": ".KS11",
+    "krw": "KRW=",
+    "misir": "@C.1",
+    "mxn": "MXN=",
+    "n225": ".N225",
+    "ndx": ".NDX",
+    "nok": "NOK=",
+    "nzd": "NZD=",
+    "php": "PHP=",
+    "pln": "PLN=",
+    "rut": ".RUT",
+    "sek": "SEK=",
+    "sensex": ".BSESN",
+    "shcomp": ".SSEC",
+    "spx": ".SPX",
+    "sx5e": ".STOXX50E",
+    "thb": "THB=",
+    "tr10y": "TR10Y-TR",
+    "tr2y": "TR2Y-TR",
+    "try": "TRY=",
+    "us10y": "US10Y",
+    "us2y": "US2Y",
+    "us30y": "US30Y",
+    "us3m": "US3M",
+    "us5y": "US5Y",
+    "vix": ".VIX",
+    "wti": "@CL.1",
+    "zar": "ZAR="
+   },
+   "kapsam": {
+    "altin": {
+     "n": 10532,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "aud": {
+     "n": 5678,
+     "ilk": "2005-01-03",
+     "son": "2026-10-09"
+    },
+    "bakir": {
+     "n": 6725,
+     "ilk": "2000-01-04",
+     "son": "2026-10-09"
+    },
+    "benzin": {
+     "n": 5278,
+     "ilk": "2005-10-03",
+     "son": "2026-10-09"
+    },
+    "bist100": {
+     "n": 6710,
+     "ilk": "2000-01-04",
+     "son": "2026-10-09"
+    },
+    "brent": {
+     "n": 9589,
+     "ilk": "1988-06-24",
+     "son": "2026-10-09"
+    },
+    "brl": {
+     "n": 5677,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "bugday": {
+     "n": 5232,
+     "ilk": "2006-01-04",
+     "son": "2026-10-09"
+    },
+    "cac": {
+     "n": 6849,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "cad": {
+     "n": 6982,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "chf": {
+     "n": 9566,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "clp": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "cnh": {
+     "n": 3858,
+     "ilk": "2010-08-02",
+     "son": "2026-10-09"
+    },
+    "cop": {
+     "n": 5670,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "czk": {
+     "n": 5676,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "dax": {
+     "n": 9809,
+     "ilk": "1987-12-30",
+     "son": "2026-10-09"
+    },
+    "de10y": {
+     "n": 6840,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "de2y": {
+     "n": 6772,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "dogalgaz": {
+     "n": 6721,
+     "ilk": "2000-01-04",
+     "son": "2026-10-09"
+    },
+    "dxy": {
+     "n": 10827,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "egp": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "eur": {
+     "n": 6981,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "ftse": {
+     "n": 9293,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "gb10y": {
+     "n": 5445,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "gb2y": {
+     "n": 5466,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "gbp": {
+     "n": 9567,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "gumus": {
+     "n": 6247,
+     "ilk": "2000-01-04",
+     "son": "2024-12-31"
+    },
+    "hsi": {
+     "n": 6600,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "huf": {
+     "n": 6981,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "idr": {
+     "n": 6980,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "ils": {
+     "n": 6982,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "inr": {
+     "n": 6981,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "it10y": {
+     "n": 5494,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "jp10y": {
+     "n": 6512,
+     "ilk": "2000-01-04",
+     "son": "2026-10-09"
+    },
+    "jp2y": {
+     "n": 6256,
+     "ilk": "2000-01-04",
+     "son": "2026-10-09"
+    },
+    "jpy": {
+     "n": 10878,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "kalorifer": {
+     "n": 6713,
+     "ilk": "2000-01-04",
+     "son": "2026-10-09"
+    },
+    "kospi": {
+     "n": 6599,
+     "ilk": "2000-01-04",
+     "son": "2026-10-08"
+    },
+    "krw": {
+     "n": 5679,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "misir": {
+     "n": 4223,
+     "ilk": "2010-01-04",
+     "son": "2026-10-09"
+    },
+    "mxn": {
+     "n": 5676,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "n225": {
+     "n": 9031,
+     "ilk": "1985-01-04",
+     "son": "2026-10-09"
+    },
+    "ndx": {
+     "n": 6728,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "nok": {
+     "n": 6977,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "nzd": {
+     "n": 6982,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "php": {
+     "n": 6981,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "pln": {
+     "n": 5678,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "rut": {
+     "n": 6738,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "sek": {
+     "n": 6980,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "sensex": {
+     "n": 6623,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "shcomp": {
+     "n": 6484,
+     "ilk": "2000-01-04",
+     "son": "2026-10-09"
+    },
+    "spx": {
+     "n": 10526,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "sx5e": {
+     "n": 6868,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "thb": {
+     "n": 6981,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "tr10y": {
+     "n": 4100,
+     "ilk": "2010-01-27",
+     "son": "2026-10-09"
+    },
+    "tr2y": {
+     "n": 1575,
+     "ilk": "2020-01-02",
+     "son": "2026-10-09"
+    },
+    "try": {
+     "n": 9598,
+     "ilk": "1989-11-08",
+     "son": "2026-10-09"
+    },
+    "us10y": {
+     "n": 9208,
+     "ilk": "1990-01-08",
+     "son": "2026-10-09"
+    },
+    "us2y": {
+     "n": 9319,
+     "ilk": "1989-01-03",
+     "son": "2026-10-09"
+    },
+    "us30y": {
+     "n": 6674,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "us3m": {
+     "n": 9118,
+     "ilk": "1989-11-27",
+     "son": "2026-10-09"
+    },
+    "us5y": {
+     "n": 5494,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    },
+    "vix": {
+     "n": 9296,
+     "ilk": "1990-01-02",
+     "son": "2026-10-09"
+    },
+    "wti": {
+     "n": 10236,
+     "ilk": "1985-01-02",
+     "son": "2026-10-09"
+    },
+    "zar": {
+     "n": 6968,
+     "ilk": "2000-01-03",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_1985.json.gz",
+     "git_blob": "2e8f8a939515ccce780c6f006ad8c4c2e747bc00"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_1990.json.gz",
+     "git_blob": "90f170eea8edc9c6091bb15e04ee5794f962c008"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_1995.json.gz",
+     "git_blob": "f034504892791e10dea95127e284afa1dbef2132"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_2000.json.gz",
+     "git_blob": "d159c267c5dd36f323c0b309e1116bddc33f6699"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_2005.json.gz",
+     "git_blob": "8a52f6dcd2517fb293ad95cc3e35ffa94203a3d4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_2010.json.gz",
+     "git_blob": "04f400e581fbf9863e20ef02962371b6c4636671"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_2015.json.gz",
+     "git_blob": "c4a85a8b9433d596533699b40905608b6e788516"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_2020.json.gz",
+     "git_blob": "fc68f56af0d60b583f3f7f5919477bfc5d57e565"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/altin__GC_1_2025.json.gz",
+     "git_blob": "82eb586ef5d6d9e925b15ccfa6fe85b9be72a6c0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/aud__AUD_2005.json.gz",
+     "git_blob": "adb60e533ed07c9ecbf8b909ca2566eff974cb3e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/aud__AUD_2010.json.gz",
+     "git_blob": "d1aefb1c4f8bf4c18031ed013d5b6bc2ef114cf9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/aud__AUD_2015.json.gz",
+     "git_blob": "3182ad7e486d6eeff691e5d60c1df65d5fffa2dc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/aud__AUD_2020.json.gz",
+     "git_blob": "1149bf333668bb0ee43756906694f5dd068f0af4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/aud__AUD_2025.json.gz",
+     "git_blob": "f17df92e27c90365e3d17c83751693ee01321d76"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bakir__HG_1_2000.json.gz",
+     "git_blob": "81873aab64337495273bb75e13d5ab4661dca014"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bakir__HG_1_2005.json.gz",
+     "git_blob": "88208fab048ae03f4f624da49e76e0e12bc12850"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bakir__HG_1_2010.json.gz",
+     "git_blob": "02fecc5806534541371cbe2cc56000ddfb87f7b5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bakir__HG_1_2015.json.gz",
+     "git_blob": "a3b65eb07ad728768ce4332652a213d55e806b54"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bakir__HG_1_2020.json.gz",
+     "git_blob": "dffeb9bc483787cdf1cc5af818a7dae4a3684fc0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bakir__HG_1_2025.json.gz",
+     "git_blob": "c63c13f521cb0937a72aa2516101a0f5567c1e2f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/benzin__RB_1_2005.json.gz",
+     "git_blob": "8c8fdc26fc02ab7f3b1f6e7143a059742689feee"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/benzin__RB_1_2010.json.gz",
+     "git_blob": "e7bdbdf5409629545221ae7ff4a6718828ca0859"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/benzin__RB_1_2015.json.gz",
+     "git_blob": "10050b6c63a5046d3365854964cf7dfc6a494fb1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/benzin__RB_1_2020.json.gz",
+     "git_blob": "1365a4c64f0e51e4a69cbf7ab82db47588701521"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/benzin__RB_1_2025.json.gz",
+     "git_blob": "07fd6d9c4c909b8305373299d9bcec925a8ad2f3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bist100__XU100_2000.json.gz",
+     "git_blob": "b90d2e69347add58c61157982f10d23f896a9138"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bist100__XU100_2005.json.gz",
+     "git_blob": "454b9efac8387b3e7a9cea09457a40fc14ced758"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bist100__XU100_2010.json.gz",
+     "git_blob": "252466a9798b97855847ddbaf6fa481b33211f66"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bist100__XU100_2015.json.gz",
+     "git_blob": "1e4359f5fbaa3aa29c2f0bb73ebcd39f6a8d6620"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bist100__XU100_2020.json.gz",
+     "git_blob": "3e86b4d4f832d935d62e63b88975e97f15116cb4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bist100__XU100_2025.json.gz",
+     "git_blob": "e9d84aee40b7b9a98f1a21dacf96ae536f768766"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_1985.json.gz",
+     "git_blob": "fe02d460efc10dd162175c8d9628bb6a5a706a63"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_1990.json.gz",
+     "git_blob": "4d32b208d0312dd3d7865bd64684d605ceb75eb6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_1995.json.gz",
+     "git_blob": "c09bbcb35b6849f86e072d25c1fae90663745dc3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_2000.json.gz",
+     "git_blob": "be576dbeb0ffc461b4e91ecbd0d2188273970518"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_2005.json.gz",
+     "git_blob": "2883a0fcef245225f5538de1bc68500fdb8c6338"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_2010.json.gz",
+     "git_blob": "17db69765abd42cf74942ec55c3ab2c382f1d1db"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_2015.json.gz",
+     "git_blob": "5cf3f23178e555853af45b13c28c465002d2c5ef"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_2020.json.gz",
+     "git_blob": "e9767908d8444d29ebd230c16e00a5b1c6897b41"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brent__LCO_1_2025.json.gz",
+     "git_blob": "be86a1868d450f8047ce52e21cc587eb4aee5999"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brl__BRL_2000.json.gz",
+     "git_blob": "f37653f01c1492f8380cd3a4bb3fbd458bb19914"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brl__BRL_2010.json.gz",
+     "git_blob": "6c1e9b479ec6aee842ccc0c116b753ed7d7b39e3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brl__BRL_2015.json.gz",
+     "git_blob": "ed9987a01d4a98e76422bf6e1837f5ac20dd43c3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brl__BRL_2020.json.gz",
+     "git_blob": "c8d54606cae0065f111a61fab98be404eec1fbfd"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/brl__BRL_2025.json.gz",
+     "git_blob": "c50239ff9e272519b10f51be6e57319727bb9ca6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bugday__W_1_2005.json.gz",
+     "git_blob": "a2d4c1f203dff01f891ed428a33f53778d538316"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bugday__W_1_2010.json.gz",
+     "git_blob": "de449ec6fbd87397f420690e713a4ba26e3950f9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bugday__W_1_2015.json.gz",
+     "git_blob": "0b9d3ab9ad1b8e8bda4a6f80e19c961de23f564b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bugday__W_1_2020.json.gz",
+     "git_blob": "dc10f7b005272108054d138c14076b5be027170b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/bugday__W_1_2025.json.gz",
+     "git_blob": "3f8733fed630220e4c1d0988e75f52d4838b79c6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cac__FCHI_2000.json.gz",
+     "git_blob": "77d137be27ec092471a0c255e5530ebf609d75b3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cac__FCHI_2005.json.gz",
+     "git_blob": "9c7dedd27421ce2e48280f7dd2be53ac8e6cc267"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cac__FCHI_2010.json.gz",
+     "git_blob": "da36a3d55d340507cf91235346c484191cb85242"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cac__FCHI_2015.json.gz",
+     "git_blob": "1a46792e8a59fe716907847c13d2f0d0ff8cb004"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cac__FCHI_2020.json.gz",
+     "git_blob": "baa1d3242eb5ff81c3d7ae9fefe9e5b5c28adbe9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cac__FCHI_2025.json.gz",
+     "git_blob": "5cf7fa71afab89dbdceb94eeb44c0ac4c4ec3af8"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cad__CAD_2000.json.gz",
+     "git_blob": "0995407e85019b5d614478515483e95f382549e8"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cad__CAD_2005.json.gz",
+     "git_blob": "3355e4226850c2fe988706003289581e57c62ece"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cad__CAD_2010.json.gz",
+     "git_blob": "9f7ae7dd7993467d861a6637d78e0d09a0877de6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cad__CAD_2015.json.gz",
+     "git_blob": "feac95fb797b2cb059a2339fc7ab2cb6138de376"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cad__CAD_2020.json.gz",
+     "git_blob": "284d29c4c18858a64ba819846b796b489b47e0aa"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cad__CAD_2025.json.gz",
+     "git_blob": "778190e295072ddee7dd29b03014e2be8cacfe67"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_1985.json.gz",
+     "git_blob": "2e273724645bf9dcf0d3da819dff306dae2cded9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_1990.json.gz",
+     "git_blob": "0f54de39b3ea38c43bb8ce65b199d10f9d258cb3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_1995.json.gz",
+     "git_blob": "a321b4dfbfde260d9639c11f740472d67c2458dd"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_2000.json.gz",
+     "git_blob": "57b99211d59397aa238a5b96d4e229339e1404b8"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_2005.json.gz",
+     "git_blob": "7af0f58dbded824a6cfb5ce5a12b32525ac3a56c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_2010.json.gz",
+     "git_blob": "ed3f61879526ffb0a636b6662c1d2cdc2a5d24f9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_2020.json.gz",
+     "git_blob": "40ed78ef7505ada109b7c195e5fca9627249940f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/chf__CHF_2025.json.gz",
+     "git_blob": "c492edbefcaf71f5d1fb9842c35c4bad77f4f4f3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/clp__CLP_2000.json.gz",
+     "git_blob": "a8805033073103a1e32a2ebe6b2972be63480527"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/clp__CLP_2005.json.gz",
+     "git_blob": "d16b55b5c4f5773398933a97a714117335622e05"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/clp__CLP_2010.json.gz",
+     "git_blob": "5384d63c271d3c19c7657c604e3a4c880f7ad161"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/clp__CLP_2015.json.gz",
+     "git_blob": "becf5b1ec8e840c37b3a057579a59aa7826e6e71"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/clp__CLP_2020.json.gz",
+     "git_blob": "93efeb07fb483ce65b588ed11e02b2051b17382c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/clp__CLP_2025.json.gz",
+     "git_blob": "e6aa46727f92ebe236758d917dfd8d38b21567e3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cnh__CNH_2010.json.gz",
+     "git_blob": "e3c51d4d130a6efc596ea5b61b4d68256b4baba3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cnh__CNH_2015.json.gz",
+     "git_blob": "3e9db9eb1412b9679cf8274e24125c80d0d90f99"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cnh__CNH_2020.json.gz",
+     "git_blob": "8e0e35ff37b6a94fe120e859ee724e1d2a1a1238"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cnh__CNH_2025.json.gz",
+     "git_blob": "45aa46896b2171375fcb880647387615274d70e2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cop__COP_2000.json.gz",
+     "git_blob": "9ee0ededf17769335e51b2b04191ed39e6e50ba7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cop__COP_2005.json.gz",
+     "git_blob": "d9f6347eeaa33568e00484025fa1d9e5b625d660"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cop__COP_2015.json.gz",
+     "git_blob": "cc6d86070bdfacd58bfab03a21fe23f8de850f3b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cop__COP_2020.json.gz",
+     "git_blob": "78b0cecbde2b4c9b26574388aecaed4631a9d963"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/cop__COP_2025.json.gz",
+     "git_blob": "23b32e684340a785bf53105491a19d7b0a131e37"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/czk__CZK_2000.json.gz",
+     "git_blob": "b20dae9f374ad71b7c5002aa20a1c95e0d12859b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/czk__CZK_2005.json.gz",
+     "git_blob": "90ac7642570034e29df5978609c3e918cd0ad87c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/czk__CZK_2010.json.gz",
+     "git_blob": "2616dada496f094d1590fbd14411b29a6732ca24"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/czk__CZK_2015.json.gz",
+     "git_blob": "297d77d9587ff841a59a70aac973f7ea7c748453"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/czk__CZK_2025.json.gz",
+     "git_blob": "4dd717a7599c171b4475a35dd8f4e62907907299"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_1985.json.gz",
+     "git_blob": "0f2f8dd508fb03c54a9a265cfe6caf478b0731df"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_1990.json.gz",
+     "git_blob": "4e2a80d162e7d52a7a95645c73edb506e1cea2d8"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_1995.json.gz",
+     "git_blob": "f8d6a681c19263caaec7e538bcfe042bd44e518e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_2000.json.gz",
+     "git_blob": "c798ae7008bbee395b8cdc6859e383203b3c50c6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_2005.json.gz",
+     "git_blob": "dc97ed9c4a4d20aac4222758e9f49b5bb18eaf85"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_2010.json.gz",
+     "git_blob": "4fe8df6922e1945dcd3cc3195b4910e562280ba5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_2015.json.gz",
+     "git_blob": "d7cc0841cc05704fee45e0efc2b2aeea1e6e32dc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_2020.json.gz",
+     "git_blob": "2e041a0c2fb26fcfaf19d9021762849211f64df0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dax__GDAXI_2025.json.gz",
+     "git_blob": "af17b687da1308199f16f011e27b43898a2f42db"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de10y__DE10Y_DE_2000.json.gz",
+     "git_blob": "23ba73f11d4a5d17841f994ee6de76e915e8f53a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de10y__DE10Y_DE_2005.json.gz",
+     "git_blob": "4415f5d2ff1b1fd76918d3e145549519cd0b74a9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de10y__DE10Y_DE_2010.json.gz",
+     "git_blob": "7c4fd7044a01e0a2a36436e59707d30cbbc546b0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de10y__DE10Y_DE_2015.json.gz",
+     "git_blob": "d313d49e9d173858b649de9a848eef37ddc496c0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de10y__DE10Y_DE_2020.json.gz",
+     "git_blob": "14cb62305d4005689e8f4bd730129ae8f45d9504"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de10y__DE10Y_DE_2025.json.gz",
+     "git_blob": "880fa24175cb9d8b825524e446a72dddcdedbca2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de2y__DE2Y_DE_2000.json.gz",
+     "git_blob": "d38c4069a15d7444a035b9321079b8c563bcc760"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de2y__DE2Y_DE_2005.json.gz",
+     "git_blob": "74d9966644077975696faa20ee23860af2b0a84a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de2y__DE2Y_DE_2010.json.gz",
+     "git_blob": "536baf1c66ccbd33581e8943c69f201d68770d47"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de2y__DE2Y_DE_2015.json.gz",
+     "git_blob": "835a41a619c3e08a1468ee88a90264c02899c6f4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de2y__DE2Y_DE_2020.json.gz",
+     "git_blob": "413be2d0576e82e179b47216f28ffb2e69d0d73c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/de2y__DE2Y_DE_2025.json.gz",
+     "git_blob": "3ea3609ca5011f64a416f989b79d4c8862046d86"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dogalgaz__NG_1_2000.json.gz",
+     "git_blob": "6858c5910bff6fdb41a0b5e52e85df03fa1260ae"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dogalgaz__NG_1_2005.json.gz",
+     "git_blob": "9f790267870eb1ecdfa792d2373a7969f3e4d08f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dogalgaz__NG_1_2010.json.gz",
+     "git_blob": "e106ba1d015958ebdb238e6f5102a8d79a3c7e00"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dogalgaz__NG_1_2015.json.gz",
+     "git_blob": "c38052724efaf62a81c440204e3fa6aad162fd10"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dogalgaz__NG_1_2020.json.gz",
+     "git_blob": "f9ca60eae3f3bfebaa6ec7d463047382f78d3613"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dogalgaz__NG_1_2025.json.gz",
+     "git_blob": "596e0ba760b8dd0f8ccaeea3577c6017540e3077"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_1985.json.gz",
+     "git_blob": "8c241df4510bd47745a1c13b9d7a4527bf9718e8"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_1990.json.gz",
+     "git_blob": "bb797f6aeddba92344c038f2a716a762157cf7d7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_1995.json.gz",
+     "git_blob": "9e2da60974b713a54abb9cc6fd25b342a3a6239d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_2000.json.gz",
+     "git_blob": "91b353494ef8e4230cfde98b128a619607cc863e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_2005.json.gz",
+     "git_blob": "2325158c02df70e099c6e77a430cfd9c3edf5918"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_2010.json.gz",
+     "git_blob": "9670ff055fe7decf77acefe4abba9932e7f65edb"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_2015.json.gz",
+     "git_blob": "15096913badde366b5e7d93157c31aad2e7b5429"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_2020.json.gz",
+     "git_blob": "1322960f3f8011145c5be22f338dc96abadab6a0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/dxy__DXY_2025.json.gz",
+     "git_blob": "2bb7a9429406d01ad6658405e8038419dac823c2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/egp__EGP_2000.json.gz",
+     "git_blob": "1b2d2a52d80e9953e0771c4827b42e7ad3f9d42d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/egp__EGP_2005.json.gz",
+     "git_blob": "2be209f730b439a4f4a3cd0e93ff737f3ead4731"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/egp__EGP_2010.json.gz",
+     "git_blob": "f25c163cb00b0f3848aca621d1197f1203b8772b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/egp__EGP_2015.json.gz",
+     "git_blob": "642227b0408f8a6853cc94cce522a038d33bfbeb"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/egp__EGP_2020.json.gz",
+     "git_blob": "69ee014b0e85b12a9245d4b373e523d4fbea2010"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/egp__EGP_2025.json.gz",
+     "git_blob": "2928a3486bd55f2aa733eb4939b68d2907c9dee2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/eur__EUR_2000.json.gz",
+     "git_blob": "0d13ab150cdc04be472f99c7466b589919b9a041"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/eur__EUR_2005.json.gz",
+     "git_blob": "91fce4af10ad3552650182005011a440c7df45e7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/eur__EUR_2010.json.gz",
+     "git_blob": "ffb5042d6ee8ee00b42b2ec88393b4c86ab9eee7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/eur__EUR_2015.json.gz",
+     "git_blob": "03cac81a91edb972b87bdc2b07abbe658c644c5b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/eur__EUR_2020.json.gz",
+     "git_blob": "59fe72e43c11d1d3580b5b4be3adce7674662ef0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/eur__EUR_2025.json.gz",
+     "git_blob": "d72174ed431fb624b4a659c952995e3f16eb4e6a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_1985.json.gz",
+     "git_blob": "5951828b31de5f8d79a2fd5e749181e8afe303f4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_1990.json.gz",
+     "git_blob": "9069e08e6260b7c56f649c50f231140a6f87462f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_1995.json.gz",
+     "git_blob": "053aa43ba4db5b9221528f2d2b39c2507e374417"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_2000.json.gz",
+     "git_blob": "e2e6dfafef4220a9c95fa1ca11f7e2172e6cae61"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_2005.json.gz",
+     "git_blob": "28037d2d6be23c8b893c93721d7b7ee3be5a81e4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_2015.json.gz",
+     "git_blob": "25aff919a2a74c6a3737f2fb229893838202ff05"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_2020.json.gz",
+     "git_blob": "ff55f0eaa78d862bf885fa69c71ed499add8fb4b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ftse__FTSE_2025.json.gz",
+     "git_blob": "97796b3e8cbb651548919e9d02eab1d13f560aa0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb10y__GB10Y_GB_2000.json.gz",
+     "git_blob": "0c8528f12cd18a7d92a2234d0e4494d299e24ca9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb10y__GB10Y_GB_2005.json.gz",
+     "git_blob": "8801e07e985b6d107455a0fb3543486acb5e58f3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb10y__GB10Y_GB_2010.json.gz",
+     "git_blob": "d89303b9de66be49c0639a6748594adb767a7430"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb10y__GB10Y_GB_2020.json.gz",
+     "git_blob": "a815f3dfdeedfeb4ce63128190d2cc1b645487de"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb10y__GB10Y_GB_2025.json.gz",
+     "git_blob": "22514973b96be960b51d758bb0916119956df56d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb2y__GB2Y_GB_2000.json.gz",
+     "git_blob": "968fb71a5ae411382897b386ed8ab2d79e895529"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb2y__GB2Y_GB_2010.json.gz",
+     "git_blob": "d5279a2ba5971d59ca9232e229b2be96afb16640"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb2y__GB2Y_GB_2015.json.gz",
+     "git_blob": "9f45da2420710769b6e15b5253d8fd1a2e98602d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb2y__GB2Y_GB_2020.json.gz",
+     "git_blob": "ec2ea030bb5345cb8cf755149a723013a73e9c23"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gb2y__GB2Y_GB_2025.json.gz",
+     "git_blob": "eb5f4eb1926a53d64c58044f791bb82871e8d803"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_1985.json.gz",
+     "git_blob": "b13c0a4b81121ab1d4f26961c9721502e139e90d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_1990.json.gz",
+     "git_blob": "cda07c22889277db54d4006abcf63b322c0be984"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_1995.json.gz",
+     "git_blob": "2e93ab7a16ab1e0915a7192ef04e627ef90f6586"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_2000.json.gz",
+     "git_blob": "72cdb106facfe5cf3856920d2c1380c9f925d61c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_2005.json.gz",
+     "git_blob": "1b5f9c7bcda86aa8b86e1130b9f82074b00bfd49"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_2010.json.gz",
+     "git_blob": "dfeec914143b3adb35de80c9c301463aa1b9e5bc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_2020.json.gz",
+     "git_blob": "609c6b14bf471af96652b0271ee2b7d41ad30ff2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gbp__GBP_2025.json.gz",
+     "git_blob": "2868efd08b36cab2e9f91bd7cbec396f9e224cbb"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gumus__SI_1_2000.json.gz",
+     "git_blob": "613c881862171f58684f47a160fb7cdc2e2d5d92"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gumus__SI_1_2005.json.gz",
+     "git_blob": "a11b2c9ed74f63f8961bc19fb4fdf6546d2858ce"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gumus__SI_1_2010.json.gz",
+     "git_blob": "293f2756e40840551aa29f01a9b939330dfdc5de"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gumus__SI_1_2015.json.gz",
+     "git_blob": "628dd866491064d87e21752a2e5d93fd11d9eda2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/gumus__SI_1_2020.json.gz",
+     "git_blob": "90b85299229fc31d190f06ea3b465697a6b90813"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/hsi__HSI_2000.json.gz",
+     "git_blob": "de1a123da1eceeb69dde4c8e485f6dfee667b195"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/hsi__HSI_2005.json.gz",
+     "git_blob": "cf4e2b81f3862e21be4ad1748dc0cfe86b4d6f6a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/hsi__HSI_2010.json.gz",
+     "git_blob": "3a0dddeb62ab84c08476efc2e7e8eb12e49521e0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/hsi__HSI_2015.json.gz",
+     "git_blob": "7f994368c9655e5e64e95af1f696b074568164c3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/hsi__HSI_2020.json.gz",
+     "git_blob": "7426e00adc4125c6bcefb130b5e084ac63be613b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/hsi__HSI_2025.json.gz",
+     "git_blob": "39c402be22b9cad36eeee3eb6e553e03e39e03e4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/huf__HUF_2000.json.gz",
+     "git_blob": "d4680303c4eebc18a8a313f2994f51f39ad3a663"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/huf__HUF_2005.json.gz",
+     "git_blob": "30a23e0efd9d6773e42d17b5b9aeb1aa1b2c845e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/huf__HUF_2010.json.gz",
+     "git_blob": "a7a0864b4605e481d96de682ab183b873872a5fa"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/huf__HUF_2015.json.gz",
+     "git_blob": "0aafba0ad9de41d2ff686a707827f7b1fa1ea8c1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/huf__HUF_2020.json.gz",
+     "git_blob": "756f1e7d668ab44500e1f9b4940739b5b9e343a7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/huf__HUF_2025.json.gz",
+     "git_blob": "1198df8f28354f401acdfe5c7ba8a0c7cfcbd397"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/idr__IDR_2000.json.gz",
+     "git_blob": "fecfcedc440b8c1e5e40b234f57b59be25c73568"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/idr__IDR_2005.json.gz",
+     "git_blob": "0281027187bd3fbf0d00ad9b4a4a052d7a6ae79e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/idr__IDR_2010.json.gz",
+     "git_blob": "1765400cd4fd4954b211d1ce912a46eed4fef2a4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/idr__IDR_2015.json.gz",
+     "git_blob": "8cb038deaf8dc8b8ff779cd933d06b83c979a95a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/idr__IDR_2020.json.gz",
+     "git_blob": "fedc0e1e80e6a5273553fc690cdac3b8bbc21395"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/idr__IDR_2025.json.gz",
+     "git_blob": "1fdd1135b85b0ab508580a0ea2ebd79b0bfae795"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ils__ILS_2000.json.gz",
+     "git_blob": "0ab455df1cc75060bc2c51260ebc3c0a6823f0bc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ils__ILS_2005.json.gz",
+     "git_blob": "c73bca2cc531eed303fb7f92a1ff340035e6f17a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ils__ILS_2010.json.gz",
+     "git_blob": "5ab9de7a2119ee67b88262df9c30e31b56ac181d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ils__ILS_2015.json.gz",
+     "git_blob": "d3db87f6ad4d1d91b65baa314a207687fa23a627"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ils__ILS_2020.json.gz",
+     "git_blob": "d07d7c8a6d2aee3aff0facf05877f879c35394e1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ils__ILS_2025.json.gz",
+     "git_blob": "ba9a3278986b2c3157cb714d835dee0a01136d97"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/inr__INR_2000.json.gz",
+     "git_blob": "806a35bdbec5217677b8a647f03cf89a57f8a40b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/inr__INR_2005.json.gz",
+     "git_blob": "49b0ff2faf8d65e7ffb61142cda7172cbfa180de"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/inr__INR_2010.json.gz",
+     "git_blob": "d1f086c29865ab588a82f3fe25b78fbf233ca7ee"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/inr__INR_2015.json.gz",
+     "git_blob": "65230b7e754a4c5761aabe2b00b3b9fb85188768"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/inr__INR_2020.json.gz",
+     "git_blob": "ce78522391ba7559b4c2b55723b80455ad1c5a16"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/inr__INR_2025.json.gz",
+     "git_blob": "33fc39957dfd7e33ab03e3856de8e8b52179ead7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/it10y__IT10Y_IT_2000.json.gz",
+     "git_blob": "acc22ebbd1584cb3ffdb6e3bc8c7d71bb7d8ef17"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/it10y__IT10Y_IT_2010.json.gz",
+     "git_blob": "e41a6903593411e4c9454bd728dd8b345e86a3b1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/it10y__IT10Y_IT_2015.json.gz",
+     "git_blob": "b097e9cd8634c81acd64f14e01ec6e1c9c8f4360"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/it10y__IT10Y_IT_2020.json.gz",
+     "git_blob": "313e7947eee00bb68238ae14cbb40a2ec76c3af2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/it10y__IT10Y_IT_2025.json.gz",
+     "git_blob": "73ce4a2d540ce00d96bb517d7a90d8f8ee52b8d3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp10y__JP10Y_JP_2000.json.gz",
+     "git_blob": "9e2d60fe2d90f78531587b45ccad53079c8e0526"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp10y__JP10Y_JP_2005.json.gz",
+     "git_blob": "a405c4b0810cc6b3ff004f3321dc9784a1851b23"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp10y__JP10Y_JP_2010.json.gz",
+     "git_blob": "2ed2607cc1536b4a94e79677dda937477b5c8e84"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp10y__JP10Y_JP_2015.json.gz",
+     "git_blob": "e3682cece6842ba6fbdc2b9fc0bcc61c936530ef"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp10y__JP10Y_JP_2020.json.gz",
+     "git_blob": "b897b84e790d8153fbcc3fdaa315a68e86e19faa"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp10y__JP10Y_JP_2025.json.gz",
+     "git_blob": "a7c78c925fe85fa3b0da16bd862b2799d5833bd7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp2y__JP2Y_JP_2000.json.gz",
+     "git_blob": "c8cd6cda316b17606e7c5098023f78f25a626657"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp2y__JP2Y_JP_2005.json.gz",
+     "git_blob": "194e2492d24cd9b05fe31815840c416e53a0a15a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp2y__JP2Y_JP_2010.json.gz",
+     "git_blob": "2d4ebb84440b5ccb81ee7f6e239b8e9919dce69a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp2y__JP2Y_JP_2015.json.gz",
+     "git_blob": "6a0b4b7da07598fb6e89555af7722645f6b446a6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp2y__JP2Y_JP_2020.json.gz",
+     "git_blob": "1df3e429281735ea830cec851486243cc8a1ff57"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jp2y__JP2Y_JP_2025.json.gz",
+     "git_blob": "275136458058ce4deea9ee4de39d38539313c862"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_1985.json.gz",
+     "git_blob": "110e6d846d00496b25d52d7562485e8c6e366b79"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_1990.json.gz",
+     "git_blob": "3b554274751069db4cbe8760b221b1b4488cdb7c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_1995.json.gz",
+     "git_blob": "16cfd5f76cb4c3bed817d08c01abbdc6694c5a86"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_2000.json.gz",
+     "git_blob": "525fbc25a8dbbad7086e9fefae38b06342d5a8a4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_2005.json.gz",
+     "git_blob": "c3302e858a41e984f9e06fc3b12cfbf675e3ceb9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_2010.json.gz",
+     "git_blob": "9004eca06bd0420af784f943074bc11ca53ea0cf"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_2015.json.gz",
+     "git_blob": "b72fc283437e5858d611f1ec3be70ad74f66c04f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_2020.json.gz",
+     "git_blob": "db645adac676954563ed90a8e801a90a356a82cd"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/jpy__JPY_2025.json.gz",
+     "git_blob": "358dcdcc79777cf9be0bbda0f4789b084382bf69"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kalorifer__HO_1_2000.json.gz",
+     "git_blob": "db1814db167c6b62eb28800260b482b4405f26bd"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kalorifer__HO_1_2005.json.gz",
+     "git_blob": "2d7046067984a6bdaa453b2d0565999b729beaeb"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kalorifer__HO_1_2010.json.gz",
+     "git_blob": "a5d76283558c7bba5f10baaad2a87860970c7459"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kalorifer__HO_1_2015.json.gz",
+     "git_blob": "03fee88afaae978d5d6fc1dfc66b8145f3de8bf7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kalorifer__HO_1_2020.json.gz",
+     "git_blob": "0be0a9459806485c0a1b1567289c310e2b66a820"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kalorifer__HO_1_2025.json.gz",
+     "git_blob": "4d3b65ee9412a2bdb33ddbc39eecdad2d0074721"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kospi__KS11_2000.json.gz",
+     "git_blob": "4824f924322474501aceafa5407851267937b9d7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kospi__KS11_2005.json.gz",
+     "git_blob": "a2252823c242fa04613275fb92b3bea100b0c589"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kospi__KS11_2010.json.gz",
+     "git_blob": "97456d08ba8326b129f31b2bd2a0bc8c1f3d539c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kospi__KS11_2015.json.gz",
+     "git_blob": "f751fa5f9ac04b9c81b2b899593b0b48416176c5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kospi__KS11_2020.json.gz",
+     "git_blob": "7ebe18117eb526eea6a21f9567f21a023a87d4a0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/kospi__KS11_2025.json.gz",
+     "git_blob": "75c188b5d02ab43112e4104c3203cc3972bac844"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/krw__KRW_2000.json.gz",
+     "git_blob": "146b72a09600b37117dd7457fa22a43f7ab9b8d8"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/krw__KRW_2005.json.gz",
+     "git_blob": "c865fd14d8d78e6d8598fdc58c975f7565e5068e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/krw__KRW_2015.json.gz",
+     "git_blob": "4834ed0e7aa1ec7c0633db0defae9c1dfd0a7de0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/krw__KRW_2020.json.gz",
+     "git_blob": "4255c59a52f715ec06abae6d4dc1cee54f4dbcbc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/krw__KRW_2025.json.gz",
+     "git_blob": "34b8ae993e923dbed8b443223e8fd5469952bce4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/misir__C_1_2010.json.gz",
+     "git_blob": "ae195c06f1617cf9306c41791afc7df34fc61387"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/misir__C_1_2015.json.gz",
+     "git_blob": "a3be74d03ad11bade41ce81071e1cc4cc23dda01"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/misir__C_1_2020.json.gz",
+     "git_blob": "8a05271681929acdc51e891aa69e0f4d6b58663d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/misir__C_1_2025.json.gz",
+     "git_blob": "223b9d9a4c304b47676f2b05674e5da4c959e72f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/mxn__MXN_2000.json.gz",
+     "git_blob": "05cde9ba999098023dd2406a76d89c8dfd7642b9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/mxn__MXN_2005.json.gz",
+     "git_blob": "79b04073e463b9de82f6a2332e51ffd0649e39f8"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/mxn__MXN_2010.json.gz",
+     "git_blob": "345022841ca596a06baa6f994e529cb8d52cf953"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/mxn__MXN_2015.json.gz",
+     "git_blob": "eff85f3de08f8e54eea5ad8a306417a8c6a44a78"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/mxn__MXN_2025.json.gz",
+     "git_blob": "97996577182e45bfea8ea3f5346e8afb73628235"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_1985.json.gz",
+     "git_blob": "1992e65adbab242550d88656d2cd2723f189e911"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_1990.json.gz",
+     "git_blob": "9d47dfa894bfb2e54d355ac06a37b9c840799667"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_1995.json.gz",
+     "git_blob": "fecec3b80a4724d02639237a7fed92c25c1a2dc1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_2000.json.gz",
+     "git_blob": "faa468324de2e836fbf4dfd23d9cadec2487ad69"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_2010.json.gz",
+     "git_blob": "bdeec20086e18ac4a9f3debe238235949ac41cdf"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_2015.json.gz",
+     "git_blob": "3190ab8486a3c83d7d7ea52329298a17f962717f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_2020.json.gz",
+     "git_blob": "d52a85b9fe775c46b6786f5e8dc10d45b9035fee"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/n225__N225_2025.json.gz",
+     "git_blob": "7a96116c5a7a956946c6000a379aaae972795449"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ndx__NDX_2000.json.gz",
+     "git_blob": "d562874a1d03fa8c410b5dde9a8ee08b02abb29b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ndx__NDX_2005.json.gz",
+     "git_blob": "5fe8d97f4a69ae2b9fc040d80a3d6d4450b1e9e2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ndx__NDX_2010.json.gz",
+     "git_blob": "051083c0c2e07a7a445ae8db15f049f547e5c756"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ndx__NDX_2015.json.gz",
+     "git_blob": "93f25790e8f740afcfa9e86a1aaf0c5653937286"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ndx__NDX_2020.json.gz",
+     "git_blob": "0cc04c0c5f43c1d7f71bdd55444b341ce7cd0f5e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/ndx__NDX_2025.json.gz",
+     "git_blob": "a082f099c32b3974d1d2ee640e663dc1d5a92a67"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nok__NOK_2000.json.gz",
+     "git_blob": "fc57d06a3f597d31f72e3a1588384ee23a53714e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nok__NOK_2005.json.gz",
+     "git_blob": "1f4eb9c7ee7b1a1de0fce2c5fdd769e7c3f59d8a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nok__NOK_2010.json.gz",
+     "git_blob": "281f32cd74c5aa1a4ff7edbfaced41f27b04c573"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nok__NOK_2015.json.gz",
+     "git_blob": "5dda0564cdd3fda8d919d58dd0dbe2584c1bfcc5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nok__NOK_2020.json.gz",
+     "git_blob": "572683d336900ff0651a717f66c2538f8f3ee73f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nok__NOK_2025.json.gz",
+     "git_blob": "e225f8acee810ba1bc2fedbc8f02f15abc7292a6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nzd__NZD_2000.json.gz",
+     "git_blob": "d40eea39c2414038d645dfda7479329d503561d9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nzd__NZD_2005.json.gz",
+     "git_blob": "117ea41f85d4fc89c0caf29eac0aa57f8de0f206"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nzd__NZD_2010.json.gz",
+     "git_blob": "aef10f3a63456d03ac7d67760b09f2907edf4971"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nzd__NZD_2015.json.gz",
+     "git_blob": "4a2aced57f773badeb1aedf2ccdbaf80f7d8c7ee"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nzd__NZD_2020.json.gz",
+     "git_blob": "7b7319297fcb25c1738ef060e1df8a011b170645"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/nzd__NZD_2025.json.gz",
+     "git_blob": "ff24c876605298c5f4517b7e045c2d596a8e572f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/php__PHP_2000.json.gz",
+     "git_blob": "baea5a03f7ccd629d18a23f56cf7388d67cab43b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/php__PHP_2005.json.gz",
+     "git_blob": "10f2e0d7faf30d40fa56edd924d15882bd18d29f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/php__PHP_2010.json.gz",
+     "git_blob": "83f24e3f14ac181ed0aae2a0cb7158fa3c15fc7e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/php__PHP_2015.json.gz",
+     "git_blob": "6e6368be4f1e4411718f6ed324e75729b343af33"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/php__PHP_2020.json.gz",
+     "git_blob": "ffd51bde668940befe07b91e4996c8d0ff63efd9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/php__PHP_2025.json.gz",
+     "git_blob": "de86230743b96d9251d04f99b20d6fbee29a8355"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/pln__PLN_2000.json.gz",
+     "git_blob": "2ef432ee6f0744b72a29208dd0567958eac6d265"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/pln__PLN_2010.json.gz",
+     "git_blob": "b2a647d4eb25993dc61f960f344452ec7de92be4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/pln__PLN_2015.json.gz",
+     "git_blob": "c1032615f3276f04b15ad64aff5dd4d5a01bf474"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/pln__PLN_2020.json.gz",
+     "git_blob": "92d0f9a0efd552619be92e88b5d9ceb1798cee46"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/pln__PLN_2025.json.gz",
+     "git_blob": "765c1070a59ab5fd68356ec1ad4dbd87468ca4ab"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/rut__RUT_2000.json.gz",
+     "git_blob": "78fe4e61a8065a8e45ce94dab1852107960fdde9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/rut__RUT_2005.json.gz",
+     "git_blob": "67e33a24154ec52b1cf4d384285f5b66222e330d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/rut__RUT_2010.json.gz",
+     "git_blob": "df132d136d7fae5f0b15bf51c4ec714b12a9e09b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/rut__RUT_2015.json.gz",
+     "git_blob": "935b9c03f58222ead26f378828d2dd354a70ca83"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/rut__RUT_2020.json.gz",
+     "git_blob": "45fbdbac090d305a7bf675c826bed94f4dff5a3e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/rut__RUT_2025.json.gz",
+     "git_blob": "e7d571ca485243d8befa2ad348411d7b26195e90"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sek__SEK_2000.json.gz",
+     "git_blob": "54ea0db3acbf2e3b0d4c4be78704e6159dd5ce8f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sek__SEK_2005.json.gz",
+     "git_blob": "8e97583f84be16d9831a56c39ef167f4c9aa013e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sek__SEK_2010.json.gz",
+     "git_blob": "4b1c0f694ed16b6fdb9fe03cb62a3b92eb15c849"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sek__SEK_2015.json.gz",
+     "git_blob": "e3387ae9f75cba90b5c5331e9b8ed4ccd27ad610"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sek__SEK_2020.json.gz",
+     "git_blob": "37d23699c245f8b62a5ce35fa5d760242fc97086"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sek__SEK_2025.json.gz",
+     "git_blob": "aef09ad1e9faf8264a482291e0e383ac65ef5ef6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sensex__BSESN_2000.json.gz",
+     "git_blob": "545ddc0fbf45bfdc4ae1b475d585e739b8354988"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sensex__BSESN_2005.json.gz",
+     "git_blob": "ea3827a44e4accc375087cdf9be516045acba34a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sensex__BSESN_2010.json.gz",
+     "git_blob": "4d14467434f2acfb5b6f7687b6874c41671c4ce6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sensex__BSESN_2015.json.gz",
+     "git_blob": "eb361ff22b3ebaf3063f16918552c5fb4d3e110b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sensex__BSESN_2020.json.gz",
+     "git_blob": "d3b9d65bba412f54dd980eee71961dc010d50780"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sensex__BSESN_2025.json.gz",
+     "git_blob": "a9765b1a1155ac77728a45f36b5f7d53209d34fd"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/shcomp__SSEC_2000.json.gz",
+     "git_blob": "65d333f88d6fa02061b37231913f4a68d0d4f295"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/shcomp__SSEC_2005.json.gz",
+     "git_blob": "6b040ccf672f9b21dc0787f2eab9ad9520497e81"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/shcomp__SSEC_2010.json.gz",
+     "git_blob": "c61e72d02f199b823e7fec5b068516b24fe14b70"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/shcomp__SSEC_2015.json.gz",
+     "git_blob": "304c927906f702cd83018ef25d360c9a2cc97ba9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/shcomp__SSEC_2020.json.gz",
+     "git_blob": "485d448a97e28a42c74270254194b04d3c3d084a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/shcomp__SSEC_2025.json.gz",
+     "git_blob": "45c2207786a24e446183cddcf1ebf001ab7e8c36"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_1985.json.gz",
+     "git_blob": "6efeb5cb6b93afbe906572fe14b7d313ceb8cd17"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_1990.json.gz",
+     "git_blob": "ee421d7090ed4162a568fc06d3a268d0ae8b509c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_1995.json.gz",
+     "git_blob": "c027fca523b19dd5202d64b15e85dc12224521d1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_2000.json.gz",
+     "git_blob": "0313e4f99b2af9dcafb78c65f413ebe302f280af"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_2005.json.gz",
+     "git_blob": "64192ddc40e746c4416112c29e5263853cf1d90c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_2010.json.gz",
+     "git_blob": "12e3cb01b5aa2495252c8c2c864eaf96eba3ba0e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_2015.json.gz",
+     "git_blob": "9e3e7fe85ca3f14ab24927c99e3fbbc83e01f8ac"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_2020.json.gz",
+     "git_blob": "ed7fa99f6283a93440c7934a48ab39ed851e2d2a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/spx__SPX_2025.json.gz",
+     "git_blob": "add9bafb154b4e0de95d49aca183e2f9c88766af"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sx5e__STOXX50E_2000.json.gz",
+     "git_blob": "8357450de0f1c45dafd2ef795dcd3c0c6b486367"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sx5e__STOXX50E_2005.json.gz",
+     "git_blob": "67373a1a0cbd2abdaabb2c972a922e06267cd19c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sx5e__STOXX50E_2010.json.gz",
+     "git_blob": "51a751f6ed6e0f32868dd1669557aadf6680d099"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sx5e__STOXX50E_2015.json.gz",
+     "git_blob": "c30f2ce48d2258bd173d7f96c64cc095c5e46153"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sx5e__STOXX50E_2020.json.gz",
+     "git_blob": "4171a5fb8e35651f14b7f0c7999fdf49ef334069"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/sx5e__STOXX50E_2025.json.gz",
+     "git_blob": "529ec18aa00a508619488f2d06c6802a9f7c0981"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/thb__THB_2000.json.gz",
+     "git_blob": "05a8cb66993d709b72fea7571bf11b21277d2d23"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/thb__THB_2005.json.gz",
+     "git_blob": "18fef53766dd86f376303d1de644710518f57806"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/thb__THB_2010.json.gz",
+     "git_blob": "1ed4a1309b764198dfedd9dff407e84f18a5ed77"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/thb__THB_2015.json.gz",
+     "git_blob": "abe93adfc8b00bfe744d65c9760e43fa8594bc2d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/thb__THB_2020.json.gz",
+     "git_blob": "6071eb6dd681291b4074dd7159d4a2479202c573"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/thb__THB_2025.json.gz",
+     "git_blob": "f7a091ff959cbf3da4953bbcf337ddac7465e26a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/tr10y__TR10Y_TR_2010.json.gz",
+     "git_blob": "df3e3157690c65ea87d11e2ad1fb3b52990f479a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/tr10y__TR10Y_TR_2015.json.gz",
+     "git_blob": "44c01cf18e2ddad80a882cd8a4034adba0727584"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/tr10y__TR10Y_TR_2020.json.gz",
+     "git_blob": "0b5edf30760d407f52cd8b6e153496bd09931257"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/tr10y__TR10Y_TR_2025.json.gz",
+     "git_blob": "8947b1f9bc30ceda7f72a7d74eac3668d25c33ac"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/tr2y__TR2Y_TR_2020.json.gz",
+     "git_blob": "23181b11449435b196759aae8a7c1a1900bfd4ab"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/tr2y__TR2Y_TR_2025.json.gz",
+     "git_blob": "f47f582332d0eadd2926e6ad29b329aa02724155"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_1985.json.gz",
+     "git_blob": "a711ab9401fa876eaaf9fb8e70c09b73f6d53b48"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_1990.json.gz",
+     "git_blob": "05b9b6ef309c26e9931d080cb01fad9b196257bf"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_1995.json.gz",
+     "git_blob": "e65f7442acfaf75c159414ed171aab06554af9ed"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_2000.json.gz",
+     "git_blob": "52d1425ed93a989c38603f060da852a269d44a1a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_2005.json.gz",
+     "git_blob": "a2292206217af26f6602db87081acca7380f3b87"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_2010.json.gz",
+     "git_blob": "e649117ef5e6f861475fe46a26f5b4f482dc7fca"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_2015.json.gz",
+     "git_blob": "0b220aa66be8581ae918f2eff946ce6c2c9ce0c9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_2020.json.gz",
+     "git_blob": "912b4479d2365c0bac2dd24dc0c1bba0c5eee6ad"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/try__TRY_2025.json.gz",
+     "git_blob": "e5e278e2b2f367c57cd0541fb0a88d3ebdcb58c4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_1990.json.gz",
+     "git_blob": "850a8f801d73f606d7ed36c158b220483893c958"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_1995.json.gz",
+     "git_blob": "b373c4424b1f011808b2c53b4fe0fa234f4c67ee"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_2000.json.gz",
+     "git_blob": "2e4d8f42bad9ed1d6f0dbf1229b0caa1c2ddc8b4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_2005.json.gz",
+     "git_blob": "16cbb3ffb11deedf34e03033bc1c040dbb369b69"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_2010.json.gz",
+     "git_blob": "54cb2900a02b45c800272ba573503f80aeea28d7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_2015.json.gz",
+     "git_blob": "f15cdd150731adc1e1be43987eb7fb8a918a7595"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_2020.json.gz",
+     "git_blob": "0d290738e24519af411db1edcd11115a0f562cfe"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us10y__US10Y_2025.json.gz",
+     "git_blob": "ee7ace5ea60f3f44e3f9aa6f9bab6dce6a09d14a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_1985.json.gz",
+     "git_blob": "7384702faf1ea78b29f196a025bb171cc1e1e63f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_1990.json.gz",
+     "git_blob": "b5122bcdd6cd5c599f6f1a3751a63ad4a26a1c0c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_1995.json.gz",
+     "git_blob": "df820a490ab7129dc85d3252fbd3dbb523762993"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_2000.json.gz",
+     "git_blob": "64a608f82aa6628f4df633bd5f1a3047ecac3e3d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_2005.json.gz",
+     "git_blob": "4f4583941588d034204a0dffcc0763ea1b85bdd5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_2010.json.gz",
+     "git_blob": "02230d6637125f51c672ddbfc408d3f921f7a1f0"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_2015.json.gz",
+     "git_blob": "4135338314767c3bd46b5e2ad14ade91017b21d1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_2020.json.gz",
+     "git_blob": "ee42f4abe45aa67895729a6bd61abd7132807eab"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us2y__US2Y_2025.json.gz",
+     "git_blob": "abacdb274283ef1f8dbd469d72a5fbe5ca82f889"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us30y__US30Y_2000.json.gz",
+     "git_blob": "c20f54fc573bbde0079406e39b9a1ac77508dfd5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us30y__US30Y_2005.json.gz",
+     "git_blob": "eb4e6af17d05c52a6a79c4d5d3a6f3323b3205e3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us30y__US30Y_2010.json.gz",
+     "git_blob": "d94971479bdd31e2453f937385a844200a349f51"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us30y__US30Y_2015.json.gz",
+     "git_blob": "e37c0836263cd7799f1bfe0a9bdb981d3a691381"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us30y__US30Y_2020.json.gz",
+     "git_blob": "bc87dee9e764db8082c0720026bc53951a43ba2c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us30y__US30Y_2025.json.gz",
+     "git_blob": "b77bf02d9a6d59a7768c3b3018e63e6063cd818b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_1985.json.gz",
+     "git_blob": "f39307dba4a679d01570a7a76525d12762ec6e6c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_1990.json.gz",
+     "git_blob": "1cd28436f78cd9f9d27803a349240cdd489da440"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_1995.json.gz",
+     "git_blob": "15108006e06c2d296f3ca882c17503812189e26e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_2000.json.gz",
+     "git_blob": "f87e70a88bff8adeeb428c890d15b70db98c946b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_2005.json.gz",
+     "git_blob": "7a03ae36beeee3e5ffba44f14b627976d4cce610"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_2010.json.gz",
+     "git_blob": "17a590114226697de2499b57b127e4e15dea8090"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_2015.json.gz",
+     "git_blob": "db2e11215441cd70fb4ceec5852c62b71c80eec9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_2020.json.gz",
+     "git_blob": "922a9c16bd768d84afff0ff853349f3d66ef220f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us3m__US3M_2025.json.gz",
+     "git_blob": "b7f9218a63bd8a0fb7519f10b0d3fcd2a80da593"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us5y__US5Y_2000.json.gz",
+     "git_blob": "5eac16ce69000f88cf9302a302451257a0ed565b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us5y__US5Y_2005.json.gz",
+     "git_blob": "6e8d9f14da85e8f83d944273939395b76b0f002a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us5y__US5Y_2015.json.gz",
+     "git_blob": "6e37099a3852507f0b377ae88b1f39673b59d3c6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us5y__US5Y_2020.json.gz",
+     "git_blob": "367e31d6714ce9287b89f66037acfc0b387c3e43"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/us5y__US5Y_2025.json.gz",
+     "git_blob": "50a05bf9a5066b3b2eeb8fb29affbfbe47624eaf"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_1990.json.gz",
+     "git_blob": "c85f01d97800b92940ed7d259d1edcf1e41f0052"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_1995.json.gz",
+     "git_blob": "df180e6f6c8ebfe743bd3d440cb7f60133c82198"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_2000.json.gz",
+     "git_blob": "19144269405f3e73757b47dd32751049c39a69c1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_2005.json.gz",
+     "git_blob": "0bf67c7edbcbd651d1e05ccf01acc94e35044503"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_2010.json.gz",
+     "git_blob": "c222099674fd0d9175172793b316bbaabfdd7b6e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_2015.json.gz",
+     "git_blob": "9be72ac68e37c4f14f56dfa171b7bd67950c8155"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_2020.json.gz",
+     "git_blob": "35719efc3473d93f6406d16342b0c1fda556165d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/vix__VIX_2025.json.gz",
+     "git_blob": "ab2e7e7daa0024ec84caffad4a942bf12a39a9e2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_1985.json.gz",
+     "git_blob": "0b4184631e1322d951440c244f3c645c3782bd6c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_1990.json.gz",
+     "git_blob": "2cfdb91f58ab0a59d202ec788f29a8fd8ddb93f1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_1995.json.gz",
+     "git_blob": "07b12125b64394702145c70f5f9f3ff63f8302fc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_2000.json.gz",
+     "git_blob": "46dd23babf8c4a035f51bddbd697ac5d48d64776"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_2005.json.gz",
+     "git_blob": "d46e477e7cd758bc23e5f601389b9876de141538"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_2010.json.gz",
+     "git_blob": "dc8a127edf986248d85e1f29e33f6e6c10891664"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_2015.json.gz",
+     "git_blob": "ee4c299dfece17264818f6d8c96b0109f071c69f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_2020.json.gz",
+     "git_blob": "4707f236b346b241e10164e4c1de493383b3f03e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/wti__CL_1_2025.json.gz",
+     "git_blob": "95d8f948d2158c2b80da095d75252c241f93d310"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/zar__ZAR_2000.json.gz",
+     "git_blob": "fa3dd5101dbb659a2f04dd2cc9e7a759fad84ab7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/zar__ZAR_2005.json.gz",
+     "git_blob": "40d9474ccc9f1922c23d353da991da4a3e2eb367"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/zar__ZAR_2010.json.gz",
+     "git_blob": "8ce1d17527d886c0c07615ccc735a67a3c6995a9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/zar__ZAR_2015.json.gz",
+     "git_blob": "6522ee3c8b21a5b2edd666fb2d01fd703d56c7a9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/zar__ZAR_2020.json.gz",
+     "git_blob": "183e2d33c53f6ea73d9b2fda146e114572581af1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/cnbc/zar__ZAR_2025.json.gz",
+     "git_blob": "2c6ee65d8f4c58568c972edb408d24171c64600f"
+    }
+   ],
+   "sembol": {
+    "altin": "@GC.1",
+    "aud": "AUD=",
+    "bakir": "@HG.1",
+    "benzin": "@RB.1",
+    "bist100": ".XU100",
+    "brent": "@LCO.1",
+    "brl": "BRL=",
+    "bugday": "@W.1",
+    "cac": ".FCHI",
+    "cad": "CAD=",
+    "chf": "CHF=",
+    "clp": "CLP=",
+    "cnh": "CNH=",
+    "cop": "COP=",
+    "czk": "CZK=",
+    "dax": ".GDAXI",
+    "de10y": "DE10Y-DE",
+    "de2y": "DE2Y-DE",
+    "dogalgaz": "@NG.1",
+    "dxy": ".DXY",
+    "egp": "EGP=",
+    "eur": "EUR=",
+    "ftse": ".FTSE",
+    "gb10y": "GB10Y-GB",
+    "gb2y": "GB2Y-GB",
+    "gbp": "GBP=",
+    "gumus": "@SI.1",
+    "hsi": ".HSI",
+    "huf": "HUF=",
+    "idr": "IDR=",
+    "ils": "ILS=",
+    "inr": "INR=",
+    "it10y": "IT10Y-IT",
+    "jp10y": "JP10Y-JP",
+    "jp2y": "JP2Y-JP",
+    "jpy": "JPY=",
+    "kalorifer": "@HO.1",
+    "kospi": ".KS11",
+    "krw": "KRW=",
+    "misir": "@C.1",
+    "mxn": "MXN=",
+    "n225": ".N225",
+    "ndx": ".NDX",
+    "nok": "NOK=",
+    "nzd": "NZD=",
+    "php": "PHP=",
+    "pln": "PLN=",
+    "rut": ".RUT",
+    "sek": "SEK=",
+    "sensex": ".BSESN",
+    "shcomp": ".SSEC",
+    "spx": ".SPX",
+    "sx5e": ".STOXX50E",
+    "thb": "THB=",
+    "tr10y": "TR10Y-TR",
+    "tr2y": "TR2Y-TR",
+    "try": "TRY=",
+    "us10y": "US10Y",
+    "us2y": "US2Y",
+    "us30y": "US30Y",
+    "us3m": "US3M",
+    "us5y": "US5Y",
+    "vix": ".VIX",
+    "wti": "@CL.1",
+    "zar": "ZAR="
+   },
+   "atilan_hafta_sonu_bari": {
+    "altin": 4,
+    "aud": 439,
+    "bakir": 0,
+    "benzin": 0,
+    "bist100": 0,
+    "brent": 0,
+    "brl": 149,
+    "bugday": 0,
+    "cac": 0,
+    "cad": 451,
+    "chf": 304,
+    "clp": 296,
+    "cnh": 416,
+    "cop": 250,
+    "czk": 213,
+    "dax": 0,
+    "de10y": 556,
+    "de2y": 622,
+    "dogalgaz": 0,
+    "dxy": 130,
+    "egp": 2313,
+    "eur": 344,
+    "ftse": 0,
+    "gb10y": 434,
+    "gb2y": 791,
+    "gbp": 278,
+    "gumus": 0,
+    "hsi": 0,
+    "huf": 447,
+    "idr": 1,
+    "ils": 358,
+    "inr": 42,
+    "it10y": 600,
+    "jp10y": 532,
+    "jp2y": 502,
+    "jpy": 449,
+    "kalorifer": 0,
+    "kospi": 0,
+    "krw": 301,
+    "misir": 0,
+    "mxn": 178,
+    "n225": 128,
+    "ndx": 0,
+    "nok": 427,
+    "nzd": 443,
+    "php": 188,
+    "pln": 457,
+    "rut": 0,
+    "sek": 422,
+    "sensex": 27,
+    "shcomp": 5,
+    "spx": 0,
+    "sx5e": 0,
+    "thb": 410,
+    "tr10y": 1,
+    "tr2y": 1,
+    "try": 434,
+    "us10y": 102,
+    "us2y": 1,
+    "us30y": 16,
+    "us3m": 15,
+    "us5y": 332,
+    "vix": 0,
+    "wti": 0,
+    "zar": 414
+   },
+   "not": "Yakın vade vadeli serileri vade devrinde sıçrar (ham); döviz barı New York 17:00, vadeli barı borsa seansı."
+  },
+  "cnbc_surucu_2000.csv.gz": {
+   "sha256": "7ff839541d96de6fd5e0c29f853539ac75ea766d905699f3592ffe6c131f3d7f",
+   "satir": 6978,
+   "aciklama": "CNBC günlük kapanışları, 2000 → 30.09.2026 (makro dersinin sürücü arşivi)",
+   "kaynak": "CNBC (ts-api.cnbc.com, günlük bar ucu; makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "altin": {
+     "n": 6734,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "au10y": {
+     "n": 6419,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "au2y": {
+     "n": 6665,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "aud": {
+     "n": 6977,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "bakir": {
+     "n": 6718,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "brent": {
+     "n": 6864,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "brl": {
+     "n": 6973,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "ca10y": {
+     "n": 6571,
+     "ilk": "2000-01-04",
+     "son": "2026-09-29"
+    },
+    "ca2y": {
+     "n": 1619,
+     "ilk": "2020-04-01",
+     "son": "2026-09-29"
+    },
+    "cad": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "ch10y": {
+     "n": 3514,
+     "ilk": "2011-09-20",
+     "son": "2026-09-30"
+    },
+    "ch2y": {
+     "n": 3464,
+     "ilk": "2011-09-20",
+     "son": "2026-09-30"
+    },
+    "chf": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "clp": {
+     "n": 6968,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "cnh": {
+     "n": 3851,
+     "ilk": "2010-08-02",
+     "son": "2026-09-30"
+    },
+    "cop": {
+     "n": 6966,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "de2y": {
+     "n": 6766,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "demir_cevheri": {
+     "n": 2663,
+     "ilk": "2010-10-22",
+     "son": "2026-09-30"
+    },
+    "dogalgaz": {
+     "n": 6714,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "eur": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "gb2y": {
+     "n": 6732,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "gbp": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "gumus": {
+     "n": 6684,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "jp10y": {
+     "n": 6504,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "jp2y": {
+     "n": 6248,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "jpy": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "krw": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "mxn": {
+     "n": 6968,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "nikkei": {
+     "n": 6553,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "nok": {
+     "n": 6970,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "nz10y": {
+     "n": 6435,
+     "ilk": "2000-01-05",
+     "son": "2026-09-30"
+    },
+    "nzd": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "platin": {
+     "n": 6235,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "sek": {
+     "n": 6972,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "soya": {
+     "n": 5452,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "spx": {
+     "n": 6727,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "try": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "us10y": {
+     "n": 6689,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "us2y": {
+     "n": 6622,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "wti": {
+     "n": 6713,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "zar": {
+     "n": 6962,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/bulut/surucu_gunluk.csv.gz",
+     "git_blob": "f0cdf16fa869669c9deb0e788a66ebab1f1e4aaa"
+    }
+   ]
+  },
+  "dibs_gunluk.csv.gz": {
+   "sha256": "c6a2290dd03f1f574b4bc534e985e1bf472e9b0a30d498fe43c0e586efab381b",
+   "satir": 3593,
+   "aciklama": "DİBS sıfır kuponlu nominal ve reel (TÜFE'ye endeksli) getiri eğrisi, başabaş, beklenti",
+   "kaynak": "TCMB EVDS (DİBS kotasyonları) — DİBS hattının eğri kurulumu",
+   "sutun_aciklama": {
+    "n3a": "nominal 3 ay, %",
+    "n2y": "nominal 2 yıl, %",
+    "n5y": "nominal 5 yıl, %",
+    "be_2y": "2 yıllık başabaş, %",
+    "r2y": "2 yıllık reel getiri, %",
+    "pka_12a": "12 ay sonrası TÜFE beklentisi (Piyasa Katılımcıları Anketi), %"
+   },
+   "kapsam": {
+    "n3a": {
+     "n": 3593,
+     "ilk": "2013-01-01",
+     "son": "2026-10-09"
+    },
+    "n6a": {
+     "n": 3593,
+     "ilk": "2013-01-01",
+     "son": "2026-10-09"
+    },
+    "n1y": {
+     "n": 3593,
+     "ilk": "2013-01-01",
+     "son": "2026-10-09"
+    },
+    "n2y": {
+     "n": 3593,
+     "ilk": "2013-01-01",
+     "son": "2026-10-09"
+    },
+    "n3y": {
+     "n": 3593,
+     "ilk": "2013-01-01",
+     "son": "2026-10-09"
+    },
+    "n5y": {
+     "n": 3593,
+     "ilk": "2013-01-01",
+     "son": "2026-10-09"
+    },
+    "n7y": {
+     "n": 3593,
+     "ilk": "2013-01-01",
+     "son": "2026-10-09"
+    },
+    "n9y": {
+     "n": 2980,
+     "ilk": "2013-01-01",
+     "son": "2026-09-07"
+    },
+    "be_1y": {
+     "n": 415,
+     "ilk": "2023-01-10",
+     "son": "2026-10-09"
+    },
+    "be_2y": {
+     "n": 676,
+     "ilk": "2022-01-10",
+     "son": "2026-10-09"
+    },
+    "be_3y": {
+     "n": 848,
+     "ilk": "2021-01-11",
+     "son": "2026-06-12"
+    },
+    "be_5y": {
+     "n": 217,
+     "ilk": "2023-01-13",
+     "son": "2026-10-09"
+    },
+    "r1y": {
+     "n": 415,
+     "ilk": "2023-01-10",
+     "son": "2026-10-09"
+    },
+    "r2y": {
+     "n": 676,
+     "ilk": "2022-01-10",
+     "son": "2026-10-09"
+    },
+    "r3y": {
+     "n": 848,
+     "ilk": "2021-01-11",
+     "son": "2026-06-12"
+    },
+    "r5y": {
+     "n": 217,
+     "ilk": "2023-01-13",
+     "son": "2026-10-09"
+    },
+    "pka_12a": {
+     "n": 3579,
+     "ilk": "2013-01-21",
+     "son": "2026-10-09"
+    },
+    "pka_24a": {
+     "n": 3579,
+     "ilk": "2013-01-21",
+     "son": "2026-10-09"
+    },
+    "tlref": {
+     "n": 1927,
+     "ilk": "2018-12-28",
+     "son": "2026-10-09"
+    },
+    "politika": {
+     "n": 2024,
+     "ilk": "2018-09-14",
+     "son": "2026-10-08"
+    },
+    "aofm": {
+     "n": 3378,
+     "ilk": "2013-01-02",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/DIBS/data/metrik.csv",
+     "git_blob": "2a8549b94abaf68a3fefa1e481141d6537a4419c"
+    }
+   ]
+  },
+  "dis_ticaret_endeks.csv.gz": {
+   "sha256": "496038e5f346b21ca1553c3981d87684cd5ea50ec24e3f1e140eecaa361859e5",
+   "satir": 163,
+   "aciklama": "Dış ticaret birim değer ve miktar endeksleri, aylık (yakıt ithalatı dahil)",
+   "kaynak": "TÜİK dış ticaret endeksleri (TCMB EVDS; makro dersi arşivi)",
+   "sutun_aciklama": {
+    "ith_yakit_birim_deger": "yakıt ithalatı birim değer endeksi (USD bazlı)",
+    "ith_yakit_miktar": "yakıt ithalatı miktar endeksi"
+   },
+   "kapsam": {
+    "ihr_birim_deger": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_birim_deger": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_yakit_birim_deger": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ihr_miktar": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_miktar": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_yakit_miktar": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/bulut/evds_dis_ticaret_endeks.csv.gz",
+     "git_blob": "7fef0e67407580c4e4661d98cba5d2ef1e6a6e22"
+    }
+   ]
+  },
+  "dxy_vix_1971.csv.gz": {
+   "sha256": "86455392962a1303052ba9aaa23c8b41bfa0b3888c3f217ab3701042a89da226",
+   "satir": 14158,
+   "aciklama": "Dolar endeksi (1971+) ve VIX (1990+)",
+   "kaynak": "Yahoo Finance (makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "dxy": {
+     "n": 14154,
+     "ilk": "1971-01-04",
+     "son": "2026-09-30"
+    },
+    "vix": {
+     "n": 9256,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/yahoo_dxy_vix_gunluk.csv.gz",
+     "git_blob": "74492eaa5c9b1daf57672f2dffb7df6ae55bb0b6"
+    }
+   ]
+  },
+  "egri_kontrat.csv.gz": {
+   "sha256": "cfdf3009bd7c0ab49cdbdbe4d314a91a6ed6c9ab73ac246f55138d67b0bac16a",
+   "satir": 250,
+   "aciklama": "Brent, WTI ve ULSD vadeli kontratlarının günlük kapanışı (Yahoo'da listeli olanlar)",
+   "kaynak": "Yahoo Finance (NYMEX BZ, CL, HO kontratları; yfinance)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "BZF27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZF28_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZG27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZG28_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZH27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZH28_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZJ27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZK27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZM27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZM28_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZN27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZQ27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZU27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZV27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZX27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZZ26_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZZ27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZZ28_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLF27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLG27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLH27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLJ27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLK27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLM27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLN27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLQ27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLU27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLV27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLX26_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLX27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLZ26_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CLZ27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOF27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOG27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOH27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOJ27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOK27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOM27_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOX26_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HOZ26_NYM": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZF27_NYM.csv.gz",
+     "git_blob": "047abd29760060dd612648901f72136c3ffb3e0c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZF28_NYM.csv.gz",
+     "git_blob": "0e61b6abd89cff39692a189896ee17718930d3b4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZG27_NYM.csv.gz",
+     "git_blob": "8f53dca05bd98137413cd4a50f887904d99fcc54"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZG28_NYM.csv.gz",
+     "git_blob": "35a8ec70a174954158c5c69bab58faa0ccdbe319"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZH27_NYM.csv.gz",
+     "git_blob": "f1f26853be5669ad0b0f4f6f9cc45fa0e6656b4b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZH28_NYM.csv.gz",
+     "git_blob": "c80f38eb14fa5432d5d360c819e9515704278b11"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZJ27_NYM.csv.gz",
+     "git_blob": "ac3ff75165982a4dbad37c4a2838225743d4715e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZK27_NYM.csv.gz",
+     "git_blob": "671a9fc47c6ea8bc7ed2912fb205875caf150e21"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZM27_NYM.csv.gz",
+     "git_blob": "4e4d1a188b1d5af0d70bbf77d9879f422ef71f28"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZM28_NYM.csv.gz",
+     "git_blob": "acc631bd0e99161f5838b0aced122789cbdcf871"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZN27_NYM.csv.gz",
+     "git_blob": "d4fd7c0fb3a3856e05c9a2ee249524dd9a3448ed"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZQ27_NYM.csv.gz",
+     "git_blob": "ac4086a537727bdbc748ac5876898bff9ce7019b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZU27_NYM.csv.gz",
+     "git_blob": "8386eb019a599b9f6b91b491c8dd19852e9381ab"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZV27_NYM.csv.gz",
+     "git_blob": "5509928849b28acd9031f9b1550701c941a2f9ce"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZX27_NYM.csv.gz",
+     "git_blob": "12f133f901c6a608e208b92153aef695dcbde3bc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZZ26_NYM.csv.gz",
+     "git_blob": "8ed0e3885c11f20b51714e419f8af1a61ab3f4d5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZZ27_NYM.csv.gz",
+     "git_blob": "967378ef761487c9940a7c3ef902da1fb3ee59e9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/BZZ28_NYM.csv.gz",
+     "git_blob": "5fe2e0afce1fc2bd12e1a9863fac68396b10e90f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLF27_NYM.csv.gz",
+     "git_blob": "9f7651bf466996feab0ef7c61085567daaf53a81"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLG27_NYM.csv.gz",
+     "git_blob": "e5e1bdface5f715b8f5ab1a750d55784e4d4bade"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLH27_NYM.csv.gz",
+     "git_blob": "3c9396d5f647d4b9d46349cfa3725beb1336985f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLJ27_NYM.csv.gz",
+     "git_blob": "bf8a1b5a427ee99ba7fc50597cc92df617bdc57e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLK27_NYM.csv.gz",
+     "git_blob": "b49114a20157864199a569b27f9f3c1913207b0a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLM27_NYM.csv.gz",
+     "git_blob": "6d12f0697ed97b7825ba22aa8e4a1c2360eb1a01"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLN27_NYM.csv.gz",
+     "git_blob": "83f0b0af0ecda407bbe9d6b857a16c53d8d239ba"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLQ27_NYM.csv.gz",
+     "git_blob": "e8d5941fdfd1f95d292fa5c3d5ed585859cf0c4a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLU27_NYM.csv.gz",
+     "git_blob": "331650ea507333c97c4cef477f805ccda3911147"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLV27_NYM.csv.gz",
+     "git_blob": "7cee3e2bb661a066f5729c4c86a6f92bf8983eef"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLX26_NYM.csv.gz",
+     "git_blob": "a831803d10794316f11315e6bf16415cfc17095f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLX27_NYM.csv.gz",
+     "git_blob": "26f24ae22387d6841e44f7716655862e7b8c8981"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLZ26_NYM.csv.gz",
+     "git_blob": "28de6d69ff77c20514752b4039c0386cbb99ffcc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/CLZ27_NYM.csv.gz",
+     "git_blob": "f2754a4a397f0837470747ab7f64f198521652d1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOF27_NYM.csv.gz",
+     "git_blob": "6c3d9f8fd93b727479c404137d1c0d3771adf957"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOG27_NYM.csv.gz",
+     "git_blob": "1487e678afe908a1dbdb65406edf00082637e32b"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOH27_NYM.csv.gz",
+     "git_blob": "59ea203dd82475c42a5621c3ec0c9b3c00f60c1f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOJ27_NYM.csv.gz",
+     "git_blob": "9d45e7b06f2c2699e3337f01c2a36361bcc8bcdf"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOK27_NYM.csv.gz",
+     "git_blob": "690a3796f9f07dcbea7370dcb438050e8cb586f7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOM27_NYM.csv.gz",
+     "git_blob": "c3a6701b701db684cbc056d7bc61f754661b1523"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOX26_NYM.csv.gz",
+     "git_blob": "433c30e9d33750d7aafb77153180b4aecf057e23"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo_egri/HOZ26_NYM.csv.gz",
+     "git_blob": "218c63b23488a2d227a37510a97a9c85fdca2217"
+    }
+   ],
+   "not": "Sütun adı kontrat kodudur: BZF27_NYM = Ocak 2027 teslimli Brent. Vadesi dolan kontrat Yahoo'dan silinir; eğri yalnız arşiv günü listeli olanlarla kurulur."
+  },
+  "eia_pompa_haftalik.csv.gz": {
+   "sha256": "870eb3c0d6845f2c34bb199cc99eae722b0a87a4a4b4e8b7b850359991170466",
+   "satir": 1880,
+   "aciklama": "ABD perakende benzin ve motorin fiyatı, USD/galon, haftalık",
+   "kaynak": "U.S. Energy Information Administration",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "abd_benzin_pompa_haftalik": {
+     "n": 1880,
+     "ilk": "1990-08-20",
+     "son": "2026-10-05"
+    },
+    "abd_motorin_pompa_haftalik": {
+     "n": 1699,
+     "ilk": "1994-03-21",
+     "son": "2026-10-05"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/eia/abd_benzin_pompa_haftalik.xls.gz",
+     "git_blob": "4fe1eb2f73252fc7b874f62207a8fd618139e554"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/eia/abd_motorin_pompa_haftalik.xls.gz",
+     "git_blob": "ef4a4a4e4d00f9dfc4a971c3e970cdabe8b67edd"
+    }
+   ]
+  },
+  "eia_spot_gunluk.csv.gz": {
+   "sha256": "1fe24ef625d406a110ee42b08deb383fb93912d0a39542b5a099fd201097cb1a",
+   "satir": 10209,
+   "aciklama": "EIA spot fiyatı: Europe Brent (RBRTE) ve WTI Cushing (RWTC), USD/varil",
+   "kaynak": "U.S. Energy Information Administration",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "brent_spot_gunluk": {
+     "n": 9102,
+     "ilk": "1987-05-20",
+     "son": "2026-10-06"
+    },
+    "wti_spot_gunluk": {
+     "n": 9517,
+     "ilk": "1986-01-02",
+     "son": "2026-10-06"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/eia/brent_spot_gunluk.xls.gz",
+     "git_blob": "4cb14f659ff97677ffcacbcb2266c029576cf6c9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/eia/wti_spot_gunluk.xls.gz",
+     "git_blob": "e36d34d7368913d185d9ffb9c27c4c343c269b37"
+    }
+   ]
+  },
+  "fonlama_gunluk.csv.gz": {
+   "sha256": "d6fd0b8063a74949dfd93d2132a62c2afa4feab4ce71dadbe2720b6197216f1c",
+   "satir": 3964,
+   "aciklama": "TCMB fonlaması: TLREF, ağırlıklı ortalama fonlama maliyeti, politika faizi, koridor, repo ihalesi",
+   "kaynak": "TCMB EVDS, BIST TLREF — Fonlama hattı",
+   "sutun_aciklama": {
+    "tlref": "TLREF, %",
+    "aofm": "TCMB ağırlıklı ortalama fonlama maliyeti, %",
+    "politika": "politika faizi, %",
+    "koridor_ust": "gecelik borç verme faizi, %",
+    "fon_ihale": "bir hafta vadeli repo ihalesi tutarı, mn TL"
+   },
+   "kapsam": {
+    "tlref": {
+     "n": 1927,
+     "ilk": "2018-12-28",
+     "son": "2026-10-09"
+    },
+    "aofm": {
+     "n": 3964,
+     "ilk": "2011-01-03",
+     "son": "2026-10-09"
+    },
+    "politika": {
+     "n": 2025,
+     "ilk": "2018-09-14",
+     "son": "2026-10-09"
+    },
+    "koridor_alt": {
+     "n": 3964,
+     "ilk": "2011-01-03",
+     "son": "2026-10-09"
+    },
+    "koridor_ust": {
+     "n": 3964,
+     "ilk": "2011-01-03",
+     "son": "2026-10-09"
+    },
+    "fon_ihale": {
+     "n": 3789,
+     "ilk": "2011-01-03",
+     "son": "2026-10-09"
+    },
+    "fon_top": {
+     "n": 3964,
+     "ilk": "2011-01-03",
+     "son": "2026-10-09"
+    },
+    "net_fonlama": {
+     "n": 3964,
+     "ilk": "2011-01-03",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/Fonlama/data/gunluk.csv",
+     "git_blob": "4f4f47561f1a73c04b5cde6453a77fedb6fd0a2c"
+    }
+   ]
+  },
+  "gecelik_1990.csv.gz": {
+   "sha256": "1b6857865d3a3d0af24923c09c151a08c7bb131dcd8510c0f5526bdd8da7bf16",
+   "satir": 9211,
+   "aciklama": "TCMB gecelik ağırlıklı ortalama faiz, 1990+",
+   "kaynak": "TCMB EVDS (makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "gecelik_ao": {
+     "n": 9211,
+     "ilk": "1990-01-02",
+     "son": "2026-08-20"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/gecelik_gunluk.csv.gz",
+     "git_blob": "8a7e5dfc7af9c18a886608dd0f263e11e29e560c"
+    }
+   ]
+  },
+  "gpr_aylik.csv.gz": {
+   "sha256": "2f79c30c226353ffd3a16d3712e59950604826b053e5a07b21f3633b62e2f4d3",
+   "satir": 1521,
+   "aciklama": "Jeopolitik risk endeksi, aylık: genel, tehdit, eylem ve ülke endeksleri",
+   "kaynak": "Caldara, D. ve Iacoviello, M. (2022), Measuring Geopolitical Risk — matteoiacoviello.com",
+   "sutun_aciklama": {
+    "GPRC_TUR": "Türkiye"
+   },
+   "kapsam": {
+    "GPR": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    },
+    "GPRT": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    },
+    "GPRA": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    },
+    "GPRC_TUR": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    },
+    "GPRC_SAU": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    },
+    "GPRC_RUS": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    },
+    "GPRC_UKR": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    },
+    "GPRC_ISR": {
+     "n": 501,
+     "ilk": "1985-01-01",
+     "son": "2026-09-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/gpr/data_gpr_export_xls.gz",
+     "git_blob": "fc419fc08dc5735ba1e23a33a0a0d325dedfb091"
+    }
+   ]
+  },
+  "gpr_gunluk.csv.gz": {
+   "sha256": "9e08e818777c75cc86cf73d552fb0764c4f153a1dbc288de2d112d2ff84d3011",
+   "satir": 15253,
+   "aciklama": "Jeopolitik risk endeksi, günlük (Caldara–Iacoviello)",
+   "kaynak": "Caldara, D. ve Iacoviello, M. (2022), Measuring Geopolitical Risk — matteoiacoviello.com",
+   "sutun_aciklama": {
+    "GPRD": "genel",
+    "GPRD_ACT": "eylem",
+    "GPRD_THREAT": "tehdit"
+   },
+   "kapsam": {
+    "GPRD": {
+     "n": 15253,
+     "ilk": "1985-01-01",
+     "son": "2026-10-05"
+    },
+    "GPRD_ACT": {
+     "n": 15253,
+     "ilk": "1985-01-01",
+     "son": "2026-10-05"
+    },
+    "GPRD_THREAT": {
+     "n": 15253,
+     "ilk": "1985-01-01",
+     "son": "2026-10-05"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/gpr/data_gpr_daily_recent_xls.gz",
+     "git_blob": "3948b8199106b786c4aac97c242ab10f9a47f4dd"
+    }
+   ]
+  },
+  "gsyh_ceyreklik.csv.gz": {
+   "sha256": "c3a0f6cf8068acdb5ed14a0349bbf566f6233a4c4d92fdec29e178306f59dede",
+   "satir": 126,
+   "aciklama": "GSYH, çeyreklik (cari fiyatlarla, bin TL)",
+   "kaynak": "TÜİK (makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "gsyh_mta_hacim": {
+     "n": 126,
+     "ilk": "1995-03-31",
+     "son": "2026-06-30"
+    },
+    "gsyh_cari_bin_tl": {
+     "n": 126,
+     "ilk": "1995-03-31",
+     "son": "2026-06-30"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/gsyh_ceyreklik.csv.gz",
+     "git_blob": "d47980d5a23a2d502f6737341b40d99844ee76ff"
+    }
+   ]
+  },
+  "hazine_nominal_2025.csv.gz": {
+   "sha256": "60147f8350d13c79ac9a098e28c50f12295860792c2720c1d971fd2ff1533875",
+   "satir": 444,
+   "aciklama": "ABD Hazinesi par getiri eğrisi, 2025–2026, %",
+   "kaynak": "ABD Hazinesi",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "1 Mo": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "1.5 Month": {
+     "n": 413,
+     "ilk": "2025-02-18",
+     "son": "2026-10-09"
+    },
+    "2 Mo": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "3 Mo": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "4 Mo": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "6 Mo": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "1 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "2 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "3 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "5 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "7 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "10 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "20 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "30 Yr": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/hazine/daily_treasury_yield_curve_2025.csv.gz",
+     "git_blob": "f993b2fb891370d392fe6fd6f027d05613bbfcae"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/hazine/daily_treasury_yield_curve_2026.csv.gz",
+     "git_blob": "8675151c2fe73f098cc666833e8e3bb893d39e43"
+    }
+   ]
+  },
+  "hazine_reel_2025.csv.gz": {
+   "sha256": "c4be484c6b52534611c33fad4037d7ce016bdc0f046ecfc2ff7eac25115a3c12",
+   "satir": 444,
+   "aciklama": "ABD Hazinesi reel (TIPS) par getiri eğrisi, 2025–2026, %",
+   "kaynak": "ABD Hazinesi",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "5 YR": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "7 YR": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "10 YR": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "20 YR": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    },
+    "30 YR": {
+     "n": 444,
+     "ilk": "2025-01-02",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/hazine/daily_treasury_real_yield_curve_2025.csv.gz",
+     "git_blob": "953e27e2c9e66a1ae36b8ba3a6998beedff9b4c4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/hazine/daily_treasury_real_yield_curve_2026.csv.gz",
+     "git_blob": "669731f11feed135e1f10ddecec086f32966e55f"
+    }
+   ]
+  },
+  "kuresel_aylik.csv.gz": {
+   "sha256": "babce84a399bb59cc929f165b4286b7fcf9876c205fac2538801b1c1be721a6c",
+   "satir": 866,
+   "aciklama": "Pink Sheet enerji endeksi, ABD TÜFE ve çekirdek TÜFE, politika faizleri",
+   "kaynak": "Dünya Bankası Pink Sheet, BLS (makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "emtia_enerji": {
+     "n": 800,
+     "ilk": "1960-01-01",
+     "son": "2026-08-01"
+    },
+    "emtia_metal": {
+     "n": 800,
+     "ilk": "1960-01-01",
+     "son": "2026-08-01"
+    },
+    "abd_tufe": {
+     "n": 798,
+     "ilk": "1960-01-01",
+     "son": "2026-07-01"
+    },
+    "abd_cekirdek": {
+     "n": 798,
+     "ilk": "1960-01-01",
+     "son": "2026-07-01"
+    },
+    "faiz_abd": {
+     "n": 866,
+     "ilk": "1954-07-01",
+     "son": "2026-08-01"
+    },
+    "faiz_ea": {
+     "n": 332,
+     "ilk": "1999-01-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/kuresel_aylik.csv.gz",
+     "git_blob": "aea80648ba200d83615c7aad577d4fbcdcace365"
+    }
+   ]
+  },
+  "nyfed_haftalik.csv.gz": {
+   "sha256": "9f5e6477960a4bb16f1f8c3eb107f731af30693cd51b59389375acceb9f240da",
+   "satir": 1972,
+   "aciklama": "NY Fed petrol fiyatı dinamikleri: Brent'in haftalık log değişimi ve talep / arz / artık payları",
+   "kaynak": "Federal Reserve Bank of New York, Oil Price Dynamics Report (son güncelleme 06.11.2023)",
+   "sutun_aciklama": {
+    "brent": "Brent haftalık log değişimi",
+    "talep": "talep payı",
+    "arz": "arz payı",
+    "artik": "artık"
+   },
+   "kapsam": {
+    "brent": {
+     "n": 1972,
+     "ilk": "1986-01-24",
+     "son": "2023-11-03"
+    },
+    "talep": {
+     "n": 1972,
+     "ilk": "1986-01-24",
+     "son": "2023-11-03"
+    },
+    "arz": {
+     "n": 1972,
+     "ilk": "1986-01-24",
+     "son": "2023-11-03"
+    },
+    "artik": {
+     "n": 1972,
+     "ilk": "1986-01-24",
+     "son": "2023-11-03"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/nyfed/oil_oil_price_dynamics_data_xls.gz",
+     "git_blob": "e8f58d222f5cb2a0bab459ea95af5bafe88bf1b5"
+    }
+   ],
+   "sayfa": "3_1986-today",
+   "ozdeslik_azami_fark": 2.7755575615628914e-17,
+   "not": "Haftalık değerler; kümülatif sayfa (2_2010-today) bu serinin birikimiyle birebir."
+  },
+  "odemeler_aylik.csv.gz": {
+   "sha256": "a5b728aefde454acae49528a8b398e9125f21fd6ee3b445c55b05de82aaccd5a",
+   "satir": 553,
+   "aciklama": "Ödemeler dengesi: cari denge ve enerji kalemleri, aylık, milyon USD",
+   "kaynak": "TCMB ödemeler dengesi istatistikleri (EVDS) — Ödemeler dengesi hattı",
+   "sutun_aciklama": {
+    "hc_enerji_ith": "enerji ithalatı (+), mn USD",
+    "hc_enerji_ihr": "enerji ihracatı, mn USD",
+    "hc_enerji_net": "net enerji (− açık), mn USD"
+   },
+   "kapsam": {
+    "cari": {
+     "n": 432,
+     "ilk": "1975-12-01",
+     "son": "2026-07-01"
+    },
+    "hc_enerji_ith": {
+     "n": 367,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    },
+    "hc_enerji_ihr": {
+     "n": 367,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    },
+    "hc_enerji_net": {
+     "n": 367,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    },
+    "hc_altin_net": {
+     "n": 367,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    },
+    "hc_cekirdek": {
+     "n": 367,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/OdemelerDengesi/data/aylik.csv",
+     "git_blob": "deac96a41230d177323a780e0cb79b2e1230ca90"
+    }
+   ]
+  },
+  "pink_aylik.csv.gz": {
+   "sha256": "0cfb460c134015696330d32d506db66bae9f05e0589260db60e7dc18a1893a91",
+   "satir": 801,
+   "aciklama": "Dünya Bankası Pink Sheet aylık ortalama fiyatlar: ham petrol (Brent, Dubai, WTI, ortalama), Avrupa gazı, LNG",
+   "kaynak": "Dünya Bankası, Commodity Markets (Pink Sheet)",
+   "sutun_aciklama": {
+    "brent": "Crude oil, Brent",
+    "ham_ort": "Crude oil, average",
+    "dubai": "Crude oil, Dubai",
+    "wti": "Crude oil, WTI",
+    "avrupa_gaz": "Natural gas, Europe",
+    "lng_japonya": "Liquefied natural gas, Japan"
+   },
+   "kapsam": {
+    "brent": {
+     "n": 801,
+     "ilk": "1960-01-01",
+     "son": "2026-09-01"
+    },
+    "ham_ort": {
+     "n": 801,
+     "ilk": "1960-01-01",
+     "son": "2026-09-01"
+    },
+    "dubai": {
+     "n": 801,
+     "ilk": "1960-01-01",
+     "son": "2026-09-01"
+    },
+    "wti": {
+     "n": 537,
+     "ilk": "1982-01-01",
+     "son": "2026-09-01"
+    },
+    "avrupa_gaz": {
+     "n": 801,
+     "ilk": "1960-01-01",
+     "son": "2026-09-01"
+    },
+    "lng_japonya": {
+     "n": 597,
+     "ilk": "1977-01-01",
+     "son": "2026-09-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/worldbank/CMO-Historical-Data-Monthly.xlsx.gz",
+     "git_blob": "d9634837b48f9ffa167756d04e0763931668cae3"
+    }
+   ]
+  },
+  "piyasa_2026.csv.gz": {
+   "sha256": "a31d43026fa0b3e5c1513eee40a2939fa4ffd190ebb1123f55f88d76015430f1",
+   "satir": 365,
+   "aciklama": "Bültenin piyasa fotoğrafı: 51 enstrümanın günlük kapanışı (2025-10 → 2026-10-09)",
+   "kaynak": "Yahoo Finance (bülten ölçüm katmanı); döviz kapanışı saatlik bardan (`ortak/fx_kapanis`)",
+   "sutun_aciklama": {
+    "XU100.IS": "BIST 100",
+    "XU030.IS": "BIST 30",
+    "XBANK.IS": "BIST Bankacılık",
+    "XUSIN.IS": "BIST Sınai",
+    "USDTRY=X": "USD/TRY",
+    "EURTRY=X": "EUR/TRY",
+    "GBPTRY=X": "GBP/TRY",
+    "TUR": "Türkiye hisse fonu (TUR)",
+    "^GSPC": "S&P 500",
+    "^NDX": "Nasdaq 100",
+    "^DJI": "Dow Jones",
+    "^RUT": "Russell 2000",
+    "^VIX": "VIX",
+    "^STOXX": "STOXX Europe 600",
+    "^GDAXI": "DAX",
+    "^FCHI": "CAC 40",
+    "^FTSE": "FTSE 100",
+    "FTSEMIB.MI": "FTSE MIB",
+    "^N225": "Nikkei 225",
+    "^HSI": "Hang Seng",
+    "000001.SS": "Şanghay Bileşik",
+    "^IRX": "ABD 13 haftalık bono",
+    "2YY=F": "ABD 2 yıllık (vadeli)",
+    "^FVX": "ABD 5 yıllık",
+    "^TNX": "ABD 10 yıllık",
+    "^TYX": "ABD 30 yıllık",
+    "^MOVE": "MOVE",
+    "DX-Y.NYB": "Dolar endeksi (DXY)",
+    "EURUSD=X": "EUR/USD",
+    "USDJPY=X": "USD/JPY",
+    "GBPUSD=X": "GBP/USD",
+    "USDCHF=X": "USD/CHF",
+    "AUDUSD=X": "AUD/USD",
+    "NZDUSD=X": "NZD/USD",
+    "USDCAD=X": "USD/CAD",
+    "USDSEK=X": "USD/SEK",
+    "USDNOK=X": "USD/NOK",
+    "GC=F": "altın",
+    "SI=F": "gümüş",
+    "PL=F": "platin",
+    "HG=F": "bakır",
+    "BZ=F": "Brent",
+    "CL=F": "WTI",
+    "RB=F": "RBOB benzin",
+    "HO=F": "kalorifer yakıtı (ULSD)",
+    "NG=F": "doğal gaz (Henry Hub)",
+    "HYG": "ABD yüksek getirili kredi fonu (HYG)",
+    "LQD": "ABD yatırım yapılabilir kredi fonu (LQD)",
+    "EMB": "gelişmekte olan ülke dolar tahvili fonu (EMB)",
+    "EEM": "gelişmekte olan piyasa hisse fonu (EEM)",
+    "BTC-USD": "Bitcoin"
+   },
+   "kapsam": {
+    "XU100.IS": {
+     "n": 251,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "XU030.IS": {
+     "n": 251,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "XBANK.IS": {
+     "n": 251,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "XUSIN.IS": {
+     "n": 251,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "USDTRY=X": {
+     "n": 260,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "EURTRY=X": {
+     "n": 260,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "GBPTRY=X": {
+     "n": 257,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "TUR": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "^GSPC": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "^NDX": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "^DJI": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "^RUT": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "^VIX": {
+     "n": 254,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^STOXX": {
+     "n": 251,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^GDAXI": {
+     "n": 254,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^FCHI": {
+     "n": 256,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^FTSE": {
+     "n": 254,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "FTSEMIB.MI": {
+     "n": 254,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^N225": {
+     "n": 243,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^HSI": {
+     "n": 245,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "000001.SS": {
+     "n": 241,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "^IRX": {
+     "n": 252,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "2YY=F": {
+     "n": 248,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "^FVX": {
+     "n": 252,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^TNX": {
+     "n": 252,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^TYX": {
+     "n": 252,
+     "ilk": "2025-10-09",
+     "son": "2026-10-09"
+    },
+    "^MOVE": {
+     "n": 249,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "DX-Y.NYB": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "EURUSD=X": {
+     "n": 255,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "USDJPY=X": {
+     "n": 261,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "GBPUSD=X": {
+     "n": 256,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "USDCHF=X": {
+     "n": 257,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "AUDUSD=X": {
+     "n": 261,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "NZDUSD=X": {
+     "n": 257,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "USDCAD=X": {
+     "n": 257,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "USDSEK=X": {
+     "n": 258,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "USDNOK=X": {
+     "n": 261,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "GC=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "SI=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "PL=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HG=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "BZ=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "CL=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "RB=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HO=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "NG=F": {
+     "n": 250,
+     "ilk": "2025-10-13",
+     "son": "2026-10-09"
+    },
+    "HYG": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "LQD": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "EMB": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "EEM": {
+     "n": 251,
+     "ilk": "2025-10-10",
+     "son": "2026-10-09"
+    },
+    "BTC-USD": {
+     "n": 363,
+     "ilk": "2025-10-12",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "bulten/onbellek/piyasa_ham.json",
+     "git_blob": "27ab0cd9d22f0afefcce2c0e35cd21948372114a"
+    }
+   ],
+   "doviz_kapanis_surumu": "saatlik-1",
+   "kapanis_tanimi": {
+    "USDTRY=X": "İstanbul 18:00",
+    "EURTRY=X": "İstanbul 18:00",
+    "GBPTRY=X": "İstanbul 18:00",
+    "EURUSD=X": "New York 17:00",
+    "USDJPY=X": "New York 17:00",
+    "GBPUSD=X": "New York 17:00",
+    "USDCHF=X": "New York 17:00",
+    "AUDUSD=X": "New York 17:00",
+    "NZDUSD=X": "New York 17:00",
+    "USDCAD=X": "New York 17:00",
+    "USDSEK=X": "New York 17:00",
+    "USDNOK=X": "New York 17:00"
+   },
+   "piyasa_zamani": "2026-10-12T04:19:52",
+   "not": "Vadeli seriler (BZ=F, CL=F, RB=F, HO=F, NG=F) ham ön vade kapanışıdır; vade devri günleri ölçüm katmanında ayıklanır. Getiri satırları (^IRX, ^FVX, ^TNX, ^TYX, 2YY=F) % cinsinden seviye; 2YY=F bayat vadeli kotasyon taşır (bülten kaydı) ve kullanılmaz."
+  },
+  "rezerv_gunluk.csv.gz": {
+   "sha256": "a0c36d89ecc3bbca41d38009cdfae46739525c822dd77108d39e24187f4a3d61",
+   "satir": 946,
+   "aciklama": "TCMB net rezerv, swap hariç net rezerv, brüt rezerv ve altın fiyat etkisinden arındırılmış net döviz alımı",
+   "kaynak": "TCMB analitik bilanço (EVDS) ve uluslararası rezervler — TCMB net rezerv hattı",
+   "sutun_aciklama": {
+    "net_rezerv_usd": "milyar USD",
+    "swap_haric_net_rezerv_usd": "milyar USD",
+    "brut_usd": "milyar USD",
+    "net_doviz_alimi": "günlük, milyar USD (+ alım, − satış)"
+   },
+   "kapsam": {
+    "net_rezerv_usd": {
+     "n": 946,
+     "ilk": "2023-01-02",
+     "son": "2026-10-08"
+    },
+    "swap_haric_net_rezerv_usd": {
+     "n": 946,
+     "ilk": "2023-01-02",
+     "son": "2026-10-08"
+    },
+    "brut_usd": {
+     "n": 939,
+     "ilk": "2023-01-11",
+     "son": "2026-10-08"
+    },
+    "net_doviz_alimi": {
+     "n": 921,
+     "ilk": "2023-01-02",
+     "son": "2026-10-07"
+    },
+    "altin_usd": {
+     "n": 939,
+     "ilk": "2023-01-11",
+     "son": "2026-10-08"
+    },
+    "doviz_usd": {
+     "n": 939,
+     "ilk": "2023-01-11",
+     "son": "2026-10-08"
+    },
+    "altin_fiyat_etkisi": {
+     "n": 921,
+     "ilk": "2023-01-02",
+     "son": "2026-10-07"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/TCMBNetRezerv/gunluk.csv",
+     "git_blob": "fbbae15304269bdaa3762128f854b37e926adb18"
+    }
+   ]
+  },
+  "tufe_aylik.csv.gz": {
+   "sha256": "428ff7932244fec42f48bbda5b802345693bfcff3033635a4ce9ad2a7b177781",
+   "satir": 261,
+   "aciklama": "TÜFE (2025=100), enerji ve çekirdek C göstergeleri, aylık",
+   "kaynak": "TÜİK TÜFE (EVDS) — Enflasyon hattı",
+   "sutun_aciklama": {
+    "enerji": "TÜİK özel kapsamlı enerji göstergesi"
+   },
+   "kapsam": {
+    "tufe": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "enerji": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "cekirdek_c": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "gida": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "hizmet": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "pka_12a": {
+     "n": 165,
+     "ilk": "2013-01-01",
+     "son": "2026-09-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/Enflasyon/data/aylik.csv",
+     "git_blob": "fa21245016f85a3a664af871ad3bd94fe2add730"
+    }
+   ]
+  },
+  "tufe_kalem_aylik.csv.gz": {
+   "sha256": "0c1d839a217bf235da629f5f10bb9cd7866d38a66fbcae5fa16277f074cb9098",
+   "satir": 273,
+   "aciklama": "TÜFE enerji ve akaryakıt kalemleri (2025=100), aylık",
+   "kaynak": "TÜİK TÜFE (TCMB EVDS)",
+   "sutun_aciklama": {
+    "enerji": "TP.FE25.OKTG09",
+    "tufe": "TP.TUKFIY2025.GENEL",
+    "akaryakit": "TP.TUKFIY2025.0722",
+    "motorin": "TP.TUKFIY2025.07221",
+    "benzin": "TP.TUKFIY2025.07222",
+    "otogaz": "TP.TUKFIY2025.07223",
+    "elektrik": "TP.TUKFIY2025.04510",
+    "dogalgaz": "TP.TUKFIY2025.04521",
+    "tupgaz": "TP.TUKFIY2025.04522",
+    "yolcu_tasima": "TP.TUKFIY2025.073",
+    "ulastirma": "TP.TUKFIY2025.07"
+   },
+   "kapsam": {
+    "enerji": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "tufe": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "akaryakit": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "motorin": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "benzin": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "otogaz": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "elektrik": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "dogalgaz": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "tupgaz": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "yolcu_tasima": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    },
+    "ulastirma": {
+     "n": 261,
+     "ilk": "2005-01-01",
+     "son": "2026-09-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/evds/tufe_00.json.gz",
+     "git_blob": "5bfd8581f30b377ed48ce4b600ac5de5122abf94"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/evds/tufe_01.json.gz",
+     "git_blob": "5779b03ad45a566b317799d6f883bde97481ff43"
+    }
+   ]
+  },
+  "usdtry_tcmb_1990.csv.gz": {
+   "sha256": "642d14502e4a2b9f21c72a40d5215c371dea9f2674587b5283b2ef1b6385ae5b",
+   "satir": 9253,
+   "aciklama": "TCMB gösterge kuru (döviz alış), valör tarihli, 1990+",
+   "kaynak": "TCMB EVDS (makro dersi arşivi)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "usdtry_tcmb_valor": {
+     "n": 9253,
+     "ilk": "1990-01-02",
+     "son": "2026-10-01"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/MakroKurFaiz/veri/usdtry_tcmb_gunluk.csv.gz",
+     "git_blob": "2a20344887cf1c61631855f22a68316b6e2d8284"
+    }
+   ]
+  },
+  "yabanci_haftalik.csv.gz": {
+   "sha256": "351ea06d0d99b2af0a316c838303dc79ee6bb4d8480263c84698ee0da340ebd5",
+   "satir": 317,
+   "aciklama": "Yurt dışı yerleşiklerin haftalık hisse senedi ve DİBS net alımı, milyon USD",
+   "kaynak": "TCMB haftalık menkul kıymet istatistikleri (EVDS) — yabancı portföy hattı",
+   "sutun_aciklama": {
+    "hisse": "hisse senedi net alımı, mn USD (+ alım)",
+    "dibs": "DİBS net alımı, mn USD (+ alım)"
+   },
+   "kapsam": {
+    "hisse": {
+     "n": 317,
+     "ilk": "2020-09-11",
+     "son": "2026-10-02"
+    },
+    "dibs": {
+     "n": 317,
+     "ilk": "2020-09-11",
+     "son": "2026-10-02"
+    },
+    "toplam": {
+     "n": 317,
+     "ilk": "2020-09-11",
+     "son": "2026-10-02"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/ForeignHoldings/foreign_holdings_data.csv",
+     "git_blob": "1a5f9378b73b3d6513bef03e1255c8be8580c6c0"
+    }
+   ]
+  },
+  "yahoo_duzeltilmis.csv.gz": {
+   "sha256": "7fde3a3f8e62afbbd75300b6e52d1e9f2119b6dc0dd8f1203fb3ee6f9029416f",
+   "satir": 25101,
+   "aciklama": "Yahoo düzeltilmiş kapanış (temettü ve bölünme)",
+   "kaynak": "Yahoo Finance (yfinance)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "AKBNK_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "AKSEN_IS": {
+     "n": 4202,
+     "ilk": "2010-05-21",
+     "son": "2026-10-09"
+    },
+    "ASELS_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "AYGAZ_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "BIMAS_IS": {
+     "n": 5434,
+     "ilk": "2005-07-22",
+     "son": "2026-10-09"
+    },
+    "BZ_F": {
+     "n": 4779,
+     "ilk": "2007-07-30",
+     "son": "2026-10-09"
+    },
+    "CLEBI_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "CL_F": {
+     "n": 6561,
+     "ilk": "2000-08-23",
+     "son": "2026-10-09"
+    },
+    "CVX": {
+     "n": 16302,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "DAL": {
+     "n": 4891,
+     "ilk": "2007-05-03",
+     "son": "2026-10-09"
+    },
+    "DJI": {
+     "n": 8755,
+     "ilk": "1992-01-02",
+     "son": "2026-10-09"
+    },
+    "EEM": {
+     "n": 5911,
+     "ilk": "2003-04-14",
+     "son": "2026-10-09"
+    },
+    "EMB": {
+     "n": 4731,
+     "ilk": "2007-12-19",
+     "son": "2026-10-09"
+    },
+    "ENJSA_IS": {
+     "n": 2188,
+     "ilk": "2018-02-08",
+     "son": "2026-10-09"
+    },
+    "EREGL_IS": {
+     "n": 6791,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "EWG": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWJ": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWT": {
+     "n": 6613,
+     "ilk": "2000-06-23",
+     "son": "2026-10-09"
+    },
+    "EWU": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWW": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWY": {
+     "n": 6642,
+     "ilk": "2000-05-12",
+     "son": "2026-10-09"
+    },
+    "EWZ": {
+     "n": 6599,
+     "ilk": "2000-07-14",
+     "son": "2026-10-09"
+    },
+    "EZU": {
+     "n": 6588,
+     "ilk": "2000-07-31",
+     "son": "2026-10-09"
+    },
+    "FROTO_IS": {
+     "n": 6791,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "FVX": {
+     "n": 16181,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "FXI": {
+     "n": 5536,
+     "ilk": "2004-10-08",
+     "son": "2026-10-09"
+    },
+    "GARAN_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "GSPC": {
+     "n": 24811,
+     "ilk": "1927-12-30",
+     "son": "2026-10-09"
+    },
+    "GVZ": {
+     "n": 4618,
+     "ilk": "2008-06-03",
+     "son": "2026-10-09"
+    },
+    "HYG": {
+     "n": 4907,
+     "ilk": "2007-04-11",
+     "son": "2026-10-09"
+    },
+    "IEF": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "INDA": {
+     "n": 3692,
+     "ilk": "2012-02-03",
+     "son": "2026-10-09"
+    },
+    "IRX": {
+     "n": 16678,
+     "ilk": "1960-01-04",
+     "son": "2026-10-09"
+    },
+    "ITA": {
+     "n": 5140,
+     "ilk": "2006-05-05",
+     "son": "2026-10-09"
+    },
+    "IXIC": {
+     "n": 14037,
+     "ilk": "1971-02-05",
+     "son": "2026-10-09"
+    },
+    "IYT": {
+     "n": 5729,
+     "ilk": "2004-01-02",
+     "son": "2026-10-09"
+    },
+    "JETS": {
+     "n": 2879,
+     "ilk": "2015-04-30",
+     "son": "2026-10-09"
+    },
+    "JNK": {
+     "n": 4742,
+     "ilk": "2007-12-04",
+     "son": "2026-10-09"
+    },
+    "KCHOL_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "KSA": {
+     "n": 2782,
+     "ilk": "2015-09-17",
+     "son": "2026-10-09"
+    },
+    "LQD": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "LUV": {
+     "n": 11789,
+     "ilk": "1980-01-02",
+     "son": "2026-10-09"
+    },
+    "MGROS_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "MOVE": {
+     "n": 5913,
+     "ilk": "2002-11-12",
+     "son": "2026-10-09"
+    },
+    "OVX": {
+     "n": 4886,
+     "ilk": "2007-05-10",
+     "son": "2026-10-09"
+    },
+    "PETKM_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "PGSUS_IS": {
+     "n": 3377,
+     "ilk": "2013-04-26",
+     "son": "2026-10-09"
+    },
+    "QAT": {
+     "n": 3130,
+     "ilk": "2014-05-01",
+     "son": "2026-10-09"
+    },
+    "RUT": {
+     "n": 9845,
+     "ilk": "1987-09-10",
+     "son": "2026-10-09"
+    },
+    "SHY": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "SISE_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TAVHL_IS": {
+     "n": 5022,
+     "ilk": "2007-02-26",
+     "son": "2026-10-09"
+    },
+    "THYAO_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TIP": {
+     "n": 5747,
+     "ilk": "2003-12-05",
+     "son": "2026-10-09"
+    },
+    "TLT": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "TNX": {
+     "n": 16181,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "TOASO_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TUPRS_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TUR": {
+     "n": 4664,
+     "ilk": "2008-03-28",
+     "son": "2026-10-09"
+    },
+    "TYX": {
+     "n": 12439,
+     "ilk": "1977-02-15",
+     "son": "2026-10-09"
+    },
+    "UAE": {
+     "n": 3130,
+     "ilk": "2014-05-01",
+     "son": "2026-10-09"
+    },
+    "UAL": {
+     "n": 5202,
+     "ilk": "2006-02-06",
+     "son": "2026-10-09"
+    },
+    "ULKER_IS": {
+     "n": 5800,
+     "ilk": "2004-02-25",
+     "son": "2026-10-09"
+    },
+    "VIX": {
+     "n": 9263,
+     "ilk": "1990-01-02",
+     "son": "2026-10-09"
+    },
+    "XAR": {
+     "n": 3779,
+     "ilk": "2011-09-29",
+     "son": "2026-10-09"
+    },
+    "XBANK_IS": {
+     "n": 7424,
+     "ilk": "1997-01-02",
+     "son": "2026-10-09"
+    },
+    "XLB": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLE": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLF": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLI": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLK": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLP": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLRE": {
+     "n": 2767,
+     "ilk": "2015-10-08",
+     "son": "2026-10-09"
+    },
+    "XLU": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLV": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLY": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XOM": {
+     "n": 16302,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "XOP": {
+     "n": 5107,
+     "ilk": "2006-06-22",
+     "son": "2026-10-09"
+    },
+    "XU030_IS": {
+     "n": 7424,
+     "ilk": "1997-01-02",
+     "son": "2026-10-09"
+    },
+    "XU100_IS": {
+     "n": 7312,
+     "ilk": "1997-07-01",
+     "son": "2026-10-09"
+    },
+    "XUSIN_IS": {
+     "n": 8419,
+     "ilk": "1993-01-04",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/AKBNK_IS.csv.gz",
+     "git_blob": "fc8fe27b6211e83242c7cc2b71fab5889beca4a3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/AKSEN_IS.csv.gz",
+     "git_blob": "549b54a7963f5322b0b458a4f86a1b138458dcc4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ASELS_IS.csv.gz",
+     "git_blob": "dcf571fc0ba83f9f58917f1ed295ea5553811cb9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/AYGAZ_IS.csv.gz",
+     "git_blob": "9b8df5e6acc5e130fe7810ca4ca639ad0fb3dbdc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/BIMAS_IS.csv.gz",
+     "git_blob": "243c87dafe9f48823cf73dfdb45ae3d67f5b0541"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/BZ_F.csv.gz",
+     "git_blob": "e733b8af2dba90c1ff1fff79947a1e4f66cbe704"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/CLEBI_IS.csv.gz",
+     "git_blob": "9d393c416f30e21e8e4dcfd4375c06840f5ac0ce"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/CL_F.csv.gz",
+     "git_blob": "559f18c429baa2fc74c267b1305d6b9518d85048"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/CVX.csv.gz",
+     "git_blob": "f5bd48555e38467e9e8eb3db5922d40f90c8d037"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/DAL.csv.gz",
+     "git_blob": "ca8507a460d4ca8fd2334524530d315a85c0bd30"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/DJI.csv.gz",
+     "git_blob": "6ec04d8e6b57a78954f49b1be22bf37ba94f59ff"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EEM.csv.gz",
+     "git_blob": "f5ebeb1a2b8b5c7e49851589ed74acb85c6a62de"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EMB.csv.gz",
+     "git_blob": "b5baa604f95f79fd5cfd737f0897242b21a2b351"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ENJSA_IS.csv.gz",
+     "git_blob": "501b7d6ac10d93720f2c518d91efc156080cc563"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EREGL_IS.csv.gz",
+     "git_blob": "5fcd597f71775f1c93c73ed9b81e777ce9253513"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWG.csv.gz",
+     "git_blob": "049a080d50f738d2aea2d8af531003b0e3204b04"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWJ.csv.gz",
+     "git_blob": "19e89bb7bc0b46d40ec74f8540862a643062ce06"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWT.csv.gz",
+     "git_blob": "08fc66e240fd56dd036fac16a1e5112dec2dc651"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWU.csv.gz",
+     "git_blob": "3584c5af4f4240e35f419e6713e0168ba321380a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWW.csv.gz",
+     "git_blob": "fce27f40e69e6766ec31fb110f14ad71a1afb14e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWY.csv.gz",
+     "git_blob": "08c1b67a3b3023857b69af70500ad087263c460f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWZ.csv.gz",
+     "git_blob": "444976e927995ae20a4a3cc4a87c3205749e9a06"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EZU.csv.gz",
+     "git_blob": "4b51f24c9ec361ab53feb6f9e9f923ee03e90345"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/FROTO_IS.csv.gz",
+     "git_blob": "e5b7e052fee2c5c1387ee32c41ea8708d440d293"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/FVX.csv.gz",
+     "git_blob": "4b9176bf9ba1a7818daaff0e991def2f277f40bb"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/FXI.csv.gz",
+     "git_blob": "3e00a21af84e6c6c1649ccd61a90fef366d3e88c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/GARAN_IS.csv.gz",
+     "git_blob": "1ce7aca14844bd17cefc73428e3a5b1834f8220f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/GSPC.csv.gz",
+     "git_blob": "db76ddcf2299fd757ace9ce1789c3c87910ebc3a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/GVZ.csv.gz",
+     "git_blob": "bcb43ed6f9a1fc8139aa042fe3084d2e10288290"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/HYG.csv.gz",
+     "git_blob": "67b30bf1075f272082a87d9ee9adf72cc398d01d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IEF.csv.gz",
+     "git_blob": "d81c5e0e12dd10c43e1aff96ece101f214146027"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/INDA.csv.gz",
+     "git_blob": "6d7bcbd505ca72e2ea10316a3b50b6e196edb2ec"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IRX.csv.gz",
+     "git_blob": "e52fa62b9a7968f3ec9280a97ef0ad2860b28c37"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ITA.csv.gz",
+     "git_blob": "16a70ffb073a1248d4e60878b2927af8fb73eb42"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IXIC.csv.gz",
+     "git_blob": "ed7f7c470caafec2dd07cdf4457bcbd7dc6ae5d2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IYT.csv.gz",
+     "git_blob": "01b93636f491fe93dc382e77dc4e408923fdd535"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/JETS.csv.gz",
+     "git_blob": "19badfc1672344f3d02fd52cdbdca36b11994807"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/JNK.csv.gz",
+     "git_blob": "33f96d69c8565e7f71212e73a834bb160a251a30"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/KCHOL_IS.csv.gz",
+     "git_blob": "aa758944b44694e33c37214e7560bc8e832d7099"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/KSA.csv.gz",
+     "git_blob": "545715456014e719de71809dc10d28e1427f886c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/LQD.csv.gz",
+     "git_blob": "b4c84fb645731e1019f61bd8cadd8fea2bfb6f3e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/LUV.csv.gz",
+     "git_blob": "22d8abf0b31148df573e3c88ada1c1b89e68fbbc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/MGROS_IS.csv.gz",
+     "git_blob": "32c0d29ba1a4faf7e100e5d703d0367433602785"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/MOVE.csv.gz",
+     "git_blob": "786aeb827aa91f69ec82fcb2c06b65e67955618f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/OVX.csv.gz",
+     "git_blob": "ae6839743528c16b9c0ea51f367b287dd279bd52"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/PETKM_IS.csv.gz",
+     "git_blob": "e6c40f76823fe3da3c5485906513465b2fda4883"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/PGSUS_IS.csv.gz",
+     "git_blob": "ec1b8ee5e505e26000e4339e4ab06e24caa28219"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/QAT.csv.gz",
+     "git_blob": "26ecf343419779bf8306c1546c2a18dccfc44f36"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/RUT.csv.gz",
+     "git_blob": "c906e6e738856df622b7612c6a3e0052aec1b788"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/SHY.csv.gz",
+     "git_blob": "4bea117d136c46ca2bedee59320cb054c6575d59"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/SISE_IS.csv.gz",
+     "git_blob": "aed8c8ff8f715d49fed928b25514fd34acc3abbf"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TAVHL_IS.csv.gz",
+     "git_blob": "02ee4210d03344e41035d506973f4174cb1f1a6d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/THYAO_IS.csv.gz",
+     "git_blob": "d3048e49ebb0dfee148fcab0051ca4c22a78867a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TIP.csv.gz",
+     "git_blob": "52ddbbb21c56ee6db8ef5eaddc9e31dfd8efaf54"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TLT.csv.gz",
+     "git_blob": "274a7f72346a0603a440f8f8a467380ed6bb0027"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TNX.csv.gz",
+     "git_blob": "1e76a49edc0fcfa378efcefb543b4eb4d9ffd8e5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TOASO_IS.csv.gz",
+     "git_blob": "401cc1943e598b67572ccbc53e9569bbab84e489"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TUPRS_IS.csv.gz",
+     "git_blob": "93d33fcb6c65b429a588425921b63f1233c6e9d3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TUR.csv.gz",
+     "git_blob": "b362c02d71946fbfe0fb910ef7d8f2fc48d37701"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TYX.csv.gz",
+     "git_blob": "ef7e327175e9638d01b9f38832b190ee48935555"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/UAE.csv.gz",
+     "git_blob": "ed943a5bc42d3e95a5d7ff54dea9a1933f7c4a83"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/UAL.csv.gz",
+     "git_blob": "d3ba1289b0de0b9b5aa11db44c2e3546a502c9e1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ULKER_IS.csv.gz",
+     "git_blob": "e4165d61ca51fad339b783e0de6b336a53763e33"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/VIX.csv.gz",
+     "git_blob": "3d15bdc28235bd6b4366933acaf10099befd361a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XAR.csv.gz",
+     "git_blob": "454fa9760e9cd9aec5ac713c30fad728656bffc3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XBANK_IS.csv.gz",
+     "git_blob": "a904455e043f3fef9042313df705308cfb917c20"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLB.csv.gz",
+     "git_blob": "3c7c4597ad1446525b6ee1337c867ffec6651e5c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLE.csv.gz",
+     "git_blob": "d194ad8a6d877859d4bdd52c4980e7dff7276cb4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLF.csv.gz",
+     "git_blob": "0049e811b148b0cd0a75e00316759a418d49e369"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLI.csv.gz",
+     "git_blob": "a7e11f8ab3fa3907da20a14de6e335082af7ad9d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLK.csv.gz",
+     "git_blob": "07617dd970a6055d1bbb72f017ad988831664309"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLP.csv.gz",
+     "git_blob": "2f97a2f8a9760b1010c5fc8dd306300cc2a4b893"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLRE.csv.gz",
+     "git_blob": "3ad5cd729c94e228fa15c2cf107567b217e110bc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLU.csv.gz",
+     "git_blob": "aa678571db8569d97fe96682fe4ddab0e354caa6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLV.csv.gz",
+     "git_blob": "989bd354a63692361b65c0c939a376941271dc06"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLY.csv.gz",
+     "git_blob": "313dfdd9766150425d8b5bc69b25d15ab07c35ca"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XOM.csv.gz",
+     "git_blob": "bb044c5542db543bcaa3060aad949e001a095dfa"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XOP.csv.gz",
+     "git_blob": "f73556915a943be611aed221ffd18e1a1a7888a5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XU030_IS.csv.gz",
+     "git_blob": "995124406055f3a7a86ec88eb3771efb682b94e5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XU100_IS.csv.gz",
+     "git_blob": "924199a3bbe54833dd17c437554db9304ff3eeb7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XUSIN_IS.csv.gz",
+     "git_blob": "d87bd49796f5e288a8035c9c97a74be863ef3ff6"
+    }
+   ]
+  },
+  "yahoo_kapanis.csv.gz": {
+   "sha256": "e00aa6a945dcc833c8c4e904cc1a3cfb2789b792a914c77b508a317ccc2fbf90",
+   "satir": 25101,
+   "aciklama": "Yahoo günlük kapanış (borsanın işlem günü)",
+   "kaynak": "Yahoo Finance (yfinance)",
+   "sutun_aciklama": {},
+   "kapsam": {
+    "AKBNK_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "AKSEN_IS": {
+     "n": 4202,
+     "ilk": "2010-05-21",
+     "son": "2026-10-09"
+    },
+    "ASELS_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "AYGAZ_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "BIMAS_IS": {
+     "n": 5434,
+     "ilk": "2005-07-22",
+     "son": "2026-10-09"
+    },
+    "BZ_F": {
+     "n": 4779,
+     "ilk": "2007-07-30",
+     "son": "2026-10-09"
+    },
+    "CLEBI_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "CL_F": {
+     "n": 6561,
+     "ilk": "2000-08-23",
+     "son": "2026-10-09"
+    },
+    "CVX": {
+     "n": 16302,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "DAL": {
+     "n": 4891,
+     "ilk": "2007-05-03",
+     "son": "2026-10-09"
+    },
+    "DJI": {
+     "n": 8755,
+     "ilk": "1992-01-02",
+     "son": "2026-10-09"
+    },
+    "EEM": {
+     "n": 5911,
+     "ilk": "2003-04-14",
+     "son": "2026-10-09"
+    },
+    "EMB": {
+     "n": 4731,
+     "ilk": "2007-12-19",
+     "son": "2026-10-09"
+    },
+    "ENJSA_IS": {
+     "n": 2188,
+     "ilk": "2018-02-08",
+     "son": "2026-10-09"
+    },
+    "EREGL_IS": {
+     "n": 6791,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "EWG": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWJ": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWT": {
+     "n": 6613,
+     "ilk": "2000-06-23",
+     "son": "2026-10-09"
+    },
+    "EWU": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWW": {
+     "n": 7691,
+     "ilk": "1996-03-18",
+     "son": "2026-10-09"
+    },
+    "EWY": {
+     "n": 6642,
+     "ilk": "2000-05-12",
+     "son": "2026-10-09"
+    },
+    "EWZ": {
+     "n": 6599,
+     "ilk": "2000-07-14",
+     "son": "2026-10-09"
+    },
+    "EZU": {
+     "n": 6588,
+     "ilk": "2000-07-31",
+     "son": "2026-10-09"
+    },
+    "FROTO_IS": {
+     "n": 6791,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "FVX": {
+     "n": 16181,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "FXI": {
+     "n": 5536,
+     "ilk": "2004-10-08",
+     "son": "2026-10-09"
+    },
+    "GARAN_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "GSPC": {
+     "n": 24811,
+     "ilk": "1927-12-30",
+     "son": "2026-10-09"
+    },
+    "GVZ": {
+     "n": 4618,
+     "ilk": "2008-06-03",
+     "son": "2026-10-09"
+    },
+    "HYG": {
+     "n": 4907,
+     "ilk": "2007-04-11",
+     "son": "2026-10-09"
+    },
+    "IEF": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "INDA": {
+     "n": 3692,
+     "ilk": "2012-02-03",
+     "son": "2026-10-09"
+    },
+    "IRX": {
+     "n": 16678,
+     "ilk": "1960-01-04",
+     "son": "2026-10-09"
+    },
+    "ITA": {
+     "n": 5140,
+     "ilk": "2006-05-05",
+     "son": "2026-10-09"
+    },
+    "IXIC": {
+     "n": 14037,
+     "ilk": "1971-02-05",
+     "son": "2026-10-09"
+    },
+    "IYT": {
+     "n": 5729,
+     "ilk": "2004-01-02",
+     "son": "2026-10-09"
+    },
+    "JETS": {
+     "n": 2879,
+     "ilk": "2015-04-30",
+     "son": "2026-10-09"
+    },
+    "JNK": {
+     "n": 4742,
+     "ilk": "2007-12-04",
+     "son": "2026-10-09"
+    },
+    "KCHOL_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "KSA": {
+     "n": 2782,
+     "ilk": "2015-09-17",
+     "son": "2026-10-09"
+    },
+    "LQD": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "LUV": {
+     "n": 11789,
+     "ilk": "1980-01-02",
+     "son": "2026-10-09"
+    },
+    "MGROS_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "MOVE": {
+     "n": 5913,
+     "ilk": "2002-11-12",
+     "son": "2026-10-09"
+    },
+    "OVX": {
+     "n": 4886,
+     "ilk": "2007-05-10",
+     "son": "2026-10-09"
+    },
+    "PETKM_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "PGSUS_IS": {
+     "n": 3377,
+     "ilk": "2013-04-26",
+     "son": "2026-10-09"
+    },
+    "QAT": {
+     "n": 3130,
+     "ilk": "2014-05-01",
+     "son": "2026-10-09"
+    },
+    "RUT": {
+     "n": 9845,
+     "ilk": "1987-09-10",
+     "son": "2026-10-09"
+    },
+    "SHY": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "SISE_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TAVHL_IS": {
+     "n": 5022,
+     "ilk": "2007-02-26",
+     "son": "2026-10-09"
+    },
+    "THYAO_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TIP": {
+     "n": 5747,
+     "ilk": "2003-12-05",
+     "son": "2026-10-09"
+    },
+    "TLT": {
+     "n": 6089,
+     "ilk": "2002-07-30",
+     "son": "2026-10-09"
+    },
+    "TNX": {
+     "n": 16181,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "TOASO_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TUPRS_IS": {
+     "n": 6790,
+     "ilk": "2000-05-10",
+     "son": "2026-10-09"
+    },
+    "TUR": {
+     "n": 4664,
+     "ilk": "2008-03-28",
+     "son": "2026-10-09"
+    },
+    "TYX": {
+     "n": 12439,
+     "ilk": "1977-02-15",
+     "son": "2026-10-09"
+    },
+    "UAE": {
+     "n": 3130,
+     "ilk": "2014-05-01",
+     "son": "2026-10-09"
+    },
+    "UAL": {
+     "n": 5202,
+     "ilk": "2006-02-06",
+     "son": "2026-10-09"
+    },
+    "ULKER_IS": {
+     "n": 5800,
+     "ilk": "2004-02-25",
+     "son": "2026-10-09"
+    },
+    "VIX": {
+     "n": 9263,
+     "ilk": "1990-01-02",
+     "son": "2026-10-09"
+    },
+    "XAR": {
+     "n": 3779,
+     "ilk": "2011-09-29",
+     "son": "2026-10-09"
+    },
+    "XBANK_IS": {
+     "n": 7424,
+     "ilk": "1997-01-02",
+     "son": "2026-10-09"
+    },
+    "XLB": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLE": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLF": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLI": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLK": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLP": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLRE": {
+     "n": 2767,
+     "ilk": "2015-10-08",
+     "son": "2026-10-09"
+    },
+    "XLU": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLV": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XLY": {
+     "n": 6992,
+     "ilk": "1998-12-22",
+     "son": "2026-10-09"
+    },
+    "XOM": {
+     "n": 16302,
+     "ilk": "1962-01-02",
+     "son": "2026-10-09"
+    },
+    "XOP": {
+     "n": 5107,
+     "ilk": "2006-06-22",
+     "son": "2026-10-09"
+    },
+    "XU030_IS": {
+     "n": 7424,
+     "ilk": "1997-01-02",
+     "son": "2026-10-09"
+    },
+    "XU100_IS": {
+     "n": 7312,
+     "ilk": "1997-07-01",
+     "son": "2026-10-09"
+    },
+    "XUSIN_IS": {
+     "n": 8419,
+     "ilk": "1993-01-04",
+     "son": "2026-10-09"
+    }
+   },
+   "kaynak_dosyalar": [
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/AKBNK_IS.csv.gz",
+     "git_blob": "fc8fe27b6211e83242c7cc2b71fab5889beca4a3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/AKSEN_IS.csv.gz",
+     "git_blob": "549b54a7963f5322b0b458a4f86a1b138458dcc4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ASELS_IS.csv.gz",
+     "git_blob": "dcf571fc0ba83f9f58917f1ed295ea5553811cb9"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/AYGAZ_IS.csv.gz",
+     "git_blob": "9b8df5e6acc5e130fe7810ca4ca639ad0fb3dbdc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/BIMAS_IS.csv.gz",
+     "git_blob": "243c87dafe9f48823cf73dfdb45ae3d67f5b0541"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/BZ_F.csv.gz",
+     "git_blob": "e733b8af2dba90c1ff1fff79947a1e4f66cbe704"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/CLEBI_IS.csv.gz",
+     "git_blob": "9d393c416f30e21e8e4dcfd4375c06840f5ac0ce"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/CL_F.csv.gz",
+     "git_blob": "559f18c429baa2fc74c267b1305d6b9518d85048"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/CVX.csv.gz",
+     "git_blob": "f5bd48555e38467e9e8eb3db5922d40f90c8d037"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/DAL.csv.gz",
+     "git_blob": "ca8507a460d4ca8fd2334524530d315a85c0bd30"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/DJI.csv.gz",
+     "git_blob": "6ec04d8e6b57a78954f49b1be22bf37ba94f59ff"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EEM.csv.gz",
+     "git_blob": "f5ebeb1a2b8b5c7e49851589ed74acb85c6a62de"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EMB.csv.gz",
+     "git_blob": "b5baa604f95f79fd5cfd737f0897242b21a2b351"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ENJSA_IS.csv.gz",
+     "git_blob": "501b7d6ac10d93720f2c518d91efc156080cc563"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EREGL_IS.csv.gz",
+     "git_blob": "5fcd597f71775f1c93c73ed9b81e777ce9253513"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWG.csv.gz",
+     "git_blob": "049a080d50f738d2aea2d8af531003b0e3204b04"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWJ.csv.gz",
+     "git_blob": "19e89bb7bc0b46d40ec74f8540862a643062ce06"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWT.csv.gz",
+     "git_blob": "08fc66e240fd56dd036fac16a1e5112dec2dc651"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWU.csv.gz",
+     "git_blob": "3584c5af4f4240e35f419e6713e0168ba321380a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWW.csv.gz",
+     "git_blob": "fce27f40e69e6766ec31fb110f14ad71a1afb14e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWY.csv.gz",
+     "git_blob": "08c1b67a3b3023857b69af70500ad087263c460f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EWZ.csv.gz",
+     "git_blob": "444976e927995ae20a4a3cc4a87c3205749e9a06"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/EZU.csv.gz",
+     "git_blob": "4b51f24c9ec361ab53feb6f9e9f923ee03e90345"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/FROTO_IS.csv.gz",
+     "git_blob": "e5b7e052fee2c5c1387ee32c41ea8708d440d293"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/FVX.csv.gz",
+     "git_blob": "4b9176bf9ba1a7818daaff0e991def2f277f40bb"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/FXI.csv.gz",
+     "git_blob": "3e00a21af84e6c6c1649ccd61a90fef366d3e88c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/GARAN_IS.csv.gz",
+     "git_blob": "1ce7aca14844bd17cefc73428e3a5b1834f8220f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/GSPC.csv.gz",
+     "git_blob": "db76ddcf2299fd757ace9ce1789c3c87910ebc3a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/GVZ.csv.gz",
+     "git_blob": "bcb43ed6f9a1fc8139aa042fe3084d2e10288290"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/HYG.csv.gz",
+     "git_blob": "67b30bf1075f272082a87d9ee9adf72cc398d01d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IEF.csv.gz",
+     "git_blob": "d81c5e0e12dd10c43e1aff96ece101f214146027"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/INDA.csv.gz",
+     "git_blob": "6d7bcbd505ca72e2ea10316a3b50b6e196edb2ec"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IRX.csv.gz",
+     "git_blob": "e52fa62b9a7968f3ec9280a97ef0ad2860b28c37"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ITA.csv.gz",
+     "git_blob": "16a70ffb073a1248d4e60878b2927af8fb73eb42"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IXIC.csv.gz",
+     "git_blob": "ed7f7c470caafec2dd07cdf4457bcbd7dc6ae5d2"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/IYT.csv.gz",
+     "git_blob": "01b93636f491fe93dc382e77dc4e408923fdd535"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/JETS.csv.gz",
+     "git_blob": "19badfc1672344f3d02fd52cdbdca36b11994807"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/JNK.csv.gz",
+     "git_blob": "33f96d69c8565e7f71212e73a834bb160a251a30"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/KCHOL_IS.csv.gz",
+     "git_blob": "aa758944b44694e33c37214e7560bc8e832d7099"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/KSA.csv.gz",
+     "git_blob": "545715456014e719de71809dc10d28e1427f886c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/LQD.csv.gz",
+     "git_blob": "b4c84fb645731e1019f61bd8cadd8fea2bfb6f3e"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/LUV.csv.gz",
+     "git_blob": "22d8abf0b31148df573e3c88ada1c1b89e68fbbc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/MGROS_IS.csv.gz",
+     "git_blob": "32c0d29ba1a4faf7e100e5d703d0367433602785"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/MOVE.csv.gz",
+     "git_blob": "786aeb827aa91f69ec82fcb2c06b65e67955618f"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/OVX.csv.gz",
+     "git_blob": "ae6839743528c16b9c0ea51f367b287dd279bd52"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/PETKM_IS.csv.gz",
+     "git_blob": "e6c40f76823fe3da3c5485906513465b2fda4883"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/PGSUS_IS.csv.gz",
+     "git_blob": "ec1b8ee5e505e26000e4339e4ab06e24caa28219"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/QAT.csv.gz",
+     "git_blob": "26ecf343419779bf8306c1546c2a18dccfc44f36"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/RUT.csv.gz",
+     "git_blob": "c906e6e738856df622b7612c6a3e0052aec1b788"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/SHY.csv.gz",
+     "git_blob": "4bea117d136c46ca2bedee59320cb054c6575d59"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/SISE_IS.csv.gz",
+     "git_blob": "aed8c8ff8f715d49fed928b25514fd34acc3abbf"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TAVHL_IS.csv.gz",
+     "git_blob": "02ee4210d03344e41035d506973f4174cb1f1a6d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/THYAO_IS.csv.gz",
+     "git_blob": "d3048e49ebb0dfee148fcab0051ca4c22a78867a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TIP.csv.gz",
+     "git_blob": "52ddbbb21c56ee6db8ef5eaddc9e31dfd8efaf54"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TLT.csv.gz",
+     "git_blob": "274a7f72346a0603a440f8f8a467380ed6bb0027"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TNX.csv.gz",
+     "git_blob": "1e76a49edc0fcfa378efcefb543b4eb4d9ffd8e5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TOASO_IS.csv.gz",
+     "git_blob": "401cc1943e598b67572ccbc53e9569bbab84e489"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TUPRS_IS.csv.gz",
+     "git_blob": "93d33fcb6c65b429a588425921b63f1233c6e9d3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TUR.csv.gz",
+     "git_blob": "b362c02d71946fbfe0fb910ef7d8f2fc48d37701"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/TYX.csv.gz",
+     "git_blob": "ef7e327175e9638d01b9f38832b190ee48935555"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/UAE.csv.gz",
+     "git_blob": "ed943a5bc42d3e95a5d7ff54dea9a1933f7c4a83"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/UAL.csv.gz",
+     "git_blob": "d3ba1289b0de0b9b5aa11db44c2e3546a502c9e1"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/ULKER_IS.csv.gz",
+     "git_blob": "e4165d61ca51fad339b783e0de6b336a53763e33"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/VIX.csv.gz",
+     "git_blob": "3d15bdc28235bd6b4366933acaf10099befd361a"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XAR.csv.gz",
+     "git_blob": "454fa9760e9cd9aec5ac713c30fad728656bffc3"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XBANK_IS.csv.gz",
+     "git_blob": "a904455e043f3fef9042313df705308cfb917c20"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLB.csv.gz",
+     "git_blob": "3c7c4597ad1446525b6ee1337c867ffec6651e5c"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLE.csv.gz",
+     "git_blob": "d194ad8a6d877859d4bdd52c4980e7dff7276cb4"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLF.csv.gz",
+     "git_blob": "0049e811b148b0cd0a75e00316759a418d49e369"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLI.csv.gz",
+     "git_blob": "a7e11f8ab3fa3907da20a14de6e335082af7ad9d"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLK.csv.gz",
+     "git_blob": "07617dd970a6055d1bbb72f017ad988831664309"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLP.csv.gz",
+     "git_blob": "2f97a2f8a9760b1010c5fc8dd306300cc2a4b893"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLRE.csv.gz",
+     "git_blob": "3ad5cd729c94e228fa15c2cf107567b217e110bc"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLU.csv.gz",
+     "git_blob": "aa678571db8569d97fe96682fe4ddab0e354caa6"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLV.csv.gz",
+     "git_blob": "989bd354a63692361b65c0c939a376941271dc06"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XLY.csv.gz",
+     "git_blob": "313dfdd9766150425d8b5bc69b25d15ab07c35ca"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XOM.csv.gz",
+     "git_blob": "bb044c5542db543bcaa3060aad949e001a095dfa"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XOP.csv.gz",
+     "git_blob": "f73556915a943be611aed221ffd18e1a1a7888a5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XU030_IS.csv.gz",
+     "git_blob": "995124406055f3a7a86ec88eb3771efb682b94e5"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XU100_IS.csv.gz",
+     "git_blob": "924199a3bbe54833dd17c437554db9304ff3eeb7"
+    },
+    {
+     "yol": "Aktarılacak Projeler/BrentSenaryo/veri/ham/yahoo/XUSIN_IS.csv.gz",
+     "git_blob": "d87bd49796f5e288a8035c9c97a74be863ef3ff6"
+    }
+   ]
+  }
+ }
+}
