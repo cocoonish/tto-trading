@@ -234,6 +234,10 @@ def _yaz(fig, ad: str, yukseklik: int = 500, ust: int = 96) -> None:
     html = fig.to_html(include_plotlyjs=PLOTLY_JS, full_html=True,
                        config={"displayModeBar": False, "responsive": True})
     html = html.replace("<head>", f'<head><meta name="tto-olcum-ozu" content="{olcum_ozu()}">', 1)
+    # Tarayıcının 8 piksellik gövde boşluğu sıfırlanır: yoksa belge figürün ilan ettiği yükseklikten
+    # 8 piksel uzun olur, gömme çerçevesinin içinde kaydırma doğar ve çizim 352 yerine 336 piksele iner.
+    html = html.replace("<style>html, body {height: 100%;}</style>",
+                        "<style>html, body {margin: 0; padding: 0; height: 100%; background: #fff;}</style>", 1)
     (CIKTI / ad).write_text(html, encoding="utf-8")
     print(f"  ✓ {(CIKTI / ad).relative_to(KOK)}")
     for s in tasan_satirlar(fig.layout.title.text or ""):     # uyarı: çizim düşmez, satır adıyla görünür

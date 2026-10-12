@@ -1122,6 +1122,23 @@ sina("harf.mjs ↔ buyuk_harf_baglam.py: yabancı ad listesi aynı; eklenti KaTe
      and sorted(__import__("re").findall(r"'([^']+)'", _hm_liste.group(1))) == sorted(_bhm.YABANCI)
      and __import__("re").search(r"rehypeKatex,[^\]]*\],\s*rehypeHarfKoru", _ac) is not None,
      f"harf.mjs {_hm_liste.group(1) if _hm_liste else None} · py {_bhm.YABANCI}")
+# İşaretli yüzde satır sonunda bölünmez (12.10.2026): Unicode satır kırma kuralı
+# eksi ile yüzde arasında kırmayı yasaklamaz, dar ekranda "−" satır sonunda kalır
+# ve alt satırdaki "%15,1" artı okunur. Kural üç parçalı ve üçü de sorulur:
+# eklenti kayıtlı, kalıp işaretli yüzdeyi tutuyor (işaretsizi değil), CSS kabı
+# kırılmaz yapıyor. Biri düşerse sınama düşer; kural yalnız yorumda kalmaz.
+_im = (_SITE / "src/lib/isaret.mjs").read_text(encoding="utf-8")
+_im_kalip = __import__("re").search(r"export const ISARETLI_YUZDE = /(.+?)/g;", _im)
+_gcss = (_SITE / "src/styles/global.css").read_text(encoding="utf-8")
+_ik = __import__("re").compile(_im_kalip.group(1)) if _im_kalip else None
+sina("isaret.mjs: işaretli yüzde kabı kayıtlı, kalıbı doğru, CSS'i kırılmaz",
+     _ik is not None
+     and [m.group(0) for m in _ik.finditer("−%15,1 · +%3 · %4,8 · −4,8 · +%1.234,5")]
+         == ["−%15,1", "+%3", "+%1.234,5"]
+     and "import { rehypeIsaretKoru } from './src/lib/isaret.mjs'" in _ac
+     and __import__("re").search(r"rehypePlugins:\s*\[\s*\[rehypeKatex,[^\]]*\],[^\]]*rehypeIsaretKoru", _ac) is not None
+     and __import__("re").search(r"\.isaret-koru\s*\{\s*white-space:\s*nowrap;\s*\}", _gcss) is not None,
+     f"kalıp {_im_kalip.group(1) if _im_kalip else None}")
 def _gk(deger, fark):
     # Derlenmiş kartın birebir biçimi (01.10.2026 önizlemesi): seviye iç içe
     # g-birim taşıyabilir, fark ondan sonra gelir.

@@ -4996,3 +4996,19 @@ etki değildir); ve kıyas noktası yazılmayan dış sayı (Brent 70 dolarda
 enflasyona +1,9 puan, Enflasyon Raporu'nun 58,8 dolarlık varsayımına göredir).
 Sayı kapısı (sekiz yüzü aşkın sayı) bunların hiçbirini görmüyordu, çünkü sayıların hepsi
 doğruydu; hükümler `dogru()` ölçütleriyle adıyla sınandı.
+Şekil ve telefon merceği ise sayının değil OKUNUŞUN kusurlarını buldu ve ikisi
+site geneline genelleştirildi. (1) Kanıt sütunu yedi senaryo tablosunun son
+sütunuydu ve 390 pikselde hiçbirinde görünmüyordu: "okur zayıf bir rakamı
+güçlüymüş gibi okumasın" diyen hüküm tam da okura ulaşmıyordu. Hüküm artık
+ikinci sütun (yapışık satır adının yanı); bir tablonun telefonda görünen
+sütunları, okurun önce görmesi gerekenlerdir. (2) Unicode satır kırma kuralı
+eksi ile yüzde arasında kırmayı yasaklamıyor: düzyazıda satır "−" ile biterken
+alt satır "%15,1" ile başlıyor ve değer artı okunuyordu. Kural global.css'te
+yalnız tablo hücrelerine uygulanmıştı (yorumu kusuru adıyla anıyordu); MDX
+gövdesi artık `site/src/lib/isaret.mjs` eklentisinden geçiyor (işaretli yüzde
+`.isaret-koru`, nowrap). Bülten metni bileşenden basıldığı için bu yoldan
+geçmez ve AÇIK. Ayrıca: kategori ekseni eşit aralıklı olmayan teslim aylarını
+eşit adımla çizip eğrinin ucunu dikleşmiş gösteriyordu (tarih eksenine geçti);
+ABD ve TL faiz tepkileri tek eksende ABD'yi sıfıra yapıştırıyordu (iki panel);
+figür gövdesinin 8 piksellik tarayıcı boşluğu gömme çerçevesinde kaydırma
+üretiyordu.
