@@ -1,0 +1,2194 @@
+{
+ "cnbc/aud__AUD_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181456,
+  "sha256": "2f6f6e0be12d3b503dfecea9f56d1d92b65a4254fe18bf45dba9965c8855857b",
+  "an": "2026-10-12T13:51:34+00:00",
+  "not": "aud · AUD="
+ },
+ "cnbc/aud__AUD_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181317,
+  "sha256": "0061a5cf68313b45f2c95032d99b8d5b7ddcc9baf4068e2904b6d41f4464f396",
+  "an": "2026-10-12T13:51:35+00:00",
+  "not": "aud · AUD="
+ },
+ "cnbc/aud__AUD_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 216785,
+  "sha256": "5a19feb31a77f49e84b572e753767073fb0a88aeee606198d76dd04791149bb0",
+  "an": "2026-10-12T13:51:41+00:00",
+  "not": "aud · AUD="
+ },
+ "cnbc/aud__AUD_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 70377,
+  "sha256": "18e053f578ee25ce861d7a088a3e43466de40ab3c487065f6f69992d4cbc1ebf",
+  "an": "2026-10-12T13:51:46+00:00",
+  "not": "aud · AUD="
+ },
+ "cnbc/bakir__HG_1_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 172705,
+  "sha256": "d90a1e0295db7ebfbfbc23b414ac370e04b850208f6a20147c5075b4ac0d61aa",
+  "an": "2026-10-12T13:49:27+00:00",
+  "not": "bakir · @HG.1"
+ },
+ "cnbc/bakir__HG_1_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 178824,
+  "sha256": "8b1162f66aa827deaa51b0219352a6162ef10dbcb487aba2c1ea5dde77f30b2f",
+  "an": "2026-10-12T13:49:27+00:00",
+  "not": "bakir · @HG.1"
+ },
+ "cnbc/bakir__HG_1_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180322,
+  "sha256": "0fa20e8e4c36a169ac5e78c7e4d9cbf23ddca97537842cace7f692632cc861f2",
+  "an": "2026-10-12T13:49:28+00:00",
+  "not": "bakir · @HG.1"
+ },
+ "cnbc/bakir__HG_1_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180430,
+  "sha256": "5dafd7a8b2900e545804cf6e5c65af5851585cc9983cf2175741887c6a571ace",
+  "an": "2026-10-12T13:49:28+00:00",
+  "not": "bakir · @HG.1"
+ },
+ "cnbc/bakir__HG_1_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180119,
+  "sha256": "433cb5692275f1b9a0ca8c4d8337ceab1bafdce358034a6690b6210e6739d1d1",
+  "an": "2026-10-12T13:49:29+00:00",
+  "not": "bakir · @HG.1"
+ },
+ "cnbc/bakir__HG_1_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 63644,
+  "sha256": "7f17d7c1f0f919096eab4e6e7e80fc51a65c2abaf2118770136ff26e2494c6ab",
+  "an": "2026-10-12T13:49:29+00:00",
+  "not": "bakir · @HG.1"
+ },
+ "cnbc/benzin__RB_1_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40RB.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 151910,
+  "sha256": "7c09f62529e71065540e262eebe3d73a52f740b3d747a3bc259e815b1b229cd0",
+  "an": "2026-10-12T13:48:10+00:00",
+  "not": "benzin · @RB.1"
+ },
+ "cnbc/benzin__RB_1_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40RB.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179845,
+  "sha256": "f067d0102cd4922d49d9e49484e469fafd151d9899679732c27658bbef829081",
+  "an": "2026-10-12T13:48:27+00:00",
+  "not": "benzin · @RB.1"
+ },
+ "cnbc/benzin__RB_1_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40RB.1/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 63490,
+  "sha256": "a2920ab35ee407a7a60e6096c10ef32c47a6ca8422bd0196eca3dfb483d56a4a",
+  "an": "2026-10-12T13:48:27+00:00",
+  "not": "benzin · @RB.1"
+ },
+ "cnbc/bist100__XU100_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.XU100/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181305,
+  "sha256": "023593ad4d4d5b0468ea2548224a8d2756bbbc93a1cfcd1b65df9e06e93ccb05",
+  "an": "2026-10-12T14:01:14+00:00",
+  "not": "bist100 · .XU100"
+ },
+ "cnbc/bist100__XU100_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.XU100/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185291,
+  "sha256": "c1cff99d051fb06face34181f8c4489ecaeb39c7d67d5d7f7bf3d4f0281cf4d2",
+  "an": "2026-10-12T14:01:15+00:00",
+  "not": "bist100 · .XU100"
+ },
+ "cnbc/bist100__XU100_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.XU100/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 189017,
+  "sha256": "131002491f7a8fc9a08d5811e84206cf8f5e1b1b5972608d2766c89018143fdc",
+  "an": "2026-10-12T14:01:16+00:00",
+  "not": "bist100 · .XU100"
+ },
+ "cnbc/bist100__XU100_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.XU100/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186442,
+  "sha256": "b52ab6ee17444024db6c08b13b2e69f42f7ef1b01d7440edc8c063a1f3771257",
+  "an": "2026-10-12T14:01:16+00:00",
+  "not": "bist100 · .XU100"
+ },
+ "cnbc/bist100__XU100_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.XU100/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 196493,
+  "sha256": "14bf5eadc7247db25ceb6ff682d1d28278122cba55d4acda69503054b7d9258c",
+  "an": "2026-10-12T14:01:17+00:00",
+  "not": "bist100 · .XU100"
+ },
+ "cnbc/bist100__XU100_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.XU100/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 72682,
+  "sha256": "4f8b259902f9508108c1288572f198b8dd787f892f925c9930578377d0cd9bf0",
+  "an": "2026-10-12T14:01:17+00:00",
+  "not": "bist100 · .XU100"
+ },
+ "cnbc/brl__BRL_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180769,
+  "sha256": "9952d192117eb5ac269dcbc36a894f7438cb61a36bc83984c19f415bb735eb0d",
+  "an": "2026-10-12T13:53:34+00:00",
+  "not": "brl · BRL="
+ },
+ "cnbc/brl__BRL_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181347,
+  "sha256": "aebe6c1b3919e38a7f3085fd095edefe5748e11ca6ccdb2323c9f6e941862dff",
+  "an": "2026-10-12T13:53:40+00:00",
+  "not": "brl · BRL="
+ },
+ "cnbc/brl__BRL_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186866,
+  "sha256": "a86df3fa3588f724b5101c9346bc89cf14cbfab2178340f8f7a9650bde704353",
+  "an": "2026-10-12T13:53:41+00:00",
+  "not": "brl · BRL="
+ },
+ "cnbc/brl__BRL_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 193833,
+  "sha256": "d0fcf8a43d576881d93335bb8b0cce41079cfdd29cfea98940b3d5e034350cf3",
+  "an": "2026-10-12T13:53:41+00:00",
+  "not": "brl · BRL="
+ },
+ "cnbc/brl__BRL_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68474,
+  "sha256": "b31c66afa38d04f508a86c0e0842a0bca7b91d3a0bfc9f225c050034bb8c8463",
+  "an": "2026-10-12T13:53:42+00:00",
+  "not": "brl · BRL="
+ },
+ "cnbc/bugday__W_1_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40W.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190826,
+  "sha256": "db011bbba4332802f5a7b53747e78a501f677de56a4a2ade4df5c1aa31eca0b4",
+  "an": "2026-10-12T13:49:36+00:00",
+  "not": "bugday · @W.1"
+ },
+ "cnbc/bugday__W_1_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40W.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190516,
+  "sha256": "62ff523ea4423a20654af8de74e156630befdbeb3c6aaec674278a1d63da47e5",
+  "an": "2026-10-12T13:49:37+00:00",
+  "not": "bugday · @W.1"
+ },
+ "cnbc/bugday__W_1_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40W.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190798,
+  "sha256": "6c42071c47e7e75137df4e71b5ae6adee99c264997b1318f7260a23812dd7038",
+  "an": "2026-10-12T13:49:37+00:00",
+  "not": "bugday · @W.1"
+ },
+ "cnbc/bugday__W_1_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40W.1/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 67290,
+  "sha256": "616151778010928640e1aafa05dac9ec84dd3d1eec321d69b5459eafe11fb4e0",
+  "an": "2026-10-12T13:49:38+00:00",
+  "not": "bugday · @W.1"
+ },
+ "cnbc/cac__FCHI_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FCHI/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 201639,
+  "sha256": "1389be66f258c497294b930eee4ffbcd1bd40c14237e67ac964bd99878fd55d0",
+  "an": "2026-10-12T14:00:48+00:00",
+  "not": "cac · .FCHI"
+ },
+ "cnbc/cac__FCHI_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FCHI/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 203274,
+  "sha256": "2a3313de640099429d82ab67f1417c8bea7994dd457898e021f12175ed60f309",
+  "an": "2026-10-12T14:00:48+00:00",
+  "not": "cac · .FCHI"
+ },
+ "cnbc/cac__FCHI_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FCHI/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 203568,
+  "sha256": "5b65e43b644a53d56713c6e44957869200c281daec5036cfa7d258edd5ac24d8",
+  "an": "2026-10-12T14:00:49+00:00",
+  "not": "cac · .FCHI"
+ },
+ "cnbc/cac__FCHI_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FCHI/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202633,
+  "sha256": "31e57610dbcf63013c9bb761e1044257b883da29f6fbec9ce8b7a35dd7fe59a5",
+  "an": "2026-10-12T14:00:50+00:00",
+  "not": "cac · .FCHI"
+ },
+ "cnbc/cac__FCHI_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FCHI/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 203121,
+  "sha256": "289ab3d81225b9620f3748e005276f37d279b6ed0ce9861ab82f7750cc6f316f",
+  "an": "2026-10-12T14:00:51+00:00",
+  "not": "cac · .FCHI"
+ },
+ "cnbc/cac__FCHI_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FCHI/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 71810,
+  "sha256": "a15b768169f5a0c03a7b35a18068dd160e4bdc538890312989c2a840a5b71fc3",
+  "an": "2026-10-12T14:00:51+00:00",
+  "not": "cac · .FCHI"
+ },
+ "cnbc/cad__CAD_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180878,
+  "sha256": "86dc64378276fecae844b3cc6e7c1d577d8980c84358b236250669fbb1cad839",
+  "an": "2026-10-12T13:51:10+00:00",
+  "not": "cad · CAD="
+ },
+ "cnbc/cad__CAD_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181456,
+  "sha256": "c7c18c3cbf4651c8bdc686926129b4855c380d104b7195dad537614486bcaa1f",
+  "an": "2026-10-12T13:51:10+00:00",
+  "not": "cad · CAD="
+ },
+ "cnbc/cad__CAD_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181317,
+  "sha256": "c0922ed556fdb4949adcf2bda325130a7795c5e9cc6e2acb763a682f315b8023",
+  "an": "2026-10-12T13:51:11+00:00",
+  "not": "cad · CAD="
+ },
+ "cnbc/cad__CAD_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 216439,
+  "sha256": "c4b47511644e18ca380d2d4e1c90236fb09926766798e33aa478060713c2ba3e",
+  "an": "2026-10-12T13:51:22+00:00",
+  "not": "cad · CAD="
+ },
+ "cnbc/chf__CHF_1985.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/19850101000000/19891231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 177668,
+  "sha256": "67d50b2f4e12423556b21ea9b017868873fcb14498b89eea08d8486e1f51d0d4",
+  "an": "2026-10-12T13:50:34+00:00",
+  "not": "chf · CHF="
+ },
+ "cnbc/chf__CHF_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179876,
+  "sha256": "6755fb57f26af397374427fb0c0ed712d29fd2d8704b2c729c34eb5e3bc162d3",
+  "an": "2026-10-12T13:50:34+00:00",
+  "not": "chf · CHF="
+ },
+ "cnbc/chf__CHF_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180878,
+  "sha256": "2c5d23052fcf48c111d0fdd7dd4d373dbf46f3e4f0c24cb6b264ac826530ad0f",
+  "an": "2026-10-12T13:50:46+00:00",
+  "not": "chf · CHF="
+ },
+ "cnbc/chf__CHF_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181456,
+  "sha256": "4217e7bcf891e0c4539ffefdcc27f367968d681c092b6602160379f6e7b79005",
+  "an": "2026-10-12T13:50:51+00:00",
+  "not": "chf · CHF="
+ },
+ "cnbc/chf__CHF_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181317,
+  "sha256": "9bf27715dbfc1d33507ae0bde2d276dc0e5d34e5f8fa9141fced63502efeb847",
+  "an": "2026-10-12T13:50:57+00:00",
+  "not": "chf · CHF="
+ },
+ "cnbc/chf__CHF_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 216817,
+  "sha256": "508986819396ef24ba3eceeea87d50e28c73b6d1fadfbcf52dc66dc62e754237",
+  "an": "2026-10-12T13:51:03+00:00",
+  "not": "chf · CHF="
+ },
+ "cnbc/chf__CHF_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 72188,
+  "sha256": "fe8c3f2e55255688cebbb8dccfcfdc5df61971400ff37a6a38ea4e8b421428f2",
+  "an": "2026-10-12T13:51:04+00:00",
+  "not": "chf · CHF="
+ },
+ "cnbc/clp__CLP_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190306,
+  "sha256": "aaa236d90367e4f9a8f15512b268b155f38c93689108f9f0f41f6954d010d193",
+  "an": "2026-10-12T13:53:42+00:00",
+  "not": "clp · CLP="
+ },
+ "cnbc/clp__CLP_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 191916,
+  "sha256": "dbf65a51540b3674ebddae0e9c55dfcc71afba6b21df5489b9c384abf134383c",
+  "an": "2026-10-12T13:53:43+00:00",
+  "not": "clp · CLP="
+ },
+ "cnbc/clp__CLP_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 191778,
+  "sha256": "69eb835f0c0089da2a0393b099c44d2913af2e2606924c4e2f66ebfcee003232",
+  "an": "2026-10-12T13:53:44+00:00",
+  "not": "clp · CLP="
+ },
+ "cnbc/clp__CLP_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 204357,
+  "sha256": "b6545ae7cafb58a3a237e6e5e50c179a193e80c09dc82bc0819972379aae6e20",
+  "an": "2026-10-12T13:53:44+00:00",
+  "not": "clp · CLP="
+ },
+ "cnbc/clp__CLP_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 219684,
+  "sha256": "6cbb040d6d9f3a37e6fe7e72e3d016aedb9cf5280d3310fd5e773cb4155ea905",
+  "an": "2026-10-12T13:53:45+00:00",
+  "not": "clp · CLP="
+ },
+ "cnbc/clp__CLP_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 72052,
+  "sha256": "32c106604671ec551d4b7b293d2e506bb8c3277c30a933d6f5a9ee37551ed0fa",
+  "an": "2026-10-12T13:53:45+00:00",
+  "not": "clp · CLP="
+ },
+ "cnbc/cnh__CNH_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 109632,
+  "sha256": "159e262244a498c87bafb2d0f0a7402b8fd2b05bcbe21b98ef84348c7390f86c",
+  "an": "2026-10-12T13:55:59+00:00",
+  "not": "cnh · CNH="
+ },
+ "cnbc/cnh__CNH_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 201641,
+  "sha256": "e5ce8cf82a1f37242ca14ceef7c2474ee6640d67ba724d0a40e69df491472688",
+  "an": "2026-10-12T13:56:00+00:00",
+  "not": "cnh · CNH="
+ },
+ "cnbc/cnh__CNH_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 215718,
+  "sha256": "af2cbd88cd5dad76288914728e9741ad83f09a34cd620bf450a46c577fa5d303",
+  "an": "2026-10-12T13:56:00+00:00",
+  "not": "cnh · CNH="
+ },
+ "cnbc/cnh__CNH_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68984,
+  "sha256": "eacf03e3e8968bca2e2dec9cfcd2c44eb989ae45074932de209dd23fa10c8586",
+  "an": "2026-10-12T13:56:01+00:00",
+  "not": "cnh · CNH="
+ },
+ "cnbc/cop__COP_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 195376,
+  "sha256": "5e16ff0314a536c76a091be85ce9fe29df6dd3866349cfb00e9ac4ccc342464f",
+  "an": "2026-10-12T13:53:46+00:00",
+  "not": "cop · COP="
+ },
+ "cnbc/cop__COP_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 196905,
+  "sha256": "50af9f920ced22453aa6c48b12a26aefb4f1ad2eea1577acffb4fca2e53010db",
+  "an": "2026-10-12T13:53:47+00:00",
+  "not": "cop · COP="
+ },
+ "cnbc/cop__COP_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 212748,
+  "sha256": "b28ae8368fe01e1ebe3b2d93d1a1459425a400dbdacee932c449d4a04a23c93b",
+  "an": "2026-10-12T13:53:54+00:00",
+  "not": "cop · COP="
+ },
+ "cnbc/cop__COP_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 218741,
+  "sha256": "759dd17d1b4be2d2ef6debfdb381ba49b70e790a2dc87c04aae9d06924b84799",
+  "an": "2026-10-12T13:53:55+00:00",
+  "not": "cop · COP="
+ },
+ "cnbc/cop__COP_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 70913,
+  "sha256": "37d7f8f7c6fc7b71d99a240ec4cae2fec845e00d5bab4f40dc0f03575b00334b",
+  "an": "2026-10-12T13:53:56+00:00",
+  "not": "cop · COP="
+ },
+ "cnbc/czk__CZK_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CZK%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185999,
+  "sha256": "35ff58aa8d2a1774ce0d0a9bc30f5f3ad435baead395da5f0daf25a2389a56ba",
+  "an": "2026-10-12T13:55:25+00:00",
+  "not": "czk · CZK="
+ },
+ "cnbc/czk__CZK_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CZK%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186700,
+  "sha256": "df024abb9d04b59a0cef7be24f251028882665c8ce55636da72e46c96de721f1",
+  "an": "2026-10-12T13:55:26+00:00",
+  "not": "czk · CZK="
+ },
+ "cnbc/czk__CZK_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CZK%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186557,
+  "sha256": "a4dfc04a025ac10aa026ea0122cb1c22988be957e0b970379cafac130a7b8145",
+  "an": "2026-10-12T13:55:27+00:00",
+  "not": "czk · CZK="
+ },
+ "cnbc/czk__CZK_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CZK%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 207897,
+  "sha256": "9cf1d763db4be3a1c7f7a55673e8e52caa9154cde6a2f78e405a8d09f4d06deb",
+  "an": "2026-10-12T13:55:27+00:00",
+  "not": "czk · CZK="
+ },
+ "cnbc/czk__CZK_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/CZK%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 76205,
+  "sha256": "25ff1a4c3e17d250eb2888c526786e26b0267ea94d61c76772db119836006c80",
+  "an": "2026-10-12T13:55:33+00:00",
+  "not": "czk · CZK="
+ },
+ "cnbc/dax__GDAXI_1985.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/19850101000000/19891231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 70963,
+  "sha256": "bafd5e490532642cf90a1add8caabb8fe320f41e73955a2a1a3c5883b45efa9a",
+  "an": "2026-10-12T14:00:30+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 184526,
+  "sha256": "b2ba825b3d0ce87f9181ea3165f3e3cfcfb1e0d9c4868fea800fad31848e23be",
+  "an": "2026-10-12T14:00:30+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_1995.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/19950101000000/19991231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 188757,
+  "sha256": "9f21e9f6c4dab50d2a5e89093a1411d8ba71f90fc7b8ffeb3a1f8c02637e0825",
+  "an": "2026-10-12T14:00:31+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 200703,
+  "sha256": "ccf9aaef7f78e7fdfdbff823a537cf5e4f726f0e13a222a205fa5a094b9f0670",
+  "an": "2026-10-12T14:00:31+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202129,
+  "sha256": "cb5ff8a525eaada6eb2413aa05e958265ecc2386a44c83cfe395cd78ebbeb08b",
+  "an": "2026-10-12T14:00:32+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 201839,
+  "sha256": "09995e450d9267f4b2871fdb555f59ad39f81d412c63993a5cb08d2e1b852d2d",
+  "an": "2026-10-12T14:00:33+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 204573,
+  "sha256": "80fc3eb45cf99c56ba9cddcaa4b61e76bb5014fae08cc0deddcfa48aff7e83ec",
+  "an": "2026-10-12T14:00:35+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 206836,
+  "sha256": "ab8733a5e75ceca8a64a0189df6d39593dffbd3e0142db06cac80052dd4011a0",
+  "an": "2026-10-12T14:00:35+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/dax__GDAXI_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.GDAXI/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 73294,
+  "sha256": "076fe819550416af8db8ce816375430f6ec51772bd4c849d4efa4aabd1a5bc6c",
+  "an": "2026-10-12T14:00:36+00:00",
+  "not": "dax · .GDAXI"
+ },
+ "cnbc/de2y__DE2Y_DE_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 178530,
+  "sha256": "ddcd9e01c5c4507819445ac743c3c6663d0e6394afa5a57e25e3dcc2cc4135de",
+  "an": "2026-10-12T13:57:51+00:00",
+  "not": "de2y · DE2Y-DE"
+ },
+ "cnbc/de2y__DE2Y_DE_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 177024,
+  "sha256": "3703040d6f5d6395c611120d1348626e2594f7dfe5c2c3b44a553eb5a0186160",
+  "an": "2026-10-12T13:57:51+00:00",
+  "not": "de2y · DE2Y-DE"
+ },
+ "cnbc/de2y__DE2Y_DE_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 162013,
+  "sha256": "7bffcae051ddd2e00842eca194aaf9429d4485d27d48b847f9fc1b89e5f658cd",
+  "an": "2026-10-12T13:57:52+00:00",
+  "not": "de2y · DE2Y-DE"
+ },
+ "cnbc/de2y__DE2Y_DE_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 222438,
+  "sha256": "c93c6e8b65a9c71a0bf3a7435342230bc2bece9b0196fe0fafc40a0c294ec40d",
+  "an": "2026-10-12T13:57:52+00:00",
+  "not": "de2y · DE2Y-DE"
+ },
+ "cnbc/de2y__DE2Y_DE_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 220022,
+  "sha256": "70f883c2c6a12cda2421fca30ef7c4d71d1495554065edf75b639f910a6de6a1",
+  "an": "2026-10-12T13:57:58+00:00",
+  "not": "de2y · DE2Y-DE"
+ },
+ "cnbc/de2y__DE2Y_DE_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 78056,
+  "sha256": "0a98188b26c41cfb9706b7b72ed3fa221cf5bad7bf7579b855215c0bef6f72a6",
+  "an": "2026-10-12T13:58:03+00:00",
+  "not": "de2y · DE2Y-DE"
+ },
+ "cnbc/dxy__DXY_1985.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/19850101000000/19891231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186714,
+  "sha256": "475a942d73169030370c560c3daa847e13d22d5b1338a361691e2ed3f1a5393c",
+  "an": "2026-10-12T14:00:17+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185524,
+  "sha256": "684be3fa015a36ae495d090573706c001b22210eb4b6026f31367e4d1cdd09eb",
+  "an": "2026-10-12T14:00:17+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_1995.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/19950101000000/19991231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186317,
+  "sha256": "322016b0ae7664dc7b476d9e7a68ac2259eeb8a6d49c383771a9e4287c6eef2e",
+  "an": "2026-10-12T14:00:18+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185900,
+  "sha256": "fc8ff82d194b407a66f6453be1540c0397b0f7d5c267671e5c0c7e7ed98880cf",
+  "an": "2026-10-12T14:00:19+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 183254,
+  "sha256": "9d7b97d41e1129aab1ee45421b2aa6d7755838298b94e83c93fca27e6e210b23",
+  "an": "2026-10-12T14:00:19+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186400,
+  "sha256": "2b81c3891e9a029bc1f2d1b7af91261fd1e0d14e94cd35a684429e7c2edec6f5",
+  "an": "2026-10-12T14:00:21+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 195003,
+  "sha256": "0d76341fbfae226038e24ffc73a2543a26dc3f307e98ec0fdca140771a84ce41",
+  "an": "2026-10-12T14:00:21+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 197681,
+  "sha256": "2a642153169a69a44a939664d903b0473e45969eb9f21c738b459999c783b203",
+  "an": "2026-10-12T14:00:22+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/dxy__DXY_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68652,
+  "sha256": "1bf31135a1d721f8e939a5bdc7d9d8431d4a87c918543d521498ff4a8ccfa139",
+  "an": "2026-10-12T14:00:23+00:00",
+  "not": "dxy · .DXY"
+ },
+ "cnbc/egp__EGP_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/EGP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190499,
+  "sha256": "622f45791d7efb0fca2278e8d7d3dcd4f59366d0aaaeefdd8ef9a5188d5710f7",
+  "an": "2026-10-12T13:55:42+00:00",
+  "not": "egp · EGP="
+ },
+ "cnbc/egp__EGP_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/EGP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 254044,
+  "sha256": "784c2cb9d7a3b0e56b8d4de644eb9e3f89a8b5d8feb7b39fb953540b26bdf2e6",
+  "an": "2026-10-12T13:55:43+00:00",
+  "not": "egp · EGP="
+ },
+ "cnbc/egp__EGP_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/EGP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 248623,
+  "sha256": "0ddab5c31e57074c6905bd055137ba5b7cfcd377493f27d390640cd5f9ea9a3f",
+  "an": "2026-10-12T13:55:44+00:00",
+  "not": "egp · EGP="
+ },
+ "cnbc/egp__EGP_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/EGP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 262834,
+  "sha256": "db92a74f94baa49fd978c910ee32fbd1148d700ecc4e478b96621237d41df57b",
+  "an": "2026-10-12T13:55:44+00:00",
+  "not": "egp · EGP="
+ },
+ "cnbc/egp__EGP_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/EGP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 269714,
+  "sha256": "f5bfaeecd845ed0cf32a3c3a9c3b3b3d4d5f7ffc66c4790edf70d63f3287a69c",
+  "an": "2026-10-12T13:55:45+00:00",
+  "not": "egp · EGP="
+ },
+ "cnbc/egp__EGP_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/EGP%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 93685,
+  "sha256": "be28fcc458d9ea82618d576ad8d30a8bf6147d306583c4c4e4188926087b65ba",
+  "an": "2026-10-12T13:55:51+00:00",
+  "not": "egp · EGP="
+ },
+ "cnbc/ftse__FTSE_1985.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/19850101000000/19891231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185863,
+  "sha256": "55f3114d1c052fdefe7709749fe6a3665a6a7bde455b10f7136f90acdf05d282",
+  "an": "2026-10-12T14:00:36+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/ftse__FTSE_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 189160,
+  "sha256": "c4d4d3f2aae40012675bd02bea14f89a38245b9093a30927f9dcfae5a8802f63",
+  "an": "2026-10-12T14:00:37+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/ftse__FTSE_1995.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/19950101000000/19991231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 191671,
+  "sha256": "f1c0ff92ee7a6dcbd730e6df65c51aec6697a7eacf8b659223e333f7e4244b3f",
+  "an": "2026-10-12T14:00:38+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/ftse__FTSE_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 201775,
+  "sha256": "d3d52c1d46d6c3eba9771a1112de6fb45128c5dc03f8186056adf0abcfd96ff7",
+  "an": "2026-10-12T14:00:38+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/ftse__FTSE_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202308,
+  "sha256": "c6a575c4c8cecf28d403474e63fbb391a7bbe14e9c90058fec4047c931aba9a7",
+  "an": "2026-10-12T14:00:39+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/ftse__FTSE_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 201333,
+  "sha256": "e2f5d5747768faecbdf089135886d7521c20073294a4f29d3e0d11d3665ac14d",
+  "an": "2026-10-12T14:00:46+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/ftse__FTSE_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 201116,
+  "sha256": "97b2bcd796936cb586e7b4904bd7d102fde2322dac17f519ba8395ffad9b08cb",
+  "an": "2026-10-12T14:00:46+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/ftse__FTSE_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.FTSE/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 72438,
+  "sha256": "68395ea1d17b49a18e6ed89ef98c1d126d81c9dede77d42acf8da3b40725cfaf",
+  "an": "2026-10-12T14:00:47+00:00",
+  "not": "ftse · .FTSE"
+ },
+ "cnbc/gb10y__GB10Y_GB_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 176887,
+  "sha256": "df2d565d9042ed42b113aca02464b4162c134b425049cdb10df1a8104ef3a030",
+  "an": "2026-10-12T13:58:33+00:00",
+  "not": "gb10y · GB10Y-GB"
+ },
+ "cnbc/gb10y__GB10Y_GB_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 159234,
+  "sha256": "98779ca3dc045dbeda58e707fe46c6a8cff14dc83bd289afae19ddbde8020429",
+  "an": "2026-10-12T13:58:34+00:00",
+  "not": "gb10y · GB10Y-GB"
+ },
+ "cnbc/gb10y__GB10Y_GB_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 226927,
+  "sha256": "ec45ad010c40482ce676512901850ac46e6df0bdd049046745892942fe8f4839",
+  "an": "2026-10-12T13:58:40+00:00",
+  "not": "gb10y · GB10Y-GB"
+ },
+ "cnbc/gb10y__GB10Y_GB_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 75417,
+  "sha256": "7a44445ca9c71a7fb8e62a04b1dbdbe6df290532545c0b3cd1a52706668b3b3f",
+  "an": "2026-10-12T13:58:40+00:00",
+  "not": "gb10y · GB10Y-GB"
+ },
+ "cnbc/gb2y__GB2Y_GB_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179371,
+  "sha256": "1514485d7f0a2c7b9eeb270b6b1c27722799d5de65b3fc223cd83aaec064a459",
+  "an": "2026-10-12T13:58:09+00:00",
+  "not": "gb2y · GB2Y-GB"
+ },
+ "cnbc/gb2y__GB2Y_GB_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 209967,
+  "sha256": "7647420992124a0088a7ccd935c743079d75ddcbe34c31e8d418038135d1ec11",
+  "an": "2026-10-12T13:58:21+00:00",
+  "not": "gb2y · GB2Y-GB"
+ },
+ "cnbc/gb2y__GB2Y_GB_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 234573,
+  "sha256": "eceb7f971fbb97cfa0f2acaeffc5d2ed5b07e6a2e9d08874e31203c000212670",
+  "an": "2026-10-12T13:58:22+00:00",
+  "not": "gb2y · GB2Y-GB"
+ },
+ "cnbc/gb2y__GB2Y_GB_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 87925,
+  "sha256": "fa72251f5756c9a3df1c29b474acbd627b42be6ce5af866b4bbe6b1be94e68b8",
+  "an": "2026-10-12T13:58:22+00:00",
+  "not": "gb2y · GB2Y-GB"
+ },
+ "cnbc/gbp__GBP_1985.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/19850101000000/19891231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 177806,
+  "sha256": "17dfa09c41bcf596a06f7a6f5055c30801fea7d6ab7f62d0716ec4574f181cb8",
+  "an": "2026-10-12T13:50:08+00:00",
+  "not": "gbp · GBP="
+ },
+ "cnbc/gbp__GBP_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179876,
+  "sha256": "855e946d38e35e477650dd414052348eb5cfce6526bcce930233b0388ce95d41",
+  "an": "2026-10-12T13:50:08+00:00",
+  "not": "gbp · GBP="
+ },
+ "cnbc/gbp__GBP_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180878,
+  "sha256": "4cf20b98ed7b41c367be65d77ae81d07c43936e64f05db0a5fe4d44117fc8b47",
+  "an": "2026-10-12T13:50:14+00:00",
+  "not": "gbp · GBP="
+ },
+ "cnbc/gbp__GBP_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181456,
+  "sha256": "712b980a4d42f46d6964a890fb86acaf776d2103c618e5556f2f3ef8e61e457e",
+  "an": "2026-10-12T13:50:15+00:00",
+  "not": "gbp · GBP="
+ },
+ "cnbc/gbp__GBP_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181317,
+  "sha256": "7e8700493a52cb69166848fa2916a1d14ddeb8be5353729e5d400c3a3827a6c7",
+  "an": "2026-10-12T13:50:15+00:00",
+  "not": "gbp · GBP="
+ },
+ "cnbc/gbp__GBP_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 216432,
+  "sha256": "c5c9b612cc7ca9feef7ad0ae6eb168ea3e106ffb42a2c7a35a7e2c1fecb6c806",
+  "an": "2026-10-12T13:50:27+00:00",
+  "not": "gbp · GBP="
+ },
+ "cnbc/gbp__GBP_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68952,
+  "sha256": "5ac65a0361b84e2348d343d444103b0551927868e6ef1bd7c3e863ba8f1ecbd3",
+  "an": "2026-10-12T13:50:33+00:00",
+  "not": "gbp · GBP="
+ },
+ "cnbc/gumus__SI_1_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 171599,
+  "sha256": "ae4e639d6c2fe89983de0a3e720a41f264690fb874d2e5e5529995d26f52a3fd",
+  "an": "2026-10-12T13:48:56+00:00",
+  "not": "gumus · @SI.1"
+ },
+ "cnbc/gumus__SI_1_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179359,
+  "sha256": "8e26e067c9c89dea67bafd13ad721d1d775254e685d892421cff6dd3fb321b0d",
+  "an": "2026-10-12T13:49:02+00:00",
+  "not": "gumus · @SI.1"
+ },
+ "cnbc/gumus__SI_1_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185428,
+  "sha256": "695ef58c77fae67383e6df581268575a07596f7b7cb0f5d014ae482d73d392df",
+  "an": "2026-10-12T13:49:10+00:00",
+  "not": "gumus · @SI.1"
+ },
+ "cnbc/gumus__SI_1_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185174,
+  "sha256": "f6376c8c53a8ed317884398bbc2cf3f3730a7b769688d29ddaf4e41a6f9c9516",
+  "an": "2026-10-12T13:49:15+00:00",
+  "not": "gumus · @SI.1"
+ },
+ "cnbc/hsi__HSI_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.HSI/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 196494,
+  "sha256": "739515c52eb83f0f5dfd14af6b4e202cd0200f1f49b97050d1f656d010c544d7",
+  "an": "2026-10-12T14:01:01+00:00",
+  "not": "hsi · .HSI"
+ },
+ "cnbc/hsi__HSI_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.HSI/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202063,
+  "sha256": "6cf5eed168c83e3ce7e1aeaa6263461b022f78aa82183d8901ab2f977e06cc5f",
+  "an": "2026-10-12T14:01:01+00:00",
+  "not": "hsi · .HSI"
+ },
+ "cnbc/hsi__HSI_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.HSI/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202701,
+  "sha256": "b0546632a2aac393dd4f87c053d0febb1ac5a2314c83c6315164f946994bd32c",
+  "an": "2026-10-12T14:01:02+00:00",
+  "not": "hsi · .HSI"
+ },
+ "cnbc/hsi__HSI_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.HSI/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202040,
+  "sha256": "7876b6d1e72ec4abff1884fe9006692039dacaa946e2669e22d42183509717f6",
+  "an": "2026-10-12T14:01:02+00:00",
+  "not": "hsi · .HSI"
+ },
+ "cnbc/hsi__HSI_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.HSI/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 201914,
+  "sha256": "0fc4829b5919cdbc4dbbe6193a4a283d56c81f0e9586b4af395d5d8add45f66d",
+  "an": "2026-10-12T14:01:03+00:00",
+  "not": "hsi · .HSI"
+ },
+ "cnbc/hsi__HSI_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.HSI/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 71875,
+  "sha256": "c551272e5a2d00c80673962f33644cb4dab8b96c738c6f337cebeb82e40ff327",
+  "an": "2026-10-12T14:01:03+00:00",
+  "not": "hsi · .HSI"
+ },
+ "cnbc/ils__ILS_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ILS%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181181,
+  "sha256": "aa748812d9aaf88afa95ad7e1429a27485d8754a973ab72410219591c30afad8",
+  "an": "2026-10-12T13:55:39+00:00",
+  "not": "ils · ILS="
+ },
+ "cnbc/ils__ILS_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ILS%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181528,
+  "sha256": "5435e9588b0769752bd854751d4e345f177f0397e1ad20b57e3c66afec6cd6e4",
+  "an": "2026-10-12T13:55:39+00:00",
+  "not": "ils · ILS="
+ },
+ "cnbc/ils__ILS_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ILS%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181347,
+  "sha256": "f70c4f27b2edbb8670cb826138fafc7874b4a976bf8ef0c0173b88426f18191e",
+  "an": "2026-10-12T13:55:40+00:00",
+  "not": "ils · ILS="
+ },
+ "cnbc/ils__ILS_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ILS%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 196991,
+  "sha256": "b392942d7028cc01f7e978f7b0214058d02590fa21e3935470c91b699cd4d0be",
+  "an": "2026-10-12T13:55:41+00:00",
+  "not": "ils · ILS="
+ },
+ "cnbc/ils__ILS_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ILS%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 212360,
+  "sha256": "dbc88c96c39236499b8eb6f830c1730b15b32fb5a77cdd25f88339b34b1ae1d4",
+  "an": "2026-10-12T13:55:41+00:00",
+  "not": "ils · ILS="
+ },
+ "cnbc/ils__ILS_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ILS%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68515,
+  "sha256": "9eb348c43cb88450d0fb12053e7c9f27d38157d28537597b935d1adfb54cf8e8",
+  "an": "2026-10-12T13:55:42+00:00",
+  "not": "ils · ILS="
+ },
+ "cnbc/inr__INR_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/INR%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186208,
+  "sha256": "d6ab1334be086fcb843f818efc3b3a6dfd103474173eb7da48ee973b200e3998",
+  "an": "2026-10-12T13:54:17+00:00",
+  "not": "inr · INR="
+ },
+ "cnbc/inr__INR_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/INR%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186790,
+  "sha256": "a5d6eb49ba7ba971ce2761b0bf73aae86b7a9e076a5b7279b11737424a114188",
+  "an": "2026-10-12T13:54:18+00:00",
+  "not": "inr · INR="
+ },
+ "cnbc/inr__INR_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/INR%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186527,
+  "sha256": "d86f11af895b99e330e71ddd09becaba00c546fe27d2410d4c88412f2c4b24c8",
+  "an": "2026-10-12T13:54:19+00:00",
+  "not": "inr · INR="
+ },
+ "cnbc/inr__INR_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/INR%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 187378,
+  "sha256": "5ad86b718b6c5a1213d7ac4b7ca46ed77881045406d63dc7dda97833ee9d0346",
+  "an": "2026-10-12T13:54:20+00:00",
+  "not": "inr · INR="
+ },
+ "cnbc/inr__INR_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/INR%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 192257,
+  "sha256": "97e869c9b6d7b47a5a5b06e643ff26ef403b4cfbca808e2213599ada32944d96",
+  "an": "2026-10-12T13:54:20+00:00",
+  "not": "inr · INR="
+ },
+ "cnbc/inr__INR_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/INR%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 66295,
+  "sha256": "088ed56ac21890b761bf8fa9e57187f75a7388375aa5110761e2048fb4869f51",
+  "an": "2026-10-12T13:54:22+00:00",
+  "not": "inr · INR="
+ },
+ "cnbc/it10y__IT10Y_IT_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/IT10Y-IT/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 178256,
+  "sha256": "ae9f79460b8388dfb2bdc3ddbedd73b693f1b477a9abd624349f34cba8c8d5e4",
+  "an": "2026-10-12T13:58:59+00:00",
+  "not": "it10y · IT10Y-IT"
+ },
+ "cnbc/it10y__IT10Y_IT_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/IT10Y-IT/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 160344,
+  "sha256": "9832b9f09c6f5cc9fc1562a601d5180a4b3cb531ec6291fbc741d25d0a113219",
+  "an": "2026-10-12T13:59:05+00:00",
+  "not": "it10y · IT10Y-IT"
+ },
+ "cnbc/it10y__IT10Y_IT_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/IT10Y-IT/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 213025,
+  "sha256": "dd1098696ddfe9fc828a4c3b112a9579aa65f59c8250dbf5168b594364668b2d",
+  "an": "2026-10-12T13:59:06+00:00",
+  "not": "it10y · IT10Y-IT"
+ },
+ "cnbc/it10y__IT10Y_IT_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/IT10Y-IT/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 218724,
+  "sha256": "577ec5dd2010825fd7fea1276e63ffc28a8acf634818521b04d2dcd6a46825d9",
+  "an": "2026-10-12T13:59:07+00:00",
+  "not": "it10y · IT10Y-IT"
+ },
+ "cnbc/it10y__IT10Y_IT_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/IT10Y-IT/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 77361,
+  "sha256": "c411f332442c60fdc5d73493c8f3cd6b73e4a1a2e2be158005fb960f52fc19fe",
+  "an": "2026-10-12T13:59:07+00:00",
+  "not": "it10y · IT10Y-IT"
+ },
+ "cnbc/jp2y__JP2Y_JP_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 170905,
+  "sha256": "9c7a28934347ea7faad83e7cc45a01667208477ee9f5d7f6c73c381cd720ac37",
+  "an": "2026-10-12T13:58:46+00:00",
+  "not": "jp2y · JP2Y-JP"
+ },
+ "cnbc/jp2y__JP2Y_JP_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 169516,
+  "sha256": "1ebe4cd7541e38a8af4e6d515497be2aa1130d796c537e80372dc139af7e5722",
+  "an": "2026-10-12T13:58:46+00:00",
+  "not": "jp2y · JP2Y-JP"
+ },
+ "cnbc/jp2y__JP2Y_JP_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 116279,
+  "sha256": "4a357c1a6fdeb5e3f18d0261cc8e76625fcfb6e0cc1a35032ae1d532b69b896a",
+  "an": "2026-10-12T13:58:47+00:00",
+  "not": "jp2y · JP2Y-JP"
+ },
+ "cnbc/jp2y__JP2Y_JP_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 205372,
+  "sha256": "f4f4a71aa9b30590d002cb6c22a0621d33d6138c9c9fbe508f42a17184b9bd7f",
+  "an": "2026-10-12T13:58:47+00:00",
+  "not": "jp2y · JP2Y-JP"
+ },
+ "cnbc/jp2y__JP2Y_JP_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 213742,
+  "sha256": "eca2924bbccaf9ff3acb5e1f83586c529e50b922b9c23ff85472f86009177ebd",
+  "an": "2026-10-12T13:58:53+00:00",
+  "not": "jp2y · JP2Y-JP"
+ },
+ "cnbc/jp2y__JP2Y_JP_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 73606,
+  "sha256": "e0021e3ab8a422573152da241359c321679f96341542a5752dc32a9fb2c821f9",
+  "an": "2026-10-12T13:58:53+00:00",
+  "not": "jp2y · JP2Y-JP"
+ },
+ "cnbc/kalorifer__HO_1_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HO.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 172854,
+  "sha256": "da859b9c0f872048f7159769674bb8527c9e82a4feb3fec16dc11f50c634e5cd",
+  "an": "2026-10-12T13:47:51+00:00",
+  "not": "kalorifer · @HO.1"
+ },
+ "cnbc/kalorifer__HO_1_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HO.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180310,
+  "sha256": "b2d9b0cd2368c51c3ed4f801fb961184874dae2f64d3538a1b154c35a3d29984",
+  "an": "2026-10-12T13:47:57+00:00",
+  "not": "kalorifer · @HO.1"
+ },
+ "cnbc/kalorifer__HO_1_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HO.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 178815,
+  "sha256": "cb823f6d4682a0a15a08f84596305ee7c3b9678997a6cf872c0063265faa2344",
+  "an": "2026-10-12T13:47:58+00:00",
+  "not": "kalorifer · @HO.1"
+ },
+ "cnbc/kalorifer__HO_1_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HO.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179847,
+  "sha256": "01e3c4513a3e40f591f4829e4d6e50bbc196970b955a26a37baa44c13b5bf753",
+  "an": "2026-10-12T13:47:59+00:00",
+  "not": "kalorifer · @HO.1"
+ },
+ "cnbc/kospi__KS11_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.KS11/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190034,
+  "sha256": "57c47fdb8af3e6864a2ac627136d3a52838becf9ae8c91d96e98ae71ceb19aea",
+  "an": "2026-10-12T14:01:04+00:00",
+  "not": "kospi · .KS11"
+ },
+ "cnbc/kospi__KS11_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.KS11/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 197383,
+  "sha256": "1fdfd2f57e53b1baf43cbb24e27c2c8c113c39909e35f576565730a51f9408fa",
+  "an": "2026-10-12T14:01:05+00:00",
+  "not": "kospi · .KS11"
+ },
+ "cnbc/kospi__KS11_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.KS11/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 197676,
+  "sha256": "e75b5905ce99992179fe3fe4fdc2cbcfd3941125c840bf936c06e2b191b6151a",
+  "an": "2026-10-12T14:01:06+00:00",
+  "not": "kospi · .KS11"
+ },
+ "cnbc/kospi__KS11_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.KS11/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 195142,
+  "sha256": "f9fad5835b27b4dd5077a8d5f88aed9660b0ff49bb517aa2109d5a8a3d5d5c7f",
+  "an": "2026-10-12T14:01:06+00:00",
+  "not": "kospi · .KS11"
+ },
+ "cnbc/kospi__KS11_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.KS11/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 196281,
+  "sha256": "046ee3fd2383134204feabb92d544308a7e1793b150ce1e828a2f4136c68c549",
+  "an": "2026-10-12T14:01:07+00:00",
+  "not": "kospi · .KS11"
+ },
+ "cnbc/kospi__KS11_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.KS11/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68603,
+  "sha256": "bf3df7ea8f7ef1b4f637d2b83414e45f37053b1810334662fb389079b31b0a8b",
+  "an": "2026-10-12T14:01:07+00:00",
+  "not": "kospi · .KS11"
+ },
+ "cnbc/krw__KRW_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 196784,
+  "sha256": "390f4d4a118daa0b4d1120393ad1fc7b7cd758ba0231e293dfe17483b485566a",
+  "an": "2026-10-12T13:52:35+00:00",
+  "not": "krw · KRW="
+ },
+ "cnbc/krw__KRW_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 194730,
+  "sha256": "a46e6e00c77d783cbc5948e5fdd5d05f886e3364623193a8be5e4f655597d47a",
+  "an": "2026-10-12T13:52:35+00:00",
+  "not": "krw · KRW="
+ },
+ "cnbc/krw__KRW_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 217148,
+  "sha256": "927599267c97f0c62be5920b11a0752981d3c2d00ebbd22ae212f332d1cfbc28",
+  "an": "2026-10-12T13:52:41+00:00",
+  "not": "krw · KRW="
+ },
+ "cnbc/krw__KRW_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 217169,
+  "sha256": "1db8264cf2aded4e0481b0c9cb46bdf34996fffcb0633f6009357175bdc61a11",
+  "an": "2026-10-12T13:52:42+00:00",
+  "not": "krw · KRW="
+ },
+ "cnbc/krw__KRW_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 75764,
+  "sha256": "33a6d5e913dd2ecd78089ceef7b68d89fefa8c541c87bf7968d781d7a0565b6c",
+  "an": "2026-10-12T13:52:42+00:00",
+  "not": "krw · KRW="
+ },
+ "cnbc/misir__C_1_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40C.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186588,
+  "sha256": "67de54f2cabe0ca5da80b1e7468bddaf3b8ff70aea09b01609e44d2d9a374dad",
+  "an": "2026-10-12T13:49:49+00:00",
+  "not": "misir · @C.1"
+ },
+ "cnbc/misir__C_1_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40C.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 191565,
+  "sha256": "7956f739ef1c96d0add70ba11258f8d42290c104ba3c45616f1920f386489ec0",
+  "an": "2026-10-12T13:49:55+00:00",
+  "not": "misir · @C.1"
+ },
+ "cnbc/misir__C_1_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40C.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 191638,
+  "sha256": "ae76f5cefd812c1ee46bb69466e88158fbe439b54d207a12a43d2fe471eb7250",
+  "an": "2026-10-12T13:49:56+00:00",
+  "not": "misir · @C.1"
+ },
+ "cnbc/misir__C_1_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40C.1/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 67485,
+  "sha256": "93077e3ab18520d155c34cb2024cd426e52a029e266688e47073f5613162fb59",
+  "an": "2026-10-12T13:49:56+00:00",
+  "not": "misir · @C.1"
+ },
+ "cnbc/mxn__MXN_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 183248,
+  "sha256": "e2d9932aa6765a31ca1a074aa24c6741cb623b9612747c83819c8720bf03a02f",
+  "an": "2026-10-12T13:53:06+00:00",
+  "not": "mxn · MXN="
+ },
+ "cnbc/mxn__MXN_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186557,
+  "sha256": "a995b30fd0b15daa62e054f6621419b4167d141a196189111182886f0cef5c7a",
+  "an": "2026-10-12T13:53:17+00:00",
+  "not": "mxn · MXN="
+ },
+ "cnbc/mxn__MXN_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 71964,
+  "sha256": "7fee753115c68a8d06afbb51a125420e843284dfca813fd4a3f7945bcd0128f5",
+  "an": "2026-10-12T13:53:34+00:00",
+  "not": "mxn · MXN="
+ },
+ "cnbc/n225__N225_1985.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/19850101000000/19891231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 199894,
+  "sha256": "21cb7315f5c9bb48a2231464ce80f3241ea392a5c5be915dbbb912374b5b6735",
+  "an": "2026-10-12T14:00:52+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/n225__N225_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 189938,
+  "sha256": "b4001a3736557d3de0c7cacaea8dda9652365eb4d8b2e0f5b37137c8ca1c0950",
+  "an": "2026-10-12T14:00:52+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/n225__N225_1995.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/19950101000000/19991231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190092,
+  "sha256": "eaa63177eb2f6ded9c5b0a65ff1248dc0f1efb5739cf4d3e5647822054368ecf",
+  "an": "2026-10-12T14:00:53+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/n225__N225_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 191963,
+  "sha256": "b48703c6026301710fdbcc8de44f5d711003d83593c56d712fed39c5fad473bf",
+  "an": "2026-10-12T14:00:53+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/n225__N225_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 195917,
+  "sha256": "2b0fb9f4a9a337881825da0a88268c497f573e646efac535b2485656a7bda6e7",
+  "an": "2026-10-12T14:00:59+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/n225__N225_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202016,
+  "sha256": "18496ee9f4b2ea1ae45c5d01269a2ee446f5e6bfe0230f755dea92b2384bf360",
+  "an": "2026-10-12T14:00:59+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/n225__N225_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 200042,
+  "sha256": "e794dbc1828f926a79bab58ab43908c6b2747ba62d69b961a1d58d8aa44df514",
+  "an": "2026-10-12T14:01:00+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/n225__N225_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 70703,
+  "sha256": "de0a0f933334e5074fc3b06707d7579a63c111f7fc439bbf926c8893a92c5dfc",
+  "an": "2026-10-12T14:01:00+00:00",
+  "not": "n225 · .N225"
+ },
+ "cnbc/ndx__NDX_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.NDX/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 189021,
+  "sha256": "3e309a0b9ceb3951f6eeac9c699fc25bdff1a58595ba1a4c60509f13bb71d940",
+  "an": "2026-10-12T13:59:54+00:00",
+  "not": "ndx · .NDX"
+ },
+ "cnbc/ndx__NDX_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.NDX/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 197496,
+  "sha256": "cb6e5305e16aa079ee1098db2e9e48700a786f02d62bf3ab010870815a994218",
+  "an": "2026-10-12T13:59:55+00:00",
+  "not": "ndx · .NDX"
+ },
+ "cnbc/ndx__NDX_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.NDX/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 199888,
+  "sha256": "44091ed2ee990b6acacfb97a58ebfdaaf89cf967b7e9a7ef1c6e1766ef646fc5",
+  "an": "2026-10-12T13:59:55+00:00",
+  "not": "ndx · .NDX"
+ },
+ "cnbc/ndx__NDX_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.NDX/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 200038,
+  "sha256": "2fd7845d0a8dcf481def0b57615157443e0f9d5872a74f30d1bab88db44f68df",
+  "an": "2026-10-12T13:59:56+00:00",
+  "not": "ndx · .NDX"
+ },
+ "cnbc/ndx__NDX_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.NDX/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 204468,
+  "sha256": "66c55e8f58f1a6043819ddf27231536d779d2ac17c3fcb20eb1426b1673af790",
+  "an": "2026-10-12T13:59:56+00:00",
+  "not": "ndx · .NDX"
+ },
+ "cnbc/ndx__NDX_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.NDX/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 72586,
+  "sha256": "dd126dc4f4301e40a0d3e4781139b09af927347393632c5d8fce88ff01989ecd",
+  "an": "2026-10-12T13:59:56+00:00",
+  "not": "ndx · .NDX"
+ },
+ "cnbc/nok__NOK_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180909,
+  "sha256": "f5ac5299082a8158512bac08116ff4af184ef64024ef8d435e8b082236e67369",
+  "an": "2026-10-12T13:52:11+00:00",
+  "not": "nok · NOK="
+ },
+ "cnbc/nok__NOK_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181348,
+  "sha256": "5010e0665634ab1d6ccefb8cde88837a5722ebf622155ad990f9044743d23242",
+  "an": "2026-10-12T13:52:17+00:00",
+  "not": "nok · NOK="
+ },
+ "cnbc/nok__NOK_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202143,
+  "sha256": "ac0bd93cb1353e8d4ad42aa183fb3799bc38dab587d2b3b3b2cde77e4abc3181",
+  "an": "2026-10-12T13:52:17+00:00",
+  "not": "nok · NOK="
+ },
+ "cnbc/nok__NOK_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 218724,
+  "sha256": "a9e0f47cde79b947fa9f84fda47b35ae07978cdec42821b63f14c0b04718caa9",
+  "an": "2026-10-12T13:52:23+00:00",
+  "not": "nok · NOK="
+ },
+ "cnbc/nok__NOK_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 70606,
+  "sha256": "bce4730e09294be2ef68cea33778e42a7f5d72fc3097b669fabca87cc34ee783",
+  "an": "2026-10-12T13:52:23+00:00",
+  "not": "nok · NOK="
+ },
+ "cnbc/nzd__NZD_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181456,
+  "sha256": "8d9ec88b5f4851976bdb0ae495497aed27fd8b89a8765e49c209d87602e6611d",
+  "an": "2026-10-12T13:51:57+00:00",
+  "not": "nzd · NZD="
+ },
+ "cnbc/nzd__NZD_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181317,
+  "sha256": "076413500ff37a105e748811fa75eee5460cec7c4dd985a332ba421be35984bb",
+  "an": "2026-10-12T13:52:03+00:00",
+  "not": "nzd · NZD="
+ },
+ "cnbc/nzd__NZD_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202299,
+  "sha256": "773c8c55965764191f7cd876f77ff15f0fc6a77fd7169b7cdb9a8cacf64cdf3b",
+  "an": "2026-10-12T13:52:03+00:00",
+  "not": "nzd · NZD="
+ },
+ "cnbc/nzd__NZD_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 216395,
+  "sha256": "ff8fc09477dbed18fc862a35ca553ce2838144f5339f5cbb604aeb5570e93bb1",
+  "an": "2026-10-12T13:52:04+00:00",
+  "not": "nzd · NZD="
+ },
+ "cnbc/nzd__NZD_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 71642,
+  "sha256": "69fb920920b2d8d3509f3942cee64ca202c0befdca2f483bd0aad3b70841ddf8",
+  "an": "2026-10-12T13:52:05+00:00",
+  "not": "nzd · NZD="
+ },
+ "cnbc/php__PHP_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PHP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185945,
+  "sha256": "eb63fe9c2497f4df334ff92ecda6bb601bfa143bb413d2203dee32402c97bfbc",
+  "an": "2026-10-12T13:54:32+00:00",
+  "not": "php · PHP="
+ },
+ "cnbc/php__PHP_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PHP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186682,
+  "sha256": "29be9e7d938da2b84e33fdfd451abdd31c0459a105cc239315741fc83375c8b0",
+  "an": "2026-10-12T13:54:32+00:00",
+  "not": "php · PHP="
+ },
+ "cnbc/php__PHP_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PHP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186521,
+  "sha256": "e283dc6813aeed3200d1a606c99b4a8dbb2a545bd80bb6f87cec003eda8d92ad",
+  "an": "2026-10-12T13:54:33+00:00",
+  "not": "php · PHP="
+ },
+ "cnbc/php__PHP_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PHP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190164,
+  "sha256": "6a2d071f5200fb637a689ba1665b07d52dc1b2af85772665c28b3c85c1f12841",
+  "an": "2026-10-12T13:54:34+00:00",
+  "not": "php · PHP="
+ },
+ "cnbc/php__PHP_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PHP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 204199,
+  "sha256": "27bf7186ea742c5cffa60944633870624d8d4d0520c000fbcf0f72b7eb6b0dd6",
+  "an": "2026-10-12T13:54:40+00:00",
+  "not": "php · PHP="
+ },
+ "cnbc/php__PHP_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PHP%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 72470,
+  "sha256": "cd52ef504770b1b276481b8648412a2cd04f13122f93b493220ab8b0b36de213",
+  "an": "2026-10-12T13:54:41+00:00",
+  "not": "php · PHP="
+ },
+ "cnbc/pln__PLN_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PLN%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181060,
+  "sha256": "c7052c40b2c98e678479f34890c5ac82f7a229e892da89f524159522263200fd",
+  "an": "2026-10-12T13:55:07+00:00",
+  "not": "pln · PLN="
+ },
+ "cnbc/pln__PLN_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PLN%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181345,
+  "sha256": "342f56f4ca970a66790549cc0372d2f97c1f01057a41a4ee62567aa0507ba579",
+  "an": "2026-10-12T13:55:13+00:00",
+  "not": "pln · PLN="
+ },
+ "cnbc/pln__PLN_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PLN%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202114,
+  "sha256": "ab1d07b39d06f10c40d9a075e1c09a14562d3615690deb2643577c66de888943",
+  "an": "2026-10-12T13:55:14+00:00",
+  "not": "pln · PLN="
+ },
+ "cnbc/pln__PLN_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PLN%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 216301,
+  "sha256": "c37f2d2f5f17444a9dc9df41e0d5718030946da2e597f04e49440e8487ae0bc2",
+  "an": "2026-10-12T13:55:14+00:00",
+  "not": "pln · PLN="
+ },
+ "cnbc/pln__PLN_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/PLN%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 73948,
+  "sha256": "0b7e4a38714e429ad084fb8159e59c2262bbc54b074039bd719e98a1d691e044",
+  "an": "2026-10-12T13:55:14+00:00",
+  "not": "pln · PLN="
+ },
+ "cnbc/rut__RUT_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.RUT/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 184418,
+  "sha256": "29ad41e0eb97326f2dbc7a2da44217676fe334533801fd16fd79de55da642bf2",
+  "an": "2026-10-12T13:59:57+00:00",
+  "not": "rut · .RUT"
+ },
+ "cnbc/rut__RUT_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.RUT/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185284,
+  "sha256": "47e109ffbbc67dc1e2f6c13653b714817055be1d826bf338551004ee0d56e4af",
+  "an": "2026-10-12T13:59:58+00:00",
+  "not": "rut · .RUT"
+ },
+ "cnbc/rut__RUT_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.RUT/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 187531,
+  "sha256": "01621a6de50dcc126d6ecd9b9ae0b5b42f87882c28cd2616df0b43665101b9dd",
+  "an": "2026-10-12T13:59:58+00:00",
+  "not": "rut · .RUT"
+ },
+ "cnbc/rut__RUT_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.RUT/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190121,
+  "sha256": "c1e5d809fb7c6b7348b583c35a3b8ca6dcf013b9f5ba05615e7f7b330c852e23",
+  "an": "2026-10-12T13:59:59+00:00",
+  "not": "rut · .RUT"
+ },
+ "cnbc/rut__RUT_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.RUT/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190013,
+  "sha256": "d8966b3745ca8aa2bc2d7028338055807c2477a19d33fbc920b4c26155a66242",
+  "an": "2026-10-12T14:00:04+00:00",
+  "not": "rut · .RUT"
+ },
+ "cnbc/sensex__BSESN_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.BSESN/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 189293,
+  "sha256": "e4b65a1e3668e520a889d0ad22b4c2acb16194d5a73f44a93a1140dc188a2bce",
+  "an": "2026-10-12T14:01:08+00:00",
+  "not": "sensex · .BSESN"
+ },
+ "cnbc/sensex__BSESN_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.BSESN/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 194888,
+  "sha256": "cf53375edc7beed7459f73acf802c2c4f3b89c1ba186941d49766e70b35999d2",
+  "an": "2026-10-12T14:01:08+00:00",
+  "not": "sensex · .BSESN"
+ },
+ "cnbc/sensex__BSESN_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.BSESN/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 197575,
+  "sha256": "cdad45c01ca146367ed938be4e74eb5c64c3a2c1b0150946df4bf10615ef855e",
+  "an": "2026-10-12T14:01:09+00:00",
+  "not": "sensex · .BSESN"
+ },
+ "cnbc/sensex__BSESN_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.BSESN/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 198683,
+  "sha256": "e4b0208a4dad67b344813487dae7ced2b6cefeeb65715b27e4383ff1618d252a",
+  "an": "2026-10-12T14:01:10+00:00",
+  "not": "sensex · .BSESN"
+ },
+ "cnbc/sensex__BSESN_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.BSESN/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 200917,
+  "sha256": "b5b849464579036cc41aa5e16dc8742aa82ac4fe437424e5594ba03c4f37821e",
+  "an": "2026-10-12T14:01:10+00:00",
+  "not": "sensex · .BSESN"
+ },
+ "cnbc/sensex__BSESN_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.BSESN/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 71539,
+  "sha256": "6a24d25bf5d3724deaba797cf2bba2f71bbb795be16bfe3533900e05a2c126ca",
+  "an": "2026-10-12T14:01:10+00:00",
+  "not": "sensex · .BSESN"
+ },
+ "cnbc/shcomp__SSEC_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SSEC/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181791,
+  "sha256": "9979073ee4113f826609f7a75cb80c782f86b4834a4e8c141894220e2a23e3fc",
+  "an": "2026-10-12T14:01:11+00:00",
+  "not": "shcomp · .SSEC"
+ },
+ "cnbc/shcomp__SSEC_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SSEC/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 189315,
+  "sha256": "ad72a42f8034d1cb0ab732be4e58723466f70354a75ae78d28b650b6c9ffb474",
+  "an": "2026-10-12T14:01:11+00:00",
+  "not": "shcomp · .SSEC"
+ },
+ "cnbc/shcomp__SSEC_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SSEC/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 190918,
+  "sha256": "3311fab52c91bc64f8c5ee35d287bfd397d8d6c1e9af084e9b698c09f39f067b",
+  "an": "2026-10-12T14:01:12+00:00",
+  "not": "shcomp · .SSEC"
+ },
+ "cnbc/shcomp__SSEC_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SSEC/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 199362,
+  "sha256": "6b37514f9f6b6b098ffd9cf423e6cc717f6bb7453e21b1b58d2348ca6578afc0",
+  "an": "2026-10-12T14:01:12+00:00",
+  "not": "shcomp · .SSEC"
+ },
+ "cnbc/shcomp__SSEC_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SSEC/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 195316,
+  "sha256": "ff589dbd3e495178e2b014bcc7af2cbcaa3728e7315d799d185cc7571b903a08",
+  "an": "2026-10-12T14:01:13+00:00",
+  "not": "shcomp · .SSEC"
+ },
+ "cnbc/shcomp__SSEC_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SSEC/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68949,
+  "sha256": "5e49e0566733bbbf43a601198253431f539d9994d475c3e9d65f6f24535e5e43",
+  "an": "2026-10-12T14:01:13+00:00",
+  "not": "shcomp · .SSEC"
+ },
+ "cnbc/spx__SPX_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 184896,
+  "sha256": "68adbab28d1389fbb1b060453d3f192cc13f82272d16eb211b30109d13ac53e2",
+  "an": "2026-10-12T13:59:46+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/spx__SPX_1995.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/19950101000000/19991231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186484,
+  "sha256": "7d2a15e9731803af3af658c61e6e515cf724339782a175749145f8cc94f01577",
+  "an": "2026-10-12T13:59:46+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/spx__SPX_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 188270,
+  "sha256": "f26ca6954198bdfc03b7c90ea503c6eb55f7596afbdb17b6d87d98311e7dc996",
+  "an": "2026-10-12T13:59:47+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/spx__SPX_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 189469,
+  "sha256": "aec1d29a7d865436b17831c97ce0089876f130b7aa3baf7fdd41e9b5a1ab351b",
+  "an": "2026-10-12T13:59:47+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/spx__SPX_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 193619,
+  "sha256": "9ced06970d13b0bbbcb83516e45fe6d90dbbeff23ce281ba5a91138d6ce05936",
+  "an": "2026-10-12T13:59:47+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/spx__SPX_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 200936,
+  "sha256": "5ece815cac3e64bfdce64d10c2a12b616446f68fa10fc3cada98d26e0d32d6af",
+  "an": "2026-10-12T13:59:48+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/spx__SPX_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 195977,
+  "sha256": "1caaefa38457f6119e29acffcdc1f028bc1b46593a3b74123a5c83d7edecba34",
+  "an": "2026-10-12T13:59:48+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/spx__SPX_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 68570,
+  "sha256": "f0267e5160ecd16713a207c555c58bfade95364beeb3e7d9dbcb15029c1dc76f",
+  "an": "2026-10-12T13:59:49+00:00",
+  "not": "spx · .SPX"
+ },
+ "cnbc/thb__THB_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/THB%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 185957,
+  "sha256": "eb12432aca6052af42e536d4c68afefa4167db8b5485abea5d1d3e73901aae9e",
+  "an": "2026-10-12T13:54:44+00:00",
+  "not": "thb · THB="
+ },
+ "cnbc/thb__THB_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/THB%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186551,
+  "sha256": "edcc71df73a50ea49802cd458b82c4970db437d675d8ed0370f9b7d3bc0f5dec",
+  "an": "2026-10-12T13:54:50+00:00",
+  "not": "thb · THB="
+ },
+ "cnbc/thb__THB_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/THB%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 219701,
+  "sha256": "31cf0156942ddebfad24999b77e00495bf0c82dd73239d0beb78f9ac95eebae0",
+  "an": "2026-10-12T13:54:55+00:00",
+  "not": "thb · THB="
+ },
+ "cnbc/tr10y__TR10Y_TR_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TR10Y-TR/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 173186,
+  "sha256": "e61f6bc3d6026465bfd2885675ea79380a6d537e862469999a210e44867dcca7",
+  "an": "2026-10-12T13:59:38+00:00",
+  "not": "tr10y · TR10Y-TR"
+ },
+ "cnbc/tr10y__TR10Y_TR_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TR10Y-TR/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 173356,
+  "sha256": "c522dca2bb50038bd67cb76f794c1a9cf3e319a14ee86fd1b351700042fe57e2",
+  "an": "2026-10-12T13:59:38+00:00",
+  "not": "tr10y · TR10Y-TR"
+ },
+ "cnbc/tr10y__TR10Y_TR_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TR10Y-TR/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 174004,
+  "sha256": "db07ad2514ee191d77848f87e7d576bef10c991bce50ad75e32bcfd334b40e8a",
+  "an": "2026-10-12T13:59:39+00:00",
+  "not": "tr10y · TR10Y-TR"
+ },
+ "cnbc/tr10y__TR10Y_TR_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TR10Y-TR/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 61138,
+  "sha256": "53895b49c1fd89497e595212f0f6b4d2e92267b6f90079817f501e12455b021a",
+  "an": "2026-10-12T13:59:39+00:00",
+  "not": "tr10y · TR10Y-TR"
+ },
+ "cnbc/tr2y__TR2Y_TR_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TR2Y-TR/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 164447,
+  "sha256": "7f26dd4615411034316e1bb5ced1124a63178d00a6b5c5b32172ced34a155dc2",
+  "an": "2026-10-12T13:59:25+00:00",
+  "not": "tr2y · TR2Y-TR"
+ },
+ "cnbc/try__TRY_1995.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/19950101000000/19991231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179490,
+  "sha256": "18c25d37cf067d72e62f495c65fc22f3d13a633f1e7cd4a43518fc8952f59815",
+  "an": "2026-10-12T13:54:08+00:00",
+  "not": "try · TRY="
+ },
+ "cnbc/try__TRY_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 182399,
+  "sha256": "9e9f0deefb0a7c33bd872f00acd2db4361fe5c8ed11f611fccb4befb3d8de949",
+  "an": "2026-10-12T13:54:08+00:00",
+  "not": "try · TRY="
+ },
+ "cnbc/try__TRY_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181505,
+  "sha256": "5e4dad8260b81f7f236765050dddb708f9c917c1df29d26467fead40e3a2fcc3",
+  "an": "2026-10-12T13:54:09+00:00",
+  "not": "try · TRY="
+ },
+ "cnbc/try__TRY_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181345,
+  "sha256": "a764b290246ce4a70eef3c94b71d8a8b766a81994bfbad36e8de7210162da1e5",
+  "an": "2026-10-12T13:54:10+00:00",
+  "not": "try · TRY="
+ },
+ "cnbc/try__TRY_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202238,
+  "sha256": "d9b4285df5e448cb9a38e4c70e0f05f584c0df81e502b7b5957192b6c4971245",
+  "an": "2026-10-12T13:54:10+00:00",
+  "not": "try · TRY="
+ },
+ "cnbc/try__TRY_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 219986,
+  "sha256": "9d70ea1768b2aa91c7661283a3a7a2da571a5b0bf12754ef6be76cdcd4d07ee7",
+  "an": "2026-10-12T13:54:16+00:00",
+  "not": "try · TRY="
+ },
+ "cnbc/try__TRY_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 72842,
+  "sha256": "68799578152171f83510382706954e9006d09b9bb8e0ac1dc91ba38838b6f1db",
+  "an": "2026-10-12T13:54:17+00:00",
+  "not": "try · TRY="
+ },
+ "cnbc/us10y__US10Y_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 177441,
+  "sha256": "361239f43a1d891db6441a367bce2eb8310693648061b9115459e818328d1d01",
+  "an": "2026-10-12T13:57:05+00:00",
+  "not": "us10y · US10Y"
+ },
+ "cnbc/us10y__US10Y_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 175495,
+  "sha256": "e9693e17bc6af38ddfe3f9180c5e6aa8b92a4145e67aa4735127a131af000db3",
+  "an": "2026-10-12T13:57:21+00:00",
+  "not": "us10y · US10Y"
+ },
+ "cnbc/us30y__US30Y_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US30Y/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 175209,
+  "sha256": "e637490cb79ca6ec264f6ca20b5d6c95bd149c1e21eceaced6b0c1a34825337d",
+  "an": "2026-10-12T13:57:27+00:00",
+  "not": "us30y · US30Y"
+ },
+ "cnbc/us30y__US30Y_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US30Y/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 165904,
+  "sha256": "3006fb1e293058641192035c444a2c2dfc9a2cb51cf12925fceb3abc1c1c6bb9",
+  "an": "2026-10-12T13:57:38+00:00",
+  "not": "us30y · US30Y"
+ },
+ "cnbc/us30y__US30Y_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US30Y/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 175078,
+  "sha256": "314c91db9ba1dfd5488ae2580a6c2219a0913cef878f7294d108ef91b53d807e",
+  "an": "2026-10-12T13:57:39+00:00",
+  "not": "us30y · US30Y"
+ },
+ "cnbc/us5y__US5Y_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US5Y/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 174520,
+  "sha256": "5c2915be9a04f1cdbc6c37b48a1376440acc9f677026736c1f04dc109c33ff3c",
+  "an": "2026-10-12T13:56:21+00:00",
+  "not": "us5y · US5Y"
+ },
+ "cnbc/us5y__US5Y_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US5Y/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 195926,
+  "sha256": "41f71a26093952bc3be118c0d3671758434e73ae368221efdc9ef38c5789eb22",
+  "an": "2026-10-12T13:56:27+00:00",
+  "not": "us5y · US5Y"
+ },
+ "cnbc/us5y__US5Y_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US5Y/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 198567,
+  "sha256": "afc8687a463498edb22fa3a9565c63e402c5a1bfd4acd8690e4eb740f27ad6bd",
+  "an": "2026-10-12T13:56:32+00:00",
+  "not": "us5y · US5Y"
+ },
+ "cnbc/vix__VIX_1990.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/19900101000000/19941231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 178163,
+  "sha256": "f3bf8f468e07f3615f234ffe6ebc6cab907a6c1c4f9434a1a23e136cb1bdbf13",
+  "an": "2026-10-12T14:00:12+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/vix__VIX_1995.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/19950101000000/19991231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179560,
+  "sha256": "a0b9da494ad26b8dd6a8420765e5b26160cb0d48fdf677fb0f51513d02d7ee01",
+  "an": "2026-10-12T14:00:12+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/vix__VIX_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179683,
+  "sha256": "e0b93e9a8ad80af548bda152226a47bb9d70573952ed88329f0e8b138ad005e2",
+  "an": "2026-10-12T14:00:13+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/vix__VIX_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180234,
+  "sha256": "909ccbd6275fb6a43cf9f7afb2003e3a84cd98b47ec7f2094fd8add82e783c64",
+  "an": "2026-10-12T14:00:13+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/vix__VIX_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 180251,
+  "sha256": "7e1165dfa47532acc4804421884ec4cadc2783a1ed3be45cafd91167aa757160",
+  "an": "2026-10-12T14:00:14+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/vix__VIX_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 179870,
+  "sha256": "6b0526472baa3fa32eda974ca2667a01fb3a121e0c41ec47a16f09d89a513b79",
+  "an": "2026-10-12T14:00:15+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/vix__VIX_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 182825,
+  "sha256": "26d702e503f3af012535e104c1194bc149d9fc4ab68f8e4834350deb1a141a94",
+  "an": "2026-10-12T14:00:15+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/vix__VIX_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 65708,
+  "sha256": "7ebdda83c7cb21fcf4e65c7efd50a4c8fcff93f1e04eadedfd169be6edc7db69",
+  "an": "2026-10-12T14:00:16+00:00",
+  "not": "vix · .VIX"
+ },
+ "cnbc/wti__CL_1_2000.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 183978,
+  "sha256": "b64c26f9a644f3f330e35bfa954a317f6e087971ce870fa475124e0fa01d72e6",
+  "an": "2026-10-12T13:47:43+00:00",
+  "not": "wti · @CL.1"
+ },
+ "cnbc/wti__CL_1_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186832,
+  "sha256": "c4f8c95e2900c5460f08806f6db2d2bc8cb2ea43acca03de636503c8c06ae73b",
+  "an": "2026-10-12T13:47:44+00:00",
+  "not": "wti · @CL.1"
+ },
+ "cnbc/wti__CL_1_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186692,
+  "sha256": "cd23ea91deb78bfde8982d7487c57aaf3d9f7075582c3b19d1d93caccc3f4582",
+  "an": "2026-10-12T13:47:44+00:00",
+  "not": "wti · @CL.1"
+ },
+ "cnbc/wti__CL_1_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186377,
+  "sha256": "294f0df4ebbb79cec08c70a3731fbb63f2e026aec88e0749fd3171bbc32534fe",
+  "an": "2026-10-12T13:47:45+00:00",
+  "not": "wti · @CL.1"
+ },
+ "cnbc/wti__CL_1_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 186400,
+  "sha256": "d28bc4d55c71f1ec841992fb42e87faa970633e4b3e6afa91282fc4e0a4195ca",
+  "an": "2026-10-12T13:47:50+00:00",
+  "not": "wti · @CL.1"
+ },
+ "cnbc/wti__CL_1_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 65628,
+  "sha256": "72151468c239a2b2dfcbb59fed2074238f3d020816c00919fab7f1666b1093a7",
+  "an": "2026-10-12T13:47:51+00:00",
+  "not": "wti · @CL.1"
+ },
+ "cnbc/zar__ZAR_2005.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181721,
+  "sha256": "71a001e04fd103b2707a41a5bdd0868fd63b4e854a6ec043430a94318e298f15",
+  "an": "2026-10-12T13:52:48+00:00",
+  "not": "zar · ZAR="
+ },
+ "cnbc/zar__ZAR_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 206697,
+  "sha256": "0e7c100627a8c59b4801b3dc66cdce4c693a87b16708fa53cb035b82a1e84b9a",
+  "an": "2026-10-12T13:52:55+00:00",
+  "not": "zar · ZAR="
+ },
+ "cnbc/zar__ZAR_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 220275,
+  "sha256": "5011aca6d436bed85180c3adde38ea9a9f25107838d65e8ecb354d8e700dffa1",
+  "an": "2026-10-12T13:53:00+00:00",
+  "not": "zar · ZAR="
+ },
+ "cnbc/zar__ZAR_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20250101000000/20261013000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 71120,
+  "sha256": "c3165386f59cd3573fd92d831e5ef7843b41187aa91b8137acff50dfb796f2ad",
+  "an": "2026-10-12T13:53:01+00:00",
+  "not": "zar · ZAR="
+ }
+}

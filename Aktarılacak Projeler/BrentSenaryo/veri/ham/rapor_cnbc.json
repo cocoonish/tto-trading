@@ -1,0 +1,2180 @@
+{
+ "2026-10-12T13:47:15Z": {
+  "CNBC": {
+   "durum": "tamam",
+   "brent": {
+    "durum": "kapalı",
+    "yoklama": {
+     "@LCO.1": {
+      "durum": 200,
+      "bar": 0
+     },
+     "@BRN.1": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "wti": {
+    "durum": "tamam",
+    "sembol": "@CL.1",
+    "yoklama": {
+     "@CL.1": {
+      "durum": 200,
+      "bar": 497
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1245
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 442
+     }
+    }
+   },
+   "kalorifer": {
+    "durum": "tamam",
+    "sembol": "@HO.1",
+    "yoklama": {
+     "@HO.1": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1245
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1250
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "benzin": {
+    "durum": "tamam",
+    "sembol": "@RB.1",
+    "yoklama": {
+     "@RB.1": {
+      "durum": 200,
+      "bar": 498
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1068
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 443
+     }
+    }
+   },
+   "gazyagi_gasoil": {
+    "durum": "kapalı",
+    "yoklama": {
+     "@LGO.1": {
+      "durum": 200,
+      "bar": 0
+     },
+     "@GO.1": {
+      "durum": 200,
+      "bar": 0
+     },
+     "@QS.1": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "dogalgaz": {
+    "durum": "kapalı",
+    "yoklama": {
+     "@NG.1": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "ttf": {
+    "durum": "kapalı",
+    "yoklama": {
+     "@TFM.1": {
+      "durum": 200,
+      "bar": 0
+     },
+     "@TTF.1": {
+      "durum": 200,
+      "bar": 0
+     },
+     "@TG.1": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "altin": {
+    "durum": "kapalı",
+    "yoklama": {
+     "@GC.1": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "gumus": {
+    "durum": "tamam",
+    "sembol": "@SI.1",
+    "yoklama": {
+     "@SI.1": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1236
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1233
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "bakir": {
+    "durum": "tamam",
+    "sembol": "@HG.1",
+    "yoklama": {
+     "@HG.1": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1244
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 444
+     }
+    }
+   },
+   "bugday": {
+    "durum": "tamam",
+    "sembol": "@W.1",
+    "yoklama": {
+     "@W.1": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1261
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 444
+     }
+    }
+   },
+   "misir": {
+    "durum": "tamam",
+    "sembol": "@C.1",
+    "yoklama": {
+     "@C.1": {
+      "durum": 200,
+      "bar": 498
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 443
+     }
+    }
+   },
+   "eur": {
+    "durum": "kapalı",
+    "yoklama": {
+     "EUR=": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "jpy": {
+    "durum": "kapalı",
+    "yoklama": {
+     "JPY=": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "gbp": {
+    "durum": "tamam",
+    "sembol": "GBP=",
+    "yoklama": {
+     "GBP=": {
+      "durum": 200,
+      "bar": 581
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 1287
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1551
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 494
+     }
+    }
+   },
+   "chf": {
+    "durum": "tamam",
+    "sembol": "CHF=",
+    "yoklama": {
+     "CHF=": {
+      "durum": 200,
+      "bar": 586
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 1286
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1554
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 517
+     }
+    }
+   },
+   "cad": {
+    "durum": "tamam",
+    "sembol": "CAD=",
+    "yoklama": {
+     "CAD=": {
+      "durum": 200,
+      "bar": 587
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1551
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "aud": {
+    "durum": "tamam",
+    "sembol": "AUD=",
+    "yoklama": {
+     "AUD=": {
+      "durum": 200,
+      "bar": 585
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1553
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 504
+     }
+    }
+   },
+   "nzd": {
+    "durum": "tamam",
+    "sembol": "NZD=",
+    "yoklama": {
+     "NZD=": {
+      "durum": 200,
+      "bar": 582
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1451
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1551
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 513
+     }
+    }
+   },
+   "nok": {
+    "durum": "tamam",
+    "sembol": "NOK=",
+    "yoklama": {
+     "NOK=": {
+      "durum": 200,
+      "bar": 567
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1450
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1546
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 498
+     }
+    }
+   },
+   "sek": {
+    "durum": "kapalı",
+    "yoklama": {
+     "SEK=": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "krw": {
+    "durum": "tamam",
+    "sembol": "KRW=",
+    "yoklama": {
+     "KRW=": {
+      "durum": 200,
+      "bar": 559
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1436
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1437
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 500
+     }
+    }
+   },
+   "zar": {
+    "durum": "tamam",
+    "sembol": "ZAR=",
+    "yoklama": {
+     "ZAR=": {
+      "durum": 200,
+      "bar": 564
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1442
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1536
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 495
+     }
+    }
+   },
+   "mxn": {
+    "durum": "tamam",
+    "sembol": "MXN=",
+    "yoklama": {
+     "MXN=": {
+      "durum": 200,
+      "bar": 570
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 501
+     }
+    }
+   },
+   "brl": {
+    "durum": "tamam",
+    "sembol": "BRL=",
+    "yoklama": {
+     "BRL=": {
+      "durum": 200,
+      "bar": 547
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1341
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1390
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 490
+     }
+    }
+   },
+   "clp": {
+    "durum": "tamam",
+    "sembol": "CLP=",
+    "yoklama": {
+     "CLP=": {
+      "durum": 200,
+      "bar": 549
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1296
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1388
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1492
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 488
+     }
+    }
+   },
+   "cop": {
+    "durum": "tamam",
+    "sembol": "COP=",
+    "yoklama": {
+     "COP=": {
+      "durum": 200,
+      "bar": 527
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1296
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1407
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1446
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 468
+     }
+    }
+   },
+   "try": {
+    "durum": "tamam",
+    "sembol": "TRY=",
+    "yoklama": {
+     "TRY=": {
+      "durum": 200,
+      "bar": 574
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 1299
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1451
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1548
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 507
+     }
+    }
+   },
+   "inr": {
+    "durum": "tamam",
+    "sembol": "INR=",
+    "yoklama": {
+     "INR=": {
+      "durum": 200,
+      "bar": 520
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1308
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1343
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 462
+     }
+    }
+   },
+   "idr": {
+    "durum": "kapalı",
+    "yoklama": {
+     "IDR=": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "php": {
+    "durum": "tamam",
+    "sembol": "PHP=",
+    "yoklama": {
+     "PHP=": {
+      "durum": 200,
+      "bar": 571
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1328
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1427
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 505
+     }
+    }
+   },
+   "thb": {
+    "durum": "tamam",
+    "sembol": "THB=",
+    "yoklama": {
+     "THB=": {
+      "durum": 200,
+      "bar": 549
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1534
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "pln": {
+    "durum": "tamam",
+    "sembol": "PLN=",
+    "yoklama": {
+     "PLN=": {
+      "durum": 200,
+      "bar": 598
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1450
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1550
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 529
+     }
+    }
+   },
+   "huf": {
+    "durum": "kapalı",
+    "yoklama": {
+     "HUF=": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "czk": {
+    "durum": "tamam",
+    "sembol": "CZK=",
+    "yoklama": {
+     "CZK=": {
+      "durum": 200,
+      "bar": 589
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1450
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 530
+     }
+    }
+   },
+   "ils": {
+    "durum": "tamam",
+    "sembol": "ILS=",
+    "yoklama": {
+     "ILS=": {
+      "durum": 200,
+      "bar": 559
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1415
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1524
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 491
+     }
+    }
+   },
+   "egp": {
+    "durum": "tamam",
+    "sembol": "EGP=",
+    "yoklama": {
+     "EGP=": {
+      "durum": 200,
+      "bar": 730
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1372
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1826
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1787
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1826
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1827
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 649
+     }
+    }
+   },
+   "cnh": {
+    "durum": "tamam",
+    "sembol": "CNH=",
+    "yoklama": {
+     "CNH=": {
+      "durum": 200,
+      "bar": 580
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 787
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1447
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1546
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 494
+     }
+    }
+   },
+   "dem": {
+    "durum": "kapalı",
+    "yoklama": {
+     "DEM=": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "us3m": {
+    "durum": "kapalı",
+    "yoklama": {
+     "US3M": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "us2y": {
+    "durum": "kapalı",
+    "yoklama": {
+     "US2Y": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "us5y": {
+    "durum": "tamam",
+    "sembol": "US5Y",
+    "yoklama": {
+     "US5Y": {
+      "durum": 200,
+      "bar": 519
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1254
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1408
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1427
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "us10y": {
+    "durum": "tamam",
+    "sembol": "US10Y",
+    "yoklama": {
+     "US10Y": {
+      "durum": 200,
+      "bar": 502
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1275
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1261
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "us30y": {
+    "durum": "tamam",
+    "sembol": "US30Y",
+    "yoklama": {
+     "US30Y": {
+      "durum": 200,
+      "bar": 518
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1262
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1192
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "de2y": {
+    "durum": "tamam",
+    "sembol": "DE2Y-DE",
+    "yoklama": {
+     "DE2Y-DE": {
+      "durum": 200,
+      "bar": 631
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1286
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1272
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1161
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1554
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1561
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 560
+     }
+    }
+   },
+   "de10y": {
+    "durum": "kapalı",
+    "yoklama": {
+     "DE10Y-DE": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "gb2y": {
+    "durum": "tamam",
+    "sembol": "GB2Y-GB",
+    "yoklama": {
+     "GB2Y-GB": {
+      "durum": 200,
+      "bar": 712
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1292
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1509
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1679
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 631
+     }
+    }
+   },
+   "gb10y": {
+    "durum": "tamam",
+    "sembol": "GB10Y-GB",
+    "yoklama": {
+     "GB10Y-GB": {
+      "durum": 200,
+      "bar": 608
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1271
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1144
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1631
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 541
+     }
+    }
+   },
+   "jp2y": {
+    "durum": "tamam",
+    "sembol": "JP2Y-JP",
+    "yoklama": {
+     "JP2Y-JP": {
+      "durum": 200,
+      "bar": 595
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1231
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1218
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 835
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1440
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1506
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 528
+     }
+    }
+   },
+   "jp10y": {
+    "durum": "kapalı",
+    "yoklama": {
+     "JP10Y-JP": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "it10y": {
+    "durum": "tamam",
+    "sembol": "IT10Y-IT",
+    "yoklama": {
+     "IT10Y-IT": {
+      "durum": 200,
+      "bar": 624
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1284
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1152
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1531
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1572
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 555
+     }
+    }
+   },
+   "tr2y": {
+    "durum": "tamam",
+    "sembol": "TR2Y-TR",
+    "yoklama": {
+     "TR2Y-TR": {
+      "durum": 200,
+      "bar": 480
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1151
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "tr10y": {
+    "durum": "tamam",
+    "sembol": "TR10Y-TR",
+    "yoklama": {
+     "TR10Y-TR": {
+      "durum": 200,
+      "bar": 478
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1239
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1220
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1216
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 426
+     }
+    }
+   },
+   "spx": {
+    "durum": "tamam",
+    "sembol": ".SPX",
+    "yoklama": {
+     ".SPX": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1265
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 1263
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1256
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 444
+     }
+    }
+   },
+   "ndx": {
+    "durum": "tamam",
+    "sembol": ".NDX",
+    "yoklama": {
+     ".NDX": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1256
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1256
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1256
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 444
+     }
+    }
+   },
+   "rut": {
+    "durum": "tamam",
+    "sembol": ".RUT",
+    "yoklama": {
+     ".RUT": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1256
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1264
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "vix": {
+    "durum": "tamam",
+    "sembol": ".VIX",
+    "yoklama": {
+     ".VIX": {
+      "durum": 200,
+      "bar": 514
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 0
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1264
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 1263
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1277
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 458
+     }
+    }
+   },
+   "dxy": {
+    "durum": "tamam",
+    "sembol": ".DXY",
+    "yoklama": {
+     ".DXY": {
+      "durum": 200,
+      "bar": 542
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 1296
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1305
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1279
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1280
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1359
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1359
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 474
+     }
+    }
+   },
+   "sx5e": {
+    "durum": "kapalı",
+    "yoklama": {
+     ".STOXX50E": {
+      "durum": 200,
+      "bar": 0
+     },
+     ".SX5E": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "dax": {
+    "durum": "tamam",
+    "sembol": ".GDAXI",
+    "yoklama": {
+     ".GDAXI": {
+      "durum": 200,
+      "bar": 504
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 502
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1251
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 1255
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1270
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1272
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1271
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1262
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1275
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 451
+     }
+    }
+   },
+   "ftse": {
+    "durum": "tamam",
+    "sembol": ".FTSE",
+    "yoklama": {
+     ".FTSE": {
+      "durum": 200,
+      "bar": 504
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 1263
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1264
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 1263
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1264
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1264
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1264
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1262
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 449
+     }
+    }
+   },
+   "cac": {
+    "durum": "tamam",
+    "sembol": ".FCHI",
+    "yoklama": {
+     ".FCHI": {
+      "durum": 200,
+      "bar": 508
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1275
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1279
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1281
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1278
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1283
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 453
+     }
+    }
+   },
+   "n225": {
+    "durum": "tamam",
+    "sembol": ".N225",
+    "yoklama": {
+     ".N225": {
+      "durum": 200,
+      "bar": 485
+     }
+    },
+    "parcalar": {
+     "1985": {
+      "durum": 200,
+      "bar": 1360
+     },
+     "1990": {
+      "durum": 200,
+      "bar": 1232
+     },
+     "1995": {
+      "durum": 200,
+      "bar": 1233
+     },
+     "2000": {
+      "durum": 200,
+      "bar": 1231
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1227
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1222
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1224
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 430
+     }
+    }
+   },
+   "hsi": {
+    "durum": "tamam",
+    "sembol": ".HSI",
+    "yoklama": {
+     ".HSI": {
+      "durum": 200,
+      "bar": 492
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1234
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1234
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1235
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1231
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1230
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 437
+     }
+    }
+   },
+   "kospi": {
+    "durum": "tamam",
+    "sembol": ".KS11",
+    "yoklama": {
+     ".KS11": {
+      "durum": 200,
+      "bar": 485
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1227
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1243
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1242
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1226
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1232
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 430
+     }
+    }
+   },
+   "sensex": {
+    "durum": "tamam",
+    "sembol": ".BSESN",
+    "yoklama": {
+     ".BSESN": {
+      "durum": 200,
+      "bar": 495
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1255
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1239
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1244
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1229
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1243
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 441
+     }
+    }
+   },
+   "shcomp": {
+    "durum": "tamam",
+    "sembol": ".SSEC",
+    "yoklama": {
+     ".SSEC": {
+      "durum": 200,
+      "bar": 484
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1200
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1218
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1214
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1219
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1212
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 427
+     }
+    }
+   },
+   "bist100": {
+    "durum": "tamam",
+    "sembol": ".XU100",
+    "yoklama": {
+     ".XU100": {
+      "durum": 200,
+      "bar": 500
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1241
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1252
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 444
+     }
+    }
+   },
+   "sure_sn": 842.2
+  }
+ }
+}
