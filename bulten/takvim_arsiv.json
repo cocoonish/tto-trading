@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-11",
+ "_son_guncelleme": "2026-10-12",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1211,6 +1211,26 @@
    "beklenti": "mevcut politika faizi %37,00 · anket (PKA Eylül): 12 ay sonrası politika faizi %29,22",
    "beklenti_sayi": null,
    "gorulme": "2026-10-09"
+  },
+  "2026-11-02|TCMB: Haftalık para-banka (43. Hafta 2026)": {
+   "tarih": "2026-11-02",
+   "olay": "TCMB: Haftalık para-banka (43. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-12"
+  },
+  "2026-11-02|TCMB: Menkul kıymet ist. (43. Hafta 2026)": {
+   "tarih": "2026-11-02",
+   "olay": "TCMB: Menkul kıymet ist. (43. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-12"
   }
  }
 }
