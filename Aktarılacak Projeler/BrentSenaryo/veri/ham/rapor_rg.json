@@ -1,0 +1,78 @@
+{
+ "2026-10-12T14:54:26Z": {
+  "Resmî Gazete ÖTV kararları (kodlama düzeltilmiş)": {
+   "durum": "tamam",
+   "20260302": {
+    "durum": 200,
+    "bag": []
+   },
+   "20260302M1": {
+    "durum": 404
+   },
+   "20260303": {
+    "durum": 200,
+    "bag": []
+   },
+   "20260303M1": {
+    "durum": 404
+   },
+   "20260304": {
+    "durum": 200,
+    "bag": []
+   },
+   "20260304M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260304M1.htm — URLError(TimeoutError('timed out'))",
+   "20260305": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260305.htm — URLError(TimeoutError('timed out'))",
+   "20260305M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260305M1.htm — URLError(TimeoutError('timed out'))",
+   "20260306": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260306.htm — URLError(TimeoutError('timed out'))",
+   "20260306M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260306M1.htm — URLError(TimeoutError('timed out'))",
+   "20260307": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260307.htm — URLError(TimeoutError('timed out'))",
+   "20260307M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260307M1.htm — URLError(TimeoutError('timed out'))",
+   "20260308": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260308.htm — URLError(TimeoutError('timed out'))",
+   "20260308M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260308M1.htm — URLError(TimeoutError('timed out'))",
+   "20260309": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260309.htm — URLError(TimeoutError('timed out'))",
+   "20260309M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260309M1.htm — URLError(TimeoutError('timed out'))",
+   "20260310": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260310.htm — URLError(TimeoutError('timed out'))",
+   "20260310M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/03/20260310M1.htm — URLError(TimeoutError('timed out'))",
+   "20260810": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260810.htm — URLError(TimeoutError('timed out'))",
+   "20260810M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260810M1.htm — URLError(TimeoutError('timed out'))",
+   "20260811": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260811.htm — URLError(TimeoutError('timed out'))",
+   "20260811M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260811M1.htm — URLError(TimeoutError('timed out'))",
+   "20260812": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260812.htm — URLError(TimeoutError('timed out'))",
+   "20260812M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260812M1.htm — URLError(TimeoutError('timed out'))",
+   "20260813": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260813.htm — URLError(TimeoutError('timed out'))",
+   "20260813M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260813M1.htm — URLError(TimeoutError('timed out'))",
+   "20260814": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260814.htm — URLError(TimeoutError('timed out'))",
+   "20260814M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260814M1.htm — URLError(TimeoutError('timed out'))",
+   "20260815": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260815.htm — URLError(TimeoutError('timed out'))",
+   "20260815M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260815M1.htm — URLError(TimeoutError('timed out'))",
+   "20260816": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260816.htm — URLError(TimeoutError('timed out'))",
+   "20260816M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260816M1.htm — URLError(TimeoutError('timed out'))",
+   "20260817": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260817.htm — URLError(TimeoutError('timed out'))",
+   "20260817M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260817M1.htm — URLError(TimeoutError('timed out'))",
+   "20260818": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260818.htm — URLError(TimeoutError('timed out'))",
+   "20260818M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260818M1.htm — URLError(TimeoutError('timed out'))",
+   "20260819": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260819.htm — URLError(TimeoutError('timed out'))",
+   "20260819M1": "hata indirilemedi: https://www.resmigazete.gov.tr/eskiler/2026/08/20260819M1.htm — URLError(TimeoutError('timed out'))",
+   "2026-08-20": "bütçe doldu",
+   "2026-08-21": "bütçe doldu",
+   "2026-08-22": "bütçe doldu",
+   "2026-08-23": "bütçe doldu",
+   "2026-08-24": "bütçe doldu",
+   "2026-08-25": "bütçe doldu",
+   "2026-08-26": "bütçe doldu",
+   "2026-08-27": "bütçe doldu",
+   "2026-08-28": "bütçe doldu",
+   "2026-08-29": "bütçe doldu",
+   "2026-08-30": "bütçe doldu",
+   "2026-08-31": "bütçe doldu",
+   "2026-09-01": "bütçe doldu",
+   "2026-09-02": "bütçe doldu",
+   "2026-09-28": "bütçe doldu",
+   "2026-09-29": "bütçe doldu",
+   "2026-09-30": "bütçe doldu",
+   "2026-10-01": "bütçe doldu",
+   "2026-10-02": "bütçe doldu",
+   "sure_sn": 1080.6
+  }
+ }
+}
