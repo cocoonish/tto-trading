@@ -233,8 +233,11 @@ def cnbc() -> dict:
 # Hisse ve fon kapanışları. Döviz BİLEREK yok: Yahoo'nun günlük döviz barının
 # kapanışı günün BAŞIDIR (ölçüldü, 02.10.2026); paralar CNBC'den.
 YAHOO = [
-    # ABD endeksleri (1990 emsali için uzun)
+    # ABD endeksleri (1990 emsali için uzun) ve ima edilen oynaklık: ^OVX ham
+    # petrol (USO opsiyonları), ^GVZ altın, ^MOVE ABD tahvili — piyasanın bir
+    # aylık hareketi ne kadar olası saydığının tek doğrudan ölçüsü
     "^GSPC", "^IXIC", "^DJI", "^RUT", "^VIX", "^TNX", "^IRX", "^FVX", "^TYX",
+    "^OVX", "^GVZ", "^MOVE", "BZ=F", "CL=F",
     # ABD sektör fonları ve temalar
     "XLE", "XOP", "XLB", "XLI", "XLY", "XLP", "XLU", "XLF", "XLK", "XLV", "XLRE",
     "JETS", "ITA", "XAR", "IYT",
