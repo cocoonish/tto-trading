@@ -461,6 +461,23 @@ main:focus {
     display: table;
   }
 }
+/* Sayı tablosu (`<div class="sayi-tablo">` içindeki Markdown tablosu): değer hücreleri satır içinde
+   kırılmaz — dar ekranda "−%10,4" eksiyle yüzde arasından, "102,41 – 118,26" aralığın ortasından
+   bölünüyordu. Tablo kendi içinde yatay kayar (yukarıdaki display:block), satır adı yapışık kalır. */
+.prose .sayi-tablo td:not(:first-child),
+.prose .sayi-tablo th:not(:first-child) {
+  white-space: nowrap;
+}
+@media (max-width: 759px) {
+  .prose .sayi-tablo td:first-child,
+  .prose .sayi-tablo th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: 7.5rem;
+    background: var(--paper);
+  }
+}
 .prose thead th {
   font-family: var(--font-mono);
   font-size: 0.68rem;

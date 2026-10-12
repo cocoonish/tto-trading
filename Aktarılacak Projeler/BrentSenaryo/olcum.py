@@ -17,7 +17,7 @@ geçmişte ne yaptı? Cevap üç ayaktan kurulur ve üçü ayrı ayrı yayımlan
   2. EMSALLER — anlatıyla belgelenmiş arz olayları (1990 Körfez, 2002
      Venezuela, 2003 Irak, 2011 Libya, 2019 Abqaiq, 2022 Rusya, 2025
      İsrail–İran, 2026 Hürmüz; pencere olay gününden sabit, sonucu bilmeden)
-     ve 2000'den bu yana Brent'in 21 iş günde en az senaryonun alt ucu kadar
+     ve 1988'den bu yana Brent'in 21 iş günde en az senaryonun alt ucu kadar
      yükseldiği BÜTÜN pencereler (nedeni karışık).
   3. ÖRNEKLEM DIŞI SINAMA — 2026 içinde bir-pencere-dışarıda (her yükseliş
      öbür üçünden tahmin edilir) ve 2026 öncesi pencerelerden 2026'ya.
@@ -65,6 +65,11 @@ SENARYO = {"125": 125.0, "150": 150.0}
 UFUK = 21
 NW_GECIKME = UFUK - 1
 ESIK_ALT = None          # senaryonun alt ucunun log değişimi; senaryo_yeri() kurar
+PENCERE_ESIK = 15.0      # 2026 pencereleri: Brent'in 21 iş günlük yükselişi en az %15
+PENCERE_ARA = 35         # 2026 pencereleri: birbirinden 35 takvim gününden fazla uzak
+GENIS_ARA = 40           # 1988+ geniş küme: birbirinden 40 takvim gününden fazla uzak
+TAKVIM_TAVAN = 40        # 21 gözlemlik pencerenin takvim boyu bunu aşarsa (kaynakta boşluk) atılır
+LOO_ASGARI = 40          # bir-pencere-dışarıda sınamada eğitimde kalması gereken en az gün
 
 
 # ─────────────────────────────────────────────────────────────── okuma
@@ -130,7 +135,7 @@ def degisim(x: pd.Series, birim: str, h: int = UFUK) -> pd.Series:
     raise ValueError(birim)
 
 
-def pencere_log(s: pd.Series, h: int = UFUK, azami_gun: int = 40) -> pd.Series:
+def pencere_log(s: pd.Series, h: int = UFUK, azami_gun: int = TAKVIM_TAVAN) -> pd.Series:
     """h GÖZLEMLİK log değişim (×100); pencerenin TAKVİM boyu `azami_gun`ü aşıyorsa boş.
     Kaynakta boşluk varsa (CNBC Brent 29.12.1989 → 09.10.1990) h gözlem bir aydan uzun bir
     aralığı kapsar ve "21 iş günlük değişim" sessizce dokuz aylık değişime dönüşür."""
@@ -138,6 +143,13 @@ def pencere_log(s: pd.Series, h: int = UFUK, azami_gun: int = 40) -> pd.Series:
     r = np.log(s / s.shift(h)) * 100
     boy = pd.Series(s.index, index=s.index).diff(h).dt.days
     return r[boy <= azami_gun]
+
+
+def yuzde(m: float | None) -> float | None:
+    """Log değişim (×100) → yüzde değişim. Okura giden her fiyat değişimi yüzdedir: büyük hareketlerde
+    log ölçü ile yüzde ayrışır (log +53,6 = +%70,8) ve okurun seviye aritmetiği log ölçüde tutmaz.
+    Eğimler (esneklikler) log ölçüde kalır."""
+    return None if m is None else (math.exp(m / 100) - 1) * 100
 
 
 def iki_nokta(s: pd.Series, t0: pd.Timestamp, t1: pd.Timestamp, birim: str, tol: int = 5) -> float | None:
@@ -211,7 +223,8 @@ def cnbc() -> tuple[pd.DataFrame, dict]:
 
 
 def brent_vadeli_uzun() -> pd.Series:
-    """CNBC ön vade Brent (2000+), 2026 penceresinde bültenin serisiyle birebir aynı (ölçüldü)."""
+    """CNBC ön vade Brent (24.06.1988'den), 2026 penceresinde bültenin serisiyle birebir aynı (ölçülür:
+    `kaynak_uyumu`)."""
     C, _ = cnbc()
     return C["brent"].dropna()
 
@@ -222,8 +235,8 @@ def brent_fiziki() -> pd.Series:
 
 def devir_gunleri(idx: pd.DatetimeIndex) -> set:
     """Brent ön vadesinin değiştiği gün: her ayın İLK iş günü (ICE Brent kontratı teslim ayından
-    iki ay önceki ayın son iş günü dolar). Ölçüldü: 01.04.2026'da Brent −%15,7, aynı gün WTI
-    −%1,3 — fark devrin kendisi."""
+    iki ay önceki ayın son iş günü dolar). Ölçüldü (`rejim_2026.devir.ornek`): 01.04.2026'da ön vade
+    −%14,5, aynı gün WTI −%1,2; aradaki 14,4 log puan devrin kendisi."""
     s = pd.Series(idx, index=idx)
     return set(s.groupby([idx.year, idx.month]).min())
 
@@ -268,6 +281,14 @@ def brent_devirsiz(on: pd.Series) -> tuple[pd.Series, dict]:
     endeks = np.exp(r.fillna(0).cumsum())
     endeks = endeks / endeks.iloc[-1] * on.iloc[-1]
     kayit["wti_bosluk_2026"] = {k: v for k, v in bosluk.items() if k >= "2025-10-01"}
+    if kayit["wti_bosluk_2026"]:
+        # yöntem ekinin örneği: pencerenin en büyük devir boşluğu (ön vade ile WTI'nın o günkü getirisi)
+        g = max(kayit["wti_bosluk_2026"], key=lambda k: abs(kayit["wti_bosluk_2026"][k]))
+        t = pd.Timestamp(g)
+        rb = math.log(on.loc[t] / on.loc[on.index[on.index.get_loc(t) - 1]])
+        kayit["ornek"] = {"gun": g, "on_vade_yuzde": float((math.exp(rb) - 1) * 100),
+                          "wti_yuzde": float((math.exp(rw.loc[t]) - 1) * 100),
+                          "fark_log": kayit["wti_bosluk_2026"][g]}
     return endeks, kayit
 
 
@@ -304,6 +325,8 @@ def iki_brent() -> dict:
         "ekim_ort_fark": float(eki.fark.mean()), "ekim_gun": int(len(eki)),
         "fark_zirve_2026": float(D.loc["2026", "fark"].max()),
         "fark_zirve_2026_gun": D.loc["2026", "fark"].idxmax().strftime("%Y-%m-%d"),
+        "fark_zirve_2026_fiziki": float(D.loc[D.loc["2026", "fark"].idxmax(), "fiziki"]),
+        "fark_zirve_2026_vadeli": float(D.loc[D.loc["2026", "fark"].idxmax(), "vadeli"]),
         "fiziki_zirve_2026": float(sp.loc["2026"].max()),
         "fiziki_zirve_2026_gun": sp.loc["2026"].idxmax().strftime("%Y-%m-%d"),
         "tarihce_2000_2025": {
@@ -365,6 +388,13 @@ def senaryo_yeri() -> dict:
         out["egri_kodlari"] = ilk
     for ad, v in out["senaryo"].items():
         v.setdefault("log_devirsiz", None)
+    # Eğrinin normalleşme fiyatlaması geçmişte tuttu mu: bugünün ön vadesi (Aralık 2026) Mart zirvesinin
+    # son gününde ve 1 Eylül'de ne fiyatlanıyordu (aynı kontrat, Yahoo'da listeli kontrat kapanışı)
+    kk = tablo("egri_kontrat")
+    if "BZZ26_NYM" in kk:
+        z = kk["BZZ26_NYM"].dropna()
+        out["aralik26"] = {g: {"gun": z.loc[:g].index[-1].strftime("%Y-%m-%d"), "fiyat": float(z.loc[:g].iloc[-1])}
+                           for g in ("2026-03-31", "2026-09-01", BAZ_GUN)}
     y26 = p[p.index >= "2026-01-01"]
     out["yil_ilk"] = {"gun": y26.index[0].strftime("%Y-%m-%d"), "deger": float(y26.iloc[0])}
     out["zirve_2026"] = {"gun": y26.idxmax().strftime("%Y-%m-%d"), "deger": float(y26.max())}
@@ -381,6 +411,7 @@ def senaryo_yeri() -> dict:
             s = pd.concat([s[s.index < p.index[0]], p]).sort_index()
             s = s[~s.index.duplicated(keep="last")]
         lr = pencere_log(s).dropna()
+        bas_fiyat = s.dropna().shift(UFUK)   # pencerenin başlangıç fiyatı (21 gözlem önce)
         d = {"n": int(len(lr)), "ilk": lr.index[0].strftime("%Y-%m-%d"), "son": lr.index[-1].strftime("%Y-%m-%d")}
         for k, v in out["senaryo"].items():
             m = lr >= v["log"]
@@ -394,7 +425,8 @@ def senaryo_yeri() -> dict:
                     ep[-1].append(g)
             d[k] = {"pay": float(m.mean() * 100), "gun": int(m.sum()), "epizot": len(ep),
                     "epizotlar": [{"ilk": e[0].strftime("%Y-%m-%d"), "son": e[-1].strftime("%Y-%m-%d"),
-                                   "azami": float(lr.loc[e].max())} for e in ep]}
+                                   "azami": float(lr.loc[e].max()),
+                                   "bas_azami": float(bas_fiyat.reindex(e).max())} for e in ep]}
         sik[ad] = d
     out["siklik"] = sik
     # opsiyon piyasasının ima ettiği olasılık (OVX: WTI fonu opsiyonları, 30 gün; çarpıklıksız lognormal,
@@ -449,7 +481,7 @@ KUTUK = [
     ("^HSI", "Hang Seng", "hisse", "log", "p"), ("000001.SS", "Şanghay Bileşik", "hisse", "log", "p"),
     ("EEM", "gelişmekte olan piyasa hisseleri (EEM)", "hisse", "log", "p"),
     ("XLE", "ABD enerji sektörü (XLE)", "sektor", "log", "y"), ("XOP", "ABD petrol üreticileri (XOP)", "sektor", "log", "y"),
-    ("JETS", "ABD havayolları (JETS)", "sektor", "log", "y"), ("XLY", "ABD dayanıklı olmayan tüketim dışı (XLY)", "sektor", "log", "y"),
+    ("JETS", "ABD havayolları (JETS)", "sektor", "log", "y"), ("XLY", "ABD isteğe bağlı tüketim (XLY)", "sektor", "log", "y"),
     ("XLP", "ABD temel tüketim (XLP)", "sektor", "log", "y"), ("XLK", "ABD teknoloji (XLK)", "sektor", "log", "y"),
     ("XLU", "ABD kamu hizmetleri (XLU)", "sektor", "log", "y"), ("ITA", "ABD savunma (ITA)", "sektor", "log", "y"),
     ("KSA", "Suudi Arabistan hisseleri (KSA)", "hisse", "log", "y"), ("UAE", "BAE hisseleri (UAE)", "hisse", "log", "y"),
@@ -519,7 +551,7 @@ def panel_2026() -> pd.DataFrame:
     return X
 
 
-def yukselis_pencereleri(bz: pd.Series, esik: float = 15.0) -> list[dict]:
+def yukselis_pencereleri(bz: pd.Series, esik: float = PENCERE_ESIK) -> list[dict]:
     """Brent'in 21 iş günlük yükselişinin en büyük olduğu, birbirine 35 takvim
     gününden yakın olmayan pencereler (eşik %15). Seçim yalnız Brent'e bakar;
     öbür varlıkların ne yaptığını bilmez."""
@@ -528,7 +560,7 @@ def yukselis_pencereleri(bz: pd.Series, esik: float = 15.0) -> list[dict]:
     for t, v in r.dropna().sort_values(ascending=False).items():
         if v < esik:
             break
-        if all(abs((t - s).days) > 35 for s in secilen):
+        if all(abs((t - s).days) > PENCERE_ARA for s in secilen):
             secilen.append(t)
     out = []
     for t in sorted(secilen):
@@ -578,7 +610,8 @@ def rejim_2026() -> dict:
                 t = pd.Timestamp(p["son"])
                 ep.append(float(y.loc[t]) if t in y.index and np.isfinite(y.loc[t]) else None)
             son = X[k].dropna()
-            kayit_v.update({"pencere": ep, "son_deger": float(son.iloc[-1]), "son_gun": son.index[-1].strftime("%Y-%m-%d")})
+            kayit_v.update({"pencere": ep, "son_deger": float(son.iloc[-1]), "son_gun": son.index[-1].strftime("%Y-%m-%d"),
+                            "pencere_yuzde": [yuzde(x) for x in ep] if birim == "log" else ep})
             varliklar[k] = kayit_v
     return {"pencereler": pencereler, "varlik": varliklar, "n_gun": int(lb.dropna().shape[0]),
             "ilk": X.index[0].strftime("%Y-%m-%d"), "son": X.index[-1].strftime("%Y-%m-%d"),
@@ -601,7 +634,7 @@ def birini_disarida_birak(rejim: dict) -> dict:
             i = X.index.get_loc(t)
             dis = X.index[max(0, i - 2 * UFUK): min(len(X), i + UFUK + 1)]
             egitim = df[(~df.index.isin(dis)) & (df.b > 0)]
-            if len(egitim) < 40 or t not in df.index:
+            if len(egitim) < LOO_ASGARI or t not in df.index:
                 tahmin.append(None); gercek.append(None)
                 continue
             m = ekk_nw(egitim.y.values, egitim.b.values, NW_GECIKME)
@@ -639,6 +672,7 @@ EMSAL_SUTUN = [
     ("try_tcmb", "USD/TRY (TCMB)", "log", "tcmb"), ("bist100", "BIST 100", "log", "c"),
     ("bist_usd", "BIST 100 (dolar)", "log", "c"),
 ]
+BIRIM_EMSAL = {s: b for s, _, b, _ in EMSAL_SUTUN}
 # TL gecelik faizi (EVDS TP.PY.P06.ON) bilerek YOK: 2026 Mart'ında TLREF koridorun üstüne (%40)
 # çıkarken bu seri %35,5'te kımıldamadı (ölçüldü) — piyasanın fonlama maliyetini ölçmüyor.
 
@@ -686,13 +720,14 @@ def emsaller() -> dict:
         for s, _, birim, _ in EMSAL_SUTUN:
             if s in seri:
                 sat["deger"][s] = iki_nokta(seri[s], t0, t1, birim)
+        sat["deger_yuzde"] = {s: (yuzde(v) if BIRIM_EMSAL[s] == "log" else v) for s, v in sat["deger"].items()}
         sat["nyfed"] = ny_fed_ayristirma(t0, t1)
         out[k] = sat
     return out
 
 
 def tum_yukselisler() -> dict:
-    """2000'den bu yana vadeli Brent'in 21 iş günde EN AZ senaryonun alt ucu kadar
+    """1988'den bu yana vadeli Brent'in 21 iş günde EN AZ senaryonun alt ucu kadar
     (log ölçüde) yükseldiği, birbirine 40 takvim gününden yakın olmayan bütün
     pencereler. Nedeni karışık: talep toparlanmaları da, arz şokları da burada."""
     seri = emsal_kaynak()
@@ -702,16 +737,18 @@ def tum_yukselisler() -> dict:
     for t, v in r.dropna().sort_values(ascending=False).items():
         if v < ESIK_ALT:
             break
-        if all(abs((t - s).days) > 40 for s in sec):
+        if all(abs((t - s).days) > GENIS_ARA for s in sec):
             sec.append(t)
     pencere = []
     for t in sorted(sec):
         i = bz.index.get_loc(t)
         t0 = bz.index[i - UFUK]
-        sat = {"bas": t0.strftime("%Y-%m-%d"), "son": t.strftime("%Y-%m-%d"), "brent": float(r[t]), "deger": {}}
+        sat = {"bas": t0.strftime("%Y-%m-%d"), "son": t.strftime("%Y-%m-%d"), "brent": float(r[t]),
+               "brent_yuzde": yuzde(float(r[t])), "deger": {}}
         for s, _, birim, _ in EMSAL_SUTUN:
             if s in seri and s not in ("brent", "brent_fiziki"):
                 sat["deger"][s] = iki_nokta(seri[s], t0, t, birim)
+        sat["deger_yuzde"] = {s: (yuzde(v) if BIRIM_EMSAL[s] == "log" else v) for s, v in sat["deger"].items()}
         sat["nyfed"] = ny_fed_ayristirma(t0, t)
         pencere.append(sat)
     # gruplar: 2026 (bu savaş) · 2026 öncesi; 2026 öncesi NY Fed ayrıştırmasıyla ayrıca arz/talep baskın
@@ -721,11 +758,14 @@ def tum_yukselisler() -> dict:
                         ("once_arz", lambda p: p["son"] < "2026-01-01" and p["nyfed"] and p["nyfed"]["arz"] > p["nyfed"]["talep"]),
                         ("once_talep", lambda p: p["son"] < "2026-01-01" and p["nyfed"] and p["nyfed"]["arz"] <= p["nyfed"]["talep"])):
         ps = [p for p in pencere if sec_f(p)]
-        g = {"n": len(ps), "brent_medyan": float(np.median([p["brent"] for p in ps])) if ps else None}
+        g = {"n": len(ps), "brent_medyan": float(np.median([p["brent"] for p in ps])) if ps else None,
+             "brent_medyan_yuzde": float(np.median([p["brent_yuzde"] for p in ps])) if ps else None}
         for s, _, _, _ in EMSAL_SUTUN:
             v = [p["deger"].get(s) for p in ps if p["deger"].get(s) is not None]
             if v:
-                g[s] = {"medyan": float(np.median(v)), "n": len(v), "arti_pay": float(np.mean(np.array(v) > 0) * 100),
+                vy = [p["deger_yuzde"][s] for p in ps if p["deger"].get(s) is not None]
+                g[s] = {"medyan": float(np.median(v)), "medyan_yuzde": float(np.median(vy)),
+                        "n": len(v), "arti_pay": float(np.mean(np.array(v) > 0) * 100),
                         "elastikiyet_medyan": float(np.median([p["deger"][s] / p["brent"] for p in ps
                                                                if p["deger"].get(s) is not None]))}
         ozet[grup] = g
@@ -763,6 +803,11 @@ def tcmb_oyun_kitabi() -> dict:
         s = gunler[-1]
         ihale = f.loc[b:s, "fon_ihale"]
         sifir = ihale[ihale <= 0]
+        # ara verildiği gün: bir hafta vadeli repo stoku olay öncesi düzeyinin altına ilk indiği gün
+        # (stok vadesi dolan repolarla birer birer erir; sıfırlandığı gün ara verildiği gün DEĞİLDİR)
+        ara = ihale[(ihale.index > b) & (ihale < ihale.iloc[0])]
+        aofm = f.loc[b:s, ["aofm", "koridor_ust"]].dropna()
+        tavan = aofm[aofm["aofm"] >= aofm["koridor_ust"] - 0.005]
         rr = r.loc[b:s]
         kayit = {
             "aciklama": aciklama, "bas": bas, "son": s.strftime("%Y-%m-%d"),
@@ -771,6 +816,9 @@ def tcmb_oyun_kitabi() -> dict:
             "politika_bas": float(f.loc[:b, "politika"].dropna().iloc[-1]),
             "politika_son": float(f.loc[:s, "politika"].dropna().iloc[-1]),
             "ihale_sifir_ilk": sifir.index[0].strftime("%Y-%m-%d") if len(sifir) else None,
+            "ihale_ara_ilk": ara.index[0].strftime("%Y-%m-%d") if len(ara) else None,
+            "tlref_ara_ilk": float(f.loc[ara.index[0], "tlref"]) if len(ara) and pd.notna(f.loc[ara.index[0], "tlref"]) else None,
+            "aofm_tavan_ilk": tavan.index[0].strftime("%Y-%m-%d") if len(tavan) else None,
             "doviz_satisi_21g": float(r.loc[b + pd.Timedelta(days=1):s, "net_doviz_alimi"].sum()),
             "net_rezerv_bas": float(r.loc[:b, "net_rezerv_usd"].dropna().iloc[-1]),
             "net_rezerv_dip": float(rr["net_rezerv_usd"].min()),
@@ -791,8 +839,11 @@ def tcmb_oyun_kitabi() -> dict:
     x = f.loc["2026-03-01":BAZ_GUN, "fon_ihale"]
     kapali = x[x <= 0]
     acilis = x[(x > 0) & (x.index > kapali.index[0])]
-    out["ust_bant_2026"] = {"ilk": kapali.index[0].strftime("%Y-%m-%d"), "acilis": acilis.index[0].strftime("%Y-%m-%d"),
-                            "is_gunu": int(len(x.loc[kapali.index[0]:acilis.index[0]]) - 1)}
+    ara = pd.Timestamp(out["2026-03"]["ihale_ara_ilk"])
+    # ara verildiği gün (stokun ilk düştüğü gün) → yeniden açıldığı gün; aradaki iş günleri ihalesiz
+    out["ust_bant_2026"] = {"ara": out["2026-03"]["ihale_ara_ilk"], "sifir": kapali.index[0].strftime("%Y-%m-%d"),
+                            "acilis": acilis.index[0].strftime("%Y-%m-%d"),
+                            "is_gunu": int(len(f.loc[ara:acilis.index[0]]) - 1)}
     rs = r.dropna(subset=["net_rezerv_usd"])
     son = rs.iloc[-1]
     out["rezerv_bugun"] = {"gun": rs.index[-1].strftime("%Y-%m-%d"), "net": float(son["net_rezerv_usd"]),
@@ -930,11 +981,13 @@ def yabanci_akim() -> dict:
                    "dibs": float(cum.loc[dip, "dibs"]), "hisse": float(cum.loc[dip, "hisse"]),
                    "toplam": float(cum.loc[dip, "toplam"]),
                    "ilk_4_hafta_dibs": float(sonraki["dibs"].iloc[:4].sum())}
+        out[ad]["ilk_4_hafta_pay"] = out[ad]["ilk_4_hafta_dibs"] / out[ad]["dibs"] * 100
     dip26 = pd.Timestamp(out["2026-03"]["dip_hafta"])
     geri = y.loc[dip26 + pd.Timedelta(days=1):]
     out["geri_donus_2026"] = {"bas": dip26.strftime("%Y-%m-%d"), "son": y.index[-1].strftime("%Y-%m-%d"),
                               "dibs": float(geri["dibs"].sum()), "hisse": float(geri["hisse"].sum()),
                               "hafta": int(len(geri))}
+    out["geri_donus_2026"]["dibs_geri_pay"] = out["geri_donus_2026"]["dibs"] / -out["2026-03"]["dibs"] * 100
     out["son_4_hafta"] = {"son": y.index[-1].strftime("%Y-%m-%d"), "dibs": float(y["dibs"].iloc[-4:].sum()),
                           "hisse": float(y["hisse"].iloc[-4:].sum())}
     return out
@@ -965,7 +1018,38 @@ def abd_enflasyon() -> dict:
     X = np.column_stack([np.ones(len(E)), E.b])
     b, V = ekk(E.p.values, X)
     out["benzin_pompa_gecis"] = {"galon_basina_dolar_per_galon": float(b[1]), "se": float(np.sqrt(V[1, 1])),
-                                 "n": int(len(E)), "son_hafta": pm.index[-1].strftime("%Y-%m-%d"), "son_fiyat": float(pm.iloc[-1])}
+                                 "n": int(len(E)), "ilk_hafta": E.index[0].strftime("%Y-%m-%d"),
+                                 "son_hafta": pm.index[-1].strftime("%Y-%m-%d"), "son_fiyat": float(pm.iloc[-1])}
+    # Motorin pompası aynı tanımla (dört haftalık fark; Brent'in galon karşılığı). Motorinin ham petrolden
+    # ayrışan rafineri marjı bu denklemde yok — 2026'da distilat marjının yükselişi artıkta kalır.
+    dm = tablo("eia_pompa_haftalik")["abd_motorin_pompa_haftalik"].dropna()
+    E2 = pd.DataFrame({"p": dm.diff(4), "b": (w.diff(4) / 42).reindex(dm.index, method="nearest", tolerance=pd.Timedelta(days=3))}).dropna()
+    E2 = E2.loc["2005":]
+    b2, V2 = ekk(E2.p.values, np.column_stack([np.ones(len(E2)), E2.b]))
+    out["motorin_pompa_gecis"] = {"galon_basina_dolar_per_galon": float(b2[1]), "se": float(np.sqrt(V2[1, 1])),
+                                  "n": int(len(E2)), "ilk_hafta": E2.index[0].strftime("%Y-%m-%d"),
+                                  "son_hafta": dm.index[-1].strftime("%Y-%m-%d"), "son_fiyat": float(dm.iloc[-1]),
+                                  "rekor": float(dm.max()), "rekor_hafta": dm.idxmax().strftime("%Y-%m-%d")}
+    out["benzin_pompa_gecis"]["rekor"] = float(pm.max())
+    out["benzin_pompa_gecis"]["rekor_hafta"] = pm.idxmax().strftime("%Y-%m-%d")
+    return out
+
+
+def abd_senaryo(ae: dict, yer: dict) -> dict:
+    """Senaryonun ABD pompasına ve manşet TÜFE'sine geçişi. Pompa: dört haftalık geçiş katsayısı × Brent'in
+    varil başına artışı / 42 (ön vade, bugünkü 104,72'den). TÜFE: aylık esneklik (0–2 ay) × ön vadenin log
+    değişimi — fiyat SEVİYESİNE etki, yıllık enflasyona değil; fiyat üç ay o düzeyde kalırsa."""
+    out = {}
+    for ad, s in yer["senaryo"].items():
+        d = s["hedef"] - yer["baz"]
+        sat = {"brent_artis": d}
+        for k in ("benzin", "motorin"):
+            g = ae[f"{k}_pompa_gecis"]
+            sat[k] = {"artis": g["galon_basina_dolar_per_galon"] * d / 42,
+                      "seviye": g["son_fiyat"] + g["galon_basina_dolar_per_galon"] * d / 42}
+        sat["tufe_seviye_2000"] = ae["manset_2000"]["toplam"] * s["log"]
+        sat["tufe_seviye_2015"] = ae["manset_2015"]["toplam"] * s["log"]
+        out[ad] = sat
     return out
 
 
@@ -980,7 +1064,7 @@ def kanit(rejim: dict, loo: dict, tum: dict, k: str) -> str:
         return "zayif"
     esle = {"^GSPC": "spx", "^VIX": "vix", "DX-Y.NYB": "dxy", "us2y": "us2y", "us10y": "us10y", "GC=F": "altin",
             "USDJPY=X": "jpy", "EURUSD=X": "eur", "GBPUSD=X": "gbp", "^GDAXI": "dax", "^N225": "n225",
-            "XU100.IS": "bist100"}
+            "XU100.IS": "bist100", "bist_usd": "bist_usd", "USDTRY=X": "try_tcmb"}
     o = tum["orneklem_disi_2026"].get(esle.get(k, ""))
     if o is not None and o["isaret_tutan"] < 3:
         return "orta"
@@ -1003,7 +1087,11 @@ def senaryo_tablosu(yer: dict, rejim: dict, loo: dict, tum: dict) -> dict:
             # tek bir pencerenin artık oynaklığı birlikte: tek bir ayın sonucu doğrunun kendisinden geniştir
             bant = 1.645 * math.sqrt(max(0.0, yk["se_sabit"] ** 2 + (yk["se"] * x) ** 2 + 2 * x * yk["kov"])
                                      + yk["artik_sd"] ** 2)
-            sat[ad] = {"orta": orta, "alt": orta - bant, "ust": orta + bant, "x": x}
+            # petrolün payı = eğim × x; sabit (2026'nın Brent'ten bağımsız eğilimi) ayrıca okunur — S&P 500'de
+            # ikisi neredeyse birbirini götürüyor ve tek sayı "petrol hisseyi etkilemiyor" diye yanlış okunurdu
+            sat[ad] = {"orta": orta, "alt": orta - bant, "ust": orta + bant, "x": x, "petrol_payi": yk["egim"] * x}
+            if v["birim"] == "log":
+                sat[ad].update({"orta_yuzde": yuzde(orta), "alt_yuzde": yuzde(orta - bant), "ust_yuzde": yuzde(orta + bant)})
             # seviye: bugünkü değerden — log birim çarpanla, baz puan yüzde puana, fark doğrudan
             s0 = v["son_deger"]
             cev = {"log": lambda m: s0 * math.exp(m / 100), "bp": lambda m: s0 + m / 100, "fark": lambda m: s0 + m}[v["birim"]]
@@ -1011,6 +1099,9 @@ def senaryo_tablosu(yer: dict, rejim: dict, loo: dict, tum: dict) -> dict:
         # en yakın büyüklükteki 2026 pencereleri: 125 ↔ Mayıs ve Eylül (Brent ≈ +21), 150 ↔ Mart (≈ +47)
         sat["mart"] = v["pencere"][0] if pen else None
         sat["mayis_eylul"] = [v["pencere"][1], v["pencere"][3]] if len(pen) >= 4 else None
+        sat["pencere"] = v["pencere"]
+        dolu = [p for p in v["pencere"] if p is not None]
+        sat["pencere_isaret"] = {"arti": sum(p > 0 for p in dolu), "eksi": sum(p < 0 for p in dolu), "n": len(dolu)}
         out[k] = sat
     return out
 
@@ -1025,17 +1116,101 @@ def tufe_aktarim(yer: dict, tg: dict, st: dict) -> dict:
     kur = {ad: st["USDTRY=X"][ad]["orta"] for ad in SENARYO}
     out["kur_varsayimi"] = kur["125"]
     out["kur_varsayimi_150"] = kur["150"]
+    # PETROLÜN PAYI ile KURUN PAYI ayrı yazılır: USD/TRY'nin 2026 rejimindeki orta değeri neredeyse
+    # tamamen sabittir (eğim ≈ 0 — yönetilen patika), yani kur bacağı petrol olmasa da gelecek olan aylık
+    # değer kaybıdır. Senaryonun etkisi YALNIZ petrol bacağıdır; kurlu toplam pompanın TL fiyatını anlatır.
     for ad, s in yer["senaryo"].items():
-        kalem = {}
+        kalem, kalem_kurlu = {}, {}
         for k in ("motorin", "benzin", "akaryakit", "enerji", "tufe"):
             e = tg[f"vadeli:{k}:2005"]
-            c = e["brent_0_1"] * s["log"] + e["kur_0_1"] * kur[ad]
-            kalem[k] = (math.exp(c / 100) - 1) * 100
+            kalem[k] = (math.exp(e["brent_0_1"] * s["log"] / 100) - 1) * 100
+            kalem_kurlu[k] = (math.exp((e["brent_0_1"] * s["log"] + e["kur_0_1"] * kur[ad]) / 100) - 1) * 100
         out["senaryo"][ad] = {"kalem": {k: v for k, v in kalem.items() if k != "tufe"},
-                              "tufe_2ay": kalem["tufe"],
-                              "tufe_2ay_yalniz_brent": tg["vadeli:tufe:2005"]["brent_0_1"] * s["log"],
+                              "kalem_kurlu": {k: v for k, v in kalem_kurlu.items() if k != "tufe"},
+                              "tufe_2ay_petrol": tg["vadeli:tufe:2005"]["brent_0_1"] * s["log"],
+                              "tufe_2ay_kurlu": kalem_kurlu["tufe"],
+                              "tufe_2ay_kur_payi": tg["vadeli:tufe:2005"]["kur_0_1"] * kur[ad],
                               "tufe_12ay_tcmb": s["yuzde"] / 10 * 1.0}
     return out
+
+
+LITRE_VARIL = 158.987294928    # 42 ABD galonu
+LITRE_GALON = 3.785411784
+
+
+def otv_kararlari() -> dict:
+    """Resmî Gazete'deki iki ÖTV kararının tabloları (`veri/otv_kararlar.json`; PDF'ler taranmış görüntü,
+    tablolar sayfadan okundu). Kaydın özü üretim künyesine girer: tablo elle aktarıldığı için kapı (dogrula.py)
+    kaydın PDF özlerini bulut künyesiyle ve ölçümün bu kayıtla üretildiğini ayrıca sorar."""
+    return json.loads((VERI / "otv_kararlar.json").read_text(encoding="utf-8"))
+
+
+def otv_tutari(kr: dict, urun: str, gun: str) -> float | None:
+    for k in kr["kararlar"]:
+        for u in k["urunler"]:
+            if u["ad"] != urun:
+                continue
+            for d in u["donemler"]:
+                if d["bas"] <= gun and (d["son"] is None or gun <= d["son"]):
+                    return float(d["otv"])
+    return None
+
+
+def otv_tampon(yer: dict, st: dict) -> dict:
+    """Senaryonun pompaya gelen maliyeti ile yürürlükteki ÖTV'nin karşılaştırması — litre başına, KDV HARİÇ
+    (KDV ikisine de aynı oranla eklenir; kıyas orandan bağımsızdır).
+    · Ham petrol bacağı (rafineri marjı sabit): ön vadenin varil başına artışı / 158,99 litre × senaryonun kuru.
+    · Ürün bacağı (marj 2026'daki gibi ham petrolle orantılı açılırsa): ABD motorin (ULSD) ve benzin (RBOB)
+      vadelisinin senaryodaki dolar artışı / 3,785 litre × kur. ABD vadelisi Akdeniz ürün fiyatının vekilidir.
+    · Tampon: eşel mobil yeniden açılsaydı vergi indirimiyle karşılanabilecek azami tutar = yürürlükteki ÖTV.
+    · Takvim adımı: 1 Kasım'da kararın kendisinin getirdiği ÖTV artışı (senaryo ayının içinde, petrolden bağımsız).
+    Pompa fiyatının kendisi (TL/litre) ölçülen katmanda yok; oran pompa fiyatına göre değil, vergiye göre kurulur."""
+    kr = otv_kararlari()
+    hedef = yer["hedef_gun"]
+    kur0 = st["USDTRY=X"]["son_deger"]
+    out = {"baz_gun": BAZ_GUN, "hedef_gun": hedef, "kur_bugun": kur0,
+           "litre_basina_10_dolar": 10 / LITRE_VARIL * kur0, "otv": {}, "senaryo": {}}
+    for urun in ("motorin", "kurşunsuz benzin 95 oktan"):
+        a, b = otv_tutari(kr, urun, BAZ_GUN), otv_tutari(kr, urun, hedef)
+        out["otv"][urun] = {"baz": a, "hedef": b, "adim": b - a,
+                            "kasim": otv_tutari(kr, urun, "2026-11-15"), "aralik": otv_tutari(kr, urun, "2026-12-15"),
+                            "dolar_karsiligi_baz": a / (kur0 / LITRE_VARIL),      # bugünkü ÖTV kaç dolarlık Brent'i tamponlar
+                            "dolar_karsiligi_hedef": b / (kur0 / LITRE_VARIL)}
+    out["otv"]["motorin"]["agustos"] = otv_tutari(kr, "motorin", "2026-08-20")
+    out["otv"]["motorin"]["ocak27"] = otv_tutari(kr, "motorin", "2027-01-15")
+    for ad, s in yer["senaryo"].items():
+        kur = st["USDTRY=X"][ad]["seviye"]
+        d = s["hedef"] - yer["baz"]
+        ho, rb = st["HO=F"], st["RB=F"]
+        sat = {"kur": kur, "brent_artis_varil": d,
+               "ham_tl_litre": d / LITRE_VARIL * kur,
+               "motorin_urun_tl_litre": (ho[ad]["seviye"] - ho["son_deger"]) / LITRE_GALON * kur,
+               "benzin_urun_tl_litre": (rb[ad]["seviye"] - rb["son_deger"]) / LITRE_GALON * kur,
+               "motorin_urun_artis_galon": ho[ad]["seviye"] - ho["son_deger"],
+               "benzin_urun_artis_galon": rb[ad]["seviye"] - rb["son_deger"]}
+        m, bz = out["otv"]["motorin"], out["otv"]["kurşunsuz benzin 95 oktan"]
+        sat["motorin_tampon_kasim_ham"] = m["hedef"] / sat["ham_tl_litre"]
+        sat["motorin_tampon_kasim_urun"] = m["hedef"] / sat["motorin_urun_tl_litre"]
+        sat["benzin_tampon_kasim_ham"] = bz["hedef"] / sat["ham_tl_litre"]
+        sat["benzin_tampon_kasim_urun"] = bz["hedef"] / sat["benzin_urun_tl_litre"]
+        # vergi indirimi yapılmazsa senaryo ayında KDV hariç litre başına toplam artış: petrol + takvim adımı
+        sat["motorin_toplam_ham"] = sat["ham_tl_litre"] + m["adim"]
+        sat["motorin_toplam_urun"] = sat["motorin_urun_tl_litre"] + m["adim"]
+        sat["benzin_toplam_ham"] = sat["ham_tl_litre"] + bz["adim"]
+        sat["benzin_toplam_urun"] = sat["benzin_urun_tl_litre"] + bz["adim"]
+        out["senaryo"][ad] = sat
+    return out
+
+
+def kaynak_uyumu() -> dict:
+    """Bülten piyasa fotoğrafının Brent'i (Yahoo BZ=F) ile CNBC ön vade Brent'in örtüşen günlerdeki farkı:
+    2026 penceresinde bülten serisi, öncesi CNBC — iki kaynağın birleşiminde ek bir kırılma olmamalı."""
+    p = tablo("piyasa_2026")["BZ=F"].dropna()
+    c = brent_vadeli_uzun()
+    ort = p.index.intersection(c.index)
+    fark = (p.loc[ort] / c.loc[ort] - 1).abs() * 100
+    return {"ortak_gun": int(len(ort)), "azami_fark_yuzde": float(fark.max()), "ilk": ort[0].strftime("%Y-%m-%d"),
+            "son": ort[-1].strftime("%Y-%m-%d"), "birebir_pay": float((fark < 1e-4).mean() * 100)}
 
 
 def enerji_kural_senaryo(ef: dict, yer: dict) -> dict:
@@ -1106,8 +1281,12 @@ def main() -> int:
     yer = senaryo_yeri()
     sonuc = {
         "uretim": {"olcum_py_sha256": hashlib.sha256((BURASI / "olcum.py").read_bytes()).hexdigest(),
-                   "girdiler": {k: v["sha256"] for k, v in KUNYE["dosyalar"].items()}},
+                   "girdiler": {k: v["sha256"] for k, v in KUNYE["dosyalar"].items()},
+                   "otv_kararlar_sha256": hashlib.sha256((VERI / "otv_kararlar.json").read_bytes()).hexdigest()},
         "slug": SLUG,
+        "yontem": {"ufuk": UFUK, "nw_gecikme": NW_GECIKME, "pencere_esik": PENCERE_ESIK, "pencere_ara": PENCERE_ARA,
+                   "genis_ara": GENIS_ARA, "takvim_tavan": TAKVIM_TAVAN, "loo_once": 2 * UFUK, "loo_sonra": UFUK,
+                   "loo_asgari": LOO_ASGARI, "litre_varil": LITRE_VARIL, "litre_galon": LITRE_GALON},
         "iki_brent": iki_brent(),
         "senaryo_yeri": yer,
     }
@@ -1125,9 +1304,12 @@ def main() -> int:
     sonuc["enerji_faturasi"] = enerji_faturasi()
     sonuc["yabanci"] = yabanci_akim()
     sonuc["abd_enflasyon"] = abd_enflasyon()
+    sonuc["abd_senaryo"] = abd_senaryo(sonuc["abd_enflasyon"], yer)
     sonuc["senaryo_tablosu"] = senaryo_tablosu(yer, rj, loo, tum)
     sonuc["tufe_aktarim"] = tufe_aktarim(yer, sonuc["tufe_gecis"], sonuc["senaryo_tablosu"])
     sonuc["enerji_faturasi"]["senaryo_kural"] = enerji_kural_senaryo(sonuc["enerji_faturasi"], yer)
+    sonuc["otv_tampon"] = otv_tampon(yer, sonuc["senaryo_tablosu"])
+    sonuc["kaynak_uyumu"] = kaynak_uyumu()
     sonuc["sekil"] = sekil_verisi(yer)
 
     def temiz(o):

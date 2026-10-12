@@ -37,7 +37,7 @@ from sekil_ortak import go, make_subplots, vir, yuzde, tarih  # noqa: E402
 
 O = json.loads(so.OLCUM.read_text(encoding="utf-8"))
 SEKILLER = ["01_iki_brent", "02_egri", "03_dagilim", "04_pencereler", "05_egimler", "06_tcmb",
-            "07_yabanci", "08_tufe", "09_cari", "10_tarih"]
+            "07_yabanci", "08_tufe", "09_otv", "10_cari", "11_tarih"]
 CLARET, MAVI, KEHRIBAR, YESIL, GRI, MUREKKEP = so.CLARET, so.MAVI, so.TURUNCU, so.YESIL, so.GRI, so.MUREKKEP
 ACIK = "#d8d4cc"
 PENCERE_AD = ["Mart", "Mayıs", "Temmuz", "Eylül"]
@@ -163,16 +163,17 @@ def sekil_04():
     pen = r["pencereler"]
     V = r["varlik"]
     fig = make_subplots(rows=2, cols=1, vertical_spacing=0.10, row_heights=[0.74, 0.26],
-                        subplot_titles=("Fiyat değişimi, % (log ×100)", "Faiz değişimi, baz puan"))
+                        subplot_titles=("Fiyat değişimi, %", "Faiz değişimi, baz puan"))
     for j, p in enumerate(pen):
         ad = f"{PENCERE_AD[j]} (Brent +%{vir(p['brent_yuzde'], 1)})"
         for satir, kume, birim in ((1, P04_YUZDE, "%"), (2, P04_BP, "bp")):
             ys = [a for k, a in kume if k in V]
-            xs = [V[k]["pencere"][j] for k, _ in kume if k in V]
+            xs = [V[k]["pencere_yuzde"][j] for k, _ in kume if k in V]
             fig.add_trace(go.Scatter(x=xs, y=ys, mode="markers", name=ad, legendgroup=ad, showlegend=(satir == 1),
                                      marker=dict(color=PENCERE_RENK[j], symbol=PENCERE_SEMBOL[j], size=10,
                                                  line=dict(color="white", width=1)),
-                                     customdata=[f"{a} · {PENCERE_AD[j]}: {isaretli(x, 1)} {birim}" for a, x in zip(ys, xs)],
+                                     customdata=[f"{a} · {PENCERE_AD[j]}: " + (yuzde(x, 1, True) if birim == "%" else f"{isaretli(x, 0)} bp")
+                                                 for a, x in zip(ys, xs)],
                                      hovertemplate="%{customdata}<extra></extra>"), row=satir, col=1)
     for satir in (1, 2):
         fig.add_vline(x=0, line=dict(color=GRI, width=1), row=satir, col=1)
@@ -204,7 +205,7 @@ def sekil_05():
     V = O["rejim_2026"]["varlik"]
     T = O["senaryo_tablosu"]
     fig = make_subplots(rows=2, cols=1, vertical_spacing=0.07, row_heights=[0.77, 0.23],
-                        subplot_titles=("Brent'in %1'lik yükselişine tepki, % (log ölçü)", "Brent'in %1'lik yükselişine tepki, baz puan"))
+                        subplot_titles=("Tepki, % (log ölçü)", "Tepki, baz puan"))
     gorulen = set()
     for satir, kume, birim in ((1, P05_YUZDE, "%"), (2, P05_BP, "bp")):
         for k, ad in kume:
@@ -220,7 +221,9 @@ def sekil_05():
                                                                  symbol="circle" if kn != "zayif" else "circle-open",
                                                                  line=dict(width=1.6, color=KANIT_RENK[kn])),
                                      error_x=dict(type="data", array=[h], color=KANIT_RENK[kn], thickness=1.4, width=0),
-                                     customdata=[f"{ad}: {vir(e, 2)} {birim} (%90 aralık {vir(e - h, 2)} – {vir(e + h, 2)}) · kanıt {KANIT_AD[kn]}"],
+                                     customdata=[f"{ad}: " + (f"{yuzde(e, 2)} (%90 aralık {yuzde(e - h, 2)} – {yuzde(e + h, 2)})" if birim == "%"
+                                                              else f"{vir(e, 2)} bp (%90 aralık {vir(e - h, 2)} – {vir(e + h, 2)} bp)")
+                                                 + f" · kanıt {KANIT_AD[kn]}"],
                                      hovertemplate="%{customdata}<extra></extra>"), row=satir, col=1)
         fig.add_vline(x=0, line=dict(color=GRI, width=1), row=satir, col=1)
     fig.update_yaxes(autorange="reversed", row=1, col=1)
@@ -228,8 +231,9 @@ def sekil_05():
     r = O["rejim_2026"]
     _bitir(fig, "05_egimler.html",
            "Şekil 05 — Petrol yükselirken: ABD faizleri, kredi ve havayolları tutarlı; S&P 500 ve altın değil",
-           [f"Brent'in yükseldiği günlerde 21 iş günlük değişimin Brent'in devirsiz değişimine eğimi · {tarih(r['ilk'])}–{tarih(r['son'])}",
-            "Çizgi: %90 aralık (Newey–West, 20 gecikme) · kanıt: bir-pencere-dışarıda sınama (yöntem notu)"], 900)
+           [f"Brent'in %1'lik yükselişine tepki: Brent'in yükseldiği günlerde 21 iş günlük değişimin Brent'in devirsiz "
+            f"değişimine eğimi · {tarih(r['ilk'])}–{tarih(r['son'])}",
+            "Çizgi: %90 aralık (Newey–West, 20 gecikme) · kanıt: bir-pencere-dışarıda sınama (Yöntem eki)"], 900)
 
 
 # ─────────────────────────────────────────────────────────────────────── 06
@@ -252,13 +256,13 @@ def sekil_06():
                                  hovertemplate="%{customdata}<extra>" + ad + "</extra>"), row=2, col=1)
     ub = t["ust_bant_2026"]
     for satir in (1, 2):
-        fig.add_vrect(x0=ub["ilk"], x1=ub["acilis"], fillcolor="rgba(140,47,57,0.06)", line_width=0, row=satir, col=1)
-    fig.add_annotation(x=ub["ilk"], y=40.6, text=" repo ihalesi yok", showarrow=False, xanchor="left", yanchor="bottom",
+        fig.add_vrect(x0=ub["ara"], x1=ub["acilis"], fillcolor="rgba(140,47,57,0.06)", line_width=0, row=satir, col=1)
+    fig.add_annotation(x=ub["ara"], y=40.6, text=" repo ihalesi yok", showarrow=False, xanchor="left", yanchor="bottom",
                        font=dict(size=11, color=CLARET), row=1, col=1)
     m = t["2026-03"]
     _bitir(fig, "06_tcmb.html",
            f"Şekil 06 — Mart'ın savunması: fonlama koridorun tavanında, swap hariç net rezerv {vir(m['swap_haric_bas'], 1)} → {vir(m['swap_haric_dip'], 1)} milyar dolar",
-           [f"Gölge: bir hafta vadeli repo ihalesinin açılmadığı dönem, {tarih(ub['ilk'])}–{tarih(ub['acilis'])} ({ub['is_gunu']} iş günü)",
+           [f"Gölge: bir hafta vadeli repo ihalesine ara verilen dönem, {tarih(ub['ara'])}–{tarih(ub['acilis'])} ({ub['is_gunu']} iş günü)",
             f"Kaynak: TCMB, Borsa İstanbul (TLREF) · son gözlem {tarih(t['rezerv_bugun']['gun'])}"], 600)
 
 
@@ -288,7 +292,7 @@ def sekil_07():
 # ─────────────────────────────────────────────────────────────────────── 08
 def sekil_08():
     T = O["tufe_aktarim"]
-    fig = make_subplots(rows=1, cols=2, horizontal_spacing=0.16, column_widths=[0.6, 0.4],
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.16, row_heights=[0.55, 0.45],
                         subplot_titles=("Kalem fiyatı, iki ayda %", "TÜFE'ye katkı, puan"))
     kalem = [("motorin", "Motorin"), ("benzin", "Benzin"), ("akaryakit", "Akaryakıt"), ("enerji", "Enerji")]
     for j, (sen, renk) in enumerate((("125", MAVI), ("150", CLARET))):
@@ -296,25 +300,63 @@ def sekil_08():
         fig.add_trace(go.Bar(x=[a for _, a in kalem], y=ys, name=f"{sen} dolar", marker_color=renk, legendgroup=sen,
                              customdata=[f"{a}: +%{vir(v, 1)} ({sen} dolar)" for (_, a), v in zip(kalem, ys)],
                              hovertemplate="%{customdata}<extra></extra>"), row=1, col=1)
-        ys2 = [T["senaryo"][sen]["tufe_2ay"], T["senaryo"][sen]["tufe_12ay_tcmb"]]
+        ys2 = [T["senaryo"][sen]["tufe_2ay_petrol"], T["senaryo"][sen]["tufe_12ay_tcmb"]]
         fig.add_trace(go.Bar(x=["2 ay, ölçülen", "12 ay, TCMB kuralı"], y=ys2, name=f"{sen} dolar", marker_color=renk,
                              legendgroup=sen, showlegend=False,
                              customdata=[f"{a}: +{vir(v, 1)} puan ({sen} dolar)" for a, v in zip(("2 ay", "12 ay"), ys2)],
-                             hovertemplate="%{customdata}<extra></extra>"), row=1, col=2)
+                             hovertemplate="%{customdata}<extra></extra>"), row=2, col=1)
     fig.update_layout(barmode="group", bargap=0.25)
+    fig.update_xaxes(tickangle=0)
     _bitir(fig, "08_tufe.html",
            f"Şekil 08 — 150 dolarda akaryakıt iki ayda +%{vir(T['senaryo']['150']['kalem']['akaryakit'], 0)}, TÜFE'ye "
-           f"{vir(T['senaryo']['150']['tufe_2ay'], 1)} puan",
-           [f"Kalem esneklikleri {T['donem']} aylık veriden (Brent dolar bacağı ve kur bacağı ayrı); kur USD/TRY'nin "
-            f"2026 rejimindeki orta değeriyle (+%{vir(T['kur_varsayimi'], 1)})",
-            "ÖTV ve eşel mobil kararları bu hesabın dışında (metne bakın) · 12 ay: TCMB'nin %10 → 1 puan kuralı"], 460)
+           f"{vir(T['senaryo']['150']['tufe_2ay_petrol'], 1)} puan",
+           [f"Yalnız petrolün payı: kalem esnekliği ({T['donem']}, aylık; aynı ay ve bir ay gecikme) × ön vade Brent'in log değişimi; "
+            "kurun payı dışarıda, çünkü yönetilen patika petrol olmasa da sürer",
+            "ÖTV ve eşel mobil kararları bu hesabın dışında (Şekil 09) · 12 ay: TCMB'nin %10 → 1 puan kuralı"], 620)
 
 
 # ─────────────────────────────────────────────────────────────────────── 09
 def sekil_09():
+    """ÖTV tamponu: senaryonun litre başına maliyeti (KDV hariç) ile yürürlükteki ÖTV."""
+    T = O["otv_tampon"]
+    urunler = [("motorin", "Motorin", "motorin"), ("kurşunsuz benzin 95 oktan", "Benzin (95 oktan)", "benzin")]
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.20, shared_xaxes=True,
+                        subplot_titles=("Motorin, TL/litre (KDV hariç)", "Benzin 95, TL/litre (KDV hariç)"))
+    for satir, (urun, ad, k) in enumerate(urunler, start=1):
+        for sen, renk in (("125", MAVI), ("150", CLARET)):
+            S = T["senaryo"][sen]
+            for bacak, etiket, desen in (("ham_tl_litre", "ham petrol", ""), (f"{k}_urun_tl_litre", "ürün fiyatı", "/")):
+                v = S[bacak]
+                fig.add_trace(go.Bar(x=[v], y=[f"{sen} dolar · {etiket}"], orientation="h", marker_color=renk,
+                                     marker_pattern_shape=desen, marker_pattern_fgcolor="white", showlegend=False,
+                                     customdata=[f"{ad} · {sen} dolar · {etiket}: +{vir(v, 2)} TL/litre"],
+                                     hovertemplate="%{customdata}<extra></extra>"), row=satir, col=1)
+        o = T["otv"][urun]
+        for deger, renk_ in ((o["baz"], GRI), (o["hedef"], MUREKKEP)):
+            fig.add_vline(x=deger, line=dict(color=renk_, width=1.4, dash="dash"), row=satir, col=1)
+    # ÖTV çizgilerinin adı ve değeri lejantta (çizginin yanına yazılan etiket telefonda panel başlığıyla çakışıyordu)
+    mo, be = T["otv"]["motorin"], T["otv"]["kurşunsuz benzin 95 oktan"]
+    for ay_ad, a, b_, renk_ in (("Ekim", mo["baz"], be["baz"], GRI), ("Kasım", mo["hedef"], be["hedef"], MUREKKEP)):
+        fig.add_trace(go.Scatter(x=[None], y=[None], mode="lines", line=dict(color=renk_, width=1.4, dash="dash"),
+                                 name=f"{ay_ad} ÖTV'si: motorin {vir(a, 2)} · benzin {vir(b_, 2)}", hoverinfo="skip"),
+                      row=1, col=1)
+    fig.update_yaxes(autorange="reversed")
+    fig.update_xaxes(title="TL/litre, KDV hariç", row=2, col=1)
+    m = T["senaryo"]["125"]
+    _bitir(fig, "09_otv.html",
+           f"Şekil 09 — 125 dolarda motorinin litre maliyeti +{vir(m['ham_tl_litre'], 1)} ile +{vir(m['motorin_urun_tl_litre'], 1)} TL arası; "
+           f"Kasım'da ÖTV {vir(T['otv']['motorin']['hedef'], 0)} TL",
+           [f"Ham petrol: ön vadenin varil başına artışı (125'te +{vir(m['brent_artis_varil'], 2)}, 150'de "
+            f"+{vir(T['senaryo']['150']['brent_artis_varil'], 2)} dolar) / 158,99 litre × senaryonun USD/TRY'si; marj sabit",
+            "Ürün fiyatı (taralı): ABD motorin (ULSD) ve benzin (RBOB) vadelisinin senaryodaki artışı; Akdeniz ürün fiyatının vekili",
+            "Kesikli çizgi: yürürlükteki ÖTV (11606 ve 11822 sayılı kararlar) — vergi indirimiyle karşılanabilecek azami tutar"], 520)
+
+
+# ─────────────────────────────────────────────────────────────────────── 10
+def sekil_10():
     E = O["enerji_faturasi"]["senaryo_kural"]
-    adlar = [("bugun", "bugünkü fiyat kalırsa"), ("125", "125 dolar kalırsa"), ("150", "150 dolar kalırsa")]
-    fig = make_subplots(rows=1, cols=2, horizontal_spacing=0.14,
+    adlar = [("bugun", "bugünkü fiyat"), ("125", "125 dolar"), ("150", "150 dolar")]
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.16,
                         subplot_titles=("Yıllık ek enerji faturası, milyar dolar", "Cari denge, GSYH'nin %'si"))
     for kural, renk, etiket in (("petrol", MAVI, "yalnız petrol (gaz sabit)"), ("petrol_gaz", CLARET, "petrol ve gaz birlikte")):
         ys = [E[a][kural]["ek"] for a, _ in adlar]
@@ -324,20 +366,21 @@ def sekil_09():
         cs = [E[a][kural]["cari_gsyh"] for a, _ in adlar]
         fig.add_trace(go.Bar(x=[b for _, b in adlar], y=cs, name=etiket, marker_color=renk, legendgroup=kural, showlegend=False,
                              customdata=[f"{b}: {vir(v, 2)} ({etiket})" for (_, b), v in zip(adlar, cs)],
-                             hovertemplate="%{customdata}<extra></extra>"), row=1, col=2)
+                             hovertemplate="%{customdata}<extra></extra>"), row=2, col=1)
     ef = O["enerji_faturasi"]
-    fig.add_hline(y=ef["cari_gsyh"], line=dict(color=GRI, width=1, dash="dash"), row=1, col=2)
+    fig.add_hline(y=ef["cari_gsyh"], line=dict(color=GRI, width=1, dash="dash"), row=2, col=1)
     fig.update_layout(barmode="group")
-    _bitir(fig, "09_cari.html",
-           f"Şekil 09 — 150 dolar bir yıl kalırsa cari açık/GSYH %{vir(-E['150']['petrol']['cari_gsyh'], 1)}–"
+    fig.update_xaxes(tickangle=0)
+    _bitir(fig, "10_cari.html",
+           f"Şekil 10 — 150 dolar bir yıl kalırsa cari açık/GSYH %{vir(-E['150']['petrol']['cari_gsyh'], 1)}–"
            f"{vir(-E['150']['petrol_gaz']['cari_gsyh'], 1)}",
            [f"Son 12 ay (son ay {ef['son_ay'][5:]}.{ef['son_ay'][:4]}): net enerji faturası {vir(ef['net_12a'], 1)}, cari açık {vir(-ef['cari_12a'], 1)} milyar dolar "
             f"(cari açık/GSYH %{vir(-ef['cari_gsyh'], 2)}, kesikli çizgi); o dönemin Brent ortalaması {vir(ef['brent_12a_ort_vadeli'], 1)}",
-            "Kural: aylık net enerji faturasının Brent'e eğimi, 0–6 ay gecikme, 2010+ (yöntem notu)"], 470)
+            "Kural: aylık net enerji faturasının Brent'e eğimi, 0–6 ay gecikme, 2010+ (Yöntem eki); fatura bir yıl o fiyatta kalırsa"], 640)
 
 
-# ─────────────────────────────────────────────────────────────────────── 10
-def sekil_10():
+# ─────────────────────────────────────────────────────────────────────── 11
+def sekil_11():
     pen = O["tum_yukselisler"]["pencere"]
     gruplar = [("2026", lambda p: p["son"] >= "2026-01-01", CLARET, "circle", 12),
                ("2026 öncesi, arz baskın", lambda p: p["son"] < "2026-01-01" and p["nyfed"] and p["nyfed"]["arz"] > p["nyfed"]["talep"], MAVI, "square", 9),
@@ -348,18 +391,18 @@ def sekil_10():
         ps = [p for p in pen if f(p) and p["deger"].get("spx") is not None and p["deger"].get("us2y") is not None]
         if not ps:
             continue
-        fig.add_trace(go.Scatter(x=[p["deger"]["spx"] for p in ps], y=[p["deger"]["us2y"] for p in ps], mode="markers", name=ad,
+        fig.add_trace(go.Scatter(x=[p["deger_yuzde"]["spx"] for p in ps], y=[p["deger"]["us2y"] for p in ps], mode="markers", name=ad,
                                  marker=dict(color=renk, symbol=sembol, size=boy, line=dict(color="white" if "open" not in sembol else renk, width=1)),
-                                 customdata=[f"{tarih(p['bas'])}–{tarih(p['son'])} · Brent {isaretli(p['brent'], 1)} · S&P {isaretli(p['deger']['spx'], 1)} · "
+                                 customdata=[f"{tarih(p['bas'])}–{tarih(p['son'])} · Brent {yuzde(p['brent_yuzde'], 1)} · S&P {yuzde(p['deger_yuzde']['spx'], 1)} · "
                                              f"ABD 2y {isaretli(p['deger']['us2y'], 0)} bp" for p in ps],
                                  hovertemplate="%{customdata}<extra></extra>"))
     fig.add_hline(y=0, line=dict(color=ACIK, width=1))
     fig.add_vline(x=0, line=dict(color=ACIK, width=1))
-    fig.update_xaxes(title="S&P 500, 21 iş günü, % (log ×100)")
+    fig.update_xaxes(title="S&P 500, 21 iş günlük değişim, %")
     fig.update_yaxes(title="ABD 2 yıllık, baz puan")
     t = O["tum_yukselisler"]
-    _bitir(fig, "10_tarih.html",
-           f"Şekil 10 — 2026'da ABD 2 yıllık her petrol yükselişinde arttı (medyan {bp(t['ozet']['y2026']['us2y']['medyan'], 1)}); "
+    _bitir(fig, "11_tarih.html",
+           f"Şekil 11 — 2026'da ABD 2 yıllık her petrol yükselişinde arttı (medyan {bp(t['ozet']['y2026']['us2y']['medyan'], 1)}); "
            f"önceki arz kaynaklı yükselişlerde medyan {bp(t['ozet']['once_arz']['us2y']['medyan'], 1)}",
            [f"Vadeli Brent'in 21 iş günde en az +%{vir(O['senaryo_yeri']['senaryo']['125']['yuzde'], 1)} yükseldiği, birbirine 40 günden yakın olmayan pencereler, 1988–2026",
             "Arz/talep: NY Fed petrol fiyatı dinamikleri ayrıştırması (Kasım 2023'te durdu)"], 520)

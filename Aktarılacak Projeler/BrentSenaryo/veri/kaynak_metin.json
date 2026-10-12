@@ -1,0 +1,459 @@
+{
+ "kaynak/aa_com_tr_300d27ad0c.html.gz": {
+  "url": "https://www.aa.com.tr/tr/ekonomi/abdnin-irana-yeni-saldiri-hazirligi-iddialari-brent-petrol-fiyatini-yuzde-4ten-fazla-yukseltti/4082118",
+  "tur": "html",
+  "kaynak_sha256": "6aff13c70182542dec8afb47ce5a7c08939c8bda938ec3e4e6cc2fc7ef33210b",
+  "metin": "kaynak_metin/aa_com_tr_300d27ad0c.txt.gz",
+  "metin_sha256": "f5926c753aea0e829dbedf0a87f3f0121421e7a615da782df7198aa04f301417",
+  "karakter": 6491
+ },
+ "kaynak/aa_com_tr_85ff46ff90.html.gz": {
+  "url": "https://www.aa.com.tr/tr/ekonomi/tcmbden-akaryakit-fiyatlarinda-esel-mobil-mekanizmasi-ve-enflasyona-olasi-etkileri-analizi/3885980",
+  "tur": "html",
+  "kaynak_sha256": "ccd510d12a6566a2f6cb66aaca389618c274cdf0aa57736390dc230bde2da4ea",
+  "metin": "kaynak_metin/aa_com_tr_85ff46ff90.txt.gz",
+  "metin_sha256": "2951a90122cb74878a73569bef4e0cb8510a66812eac70a29c58fdb12f303851",
+  "karakter": 8690
+ },
+ "kaynak/aeaweb_org_acb79ef7d1.html.gz": {
+  "url": "https://www.aeaweb.org/articles?id=10.1257/aer.99.3.1053",
+  "tur": "html",
+  "kaynak_sha256": "8b1a89c92ef42c75557d90f55b05fe99f357d3b1fde9a7efa4d2a02a5c69acb9",
+  "metin": "kaynak_metin/aeaweb_org_acb79ef7d1.txt.gz",
+  "metin_sha256": "03a9247df80c9996eeb34ec68a679f2ba735133164d9949c5671273c6afa6c3a",
+  "karakter": 3185
+ },
+ "kaynak/aljazeera_com_3f61b7e22d.html.gz": {
+  "url": "https://www.aljazeera.com/economy/2026/9/25/oil-prices-jump-after-yemens-houthis-claim-attacks-on-saudi-facilities?traffic_source=rss",
+  "tur": "html",
+  "kaynak_sha256": "0fc655a256a76f9a701755566fb504050832e11899c7327426bb7220abd7545d",
+  "metin": "kaynak_metin/aljazeera_com_3f61b7e22d.txt.gz",
+  "metin_sha256": "4190bf8bd29614088a88f520c872b70afff9257c76e6391e61ccf81c3f828b4f",
+  "karakter": 4529
+ },
+ "kaynak/arastirma_isyatirim_com_tr_5dbf6b4d88.html.gz": {
+  "url": "https://arastirma.isyatirim.com.tr/2026/08/13/tcmb-2026-enflasyon-tahminini-2-puan-yukari-cekti/",
+  "tur": "html",
+  "kaynak_sha256": "423a268f7846d309ffbdfc1babf7d9f7a9b1605d9c00bd8b1e74bf806f0fb7b4",
+  "metin": "kaynak_metin/arastirma_isyatirim_com_tr_5dbf6b4d88.txt.gz",
+  "metin_sha256": "fa6c8d9903135365852c466ab766ef573ecc86152243c3da1fa81204a1afc735",
+  "karakter": 14118
+ },
+ "kaynak/bbc_co_uk_fb865641ef.html.gz": {
+  "url": "https://www.bbc.co.uk/news/articles/cq0m3gmv8n7ko?at_medium=RSS&at_campaign=rss",
+  "tur": "html",
+  "kaynak_sha256": "2a45d468ef12c2a4243816c49abc890977343d3eddf2561b4d6c4494e3d78193",
+  "metin": "kaynak_metin/bbc_co_uk_fb865641ef.txt.gz",
+  "metin_sha256": "46aabae832caddb67d984c95d02ea5aeb708ab1132a88abbb33a889d83754b6c",
+  "karakter": 9538
+ },
+ "kaynak/bis_org_4d7a52a482.pdf.gz": {
+  "url": "https://www.bis.org/speeches/20030727-semiannual-monetary-policy-report-us-congress.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "a9ec9a167f1fdf43a8cb7ce7dac9d714eb618e4f407600bac9fbddb20fb43d73",
+  "metin": "kaynak_metin/bis_org_4d7a52a482.txt.gz",
+  "metin_sha256": "fb2cbf776fa4c9fadf5a558ed8efc895166729f3703dc84034bead3aba926bfd",
+  "karakter": 19873
+ },
+ "kaynak/bloomberght_com_48e00255eb.html.gz": {
+  "url": "https://www.bloomberght.com/suudi-arabistan-dan-dogu-bati-petrol-boru-hatti-aciklamasi-3790471",
+  "tur": "html",
+  "kaynak_sha256": "b9244719da231c11082337cc3d30e4bc404cba33562485036104f7a060c681e4",
+  "metin": "kaynak_metin/bloomberght_com_48e00255eb.txt.gz",
+  "metin_sha256": "b205a9d33eb1ecd4c80c61387f5b959abd029bcf923a1d32cb0a1c3fd2fbb420",
+  "karakter": 6581
+ },
+ "kaynak/bloomberght_com_90cce7c497.html.gz": {
+  "url": "https://www.bloomberght.com/goldman-sachs-brent-petrol-tahminini-yukseltti-3791040",
+  "tur": "html",
+  "kaynak_sha256": "9114ad99abbf7d3e44a5122d5967588a7316714693051f4e8f78699e5fa4af7f",
+  "metin": "kaynak_metin/bloomberght_com_90cce7c497.txt.gz",
+  "metin_sha256": "5471f8e6c40fe3fa2ec0b643677b111cca02e2f4259f6d105cb12e5e5dd7e781",
+  "karakter": 5805
+ },
+ "kaynak/bloomberght_com_d832ce5702.html.gz": {
+  "url": "https://www.bloomberght.com/trump-ara-secimlere-kadar-iran-a-saldirmayacagiz-3790877",
+  "tur": "html",
+  "kaynak_sha256": "c910de2d3559b7d15505b0227180eaf48a37e31cd89fb6bfce1d6a8d26ad404e",
+  "metin": "kaynak_metin/bloomberght_com_d832ce5702.txt.gz",
+  "metin_sha256": "9f3fd7eb4cf65e1773f2906470a08968e29b0e199d5740b618dc0dd673d83b2f",
+  "karakter": 5974
+ },
+ "kaynak/bostonfed_org_c293fdc06a.html.gz": {
+  "url": "https://www.bostonfed.org/publications/current-policy-perspectives/2026/reassessing-us-economys-vulnerability-oil-shocks.aspx",
+  "tur": "html",
+  "kaynak_sha256": "bfdf709fa58fcbb1590efabfc997a2bd843d07cdbdd139f3e6f8e54bbdc50dff",
+  "metin": "kaynak_metin/bostonfed_org_c293fdc06a.txt.gz",
+  "metin_sha256": "396564a8457bddc426bb3382a624bc26dbc35c119c62081ee481a84127b14d95",
+  "karakter": 21916
+ },
+ "kaynak/brookings_edu_181466b4be.html.gz": {
+  "url": "https://www.brookings.edu/bpea-articles/causes-and-consequences-of-the-oil-shock-of-2007-08/",
+  "tur": "html",
+  "kaynak_sha256": "d3f23ad16552094aaf778c9ffd19c3c522490c2d59b09d8ab5241b0976669353",
+  "metin": "kaynak_metin/brookings_edu_181466b4be.txt.gz",
+  "metin_sha256": "c4962f26e7335ffa9322757649e5e2fbad5e808819a323174b7f4b8dba33071d",
+  "karakter": 4219
+ },
+ "kaynak/cnbc_com_414cdf1bf9.html.gz": {
+  "url": "https://www.cnbc.com/2023/10/31/oil-could-hit-record-high-of-157-if-israel-hamas-war-escalates-world-bank.html",
+  "tur": "html",
+  "kaynak_sha256": "170d05695d1373a611394605e459b9b027f86b5bc836abb22cffcec2c2095224",
+  "metin": "kaynak_metin/cnbc_com_414cdf1bf9.txt.gz",
+  "metin_sha256": "779b96a677c300aad49e20d7a2bf45cd348384ca7cf5bdcce3716a3dc6cafd91",
+  "karakter": 6297
+ },
+ "kaynak/cnbc_com_5dfd5ea085.html.gz": {
+  "url": "https://www.cnbc.com/2026/10/04/opec-agrees-to-keep-november-oil-output-targets-steady.html",
+  "tur": "html",
+  "kaynak_sha256": "a1ed34d9c989a276a377889a32f1677b6fd428048c54127d4c3e0ffbd899a5cc",
+  "metin": "kaynak_metin/cnbc_com_5dfd5ea085.txt.gz",
+  "metin_sha256": "60d476d83840d3aa17fc96e8f066ef83c90a182445b23153432df3fa025e3018",
+  "karakter": 5471
+ },
+ "kaynak/cnbc_com_60ee3c98c3.html.gz": {
+  "url": "https://www.cnbc.com/2026/10/02/oil-wti-brent-diesel-stock-release-europe.html",
+  "tur": "html",
+  "kaynak_sha256": "f70a709f7cf4799bbbff38af3de7d8760978dcfd097cdddc0b21b952b037fcff",
+  "metin": "kaynak_metin/cnbc_com_60ee3c98c3.txt.gz",
+  "metin_sha256": "cc57a3df02a9352c2dddde51ca7558be869e223f887c80ba1b12aabfe59b20e1",
+  "karakter": 4684
+ },
+ "kaynak/congress_gov_418be75086.pdf.gz": {
+  "url": "https://www.congress.gov/crs_external_products/IN/PDF/IN11173/IN11173.2.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "5e019aa08b9c37498ac6c9b9988f703a5354a060998379c5354157fba8c488be",
+  "metin": "kaynak_metin/congress_gov_418be75086.txt.gz",
+  "metin_sha256": "05ccaf192cb3167de68a0dbdc0f5f0ea477820cbe1c5d629a383101d531a28d7",
+  "karakter": 7053
+ },
+ "kaynak/dallasfed_org_4bb9186006.pdf.gz": {
+  "url": "https://www.dallasfed.org/~/media/documents/research/papers/2026/wp2609.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "c404269a2cb1c50a372c35861bdacdda959737f21a928f526a14215c6d050750",
+  "metin": "kaynak_metin/dallasfed_org_4bb9186006.txt.gz",
+  "metin_sha256": "e45a51ac19463b897ccf1a2c527953cc379bdf6267d1ca4cd0bd0d63fac2f930",
+  "karakter": 73435
+ },
+ "kaynak/dunya_com_1b9de83c2d.html.gz": {
+  "url": "https://www.dunya.com/ekonomi/hurmuzde-trafik-dibe-vurdu-petrol-100-dolari-neden-asamiyor-haberi-839118",
+  "tur": "html",
+  "kaynak_sha256": "40a1c4be6856581a1668fbb4da40415c7cb7ee389db0d1c14fd0a9d919971fca",
+  "metin": "kaynak_metin/dunya_com_1b9de83c2d.txt.gz",
+  "metin_sha256": "b4d4ac301d83198f6bcca0782509e7471e97f41004d06ac7a9b7643bf3fb3e15",
+  "karakter": 8233
+ },
+ "kaynak/ecb_europa_eu_1149093c6a.html.gz": {
+  "url": "https://www.ecb.europa.eu/press/projections/html/ecb.projections202606_eurosystemstaff~a495110f8d.en.html",
+  "tur": "html",
+  "kaynak_sha256": "c8d02123707c92c48842d1dd2653a117e969c1a915990951cfe6fc71def6d979",
+  "metin": "kaynak_metin/ecb_europa_eu_1149093c6a.txt.gz",
+  "metin_sha256": "c912f97111b216a3cf7fe2c4531c738b585bf6f6c05934a94f5fd8b5a5158413",
+  "karakter": 124947
+ },
+ "kaynak/ecb_europa_eu_17891571a8.html.gz": {
+  "url": "https://www.ecb.europa.eu/press/blog/date/2026/html/ecb.blog20260731~6224db57f8.en.html",
+  "tur": "html",
+  "kaynak_sha256": "df4bd64ebbab3346c81d00f3f68eb74c05f1ecd11e733fab97bffa0efeaf0785",
+  "metin": "kaynak_metin/ecb_europa_eu_17891571a8.txt.gz",
+  "metin_sha256": "100dabf7ab11070f01a09dc85520e864931d70a1de36113a41dd25c1f6056771",
+  "karakter": 27353
+ },
+ "kaynak/ecb_europa_eu_1fb202a306.html.gz": {
+  "url": "https://www.ecb.europa.eu/press/projections/html/ecb.projections202603_ecbstaff~ebe291cd3d.en.html",
+  "tur": "html",
+  "kaynak_sha256": "1d7d639c48864e2576de2d7c677092cfe79fe9d132ff5d2939345460d80373e0",
+  "metin": "kaynak_metin/ecb_europa_eu_1fb202a306.txt.gz",
+  "metin_sha256": "52c67acc30b3571b1bff742ab275fb45ab163fbb37b49c1ed15caccbc3ba0273",
+  "karakter": 94987
+ },
+ "kaynak/ecb_europa_eu_2c69dc83af.html.gz": {
+  "url": "https://www.ecb.europa.eu/press/key/date/2026/html/ecb.sp260420~cdf674023e.en.html",
+  "tur": "html",
+  "kaynak_sha256": "62f6dd7f6b05fa4ea80ffac966d14ef4d932dae4acbf4ccdf661a76f2ec89596",
+  "metin": "kaynak_metin/ecb_europa_eu_2c69dc83af.txt.gz",
+  "metin_sha256": "2264ad718af278ac67e9f34e0d50f6c04521515f6ce0dccbaaef095e3a074c33",
+  "karakter": 24069
+ },
+ "kaynak/ecb_europa_eu_933be96506.html.gz": {
+  "url": "https://www.ecb.europa.eu/press/pr/date/2011/html/pr110707.en.html",
+  "tur": "html",
+  "kaynak_sha256": "fa2c1d68d44bcdd689f8c75c165289de0ad36efcf6d9990359d0e122f8de57a3",
+  "metin": "kaynak_metin/ecb_europa_eu_933be96506.txt.gz",
+  "metin_sha256": "54859e03695001fd0208eb91fa2c4eefe60374281615658897fe6e4ea5524fb4",
+  "karakter": 13688
+ },
+ "kaynak/ecb_europa_eu_b45b81d09b.html.gz": {
+  "url": "https://www.ecb.europa.eu/press/pr/date/2011/html/pr110407.en.html",
+  "tur": "html",
+  "kaynak_sha256": "ed8aa4d773a17c3572f488919937a99c295d3bceb5fbe676f9d6b1203e45e051",
+  "metin": "kaynak_metin/ecb_europa_eu_b45b81d09b.txt.gz",
+  "metin_sha256": "5d390169bcdfe89d284eff04c2be1044d9459ce73ff3707045bcf8e726fddf7c",
+  "karakter": 13692
+ },
+ "kaynak/eia_gov_287ffb4bfb.html.gz": {
+  "url": "https://www.eia.gov/todayinenergy/detail.php?id=51498",
+  "tur": "html",
+  "kaynak_sha256": "f5e9dab1bfac5ef8d165e45dea50553180f19c6aa6dc1e6228b3ca133afd7e45",
+  "metin": "kaynak_metin/eia_gov_287ffb4bfb.txt.gz",
+  "metin_sha256": "39715c89a5f68675504ed882ab3319df96328744ccb4332aa4f99c55fa8e0ae1",
+  "karakter": 6958
+ },
+ "kaynak/eia_gov_5a873af7dd.html.gz": {
+  "url": "https://www.eia.gov/todayinenergy/detail.php?id=4550",
+  "tur": "html",
+  "kaynak_sha256": "a06683e5250fa42fcbbad51be68759fe53ebf944c5d031214abdb87b6547b2b4",
+  "metin": "kaynak_metin/eia_gov_5a873af7dd.txt.gz",
+  "metin_sha256": "c9adec0ed498463a08a737e6df54351ffdab4c153017409befe9b6c204ae9b44",
+  "karakter": 8835
+ },
+ "kaynak/eia_gov_5c51486935.html.gz": {
+  "url": "https://www.eia.gov/todayinenergy/detail.php?id=6850",
+  "tur": "html",
+  "kaynak_sha256": "8b78c05c364dead18c4ca404cd6e0b28ed4cd33b0b51c76c53c2d5958d9d5a5a",
+  "metin": "kaynak_metin/eia_gov_5c51486935.txt.gz",
+  "metin_sha256": "882e1cd5006da0c599087188fedffad5f246b70c5719c8a3233fe0e732f65fc1",
+  "karakter": 7509
+ },
+ "kaynak/eia_gov_7fcea29da0.html.gz": {
+  "url": "https://www.eia.gov/todayinenergy/detail.php?id=65884",
+  "tur": "html",
+  "kaynak_sha256": "4fc97b426abddbd3d08e117d8fdd4566ac73fb807f92b187f2ecbe52fd23a282",
+  "metin": "kaynak_metin/eia_gov_7fcea29da0.txt.gz",
+  "metin_sha256": "5014f5e9a75a81e13d6c7d129ffee82423ab22a4102dac599cdffebfe9ae9e88",
+  "karakter": 9330
+ },
+ "kaynak/energy_gov_e92a6b9cf6.pdf.gz": {
+  "url": "https://www.energy.gov/ceser/articles/history-spr-releases-pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "95a6ad31bd146fe0ab2fcd57a43ee3f709af80d776eec5176b0c24bb5605fbff",
+  "metin": "kaynak_metin/energy_gov_e92a6b9cf6.txt.gz",
+  "metin_sha256": "9f5f298eeb2532497e137772f7063642f61ecfaa746e66cad1693532e05fe28b",
+  "karakter": 13785
+ },
+ "kaynak/energypolicy_columbia_edu_66a2cb4655.html.gz": {
+  "url": "https://www.energypolicy.columbia.edu/publications/oil-intensity-curiously-steady-decline-oil-gdp/",
+  "tur": "html",
+  "kaynak_sha256": "cd084a30152fd5efcea74b38468e81c05c2a750eb07c77a7287366c7a2fac8ae",
+  "metin": "kaynak_metin/energypolicy_columbia_edu_66a2cb4655.txt.gz",
+  "metin_sha256": "7ba23507d25738b63bdb0eea0d56f9ce8ddbbe1cb80153dbbba13697e75e445f",
+  "karakter": 16626
+ },
+ "kaynak/federalreserve_gov_631cb0ace1.html.gz": {
+  "url": "https://www.federalreserve.gov/boarddocs/press/monetary/2003/20030318/default.htm",
+  "tur": "html",
+  "kaynak_sha256": "fc77216c012185e0e815923b06078ebba1dfc8dedadf21579192c23652d3ee85",
+  "metin": "kaynak_metin/federalreserve_gov_631cb0ace1.txt.gz",
+  "metin_sha256": "53edd70676823a4188af2176f97eda00dc2056d54e1b56cf1e64b22845629d75",
+  "karakter": 1652
+ },
+ "kaynak/federalreserve_gov_823e475673.html.gz": {
+  "url": "https://www.federalreserve.gov/econres/notes/feds-notes/oil-price-shocks-and-inflation-in-a-dsge-model-of-the-global-economy-accessible-20240802.htm",
+  "tur": "html",
+  "kaynak_sha256": "8c34cbb7107fff870a7df34ecdff69e218fe24177c1e02fe6b50c9443d66f9e9",
+  "metin": "kaynak_metin/federalreserve_gov_823e475673.txt.gz",
+  "metin_sha256": "d8acede54f4ea1f186c0224d48b9a676840c7fd8d2e56f362f2b4f240d6bc270",
+  "karakter": 12644
+ },
+ "kaynak/federalreserve_gov_ea0bc3b53d.html.gz": {
+  "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm",
+  "tur": "html",
+  "kaynak_sha256": "7ae98e95a88a690ba68880e8b294bffd7253e4216378e0842b099f4c065e6b4b",
+  "metin": "kaynak_metin/federalreserve_gov_ea0bc3b53d.txt.gz",
+  "metin_sha256": "d3c89ddcc832550c239db15e7f30befdcb57f0bd73eba367ca4d64a66d65b952",
+  "karakter": 10752
+ },
+ "kaynak/federalreservehistory_org_09e0cb51ea.html.gz": {
+  "url": "https://www.federalreservehistory.org/essays/oil-shock-of-1978-79",
+  "tur": "html",
+  "kaynak_sha256": "8bde41dfb222a1a15cced5365a47815a9d2c0189e99d619e98b847c2c9cbcf67",
+  "metin": "kaynak_metin/federalreservehistory_org_09e0cb51ea.txt.gz",
+  "metin_sha256": "eab4abd5cbbc2b168bc7a3a839b98cb89b5249a31a34cf4ae71e0a2f406e3af1",
+  "karakter": 7247
+ },
+ "kaynak/federalreservehistory_org_3e5fe1b083.html.gz": {
+  "url": "https://www.federalreservehistory.org/essays/oil-shock-of-1973-74",
+  "tur": "html",
+  "kaynak_sha256": "9a43a8f866784302ec51597793b9558ffdc3388555a6e30607c650b9e9d1b793",
+  "metin": "kaynak_metin/federalreservehistory_org_3e5fe1b083.txt.gz",
+  "metin_sha256": "71c26c7a40e34800fe4dde8194e894b3e0f5355bcd60b879421d4b5ae873f76b",
+  "karakter": 8036
+ },
+ "kaynak/govinfo_gov_77fc3b339c.pdf.gz": {
+  "url": "https://www.govinfo.gov/content/pkg/CRPT-117hrpt536/pdf/CRPT-117hrpt536.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "a4a3b5f6036e154c8cabc96ffac5a52504ab4ec57defa44a6a26a1637c09adf7",
+  "metin": "kaynak_metin/govinfo_gov_77fc3b339c.txt.gz",
+  "metin_sha256": "034941470b6f782e1d255fc55cccef1f7157a9ad700d0a4a52e3ce03a4d3888b",
+  "karakter": 16812
+ },
+ "kaynak/nber_org_45b760eccb.html.gz": {
+  "url": "https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions",
+  "tur": "html",
+  "kaynak_sha256": "60438616f9d3c087083ed432488562be74527cea422de3e27108ded7d2962f5e",
+  "metin": "kaynak_metin/nber_org_45b760eccb.txt.gz",
+  "metin_sha256": "897bbc607e2258567c8d6dde7bcf64d9041c9184c2a08022a059f87df2839e69",
+  "karakter": 7028
+ },
+ "kaynak/nber_org_546e38fafe.pdf.gz": {
+  "url": "https://www.nber.org/system/files/working_papers/w16790/w16790.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "54b37f977d8fb5a5b582e8c915d4a1f745c7fadef17913eaa6c398e59779c7cb",
+  "metin": "kaynak_metin/nber_org_546e38fafe.txt.gz",
+  "metin_sha256": "b6bdce1282e82e0e810394e7e536557cc14e7649601cc3755b8199185fa6544e",
+  "karakter": 70667
+ },
+ "kaynak/nber_org_91491849c6.html.gz": {
+  "url": "https://www.nber.org/papers/w7755",
+  "tur": "html",
+  "kaynak_sha256": "0aa505261e44bb9dfe8c471529140e4b1074dd952ab28f594c555b1c281e1cb9",
+  "metin": "kaynak_metin/nber_org_91491849c6.txt.gz",
+  "metin_sha256": "b1a32ff02498e2eeb050d30ed8dab16c28721382b633600e8dd563dd02d2f5d9",
+  "karakter": 5283
+ },
+ "kaynak/oilprice_com_3160594906.html.gz": {
+  "url": "https://oilprice.com/Latest-Energy-News/World-News/Brent-Hits-108-as-Saudi-Pipeline-Shutdown-Deepens-Supply-Fears.html",
+  "tur": "html",
+  "kaynak_sha256": "703a85a47097086dfc4eabcdf5f25cc0333ee50782bb7f5050fcb4892d9fedb3",
+  "metin": "kaynak_metin/oilprice_com_3160594906.txt.gz",
+  "metin_sha256": "8dd0d4d7017559cc508ba11668bab84a84eb5bc408d90aa89a4be1fb93f00174",
+  "karakter": 11577
+ },
+ "kaynak/oilprice_com_3cf37f38d0.html.gz": {
+  "url": "https://oilprice.com/Energy/Crude-Oil/Dated-Brent-Above-120-Signals-a-Serious-Oil-Squeeze.html",
+  "tur": "html",
+  "kaynak_sha256": "f2fa0002c7c69173286d3b128cb0268c5c59162d33ac4d82d4b81415d4422832",
+  "metin": "kaynak_metin/oilprice_com_3cf37f38d0.txt.gz",
+  "metin_sha256": "89d99445850564ca83adb0519f651789c9ac8d3a9c8d138c3788debb8b23dcf6",
+  "karakter": 14414
+ },
+ "kaynak/oilprice_com_40f3690eb8.html.gz": {
+  "url": "https://oilprice.com/Energy/Crude-Oil/Oil-Prices-Fall-as-Iran-Negotiation-Hopes-Return.html",
+  "tur": "html",
+  "kaynak_sha256": "3e1aa9b65e3b62b9e5fd0028b8420cd7d385727ec7072276e4f6fc7abe123b4e",
+  "metin": "kaynak_metin/oilprice_com_40f3690eb8.txt.gz",
+  "metin_sha256": "5912c131a0180feb1c8a7c29d5862da1e7d17f86cdc4a21f36eec6facfa579bd",
+  "karakter": 16461
+ },
+ "kaynak/oilprice_com_57b4241b9e.html.gz": {
+  "url": "https://oilprice.com/Latest-Energy-News/World-News/OPEC-Sees-Oil-Demand-Growth-Explode-Sixfold-in-2027.html",
+  "tur": "html",
+  "kaynak_sha256": "8c5ed7a46f33da61a84939ec47fb92b148be4870c188ded304a5897534a224cc",
+  "metin": "kaynak_metin/oilprice_com_57b4241b9e.txt.gz",
+  "metin_sha256": "746a52165009af7beae3fe6dc44fabd5d188a94493985182e32e9d8c0965a75b",
+  "karakter": 11551
+ },
+ "kaynak/oilprice_com_6d2ba44bb4.html.gz": {
+  "url": "https://oilprice.com/Energy/Crude-Oil/Saudi-Export-Pivot-Sends-Brent-Below-105.html",
+  "tur": "html",
+  "kaynak_sha256": "66d9b24718c2fb66a14aaa90f453e1b9e10f4de5af6da0635005ccfa22340dc6",
+  "metin": "kaynak_metin/oilprice_com_6d2ba44bb4.txt.gz",
+  "metin_sha256": "a7f27c38d39ccab2022353c0ed863c2a8447c971b4aeb5b7dbe775fdcb1c0d53",
+  "karakter": 14425
+ },
+ "kaynak/oilprice_com_91e8ce4c1c.html.gz": {
+  "url": "https://oilprice.com/Energy/Crude-Oil/US-Crude-Inventories-Fall-As-Brent-Prices-Soar.html",
+  "tur": "html",
+  "kaynak_sha256": "bc835b75a17887819623c076aeff65e00b00d808c43360d2bf95620543b0fde5",
+  "metin": "kaynak_metin/oilprice_com_91e8ce4c1c.txt.gz",
+  "metin_sha256": "e67d2280c0de9ed7abbe0fdc0972b8f8b1cf68501b1ff5f51c282a99363d56a4",
+  "karakter": 10913
+ },
+ "kaynak/oilprice_com_b12323df4c.html.gz": {
+  "url": "https://oilprice.com/Energy/Oil-Prices/Oil-Price-Forecasts-Jump-as-Hormuz-Disruption-Drags-On.html",
+  "tur": "html",
+  "kaynak_sha256": "799f568121a3684a9b240f40dc32771c18750622fa91dda7188f7f09cee9abb5",
+  "metin": "kaynak_metin/oilprice_com_b12323df4c.txt.gz",
+  "metin_sha256": "d942567faba4db34984233d260450601984484e7e3265d5eaac966a1806c25e2",
+  "karakter": 12337
+ },
+ "kaynak/oilprice_com_d9d3ba7e96.html.gz": {
+  "url": "https://oilprice.com/Latest-Energy-News/World-News/US-Strategic-Petroleum-Reserve-Falls-to-Lowest-Level-Since-1982.html",
+  "tur": "html",
+  "kaynak_sha256": "0042350cd7527766619683470403d8a4d8c37c1b807346c53193bbe8f233d8e7",
+  "metin": "kaynak_metin/oilprice_com_d9d3ba7e96.txt.gz",
+  "metin_sha256": "8702ded33dfa349d171db52efa0b32e1592282ba8babac645e7f00eb60362425",
+  "karakter": 11436
+ },
+ "kaynak/sbb_gov_tr_fabb206ad8.pdf.gz": {
+  "url": "https://www.sbb.gov.tr/wp-content/uploads/2026/09/Orta-Vadeli-Program-2027-2029.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "20bd68a5629071a67597d161e978d5101993c8fa6855f94f0f5f5c7453684792",
+  "metin": "kaynak_metin/sbb_gov_tr_fabb206ad8.txt.gz",
+  "metin_sha256": "937be6a405fbc5f9ffc178ee91f27b75ded69688970b2825c6e0ec078c6e7e62",
+  "karakter": 430626,
+  "glif_esleme": true
+ },
+ "kaynak/tcmb_gov_tr_6eb5df2020.html.gz": {
+  "url": "https://www.tcmb.gov.tr/wps/wcm/connect/tr/tcmb+tr/main+menu/duyurular/basin/2022/duy2022-18",
+  "tur": "html",
+  "kaynak_sha256": "0fd800283fe55f3c0c344f96a947358eb68c5af08754f35bb4cb7afe597c0468",
+  "metin": "kaynak_metin/tcmb_gov_tr_6eb5df2020.txt.gz",
+  "metin_sha256": "ad302e48dbf7c837ba022dfc64f36babeb617c544dadefbb52559b9ddf7086b0",
+  "karakter": 6313
+ },
+ "kaynak/tcmbblog_org_81fb3752cd.html.gz": {
+  "url": "https://tcmbblog.org/wps/wcm/connect/blog/tr/main+menu/analizler/uluslararasi+petrol+fiyatlarinin+tuketici+fiyatlarina+ve+cari+dengeye+yansimalari",
+  "tur": "html",
+  "kaynak_sha256": "baa4c467b977b4b28684588da566936e6d8019cd9042e6994731c40cc301cc51",
+  "metin": "kaynak_metin/tcmbblog_org_81fb3752cd.txt.gz",
+  "metin_sha256": "8bf6c9b860288b51325d0da411b6da8cf6a792f9fddda61725b668f518aef594",
+  "karakter": 9663
+ },
+ "kaynak/tr_euronews_com_89429ed7bb.html.gz": {
+  "url": "https://tr.euronews.com/2026/09/23/oecd-iran-savasina-ragmen-2026-kuresel-buyume-tahminini-29a-cikardi",
+  "tur": "html",
+  "kaynak_sha256": "96b139cf73c472923aa80ff494bef8de333add6897a13e6b3d4c12b441f4221b",
+  "metin": "kaynak_metin/tr_euronews_com_89429ed7bb.txt.gz",
+  "metin_sha256": "204781b21e80a66ddfd28761f7fe030dc07b1bcaaadc140beca0c036a2a2cded",
+  "karakter": 10960
+ },
+ "kaynak/tr_euronews_com_d4618a6439.html.gz": {
+  "url": "https://tr.euronews.com/2026/10/05/ortadogu-petrol-ihracati-iran-haric-savas-oncesi-seviyeye-dondu",
+  "tur": "html",
+  "kaynak_sha256": "28f8977da857376c62e459a9c0bc4e63ab1e9cbdfa48edb75bcf7ca90fb32938",
+  "metin": "kaynak_metin/tr_euronews_com_d4618a6439.txt.gz",
+  "metin_sha256": "4261927e4fb2366e7b9fca7d59b121d82f02bef6ca2d42f46e324a4f1d165c3f",
+  "karakter": 10730
+ },
+ "kaynak/tr_euronews_com_f31c4c55cf.html.gz": {
+  "url": "https://tr.euronews.com/2026/10/08/ozel-haber-g7nin-100-milyon-varillik-petrol-plani-acil-rezerv-saliminin-tamamlanmasina-bag",
+  "tur": "html",
+  "kaynak_sha256": "62fe67a9f1fb157460d13bcb597aa13a256eef1c1e5f16b297cd25d47c820041",
+  "metin": "kaynak_metin/tr_euronews_com_f31c4c55cf.txt.gz",
+  "metin_sha256": "129067bfe4a844fdec71da07b9d7e96cd0b990f863bec3f3231885ff31b29df0",
+  "karakter": 12926
+ },
+ "kaynak/worldbank_org_a829fc2b51.html.gz": {
+  "url": "https://www.worldbank.org/en/brief/2024/07/15/global-inflation",
+  "tur": "html",
+  "kaynak_sha256": "5328d07d1190f07010ab0391e08aa2ed1c8d6bddc0a56e595ecad5b1f0e12b78",
+  "metin": "kaynak_metin/worldbank_org_a829fc2b51.txt.gz",
+  "metin_sha256": "c7de74e1cbdb7429628f2d5fbe407ffb2dd8294b631e2fcdfc89a820c97adb5d",
+  "karakter": 7757
+ },
+ "kaynak/worldbank_org_b9c4f1b4c3.html.gz": {
+  "url": "https://www.worldbank.org/en/news/press-release/2026/04/28/commodity-markets-outlook-april-2026-press-release",
+  "tur": "html",
+  "kaynak_sha256": "6725632e3158f7f449732fbb2064f14640bd79b24b71801ba29c38142dad0bf5",
+  "metin": "kaynak_metin/worldbank_org_b9c4f1b4c3.txt.gz",
+  "metin_sha256": "1f4f6b92ca6812eb331a79e845fa2b72bfb0b43dbbe9e4178dff9e852ec5f2a5",
+  "karakter": 10018
+ },
+ "resmigazete/karar_20260813-0.pdf.gz": {
+  "url": "https://www.resmigazete.gov.tr/eskiler/2026/08/20260813-0.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "b3494f794744d4d23a28b038e20cef616df41df535d2dab759cc936eac98ee95",
+  "metin": "kaynak_metin/karar_20260813-0.txt.gz",
+  "metin_sha256": "a4a910d8cbd712889d343624132a90e139d943ea4e1b7f7e3d8ee20ab90f75b5",
+  "karakter": 142
+ },
+ "resmigazete/karar_20261001-3-3.pdf.gz": {
+  "url": "https://www.resmigazete.gov.tr/eskiler/2026/10/20261001-3-3.pdf",
+  "tur": "pdf",
+  "kaynak_sha256": "33830a1c65c0bb2283f4c5c8c9dde5904936bebdc4c3506406af8776de1dd0b5",
+  "metin": "kaynak_metin/karar_20261001-3-3.txt.gz",
+  "metin_sha256": "e22182d4ad59fcf8d06fec1ba657ee56376506d350b9a7de9bc621c66df66296",
+  "karakter": 136
+ }
+}

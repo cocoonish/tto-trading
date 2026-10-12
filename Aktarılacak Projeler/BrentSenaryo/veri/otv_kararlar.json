@@ -1,0 +1,63 @@
+{
+ "aciklama": "Resmî Gazete'de yayımlanan iki Cumhurbaşkanı Kararının ekli ÖTV tabloları. İki PDF'in de metin katmanı yok (sayfa, taranmış görüntüdür); tablolar sayfa görüntüsünden okunup buraya aktarıldı. Kaynak dosya bulutta indirildi, sıkıştırılmamış özü bulut künyesinde (ham/kunye_rg.json); dogrula.py özün künyeyle ve bu kaydın künyeyle aynı olduğunu sorar.",
+ "okuma": "sayfa görüntüsünden (metin katmanı yok)",
+ "birim": "TL/litre",
+ "kararlar": [
+  {
+   "karar_sayisi": 11606,
+   "karar_tarihi": "2026-08-12",
+   "rg_tarihi": "2026-08-13",
+   "rg_sayisi": 33339,
+   "dosya": "ham/resmigazete/karar_20260813-0.pdf.gz",
+   "url": "https://www.resmigazete.gov.tr/eskiler/2026/08/20260813-0.pdf",
+   "sha256": "b3494f794744d4d23a28b038e20cef616df41df535d2dab759cc936eac98ee95",
+   "yururluk": "yayımı tarihinde (Madde 3)",
+   "urunler": [
+    {
+     "ad": "motorin",
+     "gtip": ["2710.19.43.00.11", "2710.20.11.00.11"],
+     "donemler": [
+      {"bas": "2026-08-13", "son": "2026-08-31", "otv": 0.0},
+      {"bas": "2026-09-01", "son": "2026-09-30", "otv": 3.0},
+      {"bas": "2026-10-01", "son": "2026-10-31", "otv": 6.0},
+      {"bas": "2026-11-01", "son": "2026-11-30", "otv": 9.0},
+      {"bas": "2026-12-01", "son": "2026-12-31", "otv": 12.0},
+      {"bas": "2027-01-01", "son": null, "otv": 13.9006}
+     ]
+    }
+   ],
+   "madde_2": "4/3/2026 tarihli ve 10995 sayılı Cumhurbaşkanı Kararının eki Karar hükümleri 4760 sayılı Kanuna ekli (I) sayılı listenin (A) cetvelinde 2710.19.43.00.11 ve 2710.20.11.00.11 G.T.İ.P. numaraları ile yer alan motorin türü mallar bakımından uygulanmaz."
+  },
+  {
+   "karar_sayisi": 11822,
+   "karar_tarihi": "2026-09-30",
+   "rg_tarihi": "2026-10-01",
+   "rg_sayisi": 33387,
+   "dosya": "ham/resmigazete/karar_20261001-3-3.pdf.gz",
+   "url": "https://www.resmigazete.gov.tr/eskiler/2026/10/20261001-3-3.pdf",
+   "sha256": "33830a1c65c0bb2283f4c5c8c9dde5904936bebdc4c3506406af8776de1dd0b5",
+   "yururluk": "yayımı tarihinde (Madde 3)",
+   "urunler": [
+    {
+     "ad": "kurşunsuz benzin 95 oktan",
+     "gtip": ["2710.12.45.00.11", "2710.12.45.00.13", "2710.12.45.00.18"],
+     "donemler": [
+      {"bas": "2026-10-01", "son": "2026-10-31", "otv": 7.9},
+      {"bas": "2026-11-01", "son": "2026-11-30", "otv": 11.36},
+      {"bas": "2026-12-01", "son": null, "otv": 14.8277}
+     ]
+    },
+    {
+     "ad": "kurşunsuz benzin 98 oktan",
+     "gtip": ["2710.12.49.00.11", "2710.12.49.00.12", "2710.12.49.00.18"],
+     "donemler": [
+      {"bas": "2026-10-01", "son": "2026-10-31", "otv": 8.9},
+      {"bas": "2026-11-01", "son": "2026-11-30", "otv": 12.36},
+      {"bas": "2026-12-01", "son": null, "otv": 15.5437}
+     ]
+    }
+   ],
+   "not": "Tablonun ilk sütunu '31/10/2026 tarihine kadar' der; karar yayımı tarihinde yürürlüğe girdiği için dönem 1 Ekim 2026'da başlar. Karar 10995 sayılı Karara atıf yapmaz."
+  }
+ ]
+}
