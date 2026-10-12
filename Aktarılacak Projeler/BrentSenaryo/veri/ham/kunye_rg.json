@@ -1,1 +1,18 @@
-{}
+{
+ "resmigazete/karar_20260813-0.pdf.gz": {
+  "url": "https://www.resmigazete.gov.tr/eskiler/2026/08/20260813-0.pdf",
+  "durum": 200,
+  "bayt": 82182,
+  "sha256": "b3494f794744d4d23a28b038e20cef616df41df535d2dab759cc936eac98ee95",
+  "an": "2026-10-12T15:14:33+00:00",
+  "not": "ÖTV kararı 11606 — 13.08.2026"
+ },
+ "resmigazete/karar_20261001-3-3.pdf.gz": {
+  "url": "https://www.resmigazete.gov.tr/eskiler/2026/10/20261001-3-3.pdf",
+  "durum": 200,
+  "bayt": 828636,
+  "sha256": "33830a1c65c0bb2283f4c5c8c9dde5904936bebdc4c3506406af8776de1dd0b5",
+  "an": "2026-10-12T15:14:31+00:00",
+  "not": "ÖTV kararı 11822 — 01.10.2026"
+ }
+}

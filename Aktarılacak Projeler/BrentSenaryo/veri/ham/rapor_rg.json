@@ -74,5 +74,21 @@
    "2026-10-02": "bütçe doldu",
    "sure_sn": 1080.6
   }
+ },
+ "2026-10-12T15:14:29Z": {
+  "Resmî Gazete ÖTV kararları (fihristten çözülmüş adres)": {
+   "durum": "tamam",
+   "https://www.resmigazete.gov.tr/eskiler/2026/10/20261001-3-3.pdf": {
+    "durum": 200,
+    "bayt": 828636,
+    "dosya": "resmigazete/karar_20261001-3-3.pdf.gz"
+   },
+   "https://www.resmigazete.gov.tr/eskiler/2026/08/20260813-0.pdf": {
+    "durum": 200,
+    "bayt": 82182,
+    "dosya": "resmigazete/karar_20260813-0.pdf.gz"
+   },
+   "sure_sn": 3.7
+  }
  }
 }
