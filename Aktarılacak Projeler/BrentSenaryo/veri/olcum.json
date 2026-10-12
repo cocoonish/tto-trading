@@ -1,6 +1,6 @@
 {
  "uretim": {
-  "olcum_py_sha256": "4f72dc941d6faf6db820eb2282a9046bfa2150cf99bc7e238f95d382e36b9257",
+  "olcum_py_sha256": "dee016af2ad9a657ee0ea5dc2ddb2a1d49b8015c95d81ac9284eb6841a2acc92",
   "girdiler": {
    "abd_hazine_1990.csv.gz": "8c31a527e6ebb6dfec0fbe654e739c5dac5ba0d5c0f107c0ec76952999d755ab",
    "abd_reel_2003.csv.gz": "7aa5105fd44c522765f73a501f0566956491f64d78308cc9a4bd3599498a60da",
@@ -876,6 +876,13 @@
     "150": 98.810486
    }
   }
+ },
+ "giris_kapanis": {
+  "2026-10-05": 100.32,
+  "2026-10-06": 100.580002,
+  "2026-10-07": 100.199997,
+  "2026-10-08": 104.279999,
+  "2026-10-09": 104.720001
  },
  "kaynak_duzeltme": {
   "try_eski_lira_gun": 68,
@@ -21438,7 +21445,8 @@
     "tufe_2ay_petrol": 0.853014,
     "tufe_2ay_kurlu": 1.294703,
     "tufe_2ay_kur_payi": 0.433379,
-    "tufe_12ay_tcmb": 1.936593
+    "tufe_12ay_tcmb": 1.936593,
+    "tufe_12ay_tcmb_2025": 1.549274
    },
    "150": {
     "kalem": {
@@ -21456,7 +21464,8 @@
     "tufe_2ay_petrol": 1.731558,
     "tufe_2ay_kurlu": 2.171302,
     "tufe_2ay_kur_payi": 0.416507,
-    "tufe_12ay_tcmb": 4.323911
+    "tufe_12ay_tcmb": 4.323911,
+    "tufe_12ay_tcmb_2025": 3.459129
    }
   },
   "kur_varsayimi": 1.367677,

@@ -755,7 +755,7 @@ def metin(on: dict, o: dict) -> None:
     dogru(S["PGSUS_IS"]["150"]["orta"] < 0 and S["THYAO_IS"]["150"]["orta"] < 0, "tablo: Pegasus/THY aşağıda değil")
     s125, s150 = TA["senaryo"]["125"], TA["senaryo"]["150"]
     metinde(f"Yalnız petrolün payı TÜFE'ye iki ayda {sayi(s125['tufe_2ay_petrol'], 2, True)} (125 dolar) ve "
-            f"{sayi(s150['tufe_2ay_petrol'], 2, True)} puan (150 dolar); TCMB'nin 12 aylık kuralıyla "
+            f"{sayi(s150['tufe_2ay_petrol'], 2, True)} puan (150 dolar); TCMB ekonomistlerinin 12 aylık esnekliğiyle "
             f"{sayi(s125['tufe_12ay_tcmb'], 2, True)} ve {sayi(s150['tufe_12ay_tcmb'], 2, True)} puan", "tablo · TÜFE")
     metinde(f"Motorinin ÖTV'si Ekim'de {sayi(om['baz'], 0)}, Kasım'da {sayi(om['kasim'], 0)} TL", "tablo · ÖTV")
     metinde(f"cari açık/GSYH {yz(-EF['cari_gsyh'], 2)}'dan {yz(-ek['150']['petrol']['cari_gsyh'], 2)}–"
@@ -794,12 +794,18 @@ def metin(on: dict, o: dict) -> None:
     metinde(f"Brent'in ön vadesi 9 Ekim'i {sayi(baz, 2)} dolardan kapattı", "giriş")
     alinti("aa_com_tr_300d27ad0c", "ABD'nin İran'a yeni saldırı hazırlığı iddiaları Brent petrol fiyatını yüzde 4'ten fazla",
            "yeni saldırı hazırlığı haberleriyle gün içinde yüzde 4'ün üzerinde yükselmişti (Anadolu Ajansı)")
-    alinti("bulten:2026-10-12", "Brent TSİ 04:54'te %1,47 düşüşle 103,18 dolara",
-           "TSİ 04:54'te %1,47 düşüşle 103,18 dolardaydı (Reuters)")
     alinti("bulten:2026-10-12", "Donald Trump'ın Rusya ve Ukrayna'nın enerji tesislerine yönelik saldırıları durdurmayı "
                                 "kabul ettiğini açıklamasının ardından",
            "Trump'ın Rusya ve Ukrayna'nın enerji tesislerine yönelik saldırıları durdurmayı kabul ettiğini açıklamasının "
-           "ardından geldi (Bloomberg HT)")
+           "ardından geriledi (Bloomberg HT)")
+    alinti("oilprice_com_3cf37f38d0", "Oil Jumps 2% as Saudi Attacks and Tanker Strikes Revive Hormuz Fears",
+           "Hürmüz'de vurulan tanker haberleriyle 9 Ekim kapanışının yaklaşık %2 üstüne çıktı (OilPrice)")
+    kaynakta("oilprice_com_3cf37f38d0", "Brent Crude •11 mins 107.0 +2.26 +2.16%")
+    gk = o["giris_kapanis"]
+    dogru(gk.get("2026-10-08", 0) > 1.03 * gk.get("2026-10-07", 1e9) and gk.get("2026-10-09", 0) > gk.get("2026-10-08", 1e9)
+          and abs(gk.get("2026-10-09", 0) - baz) < 1e-6,
+          "giriş: 8 Ekim yükselişi korunmamış ya da 9 Ekim kapanışı 8 Ekim'in altında / baz değil")
+    metinde("fiyat kazancını korudu ve 9 Ekim'i daha yukarıda kapattı", "giriş")
     metinde(f"Bir ay burada {YT['ufuk']} iş günüdür; hedef gün {gun(Y['hedef_gun'])}", "giriş")
     metinde("dört kez %20'nin üstünde yükseldi", "giriş")
     dogru(len(P) == 4 and all(p["brent_yuzde"] > 20 for p in P), "giriş: dört pencerenin hepsi %20'nin üstünde değil")
@@ -926,15 +932,19 @@ def metin(on: dict, o: dict) -> None:
             f"{sayi(rk['senaryo_2008_dolariyla']['150'], 2)} eder", "B2 · reel")
     alinti("energypolicy_columbia_edu_66a2cb4655", "By 2019 (the last data set before Covid) global oil intensity was 0.43 "
                                                    "barrel per $1,000 of global GDP-a 56% decline",
-           "2019'da 0,43 varil kullanılıyordu, %56 daha az (Columbia Üniversitesi)")
+           "2019'da 0,43 varil kullanılıyordu, %56 daha az (Rühl ve Erker, Columbia Üniversitesi)")
     alinti("bostonfed_org_c293fdc06a", "the current conflict has generated a real oil price shock of about 33 percent",
-           "Boston Fed'e göre bu savaşın yarattığı reel petrol şoku yaklaşık %33")
+           "bu savaşın Mayıs'a kadar yarattığı reel petrol şoku yaklaşık %33")
+    kaynakta("bostonfed_org_c293fdc06a", "Because May 2026 PCE data were not available at the time of writing")
+    kaynakta("bostonfed_org_c293fdc06a", "these estimates represent statistical associations rather than causal estimates")
+    kaynakta("bostonfed_org_c293fdc06a", "The views expressed herein are solely those of the authors")
+    kaynakta("bostonfed_org_c293fdc06a", "Federal Reserve Bank of Boston Current Policy Perspectives 26-5")
     alinti("bostonfed_org_c293fdc06a", "a 33 percent oil shock was associated with an increase in year-ahead (the "
                                        "subsequent 12 months) total PCE inflation of about 2.2 percentage points before the "
                                        "mid-1980s, the estimated effect has gradually declined to approximately 1.5 "
                                        "percentage points today",
-           "bugün %33'lük bir şok ABD'de bir sonraki yılın PCE enflasyonunu yaklaşık 1,5 puan artırıyor, 1980'lerin "
-           "ortasından önce bu etki 2,2 puandı")
+           "Bugün %33'lük bir şok ABD'de bir sonraki yılın PCE enflasyonunda yaklaşık 1,5 puanlık bir artışla birlikte "
+           "görülüyor, 1980'lerin ortasından önce bu 2,2 puandı")
 
     # ── Bölüm 3
     alinti("aeaweb_org_acb79ef7d1", "Not All Oil Price Shocks Are Alike", "petrol fiyatı şoklarının hepsi aynı değildir")
@@ -1085,7 +1095,7 @@ def metin(on: dict, o: dict) -> None:
             f"{sayi(AS['150']['tufe_seviye_2000'], 2, True)} puan; 2015'ten bu yana ölçülen esneklikle "
             f"{sayi(AS['125']['tufe_seviye_2015'], 2, True)} ve {sayi(AS['150']['tufe_seviye_2015'], 2, True)}", "B4 · ABD TÜFE")
     alinti("ecb_europa_eu_17891571a8", "In general, the pass-through is fast, within one or two months, and complete",
-           "ECB'ye göre ham petrol fiyatının pompaya geçişi hızlı, bir iki ay içinde ve tam")
+           "ECB blogundaki yazıya göre ham petrol fiyatının pompaya geçişi hızlı, bir iki ay içinde ve tam")
     alinti("ecb_europa_eu_17891571a8", "an increase of €0.10 per litre in crude oil prices usually translates into an "
                                        "increase of €0.10 per litre in pre-tax pump prices",
            "ham petroldeki litre başına 0,10 avroluk artış vergi öncesi pompa fiyatında genellikle 0,10 avroluk artışa dönüşür")
@@ -1203,14 +1213,19 @@ def metin(on: dict, o: dict) -> None:
             "B7 · kur payı")
     alinti("aa_com_tr_85ff46ff90", "Brent petrol fiyatında yüzde 10'luk bir artışın tüketici enflasyonunu 12 ay sonunda "
                                    "doğrudan ve dolaylı etkiler kanalıyla nihai olarak 1 puan artırdığına",
-           "Brent'te %10'luk artış tüketici enflasyonunu 12 ayda nihai olarak 1 puan")
+           "Brent'te %10'luk artış tüketici enflasyonunu 12 ayın sonunda doğrudan ve dolaylı etkilerle nihai olarak 1 puan")
     alinti("aa_com_tr_85ff46ff90", "Toplam etkiyi ise 24 ay içerisinde yaklaşık 1,2 puan olarak hesaplıyoruz",
-           "ayda yaklaşık 1,2 puan artırıyor (TCMB'nin Mart 2026 analizi")
+           "24 ayda toplam yaklaşık 1,2 puan artırıyor (Anadolu Ajansı'nın aktarımıyla)")
+    kaynakta("aa_com_tr_85ff46ff90", "analizi, bankanın blog sayfası Merkezin Güncesi'nde yayımlandı")
+    kaynakta("tcmbblog_org_81fb3752cd", "Blogda yer verilen görüşler yazarlara aittir")
     alinti("tcmbblog_org_81fb3752cd", "nihai olarak 1 puan artırdığına işaret ediyor. Toplam etkinin yaklaşık yarısı ilk "
                                       "çeyrekte gerçekleşirken, bir yılın sonunda yaklaşık 0,8 puanlık bir etki",
-           "nihai etkiyi 1 puan, bir yılın sonundaki etkiyi 0,8 puan veriyordu")
-    metinde(f"kuralla 125 dolar {sayi(s125['tufe_12ay_tcmb'], 2, True)}, 150 dolar {sayi(s150['tufe_12ay_tcmb'], 2, True)} "
-            "puan eder", "B7 · TCMB kuralı")
+           "bir yılın sonundaki etkiyi yaklaşık 0,8, nihai etkiyi 1 puan veriyordu")
+    metinde(f"Mart 2026 oranıyla 125 dolar {sayi(s125['tufe_12ay_tcmb'], 2, True)}, 150 dolar "
+            f"{sayi(s150['tufe_12ay_tcmb'], 2, True)} puan eder; Temmuz 2025 oranıyla "
+            f"{sayi(s125['tufe_12ay_tcmb_2025'], 2, True)} ve {sayi(s150['tufe_12ay_tcmb_2025'], 2, True)}", "B7 · TCMB esnekliği")
+    dogru(abs(s125["tufe_12ay_tcmb_2025"] - 0.8 * y125 / 10) < 1e-3 and abs(s150["tufe_12ay_tcmb_2025"] - 0.8 * y150 / 10) < 1e-3,
+          "B7: Temmuz 2025 esnekliği yüzde değişimin 0,08'i değil")
     dogru(abs(s125["tufe_12ay_tcmb"] - y125 / 10) < 1e-3 and abs(s150["tufe_12ay_tcmb"] - y150 / 10) < 1e-3,
           "B7: TCMB kuralı yüzde değişimin onda biri değil")
     he, ea = TU["haziran_eylul"], TU["eylul_aylik"]
@@ -1232,6 +1247,12 @@ def metin(on: dict, o: dict) -> None:
     alinti("aa_com_tr_85ff46ff90", "Brent petrol fiyatının ortalama 90 dolar olduğu durumda 3,7 yüzde puana kadar çıkıyor",
            "ortalama 90 dolarda eşel mobilin düşürücü etkisi 3,7 puana kadar çıkabiliyor (Anadolu Ajansı)")
     kaynakta("aa_com_tr_85ff46ff90", "Ortalama Brent petrol fiyatının 70 dolar olduğu")
+    alinti("aa_com_tr_85ff46ff90", "Mart 2026-Şubat 2027 arası ortalama Brent petrol fiyatı 58,8 dolar olarak varsayılmıştı",
+           "Raporu'nun varsaydığı 58,8 dolar yerine 70 dolar olursa")
+    fark_er = (70 / 58.8 - 1) * 100
+    metinde(f"58,8'den 70'e geçiş yaklaşık {yz(fark_er, 0, True)}'luk bir Brent farkıdır, bu yazının 125 dolar senaryosuyla "
+            "aynı büyüklükte", "B7 · eşel mobil")
+    dogru(abs(fark_er - y125) < 1.0, "B7: 58,8 → 70 farkı 125 dolar senaryosuyla aynı büyüklükte değil")
     kay = otv_kayitlari()
     mot, b95, b98 = kay["motorin"], kay["kurşunsuz benzin 95 oktan"], kay["kurşunsuz benzin 98 oktan"]
     md, b5, b8 = mot["donem"], b95["donem"], b98["donem"]
@@ -1301,7 +1322,8 @@ def metin(on: dict, o: dict) -> None:
                                       "ihracatını da 2,2 milyar ABD doları yukarı çekeceği",
            "10 dolarlık artış petrol ürünleri ithalatını 5,1, ihracatını 2,2 milyar dolar artırıyor")
     alinti("tcmbblog_org_81fb3752cd", "12 aylık net etkisini, her 10 ABD dolarlık artışta 2,6 milyar ABD doları civarında",
-           "cari açığa 12 aylık net etkisi 2,6 milyar dolar civarında (TCMB blogu)")
+           "cari açığa 12 aylık net etkisi 2,6 milyar dolar civarında (TCMB blogu, Temmuz 2025)")
+    dogru(abs(kg["milyar_usd_yillik_10_dolar"] - 2.6) / 2.6 < 0.15, "B7: gazsız kural TCMB blogunun 2,6'sına yakın değil")
     metinde(f"125 dolarda kalırsa ek fatura {sayi(ek['125']['petrol']['ek'], 2)}–{sayi(ek['125']['petrol_gaz']['ek'], 2)} "
             f"milyar dolar ve cari açık/GSYH {yz(-ek['125']['petrol']['cari_gsyh'], 2)}–"
             f"{sayi(-ek['125']['petrol_gaz']['cari_gsyh'], 2)}; 150 dolarda {sayi(ek['150']['petrol']['ek'], 2)}–"
@@ -1338,14 +1360,17 @@ def metin(on: dict, o: dict) -> None:
            "Irak ve Kuveyt dünya üretiminin yaklaşık %9'unu oluşturuyordu")
     kaynakta("nber_org_546e38fafe", "the price of crude oil doubled within the space of a few months")
     kaynakta("nber_org_45b760eccb", "July 1990 (1990Q3) March 1991 (1991Q1)")
-    kaynakta("nber_org_546e38fafe", "All but one of the 11 postwar recessions were associated with an increase in the price of oil")
+    alinti("nber_org_546e38fafe", "All but one of the 11 postwar recessions were associated with an increase in the price of oil, "
+                                  "the single exception being the recession of 1960",
+           "2011'e kadarki 11 ABD resesyonunun biri (1960) hariç hepsi petrol fiyatındaki bir artışla birlikte görüldü")
     em = o["emsaller"]
     yuk = [k for k, m in em.items() if (m["deger"].get("us2y") or 0) > 20]
     dogru(yuk == ["1990", "2022", "2026"], f"B8: ABD 2 yıllığın belirgin arttığı olaylar 1990, 2022, 2026 değil: {yuk}")
     metinde(f"ABD 2 yıllık getirisi sekiz olayın üçünde belirgin biçimde yükseldi (1990, 2022, 2026)", "B8")
     dogru(len(em) == 8, "B8: olay sayısı sekiz değil")
-    kaynakta("federalreserve_gov_ea0bc3b53d", "in the near term the invasion and related events are likely to create additional "
-                                              "upward pressure on inflation and weigh on economic activity")
+    alinti("federalreserve_gov_ea0bc3b53d", "in the near term the invasion and related events are likely to create additional "
+                                            "upward pressure on inflation and weigh on economic activity",
+           "işgalin yakın vadede enflasyona ek yukarı baskı yaratıp ekonomik faaliyeti baskılayacağını yazarak")
     kaynakta("federalreserve_gov_ea0bc3b53d", "decided to raise the target range for the federal funds rate")
     kaynakta("ecb_europa_eu_b45b81d09b", "will be increased by 25 basis points to 1.25%")
     kaynakta("ecb_europa_eu_933be96506", "will be increased by 25 basis points to 1.50%")
@@ -1397,21 +1422,31 @@ def metin(on: dict, o: dict) -> None:
             "geldi", "B9 · sıra")
     alinti("cnbc_com_60ee3c98c3", "The G7 will deploy 100 million barrels of reserves over the next four months \"with a "
                                   "frontloaded substantial diesel release within the first 20 days,\"",
-           "G7 2 Ekim'de dört ay içinde 100 milyon varillik stok salımı açıkladı, ilk 20 günde ağırlıklı olarak dizel (CNBC)")
+           "G7 2 Ekim'de dört ay içinde 100 milyon varillik stok salımı açıkladı; büyük bir dizel salımı ilk 20 güne öne "
+           "çekiliyor (CNBC)")
     alinti("tr_euronews_com_f31c4c55cf", "IEA'nın martta başlattığı acil petrol rezervi salımının hızlandırılarak "
                                          "tamamlanmasını öngörüyor. Bu adım, daha önce kararlaştırılan 400 milyon varile ek "
                                          "olarak yeni bir 100 milyon varillik taahhüt anlamına gelmiyor",
-           "Mart'ta başlayan 400 milyon varillik salıma ek yeni bir taahhüt değil")
+           "IEA'nın Mart'ta başlattığı 400 milyon varillik acil stok salımına ek yeni bir taahhüt değil")
     alinti("oilprice_com_d9d3ba7e96", "stood at 284.6 million barrels for the week ending September 18", "18 Eylül haftasında 284,6 milyon varildi")
     alinti("oilprice_com_d9d3ba7e96", "and 406.0 million a year earlier", "bir yıl önce 406,0")
     alinti("oilprice_com_d9d3ba7e96", "the reserve fell further the following week, to 283.8 million barrels, the lowest level "
                                       "since October 1982",
            "ertesi hafta 283,8 milyon varille Ekim 1982'den bu yana en düşük düzeye indi")
+    alinti("aa_com_tr_300d27ad0c", "stratejik petrol rezervleri de yaklaşık 800 bin varil azalarak 283 milyon varile düştü",
+           "yaklaşık 800 bin varil daha azalarak 283 milyon varile geriledi (Anadolu Ajansı, 8 Ekim)")
     alinti("bloomberght_com_48e00255eb", "Kızıldeniz'deki ihraç merkezine günlük 5,8 milyon varil petrol pompalama kapasitesine "
                                          "ulaştığını",
            "Kızıldeniz'deki ihraç merkezine günde 5,8 milyon varil pompalama kapasitesine ulaştığını açıkladı (Bloomberg HT, 6")
     alinti("bloomberght_com_48e00255eb", "10-11 Eylül tarihlerinde", "hat 10–11 Eylül'deki saldırının ardından yaklaşık 11 gün kapalı kalmıştı")
     kaynakta("bloomberght_com_48e00255eb", "Söz konusu hat, yaklaşık 11 gün kapalı kalmıştı")
+    kaynakta("bloomberght_com_48e00255eb", "Abkayk bölgesinden Kızıldeniz kıyısındaki Yanbu'ya kadar")
+    alinti("aljazeera_com_3f61b7e22d", "The Houthis on Thursday said they had launched missile and drone attacks",
+           "Husiler 24 Eylül'de hattın Kızıldeniz'deki ucu Yanbu'da Aramco tesislerine saldırdıklarını açıkladı")
+    kaynakta("aljazeera_com_3f61b7e22d", "and Aramco facilities in the Red Sea city of Yanbu")
+    alinti("aljazeera_com_3f61b7e22d", "Saudi authorities have not confirmed whether the attacks caused any damage",
+           "Suudi makamları doğrulamadı (Al Jazeera, 25 Eylül)")
+    dogru(__import__("datetime").date(2026, 9, 24).weekday() == 3, "B9: Al Jazeera'nın 'Thursday'i 24 Eylül değil")
     alinti("tr_euronews_com_d4618a6439", "Kpler'in verilerine göre 1-28 Eylül arasında bölgeden günde en az 16,5 milyon varil "
                                          "(mbd) ham petrol çıktı; bu, İran hariç tutulduğunda savaş öncesi ortalamaya denk",
            "1–28 Eylül'de günde en az 16,5 milyon varille savaş öncesi ortalamaya döndü (Euronews, 5 Ekim)")
@@ -1421,10 +1456,21 @@ def metin(on: dict, o: dict) -> None:
     alinti("cnbc_com_5dfd5ea085", "yet still roughly 5 million bpd below prewar levels in February",
            "yedi üye Ağustos'ta savaş öncesinin günde yaklaşık 5 milyon varil altında üretti")
     kaynakta("cnbc_com_5dfd5ea085", "OPEC+ agrees to keep November oil output targets steady")
+    alinti("oilprice_com_b12323df4c", "reached 23.3 million bpd over the past week, roughly matching their 2025 average",
+           "Goldman Sachs'ın Körfez ihracatını son haftada 2025 ortalamasına yakın tahmin etmesiyle (OilPrice, 30 Eylül)")
     alinti("bloomberght_com_d832ce5702", "3 Kasım'daki ara seçimlere kadar İran'a saldırı düzenlemeyeceklerini açıkladı",
            "3 Kasım'daki ara seçimlere kadar İran'a saldırı düzenlemeyeceklerini açıkladı (Bloomberg HT, 8 Ekim)")
+    alinti("aa_com_tr_300d27ad0c", "ABD'li ve İsrailli kaynaklar, saldırıların ABD'de 3 Kasım'da yapılacak ara seçimler ve "
+                                   "İsrail'de 27 Ekim'de düzenlenecek seçimler öncesinde gerçekleştirilebileceğini belirtti",
+           "8 Ekim'de ABD'li ve İsrailli kaynaklar saldırıların İsrail'deki 27 Ekim ve ABD'deki 3 Kasım seçimlerinden önce "
+           "gelebileceğini söylüyordu (Anadolu Ajansı)")
+    _dt = __import__("datetime")
+    _ig = sum(1 for k in range(1, 7) if (_dt.date(2026, 11, 3) + _dt.timedelta(days=k)).weekday() < 5
+              and _dt.date(2026, 11, 3) + _dt.timedelta(days=k) <= _dt.date.fromisoformat(Y["hedef_gun"]))
+    dogru(_ig == 4 and Y["hedef_gun"] == "2026-11-09", f"B9: taahhüdün bitişi ile hedef gün arası dört iş günü değil ({_ig})")
+    metinde("Taahhüdün süresi hedef günden dört iş günü önce doluyor", "B9 · dal 4")
     alinti("bulten:2026-10-12", "Rusya'nın yeniden motorin tedarik edeceği",
-           "Dünya gazetesi düşüşü Rusya'nın yeniden motorin tedarik edeceği beklentisine bağlıyor")
+           "Dünya gazetesi (12 Ekim) düşüşü Rusya'nın yeniden motorin tedarik edeceği beklentisine bağlıyor")
     kaynakta("bulten:2026-10-12", "Zelenskiy'nin saldırıların sürdüğünü açıklaması")
     metinde(f"Brent'ten hızlı yükseldiği için (eğim {sayi(S['HO=F']['egim'], 2)}) bu, Türkiye'nin pompa hesabında", "B9 · dal 5")
     alinti("bulten:2026-10-09", "22 Ekim'deki Para Politikası Kurulu toplantısında değişiklik beklemediklerini ancak bu tahmine "
@@ -1443,7 +1489,14 @@ def metin(on: dict, o: dict) -> None:
     alinti("worldbank_org_b9c4f1b4c3", "the Strait of Hormuz, which handles about 35% of global seaborne crude oil trade",
            "Hürmüz deniz yoluyla taşınan ham petrolün yaklaşık %35'ini taşıyor (Dünya Bankası, Nisan 2026)")
     alinti("dallasfed_org_4bb9186006", "in the DSGE model higher oil prices are associated with economic contractions",
-           "Dallas Fed'in modelinde yüksek fiyat ekonomik daralmayla birlikte gelir")
+           "modelde yüksek fiyat ekonomik daralmayla birlikte gelir")
+    alinti("dallasfed_org_4bb9186006", "we consider a complete closure of the Strait of Hormuz, not allowing for any diversion "
+                                       "of oil exports by pipeline to the Red Sea",
+           "boru hatlarıyla hiçbir sapmaya izin vermeyen tam bir Hürmüz kapanışı")
+    alinti("dallasfed_org_4bb9186006", "An outage lasting two quarters would cause the WTI price to peak at $132 per barrel in "
+                                       "July 2026 and an outage lasting three quarters would cause the WTI price to peak at "
+                                       "$167 in October of 2026",
+           "iki çeyrek sürerse WTI Temmuz'da 132, üç çeyrek sürerse Ekim'de 167 dolarda zirve yapıyordu")
     alinti("dallasfed_org_4bb9186006", "The destruction of oil demand associated with these contractions makes it difficult for "
                                        "the quarterly average price of oil to rise to levels of $200 per barrel or more",
            "daralmanın yok ettiği talep, çeyreklik ortalama fiyatın 200 doları aşmasını zorlaştırır")

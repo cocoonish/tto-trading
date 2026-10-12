@@ -184,7 +184,7 @@ def sekil_04():
            "Şekil 04 — 2026'nın dört petrol yükselişinde öbür piyasalar ne yaptı",
            [f"Her pencere Brent'in 21 iş günlük yükselişinin tepe yaptığı gün biter: "
             + ", ".join(f"{PENCERE_AD[j]} {tarih(p['bas'])}–{tarih(p['son'])}" for j, p in enumerate(pen)),
-            "Kaynak: bülten piyasa fotoğrafı, ABD Hazinesi, TCMB, Borsa İstanbul"], 820)
+            "Kaynak: Yahoo Finance ve CNBC kapanışları, ABD Hazinesi, TCMB, Borsa İstanbul"], 820)
 
 
 # ─────────────────────────────────────────────────────────────────────── 05
@@ -301,7 +301,7 @@ def sekil_08():
                              customdata=[f"{a}: +%{vir(v, 1)} ({sen} dolar)" for (_, a), v in zip(kalem, ys)],
                              hovertemplate="%{customdata}<extra></extra>"), row=1, col=1)
         ys2 = [T["senaryo"][sen]["tufe_2ay_petrol"], T["senaryo"][sen]["tufe_12ay_tcmb"]]
-        fig.add_trace(go.Bar(x=["2 ay, ölçülen", "12 ay, TCMB kuralı"], y=ys2, name=f"{sen} dolar", marker_color=renk,
+        fig.add_trace(go.Bar(x=["2 ay, ölçülen", "12 ay, TCMB ekonomistleri"], y=ys2, name=f"{sen} dolar", marker_color=renk,
                              legendgroup=sen, showlegend=False,
                              customdata=[f"{a}: +{vir(v, 1)} puan ({sen} dolar)" for a, v in zip(("2 ay", "12 ay"), ys2)],
                              hovertemplate="%{customdata}<extra></extra>"), row=2, col=1)
@@ -312,7 +312,7 @@ def sekil_08():
            f"{vir(T['senaryo']['150']['tufe_2ay_petrol'], 1)} puan",
            [f"Yalnız petrolün payı: kalem esnekliği ({T['donem']}, aylık; aynı ay ve bir ay gecikme) × ön vade Brent'in log değişimi; "
             "kurun payı dışarıda, çünkü yönetilen patika petrol olmasa da sürer",
-            "ÖTV ve eşel mobil kararları bu hesabın dışında (Şekil 09) · 12 ay: TCMB'nin %10 → 1 puan kuralı"], 620)
+            "ÖTV ve eşel mobil kararları bu hesabın dışında (Şekil 09) · 12 ay: TCMB ekonomistlerinin %10 → 1 puan esnekliği (Mart 2026)"], 620)
 
 
 # ─────────────────────────────────────────────────────────────────────── 09

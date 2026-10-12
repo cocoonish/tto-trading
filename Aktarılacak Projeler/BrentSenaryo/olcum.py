@@ -1275,7 +1275,9 @@ def tufe_aktarim(yer: dict, tg: dict, st: dict) -> dict:
                               "tufe_2ay_petrol": tg["vadeli:tufe:2005"]["brent_0_1"] * s["log"],
                               "tufe_2ay_kurlu": kalem_kurlu["tufe"],
                               "tufe_2ay_kur_payi": tg["vadeli:tufe:2005"]["kur_0_1"] * kur[ad],
-                              "tufe_12ay_tcmb": s["yuzde"] / 10 * 1.0}
+                              "tufe_12ay_tcmb": s["yuzde"] / 10 * 1.0,
+                              # TCMB blogunun Temmuz 2025 yazısı: bir yılın sonunda %10 → yaklaşık 0,8 puan
+                              "tufe_12ay_tcmb_2025": s["yuzde"] / 10 * 0.8}
     return out
 
 
@@ -1432,6 +1434,13 @@ def sekil_verisi(yer: dict) -> dict:
     return out
 
 
+def giris_kapanislari() -> dict:
+    """Girişin günleri: 8 Ekim'in yükselişi ve aynı akşamki taahhütten sonra fiyatın kazancını koruyup korumadığı
+    (ön vade kapanışı, devirden arındırılmamış — aynı kontrat, Aralık 2026)."""
+    on = tablo("piyasa_2026")["BZ=F"].dropna()
+    return {g.strftime("%Y-%m-%d"): float(v) for g, v in on.loc["2026-10-05":BAZ_GUN].items()}
+
+
 def main() -> int:
     yer = senaryo_yeri()
     sonuc = {
@@ -1444,6 +1453,7 @@ def main() -> int:
                    "loo_asgari": LOO_ASGARI, "litre_varil": LITRE_VARIL, "litre_galon": LITRE_GALON},
         "iki_brent": iki_brent(),
         "senaryo_yeri": yer,
+        "giris_kapanis": giris_kapanislari(),
     }
     _, say = cnbc()
     sonuc["kaynak_duzeltme"] = say
