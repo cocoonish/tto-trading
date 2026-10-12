@@ -1,0 +1,500 @@
+{
+ "2026-10-12T14:02:21Z": {
+  "Yahoo": {
+   "durum": "tamam",
+   "^GSPC": {
+    "satir": 24812,
+    "ilk": "1927-12-30",
+    "son": "2026-10-12"
+   },
+   "^IXIC": {
+    "satir": 14038,
+    "ilk": "1971-02-05",
+    "son": "2026-10-12"
+   },
+   "^DJI": {
+    "satir": 8756,
+    "ilk": "1992-01-02",
+    "son": "2026-10-12"
+   },
+   "^RUT": {
+    "satir": 9846,
+    "ilk": "1987-09-10",
+    "son": "2026-10-12"
+   },
+   "^VIX": {
+    "satir": 9264,
+    "ilk": "1990-01-02",
+    "son": "2026-10-12"
+   },
+   "^TNX": {
+    "satir": 16182,
+    "ilk": "1962-01-02",
+    "son": "2026-10-12"
+   },
+   "^IRX": {
+    "satir": 16679,
+    "ilk": "1960-01-04",
+    "son": "2026-10-12"
+   },
+   "^FVX": {
+    "satir": 16182,
+    "ilk": "1962-01-02",
+    "son": "2026-10-12"
+   },
+   "^TYX": {
+    "satir": 12440,
+    "ilk": "1977-02-15",
+    "son": "2026-10-12"
+   },
+   "^OVX": {
+    "satir": 4886,
+    "ilk": "2007-05-10",
+    "son": "2026-10-09"
+   },
+   "^GVZ": {
+    "satir": 4618,
+    "ilk": "2008-06-03",
+    "son": "2026-10-09"
+   },
+   "^MOVE": {
+    "satir": 5913,
+    "ilk": "2002-11-12",
+    "son": "2026-10-09"
+   },
+   "BZ=F": {
+    "satir": 4780,
+    "ilk": "2007-07-30",
+    "son": "2026-10-12"
+   },
+   "CL=F": {
+    "satir": 6562,
+    "ilk": "2000-08-23",
+    "son": "2026-10-12"
+   },
+   "XLE": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XOP": {
+    "satir": 5108,
+    "ilk": "2006-06-22",
+    "son": "2026-10-12"
+   },
+   "XLB": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLI": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLY": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLP": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLU": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLF": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLK": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLV": {
+    "satir": 6993,
+    "ilk": "1998-12-22",
+    "son": "2026-10-12"
+   },
+   "XLRE": {
+    "satir": 2768,
+    "ilk": "2015-10-08",
+    "son": "2026-10-12"
+   },
+   "JETS": {
+    "satir": 2880,
+    "ilk": "2015-04-30",
+    "son": "2026-10-12"
+   },
+   "ITA": {
+    "satir": 5141,
+    "ilk": "2006-05-05",
+    "son": "2026-10-12"
+   },
+   "XAR": {
+    "satir": 3780,
+    "ilk": "2011-09-29",
+    "son": "2026-10-12"
+   },
+   "IYT": {
+    "satir": 5730,
+    "ilk": "2004-01-02",
+    "son": "2026-10-12"
+   },
+   "DAL": {
+    "satir": 4892,
+    "ilk": "2007-05-03",
+    "son": "2026-10-12"
+   },
+   "UAL": {
+    "satir": 5203,
+    "ilk": "2006-02-06",
+    "son": "2026-10-12"
+   },
+   "LUV": {
+    "satir": 11790,
+    "ilk": "1980-01-02",
+    "son": "2026-10-12"
+   },
+   "XOM": {
+    "satir": 16303,
+    "ilk": "1962-01-02",
+    "son": "2026-10-12"
+   },
+   "CVX": {
+    "satir": 16303,
+    "ilk": "1962-01-02",
+    "son": "2026-10-12"
+   },
+   "HYG": {
+    "satir": 4908,
+    "ilk": "2007-04-11",
+    "son": "2026-10-12"
+   },
+   "JNK": {
+    "satir": 4743,
+    "ilk": "2007-12-04",
+    "son": "2026-10-12"
+   },
+   "LQD": {
+    "satir": 6090,
+    "ilk": "2002-07-30",
+    "son": "2026-10-12"
+   },
+   "TLT": {
+    "satir": 6090,
+    "ilk": "2002-07-30",
+    "son": "2026-10-12"
+   },
+   "IEF": {
+    "satir": 6090,
+    "ilk": "2002-07-30",
+    "son": "2026-10-12"
+   },
+   "SHY": {
+    "satir": 6090,
+    "ilk": "2002-07-30",
+    "son": "2026-10-12"
+   },
+   "TIP": {
+    "satir": 5748,
+    "ilk": "2003-12-05",
+    "son": "2026-10-12"
+   },
+   "EEM": {
+    "satir": 5912,
+    "ilk": "2003-04-14",
+    "son": "2026-10-12"
+   },
+   "EMB": {
+    "satir": 4732,
+    "ilk": "2007-12-19",
+    "son": "2026-10-12"
+   },
+   "TUR": {
+    "satir": 4665,
+    "ilk": "2008-03-28",
+    "son": "2026-10-12"
+   },
+   "EWZ": {
+    "satir": 6600,
+    "ilk": "2000-07-14",
+    "son": "2026-10-12"
+   },
+   "EWW": {
+    "satir": 7692,
+    "ilk": "1996-03-18",
+    "son": "2026-10-12"
+   },
+   "INDA": {
+    "satir": 3693,
+    "ilk": "2012-02-03",
+    "son": "2026-10-12"
+   },
+   "EWY": {
+    "satir": 6643,
+    "ilk": "2000-05-12",
+    "son": "2026-10-12"
+   },
+   "EWJ": {
+    "satir": 7692,
+    "ilk": "1996-03-18",
+    "son": "2026-10-12"
+   },
+   "FXI": {
+    "satir": 5537,
+    "ilk": "2004-10-08",
+    "son": "2026-10-12"
+   },
+   "EZU": {
+    "satir": 6589,
+    "ilk": "2000-07-31",
+    "son": "2026-10-12"
+   },
+   "EWG": {
+    "satir": 7692,
+    "ilk": "1996-03-18",
+    "son": "2026-10-12"
+   },
+   "EWU": {
+    "satir": 7692,
+    "ilk": "1996-03-18",
+    "son": "2026-10-12"
+   },
+   "KSA": {
+    "satir": 2783,
+    "ilk": "2015-09-17",
+    "son": "2026-10-12"
+   },
+   "UAE": {
+    "satir": 3131,
+    "ilk": "2014-05-01",
+    "son": "2026-10-12"
+   },
+   "QAT": {
+    "satir": 3131,
+    "ilk": "2014-05-01",
+    "son": "2026-10-12"
+   },
+   "EWT": {
+    "satir": 6614,
+    "ilk": "2000-06-23",
+    "son": "2026-10-12"
+   },
+   "XU100.IS": {
+    "satir": 7313,
+    "ilk": "1997-07-01",
+    "son": "2026-10-12"
+   },
+   "XU030.IS": {
+    "satir": 7425,
+    "ilk": "1997-01-02",
+    "son": "2026-10-12"
+   },
+   "XBANK.IS": {
+    "satir": 7425,
+    "ilk": "1997-01-02",
+    "son": "2026-10-12"
+   },
+   "XUSIN.IS": {
+    "satir": 8420,
+    "ilk": "1993-01-04",
+    "son": "2026-10-12"
+   },
+   "XULAS.IS": "boş",
+   "XKMYA.IS": "boş",
+   "XUTEK.IS": "boş",
+   "XHOLD.IS": "boş",
+   "XUHIZ.IS": "boş",
+   "XUMAL.IS": "boş",
+   "TUPRS.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "THYAO.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "PGSUS.IS": {
+    "satir": 3378,
+    "ilk": "2013-04-26",
+    "son": "2026-10-12"
+   },
+   "PETKM.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "AYGAZ.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "FROTO.IS": {
+    "satir": 6792,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "TOASO.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "BIMAS.IS": {
+    "satir": 5435,
+    "ilk": "2005-07-22",
+    "son": "2026-10-12"
+   },
+   "EREGL.IS": {
+    "satir": 6792,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "SISE.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "AKBNK.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "GARAN.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "KCHOL.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "ASELS.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "TAVHL.IS": {
+    "satir": 5023,
+    "ilk": "2007-02-26",
+    "son": "2026-10-12"
+   },
+   "CLEBI.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "ENJSA.IS": {
+    "satir": 2189,
+    "ilk": "2018-02-08",
+    "son": "2026-10-12"
+   },
+   "AKSEN.IS": {
+    "satir": 4203,
+    "ilk": "2010-05-21",
+    "son": "2026-10-12"
+   },
+   "ULKER.IS": {
+    "satir": 5801,
+    "ilk": "2004-02-25",
+    "son": "2026-10-12"
+   },
+   "MGROS.IS": {
+    "satir": 6791,
+    "ilk": "2000-05-10",
+    "son": "2026-10-12"
+   },
+   "sure_sn": 120.5
+  },
+  "EVDS": {
+   "durum": "tamam",
+   "TP.FE25.OKTG09,TP.TUKFIY2025.GENEL,TP.TUKFIY2025.0722,TP.TUKFIY2025.07221,TP.TUKFIY2025.07222,TP.TUKFIY2025.07223": 200,
+   "TP.TUKFIY2025.04510,TP.TUKFIY2025.04521,TP.TUKFIY2025.04522,TP.TUKFIY2025.073,TP.TUKFIY2025.07": 200,
+   "serieList:bie_tukfiy2025": 200,
+   "serieList:bie_fe25": 200,
+   "sure_sn": 6.7
+  },
+  "EIA": {
+   "durum": "tamam",
+   "brent_spot_gunluk": {
+    "durum": 200,
+    "bayt": 452096
+   },
+   "wti_spot_gunluk": {
+    "durum": 200,
+    "bayt": 471040
+   },
+   "abd_benzin_pompa_haftalik": {
+    "durum": 200,
+    "bayt": 127488
+   },
+   "abd_motorin_pompa_haftalik": {
+    "durum": 200,
+    "bayt": 117760
+   },
+   "sure_sn": 34.9
+  },
+  "ABD Hazinesi": {
+   "durum": "tamam",
+   "daily_treasury_yield_curve:2025": {
+    "durum": 200,
+    "bayt": 20155
+   },
+   "daily_treasury_yield_curve:2026": {
+    "durum": 200,
+    "bayt": 15905
+   },
+   "daily_treasury_real_yield_curve:2025": {
+    "durum": 200,
+    "bayt": 9006
+   },
+   "daily_treasury_real_yield_curve:2026": {
+    "durum": 200,
+    "bayt": 7062
+   },
+   "sure_sn": 0.8
+  },
+  "Pink Sheet": {
+   "durum": "tamam",
+   "adres": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
+   "bayt": 586099,
+   "sayfadan": true,
+   "sure_sn": 0.3
+  },
+  "NY Fed petrol": {
+   "durum": "tamam",
+   "sayfa": 200,
+   "baglar": [
+    "/medialibrary/media/research/archive/oil_oil-price-dynamics_data.xls"
+   ],
+   "alinan": {
+    "https://www.newyorkfed.org/medialibrary/media/research/archive/oil_oil-price-dynamics_data.xls": {
+     "durum": 200,
+     "bayt": 467968
+    }
+   },
+   "sure_sn": 0.8
+  },
+  "GPR": {
+   "durum": "tamam",
+   "https://www.matteoiacoviello.com/gpr_files/data_gpr_daily_recent.xls": {
+    "durum": 200,
+    "bayt": 3270144
+   },
+   "https://www.matteoiacoviello.com/gpr_files/data_gpr_export.xls": {
+    "durum": 200,
+    "bayt": 2716160
+   },
+   "sure_sn": 2.9
+  }
+ }
+}

@@ -1,0 +1,786 @@
+{
+ "eia/abd_benzin_pompa_haftalik.xls.gz": {
+  "url": "https://www.eia.gov/dnav/pet/hist_xls/EMM_EPMR_PTE_NUS_DPGw.xls",
+  "durum": 200,
+  "bayt": 127488,
+  "sha256": "6ea78144505403a9869fb480438193ab7e0e16c468f3caa1a5ea00daf5a48911",
+  "an": "2026-10-12T14:04:53+00:00",
+  "not": ""
+ },
+ "eia/abd_motorin_pompa_haftalik.xls.gz": {
+  "url": "https://www.eia.gov/dnav/pet/hist_xls/EMD_EPD2D_PTE_NUS_DPGw.xls",
+  "durum": 200,
+  "bayt": 117760,
+  "sha256": "e8ba344a6af7a0c08a7392896b96fd1be5fdd121edd35f93602db24cd6f23e84",
+  "an": "2026-10-12T14:05:04+00:00",
+  "not": ""
+ },
+ "eia/brent_spot_gunluk.xls.gz": {
+  "url": "https://www.eia.gov/dnav/pet/hist_xls/RBRTEd.xls",
+  "durum": 200,
+  "bayt": 452096,
+  "sha256": "a7b7074cb3e1e4b7418cdc7f73ccf831226d55f9365c136be56c8edc3a1e2182",
+  "an": "2026-10-12T14:04:37+00:00",
+  "not": ""
+ },
+ "eia/wti_spot_gunluk.xls.gz": {
+  "url": "https://www.eia.gov/dnav/pet/hist_xls/RWTCd.xls",
+  "durum": 200,
+  "bayt": 471040,
+  "sha256": "d56094e4a98f57a0abe19478b9146c81818539765118ca85d0913ff8cdea99b4",
+  "an": "2026-10-12T14:04:45+00:00",
+  "not": ""
+ },
+ "evds/serielist_bie_fe25.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_fe25",
+  "durum": 200,
+  "bayt": 2,
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "an": "2026-10-12T14:04:29+00:00",
+  "not": ""
+ },
+ "evds/serielist_bie_tukfiy2025.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_tukfiy2025",
+  "durum": 200,
+  "bayt": 411072,
+  "sha256": "a2449d215a38dfb39c2579333baf57b4ef83926f314eda1443fe5b0907b93ca0",
+  "an": "2026-10-12T14:04:28+00:00",
+  "not": ""
+ },
+ "evds/tufe_00.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.FE25.OKTG09-TP.TUKFIY2025.GENEL-TP.TUKFIY2025.0722-TP.TUKFIY2025.07221-TP.TUKFIY2025.07222-TP.TUKFIY2025.07223&startDate=01-01-2004&endDate=12-10-2026&type=json",
+  "durum": 200,
+  "bayt": 72107,
+  "sha256": "20b4dd38deb0fb25ec52bdb5dd3a9018c1f3d2fc8ede0c4c4951b9ffdd2cb3fc",
+  "an": "2026-10-12T14:04:24+00:00",
+  "not": "TP.FE25.OKTG09,TP.TUKFIY2025.GENEL,TP.TUKFIY2025.0722,TP.TUKFIY2025.07221,TP.TUKFIY2025.07222,TP.TUKFIY2025.07223"
+ },
+ "evds/tufe_01.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.TUKFIY2025.04510-TP.TUKFIY2025.04521-TP.TUKFIY2025.04522-TP.TUKFIY2025.073-TP.TUKFIY2025.07&startDate=01-01-2004&endDate=12-10-2026&type=json",
+  "durum": 200,
+  "bayt": 62824,
+  "sha256": "84ea1a004195dfeace7ec797acc25854757257f1ef459de015f6ca1b707d47f9",
+  "an": "2026-10-12T14:04:26+00:00",
+  "not": "TP.TUKFIY2025.04510,TP.TUKFIY2025.04521,TP.TUKFIY2025.04522,TP.TUKFIY2025.073,TP.TUKFIY2025.07"
+ },
+ "gpr/data_gpr_daily_recent_xls.gz": {
+  "url": "https://www.matteoiacoviello.com/gpr_files/data_gpr_daily_recent.xls",
+  "durum": 200,
+  "bayt": 3270144,
+  "sha256": "d1226e6f1b81ffc64dbef8f2176dd92f0ef4ffa2e7a4d1bb4deb0e13e5ccc568",
+  "an": "2026-10-12T14:05:07+00:00",
+  "not": ""
+ },
+ "gpr/data_gpr_export_xls.gz": {
+  "url": "https://www.matteoiacoviello.com/gpr_files/data_gpr_export.xls",
+  "durum": 200,
+  "bayt": 2716160,
+  "sha256": "97af839913606a4bbf4315130b3b1d08d25e37398110c3d2207dc1179f9ff0eb",
+  "an": "2026-10-12T14:05:08+00:00",
+  "not": ""
+ },
+ "hazine/daily_treasury_real_yield_curve_2025.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2025/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2025&page&_format=csv",
+  "durum": 200,
+  "bayt": 9006,
+  "sha256": "d3d3131c41e1f93f4661d227ce7079049d51888b395aaff863b6ad8e08838b64",
+  "an": "2026-10-12T14:05:04+00:00",
+  "not": ""
+ },
+ "hazine/daily_treasury_real_yield_curve_2026.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2026&page&_format=csv",
+  "durum": 200,
+  "bayt": 7062,
+  "sha256": "2fe4b3a277eae774a79748c4cb8db54a64b1bec5ad4a84cc453a5915a573a509",
+  "an": "2026-10-12T14:05:04+00:00",
+  "not": ""
+ },
+ "hazine/daily_treasury_yield_curve_2025.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2025/all?type=daily_treasury_yield_curve&field_tdr_date_value=2025&page&_format=csv",
+  "durum": 200,
+  "bayt": 20155,
+  "sha256": "cf2fa3da7f160384b63d2ead698532b1d76cd9f789ce4911e2304db85b14e6d5",
+  "an": "2026-10-12T14:05:04+00:00",
+  "not": ""
+ },
+ "hazine/daily_treasury_yield_curve_2026.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
+  "durum": 200,
+  "bayt": 15905,
+  "sha256": "0e7164f6f348497a4541b61ce9b3e76fc00902c988540d08332a7d956350c764",
+  "an": "2026-10-12T14:05:04+00:00",
+  "not": ""
+ },
+ "nyfed/oil_oil_price_dynamics_data_xls.gz": {
+  "url": "https://www.newyorkfed.org/medialibrary/media/research/archive/oil_oil-price-dynamics_data.xls",
+  "durum": 200,
+  "bayt": 467968,
+  "sha256": "41383f80fa3fe43fba84a10a2d489019a130f06e6f8cee3f9543d4abe9c6ae34",
+  "an": "2026-10-12T14:05:05+00:00",
+  "not": ""
+ },
+ "nyfed/sayfa.html.gz": {
+  "url": "https://www.newyorkfed.org/research/policy/oil_price_dynamics_report",
+  "durum": 200,
+  "bayt": 105656,
+  "sha256": "568d89195f7de526c96e9c4768e1e9b02defed59c71dbe06c0c00a26d7863e77",
+  "an": "2026-10-12T14:05:05+00:00",
+  "not": ""
+ },
+ "worldbank/CMO-Historical-Data-Monthly.xlsx.gz": {
+  "url": "https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx",
+  "durum": 200,
+  "bayt": 586099,
+  "sha256": "ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154",
+  "an": "2026-10-12T14:05:05+00:00",
+  "not": ""
+ },
+ "yahoo/AKBNK_IS.csv.gz": {
+  "url": "yfinance:AKBNK.IS:period=max",
+  "durum": 200,
+  "bayt": 570786,
+  "sha256": "e5dca3e9184656395e1e4a535bc49022d559b52806ab51aa61f6993aac279a14",
+  "an": "2026-10-12T14:04:09+00:00",
+  "not": "AKBNK.IS"
+ },
+ "yahoo/AKSEN_IS.csv.gz": {
+  "url": "yfinance:AKSEN.IS:period=max",
+  "durum": 200,
+  "bayt": 350543,
+  "sha256": "fc8b02f2ff05b628d666a0960770da5cfbe69051c359774690973ff5647778aa",
+  "an": "2026-10-12T14:04:18+00:00",
+  "not": "AKSEN.IS"
+ },
+ "yahoo/ASELS_IS.csv.gz": {
+  "url": "yfinance:ASELS.IS:period=max",
+  "durum": 200,
+  "bayt": 568446,
+  "sha256": "f918bfe6ce48fffe185351a9b6780047fd95b030f22bed8b078ea75a795ef44e",
+  "an": "2026-10-12T14:04:13+00:00",
+  "not": "ASELS.IS"
+ },
+ "yahoo/AYGAZ_IS.csv.gz": {
+  "url": "yfinance:AYGAZ.IS:period=max",
+  "durum": 200,
+  "bayt": 566011,
+  "sha256": "95eec5b93f906cfb29157cc056b650bded5b57f92f269d9704920d8fff7ca782",
+  "an": "2026-10-12T14:04:00+00:00",
+  "not": "AYGAZ.IS"
+ },
+ "yahoo/BIMAS_IS.csv.gz": {
+  "url": "yfinance:BIMAS.IS:period=max",
+  "durum": 200,
+  "bayt": 465258,
+  "sha256": "3afec1c7334608bd2c7b9b8b2058fd9840a5481866af579c9d07e3189cfda16a",
+  "an": "2026-10-12T14:04:05+00:00",
+  "not": "BIMAS.IS"
+ },
+ "yahoo/BZ_F.csv.gz": {
+  "url": "yfinance:BZ=F:period=max",
+  "durum": 200,
+  "bayt": 408945,
+  "sha256": "12c35efbcc324202dbcc893ae718070a77f8d8af0621d62fbc56ee0655ee1b3a",
+  "an": "2026-10-12T14:02:41+00:00",
+  "not": "BZ=F"
+ },
+ "yahoo/CLEBI_IS.csv.gz": {
+  "url": "yfinance:CLEBI.IS:period=max",
+  "durum": 200,
+  "bayt": 580106,
+  "sha256": "07c9518220b2d119a3f9ceffc26f3072518e1c07e925411a64b30b9115970d22",
+  "an": "2026-10-12T14:04:16+00:00",
+  "not": "CLEBI.IS"
+ },
+ "yahoo/CL_F.csv.gz": {
+  "url": "yfinance:CL=F:period=max",
+  "durum": 200,
+  "bayt": 565997,
+  "sha256": "625a6657c57864f61e1d586c6854531808407439b9a1e7228632a87e4ce2a35d",
+  "an": "2026-10-12T14:02:42+00:00",
+  "not": "CL=F"
+ },
+ "yahoo/CVX.csv.gz": {
+  "url": "yfinance:CVX:period=max",
+  "durum": 200,
+  "bayt": 1397082,
+  "sha256": "f4cfd44fb53a9d3535526b4fed83d09d35813e6eef44aa03b39df7ead3b682df",
+  "an": "2026-10-12T14:03:10+00:00",
+  "not": "CVX"
+ },
+ "yahoo/DAL.csv.gz": {
+  "url": "yfinance:DAL:period=max",
+  "durum": 200,
+  "bayt": 424203,
+  "sha256": "9289358393737a1f8b4dd06ff0c7954b81dc0d90003cfbc3dc153bb210ef1df4",
+  "an": "2026-10-12T14:03:04+00:00",
+  "not": "DAL"
+ },
+ "yahoo/DJI.csv.gz": {
+  "url": "yfinance:^DJI:period=max",
+  "durum": 200,
+  "bayt": 894861,
+  "sha256": "b7f1fa4fa8aa13bdd1c28384d1d985e9e5f4b05c4eae364d3c83e3a9f34969df",
+  "an": "2026-10-12T14:02:27+00:00",
+  "not": "^DJI"
+ },
+ "yahoo/EEM.csv.gz": {
+  "url": "yfinance:EEM:period=max",
+  "durum": 200,
+  "bayt": 519626,
+  "sha256": "fcd8e3cecdf9e7670a470a9e3eadf2d18e108d9d28c0f5765d3cfb7cbe1b37ee",
+  "an": "2026-10-12T14:03:21+00:00",
+  "not": "EEM"
+ },
+ "yahoo/EMB.csv.gz": {
+  "url": "yfinance:EMB:period=max",
+  "durum": 200,
+  "bayt": 422260,
+  "sha256": "4e269dc8019e3bb755138c6a7753bbd5efb08723aa3c3f048f4409a7d54e86f3",
+  "an": "2026-10-12T14:03:22+00:00",
+  "not": "EMB"
+ },
+ "yahoo/ENJSA_IS.csv.gz": {
+  "url": "yfinance:ENJSA.IS:period=max",
+  "durum": 200,
+  "bayt": 187738,
+  "sha256": "0369b028eedc719a684585b92b6639b8b1f12385a59c9a225c69743ce6bae40b",
+  "an": "2026-10-12T14:04:17+00:00",
+  "not": "ENJSA.IS"
+ },
+ "yahoo/EREGL_IS.csv.gz": {
+  "url": "yfinance:EREGL.IS:period=max",
+  "durum": 200,
+  "bayt": 573124,
+  "sha256": "b1029f5d7502dd7f192570ca9859187978ce2ea502ee23fae01daf76785aaa68",
+  "an": "2026-10-12T14:04:06+00:00",
+  "not": "EREGL.IS"
+ },
+ "yahoo/EWG.csv.gz": {
+  "url": "yfinance:EWG:period=max",
+  "durum": 200,
+  "bayt": 661920,
+  "sha256": "f0b7364b96ef0ddebac787b6e99294cf35ce065dcb27031624e8604b59f181dd",
+  "an": "2026-10-12T14:03:35+00:00",
+  "not": "EWG"
+ },
+ "yahoo/EWJ.csv.gz": {
+  "url": "yfinance:EWJ:period=max",
+  "durum": 200,
+  "bayt": 666941,
+  "sha256": "44fbfb8e7a4cb94bef55613f0d0910956fb4d768101cf35e19934c389367a0f0",
+  "an": "2026-10-12T14:03:31+00:00",
+  "not": "EWJ"
+ },
+ "yahoo/EWT.csv.gz": {
+  "url": "yfinance:EWT:period=max",
+  "durum": 200,
+  "bayt": 572653,
+  "sha256": "70e55923d850321e5f03182784fb84b467357261fa65cfb9e4ed2a4f2d53fb48",
+  "an": "2026-10-12T14:03:41+00:00",
+  "not": "EWT"
+ },
+ "yahoo/EWU.csv.gz": {
+  "url": "yfinance:EWU:period=max",
+  "durum": 200,
+  "bayt": 660804,
+  "sha256": "010a9d500b67afad88d532901667dd6f4aafc46cb8c2518067583b25e7483861",
+  "an": "2026-10-12T14:03:36+00:00",
+  "not": "EWU"
+ },
+ "yahoo/EWW.csv.gz": {
+  "url": "yfinance:EWW:period=max",
+  "durum": 200,
+  "bayt": 662045,
+  "sha256": "a56e63a1d36ed3d6063348e9fa2d66922a5835b142c98b9afff9a56b2bf70aae",
+  "an": "2026-10-12T14:03:27+00:00",
+  "not": "EWW"
+ },
+ "yahoo/EWY.csv.gz": {
+  "url": "yfinance:EWY:period=max",
+  "durum": 200,
+  "bayt": 576442,
+  "sha256": "dc7eaaa4a40fdb7a77c126bed31182726e872f20116cb4ed5d4350ad4fe05453",
+  "an": "2026-10-12T14:03:29+00:00",
+  "not": "EWY"
+ },
+ "yahoo/EWZ.csv.gz": {
+  "url": "yfinance:EWZ:period=max",
+  "durum": 200,
+  "bayt": 574537,
+  "sha256": "27062902c508157d094d43edb824dd90af6279142c2d8052fdee791f66ab6e55",
+  "an": "2026-10-12T14:03:25+00:00",
+  "not": "EWZ"
+ },
+ "yahoo/EZU.csv.gz": {
+  "url": "yfinance:EZU:period=max",
+  "durum": 200,
+  "bayt": 569140,
+  "sha256": "953dfcd904c3a337fc9f1d5d60065b23c0b262946c268b328653de9252ba0c0f",
+  "an": "2026-10-12T14:03:33+00:00",
+  "not": "EZU"
+ },
+ "yahoo/FROTO_IS.csv.gz": {
+  "url": "yfinance:FROTO.IS:period=max",
+  "durum": 200,
+  "bayt": 575632,
+  "sha256": "c77d098a45a207ce9e4ae42ce1bed84e249bb598fcd808d62eaaaff4f73e4ea3",
+  "an": "2026-10-12T14:04:02+00:00",
+  "not": "FROTO.IS"
+ },
+ "yahoo/FVX.csv.gz": {
+  "url": "yfinance:^FVX:period=max",
+  "durum": 200,
+  "bayt": 1236692,
+  "sha256": "4647feb0fbae8263672970ae1240cdafbe4e96975be79d5f310065063d8d948a",
+  "an": "2026-10-12T14:02:35+00:00",
+  "not": "^FVX"
+ },
+ "yahoo/FXI.csv.gz": {
+  "url": "yfinance:FXI:period=max",
+  "durum": 200,
+  "bayt": 486151,
+  "sha256": "263dd89d4ce34d811b58f2ce1c243db032b3a097d01a99e32183e426ba5f1565",
+  "an": "2026-10-12T14:03:32+00:00",
+  "not": "FXI"
+ },
+ "yahoo/GARAN_IS.csv.gz": {
+  "url": "yfinance:GARAN.IS:period=max",
+  "durum": 200,
+  "bayt": 572763,
+  "sha256": "267f7cfe8a24a4c8972b2de470a318faf1f368bd91c61df6f42efd0d6c47cc78",
+  "an": "2026-10-12T14:04:10+00:00",
+  "not": "GARAN.IS"
+ },
+ "yahoo/GSPC.csv.gz": {
+  "url": "yfinance:^GSPC:period=max",
+  "durum": 200,
+  "bayt": 2250379,
+  "sha256": "93a05b6e96e9116d6ec0f4d89f3701903357cc1a2ad358e16186a11a9044d144",
+  "an": "2026-10-12T14:02:24+00:00",
+  "not": "^GSPC"
+ },
+ "yahoo/GVZ.csv.gz": {
+  "url": "yfinance:^GVZ:period=max",
+  "durum": 200,
+  "bayt": 373804,
+  "sha256": "8e080c1ac71fbaf7ce4366108cb16750d24f781fafaf0fa72f4e3026ad4a1de4",
+  "an": "2026-10-12T14:02:39+00:00",
+  "not": "^GVZ"
+ },
+ "yahoo/HYG.csv.gz": {
+  "url": "yfinance:HYG:period=max",
+  "durum": 200,
+  "bayt": 429056,
+  "sha256": "af95aa867cb3e9180cf8756b60bda50ae03a111bfb1dc6fea9ca0aeda1d24845",
+  "an": "2026-10-12T14:03:12+00:00",
+  "not": "HYG"
+ },
+ "yahoo/IEF.csv.gz": {
+  "url": "yfinance:IEF:period=max",
+  "durum": 200,
+  "bayt": 538490,
+  "sha256": "61108667b85518acfa3b69fa0ca44d0d2f8cf8adbd05a59f9bcb37833083ff51",
+  "an": "2026-10-12T14:03:17+00:00",
+  "not": "IEF"
+ },
+ "yahoo/INDA.csv.gz": {
+  "url": "yfinance:INDA:period=max",
+  "durum": 200,
+  "bayt": 320014,
+  "sha256": "391e80840b29a5bca6d30c00063d1d9bdeff4494845e04479490b695007581ac",
+  "an": "2026-10-12T14:03:28+00:00",
+  "not": "INDA"
+ },
+ "yahoo/IRX.csv.gz": {
+  "url": "yfinance:^IRX:period=max",
+  "durum": 200,
+  "bayt": 1271486,
+  "sha256": "ba7e2a7329512d56cf82268427f01206b50bf806ebbb018256069b36c88ebce1",
+  "an": "2026-10-12T14:02:33+00:00",
+  "not": "^IRX"
+ },
+ "yahoo/ITA.csv.gz": {
+  "url": "yfinance:ITA:period=max",
+  "durum": 200,
+  "bayt": 448436,
+  "sha256": "f26a813f496e5935fc1fb3a4359b808b9b5e08875ca9e7d4dbe0f7fca7e5b5df",
+  "an": "2026-10-12T14:03:00+00:00",
+  "not": "ITA"
+ },
+ "yahoo/IXIC.csv.gz": {
+  "url": "yfinance:^IXIC:period=max",
+  "durum": 200,
+  "bayt": 1340857,
+  "sha256": "58115209cff6f03de1037fd6d7d13031a330f3692bd75247a9dfe4ddc30b747b",
+  "an": "2026-10-12T14:02:25+00:00",
+  "not": "^IXIC"
+ },
+ "yahoo/IYT.csv.gz": {
+  "url": "yfinance:IYT:period=max",
+  "durum": 200,
+  "bayt": 495529,
+  "sha256": "ed78446fefca78d028388830d83f81d7cd4d366ac0793b54de91c7463a104218",
+  "an": "2026-10-12T14:03:03+00:00",
+  "not": "IYT"
+ },
+ "yahoo/JETS.csv.gz": {
+  "url": "yfinance:JETS:period=max",
+  "durum": 200,
+  "bayt": 248161,
+  "sha256": "d786df4aaaab4ce68470e83dc93449640b4aed795d8efc2eb462c093df65903e",
+  "an": "2026-10-12T14:02:59+00:00",
+  "not": "JETS"
+ },
+ "yahoo/JNK.csv.gz": {
+  "url": "yfinance:JNK:period=max",
+  "durum": 200,
+  "bayt": 425312,
+  "sha256": "07dc1478cd8d951d8db3d54b15ad118f3cbb11ebc76ae1eea5e7b26a5adec954",
+  "an": "2026-10-12T14:03:13+00:00",
+  "not": "JNK"
+ },
+ "yahoo/KCHOL_IS.csv.gz": {
+  "url": "yfinance:KCHOL.IS:period=max",
+  "durum": 200,
+  "bayt": 580595,
+  "sha256": "bc20673e72de2ef74bb53bd8ba441a95c7668e9be13e954759af1369b544c138",
+  "an": "2026-10-12T14:04:12+00:00",
+  "not": "KCHOL.IS"
+ },
+ "yahoo/KSA.csv.gz": {
+  "url": "yfinance:KSA:period=max",
+  "durum": 200,
+  "bayt": 237929,
+  "sha256": "addf3b75f36f7de42f12cba18cd22412d54887338adb6f8ac70cf31f536226dc",
+  "an": "2026-10-12T14:03:38+00:00",
+  "not": "KSA"
+ },
+ "yahoo/LQD.csv.gz": {
+  "url": "yfinance:LQD:period=max",
+  "durum": 200,
+  "bayt": 553383,
+  "sha256": "810c8d18ba73e3fcf49898214e93a11d4061ab1d33e784e9030a361f093f2f7a",
+  "an": "2026-10-12T14:03:14+00:00",
+  "not": "LQD"
+ },
+ "yahoo/LUV.csv.gz": {
+  "url": "yfinance:LUV:period=max",
+  "durum": 200,
+  "bayt": 998784,
+  "sha256": "4e16912a355b0f3991fb85ddec7be2c1bf25e4c14b53233fe0b1ab0865337fa9",
+  "an": "2026-10-12T14:03:07+00:00",
+  "not": "LUV"
+ },
+ "yahoo/MGROS_IS.csv.gz": {
+  "url": "yfinance:MGROS.IS:period=max",
+  "durum": 200,
+  "bayt": 601270,
+  "sha256": "41087658225320fe4035ef0e01bbc6a8b2e9a9bbc8994022c14063a19ea95a39",
+  "an": "2026-10-12T14:04:21+00:00",
+  "not": "MGROS.IS"
+ },
+ "yahoo/MOVE.csv.gz": {
+  "url": "yfinance:^MOVE:period=max",
+  "durum": 200,
+  "bayt": 487733,
+  "sha256": "a0d3d1930a109ad5c13a5c95bfa7ed38830546a31304a1d3029cba6d7dd8b3a1",
+  "an": "2026-10-12T14:02:40+00:00",
+  "not": "^MOVE"
+ },
+ "yahoo/OVX.csv.gz": {
+  "url": "yfinance:^OVX:period=max",
+  "durum": 200,
+  "bayt": 396075,
+  "sha256": "fcc2882009a58755e9171623213287c5ece10ef38df432e86f79ced8726e0811",
+  "an": "2026-10-12T14:02:37+00:00",
+  "not": "^OVX"
+ },
+ "yahoo/PETKM_IS.csv.gz": {
+  "url": "yfinance:PETKM.IS:period=max",
+  "durum": 200,
+  "bayt": 565641,
+  "sha256": "6bba2f00a87c2caf888eb8173b898d47f49785d022a8face6674bfd2a2ba9355",
+  "an": "2026-10-12T14:03:59+00:00",
+  "not": "PETKM.IS"
+ },
+ "yahoo/PGSUS_IS.csv.gz": {
+  "url": "yfinance:PGSUS.IS:period=max",
+  "durum": 200,
+  "bayt": 291090,
+  "sha256": "d0c4935c1890ad58d7f9479e1ed8e1e66a6df3376182f9130af7521a7e997282",
+  "an": "2026-10-12T14:03:58+00:00",
+  "not": "PGSUS.IS"
+ },
+ "yahoo/QAT.csv.gz": {
+  "url": "yfinance:QAT:period=max",
+  "durum": 200,
+  "bayt": 263598,
+  "sha256": "19d00a8d1df332da86ab7b0f2cb6f0e478d3546feb5c14fe3e8d490200852932",
+  "an": "2026-10-12T14:03:40+00:00",
+  "not": "QAT"
+ },
+ "yahoo/RUT.csv.gz": {
+  "url": "yfinance:^RUT:period=max",
+  "durum": 200,
+  "bayt": 948745,
+  "sha256": "4e4c8e5439cb57c40703071a547973e7e3e04b04da2c65a3f6a97d4a05245b75",
+  "an": "2026-10-12T14:02:28+00:00",
+  "not": "^RUT"
+ },
+ "yahoo/SHY.csv.gz": {
+  "url": "yfinance:SHY:period=max",
+  "durum": 200,
+  "bayt": 527060,
+  "sha256": "2b8788fca49198248c5bcf4d78f980fa7d2eb38104c6e29033ce8d1cebd6bb83",
+  "an": "2026-10-12T14:03:19+00:00",
+  "not": "SHY"
+ },
+ "yahoo/SISE_IS.csv.gz": {
+  "url": "yfinance:SISE.IS:period=max",
+  "durum": 200,
+  "bayt": 568769,
+  "sha256": "7aeb29eb2a6e20ebfb1c28e6076b21ea74a6bbbd1db0f0eff8a46527055fd29e",
+  "an": "2026-10-12T14:04:07+00:00",
+  "not": "SISE.IS"
+ },
+ "yahoo/TAVHL_IS.csv.gz": {
+  "url": "yfinance:TAVHL.IS:period=max",
+  "durum": 200,
+  "bayt": 431109,
+  "sha256": "7905b9d54028da154b8674060e5086088c491fce054f95487cab5dbad8b1294a",
+  "an": "2026-10-12T14:04:14+00:00",
+  "not": "TAVHL.IS"
+ },
+ "yahoo/THYAO_IS.csv.gz": {
+  "url": "yfinance:THYAO.IS:period=max",
+  "durum": 200,
+  "bayt": 578563,
+  "sha256": "d8c5d231d4ff2e4e54bffe12aae632df1220266a795530a45d60d434f301549d",
+  "an": "2026-10-12T14:03:56+00:00",
+  "not": "THYAO.IS"
+ },
+ "yahoo/TIP.csv.gz": {
+  "url": "yfinance:TIP:period=max",
+  "durum": 200,
+  "bayt": 519690,
+  "sha256": "2779e0adf4204c1193318154b955167305378b565825899ffe775a2b8d072958",
+  "an": "2026-10-12T14:03:20+00:00",
+  "not": "TIP"
+ },
+ "yahoo/TLT.csv.gz": {
+  "url": "yfinance:TLT:period=max",
+  "durum": 200,
+  "bayt": 544699,
+  "sha256": "0feb2dcfaa498438db298dfb5acf18c52de8f0d9e0c3975451198e1269f981b2",
+  "an": "2026-10-12T14:03:16+00:00",
+  "not": "TLT"
+ },
+ "yahoo/TNX.csv.gz": {
+  "url": "yfinance:^TNX:period=max",
+  "durum": 200,
+  "bayt": 1237548,
+  "sha256": "b813af115e682987d082d85f6370a6a31077bddd37c18ec44c47108f6166a398",
+  "an": "2026-10-12T14:02:31+00:00",
+  "not": "^TNX"
+ },
+ "yahoo/TOASO_IS.csv.gz": {
+  "url": "yfinance:TOASO.IS:period=max",
+  "durum": 200,
+  "bayt": 578004,
+  "sha256": "ae56ec192d967f799368d1293c2d99e89d9d6b7eb88c7b34001fb149cb31ff9d",
+  "an": "2026-10-12T14:04:03+00:00",
+  "not": "TOASO.IS"
+ },
+ "yahoo/TUPRS_IS.csv.gz": {
+  "url": "yfinance:TUPRS.IS:period=max",
+  "durum": 200,
+  "bayt": 581497,
+  "sha256": "26def98a5efef6f4e2377a25f15a7cb8efd7ca2e254d1fa8fd5542261df7d6e4",
+  "an": "2026-10-12T14:03:55+00:00",
+  "not": "TUPRS.IS"
+ },
+ "yahoo/TUR.csv.gz": {
+  "url": "yfinance:TUR:period=max",
+  "durum": 200,
+  "bayt": 400613,
+  "sha256": "9ada4ff4b48bc567960923b97aa686dea36ba32cd0734c668d576f5dfead3420",
+  "an": "2026-10-12T14:03:24+00:00",
+  "not": "TUR"
+ },
+ "yahoo/TYX.csv.gz": {
+  "url": "yfinance:^TYX:period=max",
+  "durum": 200,
+  "bayt": 953236,
+  "sha256": "4f3291b141baa725b70c69c4884754ee8370ae5c431a0d1688d87f159d6f7d3d",
+  "an": "2026-10-12T14:02:36+00:00",
+  "not": "^TYX"
+ },
+ "yahoo/UAE.csv.gz": {
+  "url": "yfinance:UAE:period=max",
+  "durum": 200,
+  "bayt": 264336,
+  "sha256": "baba7b1753bd5d8727c0800af36297db5fb5516f220a7a57827b4a99314fbccf",
+  "an": "2026-10-12T14:03:39+00:00",
+  "not": "UAE"
+ },
+ "yahoo/UAL.csv.gz": {
+  "url": "yfinance:UAL:period=max",
+  "durum": 200,
+  "bayt": 453408,
+  "sha256": "938bdb40549dd88431f080e838e22d13296d7498d410408ff305777d330e8eb3",
+  "an": "2026-10-12T14:03:05+00:00",
+  "not": "UAL"
+ },
+ "yahoo/ULKER_IS.csv.gz": {
+  "url": "yfinance:ULKER.IS:period=max",
+  "durum": 200,
+  "bayt": 492789,
+  "sha256": "347f34014144a036e718875ecf05e2bd9b7f294a52b5933e4ce58131a2f74c06",
+  "an": "2026-10-12T14:04:19+00:00",
+  "not": "ULKER.IS"
+ },
+ "yahoo/VIX.csv.gz": {
+  "url": "yfinance:^VIX:period=max",
+  "durum": 200,
+  "bayt": 750104,
+  "sha256": "a13b9e60a69e4cfea64af038cca4ae7e8d3fb7629e44e309ddc17b5ad3e8ec66",
+  "an": "2026-10-12T14:02:30+00:00",
+  "not": "^VIX"
+ },
+ "yahoo/XAR.csv.gz": {
+  "url": "yfinance:XAR:period=max",
+  "durum": 200,
+  "bayt": 329456,
+  "sha256": "ae9452750ac8ad4d24ee17b046f39b29af8f799ebe32d7e1e6958c47187750c2",
+  "an": "2026-10-12T14:03:01+00:00",
+  "not": "XAR"
+ },
+ "yahoo/XBANK_IS.csv.gz": {
+  "url": "yfinance:XBANK.IS:period=max",
+  "durum": 200,
+  "bayt": 687608,
+  "sha256": "b9b50d9c9a0f6754c0dcad26c9a22646bc426edbe43583b15b7d9bc95c1f07de",
+  "an": "2026-10-12T14:03:45+00:00",
+  "not": "XBANK.IS"
+ },
+ "yahoo/XLB.csv.gz": {
+  "url": "yfinance:XLB:period=max",
+  "durum": 200,
+  "bayt": 606988,
+  "sha256": "6d7fa4b45cba37ad37c077ade4fffc9c9c94cdc5d730c95267630ba45f5f0171",
+  "an": "2026-10-12T14:02:46+00:00",
+  "not": "XLB"
+ },
+ "yahoo/XLE.csv.gz": {
+  "url": "yfinance:XLE:period=max",
+  "durum": 200,
+  "bayt": 611313,
+  "sha256": "08e8e3b0fcce90fd18773d2154ceed78ebdc0c413c64ae436a70ccd847021677",
+  "an": "2026-10-12T14:02:44+00:00",
+  "not": "XLE"
+ },
+ "yahoo/XLF.csv.gz": {
+  "url": "yfinance:XLF:period=max",
+  "durum": 200,
+  "bayt": 612043,
+  "sha256": "fe97471b520cc621199df5bfc014e20e868998bba2396d17e1831359cb4f0a41",
+  "an": "2026-10-12T14:02:54+00:00",
+  "not": "XLF"
+ },
+ "yahoo/XLI.csv.gz": {
+  "url": "yfinance:XLI:period=max",
+  "durum": 200,
+  "bayt": 613340,
+  "sha256": "b12eb16c5ebcca3cd0538da07bfa06a5e6aa8d5d78198130614f3785a6f1eb94",
+  "an": "2026-10-12T14:02:48+00:00",
+  "not": "XLI"
+ },
+ "yahoo/XLK.csv.gz": {
+  "url": "yfinance:XLK:period=max",
+  "durum": 200,
+  "bayt": 609271,
+  "sha256": "b4228d261685bae7909b99db4277b9823ada277a069941ec4a0b935f9a106689",
+  "an": "2026-10-12T14:02:55+00:00",
+  "not": "XLK"
+ },
+ "yahoo/XLP.csv.gz": {
+  "url": "yfinance:XLP:period=max",
+  "durum": 200,
+  "bayt": 607961,
+  "sha256": "e1173346a95e51c484971f341254c73e6af07091b89d44c366050cbd7ab8f8de",
+  "an": "2026-10-12T14:02:51+00:00",
+  "not": "XLP"
+ },
+ "yahoo/XLRE.csv.gz": {
+  "url": "yfinance:XLRE:period=max",
+  "durum": 200,
+  "bayt": 240331,
+  "sha256": "a0075657323f4df3f7b63d98deb001c0d86ff1562100c377fd9b940f3a4bf38a",
+  "an": "2026-10-12T14:02:58+00:00",
+  "not": "XLRE"
+ },
+ "yahoo/XLU.csv.gz": {
+  "url": "yfinance:XLU:period=max",
+  "durum": 200,
+  "bayt": 607583,
+  "sha256": "ba3407a0c8132392a50c0052842da6c9f8f61042b757710ef1fed0f387f76c0f",
+  "an": "2026-10-12T14:02:52+00:00",
+  "not": "XLU"
+ },
+ "yahoo/XLV.csv.gz": {
+  "url": "yfinance:XLV:period=max",
+  "durum": 200,
+  "bayt": 614834,
+  "sha256": "c14ef4d5f8d25e60db415899b8c3968e22c59b000d12b8eeef1a8d9c81aea16c",
+  "an": "2026-10-12T14:02:56+00:00",
+  "not": "XLV"
+ },
+ "yahoo/XLY.csv.gz": {
+  "url": "yfinance:XLY:period=max",
+  "durum": 200,
+  "bayt": 610025,
+  "sha256": "3e1f829552412f0cbb40039ff7a8b78051b5f9dbc50b5f33341d47deaed966ca",
+  "an": "2026-10-12T14:02:49+00:00",
+  "not": "XLY"
+ },
+ "yahoo/XOM.csv.gz": {
+  "url": "yfinance:XOM:period=max",
+  "durum": 200,
+  "bayt": 1394053,
+  "sha256": "d16c94e727147415c804ac7e79b04c62b1575711485f64c14d2a507f6f40dbeb",
+  "an": "2026-10-12T14:03:09+00:00",
+  "not": "XOM"
+ },
+ "yahoo/XOP.csv.gz": {
+  "url": "yfinance:XOP:period=max",
+  "durum": 200,
+  "bayt": 464801,
+  "sha256": "dc6bd6711317c3385da11010ca48d3e327ab2ead07086d6e7c67054e1e2829b9",
+  "an": "2026-10-12T14:02:45+00:00",
+  "not": "XOP"
+ },
+ "yahoo/XU030_IS.csv.gz": {
+  "url": "yfinance:XU030.IS:period=max",
+  "durum": 200,
+  "bayt": 679734,
+  "sha256": "889b9f3ed7731e28b538b57c6b45608b76c40a52327fe07b921768ad6329268b",
+  "an": "2026-10-12T14:03:44+00:00",
+  "not": "XU030.IS"
+ },
+ "yahoo/XU100_IS.csv.gz": {
+  "url": "yfinance:XU100.IS:period=max",
+  "durum": 200,
+  "bayt": 707475,
+  "sha256": "f7d8c1398eab97460a4c69835bfec726cf59fe1ac95fb623f9e830f43d7b1039",
+  "an": "2026-10-12T14:03:43+00:00",
+  "not": "XU100.IS"
+ },
+ "yahoo/XUSIN_IS.csv.gz": {
+  "url": "yfinance:XUSIN.IS:period=max",
+  "durum": 200,
+  "bayt": 751894,
+  "sha256": "0064a2e3888c903f8505065eae0a276ea1a27af3833be5058f904c023deecbed",
+  "an": "2026-10-12T14:03:47+00:00",
+  "not": "XUSIN.IS"
+ }
+}
