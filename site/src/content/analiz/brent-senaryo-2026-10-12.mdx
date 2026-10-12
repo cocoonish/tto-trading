@@ -5,7 +5,7 @@ pubDate: 2026-10-12
 veriTarihi: 2026-10-09
 tags: ['petrol', 'brent', 'senaryo', 'enerji', 'tcmb', 'faiz', 'döviz', 'enflasyon', 'cari denge']
 durum: 'aktif'
-kaynak: 'Vadeli Brent ön vade ve vade eğrisi kapanışları (NYMEX Brent; CNBC, 1988–2026; Yahoo Finance); EIA Avrupa Brent spot fiyatı ve ABD pompa fiyatları; ABD Çalışma İstatistikleri Bürosu TÜFE; ABD Hazinesi nominal ve reel getiri eğrileri; hisse, sektör ve ülke fonu kapanışları (Yahoo Finance); döviz ve endeks kapanışları (CNBC); TCMB EVDS (rezerv, fonlama, menkul kıymet istatistikleri, ödemeler dengesi, gösterge kuru, DİBS kotasyonları); Borsa İstanbul TLREF; TÜİK TÜFE kalemleri, dış ticaret endeksleri ve çeyreklik GSYH; NY Fed petrol fiyatı dinamikleri; Resmî Gazete (11606 ve 11822 sayılı Cumhurbaşkanı Kararları); TCMB Para Politikası Kurulu metinleri ve TCMB blogu; TCMB Enflasyon Raporu 2026-III (İş Yatırım aktarımı); Orta Vadeli Program 2027–2029; ECB ve Fed metinleri, Boston Fed ve Dallas Fed araştırmacılarının çalışmaları, EIA ve Dünya Bankası yayınları; yayıncı haber akışları (CNBC, BBC, Al Jazeera, Anadolu Ajansı, Bloomberg HT, Euronews, Dünya, Investing.com Türkiye, OilPrice).'
+kaynak: 'Vadeli Brent ön vade ve vade eğrisi kapanışları (NYMEX Brent; CNBC, 1988–2026; Yahoo Finance); EIA Avrupa Brent spot fiyatı ve ABD pompa fiyatları; ABD Çalışma İstatistikleri Bürosu TÜFE; ABD Hazinesi nominal ve reel getiri eğrileri; emtia vadelisi, hisse endeksi, G10 kur, kredi, sektör ve ülke fonu kapanışları (Yahoo Finance, 2025–2026); gelişen ülke kurları ile endeks ve döviz kapanışlarının uzun tarihçesi (CNBC, 1988–2026); TCMB EVDS (rezerv, fonlama, menkul kıymet istatistikleri, ödemeler dengesi, gösterge kuru, DİBS kotasyonları); Borsa İstanbul TLREF; TÜİK TÜFE kalemleri, dış ticaret endeksleri ve çeyreklik GSYH; NY Fed petrol fiyatı dinamikleri; Resmî Gazete (11606 ve 11822 sayılı Cumhurbaşkanı Kararları); TCMB Para Politikası Kurulu metinleri ve TCMB blogu; TCMB Enflasyon Raporu 2026-III (İş Yatırım aktarımı); Orta Vadeli Program 2027–2029; ECB ve Fed metinleri, Boston Fed ve Dallas Fed araştırmacılarının çalışmaları, EIA ve Dünya Bankası yayınları; yayıncı haber akışları (CNBC, BBC, Al Jazeera, Anadolu Ajansı, Bloomberg HT, Euronews, Dünya, Investing.com Türkiye, OilPrice).'
 guncelleme: 'tek seferlik analiz; veri günü 9 Ekim 2026 (fiziki Brent 6 Ekim)'
 ozet: 'Fiziki Brent 6 Ekim''de zaten 125 dolardaydı, vadeli 104,72''de (9 Ekim); bu savaşın dört petrol yükselişinin dördünde de ABD 2 yıllık getiri yükseldi, ABD havayolu hisseleri ve BIST 100 düştü, S&P 500 ve altın için ise 2026 bir yön söylemiyor.'
 seviye: 'ileri'
@@ -21,13 +21,14 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
   (+%43,2) çıkarsa bu savaşın dört petrol yükselişinden kurulan ilişkiler ABD 2 yıllık getiri için
   +20 ve +34 baz puan, ABD havayolları için −%6,0 ve −%14,2, DİBS 2 yıllık için +157 ve +431 baz puan,
   BIST Bankacılık için −%4,8 ve −%15,1 veriyor; USD/TRY iki senaryoda da yönetilen patikada, 50,02 ve
-  49,99. Bir ayda +%43,2 1988'den bu yana yalnız iki kez görüldü, ikisinde de 80 doların altından
-  başlayarak; fiziki piyasada ise 125 dolar zaten görüldü: Avrupa Brent spot fiyatı 6 Ekim'de 125,44
+  49,99. Vadeli seride bir ayda +%43,2 1988'den bu yana yalnız iki kez görüldü, ikisinde de 80 doların
+  altından başlayarak (seride 1990'ın ilk dokuz ayı yok; fiziki Brent Körfez Savaşı'nın Ağustos–Eylül
+  1990'ında da bu hızı aştı); fiziki piyasada ise 125 dolar zaten görüldü: Avrupa Brent spot fiyatı 6 Ekim'de 125,44
   dolardı, aynı günün vadelisinin 24,86 dolar üstünde, 2000–2025'te bu fark hiç 11,10 doları
   aşmamıştı. En tutarlı izler: ABD 2 yıllık getirisi dört yükselişin (Mart, Mayıs, Temmuz, Eylül
   2026) dördünde de yükseldi, ABD havayolu hisseleri ile BIST 100 dördünde de düştü, BIST Bankacılık
-  üçünde düştü. Türkiye'de Mart'ın yükü rezervdeydi: şokun ilk ayında (27 Şubat–31 Mart) swap
-  hariç net rezerv 61,2 milyar dolar eridi (tahmini döviz satışı 41,76, altının fiyat etkisi 18,0 milyar dolar), bugünkü stok 45,1 milyar dolar. Motorinde eşel mobil
+  üçünde düştü. Türkiye'de Mart'ın yükü rezervdeydi: şokun ilk 21 iş gününün (2–31 Mart) işlemleri
+  swap hariç net rezervi 60,5 milyar dolar eritti (tahmini döviz satışı 41,76, altının fiyat etkisi 18,0 milyar dolar), bugünkü stok 45,1 milyar dolar. Motorinde eşel mobil
   Ağustos'tan beri uygulanmıyor; yeniden açılırsa Kasım'ın litre başına 9 TL'lik ÖTV'si 125 dolarlık ham petrolün getirdiği 6,38 TL'lik
   artışı karşılayabilir, ama rafineri marjı 2026'daki gibi açılırsa gelen 14,85 TL'yi karşılayamaz.</p>
 
@@ -39,7 +40,7 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
       </tr>
       <tr>
         <td>Ne kadar olağandışı</td>
-        <td>1988'den bu yana günlerin %2,63'ünde vadeli Brent bir ayda en az senaryonun alt ucu kadar yükseldi (44 ayrı epizot); üst ucu kadar ise yalnız 24 günde, iki epizotta ve hiçbiri yüz doların üstünden başlamadı. Petrol opsiyonlarının oynaklığı (OVX 48,90) hedef günün ön vadesi olan Ocak kontratına ay sonunda 125'in üstünde olmaya %5,9, 150'nin üstünde olmaya %0,2 olasılık veriyor; çarpıklık hesaba katılmadığı için kuyruk olduğundan ince görünür. Reel olarak 150 dolar bile 2008 zirvesinin altında: 146,08 dolarlık kapanış rekoru bugünün dolarıyla 221,76.</td>
+        <td>1988'den bu yana günlerin %2,63'ünde vadeli Brent bir ayda en az senaryonun alt ucu kadar yükseldi (44 ayrı epizot; seride 1990'ın ilk dokuz ayı yok); üst ucu kadar ise yalnız 24 günde, iki epizotta ve hiçbiri yüz doların üstünden başlamadı. Petrol opsiyonlarının oynaklığı (OVX 48,90) hedef günün ön vadesi olan Ocak kontratına ay sonunda 125'in üstünde olmaya %5,9, 150'nin üstünde olmaya %0,2 olasılık veriyor; çarpıklık hesaba katılmadığı için kuyruk olduğundan ince görünür. Reel olarak 150 dolar bile 2008 zirvesinin altında: 146,08 dolarlık kapanış rekoru bugünün dolarıyla 221,76.</td>
       </tr>
       <tr>
         <td>Küresel faiz ve dolar</td>
@@ -51,7 +52,7 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
       </tr>
       <tr>
         <td>Türkiye'de kur, rezerv ve fonlama</td>
-        <td>USD/TRY dört yükselişin dördünde +%1,1 ile +%1,8 arasında kaldı; büyüklük petrolün hareketine duyarsız. Mart'ta yük rezervdeydi: TCMB şokun ilk 21 iş gününde (27 Şubat–31 Mart) tahminen 41,76 milyar dolar sattı, repo ihalesine ara verip fonlamayı koridorun tavanına (%40) taşıdı, politika faizine dokunmadı; swap hariç net rezerv 80,49'dan 19,29 milyar dolara indi. Öbür üç yükselişte erime en çok 6,0 milyar dolardı ve rezerv kaleminin kanıtı zayıf. Bugün 45,10 milyar dolar.</td>
+        <td>USD/TRY dört yükselişin dördünde +%1,1 ile +%1,8 arasında kaldı; büyüklük petrolün hareketine duyarsız. Mart'ta yük rezervdeydi: TCMB şokun ilk 21 iş gününde (2–31 Mart) tahminen 41,76 milyar dolar sattı, repo ihalesine ara verip fonlamayı koridorun tavanına (%40) taşıdı, politika faizine dokunmadı; swap hariç net rezerv 80,49'dan 19,29 milyar dolara indi. Öbür üç yükselişte erime en çok 6,0 milyar dolardı ve rezerv kaleminin kanıtı zayıf. Bugün 45,10 milyar dolar.</td>
       </tr>
       <tr>
         <td>Türkiye'de faiz ve hisse</td>
@@ -77,7 +78,7 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
     <li><b>%2,63</b><span>1988'den bu yana vadeli Brent'in bir ayda en az +%19,4 yükseldiği günlerin payı (44 epizot)</span></li>
     <li><b>+34 bp</b><span>150 dolarda ABD 2 yıllık getirinin orta değeri; dört yükselişin dördünde artış</span></li>
     <li><b>−%15,1</b><span>150 dolarda BIST Bankacılık endeksinin orta değeri</span></li>
-    <li><b>61,2 milyar dolar</b><span>şokun ilk ayında (27 Şubat–31 Mart) swap hariç net rezervin erimesi, 18,0 milyarı altının fiyat etkisi; bugünkü stok 45,1</span></li>
+    <li><b>60,5 milyar dolar</b><span>şokun ilk 21 iş gününün (2–31 Mart) işlemlerinin swap hariç net rezervden erittiği tutar, 18,0 milyarı altının fiyat etkisi; bugünkü stok 45,1</span></li>
     <li><b>+1,73 puan</b><span>150 dolarda petrolün iki ayda TÜFE'ye katkısı, kurun payı hariç</span></li>
     <li><b>+14,85 TL</b><span>125 dolarda motorinin litre maliyetindeki artış, rafineri marjı 2026'daki gibi açılırsa (KDV hariç; Kasım ÖTV'si 9 TL)</span></li>
   </ul>
@@ -106,8 +107,9 @@ gider? Bir ay burada 21 iş günüdür; hedef gün 9 Kasım 2026.
 Cevap üç ayaktan kuruluyor ve üçü ayrı ayrı yazılıyor. Birincisi bu savaşın kendi dört büyük
 petrol yükselişi: 2026'da Brent bir aylık pencerelerde dört kez %20'nin üstünde yükseldi ve her
 seferinde öbür piyasaların ne yaptığı kayıtta. İkincisi geçmişin anlatıyla belgelenmiş arz şokları,
-1990 Körfez Savaşı'ndan 2025 İsrail–İran savaşına. Üçüncüsü 1988'den bu yana Brent'in bir ayda en az
-senaryonun alt ucu kadar yükseldiği bütün pencereler; nedeni karışık, aralarında arz da var talep de.
+1990 Körfez Savaşı'ndan 2025 İsrail–İran savaşına. Üçüncüsü 1988'den bu yana vadeli Brent'in bir ayda en az
+senaryonun alt ucu kadar yükseldiği, kaynağın kapsadığı bütün pencereler (seride 1990'ın ilk dokuz ayı
+yok); nedeni karışık, aralarında arz da var talep de.
 Her tahmin ölçüldüğü örneklemin dışında sınandı ve sınamayı geçemeyen kalem tablolarda zayıf diye
 işaretli duruyor: okur kanıtı zayıf bir rakamı güçlüymüş gibi okumasın.
 
@@ -185,6 +187,8 @@ Aralık 2026 teslimden başlıyor; o günün kendi ön vadesi lejantta ayrıca y
 ## Bölüm 2 — Ne kadar uç bir hareket
 
 **Sıklık.** 1988'den bu yana 9.541 iş günü için vadeli Brent'in 21 iş günlük değişimi hesaplandı.
+Seride 29 Aralık 1989 ile 9 Ekim 1990 arasında gözlem yok: Körfez Savaşı'nın ilk ayları bu sayımın ve
+Bölüm 8'deki 40 pencerenin dışında kalıyor, aşağıdaki fiziki seri onları kapsıyor.
 Bir ayda en az +%19,4'lük yükseliş günlerin %2,63'ünde görüldü: 251 gün, 44 ayrı epizot (araya en az
 21 iş günü giren günler ayrı sayıldı). +%43,2 ve üstü ise yalnız 24 günde ve iki epizotta görüldü:
 20 Mayıs–5 Haziran 2020 arasında, salgın dibinden toparlanan haftalarda ve 9–31 Mart 2026'da.
@@ -468,9 +472,11 @@ fiyat seviyesi etkisidir, yıllık enflasyonun kalıcı olarak bu kadar yüksele
 ham petroldeki litre başına 0,10 avroluk artış vergi öncesi pompa fiyatında genellikle 0,10 avroluk
 artışa dönüşür. Nisan'ın ilk haftasında euro bölgesinde motorinin litresi 2,18 avroydu, Şubat sonunda
 1,63. ECB'nin Mart 2026 projeksiyonlarındaki ağır senaryo petrolün 2026'nın ikinci çeyreğinde 145
-dolarda zirve yapmasını varsayıyordu ve euro bölgesi enflasyonunu baz senaryoya göre 2026'da 1,8,
-2027'de 2,8 puan yukarı taşıyordu; GSYH büyümesi 2026–27'de 0,4–0,5 puan aşağı. Bu senaryo
-150 dolarlık bir ayın kaba bir eşidir, ama tek bir ay değil, kalıcı bir şok varsayar.
+dolarda, Avrupa gazının megavatsaat başına 106 avroda zirve yapmasını ve şokun yavaş sönmesini
+varsayıyordu; bu varsayımlarla euro bölgesi enflasyonu baz senaryoya göre 2026'da 1,8, 2027'de 2,8
+puan yukarıda, GSYH büyümesi 2026–27'de 0,4–0,5 puan aşağıdaydı. Bu senaryo gazı da kapsayan kalıcı
+bir enerji şokudur; yalnız petrolü soran bir aylık 150 dolar senaryosu için euro bölgesinde bir üst
+sınır gibi okunur.
 
 ## Bölüm 5 — Türkiye: kur, rezerv, fonlama ve faiz
 
@@ -499,14 +505,19 @@ ve büyüklüğü görülüyor.
 
 </div>
 
+Satış ve altın satırları pencerenin 21 iş gününün (2025'te 19 Mart–18 Nisan, 2026'da 2–31 Mart)
+işlemleridir; bir işlem gününün akımı o günün bilançosundan ertesi iş gününün bilançosuna stok
+değişimi olduğu için bu işlemlerin swap hariç net rezervdeki karşılığı bir gün kayık ölçülür: 2025'te
+45,44, 2026'da 60,47 milyar dolar erime. Dip satırları bilanço seviyesidir.
+
 Mart 2026'nın dersi şu: TCMB faiz artırmadan sıkılaştırdı. 2 Mart'ta bir hafta vadeli repo
 ihalelerine ara verdi ve ağırlıklı ortalama fonlama maliyeti koridorun tavanı olan %40'ta oluştu;
 politika faizi %37'de kaldı. Aynı dönemde Türk lirası uzlaşmalı vadeli döviz satım işlemlerine
 başlandı (PPK özeti, 18 Mart). Repo ihalesi 117 iş günü kapalı kaldı (2 Mart–24 Ağustos). Kur bu
-sürede yönetilen patikadan çıkmadı: 27 Şubat–24 Ağustos arasında USD/TRY +%9,37, 21 iş gün başına
+sürede yönetilen patikadan çıkmadı: 27 Şubat–24 Ağustos arasında USD/TRY İstanbul kapanışıyla +%9,37, 21 iş gün başına
 yaklaşık +%1,5; şokun ilk 21 iş gününde TCMB gösterge kuruyla +%1,33, İstanbul kapanışıyla +%1,18.
-Bedeli rezerv ödedi: 21 iş günde tahminen 41,76 milyar dolarlık döviz satışı; swap hariç net rezervdeki 61,2 milyar
-dolarlık erimenin 18,0 milyarı ise aynı dönemde düşen altının fiyat etkisiydi. Aynı dönemde BIST 100 TL bazında %6,76 geriledi.
+Bedeli rezerv ödedi: 21 iş günde tahminen 41,76 milyar dolarlık döviz satışı; bu işlemlerin swap hariç net rezervden
+erittiği 60,5 milyar doların 18,0 milyarı ise aynı günlerde düşen altının fiyat etkisiydi. Aynı dönemde BIST 100 TL bazında %6,76 geriledi.
 
 <GrafikEmbed src="/analiz/brent-senaryo-2026-10-12/06_tcmb.html" baslik="TL fonlama koridoru, TLREF ve TCMB net rezervi, Ekim 2025–Ekim 2026" no="06" />
 
@@ -517,7 +528,7 @@ bilançosundan net rezerv ve swap hariç net rezerv; son gözlem 8 Ekim.
 Bugün aynı tamponlar daha ince. Analitik bilançodan günlük tahminle 8 Ekim'de net rezerv 58,76,
 swap hariç net rezerv 45,10, brüt rezerv 172,48 milyar dolar; TCMB'nin haftalık tanımıyla 2 Ekim'de
 net rezerv 53,8, swap hariç net rezerv 37,9 milyar dolar. Mart'ın 21 günlük tahmini döviz satışı
-(41,76) bugünkü swap hariç stoka (45,10) yakın; altının fiyat etkisiyle birlikte erime (61,2) stoktan
+(41,76) bugünkü swap hariç stoka (45,10) yakın; altının fiyat etkisiyle birlikte erime (60,5) stoktan
 büyük. Stok sıfırda bir duvar değildir: swap hariç net rezerv bu serinin başladığı 2 Ocak 2023'ten 28
 Mayıs 2024'e kadar kesintisiz eksideydi (354 iş günü) ve 20 Mart 2024'te −65,09 milyar dolara indi;
 Mart'ın savunması bugün tekrarlanırsa seri o bölgeye döner. Fonlama tarafında araç aynı: politika faizi %37, koridor %35,5–%40, TLREF 9
@@ -529,8 +540,9 @@ aştı, en çok 301 baz puan (18 Kasım).
 **Rejimin söylediği.** USD/TRY'nin dört penceredeki değişimi (+%1,1, +%1,6, +%1,8 ve +%1,6)
 Brent'in büyüklüğüne duyarsız; eğim sıfıra yakın. Senaryo tablosunda 125 dolarda 50,02, 150 dolarda
 49,99. Bu değer doğrunun sabitinden, yani kurun 2026'daki ortalama hızından gelir: 21 iş günde
-yaklaşık +%1,4. Son 21 iş günündeki değer kaybı +%1,76'ydı; bu hız sürerse kur petrol yükselmese de 9
-Kasım'da 50,21 olur, tablodaki %90 aralığın (49,81–50,24) üst ucunda. Swap hariç net rezerv Brent'in her bir log puanlık yükselişine 1,19 milyar dolarlık erimeyle
+yaklaşık +%1,4. Son 21 iş günündeki değer kaybı +%1,76'ydı, son üç ayınki 21 iş günde +%1,61; bu
+hızlar sürerse kur petrol yükselmese de 9 Kasım'da 50,21 ya da 50,14 olur, ikisi de tablodaki %90
+aralığın (49,81–50,24) üst yarısında. Swap hariç net rezerv Brent'in her bir log puanlık yükselişine 1,19 milyar dolarlık erimeyle
 eşlik ediyor; doğrunun +13,7 milyar dolarlık sabiti bunun bir bölümünü götürüyor ve hücre 125 dolarda
 −11,4, 150 dolarda −33,2 milyar dolar. Sabit ölçülmüş bir birikim değildir: rezervin bu dönemdeki
 ortalama 21 günlük değişimi −1,2 milyar dolar. Bu kalemin kanıtı zayıf: pencereler dışarıda bırakılıp
@@ -640,8 +652,8 @@ analizleri daha uzun bir ufka bakar. Mart 2026 analizine göre Brent'te %10'luk 
 enflasyonunu 12 ayın sonunda doğrudan ve dolaylı etkilerle nihai olarak 1 puan, 24 ayda toplam
 yaklaşık 1,2 puan artırıyor (Anadolu Ajansı'nın aktarımıyla). Analiz bu katsayıyı 2025'te yayımlanan
 çalışmayı son dönemi kapsayacak biçimde güncelleyerek buluyor; aynı blogun Temmuz 2025 yazısı bir yılın
-sonundaki etkiyi yaklaşık 0,8, nihai etkiyi 1 puan veriyordu. Fiyat o düzeyde kalırsa bu esneklikle 125
-dolar +1,94, 150 dolar +4,32 puan eder. Blog yazıları yazarlarının görüşüdür, TCMB'nin resmî görüşü
+sonundaki etkiyi yaklaşık 0,8, nihai etkiyi 1 puan veriyordu. Bu esneklikle, fiyat 12 ay o düzeyde
+kalırsa, 125 dolar +1,94, 150 dolar +4,32 puan eder. Blog yazıları yazarlarının görüşüdür, TCMB'nin resmî görüşü
 olmayabilir.
 
 <GrafikEmbed src="/analiz/brent-senaryo-2026-10-12/08_tufe.html" baslik="Senaryonun akaryakıt kalemlerine ve TÜFE'ye geçişi: iki ay ölçülen, 12 ay TCMB ekonomistlerinin esnekliği" no="08" />
@@ -683,7 +695,7 @@ eklenir): varil başına 10 dolarlık bir Brent hareketi bugünkü kurla litrede
 6 TL'lik motorin ÖTV'si 19,33 dolarlık, Kasım'daki 9 TL 29,00 dolarlık bir Brent artışını
 karşılayabilir; benzinde 7,90 ve 11,36 TL 25,46 ve 36,60 dolara denk geliyor. 125 dolar senaryosu
 vadeli Brent'te varil başına +20,28 dolar demek: ham petrol bacağı litrede +6,38 TL. Rafineri marjı
-sabit kalırsa Kasım'ın motorin ÖTV'si bu artışın 1,41 katı; eşel mobil yeniden açılsa senaryonun ham
+dolar olarak sabit kalırsa (ürün ham petrolle aynı dolar tutarında pahalanırsa) Kasım'ın motorin ÖTV'si bu artışın 1,41 katı; eşel mobil yeniden açılsa senaryonun ham
 petrol bacağı vergiden karşılanabilir. Ama 2026'da marj sabit kalmadı: motorin vadelisi Brent'le
 orantılı, biraz da hızlı yükseldi (eğim 1,13). Motorinin varil fiyatı ham petrolün yaklaşık iki katı
 olduğu için orantılı bir artış litrede ham petrol bacağının iki katından fazlasını getirir: 125 dolar
@@ -755,6 +767,10 @@ Belgelenmiş arz şoklarının ilk ayı tek bir kalıp vermiyor. Aşağıdaki ta
 
 </div>
 
+Tablonun pencereleri ABD iş günleriyle sayıldı: 2026 satırı 30 Mart'ta biter. Bölüm 5'teki Mart
+karşılaştırması Türkiye iş günleriyle sayıldığı için (20 Mart tatildi) 31 Mart'a uzanır; USD/TRY ve
+BIST 100 iki bölümde bu bir günlük farkla, BIST 100 ayrıca biri dolar biri lira bazında ölçülür.
+
 Fiyatın kendisi bile her şokta yükselmedi. 2003'te savaşın başlamasıyla Brent düştü: Greenspan'in
 Temmuz 2003'teki ifadesiyle petrol fiyatları Irak petrol sahalarının güvenceye alındığı haberleriyle
 Mart'ta sert düşmüştü. 2019'da Abqaiq saldırısı Suudi Arabistan'ın petrol üretiminin yarısından
@@ -776,7 +792,8 @@ yalnız %54'ünde yükseldi.
 
 **Daha geniş küme.** Belgelenmiş olaylar az; nedeni karışık ama sayısı çok olan küme daha fazla
 şey söylüyor. 1988–2025 arasında vadeli Brent'in bir ayda en az +%19,4 yükseldiği ve birbirinden 40
-takvim gününden fazla uzak 40 pencere var. NY Fed'in petrol fiyatı ayrıştırmasıyla (Kasım 2023'te durdu)
+takvim gününden fazla uzak 40 pencere var; vadeli seride 1990'ın ilk dokuz ayı olmadığı için Körfez
+Savaşı bu kümede yok (emsal tablosundaki 1990 satırının Brent sütunu fiziki seriden). NY Fed'in petrol fiyatı ayrıştırmasıyla (Kasım 2023'te durdu)
 25'i arz, 14'ü talep baskın; Haziran 2025'te biten pencere ayrıştırmanın kapsamı dışında. Talep baskın pencerelerde S&P 500 medyanda +%5,3 yükseldi ve %86'sında
 arttı, ABD 2 yıllık medyanda +22,0 bp; arz baskın pencerelerde S&P 500 +%0,4, ABD 2 yıllık +7,0
 bp. 2026'nın dört penceresi ikisinden de ayrışıyor: ABD 2 yıllık medyanda +34,5 bp ve dördünde artış,
@@ -800,12 +817,12 @@ yıllık verisi olmadığı için şekilde 2026 öncesinin 40 penceresinden 39'u
 
 **Sıra.** Mart'ta fonlama ve rezerv ilk haftada birlikte değişti: TCMB repo ihalesine 2 Mart'ta ara
 verdi, TLREF aynı gün %39,84'e çıktı, ağırlıklı ortalama fonlama maliyeti 6 Mart'ta koridorun
-tavanına (%40) ulaştı ve ilk haftada 14,66 milyar dolarlık döviz satıldı. Swap hariç net rezerv
-ayın her haftasında eridi, döviz satışı ise iki haftada yoğunlaştı (2–6 Mart 14,66, 23–27 Mart 17,24
-milyar dolar). 16–19 Mart'ta TCMB net alıcıydı (0,76 milyar dolar); o haftanın 10,58 milyar dolarlık
-erimesini altının fiyatı getirdi (altının fiyat etkisi tek başına 18,01 milyar dolar). Net rezerv 30
-Mart'ta, swap hariç net rezerv 31 Mart'ta pencerenin dibine indi (dönemin en düşüğü 6 Nisan'da
-19,14). Kur ay boyunca yalnız +%1,33 kaydı. Yabancının beş haftalık DİBS çıkışının %89'u ilk dört
+tavanına (%40) ulaştı ve ilk haftada 14,66 milyar dolarlık döviz satıldı. Döviz satışı iki haftada
+yoğunlaştı (2–6 Mart 14,66, 23–27 Mart 17,24 milyar dolar), rezervin haftalık erimesini ise altının
+fiyatı yeniden dağıttı: 16–19 Mart'ta TCMB net alıcıydı (0,76 milyar dolar), ama o haftanın işlemleri
+swap hariç net rezervi 18,53 milyar dolar eritti ve bunun 18,01 milyarı altının fiyat etkisiydi; 23–27
+Mart'ta altın toparlanınca erime satıştan küçük kaldı (10,84). Net rezerv 30 Mart'ta, swap hariç net rezerv 31 Mart'ta pencerenin dibine indi (dönemin en düşüğü 6 Nisan'da
+19,14 milyar dolar). Kur ay boyunca yalnız +%1,33 kaydı. Yabancının beş haftalık DİBS çıkışının %89'u ilk dört
 haftada geldi. Senaryo ayı benzer bir sıra izlerse fonlama ve rezerv ilk haftada birlikte görünür;
 yabancının DİBS çıkışı haftalık veride bir hafta gecikmeyle, enerji faturası ödemeler dengesinde iki
 ay gecikmeyle görünür.
@@ -848,12 +865,15 @@ Bu varsayımı bozacak altı dal var.
    göre İran hariç Orta Doğu'nun ham petrol ihracatı 1–28 Eylül'de günde en az 16,5 milyon varille savaş
    öncesi ortalamaya döndü (Euronews, 5 Ekim). Bu yollar açık kaldıkça senaryo zorlaşır; kapanırlarsa
    hızlanır. Hürmüz'ü baypas eden çıkış kapısı Husilerin menzilinde.
-3. **OPEC+.** Çekirdek yedi üye Kasım hedeflerini değiştirmedi. CNBC'ye göre Körfez üreticilerinin
-   ihracatı son aylarda normalin %60 ile %80'i arasında dalgalandı (dönem belirtilmeden) ve yedi üye
-   Ağustos'ta savaş öncesinin günde yaklaşık 5 milyon varil altında üretti. Bu resim Kpler'in Eylül
-   için ölçtüğü toparlanmayla (dal 2) ve Goldman Sachs'ın Körfez ihracatını son haftada 2025
-   ortalamasına yakın tahmin etmesiyle (OilPrice, 30 Eylül) ayrışıyor: kaynaklar farklı dönem ve kapsam
-   ölçüyor, ihracat toparlansa da üretim hâlâ geride. Bir sonraki toplantı 1 Kasım (CNBC, 4 Ekim).
+3. **OPEC+.** Çekirdek yedi üye (Suudi Arabistan, Rusya, Irak, Kuveyt, Cezayir, Kazakistan ve
+   Umman) Kasım hedeflerini değiştirmedi. CNBC'ye göre Körfez üreticilerinin ihracatı son aylarda
+   normalin %60 ile %80'i arasında dalgalandı (dönem belirtilmeden) ve yedi üye Ağustos'ta Şubat'taki
+   savaş öncesi düzeyin günde yaklaşık 5 milyon varil altında üretti. Bu resim Kpler'in Eylül için ölçtüğü
+   toparlanmayla (dal 2) ve Goldman Sachs'ın Körfez ihracatını son haftada 2025 ortalamasına yakın
+   tahmin etmesiyle (OilPrice, 30 Eylül) aynı değil: Kpler Eylül'ün, Goldman Eylül'ün son haftasının
+   ihracatını ölçüyor; CNBC'nin aktarımı dönemi belirtilmemiş son ayları, OPEC verisi ise ihracatı
+   değil üretimi anlatıyor ve yedi üyenin içinde Körfez dışından Rusya, Kazakistan ve Cezayir de var.
+   Hangisinin bugünü yansıttığı bu yazıda ayrılmadı. Bir sonraki toplantı 1 Kasım (CNBC, 4 Ekim).
 4. **Washington.** 8 Ekim'de ABD'li ve İsrailli kaynaklar saldırıların İsrail'deki 27 Ekim ve
    ABD'deki 3 Kasım seçimlerinden önce gelebileceğini söylüyordu (Anadolu Ajansı); Trump'ın aynı
    akşamki taahhüdü (giriş) ise ara seçime kadar geçerli. Taahhüt senaryo ayının ilk üç haftasını
@@ -913,7 +933,7 @@ kıyaslandı. Görüşsüz kıyasın tahmini, aynı dışlamayla eğitimde kalan
 ortalama 21 günlük değişimidir. Kanıt hükmü bu üç sınamadan mekanik olarak türer.
 
 **Sıklık ve olasılık.** Sıklıkta 21 gözlemlik pencerenin takvim boyu 40 günü aşarsa (kaynakta boşluk)
-pencere atıldı; epizotlar en az 21 iş günü arayla ayrıldı. Opsiyon olasılıkları OVX'ten çarpıklıksız
+pencere atıldı; vadeli seride böyle tek bir boşluk var, 29 Aralık 1989 ile 9 Ekim 1990 arası; epizotlar en az 21 iş günü arayla ayrıldı. Opsiyon olasılıkları OVX'ten çarpıklıksız
 lognormal ve risk-nötr sürüklenmeyle (−σ²/2) kuruldu; değme olasılığı yansıma ilkesiyle.
 
 **Kaynak temizliği.** CNBC'nin USD/TRY serisinde 2004 sonundaki 68 gün eski lira ölçeğinde, BIST 100
@@ -921,7 +941,9 @@ serisinde 2014'ün 251 günü yüz katı ölçekteydi; ikisi de düzeltildi. Piy
 yılbaşı barı atıldı. Kapanış saatleri farklı (BIST 18:00 TSİ, Brent Londra akşamı, lira kurları İstanbul 18:00, öbür
 kurlar New York 17:00); 21 günlük pencere bu farkı söndürür. TCMB'nin döviz satışı yayımlanan bir
 sayı değildir: swap hariç net rezervin günlük değişiminden kamu döviz mevduatının değişimi ve altının
-fiyat etkisi düşülerek tahmin edilir.
+fiyat etkisi düşülerek tahmin edilir. Akım serisi işlem gününe hizalıdır: bir günün akımı o günün
+bilançosundan ertesi iş gününün bilançosuna stok değişimidir; bir pencerenin satışı, altın etkisi ve
+erimesi bu yüzden aynı işlem günleri üzerinden toplanır.
 
 **TÜFE, cari denge ve ÖTV.** TÜFE geçişi Şekil 08'in, cari denge kuralı Şekil 10'un altındaki
 paragraflarda. Ön vadenin fiyat düzeyini izleyen hesaplar (TÜFE geçişi, ÖTV'nin ham petrol bacağı,
@@ -934,9 +956,10 @@ tutarlar sayfa görüntüsünden okundu.
 
 ## Ne ölçmedik
 
-- **Bir ay sonrasını.** Tablolar 21 iş gününün sonundaki konumu anlatır. Bölüm 7'deki iki aylık ve
-  12 aylık TÜFE hesapları ile bir yıllık cari denge hesabı fiyatın o düzeyde kalmasını varsayan
-  kurallardır; talep kaybı ve resesyon olasılığı ölçülmedi.
+- **Bir ay sonrasını.** Tablolar 21 iş gününün sonundaki konumu anlatır. Bölüm 4 ve 7'deki iki aylık
+  TÜFE geçişi, 12 aylık TÜFE kuralı, ABD'de üç aylık TÜFE etkisi ve bir yıllık cari denge hesabı
+  fiyatın o düzeyde kalmasını varsayan kurallardır, bir ay sonrasının ölçümü değildir; talep kaybı ve
+  resesyon olasılığı ölçülmedi.
 - **Ortak dağılımı.** Her hücre o varlığın kendi koşullu beklentisidir. Satırlar birlikte tek bir
   tutarlı senaryo oluşturmaz; bir ayın sonucu her satırda aralığın farklı ucuna düşebilir.
 - **Politika tepkisini.** Tablolar 2026'nın tepkilerini taşıyor. TCMB'nin faiz artırması, yeniden eşel
@@ -977,8 +1000,9 @@ tutarlar sayfa görüntüsünden okundu.
 ## Kaynakça
 
 - Vadeli Brent ön vade kapanışı: Yahoo Finance (`BZ=F`, 2025–2026) ve CNBC (`@LCO.1`, 1988–2026).
-  Vade eğrisi: NYMEX Brent kontratları (`BZZ26`–`BZZ28`), Yahoo Finance. Hisse, sektör ve ülke fonu
-  kapanışları: Yahoo Finance. Endeks ve döviz kapanışlarının uzun tarihçesi: CNBC.
+  Vade eğrisi: NYMEX Brent kontratları (`BZZ26`–`BZZ28`), Yahoo Finance. Emtia vadelisi, hisse
+  endeksi, G10 kur, kredi, sektör ve ülke fonu kapanışları (2025–2026): Yahoo Finance. Gelişen ülke
+  kurları ile endeks ve döviz kapanışlarının 1988'den bu yana uzun tarihçesi: CNBC.
 - Fiziki Brent: EIA, Europe Brent Spot Price FOB, günlük (`RBRTE`). ABD pompa fiyatları: EIA haftalık
   benzin ve motorin perakende fiyatları. ABD TÜFE: ABD Çalışma İstatistikleri Bürosu, CPI-U (aylık).
 - ABD Hazinesi, Daily Treasury Par Yield Curve ve Real Yield Curve.

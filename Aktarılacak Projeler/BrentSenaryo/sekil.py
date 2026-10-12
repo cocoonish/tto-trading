@@ -161,6 +161,8 @@ def sekil_03():
            f"Şekil 03 — Bir ayda +%{vir(y['senaryo']['125']['yuzde'], 1)}: görülme oranı %{vir(sik['125']['pay'], 1)}; "
            f"+%{vir(y['senaryo']['150']['yuzde'], 1)} yalnız {sik['150']['epizot']} kez",
            [f"Vadeli Brent ön vade kapanışı, 21 iş günlük değişim · {tarih(d['ilk'])}–{tarih(d['son'])}, {vir(d['n'], 0)} gün",
+            "Seride " + " ve ".join(f"{tarih(b['son_once'])}–{tarih(b['ilk_sonra'])}" for b in sik["bosluk"])
+            + " arası yok: 1990 Körfez Savaşı bu sayımın dışında",
             f"Bordo: üst kenarı 125 senaryosunun eşiğini ({vir(y['senaryo']['125']['log'], 2)}) aşan kovalar · bugünkü 21 günlük "
             f"değişim {isaretli(d['son_deger'], 1)}"], 420)
 

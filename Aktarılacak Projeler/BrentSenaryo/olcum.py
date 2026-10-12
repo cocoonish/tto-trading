@@ -413,6 +413,12 @@ def senaryo_yeri() -> dict:
         lr = pencere_log(s).dropna()
         bas_fiyat = s.dropna().shift(UFUK)   # pencerenin başlangıç fiyatı (21 gözlem önce)
         d = {"n": int(len(lr)), "ilk": lr.index[0].strftime("%Y-%m-%d"), "son": lr.index[-1].strftime("%Y-%m-%d")}
+        # kaynaktaki boşluklar (ardışık iki gözlem arasında 10 takvim gününden fazla): boşluğa düşen dönem bu
+        # sayımın dışındadır ve sayımı kullanan her cümle bunu adıyla söyler (vadeli seride 1990 Körfez Savaşı)
+        gi = s.dropna().index
+        aralik = gi.to_series().diff().dt.days
+        d["bosluk"] = [{"son_once": gi[gi.get_loc(t) - 1].strftime("%Y-%m-%d"), "ilk_sonra": t.strftime("%Y-%m-%d"),
+                        "takvim_gun": int(v)} for t, v in aralik[aralik > 10].items()]
         for k, v in out["senaryo"].items():
             m = lr >= v["log"]
             # ayrı epizot: art arda gelen günler tek epizot (aradaki boşluk ≥ 21 iş günü yeni epizot)
@@ -917,21 +923,30 @@ def tcmb_oyun_kitabi() -> dict:
         ic = r.loc[b + pd.Timedelta(days=1):s]
         if "altin_fiyat_etkisi" in ic:
             kayit["altin_fiyat_etkisi_21g"] = float(ic["altin_fiyat_etkisi"].sum())
+        # Etiket sözleşmesi (TCMBNetRezerv/altin_etkisi.py §2): L etiketli akım stokun L → L+1 değişimini taşır.
+        # Pencerenin 21 işlem gününün (b+1..s) satışı ve altın etkisi, stokun b+1 → s'den sonraki ilk gün
+        # değişimine karşılık gelir; b → s bilanço farkı bir gün kayıktır ve ikisi aynı ayrıştırmada toplanmaz.
+        swd = r["swap_haric_net_rezerv_usd"].dropna()
+        ileri = swd.shift(-1) - swd                       # etiket L: L → L+1 stok değişimi
+        kayit["swap_haric_degisim_islem_21g"] = float(ileri.reindex(ic.index).sum())
+        kayit["swap_haric_islem_bas"] = ic.index[0].strftime("%Y-%m-%d")
+        kayit["swap_haric_islem_son_bilanco"] = swd.index[swd.index > s][0].strftime("%Y-%m-%d")
+        kayit["swap_haric_son"] = float(swd.loc[:s].iloc[-1])
         # haftalık dağılım (Cuma kapanan haftalar): satış ayın tamamına mı, birkaç haftaya mı yayıldı; erimenin
         # satış dışındaki kısmının altının fiyatından gelip gelmediği haftalık altın fiyat etkisiyle sorulur
+        # Haftanın erimesi aynı etiketlerin L → L+1 stok değişimlerinin toplamıdır (satış ve altın etkisiyle aynı
+        # pencere): haftanın işlemleri, haftanın ilk gününden sonraki haftanın ilk gününe kadarki bilançoda görünür
         hf = ic[["net_doviz_alimi"]].copy()
         if "altin_fiyat_etkisi" in ic:
             hf["altin"] = ic["altin_fiyat_etkisi"]
-        sw = r["swap_haric_net_rezerv_usd"].dropna()
-        hf["sw"] = sw.reindex(ic.index)
+        hf["sw"] = ileri.reindex(ic.index)
         haftalar = []
         for son_gun, grp in hf.groupby(pd.Grouper(freq="W-FRI")):
             if grp.empty:
                 continue
-            onceki = sw.loc[:grp.index[0] - pd.Timedelta(days=1)]
             hafta = {"ilk": grp.index[0].strftime("%Y-%m-%d"), "son": grp.index[-1].strftime("%Y-%m-%d"),
                      "doviz_satisi": float(grp["net_doviz_alimi"].sum()),
-                     "swap_haric_degisim": float(grp["sw"].dropna().iloc[-1] - onceki.iloc[-1]) if len(onceki) and grp["sw"].notna().any() else None}
+                     "swap_haric_degisim": float(grp["sw"].sum()) if grp["sw"].notna().all() else None}
             if "altin" in grp:
                 hafta["altin_fiyat_etkisi"] = float(grp["altin"].sum())
             haftalar.append(hafta)
@@ -1469,8 +1484,13 @@ def turkiye_ek() -> dict:
                                  "yuzde": (p.loc[b1] / p.loc[b0] - 1) * 100, "log_21g": lg / n * UFUK}
     son = p.index[-1]
     l21 = math.log(p.iloc[-1] / p.iloc[-1 - UFUK]) * 100
+    # Son 21 iş günü tek bir pencere: içindeki hafta sonu geçişlerinin sayısı hedef pencereninkinden farklı olabilir;
+    # son üç ayın (63 iş günü) 21 güne ölçekli hızı ikinci bir ölçüdür (inceleme, turkiye-15)
+    l63 = math.log(p.iloc[-1] / p.iloc[-1 - 3 * UFUK]) * 100 / 3
     out["usdtry_son21"] = {"son_gun": son.strftime("%Y-%m-%d"), "son": float(p.iloc[-1]), "log": l21,
-                           "hedef_seviye": float(p.iloc[-1] * math.exp(l21 / 100))}
+                           "hedef_seviye": float(p.iloc[-1] * math.exp(l21 / 100)),
+                           "log_63_21g": l63, "hedef_seviye_63": float(p.iloc[-1] * math.exp(l63 / 100)),
+                           "bas_63": p.index[-1 - 3 * UFUK].strftime("%Y-%m-%d")}
     return out
 
 
