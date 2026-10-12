@@ -917,8 +917,11 @@ def tcmb_oyun_kitabi() -> dict:
         ic = r.loc[b + pd.Timedelta(days=1):s]
         if "altin_fiyat_etkisi" in ic:
             kayit["altin_fiyat_etkisi_21g"] = float(ic["altin_fiyat_etkisi"].sum())
-        # haftalık dağılım (Cuma kapanan haftalar): satış ayın tamamına mı, birkaç haftaya mı yayıldı
+        # haftalık dağılım (Cuma kapanan haftalar): satış ayın tamamına mı, birkaç haftaya mı yayıldı; erimenin
+        # satış dışındaki kısmının altının fiyatından gelip gelmediği haftalık altın fiyat etkisiyle sorulur
         hf = ic[["net_doviz_alimi"]].copy()
+        if "altin_fiyat_etkisi" in ic:
+            hf["altin"] = ic["altin_fiyat_etkisi"]
         sw = r["swap_haric_net_rezerv_usd"].dropna()
         hf["sw"] = sw.reindex(ic.index)
         haftalar = []
@@ -926,9 +929,12 @@ def tcmb_oyun_kitabi() -> dict:
             if grp.empty:
                 continue
             onceki = sw.loc[:grp.index[0] - pd.Timedelta(days=1)]
-            haftalar.append({"ilk": grp.index[0].strftime("%Y-%m-%d"), "son": grp.index[-1].strftime("%Y-%m-%d"),
-                             "doviz_satisi": float(grp["net_doviz_alimi"].sum()),
-                             "swap_haric_degisim": float(grp["sw"].dropna().iloc[-1] - onceki.iloc[-1]) if len(onceki) and grp["sw"].notna().any() else None})
+            hafta = {"ilk": grp.index[0].strftime("%Y-%m-%d"), "son": grp.index[-1].strftime("%Y-%m-%d"),
+                     "doviz_satisi": float(grp["net_doviz_alimi"].sum()),
+                     "swap_haric_degisim": float(grp["sw"].dropna().iloc[-1] - onceki.iloc[-1]) if len(onceki) and grp["sw"].notna().any() else None}
+            if "altin" in grp:
+                hafta["altin_fiyat_etkisi"] = float(grp["altin"].sum())
+            haftalar.append(hafta)
         kayit["haftalik"] = haftalar
         # pencerenin dışına taşan dip: şokun ilk günü ile 60 iş günü sonrası arasında en düşük değer
         uzun = r.loc[b:].iloc[:61]

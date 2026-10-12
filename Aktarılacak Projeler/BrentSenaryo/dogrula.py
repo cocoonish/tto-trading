@@ -1329,11 +1329,13 @@ def metin(on: dict, o: dict) -> None:
     alinti("tcmbblog_org_81fb3752cd", "nihai olarak 1 puan artırdığına işaret ediyor. Toplam etkinin yaklaşık yarısı ilk "
                                       "çeyrekte gerçekleşirken, bir yılın sonunda yaklaşık 0,8 puanlık bir etki",
            "bir yılın sonundaki etkiyi yaklaşık 0,8, nihai etkiyi 1 puan veriyordu")
-    metinde(f"Mart 2026 oranıyla 125 dolar {sayi(s125['tufe_12ay_tcmb'], 2, True)}, 150 dolar "
-            f"{sayi(s150['tufe_12ay_tcmb'], 2, True)} puan eder; Temmuz 2025 oranıyla "
-            f"{sayi(s125['tufe_12ay_tcmb_2025'], 2, True)} ve {sayi(s150['tufe_12ay_tcmb_2025'], 2, True)}", "B7 · TCMB esnekliği")
-    dogru(abs(s125["tufe_12ay_tcmb_2025"] - 0.8 * y125 / 10) < 1e-3 and abs(s150["tufe_12ay_tcmb_2025"] - 0.8 * y150 / 10) < 1e-3,
-          "B7: Temmuz 2025 esnekliği yüzde değişimin 0,08'i değil")
+    # Temmuz 2025'in 0,8'i yalnız künye olarak anılır: kaynağın kendisi katsayıyı Mart 2026'da güncelledi, eskimiş
+    # oranla türetilen bir senaryo sayısı basılmaz (inceleme, kaynak-04)
+    alinti("aa_com_tr_85ff46ff90", "bu katsayıyı bulabilmek için 2025 yılında yayımlanan çalışmanın son dönemi içerecek "
+                                   "şekilde güncellendiği bildirildi",
+           "Analiz bu katsayıyı 2025'te yayımlanan çalışmayı son dönemi kapsayacak biçimde güncelleyerek buluyor")
+    metinde(f"Fiyat o düzeyde kalırsa bu esneklikle 125 dolar {sayi(s125['tufe_12ay_tcmb'], 2, True)}, 150 dolar "
+            f"{sayi(s150['tufe_12ay_tcmb'], 2, True)} puan eder", "B7 · TCMB esnekliği")
     dogru(abs(s125["tufe_12ay_tcmb"] - y125 / 10) < 1e-3 and abs(s150["tufe_12ay_tcmb"] - y150 / 10) < 1e-3,
           "B7: TCMB kuralı yüzde değişimin onda biri değil")
     he, ea = TU["haziran_eylul"], TU["eylul_aylik"]
@@ -1541,12 +1543,21 @@ def metin(on: dict, o: dict) -> None:
             f"{yz(m26['tlref_ara_ilk'], 2)}'e çıktı, ağırlıklı ortalama fonlama maliyeti {gun_ay(m26['aofm_tavan_ilk'])}'ta "
             f"koridorun tavanına ({yz(m26['aofm_zirve'], 0)}) ulaştı ve ilk haftada {sayi(-hf[0]['doviz_satisi'], 2)} milyar "
             "dolarlık döviz satıldı", "B9 · sıra")
-    metinde(f"(2–6 Mart {sayi(-hf[0]['doviz_satisi'], 2)}, 23–27 Mart {sayi(-hf[3]['doviz_satisi'], 2)} milyar dolar)",
-            "B9 · haftalar")
+    metinde(f"Swap hariç net rezerv ayın her haftasında eridi, döviz satışı ise iki haftada yoğunlaştı (2–6 Mart "
+            f"{sayi(-hf[0]['doviz_satisi'], 2)}, 23–27 Mart {sayi(-hf[3]['doviz_satisi'], 2)} milyar dolar)", "B9 · haftalar")
     enb = sorted(range(len(hf)), key=lambda i: hf[i]["doviz_satisi"])[:2]
     dogru(hf[0]["ilk"] == "2026-03-02" and hf[3]["ilk"] == "2026-03-23" and sorted(enb) == [0, 3]
-          and all(h["swap_haric_degisim"] < 0 for h in hf), "B9: satışın en yoğun iki haftası 2–6 ve 23–27 Mart değil")
-    metinde(f"net rezerv {gun_ay(m26['net_rezerv_dip_gun'])}'ta, swap hariç net rezerv {gun_ay(m26['swap_haric_dip_gun'])}'ta "
+          and all(h["swap_haric_degisim"] < 0 for h in hf), "B9: satışın en yoğun iki haftası 2–6 ve 23–27 Mart değil "
+                                                            "ya da rezerv her hafta erimedi")
+    # Satışın olmadığı hafta: erimeyi altının fiyatı getirdi — fiyat etkisi tek başına erimeden büyük
+    h3 = hf[2]
+    metinde(f"16–19 Mart'ta TCMB net alıcıydı ({sayi(h3['doviz_satisi'], 2)} milyar dolar); o haftanın "
+            f"{sayi(-h3['swap_haric_degisim'], 2)} milyar dolarlık erimesini altının fiyatı getirdi (altının fiyat etkisi tek "
+            f"başına {sayi(-h3['altin_fiyat_etkisi'], 2)} milyar dolar)", "B9 · alım haftası")
+    dogru((h3["ilk"], h3["son"]) == ("2026-03-16", "2026-03-19") and h3["doviz_satisi"] > 0
+          and h3["altin_fiyat_etkisi"] < h3["swap_haric_degisim"] < 0,
+          "B9: 16–19 Mart net alım haftası değil ya da altının fiyat etkisi o haftanın erimesinden büyük değil")
+    metinde(f"Net rezerv {gun_ay(m26['net_rezerv_dip_gun'])}'ta, swap hariç net rezerv {gun_ay(m26['swap_haric_dip_gun'])}'ta "
             f"pencerenin dibine indi (dönemin en düşüğü {gun_ay(m26['swap_haric_donem_dip_gun'])}'da "
             f"{sayi(m26['swap_haric_donem_dip'], 2)})", "B9 · sıra")
     metinde(f"Kur ay boyunca yalnız {yz(m26['usdtry_tcmb_degisim'], 2, True)} kaydı", "B9 · kur")
