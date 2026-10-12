@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """BRENT 125–150 SENARYOSU — üçüncü arşiv geçişi: CNBC'nin İLK geçişte BOŞ
-döndürdüğü semboller.
+döndürdüğü semboller ve BOŞ dönen beş yıllık parçalar.
 
 İlk geçişte (12.10.2026 13:47 UTC) on üç sembolün yoklaması "durum 200, bar 0"
 döndü — aralarında Brent, altın, EUR/USD, USD/JPY ve ABD 2 yıllık. Aynı semboller
@@ -10,10 +10,18 @@ gövde" kaynağın o anki yanıtıdır, sembolün yokluğu değil ("bulamadım" 
 aynı şey değildir). Bu geçiş yoklamayı üç kez, aralıklı ve iki ayrı pencereyle
 dener; yine boş dönen sembol rapora adıyla yazılır.
 
+İkinci kusur aynı sınıftan: sembolü tutan araçların 59 beş yıllık parçası boş
+geldi (ör. ABD 10 yıllık 2000–2004, 2010–2019; sterlin 2015–2019) ve yıllık bar
+sayımı bunu gösterdi — boş parça, 21 günlük pencereyi bir boşluğun üstünden
+ölçtürür. İlk geçişin raporundaki (`rapor_cnbc.json`) her boş parça yeniden
+istenir; kaynağın gerçekten kapsamadığı yıllar (ör. CNH 2010 öncesi) yine boş
+döner ve adıyla kalır.
+
 Yardımcılar ve ilkeler `arsiv_brent.py` başlığında; künye `kunye_cnbc2.json`.
 """
 from __future__ import annotations
 
+import json
 import sys
 import time
 from datetime import timedelta
@@ -95,9 +103,50 @@ def cnbc_yeniden() -> dict:
     return sonuc
 
 
+@ab.kaynak("CNBC boş parçalar")
+def cnbc_parcalar() -> dict:
+    rp = ab.HAM / "rapor_cnbc.json"
+    if not rp.exists():
+        raise RuntimeError("rapor_cnbc.json yok")
+    ilk = list(json.loads(rp.read_text(encoding="utf-8")).values())[0]["CNBC"]
+    yarin = (ab.SIMDI + timedelta(days=1)).strftime("%Y%m%d")
+    sonuc = {}
+    for arac, v in ilk.items():
+        if not isinstance(v, dict) or v.get("durum") != "tamam":
+            continue
+        sem = v["sembol"]
+        alt = ab.CNBC_ILK_UZUN if arac in ab.UZUN else ab.CNBC_ILK
+        for yil, parca in v["parcalar"].items():
+            bas = int(yil)
+            if bas < alt or not isinstance(parca, dict) or parca.get("bar", 0) > 0:
+                continue
+            if ab.kalan() < 120:
+                sonuc[f"{arac}:{yil}"] = "bütçe doldu"
+                continue
+            son = f"{bas + 4}1231235959" if bas + 4 < ab.SIMDI.year else f"{yarin}000000"
+            u = ab._cnbc_url(sem, f"{bas}0101", son)
+            n, d = 0, 0
+            for deneme in range(3):
+                try:
+                    d, gv = ab.al(u, sn=40)
+                except RuntimeError:
+                    d, gv = 0, b""
+                n = ab._bar_sayisi(gv) if d == 200 else 0
+                if n:
+                    break
+                time.sleep(3.0 * (deneme + 1))
+            if n:
+                ab.yaz(f"cnbc/{arac}__{ab._dosya_adi(sem)}_{bas}.json.gz", gv, u, d, not_=f"{arac} · {sem}")
+            sonuc[f"{arac}:{yil}"] = {"durum": d, "bar": n}
+            print(f"   {arac} {yil}: {n} bar", flush=True)
+            time.sleep(0.4)
+    return sonuc
+
+
 def main() -> int:
     ab.HAM.mkdir(parents=True, exist_ok=True)
     cnbc_yeniden()
+    cnbc_parcalar()
     ab.kaydet("cnbc2")
     return 0 if ab.KUNYE else 1
 
