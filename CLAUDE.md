@@ -4985,9 +4985,16 @@ yatay kaldığı günlerin gerçekleşen ortalaması +1,2; metin sabiti "petrol
 hiç kımıldamasa da" diye okuyordu. Sabit, doğrunun x = 0'daki değeridir ve
 x = 0 çevresinde gözlem yoksa bir ölçüm değil, bir uzatmadır.
 (4) "TCMB Mart'ta 61,2 milyar dolar sattı" cümlesi swap hariç net rezervin
-ERİMESİNİ satış sayıyordu; erimenin 18,0 milyarı altının fiyat etkisiydi,
-satış 41,76. Bir stok değişimi, akım ve değerleme bacaklarına ayrılmadan
-bir eylemin büyüklüğü diye yazılmaz.
+ERİMESİNİ satış sayıyordu. Bir stok değişimi, akım ve değerleme bacaklarına
+ayrılmadan bir eylemin büyüklüğü diye yazılmaz — ve ayrıştırma ancak AYNI
+etiketlerin toplamıyla kurulur: rezerv hattının akımı `L → L+1` stok
+değişimini taşır (TCMBNetRezerv/altin_etkisi.py §2; veride ölçüldü, ortalama
+fark 0,29, korelasyon 0,95, ters hizada 2,14 ve 0,18). 2–31 Mart işlemlerinin
+satışı (41,76) ve altın etkisi (18,03) stokta 2 Mart → 1 Nisan erimesine
+(60,47) karşılık gelir; 61,20 ise 27 Şubat → 31 Mart bilanço farkıdır ve ilk
+ayrıştırma ikisini bir gün kaydırarak toplamıştı. Aynı kayıklık haftalık
+dağılımda bir hükmü tersine çeviriyordu ("rezerv her hafta eridi"; hizalanınca
+son iki işlem gününde rezerv arttı).
 Kaynak merceğinin üç sınıfı da kayda değer: ikinci elden atıf (kendi
 bültenimizin aktardığı bir Reuters kotasyonu donmuş kaynak değildir);
 kurum adına okunan araştırmacı görüşü (TCMB ekonomistlerinin blog esnekliği
@@ -5012,3 +5019,16 @@ eşit adımla çizip eğrinin ucunu dikleşmiş gösteriyordu (tarih eksenine ge
 ABD ve TL faiz tepkileri tek eksende ABD'yi sıfıra yapıştırıyordu (iki panel);
 figür gövdesinin 8 piksellik tarayıcı boşluğu gömme çerçevesinde kaydırma
 üretiyordu.
+Çürütme turunun doğrulayıcıları kendi EK bulgularını da çıkardı ve en ağırı
+bir KAPSAM kusuruydu: vadeli Brent serisinde 29.12.1989 → 09.10.1990 arası
+boş (284 gün), yani "1988'den bu yana yalnız iki kez" sayımı Körfez
+Savaşı'nı hiç görmüyordu — oysa aynı yazının emsal tablosunun ilk satırı
+odur ve fiziki seri o ayı +%43,2'nin üstünde ölçüyor. Sayım yeniden
+kurulmadı (fiziki ile vadeliyi eklemek yöntemi değiştirir); boşluk ölçüm
+katmanına yazıldı (`siklik.*.bosluk`) ve sayımı kullanan her cümle onu
+adıyla söylüyor. Bir "X'ten bu yana" sayımı, serinin kendi boşlukları
+sorulmadan kurulamaz. İkinci ders kaynağın KENDİ güncellemesi: TCMB
+ekonomistleri Mart 2026'da esnekliği 2025 çalışmasını güncelleyerek buldu;
+eski 0,8'lik oranla türetilen senaryo sayıları kaldırıldı, eski oran yalnız
+künye olarak anılıyor — kaynağın kendisinin geride bıraktığı bir tahminle
+"alternatif" sayı basılmaz.
