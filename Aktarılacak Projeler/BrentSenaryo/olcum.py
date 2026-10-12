@@ -1434,6 +1434,40 @@ def sekil_verisi(yer: dict) -> dict:
     return out
 
 
+def turkiye_ek() -> dict:
+    """Türkiye bölümünün dört yan ölçüsü (inceleme turu 2):
+    (1) TLREF'in koridorun üst bandını faiz kararı olmadan aştığı 2020 günleri — tavan bir tercih mi, sınır mı;
+    (2) swap hariç net rezervin eksi olduğu dönem — stok sıfırda bir duvar değildir;
+    (3) USD/TRY'nin repo ihalesinin kapalı kaldığı dönemdeki değişimi (İstanbul 18:00);
+    (4) USD/TRY'nin son 21 iş günlük hızı ve o hız sürerse hedef gündeki seviyesi."""
+    f = tablo("fonlama_gunluk")
+    r = tablo("rezerv_gunluk")
+    p = tablo("piyasa_2026")["USDTRY=X"].dropna()
+    out = {}
+    g = f.loc["2020", ["tlref", "koridor_ust"]].dropna()
+    asim = g[g["tlref"] > g["koridor_ust"] + 1e-9]
+    fark = (asim["tlref"] - asim["koridor_ust"]) * 100
+    out["tlref_tavan_2020"] = {"gun": int(len(asim)), "ilk": asim.index[0].strftime("%Y-%m-%d"),
+                               "son": asim.index[-1].strftime("%Y-%m-%d"), "azami_bp": float(fark.max()),
+                               "azami_gun": fark.idxmax().strftime("%Y-%m-%d"),
+                               "aylar": {k.strftime("%Y-%m"): int(v) for k, v in asim.groupby(asim.index.to_period("M")).size().items()}}
+    sh = r["swap_haric_net_rezerv_usd"].dropna()
+    eksi = sh[sh < 0]
+    out["swap_haric_eksi"] = {"gun": int(len(eksi)), "ilk": eksi.index[0].strftime("%Y-%m-%d"),
+                              "son": eksi.index[-1].strftime("%Y-%m-%d"), "asgari": float(eksi.min()),
+                              "asgari_gun": eksi.idxmin().strftime("%Y-%m-%d")}
+    b0, b1 = p.loc[:"2026-02-27"].index[-1], p.loc[:"2026-08-24"].index[-1]
+    n = int(len(p.loc[b0:b1])) - 1
+    lg = math.log(p.loc[b1] / p.loc[b0]) * 100
+    out["usdtry_repo_kapali"] = {"bas": b0.strftime("%Y-%m-%d"), "son": b1.strftime("%Y-%m-%d"), "is_gunu": n,
+                                 "yuzde": (p.loc[b1] / p.loc[b0] - 1) * 100, "log_21g": lg / n * UFUK}
+    son = p.index[-1]
+    l21 = math.log(p.iloc[-1] / p.iloc[-1 - UFUK]) * 100
+    out["usdtry_son21"] = {"son_gun": son.strftime("%Y-%m-%d"), "son": float(p.iloc[-1]), "log": l21,
+                           "hedef_seviye": float(p.iloc[-1] * math.exp(l21 / 100))}
+    return out
+
+
 def giris_kapanislari() -> dict:
     """Girişin günleri: 8 Ekim'in yükselişi ve aynı akşamki taahhütten sonra fiyatın kazancını koruyup korumadığı
     (ön vade kapanışı, devirden arındırılmamış — aynı kontrat, Aralık 2026)."""
@@ -1454,6 +1488,7 @@ def main() -> int:
         "iki_brent": iki_brent(),
         "senaryo_yeri": yer,
         "giris_kapanis": giris_kapanislari(),
+        "turkiye_ek": turkiye_ek(),
     }
     _, say = cnbc()
     sonuc["kaynak_duzeltme"] = say

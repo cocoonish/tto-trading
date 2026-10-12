@@ -1,6 +1,6 @@
 {
  "uretim": {
-  "olcum_py_sha256": "dee016af2ad9a657ee0ea5dc2ddb2a1d49b8015c95d81ac9284eb6841a2acc92",
+  "olcum_py_sha256": "da925790fc6119f2306db417d485b02b3df613b318a10b7ce2c9c065f2260a88",
   "girdiler": {
    "abd_hazine_1990.csv.gz": "8c31a527e6ebb6dfec0fbe654e739c5dac5ba0d5c0f107c0ec76952999d755ab",
    "abd_reel_2003.csv.gz": "7aa5105fd44c522765f73a501f0566956491f64d78308cc9a4bd3599498a60da",
@@ -883,6 +883,41 @@
   "2026-10-07": 100.199997,
   "2026-10-08": 104.279999,
   "2026-10-09": 104.720001
+ },
+ "turkiye_ek": {
+  "tlref_tavan_2020": {
+   "gun": 55,
+   "ilk": "2020-08-24",
+   "son": "2020-11-18",
+   "azami_bp": 300.58,
+   "azami_gun": "2020-11-18",
+   "aylar": {
+    "2020-08": 5,
+    "2020-09": 16,
+    "2020-10": 21,
+    "2020-11": 13
+   }
+  },
+  "swap_haric_eksi": {
+   "gun": 354,
+   "ilk": "2023-01-02",
+   "son": "2024-05-28",
+   "asgari": -65.087537,
+   "asgari_gun": "2024-03-20"
+  },
+  "usdtry_repo_kapali": {
+   "bas": "2026-02-27",
+   "son": "2026-08-24",
+   "is_gunu": 126,
+   "yuzde": 9.369735,
+   "log_21g": 1.492734
+  },
+  "usdtry_son21": {
+   "son_gun": "2026-10-09",
+   "son": 49.341309,
+   "log": 1.742471,
+   "hedef_seviye": 50.208601
+  }
  },
  "kaynak_duzeltme": {
   "try_eski_lira_gun": 68,
