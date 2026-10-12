@@ -1,6 +1,6 @@
 {
  "uretim": {
-  "olcum_py_sha256": "f62fec1eef7dce0cb2f6943811b8c023f12b4add4fd3c6467ea76878e4f65973",
+  "olcum_py_sha256": "4f72dc941d6faf6db820eb2282a9046bfa2150cf99bc7e238f95d382e36b9257",
   "girdiler": {
    "abd_hazine_1990.csv.gz": "8c31a527e6ebb6dfec0fbe654e739c5dac5ba0d5c0f107c0ec76952999d755ab",
    "abd_reel_2003.csv.gz": "7aa5105fd44c522765f73a501f0566956491f64d78308cc9a4bd3599498a60da",
@@ -842,13 +842,24 @@
    "gun": "2026-10-09",
    "deger": 48.900002,
    "aylik_sigma": 14.116215,
+   "dayanak": 101.25,
+   "dayanak_kontrat": "BZF27_NYM",
+   "bacak_gun": {
+    "aralik": 15,
+    "ocak": 6,
+    "devir_gunu": "2026-11-02"
+   },
    "olasilik": {
-    "125": 9.264769,
-    "150": 0.444571
+    "125": 5.898634,
+    "150": 0.215242
    },
    "dokunma_olasiligi": {
-    "125": 19.176541,
-    "150": 0.909604
+    "125": 15.657976,
+    "150": 0.507488
+   },
+   "olasilik_on_vade": {
+    "125": 9.264769,
+    "150": 0.444571
    },
    "yuzdelik_2007": 83.381089,
    "zirve_2026": 120.910004,
@@ -1213,7 +1224,10 @@
      24.031867,
      31.244917,
      22.853597
-    ]
+    ],
+    "ortalama_21g": 4.463798,
+    "yatay_brent_ortalama": -2.176117,
+    "yatay_brent_gun": 58
    },
    "CL=F": {
     "ad": "WTI",
@@ -1298,7 +1312,10 @@
      29.588559,
      26.969012,
      28.434465
-    ]
+    ],
+    "ortalama_21g": 4.22699,
+    "yatay_brent_ortalama": -2.075278,
+    "yatay_brent_gun": 58
    },
    "HO=F": {
     "ad": "motorin vadelisi (ULSD)",
@@ -1383,7 +1400,10 @@
      21.107317,
      31.622694,
      22.860679
-    ]
+    ],
+    "ortalama_21g": 6.643634,
+    "yatay_brent_ortalama": -2.906747,
+    "yatay_brent_gun": 58
    },
    "RB=F": {
     "ad": "benzin vadelisi (RBOB)",
@@ -1468,7 +1488,10 @@
      25.156416,
      17.839545,
      8.82824
-    ]
+    ],
+    "ortalama_21g": 5.300998,
+    "yatay_brent_ortalama": -3.092145,
+    "yatay_brent_gun": 58
    },
    "NG=F": {
     "ad": "doğal gaz (Henry Hub)",
@@ -1553,7 +1576,10 @@
      13.089005,
      -10.866191,
      6.805708
-    ]
+    ],
+    "ortalama_21g": -1.590616,
+    "yatay_brent_ortalama": 1.889009,
+    "yatay_brent_gun": 58
    },
    "GC=F": {
     "ad": "altın",
@@ -1638,7 +1664,10 @@
      -6.590706,
      1.546597,
      -2.355036
-    ]
+    ],
+    "ortalama_21g": 0.399683,
+    "yatay_brent_ortalama": 4.304686,
+    "yatay_brent_gun": 58
    },
    "SI=F": {
     "ad": "gümüş",
@@ -1723,7 +1752,10 @@
      -5.707261,
      1.040447,
      -2.695881
-    ]
+    ],
+    "ortalama_21g": 2.298266,
+    "yatay_brent_ortalama": 13.294862,
+    "yatay_brent_gun": 58
    },
    "HG=F": {
     "ad": "bakır",
@@ -1808,7 +1840,10 @@
      2.760711,
      6.343598,
      -3.500265
-    ]
+    ],
+    "ortalama_21g": 2.451074,
+    "yatay_brent_ortalama": 4.622117,
+    "yatay_brent_gun": 58
    },
    "^GSPC": {
     "ad": "S&P 500",
@@ -1893,7 +1928,10 @@
      3.886997,
      0.730608,
      -2.569175
-    ]
+    ],
+    "ortalama_21g": 1.195653,
+    "yatay_brent_ortalama": 1.945074,
+    "yatay_brent_gun": 58
    },
    "^NDX": {
     "ad": "Nasdaq 100",
@@ -1978,7 +2016,10 @@
      8.705392,
      -3.736203,
      -3.688663
-    ]
+    ],
+    "ortalama_21g": 1.639502,
+    "yatay_brent_ortalama": 1.871299,
+    "yatay_brent_gun": 58
    },
    "^RUT": {
     "ad": "Russell 2000",
@@ -2063,7 +2104,10 @@
      -0.064813,
      -1.896113,
      -6.457065
-    ]
+    ],
+    "ortalama_21g": 1.269111,
+    "yatay_brent_ortalama": 2.227922,
+    "yatay_brent_gun": 58
    },
    "^STOXX": {
     "ad": "STOXX Europe 600",
@@ -2148,7 +2192,10 @@
      -2.618985,
      1.472076,
      -3.599549
-    ]
+    ],
+    "ortalama_21g": 0.978578,
+    "yatay_brent_ortalama": 1.876281,
+    "yatay_brent_gun": 58
    },
    "^GDAXI": {
     "ad": "DAX",
@@ -2233,7 +2280,10 @@
      -1.596294,
      1.449618,
      -3.925942
-    ]
+    ],
+    "ortalama_21g": 0.455345,
+    "yatay_brent_ortalama": 1.767775,
+    "yatay_brent_gun": 58
    },
    "^FCHI": {
     "ad": "CAC 40",
@@ -2318,7 +2368,10 @@
      -5.194456,
      -0.157534,
      -6.327807
-    ]
+    ],
+    "ortalama_21g": -0.130907,
+    "yatay_brent_ortalama": 0.574702,
+    "yatay_brent_gun": 58
    },
    "^FTSE": {
     "ad": "FTSE 100",
@@ -2403,7 +2456,10 @@
      -3.222841,
      2.624843,
      -0.855806
-    ]
+    ],
+    "ortalama_21g": 0.923107,
+    "yatay_brent_ortalama": 1.334789,
+    "yatay_brent_gun": 58
    },
    "^N225": {
     "ad": "Nikkei 225",
@@ -2488,7 +2544,10 @@
      4.001735,
      -6.597503,
      -7.610837
-    ]
+    ],
+    "ortalama_21g": 2.625587,
+    "yatay_brent_ortalama": 2.085256,
+    "yatay_brent_gun": 57
    },
    "^HSI": {
     "ad": "Hang Seng",
@@ -2573,7 +2632,10 @@
      -1.854527,
      6.624974,
      -1.790071
-    ]
+    ],
+    "ortalama_21g": -0.542461,
+    "yatay_brent_ortalama": -0.034573,
+    "yatay_brent_gun": 58
    },
    "000001.SS": {
     "ad": "Şanghay Bileşik",
@@ -2658,7 +2720,10 @@
      1.977151,
      -7.215482,
      -1.601607
-    ]
+    ],
+    "ortalama_21g": -0.17826,
+    "yatay_brent_ortalama": 0.356519,
+    "yatay_brent_gun": 58
    },
    "EEM": {
     "ad": "gelişmekte olan piyasa hisseleri (EEM)",
@@ -2743,7 +2808,10 @@
      2.089884,
      -5.828993,
      -1.276083
-    ]
+    ],
+    "ortalama_21g": 1.888213,
+    "yatay_brent_ortalama": 2.003666,
+    "yatay_brent_gun": 58
    },
    "XLE": {
     "ad": "ABD enerji sektörü (XLE)",
@@ -2828,7 +2896,10 @@
      10.105418,
      11.293636,
      6.493303
-    ]
+    ],
+    "ortalama_21g": 3.634643,
+    "yatay_brent_ortalama": 2.847671,
+    "yatay_brent_gun": 58
    },
    "XOP": {
     "ad": "ABD petrol üreticileri (XOP)",
@@ -2913,7 +2984,10 @@
      10.345039,
      13.735872,
      10.643243
-    ]
+    ],
+    "ortalama_21g": 3.76878,
+    "yatay_brent_ortalama": 1.791398,
+    "yatay_brent_gun": 58
    },
    "JETS": {
     "ad": "ABD havayolları (JETS)",
@@ -2998,7 +3072,10 @@
      -8.488542,
      -7.327586,
      -11.66033
-    ]
+    ],
+    "ortalama_21g": 1.18775,
+    "yatay_brent_ortalama": 5.017134,
+    "yatay_brent_gun": 58
    },
    "XLY": {
     "ad": "ABD isteğe bağlı tüketim (XLY)",
@@ -3083,7 +3160,10 @@
      -3.396724,
      -4.918738,
      -6.192897
-    ]
+    ],
+    "ortalama_21g": -0.55235,
+    "yatay_brent_ortalama": 1.740322,
+    "yatay_brent_gun": 58
    },
    "XLP": {
     "ad": "ABD temel tüketim (XLP)",
@@ -3168,7 +3248,10 @@
      4.171719,
      -0.367135,
      -2.74131
-    ]
+    ],
+    "ortalama_21g": 0.744145,
+    "yatay_brent_ortalama": 1.19004,
+    "yatay_brent_gun": 58
    },
    "XLK": {
     "ad": "ABD teknoloji (XLK)",
@@ -3253,7 +3336,10 @@
      12.964034,
      -3.916967,
      -3.29982
-    ]
+    ],
+    "ortalama_21g": 2.653468,
+    "yatay_brent_ortalama": 2.212144,
+    "yatay_brent_gun": 58
    },
    "XLU": {
     "ad": "ABD kamu hizmetleri (XLU)",
@@ -3338,7 +3424,10 @@
      -4.809366,
      1.646905,
      -6.747918
-    ]
+    ],
+    "ortalama_21g": -0.753027,
+    "yatay_brent_ortalama": -2.085134,
+    "yatay_brent_gun": 58
    },
    "ITA": {
     "ad": "ABD savunma (ITA)",
@@ -3423,7 +3512,10 @@
      -5.048724,
      1.672386,
      -15.390541
-    ]
+    ],
+    "ortalama_21g": -0.017981,
+    "yatay_brent_ortalama": 1.034001,
+    "yatay_brent_gun": 58
    },
    "KSA": {
     "ad": "Suudi Arabistan hisseleri (KSA)",
@@ -3508,7 +3600,10 @@
      -5.493962,
      -2.652316,
      -1.083806
-    ]
+    ],
+    "ortalama_21g": -0.560781,
+    "yatay_brent_ortalama": -1.671293,
+    "yatay_brent_gun": 58
    },
    "UAE": {
     "ad": "BAE hisseleri (UAE)",
@@ -3593,7 +3688,10 @@
      -8.823528,
      -4.843587,
      1.580015
-    ]
+    ],
+    "ortalama_21g": 0.539883,
+    "yatay_brent_ortalama": 1.176915,
+    "yatay_brent_gun": 58
    },
    "INDA": {
     "ad": "Hindistan hisseleri (INDA)",
@@ -3678,7 +3776,10 @@
      -6.708267,
      -3.244008,
      -4.399355
-    ]
+    ],
+    "ortalama_21g": -1.251611,
+    "yatay_brent_ortalama": 0.215992,
+    "yatay_brent_gun": 58
    },
    "EWY": {
     "ad": "Kore hisseleri (EWY)",
@@ -3763,7 +3864,10 @@
      15.604283,
      -17.388213,
      -1.808167
-    ]
+    ],
+    "ortalama_21g": 6.575779,
+    "yatay_brent_ortalama": 6.305168,
+    "yatay_brent_gun": 58
    },
    "^VIX": {
     "ad": "VIX",
@@ -3848,7 +3952,10 @@
      1.94508,
      -0.268379,
      20.701761
-    ]
+    ],
+    "ortalama_21g": -1.494862,
+    "yatay_brent_ortalama": -11.147784,
+    "yatay_brent_gun": 58
    },
    "^MOVE": {
     "ad": "MOVE",
@@ -3933,7 +4040,10 @@
      31.004572,
      11.236609,
      20.307555
-    ]
+    ],
+    "ortalama_21g": 2.384481,
+    "yatay_brent_ortalama": -4.622395,
+    "yatay_brent_gun": 57
    },
    "OVX": {
     "ad": "petrol oynaklığı (OVX)",
@@ -4018,7 +4128,10 @@
      4.434137,
      42.827134,
      24.656704
-    ]
+    ],
+    "ortalama_21g": 3.474109,
+    "yatay_brent_ortalama": -10.998494,
+    "yatay_brent_gun": 58
    },
    "us2y": {
     "ad": "ABD 2 yıllık",
@@ -4103,7 +4216,10 @@
      36.0,
      22.0,
      50.0
-    ]
+    ],
+    "ortalama_21g": 11.537118,
+    "yatay_brent_ortalama": -0.206897,
+    "yatay_brent_gun": 58
    },
    "us10y": {
     "ad": "ABD 10 yıllık",
@@ -4188,7 +4304,10 @@
      35.0,
      28.0,
      32.0
-    ]
+    ],
+    "ortalama_21g": 9.925764,
+    "yatay_brent_ortalama": 5.586207,
+    "yatay_brent_gun": 58
    },
    "us30y": {
     "ad": "ABD 30 yıllık",
@@ -4273,7 +4392,10 @@
      26.0,
      30.0,
      11.0
-    ]
+    ],
+    "ortalama_21g": 7.864629,
+    "yatay_brent_ortalama": 8.568966,
+    "yatay_brent_gun": 58
    },
    "be5y": {
     "ad": "ABD 5 yıllık başabaş enflasyon",
@@ -4358,7 +4480,10 @@
      13.0,
      5.0,
      17.0
-    ]
+    ],
+    "ortalama_21g": -0.026201,
+    "yatay_brent_ortalama": -3.068966,
+    "yatay_brent_gun": 58
    },
    "reel10y": {
     "ad": "ABD 10 yıllık reel getiri",
@@ -4443,7 +4568,10 @@
      23.0,
      20.0,
      21.0
-    ]
+    ],
+    "ortalama_21g": 9.375546,
+    "yatay_brent_ortalama": 6.534483,
+    "yatay_brent_gun": 58
    },
    "DX-Y.NYB": {
     "ad": "dolar endeksi (DXY)",
@@ -4528,7 +4656,10 @@
      0.886853,
      -0.137782,
      -0.020062
-    ]
+    ],
+    "ortalama_21g": 0.167683,
+    "yatay_brent_ortalama": -0.60704,
+    "yatay_brent_gun": 58
    },
    "EURUSD=X": {
     "ad": "EUR/USD",
@@ -4613,7 +4744,10 @@
      -0.921014,
      0.11381,
      -0.230974
-    ]
+    ],
+    "ortalama_21g": -0.176249,
+    "yatay_brent_ortalama": 0.708215,
+    "yatay_brent_gun": 58
    },
    "USDJPY=X": {
     "ad": "USD/JPY",
@@ -4698,7 +4832,10 @@
      0.112227,
      1.258691,
      -2.626742
-    ]
+    ],
+    "ortalama_21g": 0.266889,
+    "yatay_brent_ortalama": 0.347769,
+    "yatay_brent_gun": 58
    },
    "GBPUSD=X": {
     "ad": "GBP/USD",
@@ -4783,7 +4920,10 @@
      -0.63309,
      1.177859,
      -0.423185
-    ]
+    ],
+    "ortalama_21g": 0.03111,
+    "yatay_brent_ortalama": 0.841993,
+    "yatay_brent_gun": 58
    },
    "USDCHF=X": {
     "ad": "USD/CHF",
@@ -4868,7 +5008,10 @@
      0.332681,
      0.722933,
      0.666585
-    ]
+    ],
+    "ortalama_21g": 0.30313,
+    "yatay_brent_ortalama": -0.542489,
+    "yatay_brent_gun": 58
    },
    "USDCAD=X": {
     "ad": "USD/CAD",
@@ -4953,7 +5096,10 @@
      0.323537,
      -0.990739,
      0.343883
-    ]
+    ],
+    "ortalama_21g": 0.056952,
+    "yatay_brent_ortalama": -0.832444,
+    "yatay_brent_gun": 58
    },
    "USDNOK=X": {
     "ad": "USD/NOK",
@@ -5038,7 +5184,10 @@
      -1.359978,
      -2.721284,
      -1.078817
-    ]
+    ],
+    "ortalama_21g": -0.552364,
+    "yatay_brent_ortalama": -0.794421,
+    "yatay_brent_gun": 58
    },
    "AUDUSD=X": {
     "ad": "AUD/USD",
@@ -5123,7 +5272,10 @@
      0.027198,
      1.201552,
      0.656397
-    ]
+    ],
+    "ortalama_21g": 0.702739,
+    "yatay_brent_ortalama": 1.365923,
+    "yatay_brent_gun": 58
    },
    "inr": {
     "ad": "USD/INR",
@@ -5208,7 +5360,10 @@
      4.046524,
      2.004437,
      0.534367
-    ]
+    ],
+    "ortalama_21g": 0.777757,
+    "yatay_brent_ortalama": 0.717701,
+    "yatay_brent_gun": 56
    },
    "krw": {
     "ad": "USD/KRW",
@@ -5293,7 +5448,10 @@
      1.527165,
      -5.381204,
      -3.839746
-    ]
+    ],
+    "ortalama_21g": -0.506603,
+    "yatay_brent_ortalama": -0.5235,
+    "yatay_brent_gun": 58
    },
    "zar": {
     "ad": "USD/ZAR",
@@ -5378,7 +5536,10 @@
      1.66232,
      1.671481,
      0.441657
-    ]
+    ],
+    "ortalama_21g": -0.495186,
+    "yatay_brent_ortalama": -2.026989,
+    "yatay_brent_gun": 58
    },
    "mxn": {
     "ad": "USD/MXN",
@@ -5463,7 +5624,10 @@
      -0.141089,
      -0.670645,
      0.728683
-    ]
+    ],
+    "ortalama_21g": -0.398284,
+    "yatay_brent_ortalama": -1.436369,
+    "yatay_brent_gun": 58
    },
    "brl": {
     "ad": "USD/BRL",
@@ -5548,7 +5712,10 @@
      0.249086,
      -2.149979,
      -1.35381
-    ]
+    ],
+    "ortalama_21g": -0.456947,
+    "yatay_brent_ortalama": 0.362328,
+    "yatay_brent_gun": 58
    },
    "pln": {
     "ad": "USD/PLN",
@@ -5633,7 +5800,10 @@
      1.332181,
      0.70632,
      1.107735
-    ]
+    ],
+    "ortalama_21g": 0.431913,
+    "yatay_brent_ortalama": -0.910012,
+    "yatay_brent_gun": 58
    },
    "HYG": {
     "ad": "ABD yüksek getirili kredi (HYG)",
@@ -5718,7 +5888,10 @@
      -1.376319,
      -0.77645,
      -1.668551
-    ]
+    ],
+    "ortalama_21g": -0.330502,
+    "yatay_brent_ortalama": 0.070558,
+    "yatay_brent_gun": 58
    },
    "LQD": {
     "ad": "ABD yatırım yapılabilir kredi (LQD)",
@@ -5803,7 +5976,10 @@
      -2.162847,
      -2.906499,
      -1.73389
-    ]
+    ],
+    "ortalama_21g": -0.727554,
+    "yatay_brent_ortalama": -0.481533,
+    "yatay_brent_gun": 58
    },
    "EMB": {
     "ad": "gelişmekte olan ülke dolar tahvilleri (EMB)",
@@ -5888,7 +6064,10 @@
      -2.120611,
      -1.998551,
      -2.167286
-    ]
+    ],
+    "ortalama_21g": -0.398559,
+    "yatay_brent_ortalama": 0.134363,
+    "yatay_brent_gun": 58
    },
    "USDTRY=X": {
     "ad": "USD/TRY",
@@ -5973,7 +6152,10 @@
      1.628271,
      1.826532,
      1.57557
-    ]
+    ],
+    "ortalama_21g": 1.403184,
+    "yatay_brent_ortalama": 1.268238,
+    "yatay_brent_gun": 58
    },
    "EURTRY=X": {
     "ad": "EUR/TRY",
@@ -6058,7 +6240,10 @@
      0.100562,
      2.156228,
      1.230435
-    ]
+    ],
+    "ortalama_21g": 1.231595,
+    "yatay_brent_ortalama": 2.003605,
+    "yatay_brent_gun": 58
    },
    "XU100.IS": {
     "ad": "BIST 100",
@@ -6143,7 +6328,10 @@
      -3.827832,
      -2.702494,
      -1.975685
-    ]
+    ],
+    "ortalama_21g": 1.686076,
+    "yatay_brent_ortalama": 3.157615,
+    "yatay_brent_gun": 58
    },
    "bist_usd": {
     "ad": "BIST 100 (dolar)",
@@ -6228,7 +6416,10 @@
      -5.368686,
      -4.447785,
      -3.496171
-    ]
+    ],
+    "ortalama_21g": 0.282892,
+    "yatay_brent_ortalama": 1.889377,
+    "yatay_brent_gun": 58
    },
    "XBANK.IS": {
     "ad": "BIST Bankacılık",
@@ -6313,7 +6504,10 @@
      -10.889911,
      -15.928694,
      2.590457
-    ]
+    ],
+    "ortalama_21g": 1.149606,
+    "yatay_brent_ortalama": 5.026097,
+    "yatay_brent_gun": 58
    },
    "XUSIN.IS": {
     "ad": "BIST Sınai",
@@ -6398,7 +6592,10 @@
      3.31075,
      7.89834,
      0.19573
-    ]
+    ],
+    "ortalama_21g": 1.913343,
+    "yatay_brent_ortalama": 2.196411,
+    "yatay_brent_gun": 58
    },
    "TUR": {
     "ad": "Türkiye hisse fonu (TUR, dolar)",
@@ -6483,7 +6680,10 @@
      -6.571361,
      -1.011125,
      -2.147002
-    ]
+    ],
+    "ortalama_21g": 0.715407,
+    "yatay_brent_ortalama": 2.104261,
+    "yatay_brent_gun": 58
    },
    "TUPRS_IS": {
     "ad": "Tüpraş",
@@ -6568,7 +6768,10 @@
      0.395255,
      40.336716,
      14.029026
-    ]
+    ],
+    "ortalama_21g": 8.046996,
+    "yatay_brent_ortalama": 4.704373,
+    "yatay_brent_gun": 53
    },
    "PETKM_IS": {
     "ad": "Petkim",
@@ -6653,7 +6856,10 @@
      15.5596,
      13.155196,
      18.371608
-    ]
+    ],
+    "ortalama_21g": 1.843182,
+    "yatay_brent_ortalama": -1.7481,
+    "yatay_brent_gun": 53
    },
    "THYAO_IS": {
     "ad": "Türk Hava Yolları",
@@ -6738,7 +6944,10 @@
      -10.486322,
      -3.926097,
      -6.552007
-    ]
+    ],
+    "ortalama_21g": -0.162346,
+    "yatay_brent_ortalama": -2.06823,
+    "yatay_brent_gun": 53
    },
    "PGSUS_IS": {
     "ad": "Pegasus",
@@ -6823,7 +7032,10 @@
      -12.849156,
      -8.700562,
      -1.120631
-    ]
+    ],
+    "ortalama_21g": -3.427717,
+    "yatay_brent_ortalama": -2.392621,
+    "yatay_brent_gun": 53
    },
    "TAVHL_IS": {
     "ad": "TAV Havalimanları",
@@ -6908,7 +7120,10 @@
      -21.01562,
      -8.820128,
      -7.699268
-    ]
+    ],
+    "ortalama_21g": 1.034968,
+    "yatay_brent_ortalama": 5.940507,
+    "yatay_brent_gun": 53
    },
    "AKBNK_IS": {
     "ad": "Akbank",
@@ -6993,7 +7208,10 @@
      -16.09815,
      -16.491661,
      1.090116
-    ]
+    ],
+    "ortalama_21g": 2.105514,
+    "yatay_brent_ortalama": 7.527487,
+    "yatay_brent_gun": 53
    },
    "GARAN_IS": {
     "ad": "Garanti BBVA",
@@ -7078,7 +7296,10 @@
      -11.680322,
      -10.256406,
      -2.442746
-    ]
+    ],
+    "ortalama_21g": 0.477816,
+    "yatay_brent_ortalama": 4.157732,
+    "yatay_brent_gun": 53
    },
    "FROTO_IS": {
     "ad": "Ford Otosan",
@@ -7163,7 +7384,10 @@
      -20.082346,
      -8.617695,
      -0.884951
-    ]
+    ],
+    "ortalama_21g": -0.789485,
+    "yatay_brent_ortalama": 1.016955,
+    "yatay_brent_gun": 53
    },
    "BIMAS_IS": {
     "ad": "BİM",
@@ -7248,7 +7472,10 @@
      2.614379,
      1.671119,
      10.940624
-    ]
+    ],
+    "ortalama_21g": 4.259212,
+    "yatay_brent_ortalama": 2.585081,
+    "yatay_brent_gun": 53
    },
    "ASELS_IS": {
     "ad": "Aselsan",
@@ -7333,7 +7560,10 @@
      -2.898551,
      3.469388,
      -2.709677
-    ]
+    ],
+    "ortalama_21g": 5.853528,
+    "yatay_brent_ortalama": 6.673755,
+    "yatay_brent_gun": 53
    },
    "n3a": {
     "ad": "DİBS 3 ay",
@@ -7418,7 +7648,10 @@
      62.697,
      394.6591,
      -295.1454
-    ]
+    ],
+    "ortalama_21g": -26.189993,
+    "yatay_brent_ortalama": -95.135993,
+    "yatay_brent_gun": 58
    },
    "n2y": {
     "ad": "DİBS 2 yıl",
@@ -7503,7 +7736,10 @@
      308.5417,
      129.4161,
      -42.0134
-    ]
+    ],
+    "ortalama_21g": 6.478657,
+    "yatay_brent_ortalama": -108.874897,
+    "yatay_brent_gun": 58
    },
    "n5y": {
     "ad": "DİBS 5 yıl",
@@ -7588,7 +7824,10 @@
      161.2015,
      206.6807,
      -127.2468
-    ]
+    ],
+    "ortalama_21g": 19.605349,
+    "yatay_brent_ortalama": -77.671671,
+    "yatay_brent_gun": 58
    },
    "be_2y": {
     "ad": "2 yıllık başabaş enflasyon",
@@ -7673,7 +7912,10 @@
      300.8584,
      -75.5218,
      -31.9767
-    ]
+    ],
+    "ortalama_21g": 10.779121,
+    "yatay_brent_ortalama": -105.357074,
+    "yatay_brent_gun": 58
    },
    "r2y": {
     "ad": "2 yıllık reel getiri (TÜFE'ye endeksli)",
@@ -7758,7 +8000,10 @@
      -9.7084,
      159.8593,
      -5.7141
-    ]
+    ],
+    "ortalama_21g": -3.971777,
+    "yatay_brent_ortalama": 4.464981,
+    "yatay_brent_gun": 58
    },
    "tlref": {
     "ad": "TLREF",
@@ -7843,7 +8088,10 @@
      17.89,
      -5.19,
      -289.52
-    ]
+    ],
+    "ortalama_21g": -25.983974,
+    "yatay_brent_ortalama": -78.455345,
+    "yatay_brent_gun": 58
    },
    "net_rezerv_usd": {
     "ad": "TCMB net rezerv",
@@ -7928,7 +8176,10 @@
      -7.420366,
      3.485172,
      -6.096413
-    ]
+    ],
+    "ortalama_21g": -1.417269,
+    "yatay_brent_ortalama": 4.687464,
+    "yatay_brent_gun": 58
    },
    "swap_haric_net_rezerv_usd": {
     "ad": "swap hariç net rezerv",
@@ -8013,12 +8264,17 @@
      -3.042609,
      5.006141,
      -5.964189
-    ]
+    ],
+    "ortalama_21g": -1.170169,
+    "yatay_brent_ortalama": 5.90632,
+    "yatay_brent_gun": 58
    }
   },
   "n_gun": 229,
   "ilk": "2025-10-13",
   "son": "2026-10-09",
+  "ilk_degisim": "2025-11-11",
+  "n_islem_gunu": 250,
   "devir": {
    "ikinci_vade": 0,
    "wti": 12,
@@ -8043,6 +8299,62 @@
     "wti_yuzde": -1.242846,
     "fark_log": -14.443652
    }
+  },
+  "yukselis_dizileri": [
+   {
+    "bas": "2025-11-11",
+    "son": "2025-11-20",
+    "gun": 8,
+    "en_buyuk_x": 6.557312
+   },
+   {
+    "bas": "2025-12-05",
+    "son": "2025-12-05",
+    "gun": 1,
+    "en_buyuk_x": 1.715464
+   },
+   {
+    "bas": "2025-12-23",
+    "son": "2025-12-23",
+    "gun": 1,
+    "en_buyuk_x": 1.065889
+   },
+   {
+    "bas": "2026-01-09",
+    "son": "2026-04-16",
+    "gun": 67,
+    "en_buyuk_x": 45.629608
+   },
+   {
+    "bas": "2026-04-20",
+    "son": "2026-05-05",
+    "gun": 12,
+    "en_buyuk_x": 18.993633
+   },
+   {
+    "bas": "2026-05-07",
+    "son": "2026-05-22",
+    "gun": 12,
+    "en_buyuk_x": 23.770809
+   },
+   {
+    "bas": "2026-07-16",
+    "son": "2026-08-20",
+    "gun": 26,
+    "en_buyuk_x": 27.725614
+   },
+   {
+    "bas": "2026-08-25",
+    "son": "2026-10-09",
+    "gun": 33,
+    "en_buyuk_x": 21.157505
+   }
+  ],
+  "yukselis_gunu": 160,
+  "x30": {
+   "gun": 19,
+   "ilk": "2026-03-09",
+   "son": "2026-04-07"
   }
  },
  "birini_disarida": {
@@ -8059,10 +8371,45 @@
     27.189499,
     20.582319
    ],
+   "tahmin_egilim": [
+    7.981862,
+    11.138004,
+    11.9022,
+    12.24714
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 2.675937,
-   "rmse_sifir": 30.793699
+   "rmse_sifir": 30.793699,
+   "rmse_egilim": 21.784691,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "CL=F": {
    "tahmin": [
@@ -8077,10 +8424,45 @@
     23.877287,
     25.024859
    ],
+   "tahmin_egilim": [
+    6.926406,
+    10.265213,
+    11.468928,
+    12.212835
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 3.874076,
-   "rmse_sifir": 30.669463
+   "rmse_sifir": 30.669463,
+   "rmse_egilim": 21.808847,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "HO=F": {
    "tahmin": [
@@ -8095,10 +8477,45 @@
     27.476926,
     20.588083
    ],
+   "tahmin_egilim": [
+    8.530994,
+    14.265775,
+    13.120338,
+    14.238341
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 9.302715,
-   "rmse_sifir": 34.334647
+   "rmse_sifir": 34.334647,
+   "rmse_egilim": 25.260275,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "RB=F": {
    "tahmin": [
@@ -8113,10 +8530,45 @@
     16.415372,
     8.460068
    ],
+   "tahmin_egilim": [
+    6.05943,
+    8.639356,
+    12.981406,
+    15.670692
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 14.536388,
-   "rmse_sifir": 28.120812
+   "rmse_sifir": 28.120812,
+   "rmse_egilim": 22.50533,
+   "kapsama": [
+    false,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 2,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "NG=F": {
    "tahmin": [
@@ -8131,10 +8583,45 @@
     -11.503147,
     6.584118
    ],
+   "tahmin_egilim": [
+    1.067395,
+    -3.14365,
+    -1.610642,
+    -4.054346
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 14.405405,
-   "rmse_sifir": 9.058416
+   "rmse_sifir": 9.058416,
+   "rmse_egilim": 10.601446,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "GC=F": {
    "tahmin": [
@@ -8149,10 +8636,45 @@
     1.53476,
     -2.38321
    ],
+   "tahmin_egilim": [
+    0.527691,
+    3.164793,
+    0.631068,
+    1.097036
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 6.125477,
-   "rmse_sifir": 3.693189
+   "rmse_sifir": 3.693189,
+   "rmse_egilim": 5.317662,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "SI=F": {
    "tahmin": [
@@ -8167,10 +8689,45 @@
     1.035071,
     -2.732886
    ],
+   "tahmin_egilim": [
+    3.183687,
+    4.228872,
+    2.267668,
+    3.060967
+   ],
    "isaret_tutan": 0,
    "n": 4,
    "rmse": 12.221374,
-   "rmse_sifir": 4.135307
+   "rmse_sifir": 4.135307,
+   "rmse_egilim": 5.929326,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "HG=F": {
    "tahmin": [
@@ -8185,10 +8742,45 @@
     6.150515,
     -3.562993
    ],
+   "tahmin_egilim": [
+    3.532771,
+    2.063058,
+    1.827596,
+    2.327385
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 4.587661,
-   "rmse_sifir": 3.870881
+   "rmse_sifir": 3.870881,
+   "rmse_egilim": 4.423646,
+   "kapsama": [
+    true,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^GSPC": {
    "tahmin": [
@@ -8203,10 +8795,45 @@
     0.727952,
     -2.602755
    ],
+   "tahmin_egilim": [
+    2.593385,
+    0.414591,
+    1.032579,
+    1.250565
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 3.15097,
-   "rmse_sifir": 2.845087
+   "rmse_sifir": 2.845087,
+   "rmse_egilim": 3.891756,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^NDX": {
    "tahmin": [
@@ -8221,10 +8848,45 @@
     -3.807787,
     -3.758415
    ],
+   "tahmin_egilim": [
+    3.493008,
+    -0.030901,
+    2.196849,
+    2.195833
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 6.010936,
-   "rmse_sifir": 4.989153
+   "rmse_sifir": 4.989153,
+   "rmse_egilim": 6.38421,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^RUT": {
    "tahmin": [
@@ -8239,10 +8901,45 @@
     -1.91432,
     -6.674966
    ],
+   "tahmin_egilim": [
+    0.670071,
+    -0.732932,
+    0.382426,
+    1.692456
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 3.821353,
-   "rmse_sifir": 4.77514
+   "rmse_sifir": 4.77514,
+   "rmse_egilim": 5.655843,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^STOXX": {
    "tahmin": [
@@ -8257,10 +8954,45 @@
     1.461346,
     -3.665931
    ],
+   "tahmin_egilim": [
+    0.638643,
+    0.713338,
+    0.1508,
+    0.806463
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 2.694452,
-   "rmse_sifir": 3.053899
+   "rmse_sifir": 3.053899,
+   "rmse_egilim": 3.64172,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^GDAXI": {
    "tahmin": [
@@ -8275,10 +9007,45 @@
     1.439211,
     -4.005085
    ],
+   "tahmin_egilim": [
+    1.105701,
+    -0.020155,
+    -0.701899,
+    -0.323868
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 3.263322,
-   "rmse_sifir": 3.833723
+   "rmse_sifir": 3.833723,
+   "rmse_egilim": 4.290085,
+   "kapsama": [
+    true,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^FCHI": {
    "tahmin": [
@@ -8293,10 +9060,45 @@
     -0.157658,
     -6.536881
    ],
+   "tahmin_egilim": [
+    -0.711259,
+    -0.657056,
+    -1.245123,
+    -0.235829
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 3.471672,
-   "rmse_sifir": 4.853215
+   "rmse_sifir": 4.853215,
+   "rmse_egilim": 4.456732,
+   "kapsama": [
+    true,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^FTSE": {
    "tahmin": [
@@ -8311,10 +9113,45 @@
     2.590985,
     -0.859489
    ],
+   "tahmin_egilim": [
+    0.690426,
+    1.6044,
+    0.585339,
+    1.177469
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 2.999438,
-   "rmse_sifir": 2.44796
+   "rmse_sifir": 2.44796,
+   "rmse_egilim": 3.2239,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^N225": {
    "tahmin": [
@@ -8329,10 +9166,45 @@
     -6.82521,
     -7.91605
    ],
+   "tahmin_egilim": [
+    1.865081,
+    1.330623,
+    3.235713,
+    4.090112
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 8.443895,
-   "rmse_sifir": 5.706993
+   "rmse_sifir": 5.706993,
+   "rmse_egilim": 8.216818,
+   "kapsama": [
+    true,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^HSI": {
    "tahmin": [
@@ -8347,10 +9219,45 @@
     6.414757,
     -1.806286
    ],
+   "tahmin_egilim": [
+    1.557459,
+    0.953642,
+    -0.42993,
+    0.319951
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 5.732453,
-   "rmse_sifir": 3.611086
+   "rmse_sifir": 3.611086,
+   "rmse_egilim": 4.255613,
+   "kapsama": [
+    true,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "000001.SS": {
    "tahmin": [
@@ -8365,10 +9272,45 @@
     -7.48904,
     -1.614572
    ],
+   "tahmin_egilim": [
+    0.365473,
+    0.061491,
+    0.771828,
+    1.143169
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 5.10455,
-   "rmse_sifir": 3.960602
+   "rmse_sifir": 3.960602,
+   "rmse_egilim": 4.476024,
+   "kapsama": [
+    true,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "EEM": {
    "tahmin": [
@@ -8383,10 +9325,45 @@
     -6.005784,
     -1.284295
    ],
+   "tahmin_egilim": [
+    2.456141,
+    1.614139,
+    3.096555,
+    3.487852
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 3.287349,
-   "rmse_sifir": 4.279574
+   "rmse_sifir": 4.279574,
+   "rmse_egilim": 6.530559,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XLE": {
    "tahmin": [
@@ -8401,10 +9378,45 @@
     10.700189,
     6.291192
    ],
+   "tahmin_egilim": [
+    3.696845,
+    7.158092,
+    5.443331,
+    6.114793
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 2.21154,
-   "rmse_sifir": 8.894484
+   "rmse_sifir": 8.894484,
+   "rmse_egilim": 3.721522,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XOP": {
    "tahmin": [
@@ -8419,10 +9431,45 @@
     12.870866,
     10.114081
    ],
+   "tahmin_egilim": [
+    3.950836,
+    7.465248,
+    6.29613,
+    7.04357
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 2.232237,
-   "rmse_sifir": 12.982742
+   "rmse_sifir": 12.982742,
+   "rmse_egilim": 7.814921,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "JETS": {
    "tahmin": [
@@ -8437,10 +9484,45 @@
     -7.609934,
     -12.398091
    ],
+   "tahmin_egilim": [
+    -1.987366,
+    -3.053599,
+    -3.174683,
+    -1.912409
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 4.025643,
-   "rmse_sifir": 13.309276
+   "rmse_sifir": 13.309276,
+   "rmse_egilim": 11.228954,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XLY": {
    "tahmin": [
@@ -8455,10 +9537,45 @@
     -5.043827,
     -6.39296
    ],
+   "tahmin_egilim": [
+    0.094874,
+    -1.972701,
+    -1.361621,
+    -0.727572
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 3.368927,
-   "rmse_sifir": 5.039045
+   "rmse_sifir": 5.039045,
+   "rmse_egilim": 4.245452,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XLP": {
    "tahmin": [
@@ -8473,10 +9590,45 @@
     -0.36781,
     -2.779585
    ],
+   "tahmin_egilim": [
+    0.182721,
+    1.512149,
+    0.575164,
+    1.495844
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 4.219903,
-   "rmse_sifir": 4.091531
+   "rmse_sifir": 4.091531,
+   "rmse_egilim": 4.201448,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XLK": {
    "tahmin": [
@@ -8491,10 +9643,45 @@
     -3.995744,
     -3.355493
    ],
+   "tahmin_egilim": [
+    5.125509,
+    0.211837,
+    3.198162,
+    3.058117
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 7.806359,
-   "rmse_sifir": 6.652449
+   "rmse_sifir": 6.652449,
+   "rmse_egilim": 8.292544,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XLU": {
    "tahmin": [
@@ -8509,10 +9696,45 @@
     1.63349,
     -6.986381
    ],
+   "tahmin_egilim": [
+    -2.632607,
+    -0.293947,
+    -0.296552,
+    1.197536
+   ],
    "isaret_tutan": 0,
    "n": 4,
    "rmse": 5.456437,
-   "rmse_sifir": 4.368544
+   "rmse_sifir": 4.368544,
+   "rmse_egilim": 5.090142,
+   "kapsama": [
+    true,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "ITA": {
    "tahmin": [
@@ -8527,10 +9749,45 @@
     1.658556,
     -16.712412
    ],
+   "tahmin_egilim": [
+    -2.744684,
+    -0.349034,
+    -2.136529,
+    0.368852
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 11.090611,
-   "rmse_sifir": 8.898978
+   "rmse_sifir": 8.898978,
+   "rmse_egilim": 9.076347,
+   "kapsama": [
+    true,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "KSA": {
    "tahmin": [
@@ -8545,10 +9802,45 @@
     -2.688125,
     -1.089722
    ],
+   "tahmin_egilim": [
+    -1.144141,
+    -0.224371,
+    0.183767,
+    0.66508
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 2.618237,
-   "rmse_sifir": 3.540518
+   "rmse_sifir": 3.540518,
+   "rmse_egilim": 3.343491,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "UAE": {
    "tahmin": [
@@ -8563,10 +9855,45 @@
     -4.96482,
     1.567663
    ],
+   "tahmin_egilim": [
+    0.86811,
+    1.019726,
+    0.031136,
+    -0.468668
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 9.120628,
-   "rmse_sifir": 11.341413
+   "rmse_sifir": 11.341413,
+   "rmse_egilim": 11.957809,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "INDA": {
    "tahmin": [
@@ -8581,10 +9908,45 @@
     -3.297792,
     -4.499062
    ],
+   "tahmin_egilim": [
+    -0.579993,
+    -1.726903,
+    -2.382281,
+    -2.083924
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 3.373581,
-   "rmse_sifir": 7.077857
+   "rmse_sifir": 7.077857,
+   "rmse_egilim": 5.968912,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "EWY": {
    "tahmin": [
@@ -8599,10 +9961,45 @@
     -19.101782,
     -1.824714
    ],
+   "tahmin_egilim": [
+    5.666551,
+    5.88156,
+    10.708222,
+    12.379933
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 16.747244,
-   "rmse_sifir": 12.03434
+   "rmse_sifir": 12.03434,
+   "rmse_egilim": 17.22844,
+   "kapsama": [
+    true,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^VIX": {
    "tahmin": [
@@ -8617,10 +10014,45 @@
     -0.26874,
     18.815254
    ],
+   "tahmin_egilim": [
+    -6.980965,
+    5.68976,
+    2.644521,
+    3.723944
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 11.451518,
-   "rmse_sifir": 14.218691
+   "rmse_sifir": 14.218691,
+   "rmse_egilim": 16.174736,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "^MOVE": {
    "tahmin": [
@@ -8635,10 +10067,45 @@
     10.648936,
     18.488123
    ],
+   "tahmin_egilim": [
+    3.086679,
+    8.231273,
+    5.999341,
+    3.20995
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 9.027083,
-   "rmse_sifir": 19.100148
+   "rmse_sifir": 19.100148,
+   "rmse_egilim": 14.048693,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "OVX": {
    "tahmin": [
@@ -8653,10 +10120,45 @@
     35.646486,
     22.039341
    ],
+   "tahmin_egilim": [
+    -0.415935,
+    17.163845,
+    12.496586,
+    16.917854
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 24.847501,
-   "rmse_sifir": 46.413834
+   "rmse_sifir": 46.413834,
+   "rmse_egilim": 43.696001,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "us2y": {
    "tahmin": [
@@ -8671,10 +10173,45 @@
     22.0,
     50.0
    ],
+   "tahmin_egilim": [
+    17.618557,
+    13.26087,
+    16.699248,
+    10.633663
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 22.592478,
-   "rmse_sifir": 36.63673
+   "rmse_sifir": 36.63673,
+   "rmse_egilim": 24.142614,
+   "kapsama": [
+    true,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "us10y": {
    "tahmin": [
@@ -8689,10 +10226,45 @@
     28.0,
     32.0
    ],
+   "tahmin_egilim": [
+    17.886598,
+    11.73913,
+    12.466165,
+    7.108911
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 21.100582,
-   "rmse_sifir": 29.470324
+   "rmse_sifir": 29.470324,
+   "rmse_egilim": 18.785817,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "us30y": {
    "tahmin": [
@@ -8707,10 +10279,45 @@
     30.0,
     11.0
    ],
+   "tahmin_egilim": [
+    14.628866,
+    8.878261,
+    8.022556,
+    5.178218
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 13.771629,
-   "rmse_sifir": 22.896506
+   "rmse_sifir": 22.896506,
+   "rmse_egilim": 14.481922,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "be5y": {
    "tahmin": [
@@ -8725,10 +10332,45 @@
     5.0,
     17.0
    ],
+   "tahmin_egilim": [
+    3.628866,
+    5.530435,
+    7.962406,
+    8.148515
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 7.00486,
-   "rmse_sifir": 17.406895
+   "rmse_sifir": 17.406895,
+   "rmse_egilim": 13.125633,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "reel10y": {
    "tahmin": [
@@ -8743,10 +10385,45 @@
     20.0,
     21.0
    ],
+   "tahmin_egilim": [
+    13.329897,
+    8.834783,
+    8.022556,
+    2.920792
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 16.484445,
-   "rmse_sifir": 18.834808
+   "rmse_sifir": 18.834808,
+   "rmse_egilim": 13.332647,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "DX-Y.NYB": {
    "tahmin": [
@@ -8761,10 +10438,45 @@
     -0.137877,
     -0.020064
    ],
+   "tahmin_egilim": [
+    0.005298,
+    0.132788,
+    0.270528,
+    0.112366
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 1.520642,
-   "rmse_sifir": 1.551306
+   "rmse_sifir": 1.551306,
+   "rmse_egilim": 1.544572,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "EURUSD=X": {
    "tahmin": [
@@ -8779,10 +10491,45 @@
     0.113745,
     -0.231241
    ],
+   "tahmin_egilim": [
+    -0.085689,
+    -0.232509,
+    -0.311294,
+    -0.096362
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 1.525963,
-   "rmse_sifir": 1.79034
+   "rmse_sifir": 1.79034,
+   "rmse_egilim": 1.731595,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "USDJPY=X": {
    "tahmin": [
@@ -8797,10 +10544,45 @@
     1.250835,
     -2.661857
    ],
+   "tahmin_egilim": [
+    -0.390325,
+    -0.209137,
+    0.151823,
+    0.499586
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 3.708667,
-   "rmse_sifir": 2.536319
+   "rmse_sifir": 2.536319,
+   "rmse_egilim": 2.817462,
+   "kapsama": [
+    false,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 2,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "GBPUSD=X": {
    "tahmin": [
@@ -8815,10 +10597,45 @@
     1.170976,
     -0.424083
    ],
+   "tahmin_egilim": [
+    0.022624,
+    -0.168168,
+    -0.242205,
+    -0.033222
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 1.538542,
-   "rmse_sifir": 1.354781
+   "rmse_sifir": 1.354781,
+   "rmse_egilim": 1.401852,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "USDCHF=X": {
    "tahmin": [
@@ -8833,10 +10650,45 @@
     0.720332,
     0.664373
    ],
+   "tahmin_egilim": [
+    0.427697,
+    0.128355,
+    0.15247,
+    -0.24938
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 0.523224,
-   "rmse_sifir": 1.526131
+   "rmse_sifir": 1.526131,
+   "rmse_egilim": 1.338963,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "USDCAD=X": {
    "tahmin": [
@@ -8851,10 +10703,45 @@
     -0.99568,
     0.343293
    ],
+   "tahmin_egilim": [
+    -0.230852,
+    -0.201561,
+    0.069628,
+    -0.141819
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 0.928266,
-   "rmse_sifir": 0.651275
+   "rmse_sifir": 0.651275,
+   "rmse_egilim": 0.79099,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "USDNOK=X": {
    "tahmin": [
@@ -8869,10 +10756,45 @@
     -2.758997,
     -1.084679
    ],
+   "tahmin_egilim": [
+    -1.277661,
+    -1.373248,
+    -1.287161,
+    -1.732292
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 2.453988,
-   "rmse_sifir": 1.692956
+   "rmse_sifir": 1.692956,
+   "rmse_egilim": 1.351446,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "AUDUSD=X": {
    "tahmin": [
@@ -8887,10 +10809,45 @@
     1.194391,
     0.654252
    ],
+   "tahmin_egilim": [
+    0.79835,
+    1.295842,
+    1.123909,
+    1.547365
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 1.118859,
-   "rmse_sifir": 0.82049
+   "rmse_sifir": 0.82049,
+   "rmse_egilim": 1.156297,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "inr": {
    "tahmin": [
@@ -8905,10 +10862,45 @@
     1.984612,
     0.532944
    ],
+   "tahmin_egilim": [
+    0.766731,
+    0.591906,
+    1.010768,
+    1.227999
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 1.632194,
-   "rmse_sifir": 2.608252
+   "rmse_sifir": 2.608252,
+   "rmse_egilim": 2.033035,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "krw": {
    "tahmin": [
@@ -8923,10 +10915,45 @@
     -5.531404,
     -3.915407
    ],
+   "tahmin_egilim": [
+    -2.276249,
+    -1.769463,
+    -0.253787,
+    0.629694
+   ],
    "isaret_tutan": 0,
    "n": 4,
    "rmse": 7.518329,
-   "rmse_sifir": 4.088019
+   "rmse_sifir": 4.088019,
+   "rmse_egilim": 5.068389,
+   "kapsama": [
+    false,
+    true,
+    false,
+    false
+   ],
+   "kapsanan": 1,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "zar": {
    "tahmin": [
@@ -8941,10 +10968,45 @@
     1.657665,
     0.440684
    ],
+   "tahmin_egilim": [
+    -0.344087,
+    -0.448385,
+    -0.089546,
+    -0.24908
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 1.110471,
-   "rmse_sifir": 3.136158
+   "rmse_sifir": 3.136158,
+   "rmse_egilim": 3.380836,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "mxn": {
    "tahmin": [
@@ -8959,10 +11021,45 @@
     -0.672904,
     0.726041
    ],
+   "tahmin_egilim": [
+    -0.153877,
+    -0.318318,
+    -0.134489,
+    -0.81238
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 1.841268,
-   "rmse_sifir": 2.146204
+   "rmse_sifir": 2.146204,
+   "rmse_egilim": 2.314154,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "brl": {
    "tahmin": [
@@ -8977,10 +11074,45 @@
     -2.173428,
     -1.363057
    ],
+   "tahmin_egilim": [
+    -0.944582,
+    -1.132369,
+    -1.600632,
+    -2.039196
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 1.813964,
-   "rmse_sifir": 1.356782
+   "rmse_sifir": 1.356782,
+   "rmse_egilim": 1.215287,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "pln": {
    "tahmin": [
@@ -8995,10 +11127,45 @@
     0.703837,
     1.101645
    ],
+   "tahmin_egilim": [
+    0.327262,
+    0.639038,
+    0.604694,
+    0.218449
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 1.397503,
-   "rmse_sifir": 2.577919
+   "rmse_sifir": 2.577919,
+   "rmse_egilim": 2.309777,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "HYG": {
    "tahmin": [
@@ -9013,10 +11180,45 @@
     -0.77948,
     -1.682628
    ],
+   "tahmin_egilim": [
+    -0.504988,
+    -0.585096,
+    -0.515763,
+    -0.230427
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 0.635907,
-   "rmse_sifir": 1.454123
+   "rmse_sifir": 1.454123,
+   "rmse_egilim": 1.048251,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "LQD": {
    "tahmin": [
@@ -9031,10 +11233,45 @@
     -2.949575,
     -1.749098
    ],
+   "tahmin_egilim": [
+    -1.26623,
+    -0.979701,
+    -0.815323,
+    -0.494722
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 1.032255,
-   "rmse_sifir": 2.444504
+   "rmse_sifir": 2.444504,
+   "rmse_egilim": 1.555557,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "EMB": {
    "tahmin": [
@@ -9049,10 +11286,45 @@
     -2.018792,
     -2.191116
    ],
+   "tahmin_egilim": [
+    -0.752013,
+    -0.748365,
+    -0.63352,
+    -0.194222
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 0.781211,
-   "rmse_sifir": 2.500354
+   "rmse_sifir": 2.500354,
+   "rmse_egilim": 1.926534,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "USDTRY=X": {
    "tahmin": [
@@ -9067,10 +11339,45 @@
     1.810051,
     1.563287
    ],
+   "tahmin_egilim": [
+    1.516157,
+    1.396468,
+    1.333604,
+    1.245603
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 0.559514,
-   "rmse_sifir": 1.547682
+   "rmse_sifir": 1.547682,
+   "rmse_egilim": 0.365171,
+   "kapsama": [
+    false,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 2,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "EURTRY=X": {
    "tahmin": [
@@ -9085,10 +11392,45 @@
     2.133311,
     1.222927
    ],
+   "tahmin_egilim": [
+    1.450629,
+    1.156776,
+    1.04546,
+    1.158806
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 1.509829,
-   "rmse_sifir": 1.371659
+   "rmse_sifir": 1.371659,
+   "rmse_egilim": 1.532418,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XU100.IS": {
    "tahmin": [
@@ -9103,10 +11445,45 @@
     -2.739683,
     -1.995463
    ],
+   "tahmin_egilim": [
+    -0.246306,
+    1.167258,
+    2.497534,
+    4.848762
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 2.484469,
-   "rmse_sifir": 4.821264
+   "rmse_sifir": 4.821264,
+   "rmse_egilim": 6.369605,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "bist_usd": {
    "tahmin": [
@@ -9121,10 +11498,45 @@
     -4.549734,
     -3.55875
    ],
+   "tahmin_egilim": [
+    -1.762463,
+    -0.22921,
+    1.16393,
+    3.603159
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 2.807031,
-   "rmse_sifir": 6.114392
+   "rmse_sifir": 6.114392,
+   "rmse_egilim": 6.48285,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XBANK.IS": {
    "tahmin": [
@@ -9139,10 +11551,45 @@
     -17.350487,
     2.557473
    ],
+   "tahmin_egilim": [
+    -0.851455,
+    0.916725,
+    1.323312,
+    0.714879
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 6.301795,
-   "rmse_sifir": 13.553705
+   "rmse_sifir": 13.553705,
+   "rmse_egilim": 13.899897,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "XUSIN.IS": {
    "tahmin": [
@@ -9157,10 +11604,45 @@
     7.60193,
     0.195539
    ],
+   "tahmin_egilim": [
+    1.221278,
+    1.888595,
+    2.357018,
+    5.378863
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 5.559896,
-   "rmse_sifir": 4.734672
+   "rmse_sifir": 4.734672,
+   "rmse_egilim": 4.749402,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "TUR": {
    "tahmin": [
@@ -9175,10 +11657,45 @@
     -1.016271,
     -2.170385
    ],
+   "tahmin_egilim": [
+    -0.500655,
+    0.918797,
+    1.535502,
+    3.603796
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 3.467959,
-   "rmse_sifir": 5.730738
+   "rmse_sifir": 5.730738,
+   "rmse_egilim": 6.521823,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "TUPRS_IS": {
    "tahmin": [
@@ -9193,10 +11710,45 @@
     33.887446,
     13.128284
    ],
+   "tahmin_egilim": [
+    12.802928,
+    13.658322,
+    9.331169,
+    8.575029
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 14.757761,
-   "rmse_sifir": 20.432665
+   "rmse_sifir": 20.432665,
+   "rmse_egilim": 14.441821,
+   "kapsama": [
+    true,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "PETKM_IS": {
    "tahmin": [
@@ -9211,10 +11763,45 @@
     12.359011,
     16.865871
    ],
+   "tahmin_egilim": [
+    4.181622,
+    2.510933,
+    6.135347,
+    6.646387
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 15.671333,
-   "rmse_sifir": 13.049665
+   "rmse_sifir": 13.049665,
+   "rmse_egilim": 8.499273,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "THYAO_IS": {
    "tahmin": [
@@ -9229,10 +11816,45 @@
     -4.005247,
     -6.776512
    ],
+   "tahmin_egilim": [
+    -3.621428,
+    -1.374746,
+    -0.084821,
+    1.283988
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 8.12612,
-   "rmse_sifir": 10.924379
+   "rmse_sifir": 10.924379,
+   "rmse_egilim": 9.439033,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "PGSUS_IS": {
    "tahmin": [
@@ -9247,10 +11869,45 @@
     -9.102555,
     -1.126957
    ],
+   "tahmin_egilim": [
+    -4.780174,
+    -4.879005,
+    -3.19207,
+    -3.085085
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 7.324303,
-   "rmse_sifir": 13.862751
+   "rmse_sifir": 13.862751,
+   "rmse_egilim": 10.283493,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "TAVHL_IS": {
    "tahmin": [
@@ -9265,10 +11922,45 @@
     -9.233602,
     -8.011811
    ],
+   "tahmin_egilim": [
+    -1.712043,
+    0.843459,
+    -0.652107,
+    -0.558306
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 8.18302,
-   "rmse_sifir": 16.968254
+   "rmse_sifir": 16.968254,
+   "rmse_egilim": 16.602642,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "AKBNK_IS": {
    "tahmin": [
@@ -9283,10 +11975,45 @@
     -18.022369,
     1.084217
    ],
+   "tahmin_egilim": [
+    -0.810877,
+    1.826353,
+    1.948997,
+    1.787607
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 8.378091,
-   "rmse_sifir": 14.936676
+   "rmse_sifir": 14.936676,
+   "rmse_egilim": 15.873132,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "GARAN_IS": {
    "tahmin": [
@@ -9301,10 +12028,45 @@
     -10.821354,
     -2.473076
    ],
+   "tahmin_egilim": [
+    -0.238963,
+    0.046905,
+    -0.078182,
+    -0.3029
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 3.366551,
-   "rmse_sifir": 11.535089
+   "rmse_sifir": 11.535089,
+   "rmse_egilim": 11.431723,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "FROTO_IS": {
    "tahmin": [
@@ -9319,10 +12081,45 @@
     -9.011832,
     -0.88889
    ],
+   "tahmin_egilim": [
+    -3.79815,
+    1.497314,
+    0.393563,
+    1.244247
+   ],
    "isaret_tutan": 4,
    "n": 4,
    "rmse": 10.047546,
-   "rmse_sifir": 14.38981
+   "rmse_sifir": 14.38981,
+   "rmse_egilim": 14.181706,
+   "kapsama": [
+    true,
+    false,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "BIMAS_IS": {
    "tahmin": [
@@ -9337,10 +12134,45 @@
     1.657309,
     10.382496
    ],
+   "tahmin_egilim": [
+    4.596995,
+    5.868473,
+    6.398444,
+    6.964298
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 7.044872,
-   "rmse_sifir": 5.687926
+   "rmse_sifir": 5.687926,
+   "rmse_egilim": 5.254338,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "ASELS_IS": {
    "tahmin": [
@@ -9355,10 +12187,45 @@
     3.410561,
     -2.747066
    ],
+   "tahmin_egilim": [
+    2.304564,
+    5.550539,
+    8.704478,
+    11.863999
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 14.583484,
-   "rmse_sifir": 8.936904
+   "rmse_sifir": 8.936904,
+   "rmse_egilim": 11.531077,
+   "kapsama": [
+    false,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "n3a": {
    "tahmin": [
@@ -9373,10 +12240,45 @@
     394.6591,
     -295.1454
    ],
+   "tahmin_egilim": [
+    -54.717002,
+    -28.728036,
+    -14.408553,
+    47.83912
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 258.133008,
-   "rmse_sifir": 274.340626
+   "rmse_sifir": 274.340626,
+   "rmse_egilim": 306.622981,
+   "kapsama": [
+    true,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "n2y": {
    "tahmin": [
@@ -9391,10 +12293,45 @@
     129.4161,
     -42.0134
    ],
+   "tahmin_egilim": [
+    -6.927451,
+    -11.881162,
+    53.698411,
+    91.356115
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 196.311647,
-   "rmse_sifir": 274.04147
+   "rmse_sifir": 274.04147,
+   "rmse_egilim": 282.360115,
+   "kapsama": [
+    true,
+    true,
+    true,
+    true
+   ],
+   "kapsanan": 4,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "n5y": {
    "tahmin": [
@@ -9409,10 +12346,45 @@
     206.6807,
     -127.2468
    ],
+   "tahmin_egilim": [
+    25.556269,
+    22.624844,
+    51.949307,
+    76.548663
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 153.592105,
-   "rmse_sifir": 212.820492
+   "rmse_sifir": 212.820492,
+   "rmse_egilim": 203.560378,
+   "kapsama": [
+    true,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "be_2y": {
    "tahmin": [
@@ -9427,10 +12399,45 @@
     -75.5218,
     -31.9767
    ],
+   "tahmin_egilim": [
+    -18.392777,
+    -25.197957,
+    88.336285,
+    125.226779
+   ],
    "isaret_tutan": 2,
    "n": 4,
    "rmse": 315.391642,
-   "rmse_sifir": 270.0747
+   "rmse_sifir": 270.0747,
+   "rmse_egilim": 303.709166,
+   "kapsama": [
+    false,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 2,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "r2y": {
    "tahmin": [
@@ -9445,10 +12452,45 @@
     159.8593,
     -5.7141
    ],
+   "tahmin_egilim": [
+    10.134306,
+    11.397221,
+    -31.986738,
+    -33.654346
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 128.452261,
-   "rmse_sifir": 82.079566
+   "rmse_sifir": 82.079566,
+   "rmse_egilim": 100.151508,
+   "kapsama": [
+    true,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 3,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "tlref": {
    "tahmin": [
@@ -9463,10 +12505,45 @@
     -5.19,
     -289.52
    ],
+   "tahmin_egilim": [
+    -79.07268,
+    -52.001217,
+    -21.634436,
+    32.870792
+   ],
    "isaret_tutan": 1,
    "n": 4,
    "rmse": 284.707157,
-   "rmse_sifir": 219.34522
+   "rmse_sifir": 219.34522,
+   "rmse_egilim": 262.518242,
+   "kapsama": [
+    false,
+    true,
+    true,
+    false
+   ],
+   "kapsanan": 2,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "net_rezerv_usd": {
    "tahmin": [
@@ -9481,10 +12558,45 @@
     3.485172,
     -6.096413
    ],
+   "tahmin_egilim": [
+    1.883015,
+    0.817094,
+    -5.216307,
+    -5.739242
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 17.933993,
-   "rmse_sifir": 14.947213
+   "rmse_sifir": 14.947213,
+   "rmse_egilim": 16.142737,
+   "kapsama": [
+    false,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 2,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   },
   "swap_haric_net_rezerv_usd": {
    "tahmin": [
@@ -9499,10 +12611,45 @@
     5.006141,
     -5.964189
    ],
+   "tahmin_egilim": [
+    2.719167,
+    1.01896,
+    -5.875727,
+    -6.369988
+   ],
    "isaret_tutan": 3,
    "n": 4,
    "rmse": 19.486373,
-   "rmse_sifir": 14.799585
+   "rmse_sifir": 14.799585,
+   "rmse_egilim": 16.606523,
+   "kapsama": [
+    false,
+    true,
+    false,
+    true
+   ],
+   "kapsanan": 2,
+   "egitimde_kalan_pencereler": [
+    [
+     "2026-05-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-07-24",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18",
+     "2026-09-15"
+    ],
+    [
+     "2026-03-18",
+     "2026-05-18"
+    ]
+   ]
   }
  },
  "emsaller": {
@@ -12328,7 +15475,42 @@
    "usdtry_tcmb_degisim": 3.952597,
    "dibs_2y_bp": 1001.0487,
    "dibs_2y_bas": 36.24664,
-   "dibs_2y_son": 46.257127
+   "dibs_2y_son": 46.257127,
+   "altin_fiyat_etkisi_21g": 7.161592,
+   "haftalik": [
+    {
+     "ilk": "2025-03-19",
+     "son": "2025-03-21",
+     "doviz_satisi": -26.418673,
+     "swap_haric_degisim": -13.888144
+    },
+    {
+     "ilk": "2025-03-24",
+     "son": "2025-03-28",
+     "doviz_satisi": -8.132033,
+     "swap_haric_degisim": -15.710544
+    },
+    {
+     "ilk": "2025-04-02",
+     "son": "2025-04-04",
+     "doviz_satisi": -4.884462,
+     "swap_haric_degisim": -5.334211
+    },
+    {
+     "ilk": "2025-04-07",
+     "son": "2025-04-11",
+     "doviz_satisi": -9.747811,
+     "swap_haric_degisim": -10.315506
+    },
+    {
+     "ilk": "2025-04-14",
+     "son": "2025-04-18",
+     "doviz_satisi": -2.459677,
+     "swap_haric_degisim": 0.04678
+    }
+   ],
+   "swap_haric_donem_dip": 14.526256,
+   "swap_haric_donem_dip_gun": "2025-04-28"
   },
   "2026-03": {
    "aciklama": "petrol şoku (Hürmüz, 2 Mart 2026)",
@@ -12356,7 +15538,42 @@
    "dibs_2y_bas": 35.539312,
    "dibs_2y_son": 43.02362,
    "usdtry_ist18_degisim": 1.183882,
-   "xu100_degisim": -6.756184
+   "xu100_degisim": -6.756184,
+   "altin_fiyat_etkisi_21g": -18.025294,
+   "haftalik": [
+    {
+     "ilk": "2026-03-02",
+     "son": "2026-03-06",
+     "doviz_satisi": -14.664398,
+     "swap_haric_degisim": -13.317732
+    },
+    {
+     "ilk": "2026-03-09",
+     "son": "2026-03-13",
+     "doviz_satisi": -7.075713,
+     "swap_haric_degisim": -11.240454
+    },
+    {
+     "ilk": "2026-03-16",
+     "son": "2026-03-19",
+     "doviz_satisi": 0.757452,
+     "swap_haric_degisim": -10.580411
+    },
+    {
+     "ilk": "2026-03-23",
+     "son": "2026-03-27",
+     "doviz_satisi": -17.239016,
+     "swap_haric_degisim": -22.269379
+    },
+    {
+     "ilk": "2026-03-30",
+     "son": "2026-03-31",
+     "doviz_satisi": -3.535573,
+     "swap_haric_degisim": -3.787377
+    }
+   ],
+   "swap_haric_donem_dip": 19.139936,
+   "swap_haric_donem_dip_gun": "2026-04-06"
   },
   "ust_bant_2026": {
    "ara": "2026-03-02",
@@ -12683,21 +15900,50 @@
    "se": 0.36349,
    "n": 199,
    "ilk": "2010-01",
-   "son": "2026-07"
+   "son": "2026-07",
+   "sonraki_ay": "2026-08",
+   "sonraki_ay_tahmin_milyar": 4.008926,
+   "gecen_yil_ayni_ay_milyar": 3.56842
   },
   "kural_2016": {
    "milyar_usd_yillik_10_dolar": 9.075676,
    "se": 0.465523,
    "n": 127,
    "ilk": "2016-01",
-   "son": "2026-07"
+   "son": "2026-07",
+   "sonraki_ay": "2026-08",
+   "sonraki_ay_tahmin_milyar": 5.212354,
+   "gecen_yil_ayni_ay_milyar": 3.56842
   },
   "kural_2010_gazli": {
    "milyar_usd_yillik_10_dolar": 2.361529,
    "se": 0.210007,
    "n": 199,
    "ilk": "2010-01",
-   "son": "2026-07"
+   "son": "2026-07",
+   "sonraki_ay": "2026-08",
+   "sonraki_ay_tahmin_milyar": 4.469346,
+   "gecen_yil_ayni_ay_milyar": 3.56842
+  },
+  "kural_2010_fiziki": {
+   "milyar_usd_yillik_10_dolar": 4.494877,
+   "se": 0.346632,
+   "n": 199,
+   "ilk": "2010-01",
+   "son": "2026-07",
+   "sonraki_ay": "2026-08",
+   "sonraki_ay_tahmin_milyar": 3.900015,
+   "gecen_yil_ayni_ay_milyar": 3.56842
+  },
+  "kural_2010_gazli_fiziki": {
+   "milyar_usd_yillik_10_dolar": 2.370601,
+   "se": 0.202361,
+   "n": 199,
+   "ilk": "2010-01",
+   "son": "2026-07",
+   "sonraki_ay": "2026-08",
+   "sonraki_ay_tahmin_milyar": 4.468511,
+   "gecen_yil_ayni_ay_milyar": 3.56842
   },
   "senaryo_12ay": {
    "bugun": {
@@ -12751,6 +15997,17 @@
     "petrol_gaz": {
      "ek": 32.316096,
      "cari_gsyh": -4.288816
+    }
+   },
+   "bugun_fiziki": {
+    "brent": 125.44,
+    "petrol": {
+     "ek": 10.753266,
+     "cari_gsyh": -3.022364
+    },
+    "petrol_gaz": {
+     "ek": 20.389179,
+     "cari_gsyh": -3.588311
     }
    }
   }
@@ -12829,11 +16086,15 @@
    "brent_artis": 20.279999,
    "benzin": {
     "artis": 0.386598,
-    "seviye": 4.740598
+    "seviye": 4.740598,
+    "seviye_vadeli_yolu": 5.01083,
+    "pompa_vadeli_farki": 1.0588
    },
    "motorin": {
     "artis": 0.399956,
-    "seviye": 6.598956
+    "seviye": 6.598956,
+    "seviye_vadeli_yolu": 7.322958,
+    "pompa_vadeli_farki": 1.4606
    },
    "tufe_seviye_2000": 0.668938,
    "tufe_seviye_2015": 0.529836
@@ -12842,11 +16103,15 @@
    "brent_artis": 45.279999,
    "benzin": {
     "artis": 0.863172,
-    "seviye": 5.217172
+    "seviye": 5.217172,
+    "seviye_vadeli_yolu": 5.797096,
+    "pompa_vadeli_farki": 1.0588
    },
    "motorin": {
     "artis": 0.892998,
-    "seviye": 7.091998
+    "seviye": 7.091998,
+    "seviye_vadeli_yolu": 8.66238,
+    "pompa_vadeli_farki": 1.4606
    },
    "tufe_seviye_2000": 1.357895,
    "tufe_seviye_2015": 1.075528
@@ -12860,9 +16125,16 @@
    "son_deger": 91.849998,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 1.036398,
    "se": 0.046171,
    "sabit": -3.76413,
+   "ortalama_21g": 4.22699,
+   "yatay_brent_ortalama": -2.075278,
    "125": {
     "orta": 18.074957,
     "alt": 10.881125,
@@ -12889,6 +16161,13 @@
     "seviye_alt": 123.48984,
     "seviye_ust": 143.103662
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 29.551936,
+    "orta_yuzde": 34.382411
+   },
    "mart": 43.52331,
    "mayis_eylul": [
     25.919431,
@@ -12913,9 +16192,16 @@
    "son_deger": 4.7384,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 1.128645,
    "se": 0.120144,
    "sabit": -2.49769,
+   "ortalama_21g": 6.643634,
+   "yatay_brent_ortalama": -2.906747,
    "125": {
     "orta": 21.285233,
     "alt": 5.616516,
@@ -12942,6 +16228,13 @@
     "seviye_alt": 6.110158,
     "seviye_ust": 8.488427
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 33.783745,
+    "orta_yuzde": 40.19126
+   },
    "mart": 56.30162,
    "mayis_eylul": [
     19.150689,
@@ -12966,9 +16259,16 @@
    "son_deger": 3.2952,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.99521,
    "se": 0.121827,
    "sabit": -2.794926,
+   "ortalama_21g": 5.300998,
+   "yatay_brent_ortalama": -3.092145,
    "125": {
     "orta": 18.176247,
     "alt": 6.229038,
@@ -12995,6 +16295,13 @@
     "seviye_alt": 4.152578,
     "seviye_ust": 5.40663
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 29.197115,
+    "orta_yuzde": 33.906439
+   },
    "mart": 48.151387,
    "mayis_eylul": [
     22.43941,
@@ -13019,9 +16326,16 @@
    "son_deger": 3.22,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.082067,
    "se": 0.211865,
    "sabit": -1.886714,
+   "ortalama_21g": -1.590616,
+   "yatay_brent_ortalama": 1.889009,
    "125": {
     "orta": -3.616037,
     "alt": -38.725925,
@@ -13048,6 +16362,13 @@
     "seviye_alt": 2.15148,
     "seviye_ust": 4.350806
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.524839,
+    "orta_yuzde": -4.423995
+   },
    "mart": 1.115497,
    "mayis_eylul": [
     12.300498,
@@ -13072,9 +16393,16 @@
    "son_deger": 4216.299805,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.299747,
    "se": 0.089649,
    "sabit": 5.243501,
+   "ortalama_21g": 0.399683,
+   "yatay_brent_ortalama": 4.304686,
    "125": {
     "orta": -1.072792,
     "alt": -12.411346,
@@ -13101,6 +16429,13 @@
     "seviye_alt": 3515.14204,
     "seviye_ust": 4437.448281
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.39216,
+    "orta_yuzde": -4.297101
+   },
    "mart": -0.197911,
    "mayis_eylul": [
     -6.817934,
@@ -13125,9 +16460,16 @@
    "son_deger": 60.669998,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.503566,
    "se": 0.212165,
    "sabit": 9.203267,
+   "ortalama_21g": 2.298266,
+   "yatay_brent_ortalama": 13.294862,
    "125": {
     "orta": -1.407937,
     "alt": -25.606575,
@@ -13154,6 +16496,13 @@
     "seviye_alt": 42.650933,
     "seviye_ust": 69.830346
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -6.984387,
+    "orta_yuzde": -6.746059
+   },
    "mart": 5.032751,
    "mayis_eylul": [
     -5.8766,
@@ -13178,9 +16527,16 @@
    "son_deger": 6.6425,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.231275,
    "se": 0.045333,
    "sabit": 5.444198,
+   "ortalama_21g": 2.451074,
+   "yatay_brent_ortalama": 4.622117,
    "125": {
     "orta": 0.570755,
     "alt": -6.310595,
@@ -13207,6 +16563,13 @@
     "seviye_alt": 5.970366,
     "seviye_ust": 6.870596
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.99036,
+    "orta_yuzde": -1.970683
+   },
    "mart": -1.412377,
    "mayis_eylul": [
     2.723291,
@@ -13231,9 +16594,16 @@
    "son_deger": 7811.540039,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.185564,
    "se": 0.033492,
    "sabit": 3.798686,
+   "ortalama_21g": 1.195653,
+   "yatay_brent_ortalama": 1.945074,
    "125": {
     "orta": -0.111548,
     "alt": -5.27613,
@@ -13260,6 +16630,13 @@
     "seviye_alt": 7162.942491,
     "seviye_ust": 7943.767376
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -2.166472,
+    "orta_yuzde": -2.143173
+   },
    "mart": -3.24533,
    "mayis_eylul": [
     3.813356,
@@ -13284,9 +16661,16 @@
    "son_deger": 30883.150391,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.191586,
    "se": 0.050429,
    "sabit": 4.356283,
+   "ortalama_21g": 1.639502,
+   "yatay_brent_ortalama": 1.871299,
    "125": {
     "orta": 0.319169,
     "alt": -8.451444,
@@ -13313,6 +16697,13 @@
     "seviye_alt": 27422.988723,
     "seviye_ust": 32640.791333
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.802434,
+    "orta_yuzde": -1.786288
+   },
    "mart": -1.125713,
    "mayis_eylul": [
     8.347121,
@@ -13337,9 +16728,16 @@
    "son_deger": 2806.97998,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.219528,
    "se": 0.038821,
    "sabit": 3.554242,
+   "ortalama_21g": 1.269111,
+   "yatay_brent_ortalama": 2.227922,
    "125": {
     "orta": -1.07168,
     "alt": -8.871675,
@@ -13366,6 +16764,13 @@
     "seviye_alt": 2469.53019,
     "seviye_ust": 2882.642347
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -3.502715,
+    "orta_yuzde": -3.44208
+   },
    "mart": -6.556207,
    "mayis_eylul": [
     -0.064834,
@@ -13390,9 +16795,16 @@
    "son_deger": 631.549988,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.201941,
    "se": 0.027241,
    "sabit": 3.301802,
+   "ortalama_21g": 0.978578,
+   "yatay_brent_ortalama": 1.876281,
    "125": {
     "orta": -0.953514,
     "alt": -5.212688,
@@ -13419,6 +16831,13 @@
     "seviye_alt": 577.275338,
     "seviye_ust": 629.753366
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -3.189788,
+    "orta_yuzde": -3.139451
+   },
    "mart": -3.832425,
    "mayis_eylul": [
     -2.653891,
@@ -13443,9 +16862,18 @@
    "son_deger": 25087.269531,
    "son_gun": "2026-10-09",
    "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [
+     "gecmis"
+    ],
+    "hukum": "orta"
+   },
    "egim": -0.247873,
    "se": 0.036854,
    "sabit": 3.447275,
+   "ortalama_21g": 0.455345,
+   "yatay_brent_ortalama": 1.767775,
    "125": {
     "orta": -1.775924,
     "alt": -6.956332,
@@ -13472,6 +16900,13 @@
     "seviye_alt": 22331.017558,
     "seviye_ust": 24849.580595
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.520844,
+    "orta_yuzde": -4.420176
+   },
    "mart": -6.171568,
    "mayis_eylul": [
     -1.609172,
@@ -13496,9 +16931,16 @@
    "son_deger": 7803.330078,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.189546,
    "se": 0.028107,
    "sabit": 1.940253,
+   "ortalama_21g": -0.130907,
+   "yatay_brent_ortalama": 0.574702,
    "125": {
     "orta": -2.053874,
     "alt": -7.719691,
@@ -13525,6 +16967,13 @@
     "seviye_alt": 6975.117161,
     "seviye_ust": 7819.010468
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.152886,
+    "orta_yuzde": -4.067835
+   },
    "mart": -4.796363,
    "mayis_eylul": [
     -5.33423,
@@ -13549,9 +16998,16 @@
    "son_deger": 10552.099609,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.146788,
    "se": 0.036671,
    "sabit": 2.975308,
+   "ortalama_21g": 0.923107,
+   "yatay_brent_ortalama": 1.334789,
    "125": {
     "orta": -0.117814,
     "alt": -4.729769,
@@ -13578,6 +17034,13 @@
     "seviye_alt": 9783.780613,
     "seviye_ust": 10762.225966
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.743325,
+    "orta_yuzde": -1.728217
+   },
    "mart": -2.405508,
    "mayis_eylul": [
     -3.275918,
@@ -13602,9 +17065,16 @@
    "son_deger": 69030.921875,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.351648,
    "se": 0.027958,
    "sabit": 7.0723,
+   "ortalama_21g": 2.625587,
+   "yatay_brent_ortalama": 2.085256,
    "125": {
     "orta": -0.337664,
     "alt": -9.540519,
@@ -13631,6 +17101,13 @@
     "seviye_alt": 58859.718579,
     "seviye_ust": 70737.2855
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.231783,
+    "orta_yuzde": -4.143493
+   },
    "mart": -2.374029,
    "mayis_eylul": [
     3.92374,
@@ -13655,9 +17132,16 @@
    "son_deger": 24211.349609,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.142501,
    "se": 0.049224,
    "sabit": 2.661621,
+   "ortalama_21g": -0.542461,
+   "yatay_brent_ortalama": -0.034573,
    "125": {
     "orta": -0.34117,
     "alt": -7.472853,
@@ -13684,6 +17168,13 @@
     "seviye_alt": 21810.390388,
     "seviye_ust": 25342.206177
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.91921,
+    "orta_yuzde": -1.900911
+   },
    "mart": -2.060058,
    "mayis_eylul": [
     -1.871939,
@@ -13708,9 +17199,16 @@
    "son_deger": 3813.791016,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.157353,
    "se": 0.036178,
    "sabit": 2.363252,
+   "ortalama_21g": -0.17826,
+   "yatay_brent_ortalama": 0.356519,
    "125": {
     "orta": -0.95251,
     "alt": -6.650969,
@@ -13737,6 +17235,13 @@
     "seviye_alt": 3462.274576,
     "seviye_ust": 3891.885346
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -2.695025,
+    "orta_yuzde": -2.659033
+   },
    "mart": -0.46873,
    "mayis_eylul": [
     1.957859,
@@ -13761,9 +17266,16 @@
    "son_deger": 66.800003,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.322201,
    "se": 0.039054,
    "sabit": 6.762452,
+   "ortalama_21g": 1.888213,
+   "yatay_brent_ortalama": 2.003666,
    "125": {
     "orta": -0.027003,
     "alt": -8.173447,
@@ -13790,6 +17302,13 @@
     "seviye_alt": 58.029873,
     "seviye_ust": 68.334849
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -3.595028,
+    "orta_yuzde": -3.531175
+   },
    "mart": -5.591253,
    "mayis_eylul": [
     2.068345,
@@ -13814,9 +17333,16 @@
    "son_deger": 65.080002,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.098926,
    "se": 0.048421,
    "sabit": 4.405004,
+   "ortalama_21g": 3.634643,
+   "yatay_brent_ortalama": 2.847671,
    "125": {
     "orta": 6.489583,
     "alt": -2.615319,
@@ -13843,6 +17369,13 @@
     "seviye_alt": 64.653233,
     "seviye_ust": 77.328367
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 7.585081,
+    "orta_yuzde": 7.880161
+   },
    "mart": 8.348584,
    "mayis_eylul": [
     9.626806,
@@ -13867,9 +17400,16 @@
    "son_deger": 191.520004,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.326755,
    "se": 0.045141,
    "sabit": 2.009594,
+   "ortalama_21g": 3.76878,
+   "yatay_brent_ortalama": 1.791398,
    "125": {
     "orta": 8.895018,
     "alt": -0.81402,
@@ -13896,6 +17436,13 @@
     "seviye_alt": 201.785151,
     "seviye_ust": 244.650457
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 12.513478,
+    "orta_yuzde": 13.330119
+   },
    "mart": 17.588187,
    "mayis_eylul": [
     9.844199,
@@ -13920,9 +17467,16 @@
    "son_deger": 27.450001,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.4987,
    "se": 0.061533,
    "sabit": 4.3221,
+   "ortalama_21g": 1.18775,
+   "yatay_brent_ortalama": 5.017134,
    "125": {
     "orta": -6.186554,
     "alt": -15.284232,
@@ -13949,6 +17503,13 @@
     "seviye_alt": 21.441429,
     "seviye_ust": 25.889278
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -11.709111,
+    "orta_yuzde": -11.049585
+   },
    "mart": -20.45082,
    "mayis_eylul": [
     -8.8706,
@@ -13973,9 +17534,16 @@
    "son_deger": 112.849998,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.20132,
    "se": 0.036411,
    "sabit": 1.725412,
+   "ortalama_21g": -0.55235,
+   "yatay_brent_ortalama": 1.740322,
    "125": {
     "orta": -2.516826,
     "alt": -9.232838,
@@ -14002,6 +17570,13 @@
     "seviye_alt": 99.239511,
     "seviye_ust": 113.390343
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.746227,
+    "orta_yuzde": -4.635355
+   },
    "mart": -4.828614,
    "mayis_eylul": [
     -3.455753,
@@ -14026,9 +17601,16 @@
    "son_deger": 83.43,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.210782,
    "se": 0.053131,
    "sabit": 3.736097,
+   "ortalama_21g": 0.744145,
+   "yatay_brent_ortalama": 1.19004,
    "125": {
     "orta": -0.705525,
     "alt": -7.590884,
@@ -14055,6 +17637,13 @@
     "seviye_alt": 74.320164,
     "seviye_ust": 85.512527
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -3.039706,
+    "orta_yuzde": -2.993972
+   },
    "mart": -6.51131,
    "mayis_eylul": [
     4.08705,
@@ -14079,9 +17668,16 @@
    "son_deger": 198.779999,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.214106,
    "se": 0.066772,
    "sabit": 5.624464,
+   "ortalama_21g": 2.653468,
+   "yatay_brent_ortalama": 2.212144,
    "125": {
     "orta": 1.11279,
     "alt": -10.616808,
@@ -14108,6 +17704,13 @@
     "seviye_alt": 172.105506,
     "seviye_ust": 217.124958
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.258205,
+    "orta_yuzde": -1.250323
+   },
    "mart": -1.095725,
    "mayis_eylul": [
     12.18993,
@@ -14132,9 +17735,16 @@
    "son_deger": 41.41,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.033684,
    "se": 0.041605,
    "sabit": -1.00744,
+   "ortalama_21g": -0.753027,
+   "yatay_brent_ortalama": -2.085134,
    "125": {
     "orta": -0.297646,
     "alt": -7.589657,
@@ -14161,6 +17771,13 @@
     "seviye_alt": 38.572744,
     "seviye_ust": 44.73824
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 0.075368,
+    "orta_yuzde": 0.075396
+   },
    "mart": 0.751799,
    "mayis_eylul": [
     -4.928863,
@@ -14185,9 +17802,16 @@
    "son_deger": 206.649994,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.224611,
    "se": 0.079725,
    "sabit": 1.828901,
+   "ortalama_21g": -0.017981,
+   "yatay_brent_ortalama": 1.034001,
    "125": {
     "orta": -2.90413,
     "alt": -14.22965,
@@ -14214,6 +17838,13 @@
     "seviye_alt": 171.455984,
     "seviye_ust": 216.532551
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -5.391455,
+    "orta_yuzde": -5.248693
+   },
    "mart": -2.805846,
    "mayis_eylul": [
     -5.180631,
@@ -14238,9 +17869,16 @@
    "son_deger": 36.060001,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.023714,
    "se": 0.055637,
    "sabit": 0.437155,
+   "ortalama_21g": -0.560781,
+   "yatay_brent_ortalama": -1.671293,
    "125": {
     "orta": -0.062547,
     "alt": -8.015646,
@@ -14267,6 +17905,13 @@
     "seviye_alt": 33.062789,
     "seviye_ust": 38.941557
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -0.325153,
+    "orta_yuzde": -0.324625
+   },
    "mart": -3.130135,
    "mayis_eylul": [
     -5.650646,
@@ -14291,9 +17936,16 @@
    "son_deger": 19.32,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.509857,
    "se": 0.10118,
    "sabit": 7.325994,
+   "ortalama_21g": 0.539883,
+   "yatay_brent_ortalama": 1.176915,
    "125": {
     "orta": -3.417774,
     "alt": -12.364254,
@@ -14320,6 +17972,13 @@
     "seviye_alt": 15.425313,
     "seviye_ust": 18.765129
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -9.063888,
+    "orta_yuzde": -8.665252
+   },
    "mart": -20.051816,
    "mayis_eylul": [
     -9.23733,
@@ -14344,9 +18003,16 @@
    "son_deger": 46.029999,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.272878,
    "se": 0.039655,
    "sabit": 2.019766,
+   "ortalama_21g": -1.251611,
+   "yatay_brent_ortalama": 0.215992,
    "125": {
     "orta": -3.730338,
     "alt": -9.220148,
@@ -14373,6 +18039,13 @@
     "seviye_alt": 39.879248,
     "seviye_ust": 44.63958
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -6.752159,
+    "orta_yuzde": -6.529246
+   },
    "mart": -11.00227,
    "mayis_eylul": [
     -6.943868,
@@ -14397,9 +18070,16 @@
    "son_deger": 177.240005,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.572934,
    "se": 0.092668,
    "sabit": 15.385381,
+   "ortalama_21g": 6.575779,
+   "yatay_brent_ortalama": 6.305168,
    "125": {
     "orta": 3.312457,
     "alt": -18.477933,
@@ -14426,6 +18106,13 @@
     "seviye_alt": 132.494599,
     "seviye_ust": 205.572835
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -3.032161,
+    "orta_yuzde": -2.986653
+   },
    "mart": 0.914092,
    "mayis_eylul": [
     14.500282,
@@ -14450,9 +18137,18 @@
    "son_deger": 14.84,
    "son_gun": "2026-10-09",
    "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [
+     "gecmis"
+    ],
+    "hukum": "orta"
+   },
    "egim": 0.819408,
    "se": 0.151618,
    "sabit": -10.210235,
+   "ortalama_21g": -1.494862,
+   "yatay_brent_ortalama": -11.147784,
    "125": {
     "orta": 7.056424,
     "alt": -24.669022,
@@ -14479,6 +18175,13 @@
     "seviye_alt": 13.455638,
     "seviye_ust": 25.410802
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 16.130479,
+    "orta_yuzde": 17.504305
+   },
    "mart": 21.234116,
    "mayis_eylul": [
     1.926405,
@@ -14503,9 +18206,16 @@
    "son_deger": 98.470001,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.895704,
    "se": 0.129436,
    "sabit": -6.757289,
+   "ortalama_21g": 2.384481,
+   "yatay_brent_ortalama": -4.622395,
    "125": {
     "orta": 12.117082,
     "alt": -17.470611,
@@ -14532,6 +18242,13 @@
     "seviye_alt": 97.325263,
     "seviye_ust": 175.985091
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 22.036029,
+    "orta_yuzde": 24.652576
+   },
    "mart": 16.574591,
    "mayis_eylul": [
     27.006204,
@@ -14556,9 +18273,16 @@
    "son_deger": 48.900002,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 1.574283,
    "se": 0.347545,
    "sabit": -10.337384,
+   "ortalama_21g": 3.474109,
+   "yatay_brent_ortalama": -10.998494,
    "125": {
     "orta": 22.836075,
     "alt": -19.212712,
@@ -14585,6 +18309,13 @@
     "seviye_alt": 52.467665,
     "seviye_ust": 127.757104
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 40.269545,
+    "orta_yuzde": 49.585126
+   },
    "mart": 82.714857,
    "mayis_eylul": [
     4.338642,
@@ -14609,9 +18340,16 @@
    "son_deger": 4.8,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.73905,
    "se": 0.125609,
    "sabit": 4.462629,
+   "ortalama_21g": 11.537118,
+   "yatay_brent_ortalama": -0.206897,
    "125": {
     "orta": 20.035957,
     "alt": -10.929806,
@@ -14631,6 +18369,13 @@
     "seviye": 5.135104,
     "seviye_alt": 4.825383,
     "seviye_ust": 5.444825
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 28.220125,
+    "orta_yuzde": null
    },
    "mart": 33.0,
    "mayis_eylul": [
@@ -14655,10 +18400,19 @@
    "birim": "bp",
    "son_deger": 5.24,
    "son_gun": "2026-10-09",
-   "kanit": "guclu",
+   "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [
+     "egilim"
+    ],
+    "hukum": "orta"
+   },
    "egim": 0.430256,
    "se": 0.13745,
    "sabit": 6.79311,
+   "ortalama_21g": 9.925764,
+   "yatay_brent_ortalama": 5.586207,
    "125": {
     "orta": 15.859504,
     "alt": -12.927958,
@@ -14678,6 +18432,13 @@
     "seviye": 5.47704,
     "seviye_alt": 5.185856,
     "seviye_ust": 5.768224
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 20.624117,
+    "orta_yuzde": null
    },
    "mart": 21.0,
    "mayis_eylul": [
@@ -14703,9 +18464,16 @@
    "son_deger": 5.6,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.281945,
    "se": 0.105688,
    "sabit": 5.842774,
+   "ortalama_21g": 7.864629,
+   "yatay_brent_ortalama": 8.568966,
    "125": {
     "orta": 11.783958,
     "alt": -10.83418,
@@ -14725,6 +18493,13 @@
     "seviye": 5.769244,
     "seviye_alt": 5.540859,
     "seviye_ust": 5.99763
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 14.906196,
+    "orta_yuzde": null
    },
    "mart": 20.0,
    "mayis_eylul": [
@@ -14750,9 +18525,16 @@
    "son_deger": 2.34,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.293761,
    "se": 0.059745,
    "sabit": 1.885502,
+   "ortalama_21g": -0.026201,
+   "yatay_brent_ortalama": -3.068966,
    "125": {
     "orta": 8.075674,
     "alt": -6.419785,
@@ -14772,6 +18554,13 @@
     "seviye": 2.474316,
     "seviye_alt": 2.33021,
     "seviye_ust": 2.618421
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 11.328762,
+    "orta_yuzde": null
    },
    "mart": 27.0,
    "mayis_eylul": [
@@ -14796,10 +18585,19 @@
    "birim": "bp",
    "son_deger": 2.91,
    "son_gun": "2026-10-09",
-   "kanit": "guclu",
+   "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [
+     "egilim"
+    ],
+    "hukum": "orta"
+   },
    "egim": 0.31566,
    "se": 0.151014,
    "sabit": 4.433372,
+   "ortalama_21g": 9.375546,
+   "yatay_brent_ortalama": 6.534483,
    "125": {
     "orta": 11.084983,
     "alt": -17.177351,
@@ -14819,6 +18617,13 @@
     "seviye": 3.078401,
     "seviye_alt": 2.793345,
     "seviye_ust": 3.363457
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 14.580568,
+    "orta_yuzde": null
    },
    "mart": 7.0,
    "mayis_eylul": [
@@ -14844,9 +18649,16 @@
    "son_deger": 102.209999,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.059147,
    "se": 0.016231,
    "sabit": -0.729812,
+   "ortalama_21g": 0.167683,
+   "yatay_brent_ortalama": -0.60704,
    "125": {
     "orta": 0.516536,
     "alt": -1.786947,
@@ -14873,6 +18685,13 @@
     "seviye_alt": 101.447745,
     "seviye_ust": 106.315743
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 1.171522,
+    "orta_yuzde": 1.178411
+   },
    "mart": 2.97106,
    "mayis_eylul": [
     0.882944,
@@ -14897,9 +18716,18 @@
    "son_deger": 1.120574,
    "son_gun": "2026-10-09",
    "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [
+     "gecmis"
+    ],
+    "hukum": "orta"
+   },
    "egim": -0.060735,
    "se": 0.016563,
    "sabit": 0.703965,
+   "ortalama_21g": -0.176249,
+   "yatay_brent_ortalama": 0.708215,
    "125": {
     "orta": -0.57585,
     "alt": -3.099476,
@@ -14926,6 +18754,13 @@
     "seviye_alt": 1.07399,
     "seviye_ust": 1.130475
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.248425,
+    "orta_yuzde": -1.240665
+   },
    "mart": -3.449452,
    "mayis_eylul": [
     -0.925281,
@@ -14950,9 +18785,16 @@
    "son_deger": 158.246002,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.059313,
    "se": 0.029301,
    "sabit": -0.882639,
+   "ortalama_21g": 0.266889,
+   "yatay_brent_ortalama": 0.347769,
    "125": {
     "orta": 0.367203,
     "alt": -2.697433,
@@ -14979,6 +18821,13 @@
     "seviye_alt": 155.45257,
     "seviye_ust": 165.824987
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 1.024026,
+    "orta_yuzde": 1.029287
+   },
    "mart": 4.131464,
    "mayis_eylul": [
     0.112164,
@@ -15003,9 +18852,16 @@
    "son_deger": 1.323382,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.045154,
    "se": 0.013436,
    "sabit": 0.579726,
+   "ortalama_21g": 0.03111,
+   "yatay_brent_ortalama": 0.841993,
    "125": {
     "orta": -0.371757,
     "alt": -2.858791,
@@ -15032,6 +18888,13 @@
     "seviye_alt": 1.275306,
     "seviye_ust": 1.340839
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -0.871785,
+    "orta_yuzde": -0.867996
+   },
    "mart": -2.321065,
    "mayis_eylul": [
     -0.635102,
@@ -15056,9 +18919,16 @@
    "son_deger": 0.83,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.073576,
    "se": 0.01403,
    "sabit": -0.848819,
+   "ortalama_21g": 0.30313,
+   "yatay_brent_ortalama": -0.542489,
    "125": {
     "orta": 0.701592,
     "alt": -2.052909,
@@ -15085,6 +18955,13 @@
     "seviye_alt": 0.824347,
     "seviye_ust": 0.870547
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 1.516371,
+    "orta_yuzde": 1.527926
+   },
    "mart": 2.871537,
    "mayis_eylul": [
     0.332129,
@@ -15109,9 +18986,16 @@
    "son_deger": 1.42528,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.031353,
    "se": 0.014418,
    "sabit": -0.554824,
+   "ortalama_21g": 0.056952,
+   "yatay_brent_ortalama": -0.832444,
    "125": {
     "orta": 0.105852,
     "alt": -2.143969,
@@ -15138,6 +19022,13 @@
     "seviye_alt": 1.402685,
     "seviye_ust": 1.467995
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 0.453053,
+    "orta_yuzde": 0.454081
+   },
    "mart": 0.695033,
    "mayis_eylul": [
     0.323015,
@@ -15162,9 +19053,16 @@
    "son_deger": 9.55019,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.060935,
    "se": 0.028988,
    "sabit": -2.294568,
+   "ortalama_21g": -0.552364,
+   "yatay_brent_ortalama": -0.794421,
    "125": {
     "orta": -1.01054,
     "alt": -4.807853,
@@ -15191,6 +19089,13 @@
     "seviye_alt": 9.196337,
     "seviye_ust": 9.937601
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -0.335752,
+    "orta_yuzde": -0.335189
+   },
    "mart": 0.894872,
    "mayis_eylul": [
     -1.36931,
@@ -15215,9 +19120,16 @@
    "son_deger": 0.698617,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.07289,
    "se": 0.023905,
    "sabit": 2.148071,
+   "ortalama_21g": 0.702739,
+   "yatay_brent_ortalama": 1.365923,
    "125": {
     "orta": 0.612131,
     "alt": -2.915575,
@@ -15244,6 +19156,13 @@
     "seviye_alt": 0.669381,
     "seviye_ust": 0.718752
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -0.195043,
+    "orta_yuzde": -0.194853
+   },
    "mart": -0.915128,
    "mayis_eylul": [
     0.027195,
@@ -15268,9 +19187,16 @@
    "son_deger": 96.76,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.048088,
    "se": 0.011149,
    "sabit": 0.247067,
+   "ortalama_21g": 0.777757,
+   "yatay_brent_ortalama": 0.717701,
    "125": {
     "orta": 1.260374,
     "alt": -0.522241,
@@ -15297,6 +19223,13 @@
     "seviye_alt": 97.093536,
     "seviye_ust": 100.638498
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 1.792892,
+    "orta_yuzde": 1.809061
+   },
    "mart": 2.693274,
    "mayis_eylul": [
     3.966796,
@@ -15321,9 +19254,16 @@
    "son_deger": 1340.25,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.097881,
    "se": 0.053982,
    "sabit": -2.45893,
+   "ortalama_21g": -0.506603,
+   "yatay_brent_ortalama": -0.5235,
    "125": {
     "orta": -0.396378,
     "alt": -5.27103,
@@ -15350,6 +19290,13 @@
     "seviye_alt": 1288.687566,
     "seviye_ust": 1433.117278
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 0.687544,
+    "orta_yuzde": 0.689913
+   },
    "mart": 4.315511,
    "mayis_eylul": [
     1.515621,
@@ -15374,9 +19321,16 @@
    "son_deger": 16.4989,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.172992,
    "se": 0.020903,
    "sabit": -2.558478,
+   "ortalama_21g": -0.495186,
+   "yatay_brent_ortalama": -2.026989,
    "125": {
     "orta": 1.086827,
     "alt": -2.270909,
@@ -15403,6 +19357,13 @@
     "seviye_alt": 16.64073,
     "seviye_ust": 17.806277
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 3.002525,
+    "orta_yuzde": 3.048056
+   },
    "mart": 5.803605,
    "mayis_eylul": [
     1.648655,
@@ -15427,9 +19388,16 @@
    "son_deger": 18.39,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.113298,
    "se": 0.026515,
    "sabit": -1.922067,
+   "ortalama_21g": -0.398284,
+   "yatay_brent_ortalama": -1.436369,
    "125": {
     "orta": 0.465369,
     "alt": -3.860546,
@@ -15456,6 +19424,13 @@
     "seviye_alt": 18.063809,
     "seviye_ust": 19.694206
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 1.720026,
+    "orta_yuzde": 1.734904
+   },
    "mart": 4.174313,
    "mayis_eylul": [
     -0.141189,
@@ -15480,9 +19455,16 @@
    "son_deger": 4.9869,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.046458,
    "se": 0.030678,
    "sabit": -2.014539,
+   "ortalama_21g": -0.456947,
+   "yatay_brent_ortalama": 0.362328,
    "125": {
     "orta": -1.035567,
     "alt": -4.747989,
@@ -15509,6 +19491,13 @@
     "seviye_alt": 4.793426,
     "seviye_ust": 5.168657
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -0.521094,
+    "orta_yuzde": -0.519738
+   },
    "mart": 0.848424,
    "mayis_eylul": [
     0.248776,
@@ -15533,9 +19522,16 @@
    "son_deger": 3.9092,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 0.092114,
    "se": 0.019622,
    "sabit": -0.851477,
+   "ortalama_21g": 0.431913,
+   "yatay_brent_ortalama": -0.910012,
    "125": {
     "orta": 1.089567,
     "alt": -2.266376,
@@ -15562,6 +19558,13 @@
     "seviye_alt": 3.885095,
     "seviye_ust": 4.157435
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 2.109634,
+    "orta_yuzde": 2.132044
+   },
    "mart": 4.808566,
    "mayis_eylul": [
     1.323386,
@@ -15586,9 +19589,16 @@
    "son_deger": 77.230003,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.043597,
    "se": 0.006835,
    "sabit": 0.139782,
+   "ortalama_21g": -0.330502,
+   "yatay_brent_ortalama": 0.070558,
    "125": {
     "orta": -0.778898,
     "alt": -2.446779,
@@ -15615,6 +19625,13 @@
     "seviye_alt": 74.773524,
     "seviye_ust": 77.29559
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.261686,
+    "orta_yuzde": -1.25376
+   },
    "mart": -1.76023,
    "mayis_eylul": [
     -1.385878,
@@ -15639,9 +19656,16 @@
    "son_deger": 102.410004,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.053081,
    "se": 0.008386,
    "sabit": -0.194397,
+   "ortalama_21g": -0.727554,
+   "yatay_brent_ortalama": -0.481533,
    "125": {
     "orta": -1.312918,
     "alt": -3.417897,
@@ -15668,6 +19692,13 @@
     "seviye_alt": 98.020606,
     "seviye_ust": 102.2251
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -1.900728,
+    "orta_yuzde": -1.882778
+   },
    "mart": -2.71329,
    "mayis_eylul": [
     -2.186579,
@@ -15692,9 +19723,16 @@
    "son_deger": 91.169998,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.090173,
    "se": 0.012955,
    "sabit": 0.580243,
+   "ortalama_21g": -0.398559,
+   "yatay_brent_ortalama": 0.134363,
    "125": {
     "orta": -1.319897,
     "alt": -3.815725,
@@ -15721,6 +19759,13 @@
     "seviye_alt": 86.332172,
     "seviye_ust": 90.737472
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -2.318468,
+    "orta_yuzde": -2.291798
+   },
    "mart": -3.396516,
    "mayis_eylul": [
     -2.143419,
@@ -15744,10 +19789,19 @@
    "birim": "log",
    "son_deger": 49.341309,
    "son_gun": "2026-10-09",
-   "kanit": "guclu",
+   "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [
+     "egilim"
+    ],
+    "hukum": "orta"
+   },
    "egim": -0.00292,
    "se": 0.004186,
    "sabit": 1.429217,
+   "ortalama_21g": 1.403184,
+   "yatay_brent_ortalama": 1.268238,
    "125": {
     "orta": 1.367677,
     "alt": 0.93973,
@@ -15774,6 +19828,13 @@
     "seviye_alt": 49.769897,
     "seviye_ust": 50.219409
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 1.335337,
+    "orta_yuzde": 1.344292
+   },
    "mart": 1.119106,
    "mayis_eylul": [
     1.615157,
@@ -15798,9 +19859,16 @@
    "son_deger": 55.240719,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.063826,
    "se": 0.019031,
    "sabit": 2.142872,
+   "ortalama_21g": 1.231595,
+   "yatay_brent_ortalama": 2.003605,
    "125": {
     "orta": 0.797922,
     "alt": -1.717678,
@@ -15827,6 +19895,13 @@
     "seviye_alt": 53.635618,
     "seviye_ust": 56.479177
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 0.091118,
+    "orta_yuzde": 0.091159
+   },
    "mart": -1.212076,
    "mayis_eylul": [
     0.100511,
@@ -15851,9 +19926,18 @@
    "son_deger": 12266.0,
    "son_gun": "2026-10-09",
    "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [
+     "gecmis"
+    ],
+    "hukum": "orta"
+   },
    "egim": -0.290869,
    "se": 0.073418,
    "sabit": 5.784018,
+   "ortalama_21g": 1.686076,
+   "yatay_brent_ortalama": 3.157615,
    "125": {
     "orta": -0.345194,
     "alt": -14.180196,
@@ -15880,6 +19964,13 @@
     "seviye_alt": 10111.170832,
     "seviye_ust": 13290.566366
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -3.566246,
+    "orta_yuzde": -3.503405
+   },
    "mart": -8.139843,
    "mayis_eylul": [
     -3.903019,
@@ -15904,9 +19995,18 @@
    "son_deger": 248.594945,
    "son_gun": "2026-10-09",
    "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": true,
+    "orta_sebep": [
+     "gecmis"
+    ],
+    "hukum": "orta"
+   },
    "egim": -0.287948,
    "se": 0.074437,
    "sabit": 4.354801,
+   "ortalama_21g": 0.282892,
+   "yatay_brent_ortalama": 1.889377,
    "125": {
     "orta": -1.712871,
     "alt": -15.732032,
@@ -15933,6 +20033,13 @@
     "seviye_alt": 201.895163,
     "seviye_ust": 266.305835
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.901583,
+    "orta_yuzde": -4.783394
+   },
    "mart": -9.258949,
    "mayis_eylul": [
     -5.518175,
@@ -15957,9 +20064,16 @@
    "son_deger": 15870.799805,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.624216,
    "se": 0.076675,
    "sabit": 8.219048,
+   "ortalama_21g": 1.149606,
+   "yatay_brent_ortalama": 5.026097,
    "125": {
     "orta": -4.934502,
     "alt": -19.749032,
@@ -15986,6 +20100,13 @@
     "seviye_alt": 11620.478478,
     "seviye_ust": 15640.860096
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -11.847017,
+    "orta_yuzde": -11.172168
+   },
    "mart": -17.155062,
    "mayis_eylul": [
     -11.529763,
@@ -16010,9 +20131,16 @@
    "son_deger": 16011.5,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.153126,
    "se": 0.08063,
    "sabit": 4.84799,
+   "ortalama_21g": 1.913343,
+   "yatay_brent_ortalama": 2.196411,
    "125": {
     "orta": 1.621306,
     "alt": -13.327068,
@@ -16039,6 +20167,13 @@
     "seviye_alt": 13649.55881,
     "seviye_ust": 18347.568616
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -0.074396,
+    "orta_yuzde": -0.074368
+   },
    "mart": -4.607825,
    "mayis_eylul": [
     3.257125,
@@ -16063,9 +20198,16 @@
    "son_deger": 34.130001,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.252688,
    "se": 0.073623,
    "sabit": 4.730332,
+   "ortalama_21g": 0.715407,
+   "yatay_brent_ortalama": 2.104261,
    "125": {
     "orta": -0.594326,
     "alt": -13.567033,
@@ -16092,6 +20234,13 @@
     "seviye_alt": 28.483124,
     "seviye_ust": 36.855855
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -3.392566,
+    "orta_yuzde": -3.335663
+   },
    "mart": -8.911777,
    "mayis_eylul": [
     -6.797226,
@@ -16115,10 +20264,19 @@
    "birim": "log",
    "son_deger": 386.25,
    "son_gun": "2026-10-09",
-   "kanit": "guclu",
+   "kanit": "orta",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [
+     "egilim"
+    ],
+    "hukum": "orta"
+   },
    "egim": 0.199558,
    "se": 0.111439,
    "sabit": 9.04463,
+   "ortalama_21g": 8.046996,
+   "yatay_brent_ortalama": 4.704373,
    "125": {
     "orta": 13.249739,
     "alt": -5.063331,
@@ -16145,6 +20303,13 @@
     "seviye_alt": 380.548729,
     "seviye_ust": 549.559847
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 15.459627,
+    "orta_yuzde": 16.718664
+   },
    "mart": 18.684451,
    "mayis_eylul": [
     0.394476,
@@ -16169,9 +20334,16 @@
    "son_deger": 20.559999,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 0.265568,
    "se": 0.138826,
    "sabit": 1.447409,
+   "ortalama_21g": 1.843182,
+   "yatay_brent_ortalama": -1.7481,
    "125": {
     "orta": 7.043491,
     "alt": -8.861359,
@@ -16198,6 +20370,13 @@
     "seviye_alt": 19.609332,
     "seviye_ust": 27.341253
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 9.98437,
+    "orta_yuzde": 10.49982
+   },
    "mart": 5.902018,
    "mayis_eylul": [
     14.461623,
@@ -16222,9 +20401,16 @@
    "son_deger": 287.5,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.211876,
    "se": 0.120803,
    "sabit": 2.105454,
+   "ortalama_21g": -0.162346,
+   "yatay_brent_ortalama": -2.06823,
    "125": {
     "orta": -2.359224,
     "alt": -15.832484,
@@ -16251,6 +20437,13 @@
     "seviye_alt": 234.890676,
     "seviye_ust": 310.716788
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -4.705522,
+    "orta_yuzde": -4.596528
+   },
    "mart": -17.108063,
    "mayis_eylul": [
     -11.077875,
@@ -16275,9 +20468,16 @@
    "son_deger": 134.399994,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.275686,
    "se": 0.089183,
    "sabit": -0.413972,
+   "ortalama_21g": -3.427717,
+   "yatay_brent_ortalama": -2.392621,
    "125": {
     "orta": -6.223247,
     "alt": -16.700353,
@@ -16304,6 +20504,13 @@
     "seviye_alt": 107.475768,
     "seviye_ust": 134.207025
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -9.276164,
+    "orta_yuzde": -8.858928
+   },
    "mart": -22.258317,
    "mayis_eylul": [
     -13.752973,
@@ -16328,9 +20535,16 @@
    "son_deger": 274.75,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.424739,
    "se": 0.152719,
    "sabit": 5.342059,
+   "ortalama_21g": 1.034968,
+   "yatay_brent_ortalama": 5.940507,
    "125": {
     "orta": -3.608092,
     "alt": -20.096432,
@@ -16357,6 +20571,13 @@
     "seviye_alt": 205.998545,
     "seviye_ust": 292.017571
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -8.311617,
+    "orta_yuzde": -7.975576
+   },
    "mart": -21.110548,
    "mayis_eylul": [
     -23.592008,
@@ -16381,9 +20602,16 @@
    "son_deger": 67.849998,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.70512,
    "se": 0.080352,
    "sabit": 10.188582,
+   "ortalama_21g": 2.105514,
+   "yatay_brent_ortalama": 7.527487,
    "125": {
     "orta": -4.669776,
     "alt": -21.822743,
@@ -16410,6 +20638,13 @@
     "seviye_alt": 47.971121,
     "seviye_ust": 67.591815
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -12.47821,
+    "orta_yuzde": -11.731078
+   },
    "mart": -16.073403,
    "mayis_eylul": [
     -17.552253,
@@ -16434,9 +20669,16 @@
    "son_deger": 129.300003,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.553885,
    "se": 0.065066,
    "sabit": 7.062919,
+   "ortalama_21g": 0.477816,
+   "yatay_brent_ortalama": 4.157732,
    "125": {
     "orta": -4.608598,
     "alt": -15.368967,
@@ -16463,6 +20705,13 @@
     "seviye_alt": 99.971439,
     "seviye_ust": 124.616851
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -10.742268,
+    "orta_yuzde": -10.185404
+   },
    "mart": -15.960604,
    "mayis_eylul": [
     -12.420725,
@@ -16487,9 +20736,16 @@
    "son_deger": 74.650002,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": -0.334668,
    "se": 0.093916,
    "sabit": 4.100909,
+   "ortalama_21g": -0.789485,
+   "yatay_brent_ortalama": 1.016955,
    "125": {
     "orta": -2.951243,
     "alt": -17.845988,
@@ -16516,6 +20772,13 @@
     "seviye_alt": 58.911208,
     "seviye_ust": 78.927572
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -6.657322,
+    "orta_yuzde": -6.440559
+   },
    "mart": -15.611729,
    "mayis_eylul": [
     -22.417341,
@@ -16540,9 +20803,16 @@
    "son_deger": 402.75,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.150835,
    "se": 0.08466,
    "sabit": 7.940949,
+   "ortalama_21g": 4.259212,
+   "yatay_brent_ortalama": 2.585081,
    "125": {
     "orta": 4.762536,
     "alt": -5.560433,
@@ -16569,6 +20839,13 @@
     "seviye_alt": 369.291116,
     "seviye_ust": 457.280289
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 3.092202,
+    "orta_yuzde": 3.140507
+   },
    "mart": -3.493802,
    "mayis_eylul": [
     2.580789,
@@ -16593,9 +20870,16 @@
    "son_deger": 351.25,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.077031,
    "se": 0.162077,
    "sabit": 8.036588,
+   "ortalama_21g": 5.853528,
+   "yatay_brent_ortalama": 6.673755,
    "125": {
     "orta": 6.413389,
     "alt": -17.551404,
@@ -16622,6 +20906,13 @@
     "seviye_alt": 290.309133,
     "seviye_ust": 469.7634
    },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 5.560358,
+    "orta_yuzde": 5.717851
+   },
    "mart": 17.077557,
    "mayis_eylul": [
     -2.941389,
@@ -16646,9 +20937,16 @@
    "son_deger": 36.782133,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 11.014988,
    "se": 1.354313,
    "sabit": -149.64639,
+   "ortalama_21g": -26.189993,
+   "yatay_brent_ortalama": -95.135993,
    "125": {
     "orta": 82.462582,
     "alt": -235.454978,
@@ -16668,6 +20966,13 @@
     "seviye": 39.615029,
     "seviye_alt": 36.357416,
     "seviye_ust": 42.872641
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 204.441567,
+    "orta_yuzde": null
    },
    "mart": 232.924,
    "mayis_eylul": [
@@ -16693,9 +20998,16 @@
    "son_deger": 39.96269,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 15.049603,
    "se": 2.176198,
    "sabit": -160.595701,
+   "ortalama_21g": 6.478657,
+   "yatay_brent_ortalama": -108.874897,
    "125": {
     "orta": 156.531095,
     "alt": -118.044617,
@@ -16715,6 +21027,13 @@
     "seviye": 44.271868,
     "seviye_alt": 41.398816,
     "seviye_ust": 47.144921
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 323.189042,
+    "orta_yuzde": null
    },
    "mart": 432.0686,
    "mayis_eylul": [
@@ -16740,9 +21059,16 @@
    "son_deger": 36.474788,
    "son_gun": "2026-10-09",
    "kanit": "guclu",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "guclu"
+   },
    "egim": 9.005324,
    "se": 1.702039,
    "sabit": -67.141261,
+   "ortalama_21g": 19.605349,
+   "yatay_brent_ortalama": -77.671671,
    "125": {
     "orta": 122.619857,
     "alt": -91.883645,
@@ -16762,6 +21088,13 @@
     "seviye": 39.342851,
     "seviye_alt": 37.106793,
     "seviye_ust": 41.578909
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 222.344002,
+    "orta_yuzde": null
    },
    "mart": 310.2832,
    "mayis_eylul": [
@@ -16787,9 +21120,16 @@
    "son_deger": 30.642535,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 14.842124,
    "se": 2.677515,
    "sabit": -149.89895,
+   "ortalama_21g": 10.779121,
+   "yatay_brent_ortalama": -105.357074,
    "125": {
     "orta": 162.855824,
     "alt": -138.832338,
@@ -16809,6 +21149,13 @@
     "seviye": 34.977132,
     "seviye_alt": 31.737898,
     "seviye_ust": 38.216367
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 327.216165,
+    "orta_yuzde": null
    },
    "mart": 441.0437,
    "mayis_eylul": [
@@ -16834,9 +21181,16 @@
    "son_deger": 7.134089,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -0.793926,
    "se": 0.657293,
    "sabit": 1.485109,
+   "ortalama_21g": -3.971777,
+   "yatay_brent_ortalama": 4.464981,
    "125": {
     "orta": -15.244583,
     "alt": -137.430191,
@@ -16856,6 +21210,13 @@
     "seviye": 6.836893,
     "seviye_alt": 5.565734,
     "seviye_ust": 8.108053
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -24.036449,
+    "orta_yuzde": null
    },
    "mart": -35.5854,
    "mayis_eylul": [
@@ -16881,9 +21242,16 @@
    "son_deger": 36.9235,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": 8.274341,
    "se": 2.036747,
    "sabit": -138.056311,
+   "ortalama_21g": -25.983974,
+   "yatay_brent_ortalama": -78.455345,
    "125": {
     "orta": 36.30145,
     "alt": -195.233645,
@@ -16903,6 +21271,13 @@
     "seviye": 38.795105,
     "seviye_alt": 36.284139,
     "seviye_ust": 41.306072
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": 127.93075,
+    "orta_yuzde": null
    },
    "mart": 329.06,
    "mayis_eylul": [
@@ -16928,9 +21303,16 @@
    "son_deger": 58.760576,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -1.087865,
    "se": 0.210612,
    "sabit": 12.457652,
+   "ortalama_21g": -1.417269,
+   "yatay_brent_ortalama": 4.687464,
    "125": {
     "orta": -10.465957,
     "alt": -30.934439,
@@ -16950,6 +21332,13 @@
     "seviye": 28.460491,
     "seviye_alt": 5.984968,
     "seviye_ust": 50.936015
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -22.512878,
+    "orta_yuzde": null
    },
    "mart": -28.094523,
    "mayis_eylul": [
@@ -16975,9 +21364,16 @@
    "son_deger": 45.104481,
    "son_gun": "2026-10-09",
    "kanit": "zayif",
+   "kanit_ayrinti": {
+    "ikinci_sinama": false,
+    "orta_sebep": [],
+    "hukum": "zayif"
+   },
    "egim": -1.193499,
    "se": 0.223306,
    "sabit": 13.714196,
+   "ortalama_21g": -1.170169,
+   "yatay_brent_ortalama": 5.90632,
    "125": {
     "orta": -11.435332,
     "alt": -34.710442,
@@ -16997,6 +21393,13 @@
     "seviye": 11.909094,
     "seviye_alt": -13.465755,
     "seviye_ust": 37.283944
+   },
+   "duyarlilik_125": {
+    "x": 32.146013,
+    "devir_gunu": "2026-04-01",
+    "devir_farki": 14.443652,
+    "orta": -24.652029,
+    "orta_yuzde": null
    },
    "mart": -28.39402,
    "mayis_eylul": [

@@ -230,10 +230,10 @@ def sekil_05():
     fig.update_yaxes(autorange="reversed", row=2, col=1)
     r = O["rejim_2026"]
     _bitir(fig, "05_egimler.html",
-           "Şekil 05 — Petrol yükselirken: ABD faizleri, kredi ve havayolları tutarlı; S&P 500 ve altın değil",
+           "Şekil 05 — Petrol yükselirken: kredi, havayolları ve ABD 2 yıllık tutarlı; S&P 500 ve altın değil",
            [f"Brent'in %1'lik yükselişine tepki: Brent'in yükseldiği günlerde 21 iş günlük değişimin Brent'in devirsiz "
-            f"değişimine eğimi · {tarih(r['ilk'])}–{tarih(r['son'])}",
-            "Çizgi: %90 aralık (Newey–West, 20 gecikme) · kanıt: bir-pencere-dışarıda sınama (Yöntem eki)"], 900)
+            f"değişimine eğimi · {tarih(r['ilk_degisim'])}–{tarih(r['son'])}",
+            "Çizgi: %90 aralık (Newey–West, 20 gecikme) · kanıt: Bölüm 3'ün üç sınaması"], 900)
 
 
 # ─────────────────────────────────────────────────────────────────────── 06

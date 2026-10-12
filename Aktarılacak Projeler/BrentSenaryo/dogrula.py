@@ -499,6 +499,7 @@ def mart_tablosu(o: dict) -> None:
         ("Net rezerv (dip)", lambda m: f"{sayi(m['net_rezerv_bas'], 2)} → {sayi(m['net_rezerv_dip'], 2)} milyar dolar"),
         ("Swap hariç net rezerv (dip)",
          lambda m: f"{sayi(m['swap_haric_bas'], 2)} → {sayi(m['swap_haric_dip'], 2)} milyar dolar"),
+        ("Altının rezerve fiyat etkisi", lambda m: f"{sayi(m['altin_fiyat_etkisi_21g'], 2, True)} milyar dolar"),
         ("USD/TRY (TCMB gösterge kuru)", lambda m: yz(m["usdtry_tcmb_degisim"], 2, True)),
         ("DİBS 2 yıllık", lambda m: f"{yz(m['dibs_2y_bas'], 2)} → {yz(m['dibs_2y_son'], 2)}"),
     ]
@@ -577,6 +578,10 @@ def takvim_tablosu(o: dict) -> None:
     }
     yazili = [r[0] for r in t[1:]]
     dogru(yazili == list(kontrol), f"takvim tablosunun satırları değişti: {yazili!r}")
+    k10, kg = o["enerji_faturasi"]["kural_2010"], o["enerji_faturasi"]["kural_2010_gazli"]
+    t1, t2 = k10["sonraki_ay_tahmin_milyar"], kg["sonraki_ay_tahmin_milyar"]
+    hucre(t, "13 Ekim", 2, f"Enerji faturası; kural {sayi(min(t1, t2), 2)}–{sayi(max(t1, t2), 2)} milyar dolar bekliyor "
+                           f"(Ağustos 2025: {sayi(k10['gecen_yil_ayni_ay_milyar'], 2)})", ad)
     for r in t[1:]:
         sayac["hucre"] += 1
         if r[0] in kontrol and not kontrol[r[0]]():
@@ -593,6 +598,10 @@ def izleme_tablosu(o: dict) -> None:
     t = tablo("tarih", "veri", "neyi doğrular / çürütür")
     dis_hucre(t, "12.11.2026", 2, "87,8 dolar", "arastirma_isyatirim_com_tr_5dbf6b4d88",
               "Brent petrol fiyat varsayımını 1,6 dolar aşağı çekerek 87,8 dolara")
+    k10, kg = o["enerji_faturasi"]["kural_2010"], o["enerji_faturasi"]["kural_2010_gazli"]
+    t1, t2 = k10["sonraki_ay_tahmin_milyar"], kg["sonraki_ay_tahmin_milyar"]
+    hucre(t, "13.10.2026", 2, f"Net enerji faturası kuralın beklediği {sayi(min(t1, t2), 2)}–{sayi(max(t1, t2), 2)} milyar "
+                              f"dolarla tutuyor mu (Ağustos 2025: {sayi(k10['gecen_yil_ayni_ay_milyar'], 2)})", "izleme")
     ot = o["otv_tampon"]["otv"]
     m, b = ot["motorin"]["adim"], ot["kurşunsuz benzin 95 oktan"]["adim"]
     hucre(t, "01.11.2026", 2, f"Arz kararı; motorinde {sayi(m, 0, True)}, benzinde {sayi(b, 2, True)} TL", "izleme")
@@ -681,11 +690,14 @@ def metin(on: dict, o: dict) -> None:
     metinde(f"Bu ilişkiler 125 dolarda ABD 2 yıllık için {ob('us2y', '125')}, 150 dolarda {ob('us2y', '150')} baz puan; "
             f"BIST Bankacılık için {oy('XBANK.IS', '125')} ve {oy('XBANK.IS', '150')}; USD/TRY için "
             f"{sv('USDTRY=X', '125')} ve {sv('USDTRY=X', '150')} veriyor", "tez")
-    metinde(f"Mart'ta swap hariç net rezerv 21 iş gününde {sayi(sh, 1)} milyar dolar eridi, bugünkü stok "
-            f"{sayi(rz['swap_haric'], 1)} milyar dolar", "tez")
-    metinde(f"Kasım'da litre başına {sayi(om['kasim'], 0)} TL olacak ÖTV, 125 dolarlık ham petrolün getirdiği "
-            f"{sayi(ot125['ham_tl_litre'], 2)} TL'lik maliyeti karşılıyor, ama rafineri marjı 2026'daki gibi açılırsa "
-            f"gelen {sayi(ot125['motorin_urun_tl_litre'], 2)} TL'yi karşılamıyor", "tez")
+    metinde(f"swap hariç net rezerv 21 iş gününde {sayi(sh, 1)} milyar dolar eridi (döviz satışı "
+            f"{sayi(-m26['doviz_satisi_21g'], 2)}, altının fiyat etkisi {sayi(-m26['altin_fiyat_etkisi_21g'], 1)} milyar "
+            f"dolar), bugünkü stok {sayi(rz['swap_haric'], 1)} milyar dolar", "tez")
+    dogru(m26["altin_fiyat_etkisi_21g"] < 0 and abs(sh + m26["doviz_satisi_21g"] + m26["altin_fiyat_etkisi_21g"]) < 3,
+          "tez: Mart erimesi döviz satışı ile altının fiyat etkisinin toplamına yakın değil")
+    metinde(f"yeniden açılırsa Kasım'ın litre başına {sayi(om['kasim'], 0)} TL'lik ÖTV'si 125 dolarlık ham petrolün getirdiği "
+            f"{sayi(ot125['ham_tl_litre'], 2)} TL'lik artışı karşılayabilir, ama rafineri marjı 2026'daki gibi açılırsa "
+            f"gelen {sayi(ot125['motorin_urun_tl_litre'], 2)} TL'yi karşılayamaz", "tez")
     dogru(ot125["ham_tl_litre"] < om["kasim"] < ot125["motorin_urun_tl_litre"], "tez: ÖTV tamponu karşılaştırması")
 
     # ── yönetici özeti: tablo
@@ -698,13 +710,17 @@ def metin(on: dict, o: dict) -> None:
             f"{yz(y125, 1, True)} yükseldi ({sik['125']['epizot']} ayrı epizot); {yz(y150, 1, True)} ise yalnız "
             f"{sik['150']['gun']} günde, {SAYI_AD[sik['150']['epizot']]} epizotta", "tablo · sıklık")
     ov = Y["ovx"]
-    metinde(f"(OVX {sayi(ov['deger'], 2)}) ay sonunda 125'in üstünde olmaya {yz(ov['olasilik']['125'], 1)}, 150'nin "
-            f"üstünde olmaya {yz(ov['olasilik']['150'], 1)} olasılık", "tablo · OVX")
+    metinde(f"(OVX {sayi(ov['deger'], 2)}) hedef günün ön vadesi olan Ocak kontratına ay sonunda 125'in üstünde olmaya "
+            f"{yz(ov['olasilik']['125'], 1)}, 150'nin üstünde olmaya {yz(ov['olasilik']['150'], 1)} olasılık", "tablo · OVX")
+    dogru(abs(ov["dayanak"] - ocak) < 1e-9, "OVX olasılığının dayanağı hedef günün ön vadesi (Ocak kontratı) değil")
     rk = Y["rekor"]
     metinde(f"{sayi(rk['vadeli_kapanis'], 2)} dolarlık kapanış rekoru bugünün dolarıyla {sayi(rk['bugunun_dolariyla'], 2)}",
             "tablo · reel")
     metinde(f"ABD 2 yıllık getirisi 125 dolarda {ob('us2y', '125')}, 150 dolarda {ob('us2y', '150')} baz puan; "
             f"10 yıllık {ob('us10y', '125')} ve {bp(S['us10y']['150']['orta'])}", "tablo · faiz")
+    dogru(TCB["us2y"]["rmse"] < TCB["us2y"]["rmse_egilim"] and TCB["us10y"]["rmse"] >= TCB["us10y"]["rmse_egilim"],
+          "tablo: Brent'in büyüklüğü 2 yıllıkta katkı vermiyor ya da 10 yıllıkta veriyor")
+    dogru(all(x > 0 for x in V["us10y"]["pencere"]), "tablo: 10 yıllık dördünde artmadı")
     metinde(f"Dolar endeksi için kanıt zayıf ({oy('DX-Y.NYB', '125')} ve {oy('DX-Y.NYB', '150')})", "tablo · DXY")
     dogru(S["DX-Y.NYB"]["kanit"] == "zayif", "tablo: DXY kanıtı zayıf değil")
     for k in ("inr", "zar", "pln", "USDCHF=X"):
@@ -721,10 +737,13 @@ def metin(on: dict, o: dict) -> None:
     u = V["USDTRY=X"]["pencere_yuzde"]
     metinde(f"USD/TRY dört yükselişin dördünde {yz(min(u), 1, True)} ile {yz(max(u), 1, True)} arasında kaldı",
             "tablo · USD/TRY")
-    metinde(f"Mart'ta TCMB 21 iş gününde {sayi(-m26['doviz_satisi_21g'], 2)} milyar dolar sattı, repo ihalesine ara "
-            f"verip fonlamayı koridorun tavanına ({yz(m26['aofm_zirve'], 0)}) taşıdı", "tablo · Mart")
+    metinde(f"Mart'ta yük rezervdeydi: TCMB 21 iş gününde {sayi(-m26['doviz_satisi_21g'], 2)} milyar dolar sattı, repo "
+            f"ihalesine ara verip fonlamayı koridorun tavanına ({yz(m26['aofm_zirve'], 0)}) taşıdı", "tablo · Mart")
+    swp = V["swap_haric_net_rezerv_usd"]["pencere"]
     metinde(f"swap hariç net rezerv {sayi(m26['swap_haric_bas'], 2)}'dan {sayi(m26['swap_haric_dip'], 2)} milyar dolara "
-            f"indi. Bugün {sayi(rz['swap_haric'], 2)} milyar dolar", "tablo · rezerv")
+            f"indi. Öbür üç yükselişte erime en çok {sayi(-min(swp[1:]), 1)} milyar dolardı ve rezerv kaleminin kanıtı zayıf. "
+            f"Bugün {sayi(rz['swap_haric'], 2)} milyar dolar", "tablo · rezerv")
+    dogru(S["swap_haric_net_rezerv_usd"]["kanit"] == "zayif", "tablo: rezerv kaleminin kanıtı zayıf değil")
     dogru(m26["politika_bas"] == m26["politika_son"], "Mart 2026'da politika faizi değişti")
     metinde(f"DİBS 2 yıllık 125 dolarda {ob('n2y', '125')}, 150 dolarda {ob('n2y', '150')} baz puan "
             f"({yz(S['n2y']['125']['seviye'], 2)} ve {yz(S['n2y']['150']['seviye'], 2)})", "tablo · DİBS")
@@ -745,9 +764,13 @@ def metin(on: dict, o: dict) -> None:
     sayim = {"guclu": 0, "orta": 0, "zayif": 0}
     for v in S.values():
         sayim[v["kanit"]] += 1
-    metinde(f"{R['n_gun']} işlem gününün {nyuk}'ında Brent'in aylık değişimi pozitifti", "tablo · kanıt")
-    metinde(f"{len(S)} kalemin {sayim['guclu']}'u bu sınamayı ve varsa 2026 öncesinden 2026'ya örneklem dışı sınamayı "
-            f"geçti, {sayim['orta']}'i yalnız ilkini geçti, {sayim['zayif']}'sı ilkini de geçemedi", "tablo · kanıt")
+    metinde(f"{R['n_gun']} günün {nyuk}'ında devirden arındırılmış Brent'in 21 günlük değişimi pozitifti, ama bağımsız "
+            f"epizot {SAYI_AD[len(P)]} ve 150 dolar sütunu fiilen Mart'a dayanıyor", "tablo · kanıt")
+    n2s = sum(1 for v in S.values() if v["kanit_ayrinti"]["ikinci_sinama"])
+    metinde(f"uzun tarihçesi olan {n2s} kalemde 2026 öncesinin pencereleri 2026'ya uygulandı", "tablo · kanıt")
+    metinde(f"{len(S)} kalemin {sayim['guclu']}'i güçlü, {sayim['orta']}'u orta, {sayim['zayif']}'sı zayıf", "tablo · kanıt")
+    x30 = R["x30"]
+    dogru(x30["ilk"] >= "2026-03-01" and x30["son"] <= "2026-04-30", "tablo: 30 log puanı aşan günler Mart şokunda değil")
     once = TY["ozet"]["once"]
     metinde(f"S&P 500 o pencerelerin {yz(once['spx']['arti_pay'], 1)}'inde yükseldi, ABD 2 yıllık medyanda yalnız "
             f"{bp(once['us2y']['medyan'], 1)} arttı", "tablo · 2026 öncesi")
@@ -760,10 +783,11 @@ def metin(on: dict, o: dict) -> None:
             f"yükseldiği günlerin payı ({sik['125']['epizot']} epizot)", "şerit")
     metinde(f"{bp(S['us2y']['150']['orta'])} 150 dolarda ABD 2 yıllık getirinin orta değeri", "şerit")
     metinde(f"{oy('XBANK.IS', '150')} 150 dolarda BIST Bankacılık endeksinin orta değeri", "şerit")
-    metinde(f"{sayi(sh, 1)} milyar dolar Mart'ta swap hariç net rezervin 21 iş günlük erimesi; bugünkü stok "
-            f"{sayi(rz['swap_haric'], 1)}", "şerit")
+    metinde(f"{sayi(sh, 1)} milyar dolar Mart'ta swap hariç net rezervin 21 iş günlük erimesi, "
+            f"{sayi(-m26['altin_fiyat_etkisi_21g'], 1)} milyarı altının fiyat etkisi; bugünkü stok {sayi(rz['swap_haric'], 1)}",
+            "şerit")
     metinde(f"{sayi(s150['tufe_2ay_petrol'], 2, True)} puan 150 dolarda petrolün iki ayda TÜFE'ye katkısı", "şerit")
-    metinde(f"{sayi(ot125['motorin_urun_tl_litre'], 2)} TL 125 dolarda motorinin litre maliyeti", "şerit")
+    metinde(f"{sayi(ot125['motorin_urun_tl_litre'], 2, True)} TL 125 dolarda motorinin litre maliyetindeki artış", "şerit")
     metinde(f"(KDV hariç; Kasım ÖTV'si {sayi(om['kasim'], 0)} TL)", "şerit")
 
     # ── giriş
@@ -793,12 +817,21 @@ def metin(on: dict, o: dict) -> None:
             f"{sayi(IB['fark_zirve_2026_fiziki'], 2)}, vadeli {sayi(IB['fark_zirve_2026_vadeli'], 2)})", "B1")
     dogru(IB["fark_zirve_2026_gun"] == "2026-10-02", "fark zirvesinin günü 2 Ekim değil")
     ay26 = IB["aylik_2026"]
-    metinde(f"Nisan'da {sayi(ay26['2026-04']['fark'], 2)}, Eylül'de {sayi(ay26['2026-09']['fark'], 2)}, Ekim'in ilk "
-            f"{SAYI_AD[IB['ekim_gun']]} gününde {sayi(IB['ekim_ort_fark'], 2)} dolar", "B1 · aylık")
+    metinde(f"Nisan'da {sayi(ay26['2026-04']['fark'], 2)} dolardı, Temmuz'da kapandı ({sayi(ay26['2026-07']['fark'], 2)}), "
+            f"Eylül'de {sayi(ay26['2026-09']['fark'], 2)}'ya, Ekim'in ilk {SAYI_AD[IB['ekim_gun']]} gününde "
+            f"{sayi(IB['ekim_ort_fark'], 2)} dolara çıktı", "B1 · aylık")
+    dogru(abs(ay26["2026-07"]["fark"]) < 0.5 < 10 < ay26["2026-04"]["fark"] and ay26["2026-09"]["fark"] > 10,
+          "B1: farkın iki dalgası (Nisan açık, Temmuz kapalı, Eylül açık) tutmuyor")
     alinti("oilprice_com_3cf37f38d0", "The European diesel stock release, droned tankers in the Strait of Hormuz, and "
-                                      "China reinstating its refined product export ban",
-           "OilPrice'ın 2 Ekim notu ayrışmayı Avrupa'nın dizel stoku salımına, Hürmüz'de insansız hava aracıyla vurulan "
-           "tankerlere ve Çin'in rafine ürün ihracat yasağını yeniden getirmesine bağlıyor")
+                                      "China reinstating its refined product export ban have all played their part in "
+                                      "this week's extremely volatile trading",
+           "OilPrice'ın 2 Ekim notu haftanın oynaklığını Avrupa'nın dizel stoku salımına, Hürmüz'de insansız hava aracıyla "
+           "vurulan tankerlere ve Çin'in rafine ürün ihracat yasağını yeniden getirmesine bağlıyor")
+    alinti("oilprice_com_3cf37f38d0", "with ICE Brent edging lower to $101 per barrel", "vadeli 101 dolara gerilerken")
+    alinti("oilprice_com_3cf37f38d0", "jumping above $120 per barrel. This suggests the physical market is a lot tighter "
+                                      "than news headlines would care to admit",
+           "fiziki göstergenin 120 doların üstüne çıkmasını ise fiziki piyasanın başlıkların söylediğinden çok daha sıkı "
+           "olmasına yoruyor")
     r2 = IB["ithalat_birim_deger_r2"]
     metinde(f"(aynı ay ve bir ay gecikmeyle R² {sayi(r2['fiziki'], 2)}, vadeliyle {sayi(r2['vadeli'], 2)}; "
             f"{IB['ithalat_birim_deger_n']} ay, {ay_ad(IB['ithalat_birim_deger_ilk'] + '-01')} "
@@ -824,6 +857,19 @@ def metin(on: dict, o: dict) -> None:
             "B1 · devirsiz")
     metinde(f"vade devrinin kendisi yüzünden {sayi(Y['devir_payi'], 2)} log puan aşağı kayar", "B1 · devir payı")
     metinde(f"ön vade bugünün Ocak 2027 kontratıdır, o kontrat da {sayi(ocak, 2)} dolarda", "B1 · Ocak kontratı")
+    bos = R["devir"]["wti_bosluk_2026"]
+    du, dxb = S["us2y"]["duyarlilik_125"], S["XBANK.IS"]["duyarlilik_125"]
+    metinde(f"Aralık–Ocak farkının 30 Ekim'deki devirde bugünkü {sayi(Y['devir_payi'], 2)} log puanda kalacağını varsayar",
+            "B1 · üçüncü koşul")
+    metinde(f"2026'da devir günündeki fark 1 Ekim'de {sayi(-bos['2026-10-01'], 2)}, 1 Nisan'da {sayi(-bos['2026-04-01'], 2)} "
+            "log puandı", "B1 · üçüncü koşul")
+    metinde(f"125 dolarda bile {sayi(Y['senaryo']['125']['log_devirsiz'], 2)} değil {sayi(du['x'], 2)} log puan olur",
+            "B1 · üçüncü koşul")
+    metinde(f"ABD 2 yıllık {ob('us2y', '125')} yerine {bp(du['orta'])}, BIST Bankacılık {oy('XBANK.IS', '125')} yerine "
+            f"{yz(dxb['orta_yuzde'], 1, True)}", "B1 · üçüncü koşul")
+    dogru(du["devir_gunu"] == "2026-04-01" and abs(du["devir_farki"] + bos["2026-04-01"]) < 1e-9
+          and abs(du["x"] - (Y["senaryo"]["125"]["log"] + du["devir_farki"])) < 1e-9,
+          "B1: duyarlılığın x'i ön vade değişimi + 1 Nisan devir farkı değil")
     metinde("%90 aralı", "yöntem sabiti (%90 aralık, 1,645)")
 
     # ── Bölüm 2
@@ -846,9 +892,15 @@ def metin(on: dict, o: dict) -> None:
     metinde("ikisinde de 80 doların altından başlayarak", "tez · 150 tabanı")
     metinde(f"{SAYI_AD[len(e150)]} epizotta ve hiçbiri yüz doların üstünden başlamadı", "tablo · 150 tabanı")
     fz = Y["siklik"]["fiziki_1987"]["150"]
-    metinde(f"Fiziki Brent'te 1987'den bu yana {SAYI_AD[fz['epizot']]} epizot var; aralarında Ağustos–Eylül 1990", "B2")
-    dogru(fz["epizotlar"][0]["ilk"].startswith("1990-08") and fz["epizotlar"][0]["son"].startswith("1990-09"),
-          "B2: fizikinin ilk 150 epizotu Ağustos–Eylül 1990 değil")
+    metinde(f"Fiziki Brent'te bir ayda {yz(y150, 1, True)}'lik yükselişin 1987'den bu yana {SAYI_AD[fz['epizot']]} epizodu "
+            "var: Ağustos–Eylül 1990, Mayıs–Haziran 2020, Mart–Nisan 2026 ve Temmuz 2026", "B2")
+    dogru([(e["ilk"][:7], e["son"][:7]) for e in fz["epizotlar"]]
+          == [("1990-08", "1990-09"), ("2020-05", "2020-06"), ("2026-03", "2026-04"), ("2026-07", "2026-07")],
+          "B2: fizikinin 150 epizotları yazıdakiler değil")
+    fz125 = Y["siklik"]["fiziki_1987"]["125"]
+    metinde(f"{yz(y125, 1, True)} eşiğinde fiziki seride {fz125['epizot']} epizot var, günlerin {yz(fz125['pay'], 2)}'i",
+            "B2 · fiziki 125")
+    dogru(fz125["pay"] > sik["125"]["pay"], "B2: fiziki seride 125 eşiği vadeliden sık değil")
     metinde(f"takvim boyu {YT['takvim_tavan']} günü aşan pencereler atıldı", "Şekil 03")
     metinde(f"Çubuklar 2,5 puanlık kovalardaki", "Şekil 03 · kova")
     metinde(f"125 dolar için log ölçüde {sayi(Y['senaryo']['125']['log'], 2)}, 150 dolar için "
@@ -857,12 +909,15 @@ def metin(on: dict, o: dict) -> None:
             f"yüksek, ama 2026 zirvesinin ({gun_ay(ov['zirve_2026_gun'])}, {sayi(ov['zirve_2026'], 2)}) çok altında",
             "B2 · OVX")
     metinde(f"bir aylık standart sapmayı {yz(ov['aylik_sigma'], 1)} yapar", "B2 · OVX")
-    metinde(f"125'in üstünde olmasına {yz(ov['olasilik']['125'], 1)}, 150'nin üstünde olmasına "
-            f"{yz(ov['olasilik']['150'], 1)} olasılık verir; ay içinde en az bir kez değmesine "
+    metinde(f"Ocak kontratının (bugün {sayi(ov['dayanak'], 2)} dolar) ay sonunda 125'in üstünde olmasına "
+            f"{yz(ov['olasilik']['125'], 1)}, 150'nin üstünde olmasına {yz(ov['olasilik']['150'], 1)} olasılık verir; ön "
+            "vadenin ay içinde en az bir kez değmesine (30 Ekim'e kadar Aralık, sonra Ocak kontratıyla) "
             f"{yz(ov['dokunma_olasiligi']['125'], 1)} ve {yz(ov['dokunma_olasiligi']['150'], 1)}", "B2 · olasılık")
+    dogru(ov["bacak_gun"] == {"aralik": 15, "ocak": 6, "devir_gunu": "2026-11-02"}, "B2: değme olasılığının bacakları değişti")
     metinde(f"son 21 iş günü {yz(Y['gerceklesen_oyn_21g'], 1)}, Mart–Ekim arası {yz(Y['gerceklesen_oyn_mart_ekim'], 1)}",
             "B2 · gerçekleşen oynaklık")
-    dogru(Y["gerceklesen_oyn_mart_ekim"] > ov["deger"], "B2: opsiyon oynaklığı gerçekleşenin altında değil")
+    dogru(Y["gerceklesen_oyn_21g"] < ov["deger"] < Y["gerceklesen_oyn_mart_ekim"],
+          "B2: OVX son ayın gerçekleşeninin üstünde ve Mart–Ekim'inkinin altında değil")
     metinde(f"kapanış rekoru {gun(rk['gun'])}'deki {sayi(rk['vadeli_kapanis'], 2)} dolar", "B2 · rekor")
     metinde(f"ABD TÜFE'si o günden {ay_ad(rk['tufe_son_ay'] + '-01')} {rk['tufe_son_ay'][:4]}'ya "
             f"{sayi(rk['tufe_carpani'], 3)} katına çıktı, yani o rekor bugünün dolarıyla {sayi(rk['bugunun_dolariyla'], 2)}",
@@ -888,8 +943,8 @@ def metin(on: dict, o: dict) -> None:
             f"yükseldi, arz baskın olanlarda {yz(tr['spx']['medyan_yuzde'], 1, True)}", "B3")
     alinti("bulten:2026-09-17", "Fed 16 Eylül'de politika faizini %3,75-%4,00 aralığına çıkardı",
            "Fed 16 Eylül'de politika faizini %3,75–%4,00 aralığına çıkardı")
-    metinde(f"{gun(R['ilk'])} ile {gun(R['son'])} arasındaki {R['n_gun']} işlem gününde, Brent'in 21 iş günlük "
-            f"yükselişinin {yz(YT['pencere_esik'], 0)}'i aştığı ve birbirinden {YT['pencere_ara']} takvim gününden fazla "
+    metinde(f"{gun(R['ilk_degisim'])} ile {gun(R['son'])} arasında 21 iş günlük değişimi hesaplanabilen {R['n_gun']} işlem "
+            f"gününde, Brent'in 21 iş günlük yükselişinin {yz(YT['pencere_esik'], 0)}'i aştığı ve birbirinden {YT['pencere_ara']} takvim gününden fazla "
             f"uzak {SAYI_AD[len(P)]} pencere var", "B3 · pencere seçimi")
     for ad, p in zip(("Mart", "Mayıs", "Temmuz", "Eylül"), P):
         metinde(f"{ad} ({gun_ay(p['bas'])}–{gun_ay(p['son'])}): {sayi(p['brent_bas'], 2)}'den {sayi(p['brent_son'], 2)} "
@@ -918,18 +973,51 @@ def metin(on: dict, o: dict) -> None:
     metinde(f"Eylül'de {sayi(n2[3], 0, True)} bp", "B3 · DİBS")
     tl = V["tlref"]["pencere"]
     metinde(f"TLREF (Mart'ta {sayi(tl[0], 0, True)} bp, Eylül'de {sayi(tl[3], 0, True)} bp)", "B3 · TLREF")
-    metinde(f"{R['n_gun']} günün {nyuk}'ında Brent'in 21 günlük değişimi pozitifti", "B3 · doğru")
+    metinde(f"{R['n_gun']} günün bu değişimin pozitif olduğu {nyuk}'ından kestirildi", "B3 · doğru")
+    dz = R["yukselis_dizileri"]
+    buy = max(dz, key=lambda d: d["gun"])
+    metinde(f"bu günler {SAYI_AD[len(dz)]} kesintisiz diziye toplanıyor ve biri ({gun_ay(buy['bas'])}–{gun_ay(buy['son'])}) "
+            f"{nyuk} günün {buy['gun']}'sini, Brent'in 30 log puandan fazla yükseldiği {R['x30']['gun']} günün de tamamını "
+            "taşıyor", "B3 · diziler")
+    dogru(R["yukselis_gunu"] == nyuk and sum(d["gun"] for d in dz) == nyuk, "B3: dizilerin gün toplamı yükseliş günü sayısı değil")
+    dogru(buy["bas"] <= R["x30"]["ilk"] and R["x30"]["son"] <= buy["son"], "B3: 30 log puanı aşan günler en büyük dizide değil")
     metinde(f"standart hata {YT['nw_gecikme']} gecikmeli Newey–West", "B3 · NW")
     metinde(f"ABD 2 yıllıkta yükseliş günlerinin eğimi {sayi(V['us2y']['yukselis']['egim'], 2, True)} bp, düşüş "
             f"günlerinde işaret dönüyor ({sayi(V['us2y']['dusus']['egim'], 2, True)})", "B3 · asimetri")
     metinde(f"({YT['loo_once']} iş günü öncesinden {YT['loo_sonra']} iş günü sonrasına)", "B3 · LOO")
     metinde(f"2026 öncesinin {once['n']} büyük yükselişinden", "B3 · OOS")
-    metinde(f"{len(S)} kalemin {sayim['guclu']}'u güçlü, {sayim['orta']}'i orta, {sayim['zayif']}'sı zayıf", "B3 · sayım")
+    metinde(f"Üçüncüsü, uzun tarihçesi olan {n2s} kalemde", "B3 · OOS")
+    metinde(f"Üçüncü sınama yalnız {n2s} kalemde yapılabildiği için", "B3 · OOS")
+    dogru(TCB["us2y"]["egitimde_kalan_pencereler"][3] == [P[0]["son"], P[1]["son"]],
+          "B3: Eylül yalnız Mart ve Mayıs'tan tahmin edilmiyor")
+    metinde(f"{len(S)} kalemin {sayim['guclu']}'i güçlü, {sayim['orta']}'u orta, {sayim['zayif']}'sı zayıf", "B3 · sayım")
+    egi = sorted(k for k, v in S.items() if "egilim" in v["kanit_ayrinti"]["orta_sebep"])
+    dogru(egi == sorted(["us10y", "reel10y", "USDTRY=X", "TUPRS_IS"]),
+          f"B3: görüşsüz kıyasın ortaya indirdiği kalemler yazıdakiler değil: {egi}")
+    kap = {h: [0, 0] for h in ("guclu", "orta", "zayif")}
+    for k, v in S.items():
+        if k in TCB:
+            kap[v["kanit"]][0] += TCB[k]["kapsanan"]
+            kap[v["kanit"]][1] += sum(1 for c in TCB[k]["kapsama"] if c is not None)
+    metinde(f"güçlü kalemlerde gerçekleşeni {kap['guclu'][1]} denemenin {kap['guclu'][0]}'inde, zayıf kalemlerde "
+            f"{kap['zayif'][1]}'ün {kap['zayif'][0]}'ünde kapsadı", "B3 · kapsama")
+    metinde("zayıf satırlarda aralık %90 güven vermez", "B3 · kapsama (yöntem sabiti)")
+    dogru(kap["zayif"][0] / kap["zayif"][1] < 0.85 < kap["guclu"][0] / kap["guclu"][1],
+          "B3: kapsama hükmü (zayıfta %90'ın altında, güçlüde yakın) tutmuyor")
     x125, x150 = Y["senaryo"]["125"]["log_devirsiz"], Y["senaryo"]["150"]["log_devirsiz"]
     metinde(f"(log ölçüde {sayi(x125, 2)} ve {sayi(x150, 2)})", "B3 · x")
     sp = S["^GSPC"]
     metinde(f"125 dolarda {sayi(sp['125']['petrol_payi'], 1, True)}, 150 dolarda {sayi(sp['150']['petrol_payi'], 1, True)} "
-            f"puandır (log ölçü), ama 2026'nın genel yükseliş eğilimi ({sayi(sp['sabit'], 1, True)})", "B3 · S&P payı")
+            f"puandır (log ölçü) ve sabit ({sayi(sp['sabit'], 1, True)}) ilkini neredeyse götürüyor; oysa endeksin bu dönemdeki "
+            f"ortalama 21 iş günlük değişimi {sayi(sp['ortalama_21g'], 1, True)}, Brent'in bir ayda ±5 log puan içinde kaldığı "
+            f"günlerde {sayi(sp['yatay_brent_ortalama'], 1, True)}", "B3 · S&P payı")
+    dogru(sp["sabit"] > max(sp["ortalama_21g"], sp["yatay_brent_ortalama"]), "B3: sabit gerçekleşen eğilimden büyük değil")
+    up2 = V["us2y"]["pencere"]
+    metinde(f"ABD 2 yıllık {bp(S['us2y']['125']['orta'])}, o iki pencerede {sayi(up2[1], 0, True)} ve {bp(up2[3])}",
+            "B3 · hücre/pencere")
+    ayni = [k for k, v in S.items() if v["pencere_isaret"]["n"] == 4 and max(v["pencere_isaret"]["arti"], v["pencere_isaret"]["eksi"]) == 4]
+    kucuk = [k for k in ayni if abs(S[k]["125"]["orta"]) < min(abs(V[k]["pencere"][1]), abs(V[k]["pencere"][3]))]
+    dogru(len(kucuk) > len(ayni) / 2, f"B3: 125 hücresi çoğu kalemde Mayıs/Eylül'den küçük değil ({len(kucuk)}/{len(ayni)})")
     metinde(f"Tablodaki {oy('^GSPC', '125')}", "B3 · S&P")
 
     # ── Bölüm 4
@@ -939,8 +1027,15 @@ def metin(on: dict, o: dict) -> None:
     metinde(f"2 yıllık getiri 125 dolarda {yz(S['us2y']['125']['seviye'], 2)}'e, 150 dolarda "
             f"{yz(S['us2y']['150']['seviye'], 2)}'e çıkıyor", "B4 · faiz")
     dogru(S["us2y"]["150"]["orta"] > S["us10y"]["150"]["orta"] > S["us30y"]["150"]["orta"], "B4: eğri yassılaşmıyor")
-    metinde(f"(5 yıllık başabaş {ob('be5y', '125')} ve {bp(S['be5y']['150']['orta'])})", "B4 · başabaş")
-    metinde(f"(10 yıllık reel getiri {ob('reel10y', '125')} ve {bp(S['reel10y']['150']['orta'])})", "B4 · reel")
+    metinde(f"2 yıllığın bütün günlerdeki ortalama 21 günlük değişimi {bp(S['us2y']['ortalama_21g'], 1)}", "B4 · eğilim")
+    metinde(f"(hata {sayi(TCB['us2y']['rmse'], 1)}'ya karşı {sayi(TCB['us2y']['rmse_egilim'], 1)} bp), 10 yıllıkta "
+            "iyileştirmiyor; 10 yıllığın kanıtı bu yüzden orta", "B4 · görüşsüz kıyas")
+    dogru(S["us10y"]["kanit"] == "orta" and S["reel10y"]["kanit"] == "orta", "B4: 10 yıllık ve reel getiri orta değil")
+    metinde(f"10 yıllıktaki artışın çoğu reel faizden geliyor: reel getiri {ob('reel10y', '125')} ve "
+            f"{bp(S['reel10y']['150']['orta'])}, nominal getiri {ob('us10y', '125')} ve {bp(S['us10y']['150']['orta'])}; "
+            f"5 yıllık başabaş {ob('be5y', '125')} ve {bp(S['be5y']['150']['orta'])}", "B4 · ayrıştırma")
+    dogru(all(S["reel10y"][a]["orta"] > 0.5 * S["us10y"][a]["orta"] for a in ("125", "150")),
+          "B4: 10 yıllıktaki artışın çoğu reel faizden gelmiyor")
     alinti("bbc_co_uk_fb865641ef", "rates on 10-year government borrowing hitting 5%",
            "bunlardan biri 10 yıllık getirinin %5'e ulaşmasıydı (BBC)")
     kaynakta("bbc_co_uk_fb865641ef", "there would be \"economic red lines\" that the Trump administration would be unwilling to cross")
@@ -954,6 +1049,10 @@ def metin(on: dict, o: dict) -> None:
     dogru(S["^GDAXI"]["kanit"] == "orta", "B4: DAX kanıtı orta değil")
     metinde(f"BAE hisseleri {oy('UAE', '125')} ve {oy('UAE', '150')}", "B4 · BAE")
     metinde(f"Hindistan'ın hisseleri {oy('INDA', '125')} ve {oy('INDA', '150')}", "B4 · Hindistan")
+    ks = V["KSA"]["pencere_yuzde"]
+    metinde(f"Suudi Arabistan hisseleri dört pencerenin dördünde düştü ({yz(max(ks), 1, True)} ile {yz(min(ks), 1, True)} "
+            "arası)", "B4 · KSA")
+    dogru(all(x < 0 for x in ks) and S["KSA"]["kanit"] == "zayif", "B4: Suudi Arabistan dördünde düşmedi ya da kanıtı zayıf değil")
     dogru(S["ITA"]["kanit"] == "zayif", "B4: savunma kanıtı zayıf değil")
     metinde(f"(USD/ZAR 150 dolarda {oy('zar', '150')})", "B4 · ZAR")
     metinde(f"USD/CHF {oy('USDCHF=X', '125')} ve {oy('USDCHF=X', '150')}", "B4 · CHF")
@@ -966,16 +1065,22 @@ def metin(on: dict, o: dict) -> None:
            "değişimin genellikle %50'si iki haftada, %80'i dört haftada pompaya yansır")
     bz = AE["benzin_pompa_gecis"]
     dogru(bz["ilk_hafta"].startswith("2005"), "B4: pompa geçişinin örneklemi 2005'te başlamıyor")
-    metinde(f"(dört haftalık fark, 2005'ten bu yana {sayi(bz['n'], 0)} hafta) varilin galon karşılığının "
-            f"{sayi(bz['galon_basina_dolar_per_galon'], 2)}'i", "B4 · pompa")
-    metinde(f"Bugünkü {sayi(bz['son_fiyat'], 3)} dolarlık benzin 125 dolarda {sayi(AS['125']['benzin']['seviye'], 2)}, "
+    mz = AE["motorin_pompa_gecis"]
+    metinde(f"(dört haftalık fark, 2005'ten bu yana {sayi(bz['n'], 0)} hafta) benzinde varilin galon karşılığının "
+            f"{sayi(bz['galon_basina_dolar_per_galon'], 2)}'i, motorinde {sayi(mz['galon_basina_dolar_per_galon'], 2)}'ü",
+            "B4 · pompa")
+    metinde(f"bugünkü {sayi(bz['son_fiyat'], 3)} dolarlık benzin 125 dolarda {sayi(AS['125']['benzin']['seviye'], 2)}, "
             f"150 dolarda {sayi(AS['150']['benzin']['seviye'], 2)} dolar/galona çıkar", "B4 · pompa")
-    metinde(f"ikincisi {bz['rekor_hafta'][:4]}'deki {sayi(bz['rekor'], 3)} dolarlık rekorun üstü", "B4 · rekor")
+    metinde(f"pompa ile vadeli arasındaki bugünkü fark korunursa benzin 125 dolarda "
+            f"{sayi(AS['125']['benzin']['seviye_vadeli_yolu'], 2)}, 150 dolarda "
+            f"{sayi(AS['150']['benzin']['seviye_vadeli_yolu'], 2)} olur", "B4 · pompa vadeli yolu")
+    metinde(f"İki yolda da 150 dolar {bz['rekor_hafta'][:4]}'deki {sayi(bz['rekor'], 3)} dolarlık rekorun üstünde", "B4 · rekor")
+    dogru(AS["150"]["benzin"]["seviye_vadeli_yolu"] > bz["rekor"], "B4: vadeli yolunda 150 dolar rekorun üstünde değil")
     dogru(AS["150"]["benzin"]["seviye"] > bz["rekor"] > AS["125"]["benzin"]["seviye"], "B4: benzin rekor kıyası")
     alinti("bbc_co_uk_fb865641ef", "gasoline topping $5 a gallon", "benzinin galonda 5 doları aşmasıydı (BBC)")
-    mz = AE["motorin_pompa_gecis"]
     metinde(f"Motorin pompası {sayi(mz['son_fiyat'], 3)} dolarda; {gun_ay(mz['rekor_hafta'])}'de {sayi(mz['rekor'], 3)} "
-            f"ile rekor kırmıştı ve 150 dolarda {sayi(AS['150']['motorin']['seviye'], 2)}'a çıkar", "B4 · motorin")
+            f"ile rekor kırmıştı. 150 dolarda ham petrol yoluyla {sayi(AS['150']['motorin']['seviye'], 2)}'a, ürün vadelisi "
+            f"yoluyla {sayi(AS['150']['motorin']['seviye_vadeli_yolu'], 2)}'ya çıkar", "B4 · motorin")
     metinde(f"125 dolarda {sayi(AS['125']['tufe_seviye_2000'], 2, True)}, 150 dolarda "
             f"{sayi(AS['150']['tufe_seviye_2000'], 2, True)} puan; 2015'ten bu yana ölçülen esneklikle "
             f"{sayi(AS['125']['tufe_seviye_2015'], 2, True)} ve {sayi(AS['150']['tufe_seviye_2015'], 2, True)}", "B4 · ABD TÜFE")
@@ -1007,12 +1112,19 @@ def metin(on: dict, o: dict) -> None:
                                "repo ihalelerine tekrar başlanmasına")
     metinde(f"USD/TRY 21 iş günde {yz(m26['usdtry_tcmb_degisim'], 2, True)}; İstanbul kapanışıyla "
             f"{yz(m26['usdtry_ist18_degisim'], 2, True)}", "B5 · kur")
-    metinde(f"21 iş günde {sayi(-m26['doviz_satisi_21g'], 2)} milyar dolarlık döviz satışı ve swap hariç net rezervde "
-            f"{sayi(sh, 1)} milyar dolarlık erime. Aynı dönemde BIST 100 {yz(m26['xu100_degisim'], 2)} geriledi", "B5 · bedel")
+    dogru(m26["haftalik"][0]["doviz_satisi"] < 0 and m26["ihale_ara_ilk"] <= m26["haftalik"][0]["son"],
+          "B5: döviz satışı ve fonlama ilk haftada birlikte başlamadı")
+    metinde(f"21 iş günde {sayi(-m26['doviz_satisi_21g'], 2)} milyar dolarlık döviz satışı; swap hariç net rezervdeki "
+            f"{sayi(sh, 1)} milyar dolarlık erimenin {sayi(-m26['altin_fiyat_etkisi_21g'], 1)} milyarı ise aynı dönemde düşen "
+            f"altının fiyat etkisiydi. Aynı dönemde BIST 100 {yz(m26['xu100_degisim'], 2)} geriledi", "B5 · bedel")
     metinde(f"son gözlem {gun_ay(rz['gun'])}", "Şekil 06")
     metinde(f"{gun_ay(rz['gun'])}'de net rezerv {sayi(rz['net'], 2)}, swap hariç net rezerv {sayi(rz['swap_haric'], 2)}, "
             f"brüt rezerv {sayi(rz['brut'], 2)} milyar dolar", "B5 · bugün")
     dogru(sh > rz["swap_haric"], "B5: Mart erimesi bugünkü stoktan küçük")
+    metinde(f"Mart'ın 21 günlük döviz satışını ({sayi(-m26['doviz_satisi_21g'], 2)}) bugünkü swap hariç stok "
+            f"({sayi(rz['swap_haric'], 2)}) ancak karşılıyor; altının fiyat etkisiyle birlikte erimeyi ({sayi(sh, 1)}) "
+            "karşılamıyor", "B5 · stok")
+    dogru(-m26["doviz_satisi_21g"] < rz["swap_haric"] < sh, "B5: stok satışı karşılayıp erimeyi karşılamama hükmü tutmuyor")
     metinde(f"politika faizi {yz(fb['politika'], 0)}, koridor {yz(fb['koridor_alt'], 1)}–{yz(fb['koridor_ust'], 0)}, "
             f"TLREF {gun_ay(fb['gun'])}'da {yz(fb['tlref'], 2)}", "B5 · fonlama")
     metinde(f"yaklaşık {sayi((fb['koridor_ust'] - fb['tlref']) * 100, 0)} baz puan yukarı", "B5 · tavana mesafe")
@@ -1020,10 +1132,16 @@ def metin(on: dict, o: dict) -> None:
     metinde(f"({yz(up[0], 1, True)}, {yz(up[1], 1, True)}, {yz(up[2], 1, True)} ve {yz(up[3], 1, True)})", "B5 · rejim")
     metinde(f"Senaryo tablosunda 125 dolarda {sv('USDTRY=X', '125')}, 150 dolarda {sv('USDTRY=X', '150')}", "B5 · rejim")
     sw = V["swap_haric_net_rezerv_usd"]
-    metinde(f"{sayi(-sw['yukselis']['egim'], 2)} milyar dolarlık erimeyle eşlik ediyor; 125 dolarda "
-            f"{of('swap_haric_net_rezerv_usd', '125')}, 150 dolarda {of('swap_haric_net_rezerv_usd', '150')} milyar dolar",
-            "B5 · rezerv eğimi")
-    dogru(S["swap_haric_net_rezerv_usd"]["kanit"] == "zayif" and sw["pencere"][2] > 0, "B5: rezerv kanıtı / Temmuz yönü")
+    Ssw, Lsw = S["swap_haric_net_rezerv_usd"], TCB["swap_haric_net_rezerv_usd"]
+    metinde(f"{sayi(-sw['yukselis']['egim'], 2)} milyar dolarlık erimeyle eşlik ediyor; doğrunun {sayi(Ssw['sabit'], 1, True)} "
+            f"milyar dolarlık sabiti bunun bir bölümünü götürüyor ve hücre 125 dolarda {of('swap_haric_net_rezerv_usd', '125')}, "
+            f"150 dolarda {of('swap_haric_net_rezerv_usd', '150')} milyar dolar", "B5 · rezerv eğimi")
+    metinde(f"rezervin bu dönemdeki ortalama 21 günlük değişimi {sayi(Ssw['ortalama_21g'], 1)} milyar dolar", "B5 · rezerv eğilim")
+    metinde(f"({sayi(Lsw['rmse'], 1)}'e karşı {sayi(Lsw['rmse_sifir'], 1)} milyar dolar); doğru Mart'taki "
+            f"{sayi(-Lsw['gercek'][0], 1)} milyar dolarlık erimeyi {sayi(-Lsw['tahmin'][0], 1)} milyar dolar diye tahmin ediyor, "
+            "Temmuz'da yönü de tutmuyor", "B5 · rezerv sınama")
+    dogru(Ssw["kanit"] == "zayif" and Lsw["isaret_tutan"] == 3 and Lsw["rmse"] >= Lsw["rmse_sifir"]
+          and Lsw["tahmin"][2] * Lsw["gercek"][2] < 0 and sw["pencere"][2] > 0, "B5: rezerv kanıtının gerekçesi tutmuyor")
     metinde(f"Mart penceresinde ({gun_ay(P[0]['bas'])}–{gun_ay(P[0]['son'])}) erime {sayi(-sw['pencere'][0], 1)} milyar "
             f"dolarken şokun ilk ayında ({gun_ay(m26['bas'])}–{gun_ay(m26['son'])}) {sayi(sh, 1)} milyar dolar", "B5 · pencere")
     metinde(f"DİBS 2 yıllık 125 dolarda {ob('n2y', '125')}, 150 dolarda {ob('n2y', '150')} baz puan; 3 aylık ve 5 yıllık",
@@ -1053,8 +1171,9 @@ def metin(on: dict, o: dict) -> None:
             f"{yz(bo['arti_pay'], 0)}'inde arttı", "B6")
     metinde(f"yatay ({oy('XU100.IS', '125')})", "B6")
     metinde(f"dolar bazında {oy('bist_usd', '125')} ve {oy('bist_usd', '150')}", "B6")
-    metinde(f"{sayi(V['XBANK.IS']['yukselis']['egim'], 2)}'lik log tepki ve 150 dolarda {oy('XBANK.IS', '150')} "
-            f"(Akbank {oy('AKBNK_IS', '150')}, Garanti BBVA {oy('GARAN_IS', '150')})", "B6 · banka")
+    metinde(f"{sayi(V['XBANK.IS']['yukselis']['egim'], 2)}'lik log tepki; doğrunun {sayi(S['XBANK.IS']['sabit'], 1, True)}'lik "
+            f"sabitiyle birlikte 150 dolarda {oy('XBANK.IS', '150')} (Akbank {oy('AKBNK_IS', '150')}, Garanti BBVA "
+            f"{oy('GARAN_IS', '150')})", "B6 · banka")
     metinde(f"Mart'ta fonlama maliyeti {sayi((m26['aofm_zirve'] - m26['aofm_bas']) * 100, 0)} baz puan arttı", "B6 · fonlama")
     metinde(f"Pegasus THY'den duyarlı ({oy('PGSUS_IS', '125')} ve {oy('PGSUS_IS', '150')}'ya karşı {oy('THYAO_IS', '125')} "
             f"ve {oy('THYAO_IS', '150')}); TAV Havalimanları {oy('TAVHL_IS', '125')} ve {oy('TAVHL_IS', '150')}", "B6 · hava")
@@ -1064,6 +1183,12 @@ def metin(on: dict, o: dict) -> None:
             f"{yz(tp[3], 1, True)}) ve senaryoda {oy('TUPRS_IS', '125')} ve {oy('TUPRS_IS', '150')}", "B6 · Tüpraş")
     for k in ("PETKM_IS", "BIMAS_IS", "ASELS_IS"):
         dogru(S[k]["kanit"] == "zayif", f"B6: {k} zayıf değil")
+    dogru(S["TUPRS_IS"]["kanit"] == "orta" and "egilim" in S["TUPRS_IS"]["kanit_ayrinti"]["orta_sebep"],
+          "B6: Tüpraş'ın kanıtı görüşsüz kıyas yüzünden orta değil")
+    pk = V["PETKM_IS"]["pencere_yuzde"]
+    metinde(f"Petkim de dört pencerenin dördünde yükseldi ({yz(min(pk), 1, True)} ile {yz(max(pk), 1, True)})", "B6 · Petkim")
+    dogru(all(x > 0 for x in pk) and TCB["PETKM_IS"]["isaret_tutan"] >= 3 and TCB["PETKM_IS"]["rmse"] >= TCB["PETKM_IS"]["rmse_sifir"],
+          "B6: Petkim'in zayıflığı büyüklük hatasından gelmiyor")
 
     # ── Bölüm 7
     tg = lambda k: TU[f"vadeli:{k}:2005"]  # noqa: E731
@@ -1141,9 +1266,15 @@ def metin(on: dict, o: dict) -> None:
     metinde(f"varil başına {sayi(ot125['brent_artis_varil'], 2, True)} dolar demek: ham petrol bacağı litrede "
             f"{sayi(ot125['ham_tl_litre'], 2, True)} TL", "B7 · 125")
     metinde(f"Kasım'ın motorin ÖTV'si bu artışın {sayi(ot125['motorin_tampon_kasim_ham'], 2)} katı", "B7 · 125")
-    metinde(f"(eğim {sayi(S['HO=F']['egim'], 2)}) ve bu ilişkiyle 125 dolar senaryosu motorinin ürün fiyatını litrede "
-            f"{sayi(ot125['motorin_urun_tl_litre'], 2, True)} TL artırır; Kasım ÖTV'si bunun yalnız "
-            f"{yz(ot125['motorin_tampon_kasim_urun'] * 100, 0)}'ini karşılayabilir", "B7 · ürün")
+    metinde(f"orantılı, biraz da hızlı yükseldi (eğim {sayi(S['HO=F']['egim'], 2)})", "B7 · ürün")
+    metinde(f"125 dolar senaryosu motorinin ürün fiyatını litrede {sayi(ot125['motorin_urun_tl_litre'], 2, True)} TL artırır; "
+            f"Kasım ÖTV'si bunun yalnız {yz(ot125['motorin_tampon_kasim_urun'] * 100, 0)}'ini karşılayabilir", "B7 · ürün")
+    dogru(1.7 < S["HO=F"]["son_deger"] * 42 / baz < 2.3 and ot125["motorin_urun_tl_litre"] > 2 * ot125["ham_tl_litre"],
+          "B7: motorinin varil fiyatı ham petrolün yaklaşık iki katı değil ya da ürün bacağı ham bacağın iki katını aşmıyor")
+    metinde(f"ön vadenin bugünkü {sayi(baz, 2)} dolardan hedefe log değişimiyle (125'te {sayi(Y['senaryo']['125']['log'], 2)}, "
+            f"150'de {sayi(Y['senaryo']['150']['log'], 2)}) çarpılır", "Şekil 08 · x")
+    dogru(abs(s125["tufe_2ay_petrol"] - tg("tufe")["brent_0_1"] * Y["senaryo"]["125"]["log"]) < 1e-3,
+          "Şekil 08: TÜFE katkısı ön vadenin değişimiyle kurulmamış")
     metinde(f"150 dolarda ham petrol bacağı {sayi(ot150['ham_tl_litre'], 2, True)}, ürün bacağı "
             f"{sayi(ot150['motorin_urun_tl_litre'], 2, True)} TL; Kasım ÖTV'si bunların "
             f"{yz(ot150['motorin_tampon_kasim_ham'] * 100, 0)}'ünü ve {yz(ot150['motorin_tampon_kasim_urun'] * 100, 0)}'ini",
@@ -1178,6 +1309,19 @@ def metin(on: dict, o: dict) -> None:
             f"{sayi(-ek['150']['petrol_gaz']['cari_gsyh'], 2)}", "B7 · senaryo")
     metinde(f"bir yıl sürmesi bile {yz(-ek['bugun']['petrol']['cari_gsyh'], 2)}–{sayi(-ek['bugun']['petrol_gaz']['cari_gsyh'], 2)}",
             "B7 · bugün")
+    bfz = ek["bugun_fiziki"]
+    metinde(f"bugünkü fiziki fiyatın ({sayi(fiz, 2)}) bir yıl sürmesi cari açık/GSYH'yi {yz(-bfz['petrol']['cari_gsyh'], 2)}–"
+            f"{sayi(-bfz['petrol_gaz']['cari_gsyh'], 2)}'a taşır", "B7 · fiziki")
+    dogru(abs(EF["kural_2010_fiziki"]["milyar_usd_yillik_10_dolar"] - k10["milyar_usd_yillik_10_dolar"]) < 0.3
+          and abs(EF["kural_2010_gazli_fiziki"]["milyar_usd_yillik_10_dolar"] - kg["milyar_usd_yillik_10_dolar"]) < 0.3,
+          "B7: fiziki Brent'le kurulan kural 'neredeyse aynı katsayı' vermiyor")
+    t1, t2 = k10["sonraki_ay_tahmin_milyar"], kg["sonraki_ay_tahmin_milyar"]
+    metinde(f"Kural Ağustos'un net enerji faturası için {sayi(min(t1, t2), 2)}–{sayi(max(t1, t2), 2)} milyar dolar bekliyor; "
+            f"bir yıl önce {sayi(k10['gecen_yil_ayni_ay_milyar'], 2)}'ydi", "B7 · Ağustos")
+    dogru(k10["sonraki_ay"] == kg["sonraki_ay"] == "2026-08", "B7: kuralın beklediği ay Ağustos değil")
+    k16 = EF["kural_2016"]
+    metinde(f"aynı kural {k16['ilk'][:4]}–{k16['son'][:4]} verisiyle 10 dolar için {sayi(k10['milyar_usd_yillik_10_dolar'], 2)} "
+            f"değil {sayi(k16['milyar_usd_yillik_10_dolar'], 2)} milyar dolar veriyor", "Şekil 10 · örneklem")
     alinti("sbb_gov_tr_fabb206ad8", "Ham Petrol Fiyatı- (/) 69,1 88,0", "Brent'i 88,0 dolar")
     alinti("sbb_gov_tr_fabb206ad8", "Enerji İthalatı (Milyar Dolar) 62,5 71,0", "enerji ithalatını 71,0 milyar dolar")
     alinti("sbb_gov_tr_fabb206ad8", "işlemler açığının 2026 yılında 47,5 milyar dolar gerçekleşerek GSYH'ya oranının yüzde 2,6",
@@ -1210,14 +1354,18 @@ def metin(on: dict, o: dict) -> None:
     art = [k for k, m in em.items() if (m["deger"].get("try_tcmb") or 0) > 0]
     azl = [k for k, m in em.items() if (m["deger"].get("try_tcmb") or 0) < 0]
     dogru(all(x is not None for x in tt), "B8: USD/TRY bir olayda eksik")
+    tto = once["try_tcmb"]
     metinde(f"USD/TRY sekiz olayın {SAYI_AD[len(art)]}sında yükseldi, {SAYI_AD[len(azl)]}sinde ({', '.join(azl)}) geriledi",
             "B8 · USD/TRY")
-    tto = once["try_tcmb"]
     metinde(f"2026 öncesinin {tto['n']} büyük petrol yükselişinde kur pencerelerin yalnız {yz(tto['arti_pay'], 0)}'ünde "
             "yükseldi", "B8 · USD/TRY")
     metinde(f"1988–2025 arasında vadeli Brent'in bir ayda en az {yz(y125, 1, True)} yükseldiği ve birbirinden "
             f"{YT['genis_ara']} takvim gününden fazla uzak {once['n']} pencere var", "B8 · geniş küme")
     metinde(f"{tr['n']}'i arz, {ta['n']}'ü talep baskın", "B8 · ayrıştırma")
+    disari = [p for p in TY["pencere"] if p["son"] < "2026-01-01" and not p.get("nyfed")]
+    dogru(len(disari) == 1 and disari[0]["son"].startswith("2025-06") and once["n"] == tr["n"] + ta["n"] + 1,
+          "B8: ayrıştırmanın dışında kalan pencere Haziran 2025'te biten tek pencere değil")
+    metinde(f"2026 öncesinin pencerelerinde ise yalnız {yz(tto['arti_pay'], 0)}'ünde yükselmişti", "B8 · USD/TRY OOS")
     metinde(f"Talep baskın pencerelerde S&P 500 medyanda {yz(ta['spx']['medyan_yuzde'], 1, True)} yükseldi ve "
             f"{yz(ta['spx']['arti_pay'], 0)}'sında arttı, ABD 2 yıllık medyanda {bp(ta['us2y']['medyan'], 1)}; arz baskın "
             f"pencerelerde S&P 500 {yz(tr['spx']['medyan_yuzde'], 1, True)}, ABD 2 yıllık {bp(tr['us2y']['medyan'], 1)}",
@@ -1231,11 +1379,20 @@ def metin(on: dict, o: dict) -> None:
     kaynakta("nber_org_546e38fafe", "Historical Oil Shocks")
 
     # ── Bölüm 9
+    hf = m26["haftalik"]
     metinde(f"TCMB repo ihalesine {gun_ay(m26['ihale_ara_ilk'])}'ta ara verdi, TLREF aynı gün "
-            f"{yz(m26['tlref_ara_ilk'], 2)}'e çıktı ve ağırlıklı ortalama fonlama maliyeti {gun_ay(m26['aofm_tavan_ilk'])}'ta "
-            f"koridorun tavanına ({yz(m26['aofm_zirve'], 0)}) ulaştı", "B9 · sıra")
-    metinde(f"net rezerv {gun_ay(m26['net_rezerv_dip_gun'])}'ta, swap hariç net rezerv {gun_ay(m26['swap_haric_dip_gun'])}'de "
-            "dibe indi", "B9 · sıra")
+            f"{yz(m26['tlref_ara_ilk'], 2)}'e çıktı, ağırlıklı ortalama fonlama maliyeti {gun_ay(m26['aofm_tavan_ilk'])}'ta "
+            f"koridorun tavanına ({yz(m26['aofm_zirve'], 0)}) ulaştı ve ilk haftada {sayi(-hf[0]['doviz_satisi'], 2)} milyar "
+            "dolarlık döviz satıldı", "B9 · sıra")
+    metinde(f"(2–6 Mart {sayi(-hf[0]['doviz_satisi'], 2)}, 23–27 Mart {sayi(-hf[3]['doviz_satisi'], 2)} milyar dolar)",
+            "B9 · haftalar")
+    enb = sorted(range(len(hf)), key=lambda i: hf[i]["doviz_satisi"])[:2]
+    dogru(hf[0]["ilk"] == "2026-03-02" and hf[3]["ilk"] == "2026-03-23" and sorted(enb) == [0, 3]
+          and all(h["swap_haric_degisim"] < 0 for h in hf), "B9: satışın en yoğun iki haftası 2–6 ve 23–27 Mart değil")
+    metinde(f"net rezerv {gun_ay(m26['net_rezerv_dip_gun'])}'ta, swap hariç net rezerv {gun_ay(m26['swap_haric_dip_gun'])}'ta "
+            f"pencerenin dibine indi (dönemin en düşüğü {gun_ay(m26['swap_haric_donem_dip_gun'])}'da "
+            f"{sayi(m26['swap_haric_donem_dip'], 2)})", "B9 · sıra")
+    metinde(f"Kur ay boyunca yalnız {yz(m26['usdtry_tcmb_degisim'], 2, True)} kaydı", "B9 · kur")
     metinde(f"Yabancının {SAYI_AD[y26['hafta']]} haftalık DİBS çıkışının {yz(y26['ilk_4_hafta_pay'], 0)}'u ilk dört haftada "
             "geldi", "B9 · sıra")
     alinti("cnbc_com_60ee3c98c3", "The G7 will deploy 100 million barrels of reserves over the next four months \"with a "
@@ -1262,7 +1419,7 @@ def metin(on: dict, o: dict) -> None:
            "Körfez üreticilerinin ihracatı son aylarda normalin %60 ile %80'i arasında")
     kaynakta("cnbc_com_5dfd5ea085", "with exports fluctuating at 60% to 80% of normal levels in recent months")
     alinti("cnbc_com_5dfd5ea085", "yet still roughly 5 million bpd below prewar levels in February",
-           "yedi üye Ağustos'ta savaş öncesinin yaklaşık 5 milyon varil altında üretti")
+           "yedi üye Ağustos'ta savaş öncesinin günde yaklaşık 5 milyon varil altında üretti")
     kaynakta("cnbc_com_5dfd5ea085", "OPEC+ agrees to keep November oil output targets steady")
     alinti("bloomberght_com_d832ce5702", "3 Kasım'daki ara seçimlere kadar İran'a saldırı düzenlemeyeceklerini açıkladı",
            "3 Kasım'daki ara seçimlere kadar İran'a saldırı düzenlemeyeceklerini açıkladı (Bloomberg HT, 8 Ekim)")
@@ -1285,6 +1442,11 @@ def metin(on: dict, o: dict) -> None:
            "Bu savaşın kesintisi başlangıçta günde yaklaşık 10 milyon varildi ve kayıtlardaki en büyük petrol arz şoku oldu")
     alinti("worldbank_org_b9c4f1b4c3", "the Strait of Hormuz, which handles about 35% of global seaborne crude oil trade",
            "Hürmüz deniz yoluyla taşınan ham petrolün yaklaşık %35'ini taşıyor (Dünya Bankası, Nisan 2026)")
+    alinti("dallasfed_org_4bb9186006", "in the DSGE model higher oil prices are associated with economic contractions",
+           "Dallas Fed'in modelinde yüksek fiyat ekonomik daralmayla birlikte gelir")
+    alinti("dallasfed_org_4bb9186006", "The destruction of oil demand associated with these contractions makes it difficult for "
+                                       "the quarterly average price of oil to rise to levels of $200 per barrel or more",
+           "daralmanın yok ettiği talep, çeyreklik ortalama fiyatın 200 doları aşmasını zorlaştırır")
     alinti("dallasfed_org_4bb9186006", "closing the Strait of Hormuz for 1, 2, or 3 quarters would increase Q4/Q4 headline PCE "
                                        "inflation in 2026 by 0.35, 0.79 and 1.47 percentage points",
            "(dördüncü çeyrekten dördüncü çeyreğe) 0,35, 0,79 ve 1,47 puan artırıyor")
