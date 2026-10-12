@@ -172,18 +172,21 @@ P04_YUZDE = [("^GSPC", "S&P 500"), ("^STOXX", "STOXX Europe 600"), ("^N225", "Ni
              ("JETS", "ABD havayolları"), ("XOP", "ABD petrol üreticileri"), ("GC=F", "Altın"), ("DX-Y.NYB", "Dolar endeksi"),
              ("HYG", "ABD yüksek getirili kredi"), ("XU100.IS", "BIST 100"), ("XBANK.IS", "BIST Bankacılık"),
              ("TUPRS_IS", "Tüpraş"), ("USDTRY=X", "USD/TRY")]
-P04_BP = [("us2y", "ABD 2 yıllık"), ("us10y", "ABD 10 yıllık"), ("n2y", "DİBS 2 yıllık"), ("tlref", "TLREF")]
+# Faizler iki panelde (Şekil 05'in eşi): ABD getirilerinin dört pencerelik değişimi +21 ile +50 bp, DİBS ve TLREF'inki
+# −290 ile +432 bp; tek eksende ABD işaretleri sıfır çizgisine yapışıyordu (inceleme, sekil-21)
+P04_ABD = [("us2y", "ABD 2 yıllık"), ("us10y", "ABD 10 yıllık")]
+P04_TL = [("n2y", "DİBS 2 yıllık"), ("tlref", "TLREF")]
 
 
 def sekil_04():
     r = O["rejim_2026"]
     pen = r["pencereler"]
     V = r["varlik"]
-    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.10, row_heights=[0.74, 0.26],
-                        subplot_titles=("Fiyat değişimi, %", "Faiz değişimi, baz puan"))
+    fig = make_subplots(rows=3, cols=1, vertical_spacing=0.07, row_heights=[0.68, 0.14, 0.18],
+                        subplot_titles=("Fiyat değişimi, %", "ABD faizleri, baz puan", "TL faizleri, baz puan"))
     for j, p in enumerate(pen):
         ad = f"{PENCERE_AD[j]} (Brent +%{vir(p['brent_yuzde'], 1)})"
-        for satir, kume, birim in ((1, P04_YUZDE, "%"), (2, P04_BP, "bp")):
+        for satir, kume, birim in ((1, P04_YUZDE, "%"), (2, P04_ABD, "bp"), (3, P04_TL, "bp")):
             ys = [a for k, a in kume if k in V]
             xs = [V[k]["pencere_yuzde"][j] for k, _ in kume if k in V]
             fig.add_trace(go.Scatter(x=xs, y=ys, mode="markers", name=ad, legendgroup=ad, showlegend=(satir == 1),
@@ -192,16 +195,15 @@ def sekil_04():
                                      customdata=[f"{a} · {PENCERE_AD[j]}: " + (yuzde(sifir(x, 1), 1, True) if birim == "%" else f"{isaretli(x, 0)} bp")
                                                  for a, x in zip(ys, xs)],
                                      hovertemplate="%{customdata}<extra></extra>"), row=satir, col=1)
-    for satir in (1, 2):
+    for satir in (1, 2, 3):
         fig.add_vline(x=0, line=dict(color=GRI, width=1), row=satir, col=1)
-    fig.update_yaxes(autorange="reversed", row=1, col=1)
-    fig.update_yaxes(autorange="reversed", row=2, col=1)
-    fig.update_layout(legend=dict(y=-0.08))
+        fig.update_yaxes(autorange="reversed", row=satir, col=1)
+    fig.update_layout(legend=dict(y=-0.07))
     _bitir(fig, "04_pencereler.html",
            "Şekil 04 — 2026'nın dört petrol yükselişinde öbür piyasalar ne yaptı",
            [f"Her pencere Brent'in 21 iş günlük yükselişinin tepe yaptığı gün biter: "
             + ", ".join(f"{PENCERE_AD[j]} {tarih(p['bas'])}–{tarih(p['son'])}" for j, p in enumerate(pen)),
-            "Kaynak: Yahoo Finance ve CNBC kapanışları, ABD Hazinesi, TCMB, Borsa İstanbul"], 820)
+            "Kaynak: Yahoo Finance ve CNBC kapanışları, ABD Hazinesi, TCMB, Borsa İstanbul"], 940)
 
 
 # ─────────────────────────────────────────────────────────────────────── 05
@@ -433,7 +435,7 @@ def sekil_11():
     _bitir(fig, "11_tarih.html",
            f"Şekil 11 — 2026'da ABD 2 yıllık her petrol yükselişinde arttı (medyan {bp(t['ozet']['y2026']['us2y']['medyan'], 1)}); "
            f"önceki arz kaynaklı yükselişlerde medyan {bp(t['ozet']['once_arz']['us2y']['medyan'], 1)}",
-           [f"Vadeli Brent'in 21 iş günde en az +%{vir(O['senaryo_yeri']['senaryo']['125']['yuzde'], 1)} yükseldiği, birbirine 40 günden yakın olmayan pencereler, 1988–2026",
+           [f"Vadeli Brent'in 21 iş günde en az +%{vir(O['senaryo_yeri']['senaryo']['125']['yuzde'], 1)} yükseldiği, birbirinden 40 takvim gününden fazla uzak pencereler, 1988–2026",
             "Arz/talep: NY Fed petrol fiyatı dinamikleri ayrıştırması (Kasım 2023'te durdu) · 2026 öncesinin "
             f"{len(once)} penceresinin {len(once) - len(dusen)}'u çizili; "
             + ", ".join(f"{tarih(p['bas'])}–{tarih(p['son'])}" for p in dusen) + " penceresinde ABD 2 yıllık verisi yok"], 520)

@@ -898,6 +898,8 @@ def tcmb_oyun_kitabi() -> dict:
             "tlref_bas": float(f.loc[:b, "tlref"].dropna().iloc[-1]), "tlref_son": float(f.loc[:s, "tlref"].dropna().iloc[-1]),
             "politika_bas": float(f.loc[:b, "politika"].dropna().iloc[-1]),
             "politika_son": float(f.loc[:s, "politika"].dropna().iloc[-1]),
+            "koridor_ust_bas": float(f.loc[:b, "koridor_ust"].dropna().iloc[-1]),
+            "koridor_ust_son": float(f.loc[:s, "koridor_ust"].dropna().iloc[-1]),
             "ihale_sifir_ilk": sifir.index[0].strftime("%Y-%m-%d") if len(sifir) else None,
             "ihale_ara_ilk": ara.index[0].strftime("%Y-%m-%d") if len(ara) else None,
             "tlref_ara_ilk": float(f.loc[ara.index[0], "tlref"]) if len(ara) and pd.notna(f.loc[ara.index[0], "tlref"]) else None,

@@ -1,6 +1,6 @@
 {
  "uretim": {
-  "olcum_py_sha256": "528aab5557cb9921e9eb904a88d9a661813614ca307e598ae5052101fa02eeaf",
+  "olcum_py_sha256": "db1d70d4293c10d6876460f7ddb4af4f3c93bdc80b895b02025fc65dfb9922b6",
   "girdiler": {
    "abd_hazine_1990.csv.gz": "8c31a527e6ebb6dfec0fbe654e739c5dac5ba0d5c0f107c0ec76952999d755ab",
    "abd_reel_2003.csv.gz": "7aa5105fd44c522765f73a501f0566956491f64d78308cc9a4bd3599498a60da",
@@ -15565,6 +15565,8 @@
    "tlref_son": 48.9902,
    "politika_bas": 42.5,
    "politika_son": 46.0,
+   "koridor_ust_bas": 44.0,
+   "koridor_ust_son": 49.0,
    "ihale_sifir_ilk": "2025-03-27",
    "ihale_ara_ilk": "2025-03-21",
    "tlref_ara_ilk": 45.7246,
@@ -15635,6 +15637,8 @@
    "tlref_son": 39.9978,
    "politika_bas": 37.0,
    "politika_son": 37.0,
+   "koridor_ust_bas": 40.0,
+   "koridor_ust_son": 40.0,
    "ihale_sifir_ilk": "2026-03-06",
    "ihale_ara_ilk": "2026-03-02",
    "tlref_ara_ilk": 39.8379,

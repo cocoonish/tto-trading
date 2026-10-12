@@ -1110,11 +1110,14 @@ def metin(on: dict, o: dict) -> None:
           and all(abs(n2[a]["petrol_payi"] + n2["sabit"] - n2[a]["orta"]) < 1 for a in ("125", "150")),
           "B3: DİBS 2 yıllıkta petrol payı x ile orantılı değil ya da orantısızlık sabitten gelmiyor")
     up2 = V["us2y"]["pencere"]
-    metinde(f"ABD 2 yıllık {bp(S['us2y']['125']['orta'])}, o iki pencerede {sayi(up2[1], 0, True)} ve {bp(up2[3])}",
-            "B3 · hücre/pencere")
-    ayni = [k for k, v in S.items() if v["pencere_isaret"]["n"] == 4 and max(v["pencere_isaret"]["arti"], v["pencere_isaret"]["eksi"]) == 4]
-    kucuk = [k for k in ayni if abs(S[k]["125"]["orta"]) < min(abs(V[k]["pencere"][1]), abs(V[k]["pencere"][3]))]
-    dogru(len(kucuk) > len(ayni) / 2, f"B3: 125 hücresi çoğu kalemde Mayıs/Eylül'den küçük değil ({len(kucuk)}/{len(ayni)})")
+    # Pencereler doğrunun iki yanına dağılır; "tepe yaptığı gün biter, bu yüzden küçük" nedenselliği ölçülmedi (inceleme,
+    # editor-09 · sayi-17): cümle betimleyicidir ve iki pencerenin hücrenin %90 aralığında kaldığını sorar
+    u2 = S["us2y"]["125"]
+    metinde(f"ABD 2 yıllıkta 125 dolar hücresi {bp(u2['orta'])}; büyüklükçe ona yakın Mayıs ve Eylül pencerelerinde "
+            f"gerçekleşen {sayi(up2[1], 0, True)} ve {bp(up2[3])}, ikisi de hücrenin %90 aralığının "
+            f"({yz(u2['seviye_alt'], 2)}–{yz(u2['seviye_ust'], 2)}) içinde", "B3 · hücre/pencere")
+    dogru(all(u2["alt"] <= up2[i] <= u2["ust"] for i in (1, 3)), "B3: Mayıs ya da Eylül penceresi ABD 2 yıllık hücresinin "
+                                                                   "%90 aralığının dışında")
     metinde(f"Tablodaki {oy('^GSPC', '125')}", "B3 · S&P")
 
     # ── Bölüm 4
@@ -1210,7 +1213,10 @@ def metin(on: dict, o: dict) -> None:
     ub = T["ust_bant_2026"]
     metinde(f"Repo ihalesi {ub['is_gunu']} iş günü kapalı kaldı ({gun_ay(ub['ara'])}–{gun_ay(ub['acilis'])})", "B5 · ara")
     metinde("büyük ölçüde aynı araçlara dayandı (repo ihalesine ara, fonlamayı koridorun tavanına taşıma, döviz satışı); "
-            "fark, 2025'te politika faizinin de artırılması, 2026'da ise faize dokunulmamasıydı", "B5 · araç seti")
+            "fark, 2025'te koridorun üst bandının ve politika faizinin de artırılması, 2026'da ise ikisine de "
+            "dokunulmamasıydı", "B5 · araç seti")
+    dogru(m25["koridor_ust_son"] > m25["koridor_ust_bas"] and m26["koridor_ust_son"] == m26["koridor_ust_bas"],
+          "B5: 2025'te koridorun üst bandı artmadı ya da 2026'da değişti")
     dogru(m25["politika_son"] > m25["politika_bas"] and m26["politika_son"] == m26["politika_bas"]
           and all(m[k] is not None for m in (m25, m26) for k in ("ihale_ara_ilk", "aofm_tavan_ilk"))
           and m25["doviz_satisi_21g"] < 0 and m26["doviz_satisi_21g"] < 0,
@@ -1682,10 +1688,19 @@ def metin(on: dict, o: dict) -> None:
     alinti("worldbank_org_b9c4f1b4c3", "the Strait of Hormuz, which handles about 35% of global seaborne crude oil trade",
            "Hürmüz deniz yoluyla taşınan ham petrolün yaklaşık %35'ini taşıyor (Dünya Bankası, Nisan 2026)")
     z26 = Y["zirve_2026"]
-    metinde(f"Kesinti Dünya Bankası'nın senaryosundan büyüktü, ama vadeli Brent'in 2026 zirvesi {sayi(z26['deger'], 2)} "
-            f"dolarda ({gun_ay(z26['gun'])}), fizikinin zirvesi {sayi(IB['fiziki_zirve_2026'], 2)} dolarda "
-            f"({gun_ay(IB['fiziki_zirve_2026_gun'])}) kaldı", "B9 · fiyatın sınırı")
-    dogru(z26["deger"] < IB["fiziki_zirve_2026"] < 140, "B9: 2026 zirveleri Dünya Bankası senaryosunun alt ucunun altında değil")
+    # Dünya Bankası'nın 140–157'si o günün ~90 dolarına uygulanan %56–75'tir; kıyas düzeyle değil yüzdeyle kurulur
+    # (inceleme, editor-44): bu savaş ~70 dolardan başladı ve vadeli zirve yüzde olarak o aralıkta kaldı
+    sub = IB["aylik_2026"]["2026-02"]
+    vz, fz = (z26["deger"] / sub["vadeli"] - 1) * 100, (IB["fiziki_zirve_2026"] / sub["fiziki"] - 1) * 100
+    dogru(abs(140 / 1.56 - 157 / 1.75) < 0.5 and 89 < 140 / 1.56 < 91, "B9: Dünya Bankası tabanı yaklaşık 90 dolar değil")
+    dogru(69 < sub["vadeli"] < 71 and 56 <= vz <= 75 and fz > 75,
+          "B9: vadeli zirve Dünya Bankası aralığında değil ya da fiziki zirve aralığın üstünde değil")
+    metinde("Dünya Bankası'nın %56–75'i o günün yaklaşık 90 dolarlık fiyatına uygulanıyordu; bu savaş Şubat'ta yaklaşık "
+            "70 dolardan başladı", "B9 · fiyatın sınırı")
+    metinde(f"vadeli Brent Şubat ortalamasından 2026 zirvesine ({sayi(z26['deger'], 2)} dolar, {gun_ay(z26['gun'])}) "
+            f"{yz(vz, 1, True)} yükseldi, yani yüzde olarak Dünya Bankası'nın aralığında kaldı; fiziki Brent "
+            f"({sayi(IB['fiziki_zirve_2026'], 2)} dolar, {gun_ay(IB['fiziki_zirve_2026_gun'])}) {yz(fz, 1, True)} ile aralığın "
+            "üstüne çıktı", "B9 · fiyatın sınırı")
     metinde("Hürmüz'ü baypas eden çıkış kapısı Husilerin menzilinde", "B9 · dal 2")
     alinti("dallasfed_org_4bb9186006", "in the DSGE model higher oil prices are associated with economic contractions",
            "modelde yüksek fiyat ekonomik daralmayla birlikte gelir")
