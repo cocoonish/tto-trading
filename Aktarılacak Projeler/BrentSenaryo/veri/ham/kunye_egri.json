@@ -1,0 +1,322 @@
+{
+ "yahoo_egri/BZF27_NYM.csv.gz": {
+  "url": "yfinance:BZF27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14035,
+  "sha256": "c79c22de47e6bcfc92851b27f8eca03bf1d89575bb706f3b008f71dfb6c16ced",
+  "an": "2026-10-12T14:32:07+00:00",
+  "not": "BZF27.NYM"
+ },
+ "yahoo_egri/BZF28_NYM.csv.gz": {
+  "url": "yfinance:BZF28.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13364,
+  "sha256": "a6ce7f78a29ffb209b32a9434fa66bd51251975a6dd5a77d90aaf77fbe0925b5",
+  "an": "2026-10-12T14:32:18+00:00",
+  "not": "BZF28.NYM"
+ },
+ "yahoo_egri/BZG27_NYM.csv.gz": {
+  "url": "yfinance:BZG27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13953,
+  "sha256": "70ae340e2a6fc01d280309f2c0cc3e99cc7847045e3d099624afb50d7b03fae0",
+  "an": "2026-10-12T14:32:08+00:00",
+  "not": "BZG27.NYM"
+ },
+ "yahoo_egri/BZG28_NYM.csv.gz": {
+  "url": "yfinance:BZG28.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13330,
+  "sha256": "5596f61c7c6d0ac2ae64e465d9b6bb74ca4d298aab1b26a6409536faeb6ec923",
+  "an": "2026-10-12T14:32:19+00:00",
+  "not": "BZG28.NYM"
+ },
+ "yahoo_egri/BZH27_NYM.csv.gz": {
+  "url": "yfinance:BZH27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13968,
+  "sha256": "aee84042eb1ae3720c812ab0acba4f397120fa8d0c37df7a6dc6fe8d075c3c5e",
+  "an": "2026-10-12T14:32:09+00:00",
+  "not": "BZH27.NYM"
+ },
+ "yahoo_egri/BZH28_NYM.csv.gz": {
+  "url": "yfinance:BZH28.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13369,
+  "sha256": "3f084393b6f3db32691c7844e55edd52ed2e080e93aaf2af1f9ed10442ff294f",
+  "an": "2026-10-12T14:32:20+00:00",
+  "not": "BZH28.NYM"
+ },
+ "yahoo_egri/BZJ27_NYM.csv.gz": {
+  "url": "yfinance:BZJ27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13807,
+  "sha256": "4062e25c17799c8456b103c386d05148473449bee39352fc5cd6361a3f17a8ee",
+  "an": "2026-10-12T14:32:10+00:00",
+  "not": "BZJ27.NYM"
+ },
+ "yahoo_egri/BZK27_NYM.csv.gz": {
+  "url": "yfinance:BZK27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13777,
+  "sha256": "ad146ad707a2a3688b4efc8a59c3ed39c3033177af840c0b04f782b9b0b87a64",
+  "an": "2026-10-12T14:32:11+00:00",
+  "not": "BZK27.NYM"
+ },
+ "yahoo_egri/BZM27_NYM.csv.gz": {
+  "url": "yfinance:BZM27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14104,
+  "sha256": "93572a49b4de705f6bd6a7fc3f3ebb645f48e3926a2891477b660614b1d429db",
+  "an": "2026-10-12T14:32:12+00:00",
+  "not": "BZM27.NYM"
+ },
+ "yahoo_egri/BZM28_NYM.csv.gz": {
+  "url": "yfinance:BZM28.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13671,
+  "sha256": "587ac209a63e80d2b1c3e03afed331d7d8a83375b9115b3c9520a8b4b06d2e8b",
+  "an": "2026-10-12T14:32:23+00:00",
+  "not": "BZM28.NYM"
+ },
+ "yahoo_egri/BZN27_NYM.csv.gz": {
+  "url": "yfinance:BZN27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13641,
+  "sha256": "adc1be5f0395f73c31592539b30ef9e74210646933261cd53968d0a1a3ef7454",
+  "an": "2026-10-12T14:32:13+00:00",
+  "not": "BZN27.NYM"
+ },
+ "yahoo_egri/BZQ27_NYM.csv.gz": {
+  "url": "yfinance:BZQ27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13556,
+  "sha256": "423c0ff4dabd6054b4b68e6a0e3aad11cd429ddc2824a938e82e5576a827d35f",
+  "an": "2026-10-12T14:32:14+00:00",
+  "not": "BZQ27.NYM"
+ },
+ "yahoo_egri/BZU27_NYM.csv.gz": {
+  "url": "yfinance:BZU27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13580,
+  "sha256": "9c2b5702eeb014a595620a9b103fb13955a4490de40ba6569f6199ba66cdae69",
+  "an": "2026-10-12T14:32:15+00:00",
+  "not": "BZU27.NYM"
+ },
+ "yahoo_egri/BZV27_NYM.csv.gz": {
+  "url": "yfinance:BZV27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13414,
+  "sha256": "9c57b5c062ada75faca82a1437d4b19238ad71d967abf44339dd31019f543d91",
+  "an": "2026-10-12T14:32:15+00:00",
+  "not": "BZV27.NYM"
+ },
+ "yahoo_egri/BZX27_NYM.csv.gz": {
+  "url": "yfinance:BZX27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13385,
+  "sha256": "2b5dff843d4b02d861560e5b78f985837cfb2388994b8adab2a896d10facc144",
+  "an": "2026-10-12T14:32:16+00:00",
+  "not": "BZX27.NYM"
+ },
+ "yahoo_egri/BZZ26_NYM.csv.gz": {
+  "url": "yfinance:BZZ26.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14328,
+  "sha256": "e81d3cdd2a78966f7f574ee6962d03ec052b5c4bc92466fb123abed111adfa57",
+  "an": "2026-10-12T14:32:07+00:00",
+  "not": "BZZ26.NYM"
+ },
+ "yahoo_egri/BZZ27_NYM.csv.gz": {
+  "url": "yfinance:BZZ27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14080,
+  "sha256": "c83c8fff7b287e0a679ed35a161a2361d2dfa8d7977e639bc900c3747f408126",
+  "an": "2026-10-12T14:32:17+00:00",
+  "not": "BZZ27.NYM"
+ },
+ "yahoo_egri/BZZ28_NYM.csv.gz": {
+  "url": "yfinance:BZZ28.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13814,
+  "sha256": "a0648b228f6c7902105ee117f91efd10007b9902962fd72ae49479bc0fc3ad94",
+  "an": "2026-10-12T14:32:31+00:00",
+  "not": "BZZ28.NYM"
+ },
+ "yahoo_egri/CLF27_NYM.csv.gz": {
+  "url": "yfinance:CLF27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14205,
+  "sha256": "68234e8a030bbf140ac5b7e105d2aabb3277380641082e60b881fe621a278a68",
+  "an": "2026-10-12T14:32:33+00:00",
+  "not": "CLF27.NYM"
+ },
+ "yahoo_egri/CLG27_NYM.csv.gz": {
+  "url": "yfinance:CLG27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14134,
+  "sha256": "dd90804fe67561166aa2987d2029a04cc7ac53a83b5dc4f7f4c48f4021fc882d",
+  "an": "2026-10-12T14:32:34+00:00",
+  "not": "CLG27.NYM"
+ },
+ "yahoo_egri/CLH27_NYM.csv.gz": {
+  "url": "yfinance:CLH27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14223,
+  "sha256": "966bd7a1d2a0ab5e1910b9ef0ab3d369925a0b6275e22a272a89f8cc3cc05249",
+  "an": "2026-10-12T14:32:35+00:00",
+  "not": "CLH27.NYM"
+ },
+ "yahoo_egri/CLJ27_NYM.csv.gz": {
+  "url": "yfinance:CLJ27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14050,
+  "sha256": "8e7f9d53dd0299e428cb9517c63a94a194106c353f25870be22b71a3fd8dd58c",
+  "an": "2026-10-12T14:32:36+00:00",
+  "not": "CLJ27.NYM"
+ },
+ "yahoo_egri/CLK27_NYM.csv.gz": {
+  "url": "yfinance:CLK27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14020,
+  "sha256": "47ddb464394731f11503e630548d38f83f6c650e25c82575ddfcac73dbf27a11",
+  "an": "2026-10-12T14:32:37+00:00",
+  "not": "CLK27.NYM"
+ },
+ "yahoo_egri/CLM27_NYM.csv.gz": {
+  "url": "yfinance:CLM27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14274,
+  "sha256": "c6e7976581c788afe1ad7b7f704654ba3c8eb76248909c4a69b552e859453e30",
+  "an": "2026-10-12T14:32:37+00:00",
+  "not": "CLM27.NYM"
+ },
+ "yahoo_egri/CLN27_NYM.csv.gz": {
+  "url": "yfinance:CLN27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13970,
+  "sha256": "ab732e312fac60a90e8ac16fd2a51783ad752887d70ad238a129d5062270fee5",
+  "an": "2026-10-12T14:32:38+00:00",
+  "not": "CLN27.NYM"
+ },
+ "yahoo_egri/CLQ27_NYM.csv.gz": {
+  "url": "yfinance:CLQ27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13943,
+  "sha256": "a1d855652a6f3af661d3c5e79630c24ecbf00f742dcaeac12f42a40b6e0b77fd",
+  "an": "2026-10-12T14:32:39+00:00",
+  "not": "CLQ27.NYM"
+ },
+ "yahoo_egri/CLU27_NYM.csv.gz": {
+  "url": "yfinance:CLU27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14046,
+  "sha256": "15b68f961d14390f97838831434152b86568f3494a8d3beb29590ef29ad3b96c",
+  "an": "2026-10-12T14:32:40+00:00",
+  "not": "CLU27.NYM"
+ },
+ "yahoo_egri/CLV27_NYM.csv.gz": {
+  "url": "yfinance:CLV27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13880,
+  "sha256": "00860e0b4a2cfb407ff498d1f6d0bc5950ee92394f817e4bc30a0b31368a2d76",
+  "an": "2026-10-12T14:32:41+00:00",
+  "not": "CLV27.NYM"
+ },
+ "yahoo_egri/CLX26_NYM.csv.gz": {
+  "url": "yfinance:CLX26.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14296,
+  "sha256": "d19f008d901e20b54b57ff7efc1d0ef8fc511be47928357024469d052c6a9c2c",
+  "an": "2026-10-12T14:32:31+00:00",
+  "not": "CLX26.NYM"
+ },
+ "yahoo_egri/CLX27_NYM.csv.gz": {
+  "url": "yfinance:CLX27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13818,
+  "sha256": "40b2d2fce3f4f1594698e4c70ead768493a0d13f7ab8257bc9879ca088d061fa",
+  "an": "2026-10-12T14:32:42+00:00",
+  "not": "CLX27.NYM"
+ },
+ "yahoo_egri/CLZ26_NYM.csv.gz": {
+  "url": "yfinance:CLZ26.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14417,
+  "sha256": "d9193a491d15cab7717fd137aaabd7dca02f3c0a68816039565dfe1be9b07a45",
+  "an": "2026-10-12T14:32:32+00:00",
+  "not": "CLZ26.NYM"
+ },
+ "yahoo_egri/CLZ27_NYM.csv.gz": {
+  "url": "yfinance:CLZ27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 14306,
+  "sha256": "dd5ddd910b098c02d5a2c7a6fe28d16573e72bf9a9a62736ed97e0c569a280b3",
+  "an": "2026-10-12T14:32:43+00:00",
+  "not": "CLZ27.NYM"
+ },
+ "yahoo_egri/HOF27_NYM.csv.gz": {
+  "url": "yfinance:HOF27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13001,
+  "sha256": "3770beeefa2706a4dad165321f3931662764827b871bf3f0843e9881be8bd477",
+  "an": "2026-10-12T14:32:45+00:00",
+  "not": "HOF27.NYM"
+ },
+ "yahoo_egri/HOG27_NYM.csv.gz": {
+  "url": "yfinance:HOG27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 12931,
+  "sha256": "0ebde5b0283f92d46f3d1a7e4895ba82840fc93288a19e2e901bcddf9a723077",
+  "an": "2026-10-12T14:32:46+00:00",
+  "not": "HOG27.NYM"
+ },
+ "yahoo_egri/HOH27_NYM.csv.gz": {
+  "url": "yfinance:HOH27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 12906,
+  "sha256": "930183d99c87a71daa07d2155fa771a045db6dadbfdda1ace09c987fe379500f",
+  "an": "2026-10-12T14:32:47+00:00",
+  "not": "HOH27.NYM"
+ },
+ "yahoo_egri/HOJ27_NYM.csv.gz": {
+  "url": "yfinance:HOJ27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 12842,
+  "sha256": "73b95f447b0bc12927c394e335b0c96fcdca79ebf2e8f0443cbc109bed7e2fb6",
+  "an": "2026-10-12T14:32:48+00:00",
+  "not": "HOJ27.NYM"
+ },
+ "yahoo_egri/HOK27_NYM.csv.gz": {
+  "url": "yfinance:HOK27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 12824,
+  "sha256": "b0a4750bbed606cab374bc14e577dbb6b68dc1ca0df2b26e06b907ee6af78a2a",
+  "an": "2026-10-12T14:32:48+00:00",
+  "not": "HOK27.NYM"
+ },
+ "yahoo_egri/HOM27_NYM.csv.gz": {
+  "url": "yfinance:HOM27.NYM:period=1y",
+  "durum": 200,
+  "bayt": 12900,
+  "sha256": "a572a0fc55a241295b41d13be1a04ffdb2b278dbaf8f773052cbd0635963b86e",
+  "an": "2026-10-12T14:32:49+00:00",
+  "not": "HOM27.NYM"
+ },
+ "yahoo_egri/HOX26_NYM.csv.gz": {
+  "url": "yfinance:HOX26.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13112,
+  "sha256": "fbe8d625b5e290f0de2cb5d24b90d162747acb70c7f3afb9fea9de102a6c49d8",
+  "an": "2026-10-12T14:32:43+00:00",
+  "not": "HOX26.NYM"
+ },
+ "yahoo_egri/HOZ26_NYM.csv.gz": {
+  "url": "yfinance:HOZ26.NYM:period=1y",
+  "durum": 200,
+  "bayt": 13192,
+  "sha256": "1a7b233a32bf8be4b74fe85d5c33e77a68b5911c8f15304d4806b1914325f6dc",
+  "an": "2026-10-12T14:32:44+00:00",
+  "not": "HOZ26.NYM"
+ }
+}
