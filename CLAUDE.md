@@ -4957,3 +4957,42 @@ sabah zincirini rutin sürüklediği için bülten etkilenmedi, ama yedek
 cron'lar o pencereye artık hiç yetişmiyor. (ii) Kredi'nin yavaşlığının kökü
 istek sayısı (iş günü serileri 2011'den 366 günlük parçalarla: 19 × 16 =
 304 istek); parça boyu EVDS'in satır sınırına karşı ölçülmeden büyütülmedi.
+
+**Kurucu ilke — BİR KANIT ETİKETİ, ÖLÇÜLEN İLİŞKİYİ GÖRÜŞSÜZ BİR KIYASLA DA
+YARIŞTIRMALIDIR; ve BİR KOŞULLU SENARYONUN HER SAYISI, KOŞULUN HANGİ
+KONTRATTA KURULDUĞUNU BİLMELİDİR.** 12.10.2026 Brent 125–150 senaryosu
+(`Aktarılacak Projeler/BrentSenaryo/`, kapı `dogrula.py` → sayfa sınavı 26)
+donmuş kopyaya karşı yedi mercekle incelendi ve yayından önce dört yöntem
+kusuru çıktı; dördü de "sayı doğru, okunuşu yanlış" sınıfından.
+(1) Kanıt etiketi yalnız bir-pencere-dışarıda sınamasına (dört pencerenin en
+az üçünde işaret, sıfır tahmininden küçük hata) bakıyordu. ABD 10 yıllık
+getirisi, reel getiri ve USD/TRY bunu geçiyordu — ama üçü de 2026'nın TAMAMINDA
+yükseldi; petrolün yükseldiği günlerde de yükselmeleri bir petrol ilişkisi
+değil yılın eğilimidir. İkinci sınama kondu: tahmin, eğitimdeki Brent-yükseliş
+günlerinin ortalama değişiminden (görüşsüz eğilim) küçük hata vermeli.
+Geçemeyen kalem "orta"dır ve sebebi künyede yazılı; 80 kalemin dördü düştü.
+Sıfıra karşı başarı, eğilime karşı başarı değildir — CLAUDE.md'nin taşıma
+dersindeki "görüşsüz kıyas" kuralının senaryo eşi.
+(2) Opsiyon olasılığının dayanağı BUGÜNÜN ön vadesiydi; hedef gün (9 Kasım)
+ön vade Ocak kontratıdır ve geriye eğimli eğride o kontrat 3,47 dolar aşağıda.
+Doğru taban hedef günün kontratıdır; ay içi değme olasılığı da iki bacaklıdır
+(devirden önce Aralık, sonra Ocak) ve yansıma ilkesiyle bacak bacak kurulur.
+Aynı sebeple öbür piyasaların gördüğü hareket +%19,4 değil +%23,5'tir ve
+eğrinin devir günündeki farkı tablolardaki her sayının ÜÇÜNCÜ koşuludur
+(Nisan'daki gibi açılırsa 125 dolar sütunu ABD 2 yıllıkta +20 yerine +28 bp).
+(3) Regresyonun sabiti eğilim değildir: S&P 500'ün sabiti +3,8 iken Brent'in
+yatay kaldığı günlerin gerçekleşen ortalaması +1,2; metin sabiti "petrol
+hiç kımıldamasa da" diye okuyordu. Sabit, doğrunun x = 0'daki değeridir ve
+x = 0 çevresinde gözlem yoksa bir ölçüm değil, bir uzatmadır.
+(4) "TCMB Mart'ta 61,2 milyar dolar sattı" cümlesi swap hariç net rezervin
+ERİMESİNİ satış sayıyordu; erimenin 18,0 milyarı altının fiyat etkisiydi,
+satış 41,76. Bir stok değişimi, akım ve değerleme bacaklarına ayrılmadan
+bir eylemin büyüklüğü diye yazılmaz.
+Kaynak merceğinin üç sınıfı da kayda değer: ikinci elden atıf (kendi
+bültenimizin aktardığı bir Reuters kotasyonu donmuş kaynak değildir);
+kurum adına okunan araştırmacı görüşü (TCMB ekonomistlerinin blog esnekliği
+"TCMB'nin kuralı" değildir, Boston Fed'in istatistiksel ilişkisi nedensel bir
+etki değildir); ve kıyas noktası yazılmayan dış sayı (Brent 70 dolarda
+enflasyona +1,9 puan, Enflasyon Raporu'nun 58,8 dolarlık varsayımına göredir).
+Sayı kapısı (sekiz yüzü aşkın sayı) bunların hiçbirini görmüyordu, çünkü sayıların hepsi
+doğruydu; hükümler `dogru()` ölçütleriyle adıyla sınandı.
