@@ -1,0 +1,29 @@
+# bulten:2026-10-13 · 2026-10-13T04:26:20+00:00 · https://x.com/i/status/2109863275760607703
+
+Sabah Notu — 13 Ekim 2026
+TL kısa ucu PPK'ya döndü: 2 yıllık DİBS 46 bp indi, kur kımıldamadı; Asya'da çip satışı Kospi'yi vurdu
+
+· TCMB ağustos ödemeler dengesini TSİ 10:00'da yayımlıyor; AA Finans anketinde 14 ekonomistin ortalama beklentisi 3,5 milyar dolar cari fazla (tahmin aralığı 0,85–4,5 milyar dolar). Temmuz 36 milyon dolar fazlaydı.
+· TL eğrisi pazartesi ön uçtan yükseldi: 2 yıllık spot getiri 46 bp düşüşle %39,50'ye, 1 yıllık 17 bp ile %39,03'e indi. 2 yıllık reel getiri %7,13'ten %7,14'e kaydı; düşüşün tamamı nominal bacaktaydı.
+· BIST 100 %0,94 düşüşle 12.151'de kapandı, bankacılık %0,56 yükseldi. Sınai endeks %1,37, finansal kiralama ve faktoring %5,17 kaybetti (AA). Dolar/TL 49,33'te yatay kaldı; TSİ 07:20'de 49,36.
+· EUR/USD %0,41 düşüşle 1,1159'a, 17 ayın dibine indi. Cleveland Fed Başkanı Hammack sıkı politikanın görece hızlı gelmesinin daha iyi olacağını söyledi (Reuters); USD/CHF %0,54 (1,6σ) yükseldi.
+· Kospi salı sabahı %6'yı aşan düşüşle 6.000'in altına indi ve satış tarafında işlem kısıtı devreye girdi (KED Global). Tetik, Çinli CXMT'nin daha yoğun bir DRAM tasarımında ilerleme kaydetmesi; SK Hynix %8,8, Samsung %7,6 geriledi.
+· Brent pazartesi 103 dolara indikten sonra günü %1,84 artışla 106,65 dolardan kapattı (Dünya). Salı sabahı Rus dizel arzı beklentisiyle yeniden geriliyor (Bloomberg HT).
+
+Bugün TSİ 10:00 · TCMB ağustos ödemeler dengesi. Beklenenin üstünde bir fazla, turizm gelirinin 100 doların üstündeki Brent'i hâlâ karşıladığını söyler ve ön uçtaki iyimserliği destekler. Fazla zayıf gelirse petrol faturası cari hesapta görünmeye başlamıştır; finans hesabındaki portföy akımı yabancının yaz tutumunu gösterecek. ABD'de büyük bankaların üçüncü çeyrek bilançoları bu hafta başlıyor (Investing).
+
+Tez: TL eğrisinde ön uçtaki tümsek erimeye başladı, ama eğri hâlâ bir indirim döngüsü fiyatlamıyor. Pazartesi hareketi bir politika beklentisiydi, enflasyon okuması değil.
+
+Gündem
+Türkiye: TL faizi ve DİBS. Eğri pazartesi kısa uçtan aşağı kaydı: 5 yıllık 24 bp ile %36,23'e indi, 2 yıllığın yarısı kadar. Tümsek böylece yassılaştı ve ters eğim azaldı. TLREF %36,89'da politika faizinin 11 bp altında; fonlama tarafında bir gerilim yok.
+Emtia: Ham petrol. Brent pazartesi Riyad'a yönelik saldırıların ve artan taşıma maliyetlerinin etkisiyle sabahki düşüşü geri aldı (Dünya). Nakliye maliyetinin ham petrol fiyatının üçte birine ulaştığı hesaplanıyor (Investing).
+
+Neye bakılacak
+· Çip satışı gelişen piyasalara yayılır → yabancı BIST'ten çıkar, TL ön ucu desteğini kaybeder; izlenecek: EEM'in 64 doların altında kapanması.
+· Kremlin ateşkesi reddeder → dizel primi geri gelir, motorin TÜFE'ye yazılır; izlenecek: kalorifer yakıtının 4,72 dolardan %5'in üzerinde yükselmesi.
+
+Pano: 1 aylık yıllıklandırılmış deval. hızı %19,1 (−5,4 puan; 12 Eki) · Net rezerv (günlük tahmin) 59,5 mlr USD (+0,7; 9 Eki) · Brüt rezervde altın payı %62,4 (+1,2 puan; 9 Eki) · 2 yıllık başabaş enflasyon %30,20 (−0,44 puan; 12 Eki)
+
+Beklenen: Çarşamba 15:30 · ABD eylül TÜFE'si. Çekirdek kalem yukarı şaşırtırsa Hammack'in çizgisi fiyatlamaya girer ve dolar güçlenir; beklentide gelirse uzun uçtaki rekor fon girişleri getirileri bastırmayı sürdürür. Perşembe 11:00 · eylül bütçe dengesi; 14:30 · menkul kıymet ve para-banka verileri. Menkul kıymet verisi 9 Ekim haftasını kapsar ve pazartesi DİBS'teki hareketi göremez; yabancının DİBS'e dönüşü bir hafta sonraki veride görünür. PPK 22 Ekim'de; o güne kadar ön uç her veriyi bu toplantının olasılığına çevirecek.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
