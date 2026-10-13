@@ -7344,7 +7344,53 @@
  },
  "gundem_kaynagi": "yazili",
  "manset": "TL kısa ucu PPK'ya döndü: 2 yıllık DİBS 46 bp indi, kur kımıldamadı; Asya'da çip satışı Kospi'yi vurdu",
- "yazi_zamani": "2026-10-13T04:25:29+00:00",
- "yazi_surumu": 1,
- "ilk_yazi_zamani": "2026-10-13T04:25:29+00:00"
+ "yazi_zamani": "2026-10-13T04:26:20+00:00",
+ "yazi_surumu": 2,
+ "ilk_yazi_zamani": "2026-10-13T04:25:29+00:00",
+ "fikirler": [
+  {
+   "kimlik": "2026-10-13-1",
+   "acilis": "2026-10-13",
+   "baslik": "Nasdaq 100 / S&P 500 göreli kısa: Çin bellek rekabeti çipleri vuruyor",
+   "tur": "goreli",
+   "gerekce": "CXMT'nin sunucu belleğine girme hedefi, yapay zekâ yatırımının en kârlı halkası olan bellek fiyatlarını hedef alıyor; Nasdaq 100 pazartesi S&P 500'den zayıf kapandı, satış salı sabahı Seul'de Samsung ve SK Hynix'e yayıldı. Göreli yapı çip ağırlığını öne alır ama piyasa yönünden bağımsız değildir, çünkü iki endeks en büyük hisseleri paylaşıyor.",
+   "ne_bozar": "Nasdaq 100 / S&P 500 oranı 14 Ekim ABD TÜFE'sinin ardından 3,93'ün üstünde kapanır ve 10 yıllık ABD getirisi %5,10'un altına inerse uzun vadeli büyüme hisselerine dönüş başlamış olur.",
+   "ufuk": "2026-10-30",
+   "dayanak": "kuresel",
+   "yazim_ani": "2026-10-13T04:26:19+00:00",
+   "bacaklar": [
+    {
+     "seri": "^NDX",
+     "deger": 30664.7,
+     "tarih": "2026-10-12"
+    },
+    {
+     "seri": "^GSPC",
+     "deger": 7807.24,
+     "tarih": "2026-10-12"
+    }
+   ],
+   "katsayilar": [
+    1.0
+   ],
+   "yon": "asagi",
+   "sinif": "hisse",
+   "giris": 3.927726,
+   "giris_tarih": "2026-10-12",
+   "birim": "oran",
+   "sonuc_birim": "%",
+   "ondalik": 4,
+   "hedef": 3.82,
+   "stop": 3.99,
+   "yapi_metni": "Nasdaq 100 / S&P 500",
+   "yon_metni": "Nasdaq 100, S&P 500 karşısında zayıflarsa kazanır",
+   "getiri_risk": 1.73,
+   "stop_mesafe": 1.59,
+   "hedef_mesafe": 2.74,
+   "sigma_gun": 0.5,
+   "ufuk_is_gunu": 13,
+   "stop_z": 0.88,
+   "hedef_z": 1.52
+  }
+ ]
 }
