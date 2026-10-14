@@ -1,24 +1,24 @@
 {
- "kosum": "2026-10-13",
- "kosum_an": "2026-10-13T16:39:40+00:00",
+ "kosum": "2026-10-14",
+ "kosum_an": "2026-10-14T14:14:57+00:00",
  "son_gun": "2026-10-13",
  "son_hafta": "2026-10-02",
  "gunluk_seri": 54,
- "gunluk_gozlem": 3966,
+ "gunluk_gozlem": 3967,
  "haftalik_seri": 13,
  "haftalik_gozlem": 718,
  "aylik_seri": 3,
  "kimlik": {
   "A24/1000 = −APIFON3": {
-   "n": 3965,
+   "n": 3966,
    "n_pencere": 250,
    "maks_fark": 123523.64000000001,
    "maks_tarih": "2021-12-21",
    "pencere_maks_fark": 4030.475999999908,
-   "pencere_maks_bagil": 0.006882323172491692,
-   "pencere_olcek_medyan": 585627.2509999999,
-   "tam_ortalama_mutlak": 4029.2585995964687,
-   "son_fark": 0.0,
+   "pencere_maks_bagil": 0.006856210509026629,
+   "pencere_olcek_medyan": 587857.6795,
+   "tam_ortalama_mutlak": 4028.2426501260716,
+   "son_fark": 0.003000000026077032,
    "birim": "mn TL",
    "esik_bagil": 0.01,
    "gecti": true,
@@ -35,7 +35,7 @@
    "gecti": true
   },
   "A16 = A17+A18+A21+A22": {
-   "n": 3965,
+   "n": 3966,
    "maks_fark": 1.4901161193847656e-08,
    "maks_bagil": 1.9838399662022157e-16,
    "maks_tarih": "2013-01-02",
@@ -45,7 +45,7 @@
    "gecti": true
   },
   "A18 = A19+A20": {
-   "n": 3965,
+   "n": 3966,
    "maks_fark": 1.0,
    "maks_bagil": 5.273360159169584e-10,
    "maks_tarih": "2024-04-22",
@@ -55,7 +55,7 @@
    "gecti": true
   },
   "A15 = A16+A24+A25": {
-   "n": 3965,
+   "n": 3966,
    "maks_fark": 3.0,
    "maks_bagil": 5.552068239804487e-08,
    "maks_tarih": "2016-03-21",
@@ -69,9 +69,9 @@
   "tlref": {
    "durum": "uzatildi",
    "gunler": [
-    "2026-10-13"
+    "2026-10-14"
    ],
-   "ortusen": 1928,
+   "ortusen": 1929,
    "kaynak": "Borsa İstanbul TLREF dosyası",
    "nereden": {
     "tarihsel": "canlı",
@@ -82,9 +82,9 @@
   "tlref_endeks": {
    "durum": "uzatildi",
    "gunler": [
-    "2026-10-13"
+    "2026-10-14"
    ],
-   "ortusen": 1814,
+   "ortusen": 1815,
    "kaynak": "Borsa İstanbul TLREF dosyası",
    "nereden": {
     "tarihsel": "canlı",
