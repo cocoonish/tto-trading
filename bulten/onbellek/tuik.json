@@ -1,20 +1,6 @@
 {
- "zaman": "2026-10-13T04:20:00",
+ "zaman": "2026-10-14T04:20:30",
  "veri": [
-  {
-   "tarih": "2026-10-13",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TCMB: Ödemeler dengesi (Ağustos 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": "Ödemeler Dengesi İstatistikleri   "
-  },
   {
    "tarih": "2026-10-15",
    "saat": "11:00",

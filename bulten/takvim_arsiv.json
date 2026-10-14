@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-13",
+ "_son_guncelleme": "2026-10-14",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1251,6 +1251,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-13"
+  },
+  "2026-11-04|ABD Hazinesi üç aylık refinansman duyurusu (Quarterly Refunding)": {
+   "tarih": "2026-11-04",
+   "olay": "ABD Hazinesi üç aylık refinansman duyurusu (Quarterly Refunding)",
+   "saat": "",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "gelecek çeyreğin ihraç kompozisyonu ve geri alım büyüklükleri burada ilan edilir",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-14"
   }
  }
 }
