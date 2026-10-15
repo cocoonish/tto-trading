@@ -1,0 +1,30 @@
+# bulten:2026-10-15 · 2026-10-15T04:26:52+00:00 · https://x.com/i/status/2110588188871795001
+
+Sabah Notu — 15 Ekim 2026
+ABD çekirdek enflasyonu beklentiyi aştı, Nasdaq %2,0 düştü; TL eğrisinin 5 yıllık ucu 51 bp yükseldi
+
+· Hazine ve Maliye Bakanlığı eylül bütçe dengesini TSİ 11:00'de yayımlıyor. Merkezi yönetim ağustosta 12,9 milyar TL fazla vermiş, 197,1 milyar TL faiz ödemişti. TCMB'nin 9 Ekim haftasına ait menkul kıymet verisi 14:30'da geliyor.
+· TL eğrisi uzun uçtan satıldı: 5 yıllık spot getiri 51 bp artışla %36,52'ye, 7 yıllık 73 bp ile %34,19'a çıktı. 2 yıllık ise 7 bp düşüşle %39,49'da kapandı. BIST 100 %1,08 kayıpla 12.118 puana indi.
+· ABD'de eylül TÜFE'si aylık %0,6, yıllık %3,7 arttı; yıllık beklenti %3,6'ydı. Çekirdek aylık %0,3 ile %0,2'lik beklentiyi aştı, yıllık oran %2,6. Benzin aylık %9,1 yükseldi ve manşet artışın yarısından fazlasını taşıdı (Bloomberg HT).
+· Veri hisseyi vurdu, uzun faizi değil: Nasdaq 100 %2,02, Russell 2000 %1,93 (−2,5σ) geriledi, VIX %10,5 (2,0σ) yükseldi. ABD 30 yıllık getiri ise 3,8 bp düşüşle %5,525'e indi.
+· Gümüş %6,10 (−2,8σ) düşüşle onsu 55,55 dolara, altın %1,66 ile 4.108 dolara indi; AA'ya göre satış enflasyon verisinin hemen ardından başladı. Bu sabah altın %1,3 toparlanıyor (Bloomberg HT).
+· Asya'da teknoloji satışı derinleşti: SK Hynix %10 değer kaybetti, Fed artırımı ve yapay zekâ yatırımlarının finansmanı endişesi öne çıktı (CNBC). S&P 500 vadelisi düşüşte.
+
+Bugün TSİ 11:00 · eylül bütçe dengesi. Faiz gideri ağustostaki 197,1 milyar TL'nin belirgin üstüne çıkarsa Hazine'nin uzun vadeli borçlanma ihtiyacı büyür ve dün satılan 5–7 yıllık bölge baskıda kalır. Faiz dışı denge güçlü gelirse uzun uçtaki satışın kaynağının dış risk iştahı olduğu teyit edilir.
+
+Tez: Sıcak çekirdek enflasyon ABD'de bir büyüme şokuna dönüştü, faiz şokuna dönüşmedi. Uzun uç düşerken hisse ve metal satıldı; Türkiye'de ise tablo tersti, TL eğrisi uzun uçtan satıldı.
+
+Gündem
+Türkiye: TL faizi ve DİBS. En kısa uç yükselmeyi sürdürdü: 3 aylık spot getiri 15 bp artışla %37,14'e çıktı ve TLREF'in (%36,77) 37 bp üstüne yerleşti. 1 yıllık getiri salıdaki 36 bp'lik düşüşün tamamına yakınını geri alarak %39,02'ye yükseldi.
+Küresel: Fed. Reuters'a göre enflasyon verisi ekim artırımı kararını başa baş bir tartışmaya çevirdi. San Francisco Fed Başkanı Daly, Reuters'a artırımların muhtemelen gerekli olduğunu ama acil olmadığını söyledi.
+Emtia: Metaller. Altın/gümüş oranı 3,3 puan artışla 73,95'e çıktı: sanayi talebine bağlı gümüş ve platin (%3,38) altından iki ila dört kat sert düştü. Fed artırımının büyüme maliyeti, getiri ödemeyen metalden çok sanayi metaline yazılıyor.
+
+Neye bakılacak
+· ABD verisi yeniden sıcak gelir → dolar güçlenir, TL uzun ucu satılır; izlenecek: dolar endeksinin 103'ün üstüne çıkması.
+· Yapay zekâ finansman kaygısı yayılır → hisse satışı krediye geçer; izlenecek: yüksek getirili tahvil fonunun 76'nın altında kapanması.
+
+Pano: USD/TRY 49,39 (+%0,04; 14 Eki, İstanbul 18:00) · 1 aylık yıllıklandırılmış deval. hızı %21,3 (+0,2 puan; 14 Eki) · Net rezerv (günlük tahmin) 59,5 mlr USD (−0,1; 13 Eki) · Brüt rezervde altın payı %61,7 (−0,3 puan; 13 Eki) · 2 yıllık başabaş enflasyon %30,18 (−0,07 puan; 14 Eki)
+
+Beklenen: 14:30 · menkul kıymet ve para-banka verileri. Veri 9 Ekim haftasını kapsar, yani dünkü uzun uç satışını göremez. Önceki hafta yabancı 675 milyon dolar net çıkış yapmıştı; girişe dönüş ön uçtaki indirim fiyatlamasının yabancı talebiyle desteklendiğini söyler, çıkışın sürmesi yerli likiditeye dayandığını. 15:30 · ABD perakende satışları, üretici fiyatları ve işsizlik başvuruları. Perakende satışlarda beklenti aylık %0,3, önceki ay %1,2 (investinglive). Güçlü satış ve sıcak üretici fiyatı ekim artırımını fiyata sokar ve doları güçlendirir; zayıf satış dünkü büyüme kaygısını derinleştirir, uzun ucu düşürür. 22 Ekim · PPK. Karar 14:00'te.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
