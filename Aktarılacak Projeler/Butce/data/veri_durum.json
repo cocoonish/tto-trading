@@ -1,10 +1,10 @@
 {
- "kosum": "2026-10-09 17:28",
+ "kosum": "2026-10-15 14:08",
  "son_ay": "2026-08-01",
  "son_ceyrek": "2026-06-30",
  "son_dis_ceyrek": "2026-06-30",
- "son_hafta": "2026-10-02",
- "son_gun": "2026-10-09",
+ "son_hafta": "2026-10-09",
+ "son_gun": "2026-10-15",
  "birim": {
   "bie_kbmgel": {
    "kod_kalibi": "^TP\\.KB\\.GEL",
@@ -175,7 +175,7 @@
    "aciklama": "Nakit denge ↔ finansman özdeşliği tutmuyor."
   },
   "DİBS S.1 + S.2 = toplam": {
-   "n": 317,
+   "n": 318,
    "maks_bagil_sapma": 2.2083745504223773e-16,
    "esik": 1e-06,
    "maks_mutlak_sapma": 1.862645149230957e-09,
@@ -185,17 +185,17 @@
    "aciklama": "Sahiplik kırılımı toplamı tutmuyor."
   },
   "DİBSVADE ≡ DİBSPİYDEĞ": {
-   "n": 317,
+   "n": 318,
    "maks_fark_mn_tl": 0.03000000026077032,
-   "piyasa_yazili_oran": 1.2262119749915705,
+   "piyasa_yazili_oran": 1.219607131174637,
    "gecti": true,
    "durdurucu": false,
-   "aciklama": "Vade tablosu PİYASA değeri; yazılı değere oranı 1.23×. Paylar kendi toplamına bölünür."
+   "aciklama": "Vade tablosu PİYASA değeri; yazılı değere oranı 1.22×. Paylar kendi toplamına bölünür."
   },
   "Birim mertebesi: iç borç ≈ DİBS": {
    "ic_borc_trl_tl": 9.545365736,
-   "dibs_yazili_trl_tl": 9.81628382,
-   "bagil_fark": 0.027598843815826,
+   "dibs_yazili_trl_tl": 10.11509375,
+   "bagil_fark": 0.05632454113438137,
    "esik": 0.2,
    "gecti": true,
    "durdurucu": true,
@@ -262,18 +262,18 @@
  "gecikme": {
   "aylik": {
    "son": "2026-09-01",
-   "gecikme_gun": 38
+   "gecikme_gun": 44
   },
   "ceyreklik": {
    "son": "2026-06-30",
-   "gecikme_gun": 101
+   "gecikme_gun": 107
   },
   "haftalik": {
-   "son": "2026-10-02",
-   "gecikme_gun": 7
+   "son": "2026-10-09",
+   "gecikme_gun": 6
   },
   "gunluk": {
-   "son": "2026-10-09",
+   "son": "2026-10-15",
    "gecikme_gun": 0
   }
  },
@@ -287,11 +287,11 @@
    17
   ],
   "haftalik": [
-   317,
+   318,
    23
   ],
   "gunluk": [
-   5226,
+   5230,
    2
   ]
  },
