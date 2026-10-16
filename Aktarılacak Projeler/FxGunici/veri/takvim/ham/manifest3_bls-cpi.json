@@ -1,0 +1,17 @@
+{
+ "_koşu": {
+  "sure_sn": 581.3,
+  "zaman": "2026-10-16T10:43:24Z"
+ },
+ "bls:cpi:ambargo": {
+  "aday": 105,
+  "dosya": "bls_cpi_ambargo.json",
+  "durum": 200,
+  "okunan": 105
+ },
+ "https://web.archive.org/cdx/search/cdx?url=bls.gov/news.release/archives/cpi_&matchType=prefix&output=json&fl=original,timestamp,statuscode,mimetype&collapse=urlkey&filter=statuscode:200&limit=20000": {
+  "bayt": 76673,
+  "dosya": "web.archive.org_cdx_search_cdx_url_bls.gov_news.release_archives_cpi__matchType_prefix_output_json_fl_original_timestamp_statuscode_mimetype_collapse__ef7238d7.html",
+  "durum": 200
+ }
+}
