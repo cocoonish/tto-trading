@@ -14,7 +14,18 @@ BEKLENEN = (
     ("d001aeeb", "2026-10-16T08:55:50+00:00", "7eb7be76e7ac8bc79f69a4c2c556eb3fda0b559f6fb79908a3d999c0c9bfcfc9"),
     ("a7d4b1a5", "2026-10-16T10:28:36+00:00", "7eb7be76e7ac8bc79f69a4c2c556eb3fda0b559f6fb79908a3d999c0c9bfcfc9"),
     ("38694c3b", "2026-10-16T20:48:02+00:00", "7eb7be76e7ac8bc79f69a4c2c556eb3fda0b559f6fb79908a3d999c0c9bfcfc9"),
+    ("526ed4e5", "2026-10-16T22:30:04+00:00", "7eb7be76e7ac8bc79f69a4c2c556eb3fda0b559f6fb79908a3d999c0c9bfcfc9"),
 )
+
+#: Yalnız yorum değiştiren kayıtların okura açıklaması (metodoloji dersinin ön kayıt tablosu). Bu kayıtların içerik özü
+#: bir öncekiyle aynıdır; ne değiştiğini git söylemez, burada yazılır. İçerik değiştiren kayıtların açıklaması
+#: değişen bölümlerden kurulur.
+ACIKLAMA = {
+    "a7d4b1a5": "ikinci kaydın notu düzeltildi: kayıt yazıldığında indirilmiş ama okunmamış iki veri parçası adıyla "
+                "yazıldı",
+    "38694c3b": "sonuçlardan sonra değişen uygulama kurallarının ve ön kaydın harfinden ayrılan iki okumanın listesi",
+    "526ed4e5": "aynı listeye eksik kalan hüküm penceresi eklendi: varsayılanın birincil hükmü 2024 → penceresinden",
+}
 
 #: İlk sonuçların görüldüğü commit: koşu çıktısını okuyan ilk kod (ders ölçümü ve figürler) bu commit'tedir. Ön kaydın
 #: İÇERİĞİNİ değiştiren her commit onun atası olmalıdır (sonuçlardan önce); sonraki kayıtlar yalnız yorum değiştirebilir.
