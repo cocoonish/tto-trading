@@ -26,13 +26,18 @@ pip = { EURUSD = 1e-4, GBPUSD = 1e-4, AUDUSD = 1e-4, USDJPY = 1e-2 }
 # rette herkesi durduran ilk tasarım işi saniyede 0,24 isteğe düşürdü. Reddedilen dosya
 # artık beklemeye alınır ve `ara_sn` (rastgele 1–2 kat) sonra yeniden istenir
 # (dukascopy.toplu_getir); bir dosya en çok `tavan_deneme` kez istenir.
+# Ret oranı kaynağın değil İŞİN DÜŞTÜĞÜ KOŞUCUNUN özelliğidir (16.10.2026, aynı dakikalarda
+# koşan iki iş): GBPUSD-2024'te başarılı isteğin medyanı 0,22 sn ve ilk denemenin %74'ü tamam,
+# USDJPY-2023'te medyan 11,96 sn (p99 19,49) ve %22. Yavaş koşucuda okuma sınırı 20 sn iken
+# 167 istek tam bitmek üzereyken kesiliyordu; sınır 40 sn. Yavaş koşucunun yarım bıraktığı
+# birim yeniden koşuda başka bir koşucuya düşer ve kaldığı yerden sürer.
 es_zamanli = 8
-zaman_asimi_sn = 20
+zaman_asimi_sn = 40
 deneme = 6
 hiz_baslangic = 2.0
 hiz_tavan = 6.0
 ara_sn = 60
-tavan_deneme = 8
+tavan_deneme = 10
 # Bulut koşusunda iş sınırı 21 dakika; betik kendi bütçesini bunun altında
 # tutar ve yarım kalan yılı bir sonraki koşuya bırakır (arşiv kaldığı yerden sürer).
 butce_dk = 18
