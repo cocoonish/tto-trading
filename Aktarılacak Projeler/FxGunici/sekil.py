@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 """FX GÜN İÇİ STRATEJİLER — figürler. Sayıların tamamı `cikti/ders/olcum.json`dan gelir.
 
-Strateji başına beş figür (birim adıyla):
+Strateji başına altı figür (birim adıyla):
   <birim>-ornek.html   örnek günler: örneklem dışının en son kazanan ve kaybeden işlemi (EUR/USD)
   <birim>-egri.html    birikimli R, dört parite ve havuzu; altta havuzun tepeden düşüşü
   <birim>-izgara.html  parametre ısı haritası (zaman dilimi × ikinci eksen), örneklem içi ve dışı
   <birim>-kosul.html   koşul kovaları: örneklem içinde seçilen, örneklem dışında sınanan
   <birim>-saat.html    giriş saatine (TSİ) göre işlem başına R
+  <birim>-tf.html      zaman dilimi kıyası (5 / 15 / 60 dk): varsayılanın yalnız mum uzunluğu değişir
 Ortak figürler: karsilastirma-*.html, haber-*.html, veri-*.html, yontem-*.html.
 
 Biçim seçimi (görev tanımı 10: "hızlı yüklenen bir grafik biçimi seç ve gerekçelendir"):
@@ -278,7 +279,39 @@ def saat(o: dict, birim: str) -> None:
     so._yaz(fig, f"{birim}-saat.html", yukseklik(bas, 400))
 
 
-BIRIM_SEKILLERI = (ornek, egri, izgara, kosul, saat)
+# ─────────────────────────────────────────────────────── 6 · zaman dilimi kıyası (5 / 15 / 60 dk)
+TF_RENK = {"5": "#9bb6d3", "15": MAVI, "60": MUREKKEP}
+
+
+def tf(o: dict, birim: str) -> None:
+    b = o["birim"][birim]
+    ciftler = [c for c in PARITE if (b["cift"].get(c) or {}).get("tf")]
+    if not ciftler:
+        return
+    dilimler = sorted({t for c in ciftler for t in b["cift"][c]["tf"]}, key=int)
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.14,
+                        subplot_titles=("Örneklem içi (2018–2023)", "Örneklem dışı (2024 →)"))
+    for j, d in enumerate(("is", "oos"), start=1):
+        for t in dilimler:
+            hucre = [(b["cift"][c]["tf"].get(t) or {}).get(d) or {} for c in ciftler]
+            fig.add_trace(go.Bar(x=[PARITE[c] for c in ciftler], y=[h.get("beklenti_r") for h in hucre],
+                                 name=f"{t} dk mum", marker_color=TF_RENK.get(t, GRI), showlegend=(j == 1),
+                                 legendgroup=t, customdata=[[h.get("n"), h.get("sharpe")] for h in hucre],
+                                 hovertemplate="%{x} · " + t + " dk: %{y:.3f} R · n %{customdata[0]} · Sharpe "
+                                               "%{customdata[1]:.2f}<extra></extra>"), j, 1)
+        fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.8), row=j, col=1)
+        fig.update_yaxes(title_text="net R / işlem", row=j, col=1)
+    fig.update_layout(barmode="group", bargap=0.3)
+    v = b["varsayilan"]
+    oteki = [adlar.param_yaz(k, x) for k, x in v.items() if k != "tf"]
+    bas = baslik_koy(fig, f"Zaman dilimi kıyası — {adlar.BIRIM[birim][0]}",
+                     [f"Önceden kayıtlı varsayılan; yalnız mum uzunluğu değişir ({', '.join(oteki)})",
+                      "İşlem başına net ortalama R · her parite ayrı · varsayılanın kendi dilimi "
+                      f"{v.get('tf')} dk"])
+    so._yaz(fig, f"{birim}-tf.html", yukseklik(bas, 520))
+
+
+BIRIM_SEKILLERI = (ornek, egri, izgara, kosul, saat, tf)
 
 
 # ─────────────────────────────────────────────────────── ortak: karşılaştırma

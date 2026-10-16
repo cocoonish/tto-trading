@@ -42,7 +42,7 @@ DERS_BIRIM = {
 
 #: Parametrelerin okur adı ve değerlerinin okur yazımı.
 PARAM = {
-    "tf": "zaman dilimi (dk)",
+    "tf": "zaman dilimi",
     "stop_yeri": "stop yeri",
     "stop_turu": "stop türü",
     "hedef": "hedef",
