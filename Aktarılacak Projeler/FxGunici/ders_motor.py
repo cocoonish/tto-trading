@@ -835,8 +835,8 @@ def blok_pratik_islem(u: Uretim, ctx: dict, birim: str = "orb", etiket: str = ""
                             if i["neden"] in (1, 4, 5) else "piyasa emridir ve o da kayar; sonuç iki dolumda ")) +
              f"{sayi(ek_c, 1)} pip azalır ({sayi(sonuc2, 1, arti=True)} pip). Yeni R = {sayi(sonuc2, 1)} / "
              f"{sayi(risk2, 1)} = **{sayi(sonuc2 / risk2, 2, arti=True)} R**. " +
-             ("Pay küçülür, payda büyür: kazanç R cinsinden pip cinsinden olduğundan hızlı erir, en çok da stop'u "
-              "yakın stratejilerde." if sonuc > 0 else
+             ("Pay küçülür, payda büyür: kazanç R cinsinden, pip cinsinden olduğundan daha hızlı erir; en çok da "
+              "stop'u yakın stratejilerde." if sonuc > 0 else
               "Kayıp pip olarak büyür, ama payda da büyüdüğü için R cinsinden daha az: stop'ta kapanan bir işlemin "
               "kaybı 1 R'nin biraz üstünde kalır. Kaymanın asıl bedeli kazanan işlemlerin erimesidir.")]
     return "\n".join([soru, "", "<details>", "<summary>Çözüm</summary>", ""] + [p + "\n" for p in cozum] +
