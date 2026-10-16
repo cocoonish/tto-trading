@@ -134,6 +134,11 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       görünmez; bağlam derlenmiş CSS'ten hesaplanır (buyuk_harf_baglam.py).
       İlk hâli ham HTML'de "Σ" ve "TRADİNG" arıyordu ve tanımı gereği sıfır
       buluyordu — 30.09.2026'da 16 sayfada 152 kusur dururken "0 ihlal".
+  (29) DERLENMEYEN İÇERİK — `src/content/<koleksiyon>/<ad>.md(x)` dosyasının
+      `dist/<koleksiyon>/<ad>/index.html` sayfası yoksa ENGEL. Kaynağı sınayan
+      bütün kapılar derlenmemiş bir yazıda da geçer (16.10.2026: eski içerik
+      önbelleğiyle sekiz ders sitede yoktu, sınav GEÇTİ diyordu). dist/ yoksa
+      KOŞMADI uyarısı.
   (23) SOLUK METİN — `color: var(--ink-30)` ENGEL. Kontrast 1,90:1 ve
       global.css'in kendi yorumu "yalnız çizgi ve kenarlıkta" diyor; metin
       için en soluk kabul edilen jeton --ink-60 (4,59:1).
@@ -724,6 +729,24 @@ def x_izleri(dist: pathlib.Path) -> dict[str, list[str]]:
 KACAN_ETIKET = re.compile(
     r"&lt;/?(?:p|div|span|strong|em|b|i|u|s|ul|ol|li|br|hr|a|h[1-6]|table|tr|td|th|"
     r"blockquote|figure|figcaption|small|sup|sub)\b[^&]{0,60}&gt;")
+
+
+def derlenmeyen_icerik(kok: pathlib.Path) -> list[str]:
+    """(29) DERLENMEYEN İÇERİK. Her içerik koleksiyonunun her yazısı derlenmiş bir sayfaya çıkmalı:
+    `src/content/<koleksiyon>/<ad>.md(x)` → `dist/<koleksiyon>/<ad>/index.html`. Kaynağı okuyan bütün
+    kapılar (dersin kendi doğrulayıcısı dahil) yazı hiç derlenmese de geçer; 16.10.2026'da yerel içerik
+    önbelleği eskimişti, sekiz ders sitede yoktu ve sınav "GEÇTİ" diyordu. Alt çizgiyle başlayan dosya
+    Astro'nun glob yükleyicisinde içerik sayılmaz, burada da sayılmaz."""
+    src, dist = kok / "site/src/content", kok / "site/dist"
+    eksik = []
+    for kol in sorted(p for p in src.iterdir() if p.is_dir()):
+        for f in sorted([*kol.rglob("*.md"), *kol.rglob("*.mdx")]):
+            ad = f.relative_to(kol).with_suffix("").as_posix()
+            if any(parca.startswith("_") for parca in ad.split("/")):
+                continue
+            if not (dist / kol.name / ad.lower() / "index.html").exists():
+                eksik.append(f"{kol.name}/{ad}")
+    return eksik
 
 
 def kacan_etiketler(dist: pathlib.Path) -> dict[str, list[str]]:
@@ -2316,6 +2339,20 @@ def main() -> int:
             uyari.append(f"ölü çapa — {sayfa}: {', '.join('#' + c for c in cs[:5])}"
                          f"{' …' if len(cs) > 5 else ''} (sayfada bu kimlik yok)")
         print(f"  sayfa içi ölü çapa {sum(len(v) for v in capa.values())} ({len(capa)} sayfa)")
+
+    # ------------------------------------------------------------ (29)
+    # DERLENMEYEN İÇERİK. Kaynakta duran ama sayfası derlenmemiş yazı: kaynağa
+    # bakan her kapı onu görür ve geçer, okur ise hiç göremez.
+    print("\n▶ Derlenmeyen içerik (src/content'teki her yazının dist/ sayfası)")
+    if not (KOK / "site/dist").exists():
+        print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append("ölçüt 29 (derlenmeyen içerik) KOŞMADI — dist/ yok")
+    else:
+        derlenmeyen = derlenmeyen_icerik(KOK)
+        for e in derlenmeyen:
+            hata.append(f"derlenmeyen içerik — {e}: kaynakta var, dist/'te sayfası yok (yerelde eski içerik "
+                        "önbelleği olabilir: `npx astro sync`, sonra yeniden derle)")
+        print(f"  sayfası olmayan yazı {len(derlenmeyen)}")
 
     # ------------------------------------------------------------ (21)
     # X İZİ. Site X gönderisini okura göstermiyor (kullanıcı kararı); bağı

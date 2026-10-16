@@ -533,6 +533,22 @@ sina("küçüktür/büyüktür işareti yanlış alarm üretmiyor",
 
 
 # ---------------------------------------------------------------------------
+print("\n▶ Derlenmeyen içerik (29. ölçüt)")
+
+# ÖLÇÜLEN ARIZA (16.10.2026): yerel içerik önbelleği eskimişti, sekiz ders kaynakta duruyordu ama hiçbiri
+# derlenmedi; kaynağa bakan bütün kapılar ve sınavın kendisi GEÇTİ dedi.
+_dk = {"site/src/content/arastirma/ders-a.mdx": "x", "site/src/content/arastirma/ders-b.mdx": "x",
+       "site/src/content/arastirma/_taslak.mdx": "x", "site/src/content/projeler/pano.mdx": "x",
+       "site/dist/arastirma/ders-a/index.html": "<p></p>", "site/dist/projeler/pano/index.html": "<p></p>"}
+_e = _mod.derlenmeyen_icerik(_agac(_dk))
+sina("kaynakta olup derlenmeyen yazı ENGEL", _e == ["arastirma/ders-b"], f"gelen {_e}")
+_e = _mod.derlenmeyen_icerik(_agac({**_dk, "site/dist/arastirma/ders-b/index.html": "<p></p>"}))
+sina("bütün yazılar derlenmişse sessiz (alt çizgili dosya içerik değil)", _e == [], f"gelen {_e}")
+sina("29: derlenmeyen içerik sınavın ana akışında koşuyor",
+     "derlenmeyen_icerik(KOK)" in _YOL.read_text(encoding="utf-8").split("def main", 1)[1])
+
+
+# ---------------------------------------------------------------------------
 
 # ÖLÇÜLEN KARAR (08.09.2026): yalnız panolar canlı; analiz ve ders gövdesi
 # `data-deger="sabit"` kabında, Deger betiği dokunmaz. Kap bileşende kurulur;

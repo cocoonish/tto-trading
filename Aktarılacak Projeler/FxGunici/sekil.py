@@ -390,7 +390,7 @@ def maliyet(o: dict, cift: str = "EURUSD") -> None:
         return
     satir.sort(key=lambda x: x[3] if x[3] is not None else -9)
     ad = [adlar.BIRIM[x[0]][1] for x in satir]
-    fig = make_subplots(rows=1, cols=1, subplot_titles=(f"{PARITE[cift]} · örneklem dışı, işlem başına R",))
+    fig = make_subplots(rows=1, cols=1, subplot_titles=(f"{PARITE[cift]} · örneklem dışı, R / işlem",))
     for j, (etiket, renk, sembol) in enumerate((("brüt (orta fiyattan orta fiyata)", GRI, "circle-open"),
                                                 ("net, kayma 0 (yalnız makas)", MAVI, "circle"),
                                                 ("net, kayma 0,5 pip (temel senaryo)", MUREKKEP, "diamond"),
