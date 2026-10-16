@@ -1,14 +1,14 @@
 {
  "birimler": {
   "USDJPY/2021": {
-   "bayt": 3794108,
-   "dolgu_dakika": 78559,
+   "bayt": 3823382,
+   "dolgu_dakika": 80015,
    "gun": 313,
    "gun_404": [],
    "gun_bos": [
     "2021-01-01"
    ],
-   "gun_dolu": 308,
+   "gun_dolu": 311,
    "gun_dolu_liste": [
     "2021-01-03",
     "2021-01-04",
@@ -298,13 +298,16 @@
     "2021-12-01",
     "2021-12-02",
     "2021-12-03",
+    "2021-12-05",
     "2021-12-06",
     "2021-12-07",
     "2021-12-08",
     "2021-12-09",
+    "2021-12-10",
     "2021-12-12",
     "2021-12-13",
     "2021-12-14",
+    "2021-12-15",
     "2021-12-16",
     "2021-12-17",
     "2021-12-19",
@@ -320,19 +323,16 @@
     "2021-12-30"
    ],
    "gun_hata": [
-    "2021-12-05: BID tamam  · ASK hata ConnectTimeoutError",
-    "2021-12-10: BID hata ConnectTimeoutError · ASK tamam",
-    "2021-12-15: BID hata HTTP 503 · ASK tamam",
-    "2021-12-31: BID hata HTTP 503 · ASK tamam"
+    "2021-12-31: BID tamam  · ASK hata HTTP 503"
    ],
-   "icerik_ozu": "6f1fb51449ba33a81e5f7c73c127f78a4d30bb75a6b1f540322016abe9fa59a6",
+   "icerik_ozu": "880b019d3bb787bb32449d40b10329f250a62cc4535a5b1e0b078758e481be76",
    "ilk_gun": "2021-01-01",
-   "indirme": "2026-10-16T12:19:00Z",
-   "istek": 1524,
-   "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 885,
-   "satir": 366401,
-   "sha256": "6fa003c2e899736ee6b2ae061db8059d171925241f8ade5007afee102d9bcb0e",
+   "indirme": "2026-10-16T12:53:45Z",
+   "istek": 1557,
+   "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
+   "ret": 911,
+   "satir": 369265,
+   "sha256": "748c019d26d8eddef5d7f48c5f1554c6b9717d876b2febeee1fb4789cde877a7",
    "son_gun": "2021-12-31",
    "tam": false
   }
@@ -348,7 +348,7 @@
   ]
  },
  "kaynak": "https://datafeed.dukascopy.com/datafeed/<SEMBOL>/<YYYY>/<AA-1>/<GG>/<BID|ASK>_candles_min_1.bi5",
- "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
+ "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
  "nokta": {
   "AUDUSD": 1e-05,
   "EURUSD": 1e-05,
@@ -359,5 +359,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:19:00Z"
+ "yazim": "2026-10-16T12:53:45Z"
 }

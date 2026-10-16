@@ -1,12 +1,12 @@
 {
  "birimler": {
   "USDJPY/2018": {
-   "bayt": 4014992,
-   "dolgu_dakika": 75165,
+   "bayt": 4033216,
+   "dolgu_dakika": 76487,
    "gun": 313,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 308,
+   "gun_dolu": 310,
    "gun_dolu_liste": [
     "2018-01-01",
     "2018-01-02",
@@ -314,24 +314,24 @@
     "2018-12-21",
     "2018-12-24",
     "2018-12-25",
+    "2018-12-26",
     "2018-12-27",
+    "2018-12-30",
     "2018-12-31"
    ],
    "gun_hata": [
     "2018-11-26: BID tamam  · ASK hata ReadTimeoutError",
-    "2018-12-23: BID hata ConnectTimeoutError · ASK tamam",
-    "2018-12-26: BID tamam  · ASK hata bütçe (ConnectTimeoutError)",
-    "2018-12-28: BID tamam  · ASK hata ReadTimeoutError",
-    "2018-12-30: BID tamam  · ASK hata ReadTimeoutError"
+    "2018-12-23: BID hata ReadTimeoutError · ASK tamam",
+    "2018-12-28: BID hata ReadTimeoutError · ASK tamam"
    ],
-   "icerik_ozu": "4df99fe9e9bfac6e0ca5211d7589f8ced0daa4264eba68e2a3d7db7ef333c182",
+   "icerik_ozu": "a26651b78386f70c89073fdbfb30c55fa3b810e50628a83adfee89f24a978c38",
    "ilk_gun": "2018-01-01",
-   "indirme": "2026-10-16T12:08:53Z",
-   "istek": 1704,
-   "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 969,
-   "satir": 368355,
-   "sha256": "f1da616694dadcb339f7cd48d5b1f766154b79cdfb49a3959269a159a83a4969",
+   "indirme": "2026-10-16T12:53:45Z",
+   "istek": 1774,
+   "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
+   "ret": 1032,
+   "satir": 369913,
+   "sha256": "0ac9a324267378e28ae422b1514c3469c29466187a6272b4c91af1901079a333",
    "son_gun": "2018-12-31",
    "tam": false
   }
@@ -347,7 +347,7 @@
   ]
  },
  "kaynak": "https://datafeed.dukascopy.com/datafeed/<SEMBOL>/<YYYY>/<AA-1>/<GG>/<BID|ASK>_candles_min_1.bi5",
- "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
+ "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
  "nokta": {
   "AUDUSD": 1e-05,
   "EURUSD": 1e-05,
@@ -358,5 +358,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:08:53Z"
+ "yazim": "2026-10-16T12:53:45Z"
 }

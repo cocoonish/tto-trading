@@ -1,12 +1,12 @@
 {
  "birimler": {
   "USDJPY/2024": {
-   "bayt": 4280994,
-   "dolgu_dakika": 74767,
+   "bayt": 4339509,
+   "dolgu_dakika": 77355,
    "gun": 314,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 303,
+   "gun_dolu": 308,
    "gun_dolu_liste": [
     "2024-01-01",
     "2024-01-02",
@@ -306,33 +306,33 @@
     "2024-12-10",
     "2024-12-11",
     "2024-12-12",
+    "2024-12-13",
     "2024-12-15",
     "2024-12-16",
     "2024-12-19",
+    "2024-12-20",
+    "2024-12-24",
+    "2024-12-25",
     "2024-12-26",
+    "2024-12-29",
     "2024-12-31"
    ],
    "gun_hata": [
-    "2024-12-13: BID hata bütçe (ProtocolError) · ASK tamam",
-    "2024-12-17: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2024-12-18: BID hata bütçe (ProtocolError) · ASK hata bütçe (ReadTimeoutError)",
-    "2024-12-20: BID tamam  · ASK hata bütçe (ConnectTimeoutError)",
-    "2024-12-22: BID hata bütçe (ConnectTimeoutError) · ASK tamam",
-    "2024-12-23: BID tamam  · ASK hata bütçe (ReadTimeoutError)",
-    "2024-12-24: BID tamam  · ASK hata bütçe (ReadTimeoutError)",
-    "2024-12-25: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ProtocolError)",
-    "2024-12-27: BID hata bütçe (ConnectTimeoutError) · ASK tamam",
-    "2024-12-29: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ConnectTimeoutError)",
-    "2024-12-30: BID tamam  · ASK hata bütçe (ConnectTimeoutError)"
+    "2024-12-17: BID hata ReadTimeoutError · ASK tamam",
+    "2024-12-18: BID hata HTTP 503 · ASK hata ConnectTimeoutError",
+    "2024-12-22: BID hata HTTP 503 · ASK hata HTTP 503",
+    "2024-12-23: BID hata ReadTimeoutError · ASK tamam",
+    "2024-12-27: BID tamam  · ASK hata ConnectTimeoutError",
+    "2024-12-30: BID hata HTTP 503 · ASK tamam"
    ],
-   "icerik_ozu": "ea5440b867ab9f29d2b659a3625932559fb2bb7caedcb995ffa1eeaf0abfeb3e",
+   "icerik_ozu": "99f423a060e39114a39291b9a9b104b495f673669e68695781434e0f6ca41c8a",
    "ilk_gun": "2024-01-01",
-   "indirme": "2026-10-16T12:25:41Z",
-   "istek": 1877,
-   "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 1247,
-   "satir": 361553,
-   "sha256": "d9a4de152e479176a47c0a693de000578c07e6fa3c6ecdd1290d2c2334e18397",
+   "indirme": "2026-10-16T12:53:46Z",
+   "istek": 2021,
+   "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
+   "ret": 1377,
+   "satir": 366165,
+   "sha256": "a7fea0644036827f74f3980e2e25a0efa0d982ce83ff519066dd24c4cce62634",
    "son_gun": "2024-12-31",
    "tam": false
   }
@@ -348,7 +348,7 @@
   ]
  },
  "kaynak": "https://datafeed.dukascopy.com/datafeed/<SEMBOL>/<YYYY>/<AA-1>/<GG>/<BID|ASK>_candles_min_1.bi5",
- "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
+ "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
  "nokta": {
   "AUDUSD": 1e-05,
   "EURUSD": 1e-05,
@@ -359,5 +359,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:25:41Z"
+ "yazim": "2026-10-16T12:53:46Z"
 }
