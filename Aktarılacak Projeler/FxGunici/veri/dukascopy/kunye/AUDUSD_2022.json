@@ -1,12 +1,12 @@
 {
  "birimler": {
   "AUDUSD/2022": {
-   "bayt": 4129611,
-   "dolgu_dakika": 77275,
+   "bayt": 4212089,
+   "dolgu_dakika": 77538,
    "gun": 312,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 306,
+   "gun_dolu": 312,
    "gun_dolu_liste": [
     "2022-01-02",
     "2022-01-03",
@@ -294,6 +294,8 @@
     "2022-11-28",
     "2022-11-29",
     "2022-11-30",
+    "2022-12-01",
+    "2022-12-02",
     "2022-12-04",
     "2022-12-05",
     "2022-12-06",
@@ -301,11 +303,15 @@
     "2022-12-08",
     "2022-12-09",
     "2022-12-11",
+    "2022-12-12",
     "2022-12-13",
+    "2022-12-14",
     "2022-12-15",
+    "2022-12-16",
     "2022-12-18",
     "2022-12-19",
     "2022-12-20",
+    "2022-12-21",
     "2022-12-22",
     "2022-12-23",
     "2022-12-25",
@@ -315,24 +321,17 @@
     "2022-12-29",
     "2022-12-30"
    ],
-   "gun_hata": [
-    "2022-12-01: BID tamam  · ASK hata ConnectTimeoutError",
-    "2022-12-02: BID tamam  · ASK hata ReadTimeoutError",
-    "2022-12-12: BID tamam  · ASK hata ReadTimeoutError",
-    "2022-12-14: BID hata ConnectTimeoutError · ASK hata ConnectTimeoutError",
-    "2022-12-16: BID tamam  · ASK hata ConnectTimeoutError",
-    "2022-12-21: BID hata ConnectTimeoutError · ASK tamam"
-   ],
-   "icerik_ozu": "b0b51325af9ed546b8fa5d5bc59f4ab461ccb8878585f44213dbfb4cbb5e8fab",
+   "gun_hata": [],
+   "icerik_ozu": "15ede29bfc9c469a9eb181a5db358baa8ec970fddc70ec9b0e0f16cfafceb174",
    "ilk_gun": "2022-01-01",
-   "indirme": "2026-10-16T13:13:18Z",
-   "istek": 2469,
+   "indirme": "2026-10-16T13:19:30Z",
+   "istek": 2492,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1801,
-   "satir": 363365,
-   "sha256": "27efd355c8ad83814fa50a34bd5bec233cf9a36f360203304e7092b2d1ffce61",
+   "ret": 1812,
+   "satir": 371742,
+   "sha256": "1ab4260a00a893421ee25f6c183b3bd1ede13022c81029ec8db2dd9010015c03",
    "son_gun": "2022-12-31",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -357,5 +356,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T13:13:18Z"
+ "yazim": "2026-10-16T13:19:30Z"
 }
