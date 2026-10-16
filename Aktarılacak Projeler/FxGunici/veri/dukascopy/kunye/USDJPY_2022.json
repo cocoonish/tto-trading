@@ -1,12 +1,12 @@
 {
  "birimler": {
   "USDJPY/2022": {
-   "bayt": 4125397,
-   "dolgu_dakika": 71913,
+   "bayt": 4264511,
+   "dolgu_dakika": 73740,
    "gun": 312,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 294,
+   "gun_dolu": 303,
    "gun_dolu_liste": [
     "2022-01-02",
     "2022-01-03",
@@ -296,41 +296,41 @@
     "2022-12-01",
     "2022-12-05",
     "2022-12-07",
+    "2022-12-09",
+    "2022-12-13",
     "2022-12-14",
+    "2022-12-16",
+    "2022-12-18",
+    "2022-12-20",
+    "2022-12-21",
     "2022-12-22",
+    "2022-12-23",
     "2022-12-25",
     "2022-12-26",
+    "2022-12-27",
     "2022-12-28",
-    "2022-12-29"
+    "2022-12-29",
+    "2022-12-30"
    ],
    "gun_hata": [
-    "2022-11-30: BID hata HTTP 503 · ASK hata HTTP 503",
-    "2022-12-02: BID tamam  · ASK hata HTTP 503",
-    "2022-12-04: BID hata HTTP 503 · ASK hata HTTP 503",
-    "2022-12-06: BID tamam  · ASK hata HTTP 503",
-    "2022-12-08: BID tamam  · ASK hata ReadTimeoutError",
-    "2022-12-09: BID tamam  · ASK hata HTTP 503",
-    "2022-12-11: BID tamam  · ASK hata HTTP 503",
-    "2022-12-12: BID tamam  · ASK hata HTTP 503",
-    "2022-12-13: BID hata HTTP 503 · ASK tamam",
-    "2022-12-15: BID tamam  · ASK hata bütçe (HTTP 503)",
-    "2022-12-16: BID hata HTTP 503 · ASK tamam",
-    "2022-12-18: BID hata HTTP 503 · ASK hata HTTP 503",
-    "2022-12-19: BID tamam  · ASK hata bütçe (HTTP 503)",
-    "2022-12-20: BID tamam  · ASK hata HTTP 503",
-    "2022-12-21: BID hata HTTP 503 · ASK tamam",
-    "2022-12-23: BID tamam  · ASK hata bütçe (ProtocolError)",
-    "2022-12-27: BID tamam  · ASK hata bütçe (HTTP 503)",
-    "2022-12-30: BID hata ReadTimeoutError · ASK tamam"
+    "2022-11-30: BID tamam  · ASK hata HTTP 503",
+    "2022-12-02: BID hata ConnectTimeoutError · ASK hata ConnectTimeoutError",
+    "2022-12-04: BID hata ReadTimeoutError · ASK tamam",
+    "2022-12-06: BID hata ConnectTimeoutError · ASK tamam",
+    "2022-12-08: BID hata ConnectTimeoutError · ASK tamam",
+    "2022-12-11: BID hata ConnectTimeoutError · ASK hata ReadTimeoutError",
+    "2022-12-12: BID hata HTTP 503 · ASK tamam",
+    "2022-12-15: BID hata ReadTimeoutError · ASK tamam",
+    "2022-12-19: BID tamam  · ASK hata ReadTimeoutError"
    ],
-   "icerik_ozu": "4738ca081be4c507d5c32c7f42b6cc7ffedb877cca424e403b513f369359f3c4",
+   "icerik_ozu": "f4115fa323af2f414649a4d8e19be015d72562695d54901b1bee242463e57a1d",
    "ilk_gun": "2022-01-01",
-   "indirme": "2026-10-16T12:54:16Z",
-   "istek": 2330,
+   "indirme": "2026-10-16T13:13:37Z",
+   "istek": 2504,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1699,
-   "satir": 351447,
-   "sha256": "e2829976e89f8de715572d90e3f1bc252494535301b20469050c5565c65dc3b0",
+   "ret": 1848,
+   "satir": 362580,
+   "sha256": "2827bebe4edda6b17eb406155b2a1e8b0ce7dc81f31442c2fc63b7619e51fa6a",
    "son_gun": "2022-12-31",
    "tam": false
   }
@@ -357,5 +357,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:54:16Z"
+ "yazim": "2026-10-16T13:13:37Z"
 }
