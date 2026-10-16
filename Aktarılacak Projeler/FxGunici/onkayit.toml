@@ -416,6 +416,28 @@ geri_cekilme = 0.5
 stop_turu = "sert"
 hedef = "itki_ucu"
 
+[haber_devam]
+# EKLENDİ 16.10.2026, ilk ön kayıttan (a985e126) sonra ve GERÇEK VERİ İNMEDEN önce: arşivin ilk
+# bulut koşusu henüz bitmemişti, hiçbir haber olayı ölçülmemişti. Gerekçe: görev tanımı
+# "hangi koşulda kırılımın, hangisinde fade'in kazandığını gösteren net bir tablo" istiyor;
+# N1/N2 stop ve hedef kuralları taşıdığı için bu soruyu kendi başına cevaplamaz.
+ad = "Kırılım ↔ fade devam tablosu"
+kural = """Strateji kuralından bağımsız betimleyici ölçü. İlk haber mumu kapandıktan sonraki ilk dakikanın
+açılışında ilk hareketin yönünde (kırılım) ya da tersinde (fade) giriş; stop ve hedef yok; çıkış 'ufuk'
+dakika sonra (gün sonunu aşamaz). İkisi de yürütülebilir fiyatla, temel kayma ve haber kaymasıyla; biri
+kazandığında öbürü maliyetin iki katı kadar kaybeder. Ölçü birimi: net getiri / günlük ATR (paritelerin
+pipleri kıyaslanamaz). Gözlem birimi OLAYDIR: aynı ABD olayı dört paritede aynı anda ölçülür ve bu
+dört ölçüm bağımsız değildir; hücrede aynı olaya düşen paritelerin ortalaması tek gözlem sayılır.
+Hücreler: olay, parite, ilk hareket/ATR kovası, haber öncesi trend uyumu (5 dk'da, tek tek), zaman
+dilimi (5/15/60) ve olay × kova (5 dk); her biri her ufukta. Sınama: kırılım ve fade için ayrı tek
+yönlü t (ortalama net > 0); bütün hücrelerin bütün sınamaları TEK AİLE, Benjamini–Hochberg q.
+Hüküm: hücrede ≥ asgari_olay olay ve q < fdr_q → 'kırılım kazanır' / 'fade kazanır'; değilse
+'ayrışmıyor'. Örneklem dışı (2024 →) işaret ayrıca yazılır; hükmü değiştirmez."""
+ufuk_dk = [15, 60, 120]
+asgari_olay = 20
+fdr_q = 0.10
+ana_tf = 5
+
 [fomc]
 ad = "FOMC: karar ve basın toplantısı"
 kural = """Yalnız basın toplantılı toplantılar. Karar hareketi 14:00 → 14:30 ET, basın hareketi 14:30 → 15:30 ET
