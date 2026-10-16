@@ -203,6 +203,10 @@ def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
              "sure_izgara_sn": round(time.monotonic() - t0, 1)}
     if not ayrinti:
         return sonuc
+    # Bu birimin bu paritedeki önceki işlem dosyaları silinir: seçim değiştiyse önceki koşunun seçtiği kombinasyonun
+    # dosyası kalır ve işlem listesine bakan biri onu bugünün seçimi sanardı.
+    for eski in (CIKTI / "islem" / birim).glob(f"{k.b.d.cift}__*.parquet"):
+        eski.unlink()
     sr_denemeler = np.array([s["sr_gunluk_is"] for s in satirlar])
     for ad, p in (("varsayilan", varsayilan), ("secilen", secilen["p"] if secilen else None)):
         if p is None:

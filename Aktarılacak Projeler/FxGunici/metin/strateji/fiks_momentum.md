@@ -16,7 +16,7 @@ konusudur: itiş fiksingde bitebilir, hatta fiksingden önce tersine dönebilir.
 
 - **Sinyal mumu.** Londra 16:00'dan iki mum önce başlayan mum (5 dakikalık mumda 15:50–15:55).
 - **Giriş.** Sinyal mumunun yönünde, 16:00'dan bir mum önce (15:55).
-- **Çıkış.** Londra 16:00; stop'suz (ızgarada sert ve kapanış stop'u da var: 1 × ATR).
+- **Çıkış.** Londra 16:00; stop'suz (ızgarada sert ve kapanış stop'u da var: girişten 1 × ATR uzakta).
 - **R birimi.** Girişteki ATR(14), aynı zaman dilimi.
 - **Günler.** Bütün işlem günleri; ay sonu (ayın son Londra iş günü) ayrıca raporlanır.
 

@@ -122,6 +122,12 @@ giriş fiyatından stop seviyesine uzaklık. +2R, riskin iki katı kazanç demek
 oynaklıklarından bağımsızdır; dört paritenin sonuçları ancak R ile toplanabilir. Stop'u olmayan stratejilerde
 (fiksing, gün içi momentum) R birimi girişteki ATR'dir (son on dört mumun ortalama gerçek aralığı).
 
+R'nin bir bedeli var. İşlem başına ortalama R, her işlemi riskine göre büyüklükleyen birinin sonucudur: stopu
+dar bir işlemde 1R birkaç pip olabilir ve aynı pip hareketi o işlemde büyük bir R'ye dönüşür. Pip ortalaması ise
+her işlemde aynı büyüklükle işlem yapanın sonucudur. İkisi aynı işareti taşımadığında sonucun işaretini stopu dar
+işlemler belirliyor demektir; strateji dersleri bunu parite parite adıyla yazar. Hüküm ön kayıt gereği R'den
+verilir.
+
 <div class="pratik">
   <span class="etiket">Pratik — işlem mekaniği</span>
 
@@ -138,9 +144,8 @@ Bir işlemin maliyeti iki parçadır: girişte ve çıkışta ödenen **makas** 
 dolum başına {{ K.kayma_pip[0] | s1 }}, {{ K.kayma_pip[1] | s1 }}, {{ K.kayma_pip[2] | s1 }} ve
 {{ K.kayma_pip[3] | s1 }} pip. Her strateji dersinin maliyet tablosu dört kademede net sonucu verir; **başabaş
 kayma** işlem başına net R'nin (bütün dönemde) sıfıra indiği dolum başına kaymadır. R'den ölçülür, pipten değil:
-her işlem 1 R riske ettiği için para sonucu R'yi izler, ve geniş stop'lu işlemlerin ağır bastığı pip ortalaması R
-ortalamasıyla işaret değiştirebilir. Başabaş kayma yarım pipin altındaysa kuralın kenarı (varsa) bir kurumsal
-masanın bile yürütme maliyetine sığmaz.
+her işlem 1 R riske ettiği için para sonucu R'yi izler (R ile pip ortalamasının farkı yukarıda). Başabaş kayma temel
+senaryonun yarım pipinin altındaysa kuralın kenarı (varsa) o senaryonun yürütme maliyetine sığmaz.
 
 Aynı işlem iki ayrı sayı taşır: **brüt** (orta fiyattan orta fiyata, maliyetsiz) ve **net** (yürütülebilir
 fiyatlarla, makas ve kayma dahil). Brüt sonuç kuralın bir şey yakalayıp yakalamadığını, net sonuç bundan para

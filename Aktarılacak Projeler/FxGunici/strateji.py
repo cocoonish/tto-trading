@@ -422,14 +422,22 @@ def fiks(b: Baglam, tf: int, tur: str, gecikme_mum: int, tutma_mum: int):
     satir = []
     for k in np.flatnonzero(~g.tatil):
         s, e = sig[k], ent[k]
-        if s < 0 or e < 0 or e <= s or not np.isfinite(atr[s]):
+        if s < 0 or e < 0 or e <= s:
+            continue
+        # Ön kayıt: "R birimi girişteki ATR(14, tf); 'sert'/'kapanis' stop 1·ATR". Girişteki ATR girişten önce
+        # kapanan son mumundur (gecikmesiz girişte sinyal mumu) ve stop GİRİŞTEN 1·ATR uzaktadır: giriş dakikasının
+        # orta açılışından. Sinyal kapanışından ölçülseydi, girişi bir mum geciken dönüşte fiyat o mumda stop'a
+        # yaklaşabilir ve planlanan risk birkaç pipe iner; R'ye bölünen sonuç o işlemlerde onlarca R'ye fırlardı.
+        a = atr[e - 1]
+        if not np.isfinite(a) or a <= 0:
             continue
         hareket = m.c[s] - m.o[s]
         if hareket == 0:
             continue
         yon = isaret * (1 if hareket > 0 else -1)
-        satir.append((k, s, yon, m.c[s] - yon * atr[s], abs(hareket), m.h[s], m.l[s], atr[s],
-                      int(m.i0[e]), int(cik[k]), bool(g.ay_sonu[k])))
+        gi = int(m.i0[e])
+        satir.append((k, s, yon, d.mo[gi] - yon * a, abs(hareket), m.h[s], m.l[s], a,
+                      gi, int(cik[k]), bool(g.ay_sonu[k])))
     return _tablo(satir, SUTUN + ["risk", "giris_i", "cikis_i", "ay_sonu"]), 0
 
 

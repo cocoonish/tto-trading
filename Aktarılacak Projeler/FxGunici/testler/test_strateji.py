@@ -125,6 +125,29 @@ def test_duman_varsayilan_islem_uretir_ve_giris_kapanistan_sonra(birim):
     assert (a["cikis_t"].to_numpy() <= sinir + 60).all()
 
 
+def test_fiks_stop_giristen_bir_atr():
+    """Ön kayıt [fiks]: "R birimi girişteki ATR(14, tf); 'sert'/'kapanis' stop 1·ATR" — stop GİRİŞTEN ölçülür.
+    Girişi bir mum geciken dönüşte stop sinyal kapanışından ölçülseydi fiyat o mumda stop'a yaklaşabilir, planlanan
+    risk birkaç pipe iner ve R'ye bölünen sonuç onlarca R'ye fırlardı."""
+    for tur, gec in (("donus", 0), ("donus", 1), ("momentum", 0)):
+        sin, _ = AILE["fiks"](B_TAM, tf=15, tur=tur, gecikme_mum=gec, tutma_mum=2)
+        assert len(sin), f"{tur}/{gec}: sentetik veride sinyal yok"
+        gi = sin["giris_i"].to_numpy()
+        uzak = (B_TAM.d.mo[gi] - sin["stop"].to_numpy()) * sin["yon"].to_numpy()
+        np.testing.assert_allclose(uzak, sin["risk"].to_numpy(), err_msg=f"{tur}/{gec}")
+    # Motorun R'si yürütülen fiyattan ölçülür: girişteki ATR + yarım makas + kayma (haber dakikasında haber kayması).
+    kayma = 0.5
+    p = {"tf": 15, "tur": "donus", "gecikme_mum": 1, "tutma_mum": 2, "stop_turu": "kapanis", "hedef": "yok"}
+    isl = _islem(B_TAM, "fiks", p, kayma=kayma)
+    a = isl[isl["durum"] == 0]
+    assert len(a)
+    gi = a["giris_i"].to_numpy()
+    d = B_TAM.d
+    ek = (a["R"] - a["risk"]).to_numpy()
+    tavan = 0.5 * (d.ao[gi] - d.bo[gi]) + (kayma + A.haber_kayma_pip) * d.pip + 1e-9
+    assert (ek >= -1e-9).all() and (ek <= tavan).all()
+
+
 def test_izgara_sayilari_ve_varsayilan_izgarada():
     for birim in kosu.BIRIMLER:
         liste, v = kosu.izgara(birim)

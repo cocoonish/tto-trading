@@ -23,7 +23,7 @@ yönünü önceden bilmektir: fiksinge giden mumun yönünü akışın yönü sa
 - **Sinyal mumu.** Londra 16:00'da kapanan mum (15 dakikalık mumda 15:45–16:00). Mumun yönü (kapanış − açılış)
   akışın yönü sayılır.
 - **Giriş.** Sinyal mumunun **tersi** yönde, 16:00 + "gecikme" mum sonra.
-- **Çıkış.** "Tutma" mum sonra; stop'suz (ızgarada sert ve kapanış stop'u da var: 1 × ATR).
+- **Çıkış.** "Tutma" mum sonra; stop'suz (ızgarada sert ve kapanış stop'u da var: girişten 1 × ATR uzakta).
 - **R birimi.** Stop olmadığı için risk birimi girişteki ATR(14)'tür (aynı zaman dilimi).
 - **Günler.** Bütün işlem günleri; ay sonu (ayın son Londra iş günü) ayrıca raporlanır.
 

@@ -36,9 +36,10 @@ sütun dört paritenin işlemleri birlikte (havuz).
 {{! hukum_matris }}
 
 Bir kuralın bir paritede tutup öbürlerinde tutmaması iki şekilde okunabilir: ya o paritenin bir özelliği (likidite,
-seans, haber yoğunluğu) kurala uyuyordur, ya da dört sınamadan biri şansla tutmuştur. Dört bağımsız sınamadan en az
-birinin şansla %5 eşiğini geçme olasılığı 1 − 0,95⁴ ≈ {{= "%19" }}'dur; tek paritede tutan bir kuralı o pariteye özgü
-bir kenar saymak için o paritenin yapısından gelen ayrı bir gerekçe gerekir.
+seans, haber yoğunluğu) kurala uyuyordur, ya da dört sınamadan biri şansla tutmuştur. Dört sınamadan en az birinin
+şansla %5 eşiğini geçme olasılığı en çok 4 × %5 = {{= "%20" }}'dir (sınamalar bağımsız olsaydı 1 − 0,95⁴ ≈
+{{= "%19" }}; pariteler aynı dolara karşı işlem gördüğü için bağımsız değiller ve üst sınır her durumda geçerli). Tek
+paritede tutan bir kuralı o pariteye özgü bir kenar saymak için o paritenin yapısından gelen ayrı bir gerekçe gerekir.
 
 ## Maliyet
 

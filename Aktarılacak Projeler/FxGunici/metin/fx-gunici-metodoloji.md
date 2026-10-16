@@ -122,7 +122,7 @@ ayrıştırılmamış ve hiçbir haber olayı ölçülmemişti. Üçüncü kayı
 
 ### Ön kayıttan sonra yapılanlar
 
-Dört şey ön kayıttan sonra yapıldı; hiçbiri bir kuralı, bir ızgarayı, bir varsayılanı ya da hüküm kuralını
+Altı şey ön kayıttan sonra yapıldı; hiçbiri bir kuralı, bir ızgarayı, bir varsayılanı ya da hüküm kuralını
 değiştirmedi:
 
 1. **İki eksik ölçü.** Ön kaydın istediği iki ölçü ilk koşulara girmemişti: fiksing kurallarında ay sonunun ayrı
@@ -135,6 +135,14 @@ değiştirmedi:
 4. **Ters seçim.** Koşul analizinin "tuttu" sonuçları kısmi koşularda kalabalık göründü; ne kadarının şansla
    açıklanabileceğini ölçmek için aynı ölçüt, örneklem içinde en kötü kovalar seçilerek de koşuldu. Ön kayıtta yoktu,
    hiçbir hükmü değiştirmez; karşılaştırma dersinde.
+5. **Fiksing kurallarında stop'un ölçüldüğü yer.** Ön kayıt stop'lu fiksing kombinasyonlarında stop'u girişten
+   1·ATR uzağa koyar. Ölçüm bu tanıma sonuçlar görüldükten sonra hizalandı: stop sinyal mumunun kapanışından
+   ölçüldüğünde, girişi bir mum geciken dönüş kombinasyonlarında fiyat o mumda stop'a yaklaşabiliyor, planlanan risk
+   birkaç pipe iniyor ve R'ye bölünen sonuç aşırı büyük değerlere fırlıyordu. Stop'suz varsayılanlar etkilenmez;
+   değişen, ızgaranın stop'lu kombinasyonları ve onların arasından yapılan seçimdir.
+6. **Pip ortalamasının aralığı.** R ortalaması her işlemi riskine göre büyüklükler, pip ortalaması her işlemde aynı
+   büyüklükle işlem yapanın sonucudur; ikisinin işareti ayrıştığında strateji dersleri bunu adıyla yazar ve pip
+   ortalamasının %95 aralığını da verir. Ön kayıtta yoktu, hiçbir hükmü değiştirmez.
 
 ## Haber takvimi
 

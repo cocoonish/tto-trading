@@ -473,8 +473,39 @@ def kombinasyon_yaz(p: dict, on: dict) -> str:
     return " · ".join(parca)
 
 
+def _r_pip_ayrisan(b: dict, tur: str) -> list[tuple[str, dict]]:
+    """Örneklem dışında net R ortalaması ile net pip ortalamasının işareti ayrışan pariteler (tur: varsayilan |
+    secilen). R ortalaması her işlemi riskine göre büyüklükler, pip ortalaması aynı büyüklükte işlem yapanın
+    sonucudur; işaretleri ayrıştığında R'nin işaretini stopu dar işlemler belirliyor demektir."""
+    out = []
+    for c in _ciftler(b):
+        o = ((b["cift"][c].get(tur) or {}).get("oos")) or {}
+        r, p = o.get("beklenti_r"), o.get("beklenti_pip")
+        if r is None or p is None:
+            continue
+        if (r > 0) != (p > 0):
+            out.append((c, o))
+    return out
+
+
+def _r_pip_cumle(b: dict, tur: str, ozne: str) -> str:
+    """İşareti ayrışan paritelerin cümlesi; ayrışma yoksa boş."""
+    ay = _r_pip_ayrisan(b, tur)
+    if not ay:
+        return ""
+    # Sıfıra çok yakın bir pip ortalaması tek haneyle "0,0" okunur ve ayrışmayı göstermez: iki hane.
+    parca = [f"{PARITE[c]} {_hucre(o.get('beklenti_r'), 'r')} R ama "
+             f"{_hucre(o.get('beklenti_pip'), 'r' if abs(o.get('beklenti_pip')) < 0.05 else 'p1')} pip "
+             f"(pip ortalamasının %95 aralığı {_hucre(o.get('ga_pip_alt'), 'p1')} / {_hucre(o.get('ga_pip_ust'), 'p1')})"
+             for c, o in ay]
+    return (f"{ozne} örneklem dışında R ile pipin işareti ayrışıyor: {'; '.join(parca)}. R ortalaması her işlemi "
+            f"riskine göre büyüklükler, pip ortalaması her işlemde aynı büyüklükle işlem yapanın sonucudur; işaretleri "
+            f"ayrıştığında R'nin işaretini, stopu dar olduğu için R'de ağır basan işlemler belirliyor. Hüküm ön kayıt "
+            f"gereği R'den verilir.")
+
+
 def blok_secim(u: Uretim, ctx: dict) -> str:
-    """Izgaradan örneklem içinde seçilen kombinasyon, örneklem dışı sonucu ve deflated Sharpe."""
+    """Izgaradan örneklem içinde seçilen kombinasyon, örneklem dışı sonucu (R ve pip) ve deflated Sharpe."""
     b = ctx["B"]
     govde = []
     for c in _ciftler(b):
@@ -483,9 +514,13 @@ def blok_secim(u: Uretim, ctx: dict) -> str:
         p = v.get("secilen_p") or {}
         govde.append([PARITE[c], kombinasyon_yaz(p, u.ON.get(b.get("aile")) or {}) or "—",
                       _hucre((s.get("is") or {}).get("beklenti_r"), "r"), _hucre((s.get("oos") or {}).get("beklenti_r"), "r"),
+                      _hucre((s.get("oos") or {}).get("beklenti_pip"), "p1"),
                       _hucre((s.get("dsr") or {}).get("dsr"), "s2"),
                       _hucre(s.get("hukum"), "hukum")])
-    return _tablo(["Parite", "Seçilen", "İçi (R)", "Dışı (R)", "DSR", "Hüküm"], govde, ["l", "l", "r", "r", "r", "l"])
+    tablo = _tablo(["Parite", "Seçilen", "İçi (R)", "Dışı (R)", "Dışı (pip)", "DSR", "Hüküm"], govde,
+                   ["l", "l", "r", "r", "r", "r", "l"])
+    not_ = _r_pip_cumle(b, "secilen", "Seçilen kombinasyonlarda")
+    return tablo + (f"\n\n{not_}" if not_ else "")
 
 
 def blok_wf(u: Uretim, ctx: dict) -> str:
@@ -748,6 +783,9 @@ def blok_hukum_cumle(u: Uretim, ctx: dict) -> str:
     if hs["maliyet"]:
         ana += (f" Maliyet bayrağı {hs['maliyet']} paritede yanıyor: brüt sonuç bütün dönemde sıfırdan ayırt "
                 f"edilebiliyor ama net sonuç sıfırın altında — kenar varsa makası ödemeye yetmiyor.")
+    rp = _r_pip_cumle(b, "varsayilan", "Önceden kayıtlı kuralda")
+    if rp:
+        ana += " " + rp
     return ana
 
 
@@ -1347,7 +1385,10 @@ def _basabas_yaz(e: dict) -> str:
         return "ızgaranın üstünde" if e.get("oos") else "—"
     if k == 0:
         ek = e.get("basabas_sifir_r")
-        return f"sıfırda bile eksi ({_hucre(ek, 'r')} R)" if ek is not None else "sıfırda bile eksi"
+        if ek is None:
+            return "sıfırda bile eksi"
+        # İki haneye yuvarlanınca "0,00" okunan bir eksi, "sıfırda bile eksi (0,00 R)" diye kendisiyle çelişirdi.
+        return f"sıfırda bile eksi ({_hucre(ek, 'r3' if abs(ek) < 0.005 else 'r')} R)"
     if k < 0.005:
         return "&lt;0,01"
     return _hucre(k, "s2")

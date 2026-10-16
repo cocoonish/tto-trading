@@ -1,0 +1,1315 @@
+---
+title: 'FX Gün İçi Stratejiler 5: Haber — Kırılım mı Fade mi, FOMC Kararı ve Basın Toplantısı, Beş Haber Stratejisi'
+description: "ABD tarım dışı istihdamı, ABD TÜFE'si, FOMC, ECB ve BoE kararları anında dört majör paritede ne olduğu, 2018–2026 bid/ask verisiyle: resmî takvim ve saat denetimi, haber dakikasının makası, hangi koşulda ilk hareketin sürdüğünü (kırılım) hangisinde geri döndüğünü (fade) gösteren devam tablosu, ortalama fiyat patikaları, FOMC kararı ile basın toplantısının ilişkisi ve beş haber stratejisi (N1–N5)."
+pubDate: 2026-10-16
+tags: ['fx', 'gun-ici', 'haber', 'nfp', 'fomc', 'ecb', 'backtest', 'ders']
+durum: 'aktif'
+kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · BLS yayım takvimi ve bültenleri (Internet Archive kopyaları) · Fed, ECB, BoE karar arşivleri · önceden kayıt'
+ozet: "Bir veri ya da merkez bankası kararı anında fiyatın ilk hareketi sürer mi, geri mi döner? Olay olay, ilk hareketin büyüklüğüne ve haber öncesi trende göre ölçülmüş bir devam tablosu, FOMC'de kararın basın toplantısında ne sıklıkla tersine döndüğü ve beş mekanik haber stratejisinin maliyetten sonraki sonucu."
+seviye: 'ileri'
+onkosul:
+  - fx-gunici-giris
+  - fx-gunici-seans-kirilimlari
+  - fx-gunici-fade
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+Haber anı, gün içi FX'in en yoğun ve en pahalı dakikalarıdır. Fiyat bir dakikada günlük aralığının büyük bir kısmını
+yürüyebilir; makas açılır, kayma büyür, ilk tepki bazen dakikalar içinde geri alınır. Masalarda iki karşıt sezgi
+vardır: "ilk hareket sürer, yönü takip et" ve "ilk hareket aşırıdır, sol". Bu ders iki sezgiyi aynı olaylarda, aynı
+maliyetle, ön kaydın kuralıyla sınar.
+
+Ders üç parçadır. Önce **takvim ve maliyet**: olayların saati nereden geldi, nasıl denetlendi ve haber dakikasında
+işlem yapmanın bedeli ne. Sonra **betimleyici ölçüler**: stop ve hedef taşımayan, yalnız "ilk hareket sürdü mü"
+sorusunu soran devam tablosu, ortalama fiyat patikaları ve FOMC'de karar ile basın toplantısının ilişkisi. En son
+**beş strateji**: N1 kırılım, N2 fade, N3 haber öncesi aralık kırılımı, N4 başarısız haber kırılımı ve N5 geri
+çekilme sonrası devam.
+
+## Olaylar ve saatleri
+
+Ölçülen olaylar ve eşlendikleri pariteler: ABD verileri (tarım dışı istihdam ve TÜFE) ile FOMC dört paritede; ECB
+kararı ve basın toplantısı EUR/USD'de; BoE kararı GBP/USD'de. Her olayın saati resmî bir kaynaktan geldi: ABD
+verilerinde yayımın kendi ambargo satırından, FOMC kararında karar metninin yayım satırından, ECB basın toplantısında
+duyurunun kendi cümlesinden, tarih tarih; BoE kararında, ECB kararında ve FOMC basın toplantılarının çoğunda kurumun
+yayımladığı saat kuralından. Hiçbir saat "genelde 08:30'dur" diye varsayılmadı; hangi olayın saatinin nereden geldiği
+metodoloji dersinde.
+
+| Olay | Sayı | Dönem | Yerel saat (olay sayısı) | Kaynak | Fiyat sınaması |
+| :--- | ---: | :--- | :--- | :--- | :--- |
+| ABD tarım dışı istihdam (NFP) | 105 | 05.01.2018 → 02.10.2026 | 08:30 New York (105) | www.bls.gov | 105 doğrulandı |
+| ABD TÜFE (CPI) | 104 | 12.01.2018 → 11.09.2026 | 08:30 New York (104) | www.bls.gov | 100 doğrulandı · 3 sessiz · 1 çelişki |
+| FOMC kararı | 71 | 31.01.2018 → 16.09.2026 | 14:00 New York (69); 10:00 New York (1); 17:00 New York (1) | www.federalreserve.gov | 70 doğrulandı · 1 değerlendirilemedi |
+| FOMC basın toplantısı | 65 | 21.03.2018 → 16.09.2026 | 14:30 New York (65) | www.federalreserve.gov | sınanmadı (konuşma tek dakikada sıçrama yapmaz; yalnız bilgi) |
+| ECB kararı | 70 | 25.01.2018 → 10.09.2026 | 13:45 Frankfurt (36); 14:15 Frankfurt (34) | www.ecb.europa.eu | 59 doğrulandı · 10 sessiz · 1 çelişki |
+| ECB basın toplantısı | 70 | 25.01.2018 → 10.09.2026 | 14:30 Frankfurt (36); 14:45 Frankfurt (34) | www.ecb.europa.eu | sınanmadı (konuşma tek dakikada sıçrama yapmaz; yalnız bilgi) |
+| BoE kararı | 70 | 08.02.2018 → 17.09.2026 | 12:00 Londra (70) | www.bankofengland.co.uk | 67 doğrulandı · 3 sessiz |
+
+_Saatler yerel saattir; TSİ karşılıkları giriş dersinin tablosunda. Fiyat sınaması: resmî saatte 1 dakikalık fiyatta
+olağandışı bir sıçrama var mı (doğrulandı), yoksa bir saat ya da yarım saat önce/sonra mı daha iyi oturuyor (çelişki),
+yoksa piyasa hiç kımıldamadı mı (sessiz). Sınama yalnız raporlar: hiçbir olay fiyat yüzünden dışarıda bırakılmadı.
+Ayrıntısı ve takvimin bilinen boşlukları metodoloji dersinde._
+
+Fiyat sınamasının bir olayı dışarıda bırakmaması bilinçlidir. Resmî belge birincil kaynaktır; beklenen bir karar
+fiyatı oynatmayabilir, ve tepkisiz ya da çelişkili görünen olayları atmak, bir haber stratejisinin örneklemini
+sonuca bakarak seçmek olurdu. Saati yanlış bir olay sonuçları sulandırır, şişirmez.
+
+## Haber dakikasının maliyeti
+
+Açıklama anında likidite incelir. Makasın olay saatine göre seyri (EUR/USD, olayların medyanı, pip):
+
+| Olay | Olay sayısı | −5 dk | −2 dk | −1 dk | 0 dk | +1 dk | +5 dk | +15 dk | Olaysız gün, zirve dakikası | Zirve |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| ABD tarım dışı istihdam (NFP) | 105 | 0,3 | 0,4 | 1,6 | 0,5 | 0,5 | 0,4 | 0,3 | 0,3 | −1 dk · 5,3 kat |
+| ABD TÜFE (CPI) | 104 | 0,3 | 0,4 | 1,2 | 0,4 | 0,4 | 0,3 | 0,3 | 0,3 | −1 dk · 4,0 kat |
+| FOMC kararı | 71 | 0,3 | 0,4 | 1,7 | 0,6 | 0,4 | 0,3 | 0,3 | 0,3 | −1 dk · 5,7 kat |
+| FOMC basın toplantısı | 65 | 0,3 | 0,4 | 0,4 | 0,4 | 0,4 | 0,4 | 0,4 | 0,3 | −3 dk · 1,3 kat |
+| ECB kararı | 70 | 0,3 | 0,4 | 1,1 | 0,5 | 0,4 | 0,3 | 0,4 | 0,3 | −1 dk · 3,7 kat |
+| ECB basın toplantısı | 70 | 0,3 | 0,3 | 0,6 | 0,4 | 0,4 | 0,4 | 0,3 | 0,3 | −1 dk · 1,8 kat |
+
+_Dakika: olay saatine göre 1 dakikalık mumun başlangıcı; değer o mumun kapanışındaki makastır. −1 açıklamadan önceki
+son kotasyon, 0 açıklamadan bir dakika sonrasıdır. Olaysız gün: aynı UTC dakikası, takvimde hiçbir olay olmayan hafta
+içi günlerin medyanı. Zirve: makasın en geniş olduğu dakika ve olaysız güne göre katı._
+
+Dört paritede her olayın zirvesi (pip, parantezde olaysız güne göre katı):
+
+| Parite | ABD tarım dışı istihdam (NFP) | ABD TÜFE (CPI) | FOMC kararı | FOMC basın toplantısı | ECB kararı | ECB basın toplantısı | BoE kararı |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| EUR/USD | 1,6 (5,3 kat) | 1,2 (4,0 kat) | 1,7 (5,7 kat) | 0,4 (1,3 kat) | 1,1 (3,7 kat) | 0,6 (1,8 kat) | — |
+| GBP/USD | 3,4 (3,8 kat) | 2,5 (2,8 kat) | 3,2 (4,0 kat) | 1,1 (1,4 kat) | — | — | 2,8 (3,4 kat) |
+| USD/JPY | 2,2 (4,4 kat) | 1,9 (3,9 kat) | 2,3 (5,8 kat) | 0,6 (1,5 kat) | — | — | — |
+| AUD/USD | 2,8 (2,5 kat) | 2,4 (2,2 kat) | 2,8 (2,8 kat) | 1,2 (1,2 kat) | — | — | — |
+
+Makas en geniş hâline açıklamadan hemen önceki dakikanın kapanışında gelir: piyasa yapıcılar kotasyonlarını
+açıklamadan önce genişletir. Açıklamadan sonra hızla daralır ve birkaç dakikada olaysız günün düzeyine döner.
+Bu dersin stratejileri ilk haber mumunun kapanışından sonra girer, yani en pahalı dakikayı zaten atlar; yine de haber
+penceresinde (olaydan önceki iki dakikadan sonraki on beş dakikaya) her dolum için ayrıca 1,0
+pip kayma eklenir. Makasın kendisi gerçek bid/ask'tan geldiği için ayrıca sayılır.
+
+**Sürpriz vekili.** Bir verinin piyasayı ne kadar şaşırttığını ölçmenin doğru yolu açıklanan değeri piyasa
+beklentisiyle (anket medyanı) kıyaslamaktır. Bu ders o beklentilere sahip değil; yerine **ilk haber mumunun
+hareketinin, haberden önceki ATR'ye oranı** kullanılır. Bu bir ölçüm değil vekildir: büyük bir ilk hareket büyük bir
+sürprizin de, sığ likiditenin de sonucu olabilir ve ikisi ilk mumda ayırt edilemez. Tablolarda "ilk mum / ATR"
+kovaları bu vekildir: 0,5'in altı, 0,5–1, 1–2 ve 2'nin üstü.
+
+## Kırılım mı fade mi: devam tablosu
+
+Ön kayıt, strateji kurallarından bağımsız bir tablo istedi: ilk haber mumu kapandıktan sonraki ilk dakikada, ilk
+hareketin **yönünde** (kırılım) ya da **tersinde** (fade) girilir; stop ve hedef yoktur, çıkış 15, 60 ya da 120 dakika
+sonradır. İki yön de yürütülebilir fiyatla ve haber kaymasıyla ölçülür. Birinin brüt kazancı öbürünün brüt kaybıdır,
+yani iki yönün net sonuçlarının toplamı her olayda iki yönün maliyeti kadar eksidir: bir yönün artıya geçmesi için
+hareketin maliyeti aşması gerekir. Ölçü birimi net getirinin günlük ATR'ye oranıdır (yüzde): pariteler arası pipler
+kıyaslanamaz.
+
+Gözlem birimi **olaydır**. Aynı ABD verisi dört paritede aynı dakikada ölçülür ve dört ölçüm bağımsız değildir:
+hepsi doların tepkisidir. Bir hücrede aynı olaya düşen paritelerin ortalaması tek gözlem sayılır; aksi, dört ölçüm
+tam ilintili olduğunda örneklemi dörde katlar ve t istatistiğini yapay olarak iki katına çıkarır.
+
+Aşağıdaki 6 tablonun (olay, ilk mum büyüklüğü, haber öncesi trend, mum uzunluğu, parite, olay × ilk mum büyüklüğü) 147 hücresi ve her hücrenin iki yönü tek bir sınama ailesidir: 288 tek yönlü t sınaması. Hüküm, Benjamini–Hochberg ile düzeltilmiş q değeri 0,10 altında ve hücrede en az 20 olay varsa verilir. Sonuç: 111 hücrede ayrışmıyor, 36 hücrede yetersiz örneklem.
+
+**Olaya göre.**
+
+| Olay | Ufuk | Olay sayısı | Kırılım | Fade | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | :--- |
+| ABD tarım dışı istihdam (NFP) | 15 dk | 104 | −5,7 | −1,3 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) | 60 dk | 104 | −7,9 | +0,9 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) | 120 dk | 104 | −7,4 | +0,5 | ayrışmıyor |
+| ABD TÜFE (CPI) | 15 dk | 103 | −1,9 | −5,2 | ayrışmıyor |
+| ABD TÜFE (CPI) | 60 dk | 103 | −3,7 | −3,3 | ayrışmıyor |
+| ABD TÜFE (CPI) | 120 dk | 103 | −4,5 | −2,4 | ayrışmıyor |
+| FOMC kararı | 15 dk | 70 | −1,4 | −6,0 | ayrışmıyor |
+| FOMC kararı | 60 dk | 70 | −3,1 | −4,3 | ayrışmıyor |
+| FOMC kararı | 120 dk | 70 | −5,5 | −1,9 | ayrışmıyor |
+| FOMC basın toplantısı | 15 dk | 65 | −14,5 | +7,1 | ayrışmıyor |
+| FOMC basın toplantısı | 60 dk | 65 | −18,2 | +10,9 | ayrışmıyor |
+| FOMC basın toplantısı | 120 dk | 65 | −17,1 | +9,7 | ayrışmıyor |
+| ECB kararı | 15 dk | 69 | −3,1 | −3,6 | ayrışmıyor |
+| ECB kararı | 60 dk | 69 | +2,6 | −9,2 | ayrışmıyor |
+| ECB kararı | 120 dk | 69 | +1,5 | −8,1 | ayrışmıyor |
+| ECB basın toplantısı | 15 dk | 70 | −2,1 | −4,6 | ayrışmıyor |
+| ECB basın toplantısı | 60 dk | 70 | −0,3 | −6,3 | ayrışmıyor |
+| ECB basın toplantısı | 120 dk | 70 | −2,9 | −3,6 | ayrışmıyor |
+| BoE kararı | 15 dk | 70 | −4,6 | −1,3 | ayrışmıyor |
+| BoE kararı | 60 dk | 70 | −5,0 | −1,0 | ayrışmıyor |
+| BoE kararı | 120 dk | 70 | −8,7 | +2,7 | ayrışmıyor |
+
+**İlk mumun büyüklüğüne göre** (sürpriz vekili):
+
+| İlk mum / ATR | Ufuk | Olay sayısı | Kırılım | Fade | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | :--- |
+| &lt;0,5 | 15 dk | 129 | −5,7 | −1,0 | ayrışmıyor |
+| &lt;0,5 | 60 dk | 129 | −3,5 | −3,2 | ayrışmıyor |
+| &lt;0,5 | 120 dk | 129 | −5,3 | −1,4 | ayrışmıyor |
+| 0,5–1 | 15 dk | 136 | −7,5 | +0,5 | ayrışmıyor |
+| 0,5–1 | 60 dk | 136 | −9,2 | +2,3 | ayrışmıyor |
+| 0,5–1 | 120 dk | 136 | −8,2 | +1,2 | ayrışmıyor |
+| 1–2 | 15 dk | 197 | −4,6 | −2,2 | ayrışmıyor |
+| 1–2 | 60 dk | 197 | −7,3 | +0,5 | ayrışmıyor |
+| 1–2 | 120 dk | 197 | −7,7 | +0,9 | ayrışmıyor |
+| >2 | 15 dk | 336 | −4,3 | −2,8 | ayrışmıyor |
+| >2 | 60 dk | 336 | −4,7 | −2,3 | ayrışmıyor |
+| >2 | 120 dk | 336 | −6,5 | −0,5 | ayrışmıyor |
+
+**Haber öncesi trende göre** (olaydan önceki on iki mumun yönü ile ilk mumun yönü):
+
+| Haber öncesi trend | Ufuk | Olay sayısı | Kırılım | Fade | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | :--- |
+| öncesi trendle aynı yönde | 15 dk | 388 | −4,3 | −2,6 | ayrışmıyor |
+| öncesi trendle aynı yönde | 60 dk | 388 | −5,5 | −1,4 | ayrışmıyor |
+| öncesi trendle aynı yönde | 120 dk | 388 | −7,6 | +0,7 | ayrışmıyor |
+| belirsiz (trend ya da ilk mum sıfır) | 15 dk | 1 | +11,4 | −17,3 | yetersiz örneklem |
+| belirsiz (trend ya da ilk mum sıfır) | 60 dk | 1 | +31,6 | −37,4 | yetersiz örneklem |
+| belirsiz (trend ya da ilk mum sıfır) | 120 dk | 1 | +14,3 | −20,1 | yetersiz örneklem |
+| öncesi trende ters | 15 dk | 362 | −4,5 | −2,5 | ayrışmıyor |
+| öncesi trende ters | 60 dk | 362 | −4,9 | −2,0 | ayrışmıyor |
+| öncesi trende ters | 120 dk | 362 | −5,0 | −1,9 | ayrışmıyor |
+
+**Zaman dilimine göre** (ilk mum 5, 15 ya da 60 dakika):
+
+| Mum | Ufuk | Olay sayısı | Kırılım | Fade | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | :--- |
+| 5 dk mum | 15 dk | 551 | −4,5 | −2,3 | ayrışmıyor |
+| 5 dk mum | 60 dk | 551 | −5,1 | −1,8 | ayrışmıyor |
+| 5 dk mum | 120 dk | 551 | −6,3 | −0,6 | ayrışmıyor |
+| 15 dk mum | 15 dk | 552 | −2,1 | −2,7 | ayrışmıyor |
+| 15 dk mum | 60 dk | 552 | −3,4 | −0,9 | ayrışmıyor |
+| 15 dk mum | 120 dk | 552 | −3,4 | −0,8 | ayrışmıyor |
+| 60 dk mum | 15 dk | 552 | −2,4 | −1,7 | ayrışmıyor |
+| 60 dk mum | 60 dk | 552 | −2,4 | −1,8 | ayrışmıyor |
+| 60 dk mum | 120 dk | 552 | −2,1 | −2,1 | ayrışmıyor |
+
+**Pariteye göre** (her parite kendi içinde; gözlem birimi o paritedeki olay):
+
+| Parite | Ufuk | Olay sayısı | Kırılım | Fade | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | :--- |
+| EUR/USD | 15 dk | 480 | −4,8 | −1,9 | ayrışmıyor |
+| EUR/USD | 60 dk | 480 | −5,7 | −1,0 | ayrışmıyor |
+| EUR/USD | 120 dk | 480 | −6,3 | −0,3 | ayrışmıyor |
+| GBP/USD | 15 dk | 411 | −4,5 | −1,5 | ayrışmıyor |
+| GBP/USD | 60 dk | 411 | −6,6 | +0,6 | ayrışmıyor |
+| GBP/USD | 120 dk | 411 | −8,4 | +2,4 | ayrışmıyor |
+| USD/JPY | 15 dk | 342 | −4,0 | −1,9 | ayrışmıyor |
+| USD/JPY | 60 dk | 342 | −4,4 | −1,4 | ayrışmıyor |
+| USD/JPY | 120 dk | 342 | −3,1 | −2,8 | ayrışmıyor |
+| AUD/USD | 15 dk | 341 | −7,3 | −2,7 | ayrışmıyor |
+| AUD/USD | 60 dk | 341 | −10,9 | +0,9 | ayrışmıyor |
+| AUD/USD | 120 dk | 341 | −12,2 | +2,2 | ayrışmıyor |
+
+<details>
+<summary>Olay ve ilk mum büyüklüğü birlikte (bütün hücreler)</summary>
+
+| Olay · ilk mum / ATR | Ufuk | Olay sayısı | Kırılım | Fade | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | :--- |
+| BoE kararı · 0,5–1 | 15 dk | 7 | −2,6 | −3,2 | yetersiz örneklem |
+| BoE kararı · 0,5–1 | 60 dk | 7 | −4,3 | −1,4 | yetersiz örneklem |
+| BoE kararı · 0,5–1 | 120 dk | 7 | −14,4 | +8,7 | yetersiz örneklem |
+| BoE kararı · 1–2 | 15 dk | 12 | −8,4 | +3,1 | yetersiz örneklem |
+| BoE kararı · 1–2 | 60 dk | 12 | +3,3 | −8,6 | yetersiz örneklem |
+| BoE kararı · 1–2 | 120 dk | 12 | +3,3 | −8,6 | yetersiz örneklem |
+| BoE kararı · &lt;0,5 | 15 dk | 4 | −0,3 | −5,0 | yetersiz örneklem |
+| BoE kararı · &lt;0,5 | 60 dk | 4 | +0,5 | −5,9 | yetersiz örneklem |
+| BoE kararı · &lt;0,5 | 120 dk | 4 | −13,1 | +7,7 | yetersiz örneklem |
+| BoE kararı · >2 | 15 dk | 47 | −4,3 | −1,9 | ayrışmıyor |
+| BoE kararı · >2 | 60 dk | 47 | −7,7 | +1,4 | ayrışmıyor |
+| BoE kararı · >2 | 120 dk | 47 | −10,5 | +4,3 | ayrışmıyor |
+| ABD TÜFE (CPI) · 0,5–1 | 15 dk | 24 | −1,3 | −5,5 | ayrışmıyor |
+| ABD TÜFE (CPI) · 0,5–1 | 60 dk | 24 | +0,6 | −7,4 | ayrışmıyor |
+| ABD TÜFE (CPI) · 0,5–1 | 120 dk | 24 | +0,9 | −7,8 | ayrışmıyor |
+| ABD TÜFE (CPI) · 1–2 | 15 dk | 40 | −2,3 | −4,8 | ayrışmıyor |
+| ABD TÜFE (CPI) · 1–2 | 60 dk | 40 | −4,8 | −2,3 | ayrışmıyor |
+| ABD TÜFE (CPI) · 1–2 | 120 dk | 40 | −7,0 | 0,0 | ayrışmıyor |
+| ABD TÜFE (CPI) · &lt;0,5 | 15 dk | 30 | −7,2 | +0,3 | ayrışmıyor |
+| ABD TÜFE (CPI) · &lt;0,5 | 60 dk | 30 | −7,9 | +1,0 | ayrışmıyor |
+| ABD TÜFE (CPI) · &lt;0,5 | 120 dk | 30 | −7,7 | +0,8 | ayrışmıyor |
+| ABD TÜFE (CPI) · >2 | 15 dk | 81 | −2,1 | −5,1 | ayrışmıyor |
+| ABD TÜFE (CPI) · >2 | 60 dk | 81 | −3,4 | −3,7 | ayrışmıyor |
+| ABD TÜFE (CPI) · >2 | 120 dk | 81 | −3,7 | −3,4 | ayrışmıyor |
+| ECB basın toplantısı · 0,5–1 | 15 dk | 17 | −6,2 | −0,5 | yetersiz örneklem |
+| ECB basın toplantısı · 0,5–1 | 60 dk | 17 | −16,5 | +9,9 | yetersiz örneklem |
+| ECB basın toplantısı · 0,5–1 | 120 dk | 17 | −18,1 | +11,5 | yetersiz örneklem |
+| ECB basın toplantısı · 1–2 | 15 dk | 24 | +1,8 | −8,7 | ayrışmıyor |
+| ECB basın toplantısı · 1–2 | 60 dk | 24 | −3,3 | −3,6 | ayrışmıyor |
+| ECB basın toplantısı · 1–2 | 120 dk | 24 | −4,4 | −2,4 | ayrışmıyor |
+| ECB basın toplantısı · &lt;0,5 | 15 dk | 23 | −0,9 | −5,2 | ayrışmıyor |
+| ECB basın toplantısı · &lt;0,5 | 60 dk | 23 | +15,5 | −21,5 | ayrışmıyor |
+| ECB basın toplantısı · &lt;0,5 | 120 dk | 23 | +15,6 | −21,6 | ayrışmıyor |
+| ECB basın toplantısı · >2 | 15 dk | 6 | −10,2 | +2,2 | yetersiz örneklem |
+| ECB basın toplantısı · >2 | 60 dk | 6 | −3,1 | −4,7 | yetersiz örneklem |
+| ECB basın toplantısı · >2 | 120 dk | 6 | −25,3 | +17,7 | yetersiz örneklem |
+| ECB kararı · 0,5–1 | 15 dk | 10 | −4,5 | −2,6 | yetersiz örneklem |
+| ECB kararı · 0,5–1 | 60 dk | 10 | +10,2 | −17,4 | yetersiz örneklem |
+| ECB kararı · 0,5–1 | 120 dk | 10 | +24,5 | −31,6 | yetersiz örneklem |
+| ECB kararı · 1–2 | 15 dk | 12 | −5,0 | −1,1 | yetersiz örneklem |
+| ECB kararı · 1–2 | 60 dk | 12 | −7,0 | +0,9 | yetersiz örneklem |
+| ECB kararı · 1–2 | 120 dk | 12 | −10,1 | +4,0 | yetersiz örneklem |
+| ECB kararı · &lt;0,5 | 15 dk | 12 | −3,8 | −2,7 | yetersiz örneklem |
+| ECB kararı · &lt;0,5 | 60 dk | 12 | +4,3 | −10,9 | yetersiz örneklem |
+| ECB kararı · &lt;0,5 | 120 dk | 12 | −4,0 | −2,5 | yetersiz örneklem |
+| ECB kararı · >2 | 15 dk | 35 | −1,7 | −5,1 | ayrışmıyor |
+| ECB kararı · >2 | 60 dk | 35 | +3,1 | −9,8 | ayrışmıyor |
+| ECB kararı · >2 | 120 dk | 35 | +0,8 | −7,5 | ayrışmıyor |
+| FOMC basın toplantısı · 0,5–1 | 15 dk | 40 | −14,6 | +7,5 | ayrışmıyor |
+| FOMC basın toplantısı · 0,5–1 | 60 dk | 40 | −17,4 | +10,3 | ayrışmıyor |
+| FOMC basın toplantısı · 0,5–1 | 120 dk | 40 | −13,2 | +6,1 | ayrışmıyor |
+| FOMC basın toplantısı · 1–2 | 15 dk | 39 | −13,5 | +6,0 | ayrışmıyor |
+| FOMC basın toplantısı · 1–2 | 60 dk | 39 | −17,5 | +10,1 | ayrışmıyor |
+| FOMC basın toplantısı · 1–2 | 120 dk | 39 | −16,0 | +8,6 | ayrışmıyor |
+| FOMC basın toplantısı · &lt;0,5 | 15 dk | 29 | −7,8 | +0,8 | ayrışmıyor |
+| FOMC basın toplantısı · &lt;0,5 | 60 dk | 29 | −12,5 | +5,5 | ayrışmıyor |
+| FOMC basın toplantısı · &lt;0,5 | 120 dk | 29 | −13,1 | +6,1 | ayrışmıyor |
+| FOMC basın toplantısı · >2 | 15 dk | 17 | −20,4 | +12,4 | yetersiz örneklem |
+| FOMC basın toplantısı · >2 | 60 dk | 17 | −11,7 | +3,9 | yetersiz örneklem |
+| FOMC basın toplantısı · >2 | 120 dk | 17 | −18,9 | +10,9 | yetersiz örneklem |
+| FOMC kararı · 0,5–1 | 15 dk | 16 | −2,1 | −5,8 | yetersiz örneklem |
+| FOMC kararı · 0,5–1 | 60 dk | 16 | −12,9 | +5,1 | yetersiz örneklem |
+| FOMC kararı · 0,5–1 | 120 dk | 16 | −18,8 | +10,9 | yetersiz örneklem |
+| FOMC kararı · 1–2 | 15 dk | 31 | −2,8 | −4,2 | ayrışmıyor |
+| FOMC kararı · 1–2 | 60 dk | 31 | −5,9 | −1,0 | ayrışmıyor |
+| FOMC kararı · 1–2 | 120 dk | 31 | −12,6 | +5,6 | ayrışmıyor |
+| FOMC kararı · &lt;0,5 | 15 dk | 10 | −1,8 | −5,4 | yetersiz örneklem |
+| FOMC kararı · &lt;0,5 | 60 dk | 10 | −8,1 | +0,8 | yetersiz örneklem |
+| FOMC kararı · &lt;0,5 | 120 dk | 10 | −14,4 | +7,1 | yetersiz örneklem |
+| FOMC kararı · >2 | 15 dk | 56 | −1,7 | −5,9 | ayrışmıyor |
+| FOMC kararı · >2 | 60 dk | 56 | −1,1 | −6,5 | ayrışmıyor |
+| FOMC kararı · >2 | 120 dk | 56 | −2,9 | −4,7 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · 0,5–1 | 15 dk | 22 | −9,1 | +2,2 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · 0,5–1 | 60 dk | 22 | −7,2 | +0,3 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · 0,5–1 | 120 dk | 22 | −6,7 | −0,2 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · 1–2 | 15 dk | 39 | −2,5 | −4,0 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · 1–2 | 60 dk | 39 | −6,7 | +0,2 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · 1–2 | 120 dk | 39 | −0,7 | −5,8 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · &lt;0,5 | 15 dk | 21 | −10,0 | +3,1 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · &lt;0,5 | 60 dk | 21 | −8,8 | +2,0 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · &lt;0,5 | 120 dk | 21 | −8,8 | +2,0 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · >2 | 15 dk | 94 | −5,3 | −1,8 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · >2 | 60 dk | 94 | −8,3 | +1,3 | ayrışmıyor |
+| ABD tarım dışı istihdam (NFP) · >2 | 120 dk | 94 | −8,5 | +1,4 | ayrışmıyor |
+
+Hücrelerin çoğu 20 olayın altında kalır: bir olay türünün gözlemleri dört
+kovaya bölünür ve kovalar eşit dolmaz.
+Bu tablo hüküm için değil, bir hücrenin tek başına göze çarpan sayısının kaç olaydan geldiğini görmek için var.
+
+</details>
+
+_Kırılım ve fade: hücredeki olayların net ortalaması, günlük ATR'nin yüzdesi. Hüküm ön kaydın kuralıyla: en az
+20 olay ve Benjamini–Hochberg q < 0,10 ise
+"kırılım kazanır" ya da "fade kazanır"; değilse "ayrışmıyor"._
+
+Tabloyu okurken iki şey akılda tutulmalı. Birincisi maliyet: iki yön birlikte negatif olabilir (ikisi de makas ve
+kayma öder), yani "fade kazanır" hükmü yokken fade'in kırılımdan iyi görünmesi bir kenar değildir. İkincisi çoklu
+sınama: tabloların hepsi tek bir ailedir; tek bir hücrenin tek başına "anlamlı" görünmesi beklenen bir şeydir ve
+hüküm bu yüzden ailenin düzeltilmiş q değeriyle verilir.
+
+## Ortalama fiyat patikaları
+
+Her olay için olay anındaki orta fiyattan değişimin ortalaması, haberden otuz dakika öncesinden iki saat sonrasına,
+ilk beş dakikanın yönüne göre iki kümede. Bir patika ilk beş dakikadan sonra aynı yönde sürüyorsa kırılım, geri
+dönüyorsa fade lehine bir betimlemedir; gölge, ortalamanın %95 aralığıdır.
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-patika-nfp.html" baslik="Ortalama patika — NFP" no="01" kaynak="Dukascopy" />
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-patika-cpi.html" baslik="Ortalama patika — TÜFE" no="02" kaynak="Dukascopy" />
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-patika-fomc-karar.html" baslik="Ortalama patika — FOMC kararı" no="03" kaynak="Dukascopy" />
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-patika-fomc-basin.html" baslik="Ortalama patika — FOMC basın toplantısı" no="04" kaynak="Dukascopy" />
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-patika-ecb-karar.html" baslik="Ortalama patika — ECB kararı" no="05" kaynak="Dukascopy" />
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-patika-ecb-basin.html" baslik="Ortalama patika — ECB basın toplantısı" no="06" kaynak="Dukascopy" />
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-patika-boe-karar.html" baslik="Ortalama patika — BoE kararı" no="07" kaynak="Dukascopy" />
+
+Patikalar betimleyicidir: ortalama bir patika tek bir olayın yolunu anlatmaz, ve ilk beş dakikanın yönüne göre
+kümelemek patikanın ilk beş dakikasını tanımı gereği o yöne iter. Asıl bilgi beşinci dakikadan sonrasıdır.
+
+## FOMC: karar ve basın toplantısı
+
+Basın toplantılı her FOMC toplantısında iki ayrı olay var: kararın açıklanması (14:00 New York) ve yarım saat sonra
+başkanın basın toplantısı. Piyasa kararı yarım saat fiyatlar, sonra toplantıda yeniden fiyatlar. Ön kaydın soruları:
+basın toplantısının ilk saatindeki hareket kararın ilk yarım saatindekini ne sıklıkla tersine çeviriyor, ikisi
+arasındaki ilinti ne, ve dönüş olasılığı kararın büyüklüğüne bağlı mı?
+
+<GrafikEmbed src="/arastirma/fx-gunici/haber-fomc.html" baslik="FOMC: karar ve basın toplantısı" no="08" kaynak="Dukascopy" />
+
+| Parite | Toplantı | Dönüş oranı (%95) | Korelasyon (%95) | Karar &lt;0,5 ATR | 0,5–1 | >1 |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| EUR/USD | 65 | %45 (%32–%57) | +0,09 (−0,16 / +0,33) | %49 (49) | %31 (13) | %33 (3) |
+| GBP/USD | 65 | %48 (%35–%60) | +0,09 (−0,20 / +0,34) | %51 (57) | %25 (8) | — |
+| USD/JPY | 65 | %55 (%44–%67) | −0,04 (−0,26 / +0,19) | %55 (56) | %57 (7) | %0 (1) |
+| AUD/USD | 65 | %43 (%31–%55) | +0,04 (−0,18 / +0,27) | %46 (50) | %33 (12) | %33 (3) |
+
+_Dönüş oranı: basın toplantısının ilk saatindeki hareketin, kararın ilk yarım saatindekiyle ters işaretli olduğu
+toplantıların payı (%50 yazı turadır). Korelasyon: iki hareketin ilintisi; aralıklar toplantıların yeniden
+örneklenmesiyle. Son üç sütun: dönüş oranı, kararın ilk yarım saatteki hareketinin büyüklüğüne göre (günlük ATR'nin
+katı; parantezde toplantı sayısı)._
+
+Dört paritenin hiçbirinde dönüş oranının %95 aralığı %50'yi dışarıda bırakmıyor: basın toplantısının ilk saati kararın ilk yarım saatini ne sistematik olarak tersine çeviriyor ne de sürdürüyor. İki hareketin ilintisi hiçbir paritede sıfırdan ayırt edilemiyor. Hareketin büyüklüğü: EUR/USD'de basın toplantısının ilk saatindeki ortalama mutlak hareket 0,43, kararın ilk yarım saatindeki 0,34 günlük ATR (oran 1,25). Basın penceresi iki kat uzun olduğu için oran tek başına bir şey söylemez: fiyat rastgele yürüseydi bile iki kat uzun pencerede 1,41 kat hareket beklenirdi. Dört paritenin dördünde oran bunun altında: dakika başına kararın yarım saati basın toplantısının ilk saatinden daha hareketli.
+
+## N1 — haber kırılımı
+
+### Ne
+
+Haber kırılımı: verinin açıklandığı dakikadan itibaren ilk mumun yönü haberin yönü sayılır ve o yönde girilir.
+Kural hızlı olanın kazandığı bir yarış değildir — giriş ilk mum **kapandıktan** sonradır; yarışın ilk saniyelerini
+algoritmalar alır, bu kural onların bıraktığı hareketin devamına bahis yapar.
+
+### Piyasa mantığı
+
+Bir verinin sürprizi tek bir dakikada fiyatlanmaz: herkes aynı anda aynı bilgiye sahip olsa bile pozisyon
+büyüklükleri, risk limitleri ve emirlerin yürütme hızı farklıdır. Kırılım savunusu, ilk mumun yönünün sonraki
+dakikalarda da süren bir yeniden fiyatlamanın başı olduğunu söyler. Karşı savunu ilk tepkinin aşırı olduğudur:
+ince likiditede atılan ilk büyük emirler fiyatı gerekenden uzağa taşır ve fiyat geri gelir — N2'nin konusu.
+
+### Kurallar
+
+- **İlk haber mumu.** Olay anına çıpalı mumların ilki (08:30'da açıklanan bir veride 5 dakikalık mumla
+  08:30–08:35).
+- **Giriş.** İlk mumun kapanış yönünde (kapanış − açılış), "giriş mumu" kadar mum kapandıktan sonraki açılışta.
+  İlk mum hareketsiz kapanmışsa işlem yok.
+- **Stop.** İlk haber mumunun karşı ucu (alışta dibi).
+- **Hedef.** 1R, 2R ya da zaman (on iki mum).
+
+| Parametre | Izgara | Varsayılan |
+| :--- | :--- | :--- |
+| zaman dilimi | 5 dk, 15 dk, 60 dk | 5 dk |
+| giriş mumu | 1, 2, 3 | 1 |
+| stop türü | sert, kapanış | sert |
+| hedef | 1R, 2R, zaman | 1R |
+
+Varsayılan 5 dakikalık ilk mumun kapanışında girer ve 1R hedefler. Stop ilk mumun karşı ucunda olduğu için risk
+haberin kendi aralığıdır: büyük bir sürprizde stop uzak, pozisyon küçüktür.
+
+### Örnekler
+
+<GrafikEmbed src="/arastirma/fx-gunici/n1-ornek.html" baslik="Örnek günler — N1 haber kırılımı" no="09" kaynak="Dukascopy" />
+
+- **Kazanan** (2 Ekim 2026, cuma, 5 dk mum): alış. Sinyal mumu 15:35 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,12502; stop 1,12329 (17,4 pip), hedef 1,12676. Çıkış 16:50 TSİ'de 1,12676, hedef: +1,00 R (+17,4 pip, maliyet dahil).
+- **Kaybeden** (11 Eylül 2026, cuma, 5 dk mum): satış. Sinyal mumu 15:35 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,15798; stop 1,15984 (18,6 pip), hedef 1,15613. Çıkış 15:46 TSİ'de 1,15989, stop: −1,03 R (−19,1 pip, maliyet dahil).
+
+### Sonuçlar
+
+**Birikimli sonuç.** Önceden kayıtlı varsayılanın 4 paritede ve havuzda birikimli net R'si; gri alan örneklem dışı (01.01.2024 →).
+
+<GrafikEmbed src="/arastirma/fx-gunici/n1-egri.html" baslik="Birikimli net R ve düşüş — N1 kırılım" no="10" kaynak="Dukascopy" />
+
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 502 işleminin net ortalaması işlem başına −0,25 R (%95 aralığı −0,33 / −0,16; isabet %38,6). Parite parite: EUR/USD −0,28; GBP/USD −0,28; USD/JPY −0,10; AUD/USD −0,33 (artı olan parite: 0 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına −0,09 R; gerçek makas ve kayma bunun 0,16 R'sini götürüyor.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| İşlem | 153 | 131 | 109 | 109 | 502 |
+| İsabet | %37,9 | %38,2 | %45,0 | %33,9 | %38,6 |
+| Net beklenti (R) | −0,28 | −0,28 | −0,10 | −0,33 | −0,25 |
+| %95 aralığı, alt | −0,43 | −0,43 | −0,27 | −0,50 | −0,33 |
+| %95 aralığı, üst | −0,13 | −0,12 | +0,08 | −0,16 | −0,16 |
+| Brüt beklenti (R) | −0,09 | −0,12 | +0,01 | −0,13 | −0,09 |
+| Net beklenti (pip) | −4,9 | −7,1 | −3,5 | −5,9 | −5,4 |
+| Sharpe (yıllık) | −2,10 | −1,95 | −0,71 | −2,15 | −2,34 |
+
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma dahil. Havuz: aynı kural dört paritede birlikte; Sharpe havuzda günlük R toplamından._
+
+**İşlemlerin anatomisi.** Kazanç ve kayıpların büyüklüğü, işlemin süresi ve işlem sırasında gidilen en kötü (MAE) ve en iyi (MFE) nokta; ikisi de girişteki risk biriminde.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Ort. kazanç (R) | +0,88 | +0,84 | +0,87 | +0,87 | +0,86 |
+| Ort. kayıp (R) | −0,98 | −0,97 | −0,89 | −0,95 | −0,95 |
+| Kâr çarpanı | 0,59 | 0,57 | 0,81 | 0,51 | 0,63 |
+| Azami düşüş (R) | 48,2 | 39,7 | 17,4 | 37,0 | 135,8 |
+| Ort. süre (dk) | 119 | 141 | 134 | 139 | 133 |
+| MAE medyanı (R) | −1,00 | −1,00 | −0,83 | −1,00 | −1,00 |
+| MFE medyanı (R) | +0,54 | +0,44 | +0,56 | +0,34 | +0,49 |
+| Stop uzaklığı medyanı (pip) | 17,8 | 26,1 | 34,4 | 20,2 | 22,4 |
+
+**Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n1-tf.html" baslik="Zaman dilimi kıyası — N1 kırılım" no="11" kaynak="Dukascopy" />
+
+**Izgara ve seçim.** Önceden kaydın bütün kombinasyonları örneklem içinde (2018–2023) denendi; her paritede en yüksek örneklem içi Sharpe'lı kombinasyon seçildi ve örneklem dışında sınandı.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n1-izgara.html" baslik="Parametre ızgarası — N1 kırılım" no="12" kaynak="Dukascopy" />
+
+| Parite | Seçilen | İçi (R) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | ---: | :--- |
+| EUR/USD | 60 dk · giriş mumu 2 · kapanış · 2R | −0,01 | −0,07 | −1,9 | 0,00 | çalışmıyor |
+| GBP/USD | 60 dk · giriş mumu 2 · kapanış · zaman | +0,11 | +0,09 | −0,8 | 0,02 | zayıf |
+| USD/JPY | 15 dk · giriş mumu 2 · kapanış · zaman | +0,35 | −0,21 | +6,2 | 0,00 | çalışmıyor |
+| AUD/USD | 60 dk · giriş mumu 3 · kapanış · 2R | +0,04 | −1,10 | −5,8 | 0,00 | çalışmıyor |
+
+Seçilen kombinasyonlarda örneklem dışında R ile pipin işareti ayrışıyor: GBP/USD +0,09 R ama −0,8 pip (pip ortalamasının %95 aralığı −6,0 / +4,6); USD/JPY −0,21 R ama +6,2 pip (pip ortalamasının %95 aralığı −3,3 / +17,1). R ortalaması her işlemi riskine göre büyüklükler, pip ortalaması her işlemde aynı büyüklükle işlem yapanın sonucudur; işaretleri ayrıştığında R'nin işaretini, stopu dar olduğu için R'de ağır basan işlemler belirliyor. Hüküm ön kayıt gereği R'den verilir.
+
+EUR/USD'de ızgaranın 54 kombinasyonu örneklem içinde denendi; en iyisinin yıllık Sharpe'ı şansla beklenen en yüksek değerin (1,01) karşısında deflated Sharpe olasılığı 0,00 veriyor (1'e yakınsa seçim şansla açıklanamaz; 0,95 altı açıklanabilir). Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak, 2020 → bugün): EUR/USD −0,09 R (316 işlem); GBP/USD −0,06 R (305 işlem); USD/JPY −0,19 R (245 işlem); AUD/USD −0,15 R (187 işlem).
+
+| Parite | İşlem | Net R | %95 alt | Sharpe |
+| :--- | ---: | ---: | ---: | ---: |
+| EUR/USD | 316 | −0,09 | −0,21 | −0,61 |
+| GBP/USD | 305 | −0,06 | −0,23 | −0,26 |
+| USD/JPY | 245 | −0,19 | −0,42 | −0,62 |
+| AUD/USD | 187 | −0,15 | −0,32 | −0,66 |
+
+**Maliyet.** Örneklem dışında net beklenti, dolum başına kaymanın dört kademesinde (makas her kademede gerçek bid/ask).
+
+| Kayma | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 0,0 pip | −0,25 | −0,25 | −0,08 | −0,28 |
+| 0,5 pip | −0,28 | −0,28 | −0,10 | −0,33 |
+| 1,0 pip | −0,33 | −0,31 | −0,12 | −0,35 |
+| 2,0 pip | −0,37 | −0,35 | −0,20 | −0,43 |
+| Başabaş kayma (pip, dolum başına, bütün dönem) | 0,00 | 0,00 | 0,00 | 0,00 |
+
+EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+**Yön mü, zamanlama mı?** Rastgele yön sınamasında stratejinin örneklem dışı sonucu, aynı giriş ve çıkış dakikalarında yönü yazı turayla seçen 1.000 denemenin dağılımında şu yüzdelikte duruyor: EUR/USD 14., GBP/USD 8., USD/JPY 43., AUD/USD 5. Hüküm kuralının eşiği 95. yüzdelik.
+
+**Rejim ve saat.** EUR/USD için artı yıl: 1 / 9; en iyi yıl 2023 (+0,02 R), en kötü 2022 (−0,46 R). Oynaklık tercillerinde (önceki 14 günün ATR yüzdeliği): düşük −0,16, orta −0,48, yüksek −0,47 R.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 2018 | −0,31 | −0,18 | −0,42 | −0,27 |
+| 2019 | −0,19 | −0,11 | −0,02 | −0,37 |
+| 2020 | −0,41 | −0,42 | −0,47 | −0,34 |
+| 2021 | −0,42 | −0,23 | −0,13 | −0,21 |
+| 2022 | −0,46 | −0,25 | −0,29 | −0,41 |
+| 2023 | +0,02 | −0,11 | −0,17 | −0,37 |
+| 2024 | −0,23 | −0,22 | +0,09 | −0,27 |
+| 2025 | −0,35 | −0,43 | −0,02 | −0,43 |
+| 2026 | −0,25 | −0,16 | −0,42 | −0,29 |
+| oynaklık düşük | −0,16 | −0,15 | −0,19 | −0,33 |
+| oynaklık orta | −0,48 | −0,24 | −0,09 | −0,22 |
+| oynaklık yüksek | −0,47 | −0,36 | −0,28 | −0,45 |
+
+<GrafikEmbed src="/arastirma/fx-gunici/n1-saat.html" baslik="Giriş saatine göre — N1 kırılım" no="13" kaynak="Dukascopy" />
+
+Havuzun örneklem dışı ortalaması sıfırın altında: kural maliyetten sonra 4 paritede birlikte kaybettiriyor. Örneklem içinde (2018–2023) 1.080 işlemde işlem başına −0,27 R (%95 aralığı −0,33 / −0,22).
+
+**Olaya göre.** Aynı kural her olayda; pariteler birleşik (ABD verileri dört paritede, ECB EUR/USD'de, BoE
+GBP/USD'de).
+
+| Olay | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| ABD tarım dışı istihdam (NFP) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 418 | −0,27 | 132 | −0,29 |
+| ABD TÜFE (CPI) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 416 | −0,22 | 128 | −0,38 |
+| FOMC kararı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 280 | −0,14 | 88 | −0,03 |
+| FOMC basın toplantısı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 259 | −0,47 | 88 | −0,22 |
+| ECB kararı | EUR/USD | 69 | −0,15 | 22 | −0,12 |
+| ECB basın toplantısı | EUR/USD | 70 | −0,39 | 22 | −0,45 |
+| BoE kararı | GBP/USD | 70 | −0,17 | 22 | −0,15 |
+
+**İlk mumun büyüklüğüne göre.** İlk mum hareketinin haberden önceki ATR'ye oranı sürprizin vekilidir — gerçek
+sürpriz değil (bkz. dersin başı).
+
+| İlk mum / ATR | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| &lt;0,5 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 194 | −0,46 | 35 | −0,52 |
+| 0,5–1 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 203 | −0,39 | 70 | −0,39 |
+| 1–2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 294 | −0,19 | 83 | −0,11 |
+| >2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 891 | −0,22 | 314 | −0,22 |
+
+### Koşullar
+
+<GrafikEmbed src="/arastirma/fx-gunici/n1-kosul.html" baslik="Koşul kovaları — N1 kırılım" no="14" kaynak="Dukascopy" />
+
+EUR/USD, sınanan 14 değişken: **0 tuttu**, 12 tutmadı, 2 değişkende örneklem içinde seçilecek kova çıkmadı.
+- Tutmayanlar: aralık / günlük ATR, Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, 60 dk trend (EMA50 tarafı), haftanın günü, saat değişimi haftası, Londra–NY farkı 4 saat.
+
+### Kontrol listesi
+
+1. **Takvimi doğrula.** Olayın saatini resmî takvimden oku; TSİ karşılığı saat değişimi haftalarında kayar.
+2. **İlk mumu bekle.** 5 dakikalık mum kapanmadan giriş yok.
+3. **Stop ilk mumun karşı ucunda, hedef 1R.**
+4. **Haber kaymasını hesaba kat.** Haber dakikalarında dolum başına ek kayma bu dersin ölçüsüne dahildir.
+5. **Maliyet.** EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+### Hüküm
+
+**Çalışmıyor.** Önceden kayıtlı kural, sınanan 4 paritenin hiçbirinde örneklem dışında artı değil.
+
+| Parite | Varsayılan | Seçilen | Rastgele yüzdelik | Maliyet yiyor |
+| :--- | :--- | :--- | ---: | :--- |
+| EUR/USD | çalışmıyor | çalışmıyor | 14 | hayır |
+| GBP/USD | çalışmıyor | zayıf | 8 | hayır |
+| USD/JPY | çalışmıyor | çalışmıyor | 43 | hayır |
+| AUD/USD | çalışmıyor | çalışmıyor | 5 | hayır |
+
+## N2 — haber fade'i
+
+### Ne
+
+Haber fade'i: ilk haber mumu olağandışı büyükse (haberden önceki ATR'nin k katından uzun) **tersine** girilir.
+Hedef haberden önceki fiyattır: kural, ilk tepkinin aşırı olduğuna ve fiyatın açıklama öncesine geri döneceğine
+bahis yapar.
+
+### Piyasa mantığı
+
+Açıklama anında likidite en ince anındadır: makas açıklamadan hemen önce en geniş hâline gelir (ölçüsü dersin
+başında) ve ilk emirler fiyatı derinliği azalmış bir defterde ilerletir. Fade savunusu, bu hareketin bir kısmının bilgi değil
+likidite boşluğu olduğunu ve defter dolunca geri çekileceğini söyler. Kuralın riski de aynı yerden gelir: gerçek bir
+sürpriz ilk mumda bitmez, ve sürprizin büyüklüğü ile likiditenin inceliği ilk mumda birbirinden ayırt edilemez.
+Teyit girişi bu yüzden vardır: kural tersine dönen ilk mumu bekler.
+
+### Kurallar
+
+- **Eşik.** İlk haber mumunun |kapanış − açılış| hareketi, olaydan önceki 14 mumun ATR'sinin k katından büyük.
+- **Giriş.** "İlk mum kapanınca": hemen ters yönde. "Teyit": sonraki üç mumun içinde itkinin tersine kapanan
+  (yukarı itkide kapanışı açılışının altında olan) ilk mumdan sonra.
+- **Stop.** O ana kadarki itkinin ucu (yukarı itkide en yüksek tepe).
+- **Hedef.** "Haber öncesi fiyat": ilk haber mumunun açılışı; ya da 1R, 2R, zaman.
+
+| Parametre | Izgara | Varsayılan |
+| :--- | :--- | :--- |
+| zaman dilimi | 5 dk, 15 dk, 60 dk | 5 dk |
+| eşik (σ ya da ATR katı) | 1,0, 2,0 | 2,0 |
+| giriş | ilk mum kapanınca, teyit mumundan sonra | teyit mumundan sonra |
+| stop türü | sert, kapanış | sert |
+| hedef | haber öncesi fiyat, 1R, 2R, zaman | haber öncesi fiyat |
+
+Varsayılan ilk mumun haberden önceki ATR'nin iki katını aşmasını ister, teyit mumunu bekler ve haber öncesi fiyatı
+hedefler. Eşik yüksek olduğu için kural az işlem açar: yalnız büyük tepkilerin günleri.
+
+### Örnekler
+
+<GrafikEmbed src="/arastirma/fx-gunici/n2-ornek.html" baslik="Örnek günler — N2 haber fade'i" no="15" kaynak="Dukascopy" />
+
+- **Kazanan** (11 Eylül 2026, cuma, 5 dk mum): alış. Sinyal mumu 15:40 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,15881; stop 1,15694 (18,8 pip), hedef 1,15970. Çıkış 15:45 TSİ'de 1,15970, hedef: +0,48 R (+8,9 pip, maliyet dahil).
+- **Kaybeden** (2 Ekim 2026, cuma, 5 dk mum): satış. Sinyal mumu 15:45 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,12407; stop 1,12606 (19,9 pip), hedef 1,12335. Çıkış 15:55 TSİ'de 1,12611, stop: −1,02 R (−20,4 pip, maliyet dahil).
+
+### Sonuçlar
+
+**Birikimli sonuç.** Önceden kayıtlı varsayılanın 4 paritede ve havuzda birikimli net R'si; gri alan örneklem dışı (01.01.2024 →).
+
+<GrafikEmbed src="/arastirma/fx-gunici/n2-egri.html" baslik="Birikimli net R ve düşüş — N2 fade" no="16" kaynak="Dukascopy" />
+
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 266 işleminin net ortalaması işlem başına −0,04 R (%95 aralığı −0,21 / +0,12; isabet %43,2). Parite parite: EUR/USD −0,04; GBP/USD −0,06; USD/JPY +0,13; AUD/USD −0,18 (artı olan parite: 1 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,14 R; gerçek makas ve kayma bunun 0,18 R'sini götürüyor.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| İşlem | 72 | 73 | 56 | 65 | 266 |
+| İsabet | %45,8 | %38,4 | %48,2 | %41,5 | %43,2 |
+| Net beklenti (R) | −0,04 | −0,06 | +0,13 | −0,18 | −0,04 |
+| %95 aralığı, alt | −0,35 | −0,37 | −0,26 | −0,46 | −0,21 |
+| %95 aralığı, üst | +0,33 | +0,30 | +0,53 | +0,13 | +0,12 |
+| Brüt beklenti (R) | +0,13 | +0,11 | +0,25 | +0,08 | +0,14 |
+| Net beklenti (pip) | +0,1 | −1,7 | +4,8 | −2,0 | +0,1 |
+| Sharpe (yıllık) | −0,13 | −0,22 | 0,38 | −0,69 | −0,21 |
+
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma dahil. Havuz: aynı kural dört paritede birlikte; Sharpe havuzda günlük R toplamından._
+
+**İşlemlerin anatomisi.** Kazanç ve kayıpların büyüklüğü, işlemin süresi ve işlem sırasında gidilen en kötü (MAE) ve en iyi (MFE) nokta; ikisi de girişteki risk biriminde.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Ort. kazanç (R) | +1,18 | +1,51 | +1,41 | +1,08 | +1,29 |
+| Ort. kayıp (R) | −1,07 | −1,04 | −1,05 | −1,08 | −1,06 |
+| Kâr çarpanı | 1,01 | 0,84 | 1,47 | 0,70 | 1,01 |
+| Azami düşüş (R) | 10,4 | 9,9 | 6,2 | 13,5 | 27,4 |
+| Ort. süre (dk) | 74 | 63 | 60 | 39 | 60 |
+| MAE medyanı (R) | −1,00 | −1,00 | −1,00 | −1,00 | −1,00 |
+| MFE medyanı (R) | +0,47 | +0,54 | +0,53 | +0,44 | +0,51 |
+| Stop uzaklığı medyanı (pip) | 15,0 | 17,2 | 22,9 | 10,5 | 15,4 |
+
+**Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n2-tf.html" baslik="Zaman dilimi kıyası — N2 fade" no="17" kaynak="Dukascopy" />
+
+**Izgara ve seçim.** Önceden kaydın bütün kombinasyonları örneklem içinde (2018–2023) denendi; her paritede en yüksek örneklem içi Sharpe'lı kombinasyon seçildi ve örneklem dışında sınandı.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n2-izgara.html" baslik="Parametre ızgarası — N2 fade" no="18" kaynak="Dukascopy" />
+
+| Parite | Seçilen | İçi (R) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | ---: | :--- |
+| EUR/USD | 15 dk · eşik (σ ya da ATR katı) 2,0 · teyit mumundan sonra · sert · zaman | +0,18 | −0,04 | +1,9 | 0,00 | çalışmıyor |
+| GBP/USD | 15 dk · eşik (σ ya da ATR katı) 1,0 · teyit mumundan sonra · kapanış · 2R | +0,21 | −0,28 | −3,5 | 0,02 | çalışmıyor |
+| USD/JPY | 15 dk · eşik (σ ya da ATR katı) 1,0 · ilk mum kapanınca · kapanış · 2R | +0,28 | −0,39 | +4,3 | 0,01 | çalışmıyor |
+| AUD/USD | 15 dk · eşik (σ ya da ATR katı) 2,0 · teyit mumundan sonra · kapanış · zaman | +0,23 | +0,05 | +2,7 | 0,00 | zayıf |
+
+Seçilen kombinasyonlarda örneklem dışında R ile pipin işareti ayrışıyor: EUR/USD −0,04 R ama +1,9 pip (pip ortalamasının %95 aralığı −3,6 / +7,9); USD/JPY −0,39 R ama +4,3 pip (pip ortalamasının %95 aralığı −2,2 / +11,1). R ortalaması her işlemi riskine göre büyüklükler, pip ortalaması her işlemde aynı büyüklükle işlem yapanın sonucudur; işaretleri ayrıştığında R'nin işaretini, stopu dar olduğu için R'de ağır basan işlemler belirliyor. Hüküm ön kayıt gereği R'den verilir.
+
+EUR/USD'de ızgaranın 96 kombinasyonu örneklem içinde denendi; en iyisinin yıllık Sharpe'ı şansla beklenen en yüksek değerin (1,81) karşısında deflated Sharpe olasılığı 0,00 veriyor (1'e yakınsa seçim şansla açıklanamaz; 0,95 altı açıklanabilir). Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak, 2020 → bugün): EUR/USD −0,14 R (156 işlem); GBP/USD −0,23 R (199 işlem); USD/JPY −0,16 R (198 işlem); AUD/USD +0,12 R (131 işlem).
+
+| Parite | İşlem | Net R | %95 alt | Sharpe |
+| :--- | ---: | ---: | ---: | ---: |
+| EUR/USD | 156 | −0,14 | −0,48 | −0,31 |
+| GBP/USD | 199 | −0,23 | −0,60 | −0,49 |
+| USD/JPY | 198 | −0,16 | −0,60 | −0,29 |
+| AUD/USD | 131 | +0,12 | −0,21 | 0,25 |
+
+**Maliyet.** Örneklem dışında net beklenti, dolum başına kaymanın dört kademesinde (makas her kademede gerçek bid/ask).
+
+| Kayma | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 0,0 pip | +0,04 | 0,00 | +0,19 | −0,11 |
+| 0,5 pip | −0,04 | −0,06 | +0,13 | −0,18 |
+| 1,0 pip | −0,10 | −0,12 | +0,09 | −0,25 |
+| 2,0 pip | −0,22 | −0,22 | 0,00 | −0,37 |
+| Başabaş kayma (pip, dolum başına, bütün dönem) | 0,00 | 0,49 | 0,00 | 0,00 |
+
+EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+**Yön mü, zamanlama mı?** Rastgele yön sınamasında stratejinin örneklem dışı sonucu, aynı giriş ve çıkış dakikalarında yönü yazı turayla seçen 1.000 denemenin dağılımında şu yüzdelikte duruyor: EUR/USD 77., GBP/USD 78., USD/JPY 53., AUD/USD 92. Hüküm kuralının eşiği 95. yüzdelik.
+
+**Rejim ve saat.** EUR/USD için artı yıl: 2 / 9; en iyi yıl 2022 (+0,05 R), en kötü 2019 (−0,32 R). Oynaklık tercillerinde (önceki 14 günün ATR yüzdeliği): düşük −0,19, orta +0,11, yüksek 0,00 R.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 2018 | −0,22 | −0,08 | −0,58 | −0,35 |
+| 2019 | −0,32 | −0,34 | +0,28 | −0,41 |
+| 2020 | −0,29 | −0,05 | −0,61 | −0,01 |
+| 2021 | −0,16 | −0,14 | −0,40 | −0,27 |
+| 2022 | +0,05 | +0,07 | −0,24 | −0,34 |
+| 2023 | −0,04 | +0,51 | −0,45 | −0,16 |
+| 2024 | −0,03 | −0,08 | +0,02 | −0,07 |
+| 2025 | −0,09 | +0,20 | +0,22 | −0,21 |
+| 2026 | +0,01 | −0,34 | +0,23 | −0,32 |
+| oynaklık düşük | −0,19 | −0,12 | −0,27 | −0,33 |
+| oynaklık orta | +0,11 | +0,18 | −0,18 | −0,14 |
+| oynaklık yüksek | 0,00 | +0,11 | +0,01 | −0,16 |
+
+<GrafikEmbed src="/arastirma/fx-gunici/n2-saat.html" baslik="Giriş saatine göre — N2 fade" no="19" kaynak="Dukascopy" />
+
+Havuzun örneklem dışı ortalaması sıfırın altında: kural maliyetten sonra 4 paritede birlikte kaybettiriyor. Örneklem içinde (2018–2023) 468 işlemde işlem başına −0,17 R (%95 aralığı −0,27 / −0,06).
+
+**Olaya göre.**
+
+| Olay | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| ABD tarım dışı istihdam (NFP) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 246 | +0,10 | 95 | +0,32 |
+| ABD TÜFE (CPI) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 212 | −0,23 | 81 | −0,08 |
+| FOMC kararı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 172 | −0,41 | 63 | −0,47 |
+| FOMC basın toplantısı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 30 | +0,26 | 5 | −0,77 |
+| ECB kararı | EUR/USD | 30 | −0,41 | 7 | −0,68 |
+| ECB basın toplantısı | EUR/USD | 5 | −0,08 | — | — |
+| BoE kararı | GBP/USD | 39 | +0,23 | 15 | +0,21 |
+
+**İlk mumun büyüklüğüne göre.** Kural yalnız eşiği aşan olaylarda işlem açtığı için alt kovalar boş kalabilir.
+
+| İlk mum / ATR | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| >2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 734 | −0,12 | 266 | −0,04 |
+
+### Koşullar
+
+<GrafikEmbed src="/arastirma/fx-gunici/n2-kosul.html" baslik="Koşul kovaları — N2 fade" no="20" kaynak="Dukascopy" />
+
+EUR/USD, sınanan 14 değişken: **2 tuttu**, 8 tutmadı, 4 değişkende örneklem içinde seçilecek kova çıkmadı.
+- **önceki gün aralığı / ATR** — seçilen kova: üst, orta; örneklem dışında seçilen +0,25 R, tamamlayanı −0,48 R.
+- **oynaklık yüzdeliği** — seçilen kova: orta; örneklem dışında seçilen +0,09 R, tamamlayanı −0,09 R.
+- Tutmayanlar: aralık / günlük ATR, Asya aralığı / günlük ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), açılış farkı / ATR, 60 dk trend (EMA50 tarafı), haftanın günü, ay sonu.
+
+EUR/USD'de tutan değişkenler öbür paritelerde:
+
+| Değişken | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | :--- | :--- | :--- | :--- |
+| önceki gün aralığı / ATR | tuttu | tuttu | tutmadı | tutmadı |
+| oynaklık yüzdeliği | tuttu | seçilmedi | tuttu | tutmadı |
+
+### Kontrol listesi
+
+1. **İlk mumu ölç.** Hareket, haberden önceki ATR'nin iki katını aşıyor mu?
+2. **Teyidi bekle.** Sonraki üç mum içinde ters yönde kapanan mum.
+3. **Stop itkinin ucunda, hedef haber öncesi fiyat.**
+4. **Gerçek sürprizde durma.** İtki sürerse stop kuralın parçasıdır; ikinci bir fade yok.
+5. **Maliyet.** EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+### Hüküm
+
+**Parite parite.** USD/JPY: zayıf · EUR/USD, GBP/USD, AUD/USD: çalışmıyor. Önceden kayıtlı kuralda örneklem dışında R ile pipin işareti ayrışıyor: EUR/USD −0,04 R ama +0,1 pip (pip ortalamasının %95 aralığı −3,8 / +4,4). R ortalaması her işlemi riskine göre büyüklükler, pip ortalaması her işlemde aynı büyüklükle işlem yapanın sonucudur; işaretleri ayrıştığında R'nin işaretini, stopu dar olduğu için R'de ağır basan işlemler belirliyor. Hüküm ön kayıt gereği R'den verilir.
+
+| Parite | Varsayılan | Seçilen | Rastgele yüzdelik | Maliyet yiyor |
+| :--- | :--- | :--- | ---: | :--- |
+| EUR/USD | çalışmıyor | çalışmıyor | 77 | hayır |
+| GBP/USD | çalışmıyor | çalışmıyor | 78 | hayır |
+| USD/JPY | zayıf | çalışmıyor | 53 | hayır |
+| AUD/USD | çalışmıyor | zayıf | 92 | hayır |
+
+## N3 — haber öncesi aralık kırılımı
+
+### Ne
+
+Haber öncesi aralık kırılımı (*straddle*): açıklamadan önceki mumların tepesi ve dibi bir aralık kurar; haberden
+sonra fiyat bu aralığın dışında kapanırsa o yönde girilir. Yön önceden tahmin edilmez — kural yalnız fiyatın
+aralıktan hangi yönde çıktığını izler. Opsiyon piyasasındaki *straddle* (alım ve satım opsiyonunu birlikte almak)
+adının kaynağıdır: iki yöne de hazır durmak.
+
+### Piyasa mantığı
+
+Önemli bir veriden önce piyasa çoğu zaman bekler ve dar bir aralıkta işlem görür; aralığın iki ucunun ötesinde
+bekleyen stop ve kırılım emirleri haberle birlikte tetiklenir. Kural bu tetiklenmeyi yakalar. Zayıf noktası
+yürütmedir: aralığın hemen ötesinde, haberin ilk saniyelerinde dolan bir emir makasın en açık, kaymanın en büyük
+olduğu anda dolar. Bu ders girişi mumun kapanışında, haber kaymasıyla birlikte ölçer.
+
+### Kurallar
+
+- **Aralık.** Olaydan önceki "aralık" kadar mumun tepesi ve dibi (5 dakikalık mumla altı mum: son yarım saat).
+- **Sinyal.** Olaydan sonraki ilk altı mumun içinde aralığın dışında kapanan ilk mum; yön kapanışın tarafı.
+- **Stop.** Aralığın karşı ucu ya da ortası.
+- **Hedef.** 1R, 2R ya da zaman.
+
+| Parametre | Izgara | Varsayılan |
+| :--- | :--- | :--- |
+| zaman dilimi | 5 dk, 15 dk, 60 dk | 5 dk |
+| haber öncesi aralık (mum) | 3, 6 | 6 |
+| stop yeri | karşı uç, orta | karşı uç |
+| stop türü | sert, kapanış | sert |
+| hedef | 1R, 2R, zaman | 1R |
+
+Varsayılan haberden önceki yarım saatin aralığını kullanır, stop'u karşı uca koyar ve 1R hedefler.
+
+### Örnekler
+
+<GrafikEmbed src="/arastirma/fx-gunici/n3-ornek.html" baslik="Örnek günler — N3 haber öncesi aralık" no="21" kaynak="Dukascopy" />
+
+- **Kazanan** (2 Ekim 2026, cuma, 5 dk mum): alış. Sinyal mumu 15:35 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,12502; stop 1,12209 (29,3 pip), hedef 1,12795. Çıkış 17:04 TSİ'de 1,12795, hedef: +1,00 R (+29,3 pip, maliyet dahil).
+- **Kaybeden** (11 Eylül 2026, cuma, 5 dk mum): satış. Sinyal mumu 15:35 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,15798; stop 1,15975 (17,6 pip), hedef 1,15621. Çıkış 15:45 TSİ'de 1,15980, stop: −1,03 R (−18,1 pip, maliyet dahil).
+
+Figürde mavi çizgiler haber öncesi aralığın iki ucudur.
+
+### Sonuçlar
+
+**Birikimli sonuç.** Önceden kayıtlı varsayılanın 4 paritede ve havuzda birikimli net R'si; gri alan örneklem dışı (01.01.2024 →).
+
+<GrafikEmbed src="/arastirma/fx-gunici/n3-egri.html" baslik="Birikimli net R ve düşüş — N3 straddle" no="22" kaynak="Dukascopy" />
+
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 478 işleminin net ortalaması işlem başına −0,13 R (%95 aralığı −0,20 / −0,05; isabet %44,8). Parite parite: EUR/USD −0,07; GBP/USD −0,12; USD/JPY −0,13; AUD/USD −0,21 (artı olan parite: 0 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına −0,03 R; gerçek makas ve kayma bunun 0,10 R'sini götürüyor.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| İşlem | 139 | 129 | 105 | 105 | 478 |
+| İsabet | %47,5 | %46,5 | %45,7 | %38,1 | %44,8 |
+| Net beklenti (R) | −0,07 | −0,12 | −0,13 | −0,21 | −0,13 |
+| %95 aralığı, alt | −0,21 | −0,27 | −0,29 | −0,36 | −0,20 |
+| %95 aralığı, üst | +0,08 | +0,03 | +0,04 | −0,04 | −0,05 |
+| Brüt beklenti (R) | +0,03 | −0,03 | −0,06 | −0,07 | −0,03 |
+| Net beklenti (pip) | −1,0 | −4,5 | −7,1 | −4,4 | −4,0 |
+| Sharpe (yıllık) | −0,56 | −0,92 | −0,86 | −1,42 | −1,20 |
+
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma dahil. Havuz: aynı kural dört paritede birlikte; Sharpe havuzda günlük R toplamından._
+
+**İşlemlerin anatomisi.** Kazanç ve kayıpların büyüklüğü, işlemin süresi ve işlem sırasında gidilen en kötü (MAE) ve en iyi (MFE) nokta; ikisi de girişteki risk biriminde.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Ort. kazanç (R) | +0,76 | +0,74 | +0,74 | +0,79 | +0,76 |
+| Ort. kayıp (R) | −0,82 | −0,87 | −0,86 | −0,83 | −0,84 |
+| Kâr çarpanı | 0,91 | 0,73 | 0,69 | 0,63 | 0,74 |
+| Azami düşüş (R) | 18,9 | 22,3 | 14,4 | 23,6 | 75,5 |
+| Ort. süre (dk) | 173 | 163 | 156 | 157 | 163 |
+| MAE medyanı (R) | −0,66 | −0,79 | −0,74 | −0,84 | −0,74 |
+| MFE medyanı (R) | +0,57 | +0,51 | +0,54 | +0,43 | +0,53 |
+| Stop uzaklığı medyanı (pip) | 27,6 | 32,8 | 47,5 | 23,2 | 29,8 |
+
+**Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n3-tf.html" baslik="Zaman dilimi kıyası — N3 straddle" no="23" kaynak="Dukascopy" />
+
+**Izgara ve seçim.** Önceden kaydın bütün kombinasyonları örneklem içinde (2018–2023) denendi; her paritede en yüksek örneklem içi Sharpe'lı kombinasyon seçildi ve örneklem dışında sınandı.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n3-izgara.html" baslik="Parametre ızgarası — N3 straddle" no="24" kaynak="Dukascopy" />
+
+| Parite | Seçilen | İçi (R) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | ---: | :--- |
+| EUR/USD | 60 dk · haber öncesi aralık (mum) 3 · karşı uç · sert · zaman | −0,05 | −0,10 | −2,6 | 0,00 | çalışmıyor |
+| GBP/USD | 60 dk · haber öncesi aralık (mum) 6 · karşı uç · kapanış · 2R | 0,00 | 0,00 | +0,3 | 0,00 | zayıf |
+| USD/JPY | 60 dk · haber öncesi aralık (mum) 3 · orta · kapanış · zaman | +0,03 | −0,11 | −3,5 | 0,00 | çalışmıyor |
+| AUD/USD | 60 dk · haber öncesi aralık (mum) 3 · orta · sert · zaman | −0,10 | −0,23 | −4,0 | 0,00 | çalışmıyor |
+
+EUR/USD'de ızgaranın 72 kombinasyonu örneklem içinde denendi; en iyisinin yıllık Sharpe'ı şansla beklenen en yüksek değerin (0,77) karşısında deflated Sharpe olasılığı 0,00 veriyor (1'e yakınsa seçim şansla açıklanamaz; 0,95 altı açıklanabilir). Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak, 2020 → bugün): EUR/USD −0,11 R (325 işlem); GBP/USD −0,07 R (290 işlem); USD/JPY −0,12 R (253 işlem); AUD/USD −0,20 R (242 işlem).
+
+| Parite | İşlem | Net R | %95 alt | Sharpe |
+| :--- | ---: | ---: | ---: | ---: |
+| EUR/USD | 325 | −0,11 | −0,20 | −0,84 |
+| GBP/USD | 290 | −0,07 | −0,17 | −0,56 |
+| USD/JPY | 253 | −0,12 | −0,25 | −0,60 |
+| AUD/USD | 242 | −0,20 | −0,31 | −1,39 |
+
+**Maliyet.** Örneklem dışında net beklenti, dolum başına kaymanın dört kademesinde (makas her kademede gerçek bid/ask).
+
+| Kayma | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 0,0 pip | −0,03 | −0,09 | −0,12 | −0,13 |
+| 0,5 pip | −0,07 | −0,12 | −0,13 | −0,21 |
+| 1,0 pip | −0,08 | −0,14 | −0,15 | −0,25 |
+| 2,0 pip | −0,17 | −0,17 | −0,19 | −0,36 |
+| Başabaş kayma (pip, dolum başına, bütün dönem) | 0,00 | 0,00 | 0,00 | 0,00 |
+
+EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+**Yön mü, zamanlama mı?** Rastgele yön sınamasında stratejinin örneklem dışı sonucu, aynı giriş ve çıkış dakikalarında yönü yazı turayla seçen 1.000 denemenin dağılımında şu yüzdelikte duruyor: EUR/USD 64., GBP/USD 39., USD/JPY 23., AUD/USD 17. Hüküm kuralının eşiği 95. yüzdelik.
+
+**Rejim ve saat.** EUR/USD için artı yıl: 2 / 9; en iyi yıl 2019 (+0,08 R), en kötü 2020 (−0,35 R). Oynaklık tercillerinde (önceki 14 günün ATR yüzdeliği): düşük −0,05, orta −0,28, yüksek −0,24 R.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 2018 | −0,26 | −0,02 | −0,22 | −0,06 |
+| 2019 | +0,08 | −0,34 | −0,05 | −0,12 |
+| 2020 | −0,35 | −0,31 | 0,00 | −0,33 |
+| 2021 | −0,27 | 0,00 | +0,06 | −0,09 |
+| 2022 | −0,32 | −0,30 | −0,22 | −0,34 |
+| 2023 | +0,04 | −0,18 | −0,01 | −0,33 |
+| 2024 | −0,03 | −0,07 | −0,14 | −0,20 |
+| 2025 | −0,13 | −0,19 | +0,04 | −0,32 |
+| 2026 | −0,03 | −0,10 | −0,31 | −0,09 |
+| oynaklık düşük | −0,05 | −0,04 | −0,16 | −0,21 |
+| oynaklık orta | −0,28 | −0,43 | +0,11 | −0,15 |
+| oynaklık yüksek | −0,24 | −0,22 | −0,14 | −0,30 |
+
+<GrafikEmbed src="/arastirma/fx-gunici/n3-saat.html" baslik="Giriş saatine göre — N3 straddle" no="25" kaynak="Dukascopy" />
+
+Havuzun örneklem dışı ortalaması sıfırın altında: kural maliyetten sonra 4 paritede birlikte kaybettiriyor. Örneklem içinde (2018–2023) 1.015 işlemde işlem başına −0,17 R (%95 aralığı −0,22 / −0,11).
+
+**Olaya göre.**
+
+| Olay | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| ABD tarım dışı istihdam (NFP) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 415 | −0,22 | 131 | −0,33 |
+| ABD TÜFE (CPI) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 394 | −0,11 | 126 | −0,21 |
+| FOMC kararı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 277 | −0,22 | 86 | −0,10 |
+| FOMC basın toplantısı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 222 | −0,05 | 79 | +0,23 |
+| ECB kararı | EUR/USD | 63 | −0,03 | 20 | −0,02 |
+| ECB basın toplantısı | EUR/USD | 54 | −0,19 | 14 | +0,06 |
+| BoE kararı | GBP/USD | 68 | −0,16 | 22 | −0,05 |
+
+**İlk mumun büyüklüğüne göre.**
+
+| İlk mum / ATR | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| &lt;0,5 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 165 | −0,16 | 28 | −0,15 |
+| 0,5–1 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 165 | +0,04 | 58 | +0,19 |
+| 1–2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 278 | −0,13 | 80 | −0,06 |
+| >2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 885 | −0,19 | 312 | −0,20 |
+
+### Koşullar
+
+<GrafikEmbed src="/arastirma/fx-gunici/n3-kosul.html" baslik="Koşul kovaları — N3 straddle" no="26" kaynak="Dukascopy" />
+
+EUR/USD, sınanan 14 değişken: **1 tuttu**, 11 tutmadı, 2 değişkende örneklem içinde seçilecek kova çıkmadı.
+- **NR7 (son 7 günün en dar aralığı)** — seçilen kova: NR7; örneklem dışında seçilen +0,02 R, tamamlayanı −0,08 R.
+- Tutmayanlar: aralık / günlük ATR, Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, 60 dk trend (EMA50 tarafı), haftanın günü, saat değişimi haftası, Londra–NY farkı 4 saat.
+
+EUR/USD'de tutan değişkenler öbür paritelerde:
+
+| Değişken | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | :--- | :--- | :--- | :--- |
+| NR7 (son 7 günün en dar aralığı) | tuttu | tutmadı | tutmadı | tutmadı |
+
+### Kontrol listesi
+
+1. **Aralığı işaretle.** Haberden önceki yarım saatin tepesi ve dibi.
+2. **Emri önceden koyma, kapanışı bekle.** Bu dersin ölçtüğü kural kapanışla girer; aralığın ötesinde bekleyen stop
+   emri farklı bir kuraldır ve burada ölçülmedi: açıklama saniyesinde dolan bir emrin kayması bu dersin
+   varsaydığı ek kaymadan büyük olabilir.
+3. **Stop aralığın karşı ucunda, hedef 1R.**
+4. **Maliyet.** EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+### Hüküm
+
+**Çalışmıyor.** Önceden kayıtlı kural, sınanan 4 paritenin hiçbirinde örneklem dışında artı değil.
+
+| Parite | Varsayılan | Seçilen | Rastgele yüzdelik | Maliyet yiyor |
+| :--- | :--- | :--- | ---: | :--- |
+| EUR/USD | çalışmıyor | çalışmıyor | 64 | hayır |
+| GBP/USD | çalışmıyor | zayıf | 39 | hayır |
+| USD/JPY | çalışmıyor | çalışmıyor | 23 | hayır |
+| AUD/USD | çalışmıyor | çalışmıyor | 17 | hayır |
+
+## N4 — başarısız haber kırılımı
+
+### Ne
+
+Başarısız haber kırılımı: ilk haber mumu haber öncesi aralığın dışında kapanır, ikinci mum yeniden aralığın içinde
+kapanırsa **tersine** girilir. Fade dersindeki başarısız kırılımın haber hâlidir ve N3'ün aynasıdır: N3 aralıktan
+çıkışa, N4 çıkışın geri alınmasına bahis yapar.
+
+### Piyasa mantığı
+
+Haberin ilk mumu aralığın dışına taşıyıp ikinci mum geri dönüyorsa, ilk hareket ya likidite boşluğundaydı ya da
+verinin bir kısmı (alt kalemler, revizyonlar) ilk okumayı düzeltti. İki durumda da aralığın içine dönüş, ilk
+tepkinin fiyatlanmadığını söyler. Kuralın doğal hedefi aralığın karşı ucudur: geri dönen fiyatın gideceği yer
+haber öncesi dengenin öbür kenarı.
+
+### Kurallar
+
+- **Aralık.** Olaydan önceki "aralık" kadar mumun tepesi ve dibi (N3 ile aynı).
+- **Sinyal.** İlk haber mumu aralığın dışında kapanır; ikinci mum aralığın **içinde** kapanır (karşı kenarın ötesinde
+  kapanış yeni bir kırılımdır, başarısızlık değil) → ilk mumun tersi yönde giriş.
+- **Stop.** İlk iki mumun ucu (yukarı taşmada iki mumun en yüksek tepesi).
+- **Hedef.** "Karşı uç": aralığın öbür kenarı; ya da 1R, 2R, zaman.
+
+| Parametre | Izgara | Varsayılan |
+| :--- | :--- | :--- |
+| zaman dilimi | 5 dk, 15 dk, 60 dk | 5 dk |
+| haber öncesi aralık (mum) | 3, 6 | 6 |
+| stop türü | sert, kapanış | sert |
+| hedef | karşı uç, 1R, 2R, zaman | karşı uç |
+
+Varsayılan haberden önceki yarım saatin aralığını kullanır ve aralığın karşı ucunu hedefler.
+
+### Örnekler
+
+<GrafikEmbed src="/arastirma/fx-gunici/n4-ornek.html" baslik="Örnek günler — N4 başarısız haber kırılımı" no="27" kaynak="Dukascopy" />
+
+- **Kazanan** (18 Mart 2026, çarşamba, 5 dk mum): satış. Sinyal mumu 21:10 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,15140; stop 1,15253 (11,3 pip), hedef 1,15046. Çıkış 21:15 TSİ'de 1,15046, hedef: +0,84 R (+9,4 pip, maliyet dahil).
+- **Kaybeden** (17 Haziran 2026, çarşamba, 5 dk mum): alış. Sinyal mumu 21:40 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,15545; stop 1,15357 (18,9 pip), hedef 1,15959. Çıkış 22:02 TSİ'de 1,15352, stop: −1,03 R (−19,4 pip, maliyet dahil).
+
+Figürde mavi çizgiler haber öncesi aralığın iki ucudur; hedef karşı uçtur.
+
+### Sonuçlar
+
+**Birikimli sonuç.** Önceden kayıtlı varsayılanın 4 paritede ve havuzda birikimli net R'si; gri alan örneklem dışı (01.01.2024 →).
+
+<GrafikEmbed src="/arastirma/fx-gunici/n4-egri.html" baslik="Birikimli net R ve düşüş — N4 başarısız" no="28" kaynak="Dukascopy" />
+
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 43 işleminin net ortalaması işlem başına −0,01 R (%95 aralığı −0,37 / +0,46; isabet %60,5). Parite parite: EUR/USD −0,26; GBP/USD −0,46; USD/JPY +0,35; AUD/USD +0,18 (artı olan parite: 2 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,13 R; gerçek makas ve kayma bunun 0,14 R'sini götürüyor.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| İşlem | 10 | 9 | 12 | 12 | 43 |
+| İsabet | %60,0 | %44,4 | %66,7 | %66,7 | %60,5 |
+| Net beklenti (R) | −0,26 | −0,46 | +0,35 | +0,18 | −0,01 |
+| %95 aralığı, alt | −0,72 | — | −0,51 | −0,52 | −0,37 |
+| %95 aralığı, üst | +0,15 | — | +1,69 | +1,15 | +0,46 |
+| Brüt beklenti (R) | −0,13 | −0,35 | +0,45 | +0,40 | +0,13 |
+| Net beklenti (pip) | −2,9 | −13,8 | +11,3 | +2,1 | +0,2 |
+| Sharpe (yıllık) | −0,66 | −1,01 | 0,35 | 0,24 | −0,02 |
+
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma dahil. Havuz: aynı kural dört paritede birlikte; Sharpe havuzda günlük R toplamından._
+
+**İşlemlerin anatomisi.** Kazanç ve kayıpların büyüklüğü, işlemin süresi ve işlem sırasında gidilen en kötü (MAE) ve en iyi (MFE) nokta; ikisi de girişteki risk biriminde.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Ort. kazanç (R) | +0,28 | +0,26 | +1,06 | +0,81 | +0,68 |
+| Ort. kayıp (R) | −1,07 | −1,04 | −1,06 | −1,08 | −1,06 |
+| Kâr çarpanı | 0,53 | 0,15 | 2,60 | 1,52 | 1,02 |
+| Azami düşüş (R) | 2,7 | 4,1 | 3,8 | 4,0 | 10,5 |
+| Ort. süre (dk) | 17 | 17 | 16 | 19 | 17 |
+| MAE medyanı (R) | −0,78 | −1,00 | −0,43 | −0,70 | −0,66 |
+| MFE medyanı (R) | +0,15 | +0,02 | +0,18 | +0,22 | +0,16 |
+| Stop uzaklığı medyanı (pip) | 19,0 | 26,9 | 41,8 | 14,4 | 21,2 |
+
+**Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n4-tf.html" baslik="Zaman dilimi kıyası — N4 başarısız" no="29" kaynak="Dukascopy" />
+
+**Izgara ve seçim.** Önceden kaydın bütün kombinasyonları örneklem içinde (2018–2023) denendi; her paritede en yüksek örneklem içi Sharpe'lı kombinasyon seçildi ve örneklem dışında sınandı.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n4-izgara.html" baslik="Parametre ızgarası — N4 başarısız" no="30" kaynak="Dukascopy" />
+
+| Parite | Seçilen | İçi (R) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | ---: | :--- |
+| EUR/USD | 5 dk · haber öncesi aralık (mum) 3 · sert · karşı uç | +0,13 | −0,37 | −3,7 | 0,23 | ölçülemedi |
+| GBP/USD | 5 dk · haber öncesi aralık (mum) 3 · kapanış · 1R | −0,36 | −0,42 | −17,1 | 0,00 | ölçülemedi |
+| USD/JPY | 5 dk · haber öncesi aralık (mum) 6 · kapanış · zaman | +0,33 | +0,74 | +22,4 | 0,27 | ölçülemedi |
+| AUD/USD | — | — | — | — | — | — |
+
+EUR/USD'de ızgaranın 48 kombinasyonu örneklem içinde denendi; en iyisinin yıllık Sharpe'ı şansla beklenen en yüksek değerin (0,79) karşısında deflated Sharpe olasılığı 0,23 veriyor (1'e yakınsa seçim şansla açıklanamaz; 0,95 altı açıklanabilir). Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak, 2020 → bugün): EUR/USD −0,24 R (40 işlem); GBP/USD +0,03 R (12 işlem); USD/JPY +0,30 R (22 işlem); AUD/USD −0,13 R (12 işlem).
+
+| Parite | İşlem | Net R | %95 alt | Sharpe |
+| :--- | ---: | ---: | ---: | ---: |
+| EUR/USD | 40 | −0,24 | −0,48 | −0,62 |
+| GBP/USD | 12 | +0,03 | −0,53 | 0,04 |
+| USD/JPY | 22 | +0,30 | −0,41 | 0,27 |
+| AUD/USD | 12 | −0,13 | −0,62 | −0,18 |
+
+**Maliyet.** Örneklem dışında net beklenti, dolum başına kaymanın dört kademesinde (makas her kademede gerçek bid/ask).
+
+| Kayma | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 0,0 pip | −0,23 | −0,39 | +0,39 | +0,25 |
+| 0,5 pip | −0,26 | −0,46 | +0,35 | +0,18 |
+| 1,0 pip | −0,29 | −0,48 | +0,32 | +0,13 |
+| 2,0 pip | −0,39 | −0,52 | +0,29 | +0,02 |
+| Başabaş kayma (pip, dolum başına, bütün dönem) | 0,64 | 0,00 | — | — |
+
+EUR/USD için makasın üstüne dolum başına 0,64 pip kayma net beklentiyi sıfıra indiriyor (bütün dönem). Yürütme maliyetiniz bunun altında değilse kural kâğıt üstünde kalır.
+
+**Yön mü, zamanlama mı?** 
+
+**Rejim ve saat.** EUR/USD için artı yıl: 3 / 9; en iyi yıl 2018 (+0,48 R), en kötü 2026 (−0,59 R). Oynaklık tercillerinde (önceki 14 günün ATR yüzdeliği): düşük −0,14, orta +0,31, yüksek +0,12 R.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 2018 | +0,48 | −0,31 | +1,74 | +1,52 |
+| 2019 | −0,29 | −0,26 | +0,45 | +0,17 |
+| 2020 | −0,05 | −0,44 | −0,25 | −1,09 |
+| 2021 | −0,12 | +1,21 | −0,79 | −0,44 |
+| 2022 | +0,46 | +0,09 | +0,33 | +0,41 |
+| 2023 | −0,10 | −0,52 | +0,14 | −0,06 |
+| 2024 | −0,53 | −0,67 | +2,41 | +2,35 |
+| 2025 | +0,20 | −0,43 | −0,47 | −0,15 |
+| 2026 | −0,59 | −0,20 | −0,22 | −0,42 |
+| oynaklık düşük | −0,14 | −0,18 | −0,01 | +0,34 |
+| oynaklık orta | +0,31 | −0,65 | −0,70 | −0,66 |
+| oynaklık yüksek | +0,12 | −0,12 | +0,75 | +0,22 |
+
+<GrafikEmbed src="/arastirma/fx-gunici/n4-saat.html" baslik="Giriş saatine göre — N4 başarısız" no="31" kaynak="Dukascopy" />
+
+Havuzun örneklem dışı ortalaması sıfırın altında: kural maliyetten sonra 4 paritede birlikte kaybettiriyor. Örneklem içinde (2018–2023) 112 işlemde işlem başına +0,03 R (%95 aralığı −0,15 / +0,22).
+
+**Olaya göre.**
+
+| Olay | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| ABD tarım dışı istihdam (NFP) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 50 | −0,22 | 13 | −0,34 |
+| ABD TÜFE (CPI) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 36 | −0,14 | 15 | +0,01 |
+| FOMC kararı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 24 | −0,20 | 7 | −0,17 |
+| FOMC basın toplantısı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 30 | +0,77 | 7 | +0,89 |
+| ECB kararı | EUR/USD | 8 | +0,16 | 1 | −1,12 |
+| ECB basın toplantısı | EUR/USD | 2 | +1,25 | — | — |
+| BoE kararı | GBP/USD | 5 | −0,55 | — | — |
+
+**İlk mumun büyüklüğüne göre.**
+
+| İlk mum / ATR | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| &lt;0,5 | EUR/USD, GBP/USD, USD/JPY | 3 | −0,51 | 1 | +0,61 |
+| 0,5–1 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 13 | +0,65 | 4 | −0,25 |
+| 1–2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 51 | +0,07 | 9 | +1,00 |
+| >2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 88 | −0,08 | 29 | −0,31 |
+
+### Koşullar
+
+<GrafikEmbed src="/arastirma/fx-gunici/n4-kosul.html" baslik="Koşul kovaları — N4 başarısız" no="32" kaynak="Dukascopy" />
+
+EUR/USD, sınanan 14 değişken: **0 tuttu**, 2 tutmadı, 12 değişkende örneklem içinde seçilecek kova çıkmadı.
+- Tutmayanlar: NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı).
+
+### Kontrol listesi
+
+1. **Aralığı işaretle.** Haberden önceki yarım saatin tepesi ve dibi.
+2. **İlk mum dışarıda, ikinci mum içeride.** İkinci mumun kapanışı aralığın içinde olmalı.
+3. **Stop iki mumun ucunda, hedef aralığın karşı ucu.**
+4. **Maliyet.** EUR/USD için makasın üstüne dolum başına 0,64 pip kayma net beklentiyi sıfıra indiriyor (bütün dönem). Yürütme maliyetiniz bunun altında değilse kural kâğıt üstünde kalır.
+
+### Hüküm
+
+**Parite parite.** .
+
+| Parite | Varsayılan | Seçilen | Rastgele yüzdelik | Maliyet yiyor |
+| :--- | :--- | :--- | ---: | :--- |
+| EUR/USD | ölçülemedi | ölçülemedi | — | hayır |
+| GBP/USD | ölçülemedi | ölçülemedi | — | hayır |
+| USD/JPY | ölçülemedi | ölçülemedi | — | hayır |
+| AUD/USD | ölçülemedi | — | — | hayır |
+
+## N5 — geri çekilme sonrası devam
+
+### Ne
+
+Geri çekilme sonrası devam: haberin ilk mumu belirgin bir itki yaparsa, kural itkinin bir kısmının geri
+alınmasını bekler ve fiyat yeniden itki yönünde kapandığında girer. Hedef itkinin ucudur. Kırılımın (N1) daha sabırlı
+biçimidir: ilk hareketi kovalamaz, ilk geri çekilmeyi alır.
+
+### Piyasa mantığı
+
+Büyük bir sürprizden sonra ilk itki, kısa vadeli katılımcıların kâr alması ve geç kalanların fiyat aramasıyla bir
+miktar geri çekilir; yön değişmediyse ikinci dalga ilk itkinin ucunu yeniden sınar. Kural iki yerde kırılgandır:
+geri çekilme oranı (yarım ya da %38,2) bir gelenektir, bir ölçü değil; ve itkinin ucu, ilk mumun likidite boşluğunda
+oluşmuşsa yeniden görülmeyebilir.
+
+### Kurallar
+
+- **İtki.** İlk haber mumu; hareketi en az 0,5 × ATR olmalı (haberden önceki 14 mum).
+- **Geri çekilme.** Sonraki altı mum içinde fiyat itkinin (açılıştan uca) "oran" kadarını geri alır.
+- **Sinyal.** Geri çekilmeden sonra itki yönünde kapanan (yukarı itkide kapanışı açılışının üstünde olan) ilk mum.
+- **Stop.** Geri çekilmenin ucu (yukarı itkide geri çekilmenin en düşük dibi).
+- **Hedef.** "İtkinin ucu": ilk mumun tepesi (yukarı itkide); ya da 1R, 2R.
+
+| Parametre | Izgara | Varsayılan |
+| :--- | :--- | :--- |
+| zaman dilimi | 5 dk, 15 dk, 60 dk | 5 dk |
+| geri çekilme oranı | 0,382, 0,5 | 0,5 |
+| stop türü | sert, kapanış | sert |
+| hedef | itkinin ucu, 1R, 2R | itkinin ucu |
+
+Varsayılan itkinin yarısının geri alınmasını bekler ve itkinin ucunu hedefler.
+
+### Örnekler
+
+<GrafikEmbed src="/arastirma/fx-gunici/n5-ornek.html" baslik="Örnek günler — N5 geri çekilme sonrası devam" no="33" kaynak="Dukascopy" />
+
+- **Kazanan** (16 Eylül 2026, çarşamba, 5 dk mum): satış. Sinyal mumu 21:45 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,14849; stop 1,14918 (6,9 pip), hedef 1,14794. Çıkış 21:52 TSİ'de 1,14794, hedef: +0,81 R (+5,5 pip, maliyet dahil).
+- **Kaybeden** (2 Ekim 2026, cuma, 5 dk mum): alış. Sinyal mumu 15:40 TSİ'de kapandı; giriş sonraki dakikanın açılışında, 1,12529; stop 1,12421 (10,8 pip), hedef 1,12606. Çıkış 15:41 TSİ'de 1,12406, stop: −1,14 R (−12,3 pip, maliyet dahil).
+
+### Sonuçlar
+
+**Birikimli sonuç.** Önceden kayıtlı varsayılanın 4 paritede ve havuzda birikimli net R'si; gri alan örneklem dışı (01.01.2024 →).
+
+<GrafikEmbed src="/arastirma/fx-gunici/n5-egri.html" baslik="Birikimli net R ve düşüş — N5 devam" no="34" kaynak="Dukascopy" />
+
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 252 işleminin net ortalaması işlem başına −0,25 R (%95 aralığı −0,42 / −0,09; isabet %34,5). Parite parite: EUR/USD −0,27; GBP/USD −0,14; USD/JPY −0,18; AUD/USD −0,42 (artı olan parite: 0 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına −0,02 R; gerçek makas ve kayma bunun 0,23 R'sini götürüyor.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| İşlem | 75 | 65 | 57 | 55 | 252 |
+| İsabet | %36,0 | %35,4 | %38,6 | %27,3 | %34,5 |
+| Net beklenti (R) | −0,27 | −0,14 | −0,18 | −0,42 | −0,25 |
+| %95 aralığı, alt | −0,54 | −0,48 | −0,50 | −0,72 | −0,42 |
+| %95 aralığı, üst | +0,03 | +0,25 | +0,20 | −0,05 | −0,09 |
+| Brüt beklenti (R) | −0,07 | +0,08 | −0,02 | −0,08 | −0,02 |
+| Net beklenti (pip) | −2,5 | −1,8 | −5,2 | −2,9 | −3,0 |
+| Sharpe (yıllık) | −1,05 | −0,41 | −0,61 | −1,36 | −1,14 |
+
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma dahil. Havuz: aynı kural dört paritede birlikte; Sharpe havuzda günlük R toplamından._
+
+**İşlemlerin anatomisi.** Kazanç ve kayıpların büyüklüğü, işlemin süresi ve işlem sırasında gidilen en kötü (MAE) ve en iyi (MFE) nokta; ikisi de girişteki risk biriminde.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Ort. kazanç (R) | +1,21 | +1,60 | +1,25 | +1,43 | +1,36 |
+| Ort. kayıp (R) | −1,10 | −1,09 | −1,08 | −1,12 | −1,10 |
+| Kâr çarpanı | 0,60 | 0,76 | 0,51 | 0,53 | 0,60 |
+| Azami düşüş (R) | 29,1 | 20,6 | 12,8 | 31,2 | 72,6 |
+| Ort. süre (dk) | 21 | 20 | 34 | 27 | 25 |
+| MAE medyanı (R) | −1,00 | −1,00 | −1,00 | −1,00 | −1,00 |
+| MFE medyanı (R) | +0,52 | +0,50 | +0,46 | +0,33 | +0,48 |
+| Stop uzaklığı medyanı (pip) | 8,4 | 10,8 | 14,1 | 7,5 | 9,5 |
+
+**Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n5-tf.html" baslik="Zaman dilimi kıyası — N5 devam" no="35" kaynak="Dukascopy" />
+
+**Izgara ve seçim.** Önceden kaydın bütün kombinasyonları örneklem içinde (2018–2023) denendi; her paritede en yüksek örneklem içi Sharpe'lı kombinasyon seçildi ve örneklem dışında sınandı.
+
+<GrafikEmbed src="/arastirma/fx-gunici/n5-izgara.html" baslik="Parametre ızgarası — N5 devam" no="36" kaynak="Dukascopy" />
+
+| Parite | Seçilen | İçi (R) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| :--- | :--- | ---: | ---: | ---: | ---: | :--- |
+| EUR/USD | 60 dk · geri çekilme oranı 0,382 · sert · itkinin ucu | +0,03 | −0,20 | −3,3 | 0,17 | çalışmıyor |
+| GBP/USD | 60 dk · geri çekilme oranı 0,5 · sert · 2R | −0,02 | −0,16 | −1,3 | 0,03 | çalışmıyor |
+| USD/JPY | 5 dk · geri çekilme oranı 0,5 · sert · itkinin ucu | +0,20 | −0,18 | −5,2 | 0,14 | çalışmıyor |
+| AUD/USD | 60 dk · geri çekilme oranı 0,5 · kapanış · itkinin ucu | −0,10 | −0,48 | −4,8 | 0,00 | çalışmıyor |
+
+EUR/USD'de ızgaranın 36 kombinasyonu örneklem içinde denendi; en iyisinin yıllık Sharpe'ı şansla beklenen en yüksek değerin (0,51) karşısında deflated Sharpe olasılığı 0,17 veriyor (1'e yakınsa seçim şansla açıklanamaz; 0,95 altı açıklanabilir). Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak, 2020 → bugün): EUR/USD −0,15 R (176 işlem); GBP/USD −0,25 R (181 işlem); USD/JPY +0,06 R (141 işlem); AUD/USD −0,25 R (142 işlem).
+
+| Parite | İşlem | Net R | %95 alt | Sharpe |
+| :--- | ---: | ---: | ---: | ---: |
+| EUR/USD | 176 | −0,15 | −0,30 | −0,64 |
+| GBP/USD | 181 | −0,25 | −0,40 | −1,13 |
+| USD/JPY | 141 | +0,06 | −0,18 | 0,19 |
+| AUD/USD | 142 | −0,25 | −0,43 | −1,01 |
+
+**Maliyet.** Örneklem dışında net beklenti, dolum başına kaymanın dört kademesinde (makas her kademede gerçek bid/ask).
+
+| Kayma | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 0,0 pip | −0,17 | −0,05 | −0,10 | −0,31 |
+| 0,5 pip | −0,27 | −0,14 | −0,18 | −0,42 |
+| 1,0 pip | −0,35 | −0,22 | −0,25 | −0,50 |
+| 2,0 pip | −0,48 | −0,35 | −0,35 | −0,64 |
+| Başabaş kayma (pip, dolum başına, bütün dönem) | 0,00 | 0,00 | 0,94 | 0,00 |
+
+EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+**Yön mü, zamanlama mı?** Rastgele yön sınamasında stratejinin örneklem dışı sonucu, aynı giriş ve çıkış dakikalarında yönü yazı turayla seçen 1.000 denemenin dağılımında şu yüzdelikte duruyor: EUR/USD 61., GBP/USD 55., USD/JPY 16., AUD/USD 42. Hüküm kuralının eşiği 95. yüzdelik.
+
+**Rejim ve saat.** EUR/USD için artı yıl: 1 / 9; en iyi yıl 2019 (+0,02 R), en kötü 2024 (−0,54 R). Oynaklık tercillerinde (önceki 14 günün ATR yüzdeliği): düşük −0,19, orta 0,00, yüksek −0,36 R.
+
+|  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 2018 | −0,03 | −0,27 | +0,03 | −0,60 |
+| 2019 | +0,02 | +0,15 | +0,28 | −0,60 |
+| 2020 | −0,24 | +0,22 | −0,02 | −0,43 |
+| 2021 | −0,23 | −0,35 | +0,39 | −0,50 |
+| 2022 | −0,03 | −0,43 | +0,45 | −0,30 |
+| 2023 | −0,33 | 0,00 | +0,05 | −0,32 |
+| 2024 | −0,54 | −0,35 | −0,13 | −0,80 |
+| 2025 | 0,00 | +0,21 | −0,06 | −0,29 |
+| 2026 | −0,20 | −0,16 | −0,36 | −0,17 |
+| oynaklık düşük | −0,19 | +0,05 | +0,02 | −0,58 |
+| oynaklık orta | 0,00 | −0,28 | +0,20 | −0,53 |
+| oynaklık yüksek | −0,36 | −0,31 | +0,14 | −0,27 |
+
+<GrafikEmbed src="/arastirma/fx-gunici/n5-saat.html" baslik="Giriş saatine göre — N5 devam" no="37" kaynak="Dukascopy" />
+
+Havuzun örneklem dışı ortalaması sıfırın altında: kural maliyetten sonra 4 paritede birlikte kaybettiriyor. Örneklem içinde (2018–2023) 541 işlemde işlem başına −0,13 R (%95 aralığı −0,24 / −0,02).
+
+**Olaya göre.**
+
+| Olay | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| ABD tarım dışı istihdam (NFP) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 240 | −0,08 | 66 | −0,36 |
+| ABD TÜFE (CPI) | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 211 | −0,19 | 82 | −0,20 |
+| FOMC kararı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 145 | −0,35 | 45 | −0,69 |
+| FOMC basın toplantısı | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 108 | −0,10 | 33 | +0,34 |
+| ECB kararı | EUR/USD | 31 | −0,12 | 10 | +0,02 |
+| ECB basın toplantısı | EUR/USD | 21 | −0,33 | 6 | −0,01 |
+| BoE kararı | GBP/USD | 37 | 0,00 | 10 | −0,31 |
+
+**İlk mumun büyüklüğüne göre.** Kural yalnız itkisi yarım ATR'yi aşan olaylarda işlem açar.
+
+| İlk mum / ATR | Pariteler | İşlem | Net R | Dışı işlem | Dışı R |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| 0,5–1 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 121 | −0,31 | 34 | −0,11 |
+| 1–2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 181 | −0,14 | 45 | −0,23 |
+| >2 | EUR/USD, GBP/USD, USD/JPY, AUD/USD | 491 | −0,14 | 173 | −0,28 |
+
+### Koşullar
+
+<GrafikEmbed src="/arastirma/fx-gunici/n5-kosul.html" baslik="Koşul kovaları — N5 devam" no="38" kaynak="Dukascopy" />
+
+EUR/USD, sınanan 14 değişken: **0 tuttu**, 12 tutmadı, 2 değişkende örneklem içinde seçilecek kova çıkmadı.
+- Tutmayanlar: aralık / günlük ATR, Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, 60 dk trend (EMA50 tarafı), haftanın günü, ay sonu, saat değişimi haftası.
+
+### Kontrol listesi
+
+1. **İtkiyi ölç.** İlk mumun hareketi haberden önceki ATR'nin en az yarısı mı?
+2. **Geri çekilmeyi bekle.** Altı mum içinde itkinin yarısı geri alınmalı.
+3. **İtki yönünde kapanışta gir.** Stop geri çekilmenin ucunda, hedef itkinin ucu.
+4. **Maliyet.** EUR/USD için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun.
+
+### Hüküm
+
+**Çalışmıyor.** Önceden kayıtlı kural, sınanan 4 paritenin hiçbirinde örneklem dışında artı değil.
+
+| Parite | Varsayılan | Seçilen | Rastgele yüzdelik | Maliyet yiyor |
+| :--- | :--- | :--- | ---: | :--- |
+| EUR/USD | çalışmıyor | çalışmıyor | 61 | hayır |
+| GBP/USD | çalışmıyor | çalışmıyor | 55 | hayır |
+| USD/JPY | çalışmıyor | çalışmıyor | 16 | hayır |
+| AUD/USD | çalışmıyor | çalışmıyor | 42 | hayır |
+
+## Beş stratejinin özeti
+
+| Strateji | Dışı işlem (havuz) | Dışı net R | %95 aralığı | Parite hükümleri | Maliyet yiyor | Başabaş kayma, EUR/USD (pip) | R birimi medyanı, EUR/USD (pip) |
+| :--- | ---: | ---: | ---: | :--- | ---: | ---: | ---: |
+| N1 kırılım | 502 | −0,25 | −0,33 / −0,16 | 4 çalışmıyor | — | sıfırda bile eksi (−0,24 R) | 17,8 |
+| N2 fade | 266 | −0,04 | −0,21 / +0,12 | 1 zayıf · 3 çalışmıyor | — | sıfırda bile eksi (−0,04 R) | 15,0 |
+| N3 straddle | 478 | −0,13 | −0,20 / −0,05 | 4 çalışmıyor | — | sıfırda bile eksi (−0,10 R) | 27,6 |
+| N4 başarısız | 43 | −0,01 | −0,37 / +0,46 | 4 ölçülemedi | — | 0,64 | 19,0 |
+| N5 devam | 252 | −0,25 | −0,42 / −0,09 | 4 çalışmıyor | — | sıfırda bile eksi (−0,09 R) | 8,4 |
+
+_Başabaş kayma: net beklentiyi sıfıra indiren dolum başına kayma (bütün dönem); sıfır kaymada bile eksiyse parantezde sıfır kaymadaki işlem başına net R. R birimi: stop'lu kurallarda girişten stop'a uzaklık, stop'suz kurallarda girişteki ATR. Maliyet yiyor: brüt sonucu sıfırdan ayırt edilen ama net sonucu eksi olan parite sayısı._
+
+<div class="pratik">
+  <span class="etiket">Pratik — haber</span>
+
+**Alıştırma 1 — bir işlemin R'si.** N1 kırılım kuralının EUR/USD'deki örnek günü (2 Ekim 2026): alış, giriş 1,12502 (ask, kayma dahil), stop 1,12329, çıkış 1,12676 (hedef). (a) Risk kaç pip? (b) İşlem kaç pip ve kaç R getirdi? (c) Dolum başına kayma 0,5 pip daha kötü olsaydı sonuç kaç R olurdu?
+
+<details>
+<summary>Çözüm</summary>
+
+(a) Risk, yürütülen giriş fiyatından stop'a uzaklıktır: 1,12502 ile 1,12329 arası **17,3 pip**.
+
+(b) Sonuç 1,12676 − 1,12502 = **+17,4 pip**; R = sonuç / risk = 17,4 / 17,3 = **+1,01 R** (motorun kaydı +1,00 R: fiyatlar burada beş haneye yuvarlı).
+
+(c) Kayma iki yerden işler. Giriş 0,5 pip kötüleşir, bu yüzden risk de 0,5 pip büyür (17,8 pip). Çıkış bir limit emirdir (hedef) ve kaymaz; sonuç yalnız giriş tarafında 0,5 pip azalır (+16,9 pip). Yeni R = 16,9 / 17,8 = **+0,95 R**. Pay küçülür, payda büyür: kazanç R cinsinden, pip cinsinden olduğundan daha hızlı erir; en çok da stop'u yakın stratejilerde.
+
+</details>
+
+**Alıştırma 2 — bir işlemin R'si.** N2 fade kuralının EUR/USD'deki örnek günü (11 Eylül 2026): alış, giriş 1,15881 (ask, kayma dahil), stop 1,15694, çıkış 1,15970 (hedef). (a) Risk kaç pip? (b) İşlem kaç pip ve kaç R getirdi? (c) Dolum başına kayma 0,5 pip daha kötü olsaydı sonuç kaç R olurdu?
+
+<details>
+<summary>Çözüm</summary>
+
+(a) Risk, yürütülen giriş fiyatından stop'a uzaklıktır: 1,15881 ile 1,15694 arası **18,7 pip**.
+
+(b) Sonuç 1,15970 − 1,15881 = **+8,9 pip**; R = sonuç / risk = 8,9 / 18,7 = **+0,48 R**.
+
+(c) Kayma iki yerden işler. Giriş 0,5 pip kötüleşir, bu yüzden risk de 0,5 pip büyür (19,2 pip). Çıkış bir limit emirdir (hedef) ve kaymaz; sonuç yalnız giriş tarafında 0,5 pip azalır (+8,4 pip). Yeni R = 8,4 / 19,2 = **+0,44 R**. Pay küçülür, payda büyür: kazanç R cinsinden, pip cinsinden olduğundan daha hızlı erir; en çok da stop'u yakın stratejilerde.
+
+</details>
+
+</div>
+
+_Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
+değildir._
