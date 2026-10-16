@@ -13,10 +13,11 @@ Girdi (hepsi depodaki koşu çıktısı ya da arşiv):
   cikti/ders/olcum.json                 figürler (sekil.py), ders metinleri (ders_yaz.py) ve doğrulayıcı
                                         (dogrula.py) yalnız buradan okur
 
-Burada yeni bir ÖLÇÜM yapılmaz, yalnız toplanır; iki istisna adıyla: (1) dört paritenin
+Burada yeni bir ÖLÇÜM yapılmaz, yalnız toplanır; üç istisna adıyla: (1) dört paritenin
 HAVUZU — aynı stratejiyi dört paritede birlikte koşmanın işlem başına ortalaması ve günlük
 R toplamından Sharpe'ı, kaydedilmiş işlem dosyalarından; (2) stratejiler arası günlük R
-korelasyonu. İkisinin tanımı aşağıda, fonksiyonun kendisinde.
+korelasyonu; (3) birimlere bölünen ailelerin AİLE sayımı — ön kaydın deneme sayısı aile
+başınadır, koşu birim başına seçer (aile_secimi). Üçünün tanımı aşağıda, fonksiyonun kendisinde.
 """
 from __future__ import annotations
 
@@ -33,7 +34,9 @@ import pandas as pd
 
 import ayar as ay
 import metrik as mk
+import onkayit_gecmis as og
 import saglamlik as sg
+import takvim
 import zaman as z
 
 BURASI = Path(__file__).resolve().parent
@@ -54,15 +57,55 @@ def _icerik_ozu(d: dict) -> str:
     return hashlib.sha256(json.dumps(d, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
-def onkayit_gecmisi() -> list[dict] | None:
-    """Ön kaydın git geçmişi: her commit'te ayrıştırılmış içeriğin özü ve bir öncekine göre değişen
-    bölümler. "Hiçbir kural sonuç görüldükten sonra değişmedi" cümlesi bir beyan değil bu listedir.
-    Git yoksa (ya da sığ klonda geçmiş eksikse) None: ölçülemeyen geçmiş uydurulmaz."""
+def _git(*arg: str) -> str:
+    import subprocess
+    return subprocess.run(["git", "-C", str(KOK), *arg], capture_output=True, text=True, check=True).stdout
+
+
+def gecmis_sorunu() -> str | None:
+    """Ön kaydın git geçmişi baştan sona okunabiliyor mu; sorun varsa adıyla, yoksa None.
+
+    Sığ klon tek başına engel değildir (bu deponun bulut klonları sığdır): dosyanın görünen İLK commit'i dosyayı
+    EKLEYEN commit olmalı ve sığ klonun sınırında olmamalıdır. Sınırdaki commit'in ebeveyni görünmez; dosyanın daha eski
+    bir geçmişi varsa kesik kök "ilk kayıt" sanılırdı."""
     import subprocess
     rel = ONKAYIT_YOL.relative_to(KOK).as_posix()
     try:
-        out = subprocess.run(["git", "-C", str(KOK), "log", "--format=%H %cI", "--", rel],
-                             capture_output=True, text=True, check=True).stdout.split("\n")
+        gecmis = _git("log", "--format=%H", "--", rel).split()
+        sinir_yol = Path(_git("rev-parse", "--git-path", "shallow").strip())
+    except (OSError, subprocess.CalledProcessError):
+        return "git yok ya da burası bir git deposu değil: ön kaydın geçmişi ölçülemez"
+    if not gecmis:
+        return "ön kayıt git geçmişinde yok"
+    ilk = gecmis[-1]
+    sinir_yol = sinir_yol if sinir_yol.is_absolute() else KOK / sinir_yol
+    sinir = set(sinir_yol.read_text().split()) if sinir_yol.exists() else set()
+    if ilk in sinir:
+        return "sığ klon ön kaydın ilk görünen commit'inde kesiliyor (git fetch --deepen ya da --unshallow)"
+    try:
+        ebeveyn = _git("rev-list", "--parents", "-n", "1", ilk).split()[1:]
+    except subprocess.CalledProcessError:
+        return "ön kaydın ilk commit'inin ebeveyni okunamadı"
+    for p in ebeveyn:
+        if subprocess.run(["git", "-C", str(KOK), "cat-file", "-e", f"{p}:{rel}"],
+                          capture_output=True).returncode == 0:
+            return "ön kaydın ilk görünen commit'i dosyayı eklemiyor: geçmişin başı kesik"
+    return None
+
+
+def onkayit_gecmisi() -> list[dict] | None:
+    """Ön kaydın git geçmişi: her commit'te ayrıştırılmış içeriğin özü ve bir öncekine göre değişen
+    bölümler. "Hiçbir kural sonuç görüldükten sonra değişmedi" cümlesi bir beyan değil bu listedir.
+    Geçmiş baştan sona okunamıyorsa (gecmis_sorunu) None: ölçülemeyen geçmiş uydurulmaz (şablonun iddiası o zaman
+    üretimi düşürür; zincir bu hâli ilk adımında adıyla söyler — hepsi.git_on_kosulu). Zaman İŞLEYEN (committer)
+    saatidir: geçmiş yeniden yazılırsa (rebase, amend) saat değişir ve beklenen geçmişle kıyas (ONKAYIT_BEKLENEN)
+    bunu yakalar."""
+    import subprocess
+    rel = ONKAYIT_YOL.relative_to(KOK).as_posix()
+    if gecmis_sorunu():
+        return None
+    try:
+        out = _git("log", "--format=%H %cI", "--", rel).split("\n")
     except (OSError, subprocess.CalledProcessError):
         return None
     kayit, onceki = [], None
@@ -75,7 +118,11 @@ def onkayit_gecmisi() -> list[dict] | None:
             return None
         d = tomllib.loads(metin)
         degisen = sorted(set(d)) if onceki is None else sorted(k for k in set(d) | set(onceki) if d.get(k) != onceki.get(k))
-        kayit.append({"commit": h[:8], "zaman": t, "icerik_ozu": _icerik_ozu(d), "degisen_bolum": degisen})
+        # Sonuçlardan önce mi: kayıt, ilk sonuçların görüldüğü commit'in atası (ya da kendisi) mı.
+        once = subprocess.run(["git", "-C", str(KOK), "merge-base", "--is-ancestor", h, og.ILK_SONUC[0]],
+                              capture_output=True).returncode == 0
+        kayit.append({"commit": h[:8], "zaman": t, "icerik_ozu": _icerik_ozu(d), "degisen_bolum": degisen,
+                      "sonuctan_once": once})
         onceki = d
     simdi = tomllib.loads(ONKAYIT_YOL.read_text(encoding="utf-8"))
     if onceki is not None and simdi != onceki:
@@ -233,6 +280,15 @@ def havuz(kok: Path, birim: str, ciftler: list[str], p: dict, egriler: dict, a: 
         oz = mk.ozet(x, g, kume_sutun="gun")
         al = mk.alinan(x)
         oz["ga_islem_alt"], oz["ga_islem_ust"] = mk.bootstrap_ort(al["r"].to_numpy()) if len(al) else (None, None)
+        # Sıfıra yakın uç (bilgi): havuz cümlesi aralığın sıfıra göre yerini okur (üstünde · kapsıyor · altında).
+        if len(al) and ad in ("oos", "tum"):
+            sinir = {}
+            for uc, hangi in (("ga_alt", "alt"), ("ga_ust", "ust")):
+                s_ = mk.sinir_bilgisi(al["r"].to_numpy(np.float64), oz.get(uc), hangi, kume=al["gun"].to_numpy())
+                if s_:
+                    sinir[uc] = s_
+            if sinir:
+                oz["sinir"] = sinir
         # günlük R toplamı: dört paritenin günlük R'si toplanır (mk.gunluk_r gün başına toplar)
         oz["pariteler"] = sorted(x["cift"].unique().tolist()) if len(x) else []
         out[ad] = oz
@@ -355,6 +411,8 @@ def birim_ozet(kok: Path, birim: str, ciftler: list[str], a: ay.Ayar, isi_eksen:
             "egri": {"varsayilan": haftalik(egri_v[c]), "secilen": haftalik(egri_s[c]),
                      "walk_forward": haftalik(wf.get("egri"))},
             "ornek": (va or {}).get("ornek") or [],
+            # Yorum duyarlılığı (kosu.YORUM): ön kaydın harfinin ikinci okumasıyla varsayılan ve ızgaradan seçim.
+            "yorum": s.get("yorum"),
         }
     out["havuz"] = {"varsayilan": havuz(kok, birim, list(sonuc), ilk["varsayilan"], egri_v, a)}
     tum_islem = _birlesik_islem(kok, birim, list(sonuc), ilk["varsayilan"])
@@ -393,6 +451,55 @@ def korelasyon(birimler: dict, a: ay.Ayar) -> dict:
     return out
 
 
+def aile_secimi(kok: Path, ciftler: list[str]) -> dict:
+    """Ön kayıt deflated Sharpe'ın deneme sayısını AİLE başına koyar ([saglamlik] dsr) ve seçimi ailenin tek
+    ızgarasından ister; koşu aileleri birimlere böldü ve birim başına seçer (kosu.BIRIMLER). Bölünen her ailenin parite
+    başına iki cevabı, koşu yeniden yapılmadan koşu çıktısından:
+      secim   ailenin bütün ızgarasından tek seçim (aynı kural: asgari işlem, en yüksek örneklem içi Sharpe, tolerans
+              içinde ilk; ailenin ızgara sırası birimlerin BIRIMLER sırasıdır). Ailenin en iyi kombinasyonu bir
+              birimin en iyisidir, yani bir birimin seçilenidir; hükmü o seçilenin hükmüdür
+      dsr     her birimin seçileninin deflated Sharpe'ı ailenin BÜTÜN denemeleriyle (seçilenin gözlem sayısı, çarpıklık
+              ve basıklığı koşu çıktısından: saglamlik.dsr_ozetten)"""
+    import kosu
+    aileler: dict[str, list[str]] = {}
+    for b, t in kosu.BIRIMLER.items():
+        aileler.setdefault(t["aile"], []).append(b)
+    yil = math.sqrt(mk.YIL_GUN)
+    out = {}
+    for aile, bs in aileler.items():
+        if len(bs) < 2:
+            continue
+        out[aile] = {"birimler": bs, "cift": {}}
+        for c in ciftler:
+            sonuc = {b: _oku(kok / "sonuc" / b / f"{c}.json") for b in bs}
+            if not all(sonuc.values()):
+                continue
+            denemeler = [((r["is"] or {}).get("sharpe") if (r["is"] or {}).get("sharpe") is not None
+                          else float("nan")) / yil for b in bs for r in sonuc[b]["izgara"]]
+            adaylar = []
+            dsr = {}
+            for b in bs:
+                se, p = sonuc[b].get("secilen_analiz"), sonuc[b].get("secilen")
+                if not se or not p:
+                    continue
+                adaylar.append({"birim": b, "p": p, "is": {"sharpe": se["is"].get("sharpe")},
+                                "hukum": se.get("hukum")})
+                d = se.get("dsr") or {}
+                if all(d.get(x) is not None for x in ("sr_yillik", "T", "carpiklik", "basiklik")):
+                    a_ = sg.dsr_ozetten(d["sr_yillik"] / yil, np.array(denemeler), int(d["T"]), d["carpiklik"],
+                                        d["basiklik"])
+                    dsr[b] = {"birim_n": d.get("n_deneme"), "birim_dsr": d.get("dsr"),
+                              "birim_dsr_gurultu": d.get("dsr_gurultu"),
+                              "aile_n": a_.get("n_deneme"), "aile_dsr": a_.get("dsr"),
+                              "aile_dsr_gurultu": a_.get("dsr_gurultu"), "aile_sr0_yillik": a_.get("sr0_yillik"),
+                              "aile_sr0_gurultu_yillik": a_.get("sr0_gurultu_yillik")}
+            sec = kosu._sec([x for x in adaylar if x["is"]["sharpe"] is not None])
+            out[aile]["cift"][c] = {"n_deneme": len(denemeler), "dsr": dsr,
+                                    "secim": ({"birim": sec["birim"], "p": sec["p"], "hukum": sec["hukum"],
+                                               "is_sharpe": sec["is"]["sharpe"]} if sec else None)}
+    return out
+
+
 # ───────────────────────────────────────────── zaman tablosu (TSİ)
 def zaman_tablosu(a: ay.Ayar) -> dict:
     yillar = list(range(a.baslangic.year, a.bitis.year + 1))
@@ -416,8 +523,15 @@ SAAT_KURAL_KALIP = r"kuralından|yayım kuralı|karar saati ECB"
 def takvim_ozet() -> dict:
     d = BURASI / "veri" / "takvim"
     out = {"kunye": _oku(d / "kunye.json"), "sinama": None, "sayim": {}}
-    if (d / "olaylar.csv").exists():
-        df = pd.read_csv(d / "olaylar.csv", dtype=str, keep_default_na=False)
+    out["ozler"] = takvim.ozler()
+    df = takvim.tumu()
+    if len(df):
+        df = df.astype({c: str for c in ("olay", "tarih", "yerel_saat", "bolge", "kaynak")})
+        if "not" not in df.columns:
+            df["not"] = ""
+        df["not"] = df["not"].fillna("").astype(str)
+        # Kullanıcının ek dosyası (veri/takvim/ek.csv) varsa olaylar ona da bakar: sayım küme küme yazılır.
+        out["kume"] = {o: {k: int(n) for k, n in g["kume"].value_counts().items()} for o, g in df.groupby("olay")}
         out["sayim"] = {o: {"toplam": int(len(g)), "yil": {y: int(n) for y, n in g["tarih"].str[:4].value_counts()
                                                            .sort_index().items()},
                             # yerel saat × bölge dağılımı ve kaynağın alan adı (dersin takvim tablosu)
@@ -462,10 +576,13 @@ def takvim_ozet() -> dict:
     return out
 
 
-def veri_ozet() -> dict:
+def veri_ozet(ciftler: list[str]) -> dict:
+    """Arşivin künyesi ve kalite raporu, YALNIZ ayardaki paritelerden (ayardan çıkarılan paritenin dosyaları kalsa da)."""
     kunye = {}
     for yol in sorted((ay.DUKA / "kunye").glob("*.json")):
         for k, v in (_oku(yol) or {}).get("birimler", {}).items():
+            if k.split("/")[0] not in ciftler:
+                continue
             kunye[k] = {x: v.get(x) for x in ("gun", "gun_dolu", "satir", "tam", "istek", "ret", "sha256",
                                                "icerik_ozu", "ilk_gun", "son_gun")}
             kunye[k]["gun_bos"] = len(v.get("gun_bos", []))
@@ -473,7 +590,7 @@ def veri_ozet() -> dict:
             # Kaynağın boş ya da "yok" döndürdüğü günler adıyla (az sayıda): dolu gün ile istenen gün arasındaki fark.
             kunye[k]["bos_gunler"] = sorted({str(x)[:10] for x in (v.get("gun_bos") or []) + (v.get("gun_404") or [])})
             kunye[k]["gun_hata"] = len(v.get("gun_hata", []))
-    kalite = _oku(ay.DUKA / "kalite.json")
+    kalite = {c: v for c, v in (_oku(ay.DUKA / "kalite.json") or {}).items() if c in ciftler} or None
     return {"kalite": kalite, "arsiv": kunye, "tatil_uyum": tatil_uyum(kalite)}
 
 
@@ -593,7 +710,10 @@ def kur(kok: Path | None = None) -> dict:
             "temel_kayma_pip": onk["genel"]["temel_kayma_pip"], "haber_kayma_pip": a.haber_kayma_pip,
             "haber_pencere_dk": list(a.haber_pencere_dk), "gun_sonu_et": a.gun_sonu_et,
             "onkayit_ozu": _oz(ONKAYIT_YOL), "ayar_ozu": _oz(BURASI / "ayar.toml"),
+            "takvim_ozleri": takvim.ozler(),
             "onkayit_icerik_ozu": _icerik_ozu(onk), "onkayit_gecmisi": onkayit_gecmisi(),
+            # İlk sonuçların görüldüğü commit ve işleyen saati (onkayit_gecmis.ILK_SONUC; saat depodan sınanır).
+            "onkayit_ilk_sonuc": {"commit": og.ILK_SONUC[0], "zaman": og.ILK_SONUC[1]},
             "hukum_kurali": onk["hukum"], "secim": onk["secim"], "saglamlik": onk["saglamlik"],
             "kosul": onk["kosul"],
             # Ön kaydın yazmadığı uygulama eşikleri (hüküm kuralının şartları kendi asgarileriyle kurulur): tek
@@ -607,15 +727,43 @@ def kur(kok: Path | None = None) -> dict:
             "bolunen_aile": sorted({v["aile"] for v in kosu.BIRIMLER.values()
                                     if sum(1 for x in kosu.BIRIMLER.values() if x["aile"] == v["aile"]) > 1}),
             "ay_sonu_kayan": ay_sonu_kayan(a.baslangic, a.bitis),
+            # Ön kaydın harfine göre ikinci okuması olan kurallar: birim → [parametre, harfin okuması].
+            "yorum": {b: list(v) for b, v in kosu.YORUM.items()},
         },
         "zaman": zaman_tablosu(a),
         "takvim": takvim_ozet(),
-        "veri": veri_ozet(),
+        "veri": veri_ozet(ciftler),
         "birim": birimler,
         "korelasyon": kor,
+        "aile_secim": aile_secimi(kok, ciftler),
         "haber": {"cift": {c: h for c, h in haber.items() if h}, "devam": _oku(kok / "sonuc" / "haber" / "devam.json")},
     }
+    tutarlilik(olcum, a)
     return _temiz(olcum)
+
+
+def tutarlilik(olcum: dict, a: ay.Ayar) -> None:
+    """Ölçümün girdileri aynı anın girdileri mi: veri denetiminin haber makası bugünkü takvimle kurulmuş mu, takvim
+    ayarın penceresiyle mi kurulmuş, ön kaydın geçmişi beklenen geçmiş mi (onkayit_gecmis). Ayrışırsa ölçüm yazılmaz
+    (zincirin sırası, elle koşulan bir adım ya da yeniden yazılmış bir geçmiş)."""
+    simdi = takvim.ozler()
+    hata = []
+    for c, v in ((olcum.get("veri") or {}).get("kalite") or {}).items():
+        if (v or {}).get("takvim_ozu") != simdi:
+            hata.append(f"{c}: veri denetimi (kalite.py) başka bir takvimle koşmuş — takvimden sonra yeniden koşulmalı")
+    k = olcum.get("kunye") or {}
+    hata += og.denetle(k.get("onkayit_gecmisi"))
+    try:
+        t_ilk = _git("log", "-1", "--format=%cI", og.ILK_SONUC[0]).strip()
+    except Exception:                                     # git yok ya da commit bu klonda değil
+        t_ilk = None
+    if t_ilk != og.ILK_SONUC[1]:
+        hata.append(f"ilk sonuç commit'inin ({og.ILK_SONUC[0]}) saati depoda {t_ilk}, beklenen {og.ILK_SONUC[1]}")
+    pen = ((olcum.get("takvim") or {}).get("kunye") or {}).get("pencere")
+    if pen != [a.baslangic.isoformat(), a.bitis.isoformat()]:
+        hata.append(f"takvimin penceresi {pen} ayarın penceresiyle aynı değil — takvim_kur.py yeniden koşulmalı")
+    if hata:
+        raise SystemExit("ölçüm yazılmadı:\n  " + "\n  ".join(hata))
 
 
 def main(argv: list[str]) -> int:

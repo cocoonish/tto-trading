@@ -49,17 +49,26 @@ ASGARI_KOSUL_OOS = 20
 
 def dsr(sr_secilen: float, sr_denemeler: np.ndarray, gunluk: np.ndarray) -> dict:
     """Günlük (yıllıklandırılmamış) Sharpe'larla deflated Sharpe; iki eşikle (modülün başlığı)."""
+    gunluk = np.asarray(gunluk, dtype=np.float64)
+    T = len(gunluk)
+    if T < 30:
+        return dsr_ozetten(sr_secilen, sr_denemeler, T, float("nan"), float("nan"))
+    return dsr_ozetten(sr_secilen, sr_denemeler, T, float(stats.skew(gunluk)),
+                       float(stats.kurtosis(gunluk, fisher=False)))
+
+
+def dsr_ozetten(sr_secilen: float, sr_denemeler: np.ndarray, T: int, g3: float, g4: float) -> dict:
+    """Aynı deflated Sharpe, günlük serinin kendisi yerine özetinden (gözlem sayısı, çarpıklık, basıklık): ölçüm
+    dosyası seçilenin bu üç sayısını taşır, yani deneme kümesi değişince (ör. ailenin bütün ızgarası) koşu yeniden
+    yapılmadan kurulur."""
     sr_denemeler = np.asarray([x for x in sr_denemeler if np.isfinite(x)])
     N = len(sr_denemeler)
-    T = len(gunluk)
     if N < 2 or T < 30 or not np.isfinite(sr_secilen):
         return {"dsr": float("nan"), "psr": float("nan"), "sr0": float("nan"), "n_deneme": N}
     carpan = (1 - EULER) * stats.norm.ppf(1 - 1.0 / N) + EULER * stats.norm.ppf(1 - 1.0 / (N * math.e))
     V = float(np.var(sr_denemeler, ddof=1))
     sr0 = math.sqrt(V) * carpan
     sr0_g = math.sqrt(1.0 / (T - 1)) * carpan
-    g3 = float(stats.skew(gunluk))
-    g4 = float(stats.kurtosis(gunluk, fisher=False))
     payda = math.sqrt(max(1e-12, 1 - g3 * sr_secilen + (g4 - 1) / 4.0 * sr_secilen ** 2))
     z_dsr = (sr_secilen - sr0) * math.sqrt(T - 1) / payda
     z_dsr_g = (sr_secilen - sr0_g) * math.sqrt(T - 1) / payda
@@ -72,6 +81,22 @@ def dsr(sr_secilen: float, sr_denemeler: np.ndarray, gunluk: np.ndarray) -> dict
             "deneme_sr_ust_yillik": float(np.max(sr_denemeler) * yil),
             "deneme_sr_alt_yillik": float(np.min(sr_denemeler) * yil),
             "deneme_sr_sd_yillik": float(math.sqrt(V) * yil),
+            "carpiklik": g3, "basiklik": g4}
+
+
+def psr_tek(sr: float, gunluk: np.ndarray) -> dict:
+    """Tek deneme (önceden kayıtlı varsayılan): seçim yoktur, deflated Sharpe probabilistic Sharpe'a eşittir ve
+    iki eşik de tanımsızdır (beklenen azami Sharpe N = 1'de sıfırdır; gürültü eşiği N ≥ 2 ister)."""
+    T = len(gunluk)
+    if T < 30 or not np.isfinite(sr):
+        return {"dsr": float("nan"), "psr": float("nan"), "n_deneme": 1, "sr0_yillik": 0.0,
+                "dsr_gurultu": None, "sr0_gurultu_yillik": None}
+    g3 = float(stats.skew(gunluk))
+    g4 = float(stats.kurtosis(gunluk, fisher=False))
+    payda = math.sqrt(max(1e-12, 1 - g3 * sr + (g4 - 1) / 4.0 * sr ** 2))
+    psr = float(stats.norm.cdf(sr * math.sqrt(T - 1) / payda))
+    return {"dsr": psr, "psr": psr, "n_deneme": 1, "T": int(T), "sr0_yillik": 0.0,
+            "dsr_gurultu": None, "sr0_gurultu_yillik": None, "sr_yillik": float(sr * math.sqrt(mk.YIL_GUN)),
             "carpiklik": g3, "basiklik": g4}
 
 

@@ -1,6 +1,10 @@
 {
+ "pencere": [
+  "2018-01-01",
+  "2026-10-15"
+ ],
  "fomc": {
-  "karar": 71,
+  "karar": 72,
   "basin": 65,
   "basin_saat_kaynagi": {
    "takvim": 8,
@@ -24,6 +28,22 @@
   },
   "kuraldan_farkli": 0,
   "takvim_gun": 68,
+  "dislanan": [
+   {
+    "tarih": "2020-03-23",
+    "baslik": "March 23 (notation vote) - 2020",
+    "sebep": "notation vote",
+    "yayim_saati": "08:00",
+    "kaynak": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323a.htm"
+   },
+   {
+    "tarih": "2025-08-22",
+    "baslik": "August 22 (notation vote) - 2025",
+    "sebep": "notation vote",
+    "yayim_saati": "10:00",
+    "kaynak": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250822a.htm"
+   }
+  ],
   "kural": {
    "karar": "14:00",
    "basin": "14:30",
@@ -56,6 +76,12 @@
   "yayimi_olmayan_referans_ayi": [
    "2025-10"
   ],
+  "sonraki_yayim": {
+   "tarih": "2026-11-06",
+   "saat": "08:30",
+   "referans": "2026-10",
+   "kaynak": "2026-10-02 bülteninin 'sonraki yayım' cümlesi (web.archive.org_web_20261002144835id__https_www.bls.gov_news…)"
+  },
   "referansi_okunamayan_ay": [
    "2019-11",
    "2019-12"
@@ -77,6 +103,13 @@
   "yayimi_olmayan_referans_ayi": [
    "2025-10"
   ],
+  "sonraki_yayim": {
+   "tarih": "2026-10-14",
+   "saat": "08:30",
+   "referans": "2026-09",
+   "kaynak": "2026-09-11 bülteninin 'sonraki yayım' cümlesi (web.archive.org_web_20260911134405id__https_www.bls.gov_news…)",
+   "durum": "yayım örneklemin içinde, resmî kopyası arşivde yok — takvime girmedi"
+  },
   "referansi_okunamayan_ay": [],
   "referansi_okunamayan_yayim": [
    "2018-01-12",
@@ -129,7 +162,9 @@
   "saatler": [
    "08:30"
   ],
-  "sorun": [],
+  "sorun": [
+   "2026-10-14: 2026-09 yayımı son bültende duyurulmuş, kopyası arşivde yok"
+  ],
   "duzeltme": [
    "2021-01-13: ambargo satırı yılı 2020 yazıyor; dosya adı ve aynı satırdaki yayım numarası (USDL-21) 2021 diyor — 2021 alındı"
   ]
@@ -142,10 +177,42 @@
   ]
  },
  "boe": {
-  "karar": 70,
+  "karar": 69,
   "sorun": [
+   "2020-05-07: ortak rapor yayımı (monetary-policy-report-financial-stability-report-may-2020) ve saat duyurusu arşivde yok — kuralın 12:00'si kaynakla desteklenmiyor, yazılmadı",
    "2020-03-19: Bank Rate değişti, MPC özet listesinde yok (olağanüstü karar); saat kaynakta yok — yazılmadı",
    "2020-03-11: Bank Rate değişti, MPC özet listesinde yok (olağanüstü karar); saat kaynakta yok — yazılmadı"
+  ],
+  "saat_duyurusu": {
+   "2020-08-06": {
+    "saat": "07:00",
+    "yayim": "07.07.2020",
+    "kaynak": "https://www.bankofengland.co.uk/news/2020/july/boe-statement-august-monetary-policy-report-and-financial-stability-report",
+    "metin": "published at 07:00 (BST) on Thursday 6 August rather than the originally scheduled time of 12:00"
+   },
+   "2020-11-05": {
+    "saat": "07:00",
+    "yayim": "04.11.2020",
+    "kaynak": "https://www.bankofengland.co.uk/news/2020/november/time-change-november-monetary-policy-report-and-monetary-policy-committee-decision-and-minutes",
+    "metin": "published, on Thursday 5 November 2020 at 7:00 hrs (GMT), not at 12:00"
+   }
+  },
+  "saat_duyurusu_gerekce": [
+   {
+    "kaynak": "https://www.bankofengland.co.uk/news/2020/july/boe-statement-august-monetary-policy-report-and-financial-stability-report",
+    "metin": "This is to accommodate the joint publication with the Financial Stability Report."
+   }
+  ],
+  "ortak_yayim_ay": [
+   "2020-05",
+   "2020-08"
+  ],
+  "saat_dogrulanamadi": [
+   {
+    "tarih": "2020-05-07",
+    "rapor": "monetary-policy-report-financial-stability-report-may-2020",
+    "sebep": "Para Politikası Raporu ile Finansal İstikrar Raporu'nun ortak yayım günü; saat duyurusu arşivde yok"
+   }
   ]
  }
 }

@@ -157,3 +157,58 @@ def test_bosluklu_stopta_mae_acilisi_tasir():
     x = kos(d, emir(1, 1, stop=95.0, hedef_tur=mt.HEDEF_R, k=1.0, cikis_i=3)).iloc[0]
     assert mt.NEDEN[x.neden] == "bosluk_stop"
     assert x.mae <= x.pnl and x.mae == (90.0 - 1.0) - 101.0
+
+
+def test_kayma_islem_yaratmaz_ask_stop_ile_kaymali_dolum_arasinda():
+    # Uzun: ask açılışı 101, stop 101,5 — giriş tarafının kaymasız açılışı stop'un ötesinde. Kaymalı dolum (101 + 5)
+    # stop'un berisine geçse de işlem yok: kayma işlem yaratamaz (eskiden R = 4,5 nokta ile alınıyordu).
+    d = dakikalar([(100, 100, 100, 100)] * 4)
+    for kayma in (0.0, 0.5, 1.0):
+        x = kos(d, emir(1, 1, stop=101.5, hedef_tur=mt.HEDEF_R, k=2.0, cikis_i=3), kayma=kayma).iloc[0]
+        assert mt.DURUM[x.durum] == "risk_gecersiz", kayma
+    # Kısa simetrik: bid açılışı 99, stop 98,5
+    for kayma in (0.0, 0.5):
+        x = kos(d, emir(1, -1, stop=98.5, hedef_tur=mt.HEDEF_R, k=2.0, cikis_i=3), kayma=kayma).iloc[0]
+        assert mt.DURUM[x.durum] == "risk_gecersiz", kayma
+    # Haber kayması da işlem yaratmaz
+    x = kos(d, emir(1, 1, stop=101.5, cikis_i=3), kayma=0.0, haber=np.ones(4, bool), haber_kayma=1.0).iloc[0]
+    assert mt.DURUM[x.durum] == "risk_gecersiz"
+
+
+def test_giris_dakikasinda_bosluklu_sert_stop_bid_stop_ask():
+    # Uzun: ask 101 > stop 99,5 (giriş geçerli), bid 99 ≤ stop — makas stop'u kapsıyor: çıkış giriş dakikasının bid
+    # açılışından (boşluk), stop seviyesinden değil.
+    d = dakikalar([(100, 100, 100, 100), (100, 100, 100, 100), (100, 100, 100, 100), (100, 100, 100, 100)])
+    x = kos(d, emir(1, 1, stop=99.5, hedef_tur=mt.HEDEF_R, k=2.0, cikis_i=3), kayma=0.5).iloc[0]
+    assert x.durum == 0 and x.giris_f == 106.0
+    assert mt.NEDEN[x.neden] == "bosluk_stop" and x.cikis_i == 1 and x.cikis_f == 99.0 - 5.0
+    assert x.mae <= x.pnl <= x.mfe
+    # Kısa simetrik: bid 99 < stop 100,5 ≤ ask 101
+    y = kos(d, emir(1, -1, stop=100.5, hedef_tur=mt.HEDEF_R, k=2.0, cikis_i=3)).iloc[0]
+    assert mt.NEDEN[y.neden] == "bosluk_stop" and y.cikis_f == 101.0
+
+
+def test_giris_dakikasi_boslugundan_sonra_ayni_dakikada_yeni_giris_yok():
+    d = dakikalar([(100, 100, 100, 100)] * 5)
+    e = mt.bos_emir(2)
+    e[0] = (1, 1, 99.5, np.nan, 0, 0.0, np.nan, 3, 1, 0)       # giriş dakikasında boşluklu stop
+    e[1] = (1, -1, 110.0, np.nan, 0, 0.0, np.nan, 3, 1, 1)     # aynı dakikada: açık pozisyon sayılır
+    r = kos(d, e).set_index("kimlik")
+    assert mt.NEDEN[r.loc[0, "neden"]] == "bosluk_stop"
+    assert mt.DURUM[r.loc[1, "durum"]] == "pozisyon_acik"
+
+
+def test_gun_sonu_girisi_ayri_sayilir():
+    d = dakikalar([(100, 100, 100, 100)] * 4)
+    x = kos(d, emir(mt.GIRIS_GUN_SONU, 1, stop=90.0, cikis_i=3)).iloc[0]
+    assert mt.DURUM[x.durum] == "gun_sonu"
+    y = kos(d, emir(-1, 1, stop=90.0, cikis_i=3)).iloc[0]
+    assert mt.DURUM[y.durum] == "veri_yok"
+
+
+def test_seviye_hedefi_kaymaya_bagli_gecersiz():
+    # Ask 101, hedef 104: kayma 0'da alınır; 0,5 pip (5 nokta) kaymayla yürütülen giriş 106 hedefin ötesinde → atılır.
+    d = dakikalar([(100, 100, 100, 100)] * 4)
+    a = kos(d, emir(1, 1, stop=90.0, hedef_tur=mt.HEDEF_SEVIYE, seviye=104.0, cikis_i=3), kayma=0.0).iloc[0]
+    b = kos(d, emir(1, 1, stop=90.0, hedef_tur=mt.HEDEF_SEVIYE, seviye=104.0, cikis_i=3), kayma=0.5).iloc[0]
+    assert a.durum == 0 and mt.DURUM[b.durum] == "hedef_gecersiz"

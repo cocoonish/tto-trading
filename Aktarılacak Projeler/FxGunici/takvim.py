@@ -56,13 +56,26 @@ SINAMA = DIZIN / "sinama.json"
 def celiskiler() -> list[dict]:
     """Fiyat sınamasının (takvim_sina.py) resmi saatle ÇELİŞTİĞİ olaylar — yalnız raporlanır, dışarıda
     bırakılmaz. Resmi belge birincil kaynaktır; fiyat tek bir olayı ancak raporlayabilir. Saati yanlış bir
-    olay haber stratejisinin sonucunu sulandırır, şişirmez; tepkiye göre olay atmak ise örneklemi sonuca
-    göre seçerdi. Sistematik bir çelişki (aynı ailede aynı kaymayla birden çok olay) kuralın kendisini
-    düzeltmeyi gerektirir ve o düzeltme takvim_kur.py'de yapılır."""
+    olayın etkisi işaretsizdir: sonucu iki yöne de kaydırabilir (ölçüldü, 16.10.2026: BoE'nin 2020'deki üç
+    rapor gününde yanlış saat N2'nin örneklem içi sonucunu +0,010'dan +0,037 R'ye ÇIKARIYORDU — doğru
+    saatte kaybeden üç işlem açılıyor, yanlış saatte hiç açılmıyordu). Tepkiye göre olay atmak ise örneklemi
+    sonuca göre seçerdi. Sistematik bir çelişki (aynı ailede aynı kaymayla birden çok olay) kuralın kendisini
+    düzeltmeyi gerektirir ve o düzeltme takvim_kur.py'de, resmî bir metinle yapılır; fiyattan saat yazılmaz."""
     if not SINAMA.exists():
         return []
     s = json.loads(SINAMA.read_text(encoding="utf-8"))
     return [k for k in s.get("olay", []) if k.get("hukum") == "celiski"]
+
+
+def ozler() -> dict:
+    """Takvim dosyalarının SHA-256 özleri ve ek dosyanın satır sayısı (ek dosya yoksa öz None). Takvimi okuyan her
+    ölçü (kalite.haber_makasi, koşu, ölçüm) bunu yazar; ölçüm iki anın özlerini kıyaslar."""
+    import hashlib
+    out = {}
+    for yol, ad in ((ANA, "resmi"), (EK, "ek")):
+        out[ad] = hashlib.sha256(yol.read_bytes()).hexdigest() if yol.exists() else None
+    out["ek_satir"] = (len(pd.read_csv(EK, dtype=str, keep_default_na=False)) if EK.exists() else 0)
+    return out
 
 
 def tumu() -> pd.DataFrame:

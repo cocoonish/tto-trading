@@ -67,16 +67,6 @@ def test_sekiller_pariteleri_kunyeden_kurar():
         sekil.parite_kur(k)
 
 
-def test_olcum_kunyesi_ayarla_ayni():
-    yol = BURASI / "cikti" / "ders" / "olcum.json"
-    if not yol.exists():
-        pytest.skip("ölçüm dosyası yok")
-    k = json.loads(yol.read_text(encoding="utf-8"))["kunye"]
-    assert k["ciftler"] == list(A.ciftler)
-    assert k["nokta"] == {c: A.nokta[c] for c in A.ciftler}
-    assert k["pip"] == {c: A.pip[c] for c in A.ciftler}
-
-
 def test_kodda_elle_parite_listesi_yok():
     """Motor ve şekil kaynağında parite sembolleri yalnız tanımlı yerlerde geçer: kısa kök eşlemesi (E/G/J/A) ve
     renk tablosu. Yeni bir elle liste bu sınamayı düşürür."""

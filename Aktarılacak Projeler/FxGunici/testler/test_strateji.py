@@ -93,14 +93,8 @@ DURUMLAR = [(b, i, 0) for b in kosu.BIRIMLER for i in range(ORNEK_ILK)] + \
            [(b, i, k) for b in kosu.BIRIMLER for i in range(ORNEK_OTEKI) for k in range(1, len(KESIMLER))]
 
 
-@pytest.mark.parametrize("birim,i,k", DURUMLAR)
-def test_lookahead_kirpma_ve_bozma(birim, i, k):
-    ornek = _ornekler(birim)
-    if i >= len(ornek):
-        pytest.skip("ızgara küçük")
-    p = ornek[i]
+def _ileri_bakma(birim: str, p: dict, t_kes: int) -> None:
     aile = kosu.BIRIMLER[birim]["aile"]
-    t_kes = KESIMLER[k]
     b_kes, b_boz = _bag(t_kes)
     tam, _ = _sinyaller(B_TAM, aile, p)
     kes, _ = _sinyaller(b_kes, aile, p)
@@ -111,6 +105,119 @@ def test_lookahead_kirpma_ve_bozma(birim, i, k):
     a, b_, c = sec(tam), sec(kes), sec(bozuk)
     pd.testing.assert_frame_equal(a, b_, check_dtype=False, obj=f"{birim} kırpma")
     pd.testing.assert_frame_equal(a, c, check_dtype=False, obj=f"{birim} bozma")
+
+
+@pytest.mark.parametrize("birim,i,k", DURUMLAR)
+def test_lookahead_kirpma_ve_bozma(birim, i, k):
+    ornek = _ornekler(birim)
+    if i >= len(ornek):
+        pytest.skip("ızgara küçük")
+    _ileri_bakma(birim, ornek[i], KESIMLER[k])
+
+
+@pytest.mark.parametrize("birim,k", [(b, k) for b in kosu.YORUM for k in range(len(KESIMLER))])
+def test_lookahead_yorum_okumasi(birim, k):
+    """Yorum duyarlılığının harf okuması da (kosu.YORUM) aynı iki ileriye bakma sınamasından geçer: ölçülüp derste
+    yazılan bir sayı, kural hangi okumayla kurulmuş olursa olsun geleceği görmemelidir."""
+    _, v = kosu.izgara(birim)
+    param, harf = kosu.YORUM[birim]
+    _ileri_bakma(birim, {**v, param: harf}, KESIMLER[k])
+
+
+def test_vwap_ilk_saat_okumalari():
+    """İlk saatin iki okuması (strateji.VWAP_ILK_SAAT), tarayıcıların kendisinde. `ok`: kuralın durumu yürür;
+    `ok_s`: sinyal verilebilir. Ölçümün okumasında ikisi aynıdır (çapa + 60 dk); harfin okumasında durum çapadan yürür."""
+    import strateji as st
+    ilk = np.array([0, 0, 0, 1, 1, 1], bool)          # ilk üç mum çapanın ilk saati
+    hep = np.ones(6, bool)
+    bk = np.zeros(6, np.int64)
+    vw = np.ones(6)
+    # Geri çekilme: üç mum VWAP'ın üstünde kapanır (ilk saat), dördüncü mum VWAP'a iner ve üstünde kapanır.
+    c = np.array([1.1, 1.1, 1.1, 1.05, 1.1, 1.1])
+    h, l = c + 0.01, c - 0.01
+    l[3] = 0.99
+    assert len(st._vwap_cekilme_tara(c, h, l, vw, bk, ilk, ilk, 3)[0]) == 0      # ölçüm: sayaç ilk saatte sıfır
+    s, y, _ = st._vwap_cekilme_tara(c, h, l, vw, bk, hep, ilk, 3)                 # harf: sayaç ilk saatte birikir
+    assert list(s) == [3] and list(y) == [1]
+    # Dönüş: ilk saatte üst bandın dışına çıkılır, ilk saatten SONRA içeride kapanılır → yalnız harfte satış sinyali.
+    sg = np.full(6, 0.1)
+    c = np.array([1.0, 1.3, 1.35, 1.2, 1.0, 1.0])
+    h, l = c + 0.02, c - 0.02
+    assert len(st._vwap_donus_tara(c, h, l, vw, sg, bk, ilk, ilk, 2.0)[0]) == 0
+    s, y, stop, _ = st._vwap_donus_tara(c, h, l, vw, sg, bk, hep, ilk, 2.0)
+    assert list(s) == [3] and list(y) == [-1] and stop[0] == pytest.approx(1.37)
+    # Gezinti ilk saatin içinde biterse iki okumada da sinyal yok ve durum sonraki mumlara taşınmaz.
+    c = np.array([1.0, 1.3, 1.1, 1.1, 1.0, 1.0])
+    h, l = c + 0.02, c - 0.02
+    for ok in (ilk, hep):
+        assert len(st._vwap_donus_tara(c, h, l, vw, sg, bk, ok, ilk, 2.0)[0]) == 0
+    # Ölçümün okuması tam koşuda da değişmedi: varsayılan okuma ile adıyla verilen "durum_sifir" aynı sinyaller.
+    for aile, p in (("vwap_donus", {"tf": 15, "capa": "londra", "k": 2.0}), ("vwap_cekilme", {"tf": 15, "capa": "londra", "n": 12})):
+        a, _ = AILE[aile](B_TAM, **p)
+        b, _ = AILE[aile](B_TAM, **p, ilk_saat="durum_sifir")
+        pd.testing.assert_frame_equal(a, b)
+        with pytest.raises(ValueError):
+            AILE[aile](B_TAM, **p, ilk_saat="bilinmeyen")
+
+
+def _pivot_seviyeleri(b):
+    g = b.g
+    P = (g.onceki_h + g.onceki_l + g.onceki_c) / 3.0
+    return 2 * P - g.onceki_l, 2 * P - g.onceki_h
+
+
+def test_pivot_kirilim_iki_okuma():
+    """Pivot kırılımı: ölçümün okumasında R1 yalnız yukarı, S1 yalnız aşağı kesişte sinyaldir; harfin okumasında her
+    seviyenin günün İLK kesişi, iki yönde de. P'de iki okuma aynıdır; dönüş kuralı okumadan etkilenmez."""
+    R1, S1 = _pivot_seviyeleri(B_TAM)
+    m = B_TAM.mumlar(15, 0)
+    for kesis in ("yonlu", "iki_yon"):
+        sin, _ = AILE["pivot"](B_TAM, tf=15, seviye="R1S1", tur="kirilim", kesis=kesis)
+        assert len(sin)
+        k_, s = sin["gun_k"].to_numpy(), sin["s"].to_numpy()
+        lv, yon = sin["ust"].to_numpy(), sin["yon"].to_numpy()
+        r1 = np.isclose(lv, R1[k_])
+        s1 = np.isclose(lv, S1[k_])
+        assert (r1 | s1).all()
+        # her sinyal kesiş yönünde bir kesiştir
+        assert ((m.c[s] - lv) * yon > 0).all() and ((m.c[s - 1] - lv) * yon <= 0).all()
+        if kesis == "yonlu":
+            assert (yon[r1] == 1).all() and (yon[s1] == -1).all()
+        else:
+            ters = int((r1 & (yon == -1)).sum() + (s1 & (yon == 1)).sum())
+            assert ters > 0, "sentetik veride R1'in aşağı ya da S1'in yukarı kesişi yok: sınama boş geçerdi"
+    for seviye, tur in (("P", "kirilim"), ("R1S1", "donus"), ("P", "donus")):
+        a, _ = AILE["pivot"](B_TAM, tf=15, seviye=seviye, tur=tur, kesis="yonlu")
+        b, _ = AILE["pivot"](B_TAM, tf=15, seviye=seviye, tur=tur, kesis="iki_yon")
+        pd.testing.assert_frame_equal(a, b, obj=f"{seviye} {tur}")
+
+
+def test_sahte_acilis_okumasi():
+    """Başarısız kırılımın açılış okuması (harfin okuması): pencerenin İLK mumu önceki kapanışa bakılmadan dışarıda
+    kapanırsa da kırılım mumudur. ORB ve Asya'da iki okuma aynıdır (pencereden önceki kapanış aralığın içindedir);
+    PDH/PDL'de açılış okuması yalnız açılıştaki adayı EKLER: ölçümün okumasının sinyal verdiği her gün harfin okumasında
+    da sinyal vardır, ayrıştıkları günde harfin sinyali pencerenin ilk mumundaki kırılımdan doğar."""
+    for seviye in ("orb", "asya"):
+        a, _ = AILE["sahte"](B_TAM, tf=15, seviye=seviye, pencere=2)
+        b, _ = AILE["sahte"](B_TAM, tf=15, seviye=seviye, pencere=2, acilis="acilis_ici")
+        pd.testing.assert_frame_equal(a, b, obj=seviye)
+    for tf, pencere in ((15, 2), (5, 3), (60, 1)):
+        a, _ = AILE["sahte"](B_TAM, tf=tf, seviye="pdhl", pencere=pencere)
+        b, _ = AILE["sahte"](B_TAM, tf=tf, seviye="pdhl", pencere=pencere, acilis="acilis_ici")
+        assert set(a["gun_k"]) <= set(b["gun_k"])
+        m = B_TAM.mumlar(tf, 0)
+        from strat_ortak import gun_mum_araligi
+        j0, _ = gun_mum_araligi(m, B_TAM.g.an["lon_0800"], B_TAM.g.an["ny_1400"], tf)
+        x = a.set_index("gun_k")
+        for _, r in b.iterrows():
+            k_ = int(r["gun_k"])
+            if k_ in x.index and int(x.loc[k_, "s"]) == int(r["s"]) and x.loc[k_, "yon"] == r["yon"]:
+                continue
+            # ayrışan gün: geri alınış pencerenin ilk mumundan sonra en çok 'pencere' mum içinde
+            assert j0[k_] < int(r["s"]) <= j0[k_] + pencere
+    a, _ = AILE["sahte"](B_TAM, tf=15, seviye="pdhl", pencere=2)
+    b, _ = AILE["sahte"](B_TAM, tf=15, seviye="pdhl", pencere=2, acilis="kesis")
+    pd.testing.assert_frame_equal(a, b)
 
 
 @pytest.mark.parametrize("birim,k", [(b, k) for b in kosu.BIRIMLER for k in range(len(KESIMLER))])

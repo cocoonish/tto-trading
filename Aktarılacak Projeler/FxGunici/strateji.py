@@ -212,7 +212,12 @@ def pdhl(b: Baglam, tf: int, baslangic: str, stop_kurali: str):
 
 
 # ───────────────────────────────────────────── 7 · Başarısız kırılım
-def sahte(b: Baglam, tf: int, seviye: str, pencere: int):
+def sahte(b: Baglam, tf: int, seviye: str, pencere: int, acilis: str = "kesis"):
+    """`acilis` (yorum duyarlılığı; ölçümün kuralı "kesis"): kırılım mumu seviyeyi KESEN mumdur (önceki kapanış içeride
+    ya da uçta). "acilis_ici": pencerenin İLK mumu önceki kapanışa bakılmadan dışarıda kapanırsa da kırılım mumudur —
+    PDH/PDL'de seviye pencereden önce (Asya'da) aşılmış ve Londra açılışında fiyat hâlâ dışarıdaysa, açılıştaki geri
+    alınış ancak bu okumada sayılır. ORB ve Asya'da iki okuma aynıdır (pencerenin ilk mumundan önceki kapanış
+    tanım gereği aralığın içindedir)."""
     m = b.mumlar(tf, 0)
     g = b.g
     if seviye == "orb":
@@ -235,6 +240,8 @@ def sahte(b: Baglam, tf: int, seviye: str, pencere: int):
         bulundu = False
         for j in range(j0[k], j1[k]):
             p = m.c[j - 1]
+            if acilis == "acilis_ici" and j == j0[k]:
+                p = (H + L) / 2.0                   # pencerenin ilk mumu: önceki kapanış sorulmaz
             if m.c[j] > H and p <= H:
                 for q in range(j + 1, min(j + 1 + pencere, j1[k])):
                     if m.c[q] < H:
@@ -284,7 +291,9 @@ def vwap_dakika(b: Baglam, capa: str):
 
 
 @njit(cache=True)
-def _vwap_donus_tara(c, h, l, vw, sg, bk, ok, k):
+def _vwap_donus_tara(c, h, l, vw, sg, bk, ok, ok_s, k):
+    """`ok`: kuralın durumu (bant dışı gezinti) yürür; `ok_s`: sinyal verilebilir (çapa + 60 dk sonrası, 16:00 ET'ye
+    kadar). Ölçümün kuralında ikisi aynıdır; ön kaydın harfi okumasında gezinti çapadan başlar."""
     n = len(c)
     out_s = np.empty(n, np.int64); out_y = np.empty(n, np.int8)
     out_st = np.empty(n); out_lv = np.empty(n)
@@ -308,19 +317,22 @@ def _vwap_donus_tara(c, h, l, vw, sg, bk, ok, k):
             if h[j] > uc:
                 uc = h[j]
             if c[j] <= ust:
-                out_s[m] = j; out_y[m] = -1; out_st[m] = uc; out_lv[m] = vw[j]; m += 1
+                if ok_s[j]:
+                    out_s[m] = j; out_y[m] = -1; out_st[m] = uc; out_lv[m] = vw[j]; m += 1
                 durum = 0
         else:
             if l[j] < uc:
                 uc = l[j]
             if c[j] >= alt:
-                out_s[m] = j; out_y[m] = 1; out_st[m] = uc; out_lv[m] = vw[j]; m += 1
+                if ok_s[j]:
+                    out_s[m] = j; out_y[m] = 1; out_st[m] = uc; out_lv[m] = vw[j]; m += 1
                 durum = 0
     return out_s[:m], out_y[:m], out_st[:m], out_lv[:m]
 
 
 @njit(cache=True)
-def _vwap_cekilme_tara(c, h, l, vw, bk, ok, n_trend):
+def _vwap_cekilme_tara(c, h, l, vw, bk, ok, ok_s, n_trend):
+    """`ok`: trend sayacı yürür; `ok_s`: sinyal verilebilir (bkz. _vwap_donus_tara)."""
     n = len(c)
     out_s = np.empty(n, np.int64); out_y = np.empty(n, np.int8); out_st = np.empty(n)
     m = 0
@@ -331,45 +343,62 @@ def _vwap_cekilme_tara(c, h, l, vw, bk, ok, n_trend):
             yuk = 0; dus = 0
             if not ok[j] or np.isnan(vw[j]):
                 continue
-        if yuk >= n_trend and l[j] <= vw[j] and c[j] > vw[j]:
+        if ok_s[j] and yuk >= n_trend and l[j] <= vw[j] and c[j] > vw[j]:
             out_s[m] = j; out_y[m] = 1; out_st[m] = l[j]; m += 1
-        elif dus >= n_trend and h[j] >= vw[j] and c[j] < vw[j]:
+        elif ok_s[j] and dus >= n_trend and h[j] >= vw[j] and c[j] < vw[j]:
             out_s[m] = j; out_y[m] = -1; out_st[m] = h[j]; m += 1
         yuk = yuk + 1 if c[j] > vw[j] else 0
         dus = dus + 1 if c[j] < vw[j] else 0
     return out_s[:m], out_y[:m], out_st[:m]
 
 
-def _vwap_mum(b: Baglam, tf: int, capa: str):
+#: İlk saatin okunuşu. Ön kayıt "çapadan sonraki ilk 60 dakika sinyal yok" der. Ölçümün kuralı ("durum_sifir", sonuçtan
+#: önce yazıldı) ilk saatte kuralın DURUMUNU da sıfırlar: trend sayacı ve bant dışı gezinti çapa + 60 dk'da başlar
+#: (ilk saatte VWAP ve σ birkaç dakikalık veriden kurulur). Ön kaydın harfi ("yalniz_sinyal"): durum çapadan yürür,
+#: yalnız sinyal ilk saatte verilmez. İkincisi yorum duyarlılığı olarak ölçülür (kosu.YORUM).
+VWAP_ILK_SAAT = ("durum_sifir", "yalniz_sinyal")
+
+
+def _vwap_mum(b: Baglam, tf: int, capa: str, ilk_saat: str = "durum_sifir"):
     m = b.mumlar(tf, 0)
     g = b.g
     bk = mum_gunu(b, m)
     vw, sg, t_capa = vwap_dakika(b, capa)
     vwb, sgb = vw[m.i1], sg[m.i1]
     kk = np.clip(bk, 0, len(g) - 1)
-    ok = (bk >= 0) & (m.bt >= t_capa[kk] + 3600) & (m.bt + tf * 60 <= g.an["ny_1600"][kk]) & (~g.tatil[kk])
-    return m, bk, vwb, sgb, ok
+    temel = (bk >= 0) & (m.bt + tf * 60 <= g.an["ny_1600"][kk]) & (~g.tatil[kk])
+    ok_s = temel & (m.bt >= t_capa[kk] + 3600)
+    if ilk_saat == "durum_sifir":
+        ok = ok_s
+    elif ilk_saat == "yalniz_sinyal":
+        ok = temel & (m.bt >= t_capa[kk])
+    else:
+        raise ValueError(f"bilinmeyen ilk saat okuması: {ilk_saat}")
+    return m, bk, vwb, sgb, ok, ok_s
 
 
-def vwap_donus(b: Baglam, tf: int, capa: str, k: float):
-    m, bk, vwb, sgb, ok = _vwap_mum(b, tf, capa)
-    s, y, st, lv = _vwap_donus_tara(m.c, m.h, m.l, vwb, sgb, bk, ok, float(k))
+def vwap_donus(b: Baglam, tf: int, capa: str, k: float, ilk_saat: str = "durum_sifir"):
+    m, bk, vwb, sgb, ok, ok_s = _vwap_mum(b, tf, capa, ilk_saat)
+    s, y, st, lv = _vwap_donus_tara(m.c, m.h, m.l, vwb, sgb, bk, ok, ok_s, float(k))
     df = pd.DataFrame({"gun_k": bk[s], "s": s, "yon": y.astype(np.int64), "stop": st,
                        "yapi": np.abs(m.c[s] - st), "ust": vwb[s] + k * sgb[s], "alt": vwb[s] - k * sgb[s],
                        "seviye": lv})
     return df, 0
 
 
-def vwap_cekilme(b: Baglam, tf: int, capa: str, n: int):
-    m, bk, vwb, sgb, ok = _vwap_mum(b, tf, capa)
-    s, y, st = _vwap_cekilme_tara(m.c, m.h, m.l, vwb, bk, ok, int(n))
+def vwap_cekilme(b: Baglam, tf: int, capa: str, n: int, ilk_saat: str = "durum_sifir"):
+    m, bk, vwb, sgb, ok, ok_s = _vwap_mum(b, tf, capa, ilk_saat)
+    s, y, st = _vwap_cekilme_tara(m.c, m.h, m.l, vwb, bk, ok, ok_s, int(n))
     df = pd.DataFrame({"gun_k": bk[s], "s": s, "yon": y.astype(np.int64), "stop": st,
                        "yapi": np.abs(m.c[s] - st), "ust": vwb[s], "alt": vwb[s]})
     return df, 0
 
 
 # ───────────────────────────────────────────── 9 · Floor pivot
-def pivot(b: Baglam, tf: int, seviye: str, tur: str):
+def pivot(b: Baglam, tf: int, seviye: str, tur: str, kesis: str = "yonlu"):
+    """`kesis` (yalnız kırılım; yorum duyarlılığı): ölçümün kuralı "yonlu" (sonuçtan önce yazıldı) R1'i yalnız YUKARI,
+    S1'i yalnız AŞAĞI kesişte sayar (direnç ve destek). Ön kaydın harfi "iki_yon": her seviyenin günün ilk kesişi, iki
+    yönde de, kesiş yönünde giriş (R1'in aşağı kesişi satış, S1'in yukarı kesişi alış). P iki okumada aynıdır."""
     m = b.mumlar(tf, 0)
     g = b.g
     P = (g.onceki_h + g.onceki_l + g.onceki_c) / 3.0
@@ -394,9 +423,11 @@ def pivot(b: Baglam, tf: int, seviye: str, tur: str):
                     if ad == "P" and h[j] >= lv and c[j] < lv and p < lv:
                         satir.append((k, j, -1, h[j], abs(c[j] - h[j]), P[k], S1[k], S1[k])); break
                 else:
-                    if ad in ("R1", "P") and c[j] > lv and p <= lv:
+                    yukari = ad in ("R1", "P") or kesis == "iki_yon"
+                    asagi = ad in ("S1", "P") or kesis == "iki_yon"
+                    if yukari and c[j] > lv and p <= lv:
                         satir.append((k, j, 1, l[j], abs(c[j] - l[j]), lv, lv, np.nan)); break
-                    if ad in ("S1", "P") and c[j] < lv and p >= lv:
+                    if asagi and c[j] < lv and p >= lv:
                         satir.append((k, j, -1, h[j], abs(c[j] - h[j]), lv, lv, np.nan)); break
     return _tablo(satir, SUTUN + ["seviye"]), 0
 

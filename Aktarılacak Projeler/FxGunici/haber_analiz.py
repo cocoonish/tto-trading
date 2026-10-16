@@ -126,8 +126,11 @@ def bh(p: np.ndarray) -> np.ndarray:
     return q
 
 
-def devam_toplu() -> dict:
-    dosyalar = sorted((CIKTI / "haber" / "devam").glob("*.parquet"))
+def devam_toplu(ciftler: list[str] | tuple[str, ...]) -> dict:
+    """Bütün paritelerin devam satırlarından hücreler. Yalnız AYARDAKİ paritelerin dosyaları okunur: ayardan çıkarılan
+    bir paritenin önceki koşudan kalan dosyası tabloya girmez."""
+    dosyalar = [CIKTI / "haber" / "devam" / f"{c}.parquet" for c in ciftler]
+    dosyalar = [d for d in dosyalar if d.exists()]
     if not dosyalar:
         return {"hucre": [], "not": "devam satırı yok"}
     df = pd.concat([pd.read_parquet(d) for d in dosyalar], ignore_index=True)

@@ -301,7 +301,10 @@ def _yaz(fig, ad: str, yukseklik: int = 500) -> None:
     fig.update_xaxes(showgrid=False, linecolor="#d8d4cc", ticks="outside")
     fig.update_yaxes(gridcolor="#ececec", zeroline=False)
     CIKTI.mkdir(parents=True, exist_ok=True)
-    html = fig.to_html(include_plotlyjs=PLOTLY_JS, full_html=True,
+    # div kimliği figürün adından: plotly'nin öntanımlısı rastgele (uuid4) ve her koşu bayt bayt farklı bir dosya
+    # yazardı; aynı ölçümden aynı figür birebir aynı dosya olmalı.
+    kimlik = "sekil-" + re.sub(r"[^a-z0-9_-]", "-", Path(ad).stem.lower())
+    html = fig.to_html(include_plotlyjs=PLOTLY_JS, full_html=True, div_id=kimlik,
                        config={"displayModeBar": False, "responsive": True})
     html = html.replace("<head>", f'<head><meta name="tto-olcum-ozu" content="{olcum_ozu()}">', 1)
     (CIKTI / ad).write_text(html, encoding="utf-8")

@@ -26,6 +26,8 @@ import math
 import numpy as np
 import pandas as pd
 
+from motor import DURUM
+
 YIL_GUN = 252.0
 #: Bootstrap aralığının asgari işlem (ve küme bootstrap'inde küme) sayısı; altında aralık kurulmaz.
 ASGARI_BOOTSTRAP = 10
@@ -98,6 +100,94 @@ def bootstrap_kume_ort(x: np.ndarray, kume: np.ndarray, tekrar: int = 2000, tohu
     return (float(np.percentile(ort, 2.5)), float(np.percentile(ort, 97.5)))
 
 
+#: Önceden kayıtlı bootstrap (2.000 tekrar, tohum 7) uçlarından biri sıfıra yakınsa, işareti tohum gürültüsüne bağlı
+#: olabilir: 2.000 tekrarda ucun tohumdan tohuma sapması ölçüldü, ortalamanın standart hatasının ≈ 0,055 katı (Asya ve
+#: ORB USD/JPY seçileni). Böyle bir uç için (|uç| < SINIR_SE · SE) büyük tekrarlı kestirim ve tohum duyarlılığı BİLGİ
+#: olarak yazılır. Hüküm ve bayraklar önceden kayıtlı 2.000 tekrarla verilir ve bu bilgiyle değişmez.
+SINIR_SE = 0.25
+SINIR_TEKRAR = 500_000
+SINIR_PARTI = 10
+SINIR_TOHUM = 200
+SINIR_TOHUM_TABAN = 1000
+SINIR_BUYUK_TOHUM = 20261016
+
+
+def ortalama_se(x: np.ndarray, kume: np.ndarray | None = None) -> float:
+    """Ortalamanın standart hatası; küme verilirse oran tahmincisinin (Σx / Σn) küme doğrusallaştırmalı SE'si."""
+    x = np.asarray(x, dtype=np.float64)
+    n = len(x)
+    if n < 2:
+        return float("nan")
+    if kume is None:
+        return float(x.std(ddof=1) / math.sqrt(n))
+    _, ters = np.unique(np.asarray(kume), return_inverse=True)
+    S = np.bincount(ters, weights=x)
+    N = np.bincount(ters).astype(np.float64)
+    K = len(S)
+    if K < 2:
+        return float("nan")
+    m = S.sum() / N.sum()
+    return float(math.sqrt(K / (K - 1) * ((S - m * N) ** 2).sum()) / N.sum())
+
+
+def _bs_ortalamalar(x: np.ndarray, kume: np.ndarray | None, tekrar: int, rng) -> np.ndarray:
+    """Önceden kayıtlı tahmincinin (işlem ya da küme yeniden örneklemesi) bootstrap ortalamaları."""
+    if kume is None:
+        n = len(x)
+        ort = np.empty(tekrar)
+        parca = max(1, min(2000, 4_000_000 // max(n, 1)))
+        for i in range(0, tekrar, parca):
+            k = min(parca, tekrar - i)
+            ort[i:i + k] = x[rng.integers(0, n, size=(k, n))].mean(axis=1)
+        return ort
+    _, ters = np.unique(np.asarray(kume), return_inverse=True)
+    toplam = np.bincount(ters, weights=x)
+    sayi = np.bincount(ters).astype(np.float64)
+    K = len(toplam)
+    ort = np.empty(tekrar)
+    parca = max(1, min(2000, 4_000_000 // max(K, 1)))
+    for i in range(0, tekrar, parca):
+        k = min(parca, tekrar - i)
+        ix = rng.integers(0, K, size=(k, K))
+        ort[i:i + k] = toplam[ix].sum(axis=1) / sayi[ix].sum(axis=1)
+    return ort
+
+
+def sinir_bilgisi(x: np.ndarray, uc: float | None, hangi: str, kume: np.ndarray | None = None) -> dict | None:
+    """Sıfıra yakın bir bootstrap ucunun (hangi: "alt" = %2,5 · "ust" = %97,5) büyük tekrarlı kestirimi ve tohum
+    duyarlılığı; uç sıfıra yakın değilse None. Alanlar:
+      kesin, kesin_mc_se   SINIR_TEKRAR tekrarlı (SINIR_PARTI parti) kestirim ve partiler arası Monte Carlo hatası
+      pozitif_pay          önceden kayıtlı yordamın (2.000 tekrar) SINIR_TOHUM farklı tohumunda ucun > 0 çıkma payı
+      sinirda              işaret tohum gürültüsüne bağlı: pozitif_pay %5–95 arasında, ya da büyük tekrar ucu
+                           sıfırdan ayıramıyor (|kesin| < 2·MC hatası), ya da büyük tekrarın işareti yayımlananın tersi"""
+    x = np.asarray(x, dtype=np.float64)
+    if uc is None or not np.isfinite(uc) or len(x) < ASGARI_BOOTSTRAP:
+        return None
+    se = ortalama_se(x, kume)
+    if not (np.isfinite(se) and se > 0) or abs(uc) >= SINIR_SE * se:
+        return None
+    j = 0 if hangi == "alt" else 1
+    q = 2.5 if hangi == "alt" else 97.5
+    if kume is None:
+        uclar = np.array([bootstrap_ort(x, 2000, SINIR_TOHUM_TABAN + t)[j] for t in range(SINIR_TOHUM)])
+    else:
+        uclar = np.array([bootstrap_kume_ort(x, kume, 2000, SINIR_TOHUM_TABAN + t)[j] for t in range(SINIR_TOHUM)])
+    rng = np.random.default_rng(SINIR_BUYUK_TOHUM)
+    partiler, hepsi = [], []
+    for _ in range(SINIR_PARTI):
+        o = _bs_ortalamalar(x, kume, SINIR_TEKRAR // SINIR_PARTI, rng)
+        partiler.append(float(np.percentile(o, q)))
+        hepsi.append(o)
+    kesin = float(np.percentile(np.concatenate(hepsi), q))
+    mc = float(np.std(partiler, ddof=1) / math.sqrt(SINIR_PARTI))
+    pozitif = float((uclar > 0).mean())
+    cozuldu = bool(abs(kesin) >= 2.0 * mc)
+    return {"uc": float(uc), "se": se, "uzaklik_se": float(uc / se), "kesin": kesin, "kesin_mc_se": mc,
+            "tekrar": SINIR_TEKRAR, "tohum_sayisi": SINIR_TOHUM, "pozitif_pay": pozitif,
+            "isaret_cozuldu": cozuldu, "kesin_pozitif": bool(kesin > 0),
+            "sinirda": bool((0.05 <= pozitif <= 0.95) or not cozuldu or ((kesin > 0) != (uc > 0)))}
+
+
 def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True, kume_sutun: str | None = None) -> dict:
     """Bir işlem kümesinin bütün metrikleri."""
     a = alinan(isl)
@@ -108,6 +198,10 @@ def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True, kume_sut
         "n_gun": int(len(gunler)),
         "alinmayan": int((isl["durum"] != 0).sum()) if isl is not None and len(isl) else 0,
         "pozisyon_acik": int((isl["durum"] == 1).sum()) if isl is not None and len(isl) else 0,
+        # Alınmayan sinyaller sebebine göre (motor.DURUM): tek pozisyon, kaymasız açılışta stop'un ötesi, seviye hedefi
+        # yürütülen girişin gerisinde, veri yok, gün sonu.
+        "atlanan": ({ad: int((isl["durum"] == kod).sum()) for kod, ad in DURUM.items() if kod != 0}
+                    if isl is not None and len(isl) and "durum" in isl else {}),
         "belirsiz": int(a["belirsiz"].sum()) if n else 0,
     }
     if n == 0:

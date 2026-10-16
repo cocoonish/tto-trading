@@ -15,6 +15,11 @@ motor yapar. Kurallar (önceden kayıt, `onkayit.toml`):
           girişten o kadar uzağa konur; R tam olarak o uzaklıktır ve stop'lu ile
           stop'suz varyant aynı R birimiyle kıyaslanır.
           R ≤ 0 ise (giriş stop'un ötesinde açıldıysa) işlem YOK, sayılır.
+          Stop SEVİYESİ taşıyan emirde giriş tarafının KAYMASIZ açılışı da
+          sorulur: uzunda ask ≤ stop, kısada bid ≥ stop ise işlem YOK. Kayma
+          emirden sonra gelen bir maliyettir; dolumu stop'un berisine itip
+          olmayacak bir işlemi (R ≤ kayma) doğuramaz. (Sonradan, 16.10.2026:
+          ilk koşu bunu yalnız kaymalı dolumla soruyordu; ön kayıttaki not.)
   MAE/MFE işlem boyunca emir tarafındaki en kötü / en iyi gezinme (giriş
           fiyatına göre). Hedefin dolduğu dakikanın ters ucu MAE'ye, boşluklu
           stop ve hedefin açılış fiyatı uçlara girer; gerçekleşen sonuç her
@@ -22,15 +27,25 @@ motor yapar. Kurallar (önceden kayıt, `onkayit.toml`):
   SERT    stop emir tarafında dakika dakika sorulur: uzunda bid ≤ stop,
   STOP    kısada ask ≥ stop. Dakika stop'un ötesinde AÇILIRSA dolum açılış
           fiyatıdır (boşluk); değilse stop seviyesi. Her ikisinde de kayma.
+          Boşluk kuralı GİRİŞ dakikasında da geçerlidir: giriş tarafı stop'un
+          berisinde açılıp emir tarafı ötesinde açıldıysa (makas stop'u
+          kapsıyor) çıkış o dakikanın emir tarafı açılışıdır. Bu çıkıştan sonra
+          aynı dakikada yeni giriş yoktur.
   KAPANIŞ mumun mid kapanışı stop'un ötesindeyse bir sonraki dakikanın (yani
   STOP'U  sonraki mumun) açılışında piyasa emriyle çıkılır.
   HEDEF   limit emir: uzunda bid ≥ hedef, kısada ask ≤ hedef. Kayma yok. Dakika
-          hedefin ötesinde açılırsa dolum açılış (lehte).
+          hedefin ötesinde açılırsa dolum açılış (lehte). SEVİYE hedefi (VWAP,
+          pivot, aralık ucu, itkinin ucu) yürütülen girişin gerisinde ya da
+          tam üstünde kalırsa işlem YOK ("hedef geçersiz", sayılır). Bu kural
+          yürütülen girişe, yani kaymaya bağlıdır: maliyet merdiveninin her
+          basamağında atılan sinyal sayısı değişebilir.
   AYNI    bir dakikada hem stop hem hedef değdiyse: açılış birinin ötesindeyse
   DAKİKA  o; değilse STOP önce sayılır (sıra 1 dakikadan çözülemez) ve işlem
           `belirsiz` diye işaretlenir. 5/15/60 dakikalık mumun içindeki sıra
           zaten dakika dakika yürüyerek çözülür.
   ZAMAN   `cikis_i` dakikasının açılışında piyasa emriyle (gün sonu, N mum).
+  GÜN     giriş dakikası gün sonu çıkışında ya da sonrasındaysa (16:55 ET)
+  SONU    işlem YOK ("gun_sonu", sayılır; strat_ortak giriş dizinini −2 yazar).
   TEK     bir pozisyon açıkken gelen emir alınmaz (sayılır).
   POZİSYON
   HABER   dolum dakikası haber penceresindeyse kaymaya haber kayması eklenir;
@@ -56,7 +71,9 @@ HEDEF_YOK, HEDEF_R, HEDEF_SEVIYE = 0, 1, 2
 STOP_YOK, STOP_SERT, STOP_KAPANIS = 0, 1, 2
 
 # Sonuç kodları
-DURUM = {0: "alindi", 1: "pozisyon_acik", 2: "risk_gecersiz", 3: "hedef_gecersiz", 4: "veri_yok"}
+DURUM = {0: "alindi", 1: "pozisyon_acik", 2: "risk_gecersiz", 3: "hedef_gecersiz", 4: "veri_yok", 5: "gun_sonu"}
+#: strat_ortak'ın gün sonundan sonraki girişe yazdığı dizin (−1: sonraki mum yok, veri yok).
+GIRIS_GUN_SONU = -2
 NEDEN = {1: "stop", 2: "hedef", 3: "zaman", 4: "kapanis_stop", 5: "bosluk_stop", 6: "bosluk_hedef"}
 
 
@@ -83,6 +100,9 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
     for e in range(n_emir):
         i = giris_i[e]
         son = cikis_i[e]
+        if i == -2:
+            durum[e] = 5
+            continue
         if i < 0 or i >= n or son <= i:
             durum[e] = 4
             continue
@@ -98,6 +118,12 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
         st = stop[e]
         sert = stop_tur[e] == 1
         kap = stop_tur[e] == 2
+        # Stop seviyeli emir: giriş tarafının kaymasız açılışı stop'un ötesindeyse işlem yok (kayma işlem yaratmaz).
+        if stop_tur[e] != 0 and not np.isnan(st):
+            ham = ao[i] if y == 1 else bo[i]
+            if not ((ham - st) * y > 0.0):
+                durum[e] = 2
+                continue
         if stop_tur[e] != 0 and np.isnan(st) and risk[e] > 0.0:
             st = g - y * risk[e]            # stop yürütülen girişten risk kadar uzakta
         if stop_tur[e] != 0 and not np.isnan(st):
@@ -133,13 +159,14 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
                 xo = ao[j]; xh = ah[j]; xl = al[j]
             sj = kayma + (haber_kayma if haber[j] else 0.0)
             yari = 0.5 * (ao[j] - bo[j])
+            # Boşluklu sert stop giriş dakikası dahil: emir tarafı stop'un ötesinde açıldıysa dolum o açılıştan.
+            if sert and (xo - st) * y <= 0.0:
+                cf = xo - y * sj; ck = j; nd = 5; mid_c = mo[j]
+                kotu = (xo - g) * y
+                if kotu < en_kotu:
+                    en_kotu = kotu
+                break
             if j > i:
-                if sert and (xo - st) * y <= 0.0:
-                    cf = xo - y * sj; ck = j; nd = 5; mid_c = mo[j]
-                    kotu = (xo - g) * y
-                    if kotu < en_kotu:
-                        en_kotu = kotu
-                    break
                 if ht != 0 and (xo - T) * y >= 0.0:
                     cf = xo; ck = j; nd = 6; mid_c = mo[j]
                     iyi = (xo - g) * y
@@ -213,8 +240,9 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
         mfe[e] = en_iyi
         hedef_f[e] = T
         stop_f[e] = st if (stop_tur[e] != 0) else np.nan
-        # Çıkış açılışta olduysa (zaman, kapanış stop'u, boşluk) aynı dakikada yeni giriş olabilir.
-        if nd == 3 or nd == 4 or nd == 5 or nd == 6:
+        # Çıkış açılışta olduysa (zaman, kapanış stop'u, boşluk) aynı dakikada yeni giriş olabilir; giriş dakikasının
+        # kendisindeki boşluklu stop bunun dışındadır (o dakikanın açılışı zaten bu işlemin girişidir).
+        if (nd == 3 or nd == 4 or nd == 5 or nd == 6) and ck > i:
             serbest = ck
         else:
             serbest = ck + 1

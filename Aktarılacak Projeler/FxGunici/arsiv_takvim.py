@@ -33,6 +33,8 @@ from urllib.parse import urljoin
 
 import urllib3
 
+import ozler
+
 BURASI = Path(__file__).resolve().parent
 HAM = BURASI / "veri" / "takvim" / "ham"
 BASLIK = {
@@ -160,6 +162,7 @@ def main() -> int:
         if not k.startswith("_"):
             durumlar[str(v.get("durum"))] = durumlar.get(str(v.get("durum")), 0) + 1
     print("durumlar:", durumlar)
+    ozler.yaz(HAM)      # ham sayfaların SHA-256 sabitlemesi (takvim_kur okumadan önce sınar)
     return 0
 
 

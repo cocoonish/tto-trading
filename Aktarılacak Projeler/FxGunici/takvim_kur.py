@@ -5,13 +5,16 @@
 Ağsız; girdisi `veri/takvim/ham/` (arsiv_takvim*.py). Her satır saatini TARİH BAZINDA
 kaynağın kendi metninden alır; metinde saat yoksa satır yazılmaz ve sebebi künyeye
 (`veri/takvim/kunye.json`) düşer. Saat sonradan 1 dakikalık fiyattan ayrıca sınanır
-(`takvim_sina.py`); ikisi ayrışırsa olay yayımlanmaz.
+(`takvim_sina.py`); ikisi ayrışırsa olay raporlanır ve takvimde kalır (`takvim.celiskiler`) — hiçbir olay
+fiyat yüzünden dışarıda kalmaz, fiyattan saat yazılmaz.
 
 FOMC. Takvim sayfaları (güncel + 2018–2020 tarihsel) toplantıları bloklar hâlinde
 verir: karar metni bağlantısı (`monetaryYYYYMMDDa.htm`, etiketi "Statement") ve basın
-toplantısı bağlantısı (`fomcpresconfYYYYMMDD.htm`). "notation vote" ve "cancelled"
-bloklar karar sayılmaz; olağanüstü toplantılar ("unscheduled") karar metni varsa
-sayılır. Saat, karar metninin kendi satırından: "For release at 2:00 p.m. EDT".
+toplantısı bağlantısı (`fomcpresconfYYYYMMDD.htm`). Tarihsel sayfada blok başlığı " - YYYY" ile
+biter ve "Meeting" sözcüğünü taşımayabilir ("October 4 (unscheduled) - 2019"). "notation vote" ve
+"cancelled" bloklar karar sayılmaz ve örneklemin içinde karar metni olanlar künyeye adıyla yazılır
+(`fomc.dislanan`; ör. 23.03.2020, metni "For release at 8:00 a.m. EDT"); olağanüstü toplantılar
+("unscheduled") karar metni varsa sayılır. Saat, karar metninin kendi satırından: "For release at 2:00 p.m. EDT".
 Basın toplantısının saati ne karar metninde ne basın toplantısı sayfasında yazar
 (sayfadaki tek saat "Released ... at 2:00 p.m." — KARARIN yayım saati; altı örnekte
 ölçüldü). Fed'in aylık etkinlik takvimi basın toplantısını ayrı satırla yalnız
@@ -38,7 +41,14 @@ saatidir; yaz saati `Europe/Berlin` ile.
 
 BoE. Tarih her MPC özetinin "Published on …" satırından; saat BoE'nin yayım
 kuralından ("published at 12 noon on a Thursday eight times a year" — liste sayfası).
-Perşembe olmayan tarih künyeye düşer. Bank Rate değişiklik listesinde olup MPC özet
+Perşembe olmayan tarih künyeye düşer. Kuraldan ayrılan gün BoE'nin kendi saat değişikliği
+duyurusundan okunur (altıncı geçiş; 07.07.2020: "will now be published at 07:00 (BST) on Thursday
+6 August rather than the originally scheduled time of 12:00 (BST)", 04.11.2020: "… on Thursday 5
+November 2020 at 7:00 hrs (GMT), not at 12:00 hrs (GMT)"). Ağustos duyurusu değişikliğin sebebini
+Finansal İstikrar Raporu ile ORTAK yayım diye yazar; bu yüzden raporların ortak yayımlandığı ayın
+kararı (BoE'nin rapor sayfasının adından: "monetary-policy-report-financial-stability-report-…")
+saat duyurusu arşivde yoksa YAZILMAZ ve adıyla sayılır (07.05.2020): kuralın 12:00'si o gün
+kaynakla desteklenmez, fiyattan saat yazılmaz. Bank Rate değişiklik listesinde olup MPC özet
 listesinde olmayan olağanüstü kararların saati kaynakta yok: yazılmaz, adıyla sayılır.
 """
 from __future__ import annotations
@@ -53,6 +63,9 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
+import ayar as ay
+import ozler
+
 BURASI = Path(__file__).resolve().parent
 HAM = BURASI / "veri" / "takvim" / "ham"
 CIKTI = BURASI / "veri" / "takvim" / "olaylar.csv"
@@ -61,7 +74,9 @@ NY = ZoneInfo("America/New_York")
 AY_ADI = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
           "November", "December"]
 AYLAR = {a: i + 1 for i, a in enumerate(AY_ADI)}
-BAS, BIT = date(2018, 1, 1), date(2026, 10, 15)
+# Takvim penceresi ayarın penceresidir (ayar.toml baslangic/bitis; elle kopyası yok). Künyeye yazılır, ölçüm kıyaslar.
+_AYAR = ay.oku()
+BAS, BIT = _AYAR.baslangic, _AYAR.bitis
 # Basın toplantısı bağlantısı: Fed sayfasında iki düzensiz yazım ölçüldü — mutlak adres
 # (2022-03-16) ve "fomcpressconf" (2026-01-28, çift s). Kalıp ikisini de tanır.
 PRESCONF = r'href="(?:https://www\.federalreserve\.gov)?(/monetarypolicy/fomcpress?conf(\d{8})\.htm)"'
@@ -74,7 +89,7 @@ BOE_ORAN = "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp"
 def _manifest() -> dict:
     m = {}
     adlar = (["manifest.json", "manifest2.json"] + sorted(p.name for p in HAM.glob("manifest3_*.json"))
-             + sorted(p.name for p in HAM.glob("manifest5_*.json")))
+             + sorted(p.name for p in HAM.glob("manifest5_*.json")) + sorted(p.name for p in HAM.glob("manifest6_*.json")))
     for ad in adlar:
         yol = HAM / ad
         if yol.exists():
@@ -111,7 +126,9 @@ def _fomc_bloklar(t: str) -> list[dict]:
     """Takvim sayfasındaki toplantı blokları: başlık, karar metni, basın toplantısı."""
     out = []
     # Tarihsel sayfa: <h5 ...>March 2 (unscheduled) Meeting - 2020</h5> ... sonraki <h5'e kadar
-    for m in re.finditer(r"<h5[^>]*>([^<]*?Meeting - (\d{4}))</h5>(.*?)(?=<h5|\Z)", t, re.S):
+    # Başlık " - YYYY" ile biter; "Meeting" sözcüğü şart değil (ölçüldü: "October 4 (unscheduled) - 2019" ve
+    # "March 23 (notation vote) - 2020" bu sözcüğü taşımıyor; ilki kural gereği karar sayılır).
+    for m in re.finditer(r"<h5[^>]*>([^<]*? - (\d{4}))</h5>(.*?)(?=<h5|\Z)", t, re.S):
         baslik, yil, govde = m.group(1).strip(), m.group(2), m.group(3)
         st = re.search(r'href="(?:https://www\.federalreserve\.gov)?/newsevents/pressreleases/monetary(\d{8})a\.htm">Statement<', govde)
         pc = re.search(PRESCONF, govde)
@@ -268,8 +285,17 @@ def fomc(man: dict, kunye: dict) -> list[dict]:
     kaynak_tarih: dict[str, list[str]] = {"takvim": [], "duyuru": []}
     kuraldan_farkli = 0
     gorulen = set()
+    dislanan: dict[str, dict] = {}
     for b in bloklar:
         bas = b["baslik"].lower()
+        if ("notation vote" in bas or "cancelled" in bas) and b["karar"] and b["karar"] not in dislanan:
+            g_ = date(int(b["karar"][:4]), int(b["karar"][4:6]), int(b["karar"][6:]))
+            if BAS <= g_ <= BIT:
+                u_ = f"https://www.federalreserve.gov/newsevents/pressreleases/monetary{b['karar']}a.htm"
+                ys_ = _yayim_saati(_metin(man[u_]["dosya"])) if u_ in man else None
+                dislanan[b["karar"]] = {"tarih": g_.isoformat(), "baslik": b["baslik"],
+                                        "sebep": "notation vote" if "notation vote" in bas else "cancelled",
+                                        "yayim_saati": ys_[0] if ys_ else None, "kaynak": u_}
         if "notation vote" in bas or "cancelled" in bas or not b["karar"]:
             continue
         if b["karar"] in gorulen:
@@ -345,6 +371,8 @@ def fomc(man: dict, kunye: dict) -> list[dict]:
                      "basin_saat_kaynagi": kaynak_say,
                      "basin_saat_tarih": {k_: sorted(v_) for k_, v_ in kaynak_tarih.items()},
                      "kuraldan_farkli": kuraldan_farkli, "takvim_gun": len(takvim),
+                     # Kuralla dışarıda kalan, örneklemin içinde karar metni olan bloklar (adıyla, saatiyle).
+                     "dislanan": [dislanan[k_] for k_ in sorted(dislanan)],
                      "kural": {x: kural[x] for x in ("karar", "basin", "kaynak", "son_gecerli", "yineleme")},
                      "sorun": sorun}
     return satir
@@ -372,6 +400,27 @@ def _bls_referans(seri: str, k: dict) -> str:
     # Başlığın "2021 M12 Results" kodu: M01–M12 ay, M13 yıllık ortalama (ay değil), Q çeyrek (ay değil)
     r = re.search(r"(\d{4})\s+M(0[1-9]|1[0-2])\s+Results", k.get("baslik", ""))
     return f"{r.group(1)}-{r.group(2)}" if r else "?"
+
+
+_SONRAKI = re.compile(r"(?:news release|Employment Situation) for ([A-Za-z]+) (\d{4}) is scheduled to be "
+                     r"(?:published|released) on "
+                     r"(?:[A-Za-z]+, )?([A-Za-z]+) (\d{1,2}), (\d{4}),? at (\d{1,2}):(\d{2}) ?([ap])\.m\.")
+
+
+def _bls_sonraki(seri: str, son: date | None) -> dict | None:
+    """Son okunan bültenin duyurduğu SONRAKİ yayım (tarih, saat, referans ayı), bültenin tam kopyasından: ikinci
+    geçişin Internet Archive kopyaları (web.archive.org_web_…_{seri}_AAGGYYYY.htm…). Kopya yoksa None."""
+    if son is None:
+        return None
+    ek = f"{seri}_{son.month:02d}{son.day:02d}{son.year}.htm"
+    for yol in sorted(HAM.glob(f"web.archive.org_web_*{ek}*")):
+        m = _SONRAKI.search(_duz(yol.read_text(encoding="utf-8", errors="replace")))
+        if m and m.group(1).capitalize() in AYLAR and m.group(3).capitalize() in AYLAR:
+            g = date(int(m.group(5)), AYLAR[m.group(3).capitalize()], int(m.group(4)))
+            return {"tarih": g.isoformat(), "saat": _saat(int(m.group(6)), int(m.group(7)), m.group(8)),
+                    "referans": f"{m.group(2)}-{AYLAR[m.group(1).capitalize()]:02d}",
+                    "kaynak": f"{son.isoformat()} bülteninin 'sonraki yayım' cümlesi ({yol.name[:60]}…)"}
+    return None
 
 
 def bls(seri: str, olay: str, kunye: dict) -> list[dict]:
@@ -440,8 +489,17 @@ def bls(seri: str, olay: str, kunye: dict) -> list[dict]:
         if any(g.year == y2 and g.month == a2 for g in bilinmeyen):
             okunamadi.append(e)
             eksik.remove(e)
+    # Sondaki boşluk: kapsam denetimi yalnız okunan ilk ve son referans ayı ARASINI görür. Son okunan bülten bir
+    # sonraki yayımı kendisi duyurur ("… news release for September 2026 is scheduled to be published on Wednesday,
+    # October 14, 2026, at 8:30 a.m."); o gün örneklemin içindeyse ve yayım takvimde yoksa ay eksik sayılır ve
+    # adıyla yazılır. Olay ancak resmî kopyası arşive girince eklenir (duyurudan olay kurulmaz).
+    sonraki = _bls_sonraki(seri, max((g for g, *_ in aday), default=None))
+    if sonraki and sonraki["tarih"] <= BIT.isoformat() and sonraki["tarih"] not in {s_["tarih"] for s_ in satir}:
+        sonraki["durum"] = "yayım örneklemin içinde, resmî kopyası arşivde yok — takvime girmedi"
+        sorun.append(f"{sonraki['tarih']}: {sonraki['referans']} yayımı son bültende duyurulmuş, kopyası arşivde yok")
     kunye[olay] = {"yayim": len(satir), "ilk_referans": refler[0] if refler else None,
                    "son_referans": refler[-1] if refler else None, "yayimi_olmayan_referans_ayi": eksik,
+                   "sonraki_yayim": sonraki,
                    "referansi_okunamayan_ay": okunamadi,
                    "referansi_okunamayan_yayim": [g.isoformat() for g in bilinmeyen],
                    "saatler": sorted({s["yerel_saat"] for s in satir}), "sorun": sorun,
@@ -519,9 +577,27 @@ def boe(man: dict, kunye: dict) -> list[dict]:
             sorun.append(f"{g}: perşembe değil — kural (perşembe 12:00) bu tarihe uygulanamaz, yazılmadı")
             continue
         tarihler[g] = u
+    degisik, gerekce = _boe_saat_duyurulari(man, sorun)
+    ortak = _boe_ortak_yayim(man, sorun)
+    dogrulanamadi = []
     for g, u in sorted(tarihler.items()):
+        if g in degisik:
+            d = degisik[g]
+            satir.append({"olay": "BoE_karar", "tarih": g.isoformat(), "yerel_saat": d["saat"],
+                          "bolge": "Europe/London", "kaynak": d["kaynak"],
+                          "not": f"saat: BoE'nin {d['yayim']} tarihli duyurusundan (kuraldaki 12:00 yerine)"})
+            continue
+        if (g.year, g.month) in ortak:
+            dogrulanamadi.append({"tarih": g.isoformat(), "rapor": ortak[(g.year, g.month)],
+                                  "sebep": "Para Politikası Raporu ile Finansal İstikrar Raporu'nun ortak yayım günü; "
+                                           "saat duyurusu arşivde yok"})
+            sorun.append(f"{g}: ortak rapor yayımı ({ortak[(g.year, g.month)]}) ve saat duyurusu arşivde yok — "
+                         f"kuralın 12:00'si kaynakla desteklenmiyor, yazılmadı")
+            continue
         satir.append({"olay": "BoE_karar", "tarih": g.isoformat(), "yerel_saat": "12:00", "bolge": "Europe/London",
                       "kaynak": u, "not": "saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)"})
+    for g in sorted(set(degisik) - set(tarihler)):
+        sorun.append(f"{g}: saat duyurusu var ama MPC özet listesinde bu gün yok — kullanılmadı")
     # Bank Rate değişiklik listesinde olup MPC özetleri arasında olmayan kararlar.
     oran = man.get(BOE_ORAN)
     if oran:
@@ -533,13 +609,79 @@ def boe(man: dict, kunye: dict) -> list[dict]:
             if BAS <= g <= BIT and g not in tarihler:
                 sorun.append(f"{g}: Bank Rate değişti, MPC özet listesinde yok (olağanüstü karar); saat kaynakta "
                              f"yok — yazılmadı")
-    kunye["boe"] = {"karar": len(satir), "sorun": sorun}
+    kunye["boe"] = {"karar": len(satir), "sorun": sorun,
+                    "saat_duyurusu": {g.isoformat(): v for g, v in sorted(degisik.items())},
+                    "saat_duyurusu_gerekce": gerekce, "ortak_yayim_ay": sorted(f"{y}-{a:02d}" for y, a in ortak),
+                    "saat_dogrulanamadi": dogrulanamadi}
     return satir
 
 
+#: BoE saat değişikliği duyurusu: yeni saat, günü ve eski saatin reddi ("rather than … 12:00" · "not at 12:00").
+_BOE_DEGISIKLIK = re.compile(
+    r"published,? (?:on Thursday (\d{1,2}) ([A-Z][a-z]+)(?: (\d{4}))? )?at (\d{1,2}):(\d{2})(?: hrs)? \((BST|GMT)\)"
+    r"(?: on Thursday (\d{1,2}) ([A-Z][a-z]+)(?: (\d{4}))?)?[^.]{0,80}?(?:rather than|not at)[^.]{0,60}?12:00")
+
+
+def _boe_saat_duyurulari(man: dict, sorun: list) -> tuple[dict, list]:
+    """BoE'nin saat değişikliği duyuruları (bankofengland.co.uk/news/…): {gün: {saat, yayim, kaynak, metin}} ve
+    duyuruların değişiklik gerekçesi cümleleri. Saat dilimi etiketi (BST/GMT) o günün Londra saatiyle tutmalı."""
+    out, gerekce = {}, []
+    for u, v in sorted(man.items()):
+        if not re.search(r"bankofengland\.co\.uk/news/\d{4}/[a-z]+/", u):
+            continue
+        t = _duz(_metin(v["dosya"]))
+        p = re.search(r"Published on (\d{1,2}) ([A-Za-z]+) (\d{4})", t)
+        if not p or p.group(2) not in AYLAR:
+            continue
+        yayim = date(int(p.group(3)), AYLAR[p.group(2)], int(p.group(1)))
+        govde = t[p.start():t.find("Other news", p.start())] if "Other news" in t[p.start():] else t[p.start():]
+        for m in _BOE_DEGISIKLIK.finditer(govde):
+            gun = m.group(1) or m.group(7)
+            ay_ = m.group(2) or m.group(8)
+            yil = m.group(3) or m.group(9)
+            if not gun or ay_ not in AYLAR:
+                sorun.append(f"{u.rsplit('/', 1)[-1]}: saat duyurusunun günü okunamadı")
+                continue
+            g = date(int(yil) if yil else yayim.year, AYLAR[ay_], int(gun))
+            if g < yayim:                                   # yılsız gün yayımdan önceye düşerse ertesi yıl
+                g = g.replace(year=g.year + 1)
+            saat = f"{int(m.group(4)):02d}:{m.group(5)}"
+            beklenen = "BST" if _yaz_saati_mi(g, "Europe/London") else "GMT"
+            if m.group(6) != beklenen or g.weekday() != 3:
+                sorun.append(f"{g}: saat duyurusu {m.group(6)} diyor ya da gün perşembe değil (o gün {beklenen}) — "
+                             f"kullanılmadı")
+                continue
+            out[g] = {"saat": saat, "yayim": yayim.strftime("%d.%m.%Y"), "kaynak": u, "metin": m.group(0)[:220]}
+        for c in re.findall(r"[^.]*\bjoint publication\b[^.]*\.", govde):
+            gerekce.append({"kaynak": u, "metin": c.strip()[:220]})
+    return out, gerekce
+
+
+def _boe_ortak_yayim(man: dict, sorun: list) -> dict:
+    """Para Politikası Raporu ile Finansal İstikrar Raporu'nun ortak yayımlandığı aylar, BoE'nin rapor sayfalarının
+    ADLARINDAN (Internet Archive dizini, altıncı geçiş): {(yıl, ay): sayfa adı}. Dizin yoksa boş ve sorun yazılır."""
+    u = next((x for x in man if "cdx?url=bankofengland.co.uk/report/" in x), None)
+    if not u:
+        sorun.append("BoE rapor sayfalarının dizini arşivde yok (altıncı geçiş boe-rapor) — ortak yayım günleri bilinmiyor")
+        return {}
+    try:
+        satir = json.loads(_metin(man[u]["dosya"]))[1:]
+    except ValueError:
+        sorun.append("BoE rapor dizini okunamadı")
+        return {}
+    out = {}
+    for orij, *_ in satir:
+        m = re.search(r"/report/(\d{4})/(monetary-policy-report-(?:and-)?(?:interim-)?financial-stability-report-"
+                      r"([a-z]+)-(\d{4}))/?$", orij.split("?")[0])
+        if m and m.group(3).capitalize() in AYLAR:
+            out[(int(m.group(4)), AYLAR[m.group(3).capitalize()])] = m.group(2)
+    return out
+
+
 def main() -> int:
+    ozler.sina(HAM)              # ham sayfalar sabitlemeyle aynı değilse takvim kurulmaz
     man = _manifest()
-    kunye: dict = {}
+    kunye: dict = {"pencere": [BAS.isoformat(), BIT.isoformat()]}
     satir = fomc(man, kunye) + bls("empsit", "NFP", kunye) + bls("cpi", "CPI", kunye) + ecb(man, kunye) \
         + boe(man, kunye)
     df = pd.DataFrame(satir, columns=["olay", "tarih", "yerel_saat", "bolge", "kaynak", "not"])
@@ -549,6 +691,8 @@ def main() -> int:
     KUNYE.write_text(json.dumps(kunye, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(df["olay"].value_counts().to_string())
     for k, v in kunye.items():
+        if not isinstance(v, dict):
+            continue
         for s in v.get("sorun", []):
             print(f"  {k}: {s}")
         if v.get("yayimi_olmayan_referans_ayi"):

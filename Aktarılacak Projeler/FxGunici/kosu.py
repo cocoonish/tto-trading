@@ -195,6 +195,81 @@ def _maliyet_bayragi(m: dict) -> bool:
     return bool(m.get("ga_brut_alt", -1) > 0 and m.get("beklenti_r", 1) <= 0)
 
 
+#: Seçim eşitliğinin toleransı (günlük R serisinin yıllıklandırılmış Sharpe'ı). Ön kayıt eşitlikte "ızgaradaki ilk"
+#: kombinasyonu ister; işlevsel kopyalar (ör. tek mum tutulan fiksing momentumunda kapanış stopu ile stop'suz: aynı
+#: giriş, aynı çıkış dakikası) yalnız kayan nokta artığıyla (≤ 1e−14) ayrışır ve kesin karşılaştırma sonrakini seçerdi.
+SECIM_TOLERANS = 1e-9
+
+
+def _sec(adaylar: list[dict]) -> dict | None:
+    """Ön kaydın seçim kuralı: en yüksek örneklem içi Sharpe; tolerans içindeki eşitlikte ızgaradaki ilk."""
+    if not adaylar:
+        return None
+    en = max(s["is"]["sharpe"] for s in adaylar)
+    return next(s for s in adaylar if s["is"]["sharpe"] >= en - SECIM_TOLERANS)
+
+
+def islem_imzasi(isl: pd.DataFrame) -> tuple[str, np.ndarray] | None:
+    """Alınan işlemlerin imzası: sıralı (giriş dakikası, çıkış dakikası, yön) üçlülerinin özü ve aynı sıradaki R'ler.
+    Hiç işlem yoksa None."""
+    import hashlib
+    a = mk.alinan(isl)
+    if not len(a):
+        return None
+    anahtar = np.stack([a["giris_i"].to_numpy(np.int64), a["cikis_i"].to_numpy(np.int64),
+                        a["yon"].to_numpy(np.int64)])
+    sira = np.lexsort(anahtar[::-1])
+    h = hashlib.sha1(np.ascontiguousarray(anahtar[:, sira]).tobytes()).hexdigest()
+    return h, a["r"].to_numpy(np.float64)[sira]
+
+
+def imza_ayni(x: tuple | None, y: tuple | None) -> bool:
+    """İki imza aynı işlemleri ve aynı R'leri (1e−9 içinde) mi taşıyor; iki boş imza aynıdır."""
+    if x is None or y is None:
+        return x is None and y is None
+    return x[0] == y[0] and len(x[1]) == len(y[1]) and bool(np.allclose(x[1], y[1], rtol=0.0, atol=1e-9))
+
+
+class ImzaSiniflayici:
+    """Izgaranın işlevsel kopyaları: aynı alınan işlemler (giriş ve çıkış dakikası, yön) ve aynı R sonuçları (1e−9
+    içinde) veren kombinasyonlar aynı sınıftır. Hiç işlem üretmeyen kombinasyon None (boş). Izgara değişmez; tekil
+    deneme sayısı bilgi olarak yazılır (deflated Sharpe'ın deneme sayısı ızgaranın kendisidir — kopyalar eşiği
+    yükseltir, yani hüküm tarafında tutucudur)."""
+
+    def __init__(self):
+        self.siniflar: list[tuple[str, np.ndarray]] = []
+
+    def sinif(self, isl: pd.DataFrame) -> int | None:
+        return self.sinif_imzadan(islem_imzasi(isl))
+
+    def sinif_imzadan(self, im: tuple | None) -> int | None:
+        if im is None:
+            return None
+        for j, x in enumerate(self.siniflar):
+            if imza_ayni(x, im):
+                return j
+        self.siniflar.append(im)
+        return len(self.siniflar) - 1
+
+
+#: Ön kaydın harfine göre İKİNCİ bir okuması olan kurallar: birim → (sinyal parametresi, harfin okuması). Ölçümün kuralı
+#: sonuçtan önce yazılmış okumadır (sinyal fonksiyonlarının varsayılanı) ve hüküm onunla verilir; harfin okuması aynı
+#: koşuda ayrıca ölçülür ve etkisi derste yazılır (yorum_duyarlilik). Okumalar strateji.py'de, fonksiyon belgelerinde:
+#:   VWAP dönüşü ve geri çekilmesi   ilk saat: kuralın durumu da sıfırlanır ↔ yalnız sinyal verilmez (ön kaydın harfi)
+#:   pivot kırılımı                   R1 yalnız yukarı, S1 yalnız aşağı ↔ her seviyede iki yönde ilk kesiş (harf)
+#:   başarısız kırılım                kırılım mumu bir kesiştir ↔ pencerenin ilk mumu dışarıda kapanırsa da kırılım
+#: Başarısız kırılımda ORB ve Asya'nın iki okuması tanım gereği aynıdır (pencerenin ilk mumundan önceki kapanış aralığın
+#: içindedir); o iki birim de koşulur ki "aynı" bir beyan değil ölçüm olsun.
+YORUM: dict[str, tuple[str, str]] = {
+    "vwap_donus": ("ilk_saat", "yalniz_sinyal"),
+    "vwap_cekilme": ("ilk_saat", "yalniz_sinyal"),
+    "pivot_kirilim": ("kesis", "iki_yon"),
+    "sahte_pdhl": ("acilis", "acilis_ici"),
+    "sahte_orb": ("acilis", "acilis_ici"),
+    "sahte_asya": ("acilis", "acilis_ici"),
+}
+
+
 def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
     tanim = BIRIMLER[birim]
     aile = tanim["aile"]
@@ -202,26 +277,39 @@ def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
     k = kosucu
     satirlar = []
     yillik = {}
-    t0 = time.monotonic()
+    imza = ImzaSiniflayici()
     for p in liste:
         isl = k.islem(aile, p)
         ic, dis = k.bol(isl)
         mi = mk.ozet(ic, k.gun_is, bootstrap=False)
         md = mk.ozet(dis, k.gun_oos, bootstrap=False)
         ss = mk.gunluk_r(ic, k.gun_is)
+        im = islem_imzasi(isl)
         satirlar.append({"p": p, "anahtar": _anahtar(p), "is": mi, "oos": md, "haber_payi": k.haber_payi(isl),
-                         "sr_gunluk_is": float(ss.mean() / ss.std(ddof=1)) if ss.std(ddof=1) > 0 else float("nan")})
+                         "sr_gunluk_is": float(ss.mean() / ss.std(ddof=1)) if ss.std(ddof=1) > 0 else float("nan"),
+                         "sinif": imza.sinif_imzadan(im), "imza": im if birim in YORUM else None})
         yillik[_anahtar(p)] = mk.yil_toplamlari(isl, k.gun_tum)
+    sinif = [s["sinif"] for s in satirlar]
     asgari = int(ONKAYIT["secim"]["asgari_islem_haber" if tanim.get("haber") else "asgari_islem"])
     adaylar = [s for s in satirlar if s["is"]["n"] >= asgari and np.isfinite(s["is"]["sharpe"])]
-    secilen = max(adaylar, key=lambda s: s["is"]["sharpe"]) if adaylar else None
+    secilen = _sec(adaylar)
+    ilk_sinif: dict = {}
+    for s in satirlar:
+        if s["sinif"] is not None:
+            ilk_sinif.setdefault(s["sinif"], s["anahtar"])
     sonuc = {"birim": birim, "aile": aile, "kombinasyon": len(liste), "varsayilan": varsayilan,
+             # Işlevsel kopyalar: aynı işlemleri veren kombinasyonlar tek deneme sayılır; boş: hiç işlem üretmeyen.
+             "tekil_deneme": len(ilk_sinif), "bos_kombinasyon": sum(1 for c in sinif if c is None),
              "izgara": [{"anahtar": s["anahtar"], "p": s["p"], "haber_payi": s["haber_payi"],
                          "is": {x: s["is"].get(x) for x in ("n", "beklenti_r", "beklenti_pip", "sharpe", "isabet")},
-                         "oos": {x: s["oos"].get(x) for x in ("n", "beklenti_r", "beklenti_pip", "sharpe", "isabet")}}
+                         "oos": {x: s["oos"].get(x) for x in ("n", "beklenti_r", "beklenti_pip", "sharpe", "isabet")},
+                         "kopya": (ilk_sinif[s["sinif"]] if s["sinif"] is not None
+                                   and ilk_sinif[s["sinif"]] != s["anahtar"] else None),
+                         "bos": s["sinif"] is None}
                         for s in satirlar],
              "secilen": secilen["p"] if secilen else None,
-             "sure_izgara_sn": round(time.monotonic() - t0, 1)}
+             "secim_asgari": asgari,
+             "en_cok_is_islem": max((s["is"]["n"] for s in satirlar), default=0)}
     if not ayrinti:
         return sonuc
     # Bu birimin bu paritedeki önceki işlem dosyaları silinir: seçim değiştiyse önceki koşunun seçtiği kombinasyonun
@@ -229,16 +317,92 @@ def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
     for eski in (CIKTI / "islem" / birim).glob(f"{k.b.d.cift}__*.parquet"):
         eski.unlink()
     sr_denemeler = np.array([s["sr_gunluk_is"] for s in satirlar])
+    # Tekil denemeler: her işlevsel kopya sınıfının ilk kombinasyonu (bilgi: kopyaların deflated Sharpe'a etkisi).
+    gorulen: set = set()
+    sr_tekil = []
+    for s in satirlar:
+        if s["sinif"] is not None and s["sinif"] not in gorulen:
+            gorulen.add(s["sinif"])
+            sr_tekil.append(s["sr_gunluk_is"])
     for ad, p in (("varsayilan", varsayilan), ("secilen", secilen["p"] if secilen else None)):
         if p is None:
             sonuc[f"{ad}_analiz"] = None
             continue
         sonuc[f"{ad}_analiz"] = derin(birim, aile, p, k, sr_denemeler if ad == "secilen" else None, yillik,
-                                      ornek=(ad == "varsayilan"))
+                                      ornek=(ad == "varsayilan"),
+                                      sr_tekil=np.array(sr_tekil) if ad == "secilen" else None)
     sonuc["walk_forward"] = walk_forward(aile, liste, yillik, k, asgari)
     if tanim.get("haber"):
         sonuc["tf_haber_kaymasiz"] = tf_haber_kaymasiz(aile, liste, varsayilan, k)
+    if birim in YORUM:
+        sonuc["yorum"] = yorum_duyarlilik(birim, aile, varsayilan, satirlar, secilen, k, asgari)
     return sonuc
+
+
+def _yorum_sonuc(aile: str, p: dict, k: Kosucu, donemler: tuple[str, ...]) -> dict:
+    """Bir kombinasyonun hüküm girdileri (birincil hükmün kuralıyla): dönem başına özet (bootstrap'lı), rastgele yön ve
+    hüküm; sıfıra yakın hüküm ucu derin()'deki gibi ayrıca."""
+    isl = k.islem(aile, p)
+    ic, dis = k.bol(isl)
+    kume = {"is": (ic, k.gun_is), "oos": (dis, k.gun_oos), "tum": (isl, k.gun_tum)}
+    out = {}
+    for d in donemler:
+        x, gun = kume[d]
+        m = mk.ozet(x, gun)
+        ry = sg.rastgele_yon(k.b, x, int(p["tf"]), k.sinyal(aile, p)[1], KAYMA_TEMEL, k.a.haber_kayma_pip)
+        satir = {"ozet": {kk: m.get(kk) for kk in ("n", "beklenti_r", "beklenti_pip", "sharpe", "isabet", "ga_alt",
+                                                     "ga_ust", "ga_brut_alt")},
+                 "rastgele": {"yuzdelik": ry.get("yuzdelik"), "n": ry.get("n")}, "hukum": _hukum(m, ry)}
+        r_ = m.get("beklenti_r")
+        if m.get("n") and r_ is not None and np.isfinite(r_) and r_ > 0:
+            s_ = mk.sinir_bilgisi(mk.alinan(x)["r"].to_numpy(np.float64), m.get("ga_alt"), "alt")
+            if s_:
+                satir["sinir"] = {"ga_alt": s_}
+        out[d] = satir
+    return out
+
+
+def yorum_duyarlilik(birim: str, aile: str, varsayilan: dict, satirlar: list[dict], secilen: dict | None,
+                     k: Kosucu, asgari: int) -> dict:
+    """Yorum duyarlılığı (YORUM): ızgara harfin okumasıyla baştan koşulur. Hüküm ölçümün okumasıyla verilir; bu kayıt
+    harfin okuması seçilseydi neyin değişeceğini söyler.
+
+      degisen          işlemleri (giriş ve çıkış dakikası, yön, R) değişen kombinasyon sayısı; bos_kombinasyon:
+                       harfin okumasında hiç işlem açmayan kombinasyon
+      varsayilan       önceden kayıtlı varsayılan harfin okumasıyla: örneklem dışı ve bütün dönem (ön kaydın varsayılan
+                       için örneklem dışı saydığı pencere), her birinde rastgele yön ve hüküm
+      secilen          ızgaradan seçim harfin okumasıyla BAŞTAN (aynı kural: asgari işlem, en yüksek örneklem içi Sharpe,
+                       tolerans içinde ızgaradaki ilk) ve seçilenin örneklem dışı hükmü
+    Okumanın parametresi ızgaranın bir boyutu DEĞİLDİR: seçim ızgaranın kendi kombinasyonları arasında yapılır, deneme
+    sayısı değişmez."""
+    import inspect
+    param, harf = YORUM[birim]
+    olcum = inspect.signature(AILE_TUM[aile]).parameters[param].default
+    alt = lambda p: {**p, param: harf}  # noqa: E731
+    degisen, bos, adaylar, v_degisti = 0, 0, [], None
+    v_anahtar = _anahtar(varsayilan)
+    for s in satirlar:
+        isl = k.islem(aile, alt(s["p"]))
+        im = islem_imzasi(isl)
+        ayni = imza_ayni(im, s["imza"])
+        degisen += not ayni
+        bos += im is None
+        if s["anahtar"] == v_anahtar:
+            v_degisti = not ayni
+        ic, _ = k.bol(isl)
+        mi = mk.ozet(ic, k.gun_is, bootstrap=False)
+        if mi["n"] >= asgari and np.isfinite(mi["sharpe"]):
+            adaylar.append({"p": s["p"], "anahtar": s["anahtar"], "is": mi})
+    sec = _sec(adaylar)
+    s_temel = _anahtar(secilen["p"]) if secilen else None
+    return {"param": param, "olcum": olcum, "harf": harf, "kombinasyon": len(satirlar), "degisen": int(degisen),
+            "bos_kombinasyon": int(bos),
+            "varsayilan_degisti": v_degisti,
+            "varsayilan": _yorum_sonuc(aile, alt(varsayilan), k, ("oos", "tum")),
+            "secilen_p": sec["p"] if sec else None, "secilen_anahtar": sec["anahtar"] if sec else None,
+            "secim_ayni": (sec["anahtar"] if sec else None) == s_temel,
+            "secilen_is": ({x: sec["is"].get(x) for x in ("n", "beklenti_r", "sharpe")} if sec else None),
+            "secilen": _yorum_sonuc(aile, alt(sec["p"]), k, ("oos",)) if sec else None}
 
 
 def tf_haber_kaymasiz(aile: str, liste: list[dict], v: dict, k: Kosucu) -> dict:
@@ -258,7 +422,8 @@ def tf_haber_kaymasiz(aile: str, liste: list[dict], v: dict, k: Kosucu) -> dict:
     return dict(sorted(out.items(), key=lambda kv: int(kv[0])))
 
 
-def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek: bool = False) -> dict:
+def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek: bool = False,
+          sr_tekil=None) -> dict:
     isl = k.islem(aile, p)
     ic, dis = k.bol(isl)
     out = {"p": p,
@@ -300,14 +465,42 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
     # deflated Sharpe (yalnız ızgaradan SEÇİLEN için anlamlı; varsayılanda PSR)
     gr_is = mk.gunluk_r(ic, k.gun_is)
     sr_is = float(gr_is.mean() / gr_is.std(ddof=1)) if gr_is.std(ddof=1) > 0 else float("nan")
-    out["dsr"] = sg.dsr(sr_is, sr_denemeler, gr_is) if sr_denemeler is not None else \
-        {**sg.dsr(sr_is, np.array([sr_is, sr_is]), gr_is), "n_deneme": 1}
+    if sr_denemeler is not None:
+        out["dsr"] = sg.dsr(sr_is, sr_denemeler, gr_is)
+        if sr_tekil is not None:
+            t = sg.dsr(sr_is, sr_tekil, gr_is)
+            out["dsr"].update({"n_tekil": t.get("n_deneme"), "dsr_tekil": t.get("dsr"),
+                               "dsr_gurultu_tekil": t.get("dsr_gurultu")})
+    else:
+        out["dsr"] = sg.psr_tek(sr_is, gr_is)
     # hüküm: birincil pencere örneklem dışı (2024 →); varsayılan için bütün dönem de örneklem dışıdır (ön kaydın başlığı)
     # ve onun hükmü ayrıca yazılır. Maliyet bayrağı iki dönemde.
     out["hukum"] = _hukum(out["oos"], out["rastgele"]["oos"])
     out["hukum_tum"] = _hukum(out["tum"], out["rastgele"]["tum"])
     out["maliyet_yiyor"] = _maliyet_bayragi(out["tum"])
     out["maliyet_yiyor_oos"] = _maliyet_bayragi(out["oos"])
+    # Sıfıra yakın uçlar (bilgi; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir): hükmü ayıran uç (net artı
+    # iken net aralığın alt ucu) ve maliyet bayrağını ayıran uç (net ≤ 0 iken brüt aralığın alt ucu). Bütün dönem
+    # yalnız varsayılanda bir hükümdür (seçilenin bütün dönemi seçim dönemini içerir).
+    for d, x in (("oos", dis), ("tum", isl)):
+        if d == "tum" and sr_denemeler is not None:
+            continue
+        m = out[d]
+        r_ = m.get("beklenti_r")
+        if not m.get("n") or r_ is None or not np.isfinite(r_):
+            continue
+        ax = mk.alinan(x)
+        sinir = {}
+        if r_ > 0:
+            s_ = mk.sinir_bilgisi(ax["r"].to_numpy(np.float64), m.get("ga_alt"), "alt")
+            if s_:
+                sinir["ga_alt"] = s_
+        else:
+            s_ = mk.sinir_bilgisi(ax["r_brut"].to_numpy(np.float64), m.get("ga_brut_alt"), "alt")
+            if s_:
+                sinir["ga_brut_alt"] = s_
+        if sinir:
+            m["sinir"] = sinir
     out["az_islem"] = {d: bool(out[d].get("n", 0) < ASGARI_RASTGELE) for d in ("is", "oos", "tum")}
     out["kuyruk"] = kuyruk(k, isl, KAYMA_TEMEL)
     # rejimler: yıl ve oynaklık tercili
@@ -474,17 +667,27 @@ def kuyruk(k: Kosucu, isl: pd.DataFrame, kayma_pip: float) -> dict:
         if n < 4:
             out[ad] = {"n": int(n)}
             continue
-        sira = np.argsort(r)[::-1]
-        en = a[m].iloc[int(sira[0])]
+        # Kararlı sıralama: en yüksek R'yi birden çok işlem paylaşıyorsa (1R/2R hedefte sık; ölçüldü: 88 varsayılanın
+        # 24'ünde 23–150 işlem) "en iyi işlem" tek bir işlem değildir; o zaman tarih ve risk yazılmaz, eşit işlem
+        # sayısı ve risk aralığı yazılır. Hariç ortalamalar hangi eşit işlemin çıktığına bağlı değildir.
+        sira = np.argsort(-r, kind="stable")
+        ax = a[m]
+        en_r = float(r[sira[0]])
+        esit = np.abs(r - en_r) <= 1e-9
+        n_esit = int(esit.sum())
+        risk_esit = ax["R_pip"].to_numpy(np.float64)[esit]
+        en = ax.iloc[int(sira[0])]
         ph = pahali[m]
         out[ad] = {"n": int(n), "r": float(r.mean()),
                    "r_tek_haric": float(np.delete(r, sira[:1]).mean()),
                    "r_uc_haric": float(np.delete(r, sira[:3]).mean()),
-                   "en_iyi_r": float(r[sira[0]]), "en_iyi_gun": str(en["gun"])[:10],
-                   "en_iyi_R_pip": float(en["R_pip"]),
+                   "en_iyi_r": en_r, "en_iyi_esit": n_esit,
+                   "en_iyi_gun": str(en["gun"])[:10] if n_esit == 1 else None,
+                   "en_iyi_R_pip": float(en["R_pip"]) if n_esit == 1 else None,
+                   "en_iyi_R_pip_alt": float(risk_esit.min()), "en_iyi_R_pip_ust": float(risk_esit.max()),
                    "n_pahali": int(ph.sum()), "pay_pahali": float(ph.mean()),
                    "r_pahali_haric": float(r[~ph].mean()) if (~ph).any() else float("nan"),
-                   "pip": float(a["pnl_pip"].to_numpy()[m].mean())}
+                   "pip": float(ax["pnl_pip"].to_numpy().mean())}
     return out
 
 
@@ -615,14 +818,16 @@ def walk_forward(aile: str, liste: list[dict], yillik: dict, k: Kosucu, asgari: 
     secimler, parcalar = {}, []
     for Y in [y for y in yillar if y >= ilk]:
         onceki = [y for y in yillar if y < Y]
-        en_iyi, en_sr = None, -np.inf
+        aday = []
         for p in liste:
             t = [yillik[_anahtar(p)][y] for y in onceki if y in yillik[_anahtar(p)]]
             sr, n = mk.sharpe_toplamdan(t)
-            if n >= asgari_yil * len(onceki) and np.isfinite(sr) and sr > en_sr:
-                en_iyi, en_sr = p, sr
-        if en_iyi is None:
+            if n >= asgari_yil * len(onceki) and np.isfinite(sr):
+                aday.append({"p": p, "is": {"sharpe": sr}})
+        sec = _sec(aday)                          # örneklem içi seçimle aynı kural: tolerans içinde ızgaradaki ilk
+        if sec is None:
             continue
+        en_iyi = sec["p"]
         secimler[str(Y)] = _anahtar(en_iyi)
         isl = k.islem(aile, en_iyi)
         g = isl["gun"].to_numpy() if len(isl) else np.array([], dtype="datetime64[D]")
@@ -699,7 +904,7 @@ def main(argv: list[str]) -> int:
             print(f"  haber analizi · {sum(h['olay_sayisi'].values())} olay · {time.monotonic() - t1:.0f} sn",
                   flush=True)
     if haber:
-        ha.yaz(CIKTI / "sonuc" / "haber" / "devam.json", ha.devam_toplu())
+        ha.yaz(CIKTI / "sonuc" / "haber" / "devam.json", ha.devam_toplu(a.ciftler))
     return 0
 
 

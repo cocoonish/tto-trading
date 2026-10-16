@@ -116,3 +116,81 @@ def test_ornek_gunler_ve_kuyruk_sentetik(tmp_path, monkeypatch):
             assert t["r_tek_haric"] <= t["r"] + 1e-12
         assert va["hukum"] in ("calisiyor", "zayif", "calismiyor", "olculemedi")
         assert set(va["yalniz_makas"]) == {"is", "oos", "tum"}
+
+
+def test_secim_esitligi_toleransla_izgaradaki_ilk():
+    """Ön kayıt: eşitlikte ızgaradaki ilk kombinasyon. İşlevsel kopyalar kayan nokta artığıyla (≤ 1e−14) ayrışır."""
+    a = [{"p": "yok", "is": {"sharpe": -1.1153529309034298}},
+         {"p": "sert", "is": {"sharpe": -1.4464}},
+         {"p": "kapanis", "is": {"sharpe": -1.1153529309034196}}]
+    assert kosu._sec(a)["p"] == "yok"
+    b = [{"p": "a", "is": {"sharpe": 0.5}}, {"p": "b", "is": {"sharpe": 0.5 + 1e-6}}]
+    assert kosu._sec(b)["p"] == "b"           # gerçek fark toleransın üstünde: büyük olan
+    assert kosu._sec([]) is None
+
+
+def test_imza_siniflayici_islevsel_kopya_ve_bos():
+    def isl(gi, ci, yon, r, durum=None):
+        n = len(gi)
+        return pd.DataFrame({"giris_i": gi, "cikis_i": ci, "yon": yon, "r": r,
+                             "durum": durum if durum is not None else np.zeros(n, int)})
+    s = kosu.ImzaSiniflayici()
+    a = s.sinif(isl([1, 5], [3, 9], [1, -1], [0.5, -1.0]))
+    b = s.sinif(isl([1, 5], [3, 9], [1, -1], [0.5 + 1e-13, -1.0]))      # kayan nokta artığı: kopya
+    c = s.sinif(isl([1, 5], [3, 9], [1, -1], [0.5, -0.9]))              # aynı dakikalar, farklı R: ayrı
+    d = s.sinif(isl([1], [3], [1], [0.5], durum=np.array([2])))          # hiç alınan işlem yok: boş
+    assert a == b and c != a and d is None
+
+
+def test_kuyruk_esit_en_iyi_islemler_tarih_yazmaz():
+    """En yüksek R'yi birden çok işlem paylaşıyorsa 'en iyi işlem' tarihi ve riski yazılmaz; eşit sayı ve risk aralığı
+    yazılır; hariç ortalamalar hangi eşit işlemin çıktığından bağımsız."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import ayar as ay
+    from gunluk import baglam_kur
+    from sentetik import dakika_uret
+    b = baglam_kur(dakika_uret())
+    k = kosu.Kosucu(b, ay.oku())
+    gun = k.gun_tum[:8]
+    r = np.array([2.0, -1.0, 2.0, 0.3, 2.0, -1.0, 0.1, -0.5])
+    isl = pd.DataFrame({"durum": 0, "r": r, "gun": gun, "giris_i": np.arange(8) * 10 + 5,
+                        "R_pip": [10.0, 5, 30, 8, 6, 7, 9, 4], "pnl_pip": r * 10})
+    q = kosu.kuyruk(k, isl, 0.5)["tum"]
+    assert q["en_iyi_esit"] == 3 and q["en_iyi_gun"] is None and q["en_iyi_R_pip"] is None
+    assert q["en_iyi_R_pip_alt"] == 6.0 and q["en_iyi_R_pip_ust"] == 30.0
+    assert q["r_tek_haric"] == pytest.approx(np.delete(r, 0).mean())
+    tek = isl.copy()
+    tek.loc[2, "r"] = 1.9
+    tek.loc[4, "r"] = 1.8
+    q1 = kosu.kuyruk(k, tek, 0.5)["tum"]
+    assert q1["en_iyi_esit"] == 1 and q1["en_iyi_gun"] == str(gun[0])[:10] and q1["en_iyi_R_pip"] == 10.0
+
+
+def test_yorum_duyarliligi_sentetik(tmp_path, monkeypatch):
+    """Yorum duyarlılığı (kosu.YORUM): harfin okuması ızgarayı baştan koşar. ORB'de iki okuma tanım gereği aynıdır
+    (sıfır değişen kombinasyon, aynı seçim, aynı hüküm); pivot kırılımında P satırları değişmez, değişen sayı
+    ızgaranın R1S1 yarısını aşamaz. Hüküm alanları birincil hükmün kuralıyla kurulur."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import ayar as ay
+    from gunluk import baglam_kur
+    from sentetik import dakika_uret, olaylar_uret
+    monkeypatch.setattr(kosu, "CIKTI", tmp_path)
+    olay = olaylar_uret()
+    b = baglam_kur(dakika_uret(soklar=olay["utc_sn"].to_numpy()), olay)
+    k = kosu.Kosucu(b, ay.oku())
+    s = kosu.birim_kos("sahte_orb", k)
+    y = s["yorum"]
+    assert (y["param"], y["olcum"], y["harf"]) == ("acilis", "kesis", "acilis_ici")
+    assert y["degisen"] == 0 and y["varsayilan_degisti"] is False and y["secim_ayni"] is True
+    assert y["kombinasyon"] == s["kombinasyon"]
+    assert y["varsayilan"]["oos"]["hukum"] == s["varsayilan_analiz"]["hukum"]
+    assert y["varsayilan"]["tum"]["hukum"] == s["varsayilan_analiz"]["hukum_tum"]
+    assert y["varsayilan"]["oos"]["ozet"]["beklenti_r"] == pytest.approx(s["varsayilan_analiz"]["oos"]["beklenti_r"])
+    p = kosu.birim_kos("pivot_kirilim", k)
+    yp = p["yorum"]
+    liste, _ = kosu.izgara("pivot_kirilim")
+    r1s1 = sum(1 for q in liste if q["seviye"] == "R1S1")
+    assert 0 < yp["degisen"] <= r1s1
+    for d in ("oos", "tum"):
+        assert yp["varsayilan"][d]["hukum"] in ("calisiyor", "zayif", "calismiyor", "olculemedi")
+    assert kosu.birim_kos("orb", k).get("yorum") is None

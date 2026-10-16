@@ -472,23 +472,59 @@ class ArsivOzuHatasi(RuntimeError):
     """Arşiv dosyası künyedeki özüyle (SHA-256) aynı değil: dosya indirildikten sonra değişmiş."""
 
 
-def oku_ham(dizin: Path, sembol: str, yillar: list[int] | None = None, sina: bool = True) -> pd.DataFrame:
-    """Arşivden ham (nokta cinsinden) çerçeve. Her yıl dosyası okunmadan önce künyedeki SHA-256 özüne karşı
-    sınanır (`sina`): indirildikten sonra değişen ya da künyesi olmayan bir dosya ölçüme giremez."""
-    dosyalar = sorted((dizin / sembol).glob("*.parquet"))
-    if yillar is not None:
-        dosyalar = [d for d in dosyalar if int(d.stem) in set(yillar)]
-    if not dosyalar:
+def icerik_ozu(df: pd.DataFrame) -> str:
+    """Dosya kodlamasından bağımsız içerik özü (parquet sürümü değişse de aynı kalır): sütunların ham baytları."""
+    h = hashlib.sha256()
+    for s in SUTUNLAR:
+        h.update(np.ascontiguousarray(df[s].to_numpy()).tobytes())
+    return h.hexdigest()
+
+
+def oku_ham(dizin: Path, sembol: str, yillar: list[int] | None = None, sina: bool = True,
+            gerekli: list[int] | None = None) -> pd.DataFrame:
+    """Arşivden ham (nokta cinsinden) çerçeve.
+
+    `sina` (öntanımlı): okunacak yıllar DİZİNDEN değil KÜNYEDEN kurulur ve her yıl dosyası
+      · okunmadan önce künyedeki SHA-256 özüne karşı (indirildikten sonra değişen dosya ölçüme giremez),
+      · okunduktan sonra künyedeki satır sayısına ve kodlamadan bağımsız içerik özüne karşı sınanır.
+    Künyede kaydı olan bir yılın dosyası yoksa, künyesi olmayan bir dosya varsa ya da `gerekli` yıllardan biri
+    künyede yoksa okuma DÜŞER: kaybolan bir yıl hata vermeden eksik bir örneklem olurdu."""
+    if not sina:
+        dosyalar = sorted((dizin / sembol).glob("*.parquet"))
+        if yillar is not None:
+            dosyalar = [d for d in dosyalar if int(d.stem) in set(yillar)]
+        if not dosyalar:
+            raise FileNotFoundError(f"{sembol}: arşiv yok ({dizin / sembol})")
+        return pd.concat([pq.read_table(d).to_pandas() for d in dosyalar], ignore_index=True)
+    birimler = kunye_oku(dizin).get("birimler", {})
+    kayit = {int(a.split("/")[1]): k for a, k in birimler.items()
+             if a.split("/")[0] == sembol and k.get("sha256")}
+    for d in sorted((dizin / sembol).glob("*.parquet")):
+        if int(d.stem) not in kayit:
+            raise ArsivOzuHatasi(f"{sembol}/{d.stem}: künyede öz yok")
+    for y in (gerekli or []):
+        if int(y) not in kayit:
+            raise ArsivOzuHatasi(f"{sembol}/{y}: ayarın penceresindeki yıl künyede yok")
+    hedef = sorted(kayit) if yillar is None else sorted(int(y) for y in yillar)
+    if not hedef:
         raise FileNotFoundError(f"{sembol}: arşiv yok ({dizin / sembol})")
-    if sina:
-        birimler = kunye_oku(dizin).get("birimler", {})
-        for d in dosyalar:
-            k = birimler.get(f"{sembol}/{d.stem}") or {}
-            if not k.get("sha256"):
-                raise ArsivOzuHatasi(f"{sembol}/{d.stem}: künyede öz yok")
-            if oz(d) != k["sha256"]:
-                raise ArsivOzuHatasi(f"{sembol}/{d.stem}: dosyanın özü künyedekiyle aynı değil")
-    return pd.concat([pq.read_table(d).to_pandas() for d in dosyalar], ignore_index=True)
+    parca = []
+    for y in hedef:
+        k = kayit.get(y)
+        d = dizin / sembol / f"{y}.parquet"
+        if k is None:
+            raise ArsivOzuHatasi(f"{sembol}/{y}: künyede öz yok")
+        if not d.exists():
+            raise ArsivOzuHatasi(f"{sembol}/{y}: künyede kayıtlı yıl dosyası yok ({d.name})")
+        if oz(d) != k["sha256"]:
+            raise ArsivOzuHatasi(f"{sembol}/{y}: dosyanın özü künyedekiyle aynı değil")
+        df = pq.read_table(d).to_pandas()
+        if "satir" in k and len(df) != int(k["satir"]):
+            raise ArsivOzuHatasi(f"{sembol}/{y}: satır sayısı künyedekiyle aynı değil ({len(df)} ↔ {k['satir']})")
+        if k.get("icerik_ozu") and icerik_ozu(df) != k["icerik_ozu"]:
+            raise ArsivOzuHatasi(f"{sembol}/{y}: içerik özü künyedekiyle aynı değil")
+        parca.append(df)
+    return pd.concat(parca, ignore_index=True)
 
 
 def fiyatla(ham: pd.DataFrame, nokta: float) -> pd.DataFrame:

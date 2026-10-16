@@ -33,6 +33,8 @@ from datetime import datetime, timezone
 import arsiv_takvim3 as a3
 import arsiv_takvim4 as a4
 
+import ozler
+
 HAM = a3.HAM
 KOK = "https://www.federalreserve.gov"
 SAYFA = KOK + "/newsevents/pressreleases.htm"
@@ -133,6 +135,7 @@ def main() -> int:
         print(f"── {p}", flush=True)
         PARCALAR[p]()
     print(f"bitti: {time.monotonic() - a3.T0:.0f} sn · {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC")
+    ozler.yaz(HAM)      # ham sayfaların SHA-256 sabitlemesi (takvim_kur okumadan önce sınar)
     return 0
 
 

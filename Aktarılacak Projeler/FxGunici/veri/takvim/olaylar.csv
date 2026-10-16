@@ -109,6 +109,7 @@ FOMC_basin,2019-09-18,14:30,America/New_York,https://www.federalreserve.gov/news
 BoE_karar,2019-09-19,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/september-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
 NFP,2019-10-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10042019.htm,referans ayı 2019-09; ambargo satırı Internet Archive kopyasından (20191115175700)
 CPI,2019-10-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10102019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20191121090643)
+FOMC_karar,2019-10-11,11:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20191011a.htm,olağanüstü toplantı
 ECB_karar,2019-10-24,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp191024~438769bd4f.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
 ECB_basin,2019-10-24,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp191024~438769bd4f.en.html,
 FOMC_karar,2019-10-30,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20191030a.htm,
@@ -145,7 +146,6 @@ FOMC_karar,2020-04-29,14:00,America/New_York,https://www.federalreserve.gov/news
 FOMC_basin,2020-04-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
 ECB_karar,2020-04-30,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200430~1eaa128265.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
 ECB_basin,2020-04-30,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200430~1eaa128265.en.html,
-BoE_karar,2020-05-07,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/may-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
 NFP,2020-05-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05082020.htm,referans ayı 2020-04; ambargo satırı Internet Archive kopyasından (20200508193548)
 CPI,2020-05-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05122020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200524001900)
 ECB_karar,2020-06-04,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200604~a307d3429c.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
@@ -161,7 +161,7 @@ ECB_karar,2020-07-16,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date
 ECB_basin,2020-07-16,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200716~fc5fbe06d9.en.html,
 FOMC_karar,2020-07-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200729a.htm,
 FOMC_basin,2020-07-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
-BoE_karar,2020-08-06,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/august-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+BoE_karar,2020-08-06,07:00,Europe/London,https://www.bankofengland.co.uk/news/2020/july/boe-statement-august-monetary-policy-report-and-financial-stability-report,saat: BoE'nin 07.07.2020 tarihli duyurusundan (kuraldaki 12:00 yerine)
 NFP,2020-08-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08072020.htm,referans ayı 2020-07; ambargo satırı Internet Archive kopyasından (20200807190658)
 CPI,2020-08-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08122020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200812235241)
 NFP,2020-09-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09042020.htm,referans ayı 2020-08; ambargo satırı Internet Archive kopyasından (20200904185150)
@@ -175,7 +175,7 @@ NFP,2020-10-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/
 CPI,2020-10-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10132020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20201017173456)
 ECB_karar,2020-10-29,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp201029~4392a355f4.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
 ECB_basin,2020-10-29,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp201029~4392a355f4.en.html,
-BoE_karar,2020-11-05,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/november-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+BoE_karar,2020-11-05,07:00,Europe/London,https://www.bankofengland.co.uk/news/2020/november/time-change-november-monetary-policy-report-and-monetary-policy-committee-decision-and-minutes,saat: BoE'nin 04.11.2020 tarihli duyurusundan (kuraldaki 12:00 yerine)
 FOMC_karar,2020-11-05,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20201105a.htm,
 FOMC_basin,2020-11-05,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
 NFP,2020-11-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11062020.htm,referans ayı 2020-10; ambargo satırı Internet Archive kopyasından (20201106133333)

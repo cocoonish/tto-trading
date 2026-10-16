@@ -59,7 +59,8 @@ def emirler(b: Baglam, sin: pd.DataFrame, tf: int, ofset: int, stop_turu: str, h
     else:
         cikis = gun_sonu
     e = mt.bos_emir(len(sin))
-    e["giris_i"] = np.where(giris < gun_sonu, giris, -1)      # gün sonundan sonra giriş yok
+    # gün sonundan sonra giriş yok; motor bunu "gun_sonu" diye sayar (−1: sonraki mum yok, "veri_yok")
+    e["giris_i"] = np.where(giris < 0, -1, np.where(giris < gun_sonu, giris, mt.GIRIS_GUN_SONU))
     e["yon"] = sin["yon"].to_numpy(np.int8)
     e["stop"] = sin["stop"].to_numpy(np.float64) if "stop" in sin else np.nan
     if "risk" in sin:
@@ -104,7 +105,8 @@ _SONUC_ALANI = ("giris_f", "cikis_f", "R", "pnl", "brut", "mae", "mfe", "hedef",
 def tek_pozisyon_uygula(isl: pd.DataFrame) -> pd.DataFrame:
     """Ayrı ayrı (tek pozisyon kuralı olmadan) koşturulmuş işlemlere, giriş dakikası sırasıyla motorun tek pozisyon
     kuralını uygular: bir pozisyon açıkken gelen emir alınmaz (durum 1). Motorla aynı serbestlik kuralı: çıkış
-    dakikanın açılışında olduysa (zaman, kapanış stop'u, boşluk) aynı dakikada yeni giriş olabilir. İşlemler
+    dakikanın açılışında olduysa (zaman, kapanış stop'u, boşluk) aynı dakikada yeni giriş olabilir — giriş dakikasının
+    kendisindeki boşluklu stop hariç. İşlemler
     birbirinden bağımsız simüle edildiği için sonuç, hepsinin tek bir motor çağrısında koşmasıyla aynıdır."""
     if len(isl) == 0:
         return isl
@@ -122,7 +124,7 @@ def tek_pozisyon_uygula(isl: pd.DataFrame) -> pd.DataFrame:
         if gi[k] < serbest:
             engel[k] = True
             continue
-        serbest = ci[k] if nd[k] in (3, 4, 5, 6) else ci[k] + 1
+        serbest = ci[k] if (nd[k] in (3, 4, 5, 6) and ci[k] > gi[k]) else ci[k] + 1
     if engel.any():
         out.loc[engel, "durum"] = 1
         for c in _SONUC_ALANI:

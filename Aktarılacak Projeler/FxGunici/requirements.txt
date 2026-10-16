@@ -1,8 +1,10 @@
 # FX gün içi stratejiler — Python 3.11 ortamı, sürümleri sabit (pip freeze).
 # Kurulum: python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
 # Doğrudan bağımlılıklar: numba, numpy, pandas, pyarrow, scipy (ölçüm) · plotly (şekiller) · pytest (sınamalar) ·
-# requests, urllib3 (arşiv indiricileri); öbürleri onların bağımlılığıdır. Kapı (dogrula.py) ve ders motoru yalnız
-# standart kütüphaneyle koşar.
+# urllib3 (arşiv indiricileri); öbürleri onların bağımlılığıdır. requests ve yalnız onun istediği certifi,
+# charset-normalizer, idna ortamda kurulu ama hiçbir betik içe aktarmaz (liste ortamın pip freeze'idir). Kapı
+# (dogrula.py) ve ders motoru yalnız standart kütüphaneyle koşar. Arşivin bulut koşusu bu dosyayı kurmaz; arşiv
+# baytlarını belirleyen pyarrow'u sürümüyle ister (arsiv_dukascopy.py başlığı) ve sürüm künyeye yazılır.
 certifi==2026.7.22
 charset-normalizer==3.5.2
 idna==3.20

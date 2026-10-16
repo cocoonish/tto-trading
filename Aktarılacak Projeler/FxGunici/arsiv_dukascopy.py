@@ -4,7 +4,8 @@
 
 Koşum (iki yol, aynı betik):
   · Bulut: `.github/workflows/arastirma-veri.yml`, betik =
-    "Aktarılacak Projeler/FxGunici/arsiv_dukascopy.py", paketler = "pyarrow".
+    "Aktarılacak Projeler/FxGunici/arsiv_dukascopy.py", paketler = "pyarrow==26.0.0" (arşivin baytlarını
+    pyarrow belirler; sürümü künyeye de yazılır).
     İş akışı yalnız bu klasörün `veri/` dizinini dala commit eder.
   · Yerel (kaynağa ağ erişimi olan makinede):  .venv/bin/python arsiv_dukascopy.py
 
@@ -45,15 +46,12 @@ import pyarrow.parquet as pq
 
 import ayar as ay
 import dukascopy as dk
+import ozler
 
 
 def icerik_ozu(df) -> str:
-    """Dosya kodlamasından bağımsız içerik özü (parquet sürümü değişse de aynı kalır)."""
-    import hashlib
-    h = hashlib.sha256()
-    for s in dk.SUTUNLAR:
-        h.update(np.ascontiguousarray(df[s].to_numpy()).tobytes())
-    return h.hexdigest()
+    """Dosya kodlamasından bağımsız içerik özü (tek tanım: dukascopy.icerik_ozu; okuyucu da onu sınar)."""
+    return dk.icerik_ozu(df)
 
 
 def saatlik_indir(a: ay.Ayar, birimler: list[tuple[str, int]], son_an: float) -> int:
@@ -75,6 +73,8 @@ def saatlik_indir(a: ay.Ayar, birimler: list[tuple[str, int]], son_an: float) ->
                 yol.parent.mkdir(parents=True, exist_ok=True)
                 yol.write_bytes(y.ham)
                 yeni += 1
+    if hedef.exists():
+        ozler.yaz(hedef)        # saatlik dosyaların SHA-256 sabitlemesi (kalite.py okumadan önce sınar)
     return yeni
 
 

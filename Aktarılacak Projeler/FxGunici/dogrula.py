@@ -17,6 +17,9 @@ depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saa
      ({{= "…" }}), ya da aşağıdaki tanım listesindedir. Elle yazılmış bir ölçüm şablona giremez.
   4. Sıra — serinin okuma sırası (adlar.DERS_SIRA) sitedeki ders grubunun sırasıyla aynıdır; ön koşullar seridedir.
   5. Ön kayıt — yayımlanan kopya kaynağın kendisidir.
+  6. Künye — ölçüm dosyasının pariteleri, nokta/pip büyüklükleri ve penceresi bugünkü ayarla aynıdır.
+  7. Ön kaydın geçmişi — ölçüm dosyasının taşıdığı geçmiş beklenen geçmiştir (onkayit_gecmis.BEKLENEN) ve ön kaydın
+     içeriğini değiştiren her kayıt ilk sonuçlardan öncedir.
 
 Dersler henüz siteye yazılmamışsa (yayın öncesi) kapı bunu söyler ve geçer; bir kısmı yazılmışsa düşer.
 """
@@ -94,6 +97,37 @@ def figur_bicimi(ad: str, h: str) -> list[str]:
     return hata
 
 
+def kunye_denetimi() -> list[str]:
+    """Ölçüm dosyasının künyesi bugünkü ayarla aynı mı (pariteler, nokta ve pip büyüklükleri, pencere). Bu soru bir
+    birim sınaması olarak zincirin İLK adımında soruluyordu ve kendini kilitliyordu: parite listesi değişince sınama
+    bir önceki koşunun ölçümünü okuyup düşüyor, ölçümü yenileyecek adım hiç koşmuyordu. Kapıda, ölçümden sonra sorulur."""
+    import ayar as ay
+    if not dy.OLCUM.exists():
+        return []
+    a = ay.oku()
+    k = json.loads(dy.OLCUM.read_text(encoding="utf-8")).get("kunye") or {}
+    hata = []
+    if k.get("ciftler") != list(a.ciftler):
+        hata.append(f"ölçümün pariteleri {k.get('ciftler')} ayarınkiyle aynı değil {list(a.ciftler)}")
+    if k.get("nokta") != {c: a.nokta[c] for c in a.ciftler} or k.get("pip") != {c: a.pip[c] for c in a.ciftler}:
+        hata.append("ölçümün nokta/pip büyüklükleri ayarınkiyle aynı değil")
+    if (k.get("baslangic"), k.get("bitis")) != (a.baslangic.isoformat(), a.bitis.isoformat()):
+        hata.append("ölçümün penceresi ayarınkiyle aynı değil")
+    return hata
+
+
+def onkayit_denetimi() -> list[str]:
+    """Ölçüm dosyasının taşıdığı ön kayıt geçmişi beklenen geçmiş mi (tek tanım: onkayit_gecmis)."""
+    import onkayit_gecmis as og
+    if not dy.OLCUM.exists():
+        return []
+    k = json.loads(dy.OLCUM.read_text(encoding="utf-8")).get("kunye") or {}
+    hata = og.denetle(k.get("onkayit_gecmisi"))
+    if k.get("onkayit_ilk_sonuc") != {"commit": og.ILK_SONUC[0], "zaman": og.ILK_SONUC[1]}:
+        hata.append("ölçüm dosyasının ilk sonuç kaydı beklenenle aynı değil")
+    return hata
+
+
 def sira_denetimi() -> list[str]:
     hata = []
     if not GRUP_TS.exists():
@@ -121,6 +155,8 @@ def main() -> int:
     var = [s for s in adlar.DERS_SIRA if (dy.ICERIK / f"{s}.mdx").exists()]
     hata += sayi_envanteri()
     hata += sira_denetimi()
+    hata += kunye_denetimi()
+    hata += onkayit_denetimi()
     if not var:
         if hata:
             print("✗ FX gün içi: " + "\n  ".join(hata))

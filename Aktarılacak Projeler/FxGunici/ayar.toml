@@ -1,9 +1,13 @@
 # FX gün içi stratejiler — proje ayarı.
 #
 # Bütün betikler bu dosyayı `ayar.py` üzerinden okur; sayı ya da liste
-# betiklere ELLE yazılmaz. Bir pariteyi eklemek/çıkarmak, örneklem sınırını ya
-# da maliyet ızgarasını değiştirmek için yalnız burası değişir ve tek komut
-# (`python3 hepsi.py`) her şeyi yeniden üretir.
+# betiklere ELLE yazılmaz. Örneklem sınırını ya da maliyet ızgarasını
+# değiştirmek için yalnız burası değişir ve tek komut (`python3 hepsi.py`)
+# ölçümü, figürleri ve dersleri yeniden üretir. Parite listesi de buradan
+# okunur (kod parite adı taşımaz), ama ders şablonları bazı iddialarını
+# paritelere ADIYLA bağlar (ör. "AUD/USD'de …"): parite eklemek ya da çıkarmak
+# o iddiaları düşürür ve şablonların da elden geçmesini ister. Ayardan çıkarılan
+# paritenin önceki koşudan kalan dosyaları ölçüme girmez.
 
 [veri]
 # Dukascopy sembol adları. Öncelik sırası: ilk parite dersin ana örneğidir.

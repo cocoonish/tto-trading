@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Bütün zincir tek komutla: sınamalar → veri denetimi → takvim → koşu → ölçüm → şekiller (ev stiliyle) → ders
-metinleri → kapı.
+"""Bütün zincir tek komutla: sınamalar → takvim → takvimin fiyat sınaması → veri denetimi → koşu → ölçüm →
+şekiller (ev stiliyle) → ders metinleri → kapı.
 
 Fiyat arşivi ve takvimin ham sayfaları bulutta indirilir (arastirma-veri.yml) ve depoda durur; bu betik ağa çıkmaz.
-Arşivin her yıl dosyası okunurken künyedeki özüne karşı sınanır (dukascopy.oku_ham), yani zincir değişmiş bir
-dosyayla koşamaz. Adımlardan biri düşerse sonrakiler koşmaz: yarısı yeni yarısı eski bir seri yazılmaz.
+Arşivin yıllık dakika dosyaları, kalite denetiminin saatlik çapraz sınama dosyaları ve takvimin ham sayfaları okunurken
+künyelerindeki SHA-256 özlerine karşı sınanır (dukascopy.oku_ham, kalite.saatlik_oz, takvim_kur), yani zincir
+değişmiş bir girdi dosyasıyla koşamaz. Takvim veri denetiminden ÖNCE kurulur: veri denetiminin haber makası ölçüsü
+takvimi okur ve eski bir takvimle ölçmemelidir.
+
+Adımlardan biri düşerse SONRAKİ adımlar koşmaz; ama önceki adımların yazdığı dosyalar diskte kalır (ör. ders metinleri
+adımı düşerse yeni ölçüm ve yeni figürler eski derslerle birlikte durur). Bu yarım hâli kapı (dogrula.py) yakalar ve
+düşer: kapıdan geçmeyen bir çalışma ağacı commit edilmez.
+
+Ön koşul: ön kaydın git geçmişini baştan sona taşıyan bir klon. Ön kaydın geçmişi (metodoloji dersindeki tablo)
+depodan okunur; git'siz bir kopyada ya da sınırı ön kaydın ilk commit'ini kesen sığ bir klonda (git clone --depth 1,
+actions/checkout öntanımlısı) zincir ilk adımda adıyla düşer — geçmiş uydurulmaz. Öyle bir klonda: git fetch
+--deepen=N ya da --unshallow.
 
 Ortam:  python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt   (sürümleri sabit)
 Koşum:  .venv/bin/python hepsi.py [--sinamasiz] [--kosusuz]
@@ -24,9 +35,9 @@ PY = sys.executable
 
 ADIMLAR = [
     ("sınamalar", [PY, "-m", "pytest", "-q", "testler"], "sinama"),
-    ("veri denetimi", [PY, "kalite.py"], None),
     ("takvim", [PY, "takvim_kur.py"], None),
     ("takvimin fiyat sınaması", [PY, "takvim_sina.py"], None),
+    ("veri denetimi", [PY, "kalite.py"], None),
     ("strateji koşusu", [PY, "kosu.py"], "kosu"),
     ("ölçüm", [PY, "ders_olcum.py"], None),
     ("şekiller", [PY, "sekil.py"], None),
@@ -35,7 +46,18 @@ ADIMLAR = [
 ]
 
 
+def git_on_kosulu() -> str | None:
+    """Ön kaydın git geçmişi baştan sona okunabiliyor mu (tek tanım: ders_olcum.gecmis_sorunu); okunamıyorsa zincir
+    hesaba girişmeden düşer."""
+    import ders_olcum
+    return ders_olcum.gecmis_sorunu()
+
+
 def main(argv: list[str]) -> int:
+    sorun = git_on_kosulu()
+    if sorun:
+        print(f"✗ ön koşul: {sorun}")
+        return 2
     atla = {"sinama"} if "--sinamasiz" in argv else set()
     if "--kosusuz" in argv:
         atla.add("kosu")

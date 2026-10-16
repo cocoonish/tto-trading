@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import pytest
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -117,3 +118,13 @@ def test_dsr_gurultu_esigi_orneklem_hatasindan():
     N, T = 100, 1500
     carpan = (1 - sg.EULER) * sg.stats.norm.ppf(1 - 1 / N) + sg.EULER * sg.stats.norm.ppf(1 - 1 / (N * math.e))
     assert abs(dar["sr0_gurultu_yillik"] - math.sqrt(1 / (T - 1)) * carpan * math.sqrt(252)) < 1e-12
+
+
+def test_tek_denemede_psr_ve_tanimsiz_esikler():
+    rng = np.random.default_rng(1)
+    g = rng.normal(0.02, 1.0, 500)
+    sr = g.mean() / g.std(ddof=1)
+    t = sg.psr_tek(sr, g)
+    eski = sg.dsr(sr, np.array([sr, sr]), g)          # eski kurulum: dsr alanı PSR'a eşitti
+    assert t["n_deneme"] == 1 and t["dsr"] == t["psr"] == pytest.approx(eski["psr"])
+    assert t["dsr_gurultu"] is None and t["sr0_gurultu_yillik"] is None and t["sr0_yillik"] == 0.0

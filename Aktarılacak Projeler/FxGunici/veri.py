@@ -48,7 +48,7 @@ class Dakika:
 
 def oku(cift: str, a: ay.Ayar | None = None) -> Dakika:
     a = a or ay.oku()
-    ham = dk.oku_ham(ay.DUKA, cift)
+    ham = dk.oku_ham(ay.DUKA, cift, gerekli=list(range(a.baslangic.year, a.bitis.year + 1)))
     bas = int(pd.Timestamp(a.baslangic, tz="UTC").timestamp())
     bit = int((pd.Timestamp(a.bitis, tz="UTC") + pd.Timedelta(days=1)).timestamp())
     ham = ham[(ham["t"] >= bas) & (ham["t"] < bit)].reset_index(drop=True)

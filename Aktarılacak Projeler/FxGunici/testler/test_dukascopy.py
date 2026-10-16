@@ -120,3 +120,31 @@ def test_okuma_arsiv_ozunu_sinar(tmp_path):
     yol.write_bytes(bytes(veri))
     with pytest.raises(dk.ArsivOzuHatasi, match="künyedekiyle aynı değil"):
         dk.oku_ham(tmp_path, "X")
+
+
+def test_okuma_eksik_yili_ve_satiri_yakalar(tmp_path):
+    """Okunacak yıllar künyeden kurulur: künyede kayıtlı ama diskte olmayan yıl, künyede olmayan ama ayarın
+    penceresindeki yıl ve satır sayısı ya da içerik özü künyeyle ayrışan dosya okumayı düşürür."""
+    import json
+    bid = ornek_gun(300, tohum=6)
+    ask = [(s, o + 2, h + 2, l + 2, c + 2, v) for (s, o, h, l, c, v) in bid]
+    cer = dk.gun_cerceve(date(2024, 1, 4), dk.coz(bi5(bid)), dk.coz(bi5(ask)))
+    yol = tmp_path / "X" / "2024.parquet"
+    oz = dk.yaz(cer, yol)
+    (tmp_path / "kunye").mkdir()
+    kayit = {"sha256": oz, "satir": len(cer), "icerik_ozu": dk.icerik_ozu(cer)}
+    (tmp_path / "kunye" / "X_2024.json").write_text(json.dumps({"birimler": {"X/2024": kayit}}))
+    assert len(dk.oku_ham(tmp_path, "X", gerekli=[2024])) == len(cer)
+    with pytest.raises(dk.ArsivOzuHatasi, match="künyede yok"):
+        dk.oku_ham(tmp_path, "X", gerekli=[2023, 2024])
+    (tmp_path / "kunye" / "X_2025.json").write_text(json.dumps({"birimler": {"X/2025": {"sha256": "0" * 64}}}))
+    with pytest.raises(dk.ArsivOzuHatasi, match="yıl dosyası yok"):
+        dk.oku_ham(tmp_path, "X")
+    (tmp_path / "kunye" / "X_2025.json").unlink()
+    (tmp_path / "kunye" / "X_2024.json").write_text(json.dumps({"birimler": {"X/2024": {**kayit, "satir": 1}}}))
+    with pytest.raises(dk.ArsivOzuHatasi, match="satır sayısı"):
+        dk.oku_ham(tmp_path, "X")
+    (tmp_path / "kunye" / "X_2024.json").write_text(json.dumps({"birimler": {"X/2024": {**kayit,
+                                                                                            "icerik_ozu": "0" * 64}}}))
+    with pytest.raises(dk.ArsivOzuHatasi, match="içerik özü"):
+        dk.oku_ham(tmp_path, "X")

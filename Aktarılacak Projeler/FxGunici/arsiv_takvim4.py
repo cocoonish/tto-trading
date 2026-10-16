@@ -33,6 +33,8 @@ from datetime import datetime, timezone
 
 import arsiv_takvim3 as a3
 
+import ozler
+
 HAM = a3.HAM
 ALAN = ("title", "time", "month", "days", "type", "description", "location")
 
@@ -177,6 +179,7 @@ def main() -> int:
         print(f"── {p}", flush=True)
         PARCALAR[p]()
     print(f"bitti: {time.monotonic() - a3.T0:.0f} sn · {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC")
+    ozler.yaz(HAM)      # ham sayfaların SHA-256 sabitlemesi (takvim_kur okumadan önce sınar)
     return 0
 
 

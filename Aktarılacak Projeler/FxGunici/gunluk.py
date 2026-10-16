@@ -10,8 +10,9 @@ Bu tablo, her gün için:
     hafta içine düşen 25 Aralık ve 1 Ocak, ve örneklemin iki ucunda tam kapsanmayan
     gün — günün sonundaki veri kapsamından değil, çünkü günün ortasındaki bir karar
     anında günün kapsamı henüz bilinmez);
-  · ÖNCEKİ günlerden bilinenler: ATR(14, Wilder), ATR'nin son 252 gündeki
-    yüzdeliği, önceki günün aralığı ve yönü, NR4/NR7, önceki gün H/L/C;
+  · ÖNCEKİ İŞLEM günlerinden bilinenler (zincir tatili atlar; `onceki_zincir`):
+    ATR(14, Wilder), ATR'nin son 252 işlem günündeki yüzdeliği, önceki işlem
+    gününün aralığı ve yönü, NR4/NR7, önceki işlem günü H/L/C/O;
   · gün içinden, ilgili anda bilinenler: Asya aralığı (Londra 00:00 → 07:00 /
     08:00), Londra açılışı fiyatı ve gece hareketi.
 Her alan "o anda bilinebilir mi" kuralına göre kurulur; ATR ve yüzdelik bugünü
@@ -100,6 +101,57 @@ class Gunluk:
 TATIL_TAKVIM = ((12, 25), (1, 1))
 
 
+def onceki_zincir(h: np.ndarray, l: np.ndarray, c: np.ndarray, o: np.ndarray, tatil: np.ndarray):
+    """"Önceki FX işlem günü"nden bilinenler; zincir TATİL GÜNLERİNİ ATLAR.
+
+    Ön kayıt "önceki FX işlem günü"nden (PDH/PDL, pivot, başarısız PDH/PDL) ve "önceki 14 FX işlem gününün
+    ATR'si"nden söz eder; tatil (takvimden, K8) işlem günü değildir. Tatil satırı tablodan çıkmaz (o gün işlem
+    açılmaz, işaretlenir), ama ertesi günün önceki günü tatilin ince kotasyonu değil, tatilden önceki son işlem
+    günüdür. Bir gün için her değer o günden ÖNCEKİ tatil olmayan günlerden kurulur, yani bugünü hiç içermez:
+      onceki_h/l/c/o  tatil olmayan son günün H/L/C/O'su
+      atr             tatil olmayan günlerin gerçek aralığından (bir önceki tatil olmayan günün kapanışıyla) Wilder
+                      ATR(14); tatil olmayan son güne kadar
+      atr_yuzdelik    o ATR'nin, tatil olmayan son 252 günün aynı ölçüsü içindeki yüzdeliği (en az 60 gün)
+      nr4 / nr7       tatil olmayan son gün, tatil olmayan son 4 / 7 günün en dar aralıklısı mı
+    Tatil takvimden önceden bilindiği için zincir ileriye bakmaz."""
+    n = len(h)
+    idx = np.flatnonzero(~np.asarray(tatil, dtype=bool))
+    # p[k]: k'den önceki tatil olmayan son satırın idx içindeki sırası (yoksa −1)
+    p = np.searchsorted(idx, np.arange(n), side="left") - 1
+    var = p >= 0
+    son = np.where(var, idx[np.clip(p, 0, None)], 0)
+    def onc(x):
+        return np.where(var, x[son], np.nan)
+    hs, ls, cs = h[idx], l[idx], c[idx]
+    tr = np.empty(len(idx))
+    if len(idx):
+        tr[0] = hs[0] - ls[0]
+        tr[1:] = np.maximum.reduce([hs[1:] - ls[1:], np.abs(hs[1:] - cs[:-1]), np.abs(ls[1:] - cs[:-1])])
+    atr_alt = _wilder(tr, 14)                        # alt dizide: o günün kendisi dahil
+    atr = np.where(var, atr_alt[np.clip(p, 0, None)] if len(idx) else np.nan, np.nan)
+    # Yüzdelik: tatil olmayan günlerin "o günün başındaki ATR"si (atr_alt bir kaydırılmış) dizisinde.
+    bas = np.concatenate([[np.nan], atr_alt[:-1]]) if len(idx) else np.array([])
+    atr_y = np.full(n, np.nan)
+    for k in range(n):
+        if not var[k] or np.isnan(atr[k]):
+            continue
+        q = p[k] + 1                                  # bu günün ATR'si alt dizide q'ncu günün başındakidir
+        g = bas[max(0, q - 252):q]
+        g = g[~np.isnan(g)]
+        if len(g) >= 60:
+            atr_y[k] = (g < atr[k]).mean()
+    aralik = hs - ls
+    def nr(m):
+        out = np.zeros(n, dtype=bool)
+        for k in range(n):
+            q = p[k]
+            if q + 1 >= m:
+                pen = aralik[q + 1 - m:q + 1]
+                out[k] = aralik[q] <= pen.min() + 1e-9
+        return out
+    return onc(h), onc(l), onc(c), onc(o), atr, atr_y, nr(4), nr(7)
+
+
 def gunluk_kur(d: Dakika, orneklem: tuple | None = None) -> Gunluk:
     """`orneklem`: (başlangıç, bitiş) UTC takvim günleri (iki uç dahil); bu pencerenin içinde baştan sona
     kapsanmayan işlem günü (ilk günün 17:00 ET başı pencereden önce, son günün sonu pencereden sonra) tatil
@@ -131,21 +183,7 @@ def gunluk_kur(d: Dakika, orneklem: tuple | None = None) -> Gunluk:
         bit_sn = int(pd.Timestamp(bit, tz="UTC").timestamp()) + 86400      # bitiş günü dahil
         gun_sonu_sn = yerel_an_sn(gun, "17:00", z.NEWYORK)
         tatil |= (gun_basi < bas_sn) | (gun_sonu_sn > bit_sn)
-    # ATR: tatil günleri de kotasyon taşıyorsa hesaba girer; değer bugünü içermez (bir kaydırma).
-    tr = np.empty(len(gun))
-    tr[0] = h[0] - l[0]
-    tr[1:] = np.maximum.reduce([h[1:] - l[1:], np.abs(h[1:] - c[:-1]), np.abs(l[1:] - c[:-1])])
-    atr_bugun = _wilder(tr, 14)
-    atr = np.concatenate([[np.nan], atr_bugun[:-1]])
-    atr_y = _yuzdelik_izleyen(atr)
-    onc = lambda x: np.concatenate([[np.nan], x[:-1]])  # noqa: E731
-    aralik = h - l
-    def nr(n):
-        out = np.zeros(len(gun), dtype=bool)
-        for i in range(n, len(gun)):
-            pen = aralik[i - n:i]
-            out[i] = aralik[i - 1] <= pen.min() + 1e-9
-        return out
+    onc_h, onc_l, onc_c, onc_o, atr, atr_y, nr4, nr7 = onceki_zincir(h, l, c, o, tatil)
     # Ay sonu = ayın SON LONDRA İŞ GÜNÜ (ön kayıt [fiks]): hafta içi ve İngiltere resmî tatili değil.
     # Ayın son hafta içi günü bir Londra tatiline düşerse (2018-03 ve 2024-03 Paskalya cuması,
     # 2020-08 ve 2026-08 ağustos tatili, 2021-05 mayıs tatili) ay sonu bir önceki iş günüdür.
@@ -155,7 +193,7 @@ def gunluk_kur(d: Dakika, orneklem: tuple | None = None) -> Gunluk:
     dst_hafta = np.array([z.dst_gecis_haftasi(t.date()) for t in tarihler])
     sinir_i = np.searchsorted(d.t, an["ny_1655"], side="left")
     g = Gunluk(gun, i0, i1, o, h, l, c, kapsam, tatil, an, atr, atr_y,
-               onc(h), onc(l), onc(c), onc(o), nr(4), nr(7), ay_sonu, dst_rejim, dst_hafta, hg,
+               onc_h, onc_l, onc_c, onc_o, nr4, nr7, ay_sonu, dst_rejim, dst_hafta, hg,
                gun_basi, sinir_i)
     for son in ("07:00", "08:00"):
         a = np.searchsorted(d.t, an["lon_0000"], side="left")

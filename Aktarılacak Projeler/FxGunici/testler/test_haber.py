@@ -87,8 +87,12 @@ def test_devam_toplu_olayi_bir_gozlem_sayar(tmp_path, monkeypatch):
                           "gun_atr_pip": 80.0, "brut_pip": 10.0, "kirilim_pip": 9.0, "fade_pip": -11.0,
                           "oos": False})
     (tmp_path / "haber" / "devam").mkdir(parents=True)
-    pd.DataFrame(satir).to_parquet(tmp_path / "haber" / "devam" / "x.parquet")
-    t = ha.devam_toplu()
+    df = pd.DataFrame(satir)
+    for cift, g in df.groupby("cift"):
+        g.to_parquet(tmp_path / "haber" / "devam" / f"{cift}.parquet")
+    # ayardan çıkarılmış bir paritenin önceki koşudan kalan dosyası tabloya girmemeli
+    df.assign(cift="AUDUSD").to_parquet(tmp_path / "haber" / "devam" / "AUDUSD.parquet")
+    t = ha.devam_toplu(["EURUSD", "GBPUSD"])
     olay = [h for h in t["hucre"] if h["boyut"] == "olay" and h["ufuk"] == 60]
     assert olay and olay[0]["n_olay"] == 25, "aynı olayın iki paritedeki ölçümü iki gözlem sayıldı"
     cift = [h for h in t["hucre"] if h["boyut"] == "cift" and h["ufuk"] == 60]

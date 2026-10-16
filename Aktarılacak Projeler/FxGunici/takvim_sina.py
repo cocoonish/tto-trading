@@ -8,7 +8,8 @@ oranı). Aynı oran bir saat önce ve sonra (yaz saati hatası) ve yarım saat �
 değişimi) da hesaplanır. Parite başına üç hâl:
   · doğrulandı — resmi saatte oran ≥ ESIK
   · çelişki    — bir aday saatte oran ≥ ESIK ve resmi saatin oranının en az iki katı (aday daha iyi oturuyor)
-  · sessiz     — ikisi de değil: piyasa o dakikada kımıldamadı
+  · sessiz     — ikisi de değil: resmî dakikada ve ±1 saatlik adaylarda sıçrama yok (piyasanın günün başka bir
+                 saatinde kımıldamış olabileceğini bu ölçü söylemez; aşağıdaki uzak tarama söyler)
 Olay hükmü değerlendirilebilen paritelerden: çoğunlukta çelişki → "çelişki"; değilse en az bir parite
 doğruladıysa "doğrulandı"; değilse "sessiz". HİÇBİR olay fiyat yüzünden dışarıda kalmaz (`takvim.celiskiler`
 yalnız raporlar): resmi belge birincil kaynaktır, beklenen bir karar fiyatı oynatmayabilir ve tepkisiz ya da
@@ -20,6 +21,12 @@ toplantısının içine düşüyor.
 ESİK ölçüldü (16.10.2026, EUR/USD): olay dışı günlerde aynı saatte (aynı haftanın günü, rastgele 136 gün)
 ECB'nin 14:15 CET'inde oran ≥ 3 olan gün %1,5; ABD saatlerinde (08:30 ve 14:00 ET) olay dışı günlerde de
 başka yayımlar olduğu için oran yüksek çıkabiliyor — o yüzden ölçü çürütmek için kullanılır, seçmek için değil.
+
+UZAK TARAMA (16.10.2026, inceleme): ±1 saatlik adaylar beş saatlik bir kaymayı yapısal olarak göremez (2020'nin üç
+BoE Para Politikası Raporu günü, saat kuraldan 12:00 yazılmışken fiyat 07:00'yi gösteriyordu). Bu yüzden ±6 saatlik
+yarım saatlik bir tarama da yapılır ve resmî saatin oranını açıkça aşan uzak saat (≥ ESIK ve resmî oranın en az iki
+katı) adıyla RAPORLANIR. Kural değildir, hüküm değişmez: aynı tarama denetimde on iki adayın onunda aynı günün başka
+bir resmî yayımını buldu; o yüzden takvimin o saatteki öbür olayları yanına yazılır.
 
 Basın toplantıları bu sınamaya girmez: başlangıçlarında tek dakikalık bir sıçrama yoktur (konuşma yavaş
 yayılır) ve karar dakikasının oynaklığı pencereyi doldurur. Onlar için yalnız bilgi verilir: toplantının ilk
@@ -61,6 +68,20 @@ def oran(d: vr.Dakika, t0: int) -> float:
 
 
 ADAY_DK = (-60, -30, 30, 60)
+#: Uzak tarama: ±6 saat, yarım saat adımla (yakın adaylar ve resmî dakika hariç). Yalnız rapor.
+UZAK_DK = tuple(k for k in range(-360, 361, 30) if k != 0 and k not in ADAY_DK)
+
+
+def uzak_tarama(d: vr.Dakika, t0: int, r0: float) -> dict | None:
+    """±6 saatlik taramanın en büyük oranı, resmî saatin oranını açıkça aşıyorsa (≥ ESIK ve ≥ 2 kat); değilse None."""
+    en = None
+    for k in UZAK_DK:
+        v = oran(d, t0 + k * 60)
+        if np.isfinite(v) and (en is None or v > en[1]):
+            en = (k, v)
+    if en and en[1] >= ESIK and (not np.isfinite(r0) or en[1] >= 2 * r0):
+        return {"dk": int(en[0]), "oran": round(float(en[1]), 2)}
+    return None
 
 
 def parite_hukmu(d: vr.Dakika, t0: int) -> dict:
@@ -76,8 +97,12 @@ def parite_hukmu(d: vr.Dakika, t0: int) -> dict:
         durum = "celiski"
     else:
         durum = "sessiz"
-    return {"durum": durum, "oran": round(r0, 2), "aday": aday,
-            "en_iyi_aday_dk": int(en_iyi[0]) if en_iyi[0] is not None else None}
+    out = {"durum": durum, "oran": round(r0, 2), "aday": aday,
+           "en_iyi_aday_dk": int(en_iyi[0]) if en_iyi[0] is not None else None}
+    u = uzak_tarama(d, t0, r0)
+    if u:
+        out["uzak"] = u
+    return out
 
 
 def basin_bilgisi(d: vr.Dakika, t0: int) -> dict | None:
@@ -129,19 +154,37 @@ def main() -> int:
     for k in satir:
         oz = ozet.setdefault(k["olay"], {})
         oz[k["hukum"]] = oz.get(k["hukum"], 0) + 1
+    # Uzak tarama raporu: paritelerin en az yarısında resmî saati açıkça aşan uzak saat; o saatteki öbür olaylar adıyla.
+    zaman = olay[["olay", "tarih", "utc_sn"]].to_numpy()
+    uzak = []
+    for k, (_, o) in zip(satir, olay.iterrows()):
+        par = {c: v["uzak"] for c, v in k["parite"].items() if isinstance(v, dict) and v.get("uzak")}
+        degerli = [c for c, v in k["parite"].items() if isinstance(v, dict) and v.get("durum") in
+                   ("dogrulandi", "celiski", "sessiz")]
+        if not par or len(par) * 2 < len(degerli):
+            continue
+        dk = sorted({v["dk"] for v in par.values()})
+        t0 = int(o["utc_sn"])
+        baska = sorted({f"{x[0]} {x[1]}" for d_ in dk for x in zaman
+                        if abs(int(x[2]) - (t0 + d_ * 60)) <= 180 and not (x[0] == o["olay"] and x[1] == o["tarih"])})
+        uzak.append({"olay": k["olay"], "tarih": k["tarih"], "yerel_saat": k["yerel_saat"], "bolge": k["bolge"],
+                     "parite": par, "dk": dk, "baska_olay": baska})
     celiski = [f"{k['olay']} {k['tarih']} {k['yerel_saat']} {k['bolge']}: "
                 + ", ".join(f"{c} oran {v.get('oran')} · en iyi aday {v.get('en_iyi_aday_dk')} dk "
                             f"({(v.get('aday') or {}).get(str(v.get('en_iyi_aday_dk')))})"
                             for c, v in k["parite"].items() if v.get("durum") == "celiski")
                 for k in satir if k["hukum"] == "celiski"]
     CIKTI.write_text(json.dumps({"kural": {"esik": ESIK, "aday_dk": list(ADAY_DK), "taban_dk": [-30, -3],
-                                          "olay_dk": [0, 2]},
-                                 "ozet": ozet, "celiski": celiski, "olay": satir},
+                                          "olay_dk": [0, 2], "uzak_dk": [min(UZAK_DK), max(UZAK_DK), 30]},
+                                 "ozet": ozet, "celiski": celiski, "uzak": uzak, "olay": satir},
                                 ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     for o, v in ozet.items():
         print(f"{o:12s} {v}")
     for s in celiski:
         print("  çelişki:", s)
+    for u in uzak:
+        print(f"  uzak saat (rapor): {u['olay']} {u['tarih']} {u['yerel_saat']} → {u['dk']} dk"
+              + (f" · o saatte: {', '.join(u['baska_olay'])}" if u["baska_olay"] else ""))
     return 0
 
 

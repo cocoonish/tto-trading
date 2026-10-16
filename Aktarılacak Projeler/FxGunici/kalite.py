@@ -5,7 +5,8 @@
 Neyi ölçer, neyi ölçmez:
   1. KAPSAM — her FX işlem gününün (önceki gün 17:00 ET → bugün 17:00 ET, 1440
      dakika) kaç dakikasında kotasyon var; eksik dakikaların ARDIŞIK koşuları
-     (boşluk) uzunluklarına göre; işlem saatleri dışında (hafta sonu) kotasyon.
+     (boşluk) uzunluklarına göre; ızgaranın dışındaki kotasyon, ikiye ayrılarak:
+     örneklemin sağ kenarındaki kısmi gün ve gerçek hafta sonu (New York saatiyle).
   2. TATİL — kapsamı %50'nin altında kalan işlem günleri (Noel, yılbaşı vb.) ve
      %50–90 arası kısmi günler. Ders bunları adıyla dışarıda bırakır; sessizce değil.
   3. MAKAS — sıfır ve negatif makas (ask ≤ bid) sayısı; saat saat medyan ve
@@ -16,10 +17,15 @@ Neyi ölçer, neyi ölçmez:
      ("kötü kotasyon" adayı); ayrıca gövdenin dışına uzanan aşırı fitil. Aday
      sayılır ve listelenir — veri DEĞİŞTİRİLMEZ. Haberle çakışanlar ayrıca
      işaretlenir (haber takvimi kurulduktan sonra).
-  5. ÇAPRAZ SINAMA — dakika arşivinden kurulan saatlik bid mumları,
+  5. ÇAPRAZ SINAMA — dakika arşivinden kurulan saatlik bid ve ask mumları,
      Dukascopy'nin KENDİ saatlik mum dosyalarıyla alan alan karşılaştırılır
-     (Ocak ve Temmuz ayları). Çözücüde ya da dolgu dakikalarının atılmasında bir
-     kusur olsaydı burada görünürdü.
+     (saklanan Ocak ve Temmuz ayları; sınanan ve dosyası olmayan aylar adıyla
+     yazılır). Çözücüde ya da dolgu dakikalarının atılmasında bir kusur olsaydı
+     burada görünürdü. Saatlik dosyalar dizinin SHA-256 sabitlemesine karşı
+     sınanır (ozler.py).
+
+Rapor yalnız ayardaki paritelerin anahtarlarını taşır; her paritenin kaydı, haber makasını kurduğu takvimin özünü
+(olaylar.csv ve varsa ek.csv) yazar — ölçüm (ders_olcum) onu güncel takvimin özüyle kıyaslar.
 
 Koşum:  .venv/bin/python kalite.py            (bütün pariteler → veri/dukascopy/kalite.json)
         .venv/bin/python kalite.py EURUSD     (tek parite)
@@ -90,7 +96,16 @@ def kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarray) -> dict:
                 an = pd.Timestamp(int(bas_sn[i] + b[j] * 60), unit="s", tz="UTC")
                 en_uzun.append((int(Ls[j]), an))
     en_uzun.sort(key=lambda x: -x[0])
-    disari = int((~np.isin(t, izgara.ravel())).sum())
+    # Izgaranın (pencerenin hafta içi FX günleri) dışındaki kotasyonlar: örneklemin sağ kenarındaki, ızgarada olmayan
+    # kısmi günün dakikaları ile gerçek hafta sonu kotasyonu (New York saatiyle cuma 17:00 → pazar 17:00) ayrı sayılır.
+    disari_m = ~np.isin(t, izgara.ravel())
+    disari = int(disari_m.sum())
+    son_an = int(bas_sn[-1] + 1440 * 60)
+    sag_kenar = int((disari_m & (t >= son_an)).sum())
+    ny = pd.to_datetime(t, unit="s", utc=True).tz_convert(z.NEWYORK)
+    hg = ny.dayofweek.to_numpy()
+    sa = (ny.hour * 60 + ny.minute).to_numpy()
+    hafta_sonu = int(((hg == 5) | ((hg == 4) & (sa >= 17 * 60)) | ((hg == 6) & (sa < 17 * 60))).sum())
     tatil = [(gunler[i].date().isoformat(), round(float(gun_kapsam[i]) * 100, 1))
              for i in np.flatnonzero(gun_kapsam < 0.5)]
     kismi = [(gunler[i].date().isoformat(), round(float(gun_kapsam[i]) * 100, 1))
@@ -109,7 +124,9 @@ def kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarray) -> dict:
                                "tsi": z.tsi([an])[0].strftime("%H:%M")} for L, an in en_uzun[:10]],
         "tatil_gunleri": tatil,
         "kismi_gunler": kismi,
-        "islem_saati_disi_dakika": disari,
+        "izgara_disi_dakika": disari,
+        "sag_kenar_dakika": sag_kenar,
+        "hafta_sonu_dakika": hafta_sonu,
     }
 
 
@@ -178,26 +195,45 @@ def sicrama(f: pd.DataFrame, pip: float) -> dict:
 HABER_DK = list(range(-5, 16))
 
 
+def _yerel(t_sn: np.ndarray, bolge: str) -> tuple[np.ndarray, np.ndarray]:
+    """UTC saniyelerin bir bölgedeki yerel günün dakikası ve haftanın günü (0 = pazartesi)."""
+    ix = pd.to_datetime(np.asarray(t_sn, dtype=np.int64), unit="s", utc=True).tz_convert(bolge)
+    return (ix.hour * 60 + ix.minute).to_numpy(np.int64), ix.dayofweek.to_numpy()
+
+
 def haber_makasi(f: pd.DataFrame, pip: float, olaylar: pd.DataFrame) -> dict:
     """Haber dakikalarında makas: olay anına göre −5 … +15 dakika, her dakikanın medyan kapanış makası (pip).
 
-    Kıyas: aynı UTC dakikasında, bu paritenin takviminde HİÇBİR olay olmayan hafta içi günlerin medyan makası — gün
-    içi makas profili saate bağlı olduğu için kıyas aynı saatten kurulur. Oran = haber / kıyas. Dakikası
-    arşivde olmayan gözlem atlanır (sayı yazılır). Ölçü makastır; kayma ve derinlik ölçülmez."""
+    Kıyas: olayın KENDİ bölgesindeki aynı YEREL dakikada (08:30 ET'deki bir olay için 08:29 ET, yaz ve kış), bu
+    paritenin takvimindeki olayların olmadığı hafta içi günlerin medyan makası. Gün içi makas profili yerel saate bağlı
+    olduğu için kıyas aynı yerel saatten kurulur; aynı UTC dakikası yaz ve kış günlerinde iki ayrı yerel saate düşerdi.
+    Kıyas günleri "olaysız" değildir: takvimde olmayan başka veriler (ör. 08:30 ET'deki öbür ABD verileri) o günlerde
+    de çıkabilir. Oran = haber / kıyas. Dakikası arşivde olmayan gözlem atlanır (sayı yazılır). Ölçü makastır; kayma
+    ve derinlik ölçülmez."""
     if olaylar is None or len(olaylar) == 0:
         return {}
     # Çözünürlükten bağımsız saniye (pandas 3 dizini saniye ya da nanosaniye çözünürlükte kurabilir).
     t = pd.DatetimeIndex(f.index).as_unit("s").asi8
     sc = f["spr_c"].to_numpy() / pip
     gun = pd.DatetimeIndex(f.index).normalize().as_unit("s").asi8
-    dakika = (t - gun) // 60
-    hafta_ici = pd.DatetimeIndex(f.index).dayofweek.to_numpy() < 5
     olay_gunu = set(pd.DatetimeIndex(pd.to_datetime(olaylar["utc_sn"].to_numpy(np.int64), unit="s", utc=True))
                     .normalize().as_unit("s").asi8)
-    kiyas_maske = hafta_ici & ~np.isin(gun, list(olay_gunu))
-    kiyas_seri = pd.Series(sc[kiyas_maske], index=dakika[kiyas_maske]).groupby(level=0).median()
+    olaysiz = ~np.isin(gun, list(olay_gunu))
+    kiyas_bolge: dict[str, pd.Series] = {}
+
+    def kiyas_seri(bolge: str) -> pd.Series:
+        if bolge not in kiyas_bolge:
+            dk, hg = _yerel(t, bolge)
+            m = olaysiz & (hg < 5)
+            kiyas_bolge[bolge] = pd.Series(sc[m], index=dk[m]).groupby(level=0).median()
+        return kiyas_bolge[bolge]
+
     out = {}
     for olay, g in olaylar.groupby("olay"):
+        bolgeler = sorted(set(g["bolge"]))
+        if len(bolgeler) != 1:
+            raise SystemExit(f"haber makası: {olay} olayının birden çok bölgesi var: {bolgeler}")
+        ks = kiyas_seri(bolgeler[0])
         satir, kiyas, n_gozlem = [], [], []
         for k in HABER_DK:
             hedef = g["utc_sn"].to_numpy(np.int64) + 60 * k
@@ -206,13 +242,13 @@ def haber_makasi(f: pd.DataFrame, pip: float, olaylar: pd.DataFrame) -> dict:
             deger = sc[j[ok]]
             satir.append(round(float(np.median(deger)), 3) if ok.any() else None)
             n_gozlem.append(int(ok.sum()))
-            dk_gun = ((hedef - (hedef // 86400) * 86400) // 60)[ok]
-            kv = kiyas_seri.reindex(dk_gun).dropna().to_numpy()
+            dk_yerel = _yerel(hedef[ok], bolgeler[0])[0] if ok.any() else np.empty(0, np.int64)
+            kv = ks.reindex(dk_yerel).dropna().to_numpy()
             kiyas.append(round(float(np.median(kv)), 3) if len(kv) else None)
         oran = [round(h / c, 2) if h is not None and c else None for h, c in zip(satir, kiyas)]
         z = max((i for i in range(len(oran)) if oran[i] is not None), key=lambda i: oran[i], default=None)
-        out[str(olay)] = {"n_olay": int(len(g)), "dk": HABER_DK, "medyan_pip": satir, "kiyas_pip": kiyas,
-                          "oran": oran, "gozlem": n_gozlem,
+        out[str(olay)] = {"n_olay": int(len(g)), "bolge": bolgeler[0], "dk": HABER_DK, "medyan_pip": satir,
+                          "kiyas_pip": kiyas, "oran": oran, "gozlem": n_gozlem,
                           "zirve": ({"dk": HABER_DK[z], "pip": satir[z], "kiyas_pip": kiyas[z], "oran": oran[z]}
                                     if z is not None else None)}
     return out
@@ -250,52 +286,81 @@ def damga_sinamasi(f: pd.DataFrame, pip: float) -> dict:
 
 
 def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
-    """Dakika arşivinden kurulan saatlik bid mumları ↔ Dukascopy saatlik dosyaları."""
+    """Dakika arşivinden kurulan saatlik mumlar ↔ Dukascopy'nin kendi saatlik dosyaları, BID ve ASK ayrı ayrı.
+
+    Kapsam saklanan dosyalardır: her yılın Ocak ve Temmuz ayları (arsiv_dukascopy.saatlik_indir); hangi ayların
+    sınandığı ve hangilerinin dosyası olmadığı sonuçta adıyla durur. Dosyalar okunmadan önce dizinin SHA-256
+    sabitlemesine karşı sınanır (ozler)."""
     dizin = ay.DUKA / "saatlik" / sembol
     if not dizin.exists():
         return {"durum": "saatlik dosya yok"}
     t = pd.to_datetime(f_ham["t"].to_numpy(np.int64), unit="s", utc=True)
-    b = pd.DataFrame({"o": f_ham["b_o"].to_numpy(), "h": f_ham["b_h"].to_numpy(),
-                      "l": f_ham["b_l"].to_numpy(), "c": f_ham["b_c"].to_numpy(),
-                      "v": f_ham["b_v"].to_numpy(np.float64)}, index=t)
-    saat = b.resample("1h").agg({"o": "first", "h": "max", "l": "min", "c": "last", "v": "sum"}).dropna()
-    toplam = esit = 0
-    alan_esit = {"o": 0, "h": 0, "l": 0, "c": 0}
-    hacim_fark = []
-    ornek = []
-    for yol in sorted(dizin.glob("*_BID.bi5")):
-        yil, ay_ = (int(x) for x in yol.stem.split("_")[0].split("-"))
-        k = dk.coz(yol.read_bytes(), adim_sn=3600, azami=744)
-        k = k[k["v"] > 0]
-        t0 = pd.Timestamp(year=yil, month=ay_, day=1, tz="UTC")
-        ix = t0 + pd.to_timedelta(k["s"].astype(np.int64), unit="s")
-        ref = pd.DataFrame({"o": k["o"], "h": k["h"], "l": k["l"], "c": k["c"], "v": k["v"].astype(np.float64)}, index=ix)
-        ort = ref.join(saat, how="inner", lsuffix="_ref")
-        for a in "ohlc":
-            alan_esit[a] += int((ort[f"{a}_ref"].astype(np.int64) == ort[a].astype(np.int64)).sum())
-        tam = (ort[["o_ref", "h_ref", "l_ref", "c_ref"]].astype(np.int64).to_numpy()
-               == ort[["o", "h", "l", "c"]].astype(np.int64).to_numpy()).all(axis=1)
-        toplam += len(ort)
-        esit += int(tam.sum())
-        hacim_fark.extend(((ort["v"] - ort["v_ref"]) / ort["v_ref"].where(ort["v_ref"] > 0)).dropna().tolist())
-        for an in ort.index[~tam][:2]:
-            if len(ornek) < 6:
-                r = ort.loc[an]
-                ornek.append({"utc": an.strftime("%Y-%m-%d %H:%M"),
-                              "ref": [int(r[f"{a}_ref"]) for a in "ohlc"], "arsiv": [int(r[a]) for a in "ohlc"]})
-    hf = np.abs(np.array(hacim_fark)) if hacim_fark else np.array([np.nan])
-    return {
-        "saat": toplam,
-        "tam_esit": esit,
-        "tam_esit_yuzde": round(100 * esit / toplam, 3) if toplam else None,
-        "alan_esit_yuzde": {a: round(100 * n / toplam, 3) if toplam else None for a, n in alan_esit.items()},
-        "hacim_goreli_fark_medyan": float(np.nanmedian(hf)),
-        "uyusmayan_ornekler": ornek,
-    }
+    out: dict = {"taraf": {}}
+    toplam_saat = toplam_esit = 0
+    for taraf, kok in (("BID", "b"), ("ASK", "a")):
+        if kok == "b":
+            fiyat = {x: f_ham[f"b_{x}"].to_numpy(np.int64) for x in "ohlc"}
+            v = f_ham["b_v"].to_numpy(np.float64)
+        else:
+            fiyat = {x: f_ham[f"b_{x}"].to_numpy(np.int64) + f_ham[f"d_{x}"].to_numpy(np.int64) for x in "ohlc"}
+            v = f_ham["a_v"].to_numpy(np.float64)
+        b = pd.DataFrame({**fiyat, "v": v}, index=t)
+        saat = b.resample("1h").agg({"o": "first", "h": "max", "l": "min", "c": "last", "v": "sum"}).dropna()
+        toplam = esit = 0
+        alan_esit = {"o": 0, "h": 0, "l": 0, "c": 0}
+        hacim_fark = []
+        ornek = []
+        aylar = []
+        for yol in sorted(dizin.glob(f"*_{taraf}.bi5")):
+            yil, ay_ = (int(x) for x in yol.stem.split("_")[0].split("-"))
+            k = dk.coz(yol.read_bytes(), adim_sn=3600, azami=744)
+            k = k[k["v"] > 0]
+            t0 = pd.Timestamp(year=yil, month=ay_, day=1, tz="UTC")
+            ix = t0 + pd.to_timedelta(k["s"].astype(np.int64), unit="s")
+            ref = pd.DataFrame({"o": k["o"], "h": k["h"], "l": k["l"], "c": k["c"],
+                                "v": k["v"].astype(np.float64)}, index=ix)
+            ort = ref.join(saat, how="inner", lsuffix="_ref")
+            for a_ in "ohlc":
+                alan_esit[a_] += int((ort[f"{a_}_ref"].astype(np.int64) == ort[a_].astype(np.int64)).sum())
+            tam = (ort[["o_ref", "h_ref", "l_ref", "c_ref"]].astype(np.int64).to_numpy()
+                   == ort[["o", "h", "l", "c"]].astype(np.int64).to_numpy()).all(axis=1)
+            toplam += len(ort)
+            esit += int(tam.sum())
+            aylar.append(f"{yil}-{ay_:02d}")
+            hacim_fark.extend(((ort["v"] - ort["v_ref"]) / ort["v_ref"].where(ort["v_ref"] > 0)).dropna().tolist())
+            for an in ort.index[~tam][:2]:
+                if len(ornek) < 6:
+                    r = ort.loc[an]
+                    ornek.append({"utc": an.strftime("%Y-%m-%d %H:%M"),
+                                  "ref": [int(r[f"{a_}_ref"]) for a_ in "ohlc"], "arsiv": [int(r[a_]) for a_ in "ohlc"]})
+        hf = np.abs(np.array(hacim_fark)) if hacim_fark else np.array([np.nan])
+        out["taraf"][taraf] = {
+            "saat": toplam, "tam_esit": esit,
+            "tam_esit_yuzde": round(100 * esit / toplam, 3) if toplam else None,
+            "alan_esit_yuzde": {a_: round(100 * n / toplam, 3) if toplam else None for a_, n in alan_esit.items()},
+            "hacim_goreli_fark_medyan": float(np.nanmedian(hf)),
+            "aylar": aylar, "uyusmayan_ornekler": ornek}
+        toplam_saat += toplam
+        toplam_esit += esit
+    # Kapsam: sınanan aylar ve örneklemde olup dosyası olmayan Ocak/Temmuz ayları; kotasyonlu saatlerin payı.
+    bas, bit = t.min(), t.max()
+    beklenen = [f"{y}-{m:02d}" for y in range(bas.year, bit.year + 1) for m in (1, 7)
+                if pd.Timestamp(year=y, month=m, day=28, tz="UTC") <= bit and pd.Timestamp(year=y, month=m, day=1,
+                                                                                         tz="UTC") >= bas.normalize().replace(day=1)]
+    sinanan = sorted(set(out["taraf"]["BID"]["aylar"]) & set(out["taraf"]["ASK"]["aylar"]))
+    tum_saat = int(pd.DatetimeIndex(t).floor("h").nunique())
+    out.update({
+        "saat": toplam_saat, "tam_esit": toplam_esit,
+        "tam_esit_yuzde": round(100 * toplam_esit / toplam_saat, 3) if toplam_saat else None,
+        "sinanan_aylar": sinanan, "eksik_aylar": [m for m in beklenen if m not in sinanan],
+        "kotasyonlu_saat": tum_saat,
+        "kapsam_yuzde": round(100 * out["taraf"]["BID"]["saat"] / tum_saat, 2) if tum_saat else None,
+    })
+    return out
 
 
 def denetle(sembol: str, a: ay.Ayar) -> dict:
-    ham = dk.oku_ham(ay.DUKA, sembol)
+    ham = dk.oku_ham(ay.DUKA, sembol, gerekli=list(range(a.baslangic.year, a.bitis.year + 1)))
     ham = ham[(ham["t"] >= int(pd.Timestamp(a.baslangic, tz="UTC").timestamp()))
               & (ham["t"] < int(pd.Timestamp(a.bitis + timedelta(days=1), tz="UTC").timestamp()))]
     f = dk.fiyatla(ham, a.nokta[sembol])
@@ -315,6 +380,7 @@ def denetle(sembol: str, a: ay.Ayar) -> dict:
     }
     import takvim
     sonuc["haber_makasi"] = haber_makasi(f, a.pip[sembol], takvim.olaylar_oku(sembol))
+    sonuc["takvim_ozu"] = takvim.ozler()
     return sonuc
 
 
@@ -325,15 +391,16 @@ def yazdir(sembol: str, s: dict) -> None:
           f"normal günlerde {k['normal_gun_kapsam_yuzde']}% ({k['normal_gun']} gün)")
     print(f"  boşluklar (normal günler): {k['bosluk_kovalari']}")
     print(f"  tatil (<%50): {len(k['tatil_gunleri'])} gün · kısmi (%50–90): {len(k['kismi_gunler'])} gün · "
-          f"işlem saati dışı kotasyon: {k['islem_saati_disi_dakika']:,} dk")
+          f"ızgara dışı kotasyon: {k['izgara_disi_dakika']:,} dk (sağ kenar {k['sag_kenar_dakika']:,} · "
+          f"hafta sonu {k['hafta_sonu_dakika']:,})")
     print(f"  makas: medyan {m['medyan_pip']} pip · p95 {m['p95_pip']} · p99 {m['p99_pip']} · "
           f"sıfır (kapanış) {m['sifir_kapanis']:,} · negatif {m['negatif_kapanis']:,}")
     print(f"  devir profili (17:00 ET'ye göre dk → medyan pip): {m['devir_profili_medyan_pip']}")
     print(f"  sıçrama adayı: {sc['aday']} · aşırı fitil: {sc['asiri_fitil']} · en büyükler: {sc['en_buyuk'][:3]}")
     print(f"  zaman damgası (ilk cumalar, 08:30 ET'ye göre zirve dakikası): {s['damga']}")
     if "tam_esit_yuzde" in cp:
-        print(f"  çapraz sınama (saatlik): {cp['tam_esit']}/{cp['saat']} saat birebir ({cp['tam_esit_yuzde']}%) · "
-              f"alan alan {cp['alan_esit_yuzde']}")
+        print(f"  çapraz sınama (saatlik, BID+ASK): {cp['tam_esit']}/{cp['saat']} saat birebir "
+              f"({cp['tam_esit_yuzde']}%) · sınanan {len(cp['sinanan_aylar'])} ay · eksik {cp['eksik_aylar']}")
     else:
         print(f"  çapraz sınama: {cp}")
 
@@ -359,12 +426,16 @@ def tablo(rapor: dict) -> str:
 
 
 def main(argv: list[str]) -> int:
+    import ozler
     a = ay.oku()
     hedef = argv or list(a.ciftler)
+    if (ay.DUKA / "saatlik").exists():
+        ozler.sina(ay.DUKA / "saatlik")
     rapor = {}
     yol = ay.DUKA / "kalite.json"
     if yol.exists():
-        rapor = json.loads(yol.read_text(encoding="utf-8"))
+        # Tek parite kipi öbür paritelerin kaydını korur; ayardan çıkarılan paritenin eski kaydı düşer.
+        rapor = {c: v for c, v in json.loads(yol.read_text(encoding="utf-8")).items() if c in a.ciftler}
     for c in hedef:
         rapor[c] = denetle(c, a)
         yazdir(c, rapor[c])
