@@ -1,0 +1,311 @@
+{
+ "_katalog": {
+  "adres": [],
+  "kayit": 4627,
+  "secilen": 36
+ },
+ "_koşu": {
+  "sure_sn": 39.8,
+  "zaman": "2026-10-16T12:31:20Z"
+ },
+ "https://www.federalreserve.gov/json/ne-press.json": {
+  "bayt": 999922,
+  "dosya": "www.federalreserve.gov_json_ne-press.json_7a94e4a4.html",
+  "durum": 200,
+  "kayit": 4627,
+  "kaynak": "aday (sayfa adres vermedi ya da başka adres verdi)"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases.htm": {
+  "bayt": 87372,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases.htm_04c4092b.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20160602a.htm": {
+  "baslik": "Federal Reserve Board announces schedule for results from Dodd-Frank Act stress tests and Comprehensive Capital Analysis and Review (CCAR)",
+  "bayt": 85074,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_bcreg20160602a.htm_44b3e3da.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/2/2016 4:30:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20170601a.htm": {
+  "baslik": "Federal Reserve Board announces schedule for results from Dodd-Frank Act stress tests and Comprehensive Capital Analysis and Review (CCAR)",
+  "bayt": 85253,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_bcreg20170601a.htm_a5a4368f.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/1/2017 1:30:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20180607a.htm": {
+  "baslik": "Federal Reserve Board announces schedule for results from Dodd-Frank Act stress tests and Comprehensive Capital Analysis and Review (CCAR)",
+  "bayt": 83803,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_bcreg20180607a.htm_27bc7b98.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/7/2018 4:30:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20190531a.htm": {
+  "baslik": "Federal Reserve Board announces schedule for results from Dodd-Frank Act stress tests and Comprehensive Capital Analysis and Review (CCAR)",
+  "bayt": 83847,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_bcreg20190531a.htm_e7dcc6b6.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "5/31/2019 2:30:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20210319a.htm": {
+  "baslik": "Federal Reserve Board announces that the temporary change to its supplementary leverage ratio (SLR) for bank holding companies will expire as scheduled on March 31",
+  "bayt": 84259,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_bcreg20210319a.htm_acfc25f6.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "3/19/2021 9:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/bcreg20210319b.htm": {
+  "baslik": "Temporary supplementary leverage ratio changes to expire as scheduled",
+  "bayt": 83338,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_bcreg20210319b.htm_4740b0c6.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "3/19/2021 9:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20120516b.htm": {
+  "baslik": "FOMC announces revised tentative 2012 meeting schedule and tentative 2013 meeting schedule",
+  "bayt": 83914,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20120516b.htm_fe7bf0f5.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "5/16/2012 2:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm": {
+  "baslik": "Federal Reserve announces time changes for FOMC statements and news conferences",
+  "bayt": 82741,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20130313a.htm_d54d4f49.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "3/13/2013 4:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20130405a.htm": {
+  "baslik": "Federal Open Market Committee announces tentative meeting schedule for 2014",
+  "bayt": 83297,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20130405a.htm_16aca5d4.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "4/5/2013 11:30:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20140603a.htm": {
+  "baslik": "Federal Reserve announces new schedule of margins applicable for collateral pledged by depository institutions",
+  "bayt": 83094,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20140603a.htm_dccb55f9.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/3/2014 12:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20140605b.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2015",
+  "bayt": 83191,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20140605b.htm_41fe5e1d.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/5/2014 2:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20150511a.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2016",
+  "bayt": 83156,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20150511a.htm_724b35a1.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "5/11/2015 10:30:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20160628a.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2017",
+  "bayt": 82695,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20160628a.htm_629c974c.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/28/2016 2:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20170511b.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2018",
+  "bayt": 82713,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20170511b.htm_0f7014ae.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "5/11/2017 2:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20180525a.htm": {
+  "baslik": "FOMC announces tentative meeting schedule for 2019",
+  "bayt": 82455,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20180525a.htm_7e7e1573.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "5/25/2018 12:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190517a.htm": {
+  "baslik": "Federal Open Market Committee announces tentative meeting schedule for 2020",
+  "bayt": 82547,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20190517a.htm_ed3a018e.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "5/17/2019 10:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200702a.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2021",
+  "bayt": 82558,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200702a.htm_a7bd4660.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "7/2/2020 10:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200728a.htm": {
+  "baslik": "Federal Reserve Board announces an extension through December 31 of its lending facilities that were scheduled to expire on or around September 30",
+  "bayt": 87229,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200728a.htm_657827c3.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "7/28/2020 9:30:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20201130a.htm": {
+  "baslik": "Federal Reserve Board announces extension through March 31, 2021, for several of its lending facilities that were generally scheduled to expire on or around December 31",
+  "bayt": 85308,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20201130a.htm_e672fd92.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "11/30/2020 9:15:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20210604a.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2022",
+  "bayt": 82560,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20210604a.htm_34f96334.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/4/2021 11:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220624a.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2023",
+  "bayt": 82750,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20220624a.htm_bf1a696d.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/24/2022 2:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230623a.htm": {
+  "baslik": "Federal Open Market Committee announces tentative meeting schedule for 2024",
+  "bayt": 82706,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20230623a.htm_caf254a0.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "6/23/2023 11:30:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240124a.htm": {
+  "baslik": "Federal Reserve Board announces the Bank Term Funding Program (BTFP) will cease making new loans as scheduled on March 11",
+  "bayt": 85072,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240124a.htm_e12a7e7a.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "1/24/2024 7:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240809a.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2025 and 2026",
+  "bayt": 83693,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240809a.htm_9ba743f5.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "8/9/2024 1:30:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250905a.htm": {
+  "baslik": "Federal Open Market Committee announces its tentative meeting schedule for 2027",
+  "bayt": 83092,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250905a.htm_eb7b9abd.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "9/5/2025 1:30:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20121029a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 85601,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20121029a.htm_45dbc42d.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "10/31/2012 11:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20131031a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 84567,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20131031a.htm_a09c2ce3.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "10/31/2013 3:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20141104a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 84548,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20141104a.htm_9c7869ed.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "11/4/2014 1:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20151103a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 84612,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20151103a.htm_dccc68ed.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "11/3/2015 10:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20161025a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 85455,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20161025a.htm_e6ae2902.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "10/25/2016 12:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20171113a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 84937,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20171113a.htm_dc4660ed.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "11/13/2017 12:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20181116a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 84570,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20181116a.htm_9daa114d.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "11/16/2018 3:00:00 PM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20191127a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 84628,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20191127a.htm_58d0481e.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "11/27/2019 10:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20200721a.htm": {
+  "baslik": "Federal Reserve Board to  maintain the current schedule of prices for most payment services that the Federal Reserve Banks provide to depository institutions in 2021",
+  "bayt": 84407,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20200721a.htm_ceb26dbb.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "7/21/2020 10:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20201110a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 85368,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20201110a.htm_d9b0fa8d.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "11/10/2020 10:00:00 AM"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/other20211201a.htm": {
+  "baslik": "Federal Reserve Board approves fee schedule for Federal Reserve Bank priced services",
+  "bayt": 84505,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_other20211201a.htm_f1a00013.html",
+  "durum": 200,
+  "kaynak": "katalog",
+  "tarih": "12/1/2021 3:00:00 PM"
+ }
+}
