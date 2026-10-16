@@ -1,0 +1,880 @@
+{
+ "_koşu": {
+  "sure_sn": 533.3,
+  "zaman": "2026-10-16T09:30:15Z"
+ },
+ "https://web.archive.org/cdx/search/cdx?url=bls.gov/news.release/archives/cpi_&matchType=prefix&output=json&fl=original,timestamp,statuscode,mimetype&collapse=urlkey&limit=20000": {
+  "bayt": 96695,
+  "dosya": "web.archive.org_cdx_search_cdx_url_bls.gov_news.release_archives_cpi__matchType_prefix_output_json_fl_original_timestamp_statuscode_mimetype_collapse__a4bbba48.html",
+  "durum": 200
+ },
+ "https://web.archive.org/cdx/search/cdx?url=bls.gov/news.release/archives/empsit_&matchType=prefix&output=json&fl=original,timestamp,statuscode,mimetype&collapse=urlkey&limit=20000": {
+  "bayt": 127506,
+  "dosya": "web.archive.org_cdx_search_cdx_url_bls.gov_news.release_archives_empsit__matchType_prefix_output_json_fl_original_timestamp_statuscode_mimetype_collap_5f0da690.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20180119113123id_/https://www.bls.gov/news.release/archives/cpi_01122018.htm": {
+  "bayt": 819250,
+  "dosya": "web.archive.org_web_20180119113123id__https_www.bls.gov_news.release_archives_cpi_01122018.htm_245f8d54.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20180202234915id_/https://www.bls.gov/news.release/archives/empsit_02022018.htm": {
+  "bayt": 576051,
+  "dosya": "web.archive.org_web_20180202234915id__https_www.bls.gov_news.release_archives_empsit_02022018.htm_52dd7ec3.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20190525055756id_/https://www.bls.gov/news.release/archives/empsit_01042019.htm": {
+  "bayt": 1116575,
+  "dosya": "web.archive.org_web_20190525055756id__https_www.bls.gov_news.release_archives_empsit_01042019.htm_702b7853.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20190716211917id_/https://www.bls.gov/news.release/archives/cpi_12122018.htm": {
+  "bayt": 1048576,
+  "dosya": "web.archive.org_web_20190716211917id__https_www.bls.gov_news.release_archives_cpi_12122018.htm_6faef052.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20190721191145id_/https://www.bls.gov/news.release/archives/cpi_01112019.htm": {
+  "bayt": 1048576,
+  "dosya": "web.archive.org_web_20190721191145id__https_www.bls.gov_news.release_archives_cpi_01112019.htm_7b19a95a.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20190817171621id_/https://www.bls.gov/news.release/archives/empsit_12072018.htm": {
+  "bayt": 1048576,
+  "dosya": "web.archive.org_web_20190817171621id__https_www.bls.gov_news.release_archives_empsit_12072018.htm_5f2091ef.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20200406181305id_/https://www.bls.gov/news.release/archives/cpi_12112019.htm": {
+  "bayt": 1380318,
+  "dosya": "web.archive.org_web_20200406181305id__https_www.bls.gov_news.release_archives_cpi_12112019.htm_654aaa76.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20200512020954id_/https://www.bls.gov/news.release/archives/empsit_12062019.htm": {
+  "bayt": 1064293,
+  "dosya": "web.archive.org_web_20200512020954id__https_www.bls.gov_news.release_archives_empsit_12062019.htm_23a26eab.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20200512021041id_/https://www.bls.gov/news.release/archives/empsit_01102020.htm": {
+  "bayt": 1128148,
+  "dosya": "web.archive.org_web_20200512021041id__https_www.bls.gov_news.release_archives_empsit_01102020.htm_310f2bea.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20200921075902id_/https://www.bls.gov/news.release/archives/cpi_01142020.htm": {
+  "bayt": 1048576,
+  "dosya": "web.archive.org_web_20200921075902id__https_www.bls.gov_news.release_archives_cpi_01142020.htm_701f0aad.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20201204133203id_/https://www.bls.gov/news.release/archives/empsit_12042020.htm": {
+  "bayt": 1069764,
+  "dosya": "web.archive.org_web_20201204133203id__https_www.bls.gov_news.release_archives_empsit_12042020.htm_89243ceb.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20201210135414id_/https://www.bls.gov/news.release/archives/cpi_12102020.htm": {
+  "bayt": 1373919,
+  "dosya": "web.archive.org_web_20201210135414id__https_www.bls.gov_news.release_archives_cpi_12102020.htm_678f528d.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20210108133703id_/https://www.bls.gov/news.release/archives/empsit_01082021.htm": {
+  "bayt": 1133950,
+  "dosya": "web.archive.org_web_20210108133703id__https_www.bls.gov_news.release_archives_empsit_01082021.htm_b64ea860.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20210113145151id_/https://www.bls.gov/news.release/archives/cpi_01132021.htm": {
+  "bayt": 1377997,
+  "dosya": "web.archive.org_web_20210113145151id__https_www.bls.gov_news.release_archives_cpi_01132021.htm_7f8ca3b9.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20211203133928id_/https://www.bls.gov/news.release/archives/empsit_12032021.htm": {
+  "bayt": 1067358,
+  "dosya": "web.archive.org_web_20211203133928id__https_www.bls.gov_news.release_archives_empsit_12032021.htm_a168a74e.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20211210134325id_/https://www.bls.gov/news.release/archives/cpi_12102021.htm": {
+  "bayt": 1345699,
+  "dosya": "web.archive.org_web_20211210134325id__https_www.bls.gov_news.release_archives_cpi_12102021.htm_d9bd60e9.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20220107133858id_/https://www.bls.gov/news.release/archives/empsit_01072022.htm": {
+  "bayt": 1130357,
+  "dosya": "web.archive.org_web_20220107133858id__https_www.bls.gov_news.release_archives_empsit_01072022.htm_ad5f8228.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20220112134227id_/https://www.bls.gov/news.release/archives/cpi_01122022.htm": {
+  "bayt": 1345775,
+  "dosya": "web.archive.org_web_20220112134227id__https_www.bls.gov_news.release_archives_cpi_01122022.htm_04204918.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20221202212401id_/https://www.bls.gov/news.release/archives/empsit_12022022.htm": {
+  "bayt": 1064806,
+  "dosya": "web.archive.org_web_20221202212401id__https_www.bls.gov_news.release_archives_empsit_12022022.htm_3b7d9ca3.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20221213133532id_/https://www.bls.gov/news.release/archives/cpi_12132022.htm": {
+  "bayt": 1367965,
+  "dosya": "web.archive.org_web_20221213133532id__https_www.bls.gov_news.release_archives_cpi_12132022.htm_2db1e302.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20230106133124id_/https://www.bls.gov/news.release/archives/empsit_01062023.htm": {
+  "bayt": 1128087,
+  "dosya": "web.archive.org_web_20230106133124id__https_www.bls.gov_news.release_archives_empsit_01062023.htm_6637010a.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20230112140347id_/https://www.bls.gov/news.release/archives/cpi_01122023.htm": {
+  "bayt": 1367628,
+  "dosya": "web.archive.org_web_20230112140347id__https_www.bls.gov_news.release_archives_cpi_01122023.htm_21ca112d.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20231208133405id_/https://www.bls.gov/news.release/archives/empsit_12082023.htm": {
+  "bayt": 1068928,
+  "dosya": "web.archive.org_web_20231208133405id__https_www.bls.gov_news.release_archives_empsit_12082023.htm_2fe4b7e6.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20231218071418id_/https://www.bls.gov/news.release/archives/cpi_12122023.htm": {
+  "bayt": 1366831,
+  "dosya": "web.archive.org_web_20231218071418id__https_www.bls.gov_news.release_archives_cpi_12122023.htm_6d45029e.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20240105185434id_/https://www.bls.gov/news.release/archives/empsit_01052024.htm": {
+  "bayt": 1133821,
+  "dosya": "web.archive.org_web_20240105185434id__https_www.bls.gov_news.release_archives_empsit_01052024.htm_72e4310a.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20240111162432id_/https://www.bls.gov/news.release/archives/cpi_01112024.htm": {
+  "bayt": 1342949,
+  "dosya": "web.archive.org_web_20240111162432id__https_www.bls.gov_news.release_archives_cpi_01112024.htm_f93654c8.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20241209003505id_/https://www.bls.gov/news.release/archives/empsit_12062024.htm": {
+  "bayt": 1068798,
+  "dosya": "web.archive.org_web_20241209003505id__https_www.bls.gov_news.release_archives_empsit_12062024.htm_d78f6d6e.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20241211142059id_/https://www.bls.gov/news.release/archives/cpi_12112024.htm": {
+  "bayt": 1367136,
+  "dosya": "web.archive.org_web_20241211142059id__https_www.bls.gov_news.release_archives_cpi_12112024.htm_6ef0432c.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20250110200932id_/https://www.bls.gov/news.release/archives/empsit_01102025.htm": {
+  "bayt": 1126083,
+  "dosya": "web.archive.org_web_20250110200932id__https_www.bls.gov_news.release_archives_empsit_01102025.htm_95df0d08.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20250120140851id_/https://www.bls.gov/news.release/archives/cpi_01152025.htm": {
+  "bayt": 1366681,
+  "dosya": "web.archive.org_web_20250120140851id__https_www.bls.gov_news.release_archives_cpi_01152025.htm_48ba7166.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20251216212300id_/https://www.bls.gov/news.release/archives/empsit_12162025.htm": {
+  "bayt": 1072891,
+  "dosya": "web.archive.org_web_20251216212300id__https_www.bls.gov_news.release_archives_empsit_12162025.htm_5d254fe2.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20251218160625id_/https://www.bls.gov/news.release/archives/cpi_12182025.htm": {
+  "bayt": 1362791,
+  "dosya": "web.archive.org_web_20251218160625id__https_www.bls.gov_news.release_archives_cpi_12182025.htm_cebc4052.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20260109133152id_/https://www.bls.gov/news.release/archives/empsit_01092026.htm": {
+  "bayt": 1129702,
+  "dosya": "web.archive.org_web_20260109133152id__https_www.bls.gov_news.release_archives_empsit_01092026.htm_7a11df19.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20260113134344id_/https://www.bls.gov/news.release/archives/cpi_01132026.htm": {
+  "bayt": 1378657,
+  "dosya": "web.archive.org_web_20260113134344id__https_www.bls.gov_news.release_archives_cpi_01132026.htm_729becc6.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20260911134405id_/https://www.bls.gov/news.release/archives/cpi_09112026.htm": {
+  "bayt": 1372789,
+  "dosya": "web.archive.org_web_20260911134405id__https_www.bls.gov_news.release_archives_cpi_09112026.htm_ed7a197b.html",
+  "durum": 200
+ },
+ "https://web.archive.org/web/20261002144835id_/https://www.bls.gov/news.release/archives/empsit_10022026.htm": {
+  "bayt": 1064261,
+  "dosya": "web.archive.org_web_20261002144835id__https_www.bls.gov_news.release_archives_empsit_10022026.htm_cdc93f13.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/april-2018": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/august-2018": {
+  "bayt": 77944,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_august-2018_12926f31.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/december-2018": {
+  "bayt": 79028,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_december-2018_89eb3d6f.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/february-2018": {
+  "bayt": 83184,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_february-2018_ad3b1db3.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/january-2018": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/july-2018": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/june-2018": {
+  "bayt": 79904,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_june-2018_40ab73fa.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/march-2018": {
+  "bayt": 78035,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_march-2018_ac63257f.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/may-2018": {
+  "bayt": 78685,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_may-2018_14132399.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/november-2018": {
+  "bayt": 78037,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_november-2018_7ac244a0.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/october-2018": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/september-2018": {
+  "bayt": 79120,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2018_september-2018_66cf086e.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/april-2019": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/august-2019": {
+  "bayt": 78900,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_august-2019_e6eeeec9.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/december-2019": {
+  "bayt": 74581,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_december-2019_0377d063.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/february-2019": {
+  "bayt": 78749,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_february-2019_bec578f2.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/january-2019": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/july-2019": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/june-2019": {
+  "bayt": 79165,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_june-2019_34574f13.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/march-2019": {
+  "bayt": 78429,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_march-2019_f7647be7.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/may-2019": {
+  "bayt": 79149,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_may-2019_c58503d6.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/november-2019": {
+  "bayt": 78153,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_november-2019_06d52f1f.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/october-2019": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/september-2019": {
+  "bayt": 79062,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2019_september-2019_1962bb5a.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/april-2020": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/august-2020": {
+  "bayt": 79039,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_august-2020_5abd9266.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/december-2020": {
+  "bayt": 79369,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_december-2020_bb59200e.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/february-2020": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/january-2020": {
+  "bayt": 82541,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_january-2020_23814eec.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/july-2020": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/june-2020": {
+  "bayt": 79372,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_june-2020_b8dbb129.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/march-2020": {
+  "bayt": 84276,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_march-2020_329daf38.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/may-2020": {
+  "bayt": 82089,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_may-2020_b29c7a91.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/november-2020": {
+  "bayt": 79534,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_november-2020_62089387.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/october-2020": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/september-2020": {
+  "bayt": 78531,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2020_september-2020_2eb22220.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/april-2021": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/august-2021": {
+  "bayt": 123731,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_august-2021_747feae9.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/december-2021": {
+  "bayt": 127240,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_december-2021_75e40a13.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/february-2021": {
+  "bayt": 79060,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_february-2021_2ff42e17.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/january-2021": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/july-2021": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/june-2021": {
+  "bayt": 81213,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_june-2021_c5cb7c6c.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/march-2021": {
+  "bayt": 79850,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_march-2021_16d468ef.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/may-2021": {
+  "bayt": 80644,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_may-2021_f21e03a7.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/november-2021": {
+  "bayt": 149861,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_november-2021_6a272c54.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/october-2021": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/september-2021": {
+  "bayt": 131753,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2021_september-2021_99a57e69.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/april-2022": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/august-2022": {
+  "bayt": 118663,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_august-2022_85452d5d.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/december-2022": {
+  "bayt": 117244,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_december-2022_f9c5daba.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/february-2022": {
+  "bayt": 132795,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_february-2022_9b7d7d29.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/january-2022": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/july-2022": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/june-2022": {
+  "bayt": 111360,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_june-2022_0883bd1d.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/march-2022": {
+  "bayt": 120796,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_march-2022_be5a07a9.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/may-2022": {
+  "bayt": 128771,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_may-2022_1a2ce9ee.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/november-2022": {
+  "bayt": 117441,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_november-2022_bcc28a93.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/october-2022": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/september-2022": {
+  "bayt": 115321,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2022_september-2022_05cc2550.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/april-2023": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/august-2023": {
+  "bayt": 97918,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_august-2023_d404c4f0.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/december-2023": {
+  "bayt": 107181,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_december-2023_95ff173f.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/february-2023": {
+  "bayt": 107351,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_february-2023_4dd0639a.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/january-2023": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/july-2023": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/june-2023": {
+  "bayt": 105979,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_june-2023_0eed408d.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/march-2023": {
+  "bayt": 115257,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_march-2023_9f70be3c.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/may-2023": {
+  "bayt": 97545,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_may-2023_371058b1.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/november-2023": {
+  "bayt": 96842,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_november-2023_a9e4b26d.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/october-2023": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/september-2023": {
+  "bayt": 115850,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2023_september-2023_5593df84.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/april-2024": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/august-2024": {
+  "bayt": 92946,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_august-2024_5dc39375.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/december-2024": {
+  "bayt": 103031,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_december-2024_1a284bfa.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/february-2024": {
+  "bayt": 95038,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_february-2024_3041376c.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/january-2024": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/july-2024": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/june-2024": {
+  "bayt": 109927,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_june-2024_97214677.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/march-2024": {
+  "bayt": 104988,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_march-2024_318b89c2.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/may-2024": {
+  "bayt": 94231,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_may-2024_a8623be0.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/november-2024": {
+  "bayt": 91232,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_november-2024_ee117dca.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/october-2024": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/september-2024": {
+  "bayt": 106025,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2024_september-2024_6cab46c9.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/april-2025": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/august-2025": {
+  "bayt": 92826,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_august-2025_03fa520e.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/december-2025": {
+  "bayt": 107219,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_december-2025_b83fef29.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/february-2025": {
+  "bayt": 93573,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_february-2025_e43c33f0.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/january-2025": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/july-2025": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/june-2025": {
+  "bayt": 105736,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_june-2025_bca335bc.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/march-2025": {
+  "bayt": 109083,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_march-2025_4eae191d.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025": {
+  "bayt": 95136,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_may-2025_023cbd20.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/november-2025": {
+  "bayt": 99033,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_november-2025_4d63f632.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/october-2025": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/september-2025": {
+  "bayt": 106361,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2025_september-2025_1b16aea7.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/april-2026": {
+  "bayt": 99786,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_april-2026_7bba5f1a.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/august-2026": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/december-2026": {
+  "bayt": 72941,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_december-2026_9c5d63b5.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/february-2026": {
+  "bayt": 100810,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_february-2026_922621dc.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/january-2026": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/july-2026": {
+  "bayt": 101789,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_july-2026_c23ae702.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/june-2026": {
+  "bayt": 112367,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_june-2026_e8d3dea7.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/march-2026": {
+  "bayt": 106775,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_march-2026_dc1ee6c7.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/may-2026": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/november-2026": {
+  "bayt": 72940,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_november-2026_26d30122.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/october-2026": {
+  "durum": "HTTP 404"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/september-2026": {
+  "bayt": 124671,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_2026_september-2026_5d6d3fae.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2018/html/index_include.en.html": {
+  "bayt": 32178,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2018_html_index_include.en.html_d36d8a96.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2019/html/index_include.en.html": {
+  "bayt": 34289,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2019_html_index_include.en.html_93e54e59.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2020/html/index_include.en.html": {
+  "bayt": 35680,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2020_html_index_include.en.html_3e90b00f.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2021/html/index_include.en.html": {
+  "bayt": 34871,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2021_html_index_include.en.html_78a5c34d.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2022/html/index_include.en.html": {
+  "bayt": 44253,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2022_html_index_include.en.html_263c970d.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2023/html/index_include.en.html": {
+  "bayt": 60154,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2023_html_index_include.en.html_b6370ed5.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2024/html/index_include.en.html": {
+  "bayt": 87137,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2024_html_index_include.en.html_f5070b8a.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2025/html/index_include.en.html": {
+  "bayt": 53467,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2025_html_index_include.en.html_cf680376.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2026/html/index_include.en.html": {
+  "bayt": 31286,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2026_html_index_include.en.html_7c586467.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2018/html/index_include.en.html": {
+  "bayt": 108288,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2018_html_index_include.en.html_1130af2c.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.pr190711~12eb66a46b.en.html": {
+  "bayt": 103151,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2019_html_ecb.pr190711_12eb66a46b.en.html_be3b7ed6.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2019/html/index_include.en.html": {
+  "bayt": 134422,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2019_html_index_include.en.html_3fa7a5bb.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2020/html/index_include.en.html": {
+  "bayt": 164571,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2020_html_index_include.en.html_19ed1d89.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2021/html/index_include.en.html": {
+  "bayt": 123916,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2021_html_index_include.en.html_8d49c697.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.pr220627~73acedf868.en.html": {
+  "bayt": 102379,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2022_html_ecb.pr220627_73acedf868.en.html_000be131.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2022/html/index_include.en.html": {
+  "bayt": 183834,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2022_html_index_include.en.html_233dce59.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2023/html/index_include.en.html": {
+  "bayt": 190914,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2023_html_index_include.en.html_f2ef7cfd.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2024/html/index_include.en.html": {
+  "bayt": 1044,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2024_html_index_include.en.html_8e365b91.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2025/html/index_include.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2026/html/index_include.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2018/html/index_include.en.html": {
+  "bayt": 40323,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2018_html_index_include.en.html_db19d34a.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2019/html/index_include.en.html": {
+  "bayt": 42708,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2019_html_index_include.en.html_63cd01c1.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2020/html/index_include.en.html": {
+  "bayt": 42711,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2020_html_index_include.en.html_dcc9629b.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2021/html/index_include.en.html": {
+  "bayt": 44181,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2021_html_index_include.en.html_3af6ab3b.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2022/html/index_include.en.html": {
+  "bayt": 52544,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2022_html_index_include.en.html_effee1bb.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2023/html/index_include.en.html": {
+  "bayt": 64726,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2023_html_index_include.en.html_f8e17a9d.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2024/html/index_include.en.html": {
+  "bayt": 81361,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2024_html_index_include.en.html_65141159.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2025/html/index_include.en.html": {
+  "bayt": 62909,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2025_html_index_include.en.html_4a5ef6ed.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2026/html/index_include.en.html": {
+  "bayt": 37309,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2026_html_index_include.en.html_6016a736.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2018/html/index_include.en.html": {
+  "bayt": 40323,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2018_html_index_include.en.html_7f9c333f.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2019/html/index_include.en.html": {
+  "bayt": 42708,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2019_html_index_include.en.html_660ce50a.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2020/html/index_include.en.html": {
+  "bayt": 42711,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2020_html_index_include.en.html_b23d8f69.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2021/html/index_include.en.html": {
+  "bayt": 44181,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2021_html_index_include.en.html_5e9a3e62.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2022/html/index_include.en.html": {
+  "bayt": 52544,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2022_html_index_include.en.html_f08ba920.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2023/html/index_include.en.html": {
+  "bayt": 64726,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2023_html_index_include.en.html_21d8748a.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2024/html/index_include.en.html": {
+  "bayt": 81361,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2024_html_index_include.en.html_4bdf2ac8.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2025/html/index_include.en.html": {
+  "bayt": 62909,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2025_html_index_include.en.html_53e07606.html",
+  "durum": 200
+ },
+ "https://www.ecb.europa.eu/press/pressconf/2026/html/index_include.en.html": {
+  "bayt": 37309,
+  "dosya": "www.ecb.europa.eu_press_pressconf_2026_html_index_include.en.html_c2b082ca.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomcpresconf20180321.htm": {
+  "bayt": 85030,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomcpresconf20180321.htm_1cac0077.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomcpresconf20190130.htm": {
+  "bayt": 85233,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomcpresconf20190130.htm_2f761416.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomcpresconf20200303.htm": {
+  "bayt": 84538,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomcpresconf20200303.htm_a9f51a5c.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomcpresconf20200315.htm": {
+  "bayt": 84922,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomcpresconf20200315.htm_71b67506.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomcpresconf20230322.htm": {
+  "bayt": 85030,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomcpresconf20230322.htm_dc05d320.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomcpresconf20260916.htm": {
+  "bayt": 85008,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomcpresconf20260916.htm_086fd343.html",
+  "durum": 200
+ }
+}
