@@ -1,12 +1,12 @@
 {
  "birimler": {
   "AUDUSD/2026": {
-   "bayt": 2859051,
-   "dolgu_dakika": 58924,
+   "bayt": 3020596,
+   "dolgu_dakika": 61877,
    "gun": 247,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 234,
+   "gun_dolu": 247,
    "gun_dolu_liste": [
     "2026-01-01",
     "2026-01-02",
@@ -241,33 +241,32 @@
     "2026-09-27",
     "2026-09-28",
     "2026-09-29",
-    "2026-09-30"
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-04",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-11",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15"
    ],
-   "gun_hata": [
-    "2026-10-01: BID tamam  · ASK hata bütçe (ConnectTimeoutError)",
-    "2026-10-02: BID hata bütçe (ConnectTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-04: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-05: BID hata bütçe (ConnectTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-06: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-07: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-08: BID hata bütçe (ConnectTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-09: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-11: BID hata bütçe (ConnectTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-12: BID hata bütçe (ConnectTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-13: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-14: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)",
-    "2026-10-15: BID hata bütçe (ReadTimeoutError) · ASK hata bütçe (ReadTimeoutError)"
-   ],
-   "icerik_ozu": "85bcc7fce65cba4159f5d8ce077ec6525c66cd8831784b69c6ae1c7e0e88db63",
+   "gun_hata": [],
+   "icerik_ozu": "e16ee2fa0ba70b19ee7bb80cbf347006b18b9512c5df708508a56e89992e73d8",
    "ilk_gun": "2026-01-01",
-   "indirme": "2026-10-16T11:35:11Z",
-   "istek": 1199,
+   "indirme": "2026-10-16T12:04:33Z",
+   "istek": 1309,
    "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 723,
-   "satir": 278036,
-   "sha256": "c4e8d69ae5e1328c67f7a2fa0e98aa69b18478af9cf4cdba91c8c1a0093f3c3e",
+   "ret": 807,
+   "satir": 293803,
+   "sha256": "1e4719587af9cddab1dff01ba45767101aec9931788ed49b7cb8f6378dd560b1",
    "son_gun": "2026-10-15",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -292,5 +291,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T11:35:11Z"
+ "yazim": "2026-10-16T12:04:33Z"
 }
