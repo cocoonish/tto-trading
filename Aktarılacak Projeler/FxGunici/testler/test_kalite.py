@@ -70,3 +70,22 @@ def test_kalite_bilinen_kusurlari_sayar(tmp_path, monkeypatch):
     assert s["makas"]["negatif_kapanis"] == 1
     assert s["sicrama"]["aday"] >= 1
     assert s["capraz"] == {"durum": "saatlik dosya yok"}
+
+
+def test_damga_sinamasi_0830_et_zirvesini_yazin_ve_kisin_bulur():
+    """08:30 ET dakikasına konan sıçrama yazın 12:30, kışın 13:30 UTC'de durur; ölçüt ikisinde de 0 demeli."""
+    parcalar = []
+    for gun in ("2024-01-05", "2024-07-05"):          # ayın ilk cumaları: kış ve yaz
+        yerel = pd.date_range(f"{gun} 07:00", f"{gun} 10:00", freq="1min", tz=z.NEWYORK, inclusive="left")
+        aralik = np.where((yerel.hour == 8) & (yerel.minute == 30), 0.0030, 0.0002)
+        c = np.full(len(yerel), 1.10)
+        parcalar.append(pd.DataFrame({"o": c, "h": c + aralik / 2, "l": c - aralik / 2, "c": c},
+                                     index=yerel.tz_convert("UTC")))
+    f = pd.concat(parcalar)
+    s = kl.damga_sinamasi(f, 1e-4)
+    assert s["kis"]["zirve_dk"] == 0 and s["yaz"]["zirve_dk"] == 0
+    # Bir saat kaydırılmış damga (ör. yerel saat UTC sanılmış) zirveyi ±60 dakikaya taşır → ölçüt sıfır demez.
+    kayik = f.copy()
+    kayik.index = kayik.index + pd.Timedelta(minutes=10)
+    s2 = kl.damga_sinamasi(kayik, 1e-4)
+    assert s2["kis"]["zirve_dk"] == 10 and s2["yaz"]["zirve_dk"] == 10

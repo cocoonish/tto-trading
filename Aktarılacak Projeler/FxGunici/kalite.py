@@ -175,6 +175,37 @@ def sicrama(f: pd.DataFrame, pip: float) -> dict:
     }
 
 
+def damga_sinamasi(f: pd.DataFrame, pip: float) -> dict:
+    """Zaman damgası ve DST sınaması: veri saatinin hareketi DOĞRU dakikada mı?
+
+    Ayın ilk cuması çoğu ay ABD tarım dışı istihdam (NFP) günüdür ve veri 08:30
+    New York saatinde yayımlanır. Damgalar UTC'yse ve yaz saati doğru
+    işleniyorsa, 1 dakikalık mum aralığının ortalaması yazın da kışın da tam
+    08:30 ET dakikasında zirve yapmalıdır (yazın 12:30, kışın 13:30 UTC). Bir
+    saatlik kayma, zirveyi ±60 dakikaya taşır; bu ölçüt onu görür. Takvim
+    yaklaşıktır (bazı aylarda NFP ikinci cumaya kayar); ortalama yine de 08:30'da
+    tepe yapar, çünkü günlerin büyük çoğunluğu doğru gündür.
+    """
+    ny = f.index.tz_convert(z.NEWYORK)
+    ilk_cuma = (ny.dayofweek == 4) & (ny.day <= 7)
+    ofs = (ny.hour * 60 + ny.minute).to_numpy() - (8 * 60 + 30)
+    # Yaz saati: New York ofseti −4 saat (yerel saat − UTC saati = −4)
+    fark_saat = ((ny.hour.to_numpy() - f.index.hour.to_numpy()) % 24)
+    yaz_mi = fark_saat == 20          # −4 ≡ 20 (mod 24); kışta −5 ≡ 19
+    aralik = (f["h"].to_numpy() - f["l"].to_numpy()) / pip
+    sonuc = {}
+    for ad, maske in (("yaz", yaz_mi), ("kis", ~yaz_mi)):
+        m = ilk_cuma & maske & (np.abs(ofs) <= 15)
+        if not m.any():
+            sonuc[ad] = None
+            continue
+        s = pd.Series(aralik[m], index=ofs[m]).groupby(level=0).mean()
+        sonuc[ad] = {"zirve_dk": int(s.idxmax()), "zirve_pip": round(float(s.max()), 2),
+                     "komsu_medyan_pip": round(float(s.drop(s.idxmax()).median()), 2),
+                     "gun": int(len(np.unique(ny[m].normalize())))}
+    return sonuc
+
+
 def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
     """Dakika arşivinden kurulan saatlik bid mumları ↔ Dukascopy saatlik dosyaları."""
     dizin = ay.DUKA / "saatlik" / sembol
@@ -235,6 +266,7 @@ def denetle(sembol: str, a: ay.Ayar) -> dict:
         "makas": makas(f, a.pip[sembol]),
         "sicrama": sicrama(f, a.pip[sembol]),
         "capraz": capraz(ham, sembol, a.nokta[sembol]),
+        "damga": damga_sinamasi(f, a.pip[sembol]),
         "hacim": {"sifir_hacimli_dakika": int(((ham["b_v"] == 0) & (ham["a_v"] == 0)).sum()),
                   "medyan": float(np.median(ham["b_v"] + ham["a_v"]))},
     }
@@ -253,11 +285,32 @@ def yazdir(sembol: str, s: dict) -> None:
           f"sıfır (kapanış) {m['sifir_kapanis']:,} · negatif {m['negatif_kapanis']:,}")
     print(f"  devir profili (17:00 ET'ye göre dk → medyan pip): {m['devir_profili_medyan_pip']}")
     print(f"  sıçrama adayı: {sc['aday']} · aşırı fitil: {sc['asiri_fitil']} · en büyükler: {sc['en_buyuk'][:3]}")
+    print(f"  zaman damgası (ilk cumalar, 08:30 ET'ye göre zirve dakikası): {s['damga']}")
     if "tam_esit_yuzde" in cp:
         print(f"  çapraz sınama (saatlik): {cp['tam_esit']}/{cp['saat']} saat birebir ({cp['tam_esit_yuzde']}%) · "
               f"alan alan {cp['alan_esit_yuzde']}")
     else:
         print(f"  çapraz sınama: {cp}")
+
+
+def tablo(rapor: dict) -> str:
+    """Kalite raporunun pariteler yan yana özet tablosu (markdown)."""
+    c = list(rapor)
+    def satir(ad, f):
+        return f"| {ad} | " + " | ".join(f(rapor[x]) for x in c) + " |"
+    t = ["| | " + " | ".join(c) + " |", "|---|" + "---|" * len(c)]
+    t.append(satir("kotasyonlu dakika", lambda s: f"{s['satir']:,}".replace(",", ".")))
+    t.append(satir("kapsam, normal günler", lambda s: f"%{s['kapsam']['normal_gun_kapsam_yuzde']:.2f}".replace(".", ",")))
+    t.append(satir("boşluk 5–14 / 15–59 / 60+ dk", lambda s: "{5-14} / {15-59} / {60+}".format(**s["kapsam"]["bosluk_kovalari"])))
+    t.append(satir("tatil (<%50) / kısmi gün", lambda s: f"{len(s['kapsam']['tatil_gunleri'])} / {len(s['kapsam']['kismi_gunler'])}"))
+    t.append(satir("makas medyan / p95 (pip)", lambda s: f"{s['makas']['medyan_pip']:.2f} / {s['makas']['p95_pip']:.2f}".replace(".", ",")))
+    t.append(satir("sıfır / negatif makas (dk)", lambda s: f"{s['makas']['sifir_kapanis']:,} / {s['makas']['negatif_kapanis']:,}".replace(",", ".")))
+    t.append(satir("sıçrama adayı / aşırı fitil", lambda s: f"{s['sicrama']['aday']} / {s['sicrama']['asiri_fitil']}"))
+    t.append(satir("saatlik çapraz sınama", lambda s: (f"%{s['capraz']['tam_esit_yuzde']:.2f}".replace(".", ",")
+                                                         if s["capraz"].get("tam_esit_yuzde") is not None else "—")))
+    t.append(satir("NFP zirvesi yaz / kış (dk)", lambda s: f"{(s['damga'].get('yaz') or {}).get('zirve_dk', '—')} / "
+                                                           f"{(s['damga'].get('kis') or {}).get('zirve_dk', '—')}"))
+    return "\n".join(t)
 
 
 def main(argv: list[str]) -> int:
@@ -271,6 +324,7 @@ def main(argv: list[str]) -> int:
         rapor[c] = denetle(c, a)
         yazdir(c, rapor[c])
     yol.write_text(json.dumps(rapor, ensure_ascii=False, indent=1, default=str) + "\n", encoding="utf-8")
+    print("\n" + tablo(rapor))
     return 0
 
 
