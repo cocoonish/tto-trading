@@ -437,6 +437,24 @@ def blok_maliyet(u: Uretim, ctx: dict) -> str:
     return _tablo(["Kayma"] + [PARITE[c] for c in cs], govde)
 
 
+#: Saat değerli parametrelerin kısa etiketi: seçilen kombinasyon tek satırda yazılırken "10:00" tek
+#: başına okunmaz (son giriş mi, başlangıç mı?).
+SAAT_ETIKET = {"son_giris_londra": "son giriş", "son_giris_et": "son giriş", "baslangic_et": "başlangıç",
+               "aralik_sonu_londra": "aralık sonu", "cikis_et": "çıkış"}
+
+
+def kombinasyon_yaz(p: dict, on: dict) -> str:
+    """Bir kombinasyonun okur yazımı, önceden kaydın ızgara sırasıyla (zaman dilimi önce)."""
+    sira = list((on.get("izgara") or {}).keys())
+    anahtar = sorted(p, key=lambda k: (sira.index(k) if k in sira else 99, k))
+    parca = []
+    for k in anahtar:
+        v = _deger_yaz(p[k], k)
+        parca.append(f"{SAAT_ETIKET[k]} {v}" if k in SAAT_ETIKET else
+                     (f"{adlar.PARAM.get(k, k)} {v}" if isinstance(p[k], (int, float)) and k != "tf" else v))
+    return " · ".join(parca)
+
+
 def blok_secim(u: Uretim, ctx: dict) -> str:
     """Izgaradan örneklem içinde seçilen kombinasyon, örneklem dışı sonucu ve deflated Sharpe."""
     b = ctx["B"]
@@ -445,7 +463,7 @@ def blok_secim(u: Uretim, ctx: dict) -> str:
         v = b["cift"][c]
         s = v.get("secilen") or {}
         p = v.get("secilen_p") or {}
-        govde.append([PARITE[c], " · ".join(adlar.DEGER.get(str(p[k]), str(p[k])) for k in sorted(p)) or "—",
+        govde.append([PARITE[c], kombinasyon_yaz(p, u.ON.get(b.get("aile")) or {}) or "—",
                       _hucre((s.get("is") or {}).get("beklenti_r"), "r"), _hucre((s.get("oos") or {}).get("beklenti_r"), "r"),
                       _hucre((s.get("dsr") or {}).get("dsr"), "s2"),
                       _hucre(s.get("hukum"), "hukum")])
@@ -551,11 +569,15 @@ def blok_ornek(u: Uretim, ctx: dict) -> str:
         risk = abs(i["giris_f"] - i["stop"]) * NOKTA["EURUSD"] / 1e-4 if i.get("stop") is not None else None
         parca = [f"**{'Kazanan' if x['etiket'] == 'kazanan' else 'Kaybeden'}** ({tarih_uzun(g)}, {gun_adi}, "
                  f"{x['tf']} dk mum): {yon}."]
-        if i.get("sinyal_t") is not None:
-            parca.append(f"Sinyal mumu {saat_tsi(i['sinyal_t'])} TSİ'de kapandı;")
-        parca.append(f"giriş {saat_tsi(i['giris_t'])} TSİ'de {sayi(i['giris_f'] * NOKTA['EURUSD'], 5)}"
-                     + (f", stop {sayi(i['stop'] * NOKTA['EURUSD'], 5)} ({sayi(risk, 1)} pip)" if risk else "")
-                     + (f", hedef {sayi(i['hedef'] * NOKTA['EURUSD'], 5)}" if i.get("hedef") is not None else "") + ".")
+        fiyat = sayi(i['giris_f'] * NOKTA['EURUSD'], 5)
+        if i.get("sinyal_t") is not None and int(i["sinyal_t"]) == int(i["giris_t"]):
+            parca.append(f"Sinyal mumu {saat_tsi(i['sinyal_t'])} TSİ'de kapandı; giriş sonraki dakikanın açılışında, "
+                         f"{fiyat}")
+        else:
+            parca.append((f"Sinyal mumu {saat_tsi(i['sinyal_t'])} TSİ'de kapandı; " if i.get("sinyal_t") is not None
+                          else "") + f"giriş {saat_tsi(i['giris_t'])} TSİ'de, {fiyat}")
+        parca[-1] += ((f"; stop {sayi(i['stop'] * NOKTA['EURUSD'], 5)} ({sayi(risk, 1)} pip)" if risk else "")
+                      + (f", hedef {sayi(i['hedef'] * NOKTA['EURUSD'], 5)}" if i.get("hedef") is not None else "") + ".")
         parca.append(f"Çıkış {saat_tsi(i['cikis_t'])} TSİ'de {sayi(i['cikis_f'] * NOKTA['EURUSD'], 5)}, "
                      f"{adlar.NEDEN.get(i['neden'], '')}: {sayi(i['r'], 2, arti=True)} R "
                      f"({sayi(i['pnl_pip'], 1, arti=True)} pip, maliyet dahil).")
@@ -588,15 +610,107 @@ def blok_basabas(u: Uretim, ctx: dict, cift: str = "EURUSD") -> str:
     v = (((ctx["B"].get("cift") or {}).get(cift) or {}).get("varsayilan")) or {}
     k = v.get("basabas_kayma_pip")
     if k is None:
-        return (f"{PARITE[cift]}'da kayma ızgarasının sonunda (dolum başına 2 pip) bile net beklenti artı: maliyet "
+        return (f"{PARITE[cift]} için kayma ızgarasının sonunda (dolum başına 2 pip) bile net beklenti artı: maliyet "
                 f"bu kuralın sınırlayıcısı değil.")
     if k == 0:
-        return f"{PARITE[cift]}'da sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun."
-    return (f"{PARITE[cift]}'da makasın üstüne dolum başına {sayi(k, 2)} pip kayma net beklentiyi sıfıra indiriyor "
+        return f"{PARITE[cift]} için sıfır kaymada (yalnız gerçek makasla) bile net beklenti eksi: maliyet ne olursa olsun."
+    return (f"{PARITE[cift]} için makasın üstüne dolum başına {sayi(k, 2)} pip kayma net beklentiyi sıfıra indiriyor "
             f"(bütün dönem). Yürütme maliyetiniz bunun altında değilse kural kâğıt üstünde kalır.")
 
 
+def _isaret_say(degerler: list) -> tuple[int, int]:
+    d = [x for x in degerler if x is not None]
+    return sum(1 for x in d if x > 0), len(d)
+
+
+def blok_oos_cumle(u: Uretim, ctx: dict) -> str:
+    """Örneklem dışının tek paragraflık özeti: havuz ve parite parite net R, aralık, işaret sayımı."""
+    b = ctx["B"]
+    h = ((b.get("havuz") or {}).get("varsayilan") or {}).get("oos") or {}
+    cs = _ciftler(b)
+    pr = [((b["cift"][c].get("varsayilan") or {}).get("oos") or {}) for c in cs]
+    arti, n = _isaret_say([p.get("beklenti_r") for p in pr])
+    k = u.O["kunye"]
+    parca = [f"Örneklem dışında ({tarih(k['dis_baslangic'])} → {tarih(k['bitis'])}) önceden kayıtlı varsayılanın"]
+    if h.get("n"):
+        parca.append(f"{len(cs)} paritedeki {sayi(h['n'], 0)} işleminin net ortalaması işlem başına "
+                     f"{_hucre(h.get('beklenti_r'), 'r')} R (%95 aralığı {_hucre(h.get('ga_alt'), 'r')} / "
+                     f"{_hucre(h.get('ga_ust'), 'r')}; isabet {_hucre(h.get('isabet'), 'yz1')}).")
+    else:
+        parca.append("örneklem dışında hiç işlemi yok.")
+    if n:
+        ayri = "; ".join(f"{PARITE[c]} {_hucre(p.get('beklenti_r'), 'r')}" for c, p in zip(cs, pr))
+        parca.append(f"Parite parite: {ayri} (artı olan parite: {arti} / {n}).")
+    brut = h.get("brut_r")
+    if brut is not None and h.get("beklenti_r") is not None:
+        parca.append(f"Maliyetten önce (orta fiyattan orta fiyata) işlem başına {_hucre(brut, 'r')} R; gerçek "
+                     f"makas ve kayma bunun {sayi(brut - h['beklenti_r'], 2)} R'sini götürüyor.")
+    return " ".join(parca)
+
+
+def blok_rastgele_cumle(u: Uretim, ctx: dict) -> str:
+    """Rastgele yön sınaması: aynı işlemler, yön yazı tura (EUR/USD ve dört paritenin yüzdeliği)."""
+    b = ctx["B"]
+    satir = []
+    for c in _ciftler(b):
+        r = (((b["cift"][c].get("varsayilan") or {}).get("rastgele") or {}).get("oos") or {})
+        if r.get("yuzdelik") is not None:
+            satir.append(f"{PARITE[c]} {sayi(r['yuzdelik'], 0)}.")
+    if not satir:
+        return ""
+    esik = u.ON.get("hukum", {}).get("rastgele_esik_yuzdelik", 95)
+    return (f"Rastgele yön sınamasında stratejinin örneklem dışı sonucu, aynı giriş ve çıkış dakikalarında yönü yazı "
+            f"turayla seçen {u.ON.get('hukum', {}).get('rastgele_tekrar', 1000)} denemenin dağılımında şu "
+            f"yüzdelikte duruyor: {', '.join(satir)} Hüküm kuralının eşiği {esik}. yüzdelik.")
+
+
+def blok_dsr_cumle(u: Uretim, ctx: dict) -> str:
+    """Izgaradan seçimin çoklu sınama düzeltmesi: deneme sayısı, deflated Sharpe (EUR/USD)."""
+    b = ctx["B"]
+    e = ((b.get("cift") or {}).get("EURUSD") or {}).get("secilen") or {}
+    d = e.get("dsr") or {}
+    if not d.get("n_deneme"):
+        return ""
+    return (f"EUR/USD'de ızgaranın {sayi(d['n_deneme'], 0)} kombinasyonu örneklem içinde denendi; en iyisinin "
+            f"yıllık Sharpe'ı şansla beklenen en yüksek değerin ({_hucre(d.get('sr0_yillik'), 's2')}) karşısında "
+            f"deflated Sharpe olasılığı {_hucre(d.get('dsr'), 's2')} veriyor (1'e yakınsa seçim şansla "
+            f"açıklanamaz; 0,95 altı açıklanabilir).")
+
+
+def blok_wf_cumle(u: Uretim, ctx: dict) -> str:
+    b = ctx["B"]
+    satir = []
+    for c in _ciftler(b):
+        w = ((b["cift"][c].get("walk_forward") or {}).get("ozet")) or {}
+        if w.get("n"):
+            satir.append(f"{PARITE[c]} {_hucre(w.get('beklenti_r'), 'r')} R ({sayi(w['n'], 0)} işlem)")
+    if not satir:
+        return ""
+    ilk = u.ON.get("saglamlik", {}).get("walk_forward_ilk_test_yili", 2020)
+    return (f"Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak, {ilk} → bugün): "
+            + "; ".join(satir) + ".")
+
+
+def blok_rejim_cumle(u: Uretim, ctx: dict, cift: str = "EURUSD") -> str:
+    """Yıl ve oynaklık tercilinin betimleyici özeti (bir parite, bütün dönem)."""
+    v = (((ctx["B"].get("cift") or {}).get(cift) or {}).get("varsayilan")) or {}
+    yil = {y: x.get("beklenti_r") for y, x in (v.get("yil") or {}).items() if x.get("beklenti_r") is not None}
+    terc = {t: (x or {}).get("beklenti_r") for t, x in (v.get("oynaklik") or {}).items()}
+    if not yil:
+        return ""
+    arti = sum(1 for x in yil.values() if x > 0)
+    eniyi, enkotu = max(yil, key=yil.get), min(yil, key=yil.get)
+    s = (f"{PARITE[cift]} için artı yıl: {arti} / {len(yil)}; en iyi yıl {eniyi} ({_hucre(yil[eniyi], 'r')} R), "
+         f"en kötü {enkotu} ({_hucre(yil[enkotu], 'r')} R).")
+    if all(terc.get(t) is not None for t in ("düşük", "orta", "yüksek")):
+        s += (f" Oynaklık tercillerinde (önceki 14 günün ATR yüzdeliği): düşük {_hucre(terc['düşük'], 'r')}, orta "
+              f"{_hucre(terc['orta'], 'r')}, yüksek {_hucre(terc['yüksek'], 'r')} R.")
+    return s
+
+
 BLOKLAR = {
+    "oos_cumle": blok_oos_cumle, "rastgele_cumle": blok_rastgele_cumle, "dsr_cumle": blok_dsr_cumle,
+    "wf_cumle": blok_wf_cumle, "rejim_cumle": blok_rejim_cumle,
     "sekil": blok_sekil, "sonuc": blok_sonuc, "ayrinti": blok_ayrinti, "maliyet": blok_maliyet,
     "secim": blok_secim, "wf": blok_wf, "rejim": blok_rejim, "kural": blok_kural, "hukum": blok_hukum,
     "kosul_ozet": blok_kosul_ozet, "ornek": blok_ornek, "zaman": blok_zaman, "dst": blok_dst,

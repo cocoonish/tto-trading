@@ -220,6 +220,23 @@ BLS_BASLIK = {"empsit": r"Employment Situation\s*[-–—]\s*([A-Za-z]+)\s+(\d{4
               "cpi": r"Consumer Price Index\s*[-–—]\s*([A-Za-z]+)\s+(\d{4})"}
 
 
+BLS_MANSET = {"empsit": r"EMPLOYMENT SITUATION\s*[-–—]+\s*([A-Za-z]+)\s+(\d{4})",
+              "cpi": r"CONSUMER PRICE INDEX\s*[-–—]+\s*([A-Za-z]+)\s+(\d{4})"}
+
+
+def _bls_referans(seri: str, k: dict) -> str:
+    """Yayımın referans ayı, yayımın KENDİ metninden: önce ambargo parçasındaki manşet ("THE EMPLOYMENT
+    SITUATION -- MARCH 2024"), sonra sayfa başlığı ("… - 2021 M12 Results" ya da "… - December 2020").
+    Yayım tarihinden türetilmez: 2025 hükümet kapanışında referans ayı ile yayım ayı ayrıştı."""
+    for metin, kalip in ((k.get("ambargo", ""), BLS_MANSET[seri]), (k.get("baslik", ""), BLS_BASLIK[seri])):
+        r = re.search(kalip, metin, re.I)
+        if r and r.group(1).capitalize() in AYLAR:
+            return f"{r.group(2)}-{AYLAR[r.group(1).capitalize()]:02d}"
+    # Başlığın "2021 M12 Results" kodu: M01–M12 ay, M13 yıllık ortalama (ay değil), Q çeyrek (ay değil)
+    r = re.search(r"(\d{4})\s+M(0[1-9]|1[0-2])\s+Results", k.get("baslik", ""))
+    return f"{r.group(1)}-{r.group(2)}" if r else "?"
+
+
 def bls(seri: str, olay: str, kunye: dict) -> list[dict]:
     yol = HAM / f"bls_{seri}_ambargo.json"
     sorun: list[str] = []
@@ -227,6 +244,7 @@ def bls(seri: str, olay: str, kunye: dict) -> list[dict]:
         kunye[olay] = {"yayim": 0, "sorun": [f"{yol.name} yok — üçüncü arşiv geçişi koşmadı"]}
         return []
     defter = json.loads(yol.read_text(encoding="utf-8"))
+    duzeltme: list[str] = []
     aday: list[tuple[date, str, str, dict]] = []
     for gs, k in sorted(defter.items()):
         g = date.fromisoformat(gs)
@@ -241,13 +259,20 @@ def bls(seri: str, olay: str, kunye: dict) -> list[dict]:
             continue
         g2 = date(int(m.group(7)), AYLAR[m.group(5)], int(m.group(6)))
         if g2 != g:
-            sorun.append(f"{gs}: dosya adı {g}, ambargo tarihi {g2} — yazılmadı")
-            continue
+            # Ambargo satırındaki YIL dizgi hatası (ölçüldü: 13.01.2021 TÜFE yayımı "January 13, 2020" diyor).
+            # Kabul ancak iki bağımsız işaret aynı yılı gösterirse: dosya adının yılı ve AYNI satırdaki
+            # yayım numarasının yılı (USDL-21-0024). Ay ve gün birebir tutmalı; tek işaret yetmez.
+            usdl = re.search(r"USDL-(\d{2})-\d{3,4}", k["ambargo"])
+            if (g2.replace(year=g.year) == g and usdl and 2000 + int(usdl.group(1)) == g.year):
+                duzeltme.append(f"{gs}: ambargo satırı yılı {g2.year} yazıyor; dosya adı ve aynı satırdaki yayım "
+                                f"numarası (USDL-{usdl.group(1)}) {g.year} diyor — {g.year} alındı")
+            else:
+                sorun.append(f"{gs}: dosya adı {g}, ambargo tarihi {g2} — yazılmadı")
+                continue
         if m.group(4) != "ET" and m.group(4) != ("EDT" if _yaz_saati_mi(g) else "EST"):
             sorun.append(f"{gs}: ambargo {m.group(4)} diyor, o gün New York'ta öbürü geçerli — yazılmadı")
             continue
-        r = re.search(BLS_BASLIK[seri], k.get("baslik", ""))
-        ref = f"{r.group(2)}-{AYLAR[r.group(1)]:02d}" if r and r.group(1) in AYLAR else "?"
+        ref = _bls_referans(seri, k)
         aday.append((g, _saat(int(m.group(1)), int(m.group(2)), m.group(3)), ref, k))
     satir, gorulen = [], {}
     for g, saat, ref, k in sorted(aday):
@@ -267,9 +292,23 @@ def bls(seri: str, olay: str, kunye: dict) -> list[dict]:
             if f"{y}-{a:02d}" not in gorulen:
                 eksik.append(f"{y}-{a:02d}")
             y, a = (y + 1, 1) if a == 12 else (y, a + 1)
+    # Referans ayı metinden okunamayan yayım (ör. yeniden basılmış kopyada manşet ambargo parçasının dışında
+    # kalıyor: 06.12.2019 ve 10.01.2020 NFP) bir boşluğun ardındaki ayda yayımlanmışsa o boşluk "yayım yok"
+    # değil "ayı okunamadı"dır; ikisi ayrı yazılır.
+    bilinmeyen = [g for g, _, ref, _ in aday if ref == "?"]
+    okunamadi = []
+    for e in list(eksik):
+        y, a = map(int, e.split("-"))
+        y2, a2 = (y + 1, 1) if a == 12 else (y, a + 1)
+        if any(g.year == y2 and g.month == a2 for g in bilinmeyen):
+            okunamadi.append(e)
+            eksik.remove(e)
     kunye[olay] = {"yayim": len(satir), "ilk_referans": refler[0] if refler else None,
                    "son_referans": refler[-1] if refler else None, "yayimi_olmayan_referans_ayi": eksik,
-                   "saatler": sorted({s["yerel_saat"] for s in satir}), "sorun": sorun}
+                   "referansi_okunamayan_ay": okunamadi,
+                   "referansi_okunamayan_yayim": [g.isoformat() for g in bilinmeyen],
+                   "saatler": sorted({s["yerel_saat"] for s in satir}), "sorun": sorun,
+                   "duzeltme": duzeltme}
     return satir
 
 

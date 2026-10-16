@@ -53,17 +53,20 @@ def _utc_sn(df: pd.DataFrame) -> np.ndarray:
 SINAMA = DIZIN / "sinama.json"
 
 
-def tutmayanlar() -> set[tuple[str, str]]:
-    """Fiyat sınamasının (takvim_sina.py) resmi saatte doğrulayamadığı olaylar: (olay, tarih)."""
+def celiskiler() -> list[dict]:
+    """Fiyat sınamasının (takvim_sina.py) resmi saatle ÇELİŞTİĞİ olaylar — yalnız raporlanır, dışarıda
+    bırakılmaz. Resmi belge birincil kaynaktır; fiyat tek bir olayı ancak raporlayabilir. Saati yanlış bir
+    olay haber stratejisinin sonucunu sulandırır, şişirmez; tepkiye göre olay atmak ise örneklemi sonuca
+    göre seçerdi. Sistematik bir çelişki (aynı ailede aynı kaymayla birden çok olay) kuralın kendisini
+    düzeltmeyi gerektirir ve o düzeltme takvim_kur.py'de yapılır."""
     if not SINAMA.exists():
-        return set()
+        return []
     s = json.loads(SINAMA.read_text(encoding="utf-8"))
-    return {(k["olay"], k["tarih"]) for k in s.get("olay", []) if k.get("hukum") == "tutmadi"}
+    return [k for k in s.get("olay", []) if k.get("hukum") == "celiski"]
 
 
-def tumu(dogrulanmis: bool = True) -> pd.DataFrame:
-    """Resmi + ek olaylar. `dogrulanmis`: fiyat sınamasında tutmayan olaylar dışarıda kalır
-    (sayıları `veri/takvim/sinama.json`da, adlarıyla)."""
+def tumu() -> pd.DataFrame:
+    """Resmi + ek olaylar (fiyat sınaması hiçbir olayı dışarıda bırakmaz: bkz. `celiskiler`)."""
     parcalar = []
     for yol, ad in ((ANA, "resmi"), (EK, "ek")):
         if yol.exists():
@@ -82,10 +85,6 @@ def tumu(dogrulanmis: bool = True) -> pd.DataFrame:
     df["utc_sn"] = _utc_sn(df)
     # Aynı olay aynı anda iki kez (resmi + ek) yazıldıysa resmi kalır.
     df = df.sort_values(["utc_sn", "olay", "kume"]).drop_duplicates(["olay", "utc_sn"], keep="first")
-    if dogrulanmis:
-        dis = tutmayanlar()
-        if dis:
-            df = df[[(o, t) not in dis for o, t in zip(df["olay"], df["tarih"])]]
     return df.reset_index(drop=True)
 
 

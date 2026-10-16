@@ -266,7 +266,7 @@ def takvim_ozet() -> dict:
                         for o, g in df.groupby("olay")}
     s = _oku(d / "sinama.json")
     if s:
-        out["sinama"] = {"kural": s.get("kural"), "ozet": s.get("ozet"), "tutmayan": s.get("tutmayan")}
+        out["sinama"] = {"kural": s.get("kural"), "ozet": s.get("ozet"), "celiski": s.get("celiski")}
     return out
 
 
