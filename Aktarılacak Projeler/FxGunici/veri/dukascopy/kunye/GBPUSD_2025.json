@@ -1,12 +1,12 @@
 {
  "birimler": {
   "GBPUSD/2025": {
-   "bayt": 4062482,
-   "dolgu_dakika": 77931,
+   "bayt": 4080510,
+   "dolgu_dakika": 79269,
    "gun": 313,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 307,
+   "gun_dolu": 309,
    "gun_dolu_liste": [
     "2025-01-01",
     "2025-01-02",
@@ -281,6 +281,7 @@
     "2025-11-12",
     "2025-11-13",
     "2025-11-14",
+    "2025-11-16",
     "2025-11-17",
     "2025-11-18",
     "2025-11-19",
@@ -314,24 +315,23 @@
     "2025-12-25",
     "2025-12-26",
     "2025-12-28",
+    "2025-12-29",
     "2025-12-30"
    ],
    "gun_hata": [
-    "2025-11-16: BID tamam  · ASK hata bütçe (HTTP 503)",
-    "2025-12-12: BID tamam  · ASK hata bütçe (ReadTimeoutError)",
-    "2025-12-16: BID tamam  · ASK hata bütçe (HTTP 503)",
+    "2025-12-12: BID hata HTTP 503 · ASK tamam",
+    "2025-12-16: BID tamam  · ASK hata ConnectTimeoutError",
     "2025-12-24: BID tamam  · ASK hata bütçe (HTTP 503)",
-    "2025-12-29: BID tamam  · ASK hata bütçe (HTTP 503)",
-    "2025-12-31: BID tamam  · ASK hata bütçe (ReadTimeoutError)"
+    "2025-12-31: BID tamam  · ASK hata HTTP 503"
    ],
-   "icerik_ozu": "dae4252e73a37b77cea3590fa8343b7c4d33d3b656e4143612d14ee485df8d71",
+   "icerik_ozu": "10210ee0b8ac4814da9f854b48528ec7f8f62ee8be5c2b75f95e10af144fdab3",
    "ilk_gun": "2025-01-01",
-   "indirme": "2026-10-16T12:27:42Z",
-   "istek": 1788,
-   "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 1144,
-   "satir": 364149,
-   "sha256": "d39021e9eea9fbc114216c5211cb5777dd586eecb601f37e8d9a4550690f5c11",
+   "indirme": "2026-10-16T12:54:12Z",
+   "istek": 1882,
+   "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
+   "ret": 1230,
+   "satir": 365691,
+   "sha256": "8b765dc4e6b7f431bc6c31b97f68e9167ff0b81c865915a00b125d31fced2070",
    "son_gun": "2025-12-31",
    "tam": false
   }
@@ -347,7 +347,7 @@
   ]
  },
  "kaynak": "https://datafeed.dukascopy.com/datafeed/<SEMBOL>/<YYYY>/<AA-1>/<GG>/<BID|ASK>_candles_min_1.bi5",
- "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
+ "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
  "nokta": {
   "AUDUSD": 1e-05,
   "EURUSD": 1e-05,
@@ -358,5 +358,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:27:42Z"
+ "yazim": "2026-10-16T12:54:12Z"
 }

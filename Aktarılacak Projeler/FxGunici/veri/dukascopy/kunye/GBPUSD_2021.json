@@ -322,15 +322,15 @@
     "2021-12-30"
    ],
    "gun_hata": [
-    "2021-12-26: BID hata bütçe (HTTP 503) · ASK tamam",
-    "2021-12-31: BID tamam  · ASK hata bütçe (HTTP 503)"
+    "2021-12-26: BID tamam  · ASK hata ProtocolError",
+    "2021-12-31: BID hata ReadTimeoutError · ASK hata HTTP 503"
    ],
-   "icerik_ozu": "93870af375fbc3ac85c81e19692e75294b288872d21d9bf5c462b0cbd51c6f00",
+   "icerik_ozu": "ce3ee28d7ebf8dd51bec7b8ea905538c84447c9066378390f3b0b1072dff51b6",
    "ilk_gun": "2021-01-01",
-   "indirme": "2026-10-16T12:27:40Z",
-   "istek": 1782,
-   "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 1147,
+   "indirme": "2026-10-16T12:54:11Z",
+   "istek": 1819,
+   "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
+   "ret": 1183,
    "satir": 370160,
    "sha256": "3f83eaa19aea77ce5eb18f77997801cfe260fbfa7ae7497eed47268973738c7b",
    "son_gun": "2021-12-31",
@@ -348,7 +348,7 @@
   ]
  },
  "kaynak": "https://datafeed.dukascopy.com/datafeed/<SEMBOL>/<YYYY>/<AA-1>/<GG>/<BID|ASK>_candles_min_1.bi5",
- "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
+ "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
  "nokta": {
   "AUDUSD": 1e-05,
   "EURUSD": 1e-05,
@@ -359,5 +359,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:27:40Z"
+ "yazim": "2026-10-16T12:54:11Z"
 }

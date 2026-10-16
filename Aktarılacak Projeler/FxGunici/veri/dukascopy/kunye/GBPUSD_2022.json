@@ -1,12 +1,12 @@
 {
  "birimler": {
   "GBPUSD/2022": {
-   "bayt": 4251066,
-   "dolgu_dakika": 76519,
+   "bayt": 4266875,
+   "dolgu_dakika": 76639,
    "gun": 312,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 308,
+   "gun_dolu": 309,
    "gun_dolu_liste": [
     "2022-01-02",
     "2022-01-03",
@@ -304,6 +304,7 @@
     "2022-12-11",
     "2022-12-12",
     "2022-12-13",
+    "2022-12-16",
     "2022-12-18",
     "2022-12-19",
     "2022-12-20",
@@ -319,18 +320,17 @@
    ],
    "gun_hata": [
     "2022-12-05: BID hata HTTP 503 · ASK tamam",
-    "2022-12-14: BID hata ConnectTimeoutError · ASK tamam",
-    "2022-12-15: BID hata ConnectTimeoutError · ASK tamam",
-    "2022-12-16: BID hata HTTP 503 · ASK tamam"
+    "2022-12-14: BID hata ReadTimeoutError · ASK tamam",
+    "2022-12-15: BID tamam  · ASK hata HTTP 503"
    ],
-   "icerik_ozu": "b1f98c961a6e1ab9d90226749e52f55d8e48e94efc7706878444227647a9ae01",
+   "icerik_ozu": "b6b5f6e1326ad487023b66c7f3d5829156799d5d1e0789a368fa1e6ed2754fe8",
    "ilk_gun": "2022-01-01",
-   "indirme": "2026-10-16T12:27:24Z",
-   "istek": 1678,
-   "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 1031,
-   "satir": 367001,
-   "sha256": "488104a4615342f778dbb79a5a1389a667339ed9bc409a699dcbbfb2f13c9f44",
+   "indirme": "2026-10-16T12:54:11Z",
+   "istek": 1741,
+   "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
+   "ret": 1089,
+   "satir": 368321,
+   "sha256": "48508948911b00ebb98920ed47cf460ba21cf49cbf9599d7da287cbe7f6b3300",
    "son_gun": "2022-12-31",
    "tam": false
   }
@@ -346,7 +346,7 @@
   ]
  },
  "kaynak": "https://datafeed.dukascopy.com/datafeed/<SEMBOL>/<YYYY>/<AA-1>/<GG>/<BID|ASK>_candles_min_1.bi5",
- "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
+ "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
  "nokta": {
   "AUDUSD": 1e-05,
   "EURUSD": 1e-05,
@@ -357,5 +357,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:27:25Z"
+ "yazim": "2026-10-16T12:54:11Z"
 }

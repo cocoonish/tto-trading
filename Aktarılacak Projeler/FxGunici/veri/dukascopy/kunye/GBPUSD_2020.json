@@ -1,12 +1,12 @@
 {
  "birimler": {
   "GBPUSD/2020": {
-   "bayt": 4682731,
-   "dolgu_dakika": 77959,
+   "bayt": 4700901,
+   "dolgu_dakika": 77961,
    "gun": 314,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 312,
+   "gun_dolu": 313,
    "gun_dolu_liste": [
     "2020-01-01",
     "2020-01-02",
@@ -306,6 +306,7 @@
     "2020-12-11",
     "2020-12-13",
     "2020-12-14",
+    "2020-12-15",
     "2020-12-16",
     "2020-12-17",
     "2020-12-18",
@@ -322,17 +323,16 @@
     "2020-12-31"
    ],
    "gun_hata": [
-    "2020-11-17: BID tamam  · ASK hata ReadTimeoutError",
-    "2020-12-15: BID tamam  · ASK hata ReadTimeoutError"
+    "2020-11-17: BID hata HTTP 503 · ASK tamam"
    ],
-   "icerik_ozu": "16037e58ca0f908b8cbe5e6fb9e30b8fe5d0fa104c7823f6b731918ecf810453",
+   "icerik_ozu": "e23a649b78e9f7f6dd93dcb5bb910e31963c59db4483805b6943dea5c6a466ac",
    "ilk_gun": "2020-01-01",
-   "indirme": "2026-10-16T12:24:52Z",
-   "istek": 1060,
-   "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 411,
-   "satir": 371321,
-   "sha256": "d8db3242f5d9d0150347919ae5aa44dd11f69c72af9a100246243a14ca1feb7e",
+   "indirme": "2026-10-16T12:54:11Z",
+   "istek": 1090,
+   "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
+   "ret": 438,
+   "satir": 372759,
+   "sha256": "7193beb651a2a575e35633b46b5e879b073d32dfe54177a3feeb00c6db218cd6",
    "son_gun": "2020-12-31",
    "tam": false
   }
@@ -348,7 +348,7 @@
   ]
  },
  "kaynak": "https://datafeed.dukascopy.com/datafeed/<SEMBOL>/<YYYY>/<AA-1>/<GG>/<BID|ASK>_candles_min_1.bi5",
- "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
+ "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
  "nokta": {
   "AUDUSD": 1e-05,
   "EURUSD": 1e-05,
@@ -359,5 +359,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:24:52Z"
+ "yazim": "2026-10-16T12:54:11Z"
 }
