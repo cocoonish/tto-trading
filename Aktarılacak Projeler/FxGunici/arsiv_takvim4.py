@@ -19,7 +19,7 @@ Bu geçiş:
 Yalnız indirir; hangi saatin kabul edildiği ayrıştırmada (`takvim_kur.py`): bir tarih için bütün
 kopyalar aynı saati yazıyorsa o saat, çelişiyorsa hiçbiri.
 
-PARÇA (`TTO_PARCA`): `fed-basin`. Internet Archive istekleri arası 4 sn, bütçe 18 dakika.
+PARÇA (`TTO_PARCA`): `fed-basin` · `londra-tatil` (İngiltere ve Galler resmî tatil listesi). Internet Archive istekleri arası 4 sn, bütçe 18 dakika.
 """
 from __future__ import annotations
 
@@ -135,7 +135,36 @@ def fed_basin() -> None:
     k.yaz()
 
 
-PARCALAR = {"fed-basin": fed_basin}
+def londra_tatil() -> None:
+    """İngiltere ve Galler resmî tatillerinin resmî listesi (gov.uk). Ders `zaman.londra_tatilleri`
+    kuralını kullanır (ay sonu = ayın son Londra iş günü); bu dosya kuralın bağımsız kıyasıdır ve
+    bir birim testi ikisini yıl yıl karşılaştırır. Liste yalnız yakın yılları taşıyabilir; kapsamı
+    dosyanın kendisinden okunur. Aynı listenin geçmiş kopyası Internet Archive'dan da istenir
+    (daha eski yılları taşıyabilir)."""
+    k = Kunye4("londra-tatil")
+    kayit = {}
+    for ad, url in (("gov.uk", "https://www.gov.uk/bank-holidays.json"),
+                    ("ia-2019", "https://web.archive.org/web/2019id_/https://www.gov.uk/bank-holidays.json")):
+        durum, veri = a3.iste(url, a3.IA_BEKLE)
+        x = {"url": url, "durum": durum}
+        if durum == 200:
+            try:
+                d = json.loads(veri.decode("utf-8"))
+                olay = (d.get("england-and-wales") or {}).get("events") or []
+                x.update({"sha256": hashlib.sha256(veri).hexdigest(), "bayt": len(veri),
+                          "olay": [{"date": e.get("date"), "title": e.get("title")} for e in olay]})
+            except ValueError:
+                x["durum"] = "ayrıştırılamadı"
+        kayit[ad] = x
+        print(f"{durum}\t{ad}\t{len(x.get('olay') or [])} olay", flush=True)
+        time.sleep(a3.IA_ARA)
+    hedef = HAM / "londra_tatil.json"
+    hedef.write_text(json.dumps(kayit, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    k.v["londra:tatil"] = {"durum": 200, "dosya": hedef.name}
+    k.yaz()
+
+
+PARCALAR = {"fed-basin": fed_basin, "londra-tatil": londra_tatil}
 
 
 def main() -> int:

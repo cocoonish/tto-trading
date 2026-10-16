@@ -163,3 +163,72 @@ def test_tsi_tablosu_temsilci_gunler():
     assert t["2026-07-15"]["FX işlem günü kapanışı"] == "00:00"
     assert t["2026-01-15"]["FX işlem günü kapanışı"] == "01:00"
     assert t["2026-07-15"]["Tokyo açılışı"] == "03:00"
+
+
+# ───────────────────────────────────────────── Londra iş günü (ay sonu, ön kayıt [fiks])
+# İngiltere ve Galler resmî tatilleri ELLE (yalnız hafta içi; resmî listeyle ayrıca aşağıda): kodun kendi
+# kuralından türetilmedi. Özel yıllar dahil: 2020 VE Day cumaya taşındı, 2022 Jübile ve cenaze,
+# 2023 taç giyme.
+LONDRA_ELLE = {
+    2018: ["01-01", "03-30", "04-02", "05-07", "05-28", "08-27", "12-25", "12-26"],
+    2019: ["01-01", "04-19", "04-22", "05-06", "05-27", "08-26", "12-25", "12-26"],
+    2020: ["01-01", "04-10", "04-13", "05-08", "05-25", "08-31", "12-25", "12-28"],
+    2021: ["01-01", "04-02", "04-05", "05-03", "05-31", "08-30", "12-27", "12-28"],
+    2022: ["01-03", "04-15", "04-18", "05-02", "06-02", "06-03", "08-29", "09-19", "12-26", "12-27"],
+    2023: ["01-02", "04-07", "04-10", "05-01", "05-08", "05-29", "08-28", "12-25", "12-26"],
+    2024: ["01-01", "03-29", "04-01", "05-06", "05-27", "08-26", "12-25", "12-26"],
+    2025: ["01-01", "04-18", "04-21", "05-05", "05-26", "08-25", "12-25", "12-26"],
+    2026: ["01-01", "04-03", "04-06", "05-04", "05-25", "08-31", "12-25", "12-28"],
+}
+
+
+@pytest.mark.parametrize("yil", sorted(LONDRA_ELLE))
+def test_londra_tatilleri_elle_yazilanla_ayni(yil):
+    beklenen = {date(yil, int(g[:2]), int(g[3:])) for g in LONDRA_ELLE[yil]}
+    assert z.londra_tatilleri(yil) == beklenen
+
+
+def test_paskalya():
+    assert z.paskalya(2024) == date(2024, 3, 31)
+    assert z.paskalya(2026) == date(2026, 4, 5)
+    assert z.paskalya(2019) == date(2019, 4, 21)
+
+
+def test_londra_ay_sonu_tatile_dusen_son_gun():
+    # Ayın son hafta içi günü Londra tatili: ay sonu bir önceki iş günü.
+    assert not z.londra_ay_sonu(date(2024, 3, 29)) and z.londra_ay_sonu(date(2024, 3, 28))
+    assert not z.londra_ay_sonu(date(2026, 8, 31)) and z.londra_ay_sonu(date(2026, 8, 28))
+    assert not z.londra_ay_sonu(date(2021, 5, 31)) and z.londra_ay_sonu(date(2021, 5, 28))
+    assert not z.londra_ay_sonu(date(2020, 8, 31)) and z.londra_ay_sonu(date(2020, 8, 28))
+    assert not z.londra_ay_sonu(date(2018, 3, 30)) and z.londra_ay_sonu(date(2018, 3, 29))
+    # Sıradan ay: son hafta içi gün; hafta sonu hiçbir zaman ay sonu değil.
+    assert z.londra_ay_sonu(date(2026, 9, 30)) and not z.londra_ay_sonu(date(2026, 9, 29))
+    assert z.londra_ay_sonu(date(2026, 10, 30)) and not z.londra_ay_sonu(date(2026, 10, 31))
+    # Her ayın tam olarak bir ay sonu günü var (2018–2026).
+    for y in range(2018, 2027):
+        for a in range(1, 13):
+            g, say = date(y, a, 1), 0
+            while g.month == a:
+                say += z.londra_ay_sonu(g)
+                g += timedelta(days=1)
+            assert say == 1, (y, a)
+
+
+def test_londra_tatilleri_resmi_listeyle_ayni():
+    """Resmî liste (gov.uk, bulut koşusunda indirilir) varsa kural onun KAPSADIĞI her yılda birebir
+    aynı olmalı. Liste yoksa sınama atlanır ve adıyla söylenir: koşmamış bir kıyas geçmiş sayılmaz."""
+    import json
+    yol = Path(__file__).resolve().parents[1] / "veri" / "takvim" / "ham" / "londra_tatil.json"
+    if not yol.exists():
+        pytest.skip("resmî liste henüz indirilmedi (arsiv_takvim4, parça londra-tatil)")
+    d = json.loads(yol.read_text(encoding="utf-8"))
+    yillar: dict[int, set] = {}
+    for kaynak in d.values():
+        for e in kaynak.get("olay") or []:
+            g = date.fromisoformat(e["date"])
+            yillar.setdefault(g.year, set()).add(g)
+    tam = [y for y, gs in yillar.items() if any(g.month == 1 for g in gs) and any(g.month == 12 for g in gs)]
+    assert tam, "resmî listede tam yıl yok"
+    for y in tam:
+        if 2018 <= y <= 2026:
+            assert z.londra_tatilleri(y) == {g for g in yillar[y] if g.weekday() < 5}, y

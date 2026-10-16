@@ -175,6 +175,49 @@ def sicrama(f: pd.DataFrame, pip: float) -> dict:
     }
 
 
+HABER_DK = list(range(-5, 16))
+
+
+def haber_makasi(f: pd.DataFrame, pip: float, olaylar: pd.DataFrame) -> dict:
+    """Haber dakikalarında makas: olay anına göre −5 … +15 dakika, her dakikanın medyan kapanış makası (pip).
+
+    Kıyas: aynı UTC dakikasında, bu paritenin takviminde HİÇBİR olay olmayan hafta içi günlerin medyan makası — gün
+    içi makas profili saate bağlı olduğu için kıyas aynı saatten kurulur. Oran = haber / kıyas. Dakikası
+    arşivde olmayan gözlem atlanır (sayı yazılır). Ölçü makastır; kayma ve derinlik ölçülmez."""
+    if olaylar is None or len(olaylar) == 0:
+        return {}
+    # Çözünürlükten bağımsız saniye (pandas 3 dizini saniye ya da nanosaniye çözünürlükte kurabilir).
+    t = pd.DatetimeIndex(f.index).as_unit("s").asi8
+    sc = f["spr_c"].to_numpy() / pip
+    gun = pd.DatetimeIndex(f.index).normalize().as_unit("s").asi8
+    dakika = (t - gun) // 60
+    hafta_ici = pd.DatetimeIndex(f.index).dayofweek.to_numpy() < 5
+    olay_gunu = set(pd.DatetimeIndex(pd.to_datetime(olaylar["utc_sn"].to_numpy(np.int64), unit="s", utc=True))
+                    .normalize().as_unit("s").asi8)
+    kiyas_maske = hafta_ici & ~np.isin(gun, list(olay_gunu))
+    kiyas_seri = pd.Series(sc[kiyas_maske], index=dakika[kiyas_maske]).groupby(level=0).median()
+    out = {}
+    for olay, g in olaylar.groupby("olay"):
+        satir, kiyas, n_gozlem = [], [], []
+        for k in HABER_DK:
+            hedef = g["utc_sn"].to_numpy(np.int64) + 60 * k
+            j = np.searchsorted(t, hedef)
+            ok = (j < len(t)) & (t[np.clip(j, 0, len(t) - 1)] == hedef)
+            deger = sc[j[ok]]
+            satir.append(round(float(np.median(deger)), 3) if ok.any() else None)
+            n_gozlem.append(int(ok.sum()))
+            dk_gun = ((hedef - (hedef // 86400) * 86400) // 60)[ok]
+            kv = kiyas_seri.reindex(dk_gun).dropna().to_numpy()
+            kiyas.append(round(float(np.median(kv)), 3) if len(kv) else None)
+        oran = [round(h / c, 2) if h is not None and c else None for h, c in zip(satir, kiyas)]
+        z = max((i for i in range(len(oran)) if oran[i] is not None), key=lambda i: oran[i], default=None)
+        out[str(olay)] = {"n_olay": int(len(g)), "dk": HABER_DK, "medyan_pip": satir, "kiyas_pip": kiyas,
+                          "oran": oran, "gozlem": n_gozlem,
+                          "zirve": ({"dk": HABER_DK[z], "pip": satir[z], "kiyas_pip": kiyas[z], "oran": oran[z]}
+                                    if z is not None else None)}
+    return out
+
+
 def damga_sinamasi(f: pd.DataFrame, pip: float) -> dict:
     """Zaman damgası ve DST sınaması: veri saatinin hareketi DOĞRU dakikada mı?
 
@@ -270,6 +313,8 @@ def denetle(sembol: str, a: ay.Ayar) -> dict:
         "hacim": {"sifir_hacimli_dakika": int(((ham["b_v"] == 0) & (ham["a_v"] == 0)).sum()),
                   "medyan": float(np.median(ham["b_v"] + ham["a_v"]))},
     }
+    import takvim
+    sonuc["haber_makasi"] = haber_makasi(f, a.pip[sembol], takvim.olaylar_oku(sembol))
     return sonuc
 
 

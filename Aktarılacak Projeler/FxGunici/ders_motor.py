@@ -304,6 +304,14 @@ class Uretim:
         ctx.update({"B": b, "BID": birim, "H": (b.get("havuz") or {}).get("varsayilan")})
         for kisa, cift in KISA_AD.items():
             ctx[kisa] = (b.get("cift") or {}).get(cift)
+        # Hüküm sayımı: önceden kayıtlı varsayılanın parite başına hükmü (ön kaydın kuralı) kaç paritede ne.
+        hs = {"calisiyor": 0, "zayif": 0, "calismiyor": 0, "olculemedi": 0, "parite": 0, "maliyet": 0}
+        for c in _ciftler(b):
+            v = b["cift"][c].get("varsayilan") or {}
+            hs[v.get("hukum") or "olculemedi"] = hs.get(v.get("hukum") or "olculemedi", 0) + 1
+            hs["parite"] += 1
+            hs["maliyet"] += 1 if v.get("maliyet_yiyor") else 0
+        ctx["HS"] = hs
         return ctx
 
     def isle(self, metin: str, ctx: dict) -> str:
@@ -364,11 +372,17 @@ def _hucre(v, bicim: str) -> str:
         return "—"
 
 
+def mdx_kacis(s: str) -> str:
+    """Üretilen metinde MDX'in sözdizimi sayacağı karakterler: '<' (etiket başlangıcı: "<0,5" derlemeyi
+    düşürür), '{' ve '}' (JSX ifadesi). Karakter göndermesine çevrilir; sayfada aynı görünür."""
+    return s.replace("<", "&lt;").replace("{", "&#123;").replace("}", "&#125;")
+
+
 def _tablo(baslik: list[str], satirlar: list[list[str]], hiza: list[str] | None = None) -> str:
     hiza = hiza or ["l"] + ["r"] * (len(baslik) - 1)
     ayrac = ["---:" if h == "r" else ":---" for h in hiza]
-    s = ["| " + " | ".join(baslik) + " |", "| " + " | ".join(ayrac) + " |"]
-    s += ["| " + " | ".join(r) + " |" for r in satirlar]
+    s = ["| " + " | ".join(mdx_kacis(x) for x in baslik) + " |", "| " + " | ".join(ayrac) + " |"]
+    s += ["| " + " | ".join(mdx_kacis(x) for x in r) + " |" for r in satirlar]
     return "\n".join(s)
 
 
@@ -660,7 +674,7 @@ def blok_rastgele_cumle(u: Uretim, ctx: dict) -> str:
         return ""
     esik = u.ON.get("hukum", {}).get("rastgele_esik_yuzdelik", 95)
     return (f"Rastgele yön sınamasında stratejinin örneklem dışı sonucu, aynı giriş ve çıkış dakikalarında yönü yazı "
-            f"turayla seçen {u.ON.get('hukum', {}).get('rastgele_tekrar', 1000)} denemenin dağılımında şu "
+            f"turayla seçen {sayi(u.ON.get('hukum', {}).get('rastgele_tekrar', 1000), 0)} denemenin dağılımında şu "
             f"yüzdelikte duruyor: {', '.join(satir)} Hüküm kuralının eşiği {esik}. yüzdelik.")
 
 
@@ -708,7 +722,266 @@ def blok_rejim_cumle(u: Uretim, ctx: dict, cift: str = "EURUSD") -> str:
     return s
 
 
+def blok_hukum_cumle(u: Uretim, ctx: dict) -> str:
+    """Hükmün tek cümlesi: ön kaydın kuralı parite başına uygulanır, cümle yalnız sayar (yeni kural yok)."""
+    hs = ctx["HS"]
+    b = ctx["B"]
+    if not hs["parite"]:
+        return "Hüküm: ölçülemedi (işlem yok)."
+    adlar_ = {h: [PARITE[c] for c in _ciftler(b) if (b["cift"][c].get("varsayilan") or {}).get("hukum") == h]
+              for h in ("calisiyor", "zayif", "calismiyor")}
+    if hs["calismiyor"] == hs["parite"]:
+        ana = f"**Çalışmıyor.** Önceden kayıtlı kural, sınanan {hs['parite']} paritenin hiçbirinde örneklem dışında artı değil."
+    elif hs["calisiyor"] == hs["parite"]:
+        ana = f"**Çalışıyor.** Önceden kayıtlı kural {hs['parite']} paritenin hepsinde hüküm kuralının üç şartını sağlıyor."
+    else:
+        parca = []
+        for h, ad in (("calisiyor", "çalışıyor"), ("zayif", "zayıf"), ("calismiyor", "çalışmıyor")):
+            if adlar_[h]:
+                parca.append(f"{', '.join(adlar_[h])}: {ad}")
+        bas = "Parite parite" if not hs["calisiyor"] else "Yalnız bir kısmında"
+        ana = f"**{bas}.** " + " · ".join(parca) + "."
+    if hs["maliyet"]:
+        ana += (f" Maliyet bayrağı {hs['maliyet']} paritede yanıyor: brüt sonuç bütün dönemde sıfırdan ayırt "
+                f"edilebiliyor ama net sonuç sıfırın altında — kenar varsa makası ödemeye yetmiyor.")
+    return ana
+
+
+def blok_ay_sonu(u: Uretim, ctx: dict) -> str:
+    """WM/R fiksingi (ön kayıt [fiks]): aynı kuralın ay sonu ve öbür günlerdeki sonucu, parite parite.
+    Ay sonu için ayrı parametre seçilmez; yalnız ayrı raporlanır. Fark Welch t ile (iki yönlü p)."""
+    b = ctx["B"]
+    govde = []
+    for c in _ciftler(b):
+        a = (b["cift"][c].get("varsayilan") or {}).get("ay_sonu") or {}
+        t, o = (a.get("ay_sonu") or {}).get("tum") or {}, (a.get("ay_sonu") or {}).get("oos") or {}
+        d, f = (a.get("diger") or {}).get("tum") or {}, (a.get("fark") or {}).get("tum") or {}
+        govde.append([PARITE[c], _hucre(t.get("n"), "n"), _hucre(t.get("beklenti_r"), "r"),
+                      f"{_hucre(t.get('ga_alt'), 'r')} / {_hucre(t.get('ga_ust'), 'r')}",
+                      _hucre(d.get("beklenti_r"), "r"), _hucre(f.get("p"), "s2"),
+                      _hucre(o.get("n"), "n"), _hucre(o.get("beklenti_r"), "r")])
+    return _tablo(["Parite", "Ay sonu işlem", "Ay sonu R", "%95 aralığı", "Öbür günler R", "Fark p",
+                   "Dışı işlem", "Dışı R"], govde, ["l", "r", "r", "r", "r", "r", "r", "r"])
+
+
+def blok_regresyon(u: Uretim, ctx: dict) -> str:
+    """Gün içi momentum (ön kayıt [momentum]): öğleden sonra getirisi ~ Londra ilk mum getirisi, ikisi de
+    ATR biriminde; Newey–West standart hatası. Strateji işlemlerinden bağımsız, maliyetsiz, orta fiyat."""
+    b = ctx["B"]
+    govde = []
+    for c in _ciftler(b):
+        rg = (b["cift"][c].get("varsayilan") or {}).get("regresyon") or {}
+        for d, ad in (("is", "içi"), ("oos", "dışı")):
+            x = rg.get(d) or {}
+            govde.append([PARITE[c], ad, _hucre(x.get("n"), "n"), _hucre(x.get("beta"), "r3"),
+                          _hucre(x.get("t_beta"), "r"), _hucre(x.get("p_beta"), "s2"), _hucre(x.get("r2"), "s3"),
+                          _hucre(x.get("isaret_isabet"), "yz1")])
+    return _tablo(["Parite", "Örneklem", "Gün", "Eğim (β)", "t (HAC)", "p", "R²", "İşaret tutturma"], govde,
+                  ["l", "l", "r", "r", "r", "r", "r", "r"])
+
+
+# ─────────────────────────────────────────────────────────────── haber bloklari
+OLAY_SIRA = ["NFP", "CPI", "FOMC_karar", "FOMC_basin", "ECB_karar", "ECB_basin", "BoE_karar"]
+KOVA_SIRA = ["<0,5", "0,5–1", "1–2", ">2"]
+UYUM_ADI = {"aynı": "öncesi trendle aynı yönde", "ters": "öncesi trende ters", "belirsiz": "belirsiz (trend ya da ilk mum sıfır)"}
+
+
+def _devam(u: Uretim) -> dict:
+    return ((u.O.get("haber") or {}).get("devam")) or {}
+
+
+def _boyut_sira(boyut: str, degerler: set) -> list[str]:
+    if boyut == "olay":
+        return [o for o in OLAY_SIRA if o in degerler]
+    if boyut == "kova":
+        return [k for k in KOVA_SIRA if k in degerler]
+    if boyut == "tf":
+        return sorted(degerler, key=int)
+    if boyut == "cift":
+        return [c for c in PARITE if c in degerler]
+    return sorted(degerler)
+
+
+def _boyut_ad(boyut: str, deger: str) -> str:
+    if boyut == "olay":
+        return adlar.OLAY.get(deger, deger)
+    if boyut == "trend_uyum":
+        return UYUM_ADI.get(deger, deger)
+    if boyut == "tf":
+        return f"{deger} dk mum"
+    if boyut == "cift":
+        return PARITE.get(deger, deger)
+    if boyut == "olay_kova":
+        o, k = deger.split("|", 1)
+        return f"{adlar.OLAY.get(o, o)} · {k}"
+    return deger
+
+
+def blok_devam(u: Uretim, ctx: dict, boyut: str = "olay") -> str:
+    """Kırılım ↔ fade devam tablosu (ön kayıt [haber_devam]): bir boyutun her değeri × her ufuk. Hücre: olay
+    sayısı, iki yönün net ortalaması (günlük ATR'nin yüzdesi) ve ön kaydın hükmü (BH q < eşik)."""
+    hucre = [h for h in _devam(u).get("hucre") or [] if h.get("boyut") == boyut]
+    if not hucre:
+        return "_Devam tablosu bu boyutta ölçülemedi (olay yok)._"
+    degerler = _boyut_sira(boyut, {h["deger"] for h in hucre})
+    ufuklar = sorted({int(h["ufuk"]) for h in hucre})
+    idx = {(h["deger"], int(h["ufuk"])): h for h in hucre}
+    govde = []
+    for d in degerler:
+        for f in ufuklar:
+            h = idx.get((d, f))
+            if not h:
+                continue
+            govde.append([_boyut_ad(boyut, d), f"{f} dk", _hucre(h.get("n_olay"), "n"),
+                          _hucre((h.get("kir") or {}).get("ort_atr_yuzde"), "r1"),
+                          _hucre((h.get("fad") or {}).get("ort_atr_yuzde"), "r1"), h.get("hukum") or "—"])
+    bas = {"olay": "Olay", "kova": "İlk mum / ATR", "trend_uyum": "Haber öncesi trend", "tf": "Mum",
+           "cift": "Parite", "olay_kova": "Olay · ilk mum / ATR"}.get(boyut, boyut)
+    return _tablo([bas, "Ufuk", "Olay", "Kırılım", "Fade", "Hüküm"], govde, ["l", "l", "r", "r", "r", "l"])
+
+
+def blok_devam_cumle(u: Uretim, ctx: dict) -> str:
+    """Devam tablosunun aile özeti: sınama sayısı, hüküm sayımı, kural."""
+    d = _devam(u)
+    if not d.get("hucre"):
+        return "Devam tablosu ölçülemedi."
+    k = d.get("kural") or {}
+    say = d.get("hukum_sayimi") or {}
+    parca = ", ".join(f"{v} hücrede {ad}" for ad, v in sorted(say.items(), key=lambda kv: -kv[1]))
+    return (f"Bütün hücrelerin bütün sınamaları tek aile: {sayi(d.get('sinama_sayisi', 0), 0)} tek yönlü t sınaması, "
+            f"Benjamini–Hochberg ile düzeltilmiş q değeri {sayi(k.get('fdr_q', 0.1), 2)} altında ve hücrede en az "
+            f"{k.get('asgari_olay', 20)} olay varsa hüküm verilir. Sonuç: {parca}.")
+
+
+def blok_haber_kirilim(u: Uretim, ctx: dict, boyut: str = "olay") -> str:
+    """Bir haber stratejisinin işlemleri olaya (ya da ilk mum kovasına) göre, dört paritenin birleşimi.
+    Havuz ortalaması parite ortalamalarının işlem sayısıyla ağırlıklı ortalamasıdır (bütün işlemlerin ortalaması)."""
+    b = ctx["B"]
+    top: dict = {}
+    for c in _ciftler(b):
+        hk = ((b["cift"][c].get("varsayilan") or {}).get("haber_kirilim") or {}).get(boyut) or {}
+        for deger, x in hk.items():
+            for d in ("tum", "oos"):
+                y = x.get(d) or {}
+                if y.get("n") and y.get("beklenti_r") is not None:
+                    t = top.setdefault(deger, {}).setdefault(d, [0, 0.0, set()])
+                    t[0] += y["n"]
+                    t[1] += y["n"] * y["beklenti_r"]
+                    t[2].add(c)
+    if not top:
+        return "_Olay kırılımı yok._"
+    govde = []
+    for deger in _boyut_sira(boyut, set(top)):
+        tum, oos = top[deger].get("tum"), top[deger].get("oos")
+        govde.append([_boyut_ad(boyut, deger), ", ".join(PARITE[c] for c in PARITE if tum and c in tum[2]) or "—",
+                      _hucre(tum[0] if tum else None, "n"), _hucre(tum[1] / tum[0] if tum else None, "r"),
+                      _hucre(oos[0] if oos else None, "n"), _hucre(oos[1] / oos[0] if oos else None, "r")])
+    bas = {"olay": "Olay", "kova": "İlk mum / ATR", "trend_uyum": "Haber öncesi trend"}.get(boyut, boyut)
+    return _tablo([bas, "Pariteler", "İşlem", "Net R", "Dışı işlem", "Dışı R"], govde,
+                  ["l", "l", "r", "r", "r", "r"])
+
+
+def blok_fomc(u: Uretim, ctx: dict) -> str:
+    """FOMC karar (14:00 → 14:30) ↔ basın toplantısı (14:30 → 15:30) hareketi, parite parite."""
+    govde = []
+    for c, h in sorted(((u.O.get("haber") or {}).get("cift") or {}).items(), key=lambda kv: list(PARITE).index(kv[0])):
+        oz = ((h or {}).get("fomc") or {}).get("ozet") or {}
+        b60 = oz.get("basin_60") or {}
+        if not b60:
+            continue
+        dn = b60.get("donus") or {}
+        kb = b60.get("karar_buyukluk") or {}
+        govde.append([PARITE[c], _hucre(oz.get("n"), "n"),
+                      f"{_hucre(dn.get('oran'), 'yz0')} ({_hucre(dn.get('alt'), 'yz0')}–{_hucre(dn.get('ust'), 'yz0')})",
+                      f"{_hucre(b60.get('korelasyon'), 'r')} ({_hucre(b60.get('korelasyon_alt'), 'r')} / "
+                      f"{_hucre(b60.get('korelasyon_ust'), 'r')})"]
+                     + [_hucre((kb.get(k) or {}).get("oran"), "yz0") for k in ("<0,5", "0,5–1", ">1")])
+    if not govde:
+        return "_FOMC karar ↔ basın toplantısı ölçülemedi (basın toplantısı saati olan toplantı yok)._"
+    return _tablo(["Parite", "Toplantı", "Dönüş oranı (%95)", "Korelasyon (%95)", "Karar <0,5 ATR", "0,5–1",
+                   ">1"], govde, ["l", "r", "r", "r", "r", "r", "r"])
+
+
+def blok_havuz_cumle(u: Uretim, ctx: dict) -> str:
+    """Havuzun (aynı kural bütün paritelerde birlikte) örneklem dışı hükmü ve örneklem içi karşılığı.
+    Hüküm kuralı değil, aralığın okunuşu: aralık sıfırın üstünde mi, sıfırı kapsıyor mu, ortalama eksi mi."""
+    b = ctx["B"]
+    h = ctx.get("H") or {}
+    oos, ic = h.get("oos") or {}, h.get("is") or {}
+    n_p = len(_ciftler(b))
+    r, alt = oos.get("beklenti_r"), oos.get("ga_alt")
+    if r is None or not oos.get("n"):
+        return "Havuz örneklem dışında ölçülemedi (işlem yok)."
+    if r > 0 and alt is not None and alt > 0:
+        s = (f"Havuzun örneklem dışı aralığı sıfırın üstünde: kuralın {n_p} paritede birlikte, maliyetten sonra "
+             f"bir kenarı var.")
+    elif r > 0:
+        s = (f"Havuzun örneklem dışı ortalaması sıfırın üstünde ama aralığı sıfırı kapsıyor: ortalama bu örneklem "
+             f"büyüklüğünde şanstan ayırt edilemiyor.")
+    else:
+        s = f"Havuzun örneklem dışı ortalaması sıfırın altında: kural maliyetten sonra {n_p} paritede birlikte kaybettiriyor."
+    if ic.get("n"):
+        k = u.O["kunye"]
+        s += (f" Örneklem içinde ({k['baslangic'][:4]}–{k['ic_bitis'][:4]}) {sayi(ic['n'], 0)} işlemde işlem başına {_hucre(ic.get('beklenti_r'), 'r')} R "
+              f"(%95 aralığı {_hucre(ic.get('ga_alt'), 'r')} / {_hucre(ic.get('ga_ust'), 'r')}).")
+    return s
+
+
+def blok_sonuclar(u: Uretim, ctx: dict) -> str:
+    """Bir stratejinin standart sonuç dizisi: aynı düzen her stratejide, böylece stratejiler yan yana okunur.
+    Yorum bu dizinin ARKASINA strateji şablonunda yazılır."""
+    b = ctx["B"]
+    k = u.O["kunye"]
+    kisa = adlar.BIRIM[ctx["BID"]][1]
+    p = [f"**Birikimli sonuç.** Önceden kayıtlı varsayılanın {len(_ciftler(b))} paritede ve havuzda birikimli net R'si; gri alan "
+         f"örneklem dışı ({tarih(k['dis_baslangic'])} →).",
+         "", blok_sekil(u, ctx, "egri", f"Birikimli net R ve düşüş — {kisa}"), "", blok_oos_cumle(u, ctx), "",
+         blok_sonuc(u, ctx, "oos"), "",
+         f"_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına "
+         f"{sayi(k['temel_kayma_pip'], 1)} pip kayma dahil. Havuz: aynı kural dört paritede birlikte; Sharpe "
+         f"havuzda günlük R toplamından._", "",
+         "**İşlemlerin anatomisi.** Kazanç ve kayıpların büyüklüğü, işlemin süresi ve işlem sırasında gidilen en kötü "
+         "(MAE) ve en iyi (MFE) nokta; ikisi de girişteki risk biriminde.", "", blok_ayrinti(u, ctx, "oos"), "",
+         "**Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.",
+         "", blok_sekil(u, ctx, "tf", f"Zaman dilimi kıyası — {kisa}"), "",
+         f"**Izgara ve seçim.** Önceden kaydın bütün kombinasyonları örneklem içinde ({k['baslangic'][:4]}–"
+         f"{k['ic_bitis'][:4]}) denendi; her paritede "
+         "en yüksek örneklem içi Sharpe'lı kombinasyon seçildi ve örneklem dışında sınandı.", "",
+         blok_sekil(u, ctx, "izgara", f"Parametre ızgarası — {kisa}"), "", blok_secim(u, ctx), "",
+         blok_dsr_cumle(u, ctx) + " " + blok_wf_cumle(u, ctx), "", blok_wf(u, ctx), "",
+         "**Maliyet.** Örneklem dışında net beklenti, dolum başına kaymanın dört kademesinde (makas her kademede "
+         "gerçek bid/ask).", "", blok_maliyet(u, ctx), "", blok_basabas(u, ctx), "",
+         "**Yön mü, zamanlama mı?** " + blok_rastgele_cumle(u, ctx), "",
+         "**Rejim ve saat.** " + blok_rejim_cumle(u, ctx), "", blok_rejim(u, ctx), "",
+         blok_sekil(u, ctx, "saat", f"Giriş saatine göre — {kisa}"), ""]
+    return "\n".join(p)
+
+
+def blok_kosullar(u: Uretim, ctx: dict) -> str:
+    """Koşul analizi dizisi: figür (EUR/USD), tutan/tutmayan özeti, öbür paritelerde aynı değişkenlerin hükmü."""
+    b = ctx["B"]
+    kisa = adlar.BIRIM[ctx["BID"]][1]
+    p = [blok_sekil(u, ctx, "kosul", f"Koşul kovaları — {kisa}"), "", blok_kosul_ozet(u, ctx, "EURUSD"), ""]
+    tut = [k["degisken"] for k in (((b.get("cift") or {}).get("EURUSD") or {}).get("varsayilan") or {}).get("kosul") or []
+           if k.get("hukum") == "tuttu"]
+    if tut:
+        govde = []
+        for d in tut:
+            satir = [adlar.KOSUL.get(d, d)]
+            for c in _ciftler(b):
+                ks = {x["degisken"]: x for x in ((b["cift"][c].get("varsayilan") or {}).get("kosul") or [])}
+                h = (ks.get(d) or {}).get("hukum")
+                satir.append({"tuttu": "tuttu", "tutmadi": "tutmadı", "secilmedi": "seçilmedi"}.get(h, "—"))
+            govde.append(satir)
+        p += ["EUR/USD'de tutan değişkenler öbür paritelerde:", "",
+              _tablo(["Değişken"] + [PARITE[c] for c in _ciftler(b)], govde, ["l"] + ["l"] * len(_ciftler(b))), ""]
+    return "\n".join(p)
+
+
 BLOKLAR = {
+    "sonuclar": blok_sonuclar, "kosullar": blok_kosullar, "hukum_cumle": blok_hukum_cumle,
+    "havuz_cumle": blok_havuz_cumle, "ay_sonu": blok_ay_sonu, "regresyon": blok_regresyon,
+    "devam": blok_devam, "devam_cumle": blok_devam_cumle, "haber_kirilim": blok_haber_kirilim, "fomc": blok_fomc,
     "oos_cumle": blok_oos_cumle, "rastgele_cumle": blok_rastgele_cumle, "dsr_cumle": blok_dsr_cumle,
     "wf_cumle": blok_wf_cumle, "rejim_cumle": blok_rejim_cumle,
     "sekil": blok_sekil, "sonuc": blok_sonuc, "ayrinti": blok_ayrinti, "maliyet": blok_maliyet,

@@ -263,6 +263,11 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
     f = ozellikler(k.b, a)
     icm = (a["gun"].to_numpy() <= np.datetime64(k.a.ic_bitis))
     out["kosul"] = sg.kova_analizi(f, icm, int(ONKAYIT["kosul"]["asgari_kova_islem"]))
+    # Ön kaydın aileye özgü iki ölçüsü: fiksingde ay sonu ayrı ([fiks]), momentumda regresyon ([momentum]).
+    if aile == "fiks":
+        out["ay_sonu"] = ay_sonu_ayrimi(a, icm)
+    if aile == "momentum":
+        out["regresyon"] = momentum_regresyon(k, aile, p)
     if "olay" in a.columns:
         out["haber_kirilim"] = haber_kirilim(a, icm)
     # günlük birikimli eğri (figür)
@@ -323,6 +328,93 @@ def haber_kirilim(a: pd.DataFrame, icm: np.ndarray) -> dict:
     out["olay_kova"] = {}
     for (o, kv), g in a.groupby(["olay", "kova"], sort=True):
         out["olay_kova"][f"{o}|{kv}"] = _kisa(g)
+    return out
+
+
+def _welch(x1: np.ndarray, x0: np.ndarray) -> dict:
+    """İki kümenin ortalama farkı ve Welch t (eşit varyans varsayılmaz); iki yönlü p."""
+    from scipy import stats
+    if len(x1) < 2 or len(x0) < 2:
+        return {"fark_r": None, "t": None, "p": None}
+    t, p = stats.ttest_ind(x1, x0, equal_var=False)
+    return {"fark_r": float(x1.mean() - x0.mean()), "t": float(t), "p": float(p)}
+
+
+def ay_sonu_ayrimi(a: pd.DataFrame, icm: np.ndarray) -> dict:
+    """WM/R fiksingi, ön kayıt [fiks]: "bütün günler ve ay sonu (ayın son Londra iş günü) ayrı".
+
+    Aynı kural, aynı işlemler; yalnız ayrı raporlanır (ay sonu için ayrı parametre SEÇİLMEZ). Her
+    kümede örneklem içi, dışı ve bütün dönem: işlem sayısı, ortalama R ve bootstrap %95 aralığı;
+    ay sonu ile öbür günlerin farkı Welch t ile. Ay sonu yılda on iki gündür: örneklem dışında küme
+    otuz dolayında işlemdir ve aralık buna göre geniştir."""
+    m = a["ay_sonu"].to_numpy(bool)
+    out: dict = {"ay_sonu": {}, "diger": {}, "fark": {}}
+    for d, dm in (("is", icm), ("oos", ~icm), ("tum", np.ones(len(a), bool))):
+        for ad, mm in (("ay_sonu", m), ("diger", ~m)):
+            x = a[mm & dm]
+            kk = _kisa(x)
+            if kk["n"] >= 2:
+                kk["ga_alt"], kk["ga_ust"] = mk.bootstrap_ort(x["r"].to_numpy())
+            out[ad][d] = kk
+        out["fark"][d] = _welch(a[m & dm]["r"].to_numpy(), a[~m & dm]["r"].to_numpy())
+    return out
+
+
+def nw_ols(x: np.ndarray, y: np.ndarray, lag: int | None = None) -> dict:
+    """y = α + β·x, sıradan en küçük kareler; standart hata Newey–West (Bartlett çekirdeği).
+
+    Gecikme verilmezse Newey–West'in kural gecikmesi ⌊4·(n/100)^(2/9)⌋. Gözlemler zaman sırasında
+    gelmelidir (gecikmeli çarpımlar komşu günleri eşler). p iki yönlü, normal yaklaşımla."""
+    n = len(x)
+    if n < 10:
+        return {"n": int(n)}
+    L = int(np.floor(4 * (n / 100) ** (2 / 9))) if lag is None else int(lag)
+    X = np.column_stack([np.ones(n), x])
+    xtx_ters = np.linalg.inv(X.T @ X)
+    b = xtx_ters @ X.T @ y
+    u = y - X @ b
+    xu = X * u[:, None]
+    S = xu.T @ xu
+    for l in range(1, L + 1):
+        w = 1 - l / (L + 1)
+        G = xu[l:].T @ xu[:-l]
+        S += w * (G + G.T)
+    V = xtx_ters @ S @ xtx_ters
+    se = np.sqrt(np.diag(V))
+    t = b / se
+    p = [math.erfc(abs(v) / math.sqrt(2)) for v in t]
+    r2 = 1 - (u @ u) / ((y - y.mean()) @ (y - y.mean()))
+    return {"n": int(n), "lag": L, "alfa": float(b[0]), "beta": float(b[1]), "se_beta": float(se[1]),
+            "t_beta": float(t[1]), "p_beta": float(p[1]), "t_alfa": float(t[0]), "r2": float(r2),
+            "isaret_isabet": float(np.mean(np.sign(x) == np.sign(y)))}
+
+
+def momentum_regresyon(k: Kosucu, aile: str, p: dict) -> dict:
+    """Ön kayıt [momentum]: "sinyalin öngörü gücü regresyonla (öğleden sonra getirisi ~ ilk tf getirisi;
+    HAC) sınanır". Strateji işlemlerinden BAĞIMSIZ: maliyet, stop ve yürütme fiyatı yok, yalnız orta fiyat.
+
+    x: Londra 08:00'den itibaren ilk tf mumunun getirisi (kapanış − açılış); y: giriş (12:00 ET) ile
+    çıkış (16:00 ya da 16:55 ET) dakikalarının açılış orta fiyatı farkı. İkisi de o günün girişteki
+    ATR(14, 60 dk)'sine bölünür, yani yıllar ve pariteler arası birimsizdir. Gözlem: sinyal üreten
+    her işlem günü (ilk mum hareketsizse gün yok — strateji de o gün işlem açmaz)."""
+    sin, _ = k.sinyal(aile, p)
+    if not len(sin):
+        return {}
+    d = k.b.d
+    gi = sin["giris_i"].to_numpy(np.int64)
+    # çıkış dakikası, işlemlerdeki gibi gün sonuyla sınırlı (strat_ortak.emirler)
+    ci = np.minimum(sin["cikis_i"].to_numpy(np.int64), k.b.g.sinir[sin["gun_k"].to_numpy(np.int64)])
+    risk = sin["risk"].to_numpy(np.float64)
+    ok = (gi >= 0) & (ci > gi) & (ci < len(d.t)) & np.isfinite(risk) & (risk > 0)
+    gun = k.b.g.gun[sin["gun_k"].to_numpy(np.int64)][ok]
+    x = sin["ilk_hareket"].to_numpy(np.float64)[ok] / risk[ok]
+    y = (d.mo[ci[ok]] - d.mo[gi[ok]]) / risk[ok]
+    sira = np.argsort(gun, kind="stable")
+    gun, x, y = gun[sira], x[sira], y[sira]
+    out = {}
+    for ad, m in (("is", gun <= np.datetime64(k.a.ic_bitis)), ("oos", gun >= np.datetime64(k.a.dis_baslangic)),
+                  ("tum", np.ones(len(gun), bool))):
+        out[ad] = nw_ols(x[m], y[m])
     return out
 
 

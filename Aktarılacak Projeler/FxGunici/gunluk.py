@@ -128,11 +128,12 @@ def gunluk_kur(d: Dakika) -> Gunluk:
             pen = aralik[i - n:i]
             out[i] = aralik[i - 1] <= pen.min() + 1e-9
         return out
-    ay = gun.astype("datetime64[M]")
-    ay_sonu = np.zeros(len(gun), dtype=bool)
-    ay_sonu[:-1] = ay[1:] != ay[:-1]
-    ay_sonu[-1] = False         # pencerenin son günü ayın sonu olup olmadığı bilinmez
     tarihler = pd.DatetimeIndex(gun.astype("datetime64[ns]"))
+    # Ay sonu = ayın SON LONDRA İŞ GÜNÜ (ön kayıt [fiks]): hafta içi ve İngiltere resmî tatili değil.
+    # Ayın son hafta içi günü bir Londra tatiline düşerse (2018-03 ve 2024-03 Paskalya cuması,
+    # 2020-08 ve 2026-08 ağustos tatili, 2021-05 mayıs tatili) ay sonu bir önceki iş günüdür.
+    # Takvim kural olduğu için pencerenin son günü de sorulabilir (veri yoksa bile kural bilinir).
+    ay_sonu = np.array([z.londra_ay_sonu(t.date()) for t in tarihler], dtype=bool)
     dst_rejim = np.array([z.dst_rejimi(t.date()) for t in tarihler], dtype=object)
     dst_hafta = np.array([z.dst_gecis_haftasi(t.date()) for t in tarihler])
     sinir_i = np.searchsorted(d.t, an["ny_1655"], side="left")

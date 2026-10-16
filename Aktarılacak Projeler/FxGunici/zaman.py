@@ -191,6 +191,76 @@ def dst_gecis_haftasi(gun: date) -> bool:
     return False
 
 
+# ───────────────────────────────────────────────────────────── Londra iş günü
+def paskalya(yil: int) -> date:
+    """Batı kilisesinin Paskalya pazarı (Gauss–Meeus–Jones–Butcher algoritması)."""
+    a, b, c = yil % 19, yil // 100, yil % 100
+    d, e = b // 4, b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i, k = c // 4, c % 4
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    ay = (h + l - 7 * m + 114) // 31
+    gun = ((h + l - 7 * m + 114) % 31) + 1
+    return date(yil, ay, gun)
+
+
+def _ayin_pazartesisi(yil: int, ay: int, son: bool) -> date:
+    if son:
+        g = date(yil + (ay == 12), ay % 12 + 1, 1) - timedelta(days=1)
+        return g - timedelta(days=g.weekday())
+    g = date(yil, ay, 1)
+    return g + timedelta(days=(7 - g.weekday()) % 7)
+
+
+#: Kuraldan sapan yıllar (İngiltere ve Galler, resmî ilanla taşınan ya da eklenen günler).
+_LONDRA_OZEL = {
+    2020: {"tasi": {date(2020, 5, 4): date(2020, 5, 8)}, "ek": []},              # VE Day 75. yıl
+    2022: {"tasi": {date(2022, 5, 30): date(2022, 6, 2)}, "ek": [date(2022, 6, 3), date(2022, 9, 19)]},
+    2023: {"tasi": {}, "ek": [date(2023, 5, 8)]},                                  # taç giyme
+}
+
+
+def londra_tatilleri(yil: int) -> set[date]:
+    """İngiltere ve Galler resmî tatilleri (bank holidays), hafta içi günler olarak.
+
+    Kural: yılbaşı, Paskalya'dan önceki cuma ve sonraki pazartesi, mayısın ilk ve son pazartesisi,
+    ağustosun son pazartesisi, Noel ve ertesi gün; hafta sonuna düşen gün sonraki hafta içi güne
+    taşınır. Kuraldan sapan yıllar `_LONDRA_OZEL`de adıyla. Kapsam bu projenin dönemidir (2018 →);
+    dışında kural doğru ama özel günler girilmedi."""
+    p = paskalya(yil)
+    gunler = [p - timedelta(days=2), p + timedelta(days=1), _ayin_pazartesisi(yil, 5, False),
+              _ayin_pazartesisi(yil, 5, True), _ayin_pazartesisi(yil, 8, True)]
+    yb = date(yil, 1, 1)
+    gunler.append(yb + timedelta(days={5: 2, 6: 1}.get(yb.weekday(), 0)))
+    noel, ertesi = date(yil, 12, 25), date(yil, 12, 26)
+    if noel.weekday() == 5:                     # cumartesi: pazartesi + salı
+        gunler += [date(yil, 12, 27), date(yil, 12, 28)]
+    elif noel.weekday() == 6:                   # pazar: pazartesi (ertesi) + salı
+        gunler += [date(yil, 12, 26), date(yil, 12, 27)]
+    elif noel.weekday() == 4:                   # cuma: ertesi gün cumartesi → pazartesi
+        gunler += [noel, date(yil, 12, 28)]
+    else:
+        gunler += [noel, ertesi]
+    ozel = _LONDRA_OZEL.get(yil, {"tasi": {}, "ek": []})
+    gunler = [ozel["tasi"].get(g, g) for g in gunler] + list(ozel["ek"])
+    return {g for g in gunler if g.weekday() < 5}
+
+
+def londra_ay_sonu(gun: date) -> bool:
+    """Gün, ayın son Londra iş günü mü (hafta içi ve İngiltere resmî tatili değil)?"""
+    if gun.weekday() >= 5 or gun in londra_tatilleri(gun.year):
+        return False
+    g = gun + timedelta(days=1)
+    while g.month == gun.month:
+        if g.weekday() < 5 and g not in londra_tatilleri(g.year):
+            return False
+        g += timedelta(days=1)
+    return True
+
+
 # ───────────────────────────────────────────────────────────── olay saatleri
 #: Dersin TSİ tablosunda geçen olaylar: (ad, bölge, yerel saat).
 OLAYLAR = [
