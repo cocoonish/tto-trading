@@ -137,7 +137,9 @@ Bir işlemin maliyeti iki parçadır: girişte ve çıkışta ödenen **makas** 
 **kayma** (makasın ötesinde kötüleşen dolum). Makas veriden gelir; kayma bir varsayımdır ve dört kademede ölçülür:
 dolum başına {{ K.kayma_pip[0] | s1 }}, {{ K.kayma_pip[1] | s1 }}, {{ K.kayma_pip[2] | s1 }} ve
 {{ K.kayma_pip[3] | s1 }} pip. Her strateji dersinin maliyet tablosu dört kademede net sonucu verir; **başabaş
-kayma** net sonucun sıfıra indiği kaymadır. Başabaş kayma yarım pipin altındaysa kuralın kenarı (varsa) bir kurumsal
+kayma** işlem başına net R'nin (bütün dönemde) sıfıra indiği dolum başına kaymadır. R'den ölçülür, pipten değil:
+her işlem 1 R riske ettiği için para sonucu R'yi izler, ve geniş stop'lu işlemlerin ağır bastığı pip ortalaması R
+ortalamasıyla işaret değiştirebilir. Başabaş kayma yarım pipin altındaysa kuralın kenarı (varsa) bir kurumsal
 masanın bile yürütme maliyetine sığmaz.
 
 Aynı işlem iki ayrı sayı taşır: **brüt** (orta fiyattan orta fiyata, maliyetsiz) ve **net** (yürütülebilir
@@ -205,7 +207,7 @@ Sharpe ve düşüş dört paritenin günlük R toplamından hesaplanır.
 | Rastgele yön sınaması | Aynı giriş ve çıkış dakikalarında yönü yazı turayla seçen denemelerin dağılımı. |
 | Deflated Sharpe | Çok sayıda kombinasyon denenmişken en iyisinin Sharpe'ının şans payından arındırılmış olasılığı. |
 | Yürüyen pencere | Her yılı yalnız önceki yıllarla seçip o yılda sınamak. |
-| Başabaş kayma | Net beklentiyi sıfıra indiren dolum başına kayma. |
+| Başabaş kayma | İşlem başına net R'yi (bütün dönem) sıfıra indiren dolum başına kayma. |
 | Pip | EUR/USD, GBP/USD, AUD/USD'de 0,0001; USD/JPY'de 0,01. |
 | TSİ | Türkiye saati, yıl boyu UTC+3. |
 

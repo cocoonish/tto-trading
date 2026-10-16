@@ -1334,19 +1334,20 @@ def blok_ders_ozet(u: Uretim, ctx: dict, *birimler: str) -> str:
                     "Maliyet yiyor", "Başabaş kayma, EUR/USD (pip)", "R birimi medyanı, EUR/USD (pip)"], govde,
                    ["l", "r", "r", "r", "l", "r", "r", "r"]) +
             "\n\n_Başabaş kayma: net beklentiyi sıfıra indiren dolum başına kayma (bütün dönem); sıfır kaymada bile "
-            "eksiyse parantezde işlem başına net pip. R birimi: stop'lu kurallarda girişten stop'a uzaklık, stop'suz "
+            "eksiyse parantezde sıfır kaymadaki işlem başına net R. R birimi: stop'lu kurallarda girişten stop'a uzaklık, stop'suz "
             "kurallarda girişteki ATR. Maliyet yiyor: brüt sonucu sıfırdan ayırt edilen ama net sonucu eksi olan "
             "parite sayısı._")
 
 
 def _basabas_yaz(e: dict) -> str:
-    """Başabaş kaymanın okur yazımı: ızgarada kesişim · sıfırda bile eksi (işlem başına net pip) · ızgaranın üstünde."""
+    """Başabaş kaymanın okur yazımı: ızgarada kesişim · sıfırda bile eksi (sıfır kaymada işlem başına net R) ·
+    ızgaranın üstünde."""
     k = e.get("basabas_kayma_pip")
     if k is None:
         return "ızgaranın üstünde" if e.get("oos") else "—"
     if k == 0:
-        ek = e.get("basabas_ek_maliyet_pip")
-        return f"sıfırda bile eksi ({_hucre(ek, 'r')} pip)" if ek is not None else "sıfırda bile eksi"
+        ek = e.get("basabas_sifir_r")
+        return f"sıfırda bile eksi ({_hucre(ek, 'r')} R)" if ek is not None else "sıfırda bile eksi"
     if k < 0.005:
         return "&lt;0,01"
     return _hucre(k, "s2")

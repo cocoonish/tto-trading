@@ -5,6 +5,7 @@ Regresyon elle kurulan bir örneğe karşı sınanır (standart hata formülü k
 türetilmez); ay sonu ayrımı sentetik bir işlem tablosunda kümeleri ve farkı doğru ayırmalı."""
 from __future__ import annotations
 
+import pytest
 import math
 import sys
 from pathlib import Path
@@ -60,3 +61,12 @@ def test_ay_sonu_ayrimi_kumeler_ve_fark():
     assert o["ay_sonu"]["is"]["n"] == 6 and o["ay_sonu"]["oos"]["n"] == 4
     assert o["fark"]["tum"]["fark_r"] > 1.0 and o["fark"]["tum"]["p"] < 1e-6
     assert o["ay_sonu"]["tum"]["ga_alt"] <= o["ay_sonu"]["tum"]["beklenti_r"] <= o["ay_sonu"]["tum"]["ga_ust"]
+
+
+def test_basabas_kesisimi():
+    """Başabaş kayma: net R'nin ızgarada sıfırı kestiği nokta (doğrusal), sıfırda bile eksi → 0, sonda bile artı → None."""
+    import kosu
+    assert kosu._sifir_kesisim([0.0, 0.5, 1.0, 2.0], [0.053, 0.011, -0.028, -0.1]) == pytest.approx(
+        0.5 + 0.5 * 0.011 / (0.011 + 0.028))
+    assert kosu._sifir_kesisim([0.0, 0.5], [-0.01, -0.05]) == 0.0
+    assert kosu._sifir_kesisim([0.0, 0.5], [0.2, 0.1]) is None

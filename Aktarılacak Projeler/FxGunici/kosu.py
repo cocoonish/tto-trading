@@ -228,11 +228,15 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
                            "tum": mk.ozet(x, k.gun_tum, bootstrap=False)}
     out["maliyet"] = {s: {d: {kk: v[d][kk] for kk in ("n", "beklenti_r", "beklenti_pip", "sharpe")} for d in v}
                       for s, v in maliyet.items()}
-    # başabaş: kayma ızgarasında beklenti_pip(s) = 0'ın doğrusal kestirimi (dolum başına pip)
+    # başabaş: kayma ızgarasında işlem başına net R (serinin ölçüsü; her işlem 1 R riske eder) = 0'ın doğrusal
+    # kestirimi, x ekseni dolum başına pip. Pip ortalaması R ortalamasıyla işaret değiştirebilir (geniş stop'lu
+    # işlemler pipte ağır basar): ölçüldü, EUR/USD N4'te sıfır kaymada pip +2,48, R +0,05; 1 pipte pip +1,13, R −0,03.
     xs = sorted(float(s) for s in maliyet)
-    ys = [maliyet[str(s) if str(s) in maliyet else s]["tum"]["beklenti_pip"] for s in xs]
+    ys = [maliyet[str(s) if str(s) in maliyet else s]["tum"]["beklenti_r"] for s in xs]
     out["basabas_kayma_pip"] = _sifir_kesisim(xs, ys)
-    out["basabas_ek_maliyet_pip"] = maliyet[str(0.0)]["tum"]["beklenti_pip"] if str(0.0) in maliyet else None
+    sifir = maliyet.get(str(0.0), {}).get("tum") or {}
+    out["basabas_sifir_r"] = sifir.get("beklenti_r")          # sıfır kaymada, yalnız gerçek makasla net R
+    out["basabas_ek_maliyet_pip"] = sifir.get("beklenti_pip")   # aynı, pip'te (bilgi)
     # rastgele yön (örneklem dışı ve bütün dönem)
     out["rastgele"] = {"oos": sg.rastgele_yon(k.b, dis, int(p["tf"]), k.sinyal(aile, p)[1], KAYMA_TEMEL,
                                               k.a.haber_kayma_pip),
