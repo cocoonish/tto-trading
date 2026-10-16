@@ -1,14 +1,14 @@
 {
  "birimler": {
   "USDJPY/2023": {
-   "bayt": 4302408,
-   "dolgu_dakika": 76267,
+   "bayt": 4347659,
+   "dolgu_dakika": 78671,
    "gun": 313,
    "gun_404": [],
    "gun_bos": [
     "2023-12-31"
    ],
-   "gun_dolu": 308,
+   "gun_dolu": 312,
    "gun_dolu_liste": [
     "2023-01-01",
     "2023-01-02",
@@ -316,25 +316,24 @@
     "2023-12-20",
     "2023-12-21",
     "2023-12-22",
+    "2023-12-24",
+    "2023-12-25",
+    "2023-12-26",
+    "2023-12-27",
     "2023-12-28",
     "2023-12-29"
    ],
-   "gun_hata": [
-    "2023-12-24: BID hata HTTP 503 · ASK hata ReadTimeoutError",
-    "2023-12-25: BID hata ProtocolError · ASK tamam",
-    "2023-12-26: BID hata HTTP 503 · ASK tamam",
-    "2023-12-27: BID tamam  · ASK hata ReadTimeoutError"
-   ],
-   "icerik_ozu": "2c4bd24ceb42be87d0525b4e38d32b9181ed434a7488fa9960fd4b0daae1f6b2",
+   "gun_hata": [],
+   "icerik_ozu": "1d4cc5825d849160ebc2c9682348ff19c661c84efbb990efdf4611b1cf3cd7d5",
    "ilk_gun": "2023-01-01",
-   "indirme": "2026-10-16T12:53:45Z",
-   "istek": 1990,
+   "indirme": "2026-10-16T13:13:07Z",
+   "istek": 2041,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1343,
-   "satir": 368693,
-   "sha256": "5ae70556117299d56977e01fe178733ce7e97e2fcc4b6d00836af0073fdd9576",
+   "ret": 1386,
+   "satir": 372049,
+   "sha256": "de7fee88eef3781f11fb3d517d18af46d559ac7322f641d2472596e619ad9032",
    "son_gun": "2023-12-31",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -359,5 +358,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:53:46Z"
+ "yazim": "2026-10-16T13:13:07Z"
 }
