@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-15",
+ "_son_guncelleme": "2026-10-16",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1281,6 +1281,16 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-15"
+  },
+  "2026-11-06|ABD tarım dışı istihdam (Ekim)": {
+   "tarih": "2026-11-06",
+   "olay": "ABD tarım dışı istihdam (Ekim)",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-16"
   }
  }
 }
