@@ -124,8 +124,9 @@ kalanında en iyi kombinasyonun örneklem içi Sharpe'ı, denenen kombinasyon sa
 değerden ayırt edilemiyor: örneklem içinde iyi görünen bir ayar, çoğu zaman yalnız en şanslı ayardır.{% else %}Bu
 bileşimlerde seçimin örneklem içi üstünlüğü denenen kombinasyon sayısıyla açıklanamıyor; örneklem dışı sonuçları
 seçim tablolarında.{% endif %}{% if T.kosul.ters_sinanan %} Koşul analizinde {% if T.kosul.ayirt %}gerçek seçim ters
-seçimden daha sık tuttu, ama fark tek tek koşulları karar kuralı yapacak kadar büyük değil{% else %}gerçek seçim ters
-seçimden ayırt edilemedi{% endif %} (yukarıdaki bölüm).{% endif %}
+seçimden daha sık tuttu, ama fark tek tek koşulları karar kuralı yapacak kadar büyük değil{% elif T.kosul.ters_ustun %}ters
+seçim gerçek seçimden daha sık tuttu: örneklem içinde iyi görünen koşullar örneklem dışında daha sık kötü kovaya
+döndü{% else %}gerçek seçim ters seçimden ayırt edilemedi{% endif %} (yukarıdaki bölüm).{% endif %}
 
 Bu sonuçlar bu kuralların bu biçimleri içindir: başka bir yürütme maliyeti (daha dar makas, likidite sağlayan emirler),
 başka bir zaman dilimi, ya da kuralın bir parçası olarak gerçek bir haber beklentisi başka sonuç verebilir. Ölçülmeyen

@@ -1445,7 +1445,7 @@ def blok_maliyet_ozet(u: Uretim, ctx: dict) -> str:
 def blok_rastgele_ozet(u: Uretim, ctx: dict) -> str:
     """Parite parite: rastgele yön dağılımında örneklem dışı sonucu eşiğin (95. yüzdelik) üstünde kalan kural sayısı."""
     esik = u.ON.get("hukum", {}).get("rastgele_esik_yuzdelik", 95)
-    parca = []
+    parca, eksi = [], []
     for c in PARITE:
         n = ust = 0
         adlar_ = []
@@ -1458,13 +1458,24 @@ def blok_rastgele_ozet(u: Uretim, ctx: dict) -> str:
             if r["yuzdelik"] >= esik:
                 ust += 1
                 adlar_.append(adlar.BIRIM[bid][1])
+                net = (v.get("oos") or {}).get("beklenti_r")
+                if net is not None and net <= 0:
+                    ort = r.get("ort")
+                    eksi.append(f"{adlar.BIRIM[bid][1]} ({PARITE[c]}: kendisi {sayi(net, 2, arti=True)} R"
+                                + (f", rastgele yönün ortalaması {sayi(ort, 2, arti=True)} R" if ort is not None else "")
+                                + ")")
         if n:
             parca.append(f"{PARITE[c]}: {sayi(ust, 0)} / {sayi(n, 0)}" + (f" ({', '.join(adlar_)})" if adlar_ else ""))
     if not parca:
         return ""
-    return (f"Örneklem dışı sonucu rastgele yön dağılımının {esik}. yüzdeliğinin üstünde kalan kural sayısı — "
-            + "; ".join(parca) + ". Hiçbir şeyin çalışmadığı bir dünyada bile her yirmi sınamadan biri bu eşiği "
-            "şansla geçer.")
+    s = (f"Örneklem dışı sonucu rastgele yön dağılımının {esik}. yüzdeliğinin üstünde kalan kural sayısı — "
+         + "; ".join(parca) + ". Hiçbir şeyin çalışmadığı bir dünyada bile her yirmi sınamadan biri bu eşiği "
+         "şansla geçer.")
+    if eksi:
+        s += (" Eşiği geçip net sonucu yine eksi kalan: " + "; ".join(eksi) + ". Rastgele yönlü işlemler de aynı "
+              "makası ödediği için dağılımın ortalaması sıfırın altında kalır; o dağılımı yenmek yön seçiminin bir "
+              "şey kattığını söyler, maliyeti karşıladığını söylemez.")
+    return s
 
 
 def blok_korelasyon_cumle(u: Uretim, ctx: dict, kac: str = "5") -> str:
@@ -1536,6 +1547,8 @@ def kosul_sayim(O: dict) -> dict:
                     t["b"] += g == "tutmadi" and ts == "tuttu"
     t["p"] = _mcnemar_p(t["a"], t["b"])
     t["ayirt"] = bool(t["a"] > t["b"] and t["p"] < 0.05)
+    # Ters yön: örneklem içinde KÖTÜ görünen kovalar örneklem dışında daha sık tutuyor — kova sıralaması dönüyor.
+    t["ters_ustun"] = bool(t["b"] > t["a"] and t["p"] < 0.05)
     return t
 
 
@@ -1629,6 +1642,11 @@ def blok_kosul_genel_cumle(u: Uretim, ctx: dict) -> str:
     if t["ayirt"]:
         s3 = (" Gerçek seçim ters seçimden daha sık tutuyor: örneklem içinde iyi görünen kovaların bir kısmı örneklem "
               "dışında da iyi. Hangisinin tuttuğu yine tek tek okunmalıdır.")
+    elif t["ters_ustun"]:
+        s3 = (" Ters seçim gerçek seçimden daha sık tutuyor: örneklem içindeki kova sıralaması örneklem dışında "
+              "sistematik olarak tersine dönüyor. Bu kurallarda bir koşula göre işlem seçmek, toplu olarak, örneklem "
+              "dışında daha kötü kovayı seçmek demekti; tek tek 'tuttu' hücreleri bir karar kuralı değildir. "
+              "Bileşimler bağımsız değildir (aynı kuralın değişkenleri aynı işlemleri paylaşır), p bir ölçüdür.")
     else:
         s3 = (" Gerçek seçim ters seçimden ayırt edilemiyor: tutan koşulların çoğu, gürültünün örneklem dışında da "
               "sıfırın üstünde kalabilmesiyle açıklanır. Tek tek 'tuttu' hücreleri bir karar kuralı değildir.")
