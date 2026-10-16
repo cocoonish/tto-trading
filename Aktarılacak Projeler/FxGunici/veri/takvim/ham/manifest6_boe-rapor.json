@@ -1,0 +1,11 @@
+{
+ "_koşu": {
+  "sure_sn": 6.6,
+  "zaman": "2026-10-16T21:03:20Z"
+ },
+ "https://web.archive.org/cdx/search/cdx?url=bankofengland.co.uk/report/&matchType=prefix&output=json&fl=original,timestamp,statuscode&collapse=urlkey&filter=statuscode:200&limit=20000": {
+  "bayt": 20511,
+  "dosya": "web.archive.org_cdx_search_cdx_url_bankofengland.co.uk_report_matchType_prefix_output_json_fl_original_timestamp_statuscode_collapse_urlkey_filter_sta_0f7eb441.html",
+  "durum": 200
+ }
+}
