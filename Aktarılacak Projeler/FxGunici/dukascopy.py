@@ -46,7 +46,7 @@ import numpy as np
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-import requests
+import urllib3
 
 KOK_URL = "https://datafeed.dukascopy.com/datafeed"
 # ASCII başlık ŞART: http.client başlığı latin-1 ile kodlar; Türkçe bir harf
@@ -112,15 +112,27 @@ def coz(ham: bytes, adim_sn: int = 60, azami: int = 1440) -> np.ndarray:
 
 
 # ───────────────────────────────────────────────────────────── ağ
-_yerel = threading.local()
+# İstekler urllib3 bağlantı havuzundan gider, `requests`ten DEĞİL. Sebep ölçüldü
+# (16.10.2026, bulut koşusu): deponun ortak HTTP koruması (`ortak/sitecustomize.py`)
+# requests'in her isteğini sarar ve aynı ana bilgisayarda iki ardışık tam
+# başarısızlıkta 180 saniyelik bir DEVRE KESİCİ açar. O kural tek tek istek atan
+# veri hatları için doğrudur; eşzamanlı binlerce dosya indiren bir arşivleyicide
+# ise kaynağın birkaç geçici zaman aşımı kesiciyi açıyor ve kesik süresince BÜTÜN
+# istekler denenmeden düşüyordu — iki yıllık birimde 16 ve 11 gün böyle kayboldu.
+# Bu betik kendi zaman aşımını, yeniden denemesini ve bütçesini taşır.
+_havuz_kilit = threading.Lock()
+_HAVUZ = None
 
 
-def _oturum() -> requests.Session:
-    if not hasattr(_yerel, "s"):
-        s = requests.Session()
-        s.headers.update(BASLIK)
-        _yerel.s = s
-    return _yerel.s
+def _havuz(boyut: int = 16):
+    global _HAVUZ
+    with _havuz_kilit:
+        if _HAVUZ is None:
+            import os
+            vekil = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+            ortak = dict(num_pools=4, maxsize=boyut, block=True, headers=BASLIK, retries=False)
+            _HAVUZ = urllib3.ProxyManager(vekil, **ortak) if vekil else urllib3.PoolManager(**ortak)
+    return _HAVUZ
 
 
 @dataclass
@@ -128,25 +140,32 @@ class Yanit:
     durum: str          # "tamam" · "bos" · "yok" (404) · "hata"
     ham: bytes = b""
     ayrinti: str = ""
+    deneme: int = 0
 
 
-def getir(url: str, deneme: int = 5, zaman_asimi: float = 30.0) -> Yanit:
-    """Tek dosya; 429/5xx ve ağ hatasında üstel bekleyişle yeniden dener."""
+def getir(url: str, deneme: int = 6, zaman_asimi: float = 20.0, son_an: float | None = None) -> Yanit:
+    """Tek dosya; 429/5xx ve ağ hatasında üstel bekleyişle yeniden dener.
+
+    `son_an` (monotonic) geçtiyse yeni deneme başlatılmaz: dosya bu koşuda HATA
+    sayılır ve bir sonraki koşu onu yeniden ister (kaldığı yerden sürer)."""
     son = ""
     for i in range(deneme):
+        if son_an is not None and time.monotonic() > son_an:
+            return Yanit("hata", ayrinti=f"bütçe ({son})" if son else "bütçe", deneme=i)
         try:
-            r = _oturum().get(url, timeout=zaman_asimi)
-            if r.status_code == 200:
-                return Yanit("tamam" if r.content else "bos", r.content)
-            if r.status_code == 404:
-                return Yanit("yok")
-            son = f"HTTP {r.status_code}"
-            if r.status_code not in (429, 500, 502, 503, 504):
-                return Yanit("hata", ayrinti=son)
-        except requests.RequestException as e:
-            son = f"{type(e).__name__}: {e}"[:200]
-        time.sleep(min(30.0, 0.75 * 2 ** i))
-    return Yanit("hata", ayrinti=son)
+            r = _havuz().request("GET", url, timeout=urllib3.Timeout(connect=10.0, read=zaman_asimi),
+                                 retries=False, preload_content=True)
+            if r.status == 200:
+                return Yanit("tamam" if r.data else "bos", r.data, deneme=i + 1)
+            if r.status == 404:
+                return Yanit("yok", deneme=i + 1)
+            son = f"HTTP {r.status}"
+            if r.status not in (429, 500, 502, 503, 504):
+                return Yanit("hata", ayrinti=son, deneme=i + 1)
+        except urllib3.exceptions.HTTPError as e:
+            son = f"{type(e).__name__}"
+        time.sleep(min(20.0, 1.0 * 2 ** i))
+    return Yanit("hata", ayrinti=son, deneme=deneme)
 
 
 # ───────────────────────────────────────────────────────────── gün → satırlar
@@ -178,17 +197,22 @@ def gunler(bas: date, bit: date) -> list[date]:
 
 
 def yil_indir(sembol: str, yil: int, bas: date, bit: date, es_zamanli: int = 8,
-              deneme: int = 5, zaman_asimi: float = 30.0) -> tuple[pd.DataFrame, dict]:
-    """Bir parite × yıl birimini indirir. Birim ATOMİKtir: tek bir gün bile
-    hatayla dönerse çerçeve döner ama künye `tam=False` der ve arşive yazılmaz."""
+              deneme: int = 6, zaman_asimi: float = 20.0, yalniz: list[date] | None = None,
+              son_an: float | None = None) -> tuple[pd.DataFrame, dict]:
+    """Bir parite × yıl biriminin günlerini indirir (`yalniz` verilirse yalnız o günleri).
+
+    Hatayla dönen gün künyede `gun_hata`da kalır; çağıran, var olan arşivle
+    birleştirip bir sonraki koşuda yalnız o günleri yeniden ister."""
     ilk = max(bas, date(yil, 1, 1))
     son = min(bit, date(yil, 12, 31))
-    liste = gunler(ilk, son)
+    liste = yalniz if yalniz is not None else gunler(ilk, son)
     isler = [(g, t) for g in liste for t in ("BID", "ASK")]
     with ThreadPoolExecutor(max_workers=es_zamanli) as h:
-        yanitlar = list(h.map(lambda gt: getir(dakika_url(sembol, gt[0], gt[1]), deneme, zaman_asimi), isler))
+        yanitlar = list(h.map(lambda gt: getir(dakika_url(sembol, gt[0], gt[1]), deneme, zaman_asimi, son_an),
+                              isler))
     sonuc = dict(zip(isler, yanitlar))
-    parcalar, bos, yok, hata, dolgu = [], [], [], [], 0
+    istek = sum(y.deneme for y in yanitlar)
+    parcalar, dolu, bos, yok, hata, dolgu = [], [], [], [], [], 0
     for g in liste:
         yb, ya = sonuc[(g, "BID")], sonuc[(g, "ASK")]
         if "hata" in (yb.durum, ya.durum):
@@ -213,12 +237,14 @@ def yil_indir(sembol: str, yil: int, bas: date, bit: date, es_zamanli: int = 8,
             bos.append(g.isoformat())
         else:
             parcalar.append(cer)
+            dolu.append(g.isoformat())
     df = pd.concat(parcalar, ignore_index=True) if parcalar else pd.DataFrame(columns=SUTUNLAR)
     df = df.sort_values("t", kind="mergesort").reset_index(drop=True)
     kunye = {
         "ilk_gun": ilk.isoformat(), "son_gun": son.isoformat(), "gun": len(liste),
         "gun_dolu": len(parcalar), "gun_bos": bos, "gun_404": yok, "gun_hata": hata,
         "dolgu_dakika": int(dolgu), "satir": int(len(df)), "tam": not hata,
+        "gun_dolu_liste": dolu, "istek": int(istek),
     }
     return df, kunye
 

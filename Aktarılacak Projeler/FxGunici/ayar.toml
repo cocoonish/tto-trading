@@ -19,9 +19,9 @@ pip = { EURUSD = 1e-4, GBPUSD = 1e-4, AUDUSD = 1e-4, USDJPY = 1e-2 }
 
 [indirme]
 # Kibar ol: kaynak kendi müşterilerine de hizmet veriyor.
-es_zamanli = 8
-zaman_asimi_sn = 30
-deneme = 5
+es_zamanli = 10
+zaman_asimi_sn = 20
+deneme = 6
 # Bulut koşusunda iş sınırı 21 dakika; betik kendi bütçesini bunun altında
 # tutar ve yarım kalan yılı bir sonraki koşuya bırakır (arşiv kaldığı yerden sürer).
 butce_dk = 18
