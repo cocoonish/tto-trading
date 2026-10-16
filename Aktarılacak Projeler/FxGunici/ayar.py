@@ -33,6 +33,8 @@ class Ayar:
     butce_dk: float
     hiz_baslangic: float
     hiz_tavan: float
+    ara_sn: float
+    tavan_deneme: int
     ic_baslangic: date
     ic_bitis: date
     dis_baslangic: date
@@ -71,6 +73,8 @@ def oku(yol: Path | None = None) -> Ayar:
         butce_dk=float(i["butce_dk"]),
         hiz_baslangic=float(i["hiz_baslangic"]),
         hiz_tavan=float(i["hiz_tavan"]),
+        ara_sn=float(i["ara_sn"]),
+        tavan_deneme=int(i["tavan_deneme"]),
         ic_baslangic=_gun(o["ic_baslangic"]),
         ic_bitis=_gun(o["ic_bitis"]),
         dis_baslangic=_gun(o["dis_baslangic"]),

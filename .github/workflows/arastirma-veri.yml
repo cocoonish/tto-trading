@@ -22,7 +22,8 @@
 # yazdığı otomatik commit'lerle yarışmaz.
 #
 # BÜTÇE (CLAUDE.md — bir işin bütçesi adımlarının toplamının üstünde durur):
-# kurulum 3 + betik 22 + commit 2 = 27 ≤ 30. Betiğin içindeki `timeout 21m`
+# yol kapısı 1 + bağımlılık 3 + betik 22 + commit 5 = 31, koşucu kurulumu (5) ve
+# kuyruk (2) payıyla 38 ≤ 40 (bulten/duman.py'nin bütçe ölçütü). Betiğin içindeki `timeout 21m`
 # adım sınırından önce keser, böylece Commit adımı her durumda koşar.
 
 name: Araştırma verisi
@@ -47,19 +48,20 @@ concurrency:
   group: arastirma-veri-${{ github.ref }}
   cancel-in-progress: false
 
-# PARÇALAR (16.10.2026). Bir kaynağın hız sınırı koşucu başınaysa (Dukascopy:
-# on eşzamanlı istekte 503), tek koşucuda eşzamanlılığı artırmak indirmeyi
-# YAVAŞLATIR; ayrı koşucular hızı parça sayısıyla çarpar. Girdi boşsa tek iş
-# koşar ve TTO_PARCA boştur — eski davranış birebir. Parçalar birbirinin
-# dosyasına dokunmamalıdır (betiğin sözleşmesi: her parça yalnız kendi
-# dosyalarına yazar); Commit adımı gönderimden önce dalı yeniden çeker.
+# PARÇALAR (16.10.2026). Uzun bir indirme parçalara bölünür: her öğe ayrı
+# koşucuda betiğe TTO_PARCA olarak gider (Dukascopy arşivi: `EURUSD-2019` gibi
+# parite × yıl jetonları). Girdi boşsa tek iş koşar ve TTO_PARCA boştur — eski
+# davranış birebir. Parçalar birbirinin dosyasına dokunmamalıdır (betiğin
+# sözleşmesi: her parça yalnız kendi dosyalarına yazar); Commit adımı gönderimden
+# önce dalı yeniden çeker. Aynı anda biten on iki iş aynı dala gönderebilir, o
+# yüzden yeniden deneme on kez ve rastgele aralıkla yapılır.
 jobs:
   arsiv:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     strategy:
       fail-fast: false
-      max-parallel: 6
+      max-parallel: 12
       matrix:
         parca: ${{ fromJSON(inputs.parcalar != '' && inputs.parcalar || '[""]') }}
     permissions:
@@ -81,6 +83,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Yol kapısı
+        timeout-minutes: 1
         run: |
           case "$BETIK" in
             "Aktarılacak Projeler/"*/arsiv*.py) ;;
@@ -110,7 +113,7 @@ jobs:
           timeout 21m python3 -u "$(basename "$BETIK")"
       - name: Commit
         if: always()
-        timeout-minutes: 2
+        timeout-minutes: 5
         run: |
           VERI="$(dirname "$BETIK")/veri"
           git config --global user.name  "tto-veri"
@@ -121,10 +124,10 @@ jobs:
             exit 0
           fi
           git commit -m "araştırma verisi: $(basename "$(dirname "$BETIK")") $(date -u +'%Y-%m-%d %H:%M') arşivi (otomatik)"
-          for deneme in 1 2 3 4 5; do
+          for deneme in 1 2 3 4 5 6 7 8 9 10; do
             git pull --rebase --autostash || true
             if git push; then echo "push tamam (deneme $deneme)"; break; fi
-            if [ "$deneme" = "5" ]; then echo "::error::push beş denemede de reddedildi."; exit 1; fi
+            if [ "$deneme" = "10" ]; then echo "::error::push on denemede de reddedildi."; exit 1; fi
             echo "::warning::push reddedildi (deneme $deneme) — yeniden deneniyor."
-            sleep $((deneme * 5))
+            sleep $((deneme * 2 + RANDOM % 7))
           done

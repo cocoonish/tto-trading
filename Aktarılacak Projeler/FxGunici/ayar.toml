@@ -19,14 +19,20 @@ pip = { EURUSD = 1e-4, GBPUSD = 1e-4, AUDUSD = 1e-4, USDJPY = 1e-2 }
 
 [indirme]
 # Kibar ol: kaynak kendi müşterilerine de hizmet veriyor. Eşzamanlılık bir tavandır;
-# istekleri başlatma HIZINI paylaşılan uyarlamalı sınır yönetir (dukascopy.Hiz):
-# 503/429'da yarıya iner, başarıda yavaşça artar. Ölçüm (16.10.2026): on eşzamanlı
-# istek 0,8 istek/sn'de 503 yağmuru üretti, daha az eşzamanlı ilk koşu 1,3 istek/sn verdi.
-es_zamanli = 6
+# istekleri başlatma HIZINI paylaşılan pencereli sınır yönetir (dukascopy.Hiz): son 40
+# isteğin %60'ından fazlası reddedildiyse hız %25 azalır, %25'inden azı reddedildiyse
+# %15 artar. Ölçüm (16.10.2026, dört bulut koşusu): kaynak isteklerin üçte birini 503
+# ya da zaman aşımıyla geri çeviriyor ve bu oran saniyede 0,2 istekte de aynı; her
+# rette herkesi durduran ilk tasarım işi saniyede 0,24 isteğe düşürdü. Reddedilen dosya
+# artık beklemeye alınır ve `ara_sn` (rastgele 1–2 kat) sonra yeniden istenir
+# (dukascopy.toplu_getir); bir dosya en çok `tavan_deneme` kez istenir.
+es_zamanli = 8
 zaman_asimi_sn = 20
 deneme = 6
-hiz_baslangic = 1.5
+hiz_baslangic = 2.0
 hiz_tavan = 6.0
+ara_sn = 60
+tavan_deneme = 8
 # Bulut koşusunda iş sınırı 21 dakika; betik kendi bütçesini bunun altında
 # tutar ve yarım kalan yılı bir sonraki koşuya bırakır (arşiv kaldığı yerden sürer).
 butce_dk = 18

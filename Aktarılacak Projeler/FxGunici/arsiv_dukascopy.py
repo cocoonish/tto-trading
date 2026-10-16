@@ -19,16 +19,21 @@ iş akışının 21 dakikalık sınırı betiği hiçbir zaman ortasında kesmez
 SAATLİK mum dosyaları da ham hâliyle saklanır (`saatlik/`); kalite denetimi
 dakika arşivinden kurduğu saatlik mumları onlarla karşılaştırır.
 
-PARÇA. `TTO_PARCA` ortam değişkeni (boşlukla ayrık parite listesi) verilirse
-yalnız o pariteler işlenir. İş akışı pariteleri ayrı koşucularda aynı anda
-çalıştırabilir (`parcalar` girdisi); her iş yalnız kendi paritesinin dosyalarına
-ve künyesine yazar. Kaynağın hız sınırı koşucu başınadır: tek koşucuda eşzamanlılığı
-artırmak 503 üretiyordu, ayrı koşucular üretmiyorsa toplam hız parça sayısıyla artar.
+PARÇA. `TTO_PARCA` ortam değişkeni boşlukla ayrık jetonlar alır: `EURUSD` (paritenin
+bütün yılları), `EURUSD-2019` (tek yıl) ya da `EURUSD-2018-2020` (aralık). İş akışı
+parçaları ayrı koşucularda aynı anda çalıştırır (`parcalar` girdisi); her iş yalnız
+kendi birimlerinin parquet ve künye dosyalarına yazar (`kunye/<SEMBOL>_<YYYY>.json`),
+dala gönderirken çakışma doğmaz.
+
+KUYRUK. Bir parçanın eksik bütün dosyaları TEK ertelemeli kuyruğa girer
+(`dukascopy.toplu_getir`): kaynağın geçici olarak reddettiği dosya bir dakika sonra
+yeniden istenir, öbürleri beklemez; birimler liste sırasıyla tamamlanır.
 """
 from __future__ import annotations
 
 import os
 import platform
+import re
 import sys
 import time
 from datetime import date, datetime, timezone
@@ -51,43 +56,57 @@ def icerik_ozu(df) -> str:
     return h.hexdigest()
 
 
-def saatlik_indir(a: ay.Ayar, semboller: list[str], son_an: float) -> int:
+def saatlik_indir(a: ay.Ayar, birimler: list[tuple[str, int]], son_an: float) -> int:
     hedef = ay.DUKA / "saatlik"
     yeni = 0
-    for sembol in semboller:
-        for yil in range(a.baslangic.year, a.bitis.year + 1):
-            for ay_ in (1, 7):
-                if date(yil, ay_, 28) > a.bitis or date(yil, ay_, 1) < a.baslangic.replace(day=1):
+    for sembol, yil in birimler:
+        for ay_ in (1, 7):
+            if date(yil, ay_, 28) > a.bitis or date(yil, ay_, 1) < a.baslangic.replace(day=1):
+                continue
+            for taraf in ("BID", "ASK"):
+                yol = hedef / sembol / f"{yil}-{ay_:02d}_{taraf}.bi5"
+                if yol.exists():
                     continue
-                for taraf in ("BID", "ASK"):
-                    yol = hedef / sembol / f"{yil}-{ay_:02d}_{taraf}.bi5"
-                    if yol.exists():
-                        continue
-                    y = dk.getir(dk.saatlik_url(sembol, yil, ay_, taraf), a.deneme, a.zaman_asimi_sn, son_an)
-                    if y.durum != "tamam":
-                        print(f"  saatlik {sembol} {yil}-{ay_:02d} {taraf}: {y.durum} {y.ayrinti}")
-                        continue
-                    dk.coz(y.ham, adim_sn=3600, azami=744)   # bozuk dosya saklanmaz
-                    yol.parent.mkdir(parents=True, exist_ok=True)
-                    yol.write_bytes(y.ham)
-                    yeni += 1
+                y = dk.getir(dk.saatlik_url(sembol, yil, ay_, taraf), a.deneme, a.zaman_asimi_sn, son_an)
+                if y.durum != "tamam":
+                    print(f"  saatlik {sembol} {yil}-{ay_:02d} {taraf}: {y.durum} {y.ayrinti}")
+                    continue
+                dk.coz(y.ham, adim_sn=3600, azami=744)   # bozuk dosya saklanmaz
+                yol.parent.mkdir(parents=True, exist_ok=True)
+                yol.write_bytes(y.ham)
+                yeni += 1
     return yeni
 
 
-def parca(a: ay.Ayar) -> list[str]:
+JETON = re.compile(r"^([A-Z]{6})(?:-(\d{4})(?:-(\d{4}))?)?$")
+
+
+def parca(a: ay.Ayar) -> list[tuple[str, int]]:
+    """`TTO_PARCA` jetonlarından (parite, yıl) birimleri; boşsa bütün birimler."""
+    ilk, son = a.baslangic.year, a.bitis.year
     istenen = os.environ.get("TTO_PARCA", "").split()
     if not istenen:
-        return list(a.ciftler)
-    bilinmeyen = [x for x in istenen if x not in a.ciftler]
-    if bilinmeyen:
-        raise SystemExit(f"TTO_PARCA'da ayar.toml'da olmayan parite: {bilinmeyen}")
-    return istenen
+        return [(s, y) for s in a.ciftler for y in range(ilk, son + 1)]
+    out: list[tuple[str, int]] = []
+    for j in istenen:
+        m = JETON.match(j)
+        if not m:
+            raise SystemExit(f"TTO_PARCA jetonu tanınmadı: {j!r} (SEMBOL · SEMBOL-YYYY · SEMBOL-YYYY-YYYY)")
+        sembol = m.group(1)
+        if sembol not in a.ciftler:
+            raise SystemExit(f"TTO_PARCA'da ayar.toml'da olmayan parite: {sembol}")
+        y1 = int(m.group(2)) if m.group(2) else ilk
+        y2 = int(m.group(3)) if m.group(3) else (y1 if m.group(2) else son)
+        if not ilk <= y1 <= y2 <= son:
+            raise SystemExit(f"TTO_PARCA yılı kapsam dışında: {j} (kapsam {ilk}–{son})")
+        out += [(sembol, y) for y in range(y1, y2 + 1)]
+    return list(dict.fromkeys(out))
 
 
 def main() -> int:
     a = ay.oku()
     dizin = ay.DUKA
-    semboller = parca(a)
+    birimler = parca(a)
     hiz = dk.hiz_kur(baslangic=a.hiz_baslangic, tavan=a.hiz_tavan)
     kunye = dk.kunye_oku(dizin)
     kunye.setdefault("birimler", {})
@@ -99,82 +118,100 @@ def main() -> int:
         "ortam": {"python": platform.python_version(), "pyarrow": pyarrow.__version__},
     })
     t0 = time.monotonic()
-    butce = a.butce_dk * 60
-    son_an = t0 + butce
+    son_an = t0 + a.butce_dk * 60
+    ad = " ".join(f"{s}-{y}" for s, y in birimler)
+    print(f"parça: {ad} · başlangıç hızı {hiz.hiz:.1f} istek/sn · tavan {hiz.tavan:.1f} · "
+          f"eşzamanlı {a.es_zamanli}", flush=True)
+
+    # 1) Plan: tamamlanmamış her birimin istenecek günleri.
+    plan = []
+    for sembol, yil in birimler:
+        anahtar = f"{sembol}/{yil}"
+        yol = dizin / sembol / f"{yil}.parquet"
+        son_hedef = min(a.bitis, date(yil, 12, 31))
+        ilk_hedef = max(a.baslangic, date(yil, 1, 1))
+        m = kunye["birimler"].get(anahtar)
+        gecerli = (bool(m) and yol.exists() and dk.oz(yol) == m.get("sha256")
+                   and m.get("ilk_gun") == ilk_hedef.isoformat())
+        if gecerli and m.get("tam") and m.get("son_gun") == son_hedef.isoformat():
+            continue
+        yalniz = None
+        if gecerli:
+            # Kaldığı yerden: yalnız hatalı günler ve bitiş ilerlediyse yeni günler.
+            hatali = {date.fromisoformat(x[:10]) for x in m.get("gun_hata", [])}
+            eski_son = date.fromisoformat(m["son_gun"])
+            yeni_gunler = set(dk.gunler(eski_son, son_hedef)) - {eski_son} if son_hedef > eski_son else set()
+            yalniz = sorted(hatali | yeni_gunler)
+        liste = dk.gun_listesi(yil, a.baslangic, a.bitis, yalniz)
+        plan.append((anahtar, sembol, yil, yol, m if gecerli else None, ilk_hedef, son_hedef, liste))
+    urller = [dk.dakika_url(s, g, t) for (_, s, _, _, _, _, _, liste) in plan for g in liste for t in ("BID", "ASK")]
+    print(f"plan: {len(plan)} birim eksik · {len(urller):,} dosya", flush=True)
+
+    # 2) Tek ertelemeli kuyruk.
+    olcum: dict = {}
+    yanitlar = dk.toplu_getir(urller, a.es_zamanli, a.zaman_asimi_sn, son_an - 30, a.tavan_deneme, a.ara_sn,
+                              olcum=olcum) if urller else {}
+    sure = time.monotonic() - t0
+
+    # 3) Her birimi kur, var olan arşivle birleştir, yaz.
     yapilan, kalan, eksik_birim = 0, 0, 0
-    print(f"parça: {' '.join(semboller)} · başlangıç hızı {hiz.hiz:.1f} istek/sn · tavan {hiz.tavan:.1f}", flush=True)
-    for sembol in semboller:
-        for yil in range(a.baslangic.year, a.bitis.year + 1):
-            anahtar = f"{sembol}/{yil}"
-            yol = dizin / sembol / f"{yil}.parquet"
-            son_hedef = min(a.bitis, date(yil, 12, 31)).isoformat()
-            ilk_hedef = max(a.baslangic, date(yil, 1, 1)).isoformat()
-            m = kunye["birimler"].get(anahtar)
-            gecerli = bool(m) and yol.exists() and dk.oz(yol) == m.get("sha256") and m.get("ilk_gun") == ilk_hedef
-            if gecerli and m.get("tam") and m.get("son_gun") == son_hedef:
-                continue
-            if time.monotonic() > son_an - 45:
-                kalan += 1
-                continue
-            eski = None
-            yalniz = None
-            if gecerli:
-                # Kaldığı yerden: yalnız hatalı günler ve bitiş ilerlediyse yeni günler.
-                hatali = {date.fromisoformat(x[:10]) for x in m.get("gun_hata", [])}
-                eski_son = date.fromisoformat(m["son_gun"])
-                yeni_gunler = set(dk.gunler(eski_son, date.fromisoformat(son_hedef))) - {eski_son} \
-                    if date.fromisoformat(son_hedef) > eski_son else set()
-                yalniz = sorted(hatali | yeni_gunler)
-                eski = pq.read_table(yol).to_pandas()
-            t1 = time.monotonic()
-            df, k = dk.yil_indir(sembol, yil, a.baslangic, a.bitis, a.es_zamanli, a.deneme, a.zaman_asimi_sn,
-                                 yalniz=yalniz, son_an=son_an)
-            sure = time.monotonic() - t1
-            if eski is not None:
-                df = (pd.concat([eski, df], ignore_index=True).drop_duplicates("t", keep="last")
-                      .sort_values("t", kind="mergesort").reset_index(drop=True))
-                for alan in ("gun_dolu_liste", "gun_bos", "gun_404"):
-                    k[alan] = sorted(set(m.get(alan, [])) | set(k[alan]))
-                k["dolgu_dakika"] = int(m.get("dolgu_dakika", 0)) + int(k["dolgu_dakika"])
-                k["istek"] = int(m.get("istek", 0)) + int(k["istek"])
-            k["ilk_gun"], k["son_gun"] = ilk_hedef, son_hedef
-            k["gun"] = sum(1 for g in dk.gunler(date.fromisoformat(ilk_hedef), date.fromisoformat(son_hedef))
-                           if dk.istenecek(g))
-            # Cumartesiler istenmez (dk.istenecek); eski koşulardan kalan cumartesi kayıtları düşer.
-            k["gun_bos"] = [x for x in k["gun_bos"] if dk.istenecek(date.fromisoformat(x[:10]))]
-            k["gun_dolu"] = len(k["gun_dolu_liste"])
-            k["satir"] = int(len(df))
-            k["tam"] = not k["gun_hata"]
-            k["sure_sn"] = round(sure, 1)
-            k["indirme"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-            if len(df):
-                k["sha256"] = dk.yaz(df, yol)
-                k["icerik_ozu"] = icerik_ozu(df)
-                k["bayt"] = yol.stat().st_size
-            olculen = k["istek"] / sure if sure > 0 else 0.0
-            durum = "✓" if k["tam"] else "…"
-            yapilan += 1
-            eksik_birim += 0 if k["tam"] else 1
-            print(f"{durum} {anahtar}: {k['satir']:,} dakika · {k['gun_dolu']}/{k['gun']} gün dolu · "
-                  f"{len(k['gun_hata'])} gün eksik · {k.get('bayt', 0) / 1e6:.1f} MB · {sure:.0f} sn · "
-                  f"{olculen:.1f} istek/sn", flush=True)
-            if k["gun_hata"]:
-                print(f"    eksik örnek: {k['gun_hata'][:2]}", flush=True)
-            kunye["birimler"][anahtar] = k
-            dk.kunye_yaz(dizin, kunye, [sembol])     # her birimden sonra: koşu kesilse de ilerleme kalır
-            s = hiz.sayac
-            print(f"    hız şimdi {hiz.hiz:.2f} istek/sn (en düşük {s['en_dusuk_hiz']:.2f}, en yüksek "
-                  f"{s['en_yuksek_hiz']:.2f}) · ret {s['ret']} · ağ hatası {s['ag']} · bekleme {s['bekleme_sn']:.0f} sn",
-                  flush=True)
+    for anahtar, sembol, yil, yol, m, ilk_hedef, son_hedef, liste in plan:
+        yan = {(g, t): yanitlar[dk.dakika_url(sembol, g, t)] for g in liste for t in ("BID", "ASK")}
+        if not any(y.deneme for y in yan.values()):
+            kalan += 1            # bu koşuda hiç denenmedi (bütçe): birime dokunulmaz
+            continue
+        df, k = dk.yil_kur(yil, a.baslangic, a.bitis, liste, lambda g, t: yan[(g, t)])
+        if m is not None:
+            eski = pq.read_table(yol).to_pandas()
+            df = (pd.concat([eski, df], ignore_index=True).drop_duplicates("t", keep="last")
+                  .sort_values("t", kind="mergesort").reset_index(drop=True))
+            for alan in ("gun_dolu_liste", "gun_bos", "gun_404"):
+                k[alan] = sorted(set(m.get(alan, [])) | set(k[alan]))
+            for alan in ("dolgu_dakika", "istek", "ret"):
+                k[alan] = int(m.get(alan, 0)) + int(k[alan])
+        k["ilk_gun"], k["son_gun"] = ilk_hedef.isoformat(), son_hedef.isoformat()
+        k["gun"] = sum(1 for g in dk.gunler(ilk_hedef, son_hedef) if dk.istenecek(g))
+        # Cumartesiler istenmez (dk.istenecek); eski koşulardan kalan cumartesi kayıtları düşer.
+        k["gun_bos"] = [x for x in k["gun_bos"] if dk.istenecek(date.fromisoformat(x[:10]))]
+        k["gun_dolu"] = len(k["gun_dolu_liste"])
+        k["satir"] = int(len(df))
+        k["tam"] = not k["gun_hata"]
+        k["indirme"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        k["kod_ozu"] = kunye["kod_ozu"]
+        if len(df):
+            k["sha256"] = dk.yaz(df, yol)
+            k["icerik_ozu"] = icerik_ozu(df)
+            k["bayt"] = yol.stat().st_size
+        yapilan += 1
+        eksik_birim += 0 if k["tam"] else 1
+        print(f"{'✓' if k['tam'] else '…'} {anahtar}: {k['satir']:,} dakika · {k['gun_dolu']}/{k['gun']} gün dolu · "
+              f"{len(k['gun_hata'])} gün eksik · {k.get('bayt', 0) / 1e6:.1f} MB", flush=True)
+        if k["gun_hata"]:
+            print(f"    eksik örnek: {k['gun_hata'][:2]}", flush=True)
+        kunye["birimler"][anahtar] = k
+        dk.kunye_yaz(dizin, kunye, [anahtar])
+
+    # 4) Ölçüm: deneme sırasına göre sonuç, geçici hata türleri, başarılı istek süresi.
+    s = hiz.sayac
+    istek = s["tamam"] + s["ret"] + s["ag"]
+    print(f"indirme: {sure:.0f} sn · {istek} istek ({istek / sure if sure > 0 else 0:.2f}/sn) · hız şimdi "
+          f"{hiz.hiz:.2f} (en düşük {s['en_dusuk_hiz']:.2f}, en yüksek {s['en_yuksek_hiz']:.2f}) · "
+          f"bekleme {s['bekleme_sn']:.0f} sn", flush=True)
+    for n in sorted(olcum.get("deneme", {}), key=int):
+        print(f"    deneme {n}: {olcum['deneme'][n]}", flush=True)
+    if olcum.get("gecici"):
+        print(f"    geçici hata türleri: {olcum['gecici']}", flush=True)
+    if olcum.get("sure_tamam"):
+        q = np.quantile(olcum["sure_tamam"], [0.5, 0.9, 0.99])
+        print(f"    başarılı istek süresi: medyan {q[0]:.2f} · p90 {q[1]:.2f} · p99 {q[2]:.2f} sn", flush=True)
+
     if time.monotonic() < son_an - 60:
-        n = saatlik_indir(a, semboller, son_an - 30)
+        n = saatlik_indir(a, birimler, son_an - 30)
         print(f"saatlik çapraz sınama dosyası: {n} yeni")
-    dk.kunye_yaz(dizin, kunye, semboller)
-    toplam = len(semboller) * (a.bitis.year - a.baslangic.year + 1)
-    tamam = sum(1 for x, v in kunye["birimler"].items() if v.get("tam") and x.split("/")[0] in semboller)
-    print(f"özet ({' '.join(semboller)}): bu koşuda {yapilan} birim işlendi · {eksik_birim} birimde eksik gün "
-          f"kaldı · {kalan} birim bütçeye kaldı · parçada {tamam}/{toplam} birim tam · "
-          f"{time.monotonic() - t0:.0f} sn · istek {hiz.sayac['tamam']} başarılı, {hiz.sayac['ret']} ret")
+    tamam = sum(1 for s_, y_ in birimler if kunye["birimler"].get(f"{s_}/{y_}", {}).get("tam"))
+    print(f"özet ({ad}): bu koşuda {yapilan} birim işlendi · {eksik_birim} birimde eksik gün kaldı · "
+          f"{kalan} birim bütçeye kaldı · parçada {tamam}/{len(birimler)} birim tam · "
+          f"{time.monotonic() - t0:.0f} sn")
     # Eksik gün ya da bütçeye kalan birim bir kusur değil, sürecek iştir: bir sonraki
     # koşu kaldığı yerden devam eder. Çıkış 0 — commit adımı her durumda koşar.
     return 0
