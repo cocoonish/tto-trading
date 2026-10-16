@@ -208,12 +208,13 @@ def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
         if p is None:
             sonuc[f"{ad}_analiz"] = None
             continue
-        sonuc[f"{ad}_analiz"] = derin(birim, aile, p, k, sr_denemeler if ad == "secilen" else None, yillik)
+        sonuc[f"{ad}_analiz"] = derin(birim, aile, p, k, sr_denemeler if ad == "secilen" else None, yillik,
+                                      ornek=(ad == "varsayilan"))
     sonuc["walk_forward"] = walk_forward(aile, liste, yillik, k, asgari)
     return sonuc
 
 
-def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik) -> dict:
+def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek: bool = False) -> dict:
     isl = k.islem(aile, p)
     ic, dis = k.bol(isl)
     out = {"p": p,
@@ -267,7 +268,47 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik) -> di
     # günlük birikimli eğri (figür)
     gr = mk.gunluk_r(isl, k.gun_tum)
     out["egri"] = {"gun": [str(x) for x in k.gun_tum], "r": [round(float(x), 4) for x in np.cumsum(gr)]}
+    if ornek:
+        out["ornek"] = ornek_gunler(k, p, isl, k.sinyal(aile, p)[1])
     _islem_kaydet(birim, k.b.d.cift, p, isl)
+    return out
+
+
+def ornek_gunler(k: Kosucu, p: dict, isl: pd.DataFrame, ofset_sabit: int | None) -> list[dict]:
+    """Ders figürünün örnek günleri: örneklem DIŞININ en son kazanan ve en son kaybeden işlemi.
+
+    Seçim kuralı sabittir (en son tarih), yani örnek sonuca bakılarak seçilmez. Gün, stratejinin
+    kendi zaman diliminin ÇIPALI mumlarıyla (orta fiyat, nokta) ve işlemin seviyeleriyle yazılır:
+    giriş ve çıkış dakikası ile fiyatı (yürütülen bid/ask), stop, hedef ve stratejinin referans
+    seviyeleri (`ust`, `alt`, varsa `seviye`)."""
+    a = mk.alinan(isl)
+    if len(a) == 0:
+        return []
+    dis = a[a["gun"].to_numpy() >= np.datetime64(k.a.dis_baslangic)]
+    out = []
+    for etiket, x in (("kazanan", dis[dis["pnl_pip"] > 0]), ("kaybeden", dis[dis["pnl_pip"] <= 0])):
+        if not len(x):
+            continue
+        s = x.iloc[-1]
+        tf = int(p["tf"])
+        ofset = int(s["ofset"]) if ofset_sabit is None else int(ofset_sabit)
+        m = k.b.mumlar(tf, ofset)
+        gk = int(s["gun_k"])
+        t0 = int(k.b.g.gun_basi[gk])
+        j0, j1 = np.searchsorted(m.bt, [t0, t0 + 86400])
+        sayi = lambda v: None if v is None or not np.isfinite(float(v)) else round(float(v), 1)  # noqa: E731
+        out.append({
+            "etiket": etiket, "gun": str(s["gun"])[:10], "tf": tf, "ofset": ofset,
+            "mum": {"t": [int(v) for v in m.bt[j0:j1]], "o": [round(float(v), 1) for v in m.o[j0:j1]],
+                    "h": [round(float(v), 1) for v in m.h[j0:j1]], "l": [round(float(v), 1) for v in m.l[j0:j1]],
+                    "c": [round(float(v), 1) for v in m.c[j0:j1]]},
+            "islem": {"yon": int(s["yon"]), "giris_t": int(s["giris_t"]), "cikis_t": int(s["cikis_t"]),
+                      "giris_f": sayi(s["giris_f"]), "cikis_f": sayi(s["cikis_f"]), "stop": sayi(s["stop"]),
+                      "hedef": sayi(s["hedef"]), "neden": int(s["neden"]), "r": round(float(s["r"]), 3),
+                      "pnl_pip": round(float(s["pnl_pip"]), 2), "sinyal_t": int(s["sinyal_t"]) if "sinyal_t" in s
+                      else None, "ust": sayi(s.get("ust")), "alt": sayi(s.get("alt")),
+                      "seviye": sayi(s.get("seviye")), "olay": str(s["olay"]) if "olay" in s else None},
+        })
     return out
 
 

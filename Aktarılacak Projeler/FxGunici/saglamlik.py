@@ -135,7 +135,9 @@ def kova_analizi(f: pd.DataFrame, ic: np.ndarray, asgari: int = 30) -> list[dict
             sinir = None
         kova = pd.Series(kova, index=f.index)
         satirlar = []
-        for k in [v for v in pd.unique(kova) if v is not None]:
+        # Eksik değer kova değildir: pandas `where(..., None)` nesne dizisinde None'u NaN'a
+        # çevirebiliyor ve NaN kovası tablolara "nan" adıyla, sıfır işlemle giriyordu.
+        for k in [v for v in pd.unique(kova) if v is not None and pd.notna(v)]:
             m = (kova == k).to_numpy()
             mi, md = m & ic, m & ~ic
             satirlar.append({

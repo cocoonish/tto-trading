@@ -1,0 +1,52 @@
+# -*- coding: utf-8 -*-
+"""Koşul kovaları: sınırlar yalnız örneklem içinden, eksik değer kova değildir, hüküm kuralı."""
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import saglamlik as sg  # noqa: E402
+
+
+def _tablo(n=400, tohum=5):
+    r = np.random.default_rng(tohum)
+    yon = r.choice(["aynı yön", "ters yön"], n).astype(object)
+    yon[:25] = None                                      # eksik değer
+    atr = r.uniform(0.2, 2.0, n)
+    # "ters yön" günlerinde beklenti artı, öbürlerinde eksi — örneklem içinde VE dışında
+    rr = np.where(yon == "ters yön", 0.4, -0.3) + r.normal(0, 0.5, n)
+    return pd.DataFrame({"onceki_gun_yon": yon, "range_atr": atr, "r": rr, "pnl_pip": rr * 10})
+
+
+def test_eksik_deger_kova_degildir_ve_hukum():
+    f = _tablo()
+    ic = np.arange(len(f)) < 250
+    out = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}
+    y = out["onceki_gun_yon"]
+    assert sorted(k["kova"] for k in y["kovalar"]) == ["aynı yön", "ters yön"]     # "nan" kovası yok
+    assert y["secilen"] == ["ters yön"] and y["hukum"] == "tuttu"
+    assert y["oos_secilen_r"] > 0 > y["oos_tamamlayan_r"]
+
+
+def test_surekli_sinirlar_yalniz_orneklem_icinden():
+    f = _tablo()
+    ic = np.arange(len(f)) < 250
+    f.loc[~ic, "range_atr"] += 5.0                       # örneklem dışı kaydırılırsa sınır değişmemeli
+    out = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}
+    q = np.nanpercentile(f["range_atr"][ic], [100 / 3, 200 / 3])
+    assert np.allclose(out["range_atr"]["sinir"], q)
+    oos_ust = next(k for k in out["range_atr"]["kovalar"] if k["kova"] == "üst")["oos_n"]
+    assert oos_ust == int((~ic).sum())                   # bütün kaydırılmış gözlemler üst kovada
+
+
+def test_secim_orneklem_disinda_tutmazsa_tutmadi():
+    f = _tablo()
+    ic = np.arange(len(f)) < 250
+    # örneklem dışında işaret döner: seçilen kova OOS'ta eksi
+    f.loc[~ic, "r"] = np.where(f.loc[~ic, "onceki_gun_yon"] == "ters yön", -0.4, 0.3)
+    out = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}
+    assert out["onceki_gun_yon"]["secilen"] == ["ters yön"] and out["onceki_gun_yon"]["hukum"] == "tutmadi"

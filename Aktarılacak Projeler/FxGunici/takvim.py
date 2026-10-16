@@ -17,6 +17,7 @@ dosyada UTC saklanmaz (iki kaynak bir gün ayrışırdı).
 """
 from __future__ import annotations
 
+import json
 import tomllib
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -49,7 +50,20 @@ def _utc_sn(df: pd.DataFrame) -> np.ndarray:
     return out
 
 
-def tumu() -> pd.DataFrame:
+SINAMA = DIZIN / "sinama.json"
+
+
+def tutmayanlar() -> set[tuple[str, str]]:
+    """Fiyat sınamasının (takvim_sina.py) resmi saatte doğrulayamadığı olaylar: (olay, tarih)."""
+    if not SINAMA.exists():
+        return set()
+    s = json.loads(SINAMA.read_text(encoding="utf-8"))
+    return {(k["olay"], k["tarih"]) for k in s.get("olay", []) if k.get("hukum") == "tutmadi"}
+
+
+def tumu(dogrulanmis: bool = True) -> pd.DataFrame:
+    """Resmi + ek olaylar. `dogrulanmis`: fiyat sınamasında tutmayan olaylar dışarıda kalır
+    (sayıları `veri/takvim/sinama.json`da, adlarıyla)."""
     parcalar = []
     for yol, ad in ((ANA, "resmi"), (EK, "ek")):
         if yol.exists():
@@ -68,6 +82,10 @@ def tumu() -> pd.DataFrame:
     df["utc_sn"] = _utc_sn(df)
     # Aynı olay aynı anda iki kez (resmi + ek) yazıldıysa resmi kalır.
     df = df.sort_values(["utc_sn", "olay", "kume"]).drop_duplicates(["olay", "utc_sn"], keep="first")
+    if dogrulanmis:
+        dis = tutmayanlar()
+        if dis:
+            df = df[[(o, t) not in dis for o, t in zip(df["olay"], df["tarih"])]]
     return df.reset_index(drop=True)
 
 
