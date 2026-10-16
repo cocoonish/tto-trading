@@ -1,0 +1,18 @@
+{
+ "_koşu": {
+  "sure_sn": 846.3,
+  "zaman": "2026-10-16T11:50:18Z"
+ },
+ "fed:basin": {
+  "ay": 74,
+  "besleme_kopya": 319,
+  "dosya": "fed_takvim_basin.json",
+  "durum": 200,
+  "okunan": 78
+ },
+ "https://web.archive.org/cdx/search/cdx?url=federalreserve.gov/json/calendar.json&output=json&fl=timestamp,statuscode,digest&filter=statuscode:200&collapse=digest&limit=20000": {
+  "bayt": 19497,
+  "dosya": "web.archive.org_cdx_search_cdx_url_federalreserve.gov_json_calendar.json_output_json_fl_timestamp_statuscode_digest_filter_statuscode_200_collapse_dig_a2028a83.html",
+  "durum": 200
+ }
+}
