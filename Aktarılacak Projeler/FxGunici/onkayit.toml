@@ -23,6 +23,9 @@
 # varsayılanlar, hüküm kuralı) değişmedi. Ölçümün UYGULAMASI sonuçlardan sonra
 # şu yerlerde değişti; her birinin zamanı, önceki hâli ve ölçülmüş etkisi
 # metodoloji dersinde:
+#   · hüküm penceresi: varsayılanın birincil hükmü 2024 → penceresinden
+#     verilir, seçilenle aynı pencerede kıyaslansın diye (yukarıda varsayılan
+#     için örneklem dışı sayılan bütün dönemin hükmü yan sütunda yazılır);
 #   · ortak mekanik: stop seviyeli emirde giriş tarafının KAYMASIZ açılışı
 #     stop'un ötesindeyse işlem yok (önce yalnız kaymalı dolum sorulurdu);
 #     sert stop'un boşluk kuralı giriş dakikasında da; önceki gün ölçüleri
