@@ -1,12 +1,12 @@
 {
  "birimler": {
   "GBPUSD/2025": {
-   "bayt": 4123027,
-   "dolgu_dakika": 79615,
+   "bayt": 4138886,
+   "dolgu_dakika": 79625,
    "gun": 313,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 312,
+   "gun_dolu": 313,
    "gun_dolu_liste": [
     "2025-01-01",
     "2025-01-02",
@@ -307,6 +307,7 @@
     "2025-12-12",
     "2025-12-14",
     "2025-12-15",
+    "2025-12-16",
     "2025-12-17",
     "2025-12-18",
     "2025-12-19",
@@ -321,19 +322,17 @@
     "2025-12-30",
     "2025-12-31"
    ],
-   "gun_hata": [
-    "2025-12-16: BID hata ReadTimeoutError · ASK tamam"
-   ],
-   "icerik_ozu": "a63b4bf18108e59927a9ab8926b7a0d3c9b905f229972249f7365081b1389757",
+   "gun_hata": [],
+   "icerik_ozu": "d58f7d6e59bce766aa6c6549f7ff4b23fab5447ef556b17501d9e2820a45f487",
    "ilk_gun": "2025-01-01",
-   "indirme": "2026-10-16T13:12:23Z",
-   "istek": 1921,
+   "indirme": "2026-10-16T13:33:15Z",
+   "istek": 1927,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1262,
-   "satir": 369665,
-   "sha256": "56b1e050bccb6759ec55851f0c4fcaa7d748f7f083a0f47e65ad687e113fe9b0",
+   "ret": 1266,
+   "satir": 371095,
+   "sha256": "fa3dfd8c81d5966897e2e16f3f4f63bb13580b18d923966edaf9e54505eae740",
    "son_gun": "2025-12-31",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -358,5 +357,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T13:12:23Z"
+ "yazim": "2026-10-16T13:33:15Z"
 }

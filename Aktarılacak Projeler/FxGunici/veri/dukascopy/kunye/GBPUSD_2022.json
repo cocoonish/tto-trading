@@ -321,14 +321,14 @@
     "2022-12-30"
    ],
    "gun_hata": [
-    "2022-12-15: BID tamam  · ASK hata ReadTimeoutError"
+    "2022-12-15: BID hata HTTP 503 · ASK tamam"
    ],
-   "icerik_ozu": "f14e46a8d4b167d5819b31f33caa8cb2923910dff39b2605d549cd3a54a9f9c2",
+   "icerik_ozu": "9bbfc8dd7df519ed0ee656913f96182f0b8689b2d1da13e278aa885039a20b1e",
    "ilk_gun": "2022-01-01",
-   "indirme": "2026-10-16T13:12:22Z",
-   "istek": 1778,
+   "indirme": "2026-10-16T13:33:14Z",
+   "istek": 1789,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1121,
+   "ret": 1131,
    "satir": 371190,
    "sha256": "7ceea3938870cb8031d38ef2eb764cf8f63374f80252ba7f4cc91aa9472142cc",
    "son_gun": "2022-12-31",
@@ -357,5 +357,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T13:12:23Z"
+ "yazim": "2026-10-16T13:33:15Z"
 }
