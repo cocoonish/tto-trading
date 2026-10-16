@@ -1,12 +1,12 @@
 {
  "birimler": {
   "USDJPY/2022": {
-   "bayt": 4264511,
-   "dolgu_dakika": 73740,
+   "bayt": 4387821,
+   "dolgu_dakika": 76552,
    "gun": 312,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 303,
+   "gun_dolu": 312,
    "gun_dolu_liste": [
     "2022-01-02",
     "2022-01-03",
@@ -293,14 +293,23 @@
     "2022-11-27",
     "2022-11-28",
     "2022-11-29",
+    "2022-11-30",
     "2022-12-01",
+    "2022-12-02",
+    "2022-12-04",
     "2022-12-05",
+    "2022-12-06",
     "2022-12-07",
+    "2022-12-08",
     "2022-12-09",
+    "2022-12-11",
+    "2022-12-12",
     "2022-12-13",
     "2022-12-14",
+    "2022-12-15",
     "2022-12-16",
     "2022-12-18",
+    "2022-12-19",
     "2022-12-20",
     "2022-12-21",
     "2022-12-22",
@@ -312,27 +321,17 @@
     "2022-12-29",
     "2022-12-30"
    ],
-   "gun_hata": [
-    "2022-11-30: BID tamam  · ASK hata HTTP 503",
-    "2022-12-02: BID hata ConnectTimeoutError · ASK hata ConnectTimeoutError",
-    "2022-12-04: BID hata ReadTimeoutError · ASK tamam",
-    "2022-12-06: BID hata ConnectTimeoutError · ASK tamam",
-    "2022-12-08: BID hata ConnectTimeoutError · ASK tamam",
-    "2022-12-11: BID hata ConnectTimeoutError · ASK hata ReadTimeoutError",
-    "2022-12-12: BID hata HTTP 503 · ASK tamam",
-    "2022-12-15: BID hata ReadTimeoutError · ASK tamam",
-    "2022-12-19: BID tamam  · ASK hata ReadTimeoutError"
-   ],
-   "icerik_ozu": "f4115fa323af2f414649a4d8e19be015d72562695d54901b1bee242463e57a1d",
+   "gun_hata": [],
+   "icerik_ozu": "b0a8e38d604fb3fb8b6e3b083cc24ea7d0a5d148c7284f9084d80a4af8507f96",
    "ilk_gun": "2022-01-01",
-   "indirme": "2026-10-16T13:13:37Z",
-   "istek": 2504,
+   "indirme": "2026-10-16T13:19:48Z",
+   "istek": 2538,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1848,
-   "satir": 362580,
-   "sha256": "2827bebe4edda6b17eb406155b2a1e8b0ce7dc81f31442c2fc63b7619e51fa6a",
+   "ret": 1864,
+   "satir": 372728,
+   "sha256": "fe93bc6fbf89f060c108b2f3776ea9b9eab18d64816935c668b57ec5f30acd9d",
    "son_gun": "2022-12-31",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -357,5 +356,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T13:13:37Z"
+ "yazim": "2026-10-16T13:19:48Z"
 }
