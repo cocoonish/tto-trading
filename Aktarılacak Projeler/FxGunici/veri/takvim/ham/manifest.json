@@ -1,0 +1,654 @@
+{
+ "_koşu": {
+  "sure_sn": 9.4,
+  "zaman": "2026-10-16T08:51:51Z"
+ },
+ "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp": {
+  "bayt": 59805,
+  "dosya": "www.bankofengland.co.uk_boeapps_database_Bank-Rate.asp_b9c773c9.html",
+  "durum": 200,
+  "son_adres": "/boeapps/database/Bank-Rate.asp"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/monetary-policy-summary-and-minutes": {
+  "bayt": 76179,
+  "dosya": "www.bankofengland.co.uk_monetary-policy-summary-and-minutes_monetary-policy-summary-and-minutes_789d988f.html",
+  "durum": 200,
+  "son_adres": "/monetary-policy-summary-and-minutes/monetary-policy-summary-and-minutes"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy/the-interest-rate-bank-rate": {
+  "bayt": 92418,
+  "dosya": "www.bankofengland.co.uk_monetary-policy_the-interest-rate-bank-rate_74ce7e82.html",
+  "durum": 200,
+  "son_adres": "/monetary-policy/the-interest-rate-bank-rate"
+ },
+ "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates": {
+  "bayt": 83374,
+  "dosya": "www.bankofengland.co.uk_monetary-policy_upcoming-mpc-dates_9e9a7148.html",
+  "durum": 200,
+  "son_adres": "/monetary-policy/upcoming-mpc-dates"
+ },
+ "https://www.bls.gov/bls/news-release/cpi.htm": {
+  "durum": "HTTP 403"
+ },
+ "https://www.bls.gov/bls/news-release/empsit.htm": {
+  "durum": "HTTP 403"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2018/html/index.en.html": {
+  "bayt": 100649,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2018_html_index.en.html_e11323d1.html",
+  "durum": 200,
+  "son_adres": "https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2019/html/index.en.html": {
+  "bayt": 100649,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2019_html_index.en.html_3a5cf44b.html",
+  "durum": 200,
+  "son_adres": "https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2020/html/index.en.html": {
+  "bayt": 100649,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_2020_html_index.en.html_fc0df65b.html",
+  "durum": 200,
+  "son_adres": "https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2021/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2022/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2023/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2024/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2025/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/2026/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html": {
+  "bayt": 100649,
+  "dosya": "www.ecb.europa.eu_press_govcdec_mopo_html_index.en.html_13ca0d84.html",
+  "durum": 200,
+  "son_adres": "/press/govcdec/mopo/html/index.en.html"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2018/html/index.en.html": {
+  "bayt": 99883,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2018_html_index.en.html_19ffe358.html",
+  "durum": 200,
+  "son_adres": "https://www.ecb.europa.eu/press/pubbydate/html/index.en.html?name_of_publication=Press%20release&year=2018"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2019/html/index.en.html": {
+  "bayt": 99883,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2019_html_index.en.html_8b6d29cc.html",
+  "durum": 200,
+  "son_adres": "https://www.ecb.europa.eu/press/pubbydate/html/index.en.html?name_of_publication=Press%20release&year=2019"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2020/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2021/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2022/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2023/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2024/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2025/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html": {
+  "bayt": 106935,
+  "dosya": "www.ecb.europa.eu_press_pr_date_2026_html_ecb.mp260910_314e508016.en.html_d26db235.html",
+  "durum": 200,
+  "son_adres": "/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html"
+ },
+ "https://www.ecb.europa.eu/press/pr/date/2026/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/html/index.en.html": {
+  "bayt": 122501,
+  "dosya": "www.ecb.europa.eu_press_press_conference_html_index.en.html_270373d1.html",
+  "durum": 200,
+  "son_adres": "/press/press_conference/html/index.en.html"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2018/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2019/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2020/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2021/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2022/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2023/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2024/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2025/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2026/html/ecb.is260910~6a45359cfc.en.html": {
+  "bayt": 140518,
+  "dosya": "www.ecb.europa.eu_press_press_conference_monetary-policy-statement_2026_html_ecb.is260910_6a45359cfc.en.html_f2db5e5d.html",
+  "durum": 200,
+  "son_adres": "/press/press_conference/monetary-policy-statement/2026/html/ecb.is260910~6a45359cfc.en.html"
+ },
+ "https://www.ecb.europa.eu/press/press_conference/monetary-policy-statement/2026/html/index.en.html": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm": {
+  "bayt": 167856,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomccalendars.htm_3f73e871.html",
+  "durum": 200,
+  "son_adres": "/monetarypolicy/fomccalendars.htm"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2018.htm": {
+  "bayt": 97810,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomchistorical2018.htm_6b722856.html",
+  "durum": 200,
+  "son_adres": "/monetarypolicy/fomchistorical2018.htm"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2019.htm": {
+  "bayt": 99449,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomchistorical2019.htm_ad39720a.html",
+  "durum": 200,
+  "son_adres": "/monetarypolicy/fomchistorical2019.htm"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2020.htm": {
+  "bayt": 100660,
+  "dosya": "www.federalreserve.gov_monetarypolicy_fomchistorical2020.htm_9f6e584c.html",
+  "durum": 200,
+  "son_adres": "/monetarypolicy/fomchistorical2020.htm"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2021.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2022.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2023.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2024.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2025.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/monetarypolicy/fomchistorical2026.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20180131a.htm": {
+  "bayt": 84854,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20180131a.htm_da297642.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20180131a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20180321a.htm": {
+  "bayt": 85015,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20180321a.htm_30a86943.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20180321a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20180502a.htm": {
+  "bayt": 84831,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20180502a.htm_8d62337d.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20180502a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20180613a.htm": {
+  "bayt": 84193,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20180613a.htm_47c41791.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20180613a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20180801a.htm": {
+  "bayt": 84134,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20180801a.htm_35b56d7f.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20180801a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20180926a.htm": {
+  "bayt": 84013,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20180926a.htm_829e09b5.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20180926a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20181108a.htm": {
+  "bayt": 84087,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20181108a.htm_e00536d1.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20181108a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20181219a.htm": {
+  "bayt": 84274,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20181219a.htm_95819bab.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20181219a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190130a.htm": {
+  "bayt": 84260,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20190130a.htm_7c0712c7.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20190130a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190320a.htm": {
+  "bayt": 84353,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20190320a.htm_42d551d6.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20190320a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190501a.htm": {
+  "bayt": 84183,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20190501a.htm_ce1cde5b.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20190501a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190619a.htm": {
+  "bayt": 84425,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20190619a.htm_71e43931.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20190619a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190731a.htm": {
+  "bayt": 84713,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20190731a.htm_f37dc2ab.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20190731a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190918a.htm": {
+  "bayt": 84609,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20190918a.htm_dc8ee5b3.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20190918a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20191011a.htm": {
+  "bayt": 87877,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20191011a.htm_b351333f.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20191011a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20191030a.htm": {
+  "bayt": 84380,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20191030a.htm_2400956e.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20191030a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20191211a.htm": {
+  "bayt": 84178,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20191211a.htm_76fa13ed.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20191211a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200129a.htm": {
+  "bayt": 84184,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200129a.htm_70220f9a.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200129a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200303a.htm": {
+  "bayt": 82883,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200303a.htm_edd04bf3.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200303a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a.htm": {
+  "bayt": 87259,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200315a.htm_74b93122.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200315a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323a.htm": {
+  "bayt": 87132,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200323a.htm_9b2b4468.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200323a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200331a.htm": {
+  "bayt": 84674,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200331a.htm_94735797.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200331a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200429a.htm": {
+  "bayt": 84905,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200429a.htm_51348faf.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200429a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200610a.htm": {
+  "bayt": 84901,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200610a.htm_7cc8fc3c.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200610a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200729a.htm": {
+  "bayt": 85041,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200729a.htm_19402d46.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200729a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200827a.htm": {
+  "bayt": 88035,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200827a.htm_ef372ef4.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200827a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200916a.htm": {
+  "bayt": 85659,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20200916a.htm_503e0617.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20200916a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20201105a.htm": {
+  "bayt": 85118,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20201105a.htm_f7e40997.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20201105a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20201216a.htm": {
+  "bayt": 85229,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20201216a.htm_81fef885.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20201216a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20210127a.htm": {
+  "bayt": 85300,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20210127a.htm_57722ad2.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20210127a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20210317a.htm": {
+  "bayt": 85262,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20210317a.htm_645c863c.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20210317a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20210428a.htm": {
+  "bayt": 85250,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20210428a.htm_5279a2eb.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20210428a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20210616a.htm": {
+  "bayt": 85210,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20210616a.htm_24764219.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20210616a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20210728a.htm": {
+  "bayt": 85293,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20210728a.htm_b4821974.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20210728a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20210922a.htm": {
+  "bayt": 85412,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20210922a.htm_88124e01.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20210922a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20211103a.htm": {
+  "bayt": 86091,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20211103a.htm_48deeb4b.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20211103a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20211215a.htm": {
+  "bayt": 85487,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20211215a.htm_15abc405.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20211215a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220126a.htm": {
+  "bayt": 84852,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20220126a.htm_491c7268.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20220126a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm": {
+  "bayt": 84345,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20220316a.htm_fd594efa.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20220316a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220504a.htm": {
+  "bayt": 84860,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20220504a.htm_c5ed059a.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20220504a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm": {
+  "bayt": 84490,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20220615a.htm_cdf329b5.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20220615a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220727a.htm": {
+  "bayt": 84151,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20220727a.htm_d00a5ebb.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20220727a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220921a.htm": {
+  "bayt": 84158,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20220921a.htm_5fd7d355.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20220921a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20221102a.htm": {
+  "bayt": 84792,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20221102a.htm_cea498d1.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20221102a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20221214a.htm": {
+  "bayt": 84793,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20221214a.htm_438a6caa.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20221214a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230201a.htm": {
+  "bayt": 84539,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20230201a.htm_f60ed9f5.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20230201a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230322a.htm": {
+  "bayt": 84735,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20230322a.htm_f7c49510.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20230322a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230503a.htm": {
+  "bayt": 84518,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20230503a.htm_3f208788.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20230503a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230614a.htm": {
+  "bayt": 84588,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20230614a.htm_6c1d3773.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20230614a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230726a.htm": {
+  "bayt": 84545,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20230726a.htm_dcdfd935.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20230726a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230920a.htm": {
+  "bayt": 84592,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20230920a.htm_c86714b3.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20230920a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20231101a.htm": {
+  "bayt": 84626,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20231101a.htm_3e8a7d07.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20231101a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20231213a.htm": {
+  "bayt": 84680,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20231213a.htm_dab17b6e.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20231213a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240131a.htm": {
+  "bayt": 84492,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240131a.htm_d2bece16.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20240131a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240320a.htm": {
+  "bayt": 84452,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240320a.htm_bab9b3d5.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20240320a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240501a.htm": {
+  "bayt": 84938,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240501a.htm_b02a64d8.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20240501a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240612a.htm": {
+  "bayt": 84540,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240612a.htm_defe8350.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20240612a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240731a.htm": {
+  "bayt": 84620,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240731a.htm_03d3b074.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20240731a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm": {
+  "bayt": 84619,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20240918a.htm_bfc1dd2d.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20240918a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20241107a.htm": {
+  "bayt": 84394,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20241107a.htm_7ed7e931.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20241107a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20241218a.htm": {
+  "bayt": 84547,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20241218a.htm_10d2002a.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20241218a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250129a.htm": {
+  "bayt": 84323,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250129a.htm_ac319d30.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20250129a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250319a.htm": {
+  "bayt": 84702,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250319a.htm_1a706f43.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20250319a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250507a.htm": {
+  "bayt": 84417,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250507a.htm_eaca4ff4.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20250507a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250618a.htm": {
+  "bayt": 84263,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250618a.htm_8be53575.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20250618a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250730a.htm": {
+  "bayt": 84428,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250730a.htm_34b14621.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20250730a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250822a.htm": {
+  "bayt": 84942,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250822a.htm_004ab462.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20250822a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250917a.htm": {
+  "bayt": 84471,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20250917a.htm_ddf50fef.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20250917a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20251029a.htm": {
+  "bayt": 84643,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20251029a.htm_8b2399dc.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20251029a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20251210a.htm": {
+  "bayt": 84784,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20251210a.htm_e6002739.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20251210a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260128a.htm": {
+  "bayt": 84214,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20260128a.htm_5636ef09.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20260128a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm": {
+  "bayt": 84295,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20260318a.htm_e1a5c134.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20260318a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260429a.htm": {
+  "bayt": 84519,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20260429a.htm_d660eba3.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20260429a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm": {
+  "bayt": 83188,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20260617a.htm_f8bf223b.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20260617a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm": {
+  "bayt": 83318,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20260729a.htm_b31df595.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20260729a.htm"
+ },
+ "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm": {
+  "bayt": 84741,
+  "dosya": "www.federalreserve.gov_newsevents_pressreleases_monetary20260916a.htm_fe283a4d.html",
+  "durum": 200,
+  "son_adres": "/newsevents/pressreleases/monetary20260916a.htm"
+ }
+}
