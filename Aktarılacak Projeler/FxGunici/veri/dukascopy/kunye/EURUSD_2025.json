@@ -1,12 +1,12 @@
 {
  "birimler": {
   "EURUSD/2025": {
-   "bayt": 3965541,
-   "dolgu_dakika": 78628,
+   "bayt": 3979474,
+   "dolgu_dakika": 78632,
    "gun": 313,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 312,
+   "gun_dolu": 313,
    "gun_dolu_liste": [
     "2025-01-01",
     "2025-01-02",
@@ -150,6 +150,7 @@
     "2025-06-12",
     "2025-06-13",
     "2025-06-15",
+    "2025-06-16",
     "2025-06-17",
     "2025-06-18",
     "2025-06-19",
@@ -321,19 +322,17 @@
     "2025-12-30",
     "2025-12-31"
    ],
-   "gun_hata": [
-    "2025-06-16: BID tamam  · ASK hata ReadTimeoutError"
-   ],
-   "icerik_ozu": "9a6fb8ee51f4c0ae91b3f1fe4ad7eb3f327a64620b1ef26191317d0b26a6a6f7",
+   "gun_hata": [],
+   "icerik_ozu": "b48772087105260470fe547573e779e49f6ca7709855d86df91ec833b722c3da",
    "ilk_gun": "2025-01-01",
-   "indirme": "2026-10-16T09:52:41Z",
-   "istek": 1102,
+   "indirme": "2026-10-16T10:49:18Z",
+   "istek": 1106,
    "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 477,
-   "satir": 370652,
-   "sha256": "1fbf0da035c4831df4c8a626dffdcc74083c00581e8957e54fdc61ef104ea099",
+   "ret": 479,
+   "satir": 372088,
+   "sha256": "5f830c332affac07cf3c8ad37cdb276a590a5dedde3a8a10de212562ef0c3b85",
    "son_gun": "2025-12-31",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -358,5 +357,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T09:52:41Z"
+ "yazim": "2026-10-16T10:49:18Z"
 }
