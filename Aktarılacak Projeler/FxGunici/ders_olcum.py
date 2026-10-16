@@ -50,6 +50,41 @@ def _oz(yol: Path) -> str | None:
     return hashlib.sha256(yol.read_bytes()).hexdigest() if yol.exists() else None
 
 
+def _icerik_ozu(d: dict) -> str:
+    """Ön kaydın AYRIŞTIRILMIŞ içeriğinin özü: yorum ve biçim değişikliği özü değiştirmez."""
+    return hashlib.sha256(json.dumps(d, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
+def onkayit_gecmisi() -> list[dict] | None:
+    """Ön kaydın git geçmişi: her commit'te ayrıştırılmış içeriğin özü ve bir öncekine göre değişen
+    bölümler. "Hiçbir kural sonuç görüldükten sonra değişmedi" cümlesi bir beyan değil bu listedir.
+    Git yoksa (ya da sığ klonda geçmiş eksikse) None: ölçülemeyen geçmiş uydurulmaz."""
+    import subprocess
+    rel = ONKAYIT_YOL.relative_to(KOK).as_posix()
+    try:
+        out = subprocess.run(["git", "-C", str(KOK), "log", "--format=%H %cI", "--", rel],
+                             capture_output=True, text=True, check=True).stdout.split("\n")
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    kayit, onceki = [], None
+    for satir in reversed([s for s in out if s.strip()]):
+        h, t = satir.split(" ", 1)
+        try:
+            metin = subprocess.run(["git", "-C", str(KOK), "show", f"{h}:{rel}"],
+                                   capture_output=True, text=True, check=True).stdout
+        except subprocess.CalledProcessError:
+            return None
+        d = tomllib.loads(metin)
+        degisen = sorted(set(d)) if onceki is None else sorted(k for k in set(d) | set(onceki) if d.get(k) != onceki.get(k))
+        kayit.append({"commit": h[:8], "zaman": t, "icerik_ozu": _icerik_ozu(d), "degisen_bolum": degisen})
+        onceki = d
+    simdi = tomllib.loads(ONKAYIT_YOL.read_text(encoding="utf-8"))
+    if onceki is not None and simdi != onceki:
+        kayit.append({"commit": None, "zaman": None, "icerik_ozu": _icerik_ozu(simdi),
+                      "degisen_bolum": sorted(k for k in set(simdi) | set(onceki) if simdi.get(k) != onceki.get(k))})
+    return kayit
+
+
 def _temiz(x):
     if isinstance(x, float):
         return None if not math.isfinite(x) else round(x, 6)
@@ -271,6 +306,7 @@ def kur(kok: Path | None = None) -> dict:
             "temel_kayma_pip": onk["genel"]["temel_kayma_pip"], "haber_kayma_pip": a.haber_kayma_pip,
             "haber_pencere_dk": list(a.haber_pencere_dk), "gun_sonu_et": a.gun_sonu_et,
             "onkayit_ozu": _oz(ONKAYIT_YOL), "ayar_ozu": _oz(BURASI / "ayar.toml"),
+            "onkayit_icerik_ozu": _icerik_ozu(onk), "onkayit_gecmisi": onkayit_gecmisi(),
             "hukum_kurali": onk["hukum"], "secim": onk["secim"], "saglamlik": onk["saglamlik"],
             "kosul": onk["kosul"],
         },
