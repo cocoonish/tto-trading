@@ -1227,11 +1227,77 @@ def blok_fomc(u: Uretim, ctx: dict) -> str:
                       f"{_hucre(dn.get('oran'), 'yz0')} ({_hucre(dn.get('alt'), 'yz0')}–{_hucre(dn.get('ust'), 'yz0')})",
                       f"{_hucre(b60.get('korelasyon'), 'r')} ({_hucre(b60.get('korelasyon_alt'), 'r')} / "
                       f"{_hucre(b60.get('korelasyon_ust'), 'r')})"]
-                     + [_hucre((kb.get(k) or {}).get("oran"), "yz0") for k in ("<0,5", "0,5–1", ">1")])
+                     + [(f"{_hucre(kb[k].get('oran'), 'yz0')} ({sayi(kb[k].get('n'), 0)})" if (kb.get(k) or {}).get("n")
+                         else "—") for k in ("<0,5", "0,5–1", ">1")])
     if not govde:
         return "_FOMC karar ↔ basın toplantısı ölçülemedi (basın toplantısı saati olan toplantı yok)._"
     return _tablo(["Parite", "Toplantı", "Dönüş oranı (%95)", "Korelasyon (%95)", "Karar <0,5 ATR", "0,5–1",
                    ">1"], govde, ["l", "r", "r", "r", "r", "r", "r"])
+
+
+def blok_fomc_cumle(u: Uretim, ctx: dict) -> str:
+    """FOMC tablosunun okunuşu: dönüş oranı yazı turadan, ilinti sıfırdan ayırt ediliyor mu; ve iki pencerenin
+    hareket büyüklüğü (pencereler farklı uzunlukta: karar 30 dk, basın 60 dk — rastgele yürüyüşte √2 kat beklenir)."""
+    satir = []
+    for c, h in sorted(((u.O.get("haber") or {}).get("cift") or {}).items(), key=lambda kv: list(PARITE).index(kv[0])):
+        b60 = (((h or {}).get("fomc") or {}).get("ozet") or {}).get("basin_60") or {}
+        dn = b60.get("donus") or {}
+        if dn.get("alt") is None or b60.get("korelasyon_alt") is None:
+            continue
+        satir.append((c, dn, b60))
+    if not satir:
+        return ""
+    n = len(satir)
+    yt = [c for c, dn, _ in satir if dn["alt"] <= 0.5 <= dn["ust"]]
+    don = [c for c, dn, _ in satir if dn["alt"] > 0.5]
+    dev = [c for c, dn, _ in satir if dn["ust"] < 0.5]
+    sif = [c for c, _, b in satir if b["korelasyon_alt"] <= 0 <= b["korelasyon_ust"]]
+    def ad(cs):
+        return ", ".join(PARITE[c] for c in cs)
+    hepsi = (f"{PARITE[satir[0][0]]}'de" if n == 1 else
+             ("Dört paritenin hiçbirinde" if n == 4 else f"{sayi(n, 0)} paritenin hiçbirinde"))
+    if len(yt) == n:
+        cumle = [f"{hepsi} dönüş oranının %95 aralığı %50'yi dışarıda bırakmıyor: basın toplantısının ilk "
+                 f"saati kararın ilk yarım saatini ne sistematik olarak tersine çeviriyor ne de sürdürüyor."]
+    else:
+        cumle = []
+        if don:
+            cumle.append(f"Dönüş oranı {ad(don)} paritesinde yazı turadan sık: basın toplantısı kararın ilk hareketini "
+                         f"çoğunlukla tersine çeviriyor.")
+        if dev:
+            cumle.append(f"{ad(dev)} paritesinde dönüş yazı turadan seyrek: basın toplantısı kararın ilk hareketini "
+                         f"çoğunlukla sürdürüyor.")
+        if yt:
+            cumle.append(f"{ad(yt)} paritesinde dönüş oranı yazı turadan ayırt edilemiyor.")
+    ayr = [c for c, _, _ in satir if c not in sif]
+    if not ayr:
+        cumle.append("İki hareketin ilintisi hiçbir paritede sıfırdan ayırt edilemiyor.")
+    else:
+        isaret = {c: ("artı (basın toplantısı kararın yönünü sürdürüyor)" if b["korelasyon"] > 0 else
+                      "eksi (basın toplantısı kararın yönünü tersine çeviriyor)") for c, _, b in satir}
+        cumle.append("İki hareketin ilintisi " + "; ".join(f"{PARITE[c]}'de {isaret[c]}" for c in ayr)
+                     + (f"; {ad(sif)} paritesinde sıfırdan ayırt edilemiyor." if sif else "."))
+    kok2 = math.sqrt(2)
+    oran = [(c, b["ort_mutlak_basin_atr"] / b["ort_mutlak_karar_atr"]) for c, _, b in satir
+            if b.get("ort_mutlak_karar_atr")]
+    if oran:
+        alt = [c for c, r in oran if r < kok2]
+        ornek = next((x for x in satir if x[0] == "EURUSD"), satir[0])
+        b = ornek[2]
+        oran_ornek = b["ort_mutlak_basin_atr"] / b["ort_mutlak_karar_atr"]
+        cumle.append(f"Hareketin büyüklüğü: {PARITE[ornek[0]]}'de basın toplantısının ilk saatindeki ortalama mutlak "
+                     f"hareket {sayi(b['ort_mutlak_basin_atr'], 2)}, kararın ilk yarım saatindeki "
+                     f"{sayi(b['ort_mutlak_karar_atr'], 2)} günlük ATR (oran {sayi(oran_ornek, 2)}). Basın penceresi iki kat uzun "
+                     f"olduğu için oran "
+                     f"tek başına bir şey söylemez: fiyat rastgele yürüseydi bile iki kat uzun pencerede "
+                     f"{sayi(kok2, 2)} kat hareket beklenirdi. "
+                     + (f"{'Dört paritenin dördünde' if len(alt) == n == 4 else ad(alt) + ' paritesinde'} oran bunun "
+                        f"altında: dakika başına kararın yarım saati basın toplantısının ilk saatinden daha hareketli."
+                        if alt else "Oran hiçbir paritede bunun altında değil: basın toplantısı dakika başına da "
+                                    "kararın yarım saati kadar hareketli.")
+                     + (f" {ad([c for c, _ in oran if c not in alt])} paritesinde değil." if alt and len(alt) < len(oran)
+                        else ""))
+    return " ".join(cumle)
 
 
 def hukum_sayim_yaz(b: dict) -> str:
@@ -1648,7 +1714,7 @@ def blok_kosullar(u: Uretim, ctx: dict) -> str:
 BLOKLAR = {
     "sonuclar": blok_sonuclar, "kosullar": blok_kosullar, "hukum_cumle": blok_hukum_cumle,
     "havuz_cumle": blok_havuz_cumle, "ay_sonu": blok_ay_sonu, "regresyon": blok_regresyon,
-    "devam": blok_devam, "devam_cumle": blok_devam_cumle, "haber_kirilim": blok_haber_kirilim, "fomc": blok_fomc,
+    "devam": blok_devam, "devam_cumle": blok_devam_cumle, "haber_kirilim": blok_haber_kirilim, "fomc": blok_fomc, "fomc_cumle": blok_fomc_cumle,
     "veri": blok_veri, "haber_makas": blok_haber_makas, "haber_makas_ozet": blok_haber_makas_ozet,
     "haber_makas_cumle": blok_haber_makas_cumle,
     "pratik_islem": blok_pratik_islem, "pratik_atr": blok_pratik_atr,

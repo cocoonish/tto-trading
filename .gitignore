@@ -61,3 +61,9 @@ Research/Al Brooks/
 
 # Yazı katmanının geçici yama dosyası — bültene uygulandıktan sonra işi biter
 yama.json
+
+# FX gün içi: strateji koşusunun ara çıktıları (birim sonuçları ve işlem listeleri, parite başına ~18 MB)
+# depodaki arşivden `hepsi.py` ile yeniden üretilir; depoda yalnız ölçüm dosyası
+# (cikti/ders/olcum.json) durur — kapı (dogrula.py) ve dersler onu okur.
+Aktarılacak Projeler/FxGunici/cikti/islem/
+Aktarılacak Projeler/FxGunici/cikti/sonuc/
