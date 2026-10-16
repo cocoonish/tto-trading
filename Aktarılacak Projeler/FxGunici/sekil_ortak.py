@@ -222,8 +222,9 @@ def _sol_pay(fig) -> float:
         return max(pay, 12 + max(satir_em(v) for v in yazi if v) * _TIK_PX)
     for iz in fig.data:
         y = getattr(iz, "y", None)
-        if y is not None and len(y) and all(isinstance(v, str) for v in y if v is not None):
-            pay = max(pay, 12 + max(satir_em(v) for v in y if v is not None) * _TIK_PX)
+        y = [] if y is None else [v for v in y if v is not None]   # değeri olmayan iz (boş parite) sayılmaz
+        if y and all(isinstance(v, str) for v in y):
+            pay = max(pay, 12 + max(satir_em(v) for v in y) * _TIK_PX)
     return pay
 
 

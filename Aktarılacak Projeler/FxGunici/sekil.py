@@ -422,7 +422,7 @@ def rastgele(o: dict, cift: str = "EURUSD") -> None:
     # kalın çizgiyle çizilen bandı kenarda kırpar (bandın ucu okura hiç görünmez).
     uclar = [v for x in satir for v in x[1:5] if v is not None]
     pay = 0.06 * (max(uclar) - min(uclar))
-    fig = make_subplots(rows=1, cols=1, subplot_titles=(f"{PARITE[cift]} · örneklem dışı, işlem başına net R",))
+    fig = make_subplots(rows=1, cols=1, subplot_titles=(f"{PARITE[cift]} · örneklem dışı, net R / işlem",))
     fig.update_xaxes(range=[min(uclar) - pay, max(uclar) + pay])
     for x, y in zip(satir, ad):
         fig.add_trace(go.Scatter(x=[x[2], x[3]], y=[y, y], mode="lines", line=dict(color="rgba(47,93,140,0.35)", width=9),
