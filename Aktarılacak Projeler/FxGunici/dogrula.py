@@ -11,6 +11,8 @@ depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saa
      üretilmemiş bir ders düşer. Üretimin kendisi de bir kapıdır: şablonların bütün iddiaları ölçüme karşı sınanır.
   2. Figürler — her gömülen figür sitede durur ve çizildiği ölçüm dosyasının özünü taşır; özü bugünkü ölçümden
      farklı bir figür (ölçüm değişmiş, şekil yeniden çizilmemiş) düşer. Hiçbir derste gömülmeyen figür de düşer.
+     Her figürde sitenin ev stili uygulanmış olmalı ve başlık bloğunun her satırı telefonun gömme çerçevesine
+     sığmalıdır (ölçü çizim katmanının kendisinden: sekil_ortak.tasan_satirlar).
   3. Sayı envanteri — şablonlardaki her ondalık sayı ve yüzde ya bir yer tutucudan gelir, ya bildirilmiş bir sabittir
      ({{= "…" }}), ya da aşağıdaki tanım listesindedir. Elle yazılmış bir ölçüm şablona giremez.
   4. Sıra — serinin okuma sırası (adlar.DERS_SIRA) sitedeki ders grubunun sırasıyla aynıdır; ön koşullar seridedir.
@@ -21,6 +23,7 @@ Dersler henüz siteye yazılmamışsa (yayın öncesi) kapı bunu söyler ve ge�
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import sys
 from pathlib import Path
@@ -53,6 +56,41 @@ def sayi_envanteri() -> list[str]:
         for m in _SAYI.finditer(_govde(yol.read_text(encoding="utf-8"))):
             if m.group(0) not in TANIM:
                 hata.append(f"{yol.relative_to(BURASI)}: elle yazılmış sayı {m.group(0)!r}")
+    return hata
+
+
+def _figur_json(h: str) -> dict | None:
+    """Figürün izleri ve düzeni, Plotly'nin kendi çağrısından (newPlot'un ikinci ve üçüncü argümanı)."""
+    dec = json.JSONDecoder()
+    i = h.find("Plotly.newPlot(")
+    if i < 0:
+        return None
+    try:
+        j = h.index(",", i) + 1
+        veri, k = dec.raw_decode(h, j + len(h[j:j + 50]) - len(h[j:j + 50].lstrip()))
+        k = h.index(",", k) + 1
+        duzen, _ = dec.raw_decode(h, k + len(h[k:k + 50]) - len(h[k:k + 50].lstrip()))
+    except ValueError:
+        return None
+    return {"data": veri, "layout": duzen}
+
+
+def figur_bicimi(ad: str, h: str) -> list[str]:
+    """Gömülen figürün biçimi: sitenin ev stili uygulanmış mı (figürün üst payı o stille kurulur; stilsiz figürde
+    başlık çizim alanına biner) ve başlık bloğunun her satırı telefonun gömme çerçevesine sığıyor mu (Plotly başlığı
+    sarmaz, sağ ucu kırpılır); panel başlıkları da (sekil_ortak.panel_tasmasi). Ölçü çizim katmanının kendi
+    tanımıdır; orada yalnız uyarıdır."""
+    import sekil_ortak as so                  # çizim kütüphanesi olmadan da içe aktarılır
+    hata = []
+    if so.EV_STILI_ISARET not in h:
+        hata.append(f"{ad}.html: ev stili uygulanmamış (sekil.py ev stiliyle yeniden koşulmalı)")
+    d = _figur_json(h)
+    if d is None:
+        hata.append(f"{ad}.html: figürün düzeni okunamadı")
+        return hata
+    bas = ((d["layout"].get("title") or {}).get("text")) or ""
+    hata += [f"{ad}.html: başlık satırı telefonun gömme çerçevesinde taşar — {t}" for t in so.tasan_satirlar(bas)]
+    hata += [f"{ad}.html: panel başlığı telefonun gömme çerçevesinde — {t}" for t in so.panel_tasmasi(d)]
     return hata
 
 
@@ -111,11 +149,13 @@ def main() -> int:
                 if not f.exists():
                     hata.append(f"{slug}: gömülen figür yok: {ad}.html")
                     continue
-                m = re.search(r'<meta name="tto-olcum-ozu" content="([0-9a-f]{64})">', f.read_text(encoding="utf-8"))
+                h = f.read_text(encoding="utf-8")
+                m = re.search(r'<meta name="tto-olcum-ozu" content="([0-9a-f]{64})">', h)
                 if not m:
                     hata.append(f"{ad}.html: ölçüm özü yok")
                 elif m.group(1) != oz:
                     hata.append(f"{ad}.html: başka bir ölçümle çizilmiş (yeniden çizilmeli)")
+                hata += figur_bicimi(ad, h)
         if cikti:
             fazla = sorted(p.name for p in dy.SEKIL.glob("*.html") if p.name not in gomulen)
             if fazla:

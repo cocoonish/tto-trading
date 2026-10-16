@@ -34,29 +34,33 @@ kesilmedikçe sinyal üretmez.
 
 {{! ornek }}
 
-Figürde mavi çizgiler dünün tepesi ve dibidir. Sinyal mumunun boyu riski belirler: seviyeyi uzun bir mumla kesen
-kırılımın stop'u da uzaktır.
+Figürde noktalı mavi çizgiler dünün tepesi ve dibi, mavi bant seviyeyi kesen sinyal mumudur. Sinyal mumunun
+boyu riski belirler: seviyeyi uzun bir mumla kesen kırılımın stop'u da uzaktır. Kaybeden örnek lehine yarım R'ye
+ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: seviye
+kesiliyor, kırılım bir süre ilerliyor ve fiyat dünün aralığına geri dönüyor.
 
 ### Sonuçlar
 
 {{! sonuclar }}
 
-{{! havuz_cumle }}
-
 ### Koşullar
 
 {{! kosullar }}
 
-Dünün aralığının ATR'ye oranı (önceki gün aralığı / ATR) bu kural için ayrıca okunmalı: dar bir dünün uçları bugüne
-yakındır ve kolay kesilir.
+Dünün aralığının ATR'ye oranı bu kuralın en doğal koşuludur: dar bir dünün uçları bugüne yakındır ve kolay
+kesilir, geniş bir dünün uçlarına ancak güçlü bir hareket ulaşır. Bu kuralda "aralık / günlük ATR" ile "önceki gün
+aralığı / ATR" aynı ölçüdür ve tek değişken sayılır.{{? E.varsayilan.kosul[2].degisken == "onceki_gun_range_atr" and E.varsayilan.kosul[2].hukum == "esdeger" and G.varsayilan.kosul[2].hukum == "esdeger" and J.varsayilan.kosul[2].hukum == "esdeger" and A.varsayilan.kosul[2].hukum == "esdeger" }} Hangisinin kırılımı taşıdığını ölçüm
+söyler: {{! kosul_tek range_atr }}.
 
 ### Kontrol listesi
 
-1. **Seviyeleri işaretle.** 17:00 New York'ta kapanan günün tepesi ve dibi (TSİ yazın 00:00, kışın 01:00).
-2. **Pencere.** Londra 08:00 (TSİ 10:00 ya da 11:00) → 14:00 New York (TSİ 21:00 ya da 22:00).
-3. **Kesişi bekle.** Önceki kapanış içeride, bu kapanış dışarıda; giriş sonraki dakikada.
-4. **Stop sinyal mumunun karşı ucunda, hedef 2R.**
-5. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Seviyeleri işaretle.** 17:00 New York'ta kapanan günün tepesi ve dibi (TSİ 00:00, ABD kış saatinde 01:00).
+4. **Pencere.** Londra 08:00 (TSİ 10:00 ya da 11:00) → 14:00 New York (TSİ 21:00 ya da 22:00).
+5. **Kesişi bekle.** Önceki kapanış içeride, bu kapanış dışarıda; giriş sonraki dakikada.
+6. **Stop sinyal mumunun karşı ucunda, hedef 2R.**
+7. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

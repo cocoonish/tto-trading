@@ -39,11 +39,11 @@ bir saldırganlıktır, ızgarada bir mum gecikmeli giriş de sınanıyor.
 
 {{! ornek }}
 
+Noktalı mavi çizgiler fiksinge giden sinyal mumunun tepesi ve dibi, mavi bant o mumun kendisidir. Kuralın stop'u olmadığı için figürde stop çizgisi yoktur; R birimi girişteki ATR'dir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
+
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Ay sonu
 
@@ -52,12 +52,11 @@ fiksinge en yoğun akışı taşıdığı gündür. Aynı kural, aynı işlemler
 
 {{! ay_sonu }}
 
-_Önceden kayıtlı varsayılan, net R. Ay sonu ve öbür günler bütün dönemde; fark Welch t ile (iki yönlü p). Son iki
-sütun ay sonunun örneklem dışı karşılığı._
+_Önceden kayıtlı varsayılan, net R; her parite iki satır: bütün dönem ve örneklem dışı (2024 →). Fark p: ay
+sonu ile öbür günlerin ortalama farkı, Welch t (iki yönlü)._
 
 Ay sonu yılda on iki gündür: EUR/USD'de bütün dönemde {{ E.varsayilan.ay_sonu.ay_sonu.tum.n | n }}, örneklem dışında
-{{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem. Aralıklar bu yüzden geniştir ve tek bir yılın birkaç günü ortalamayı taşıyabilir; dört paritede aynı yönde durmayan bir fark bir kural
-değildir.
+{{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem; aralıklar bu yüzden geniştir. {{! ay_sonu_cumle }}
 
 ### Koşullar
 
@@ -65,11 +64,13 @@ değildir.
 
 ### Kontrol listesi
 
-1. **Saat.** Londra 16:00 (TSİ yazın 18:00, kışın 19:00). Fiksing penceresi 15:57:30–16:02:30 Londra.
-2. **Son mumu oku.** 15:45–16:00 mumunun yönü.
-3. **Ters yönde gir, otuz dakika tut.** Stop yok; risk birimi ATR.
-4. **Ay sonunu ayrı düşün.** Ay sonu tablosu ayrı bir kural değil, aynı kuralın bir alt kümesi.
-5. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Saat.** Londra 16:00: TSİ 18:00 (İngiltere yaz saati) ya da 19:00. Fiksing penceresi 15:57:30–16:02:30 Londra.
+4. **Son mumu oku.** 15:45–16:00 mumunun yönü.
+5. **Ters yönde gir, otuz dakika tut.** Stop yok; R birimi girişteki ATR.
+6. **Ay sonunu ayrı düşün.** Ay sonu tablosu ayrı bir kural değil, aynı kuralın bir alt kümesi.
+7. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

@@ -12,17 +12,19 @@ onkosul:
   - fx-gunici-seans-kirilimlari
 ---
 
-**Fade** (*soldurmak*), bir hareketin tersine işlem yapmaktır. Kırılım kuralları hareketin süreceğine bahis yapar;
+**Fade** (harekete karşı işlem), bir hareketin tersine işlem yapmaktır. Kırılım kuralları hareketin süreceğine bahis yapar;
 fade kuralları hareketin aşırı olduğuna, likidite ya da akışla şiştiğine ve geri geleceğine. İki aile çoğu zaman aynı
 seviyeye zıt bahis yapar ve bu ders o seviyeleri bilerek yeniden kullanır: başarısız kırılımın üç biçimi seans ve
 yapı kırılımlarının Londra aralığına, Asya aralığına ve önceki günün uçlarına bakar; pivot dönüşü pivot kırılımının
 aynasıdır.
 
-Fade kurallarının ortak bir yapısal özelliği var: stop'ları çoğu zaman yakındır (gezintinin ucu, sinyal mumunun ucu)
-ve hedefleri kısadır (1R, VWAP, pivot). EUR/USD'de örneklem dışında başarısız kırılımların ve pivot dönüşünün stop
+Fade kurallarının ortak bir yapısal özelliği var: stop'ları çoğu zaman yakındır (gezintinin ucu, sinyal mumunun
+ucu). Hedefleri ya sabit bir R katıdır (başarısız kırılımlarda 1R) ya da bir seviyedir (VWAP, pivot), ve seviye
+hedefleri risk biriminde kısa değildir: yakın stop'la ölçüldüğünde VWAP dönüşünde hedefin uzaklığı
+{{! hedef_uzaklik vwap_donus }}, pivot dönüşünde {{! hedef_uzaklik pivot_donus }}. EUR/USD'de örneklem dışında başarısız kırılımların ve pivot dönüşünün stop
 medyanı, aynı seviyenin kırılım kuralınınkinden küçük (dersin sonundaki ikinci tablo){{? O.birim.sahte_orb.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.orb.cift.EURUSD.varsayilan.oos.risk_pip and O.birim.sahte_asya.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.asya.cift.EURUSD.varsayilan.oos.risk_pip and O.birim.sahte_pdhl.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.pdhl.cift.EURUSD.varsayilan.oos.risk_pip and O.birim.pivot_donus.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.pivot_kirilim.cift.EURUSD.varsayilan.oos.risk_pip }}. Yakın stop R'yi küçültür, maliyet ise R'den bağımsız olarak her işlemde aynı
-pip kadar ödenir: aynı makas, riski küçük bir işlemde R cinsinden daha pahalıdır. Bu yüzden fade kurallarının maliyet
-tablosu kırılımlarınkinden daha belirleyicidir ve her bölümde ayrıca okunmalıdır.
+pip kadar ödenir: aynı makas, riski küçük bir işlemde R cinsinden daha pahalıdır. Bu yüzden fade kurallarında
+maliyet satırı kırılımlarınkinden daha belirleyicidir.
 
 Son kural farklı bir yapıdadır: **fiksing dönüşü** bir seviyeye değil bir saate bakar — Londra 16:00'daki WM/R
 fiksingi, akışın en yoğun toplandığı an. Ön kayıt fiksing kurallarının ay sonunda ayrıca raporlanmasını istedi;
@@ -63,7 +65,7 @@ Kırılım dersleriyle aynı seviyelerin iki tarafı yan yana:
 <div class="pratik">
   <span class="etiket">Pratik — fade</span>
 
-{{! pratik_islem sahte_orb "Alıştırma 1" }}
+{{! pratik_islem sahte_orb "Alıştırma 1" tuzak }}
 
 {{! pratik_islem pivot_donus "Alıştırma 2" }}
 

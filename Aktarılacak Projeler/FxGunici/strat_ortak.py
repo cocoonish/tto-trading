@@ -82,18 +82,58 @@ def emirler(b: Baglam, sin: pd.DataFrame, tf: int, ofset: int, stop_turu: str, h
 
 
 def kos(b: Baglam, sin: pd.DataFrame, tf: int, ofset: int, stop_turu: str, hedef: str,
-        kayma_pip: float, haber_kayma_pip: float, zaman_mum: int = 12) -> pd.DataFrame:
+        kayma_pip: float, haber_kayma_pip: float, zaman_mum: int = 12, tek_pozisyon: bool = True) -> pd.DataFrame:
     """Sinyal tablosunu motorda koşturur; işlemleri sinyal bilgisiyle birleştirir."""
     e, sin = emirler(b, sin, tf, ofset, stop_turu, hedef, zaman_mum)
     if len(e) == 0:
         return pd.DataFrame()
-    isl = mt.simule(b.d, e, b.bar_son(tf, ofset), b.haber, kayma_pip, haber_kayma_pip)
+    isl = mt.simule(b.d, e, b.bar_son(tf, ofset), b.haber, kayma_pip, haber_kayma_pip, tek_pozisyon=tek_pozisyon)
     isl = isl.sort_values("kimlik").reset_index(drop=True)
     sin = sin.reset_index(drop=True)
     birlesik = pd.concat([sin.drop(columns=[c for c in ("yon", "stop", "giris_i", "cikis_i") if c in sin]),
                           isl], axis=1)
     birlesik["gun"] = b.g.gun[birlesik["gun_k"].to_numpy(np.int64)]
     return birlesik
+
+
+#: Tek pozisyon kuralının bir işlem engellendiğinde boşalttığı sonuç alanları (motorun alınmayan emir satırı gibi).
+_SONUC_ALANI = ("giris_f", "cikis_f", "R", "pnl", "brut", "mae", "mfe", "hedef", "pnl_pip", "brut_pip", "R_pip",
+                "r", "r_brut", "mae_r", "mfe_r", "sure_dk")
+
+
+def tek_pozisyon_uygula(isl: pd.DataFrame) -> pd.DataFrame:
+    """Ayrı ayrı (tek pozisyon kuralı olmadan) koşturulmuş işlemlere, giriş dakikası sırasıyla motorun tek pozisyon
+    kuralını uygular: bir pozisyon açıkken gelen emir alınmaz (durum 1). Motorla aynı serbestlik kuralı: çıkış
+    dakikanın açılışında olduysa (zaman, kapanış stop'u, boşluk) aynı dakikada yeni giriş olabilir. İşlemler
+    birbirinden bağımsız simüle edildiği için sonuç, hepsinin tek bir motor çağrısında koşmasıyla aynıdır."""
+    if len(isl) == 0:
+        return isl
+    out = isl.copy()
+    gi = out["giris_i"].to_numpy(np.int64)
+    sira = np.argsort(np.where(gi >= 0, gi, np.iinfo(np.int64).max), kind="stable")
+    durum = out["durum"].to_numpy(np.int8).copy()
+    ci = out["cikis_i"].to_numpy(np.int64)
+    nd = out["neden"].to_numpy(np.int64)
+    serbest = 0
+    engel = np.zeros(len(out), dtype=bool)
+    for k in sira:
+        if durum[k] != 0:
+            continue
+        if gi[k] < serbest:
+            engel[k] = True
+            continue
+        serbest = ci[k] if nd[k] in (3, 4, 5, 6) else ci[k] + 1
+    if engel.any():
+        out.loc[engel, "durum"] = 1
+        for c in _SONUC_ALANI:
+            if c in out:
+                out.loc[engel, c] = np.nan
+        for c, v in (("cikis_i", -1), ("cikis_t", -1), ("neden", 0)):
+            if c in out:
+                out.loc[engel, c] = v
+        if "belirsiz" in out:
+            out.loc[engel, "belirsiz"] = False
+    return out
 
 
 def gun_mum_araligi(m, a_sn: np.ndarray, b_sn: np.ndarray, tf: int) -> tuple[np.ndarray, np.ndarray]:

@@ -117,3 +117,42 @@ def test_mid_an_bayat_kotasyonu_okumaz():
     assert np.isfinite(sh.mid_an(B, np.array([t]))[0])
     # verinin bittiği yerden bir saat sonra: son kotasyon bayat → NaN
     assert np.isnan(sh.mid_an(B, np.array([int(D.t[-1]) + 3600]))[0])
+
+
+def test_tek_pozisyon_parite_basina_olaylar_arasinda():
+    """Ön kaydın ortak mekaniği: tek pozisyon PARİTE başına. Aynı gün iki olay (karar ve basın toplantısı) varsa
+    ikincisinin işlemi ancak birincisinin pozisyonu kapandıysa açılır."""
+    k = kosu.Kosucu(B, A)
+    for birim in ("n1", "n3"):
+        for tf in (5, 60):
+            _, v = kosu.izgara(birim)
+            v = {**v, "tf": tf, "hedef": "zaman"}
+            isl = k.islem(birim, v)
+            a = isl[isl["durum"] == 0].sort_values("giris_i")
+            gi, ci, nd = (a[c].to_numpy() for c in ("giris_i", "cikis_i", "neden"))
+            serbest = np.where(np.isin(nd, (3, 4, 5, 6)), ci, ci + 1)
+            assert (gi[1:] >= serbest[:-1]).all(), f"{birim}/{tf}: üst üste pozisyon"
+
+
+def test_tek_pozisyon_uygula_motorun_kuraliyla_ayni():
+    """Ayrı koşturulup sonradan uygulanan tek pozisyon kuralı, motorun kendi kuralıyla birebir aynı sonucu verir."""
+    from strat_ortak import kos, tek_pozisyon_uygula
+    k = kosu.Kosucu(B, A)
+    _, v = kosu.izgara("icmum")
+    sin, ofset = k.sinyal("icmum", v)
+    ic = kos(B, sin, int(v["tf"]), ofset, v["stop_turu"], v["hedef"], 0.5, 1.0, tek_pozisyon=True)
+    ayri = tek_pozisyon_uygula(kos(B, sin, int(v["tf"]), ofset, v["stop_turu"], v["hedef"], 0.5, 1.0,
+                                   tek_pozisyon=False))
+    assert (ic["durum"] == 1).any(), "sınama anlamsız: tek pozisyon hiç devreye girmiyor"
+    np.testing.assert_array_equal(ic["durum"].to_numpy(), ayri["durum"].to_numpy())
+    m = ic["durum"].to_numpy() == 0
+    np.testing.assert_allclose(ic["r"].to_numpy()[m], ayri["r"].to_numpy()[m])
+
+
+def test_devam_ufku_gun_sonuna_yetismeyen_gozlem_duser():
+    dv = sh.devam(B, 60, 120, 0.5, 1.0)
+    kp = B.ek[("devam_kirpilan", 60, 120)]
+    if len(dv):
+        t_c = pd.to_datetime(dv["gun"]).to_numpy()  # yalnız var olduğu sınanır
+        assert len(t_c) == len(dv)
+    assert sum(kp.values()) >= 1, "FOMC 14:00/14:30 + 60 dk mum + 120 dk ufuk 16:55'i aşmalı"

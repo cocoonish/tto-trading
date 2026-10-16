@@ -1,7 +1,8 @@
 ### Ne
 
-Oynaklık dalgalanır: sakin dönemleri hareketli dönemler izler. **Sıkışma** (*squeeze*) kuralı bu dalgalanmanın
-dibini ölçer ve oynaklık geri döndüğünde açılan yöne girer. Ölçü iki bandın karşılaştırmasıdır: **Bollinger
+Oynaklık dalgalanır: sakin dönemleri hareketli dönemler izler. **Sıkışma** (*squeeze*) kuralı kapanışların
+dağılımının mumların kendi büyüklüğüne göre olağandışı daraldığı anı ölçer ve dağılım yeniden açıldığında
+oluşan yöne girer. Ölçü iki bandın karşılaştırmasıdır: **Bollinger
 bantları** (kapanışların standart sapmasıyla genişler) **Keltner kanalının** (ortalama gerçek aralıkla genişler)
 içine girdiğinde fiyatın son mumlardaki dağılımı mumların kendi büyüklüğüne göre olağandışı dardır. John
 Carter'ın "TTM Squeeze" adıyla yaygınlaştırdığı tanım budur.
@@ -9,8 +10,8 @@ Carter'ın "TTM Squeeze" adıyla yaygınlaştırdığı tanım budur.
 ### Piyasa mantığı
 
 Bollinger bandı kapanışların birbirinden ne kadar uzaklaştığını, Keltner kanalı mumların ne kadar uzun olduğunu
-ölçer. Mumlar uzun kaldığı hâlde kapanışlar dar bir bölgede toplanıyorsa piyasa yön bulamıyor ama durgun da
-değildir; kırılım savunusu, bu dengenin bozulduğu anda biriken pozisyonların tek yöne kapanacağını söyler.
+ölçer. Mumlar kısalmadığı hâlde kapanışlar dar bir bölgede toplanıyorsa piyasa yön bulamıyor demektir, ama
+durgun olduğu söylenemez; kırılım savunusu, bu dengenin bozulduğu anda biriken pozisyonların tek yöne kapanacağını söyler.
 Kuralın zayıf noktası zamanlamadır: sıkışmanın bittiğini söyleyen şey bandın genişlemesidir ve bant ancak hareket
 başladıktan sonra genişler; girişin ne kadarının hareketin başında, ne kadarının ortasında olduğu ölçülmeden
 bilinemez.
@@ -39,14 +40,14 @@ günü ve saati sınanır.
 
 {{! ornek }}
 
-Figürde mavi çizgiler sıkışma kutusunun iki ucudur. Kutu birkaç saatlik bir sakinliği özetler; uzun bir sıkışmanın
-kutusu da büyüktür ve stop'u uzaklaştırır.
+Figürde noktalı mavi çizgiler sıkışma kutusunun iki ucu, mavi bant sinyal mumudur. Kutu birkaç saatlik bir
+dengeyi özetler; uzun bir sıkışmanın kutusu da büyüktür ve stop'u uzaklaştırır. Sıkışma gün içinde birden çok
+kez oluşabilir: {{! gun_ici }}. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği
+önce lehine en az yarım R gidip zararla kapanan işlemdir.
 
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Koşullar
 
@@ -54,11 +55,14 @@ kutusu da büyüktür ve stop'u uzaklaştırır.
 
 ### Kontrol listesi
 
-1. **Sıkışmayı say.** Bollinger'ın iki bandı da Keltner'ın içinde; en az altı mum üst üste.
-2. **Kutuyu işaretle.** Sıkışma mumlarının en yüksek ve en düşük noktası.
-3. **Kapanışı bekle.** Sıkışma bittikten sonraki beş mum içinde kutunun dışında kapanış; gelmezse desen bitti.
-4. **Stop kutunun karşı ucunda, hedef 2R.** Sinyal en geç 16:00 New York (TSİ 23:00 ya da 00:00).
-5. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Sıkışmayı say.** Bollinger'ın iki bandı da Keltner'ın içinde; en az altı mum üst üste.
+4. **Kutuyu işaretle.** Sıkışma mumlarının en yüksek ve en düşük noktası.
+5. **Kapanışı bekle.** Sıkışma bittikten sonraki beş mum içinde kutunun dışında kapanış; gelmezse desen bitti.
+6. **Stop kutunun karşı ucunda, hedef 2R.** Sinyal en geç 16:00 New York (TSİ 23:00 ya da 00:00, ABD'nin
+   saatine göre).
+7. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

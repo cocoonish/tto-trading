@@ -26,11 +26,11 @@ Varsayılan: 15 dakikalık mumlar, iki mumluk pencere, 1R hedef.{{? B.varsayilan
 
 {{! ornek }}
 
+Noktalı mavi çizgiler dünün tepesi ve dibi, mavi bant içeri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: geri dönüş başlıyor, sonra kırılım yeniden başlayıp stop'u alıyor.
+
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Koşullar
 
@@ -38,10 +38,12 @@ Varsayılan: 15 dakikalık mumlar, iki mumluk pencere, 1R hedef.{{? B.varsayilan
 
 ### Kontrol listesi
 
-1. **Dünün tepe ve dibi.** 17:00 New York'ta kapanan günün uçları.
-2. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde içeride kapanış.
-3. **Stop gezintinin ucunda, hedef 1R.** Pencere 14:00 New York'ta kapanır (TSİ 21:00 ya da 22:00).
-4. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Dünün tepe ve dibi.** 17:00 New York'ta kapanan günün uçları.
+4. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde içeride kapanış.
+5. **Stop gezintinin ucunda, hedef 1R.** Pencere 14:00 New York'ta kapanır (TSİ 21:00 ya da 22:00).
+6. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

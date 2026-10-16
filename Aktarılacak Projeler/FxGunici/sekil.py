@@ -3,7 +3,7 @@
 """FX GÜN İÇİ STRATEJİLER — figürler. Sayıların tamamı `cikti/ders/olcum.json`dan gelir.
 
 Strateji başına altı figür (birim adıyla):
-  <birim>-ornek.html   örnek günler: örneklem dışının en son kazanan ve kaybeden işlemi (EUR/USD)
+  <birim>-ornek.html   örnek günler: örneklem dışından sabit çekilişle üç işlem — kazanan, kaybeden, tuzak (ana parite)
   <birim>-egri.html    birikimli R, dört parite ve havuzu; altta havuzun tepeden düşüşü
   <birim>-izgara.html  parametre ısı haritası (zaman dilimi × ikinci eksen), örneklem içi ve dışı
   <birim>-kosul.html   koşul kovaları: örneklem içinde seçilen, örneklem dışında sınanan
@@ -18,12 +18,16 @@ dosyadır (/js/plotly-4.0.0.min.js) ve bütün figürler onu paylaşır: ilk fig
 kesiti tek düzlem). Okur ekranın dışındaki figürü indirmez. İnteraktivite (fareyle N, aralık,
 tarih okuma) bir backtest figüründe süs değil, sayının kaynağını gösterme yoludur.
 
+Çizilen her figüre sitenin ev stili (site/tools/plotly_stil.py) aynı koşuda uygulanır: figürlerin yüksekliği o
+stilin üst payıyla kurulur (sekil_ortak.ust_pay) ve stilsiz bir figürde başlık çizim alanına biner. Kapı
+(dogrula.py) her gömülen figürde stilin işaretini arar.
+
   python3 sekil.py [birim …] [--olcum YOL] [--cikti DİZİN]
-  python3 site/tools/plotly_stil.py site/public/arastirma/fx-gunici/*.html
 """
 from __future__ import annotations
 
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -34,15 +38,53 @@ import adlar
 import sekil_ortak as so
 from sekil_ortak import CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, baslik_koy, go, make_subplots, vir, yukseklik
 
-RENK = {"EURUSD": MAVI, "GBPUSD": CLARET, "USDJPY": TURUNCU, "AUDUSD": YESIL}
-PARITE = {"EURUSD": "EUR/USD", "GBPUSD": "GBP/USD", "USDJPY": "USD/JPY", "AUDUSD": "AUD/USD"}
-NOKTA = {"EURUSD": 1e-5, "GBPUSD": 1e-5, "AUDUSD": 1e-5, "USDJPY": 1e-3}
+#: Paritenin rengi KİMLİĞİNE bağlıdır, sırasına değil: bir parite çıkarılsa da öbürlerinin rengi değişmez. Tabloda
+#: olmayan bir parite yedek renkleri künyedeki sırasıyla alır.
+RENK_SABIT = {"EURUSD": MAVI, "GBPUSD": CLARET, "USDJPY": TURUNCU, "AUDUSD": YESIL}
+YEDEK_RENK = ("#6b4f8a", "#4f7f8a", "#8a6b4f")
+#: Parite sözlükleri ölçümün künyesinden kurulur (`parite_kur`; ders_motor.parite_kur'un eşi): parite listesi,
+#: nokta büyüklüğü ve ana parite (künyenin ilki) tek yerde, ölçüm dosyasında durur.
+PARITE: dict[str, str] = {}
+NOKTA: dict[str, float] = {}
+RENK: dict[str, str] = {}
+ANA = ""
 OOS_GOLGE = "rgba(138,138,138,0.13)"
+SINYAL_BANT = "rgba(47,93,140,0.16)"
+ORNEK_AD = {"kazanan": "Kazanan", "kaybeden": "Kaybeden", "tuzak": "Tuzak"}
+#: Stop'suz kuralların R birimi (strateji.py: fiksingte kuralın kendi mumlarının ATR'si, momentumda 60 dakikalık).
+R_BIRIMI = {"fiks": "girişteki ATR(14), kuralın kendi mumlarından", "momentum": "girişteki 60 dakikalık ATR(14)"}
+
+
+def parite_kur(kunye: dict) -> None:
+    """Parite sözlüklerini künyeden kurar. Künyede nokta büyüklüğü olmayan parite çizimi DÜŞÜRÜR: tahmin edilen bir
+    nokta büyüklüğü fiyat eksenini on kat kaydırır ve figür yine çizilir."""
+    global ANA
+    ciftler = list(kunye.get("ciftler") or [])
+    if not ciftler:
+        raise SystemExit("künyede parite listesi yok")
+    PARITE.clear(), NOKTA.clear(), RENK.clear()
+    yedek = iter(YEDEK_RENK)
+    for c in ciftler:
+        if c not in (kunye.get("nokta") or {}):
+            raise SystemExit(f"künyede nokta büyüklüğü yok: {c}")
+        PARITE[c] = f"{c[:3]}/{c[3:]}" if len(c) == 6 and c.isalpha() else c
+        NOKTA[c] = float(kunye["nokta"][c])
+        RENK[c] = RENK_SABIT.get(c) or next(yedek, GRI)
+    ANA = ciftler[0]
+
+
+def _hane(cift: str) -> int:
+    """Fiyatın ondalık hanesi, nokta büyüklüğünden (1e-5 → 5, 1e-3 → 3)."""
+    return max(0, round(-math.log10(NOKTA[cift])))
 
 
 def _tsi(t) -> list[str]:
-    return [x.strftime("%Y-%m-%d %H:%M") for x in
+    return [x.strftime("%Y-%m-%d %H:%M:%S") for x in
             pd.to_datetime(np.asarray(t, dtype=np.int64), unit="s", utc=True).tz_convert("Europe/Istanbul")]
+
+
+def _saat(t) -> str:
+    return pd.Timestamp(int(t), unit="s", tz="UTC").tz_convert("Europe/Istanbul").strftime("%H:%M")
 
 
 def _r(x, b=2, arti=True) -> str:
@@ -68,103 +110,173 @@ def _kunye(o: dict) -> str:
 
 
 # ─────────────────────────────────────────────────────── 1 · örnek günler
+def _ornek_pencere(x: dict) -> np.ndarray:
+    """Panelin mumları: sinyal mumundan (ya da olaydan) önceki birkaç saat ve çıkıştan sonraki bir saat. Bütün FX
+    günü (17:00 ET → 17:00 ET) 5 dakikalık mumda 288 mumdur ve telefonda mum başına bir pikselin altına iner."""
+    m, i = x["mum"], x["islem"]
+    sn = 60 * int(x["tf"])
+    t = np.asarray(m["t"], dtype=np.int64)
+    anlar = [int(i["giris_t"])]
+    if i.get("sinyal_t"):
+        anlar.append(int(i["sinyal_t"]) - sn)
+    if i.get("olay_t"):
+        anlar.append(int(i["olay_t"]))
+    once = (3 if sn <= 300 else 6) * 3600
+    return (t + sn > min(anlar) - once) & (t < int(i["cikis_t"]) + 3600)
+
+
 def ornek(o: dict, birim: str) -> None:
     b = o["birim"][birim]
-    ornekler = b["cift"].get("EURUSD", {}).get("ornek") or []
+    c = ANA
+    ornekler = (b["cift"].get(c) or {}).get("ornek") or []
     if not ornekler:
         print(f"  · {birim}: örnek gün yok")
         return
+    stopsuz = (b.get("varsayilan") or {}).get("stop_turu") == "yok"
     ad = adlar.BIRIM[birim][0]
     n = len(ornekler)
+    gun_sonu = o["kunye"]["gun_sonu_et"]
     basliklar = []
     for x in ornekler:
         i = x["islem"]
+        bas = ORNEK_AD.get(x["etiket"], x["etiket"]) + (" (yedek tanım)" if x.get("secim") == "yedek" else "")
+        ek_ = f" · en iyi {_r(i['mfe_r'])} R" if x["etiket"] == "tuzak" else ""
         # iki satır: tek satırda (≈ 25 em) telefonun 353 piksellik çerçevesinden taşıyordu
-        basliklar.append(f"{'Kazanan' if x['etiket'] == 'kazanan' else 'Kaybeden'} · {so.tarih(x['gun'])} · "
-                         f"{'alış' if i['yon'] > 0 else 'satış'}<br>{_r(i['r'])} R · çıkış: "
-                         f"{adlar.neden_ad(i, o['kunye']['gun_sonu_et'])}")
-    fig = make_subplots(rows=n, cols=1, vertical_spacing=0.16, subplot_titles=basliklar)
-    p = NOKTA["EURUSD"]
+        # Çıkışın kısa adı ("gün sonu kapanışı" → "gün sonu"): tuzak satırı en iyi R'yi de taşır ve uzun adla
+        # telefonun çerçevesini aşıyordu (sekil_ortak.panel_tasmasi; kapı aynı ölçüyü sorar).
+        cikis = adlar.neden_ad(i, gun_sonu).replace("gün sonu kapanışı", "gün sonu")
+        basliklar.append(f"{bas} · {so.tarih(x['gun'])} · {'alış' if i['yon'] > 0 else 'satış'}<br>"
+                         f"{_r(i['r'])} R{ek_} · çıkış: {cikis}")
+    fig = make_subplots(rows=n, cols=1, vertical_spacing=0.12, subplot_titles=basliklar)
+    p, hane = NOKTA[c], _hane(c)
+    fiyat = f"%{{y:.{hane}f}}"
+    hedef_var = olay_var = False
     for k, x in enumerate(ornekler, start=1):
         m, i = x["mum"], x["islem"]
-        t = _tsi(m["t"])
-        fig.add_trace(go.Candlestick(x=t, open=[v * p for v in m["o"]], high=[v * p for v in m["h"]],
-                                     low=[v * p for v in m["l"]], close=[v * p for v in m["c"]],
+        sn = 60 * int(x["tf"])
+        sec = _ornek_pencere(x)
+        t = np.asarray(m["t"], dtype=np.int64)[sec]
+        o_, h_, l_, c_ = (np.asarray(m[a], dtype=float)[sec] * p for a in ("o", "h", "l", "c"))
+        # Mum, kendi aralığının ORTASINA çizilir: plotly mumu x'te ortalar, başlangıcına çizilen mum sinyal
+        # bandından yarım mum kayık görünürdü. Fareyle okunan saat aralığın kendisidir.
+        aralik = [f"{_saat(a)}–{_saat(a + sn)} TSİ" for a in t]
+        fig.add_trace(go.Candlestick(x=_tsi(t + sn // 2), open=o_, high=h_, low=l_, close=c_, hovertext=aralik,
+                                     hoverinfo="text+y",
                                      increasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#ffffff"),
                                      decreasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#9a9a9a"),
                                      name=f"{x['tf']} dk mum (orta fiyat)", showlegend=(k == 1)), k, 1)
-        g0, g1 = _tsi([i["giris_t"]])[0], _tsi([i["cikis_t"]])[0]
-        seviyeler = [(i.get("ust"), "referans seviye")]
-        if i.get("alt") is not None and i.get("alt") != i.get("ust"):
-            seviyeler.append((i.get("alt"), "referans seviye"))
-        for j, (seviye, ad_) in enumerate(seviyeler):
-            if seviye is not None:
-                fig.add_trace(go.Scatter(x=[t[0], t[-1]], y=[seviye * p] * 2, mode="lines",
-                                         line=dict(color=MAVI, width=1, dash="dot"), name=ad_,
-                                         showlegend=(k == 1 and j == 0),
-                                         hovertemplate="seviye %{y:.5f}<extra></extra>"), k, 1)
+        x0, x1 = _tsi([t[0], t[-1] + sn])
+        if i.get("sinyal_t"):
+            s0, s1 = _tsi([int(i["sinyal_t"]) - sn, int(i["sinyal_t"])])
+            fig.add_vrect(x0=s0, x1=s1, fillcolor=SINYAL_BANT, line_width=0, layer="below", row=k, col=1)
+        if i.get("olay_t"):
+            olay_var = True
+            fig.add_vline(x=_tsi([int(i["olay_t"])])[0], line=dict(color=MUREKKEP, width=1, dash="dash"), row=k, col=1)
+        seviyeler = []
+        for a in ("ust", "alt", "seviye"):
+            v = i.get(a)
+            if v is not None and all(abs(v - w) > 1e-9 for w in seviyeler):
+                seviyeler.append(v)
+        for j, v in enumerate(seviyeler):
+            fig.add_trace(go.Scatter(x=[x0, x1], y=[v * p] * 2, mode="lines", line=dict(color=MAVI, width=1, dash="dot"),
+                                     name="referans seviye", legendgroup="seviye", showlegend=(k == 1 and j == 0),
+                                     hovertemplate="seviye " + fiyat + "<extra></extra>"), k, 1)
+        g0, g1 = _tsi([i["giris_t"], i["cikis_t"]])
         if i.get("stop") is not None:
             fig.add_trace(go.Scatter(x=[g0, g1], y=[i["stop"] * p] * 2, mode="lines", line=dict(color=CLARET, width=1.6),
-                                     name="stop", showlegend=(k == 1),
-                                     hovertemplate="stop %{y:.5f}<extra></extra>"), k, 1)
+                                     name="stop", legendgroup="stop", showlegend=(k == 1),
+                                     hovertemplate="stop " + fiyat + "<extra></extra>"), k, 1)
         if i.get("hedef") is not None:
+            hedef_var = True
             fig.add_trace(go.Scatter(x=[g0, g1], y=[i["hedef"] * p] * 2, mode="lines", line=dict(color=YESIL, width=1.6),
-                                     name="hedef", showlegend=(k == 1),
-                                     hovertemplate="hedef %{y:.5f}<extra></extra>"), k, 1)
+                                     name="hedef", legendgroup="hedef", showlegend=not any(
+                                         t_.name == "hedef" and t_.showlegend for t_ in fig.data),
+                                     hovertemplate="hedef " + fiyat + "<extra></extra>"), k, 1)
         fig.add_trace(go.Scatter(x=[g0], y=[i["giris_f"] * p], mode="markers",
                                  marker=dict(symbol="triangle-up" if i["yon"] > 0 else "triangle-down", size=13,
                                              color=MUREKKEP, line=dict(color="white", width=1.5)),
-                                 name="giriş (yürütülen fiyat)", showlegend=(k == 1),
-                                 hovertemplate="giriş %{x} TSİ · %{y:.5f}<extra></extra>"), k, 1)
+                                 name="giriş (yürütülen fiyat)", legendgroup="giris", showlegend=(k == 1),
+                                 hovertemplate=f"giriş {_saat(i['giris_t'])} TSİ · " + fiyat + "<extra></extra>"), k, 1)
         fig.add_trace(go.Scatter(x=[g1], y=[i["cikis_f"] * p], mode="markers",
                                  marker=dict(symbol="x", size=11, color=MUREKKEP),
-                                 name="çıkış", showlegend=(k == 1),
-                                 hovertemplate="çıkış %{x} TSİ · %{y:.5f}<extra></extra>"), k, 1)
-        fig.update_xaxes(rangeslider_visible=False, tickformat="%H:%M", row=k, col=1)
-        fig.update_yaxes(tickformat=".4f", row=k, col=1)
-    bas = baslik_koy(fig, f"Örnek günler — {ad}",
-                     ["EUR/USD · stratejinin kendi zaman diliminin mumları, saatler TSİ · önceden kayıtlı varsayılan",
-                      f"Seçim kuralı sabit: örneklem dışının ({_dis(o)}) en son kazanan ve en son kaybeden işlemi",
-                      "Noktalı mavi: stratejinin referans seviyeleri · kırmızı: stop · yeşil: hedef"])
-    fig.update_layout(legend=dict(orientation="h", y=-0.08))
-    so._yaz(fig, f"{birim}-ornek.html", yukseklik(bas, 300 * n + 80))
+                                 name="çıkış", legendgroup="cikis", showlegend=(k == 1),
+                                 hovertemplate=f"çıkış {_saat(i['cikis_t'])} TSİ · " + fiyat + "<extra></extra>"), k, 1)
+        fig.update_xaxes(rangeslider_visible=False, tickformat="%H:%M", range=[x0, x1], row=k, col=1)
+        fig.update_yaxes(tickformat=f".{max(1, hane - 1)}f", row=k, col=1)
+    # Bant ve olay çizgisi birer şekildir, lejantta görünmez: lejant girdisi boş bir izle kurulur.
+    fig.add_trace(go.Scatter(x=[None], y=[None], mode="markers", name="sinyal mumu",
+                             marker=dict(symbol="square", size=13, color=SINYAL_BANT)), 1, 1)
+    if olay_var:
+        fig.add_trace(go.Scatter(x=[None], y=[None], mode="lines", name="olay anı",
+                                 line=dict(color=MUREKKEP, width=1, dash="dash")), 1, 1)
+    isaret = "Mavi bant: sinyal mumu · noktalı mavi: referans seviye" + ("" if stopsuz else " · kırmızı: stop") + \
+             (" · yeşil: hedef" if hedef_var else "") + (" · kesikli: olay anı" if olay_var else "")
+    alt = [f"{PARITE[c]} · stratejinin kendi mum uzunluğu (orta fiyat), saatler TSİ · önceden kayıtlı varsayılan",
+           f"Örneklem dışından ({_dis(o)}) sabit çekilişle, ayrı günlerde: kazanan, kaybeden ve tuzak (lehine en az "
+           "0,5 R gidip zararla kapanan)", isaret]
+    if stopsuz:
+        alt.append(f"Stop'suz kural: stop çizgisi yok; R birimi {R_BIRIMI.get(b.get('aile'), 'girişteki ATR')}")
+    bas = baslik_koy(fig, f"Örnek günler — {ad}", alt)
+    fig.update_layout(legend=dict(orientation="h", y=-0.06))
+    so._yaz(fig, f"{birim}-ornek.html", yukseklik(bas, 290 * n + 110))
 
 
 # ─────────────────────────────────────────────────────── 2 · birikimli R ve düşüş
+def _soluk(renk: str, opak: float = 0.38) -> str:
+    """#rrggbb → rgba(…, opak): örneklem içi aynı rengin soluğudur, kimlik rengi değişmez."""
+    r, g, b_ = (int(renk[j:j + 2], 16) for j in (1, 3, 5))
+    return f"rgba({r},{g},{b_},{opak})"
+
+
+def _iki_donem(fig, gun: list[str], y: list[float], dis: str, ad: str, renk: str, kalin: float, satir: int = 1,
+               hover: str = "") -> None:
+    """Bir birikimli seriyi iki iz olarak çizer: örneklem içi soluk, örneklem dışı koyu. Dış iz, iç izin son
+    noktasından başlar (iki parça arasında boşluk kalmaz); lejantta tek girdi, ikisi birlikte açılıp kapanır."""
+    k = next((j for j, g in enumerate(gun) if g >= dis), len(gun))
+    ic, dis_ = slice(0, k), slice(max(0, k - 1), len(gun))
+    if k > 0:
+        fig.add_trace(go.Scatter(x=gun[ic], y=y[ic], mode="lines", name=ad, legendgroup=ad, showlegend=k >= len(gun),
+                                 line=dict(color=_soluk(renk), width=kalin), hovertemplate=hover), satir, 1)
+    if k < len(gun):
+        fig.add_trace(go.Scatter(x=gun[dis_], y=y[dis_], mode="lines", name=ad, legendgroup=ad, showlegend=True,
+                                 line=dict(color=renk, width=kalin), hovertemplate=hover), satir, 1)
+
+
 def egri(o: dict, birim: str) -> None:
     b = o["birim"][birim]
     k = o["kunye"]
+    dis = k["dis_baslangic"]
+    stopsuz = (b.get("varsayilan") or {}).get("stop_turu") == "yok"
+    birim_r = "R birimi girişteki ATR" if stopsuz else "her işlem 1R risk"
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True, row_heights=[0.68, 0.32], vertical_spacing=0.08,
-                        subplot_titles=("Birikimli net R (her işlem 1R risk)", "Havuzun tepeden düşüşü (R)"))
+                        subplot_titles=(f"Birikimli net R ({birim_r})", "Havuzun tepeden düşüşü (R)"))
     egriler = {}
-    for c, v in b["cift"].items():
-        e = (v.get("egri") or {}).get("varsayilan")
+    for c in PARITE:
+        e = ((b["cift"].get(c) or {}).get("egri") or {}).get("varsayilan")
         if not e:
             continue
         egriler[c] = pd.Series(e["r"], index=pd.DatetimeIndex(e["gun"]))
-        fig.add_trace(go.Scatter(x=e["gun"], y=e["r"], mode="lines", name=PARITE[c],
-                                 line=dict(color=RENK[c], width=1.2),
-                                 hovertemplate="%{x|%d.%m.%Y}: %{y:.1f} R<extra>" + PARITE[c] + "</extra>"), 1, 1)
+        _iki_donem(fig, list(e["gun"]), list(e["r"]), dis, PARITE[c], RENK[c], 1.2,
+                   hover="%{x|%d.%m.%Y}: %{y:.1f} R<extra>" + PARITE[c] + "</extra>")
     if egriler:
         # havuz: aynı haftanın parite değerlerinin toplamı (her parite kendi birikimli R'si; eksik hafta
         # bir önceki değeriyle taşınır — birikimli seride işlemsiz hafta değişmez)
         h = pd.concat(egriler, axis=1).ffill().fillna(0.0).sum(axis=1)
         dd = np.maximum.accumulate(np.concatenate([[0.0], h.to_numpy()]))[1:] - h.to_numpy()
         gun = [g.strftime("%Y-%m-%d") for g in h.index]
-        fig.add_trace(go.Scatter(x=gun, y=h.round(2), mode="lines", name="dört paritenin toplamı",
-                                 line=dict(color=MUREKKEP, width=2.2),
-                                 hovertemplate="%{x|%d.%m.%Y}: %{y:.1f} R<extra>havuz</extra>"), 1, 1)
+        _iki_donem(fig, gun, [round(float(v), 2) for v in h], dis, "havuz (paritelerin toplamı)", MUREKKEP, 2.2,
+                   hover="%{x|%d.%m.%Y}: %{y:.1f} R<extra>havuz</extra>")
         fig.add_trace(go.Scatter(x=gun, y=-dd, mode="lines", fill="tozeroy", line=dict(color=CLARET, width=1),
                                  fillcolor="rgba(140,47,57,0.22)", name="havuzun düşüşü", showlegend=False,
                                  hovertemplate="%{x|%d.%m.%Y}: −%{customdata:.1f} R<extra>düşüş</extra>",
                                  customdata=dd), 2, 1)
-    fig.add_vrect(x0=k["dis_baslangic"], x1=k["bitis"], fillcolor=OOS_GOLGE, line_width=0, layer="below",
-                  row="all", col=1)
+    fig.add_vrect(x0=dis, x1=k["bitis"], fillcolor=OOS_GOLGE, line_width=0, layer="below", row="all", col=1)
     fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.8), row=1, col=1)
     fig.update_xaxes(tickformat="%Y")              # sayısal biçim: eksende İngilizce ay adı çıkmaz
     bas = baslik_koy(fig, f"Birikimli sonuç — {adlar.BIRIM[birim][0]}",
-                     [_kunye(o), f"Önceden kayıtlı varsayılan (veriye bakmadan seçildi) · gri alan örneklem dışı ({_dis(o)})",
-                      "Havuz: aynı kural dört paritede birlikte, her işlem 1R"])
+                     [_kunye(o), f"Önceden kayıtlı varsayılan (veriye bakmadan seçildi) · örneklem içi ({_ic(o)}) soluk, "
+                      f"örneklem dışı ({_dis(o)}) koyu ve gri alanda",
+                      f"Havuz: aynı kural {len(egriler)} paritede birlikte; haftalık birikimli R"])
     so._yaz(fig, f"{birim}-egri.html", yukseklik(bas, 470))
 
 
@@ -184,7 +296,8 @@ def _isi_iz(isi: dict, donem: str, olcu: str = "beklenti_r"):
     return z, metin
 
 
-def izgara(o: dict, birim: str, cift: str = "EURUSD") -> None:
+def izgara(o: dict, birim: str, cift: str = "") -> None:
+    cift = cift or ANA
     v = o["birim"][birim]["cift"].get(cift)
     if not v:
         return
@@ -219,61 +332,83 @@ def izgara(o: dict, birim: str, cift: str = "EURUSD") -> None:
 
 
 # ─────────────────────────────────────────────────────── 4 · koşul kovaları
-def kosul(o: dict, birim: str, cift: str = "EURUSD") -> None:
+KOSUL_HUKUM = {"tuttu": "tuttu", "tutmadi": "tutmadı", "secilmedi": "kova seçilmedi"}
+def _kova_sirala(kovalar: list[dict]) -> list[dict]:
+    """Kovaların okuma sırası metinle aynı (adlar.KOVA_OKUMA)."""
+    ko = adlar.KOVA_OKUMA
+    return sorted(kovalar, key=lambda kv: ko.index(kv["kova"]) if kv["kova"] in ko else 50)
+
+
+def _kova_hover(donem: str, r, n, isabet) -> str:
+    if r is None or n is None:
+        return ""
+    s = f"{donem} {_r(r)} R · {so.vir(n, 0)} işlem"
+    return s + (f" · kazanan payı {so.yuzde(100 * isabet, 1)}" if isabet is not None else "")
+
+
+def kosul(o: dict, birim: str, cift: str = "") -> None:
+    cift = cift or ANA
     v = (o["birim"][birim]["cift"].get(cift) or {}).get("varsayilan")
     if not v or not v.get("kosul"):
         return
-    # Satırlar gruplanır: değişkenin adı kendi satırında (çizim alanının içinde, kalın), altında kovaları;
-    # eksende yalnız kova ve değişkenin hükmü durur. "Değişken · kova" etiketi eksene yazıldığında sol pay
-    # telefonun 353 piksellik çerçevesinin yarısını yiyor, çizim alanı 45 piksele iniyordu.
-    anahtar, yazi, etiket, is_r, oos_r, is_n, oos_n, sec, hk = [], [], [], [], [], [], [], [], []
-    gruplar = []
+    # Satırlar gruplanır: değişkenin adı kendi satırında (çizim alanının içinde, kalın), altında kovaları; eksende
+    # kova ve değişkenin hükmü durur. Aynı ölçüyü ikinci adla tekrarlayan ("esdeger") ve bütün kovaları seçen
+    # ("hepsi") değişken sınanamadığı için çizilmez; altyazı onları adıyla sayar.
+    anahtar, yazi, is_r, oos_r, is_h, oos_h, sec, gruplar, atlanan = [], [], [], [], [], [], [], [], []
     for gi, k in enumerate(v["kosul"]):
         ad = adlar.KOSUL.get(k["degisken"], k["degisken"])
-        hukum = {"tuttu": "tuttu", "tutmadi": "tutmadı", "secilmedi": "seçilmedi"}.get(k["hukum"], k["hukum"])
-        gruplar.append((f"g{gi}", ad))
-        anahtar.append(f"g{gi}"), yazi.append(f"<i>{hukum}</i>"), etiket.append(ad)
-        is_r.append(None), oos_r.append(None), is_n.append(None), oos_n.append(None), sec.append(False), hk.append(hukum)
-        for kv in k["kovalar"]:
-            anahtar.append(f"g{gi}·{kv['kova']}"), yazi.append(kv["kova"]), etiket.append(f"{ad} · {kv['kova']}")
-            is_r.append(kv["is_r"]), oos_r.append(kv["oos_r"]), is_n.append(kv["is_n"]), oos_n.append(kv["oos_n"])
-            sec.append(kv["kova"] in (k.get("secilen") or []))
-            hk.append(hukum)
+        if k["hukum"] not in KOSUL_HUKUM:
+            atlanan.append(ad)
+            continue
+        bas = len(anahtar)
+        anahtar.append(f"g{gi}"), yazi.append(f"<i>{KOSUL_HUKUM[k['hukum']]}</i>")
+        is_r.append(None), oos_r.append(None), is_h.append(""), oos_h.append(""), sec.append(False)
+        for kv in _kova_sirala(k["kovalar"]):
+            secildi = kv["kova"] in (k.get("secilen") or [])
+            anahtar.append(f"g{gi}·{kv['kova']}"), yazi.append(f"<b>{kv['kova']}</b>" if secildi else kv["kova"])
+            is_r.append(kv["is_r"]), oos_r.append(kv["oos_r"]), sec.append(secildi)
+            is_h.append(f"{ad} · {kv['kova']}<br>" + _kova_hover("örneklem içi", kv["is_r"], kv["is_n"], kv.get("is_isabet")))
+            oos_h.append(f"{ad} · {kv['kova']}<br>" + _kova_hover("örneklem dışı", kv["oos_r"], kv["oos_n"],
+                                                                     kv.get("oos_isabet")))
+        gruplar.append((bas, len(anahtar) - 1, ad, k.get("ic_kosulsuz_r")))
+    if not gruplar:
+        return
     fig = make_subplots(rows=1, cols=1, subplot_titles=("Net R / işlem, kova kova",))
-    fig.add_trace(go.Scatter(x=is_r, y=anahtar, mode="markers", name="örneklem içi (kovayı SEÇEN)",
-                             marker=dict(symbol="circle-open", size=9, color=GRI, line=dict(width=1.6)),
-                             customdata=list(zip(is_n, etiket)),
-                             hovertemplate="%{customdata[1]}<br>örneklem içi %{x:.2f} R · n %{customdata[0]}<extra></extra>"))
-    fig.add_trace(go.Scatter(x=oos_r, y=anahtar, mode="markers", name="örneklem dışı (seçimi SINAYAN)",
-                             marker=dict(symbol=["diamond" if s else "circle" for s in sec], size=9,
-                                         color=[MAVI if s else MUREKKEP for s in sec]),
-                             customdata=list(zip(oos_n, hk, etiket)),
-                             hovertemplate="%{customdata[2]}<br>örneklem dışı %{x:.2f} R · n %{customdata[0]}"
-                                           "<br>değişkenin hükmü: %{customdata[1]}<extra></extra>"))
-    ort = v["is"].get("beklenti_r")
-    if ort is not None:
-        fig.add_vline(x=ort, line=dict(color=GRI, width=1, dash="dash"))
+    fig.add_trace(go.Bar(x=is_r, y=anahtar, orientation="h", name="örneklem içi (kovayı seçen)", marker_color="#c4c4c4",
+                         hovertext=is_h, hoverinfo="text"))
+    fig.add_trace(go.Bar(x=oos_r, y=anahtar, orientation="h", name="örneklem dışı (seçimi sınayan)",
+                         marker_color=[MAVI if s_ else MUREKKEP for s_ in sec], hovertext=oos_h, hoverinfo="text"))
+    fig.add_trace(go.Bar(x=[None], y=[anahtar[0]], orientation="h", name="örneklem dışı · seçilen kova (kalın ad)",
+                         marker_color=MAVI, hoverinfo="skip"))
+    for bas_, son_, ad, taban in gruplar:      # değişkenin adı ve koşulsuz ortalaması kendi grubunda
+        fig.add_annotation(x=0, xref="paper", xanchor="left", y=anahtar[bas_], yref="y", text=f"<b>{ad}</b>",
+                           showarrow=False, font=dict(size=11, color=MUREKKEP), bgcolor="rgba(255,255,255,0.85)")
+        if taban is not None and son_ > bas_:
+            fig.add_shape(type="line", x0=taban, x1=taban, y0=bas_ + 0.5, y1=son_ + 0.5, xref="x", yref="y",
+                          line=dict(color=GRI, width=1.2, dash="dash"))
     fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.8))
-    for g, ad in gruplar:      # değişkenin adı kendi satırında, çizim alanının sol kenarından
-        fig.add_annotation(x=0, xref="paper", xanchor="left", y=g, yref="y", text=f"<b>{ad}</b>", showarrow=False,
-                           font=dict(size=11, color=MUREKKEP), bgcolor="rgba(255,255,255,0.85)")
     fig.update_yaxes(type="category", categoryorder="array", categoryarray=anahtar, tickvals=anahtar, ticktext=yazi,
                      autorange="reversed", tickfont=dict(size=11))
-    bas = baslik_koy(fig, f"Koşul kovaları — {adlar.BIRIM[birim][0]}",
-                     [f"{PARITE[cift]} · önceden kayıtlı varsayılan · işlem başına net R, kova kova",
-                      "Kova sınırları örneklem içinden; seçilen kova (mavi elmas) örneklem içinde koşulsuzdan (kesikli) "
-                      "iyi ve en az 30 işlemli",
-                      "Seçim örneklem dışında artı ve tamamlayanından iyi değilse hüküm: tutmadı (değişkenin "
-                      "satırında, eğik yazıyla)"])
-    so._yaz(fig, f"{birim}-kosul.html", yukseklik(bas, 110 + 19 * len(anahtar)))
+    fig.update_layout(barmode="group", bargap=0.25, bargroupgap=0.05)
+    alt = [f"{PARITE[cift]} · önceden kayıtlı varsayılan · işlem başına net R, kova kova (fareyle işlem sayısı ve "
+           "kazanan payı)",
+           "Kova sınırları örneklem içinden; seçilen kova örneklem içinde koşulsuz ortalamadan (kesikli) iyi ve en az "
+           "30 işlemli",
+           "Hüküm değişkenin satırında: tuttu = seçilen kovalar örneklem dışında artı ve öbür kovalardan iyi"]
+    if atlanan:
+        alt.append("Sınanamadığı için çizilmeyen: " + ", ".join(atlanan) + " (aynı ölçü ya da bütün kovalar seçildi)")
+    bas = baslik_koy(fig, f"Koşul kovaları — {adlar.BIRIM[birim][0]}", alt)
+    so._yaz(fig, f"{birim}-kosul.html", yukseklik(bas, 110 + 22 * len(anahtar)))
 
 
 # ─────────────────────────────────────────────────────── 5 · giriş saati (TSİ)
 def saat(o: dict, birim: str) -> None:
     b = o["birim"][birim]
     fig = make_subplots(rows=1, cols=1, subplot_titles=("İşlem başına net R, giriş saatine (TSİ) göre",))
-    for c, v in b["cift"].items():
-        s = (v.get("varsayilan") or {}).get("saat_tsi") or {}
+    for c in PARITE:
+        s = (((b["cift"].get(c) or {}).get("varsayilan")) or {}).get("saat_tsi") or {}
+        if not s:
+            continue
         saatler = sorted(int(h) for h in s)
         fig.add_trace(go.Bar(x=[f"{h:02d}:00" for h in saatler], y=[s[str(h)].get("beklenti_r") for h in saatler],
                              name=PARITE[c], marker_color=RENK[c],
@@ -377,37 +512,49 @@ def karsilastirma(o: dict) -> None:
 
 
 # ─────────────────────────────────────────────────────── ortak: maliyet merdiveni ve rastgele yön
-def maliyet(o: dict, cift: str = "EURUSD") -> None:
+def maliyet(o: dict, cift: str = "") -> None:
+    """Maliyet merdiveni: aynı kural, artan yürütme maliyetiyle. Sütunlar dersin tablosuyla (ders_motor.blok_maliyet_ozet)
+    aynıdır: brüt, yalnız makas (kayma ve haber kayması sıfır) ve dört kayma kademesi (haber kayması her kademede)."""
+    cift = cift or ANA
+    kademe = [str(float(x)) for x in o["kunye"].get("kayma_pip") or []]
+    hk = vir(float(o["kunye"]["haber_kayma_pip"]), 1)
     satir = []
     for b, v in o["birim"].items():
         va = (v["cift"].get(cift) or {}).get("varsayilan") or {}
         m = va.get("maliyet") or {}
         if not m:
             continue
-        satir.append((b, va.get("oos", {}).get("brut_r"), *[m.get(k, {}).get("oos", {}).get("beklenti_r")
-                                                             for k in ("0.0", "0.5", "1.0", "2.0")]))
-    if not satir:
+        satir.append((b, va.get("oos", {}).get("brut_r"),
+                      ((va.get("yalniz_makas") or {}).get("oos") or {}).get("beklenti_r"),
+                      *[m.get(k, {}).get("oos", {}).get("beklenti_r") for k in kademe]))
+    if not satir or len(kademe) != 4:
         return
-    satir.sort(key=lambda x: x[3] if x[3] is not None else -9)
+    temel = 3 + kademe.index(str(float(o["kunye"]["temel_kayma_pip"])))
+    satir.sort(key=lambda x: x[temel] if x[temel] is not None else -9)
     ad = [adlar.BIRIM[x[0]][1] for x in satir]
     fig = make_subplots(rows=1, cols=1, subplot_titles=(f"{PARITE[cift]} · örneklem dışı, R / işlem",))
-    for j, (etiket, renk, sembol) in enumerate((("brüt (orta fiyattan orta fiyata)", GRI, "circle-open"),
-                                                ("net, kayma 0 (yalnız makas)", MAVI, "circle"),
-                                                ("net, kayma 0,5 pip (temel senaryo)", MUREKKEP, "diamond"),
-                                                ("net, kayma 1 pip", TURUNCU, "circle"),
-                                                ("net, kayma 2 pip", CLARET, "circle"))):
+    seri = [("brüt (orta fiyattan orta fiyata)", GRI, "circle-open"),
+            ("yalnız makas (kayma ve haber kayması 0)", YESIL, "circle")]
+    renk = {0: (MAVI, "circle-open"), 1: (MUREKKEP, "diamond"), 2: (TURUNCU, "circle"), 3: (CLARET, "circle")}
+    for q, kk in enumerate(kademe):
+        temel_mi = 3 + q == temel
+        seri.append((f"net, kayma {vir(float(kk), 1)} pip" + (" (temel senaryo)" if temel_mi else ""), *renk[q]))
+    for j, (etiket, rk, sembol) in enumerate(seri):
         fig.add_trace(go.Scatter(x=[x[1 + j] for x in satir], y=ad, mode="markers", name=etiket,
-                                 marker=dict(symbol=sembol, size=8 if j != 2 else 10, color=renk,
+                                 marker=dict(symbol=sembol, size=10 if 1 + j == temel else 8, color=rk,
                                              line=dict(width=1.4) if sembol.endswith("open") else None),
                                  hovertemplate="%{y}: %{x:.3f} R<extra>" + etiket + "</extra>"), 1, 1)
     fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
-    bas = baslik_koy(fig, "Maliyet merdiveni — aynı işlemler, artan yürütme maliyeti",
-                     ["Önceden kayıtlı varsayılanlar · kayma her dolumda (giriş, piyasa çıkışı ve stop) ödenir",
-                      "Brüt ile kayma 0 arasındaki fark gerçek bid/ask makasıdır; R, işlemin kendi stop uzaklığıdır"])
-    so._yaz(fig, "karsilastirma-maliyet.html", yukseklik(bas, 120 + 26 * len(satir)))
+    bas = baslik_koy(fig, "Maliyet merdiveni — aynı kural, artan yürütme maliyeti",
+                     ["Önceden kayıtlı varsayılanlar · kayma her dolumda (giriş, piyasa çıkışı ve stop) ödenir; "
+                      f"kayma kademelerinde haber penceresindeki dolumlar ayrıca {hk} pip öder",
+                      "Brüt ile yalnız makas arasındaki fark gerçek bid/ask makasıdır · R: yürütülen girişten stop'a "
+                      "planlanan risk, stop'suz kurallarda girişteki ATR(14)"])
+    so._yaz(fig, "karsilastirma-maliyet.html", yukseklik(bas, 150 + 26 * len(satir)))
 
 
-def rastgele(o: dict, cift: str = "EURUSD") -> None:
+def rastgele(o: dict, cift: str = "") -> None:
+    cift = cift or ANA
     satir = []
     for b, v in o["birim"].items():
         va = (v["cift"].get(cift) or {}).get("varsayilan") or {}
@@ -541,7 +688,8 @@ def haber_fomc(o: dict) -> None:
     fig.update_yaxes(title_text="basın toplantısı: 14:30 → 15:30 ET")
     bas = baslik_koy(fig, "FOMC: kararın ilk yarım saati ve basın toplantısının ilk saati",
                      ["Sol üst ve sağ alt çeyrek: basın toplantısı karara verilen tepkiyi TERSİNE çevirdi",
-                      "Değişimler orta fiyattan, önceki 14 günün ATR'sine bölünmüş"])
+                      "Değişimler orta fiyattan, önceki 14 günün ATR'sine bölünmüş",
+                      "14:00 ET = TSİ 21:00 (ABD yaz saati) ya da 22:00 (ABD kış saati)"])
     so._yaz(fig, "haber-fomc.html", yukseklik(bas, 470))
 
 
@@ -558,6 +706,7 @@ def main(argv: list[str]) -> int:
         so.CIKTI = Path(argv[i + 1])
         argv = argv[:i] + argv[i + 2:]
     o = json.loads(so.OLCUM.read_text(encoding="utf-8"))
+    parite_kur(o["kunye"])
     birimler = [b for b in argv if b in o["birim"]] or list(o["birim"])
     for b in birimler:
         for f in BIRIM_SEKILLERI:
@@ -565,7 +714,7 @@ def main(argv: list[str]) -> int:
     if not argv:
         for f in (karsilastirma, maliyet, rastgele, veri, haber_patika, haber_fomc):
             f(o)
-    return 0
+    return so.ev_stili(so.YAZILAN)
 
 
 if __name__ == "__main__":

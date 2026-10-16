@@ -70,3 +70,49 @@ def test_basabas_kesisimi():
         0.5 + 0.5 * 0.011 / (0.011 + 0.028))
     assert kosu._sifir_kesisim([0.0, 0.5], [-0.01, -0.05]) == 0.0
     assert kosu._sifir_kesisim([0.0, 0.5], [0.2, 0.1]) is None
+
+
+def test_ornek_gunler_ve_kuyruk_sentetik(tmp_path, monkeypatch):
+    """Örnek seçimi (R eşikleri, ayrı günler, sabit çekiliş), ek kaymalı yeniden koşu ve kuyruk duyarlılığı.
+    Sentetik bağlamda; çıktı geçici dizine yazılır (sentetik parite adı gerçek arşivle aynıdır)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import ayar as ay
+    from gunluk import baglam_kur
+    from sentetik import dakika_uret, olaylar_uret
+    monkeypatch.setattr(kosu, "CIKTI", tmp_path)
+    olay = olaylar_uret()
+    b = baglam_kur(dakika_uret(soklar=olay["utc_sn"].to_numpy()), olay)
+    k = kosu.Kosucu(b, ay.oku())
+    for birim in ("asya", "fiks_donus"):
+        s = kosu.birim_kos(birim, k)
+        va = s["varsayilan_analiz"]
+        orn = va["ornek"]
+        assert orn, f"{birim}: örnek yok"
+        gunler = [o["gun"] for o in orn]
+        assert len(set(gunler)) == len(gunler), f"{birim}: aynı gün iki örnek"
+        for o in orn:
+            i, e = o["islem"], o["ek_kayma"]
+            if o["secim"] == "kural":
+                if o["etiket"] == "kazanan":
+                    assert i["r"] >= kosu.ORNEK_ESIK
+                elif o["etiket"] == "kaybeden":
+                    assert i["r"] <= -kosu.ORNEK_ESIK and i["mfe_r"] < kosu.ORNEK_ESIK
+                else:
+                    assert i["r"] < 0 and i["mfe_r"] >= kosu.ORNEK_ESIK
+            if i["stopsuz"]:
+                assert i["stop"] is None and e["stop"] is None
+            # R katı hedef yürütülen girişten kurulur: iki koşuda da hedefte kapanan işlem tam k R yazar
+            if i["hedef_tur"] == 1 and i["neden"] == 2 and e["neden"] == 2:
+                assert abs(e["r"] - i["hedef_k"]) < 1e-9 and abs(i["r"] - i["hedef_k"]) < 1e-9
+            if e["durum"] == 0:
+                assert e["kayma_pip"] == kosu.KAYMA_TEMEL + kosu.ORNEK_EK_KAYMA
+        # aynı girdiyle aynı örnekler (çekiliş sabit)
+        assert kosu.ornek_gunler(k, birim, s["varsayilan"], k.islem(s["aile"], s["varsayilan"]),
+                                 k.sinyal(s["aile"], s["varsayilan"])[1]) == orn
+        q = va["kuyruk"]
+        assert {"is", "oos", "tum"} <= set(q)
+        t = q["tum"]
+        if t.get("n", 0) >= 4:
+            assert t["r_tek_haric"] <= t["r"] + 1e-12
+        assert va["hukum"] in ("calisiyor", "zayif", "calismiyor", "olculemedi")
+        assert set(va["yalniz_makas"]) == {"is", "oos", "tum"}

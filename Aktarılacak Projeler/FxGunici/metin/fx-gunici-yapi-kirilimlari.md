@@ -15,11 +15,11 @@ onkosul:
 Seans kırılımları saati seçer: Londra açılışı, New York'un sabahı. Bu dersin dört kuralı saati değil **yapıyı**
 seçer. İç mum, bir mumun bir öncekinin içinde kalmasıyla oluşan küçük bir sıkışmadır. Bollinger–Keltner sıkışması aynı
 fikrin istatistiksel biçimidir: kapanışların dağılımı mumların büyüklüğüne göre olağandışı daralmıştır. Önceki günün
-tepe ve dibi ile taban pivotları ise herkesin aynı anda baktığı seviyelerdir; güçlerini bir iktisadi içerikten değil
+tepe ve dibi ile klasik (salon) pivotları ise herkesin aynı anda baktığı seviyelerdir; güçlerini bir iktisadi içerikten değil
 izlenmelerinden alırlar.
 
-Yapı kuralları gün içinde birden çok kez sinyal üretebilir (iç mum ve sıkışma için bu sık olur); aynı anda tek
-pozisyon taşındığı için bir sinyal, açık bir pozisyon varken gelirse atlanır. Seans kırılımlarında olduğu gibi her
+Yapı kuralları gün içinde birden çok kez sinyal üretebilir; aynı anda tek pozisyon taşındığı için bir sinyal, açık
+bir pozisyon varken gelirse atlanır. İç mum ve sıkışmada bunun ne kadar sık olduğu kendi bölümlerinde ölçülüyor. Seans kırılımlarında olduğu gibi her
 kuralın fade karşılığı vardır: önceki gün tepe/dip ve pivotun dönüş biçimleri fade dersinde aynı seviyelerle ölçülüyor.
 
 ## İç mum (inside bar) kırılımı
@@ -45,7 +45,7 @@ kuralın fade karşılığı vardır: önceki gün tepe/dip ve pivotun dönüş 
 <div class="pratik">
   <span class="etiket">Pratik — yapı kırılımları</span>
 
-{{! pratik_islem icmum "Alıştırma 1" }}
+{{! pratik_islem icmum "Alıştırma 1" kaybeden }}
 
 {{! pratik_islem pdhl "Alıştırma 2" }}
 

@@ -13,8 +13,8 @@ saatlik aralığın uçları açılıştaki fiyattan uzak olabilir ve o uçlara 
 
 ### Kurallar
 
-- **Seviye.** Londra 00:00 → 08:00 arasındaki 1 dakikalık orta fiyatların en yükseği ve en düşüğü (TSİ'de yazın
-  02:00 → 10:00, kışın 03:00 → 11:00).
+- **Seviye.** Londra 00:00 → 08:00 arasındaki 1 dakikalık orta fiyatların en yükseği ve en düşüğü (TSİ'de
+  İngiltere yaz saatindeyken 02:00 → 10:00, kış saatindeyken 03:00 → 11:00).
 - **Kırılım, geri dönüş, stop.** Sahte ORB ile aynı: dışarıda kapanış, en çok "pencere" kadar mum içinde içeride
   kapanış, stop gezintinin ucunda.
 - **Pencere.** Londra 08:00 → 14:00; gün başına tek işlem.
@@ -29,11 +29,11 @@ Varsayılan: 15 dakikalık mumlar, iki mumluk pencere, 1R hedef.{{? B.varsayilan
 
 {{! ornek }}
 
+Noktalı mavi çizgiler gecenin aralığı, mavi bant aralığa geri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: geri dönüş başlıyor, sonra kırılım yeniden başlayıp stop'u alıyor.
+
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Koşullar
 
@@ -41,10 +41,12 @@ Varsayılan: 15 dakikalık mumlar, iki mumluk pencere, 1R hedef.{{? B.varsayilan
 
 ### Kontrol listesi
 
-1. **Gece aralığı.** Londra 00:00 → 08:00 tepe ve dip.
-2. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde aralığın içinde kapanış.
-3. **Stop gezintinin ucunda, hedef 1R.** Pencere Londra 14:00'te kapanır.
-4. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Gece aralığı.** Londra 00:00 → 08:00 tepe ve dip.
+4. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde aralığın içinde kapanış.
+5. **Stop gezintinin ucunda, hedef 1R.** Pencere Londra 14:00'te kapanır (TSİ 16:00 ya da 17:00).
+6. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

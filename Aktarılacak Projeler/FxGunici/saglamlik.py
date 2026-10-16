@@ -11,10 +11,22 @@ Beklenen azami Sharpe (gerçek kenar sıfırken):
 (T gözlem; γ₃ çarpıklık, γ₄ basıklık; SR'ler yıllıklandırılmamış, günlük).
 DSR ≥ 0,95 "seçim etkisinden arındırılınca da anlamlı" demektir.
 
+İKİ EŞİK. Formülün V'si denemelerin KESİTSEL varyansıdır (Bailey ve López de Prado'nun
+tanımı) ve bütün denemelerin gerçek Sharpe'ı sıfırken o varyans yalnız tahmin
+gürültüsüdür. Izgaralarımızda kombinasyonlar gerçekten farklıdır (maliyet bazılarını
+sistematik olarak eksiye iter); kesitsel varyans o farkları da taşır ve eşik şişer.
+Bu yüzden ikinci eşik de yazılır: V₀ = 1/(T − 1), sıfır kenarlı bir Sharpe tahmininin
+örnekleme varyansı — "N deneme yalnız şansla ne kadar yüksek bir en iyi üretirdi".
+Hüküm kuralı ikisini de kullanmaz; ikisi de bilgi olarak basılır.
+
 RASTGELE YÖN. Stratejinin AYNI giriş dakikaları, aynı risk uzaklığı ve aynı
-çıkış kuralıyla, yalnız YÖN yazı turayla seçilir; 1000 tekrarın ortalama R
-dağılımında gerçek ortalamanın yüzdeliği. Zamanlamanın ve oynaklığın getirdiği
-her şey iki tarafta da vardır; fark yalnız yönü seçmenin değeridir.
+çıkış kuralıyla (stop ve hedef ters yönde aynı uzaklıkta; zaman çıkışı aynı
+dakikada), yalnız YÖN yazı turayla seçilir; 1000 tekrarın ortalama R
+dağılımında gerçek ortalamanın yüzdeliği. Ters işlem kendi stop ve hedefiyle
+yeniden simüle edildiği için çıkış dakikası çoğu zaman gerçek işleminkinden
+farklıdır; ters koşuda tek pozisyon kuralı yoktur (aynı giriş kümesi). Zamanlamanın
+ve oynaklığın getirdiği her şey iki tarafta da vardır; fark yalnız yönü seçmenin
+değeridir. 20 işlemin altında sınama koşmaz.
 """
 from __future__ import annotations
 
@@ -29,24 +41,37 @@ import motor as mt
 from gunluk import Baglam
 
 EULER = 0.5772156649015329
+#: Rastgele yön sınamasının asgari işlem sayısı: altında sınama koşmaz ve kural "çalışıyor" diyemez.
+ASGARI_RASTGELE = 20
+#: Koşul analizinde "tuttu" hükmünün örneklem dışında seçilen kovalarda istediği asgari işlem sayısı.
+ASGARI_KOSUL_OOS = 20
 
 
 def dsr(sr_secilen: float, sr_denemeler: np.ndarray, gunluk: np.ndarray) -> dict:
-    """Günlük (yıllıklandırılmamış) Sharpe'larla deflated Sharpe."""
+    """Günlük (yıllıklandırılmamış) Sharpe'larla deflated Sharpe; iki eşikle (modülün başlığı)."""
     sr_denemeler = np.asarray([x for x in sr_denemeler if np.isfinite(x)])
     N = len(sr_denemeler)
     T = len(gunluk)
     if N < 2 or T < 30 or not np.isfinite(sr_secilen):
         return {"dsr": float("nan"), "psr": float("nan"), "sr0": float("nan"), "n_deneme": N}
+    carpan = (1 - EULER) * stats.norm.ppf(1 - 1.0 / N) + EULER * stats.norm.ppf(1 - 1.0 / (N * math.e))
     V = float(np.var(sr_denemeler, ddof=1))
-    sr0 = math.sqrt(V) * ((1 - EULER) * stats.norm.ppf(1 - 1.0 / N) + EULER * stats.norm.ppf(1 - 1.0 / (N * math.e)))
+    sr0 = math.sqrt(V) * carpan
+    sr0_g = math.sqrt(1.0 / (T - 1)) * carpan
     g3 = float(stats.skew(gunluk))
     g4 = float(stats.kurtosis(gunluk, fisher=False))
     payda = math.sqrt(max(1e-12, 1 - g3 * sr_secilen + (g4 - 1) / 4.0 * sr_secilen ** 2))
     z_dsr = (sr_secilen - sr0) * math.sqrt(T - 1) / payda
+    z_dsr_g = (sr_secilen - sr0_g) * math.sqrt(T - 1) / payda
     z_psr = sr_secilen * math.sqrt(T - 1) / payda
+    yil = math.sqrt(mk.YIL_GUN)
     return {"dsr": float(stats.norm.cdf(z_dsr)), "psr": float(stats.norm.cdf(z_psr)),
-            "sr0_yillik": float(sr0 * math.sqrt(mk.YIL_GUN)), "n_deneme": N,
+            "sr0_yillik": float(sr0 * yil), "n_deneme": N, "T": int(T),
+            "dsr_gurultu": float(stats.norm.cdf(z_dsr_g)), "sr0_gurultu_yillik": float(sr0_g * yil),
+            "sr_yillik": float(sr_secilen * yil),
+            "deneme_sr_ust_yillik": float(np.max(sr_denemeler) * yil),
+            "deneme_sr_alt_yillik": float(np.min(sr_denemeler) * yil),
+            "deneme_sr_sd_yillik": float(math.sqrt(V) * yil),
             "carpiklik": g3, "basiklik": g4}
 
 
@@ -58,7 +83,7 @@ def rastgele_yon(b: Baglam, isl: pd.DataFrame, tf: int, ofset: int | None, kayma
     sorulduğu mum sonu her işlemin kendi çıpasından okunur.
     """
     a = mk.alinan(isl).reset_index(drop=True)
-    if len(a) < 20:
+    if len(a) < ASGARI_RASTGELE:
         return {"yuzdelik": float("nan"), "ort": float("nan"), "p95": float("nan")}
     d = b.d
     i = a["giris_i"].to_numpy(np.int64)
@@ -119,11 +144,23 @@ def kova_analizi(f: pd.DataFrame, ic: np.ndarray, asgari: int = 30) -> list[dict
     """
     sonuc = []
     r = f["r"].to_numpy()
-    ic_ort = float(np.nanmean(r[ic])) if ic.any() else float("nan")
+    gorulen: list[tuple[str, pd.Series]] = []
     for ad in [c for c in f.columns if c not in ("r", "pnl_pip", "is")]:
         x = f[ad]
         if x.isna().all():
             continue
+        # Aynı ölçünün iki adı (ör. Asya kuralında "aralık / ATR" ile "Asya aralığı / ATR") tek değişkendir: iki kez
+        # sayılırsa "tutan değişken" sayımı ve çoklu sınama payı şişer. Bütün işlemlerde aynı değeri taşıyan değişken
+        # düşer ve neye eşit olduğu kayda geçer.
+        es = next((o for o, y in gorulen if x.equals(y)), None)
+        if es is not None:
+            sonuc.append({"degisken": ad, "esdeger": es, "hukum": "esdeger"})
+            continue
+        gorulen.append((ad, x))
+        # Koşulsuz ortalama, değişkenin TANIMLI olduğu işlemlerden: kovalar yalnız onlardan kurulur ve kıyas aynı
+        # kümede yapılmalı (değişkenin tanımsız olduğu işlemler koşulsuz ortalamayı başka bir kümeye çekerdi).
+        tanimli = x.notna().to_numpy()
+        ic_ort = float(np.nanmean(r[ic & tanimli])) if (ic & tanimli).any() else float("nan")
         if ad in SUREKLI:
             q = np.nanpercentile(x[ic], [100 / 3, 200 / 3]) if (ic & x.notna().to_numpy()).sum() >= 30 else None
             if q is None or not np.isfinite(q).all() or q[0] == q[1]:
@@ -154,8 +191,16 @@ def kova_analizi(f: pd.DataFrame, ic: np.ndarray, asgari: int = 30) -> list[dict
         # aynı olur; gerçek seçimin oranı ters seçiminkini aşmıyorsa "tuttu" sayısı şansla açıklanır.
         ters = [s["kova"] for s in satirlar if s["is_n"] >= asgari and np.isfinite(s["is_r"]) and s["is_r"] < ic_ort]
         t_hukum, t_sec, t_ters = _secim_sina(kova, r, ic, ters, len(satirlar))
+        ms = kova.isin(secilen).to_numpy() if secilen else np.zeros(len(kova), bool)
+        md = ms & ~ic
+        mt_ = (~ms) & ~ic & tanimli
+        pp = f["pnl_pip"].to_numpy()
         sonuc.append({"degisken": ad, "sinir": sinir, "kovalar": satirlar, "secilen": secilen,
                       "hukum": hukum, "oos_secilen_r": oos_sec, "oos_tamamlayan_r": oos_ters,
+                      "ic_kosulsuz_r": ic_ort,
+                      "oos_secilen_n": int(md.sum()), "oos_tamamlayan_n": int(mt_.sum()),
+                      "oos_secilen_isabet": float((pp[md] > 0).mean()) if md.any() else float("nan"),
+                      "oos_tamamlayan_isabet": float((pp[mt_] > 0).mean()) if mt_.any() else float("nan"),
                       "ters_secim": {"secilen": ters, "hukum": t_hukum, "oos_secilen_r": t_sec,
                                      "oos_tamamlayan_r": t_ters}})
     return sonuc
@@ -163,14 +208,17 @@ def kova_analizi(f: pd.DataFrame, ic: np.ndarray, asgari: int = 30) -> list[dict
 
 def _secim_sina(kova: pd.Series, r: np.ndarray, ic: np.ndarray, secilen: list, n_kova: int) -> tuple:
     """Örneklem içinde seçilen kovaların örneklem dışı sınaması (ön kayıt [kosul]): seçilenlerin örneklem dışı
-    ortalaması sıfırın ve tamamlayanın üstünde, en az 20 işlemle. Seçim boşsa ya da bütün kovalarsa 'secilmedi'."""
-    if not secilen or len(secilen) >= n_kova:
+    ortalaması sıfırın ve tamamlayanın üstünde, en az ASGARI_KOSUL_OOS işlemle. Seçim boşsa 'secilmedi', bütün kovaları
+    kapsıyorsa 'hepsi' (tamamlayan yok, sınama kurulamaz)."""
+    if not secilen:
         return "secilmedi", float("nan"), float("nan")
+    if len(secilen) >= n_kova:
+        return "hepsi", float("nan"), float("nan")
     ms = kova.isin(secilen).to_numpy()
     msd, mtd = ms & ~ic, (~ms) & ~ic & kova.notna().to_numpy()
     oos_sec = float(r[msd].mean()) if msd.any() else float("nan")
     oos_ters = float(r[mtd].mean()) if mtd.any() else float("nan")
     n_oos = int(msd.sum())
-    hukum = "tuttu" if (n_oos >= 20 and np.isfinite(oos_sec) and oos_sec > 0
+    hukum = "tuttu" if (n_oos >= ASGARI_KOSUL_OOS and np.isfinite(oos_sec) and oos_sec > 0
                         and np.isfinite(oos_ters) and oos_sec > oos_ters) else "tutmadi"
     return hukum, oos_sec, oos_ters

@@ -10,8 +10,9 @@ kuralı FX'in kendi saatlerine taşınmış hâlidir: Londra açılışının il
 İki savunu var. Birincisi bilgi: Londra açılışı günün ilk büyük bilgi ve akış anıdır, ilk hareket bilgili akışın
 yönünü taşıyorsa o yön gün boyunca yeniden fiyatlanmaya devam eder. İkincisi geç kalan akış: yönü sabah belli olan
 bir hareketi öğleden sonra tamamlayan katılımcılar (portföyünü gün sonu kapanışına göre ayarlayanlar) ilk yönü
-uzatır. Karşı savunu basit: dört saatlik bir aradan sonra (Londra 08:00 → New York 12:00) ilk mumun bilgisi çoktan
-fiyatlanmıştır.
+uzatır. Karşı savunu basit: sinyal mumunun kapanışından girişe sekiz saat geçer (Londra 09:00 → New York 12:00;
+Londra ile New York arasındaki fark dört saate indiği ara haftalarda yedi saat) ve ilk mumun bilgisi o arada
+çoktan fiyatlanmıştır.
 
 ### Kurallar
 
@@ -31,17 +32,18 @@ Varsayılan Londra'nın ilk saatini kullanır ve 12:00 → 16:00 New York arası
 
 {{! ornek }}
 
+Noktalı mavi çizgiler Londra'nın ilk mumunun tepesi ve dibi, mavi bant o mumun kendisidir; giriş sekiz saat
+sonra gelir. Kuralın stop'u olmadığı için figürde stop çizgisi yoktur; R birimi girişteki ATR'dir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
+
 ### Sonuçlar
 
 {{! sonuclar }}
 
-{{! havuz_cumle }}
-
 ### Öngörü gücü
 
 Ön kayıt, kuralın kendisinden ayrı olarak sinyalin öngörü gücünü bir regresyonla sordu: öğleden sonra getirisi
-(12:00 → çıkış, orta fiyat) ilk mumun getirisinin bir fonksiyonu mu? İki getiri de o günün ATR'sine bölünür, yani
-yıllar ve pariteler arasında aynı birimdedir. Bu ölçü stop, hedef, makas ve kayma içermez: işlem kuralının
+(12:00 → çıkış, orta fiyat) ilk mumun getirisinin bir fonksiyonu mu? İki getiri de girişteki 60 dakikalık
+ATR(14)'e bölünür, yani yıllar ve pariteler arasında aynı birimdedir. Bu ölçü stop, hedef, makas ve kayma içermez: işlem kuralının
 sonucundan bağımsız olarak "bilgi var mı" sorusunu sorar.
 
 $$\frac{r_{\text{öğleden sonra}}}{\text{ATR}} = \alpha + \beta \cdot \frac{r_{\text{ilk mum}}}{\text{ATR}} + \varepsilon$$
@@ -64,10 +66,12 @@ altındaki bir R² bile bir kenar olabilir, ama ancak maliyetten sonra ve örnek
 
 ### Kontrol listesi
 
-1. **Londra'nın ilk saatini oku.** 08:00–09:00 Londra (TSİ yazın 10:00–11:00, kışın 11:00–12:00).
-2. **12:00 New York'ta gir** (TSİ 19:00 ya da 20:00), **16:00'da çık** (TSİ 23:00 ya da 00:00).
-3. **Stop yok, risk birimi ATR.** Pozisyon büyüklüğü 60 dakikalık ATR'den kurulur.
-4. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Londra'nın ilk saatini oku.** 08:00–09:00 Londra: TSİ 10:00–11:00 (İngiltere yaz saati) ya da 11:00–12:00.
+4. **12:00 New York'ta gir** (TSİ 19:00 ya da 20:00, ABD'nin saatine göre), **16:00'da çık** (TSİ 23:00 ya da 00:00).
+5. **Stop yok, R birimi ATR.** Pozisyon büyüklüğü girişteki 60 dakikalık ATR'den kurulur.
+6. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

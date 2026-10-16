@@ -268,7 +268,11 @@ OLAYLAR = [
     ("Asya aralığı başlar (Londra gece yarısı)", LONDRA, "00:00"),
     ("Londra açılışı", LONDRA, "08:00"),
     ("BoE faiz kararı", LONDRA, "12:00"),
+    # ECB: 21.07.2022 toplantısından beri karar 14:15, basın toplantısı 14:45 Frankfurt (ECB, 27.06.2022); öncesinde
+    # 13:45 ve 14:30. Tablo 2026'nın temsilci günleri için kurulduğu için bugünkü saatleri taşır.
+    ("ECB faiz kararı", FRANKFURT, "14:15"),
     ("New York veri saati (NFP, TÜFE)", NEWYORK, "08:30"),
+    ("ECB basın toplantısı", FRANKFURT, "14:45"),
     ("New York hisse açılışı", NEWYORK, "09:30"),
     ("WM/R Londra fiksingi", LONDRA, "16:00"),
     ("FOMC kararı", NEWYORK, "14:00"),

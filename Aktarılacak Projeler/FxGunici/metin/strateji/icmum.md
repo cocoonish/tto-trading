@@ -11,9 +11,8 @@ içi mumlara uygulanıyor.
 İç mum bir sıkışmadır: bir mum boyunca alıcı da satıcı da ana mumun uçlarını zorlamadı. Kırılım savunusu,
 sıkışmanın bir enerji birikimi olduğunu ve aralık bozulduğunda yönün hızlı açılacağını söyler; stop'un yakın
 olması (aralık küçük) da kuralı cazip kılar — küçük bir riskle büyük bir hareket yakalama vaadi. Karşı savunu
-aynı yerden gelir: dar bir aralığın iki ucu da kolayca aşılır ve gün içi mumlarda iç mum çok sık oluşur (bu
-kural EUR/USD'de örneklem dışında işlem günü sayısından fazla işlem açıyor){{? E.varsayilan.oos.n > E.varsayilan.oos.n_gun }}; desenin bir "bilgi" taşıdığı
-varsayımı ölçülmeden kabul edilemez.
+aynı yerden gelir: dar bir aralığın iki ucu da kolayca aşılır ve gün içi mumlarda iç mum sık oluşur —
+{{! gun_ici }}{{? E.varsayilan.oos.n > E.varsayilan.oos.n_gun }}. Sık oluşan bir desenin "bilgi" taşıdığı varsayımı ölçülmeden kabul edilemez.
 
 ### Kurallar
 
@@ -39,14 +38,14 @@ stop'u gürültünün içine koyar.
 
 {{! ornek }}
 
-Figürde mavi çizgiler referansın (ana mumun) iki ucudur. Figürdeki işlem o günün işlemlerinden biridir; aynı
-gün başka desenler de işleme dönüşmüş olabilir (aynı anda tek pozisyon).
+Figürde noktalı mavi çizgiler referansın (ana mumun) iki ucu, mavi bant sinyal mumudur. Figürdeki işlem o
+günün işlemlerinden biridir; aynı gün başka desenler de işleme dönüşmüş olabilir (aynı anda tek pozisyon).
+Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip
+zararla kapanan işlemdir.
 
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Koşullar
 
@@ -54,11 +53,14 @@ gün başka desenler de işleme dönüşmüş olabilir (aynı anda tek pozisyon)
 
 ### Kontrol listesi
 
-1. **Seans.** Londra 08:00'den (TSİ yazın 10:00, kışın 11:00) 12:00 New York'a (TSİ 19:00 ya da 20:00) kadar.
-2. **Deseni say.** Tepe ve dip ikisi birden öncekinin içinde; eşit uç desen değildir.
-3. **Referans ana mum.** Üç mum içinde ana mumun dışında kapanış yoksa desen bitti.
-4. **Stop karşı uçta, hedef 2R.**
-5. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Seans.** Londra 08:00'den (TSİ 10:00 ya da 11:00, İngiltere'nin saatine göre) 12:00 New York'a (TSİ
+   19:00 ya da 20:00, ABD'nin saatine göre) kadar.
+4. **Deseni say.** Tepe ve dip ikisi birden öncekinin içinde; eşit uç desen değildir.
+5. **Referans ana mum.** Üç mum içinde ana mumun dışında kapanış yoksa desen bitti.
+6. **Stop karşı uçta, hedef 2R.**
+7. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

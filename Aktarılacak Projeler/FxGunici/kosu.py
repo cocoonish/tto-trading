@@ -19,6 +19,7 @@ import math
 import sys
 import time
 import tomllib
+import zlib
 from pathlib import Path
 
 import numpy as np
@@ -26,6 +27,7 @@ import pandas as pd
 
 import ayar as ay
 import metrik as mk
+import motor as mt
 import saglamlik as sg
 import strat_haber as sh
 from gunluk import Baglam
@@ -142,14 +144,24 @@ class Kosucu:
             self._sinyal[anahtar] = AILE_TUM[aile](self.b, **sp)
         return self._sinyal[anahtar]
 
-    def islem(self, aile: str, p: dict, kayma: float = KAYMA_TEMEL) -> pd.DataFrame:
+    def islem(self, aile: str, p: dict, kayma: float = KAYMA_TEMEL, haber_kayma: float | None = None) -> pd.DataFrame:
+        """`haber_kayma`: haber penceresindeki dolumların ek kayması (verilmezse ayarın 1,0 pip'i; "yalnız makas"
+        koşusu ikisini de sıfırlar)."""
         sin, ofset = self.sinyal(aile, p)
         stop_turu = p.get("stop_turu", "yok")
+        hk = self.a.haber_kayma_pip if haber_kayma is None else float(haber_kayma)
         if ofset is None:           # haber: çıpa satır başına
             return sh.kos_haber(self.b, sin, int(p["tf"]), stop_turu, p.get("hedef", "yok"),
-                                kayma, self.a.haber_kayma_pip, HABER_ZAMAN_MUM)
+                                kayma, hk, HABER_ZAMAN_MUM)
         return kos(self.b, sin, int(p["tf"]), ofset, stop_turu, p.get("hedef", "yok"),
-                   kayma, self.a.haber_kayma_pip, ZAMAN_MUM)
+                   kayma, hk, ZAMAN_MUM)
+
+    def haber_payi(self, isl: pd.DataFrame) -> float:
+        """Alınan işlemlerin girişi haber penceresine düşen payı."""
+        a = mk.alinan(isl)
+        if not len(a):
+            return float("nan")
+        return float(self.b.haber[a["giris_i"].to_numpy(np.int64)].mean())
 
     def bol(self, isl: pd.DataFrame):
         if len(isl) == 0:
@@ -158,14 +170,23 @@ class Kosucu:
         return isl[g <= np.datetime64(self.a.ic_bitis)], isl[g >= np.datetime64(self.a.dis_baslangic)]
 
 
+#: Rastgele yön sınamasının asgari işlem sayısı (tek tanım saglamlik'te); altında sınama koşmaz ve kural "çalışıyor"
+#: diyemez. Bilgi bayrağı `az_islem` bu sayıdan okunur; hükmü değiştirmez.
+ASGARI_RASTGELE = sg.ASGARI_RASTGELE
+
+
 def _hukum(m_oos: dict, ry: dict) -> str:
+    """Ön kaydın [hukum] kuralı, harfi harfine. "ölçülemedi" yalnız dönemde hiç işlem yoksa (ortalama tanımsız).
+    Az işlemde (n < 20) rastgele yön sınaması koşmaz, bootstrap 10 işlemin altında kurulmaz: ikisi de "çalışıyor"un
+    şartıdır, yani az işlemli artı bir sonuç "zayıf" kalır."""
     esik = float(ONKAYIT["hukum"]["rastgele_esik_yuzdelik"])
     r = m_oos.get("beklenti_r", float("nan"))
-    if not np.isfinite(r) or m_oos.get("n", 0) < 20:
+    if r is None or not np.isfinite(r):
         return "olculemedi"
     if r <= 0:
         return "calismiyor"
-    if m_oos.get("ga_alt", -1) > 0 and ry.get("yuzdelik", 0) >= esik:
+    ga, yz = m_oos.get("ga_alt"), ry.get("yuzdelik")
+    if ga is not None and np.isfinite(ga) and ga > 0 and yz is not None and np.isfinite(yz) and yz >= esik:
         return "calisiyor"
     return "zayif"
 
@@ -188,14 +209,14 @@ def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
         mi = mk.ozet(ic, k.gun_is, bootstrap=False)
         md = mk.ozet(dis, k.gun_oos, bootstrap=False)
         ss = mk.gunluk_r(ic, k.gun_is)
-        satirlar.append({"p": p, "anahtar": _anahtar(p), "is": mi, "oos": md,
+        satirlar.append({"p": p, "anahtar": _anahtar(p), "is": mi, "oos": md, "haber_payi": k.haber_payi(isl),
                          "sr_gunluk_is": float(ss.mean() / ss.std(ddof=1)) if ss.std(ddof=1) > 0 else float("nan")})
         yillik[_anahtar(p)] = mk.yil_toplamlari(isl, k.gun_tum)
     asgari = int(ONKAYIT["secim"]["asgari_islem_haber" if tanim.get("haber") else "asgari_islem"])
     adaylar = [s for s in satirlar if s["is"]["n"] >= asgari and np.isfinite(s["is"]["sharpe"])]
     secilen = max(adaylar, key=lambda s: s["is"]["sharpe"]) if adaylar else None
     sonuc = {"birim": birim, "aile": aile, "kombinasyon": len(liste), "varsayilan": varsayilan,
-             "izgara": [{"anahtar": s["anahtar"], "p": s["p"],
+             "izgara": [{"anahtar": s["anahtar"], "p": s["p"], "haber_payi": s["haber_payi"],
                          "is": {x: s["is"].get(x) for x in ("n", "beklenti_r", "beklenti_pip", "sharpe", "isabet")},
                          "oos": {x: s["oos"].get(x) for x in ("n", "beklenti_r", "beklenti_pip", "sharpe", "isabet")}}
                         for s in satirlar],
@@ -215,7 +236,26 @@ def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
         sonuc[f"{ad}_analiz"] = derin(birim, aile, p, k, sr_denemeler if ad == "secilen" else None, yillik,
                                       ornek=(ad == "varsayilan"))
     sonuc["walk_forward"] = walk_forward(aile, liste, yillik, k, asgari)
+    if tanim.get("haber"):
+        sonuc["tf_haber_kaymasiz"] = tf_haber_kaymasiz(aile, liste, varsayilan, k)
     return sonuc
+
+
+def tf_haber_kaymasiz(aile: str, liste: list[dict], v: dict, k: Kosucu) -> dict:
+    """Haber kuralının zaman dilimi kıyası haber kayması OLMADAN da: haber penceresi olaydan sonraki 15 dakikadır ve
+    5 dakikalık mumla giriş pencerenin içinde, 15 ve 60 dakikalık mumla dışında kalır; kıyasın ne kadarının bu
+    maliyet farkından geldiği ancak iki koşuyla ayrılır. Öbür parametreler varsayılanda."""
+    out = {}
+    for p in liste:
+        if any(p.get(x) != v.get(x) for x in v if x != "tf"):
+            continue
+        isl = k.islem(aile, p, haber_kayma=0.0)
+        ic, dis = k.bol(isl)
+        out[str(p["tf"])] = {"is": mk.ozet(ic, k.gun_is, bootstrap=False)["beklenti_r"],
+                             "oos": mk.ozet(dis, k.gun_oos, bootstrap=False)["beklenti_r"],
+                             "tum": mk.ozet(isl, k.gun_tum, bootstrap=False)["beklenti_r"],
+                             "haber_payi": k.haber_payi(isl)}
+    return dict(sorted(out.items(), key=lambda kv: int(kv[0])))
 
 
 def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek: bool = False) -> dict:
@@ -232,15 +272,26 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
                            "tum": mk.ozet(x, k.gun_tum, bootstrap=False)}
     out["maliyet"] = {s: {d: {kk: v[d][kk] for kk in ("n", "beklenti_r", "beklenti_pip", "sharpe")} for d in v}
                       for s, v in maliyet.items()}
+    # Yalnız makas: temel kayma da haber kayması da sıfır — dolumlar yalnız o dakikanın gerçek bid/ask'ından. Merdivenin
+    # "0,0 pip" kademesi haber penceresindeki dolumlarda 1,0 pip haber kaymasını taşır; ikisi ancak bu koşuyla ayrılır.
+    x = k.islem(aile, p, kayma=0.0, haber_kayma=0.0)
+    xi, xd = k.bol(x)
+    out["yalniz_makas"] = {d: {kk: v[kk] for kk in ("n", "beklenti_r", "beklenti_pip", "sharpe")}
+                           for d, v in (("is", mk.ozet(xi, k.gun_is, bootstrap=False)),
+                                        ("oos", mk.ozet(xd, k.gun_oos, bootstrap=False)),
+                                        ("tum", mk.ozet(x, k.gun_tum, bootstrap=False)))}
+    out["haber_payi"] = k.haber_payi(isl)
     # başabaş: kayma ızgarasında işlem başına net R (serinin ölçüsü; her işlem 1 R riske eder) = 0'ın doğrusal
-    # kestirimi, x ekseni dolum başına pip. Pip ortalaması R ortalamasıyla işaret değiştirebilir (geniş stop'lu
-    # işlemler pipte ağır basar): ölçüldü, EUR/USD N4'te sıfır kaymada pip +2,48, R +0,05; 1 pipte pip +1,13, R −0,03.
+    # kestirimi, x ekseni dolum başına pip (haber kayması 1,0 pip'te sabit). Pip ortalaması R ortalamasıyla işaret
+    # değiştirebilir (geniş stop'lu işlemler pipte ağır basar): ölçüldü, EUR/USD N4'te sıfır kaymada pip +2,48, R +0,05;
+    # 1 pipte pip +1,13, R −0,03. İki dönemde: bütün dönem ve örneklem dışı (2024 →).
     xs = sorted(float(s) for s in maliyet)
-    ys = [maliyet[str(s) if str(s) in maliyet else s]["tum"]["beklenti_r"] for s in xs]
-    out["basabas_kayma_pip"] = _sifir_kesisim(xs, ys)
-    sifir = maliyet.get(str(0.0), {}).get("tum") or {}
-    out["basabas_sifir_r"] = sifir.get("beklenti_r")          # sıfır kaymada, yalnız gerçek makasla net R
-    out["basabas_ek_maliyet_pip"] = sifir.get("beklenti_pip")   # aynı, pip'te (bilgi)
+    for d, son in (("tum", ""), ("oos", "_oos")):
+        ys = [maliyet[str(s) if str(s) in maliyet else s][d]["beklenti_r"] for s in xs]
+        out["basabas_kayma_pip" + son] = _sifir_kesisim(xs, ys)
+        sifir = maliyet.get(str(0.0), {}).get(d) or {}
+        out["basabas_sifir_r" + son] = sifir.get("beklenti_r")          # sıfır kaymada (haber kayması dahil) net R
+        out["basabas_ek_maliyet_pip" + son] = sifir.get("beklenti_pip")   # aynı, pip'te (bilgi)
     # rastgele yön (örneklem dışı ve bütün dönem)
     out["rastgele"] = {"oos": sg.rastgele_yon(k.b, dis, int(p["tf"]), k.sinyal(aile, p)[1], KAYMA_TEMEL,
                                               k.a.haber_kayma_pip),
@@ -251,10 +302,14 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
     sr_is = float(gr_is.mean() / gr_is.std(ddof=1)) if gr_is.std(ddof=1) > 0 else float("nan")
     out["dsr"] = sg.dsr(sr_is, sr_denemeler, gr_is) if sr_denemeler is not None else \
         {**sg.dsr(sr_is, np.array([sr_is, sr_is]), gr_is), "n_deneme": 1}
-    # hüküm
+    # hüküm: birincil pencere örneklem dışı (2024 →); varsayılan için bütün dönem de örneklem dışıdır (ön kaydın başlığı)
+    # ve onun hükmü ayrıca yazılır. Maliyet bayrağı iki dönemde.
     out["hukum"] = _hukum(out["oos"], out["rastgele"]["oos"])
     out["hukum_tum"] = _hukum(out["tum"], out["rastgele"]["tum"])
     out["maliyet_yiyor"] = _maliyet_bayragi(out["tum"])
+    out["maliyet_yiyor_oos"] = _maliyet_bayragi(out["oos"])
+    out["az_islem"] = {d: bool(out[d].get("n", 0) < ASGARI_RASTGELE) for d in ("is", "oos", "tum")}
+    out["kuyruk"] = kuyruk(k, isl, KAYMA_TEMEL)
     # rejimler: yıl ve oynaklık tercili
     a = mk.alinan(isl)
     yil = pd.DatetimeIndex(a["gun"].to_numpy().astype("datetime64[ns]")).year
@@ -282,46 +337,154 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
     gr = mk.gunluk_r(isl, k.gun_tum)
     out["egri"] = {"gun": [str(x) for x in k.gun_tum], "r": [round(float(x), 4) for x in np.cumsum(gr)]}
     if ornek:
-        out["ornek"] = ornek_gunler(k, p, isl, k.sinyal(aile, p)[1])
+        out["ornek"] = ornek_gunler(k, birim, p, isl, k.sinyal(aile, p)[1])
     _islem_kaydet(birim, k.b.d.cift, p, isl)
     return out
 
 
-def ornek_gunler(k: Kosucu, p: dict, isl: pd.DataFrame, ofset_sabit: int | None) -> list[dict]:
-    """Ders figürünün örnek günleri: örneklem DIŞININ en son kazanan ve en son kaybeden işlemi.
+#: Örnek işlemlerin R eşiği: kazanan net ≥ +0,5 R; kaybeden net ≤ −0,5 R ve işlem boyunca lehine 0,5 R'ye
+#: ulaşmamış; tuzak, lehine en az 0,5 R gittikten sonra zararla kapanmış işlem.
+ORNEK_ESIK = 0.5
+#: Alıştırmaların "dolum daha kötü olsaydı" şıkkı: örnek işlem bu kadar EK kaymayla motorda yeniden koşturulur.
+ORNEK_EK_KAYMA = 0.5
 
-    Seçim kuralı sabittir (en son tarih), yani örnek sonuca bakılarak seçilmez. Gün, stratejinin
-    kendi zaman diliminin ÇIPALI mumlarıyla (orta fiyat, nokta) ve işlemin seviyeleriyle yazılır:
-    giriş ve çıkış dakikası ile fiyatı (yürütülen bid/ask), stop, hedef ve stratejinin referans
-    seviyeleri (`ust`, `alt`, varsa `seviye`)."""
+
+def _yeniden_kos(k: Kosucu, s: pd.Series, tf: int, ofset: int, kayma: float) -> pd.Series:
+    """Tek bir işlemi aynı emirle (giriş dakikası, yön, stop kuralı, hedef kuralı, planlanan çıkış) motorda yeniden
+    koşturur. R katı hedef ve yürütülen girişten konan stop, yeni dolum fiyatından yeniden kurulur."""
+    e = mt.bos_emir(1)
+    e["giris_i"] = int(s["giris_i"])
+    e["yon"] = int(s["yon"])
+    e["stop"] = float(s["stop_emir"])
+    e["risk"] = float(s["risk_emir"])
+    e["hedef_tur"] = int(s["hedef_tur"])
+    e["hedef_k"] = float(s["hedef_k"])
+    e["hedef_seviye"] = float(s["hedef_seviye_emir"])
+    e["cikis_i"] = int(s["plan_cikis_i"])
+    e["stop_tur"] = int(s["stop_tur"])
+    e["kimlik"] = 0
+    return mt.simule(k.b.d, e, k.b.bar_son(tf, ofset), k.b.haber, kayma, k.a.haber_kayma_pip,
+                     tek_pozisyon=False).iloc[0]
+
+
+def _sayi(v):
+    return None if v is None or not np.isfinite(float(v)) else round(float(v), 1)
+
+
+def ornek_gunler(k: Kosucu, birim: str, p: dict, isl: pd.DataFrame, ofset_sabit: int | None) -> list[dict]:
+    """Ders figürünün örnek günleri: örneklem DIŞINDAN üç işlem.
+
+      kazanan   net ≥ +0,5 R
+      kaybeden  net ≤ −0,5 R ve işlem boyunca lehine 0,5 R'ye ulaşmamış
+      tuzak     lehine en az 0,5 R gittikten sonra zararla kapanmış (kırılımda sahte kırılım, dönüşte süren hareket)
+    Uygun işlemler arasından seçim SABİT bir çekilişle yapılır (ön kaydın tohumu, birim, parite ve etiketten); sonuca
+    bakılarak seçilmez ve üç örnek ayrı günlerdedir. Uygun işlem yoksa yedek tanım (kazanan: net > 0; kaybeden: net
+    < 0) kullanılır ve kayda geçer; tuzağın yedeği yoktur.
+
+    Gün, stratejinin kendi zaman diliminin ÇIPALI mumlarıyla (orta fiyat, nokta) ve işlemin seviyeleriyle yazılır;
+    işlem ayrıca dolum başına ORNEK_EK_KAYMA pip ek kaymayla motorda yeniden koşturulur (alıştırmaların "dolum
+    daha kötü olsaydı" şıkkı elle değil motorla cevaplanır). Yeniden koşu temel kaymayla işlemin kendisini birebir
+    vermiyorsa düşer: o zaman ek kaymalı koşu da aynı kuralı ölçmüyor demektir."""
     a = mk.alinan(isl)
     if len(a) == 0:
         return []
-    dis = a[a["gun"].to_numpy() >= np.datetime64(k.a.dis_baslangic)]
+    dis = a[a["gun"].to_numpy() >= np.datetime64(k.a.dis_baslangic)].sort_values("giris_t", kind="stable")
+    r, mfe = dis["r"], dis["mfe_r"]
+    tanimlar = (("kazanan", r >= ORNEK_ESIK, r > 0),
+                ("kaybeden", (r <= -ORNEK_ESIK) & (mfe < ORNEK_ESIK), r < 0),
+                ("tuzak", (r < 0) & (mfe >= ORNEK_ESIK), None))
+    tohum = int(GENEL["tohum"])
+    kullanilan: list = []
     out = []
-    for etiket, x in (("kazanan", dis[dis["pnl_pip"] > 0]), ("kaybeden", dis[dis["pnl_pip"] <= 0])):
+    for etiket, kosul, yedek in tanimlar:
+        bos_gun = ~dis["gun"].isin(kullanilan)
+        x, secim = dis[kosul & bos_gun], "kural"
+        if not len(x) and yedek is not None:
+            x, secim = dis[yedek & bos_gun], "yedek"
         if not len(x):
             continue
-        s = x.iloc[-1]
+        s = x.iloc[zlib.crc32(f"{tohum}|{birim}|{k.b.d.cift}|{etiket}".encode()) % len(x)]
+        kullanilan.append(s["gun"])
         tf = int(p["tf"])
         ofset = int(s["ofset"]) if ofset_sabit is None else int(ofset_sabit)
+        ayni = _yeniden_kos(k, s, tf, ofset, KAYMA_TEMEL)
+        if not (int(ayni["durum"]) == 0 and np.isclose(float(ayni["r"]), float(s["r"]), atol=1e-9)
+                and int(ayni["cikis_t"]) == int(s["cikis_t"])):
+            raise AssertionError(f"{birim} {k.b.d.cift} {etiket}: örnek işlem yeniden koşuda kendini vermedi")
+        ek = _yeniden_kos(k, s, tf, ofset, KAYMA_TEMEL + ORNEK_EK_KAYMA)
         m = k.b.mumlar(tf, ofset)
         gk = int(s["gun_k"])
         t0 = int(k.b.g.gun_basi[gk])
         j0, j1 = np.searchsorted(m.bt, [t0, t0 + 86400])
-        sayi = lambda v: None if v is None or not np.isfinite(float(v)) else round(float(v), 1)  # noqa: E731
+        stopsuz = int(s["stop_tur"]) == mt.STOP_YOK
+        ek_ok = int(ek["durum"]) == 0
         out.append({
-            "etiket": etiket, "gun": str(s["gun"])[:10], "tf": tf, "ofset": ofset,
+            "etiket": etiket, "secim": secim, "gun": str(s["gun"])[:10], "tf": tf, "ofset": ofset,
             "mum": {"t": [int(v) for v in m.bt[j0:j1]], "o": [round(float(v), 1) for v in m.o[j0:j1]],
                     "h": [round(float(v), 1) for v in m.h[j0:j1]], "l": [round(float(v), 1) for v in m.l[j0:j1]],
                     "c": [round(float(v), 1) for v in m.c[j0:j1]]},
             "islem": {"yon": int(s["yon"]), "giris_t": int(s["giris_t"]), "cikis_t": int(s["cikis_t"]),
-                      "giris_f": sayi(s["giris_f"]), "cikis_f": sayi(s["cikis_f"]), "stop": sayi(s["stop"]),
-                      "hedef": sayi(s["hedef"]), "neden": int(s["neden"]), "r": round(float(s["r"]), 3),
-                      "pnl_pip": round(float(s["pnl_pip"]), 2), "sinyal_t": int(s["sinyal_t"]) if "sinyal_t" in s
-                      else None, "ust": sayi(s.get("ust")), "alt": sayi(s.get("alt")),
-                      "seviye": sayi(s.get("seviye")), "olay": str(s["olay"]) if "olay" in s else None},
+                      "giris_f": _sayi(s["giris_f"]), "cikis_f": _sayi(s["cikis_f"]),
+                      "stop": None if stopsuz else _sayi(s["stop"]),
+                      "hedef": _sayi(s["hedef"]), "neden": int(s["neden"]), "r": round(float(s["r"]), 3),
+                      "pnl_pip": round(float(s["pnl_pip"]), 2), "R_pip": round(float(s["R_pip"]), 2),
+                      "stop_tur": int(s["stop_tur"]), "hedef_tur": int(s["hedef_tur"]),
+                      "hedef_k": float(s["hedef_k"]), "stopsuz": bool(stopsuz),
+                      "mae_r": round(float(s["mae_r"]), 3), "mfe_r": round(float(s["mfe_r"]), 3),
+                      "sinyal_t": int(s["sinyal_t"]) if "sinyal_t" in s else None,
+                      "ust": _sayi(s.get("ust")), "alt": _sayi(s.get("alt")),
+                      "seviye": _sayi(s.get("seviye")), "olay": str(s["olay"]) if "olay" in s else None,
+                      "olay_t": int(s["t0"]) if "t0" in s and pd.notna(s.get("t0")) else None},
+            "ek_kayma": {"kayma_pip": KAYMA_TEMEL + ORNEK_EK_KAYMA, "durum": int(ek["durum"]),
+                         "giris_f": _sayi(ek["giris_f"]) if ek_ok else None,
+                         "cikis_f": _sayi(ek["cikis_f"]) if ek_ok else None,
+                         "stop": None if (stopsuz or not ek_ok) else _sayi(ek["stop"]),
+                         "hedef": _sayi(ek["hedef"]) if ek_ok else None,
+                         "cikis_t": int(ek["cikis_t"]) if ek_ok else None,
+                         "neden": int(ek["neden"]) if ek_ok else None,
+                         "r": round(float(ek["r"]), 3) if ek_ok else None,
+                         "pnl_pip": round(float(ek["pnl_pip"]), 2) if ek_ok else None,
+                         "R_pip": round(float(ek["R_pip"]), 2) if ek_ok else None},
         })
+    return out
+
+
+def kuyruk(k: Kosucu, isl: pd.DataFrame, kayma_pip: float) -> dict:
+    """Ortalamanın kuyruğa duyarlılığı (betimleyici; hükmü değiştirmez). R ortalaması her işlemi riskine göre
+    büyüklükler: riski makas düzeyine inen tek bir işlem onlarca R yazar ve ortalamayı tek başına taşıyabilir.
+
+      r_tek_haric     en iyi tek işlem çıkarılınca ortalama R
+      r_uc_haric      en iyi üç işlem çıkarılınca
+      r_pahali_haric  beklenen gidiş-dönüş maliyeti (girişteki makas + iki dolumun temel kayması + giriş haber
+                      penceresindeyse haber kayması) riskin yarısını aşan işlemler çıkarılınca — o işlemler girişte
+                      bilinen bir ölçüyle ayrılır, yani bir "R tabanı" kuralının ne değiştireceğini gösterir"""
+    a = mk.alinan(isl)
+    if len(a) == 0:
+        return {}
+    d = k.b.d
+    gi = a["giris_i"].to_numpy(np.int64)
+    maliyet = (d.ao[gi] - d.bo[gi]) / d.pip + 2.0 * kayma_pip + np.where(k.b.haber[gi], k.a.haber_kayma_pip, 0.0)
+    pahali = maliyet > 0.5 * a["R_pip"].to_numpy(np.float64)
+    gun = a["gun"].to_numpy()
+    out = {}
+    for ad, m in (("is", gun <= np.datetime64(k.a.ic_bitis)), ("oos", gun >= np.datetime64(k.a.dis_baslangic)),
+                  ("tum", np.ones(len(a), bool))):
+        r = a["r"].to_numpy(np.float64)[m]
+        n = len(r)
+        if n < 4:
+            out[ad] = {"n": int(n)}
+            continue
+        sira = np.argsort(r)[::-1]
+        en = a[m].iloc[int(sira[0])]
+        ph = pahali[m]
+        out[ad] = {"n": int(n), "r": float(r.mean()),
+                   "r_tek_haric": float(np.delete(r, sira[:1]).mean()),
+                   "r_uc_haric": float(np.delete(r, sira[:3]).mean()),
+                   "en_iyi_r": float(r[sira[0]]), "en_iyi_gun": str(en["gun"])[:10],
+                   "en_iyi_R_pip": float(en["R_pip"]),
+                   "n_pahali": int(ph.sum()), "pay_pahali": float(ph.mean()),
+                   "r_pahali_haric": float(r[~ph].mean()) if (~ph).any() else float("nan"),
+                   "pip": float(a["pnl_pip"].to_numpy()[m].mean())}
     return out
 
 
@@ -466,11 +629,14 @@ def walk_forward(aile: str, liste: list[dict], yillik: dict, k: Kosucu, asgari: 
         yil = pd.DatetimeIndex(g.astype("datetime64[ns]")).year if len(isl) else np.array([])
         parcalar.append(isl[yil == Y] if len(isl) else isl)
     if not parcalar:
-        return {"secimler": secimler, "ozet": None}
+        return {"secimler": secimler, "sinanan_yillar": [], "ozet": None}
     birlesik = pd.concat(parcalar, ignore_index=True)
-    gunler = k.gun_tum[pd.DatetimeIndex(k.gun_tum.astype("datetime64[ns]")).year >= ilk]
+    # Gün kümesi yalnız SINANAN yıllardır: seçim yapılamayan bir yılın günleri sıfır sayılsaydı Sharpe seyrelir ve
+    # "2020 → bugün" denen pencere aslında daha kısa olurdu.
+    sinanan = sorted(int(y) for y in secimler)
+    gunler = k.gun_tum[np.isin(pd.DatetimeIndex(k.gun_tum.astype("datetime64[ns]")).year, sinanan)]
     gr = mk.gunluk_r(birlesik, gunler)
-    return {"secimler": secimler, "ozet": mk.ozet(birlesik, gunler),
+    return {"secimler": secimler, "sinanan_yillar": sinanan, "ozet": mk.ozet(birlesik, gunler),
             "egri": {"gun": [str(x) for x in gunler], "r": [round(float(x), 4) for x in np.cumsum(gr)]}}
 
 
@@ -513,7 +679,7 @@ def main(argv: list[str]) -> int:
     for cift in ciftler:
         t0 = time.monotonic()
         d = vr.oku(cift, a)
-        b = baglam_kur(d, olaylar_oku(cift), tuple(a.haber_pencere_dk))
+        b = baglam_kur(d, olaylar_oku(cift), tuple(a.haber_pencere_dk), orneklem=(a.baslangic, a.bitis))
         kos_ = Kosucu(b, a)
         print(f"{cift}: veri {len(d):,} dk · {len(b.olaylar)} olay · bağlam {time.monotonic() - t0:.0f} sn",
               flush=True)

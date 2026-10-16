@@ -34,7 +34,17 @@ UFUK = [int(x) for x in HD["ufuk_dk"]]
 ASGARI = int(HD["asgari_olay"])
 FDR_Q = float(HD["fdr_q"])
 ANA_TF = int(HD["ana_tf"])
-OLAY_SIRA = ["NFP", "CPI", "FOMC_karar", "FOMC_basin", "ECB_karar", "ECB_basin", "BoE_karar"]
+#: Olay sırası ön kayıttan ([haber] olaylar); takvimde ön kayıtta olmayan bir tip varsa (kullanıcının ek dosyası)
+#: ondan sonra alfabetik gelir — ek bir olay tipi patikalara da girer.
+OLAY_ONKAYIT = [str(x) for x in sh.ONKAYIT["haber"]["olaylar"]]
+
+
+def olay_sirasi(tipler) -> list[str]:
+    tipler = set(tipler)
+    return [o for o in OLAY_ONKAYIT if o in tipler] + sorted(tipler - set(OLAY_ONKAYIT))
+
+
+OLAY_SIRA = OLAY_ONKAYIT
 
 
 def haber_analizi(b: Baglam, cift: str, zaman_dilimleri, kayma_pip: float, haber_kayma_pip: float,
@@ -52,6 +62,9 @@ def haber_analizi(b: Baglam, cift: str, zaman_dilimleri, kayma_pip: float, haber
             o: {k: int(v) for k, v in g["kova"].value_counts().items()} for o, g in cer.groupby("olay")}
         for ufuk in UFUK:
             dv = sh.devam(b, tf, ufuk, kayma_pip, haber_kayma_pip)
+            kp = b.ek.get(("devam_kirpilan", tf, ufuk), {})
+            if kp:
+                out.setdefault("devam_kirpilan", {}).setdefault(str(tf), {})[str(ufuk)] = kp
             if len(dv):
                 dv.insert(0, "ufuk", ufuk)
                 dv.insert(0, "tf", tf)
@@ -63,9 +76,8 @@ def haber_analizi(b: Baglam, cift: str, zaman_dilimleri, kayma_pip: float, haber
         yol = CIKTI / "haber" / "devam"
         yol.mkdir(parents=True, exist_ok=True)
         tum.to_parquet(yol / f"{cift}.parquet", index=False)
-    for olay in OLAY_SIRA:
-        if olay in set(olaylar["olay"]):
-            out["patika"][olay] = sh.patika(b, olaylar, olay)
+    for olay in olay_sirasi(olaylar["olay"]):
+        out["patika"][olay] = sh.patika(b, olaylar, olay)
     df = sh.fomc(b, olaylar)
     if len(df):
         out["fomc"] = {"ozet": sh.fomc_ozet(df), "satir": df.round(6).to_dict(orient="records")}

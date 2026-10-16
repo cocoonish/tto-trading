@@ -112,6 +112,10 @@ OLAY = {
     "BoE_karar": "BoE kararı",
 }
 
+#: Koşul kovalarının okuma sırası (metin ve figür aynı sırayı kullanır): "değil" önce, terciller küçükten büyüğe,
+#: haftanın günleri takvim sırasıyla. Listede olmayan kova ölçümdeki sırasını korur.
+KOVA_OKUMA = ["değil", "alt", "orta", "üst", "Pzt", "Sal", "Çar", "Per", "Cum"]
+
 #: Hüküm (onkayit.toml [hukum]).
 HUKUM = {"calisiyor": "çalışıyor", "zayif": "zayıf", "calismiyor": "çalışmıyor", "olculemedi": "ölçülemedi"}
 

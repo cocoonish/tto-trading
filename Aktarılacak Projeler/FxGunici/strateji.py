@@ -425,9 +425,10 @@ def fiks(b: Baglam, tf: int, tur: str, gecikme_mum: int, tutma_mum: int):
         if s < 0 or e < 0 or e <= s:
             continue
         # Ön kayıt: "R birimi girişteki ATR(14, tf); 'sert'/'kapanis' stop 1·ATR". Girişteki ATR girişten önce
-        # kapanan son mumundur (gecikmesiz girişte sinyal mumu) ve stop GİRİŞTEN 1·ATR uzaktadır: giriş dakikasının
-        # orta açılışından. Sinyal kapanışından ölçülseydi, girişi bir mum geciken dönüşte fiyat o mumda stop'a
-        # yaklaşabilir ve planlanan risk birkaç pipe iner; R'ye bölünen sonuç o işlemlerde onlarca R'ye fırlardı.
+        # kapanan son mumundur (gecikmesiz girişte sinyal mumu) ve stop GİRİŞTEN 1·ATR uzaktadır. Tablo stop
+        # SEVİYESİ taşımaz, yalnız riski: motor stop'u yürütülen girişten (kayma ve makas dahil) 1·ATR uzağa koyar,
+        # yani R üç stop türünde de tam ATR'dir. Seviye sinyal kapanışından ölçülseydi, girişi bir mum geciken
+        # dönüşte fiyat o mumda stop'a yaklaşabilir ve planlanan risk birkaç pipe inerdi.
         a = atr[e - 1]
         if not np.isfinite(a) or a <= 0:
             continue
@@ -436,7 +437,7 @@ def fiks(b: Baglam, tf: int, tur: str, gecikme_mum: int, tutma_mum: int):
             continue
         yon = isaret * (1 if hareket > 0 else -1)
         gi = int(m.i0[e])
-        satir.append((k, s, yon, d.mo[gi] - yon * a, abs(hareket), m.h[s], m.l[s], a,
+        satir.append((k, s, yon, np.nan, abs(hareket), m.h[s], m.l[s], a,
                       gi, int(cik[k]), bool(g.ay_sonu[k])))
     return _tablo(satir, SUTUN + ["risk", "giris_i", "cikis_i", "ay_sonu"]), 0
 
@@ -463,7 +464,9 @@ def momentum(b: Baglam, tf: int, cikis_et: str):
             continue
         yon = 1 if hareket > 0 else -1
         r = atr60[j60[k]]
-        satir.append((k, s, yon, d.mo[gir[k]] - yon * r, abs(hareket), m.h[s], m.l[s], r,
+        # Stop seviyesi yok, yalnız risk: 'sert'/'kapanis' varyantında motor stop'u yürütülen girişten 1·ATR uzağa
+        # koyar (fiksingle aynı kural; R üç stop türünde de tam ATR).
+        satir.append((k, s, yon, np.nan, abs(hareket), m.h[s], m.l[s], r,
                       int(gir[k]), int(cik[k]), hareket))
     return _tablo(satir, SUTUN + ["risk", "giris_i", "cikis_i", "ilk_hareket"]), 0
 

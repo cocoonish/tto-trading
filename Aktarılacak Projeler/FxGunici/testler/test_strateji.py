@@ -30,11 +30,29 @@ from sentetik import boz, dakika_uret, olaylar_uret  # noqa: E402
 AILE = kosu.AILE_TUM
 OLAY = olaylar_uret()
 D = dakika_uret(soklar=OLAY["utc_sn"].to_numpy())
-T_KES = int(pd.Timestamp("2023-12-27 14:07", tz="UTC").timestamp())
+# Kesim anları: gün ortası (NY sabahı), Londra sabahı, Londra açılışından önce ve UTC gece yarısından hemen sonra.
+# Günün bütününden kurulan bir alan (ör. günün kapsamından okunan bir tatil bayrağı) günün ortasındaki bir kesimde
+# değişir ve o günün sinyallerini siler; tek bir kesim anı bunu ancak tesadüfen görür.
+KESIMLER = [int(pd.Timestamp(x, tz="UTC").timestamp())
+            for x in ("2023-12-27 14:07", "2023-12-27 09:30", "2023-12-28 07:45", "2024-01-03 00:10")]
+T_KES = KESIMLER[0]
+# İlk kesimde varsayılan ve dört kombinasyon, öbür kesimlerde varsayılan ve bir kombinasyon daha. Metodoloji dersi
+# sınamanın kapsamını bu adlardan okur (ders_olcum.ileri_bakma_kapsami): sayı değişirse ders de değişir.
+ORNEK_ILK = 5
+ORNEK_OTEKI = 2
 # Takvim önceden bilinir (fiyat değildir): kırpılmış ve bozulmuş bağlam da aynı takvimi taşır.
 B_TAM = baglam_kur(D, OLAY)
-B_KES = baglam_kur(D.dilim(T_KES), OLAY)
-B_BOZ = baglam_kur(boz(D, T_KES), OLAY)
+_BAG: dict = {}
+
+
+def _bag(t: int):
+    """Kesim anı t için (kırpılmış, geleceği bozulmuş) bağlam çifti."""
+    if t not in _BAG:
+        _BAG[t] = (baglam_kur(D.dilim(t), OLAY), baglam_kur(boz(D, t), OLAY))
+    return _BAG[t]
+
+
+B_KES, B_BOZ = _bag(T_KES)
 A = ay.oku()
 
 
@@ -67,43 +85,47 @@ def _sinyaller(b, aile, p):
 def _ornekler(birim):
     liste, v = kosu.izgara(birim)
     r = np.random.default_rng(len(birim))
-    secim = [v] + [liste[i] for i in r.choice(len(liste), size=min(4, len(liste)), replace=False)]
+    secim = [v] + [liste[i] for i in r.choice(len(liste), size=min(ORNEK_ILK - 1, len(liste)), replace=False)]
     return secim
 
 
-DURUMLAR = [(b, i) for b in kosu.BIRIMLER for i in range(5)]
+DURUMLAR = [(b, i, 0) for b in kosu.BIRIMLER for i in range(ORNEK_ILK)] + \
+           [(b, i, k) for b in kosu.BIRIMLER for i in range(ORNEK_OTEKI) for k in range(1, len(KESIMLER))]
 
 
-@pytest.mark.parametrize("birim,i", DURUMLAR)
-def test_lookahead_kirpma_ve_bozma(birim, i):
+@pytest.mark.parametrize("birim,i,k", DURUMLAR)
+def test_lookahead_kirpma_ve_bozma(birim, i, k):
     ornek = _ornekler(birim)
     if i >= len(ornek):
         pytest.skip("ızgara küçük")
     p = ornek[i]
     aile = kosu.BIRIMLER[birim]["aile"]
+    t_kes = KESIMLER[k]
+    b_kes, b_boz = _bag(t_kes)
     tam, _ = _sinyaller(B_TAM, aile, p)
-    kes, _ = _sinyaller(B_KES, aile, p)
-    bozuk, _ = _sinyaller(B_BOZ, aile, p)
+    kes, _ = _sinyaller(b_kes, aile, p)
+    bozuk, _ = _sinyaller(b_boz, aile, p)
     # Kırpılmış veride sinyal, T'den önce GİRİLEBİLECEK olanlardır (sonraki mum T'den önce açılır).
-    sinir = T_KES - 2 * int(p["tf"]) * 60
+    sinir = t_kes - 2 * int(p["tf"]) * 60
     sec = lambda x: x[x["karar"] <= sinir].sort_values(["bt", "yon"]).reset_index(drop=True)  # noqa: E731
     a, b_, c = sec(tam), sec(kes), sec(bozuk)
     pd.testing.assert_frame_equal(a, b_, check_dtype=False, obj=f"{birim} kırpma")
     pd.testing.assert_frame_equal(a, c, check_dtype=False, obj=f"{birim} bozma")
 
 
-@pytest.mark.parametrize("birim", list(kosu.BIRIMLER))
-def test_islem_girisi_bozmadan_etkilenmez(birim):
+@pytest.mark.parametrize("birim,k", [(b, k) for b in kosu.BIRIMLER for k in range(len(KESIMLER))])
+def test_islem_girisi_bozmadan_etkilenmez(birim, k):
     _, v = kosu.izgara(birim)
     aile = kosu.BIRIMLER[birim]["aile"]
     sonuc = []
     sutun = ["giris_t", "yon", "giris_f", "stop", "R"]
-    for b in (B_TAM, B_BOZ):
+    t_kes = KESIMLER[k]
+    for b in (B_TAM, _bag(t_kes)[1]):
         isl = _islem(b, aile, v)
         if len(isl) == 0:
             sonuc.append(pd.DataFrame(columns=sutun))
             continue
-        a = isl[(isl["durum"] == 0) & (isl["giris_t"] < T_KES - 3600)]
+        a = isl[(isl["durum"] == 0) & (isl["giris_t"] < t_kes - 3600)]
         sonuc.append(a[sutun].sort_values(["giris_t", "yon"]).reset_index(drop=True))
     if len(sonuc[0]) == 0 and len(sonuc[1]) == 0:
         return
@@ -126,26 +148,43 @@ def test_duman_varsayilan_islem_uretir_ve_giris_kapanistan_sonra(birim):
 
 
 def test_fiks_stop_giristen_bir_atr():
-    """Ön kayıt [fiks]: "R birimi girişteki ATR(14, tf); 'sert'/'kapanis' stop 1·ATR" — stop GİRİŞTEN ölçülür.
-    Girişi bir mum geciken dönüşte stop sinyal kapanışından ölçülseydi fiyat o mumda stop'a yaklaşabilir, planlanan
-    risk birkaç pipe iner ve R'ye bölünen sonuç onlarca R'ye fırlardı."""
+    """Ön kayıt [fiks] ve [momentum]: "R birimi girişteki ATR(14); 'sert'/'kapanis' stop 1·ATR" — stop YÜRÜTÜLEN
+    girişten ölçülür. Sinyal tablosu stop seviyesi taşımaz, yalnız riski; motor stop'u gerçek giriş fiyatından
+    (makas ve kayma dahil) risk kadar uzağa koyar. Böylece stop'lu ve stop'suz varyantın R'si aynıdır: tam ATR."""
     for tur, gec in (("donus", 0), ("donus", 1), ("momentum", 0)):
         sin, _ = AILE["fiks"](B_TAM, tf=15, tur=tur, gecikme_mum=gec, tutma_mum=2)
         assert len(sin), f"{tur}/{gec}: sentetik veride sinyal yok"
-        gi = sin["giris_i"].to_numpy()
-        uzak = (B_TAM.d.mo[gi] - sin["stop"].to_numpy()) * sin["yon"].to_numpy()
-        np.testing.assert_allclose(uzak, sin["risk"].to_numpy(), err_msg=f"{tur}/{gec}")
-    # Motorun R'si yürütülen fiyattan ölçülür: girişteki ATR + yarım makas + kayma (haber dakikasında haber kayması).
+        assert sin["stop"].isna().all(), f"{tur}/{gec}: tablo stop seviyesi taşımamalı"
+        assert (sin["risk"] > 0).all()
     kayma = 0.5
-    p = {"tf": 15, "tur": "donus", "gecikme_mum": 1, "tutma_mum": 2, "stop_turu": "kapanis", "hedef": "yok"}
-    isl = _islem(B_TAM, "fiks", p, kayma=kayma)
-    a = isl[isl["durum"] == 0]
-    assert len(a)
-    gi = a["giris_i"].to_numpy()
     d = B_TAM.d
-    ek = (a["R"] - a["risk"]).to_numpy()
-    tavan = 0.5 * (d.ao[gi] - d.bo[gi]) + (kayma + A.haber_kayma_pip) * d.pip + 1e-9
-    assert (ek >= -1e-9).all() and (ek <= tavan).all()
+    for stop_turu in ("sert", "kapanis", "yok"):
+        p = {"tf": 15, "tur": "donus", "gecikme_mum": 1, "tutma_mum": 2, "stop_turu": stop_turu, "hedef": "yok"}
+        isl = _islem(B_TAM, "fiks", p, kayma=kayma)
+        a = isl[isl["durum"] == 0]
+        assert len(a), stop_turu
+        np.testing.assert_allclose(a["R"].to_numpy(), a["risk"].to_numpy(), err_msg=stop_turu)
+        if stop_turu == "yok":
+            assert a["stop"].isna().all(), "stop'suz işlem stop seviyesi taşımamalı"
+        else:
+            uzak = (a["giris_f"] - a["stop"]).to_numpy() * a["yon"].to_numpy()
+            np.testing.assert_allclose(uzak, a["risk"].to_numpy(), err_msg=stop_turu)
+    sin, _ = AILE["momentum"](B_TAM, tf=60, cikis_et="16:00")
+    if len(sin):
+        assert sin["stop"].isna().all()
+
+
+def test_mae_mfe_sonucu_kapsar():
+    """MAE ≤ gerçekleşen sonuç ≤ MFE: hedefin dolduğu dakikanın ters ucu, boşluklu çıkışın açılışı ve çıkış
+    kayması gezinmenin içinde kalır."""
+    for aile, p in (("orb", {"tf": 15, "stop_yeri": "karsi_uc", "stop_turu": "sert", "hedef": "1R",
+                            "son_giris_londra": "12:00"}),
+                    ("orb", {"tf": 5, "stop_yeri": "orta", "stop_turu": "kapanis", "hedef": "2R",
+                            "son_giris_londra": "14:00"})):
+        isl = _islem(B_TAM, aile, p, kayma=0.5)
+        a = isl[isl["durum"] == 0]
+        assert len(a)
+        assert (a["mae"] <= a["pnl"] + 1e-12).all() and (a["pnl"] <= a["mfe"] + 1e-12).all()
 
 
 def test_izgara_sayilari_ve_varsayilan_izgarada():

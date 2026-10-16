@@ -214,15 +214,23 @@ def tasan_satirlar(baslik: str) -> list[str]:
 _YAN_PX, _PANEL_PX, _TIK_PX, _CERCEVE_PX = 64, 16.0, 11.0, 353
 
 
-def _sol_pay(fig) -> float:
+def _sozluk(fig) -> dict:
+    """Figürün düzeni ve izleri sözlük olarak: çizim kütüphanesinin nesnesi ya da HTML'den okunmuş JSON (kapı,
+    dogrula.py, çizim kütüphanesi olmadan aynı ölçüyü koşturur)."""
+    return fig.to_dict() if hasattr(fig, "to_dict") else fig
+
+
+def _sol_pay(d: dict) -> float:
     """Sol payın tahmini: kategori ekseninin en uzun etiketi (11 px yazı + 12 px tik payı) ya da 64."""
     pay = _YAN_PX
-    yazi = getattr(fig.layout.yaxis, "ticktext", None)
-    if yazi:                                   # etiketler elle yazıldıysa eksende görünen odur
+    yazi = (d.get("layout", {}).get("yaxis") or {}).get("ticktext")
+    if yazi is not None and len(yazi):           # etiketler elle yazıldıysa eksende görünen odur
         return max(pay, 12 + max(satir_em(v) for v in yazi if v) * _TIK_PX)
-    for iz in fig.data:
-        y = getattr(iz, "y", None)
-        y = [] if y is None else [v for v in y if v is not None]   # değeri olmayan iz (boş parite) sayılmaz
+    for iz in d.get("data") or []:
+        y = iz.get("y")
+        if y is None or isinstance(y, (dict, str)):  # ikili kodlanmış sayı dizisi kategori değildir
+            continue
+        y = [v for v in y if v is not None]           # değeri olmayan iz (boş parite) sayılmaz
         if y and all(isinstance(v, str) for v in y):
             pay = max(pay, 12 + max(satir_em(v) for v in y) * _TIK_PX)
     return pay
@@ -230,16 +238,18 @@ def _sol_pay(fig) -> float:
 
 def panel_tasmasi(fig) -> list[str]:
     """353 piksellik gömme çerçevesinde panel başlıklarının (make_subplots ek açıklamaları) taşması ve
-    yan yana panellerde birbirine binmesi (tahmini genişlikle; ölçüt `tasan_satirlar`ın eşi)."""
-    sol = _sol_pay(fig)
+    yan yana panellerde birbirine binmesi (tahmini genişlikle; ölçüt `tasan_satirlar`ın eşi). `fig`: çizim
+    kütüphanesinin figürü ya da {"data", "layout"} sözlüğü."""
+    d = _sozluk(fig)
+    sol = _sol_pay(d)
     alan = _CERCEVE_PX - sol - _YAN_PX
     bas = []
-    for a in fig.layout.annotations or []:
-        if a.yref != "paper" or a.yanchor != "bottom" or not a.text:
+    for a in d.get("layout", {}).get("annotations") or []:
+        if a.get("yref") != "paper" or a.get("yanchor") != "bottom" or not a.get("text"):
             continue
-        gen = max(satir_em(s) for s in a.text.split("<br>")) * _PANEL_PX
-        orta = sol + (a.x or 0) * alan
-        bas.append((orta - gen / 2, orta + gen / 2, round(a.y or 0, 3), a.text))
+        gen = max(satir_em(s) for s in a["text"].split("<br>")) * _PANEL_PX
+        orta = sol + (a.get("x") or 0) * alan
+        bas.append((orta - gen / 2, orta + gen / 2, round(a.get("y") or 0, 3), a["text"]))
     sorun = []
     for x0, x1, _, metin in bas:
         if x0 < 0 or x1 > _CERCEVE_PX:
@@ -253,6 +263,30 @@ def panel_tasmasi(fig) -> list[str]:
 
 def olcum_ozu() -> str:
     return hashlib.sha256(OLCUM.read_bytes()).hexdigest()
+
+
+#: Bu koşuda yazılan figür dosyaları (ev stili yalnız onlara uygulanır).
+YAZILAN: list[Path] = []
+#: Ev stilinin dosyaya koyduğu işaret (site/tools/plotly_stil.py: ISARET); kapı figürde onu arar.
+EV_STILI_ISARET = "<!-- tto-ev-stili -->"
+EV_STILI = KOK / "site" / "tools" / "plotly_stil.py"
+
+
+def ev_stili(dosyalar: list[Path]) -> int:
+    """Sitenin ev stilini (site/tools/plotly_stil.py) çizilen dosyalara uygular. Figürlerin yüksekliği ve başlık yeri
+    o stilin üst payıyla kurulur (`ust_pay`): stil uygulanmamış bir figürde çok satırlı başlık çizim alanına biner.
+    Stil figürün verisine dokunmaz ve tekrar uygulanabilir."""
+    import subprocess
+    if not dosyalar:
+        return 0
+    s = subprocess.run([sys.executable, str(EV_STILI), *map(str, dosyalar)], capture_output=True, text=True)
+    eksik = [d.name for d in dosyalar if EV_STILI_ISARET not in d.read_text(encoding="utf-8")]
+    if s.returncode != 0 or eksik:
+        print(s.stdout[-2000:], s.stderr[-2000:])
+        print(f"  ✗ ev stili uygulanamadı: {', '.join(eksik[:5]) or 'araç düştü'}")
+        return 1
+    print(f"  ✓ ev stili: {len(dosyalar)} figür")
+    return 0
 
 
 def _yaz(fig, ad: str, yukseklik: int = 500) -> None:
@@ -272,6 +306,7 @@ def _yaz(fig, ad: str, yukseklik: int = 500) -> None:
     html = html.replace("<head>", f'<head><meta name="tto-olcum-ozu" content="{olcum_ozu()}">', 1)
     (CIKTI / ad).write_text(html, encoding="utf-8")
     yol = CIKTI / ad
+    YAZILAN.append(yol)
     print(f"  ✓ {yol.relative_to(KOK) if yol.is_relative_to(KOK) else yol}")
     for s in tasan_satirlar(fig.layout.title.text or ""):     # uyarı: çizim düşmez, satır adıyla görünür
         print(f"  ! {ad}: başlık satırı telefonun gömme çerçevesinde taşar — {s}")

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Bütün zincir tek komutla: sınamalar → veri denetimi → takvim → koşu → ölçüm → şekiller → ders metinleri → kapı.
+"""Bütün zincir tek komutla: sınamalar → veri denetimi → takvim → koşu → ölçüm → şekiller (ev stiliyle) → ders
+metinleri → kapı.
 
 Fiyat arşivi ve takvimin ham sayfaları bulutta indirilir (arastirma-veri.yml) ve depoda durur; bu betik ağa çıkmaz.
 Arşivin her yıl dosyası okunurken künyedeki özüne karşı sınanır (dukascopy.oku_ham), yani zincir değişmiş bir
 dosyayla koşamaz. Adımlardan biri düşerse sonrakiler koşmaz: yarısı yeni yarısı eski bir seri yazılmaz.
 
+Ortam:  python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt   (sürümleri sabit)
 Koşum:  .venv/bin/python hepsi.py [--sinamasiz] [--kosusuz]
   --sinamasiz   birim sınamalarını atlar (yalnız yerel yineleme için; yayından önceki koşu sınamalıdır)
   --kosusuz     strateji koşusunu atlar ve depodaki koşu çıktısından ölçer (ders metni yinelemesi için)

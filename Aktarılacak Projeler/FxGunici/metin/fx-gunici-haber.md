@@ -35,7 +35,8 @@ metodoloji dersinde.
 
 {{! takvim }}
 
-_Saatler yerel saattir; TSİ karşılıkları giriş dersinin tablosunda. Fiyat sınaması: resmî saatte 1 dakikalık fiyatta
+_Saatler yerel saattir; TSİ karşılıkları giriş dersinin tablosunda. Saatin kaynağı: tarih tarih (resmî metnin
+kendi saat satırından) ya da kuraldan (kurumun yayımladığı saat kuralından). Fiyat sınaması: resmî saatte 1 dakikalık fiyatta
 olağandışı bir sıçrama var mı (doğrulandı), yoksa bir saat ya da yarım saat önce/sonra mı daha iyi oturuyor (çelişki),
 yoksa piyasa hiç kımıldamadı mı (sessiz). Sınama yalnız raporlar: hiçbir olay fiyat yüzünden dışarıda bırakılmadı.
 Ayrıntısı ve takvimin bilinen boşlukları metodoloji dersinde._
@@ -58,9 +59,8 @@ Dört paritede her olayın zirvesi (pip, parantezde olaysız güne göre katı):
 
 {{! haber_makas_ozet }}
 
-Makas en geniş hâline açıklamadan hemen önceki dakikanın kapanışında gelir: piyasa yapıcılar kotasyonlarını
-açıklamadan önce genişletir. Açıklamadan sonra hızla daralır ve birkaç dakikada olaysız günün düzeyine döner.
-Bu dersin stratejileri ilk haber mumunun kapanışından sonra girer, yani en pahalı dakikayı zaten atlar; yine de haber
+{{! haber_makas_cumle }} Piyasa yapıcılar kotasyonlarını açıklamadan önce genişletir; açıklamadan sonraki seyri
+tablonun sağ sütunlarında. Bu dersin stratejileri ilk haber mumunun kapanışından sonra girer, yani en pahalı dakikayı zaten atlar; yine de haber
 penceresinde (olaydan önceki iki dakikadan sonraki on beş dakikaya) her dolum için ayrıca {{ K.haber_kayma_pip | s1 }}
 pip kayma eklenir. Makasın kendisi gerçek bid/ask'tan geldiği için ayrıca sayılır.
 
@@ -110,8 +110,8 @@ tam ilintili olduğunda örneklemi dörde katlar ve t istatistiğini yapay olara
 
 {{! devam olay_kova }}
 
-Hücrelerin çoğu {{ O.haber.devam.kural.asgari_olay | n }} olayın altında kalır: bir olay türünün gözlemleri dört
-kovaya bölünür ve kovalar eşit dolmaz.
+Bu ayrıntıda gözlemler incelir: {{! devam_yetersiz olay_kova }}; bir olay türünün gözlemleri dört kovaya bölünür
+ve kovalar eşit dolmaz.
 Bu tablo hüküm için değil, bir hücrenin tek başına göze çarpan sayısının kaç olaydan geldiğini görmek için var.
 
 </details>
@@ -150,8 +150,8 @@ kümelemek patikanın ilk beş dakikasını tanımı gereği o yöne iter. Asıl
 
 ## FOMC: karar ve basın toplantısı
 
-Basın toplantılı her FOMC toplantısında iki ayrı olay var: kararın açıklanması (14:00 New York) ve yarım saat sonra
-başkanın basın toplantısı. Piyasa kararı yarım saat fiyatlar, sonra toplantıda yeniden fiyatlar. Ön kaydın soruları:
+Basın toplantılı her FOMC toplantısında iki ayrı olay var: kararın açıklanması (14:00 New York; TSİ 21:00, ABD kış
+saatinde 22:00) ve yarım saat sonra başkanın basın toplantısı. Piyasa kararı yarım saat fiyatlar, sonra toplantıda yeniden fiyatlar. Ön kaydın soruları:
 basın toplantısının ilk saatindeki hareket kararın ilk yarım saatindekini ne sıklıkla tersine çeviriyor, ikisi
 arasındaki ilinti ne, ve dönüş olasılığı kararın büyüklüğüne bağlı mı?
 
@@ -193,7 +193,7 @@ katı; parantezde toplantı sayısı)._
 <div class="pratik">
   <span class="etiket">Pratik — haber</span>
 
-{{! pratik_islem n1 "Alıştırma 1" }}
+{{! pratik_islem n1 "Alıştırma 1" kaybeden }}
 
 {{! pratik_islem n2 "Alıştırma 2" }}
 

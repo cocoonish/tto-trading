@@ -10,7 +10,8 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import ders_motor as dm  # noqa: E402
 
-O = {"kunye": {"bitis": "2026-10-15"},
+# Künye pariteleri tanımlar (ders_motor.parite_kur): motor elle tutulan bir parite listesi taşımaz.
+O = {"kunye": {"bitis": "2026-10-15", "ciftler": ["EURUSD"], "nokta": {"EURUSD": 1e-5}, "pip": {"EURUSD": 1e-4}},
      "birim": {"orb": {"aile": "orb", "varsayilan": {"tf": 15},
                        "cift": {"EURUSD": {"varsayilan": {"oos": {"beklenti_r": -0.0412, "n": 1431, "isabet": 0.2798,
                                                                   "ga_alt": -0.091, "bos": None},

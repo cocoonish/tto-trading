@@ -10,10 +10,12 @@ dosyasında 08:20 gibi) olay o zaman diliminde ATLANIR ve sebebiyle sayılır.
 ATR, olaydan ÖNCEKİ 14 mumdan (aynı ızgara) — olay mumunu içermez.
 
 Bir stratejinin sinyal tablosu her satırda kendi `ofset`ini taşır (60 dakikada
-olaydan olaya değişir); işlemler olay × ofset grubunda koşturulur. Tek pozisyon
-kuralı grup içinde geçerlidir: aynı gün iki ayrı olay (FOMC kararı 14:00 ve basın
-toplantısı 14:30) birbirinin işlemini engellemez, iki olayın sonucu ayrı okunsun
-diye. Toplam satırı bu yüzden o günlerde iki pozisyon içerebilir.
+olaydan olaya değişir); işlemler olay × ofset grubunda koşturulur (kapanış stop'u
+her grubun kendi mum sonunda sorulur). Tek pozisyon kuralı ise PARİTE BAŞINA
+geçerlidir (ön kaydın ortak mekaniği): aynı gün iki olay varsa (FOMC kararı 14:00
+ve basın toplantısı 14:30) ikincisinin işlemi ancak birincisinin pozisyonu
+kapandıysa açılır. Gruplar tek pozisyon kuralı olmadan koşturulur, kural sonra
+bütün işlemlere giriş sırasıyla uygulanır.
 
 SÜRPRİZ VEKİLİ. Konsensüs beklentisi elimizde yok; sürpriz yerine ilk haber
 mumunun hareketi ATR'ye bölünerek kullanılır (|kapanış − açılış| / ATR). Bu bir
@@ -30,7 +32,7 @@ import pandas as pd
 
 import zaman as z
 from gunluk import Baglam
-from strat_ortak import atr_mum, kos
+from strat_ortak import atr_mum, kos, tek_pozisyon_uygula
 from veri import mum_dizini
 
 ONKAYIT = tomllib.loads((Path(__file__).resolve().parent / "onkayit.toml").read_text(encoding="utf-8"))
@@ -250,18 +252,18 @@ HABER = {"n1": n1, "n2": n2, "n3": n3, "n4": n4, "n5": n5}
 
 def kos_haber(b: Baglam, sin: pd.DataFrame, tf: int, stop_turu: str, hedef: str, kayma_pip: float,
               haber_kayma_pip: float, zaman_mum: int) -> pd.DataFrame:
-    """Sinyalleri olay × ofset grubunda koşturur (tek pozisyon kuralı grup içinde)."""
+    """Sinyalleri olay × ofset grubunda koşturur; tek pozisyon kuralı parite başına, bütün gruplara birlikte."""
     if len(sin) == 0:
         return pd.DataFrame()
     parcalar = []
     for (_, ofset), grup in sin.groupby(["olay", "ofset"], sort=True):
         isl = kos(b, grup.reset_index(drop=True), tf, int(ofset), stop_turu, hedef, kayma_pip, haber_kayma_pip,
-                  zaman_mum)
+                  zaman_mum, tek_pozisyon=False)
         if len(isl):
             parcalar.append(isl)
     if not parcalar:
         return pd.DataFrame()
-    out = pd.concat(parcalar, ignore_index=True)
+    out = tek_pozisyon_uygula(pd.concat(parcalar, ignore_index=True))
     sira = np.where(out["giris_i"].to_numpy() >= 0, out["giris_t"].to_numpy(), out["sinyal_t"].to_numpy())
     out = out.iloc[np.argsort(sira, kind="stable")].reset_index(drop=True)
     out["kimlik"] = np.arange(len(out))
@@ -297,10 +299,14 @@ def devam(b: Baglam, tf: int, ufuk_dk: int, kayma_pip: float, haber_kayma_pip: f
     açılışı (alış ask, satış bid, kayma dahil), çıkış ufkun açılışı (gün sonunu aşamaz).
     Kırılım ve fade aynı anlarda ters yönlü iki işlemdir; ikisi de kendi
     maliyetini öder, yani biri kazandığında öbürü maliyetin iki katı kadar kaybeder.
+    Ufku gün sonuna (16:55 ET) yetişmeyen gözlem DÜŞER: kırpılmış bir tutuş o hücrenin
+    ufkunu ölçmez (60 dakikalık mumda FOMC'nin 120 dakikası 16:55'i aşar). Düşenler
+    olay olay `b.ek[("devam_kirpilan", tf, ufuk)]` sayacına yazılır.
     """
     cer = cerceve(b, tf)
     d, g = b.d, b.g
     satir = []
+    kirpilan: dict[str, int] = {}
     for _, c in cer.iterrows():
         m = b.mumlar(tf, int(c["ofset"]))
         k0 = int(c["k0"])
@@ -310,10 +316,12 @@ def devam(b: Baglam, tf: int, ufuk_dk: int, kayma_pip: float, haber_kayma_pip: f
         gi = int(_dakika_ici(b, np.array([t_g]))[0])
         if gi < 0:
             continue
-        gun_sonu = g.sinir[int(c["gun_k"])]
+        gun_sonu = int(g.sinir[int(c["gun_k"])])
         t_c = t_g + ufuk_dk * 60
         ci = int(np.searchsorted(d.t, t_c, side="left"))
-        ci = min(ci, int(gun_sonu))
+        if ci > gun_sonu:
+            kirpilan[c["olay"]] = kirpilan.get(c["olay"], 0) + 1
+            continue
         if ci <= gi or ci >= len(d.t) or (d.t[ci] - t_c) > 300:
             continue
         yon = 1 if c["hareket"] > 0 else -1
@@ -331,6 +339,7 @@ def devam(b: Baglam, tf: int, ufuk_dk: int, kayma_pip: float, haber_kayma_pip: f
                       "kova": c["kova"], "trend_uyum": c["trend_uyum"], "hareket_atr": float(c["hareket_atr"]),
                       "gun_atr_pip": float(g.atr[int(c["gun_k"])]) / d.pip,
                       "brut_pip": brut / d.pip, "kirilim_pip": kir / d.pip, "fade_pip": fad / d.pip})
+    b.ek[("devam_kirpilan", tf, ufuk_dk)] = kirpilan
     return pd.DataFrame(satir)
 
 

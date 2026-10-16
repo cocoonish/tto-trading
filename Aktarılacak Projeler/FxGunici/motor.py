@@ -10,7 +10,15 @@ motor yapar. Kurallar (önceden kayıt, `onkayit.toml`):
           alış ask'tan, satış bid'den, artı kayma.
   R       gerçek giriş fiyatından stop seviyesine planlanan risk. Stopsuz
           (yalnız zamanla çıkan) stratejide R birimi emirle gelir (ATR).
+          Emir stop SEVİYESİ değil yalnız risk uzaklığı taşıyorsa (fiksing ve
+          gün içi momentumun stop'lu varyantları: "stop 1·ATR"), stop YÜRÜTÜLEN
+          girişten o kadar uzağa konur; R tam olarak o uzaklıktır ve stop'lu ile
+          stop'suz varyant aynı R birimiyle kıyaslanır.
           R ≤ 0 ise (giriş stop'un ötesinde açıldıysa) işlem YOK, sayılır.
+  MAE/MFE işlem boyunca emir tarafındaki en kötü / en iyi gezinme (giriş
+          fiyatına göre). Hedefin dolduğu dakikanın ters ucu MAE'ye, boşluklu
+          stop ve hedefin açılış fiyatı uçlara girer; gerçekleşen sonuç her
+          zaman ikisinin arasındadır (MAE ≤ sonuç ≤ MFE).
   SERT    stop emir tarafında dakika dakika sorulur: uzunda bid ≤ stop,
   STOP    kısada ask ≥ stop. Dakika stop'un ötesinde AÇILIRSA dolum açılış
           fiyatıdır (boşluk); değilse stop seviyesi. Her ikisinde de kayma.
@@ -70,6 +78,7 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
     mfe = np.full(n_emir, np.nan)
     belirsiz = np.zeros(n_emir, np.bool_)
     hedef_f = np.full(n_emir, np.nan)
+    stop_f = np.full(n_emir, np.nan)
     serbest = 0
     for e in range(n_emir):
         i = giris_i[e]
@@ -89,6 +98,8 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
         st = stop[e]
         sert = stop_tur[e] == 1
         kap = stop_tur[e] == 2
+        if stop_tur[e] != 0 and np.isnan(st) and risk[e] > 0.0:
+            st = g - y * risk[e]            # stop yürütülen girişten risk kadar uzakta
         if stop_tur[e] != 0 and not np.isnan(st):
             r = (g - st) * y
         else:
@@ -125,9 +136,15 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
             if j > i:
                 if sert and (xo - st) * y <= 0.0:
                     cf = xo - y * sj; ck = j; nd = 5; mid_c = mo[j]
+                    kotu = (xo - g) * y
+                    if kotu < en_kotu:
+                        en_kotu = kotu
                     break
                 if ht != 0 and (xo - T) * y >= 0.0:
                     cf = xo; ck = j; nd = 6; mid_c = mo[j]
+                    iyi = (xo - g) * y
+                    if iyi > en_iyi:
+                        en_iyi = iyi
                     break
             if y == 1:
                 stop_deg = sert and xl <= st
@@ -148,6 +165,10 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
                 iyi = (T - g) * y
                 if iyi > en_iyi:
                     en_iyi = iyi
+                # Dakikanın içindeki sıra bilinmez: hedefin dolduğu dakikanın ters ucu MAE'ye girer.
+                kotu = ((xl - g) if y == 1 else (g - xh))
+                if kotu < en_kotu:
+                    en_kotu = kotu
                 break
             iyi = ((xh - g) if y == 1 else (g - xl))
             kotu = ((xl - g) if y == 1 else (g - xh))
@@ -183,15 +204,21 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
         R[e] = r
         pnl[e] = (cf - g) * y
         brut[e] = (mid_c - mid_g) * y
+        # Gerçekleşen sonuç gezinmenin dışında kalamaz (çıkış dakikasının açılışı ve çıkış kayması dahil).
+        if pnl[e] < en_kotu:
+            en_kotu = pnl[e]
+        if pnl[e] > en_iyi:
+            en_iyi = pnl[e]
         mae[e] = en_kotu
         mfe[e] = en_iyi
         hedef_f[e] = T
+        stop_f[e] = st if (stop_tur[e] != 0) else np.nan
         # Çıkış açılışta olduysa (zaman, kapanış stop'u, boşluk) aynı dakikada yeni giriş olabilir.
         if nd == 3 or nd == 4 or nd == 5 or nd == 6:
             serbest = ck
         else:
             serbest = ck + 1
-    return durum, giris_f, cikis_f, cikis_dk, neden, R, pnl, brut, mae, mfe, belirsiz, hedef_f
+    return durum, giris_f, cikis_f, cikis_dk, neden, R, pnl, brut, mae, mfe, belirsiz, hedef_f, stop_f
 
 
 def bos_emir(n: int) -> np.ndarray:
@@ -211,7 +238,7 @@ def simule(d: Dakika, emir: np.ndarray, bar_son: np.ndarray, haber: np.ndarray |
     e = emir[sira]
     k = kayma_pip * d.pip
     hk = haber_kayma_pip * d.pip
-    (durum, gf, cf, cdk, nd, R, pnl, brut, mae, mfe, bel, hf) = _simule(
+    (durum, gf, cf, cdk, nd, R, pnl, brut, mae, mfe, bel, hf, sf) = _simule(
         d.bo, d.bh, d.bl, d.ao, d.ah, d.al, d.mo, d.mc, bar_son, haber,
         e["giris_i"], e["yon"], e["stop"], e["risk"], e["hedef_tur"], e["hedef_k"], e["hedef_seviye"],
         e["cikis_i"], e["stop_tur"], float(k), float(hk), bool(tek_pozisyon))
@@ -222,7 +249,14 @@ def simule(d: Dakika, emir: np.ndarray, bar_son: np.ndarray, haber: np.ndarray |
     df = pd.DataFrame({
         "kimlik": e["kimlik"], "durum": durum, "yon": e["yon"].astype(np.int8),
         "giris_i": gi, "cikis_i": cdk, "giris_t": t_g, "cikis_t": t_c,
-        "giris_f": gf, "cikis_f": cf, "stop": e["stop"], "hedef": hf,
+        # Stop: emrin seviyesi; seviye yoksa motorun yürütülen girişten kurduğu stop (alınan işlemde);
+        # stop'suz işlemde stop yoktur (R birimi `R` sütunundadır).
+        "giris_f": gf, "cikis_f": cf,
+        "stop": np.where(e["stop_tur"] == STOP_YOK, np.nan, np.where(np.isnan(e["stop"]), sf, e["stop"])),
+        "hedef": hf,
+        # Emrin kendi stop alanı (seviye ya da NaN: yürütülen girişten konacak stop); işlemi aynı kuralla yeniden
+        # koşturmak için (ör. örnek işlemin ek kaymalı hâli).
+        "stop_emir": e["stop"], "risk_emir": e["risk"], "hedef_seviye_emir": e["hedef_seviye"],
         "R": R, "pnl": pnl, "brut": brut, "mae": mae, "mfe": mfe,
         "neden": nd, "belirsiz": bel, "plan_cikis_i": e["cikis_i"], "stop_tur": e["stop_tur"],
         "hedef_tur": e["hedef_tur"], "hedef_k": e["hedef_k"],

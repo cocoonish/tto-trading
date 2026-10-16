@@ -27,7 +27,8 @@ başlatılacağı bir seçimdir ve ızgarada iki çapa sınanıyor.
 
 Varsayılan VWAP'ı Londra açılışında başlatır, bandı 2σ'da kurar ve hedefi sinyal anındaki VWAP'a koyar.{{? B.varsayilan.tf == 15 and B.varsayilan.capa == "londra" and B.varsayilan.k == 2.0 and B.varsayilan.hedef == "vwap" and B.varsayilan.stop_turu == "sert" }}
 VWAP hedefinin R cinsinden uzaklığı işlemden işleme değişir: bant dışı gezinti uzunsa stop girişten uzaklaşır ve
-VWAP hedefi risk biriminde yakınlaşır.
+VWAP hedefi risk biriminde yakınlaşır. Dört paritenin işlemlerinde hedefin uzaklığı {{! hedef_uzaklik }}: bu
+bir "kısa hedef" değildir, çoğu işlemde 1R'nin ötesindedir.
 
 ### Örnekler
 
@@ -35,13 +36,14 @@ VWAP hedefi risk biriminde yakınlaşır.
 
 {{! ornek }}
 
-Figürde mavi çizgiler sinyal anındaki bandın iki ucudur; hedef sinyal anındaki VWAP'tır.
+Figürde noktalı mavi çizgiler sinyal anındaki bandın iki ucu ve VWAP'ın kendisi, yeşil çizgi hedeftir
+(sinyal anındaki VWAP); mavi bant bandın içine kapanan sinyal mumudur. Kaybeden örnek lehine yarım R'ye
+ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: fiyat
+ortalamaya dönmeye başlıyor, sonra gezinti yeniden başlayıp stop'u alıyor.
 
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Koşullar
 
@@ -49,11 +51,13 @@ Figürde mavi çizgiler sinyal anındaki bandın iki ucudur; hedef sinyal anınd
 
 ### Kontrol listesi
 
-1. **Çapa Londra 08:00** (TSİ 10:00 ya da 11:00); ilk saat sinyal yok.
-2. **Bandın dışına çıkışı izle, girme.** Giriş bandın içine kapanışta.
-3. **Stop gezintinin ucunda, hedef VWAP.**
-4. **Hacmin ne olduğunu unutma.** FX'te merkezî hacim yok; bu VWAP bir likidite ağırlıklı ortalamadır.
-5. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Çapa Londra 08:00** (TSİ 10:00 ya da 11:00, İngiltere'nin saatine göre); ilk saat sinyal yok.
+4. **Bandın dışına çıkışı izle, girme.** Giriş bandın içine kapanışta.
+5. **Stop gezintinin ucunda, hedef VWAP.**
+6. **Hacmin ne olduğunu unutma.** FX'te merkezî hacim yok; bu VWAP bir likidite ağırlıklı ortalamadır.
+7. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

@@ -78,3 +78,42 @@ def test_ters_secim_bos_kumede_secilmedi():
     ic = np.arange(len(f)) < 250
     y = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}["sabit"]
     assert y["hukum"] == "secilmedi" and y["ters_secim"]["hukum"] == "secilmedi"
+
+
+def test_esdeger_degisken_tek_sayilir():
+    """Aynı ölçünün iki adı tek değişkendir: ikincisi 'esdeger' diye kayda geçer, sayıma girmez."""
+    f = _tablo()
+    f["asya_atr"] = f["range_atr"]
+    ic = np.arange(len(f)) < 250
+    k = {x["degisken"]: x for x in sg.kova_analizi(f, ic, asgari=30)}
+    assert k["asya_atr"]["hukum"] == "esdeger" and k["asya_atr"]["esdeger"] == "range_atr"
+    assert k["range_atr"]["hukum"] in ("tuttu", "tutmadi", "secilmedi", "hepsi")
+
+
+def test_kosulsuz_ortalama_tanimli_islemlerden_ve_hepsi_ayri():
+    """Bütün kovaları seçilen değişken 'hepsi'dir, hiç kova seçilmeyen 'secilmedi': iki ayrı durum. Koşulsuz ortalama
+    değişkenin tanımlı olduğu işlemlerden kurulur (tanımsız işlemler kıyası başka kümeye çekmez)."""
+    f = _tablo()
+    ic = np.arange(len(f)) < 250
+    # yalnız ilk 100 işlemde tanımlı ve hepsi yüksek R'li iki kova: tanımlı işlemlerde biri ortalamanın üstünde
+    x = np.full(len(f), None, dtype=object)
+    x[:100] = np.where(np.arange(100) % 2 == 0, "a", "b")
+    f["iki"] = x
+    f.loc[:99, "r"] = np.where(np.arange(100) % 2 == 0, 2.0, 1.0)
+    y = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}["iki"]
+    assert y["secilen"] == ["a"], y["secilen"]           # koşulsuz (tanımlı) ortalama 1,5: yalnız "a" üstünde
+    assert abs(y["ic_kosulsuz_r"] - 1.5) < 1e-9
+
+
+def test_dsr_gurultu_esigi_orneklem_hatasindan():
+    """Gürültü eşiği V₀ = 1/(T−1)'den: denemeler ne kadar dağınık olursa olsun değişmez; kesitsel eşik dağınıklıkla büyür."""
+    import math
+    rng = np.random.default_rng(1)
+    g = rng.normal(0, 1, 1500)
+    dar = sg.dsr(0.01, rng.normal(0, 0.01, 100), g)
+    genis = sg.dsr(0.01, rng.normal(-0.2, 0.3, 100), g)
+    assert dar["sr0_gurultu_yillik"] == genis["sr0_gurultu_yillik"]
+    assert genis["sr0_yillik"] > 5 * dar["sr0_yillik"]
+    N, T = 100, 1500
+    carpan = (1 - sg.EULER) * sg.stats.norm.ppf(1 - 1 / N) + sg.EULER * sg.stats.norm.ppf(1 - 1 / (N * math.e))
+    assert abs(dar["sr0_gurultu_yillik"] - math.sqrt(1 / (T - 1)) * carpan * math.sqrt(252)) < 1e-12

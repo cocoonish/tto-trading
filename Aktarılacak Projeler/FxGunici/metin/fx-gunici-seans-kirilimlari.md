@@ -50,7 +50,7 @@ analizi.
 <div class="pratik">
   <span class="etiket">Pratik — seans kırılımları</span>
 
-{{! pratik_islem asya "Alıştırma 1" }}
+{{! pratik_islem asya "Alıştırma 1" tuzak }}
 
 {{! pratik_islem nyib_0930 "Alıştırma 2" }}
 

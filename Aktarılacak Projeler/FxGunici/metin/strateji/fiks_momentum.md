@@ -31,11 +31,11 @@ ve fiksing penceresinin ilk yarısına (15:57:30 → 16:00) uzanır; çıkış p
 
 {{! ornek }}
 
+Noktalı mavi çizgiler sinyal mumunun tepesi ve dibi, mavi bant sinyal mumunun kendisidir. Kuralın stop'u olmadığı için figürde stop çizgisi yoktur; R birimi girişteki ATR'dir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
+
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 Beş dakikalık bir işlemde maliyetin payını havuzun iki sayısı gösteriyor: örneklem dışında maliyetten önce işlem
 başına {{ H.oos.brut_r | r }} R, sonra {{ H.oos.beklenti_r | r }} R.
@@ -44,12 +44,12 @@ başına {{ H.oos.brut_r | r }} R, sonra {{ H.oos.beklenti_r | r }} R.
 
 {{! ay_sonu }}
 
-_Önceden kayıtlı varsayılan, net R. Ay sonu ve öbür günler bütün dönemde; fark Welch t ile (iki yönlü p). Son iki
-sütun ay sonunun örneklem dışı karşılığı._
+_Önceden kayıtlı varsayılan, net R; her parite iki satır: bütün dönem ve örneklem dışı (2024 →). Fark p: ay
+sonu ile öbür günlerin ortalama farkı, Welch t (iki yönlü)._
 
 Ay sonu, portföy yeniden dengelemesinin fiksinge en büyük akışı taşıdığı gün olarak bilinir (Melvin ve Prins,
-2015) ve momentum savunusu en çok o gün için kurulur. Küçük örneklem uyarısı burada da geçerli: EUR/USD'de ay sonu
-kümesi bütün dönemde {{ E.varsayilan.ay_sonu.ay_sonu.tum.n | n }}, örneklem dışında {{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem.
+2015) ve momentum savunusu en çok o gün için kurulur. Örneklem küçüktür: EUR/USD'de ay sonu kümesi bütün dönemde
+{{ E.varsayilan.ay_sonu.ay_sonu.tum.n | n }}, örneklem dışında {{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem. {{! ay_sonu_cumle }}
 
 ### Koşullar
 
@@ -57,9 +57,11 @@ kümesi bütün dönemde {{ E.varsayilan.ay_sonu.ay_sonu.tum.n | n }}, örneklem
 
 ### Kontrol listesi
 
-1. **Saat.** 15:50–15:55 Londra (TSİ yazın 17:50–17:55, kışın 18:50–18:55).
-2. **Yönü oku, 15:55'te gir, 16:00'da çık.**
-3. **Maliyeti önce hesapla.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Saat.** 15:50–15:55 Londra: TSİ 17:50–17:55 (İngiltere yaz saati) ya da 18:50–18:55.
+4. **Yönü oku, 15:55'te gir, 16:00'da çık.** Stop yok; R birimi girişteki ATR.
+5. **Maliyeti önce hesapla.** {{! basabas }}
 
 ### Hüküm
 

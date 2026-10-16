@@ -18,8 +18,9 @@ olduğunu ölçmek. İkinci görüşün kuralı (**başarısız kırılım**) fa
 ### Kurallar
 
 - **Aralık.** Londra 08:00'den itibaren ilk mum (15 dakikalık mumda 08:00–08:15, 60 dakikalıkta
-  08:00–09:00). TSİ'de bu saat yaz saatinde 10:00, kışın 11:00'dir; Avrupa ile ABD'nin saat değiştirdiği ara
-  haftalarda Londra saati değişmediği için TSİ karşılığı da değişmez.
+  08:00–09:00). Londra açılışının TSİ saati yalnız İngiltere'nin saatine bağlıdır: İngiltere yaz saatindeyken
+  10:00, kış saatindeyken 11:00. Mart ve ekimdeki ara haftalarda (Avrupa ile ABD'nin saati farklı günlerde
+  değiştiği haftalar) İngiltere kış saatindedir, açılış iki ara dönemde de TSİ 11:00'dir.
 - **Sinyal.** Aralıktan sonraki mumlardan, aralığın **dışında kapanan** ilk mum; yön kapanışın tarafı. Gün
   başına tek işlem.
 - **Giriş.** Sinyal mumu kapanınca, sonraki dakikanın açılışında, yürütülebilir fiyattan (alışta ask,
@@ -42,17 +43,16 @@ temkinli biçimleridir ve ızgarada ayrıca ölçülür.
 
 {{! ornek }}
 
-Figürde mavi noktalı çizgiler aralığın iki ucu, kırmızı çizgi stop, üçgen yürütülen giriş fiyatıdır. Kazanan
-örnek kuralın vaat ettiği günü gösterir: aralık kırılıyor ve hareket gün boyu sürüyor. Kaybeden örnek kuralın
-asıl maliyetini gösterir: kırılım kapanışla teyit edildiği hâlde fiyat aralığa geri dönüyor ve karşı uçtaki
-stop alınıyor. Her iki örnek de örneklem dışının en son kazanan ve en son kaybeden işlemidir; seçim kuralı
-sonuçtan önce yazıldı, figür "en güzel günü" göstermiyor.
+Figürde noktalı mavi çizgiler açılış aralığının iki ucu, mavi bant sinyal mumu, kırmızı çizgi stop, üçgen
+yürütülen giriş fiyatıdır. Kazanan örnek kuralın vaat ettiği günü gösterir: kırılım teyit ediliyor ve hareket
+sürüyor. Kaybeden örnek, lehine yarım R'ye bile ulaşmadan zararla kapanan işlemdir: kapanışla teyit edilmiş
+bir kırılımın arkası gelmiyor. Tuzak örneği kuralın en pahalı biçimini gösterir: işlem önce lehine en az
+yarım R gidiyor, sonra fiyat geri dönüp zararla kapatıyor. Kârı gün sonuna bırakan bir kural bu kârı korumaz;
+1R ve 2R hedefler ızgarada tam bu yüzden var.
 
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Koşullar
 
@@ -63,21 +63,23 @@ yalnız sınar.
 
 {{! kosullar }}
 
-Tutan bir koşul, kuralı "o günlerde çalışan bir kural" yapmaz: on dört değişkenin her biri ayrı bir denemedir
-ve şansla birkaçının tutması beklenir. Koşul, kontrol listesine ancak öbür paritelerde de aynı yönde
-duruyorsa bir aday olarak girer.
+Açılış aralığının genişliği bu kuralın en doğal koşuludur ve iki yönlü okunabilir: dar bir açılış henüz
+boşalmamış bir birikimi, geniş bir açılış hareketin ilk mumda tükendiğini anlatabilir. Ölçüm, aralık / günlük
+ATR için: {{! kosul_tek range_atr }}.
 
 ### Kontrol listesi
 
-1. **Saat.** Aralık Londra 08:00'de başlar: TSİ 10:00 (yaz) ya da 11:00 (kış). Son giriş Londra 12:00:
-   TSİ 14:00 ya da 15:00.
-2. **Aralığı işaretle.** İlk mumun tepe ve dibi; mum kapanmadan aralık yoktur.
-3. **Kapanışı bekle.** Mumun aralığın dışına taşması sinyal değildir; dışarıda kapanması sinyaldir. Giriş
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Saat.** Aralık Londra 08:00'de başlar: TSİ 10:00 (İngiltere yaz saati) ya da 11:00 (kış saati). Son
+   giriş Londra 12:00: TSİ 14:00 ya da 15:00.
+4. **Aralığı işaretle.** İlk mumun tepe ve dibi; mum kapanmadan aralık yoktur.
+5. **Kapanışı bekle.** Mumun aralığın dışına taşması sinyal değildir; dışarıda kapanması sinyaldir. Giriş
    bir sonraki dakikada.
-4. **Stop karşı uçta, emir girişle birlikte.** Stop'un uzaklığı riskin kendisidir; pozisyon büyüklüğü bu
+6. **Stop karşı uçta, emir girişle birlikte.** Stop'un uzaklığı riskin kendisidir; pozisyon büyüklüğü bu
    uzaklıktan kurulur (1R = hesap riskinin sabit bir payı).
-5. **Gün sonunda kapat.** 16:55 New York.
-6. **Maliyet.** {{! basabas }}
+7. **Gün sonunda kapat.** 16:55 New York: TSİ 23:55 (ABD yaz saati) ya da 00:55.
+8. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

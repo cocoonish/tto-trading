@@ -6,7 +6,10 @@ Bir işlem günü (etiket D) önceki takvim günü 17:00 ET'den D 17:00 ET'ye uz
 Bu tablo, her gün için:
   · seans anları (UTC epoch sn): Londra 00:00 / 07:00 / 08:00 / 14:00 / 16:00,
     New York 08:00 / 09:30 / 12:00 / 14:00 / 16:00 / 16:55, günün başı ve sonu;
-  · mid O/H/L/C, kapsam (kotasyonlu dakika / 1440), tatil bayrağı;
+  · mid O/H/L/C, kapsam (kotasyonlu dakika / 1440), tatil bayrağı (TAKVİMDEN:
+    hafta içine düşen 25 Aralık ve 1 Ocak, ve örneklemin iki ucunda tam kapsanmayan
+    gün — günün sonundaki veri kapsamından değil, çünkü günün ortasındaki bir karar
+    anında günün kapsamı henüz bilinmez);
   · ÖNCEKİ günlerden bilinenler: ATR(14, Wilder), ATR'nin son 252 gündeki
     yüzdeliği, önceki günün aralığı ve yönü, NR4/NR7, önceki gün H/L/C;
   · gün içinden, ilgili anda bilinenler: Asya aralığı (Londra 00:00 → 07:00 /
@@ -66,7 +69,7 @@ class Gunluk:
     i1: np.ndarray                  # günün son dakikası (dahil)
     o: np.ndarray; h: np.ndarray; l: np.ndarray; c: np.ndarray
     kapsam: np.ndarray
-    tatil: np.ndarray               # kapsam < 0,5
+    tatil: np.ndarray               # takvim: 25.12 / 01.01 (hafta içi) ya da örneklem kenarındaki eksik gün
     an: dict                        # seans adı → epoch sn dizisi
     atr: np.ndarray                 # ÖNCEKİ günlerin ATR(14)'ü (bugünü içermez), nokta
     atr_yuzdelik: np.ndarray        # o ATR'nin son 252 gündeki yüzdeliği
@@ -92,7 +95,15 @@ class Gunluk:
         return np.where(self.gun[j] == gunler, j, -1)
 
 
-def gunluk_kur(d: Dakika) -> Gunluk:
+#: Döviz piyasasının kapalı olduğu, önceden bilinen günler (ay, gün). Arşivde kapsamı %50'nin altında kalan
+#: günlerin hepsi bunlardır ya da örneklemin kenarıdır (ölçüldü: dört paritede aynı küme).
+TATIL_TAKVIM = ((12, 25), (1, 1))
+
+
+def gunluk_kur(d: Dakika, orneklem: tuple | None = None) -> Gunluk:
+    """`orneklem`: (başlangıç, bitiş) UTC takvim günleri (iki uç dahil); bu pencerenin içinde baştan sona
+    kapsanmayan işlem günü (ilk günün 17:00 ET başı pencereden önce, son günün sonu pencereden sonra) tatil
+    sayılır — pencerenin kenarı bir ayardır, fiyat verisinden okunmaz."""
     etiket = d.gun
     sinir = np.flatnonzero(etiket[1:] != etiket[:-1]) + 1
     i0 = np.concatenate([[0], sinir])
@@ -108,11 +119,18 @@ def gunluk_kur(d: Dakika) -> Gunluk:
     h = np.array([d.mh[a:b + 1].max() for a, b in zip(i0, i1)])
     l = np.array([d.ml[a:b + 1].min() for a, b in zip(i0, i1)])
     kapsam = (i1 - i0 + 1) / 1440.0
-    tatil = kapsam < 0.5
     an = {}
     for ad, (saat, bolge) in SEANSLAR.items():
         an[ad] = yerel_an_sn(gun, saat, bolge)
     gun_basi = yerel_an_sn(gun, "17:00", z.NEWYORK, onceki_gun=True)
+    tarihler = pd.DatetimeIndex(gun.astype("datetime64[ns]"))
+    tatil = np.array([(t.month, t.day) in TATIL_TAKVIM for t in tarihler], dtype=bool)
+    if orneklem is not None:
+        bas, bit = orneklem
+        bas_sn = int(pd.Timestamp(bas, tz="UTC").timestamp())
+        bit_sn = int(pd.Timestamp(bit, tz="UTC").timestamp()) + 86400      # bitiş günü dahil
+        gun_sonu_sn = yerel_an_sn(gun, "17:00", z.NEWYORK)
+        tatil |= (gun_basi < bas_sn) | (gun_sonu_sn > bit_sn)
     # ATR: tatil günleri de kotasyon taşıyorsa hesaba girer; değer bugünü içermez (bir kaydırma).
     tr = np.empty(len(gun))
     tr[0] = h[0] - l[0]
@@ -128,7 +146,6 @@ def gunluk_kur(d: Dakika) -> Gunluk:
             pen = aralik[i - n:i]
             out[i] = aralik[i - 1] <= pen.min() + 1e-9
         return out
-    tarihler = pd.DatetimeIndex(gun.astype("datetime64[ns]"))
     # Ay sonu = ayın SON LONDRA İŞ GÜNÜ (ön kayıt [fiks]): hafta içi ve İngiltere resmî tatili değil.
     # Ayın son hafta içi günü bir Londra tatiline düşerse (2018-03 ve 2024-03 Paskalya cuması,
     # 2020-08 ve 2026-08 ağustos tatili, 2021-05 mayıs tatili) ay sonu bir önceki iş günüdür.
@@ -187,8 +204,9 @@ class Baglam:
         return self.son[self._anahtar(tf, ofset)]
 
 
-def baglam_kur(d: Dakika, olaylar: pd.DataFrame | None = None, pencere_dk=(-2, 15)) -> Baglam:
-    g = gunluk_kur(d)
+def baglam_kur(d: Dakika, olaylar: pd.DataFrame | None = None, pencere_dk=(-2, 15),
+               orneklem: tuple | None = None) -> Baglam:
+    g = gunluk_kur(d, orneklem)
     haber = np.zeros(len(d), dtype=np.bool_)
     haber_gun = np.zeros(len(g), dtype=bool)
     if olaylar is not None and len(olaylar):

@@ -131,3 +131,29 @@ def test_seviye_hedefi_yanlis_taraftaysa_islem_yok():
     d = dakikalar([(100, 100, 100, 100)] * 4)
     x = kos(d, emir(1, 1, stop=90.0, hedef_tur=mt.HEDEF_SEVIYE, seviye=99.0, cikis_i=3)).iloc[0]
     assert mt.DURUM[x.durum] == "hedef_gecersiz"
+
+
+def test_risk_verilip_seviye_verilmezse_stop_yurutulen_girisden():
+    # Emir yalnız risk taşır (fiksing/momentum "stop 1·ATR"): stop yürütülen girişten (ask 101 + kayma 5) 10 nokta uzakta.
+    d = dakikalar([(100, 100, 100, 100), (100, 100, 100, 100), (100, 100, 100, 100), (100, 100, 100, 100)])
+    x = kos(d, emir(1, 1, stop=np.nan, risk=10.0, cikis_i=3, stop_tur=mt.STOP_SERT), kayma=0.5).iloc[0]
+    assert x.durum == 0 and x.giris_f == 106.0 and x.R == 10.0 and x.stop == 96.0
+    # Stop'suz aynı emir: R yine 10, stop seviyesi yok
+    y = kos(d, emir(1, 1, stop=np.nan, risk=10.0, cikis_i=3, stop_tur=mt.STOP_YOK), kayma=0.5).iloc[0]
+    assert y.R == 10.0 and np.isnan(y.stop)
+
+
+def test_hedef_dakikasinin_ters_ucu_mae_ye_girer():
+    # Hedefin dolduğu dakika önce 95'e iner, sonra hedefe dolar: MAE o dakikanın dibini taşır.
+    d = dakikalar([(100, 100, 100, 100), (100, 100, 100, 100), (100, 112, 95, 111), (111, 111, 111, 111)])
+    x = kos(d, emir(1, 1, stop=80.0, hedef_tur=mt.HEDEF_R, k=0.4, cikis_i=3)).iloc[0]
+    assert mt.NEDEN[x.neden] == "hedef"
+    assert x.mae == (95.0 - 1.0) - 101.0            # bid dibi − giriş
+    assert x.mae <= x.pnl <= x.mfe
+
+
+def test_bosluklu_stopta_mae_acilisi_tasir():
+    d = dakikalar([(100, 100, 100, 100), (100, 100, 100, 100), (90, 91, 89, 90), (90, 90, 90, 90)])
+    x = kos(d, emir(1, 1, stop=95.0, hedef_tur=mt.HEDEF_R, k=1.0, cikis_i=3)).iloc[0]
+    assert mt.NEDEN[x.neden] == "bosluk_stop"
+    assert x.mae <= x.pnl and x.mae == (90.0 - 1.0) - 101.0

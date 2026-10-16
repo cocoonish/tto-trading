@@ -26,8 +26,8 @@ aynı yerden okunur: geri dönüş geçici olabilir ve kırılım gün içinde y
 
 {{! kural }}
 
-Varsayılan iki mumluk pencere verir ve 1R hedefler.{{? B.varsayilan.tf == 15 and B.varsayilan.pencere == 2 and B.varsayilan.seviye == "orb" and B.varsayilan.hedef == "1R" and B.varsayilan.stop_turu == "sert" }} Fade'in ders kitabı hedefi kısadır: kural, kırılımın aksine,
-hareketin sürmesini değil geri gelmesini bekler. Daha uzak hedefler (2R, gün sonu) ızgarada ayrıca ölçülüyor.
+Varsayılan iki mumluk pencere verir ve 1R hedefler.{{? B.varsayilan.tf == 15 and B.varsayilan.pencere == 2 and B.varsayilan.seviye == "orb" and B.varsayilan.hedef == "1R" and B.varsayilan.stop_turu == "sert" }} Kural, kırılımın aksine, hareketin sürmesini değil geri
+gelmesini bekler; daha uzak hedefler (2R, gün sonu) ızgarada ayrıca ölçülüyor.
 
 ### Örnekler
 
@@ -35,13 +35,12 @@ hareketin sürmesini değil geri gelmesini bekler. Daha uzak hedefler (2R, gün 
 
 {{! ornek }}
 
-Figürde mavi çizgiler açılış aralığıdır; kırmızı stop, aralığın dışındaki gezintinin ucudur.
+Figürde noktalı mavi çizgiler açılış aralığı, mavi bant aralığa geri dönen sinyal mumudur; kırmızı stop,
+aralığın dışındaki gezintinin ucudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: geri dönüş başlıyor, sonra kırılım yeniden başlayıp stop'u alıyor.
 
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 Kırılım dersindeki Londra açılış aralığı kuralıyla birlikte okunmalı: iki kural aynı aralığa zıt bahis yapar.
 Biri kaybettiriyorsa öbürünün kazandırması gerekmez — iki kural da maliyet öder, ve geri dönüşü bekleyen kural
@@ -53,11 +52,13 @@ yalnız geri dönülen günlerde işlem açar.
 
 ### Kontrol listesi
 
-1. **Aralığı işaretle.** Londra 08:00'den ilk mum (TSİ 10:00 ya da 11:00).
-2. **Kırılımı gör, girme.** Aralığın dışında kapanış bir sinyal değil, bir hazırlıktır.
-3. **Geri dönüşü bekle.** En çok iki mum içinde aralığın içinde kapanış; giriş sonraki dakikada, ters yönde.
-4. **Stop gezintinin ucunda, hedef 1R.** Pencere Londra 14:00'te kapanır (TSİ 16:00 ya da 17:00).
-5. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Aralığı işaretle.** Londra 08:00'den ilk mum (TSİ 10:00 ya da 11:00, İngiltere'nin saatine göre).
+4. **Kırılımı gör, girme.** Aralığın dışında kapanış bir sinyal değil, bir hazırlıktır.
+5. **Geri dönüşü bekle.** En çok iki mum içinde aralığın içinde kapanış; giriş sonraki dakikada, ters yönde.
+6. **Stop gezintinin ucunda, hedef 1R.** Pencere Londra 14:00'te kapanır (TSİ 16:00 ya da 17:00).
+7. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

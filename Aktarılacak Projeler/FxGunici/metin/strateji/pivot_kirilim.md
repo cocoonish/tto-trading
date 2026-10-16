@@ -1,10 +1,12 @@
 ### Ne
 
-**Taban pivotları** (*floor pivots*), vadeli işlem salonlarında (çukurda, *pit*) işlem yapan aracıların günün
+**Klasik pivotlar** (salon pivotları, *floor pivots*), vadeli işlem salonlarında (çukurda, *pit*) işlem yapan aracıların günün
 referans seviyelerini kâğıt kalemle hesaplamak için kullandığı formüllerdir ve bugün hemen her grafik
 platformunda hazır gelir. Önceki günün tepesi (H), dibi (L) ve kapanışından (C):
 
-$$P = \frac{H + L + C}{3}, \qquad R_1 = 2P - L, \qquad S_1 = 2P - H.$$
+$$P = \frac{H + L + C}{3}$$
+
+$$R_1 = 2P - L, \qquad S_1 = 2P - H.$$
 
 Kırılım kuralı fiyat bir seviyeyi kapanışla kestiğinde kesiş yönünde girer. Aynı seviyelerin dönüş kuralı fade
 dersinde ayrıca sınanıyor.
@@ -37,13 +39,13 @@ P çevresinde yansıtılmış hâlinden — genişliği dünün aralığı kadar
 
 {{! ornek }}
 
-Figürdeki mavi çizgi kesilen seviyedir (R1 ya da S1).
+Figürdeki noktalı mavi çizgi kesilen seviye (R1 ya da S1), mavi bant sinyal mumudur. Kaybeden örnek lehine
+yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan
+işlemdir.
 
 ### Sonuçlar
 
 {{! sonuclar }}
-
-{{! havuz_cumle }}
 
 ### Koşullar
 
@@ -51,12 +53,14 @@ Figürdeki mavi çizgi kesilen seviyedir (R1 ya da S1).
 
 ### Kontrol listesi
 
-1. **Seviyeleri hesapla.** Dünün tepe, dip ve kapanışından P, R1, S1 (gün 17:00 New York'ta kapanır: TSİ yazın
-   00:00, kışın 01:00).
-2. **Pencere.** Londra 08:00 → 14:00 New York.
-3. **Kesişi bekle.** R1'in üstünde ya da S1'in altında kapanış; önceki kapanış seviyenin öbür yanında.
-4. **Stop sinyal mumunun karşı ucunda, hedef 2R.**
-5. **Maliyet.** {{! basabas }}
+1. **Hüküm.** {{! kontrol_hukum }}
+2. **Ne zaman.** {{! ne_zaman }}
+3. **Seviyeleri hesapla.** Dünün tepe, dip ve kapanışından P, R1, S1 (gün 17:00 New York'ta kapanır: TSİ 00:00,
+   ABD kış saatinde 01:00).
+4. **Pencere.** Londra 08:00 → 14:00 New York (TSİ 10:00 ya da 11:00 → 21:00 ya da 22:00).
+5. **Kesişi bekle.** R1'in üstünde ya da S1'in altında kapanış; önceki kapanış seviyenin öbür yanında.
+6. **Stop sinyal mumunun karşı ucunda, hedef 2R.**
+7. **Maliyet.** {{! basabas }}
 
 ### Hüküm
 

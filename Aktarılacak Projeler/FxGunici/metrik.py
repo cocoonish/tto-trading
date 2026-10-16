@@ -7,14 +7,17 @@ emirler (pozisyon açık, geçersiz risk) ayrıca sayılır.
 
   isabet        net pip > 0 olan işlemlerin payı
   beklenti      işlem başına ortalama net sonuç (pip ve R)
-  PF            kazançların toplamı / kayıpların toplamının mutlak değeri (pip)
+  PF            kazançların toplamı / kayıpların toplamının mutlak değeri; pip (`pf`) ve R (`pf_r`) ayrı —
+                ikisi aynı işlemlerden farklı ağırlıkla kurulur ve 1'in iki yanına düşebilir
   Sharpe        GÜNLÜK R serisinin ortalaması / standart sapması × √252; işlemsiz
                 işlem günleri 0 sayılır (seri, dönemin bütün tatil dışı işlem günleri)
   azami düşüş   günlük birikimli R eğrisinin tepeden en derin düşüşü (R)
   MAE / MFE     işlem boyunca emir tarafında en kötü / en iyi gezinme (R, medyan)
   başabaş       beklentiyi sıfırlayan EK gidiş-dönüş maliyeti (pip); temel senaryonun
                 (gerçek makas + kayma) üstüne. Negatifse strateji temel maliyette bile kaybeder.
-  %95 aralık    ortalama R'nin (ve ayrıca ortalama net pipin) bootstrap (işlem yeniden örneklemesi) aralığı
+  %95 aralık    ortalama R'nin (ve ayrıca ortalama net pipin) bootstrap (işlem yeniden örneklemesi) aralığı;
+                `kume_sutun` verilirse KÜME bootstrap'i: aynı kümenin (ör. aynı günün dört paritedeki) bütün
+                işlemleri birlikte seçilir — işlemler kümede ilintiliyse işlem başına aralık fazla dar çıkar
 """
 from __future__ import annotations
 
@@ -24,6 +27,8 @@ import numpy as np
 import pandas as pd
 
 YIL_GUN = 252.0
+#: Bootstrap aralığının asgari işlem (ve küme bootstrap'inde küme) sayısı; altında aralık kurulmaz.
+ASGARI_BOOTSTRAP = 10
 
 
 def alinan(isl: pd.DataFrame) -> pd.DataFrame:
@@ -60,7 +65,7 @@ def azami_dusus(gunluk: np.ndarray) -> float:
 
 def bootstrap_ort(x: np.ndarray, tekrar: int = 2000, tohum: int = 7) -> tuple[float, float]:
     x = np.asarray(x, dtype=np.float64)
-    if len(x) < 10:
+    if len(x) < ASGARI_BOOTSTRAP:
         return (float("nan"), float("nan"))
     r = np.random.default_rng(tohum)
     n = len(x)
@@ -72,7 +77,28 @@ def bootstrap_ort(x: np.ndarray, tekrar: int = 2000, tohum: int = 7) -> tuple[fl
     return (float(np.percentile(ort, 2.5)), float(np.percentile(ort, 97.5)))
 
 
-def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True) -> dict:
+def bootstrap_kume_ort(x: np.ndarray, kume: np.ndarray, tekrar: int = 2000, tohum: int = 7) -> tuple[float, float]:
+    """Ortalamanın küme bootstrap'iyle %95 aralığı: kümeler yerine konarak seçilir, ortalama Σx / Σn (oran
+    tahmincisi). En az 10 işlem ve 10 küme ister."""
+    x = np.asarray(x, dtype=np.float64)
+    if len(x) < ASGARI_BOOTSTRAP:
+        return (float("nan"), float("nan"))
+    _, ters = np.unique(np.asarray(kume), return_inverse=True)
+    toplam = np.bincount(ters, weights=x)
+    sayi = np.bincount(ters).astype(np.float64)
+    K = len(toplam)
+    if K < ASGARI_BOOTSTRAP:
+        return (float("nan"), float("nan"))
+    r = np.random.default_rng(tohum)
+    ort = np.empty(tekrar)
+    for i in range(0, tekrar, 250):
+        k = min(250, tekrar - i)
+        ix = r.integers(0, K, size=(k, K))
+        ort[i:i + k] = toplam[ix].sum(axis=1) / sayi[ix].sum(axis=1)
+    return (float(np.percentile(ort, 2.5)), float(np.percentile(ort, 97.5)))
+
+
+def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True, kume_sutun: str | None = None) -> dict:
     """Bir işlem kümesinin bütün metrikleri."""
     a = alinan(isl)
     n = int(len(a))
@@ -87,7 +113,7 @@ def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True) -> dict:
     if n == 0:
         out.update({k: float("nan") for k in ("isabet", "beklenti_r", "beklenti_pip", "brut_r", "brut_pip",
                                               "ort_kazanc_r", "ort_kayip_r", "ort_kazanc_pip", "ort_kayip_pip",
-                                              "pf", "sharpe", "azami_dusus_r", "sure_dk", "mae_r", "mfe_r",
+                                              "pf", "pf_r", "sharpe", "azami_dusus_r", "sure_dk", "mae_r", "mfe_r",
                                               "risk_pip", "basabas_pip", "ga_alt", "ga_ust", "ga_brut_alt",
                                               "ga_brut_ust", "ga_pip_alt", "ga_pip_ust", "toplam_r")})
         return out
@@ -106,6 +132,7 @@ def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True) -> dict:
         "ort_kazanc_pip": float(pp[kaz].mean()) if kaz.any() else float("nan"),
         "ort_kayip_pip": float(pp[kay].mean()) if kay.any() else float("nan"),
         "pf": float(pf_pay / pf_payda) if pf_payda > 0 else float("nan"),
+        "pf_r": float(r[r > 0].sum() / -r[r <= 0].sum()) if (r <= 0).any() and r[r <= 0].sum() < 0 else float("nan"),
         "sharpe": sharpe(gr),
         "azami_dusus_r": azami_dusus(gr),
         "toplam_r": float(r.sum()),
@@ -118,11 +145,17 @@ def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True) -> dict:
         "basabas_pip": float(pp.mean()),
     })
     if bootstrap:
-        out["ga_alt"], out["ga_ust"] = bootstrap_ort(r)
-        out["ga_brut_alt"], out["ga_brut_ust"] = bootstrap_ort(a["r_brut"].to_numpy())
+        if kume_sutun is None:
+            bs = bootstrap_ort
+        else:
+            kume = a[kume_sutun].to_numpy()
+            bs = lambda x: bootstrap_kume_ort(x, kume)  # noqa: E731
+        out["ga_alt"], out["ga_ust"] = bs(r)
+        out["ga_brut_alt"], out["ga_brut_ust"] = bs(a["r_brut"].to_numpy())
         # Pip ortalamasının aralığı da: R ortalaması her işlemi riskine göre büyüklükler, pip ortalaması aynı
         # büyüklükle işlem yapanın sonucudur; ikisinin işareti ayrıştığında okur ikisinin de belirsizliğini görmeli.
-        out["ga_pip_alt"], out["ga_pip_ust"] = bootstrap_ort(pp)
+        out["ga_pip_alt"], out["ga_pip_ust"] = bs(pp)
+        out["ga_kume"] = kume_sutun
     return out
 
 
