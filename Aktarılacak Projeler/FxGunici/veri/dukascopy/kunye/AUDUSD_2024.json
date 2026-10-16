@@ -1,12 +1,12 @@
 {
  "birimler": {
   "AUDUSD/2024": {
-   "bayt": 3397060,
-   "dolgu_dakika": 77695,
+   "bayt": 3488312,
+   "dolgu_dakika": 80474,
    "gun": 314,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 306,
+   "gun_dolu": 314,
    "gun_dolu_liste": [
     "2024-01-01",
     "2024-01-02",
@@ -304,37 +304,36 @@
     "2024-12-08",
     "2024-12-09",
     "2024-12-10",
+    "2024-12-11",
     "2024-12-12",
     "2024-12-13",
+    "2024-12-15",
+    "2024-12-16",
+    "2024-12-17",
     "2024-12-18",
     "2024-12-19",
     "2024-12-20",
     "2024-12-22",
+    "2024-12-23",
+    "2024-12-24",
+    "2024-12-25",
     "2024-12-26",
+    "2024-12-27",
     "2024-12-29",
     "2024-12-30",
     "2024-12-31"
    ],
-   "gun_hata": [
-    "2024-12-11: BID hata ReadTimeoutError · ASK hata ConnectTimeoutError",
-    "2024-12-15: BID tamam  · ASK hata ReadTimeoutError",
-    "2024-12-16: BID tamam  · ASK hata ProtocolError",
-    "2024-12-17: BID hata ConnectTimeoutError · ASK tamam",
-    "2024-12-23: BID hata ProtocolError · ASK tamam",
-    "2024-12-24: BID tamam  · ASK hata ConnectTimeoutError",
-    "2024-12-25: BID hata ReadTimeoutError · ASK tamam",
-    "2024-12-27: BID hata ConnectTimeoutError · ASK tamam"
-   ],
-   "icerik_ozu": "74d7162a54d187bff2c7a6d0cf04995bff3ca7db34f27c89ec3c5883788526ef",
+   "gun_hata": [],
+   "icerik_ozu": "7173069be660e43be99ac71fb6b0c1c17c547802eb5953136f50ba8511b4583e",
    "ilk_gun": "2024-01-01",
-   "indirme": "2026-10-16T13:13:44Z",
-   "istek": 2359,
+   "indirme": "2026-10-16T13:19:26Z",
+   "istek": 2389,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1696,
-   "satir": 362945,
-   "sha256": "e2e5acaf42bd113c7dc29e8564bb46be18d57fa5706c5c40a88c3dae4a0f9dc6",
+   "ret": 1710,
+   "satir": 371686,
+   "sha256": "9c497d7ebe8c252dcd8bfd859a18898dfcd76f74b5c64e32d6c830726b2c9a5d",
    "son_gun": "2024-12-31",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -359,5 +358,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T13:13:44Z"
+ "yazim": "2026-10-16T13:19:27Z"
 }
