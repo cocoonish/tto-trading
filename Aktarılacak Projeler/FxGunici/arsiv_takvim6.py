@@ -13,7 +13,8 @@
     yazıyor; o tarih örneklemin içinde ve kopya arşivde yok. Geçiş Internet Archive dizinini o tarihten sonrası için
     yeniden sorar; kopya varsa ambargo satırı üçüncü geçişin biçimiyle deftere eklenir (bls.gov'a istek atılmaz).
 
-PARÇA (`TTO_PARCA`): `boe-saat` · `bls-son`; boşsa ikisi. Yalnız indirir. Var olan dosya yeniden indirilmez.
+PARÇA (`TTO_PARCA`): `boe-saat` · `bls-son` · `boe-rapor` (BoE rapor sayfalarının adları: Para Politikası Raporu ile
+Finansal İstikrar Raporu'nun ortak yayım ayları); boşsa hepsi. Yalnız indirir. Var olan dosya yeniden indirilmez.
 """
 from __future__ import annotations
 
@@ -155,7 +156,18 @@ def bls_son() -> None:
     k.yaz()
 
 
-PARCALAR = {"boe-saat": boe_saat, "bls-son": bls_son}
+def boe_rapor() -> None:
+    """BoE'nin rapor sayfalarının ADLARI (Internet Archive dizini, 2017 →): Para Politikası Raporu'nun Finansal İstikrar
+    Raporu ile ORTAK yayımlandığı aylar sayfanın adından okunur ("monetary-policy-report-financial-stability-report-
+    may-2020"). BoE Ağustos 2020 saat değişikliğinin sebebini "ortak yayım" diye yazıyor; ortak yayım günü kuralın
+    12:00'si kaynakla desteklenmez (takvim_kur.boe)."""
+    k = Kunye6("boe-rapor")
+    _cdx(k, "https://web.archive.org/cdx/search/cdx?url=bankofengland.co.uk/report/&matchType=prefix"
+            "&output=json&fl=original,timestamp,statuscode&collapse=urlkey&filter=statuscode:200&limit=20000")
+    k.yaz()
+
+
+PARCALAR = {"boe-saat": boe_saat, "bls-son": bls_son, "boe-rapor": boe_rapor}
 
 
 def main() -> int:
