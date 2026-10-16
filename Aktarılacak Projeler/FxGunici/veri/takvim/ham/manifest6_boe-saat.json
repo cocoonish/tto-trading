@@ -1,0 +1,139 @@
+{
+ "_boe_adaylar": [
+  "/news/2020/april/statement-on-increase-to-apf-gilt-lending-limits",
+  "/news/2020/july/statement-on-banks-commitment-to-combatting-climate-change",
+  "/news/2020/june/monetary-policy-committee-reappointment",
+  "/news/2020/june/statement-in-relation-to-the-banks-historical-links-to-the-slave-trade",
+  "/news/2020/march/governor-statement-to-tsc-on-behalf-of-the-fp-mp-and-pr-committees",
+  "/news/2020/march/joint-statement-uk-banks-and-bank-of-england-on-covid-19",
+  "/news/2020/march/professor-silvana-tenreyro-reappointed-to-the-mpc",
+  "/news/2020/march/statement-from-the-governor-of-the-boe-mark-carney-and-incoming-governor-andrew-bailey",
+  "/news/2020/may/statement-by-the-bank-of-england-and-pra-on-resolution-measures-and-covid-19",
+  "/news/2020/november/boes-joint-statement-in-support-of-ifrs-consultation",
+  "/news/2020/november/statement-from-governor-andrew-bailey",
+  "/news/2020/november/updated-statement-on-covid-guidance",
+  "/news/2020/september/boe-statement-on-esma-recognition-decisions",
+  "/news/2020/september/fca-and-boe-joint-statement-on-sonia-interest-rate-swap",
+  "/news/2020/september/governor-andrew-bailey-statement-on-chris-woolards-departure-from-the-fca",
+  "/news/2020/september/monetary-policy-committee-dates-for-2021"
+ ],
+ "_koşu": {
+  "sure_sn": 49.1,
+  "zaman": "2026-10-16T20:58:46Z"
+ },
+ "https://web.archive.org/cdx/search/cdx?url=bankofengland.co.uk/monetary-policy/upcoming-mpc-dates&from=20200401&to=20201106&output=json&fl=timestamp,statuscode,digest&filter=statuscode:200&collapse=digest&limit=200": {
+  "bayt": 3,
+  "dosya": "web.archive.org_cdx_search_cdx_url_bankofengland.co.uk_monetary-policy_upcoming-mpc-dates_from_20200401_to_20201106_output_json_fl_timestamp_statuscod_ad6e60dc.html",
+  "durum": 200
+ },
+ "https://web.archive.org/cdx/search/cdx?url=bankofengland.co.uk/news/2020/&matchType=prefix&output=json&fl=original,timestamp,statuscode&collapse=urlkey&filter=statuscode:200&limit=20000": {
+  "bayt": 29087,
+  "dosya": "web.archive.org_cdx_search_cdx_url_bankofengland.co.uk_news_2020_matchType_prefix_output_json_fl_original_timestamp_statuscode_collapse_urlkey_filter__4723f83f.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/-/media/boe/files/statement/fpc/2020/financial-policy-committee-statement-april-2020.pdf": {
+  "bayt": 152190,
+  "dosya": "www.bankofengland.co.uk_-_media_boe_files_statement_fpc_2020_financial-policy-committee-statement-april-2020.pdf_f8888b22.pdf",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2019/september/monetary-policy-committee-dates-for-2020": {
+  "bayt": 75702,
+  "dosya": "www.bankofengland.co.uk_news_2019_september_monetary-policy-committee-dates-for-2020_35b5a8a0.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/april/statement-on-increase-to-apf-gilt-lending-limits": {
+  "bayt": 75330,
+  "dosya": "www.bankofengland.co.uk_news_2020_april_statement-on-increase-to-apf-gilt-lending-limits_e850a57f.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/july/boe-statement-august-monetary-policy-report-and-financial-stability-report": {
+  "bayt": 73726,
+  "dosya": "www.bankofengland.co.uk_news_2020_july_boe-statement-august-monetary-policy-report-and-financial-stability-report_69d45b81.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/july/statement-on-banks-commitment-to-combatting-climate-change": {
+  "bayt": 74674,
+  "dosya": "www.bankofengland.co.uk_news_2020_july_statement-on-banks-commitment-to-combatting-climate-change_5a389b16.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/june/monetary-policy-committee-reappointment": {
+  "bayt": 74111,
+  "dosya": "www.bankofengland.co.uk_news_2020_june_monetary-policy-committee-reappointment_7e76ac64.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/june/statement-in-relation-to-the-banks-historical-links-to-the-slave-trade": {
+  "bayt": 73765,
+  "dosya": "www.bankofengland.co.uk_news_2020_june_statement-in-relation-to-the-banks-historical-links-to-the-slave-trade_8bbe8bf0.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/march/governor-statement-to-tsc-on-behalf-of-the-fp-mp-and-pr-committees": {
+  "bayt": 75544,
+  "dosya": "www.bankofengland.co.uk_news_2020_march_governor-statement-to-tsc-on-behalf-of-the-fp-mp-and-pr-committees_b1d3a791.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/march/joint-statement-uk-banks-and-bank-of-england-on-covid-19": {
+  "bayt": 74526,
+  "dosya": "www.bankofengland.co.uk_news_2020_march_joint-statement-uk-banks-and-bank-of-england-on-covid-19_c400653c.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/march/professor-silvana-tenreyro-reappointed-to-the-mpc": {
+  "bayt": 75005,
+  "dosya": "www.bankofengland.co.uk_news_2020_march_professor-silvana-tenreyro-reappointed-to-the-mpc_b3763161.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/march/statement-from-the-governor-of-the-boe-mark-carney-and-incoming-governor-andrew-bailey": {
+  "bayt": 75368,
+  "dosya": "www.bankofengland.co.uk_news_2020_march_statement-from-the-governor-of-the-boe-mark-carney-and-incoming-governor-andrew-bailey_0b7364c6.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/may/statement-by-the-bank-of-england-and-pra-on-resolution-measures-and-covid-19": {
+  "bayt": 81175,
+  "dosya": "www.bankofengland.co.uk_news_2020_may_statement-by-the-bank-of-england-and-pra-on-resolution-measures-and-covid-19_de6025eb.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/november/boes-joint-statement-in-support-of-ifrs-consultation": {
+  "bayt": 77052,
+  "dosya": "www.bankofengland.co.uk_news_2020_november_boes-joint-statement-in-support-of-ifrs-consultation_4a88c13c.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/november/statement-from-governor-andrew-bailey": {
+  "bayt": 73901,
+  "dosya": "www.bankofengland.co.uk_news_2020_november_statement-from-governor-andrew-bailey_f6482b7d.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/november/time-change-november-monetary-policy-report-and-monetary-policy-committee-decision-and-minutes": {
+  "bayt": 73855,
+  "dosya": "www.bankofengland.co.uk_news_2020_november_time-change-november-monetary-policy-report-and-monetary-policy-committee-decision-and-minutes_4340c8db.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/november/updated-statement-on-covid-guidance": {
+  "bayt": 74893,
+  "dosya": "www.bankofengland.co.uk_news_2020_november_updated-statement-on-covid-guidance_dc13fe20.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/september/boe-statement-on-esma-recognition-decisions": {
+  "bayt": 74228,
+  "dosya": "www.bankofengland.co.uk_news_2020_september_boe-statement-on-esma-recognition-decisions_527ea7a2.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/september/fca-and-boe-joint-statement-on-sonia-interest-rate-swap": {
+  "bayt": 79046,
+  "dosya": "www.bankofengland.co.uk_news_2020_september_fca-and-boe-joint-statement-on-sonia-interest-rate-swap_9d276d30.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/september/governor-andrew-bailey-statement-on-chris-woolards-departure-from-the-fca": {
+  "bayt": 73398,
+  "dosya": "www.bankofengland.co.uk_news_2020_september_governor-andrew-bailey-statement-on-chris-woolards-departure-from-the-fca_5a613762.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/news/2020/september/monetary-policy-committee-dates-for-2021": {
+  "bayt": 75360,
+  "dosya": "www.bankofengland.co.uk_news_2020_september_monetary-policy-committee-dates-for-2021_a9948fc7.html",
+  "durum": 200
+ },
+ "https://www.bankofengland.co.uk/report/2020/monetary-policy-report-financial-stability-report-may-2020": {
+  "bayt": 93705,
+  "dosya": "www.bankofengland.co.uk_report_2020_monetary-policy-report-financial-stability-report-may-2020_a232c29d.html",
+  "durum": 200
+ }
+}
