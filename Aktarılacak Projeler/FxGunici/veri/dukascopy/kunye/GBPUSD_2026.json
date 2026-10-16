@@ -1,12 +1,12 @@
 {
  "birimler": {
   "GBPUSD/2026": {
-   "bayt": 3044676,
-   "dolgu_dakika": 60430,
+   "bayt": 3046074,
+   "dolgu_dakika": 61698,
    "gun": 247,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 246,
+   "gun_dolu": 247,
    "gun_dolu_liste": [
     "2026-01-01",
     "2026-01-02",
@@ -202,6 +202,7 @@
     "2026-08-12",
     "2026-08-13",
     "2026-08-14",
+    "2026-08-16",
     "2026-08-17",
     "2026-08-18",
     "2026-08-19",
@@ -255,19 +256,17 @@
     "2026-10-14",
     "2026-10-15"
    ],
-   "gun_hata": [
-    "2026-08-16: BID hata bütçe (ReadTimeoutError) · ASK tamam"
-   ],
-   "icerik_ozu": "3c9da5f45372d3355adda0863a14cf6e7edbf9fa473a452324b25ccdb32bf329",
+   "gun_hata": [],
+   "icerik_ozu": "e679f57f22fd582cbd9b7933ee9a101afac111092369f740bbd58d5a9c1213b7",
    "ilk_gun": "2026-01-01",
-   "indirme": "2026-10-16T10:12:19Z",
-   "istek": 623,
+   "indirme": "2026-10-16T10:54:15Z",
+   "istek": 632,
    "kod_ozu": "2323285b39ff290c419856930557354d1457bd6d837117e68eb279d98cd85ac9",
-   "ret": 130,
-   "satir": 293810,
-   "sha256": "86b1417bb49221b45a3c9e52eddf1a95b179dec2b81e95626fbe8d5d098e5fd2",
+   "ret": 137,
+   "satir": 293982,
+   "sha256": "a3f1adab4ee312108a344631538ebb29f6b84a0c87ab1ae5c34121e4ce0ab13a",
    "son_gun": "2026-10-15",
-   "tam": false
+   "tam": true
   }
  },
  "kapsam": {
@@ -292,5 +291,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T10:12:19Z"
+ "yazim": "2026-10-16T10:54:15Z"
 }
