@@ -52,6 +52,15 @@ def _r(x, b=2, arti=True) -> str:
     return ("+" + s) if (arti and x > 0) else s
 
 
+def _ic(o: dict) -> str:
+    k = o["kunye"]
+    return f"{k['baslangic'][:4]}–{k['ic_bitis'][:4]}"
+
+
+def _dis(o: dict) -> str:
+    return f"{o['kunye']['dis_baslangic'][:4]} →"
+
+
 def _kunye(o: dict) -> str:
     k = o["kunye"]
     return (f"Dukascopy 1 dk bid/ask · {so.tarih(k['baslangic'])}–{so.tarih(k['bitis'])} · net: gerçek makas + "
@@ -73,7 +82,7 @@ def ornek(o: dict, birim: str) -> None:
         # iki satır: tek satırda (≈ 25 em) telefonun 353 piksellik çerçevesinden taşıyordu
         basliklar.append(f"{'Kazanan' if x['etiket'] == 'kazanan' else 'Kaybeden'} · {so.tarih(x['gun'])} · "
                          f"{'alış' if i['yon'] > 0 else 'satış'}<br>{_r(i['r'])} R · çıkış: "
-                         f"{adlar.NEDEN.get(i['neden'], '')}")
+                         f"{adlar.neden_ad(i, o['kunye']['gun_sonu_et'])}")
     fig = make_subplots(rows=n, cols=1, vertical_spacing=0.16, subplot_titles=basliklar)
     p = NOKTA["EURUSD"]
     for k, x in enumerate(ornekler, start=1):
@@ -115,7 +124,7 @@ def ornek(o: dict, birim: str) -> None:
         fig.update_yaxes(tickformat=".4f", row=k, col=1)
     bas = baslik_koy(fig, f"Örnek günler — {ad}",
                      ["EUR/USD · stratejinin kendi zaman diliminin mumları, saatler TSİ · önceden kayıtlı varsayılan",
-                      "Seçim kuralı sabit: örneklem dışının (2024 →) en son kazanan ve en son kaybeden işlemi",
+                      f"Seçim kuralı sabit: örneklem dışının ({_dis(o)}) en son kazanan ve en son kaybeden işlemi",
                       "Noktalı mavi: stratejinin referans seviyeleri · kırmızı: stop · yeşil: hedef"])
     fig.update_layout(legend=dict(orientation="h", y=-0.08))
     so._yaz(fig, f"{birim}-ornek.html", yukseklik(bas, 300 * n + 80))
@@ -154,7 +163,7 @@ def egri(o: dict, birim: str) -> None:
     fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.8), row=1, col=1)
     fig.update_xaxes(tickformat="%Y")              # sayısal biçim: eksende İngilizce ay adı çıkmaz
     bas = baslik_koy(fig, f"Birikimli sonuç — {adlar.BIRIM[birim][0]}",
-                     [_kunye(o), "Önceden kayıtlı varsayılan (veriye bakmadan seçildi) · gri alan örneklem dışı (2024 →)",
+                     [_kunye(o), f"Önceden kayıtlı varsayılan (veriye bakmadan seçildi) · gri alan örneklem dışı ({_dis(o)})",
                       "Havuz: aynı kural dört paritede birlikte, her işlem 1R"])
     so._yaz(fig, f"{birim}-egri.html", yukseklik(bas, 470))
 
@@ -186,7 +195,7 @@ def izgara(o: dict, birim: str, cift: str = "EURUSD") -> None:
     # İki dönem ALT ALTA: yan yana dizildiğinde telefonda iki panel başlığı birbirine biniyor, hücreler
     # 50 pikselin altına iniyordu.
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.14,
-                        subplot_titles=("Örneklem içi (2018–2023)", "Örneklem dışı (2024 →)"))
+                        subplot_titles=(f"Örneklem içi ({_ic(o)})", f"Örneklem dışı ({_dis(o)})"))
     tum = [x for d in ("is", "oos") for row in _isi_iz(isi, d)[0] for x in row if x is not None]
     sinir = max(0.25, max((abs(x) for x in tum), default=0.25))
     for j, d in enumerate(("is", "oos"), start=1):
@@ -290,7 +299,7 @@ def tf(o: dict, birim: str) -> None:
         return
     dilimler = sorted({t for c in ciftler for t in b["cift"][c]["tf"]}, key=int)
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.14,
-                        subplot_titles=("Örneklem içi (2018–2023)", "Örneklem dışı (2024 →)"))
+                        subplot_titles=(f"Örneklem içi ({_ic(o)})", f"Örneklem dışı ({_dis(o)})"))
     for j, d in enumerate(("is", "oos"), start=1):
         for t in dilimler:
             hucre = [(b["cift"][c]["tf"].get(t) or {}).get(d) or {} for c in ciftler]
@@ -477,7 +486,7 @@ def haber_patika(o: dict) -> None:
     olaylar = sorted({e for h in hc.values() for e in (h.get("patika") or {})})
     for olay in olaylar:
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.1,
-                            subplot_titles=("İlk 5 dakika YUKARI kapanan olaylar", "İlk 5 dakika AŞAĞI kapanan olaylar"))
+                            subplot_titles=("İlk 5 dakika yukarı kapanan olaylar", "İlk 5 dakika aşağı kapanan olaylar"))
         for c, h in hc.items():
             pt = (h.get("patika") or {}).get(olay)
             if not pt:
@@ -507,7 +516,7 @@ def haber_patika(o: dict) -> None:
                          ["Olay anındaki orta fiyattan değişim, önceki 14 günün ATR'sine bölünmüş · ilk 5 dakikanın "
                           "yönüne göre iki küme",
                           "Gölge: ortalamanın %95 aralığı · noktalı çizgi: ilk 5 dakikanın sonu",
-                          "Saatler resmi metinden, tarih tarih; fiyat sınamasında tutmayan olay dışarıda"])
+                          "Saatler resmî metinden, tarih tarih; fiyat sınaması hiçbir olayı dışarıda bırakmaz"])
         so._yaz(fig, f"haber-patika-{olay.lower().replace('_', '-')}.html", yukseklik(bas, 600))
 
 

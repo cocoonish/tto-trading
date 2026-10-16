@@ -1,0 +1,55 @@
+---
+title: 'FX Gün İçi Stratejiler 3: Yapı Kırılımları — İç Mum, Sıkışma, Önceki Gün Tepe/Dip, Pivot'
+description: "Bir fiyat yapısının ya da referans seviyesinin kırılmasına dayanan dört kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: iç mum (inside bar) kırılımı, Bollinger–Keltner sıkışması, önceki günün tepe ve dibinin kırılımı ve taban pivotlarının (R1/S1) kırılımı. Kural, örnek günler, örneklem içi ve dışı sonuç, maliyet, rastgele yön sınaması, koşullar, kontrol listesi ve hüküm."
+pubDate: 2026-10-16
+tags: ['fx', 'gun-ici', 'kirilim', 'inside-bar', 'pivot', 'backtest', 'ders']
+durum: 'aktif'
+kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
+ozet: "Seansın saatine değil fiyatın kendi yapısına bakan dört kırılım kuralı: dar bir mumun, sakin bir oynaklık döneminin, dünün uçlarının ve pivot seviyelerinin kırılması. Hangisinin yön bilgisi taşıdığını, hangisinin yalnız maliyet ürettiğini ölçer."
+seviye: 'orta'
+onkosul:
+  - fx-gunici-giris
+  - fx-gunici-seans-kirilimlari
+---
+
+Seans kırılımları saati seçer: Londra açılışı, New York'un sabahı. Bu dersin dört kuralı saati değil **yapıyı**
+seçer. İç mum, bir mumun bir öncekinin içinde kalmasıyla oluşan küçük bir sıkışmadır. Bollinger–Keltner sıkışması aynı
+fikrin istatistiksel biçimidir: kapanışların dağılımı mumların büyüklüğüne göre olağandışı daralmıştır. Önceki günün
+tepe ve dibi ile taban pivotları ise herkesin aynı anda baktığı seviyelerdir; güçlerini bir iktisadi içerikten değil
+izlenmelerinden alırlar.
+
+Yapı kuralları gün içinde birden çok kez sinyal üretebilir (iç mum ve sıkışma için bu sık olur); aynı anda tek
+pozisyon taşındığı için bir sinyal, açık bir pozisyon varken gelirse atlanır. Seans kırılımlarında olduğu gibi her
+kuralın fade karşılığı vardır: önceki gün tepe/dip ve pivotun dönüş biçimleri fade dersinde aynı seviyelerle ölçülüyor.
+
+## İç mum (inside bar) kırılımı
+
+{{! strateji icmum }}
+
+## Bollinger–Keltner sıkışması
+
+{{! strateji sikisma }}
+
+## Önceki gün tepe/dip kırılımı (PDH/PDL)
+
+{{! strateji pdhl }}
+
+## Pivot kırılımı
+
+{{! strateji pivot_kirilim }}
+
+## Dört kuralın özeti
+
+{{! ders_ozet }}
+
+<div class="pratik">
+  <span class="etiket">Pratik — yapı kırılımları</span>
+
+{{! pratik_islem icmum "Alıştırma 1" }}
+
+{{! pratik_islem pdhl "Alıştırma 2" }}
+
+</div>
+
+_Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
+değildir._

@@ -10,9 +10,8 @@ Girdi (hepsi depodaki koşu çıktısı ya da arşiv):
   veri/takvim/olaylar.csv, kunye.json, sinama.json   haber takvimi
   onkayit.toml, ayar.toml               önceden kayıt ve proje ayarı
 Çıktı:
-  cikti/ders/olcum.json                 figürler (sekil.py) ve ders metni (ders.py) buradan okur
-  site/src/data/fx_gunici.json          tablo bileşeninin verisi: olcum.json'un eğri, örnek gün
-                                        ve patika dizileri çıkarılmış hâli (sayfa derlemesi küçük kalsın)
+  cikti/ders/olcum.json                 figürler (sekil.py), ders metinleri (ders_yaz.py) ve doğrulayıcı
+                                        (dogrula.py) yalnız buradan okur
 
 Burada yeni bir ÖLÇÜM yapılmaz, yalnız toplanır; iki istisna adıyla: (1) dört paritenin
 HAVUZU — aynı stratejiyi dört paritede birlikte koşmanın işlem başına ortalaması ve günlük
@@ -38,7 +37,6 @@ import zaman as z
 
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parents[1]
-SITE_VERI = KOK / "site" / "src" / "data" / "fx_gunici.json"
 ONKAYIT_YOL = BURASI / "onkayit.toml"
 
 
@@ -232,10 +230,10 @@ def korelasyon(birimler: dict, a: ay.Ayar) -> dict:
     for b, v in birimler.items():
         g = [s for s in v["_gunluk_varsayilan"].values() if len(s)]
         if g:
-            seriler[b] = pd.concat(g, axis=1).fillna(0.0).sum(axis=1)
+            seriler[b] = pd.concat(g, axis=1, sort=True).fillna(0.0).sum(axis=1)
     if len(seriler) < 2:
         return {}
-    df = pd.concat(seriler, axis=1).fillna(0.0)
+    df = pd.concat(seriler, axis=1, sort=True).fillna(0.0)
     out = {"birimler": list(df.columns)}
     for ad, m in (("tum", np.ones(len(df), bool)), ("oos", df.index >= pd.Timestamp(a.dis_baslangic))):
         c = df[m].corr()
@@ -252,6 +250,8 @@ def zaman_tablosu(a: ay.Ayar) -> dict:
     temsil = [date(2026, 1, 15), date(2026, 3, 18), date(2026, 6, 17), date(2026, 10, 28)]
     return {"ara_donem": ara, "gecis": {str(y): [(g.isoformat(), t) for g, t in z.gecisler(y)] for y in yillar},
             "tablo": z.tsi_tablosu(temsil), "rejim_adi": z.REJIM_ADI,
+            # Ölçüm dosyası anahtarları sıralı yazar; tablonun satır sırası ayrıca taşınır (zaman.OLAYLAR).
+            "olay_sira": [ad for ad, _, _ in z.OLAYLAR],
             "tsi_sabit": z.tsi_sabit_mi(a.baslangic, a.bitis)}
 
 
@@ -262,11 +262,21 @@ def takvim_ozet() -> dict:
     if (d / "olaylar.csv").exists():
         df = pd.read_csv(d / "olaylar.csv", dtype=str, keep_default_na=False)
         out["sayim"] = {o: {"toplam": int(len(g)), "yil": {y: int(n) for y, n in g["tarih"].str[:4].value_counts()
-                                                           .sort_index().items()}}
+                                                           .sort_index().items()},
+                            # yerel saat × bölge dağılımı ve kaynağın alan adı (dersin takvim tablosu)
+                            "saat": {f"{s} {b}": int(n) for (s, b), n in g.groupby(["yerel_saat", "bolge"]).size().items()},
+                            # her yerel saatin ilk ve son tarihi (saat değişikliklerinin günü: ECB 13:45 → 14:15)
+                            "saat_aralik": {f"{s} {b}": [x["tarih"].min(), x["tarih"].max()]
+                                            for (s, b), x in g.groupby(["yerel_saat", "bolge"])},
+                            "olaganustu": [{"tarih": r["tarih"], "saat": r["yerel_saat"], "bolge": r["bolge"]}
+                                           for _, r in g.iterrows() if "olağanüstü" in r["not"]],
+                            "kaynak": sorted({u.split("/")[2] for u in g["kaynak"] if u.startswith("http")}),
+                            "ilk": g["tarih"].min(), "son": g["tarih"].max()}
                         for o, g in df.groupby("olay")}
     s = _oku(d / "sinama.json")
     if s:
-        out["sinama"] = {"kural": s.get("kural"), "ozet": s.get("ozet"), "celiski": s.get("celiski")}
+        out["sinama"] = {"kural": s.get("kural"), "ozet": s.get("ozet"), "celiski": s.get("celiski"),
+                         "celiski_olay": [e for e in s.get("olay") or [] if e.get("hukum") == "celiski"]}
     return out
 
 
@@ -320,18 +330,6 @@ def kur(kok: Path | None = None) -> dict:
     return _temiz(olcum)
 
 
-def site_kesiti(o: dict) -> dict:
-    """Tablo bileşeninin verisi: büyük diziler (eğri, örnek gün, patika) çıkarılır."""
-    k = json.loads(json.dumps(o))
-    for v in k.get("birim", {}).values():
-        for c in v.get("cift", {}).values():
-            c.pop("egri", None)
-            c.pop("ornek", None)
-    for h in k.get("haber", {}).get("cift", {}).values():
-        h.pop("patika", None)
-    return k
-
-
 def main(argv: list[str]) -> int:
     kok = Path(argv[0]) if argv else None
     o = kur(kok)
@@ -340,10 +338,6 @@ def main(argv: list[str]) -> int:
     hedef.write_text(json.dumps(o, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n",
                      encoding="utf-8")
     print(f"✓ {hedef} · {hedef.stat().st_size / 1e6:.1f} MB · {len(o['birim'])} birim")
-    if not argv:
-        SITE_VERI.write_text(json.dumps(site_kesiti(o), ensure_ascii=False, separators=(",", ":"),
-                                        sort_keys=True) + "\n", encoding="utf-8")
-        print(f"✓ {SITE_VERI.relative_to(KOK)} · {SITE_VERI.stat().st_size / 1e6:.1f} MB")
     return 0
 
 

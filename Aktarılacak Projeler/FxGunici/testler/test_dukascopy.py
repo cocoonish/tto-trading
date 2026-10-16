@@ -89,7 +89,7 @@ def test_yaz_oku_deterministik(tmp_path):
     oz1 = dk.yaz(cer, tmp_path / "X" / "2024.parquet")
     oz2 = dk.yaz(cer, tmp_path / "Y" / "2024.parquet")
     assert oz1 == oz2
-    geri = dk.oku_ham(tmp_path, "X")
+    geri = dk.oku_ham(tmp_path, "X", sina=False)
     assert geri["t"].tolist() == cer["t"].tolist()
     f = dk.fiyatla(geri, 1e-5)
     assert np.allclose(f["ask_c"] - f["bid_c"], 2e-5)
@@ -100,3 +100,23 @@ def test_yaz_oku_deterministik(tmp_path):
 def test_saatlik_url_ay_sifirdan():
     assert dk.dakika_url("EURUSD", date(2024, 1, 2), "BID").endswith("/EURUSD/2024/00/02/BID_candles_min_1.bi5")
     assert dk.saatlik_url("USDJPY", 2026, 12, "ASK").endswith("/USDJPY/2026/11/ASK_candles_hour_1.bi5")
+
+
+def test_okuma_arsiv_ozunu_sinar(tmp_path):
+    """Okuyucu her yıl dosyasını künyedeki SHA-256 özüne karşı sınar: değişen ya da künyesiz dosya ölçüme giremez."""
+    import json
+    bid = ornek_gun(300, tohum=4)
+    ask = [(s, o + 2, h + 2, l + 2, c + 2, v) for (s, o, h, l, c, v) in bid]
+    cer = dk.gun_cerceve(date(2024, 1, 4), dk.coz(bi5(bid)), dk.coz(bi5(ask)))
+    yol = tmp_path / "X" / "2024.parquet"
+    oz = dk.yaz(cer, yol)
+    with pytest.raises(dk.ArsivOzuHatasi, match="künyede öz yok"):
+        dk.oku_ham(tmp_path, "X")
+    (tmp_path / "kunye").mkdir()
+    (tmp_path / "kunye" / "X_2024.json").write_text(json.dumps({"birimler": {"X/2024": {"sha256": oz}}}))
+    assert len(dk.oku_ham(tmp_path, "X")) == len(cer)
+    veri = bytearray(yol.read_bytes())
+    veri[-20] ^= 0xFF
+    yol.write_bytes(bytes(veri))
+    with pytest.raises(dk.ArsivOzuHatasi, match="künyedekiyle aynı değil"):
+        dk.oku_ham(tmp_path, "X")

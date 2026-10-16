@@ -50,3 +50,31 @@ def test_secim_orneklem_disinda_tutmazsa_tutmadi():
     f.loc[~ic, "r"] = np.where(f.loc[~ic, "onceki_gun_yon"] == "ters yön", -0.4, 0.3)
     out = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}
     assert out["onceki_gun_yon"]["secilen"] == ["ters yön"] and out["onceki_gun_yon"]["hukum"] == "tutmadi"
+
+
+def test_ters_secim_bilgili_kosulda_tutmaz():
+    """Kova farkı gerçekse ters seçim (örneklem içinde ortalamanın altındaki kova) örneklem dışında tutmaz."""
+    f = _tablo()
+    ic = np.arange(len(f)) < 250
+    y = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}["onceki_gun_yon"]
+    t = y["ters_secim"]
+    assert t["secilen"] == ["aynı yön"] and t["hukum"] == "tutmadi"
+    assert t["oos_secilen_r"] < 0 < t["oos_tamamlayan_r"]
+
+
+def test_ters_secim_tersine_donen_kosulda_tutar():
+    """İşaret örneklem dışında dönerse gerçek seçim tutmaz, ters seçim tutar: iki seçim simetriktir."""
+    f = _tablo()
+    ic = np.arange(len(f)) < 250
+    f.loc[~ic, "r"] = np.where(f.loc[~ic, "onceki_gun_yon"] == "ters yön", -0.4, 0.3)
+    y = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}["onceki_gun_yon"]
+    assert y["hukum"] == "tutmadi" and y["ters_secim"]["hukum"] == "tuttu"
+
+
+def test_ters_secim_bos_kumede_secilmedi():
+    """Bütün kovalar ortalamanın üstündeyse (tek kova) ters seçim boştur: 'secilmedi'."""
+    f = _tablo()
+    f["sabit"] = "tek"
+    ic = np.arange(len(f)) < 250
+    y = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}["sabit"]
+    assert y["hukum"] == "secilmedi" and y["ters_secim"]["hukum"] == "secilmedi"

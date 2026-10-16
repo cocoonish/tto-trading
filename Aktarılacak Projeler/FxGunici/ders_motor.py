@@ -292,9 +292,12 @@ class Uretim:
         self.iddia = 0
         self.yer = 0
         self.sekiller: list[str] = []
+        self.birimler: list[str] = []       # bu derste işlenen strateji birimleri (sırayla)
 
     def kok_ctx(self) -> dict:
-        return {"O": self.O, "K": self.O["kunye"], "ON": self.ON}
+        if not hasattr(self, "_T"):
+            self._T = toplamlar(self.O, self.ON)
+        return {"O": self.O, "K": self.O["kunye"], "ON": self.ON, "T": self._T}
 
     def birim_ctx(self, birim: str) -> dict:
         b = self.O["birim"].get(birim)
@@ -347,7 +350,8 @@ class Uretim:
             self.sabitler.append(m.group(1))
             return m.group(1)
         if s.startswith("!"):
-            parca = s[1:].split()
+            # Argümanlar boşlukla ayrılır; çift tırnaklı argüman tek parçadır (tırnak düşer, kesme işareti kalır).
+            parca = [a or b for a, b in re.findall(r'"([^"]*)"|(\S+)', s[1:])]
             ad, arg = parca[0], parca[1:]
             if ad not in BLOKLAR:
                 raise SablonHatasi(f"bilinmeyen blok: {ad}")
@@ -396,7 +400,7 @@ def blok_sekil(u: Uretim, ctx: dict, ad: str, *baslik_parca: str) -> str:
     tam = f"{ctx['BID']}-{ad}" if "BID" in ctx and "-" not in ad else ad
     u.sekil_no += 1
     u.sekiller.append(tam)
-    baslik = " ".join(baslik_parca).strip('"') or tam
+    baslik = " ".join(baslik_parca) or tam
     return (f'<GrafikEmbed src="{SEKIL_YOL}/{tam}.html" baslik="{baslik}" no="{u.sekil_no:02d}" '
             f'kaynak="Dukascopy" />')
 
@@ -593,7 +597,7 @@ def blok_ornek(u: Uretim, ctx: dict) -> str:
         parca[-1] += ((f"; stop {sayi(i['stop'] * NOKTA['EURUSD'], 5)} ({sayi(risk, 1)} pip)" if risk else "")
                       + (f", hedef {sayi(i['hedef'] * NOKTA['EURUSD'], 5)}" if i.get("hedef") is not None else "") + ".")
         parca.append(f"Çıkış {saat_tsi(i['cikis_t'])} TSİ'de {sayi(i['cikis_f'] * NOKTA['EURUSD'], 5)}, "
-                     f"{adlar.NEDEN.get(i['neden'], '')}: {sayi(i['r'], 2, arti=True)} R "
+                     f"{adlar.neden_ad(i, u.O['kunye']['gun_sonu_et'])}: {sayi(i['r'], 2, arti=True)} R "
                      f"({sayi(i['pnl_pip'], 1, arti=True)} pip, maliyet dahil).")
         satir.append("- " + " ".join(parca))
     return "\n".join(satir) if satir else "_Örneklem dışında işlem yok._"
@@ -603,7 +607,7 @@ def blok_zaman(u: Uretim, ctx: dict) -> str:
     """Olayların TSİ saati, dört saat rejiminde (temsilci günler)."""
     z = u.O["zaman"]
     rejimler = z["tablo"]
-    olaylar = [k for k in rejimler[0] if k not in ("gun", "londra_ny", "rejim")]
+    olaylar = z.get("olay_sira") or [k for k in rejimler[0] if k not in ("gun", "londra_ny", "rejim")]
     bas = ["Olay"] + [z["rejim_adi"][r["rejim"]].split(" (")[0] + f" ({tarih(r['gun'])[:5]})" for r in rejimler]
     govde = [[o] + [r.get(o, "—") for r in rejimler] for o in olaylar]
     govde.append(["Londra–New York farkı (saat)"] + [str(r["londra_ny"]) for r in rejimler])
@@ -780,6 +784,324 @@ def blok_regresyon(u: Uretim, ctx: dict) -> str:
                   ["l", "l", "r", "r", "r", "r", "r", "r"])
 
 
+# ─────────────────────────────────────────────────────────────── çözümlü alıştırma
+def blok_pratik_islem(u: Uretim, ctx: dict, birim: str = "orb", etiket: str = "", tur: str = "kazanan") -> str:
+    """Bir stratejinin EUR/USD örnek işleminden (örneklem dışının en son kazanan ya da kaybeden işlemi; figürdeki
+    örnek günlerin aynısı) çözümlü alıştırma: risk, sonuç ve R; kaymanın R'yi iki yerden değiştirdiği (giriş
+    kötüleşir, risk büyür). Sayılar ölçüm dosyasından; çözümün aritmetiği motorun kaydettiği R ile karşılaştırılır,
+    tutmazsa üretim düşer."""
+    if tur not in ("kazanan", "kaybeden"):
+        raise SablonHatasi(f"pratik: tür kazanan ya da kaybeden olmalı: {tur}")
+    b = (u.O.get("birim") or {}).get(birim) or {}
+    orn = (((b.get("cift") or {}).get("EURUSD") or {}).get("ornek")) or []
+    x = next((o for o in orn if o.get("etiket") == tur), None)
+    if not x:
+        raise SablonHatasi(f"pratik: {birim} için EUR/USD örnek işlemi yok")
+    i = x["islem"]
+    nk, pip = NOKTA["EURUSD"], 1e-4
+    # Aritmetik okurun gördüğü (beş haneye yuvarlı) fiyatlardan kurulur; orta fiyattan gelen yarım nokta
+    # yuvarlamada kaybolabilir, motorun kaydıyla fark varsa adıyla yazılır.
+    g, s, c = (round(i[k] * nk, 5) for k in ("giris_f", "stop", "cikis_f"))
+    yon = i["yon"]
+    risk = round(abs(g - s) / pip, 1)
+    sonuc = round((c - g) * yon / pip, 1)
+    r = sonuc / risk
+    if abs(r - i["r"]) > 0.05 or abs(sonuc - i["pnl_pip"]) > 0.1:
+        raise SablonHatasi(f"pratik: elle aritmetik motorla tutmuyor ({r:.3f} ↔ {i['r']:.3f})")
+    yuvarlama = abs(round(r, 2) - round(i["r"], 2)) >= 0.01
+    k = u.O["kunye"]["temel_kayma_pip"]
+    k_gs = u.O["kunye"]["gun_sonu_et"]
+    limit = i["neden"] in (2, 6)            # hedef limit emirdir: kayma yalnız giriş tarafında
+    ek_c = k * (1 if limit else 2)
+    risk2, sonuc2 = risk + k, sonuc - ek_c
+    yon_ad = "alış" if yon > 0 else "satış"
+    ad = adlar.BIRIM[birim][1]
+    f5 = lambda v: sayi(v, 5)  # noqa: E731
+    soru = (f"**{etiket or 'Alıştırma'} — bir işlemin R'si.** {ad} kuralının EUR/USD'deki örnek günü "
+            f"({tarih_uzun(x['gun'])}): {yon_ad}, giriş {f5(g)} ({'ask' if yon > 0 else 'bid'}, kayma dahil), stop "
+            f"{f5(s)}, çıkış {f5(c)} ({adlar.neden_ad(i, k_gs)}). (a) Risk kaç pip? (b) İşlem kaç pip ve kaç R "
+            f"getirdi? (c) Dolum başına kayma {sayi(k, 1)} pip daha kötü olsaydı sonuç kaç R olurdu?")
+    cozum = [f"(a) Risk, yürütülen giriş fiyatından stop'a uzaklıktır: {f5(g)} ile {f5(s)} arası **{sayi(risk, 1)} pip**.",
+             f"(b) Sonuç " + (f"{f5(c)} − {f5(g)}" if yon > 0 else f"{f5(g)} − {f5(c)} (satışta giriş eksi çıkış)") +
+             f" = **{sayi(sonuc, 1, arti=True)} pip**; R = sonuç / risk = {sayi(sonuc, 1)} / {sayi(risk, 1)} = "
+             f"**{sayi(r, 2, arti=True)} R**" + (f" (motorun kaydı {sayi(i['r'], 2, arti=True)} R: fiyatlar burada beş "
+                                                 f"haneye yuvarlı)." if yuvarlama else ".") +
+             (f" Kayıp riskten büyük, çünkü çıkış stop seviyesinde değil {sayi(abs(c - s) / pip, 1)} pip ötesinde "
+              f"doldu: yürütülen fiyat makası ve kaymayı içerir." if i["neden"] in (1, 4, 5) and abs(c - s) >= 0.5 * 1e-5
+              and sonuc < 0 else ""),
+             f"(c) Kayma iki yerden işler. Giriş {sayi(k, 1)} pip kötüleşir, bu yüzden risk de {sayi(k, 1)} pip büyür "
+             f"({sayi(risk2, 1)} pip). Çıkış " + ("bir limit emirdir (hedef) ve kaymaz; sonuç yalnız giriş tarafında "
+             if limit else ("bir stop emridir; tetiklenince piyasa emrine döner ve o da kayar: sonuç iki dolumda "
+                            if i["neden"] in (1, 4, 5) else "piyasa emridir ve o da kayar; sonuç iki dolumda ")) +
+             f"{sayi(ek_c, 1)} pip azalır ({sayi(sonuc2, 1, arti=True)} pip). Yeni R = {sayi(sonuc2, 1)} / "
+             f"{sayi(risk2, 1)} = **{sayi(sonuc2 / risk2, 2, arti=True)} R**. " +
+             ("Pay küçülür, payda büyür: kazanç R cinsinden pip cinsinden olduğundan hızlı erir, en çok da stop'u "
+              "yakın stratejilerde." if sonuc > 0 else
+              "Kayıp pip olarak büyür, ama payda da büyüdüğü için R cinsinden daha az: stop'ta kapanan bir işlemin "
+              "kaybı 1 R'nin biraz üstünde kalır. Kaymanın asıl bedeli kazanan işlemlerin erimesidir.")]
+    return "\n".join([soru, "", "<details>", "<summary>Çözüm</summary>", ""] + [p + "\n" for p in cozum] +
+                     ["</details>"])
+
+
+def blok_pratik_atr(u: Uretim, ctx: dict, birim: str = "momentum", etiket: str = "") -> str:
+    """Stop'suz bir kuralın (R birimi girişteki ATR) EUR/USD örnek işleminden çözümlü alıştırma. ATR, motorun
+    kaydından (net pip / R) okunur ve soruda verilir; çözüm sonucu okurun gördüğü fiyatlardan kurar ve motorla
+    karşılaştırır. Kayma burada paydayı büyütmez: R birimi fiyattan değil oynaklıktan gelir."""
+    b = (u.O.get("birim") or {}).get(birim) or {}
+    orn = (((b.get("cift") or {}).get("EURUSD") or {}).get("ornek")) or []
+    x = next((o for o in orn if o.get("etiket") == "kazanan"), None)
+    if not x:
+        raise SablonHatasi(f"pratik: {birim} için EUR/USD örnek işlemi yok")
+    i = x["islem"]
+    if i.get("hedef") is not None or i.get("neden") != 3:
+        raise SablonHatasi(f"pratik_atr: {birim} örnek işlemi stop'suz bir zaman çıkışı değil")
+    nk, pip = NOKTA["EURUSD"], 1e-4
+    g, c = (round(i[k] * nk, 5) for k in ("giris_f", "cikis_f"))
+    yon = i["yon"]
+    sonuc = round((c - g) * yon / pip, 1)
+    if abs(sonuc - i["pnl_pip"]) > 0.1 or not i.get("r"):
+        raise SablonHatasi(f"pratik_atr: elle aritmetik motorla tutmuyor ({sonuc} ↔ {i['pnl_pip']})")
+    atr = round(i["pnl_pip"] / i["r"], 1)
+    r = sonuc / atr
+    if abs(r - i["r"]) > 0.05:
+        raise SablonHatasi(f"pratik_atr: R tutmuyor ({r:.3f} ↔ {i['r']:.3f})")
+    k = u.O["kunye"]["temel_kayma_pip"]
+    sonuc2 = sonuc - 2 * k
+    ad = adlar.BIRIM[birim][1]
+    f5 = lambda v: sayi(v, 5)  # noqa: E731
+    yon_ad = "alış" if yon > 0 else "satış"
+    soru = (f"**{etiket or 'Alıştırma'} — stop'suz bir kuralda R.** {ad} kuralının EUR/USD'deki örnek günü "
+            f"({tarih_uzun(x['gun'])}): {yon_ad}, giriş {saat_tsi(i['giris_t'])} TSİ'de {f5(g)} "
+            f"({'ask' if yon > 0 else 'bid'}, kayma dahil), çıkış {saat_tsi(i['cikis_t'])} TSİ'de {f5(c)} "
+            f"({adlar.neden_ad(i, u.O['kunye']['gun_sonu_et'])}). Kuralda stop yoktur; R birimi girişteki ATR'dir "
+            f"(bu işlemde {sayi(atr, 1)} pip). (a) İşlem kaç pip getirdi? (b) Kaç R? (c) Dolum başına kayma "
+            f"{sayi(k, 1)} pip daha kötü olsaydı?")
+    cozum = [f"(a) " + (f"{f5(c)} − {f5(g)}" if yon > 0 else f"{f5(g)} − {f5(c)} (satışta giriş eksi çıkış)") +
+             f" = **{sayi(sonuc, 1, arti=True)} pip**.",
+             f"(b) R = sonuç / ATR = {sayi(sonuc, 1)} / {sayi(atr, 1)} = **{sayi(r, 2, arti=True)} R**.",
+             f"(c) İki dolum da piyasa emridir ve ikisi de kayar: sonuç {sayi(2 * k, 1)} pip azalır "
+             f"({sayi(sonuc2, 1, arti=True)} pip). Payda değişmez, çünkü R birimi stop uzaklığı değil oynaklıktır: "
+             f"yeni R = {sayi(sonuc2, 1)} / {sayi(atr, 1)} = **{sayi(sonuc2 / atr, 2, arti=True)} R**. Stop'lu bir "
+             f"kuralda kayma riski de büyütür; burada yalnız sonucu küçültür."]
+    return "\n".join([soru, "", "<details>", "<summary>Çözüm</summary>", ""] + [p_ + "\n" for p_ in cozum] +
+                     ["</details>"])
+
+
+# ─────────────────────────────────────────────────────────────── veri ve takvim blokları
+def _kalite(u: Uretim) -> dict:
+    return ((u.O.get("veri") or {}).get("kalite")) or {}
+
+
+def blok_veri(u: Uretim, ctx: dict) -> str:
+    """Veri denetiminin parite parite özeti (kalite raporu): kapsam, tatil, makas, sıçrama adayı, çapraz sınama."""
+    govde = []
+    for c in PARITE:
+        k = _kalite(u).get(c)
+        if not k:
+            continue
+        kp, mk_, sc, cp = k.get("kapsam") or {}, k.get("makas") or {}, k.get("sicrama") or {}, k.get("capraz") or {}
+        govde.append([PARITE[c], _hucre(k.get("satir"), "n"), _hucre(kp.get("normal_gun_kapsam_yuzde"), "s1"),
+                      _hucre(len(kp.get("tatil_gunleri") or []), "n"), _hucre(mk_.get("medyan_pip"), "s1"),
+                      _hucre(mk_.get("p95_pip"), "s1"),
+                      _hucre((mk_.get("sifir_kapanis") or 0) + (mk_.get("negatif_kapanis") or 0), "n"),
+                      _hucre(sc.get("aday"), "n"), _hucre(cp.get("tam_esit_yuzde"), "s1")])
+    if not govde:
+        return "_Veri denetimi henüz yok._"
+    return _tablo(["Parite", "Dakika", "Kapsam, normal gün (%)", "Tatil günü", "Makas medyanı (pip)", "Makas p95",
+                   "Sıfır/eksi makas", "Sıçrama adayı", "Saatlik çapraz sınama (%)"], govde,
+                  ["l"] + ["r"] * 8)
+
+
+def blok_haber_makas(u: Uretim, ctx: dict, cift: str = "EURUSD") -> str:
+    """Haber dakikalarında makas (bir parite): olay saatine göre seçili dakikalarda medyan kapanış makası, zirve
+    dakikası ve zirvenin aynı dakikadaki olaysız günlere göre katı. Dakika, 1 dakikalık mumun BAŞLANGICIDIR ve değer o
+    mumun kapanışındaki makastır: −1 açıklamadan önceki son kotasyon, 0 açıklamadan bir dakika sonrası."""
+    hm = (_kalite(u).get(cift) or {}).get("haber_makasi") or {}
+    if not hm:
+        return f"_{PARITE[cift]} için haber makası ölçülmedi._"
+    dk_sec = [-5, -2, -1, 0, 1, 5, 15]
+    govde = []
+    for o in [x for x in OLAY_SIRA if x in hm]:
+        v = hm[o]
+        dks = v.get("dk") or []
+        med = v.get("medyan_pip") or []
+        satir = [adlar.OLAY.get(o, o), _hucre(v.get("n_olay"), "n")]
+        for d in dk_sec:
+            satir.append(_hucre(med[dks.index(d)] if d in dks and dks.index(d) < len(med) else None, "s1"))
+        z = v.get("zirve") or {}
+        satir.append(_hucre(z.get("kiyas_pip"), "s1"))
+        satir.append(f"{sayi(z['dk'], 0, arti=True)} dk · {sayi(z['oran'], 1)} kat" if z.get("oran") else "—")
+        govde.append(satir)
+    bas = ["Olay", "Olay sayısı"] + [f"{sayi(d, 0, arti=d != 0)} dk" for d in dk_sec] + \
+          ["Olaysız gün, zirve dakikası", "Zirve"]
+    return _tablo(bas, govde, ["l"] + ["r"] * (len(bas) - 1))
+
+
+def blok_haber_makas_cumle(u: Uretim, ctx: dict, cift: str = "EURUSD") -> str:
+    """Haber makasının tek cümlesi (giriş dersi; tablo haber dersinde): zirve dakikası ve olaysız güne göre katın
+    olaylar arasındaki aralığı."""
+    hm = (_kalite(u).get(cift) or {}).get("haber_makasi") or {}
+    z = [(o, (hm[o].get("zirve") or {})) for o in OLAY_SIRA if o in hm and (hm[o].get("zirve") or {}).get("oran")]
+    if not z:
+        return f"{PARITE[cift]} için haber makası ölçülmedi."
+    dks = {v["dk"] for _, v in z}
+    nerede = ("açıklamadan önceki son dakikada" if dks == {-1} else
+              "açıklamadan önceki son dakikada (olayların çoğunda)" if
+              sum(1 for _, v in z if v["dk"] == -1) * 2 > len(z) else "açıklama çevresinde")
+    lo = min(z, key=lambda kv: kv[1]["oran"])
+    hi = max(z, key=lambda kv: kv[1]["oran"])
+    return (f"{PARITE[cift]}'de makas en geniş hâline {nerede} gelir ve o dakikada aynı saatin olaysız günlerinin "
+            f"{sayi(lo[1]['oran'], 1)} katı ({adlar.OLAY.get(lo[0], lo[0])}) ile {sayi(hi[1]['oran'], 1)} katı "
+            f"({adlar.OLAY.get(hi[0], hi[0])}) arasındadır.")
+
+
+def blok_haber_makas_ozet(u: Uretim, ctx: dict) -> str:
+    """Bütün pariteler: her olayda zirve makası (pip) ve olaysız güne göre katı."""
+    govde, olaylar = [], []
+    for c in PARITE:
+        hm = (_kalite(u).get(c) or {}).get("haber_makasi") or {}
+        olaylar += [o for o in OLAY_SIRA if o in hm and o not in olaylar]
+    olaylar = [o for o in OLAY_SIRA if o in olaylar]
+    for c in PARITE:
+        hm = (_kalite(u).get(c) or {}).get("haber_makasi") or {}
+        if not hm:
+            continue
+        satir = [PARITE[c]]
+        for o in olaylar:
+            z = (hm.get(o) or {}).get("zirve") or {}
+            satir.append(f"{sayi(z['pip'], 1)} ({sayi(z['oran'], 1)} kat)" if z.get("oran") else "—")
+        govde.append(satir)
+    if not govde:
+        return "_Haber makası ölçülmedi._"
+    return _tablo(["Parite"] + [adlar.OLAY.get(o, o) for o in olaylar], govde, ["l"] + ["r"] * len(olaylar))
+
+
+BOLGE_AD = {"America/New_York": "New York", "Europe/Berlin": "Frankfurt", "Europe/London": "Londra"}
+SINAMA_AD = [("dogrulandi", "doğrulandı"), ("sessiz", "sessiz"), ("celiski", "çelişki"),
+             ("degerlendirilemedi", "değerlendirilemedi")]
+
+
+def blok_takvim(u: Uretim, ctx: dict) -> str:
+    """Haber takviminin olay başına özeti: sayı, dönem, yerel saat(ler), kaynak, fiyat sınamasının hükmü."""
+    t = (u.O.get("takvim") or {})
+    sayim = t.get("sayim") or {}
+    oz = ((t.get("sinama") or {}).get("ozet")) or {}
+    govde = []
+    for o in [x for x in OLAY_SIRA if x in sayim]:
+        v = sayim[o]
+        saat = "; ".join(f"{k.split(' ', 1)[0]} {BOLGE_AD.get(k.split(' ', 1)[1], k.split(' ', 1)[1])} ({sayi(n, 0)})"
+                         for k, n in sorted((v.get("saat") or {}).items(), key=lambda kv: -kv[1]))
+        s = oz.get(o) or {}
+        sin = " · ".join(f"{s[k]} {ad}" for k, ad in SINAMA_AD if s.get(k)) or (
+            "sınanmadı (konuşma tek dakikada sıçrama yapmaz; yalnız bilgi)" if s.get("basin_bilgi") else "—")
+        govde.append([adlar.OLAY.get(o, o), _hucre(v.get("toplam"), "n"),
+                      f"{tarih(v['ilk'])} → {tarih(v['son'])}" if v.get("ilk") else "—", saat or "—",
+                      ", ".join(v.get("kaynak") or []) or "—", sin])
+    if not govde:
+        return "_Takvim yok._"
+    return _tablo(["Olay", "Sayı", "Dönem", "Yerel saat (olay sayısı)", "Kaynak", "Fiyat sınaması"], govde,
+                  ["l", "r", "l", "l", "l", "l"])
+
+
+# ─────────────────────────────────────────────────────────────── metodoloji blokları
+BOLUM_AD = {"haber_devam": "haber devam tablosu"}
+
+
+def blok_onkayit_tablo(u: Uretim, ctx: dict) -> str:
+    """Ön kaydın geçmişi: her değişikliğin zamanı ve değişen bölümleri (kaynak deponun geçmişinden, ölçüm anında)."""
+    g = (u.O.get("kunye") or {}).get("onkayit_gecmisi") or []
+    govde = []
+    for i, k in enumerate(g):
+        zaman = k.get("zaman")
+        z = (f"{tarih(zaman[:10])} {zaman[11:16]}" if zaman else "işlenmemiş değişiklik")
+        bolum = k.get("degisen_bolum") or []
+        ne = ("ilk kayıt: bütün kurallar, ızgaralar, varsayılanlar ve hüküm kuralı" if i == 0 else
+              ("yalnız açıklama notu; kuralların içeriği aynı" if not bolum else
+               "eklenen ya da değişen bölüm: " + ", ".join(BOLUM_AD.get(b_, b_) for b_ in bolum)))
+        govde.append([z, ne])
+    if not govde:
+        return "_Ön kayıt geçmişi okunamadı._"
+    return _tablo(["Zaman (UTC)", "Değişiklik"], govde, ["l", "l"])
+
+
+def _gun_cevir(metin: str) -> str:
+    """Kaynak kaydındaki ISO tarihleri okur yazımına (GG.AA.YYYY) çevirir."""
+    return re.sub(r"(\d{4})-(\d{2})-(\d{2})", lambda m: f"{m.group(3)}.{m.group(2)}.{m.group(1)}", metin)
+
+
+def blok_takvim_sorun(u: Uretim, ctx: dict) -> str:
+    """Takvimin dışarıda bıraktığı ya da düzelttiği kayıtlar ve yayımı olmayan referans ayları (kaynak künyesi)."""
+    k = ((u.O.get("takvim") or {}).get("kunye")) or {}
+    satir = []
+    for kod, ad in (("NFP", "ABD tarım dışı istihdam"), ("CPI", "ABD TÜFE")):
+        v = k.get(kod) or {}
+        for ay_ in v.get("yayimi_olmayan_referans_ayi") or []:
+            satir.append(f"- **{ad}:** {ay_uzun(ay_ + '-01')} referans ayının ayrı bir yayımı yok.")
+        for d in v.get("duzeltme") or []:
+            satir.append(f"- **{ad}:** {_gun_cevir(d)}.")
+        n_ok = len(v.get("referansi_okunamayan_yayim") or [])
+        if n_ok:
+            satir.append(f"- **{ad}:** {sayi(n_ok, 0)} yayımda referans ayı okunamadı; yayım günü ve saati "
+                         f"okunduğu için olay takvimde.")
+    for kod, ad in (("ecb", "ECB"), ("boe", "BoE")):
+        for d in (k.get(kod) or {}).get("sorun") or []:
+            satir.append(f"- **{ad}:** {_gun_cevir(d)}.")
+    f = k.get("fomc") or {}
+    if f.get("basin"):
+        satir.append(f"- **FOMC:** {sayi(f['basin'], 0)} basın toplantısının saati okundu; "
+                     f"{sayi(len(f.get('sorun') or []), 0)} toplantının saati okunamadı ve yazılmadı.")
+    elif f.get("sorun"):
+        satir.append(f"- **FOMC:** basın toplantılarının saati Fed'in kaynaklarından okunamadı "
+                     f"({sayi(len(f['sorun']), 0)} toplantı); basın toplantısı olayları bu ölçümde yok.")
+    return "\n".join(satir) if satir else "_Takvimde dışarıda bırakılan kayıt yok._"
+
+
+def blok_celiski(u: Uretim, ctx: dict) -> str:
+    """Fiyat sınamasının çelişki verdiği olaylar: resmî saatteki sıçrama oranı ve en iyi aday saat, parite parite."""
+    c = (((u.O.get("takvim") or {}).get("sinama")) or {}).get("celiski_olay") or []
+    satir = []
+    for e in c:
+        bolge = BOLGE_AD.get(e.get("bolge"), e.get("bolge"))
+        par = []
+        for cift, v in (e.get("parite") or {}).items():
+            if v.get("durum") != "celiski":
+                continue
+            dk = int(v["en_iyi_aday_dk"])
+            par.append(f"{PARITE.get(cift, cift)} {sayi(v['oran'], 2)} (en iyi aday {sayi(abs(dk), 0)} dakika "
+                       f"{'sonra' if dk > 0 else 'önce'}: {sayi(v['aday'][str(dk)], 2)})")
+        satir.append(f"- **{adlar.OLAY.get(e['olay'], e['olay'])}, {tarih(e['tarih'])} {e['yerel_saat']} {bolge}:** "
+                     f"resmî saatte sıçrama oranı " + "; ".join(par) + ".")
+    return "\n".join(satir) if satir else "_Çelişki yok._"
+
+
+def blok_olaganustu(u: Uretim, ctx: dict, olay: str = "FOMC_karar") -> str:
+    """Takvimdeki olağanüstü toplantılar: gün ve yerel saat (kaynağın notundan)."""
+    v = (((u.O.get("takvim") or {}).get("sayim")) or {}).get(olay) or {}
+    liste = v.get("olaganustu") or []
+    if not liste:
+        return "olağanüstü toplantı yok"
+    return " ve ".join(f"{tarih_uzun(x['tarih'])} {x['saat']} {BOLGE_AD.get(x['bolge'], x['bolge'])}" for x in liste)
+
+
+def blok_arsiv_ozet(u: Uretim, ctx: dict) -> str:
+    """Fiyat arşivinin parite başına özeti: yıl birimleri, tamamlanan birim, işlem günü, eksik gün, dakika."""
+    a = ((u.O.get("veri") or {}).get("arsiv")) or {}
+    govde = []
+    for c in PARITE:
+        bs = {k: v for k, v in a.items() if k.split("/")[0] == c}
+        if not bs:
+            continue
+        govde.append([PARITE[c], _hucre(len(bs), "n"), _hucre(sum(1 for v in bs.values() if v.get("tam")), "n"),
+                      _hucre(sum(v.get("gun") or 0 for v in bs.values()), "n"),
+                      _hucre(sum(v.get("gun_dolu") or 0 for v in bs.values()), "n"),
+                      _hucre(sum(v.get("gun_hata") or 0 for v in bs.values()), "n"),
+                      _hucre(sum(v.get("satir") or 0 for v in bs.values()), "n")])
+    if not govde:
+        return "_Arşiv künyesi yok._"
+    return _tablo(["Parite", "Yıl", "Tamamlanan yıl", "İşlem günü", "Dolu gün", "İnmeyen gün", "Dakika"], govde,
+                  ["l"] + ["r"] * 6)
+
+
 # ─────────────────────────────────────────────────────────────── haber bloklari
 OLAY_SIRA = ["NFP", "CPI", "FOMC_karar", "FOMC_basin", "ECB_karar", "ECB_basin", "BoE_karar"]
 KOVA_SIRA = ["<0,5", "0,5–1", "1–2", ">2"]
@@ -837,7 +1159,7 @@ def blok_devam(u: Uretim, ctx: dict, boyut: str = "olay") -> str:
                           _hucre((h.get("fad") or {}).get("ort_atr_yuzde"), "r1"), h.get("hukum") or "—"])
     bas = {"olay": "Olay", "kova": "İlk mum / ATR", "trend_uyum": "Haber öncesi trend", "tf": "Mum",
            "cift": "Parite", "olay_kova": "Olay · ilk mum / ATR"}.get(boyut, boyut)
-    return _tablo([bas, "Ufuk", "Olay", "Kırılım", "Fade", "Hüküm"], govde, ["l", "l", "r", "r", "r", "l"])
+    return _tablo([bas, "Ufuk", "Olay sayısı", "Kırılım", "Fade", "Hüküm"], govde, ["l", "l", "r", "r", "r", "l"])
 
 
 def blok_devam_cumle(u: Uretim, ctx: dict) -> str:
@@ -848,9 +1170,19 @@ def blok_devam_cumle(u: Uretim, ctx: dict) -> str:
     k = d.get("kural") or {}
     say = d.get("hukum_sayimi") or {}
     parca = ", ".join(f"{v} hücrede {ad}" for ad, v in sorted(say.items(), key=lambda kv: -kv[1]))
-    return (f"Bütün hücrelerin bütün sınamaları tek aile: {sayi(d.get('sinama_sayisi', 0), 0)} tek yönlü t sınaması, "
+    boyutlar = []
+    for h in d["hucre"]:
+        if h.get("boyut") not in boyutlar:
+            boyutlar.append(h.get("boyut"))
+    ad = {"olay": "olay", "kova": "ilk mum büyüklüğü", "trend_uyum": "haber öncesi trend", "tf": "mum uzunluğu",
+          "cift": "parite", "olay_kova": "olay × ilk mum büyüklüğü"}
+    sira = [b for b in ad if b in boyutlar] + [b for b in boyutlar if b not in ad]
+    tablo = ", ".join(ad.get(b, b) for b in sira)
+    n_hucre = len(d["hucre"])
+    return (f"Aşağıdaki {sayi(len(sira), 0)} tablonun ({tablo}) {sayi(n_hucre, 0)} hücresi ve her hücrenin iki yönü "
+            f"tek bir sınama ailesidir: {sayi(d.get('sinama_sayisi', 0), 0)} tek yönlü t sınaması. Hüküm, "
             f"Benjamini–Hochberg ile düzeltilmiş q değeri {sayi(k.get('fdr_q', 0.1), 2)} altında ve hücrede en az "
-            f"{k.get('asgari_olay', 20)} olay varsa hüküm verilir. Sonuç: {parca}.")
+            f"{k.get('asgari_olay', 20)} olay varsa verilir. Sonuç: {parca}.")
 
 
 def blok_haber_kirilim(u: Uretim, ctx: dict, boyut: str = "olay") -> str:
@@ -900,6 +1232,341 @@ def blok_fomc(u: Uretim, ctx: dict) -> str:
         return "_FOMC karar ↔ basın toplantısı ölçülemedi (basın toplantısı saati olan toplantı yok)._"
     return _tablo(["Parite", "Toplantı", "Dönüş oranı (%95)", "Korelasyon (%95)", "Karar <0,5 ATR", "0,5–1",
                    ">1"], govde, ["l", "r", "r", "r", "r", "r", "r"])
+
+
+def hukum_sayim_yaz(b: dict) -> str:
+    """Parite başına hükümlerin sayımı: "2 zayıf · 2 çalışmıyor" (sıra: çalışıyor, zayıf, çalışmıyor, ölçülemedi)."""
+    say: dict = {}
+    for c in _ciftler(b):
+        h = (b["cift"][c].get("varsayilan") or {}).get("hukum") or "olculemedi"
+        say[h] = say.get(h, 0) + 1
+    return " · ".join(f"{say[h]} {adlar.HUKUM[h]}" for h in ("calisiyor", "zayif", "calismiyor", "olculemedi")
+                      if say.get(h)) or "—"
+
+
+def blok_ders_ozet(u: Uretim, ctx: dict, *birimler: str) -> str:
+    """Dersin stratejileri yan yana: havuzun örneklem dışı net R'si ve aralığı, parite hükümlerinin sayımı,
+    maliyet bayrağı ve EUR/USD'nin başabaş kayması. Birim verilmezse bu derste işlenenler."""
+    liste = list(birimler) or list(u.birimler)
+    if liste == ["hepsi"]:
+        liste = _butun_birimler(u)
+    govde = []
+    for bid in liste:
+        b = (u.O.get("birim") or {}).get(bid)
+        if not b:
+            continue
+        h = ((b.get("havuz") or {}).get("varsayilan") or {}).get("oos") or {}
+        maliyet = sum(1 for c in _ciftler(b) if (b["cift"][c].get("varsayilan") or {}).get("maliyet_yiyor"))
+        e = ((b.get("cift") or {}).get("EURUSD") or {}).get("varsayilan") or {}
+        govde.append([adlar.BIRIM[bid][1], _hucre(h.get("n"), "n"), _hucre(h.get("beklenti_r"), "r"),
+                      f"{_hucre(h.get('ga_alt'), 'r')} / {_hucre(h.get('ga_ust'), 'r')}", hukum_sayim_yaz(b),
+                      str(maliyet) if maliyet else "—", _basabas_yaz(e),
+                      _hucre((e.get("oos") or {}).get("risk_pip"), "s1")])
+    if not govde:
+        return "_Özet için strateji yok._"
+    return (_tablo(["Strateji", "Dışı işlem (havuz)", "Dışı net R", "%95 aralığı", "Parite hükümleri",
+                    "Maliyet yiyor", "Başabaş kayma, EUR/USD (pip)", "R birimi medyanı, EUR/USD (pip)"], govde,
+                   ["l", "r", "r", "r", "l", "r", "r", "r"]) +
+            "\n\n_Başabaş kayma: net beklentiyi sıfıra indiren dolum başına kayma (bütün dönem); sıfır kaymada bile "
+            "eksiyse parantezde işlem başına net pip. R birimi: stop'lu kurallarda girişten stop'a uzaklık, stop'suz "
+            "kurallarda girişteki ATR. Maliyet yiyor: brüt sonucu sıfırdan ayırt edilen ama net sonucu eksi olan "
+            "parite sayısı._")
+
+
+def _basabas_yaz(e: dict) -> str:
+    """Başabaş kaymanın okur yazımı: ızgarada kesişim · sıfırda bile eksi (işlem başına net pip) · ızgaranın üstünde."""
+    k = e.get("basabas_kayma_pip")
+    if k is None:
+        return "ızgaranın üstünde" if e.get("oos") else "—"
+    if k == 0:
+        ek = e.get("basabas_ek_maliyet_pip")
+        return f"sıfırda bile eksi ({_hucre(ek, 'r')} pip)" if ek is not None else "sıfırda bile eksi"
+    if k < 0.005:
+        return "&lt;0,01"
+    return _hucre(k, "s2")
+
+
+def _butun_birimler(u: Uretim) -> list[str]:
+    """Ölçülen bütün birimler, derslerin sırasıyla (seans, yapı, fade, haber, akış)."""
+    var = (u.O.get("birim") or {})
+    sira = [b for bl in adlar.DERS_BIRIM.values() for b in bl if b in var]
+    return sira + [b for b in var if b not in sira]
+
+
+def blok_hukum_matris(u: Uretim, ctx: dict) -> str:
+    """Strateji × parite: önceden kayıtlı varsayılanın örneklem dışı net R'si ve hükmü; son sütun havuz."""
+    govde = []
+    for bid in _butun_birimler(u):
+        b = u.O["birim"][bid]
+        satir = [adlar.BIRIM[bid][1]]
+        for c in PARITE:
+            v = ((b.get("cift") or {}).get(c) or {}).get("varsayilan") or {}
+            o = v.get("oos") or {}
+            satir.append(f"{_hucre(o.get('beklenti_r'), 'r')} · {adlar.HUKUM.get(v.get('hukum') or 'olculemedi')}"
+                         if v else "—")
+        h = ((b.get("havuz") or {}).get("varsayilan") or {}).get("oos") or {}
+        satir.append(_hucre(h.get("beklenti_r"), "r"))
+        govde.append(satir)
+    if not govde:
+        return "_Strateji yok._"
+    return _tablo(["Strateji"] + list(PARITE.values()) + ["Havuz"], govde, ["l"] + ["r"] * (len(PARITE) + 1))
+
+
+def _hukum_sayimi_hepsi(u: Uretim) -> dict:
+    say = {"calisiyor": 0, "zayif": 0, "calismiyor": 0, "olculemedi": 0, "maliyet": 0, "parite": 0}
+    kural = {"calisiyor": set(), "zayif": set()}
+    for bid in _butun_birimler(u):
+        b = u.O["birim"][bid]
+        for c in _ciftler(b):
+            v = (b["cift"][c].get("varsayilan") or {})
+            h = v.get("hukum") or "olculemedi"
+            say[h] = say.get(h, 0) + 1
+            say["parite"] += 1
+            say["maliyet"] += 1 if v.get("maliyet_yiyor") else 0
+            if h in kural:
+                kural[h].add(bid)
+    return {"say": say, "kural": kural, "birim": len(_butun_birimler(u))}
+
+
+def blok_genel_hukum(u: Uretim, ctx: dict) -> str:
+    """Bütün kuralların hüküm sayımı (strateji × parite) ve havuzda aralığı sıfırın üstünde kalan kurallar."""
+    g = _hukum_sayimi_hepsi(u)
+    s_, k = g["say"], g["kural"]
+    parca = [f"{sayi(g['birim'], 0)} kural ve {sayi(s_['parite'], 0)} kural–parite bileşiminde önceden kaydın "
+             f"hükmü: {sayi(s_['calisiyor'], 0)} çalışıyor, {sayi(s_['zayif'], 0)} zayıf, "
+             f"{sayi(s_['calismiyor'], 0)} çalışmıyor" +
+             (f", {sayi(s_['olculemedi'], 0)} ölçülemedi" if s_["olculemedi"] else "") + "."]
+    for h, ad in (("calisiyor", "çalışıyor"), ("zayif", "zayıf")):
+        if k[h]:
+            parca.append(f"En az bir paritede {ad}: " + ", ".join(adlar.BIRIM[b][1] for b in _butun_birimler(u)
+                                                              if b in k[h]) + ".")
+    pozitif = [b for b in _butun_birimler(u)
+               if (((u.O["birim"][b].get("havuz") or {}).get("varsayilan") or {}).get("oos") or {}).get("ga_alt") is not None
+               and u.O["birim"][b]["havuz"]["varsayilan"]["oos"]["ga_alt"] > 0]
+    parca.append("Havuzda %95 aralığının alt ucu sıfırın üstünde kalan kural: " +
+                 (", ".join(adlar.BIRIM[b][1] for b in pozitif) if pozitif else "yok") + ".")
+    if s_["maliyet"]:
+        parca.append(f"Maliyet bayrağı {sayi(s_['maliyet'], 0)} bileşimde yanıyor: brüt sonuç sıfırdan ayırt "
+                     f"ediliyor, net sonuç eksi.")
+    return " ".join(parca)
+
+
+def blok_maliyet_ozet(u: Uretim, ctx: dict) -> str:
+    """Parite parite: örneklem dışında brüt ve dört kayma kademesinde net beklentisi artı olan kural sayısı."""
+    kademe = [str(x) for x in (u.O["kunye"].get("kayma_pip") or [0.0, 0.5, 1.0, 2.0])]
+    govde = []
+    for c in PARITE:
+        n = brut = 0
+        net = {kk: 0 for kk in kademe}
+        for bid in _butun_birimler(u):
+            v = ((u.O["birim"][bid].get("cift") or {}).get(c) or {}).get("varsayilan") or {}
+            o = v.get("oos") or {}
+            if not o.get("n"):
+                continue
+            n += 1
+            brut += 1 if (o.get("brut_r") or 0) > 0 else 0
+            for kk in kademe:
+                x = (((v.get("maliyet") or {}).get(kk) or {}).get("oos") or {}).get("beklenti_r")
+                net[kk] += 1 if (x is not None and x > 0) else 0
+        if n:
+            govde.append([PARITE[c], _hucre(n, "n"), _hucre(brut, "n")] + [_hucre(net[kk], "n") for kk in kademe])
+    if not govde:
+        return "_Maliyet ölçülmedi._"
+    return _tablo(["Parite", "Kural", "Brüt artı"] + [f"Net artı, kayma {sayi(float(kk), 1)}" for kk in kademe],
+                  govde, ["l"] + ["r"] * (2 + len(kademe)))
+
+
+def blok_rastgele_ozet(u: Uretim, ctx: dict) -> str:
+    """Parite parite: rastgele yön dağılımında örneklem dışı sonucu eşiğin (95. yüzdelik) üstünde kalan kural sayısı."""
+    esik = u.ON.get("hukum", {}).get("rastgele_esik_yuzdelik", 95)
+    parca = []
+    for c in PARITE:
+        n = ust = 0
+        adlar_ = []
+        for bid in _butun_birimler(u):
+            v = ((u.O["birim"][bid].get("cift") or {}).get(c) or {}).get("varsayilan") or {}
+            r = ((v.get("rastgele") or {}).get("oos") or {})
+            if r.get("yuzdelik") is None:
+                continue
+            n += 1
+            if r["yuzdelik"] >= esik:
+                ust += 1
+                adlar_.append(adlar.BIRIM[bid][1])
+        if n:
+            parca.append(f"{PARITE[c]}: {sayi(ust, 0)} / {sayi(n, 0)}" + (f" ({', '.join(adlar_)})" if adlar_ else ""))
+    if not parca:
+        return ""
+    return (f"Örneklem dışı sonucu rastgele yön dağılımının {esik}. yüzdeliğinin üstünde kalan kural sayısı — "
+            + "; ".join(parca) + ". Hiçbir şeyin çalışmadığı bir dünyada bile her yirmi sınamadan biri bu eşiği "
+            "şansla geçer.")
+
+
+def blok_korelasyon_cumle(u: Uretim, ctx: dict, kac: str = "5") -> str:
+    """Stratejiler arası günlük R korelasyonunun özeti (bütün dönem): en yüksek |ρ|'lu çiftler ve eşik sayımı."""
+    kor = u.O.get("korelasyon") or {}
+    if not kor.get("tum"):
+        return "Korelasyon ölçülmedi."
+    bs, m = kor["birimler"], kor["tum"]
+    ciftler = [(abs(m[i][j]), m[i][j], bs[i], bs[j]) for i in range(len(bs)) for j in range(i + 1, len(bs))
+               if m[i][j] is not None]
+    ciftler.sort(key=lambda x: -x[0])
+    esik = sum(1 for x in ciftler if x[0] >= 0.25)
+    ust = "; ".join(f"{adlar.BIRIM[a][1]} × {adlar.BIRIM[b_][1]} {_hucre(v, 'r')}" for _, v, a, b_ in ciftler[:int(kac)])
+    return (f"{sayi(len(bs), 0)} kuralın {sayi(len(ciftler), 0)} çiftinden {sayi(esik, 0)} tanesinde günlük R "
+            f"korelasyonu mutlak değerce 0,25'i aşıyor. En yüksek {kac} çift: {ust}.")
+
+
+def blok_kosul_genel(u: Uretim, ctx: dict) -> str:
+    """Koşul analizinin bütün kural × parite bileşimlerinde değişken değişken sayımı: gerçek seçimin ve ters seçimin
+    (örneklem içinde ortalamanın altındaki kovalar) örneklem dışı ölçütü geçme sayısı."""
+    say: dict = {}
+    for bid in _butun_birimler(u):
+        b = u.O["birim"][bid]
+        for c in _ciftler(b):
+            for k in ((b["cift"][c].get("varsayilan") or {}).get("kosul") or []):
+                d = say.setdefault(k["degisken"], {"sinanan": 0, "tuttu": 0, "ters_sinanan": 0, "ters_tuttu": 0})
+                if k.get("hukum") in ("tuttu", "tutmadi"):
+                    d["sinanan"] += 1
+                    d["tuttu"] += 1 if k["hukum"] == "tuttu" else 0
+                t = k.get("ters_secim") or {}
+                if t.get("hukum") in ("tuttu", "tutmadi"):
+                    d["ters_sinanan"] += 1
+                    d["ters_tuttu"] += 1 if t["hukum"] == "tuttu" else 0
+    if not say:
+        return "_Koşul analizi yok._"
+    ters_var = any(d["ters_sinanan"] for d in say.values())
+    sira = [k for k in adlar.KOSUL if k in say] + [k for k in say if k not in adlar.KOSUL]
+    govde = []
+    for k in sira:
+        d = say[k]
+        satir = [adlar.KOSUL.get(k, k), _hucre(d["sinanan"], "n"), _hucre(d["tuttu"], "n")]
+        if ters_var:
+            satir += [_hucre(d["ters_sinanan"], "n"), _hucre(d["ters_tuttu"], "n")]
+        govde.append(satir)
+    top = {kk: sum(d[kk] for d in say.values()) for kk in ("sinanan", "tuttu", "ters_sinanan", "ters_tuttu")}
+    govde.append(["**Toplam**", _hucre(top["sinanan"], "n"), _hucre(top["tuttu"], "n")] +
+                 ([_hucre(top["ters_sinanan"], "n"), _hucre(top["ters_tuttu"], "n")] if ters_var else []))
+    bas = ["Değişken", "Sınanan (seçim)", "Tuttu"] + (["Sınanan (ters seçim)", "Tuttu (ters seçim)"] if ters_var else [])
+    return _tablo(bas, govde, ["l"] + ["r"] * (len(bas) - 1))
+
+
+def kosul_sayim(O: dict) -> dict:
+    """Koşul analizinin bütün kural × parite × değişken bileşimlerinde gerçek ve ters seçimin sayımı; eşli kıyas
+    için yalnız birinin tuttuğu bileşimler (a: gerçek tuttu, ters tutmadı · b: tersi)."""
+    t = {"sinanan": 0, "tuttu": 0, "ters_sinanan": 0, "ters_tuttu": 0, "a": 0, "b": 0}
+    for b in (O.get("birim") or {}).values():
+        for v in (b.get("cift") or {}).values():
+            for k in ((v.get("varsayilan") or {}).get("kosul") or []):
+                g = k.get("hukum")
+                ts = (k.get("ters_secim") or {}).get("hukum")
+                if g in ("tuttu", "tutmadi"):
+                    t["sinanan"] += 1
+                    t["tuttu"] += g == "tuttu"
+                if ts in ("tuttu", "tutmadi"):
+                    t["ters_sinanan"] += 1
+                    t["ters_tuttu"] += ts == "tuttu"
+                if g in ("tuttu", "tutmadi") and ts in ("tuttu", "tutmadi"):
+                    t["a"] += g == "tuttu" and ts == "tutmadi"
+                    t["b"] += g == "tutmadi" and ts == "tuttu"
+    t["p"] = _mcnemar_p(t["a"], t["b"])
+    t["ayirt"] = bool(t["a"] > t["b"] and t["p"] < 0.05)
+    return t
+
+
+def toplamlar(O: dict, ON: dict) -> dict:
+    """Karşılaştırma dersinin sayımları (bütün kural × parite bileşimleri, önceden kayıtlı varsayılan, örneklem
+    dışı). Şablonun iddiaları ve koşulları bunları okur: metindeki "çoğu", "az" gibi sözcükler sayıya bağlanır."""
+    esik = (ON.get("hukum") or {}).get("rastgele_esik_yuzdelik", 95)
+    t = {k: 0 for k in ("bilesim", "brut_arti", "brut_arti_sifir_eksi", "brut_arti_net_eksi", "rastgele_n",
+                        "rastgele_ust", "arti_n", "arti_rastgele_alt", "dsr_n", "dsr_ust")}
+    for b in (O.get("birim") or {}).values():
+        for v in (b.get("cift") or {}).values():
+            va = v.get("varsayilan") or {}
+            o = va.get("oos") or {}
+            if not o.get("n"):
+                continue
+            t["bilesim"] += 1
+            brut, net = o.get("brut_r"), o.get("beklenti_r")
+            m0 = ((((va.get("maliyet") or {}).get("0.0") or {}).get("oos")) or {}).get("beklenti_r")
+            if brut is not None and brut > 0:
+                t["brut_arti"] += 1
+                t["brut_arti_sifir_eksi"] += m0 is not None and m0 <= 0
+                t["brut_arti_net_eksi"] += net is not None and net <= 0
+            r = ((va.get("rastgele") or {}).get("oos")) or {}
+            if r.get("yuzdelik") is not None:
+                t["rastgele_n"] += 1
+                t["rastgele_ust"] += r["yuzdelik"] >= esik
+                if net is not None and net > 0:
+                    t["arti_n"] += 1
+                    t["arti_rastgele_alt"] += r["yuzdelik"] < esik
+            d = (((v.get("secilen") or {}).get("dsr")) or {}).get("dsr")
+            if d is not None:
+                t["dsr_n"] += 1
+                t["dsr_ust"] += d >= 0.95
+    t = {k: int(v) for k, v in t.items()}
+
+    def oran(a: str, b_: str):
+        return t[a] / t[b_] if t[b_] else None
+    t.update({"makas_brut_oran": oran("brut_arti_sifir_eksi", "brut_arti"),
+              "net_eksi_brut_oran": oran("brut_arti_net_eksi", "brut_arti"),
+              "rastgele_ust_oran": oran("rastgele_ust", "rastgele_n"),
+              "rastgele_beklenen": round(t["rastgele_n"] * (100 - esik) / 100),
+              "rastgele_binom_p": _binom_ust_p(t["rastgele_ust"], t["rastgele_n"], (100 - esik) / 100),
+              "arti_rastgele_alt_oran": oran("arti_rastgele_alt", "arti_n"),
+              "dsr_ust_oran": oran("dsr_ust", "dsr_n"),
+              "kosul": kosul_sayim(O),
+              "kombinasyon": int(sum(len(b.get("kombinasyon") or []) if isinstance(b.get("kombinasyon"), list)
+                                     else int(b.get("kombinasyon") or 0) for b in (O.get("birim") or {}).values())),
+              "birim": len(O.get("birim") or {}),
+              "fomc_basin": int(((((O.get("takvim") or {}).get("sayim")) or {}).get("FOMC_basin") or {})
+                                .get("toplam") or 0),
+              "inmeyen_gun": int(sum((v.get("gun_hata") or 0) for v in (((O.get("veri") or {}).get("arsiv")) or {})
+                                     .values())),
+              "eksik_birim": int(sum(1 for v in (((O.get("veri") or {}).get("arsiv")) or {}).values()
+                                     if not v.get("tam")))})
+    return t
+
+
+def _binom_ust_p(k: int, n: int, q: float) -> float | None:
+    """P(X ≥ k), X ~ Binom(n, q): n sınamada şansla en az k geçiş."""
+    if not n:
+        return None
+    return float(sum(math.comb(n, i) * q ** i * (1 - q) ** (n - i) for i in range(k, n + 1)))
+
+
+def _mcnemar_p(a: int, b: int) -> float:
+    """Kesin McNemar (iki yönlü binom, p = 1/2): uyuşmayan çiftlerde a ↔ b."""
+    n = a + b
+    if n == 0:
+        return 1.0
+    k = min(a, b)
+    return min(1.0, 2 * sum(math.comb(n, i) for i in range(k + 1)) / 2 ** n)
+
+
+def blok_kosul_genel_cumle(u: Uretim, ctx: dict) -> str:
+    """Gerçek seçim ile ters seçimin (örneklem içinde ortalamanın altındaki kovalar) geçme oranları ve eşli kıyası.
+    Kova farkları yalnız gürültüyse iki seçim aynı sıklıkla tutar. Kıyas eşlidir: aynı kural, parite ve değişkende
+    iki seçimden yalnız birinin tuttuğu bileşimler sayılır (kesin McNemar). Bileşimler bağımsız değildir (aynı
+    kuralın değişkenleri aynı işlemleri paylaşır); p bir ölçüdür, bir eşik kuralı değil."""
+    t = kosul_sayim(u.O)
+    if not t["sinanan"]:
+        return "Koşul analizi yok."
+    s1 = (f"Örneklem içinde seçilen kovalar {sayi(t['sinanan'], 0)} sınamanın {sayi(t['tuttu'], 0)} tanesinde "
+          f"(%{sayi(100 * t['tuttu'] / t['sinanan'], 0)}) örneklem dışı ölçütü geçti.")
+    if not t["ters_sinanan"]:
+        return s1 + " Ters seçim bu ölçümde yok."
+    p_ = t["p"]
+    s2 = (f" Örneklem içinde en kötü kovalar seçilseydi aynı ölçüt {sayi(t['ters_sinanan'], 0)} sınamanın "
+          f"{sayi(t['ters_tuttu'], 0)} tanesinde (%{sayi(100 * t['ters_tuttu'] / t['ters_sinanan'], 0)}) geçerdi. "
+          f"İki seçimden yalnız birinin tuttuğu bileşimlerde gerçek seçim {sayi(t['a'], 0)}, ters seçim "
+          f"{sayi(t['b'], 0)} kez tuttu (kesin McNemar p {sayi(p_, 2)}).")
+    if t["ayirt"]:
+        s3 = (" Gerçek seçim ters seçimden daha sık tutuyor: örneklem içinde iyi görünen kovaların bir kısmı örneklem "
+              "dışında da iyi. Hangisinin tuttuğu yine tek tek okunmalıdır.")
+    else:
+        s3 = (" Gerçek seçim ters seçimden ayırt edilemiyor: tutan koşulların çoğu, gürültünün örneklem dışında da "
+              "sıfırın üstünde kalabilmesiyle açıklanır. Tek tek 'tuttu' hücreleri bir karar kuralı değildir.")
+    return s1 + s2 + s3
 
 
 def blok_havuz_cumle(u: Uretim, ctx: dict) -> str:
@@ -982,6 +1649,15 @@ BLOKLAR = {
     "sonuclar": blok_sonuclar, "kosullar": blok_kosullar, "hukum_cumle": blok_hukum_cumle,
     "havuz_cumle": blok_havuz_cumle, "ay_sonu": blok_ay_sonu, "regresyon": blok_regresyon,
     "devam": blok_devam, "devam_cumle": blok_devam_cumle, "haber_kirilim": blok_haber_kirilim, "fomc": blok_fomc,
+    "veri": blok_veri, "haber_makas": blok_haber_makas, "haber_makas_ozet": blok_haber_makas_ozet,
+    "haber_makas_cumle": blok_haber_makas_cumle,
+    "pratik_islem": blok_pratik_islem, "pratik_atr": blok_pratik_atr,
+    "ders_ozet": blok_ders_ozet, "takvim": blok_takvim,
+    "hukum_matris": blok_hukum_matris, "genel_hukum": blok_genel_hukum, "maliyet_ozet": blok_maliyet_ozet,
+    "rastgele_ozet": blok_rastgele_ozet, "korelasyon_cumle": blok_korelasyon_cumle,
+    "kosul_genel": blok_kosul_genel, "kosul_genel_cumle": blok_kosul_genel_cumle,
+    "onkayit_tablo": blok_onkayit_tablo, "takvim_sorun": blok_takvim_sorun, "celiski": blok_celiski,
+    "arsiv_ozet": blok_arsiv_ozet, "olaganustu": blok_olaganustu,
     "oos_cumle": blok_oos_cumle, "rastgele_cumle": blok_rastgele_cumle, "dsr_cumle": blok_dsr_cumle,
     "wf_cumle": blok_wf_cumle, "rejim_cumle": blok_rejim_cumle,
     "sekil": blok_sekil, "sonuc": blok_sonuc, "ayrinti": blok_ayrinti, "maliyet": blok_maliyet,
@@ -1001,10 +1677,13 @@ def ders_uret(sablon: str, olcum: dict, onkayit: dict, strateji_dizini: Path | N
         yol = sd / f"{birim}.md"
         if not yol.exists():
             raise SablonHatasi(f"strateji şablonu yok: {birim}")
+        uu.birimler.append(birim)
         return uu.isle(yol.read_text(encoding="utf-8"), uu.birim_ctx(birim))
 
     BLOKLAR["strateji"] = blok_strateji
     govde = u.isle(sablon, u.kok_ctx())
+    # Boş kalan koşullu bloklar ardışık boş satır bırakır; MDX onları yutar ama üretilen dosya okunur kalsın.
+    govde = re.sub(r"\n{3,}", "\n\n", govde)
     if "<GrafikEmbed" in govde:
         on, son = _onbilgi_ayir(govde)
         govde = on + "\nimport GrafikEmbed from '../../components/GrafikEmbed.astro';\n" + son

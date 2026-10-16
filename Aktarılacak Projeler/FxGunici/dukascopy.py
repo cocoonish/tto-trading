@@ -468,13 +468,26 @@ def oz(yol: Path) -> str:
     return h.hexdigest()
 
 
-def oku_ham(dizin: Path, sembol: str, yillar: list[int] | None = None) -> pd.DataFrame:
-    """Arşivden ham (nokta cinsinden) çerçeve."""
+class ArsivOzuHatasi(RuntimeError):
+    """Arşiv dosyası künyedeki özüyle (SHA-256) aynı değil: dosya indirildikten sonra değişmiş."""
+
+
+def oku_ham(dizin: Path, sembol: str, yillar: list[int] | None = None, sina: bool = True) -> pd.DataFrame:
+    """Arşivden ham (nokta cinsinden) çerçeve. Her yıl dosyası okunmadan önce künyedeki SHA-256 özüne karşı
+    sınanır (`sina`): indirildikten sonra değişen ya da künyesi olmayan bir dosya ölçüme giremez."""
     dosyalar = sorted((dizin / sembol).glob("*.parquet"))
     if yillar is not None:
         dosyalar = [d for d in dosyalar if int(d.stem) in set(yillar)]
     if not dosyalar:
         raise FileNotFoundError(f"{sembol}: arşiv yok ({dizin / sembol})")
+    if sina:
+        birimler = kunye_oku(dizin).get("birimler", {})
+        for d in dosyalar:
+            k = birimler.get(f"{sembol}/{d.stem}") or {}
+            if not k.get("sha256"):
+                raise ArsivOzuHatasi(f"{sembol}/{d.stem}: künyede öz yok")
+            if oz(d) != k["sha256"]:
+                raise ArsivOzuHatasi(f"{sembol}/{d.stem}: dosyanın özü künyedekiyle aynı değil")
     return pd.concat([pq.read_table(d).to_pandas() for d in dosyalar], ignore_index=True)
 
 

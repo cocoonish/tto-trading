@@ -148,16 +148,29 @@ def kova_analizi(f: pd.DataFrame, ic: np.ndarray, asgari: int = 30) -> list[dict
                 "oos_isabet": float((f["pnl_pip"].to_numpy()[md] > 0).mean()) if md.any() else float("nan"),
             })
         secilen = [s["kova"] for s in satirlar if s["is_n"] >= asgari and np.isfinite(s["is_r"]) and s["is_r"] > ic_ort]
-        hukum = "secilmedi"
-        oos_sec = oos_tum = oos_ters = float("nan")
-        if secilen and len(secilen) < len(satirlar):
-            ms = kova.isin(secilen).to_numpy()
-            msd, mtd = ms & ~ic, (~ms) & ~ic & kova.notna().to_numpy()
-            oos_sec = float(r[msd].mean()) if msd.any() else float("nan")
-            oos_ters = float(r[mtd].mean()) if mtd.any() else float("nan")
-            n_oos = int(msd.sum())
-            hukum = "tuttu" if (n_oos >= 20 and np.isfinite(oos_sec) and oos_sec > 0
-                                and np.isfinite(oos_ters) and oos_sec > oos_ters) else "tutmadi"
+        hukum, oos_sec, oos_ters = _secim_sina(kova, r, ic, secilen, len(satirlar))
+        # Ters seçim (betimleyici; ön kayıtta yoktu, hükmü değiştirmez): örneklem içinde ortalamanın ALTINDA kalan
+        # kovalar seçilseydi aynı örneklem dışı ölçütü geçer miydi? Kova farkları gürültüyse iki seçimin geçme oranı
+        # aynı olur; gerçek seçimin oranı ters seçiminkini aşmıyorsa "tuttu" sayısı şansla açıklanır.
+        ters = [s["kova"] for s in satirlar if s["is_n"] >= asgari and np.isfinite(s["is_r"]) and s["is_r"] < ic_ort]
+        t_hukum, t_sec, t_ters = _secim_sina(kova, r, ic, ters, len(satirlar))
         sonuc.append({"degisken": ad, "sinir": sinir, "kovalar": satirlar, "secilen": secilen,
-                      "hukum": hukum, "oos_secilen_r": oos_sec, "oos_tamamlayan_r": oos_ters})
+                      "hukum": hukum, "oos_secilen_r": oos_sec, "oos_tamamlayan_r": oos_ters,
+                      "ters_secim": {"secilen": ters, "hukum": t_hukum, "oos_secilen_r": t_sec,
+                                     "oos_tamamlayan_r": t_ters}})
     return sonuc
+
+
+def _secim_sina(kova: pd.Series, r: np.ndarray, ic: np.ndarray, secilen: list, n_kova: int) -> tuple:
+    """Örneklem içinde seçilen kovaların örneklem dışı sınaması (ön kayıt [kosul]): seçilenlerin örneklem dışı
+    ortalaması sıfırın ve tamamlayanın üstünde, en az 20 işlemle. Seçim boşsa ya da bütün kovalarsa 'secilmedi'."""
+    if not secilen or len(secilen) >= n_kova:
+        return "secilmedi", float("nan"), float("nan")
+    ms = kova.isin(secilen).to_numpy()
+    msd, mtd = ms & ~ic, (~ms) & ~ic & kova.notna().to_numpy()
+    oos_sec = float(r[msd].mean()) if msd.any() else float("nan")
+    oos_ters = float(r[mtd].mean()) if mtd.any() else float("nan")
+    n_oos = int(msd.sum())
+    hukum = "tuttu" if (n_oos >= 20 and np.isfinite(oos_sec) and oos_sec > 0
+                        and np.isfinite(oos_ters) and oos_sec > oos_ters) else "tutmadi"
+    return hukum, oos_sec, oos_ters

@@ -8,6 +8,7 @@ arızanın kendisine karşı koşturulur.
 """
 from __future__ import annotations
 
+import json
 import sys
 from datetime import date
 from pathlib import Path
@@ -58,7 +59,9 @@ def test_kalite_bilinen_kusurlari_sayar(tmp_path, monkeypatch):
     df.loc[df.index[k + 1], "b_o"] = df.loc[j, "b_c"]
     df.loc[df.index[k + 1], "b_h"] = max(df.loc[df.index[k + 1], "b_h"], df.loc[j, "b_c"])
     duka = tmp_path / "dukascopy"
-    dk.yaz(df.reset_index(drop=True), duka / "EURUSD" / "2024.parquet")
+    oz = dk.yaz(df.reset_index(drop=True), duka / "EURUSD" / "2024.parquet")
+    (duka / "kunye").mkdir(parents=True)
+    (duka / "kunye" / "EURUSD_2024.json").write_text(json.dumps({"birimler": {"EURUSD/2024": {"sha256": oz}}}))
     monkeypatch.setattr(ay, "DUKA", duka)
     a = ay.oku()
     a = a.__class__(**{**a.__dict__, "baslangic": bas, "bitis": bit, "ciftler": ("EURUSD",)})

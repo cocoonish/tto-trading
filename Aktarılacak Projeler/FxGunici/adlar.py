@@ -5,6 +5,9 @@
 aynı şeyin iki yerde iki adı olursa okur onları iki ayrı şey sanır."""
 from __future__ import annotations
 
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+
 #: Strateji birimleri (kosu.BIRIMLER anahtarları): okura giden tam ad ve figür etiketi için kısa ad.
 BIRIM = {
     "orb": ("Londra açılış aralığı kırılımı (ORB)", "Londra ORB"),
@@ -39,6 +42,11 @@ DERS_BIRIM = {
     "fx-gunici-haber": ["n1", "n2", "n3", "n4", "n5"],
     "fx-gunici-akis": ["fiks_momentum", "momentum", "vwap_cekilme"],
 }
+
+#: Serinin okuma sırası (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır; dogrula.py iki
+#: listeyi karşılaştırır).
+DERS_SIRA = ["fx-gunici-giris", "fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari", "fx-gunici-fade",
+             "fx-gunici-haber", "fx-gunici-akis", "fx-gunici-karsilastirma", "fx-gunici-metodoloji"]
 
 #: Parametrelerin okur adı ve değerlerinin okur yazımı.
 PARAM = {
@@ -86,6 +94,16 @@ DEGER = {
 
 #: Çıkış nedeni (motor.NEDEN kodları).
 NEDEN = {1: "stop", 2: "hedef", 3: "zaman / gün sonu", 4: "kapanış stopu", 5: "boşlukla stop", 6: "boşlukla hedef"}
+
+def neden_ad(i: dict, gun_sonu_et: str) -> str:
+    """Çıkış nedeninin okur adı. Motor zaman çıkışı ile gün sonu kapanışını aynı kodla (3) yazar; ikisi çıkış
+    dakikasının New York saatinden ayrılır (gün sonu kapanışı önceden kaydın gün sonu saatindedir)."""
+    n = i.get("neden")
+    if n == 3 and i.get("cikis_t") is not None:
+        et = datetime.fromtimestamp(int(i["cikis_t"]), timezone.utc).astimezone(ZoneInfo("America/New_York"))
+        return "gün sonu kapanışı" if et.strftime("%H:%M") == gun_sonu_et else "zaman çıkışı"
+    return NEDEN.get(n, "")
+
 
 #: Haber olayları.
 OLAY = {
