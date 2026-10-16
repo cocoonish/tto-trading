@@ -417,8 +417,11 @@ stop_turu = "sert"
 hedef = "itki_ucu"
 
 [haber_devam]
-# EKLENDİ 16.10.2026, ilk ön kayıttan (a985e126) sonra ve GERÇEK VERİ İNMEDEN önce: arşivin ilk
-# bulut koşusu henüz bitmemişti, hiçbir haber olayı ölçülmemişti. Gerekçe: görev tanımı
+# EKLENDİ 16.10.2026 08:55 UTC (d001aeeb), ilk ön kayıttan (a985e126, 08:29) sonra. O anda uzak
+# dalda iki veri commit'i vardı ve ikisi de OKUNMAMIŞTI: EUR/USD 2018'in ilk fiyat parçası
+# (637da271, 08:50) ve FOMC duyurularının ham sayfaları (3e8ede37, 08:52). Takvim henüz
+# ayrıştırılmamıştı; hiçbir haber olayı ölçülmemişti. (Bu satırın ilk hâli "arşivin ilk bulut
+# koşusu henüz bitmemişti" diyordu; git geçmişine göre düzeltildi.) Gerekçe: görev tanımı
 # "hangi koşulda kırılımın, hangisinde fade'in kazandığını gösteren net bir tablo" istiyor;
 # N1/N2 stop ve hedef kuralları taşıdığı için bu soruyu kendi başına cevaplamaz.
 ad = "Kırılım ↔ fade devam tablosu"
