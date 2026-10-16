@@ -18,10 +18,15 @@ nokta = { EURUSD = 1e-5, GBPUSD = 1e-5, AUDUSD = 1e-5, USDJPY = 1e-3 }
 pip = { EURUSD = 1e-4, GBPUSD = 1e-4, AUDUSD = 1e-4, USDJPY = 1e-2 }
 
 [indirme]
-# Kibar ol: kaynak kendi müşterilerine de hizmet veriyor.
-es_zamanli = 10
+# Kibar ol: kaynak kendi müşterilerine de hizmet veriyor. Eşzamanlılık bir tavandır;
+# istekleri başlatma HIZINI paylaşılan uyarlamalı sınır yönetir (dukascopy.Hiz):
+# 503/429'da yarıya iner, başarıda yavaşça artar. Ölçüm (16.10.2026): on eşzamanlı
+# istek 0,8 istek/sn'de 503 yağmuru üretti, daha az eşzamanlı ilk koşu 1,3 istek/sn verdi.
+es_zamanli = 6
 zaman_asimi_sn = 20
 deneme = 6
+hiz_baslangic = 1.5
+hiz_tavan = 6.0
 # Bulut koşusunda iş sınırı 21 dakika; betik kendi bütçesini bunun altında
 # tutar ve yarım kalan yılı bir sonraki koşuya bırakır (arşiv kaldığı yerden sürer).
 butce_dk = 18

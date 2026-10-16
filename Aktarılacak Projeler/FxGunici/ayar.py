@@ -31,6 +31,8 @@ class Ayar:
     zaman_asimi_sn: float
     deneme: int
     butce_dk: float
+    hiz_baslangic: float
+    hiz_tavan: float
     ic_baslangic: date
     ic_bitis: date
     dis_baslangic: date
@@ -67,6 +69,8 @@ def oku(yol: Path | None = None) -> Ayar:
         zaman_asimi_sn=float(i["zaman_asimi_sn"]),
         deneme=int(i["deneme"]),
         butce_dk=float(i["butce_dk"]),
+        hiz_baslangic=float(i["hiz_baslangic"]),
+        hiz_tavan=float(i["hiz_tavan"]),
         ic_baslangic=_gun(o["ic_baslangic"]),
         ic_bitis=_gun(o["ic_bitis"]),
         dis_baslangic=_gun(o["dis_baslangic"]),

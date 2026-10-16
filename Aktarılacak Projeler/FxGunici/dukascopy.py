@@ -143,28 +143,111 @@ class Yanit:
     deneme: int = 0
 
 
+class Hiz:
+    """İş parçacıklarının PAYLAŞTIĞI uyarlamalı hız sınırı (toplamsal artış, çarpımsal azalış).
+
+    Sebep ölçüldü (16.10.2026, bulut koşusu 38874324826): on eşzamanlı istekle
+    kaynak isteklerin çoğuna HTTP 503 döndürdü — 0,8 istek/sn ve bir yılın 222
+    günü eksik; daha az eşzamanlı ilk koşu 1,3 istek/sn ve iki yılda 27 eksik gün
+    vermişti. Darboğaz kaynağın hız sınırıdır, bizim bant genişliğimiz değil; bu
+    yüzden eşzamanlılık değil istek BAŞLATMA hızı yönetilir. 429/5xx ya da ağ
+    hatasında hız yarıya iner ve BÜTÜN iş parçacıkları birlikte bekler (tek tek
+    bekleyen iş parçacıkları kaynağı hâlâ dövüyordu); her `artis_adim` başarılı
+    istekte hız biraz artar, tavanı aşmaz.
+    """
+
+    def __init__(self, baslangic: float = 1.5, taban: float = 0.2, tavan: float = 6.0,
+                 artis: float = 0.1, artis_adim: int = 25, ceza_sn: float = 10.0):
+        self.hiz, self.taban, self.tavan = baslangic, taban, tavan
+        self.artis, self.artis_adim, self.ceza_sn = artis, artis_adim, ceza_sn
+        self._kilit = threading.Lock()
+        self._sonraki = time.monotonic()
+        self._dur = 0.0
+        self._son_azalis = -1e9
+        self._seri = 0
+        self.sayac = {"tamam": 0, "ret": 0, "ag": 0, "bekleme_sn": 0.0, "en_dusuk_hiz": baslangic,
+                      "en_yuksek_hiz": baslangic}
+
+    def bekle(self, son_an: float | None = None) -> bool:
+        """Sıradaki isteğin başlama anını bekler; bütçe o andan önce dolacaksa False."""
+        with self._kilit:
+            simdi = time.monotonic()
+            t = max(self._sonraki, self._dur, simdi)
+            self._sonraki = t + 1.0 / self.hiz
+        if son_an is not None and t > son_an:
+            return False
+        if t > simdi:
+            time.sleep(t - simdi)
+            with self._kilit:
+                self.sayac["bekleme_sn"] += t - simdi
+        return True
+
+    def basarili(self) -> None:
+        with self._kilit:
+            self.sayac["tamam"] += 1
+            self._seri += 1
+            if self._seri >= self.artis_adim:
+                self._seri = 0
+                self.hiz = min(self.tavan, self.hiz + self.artis)
+                self.sayac["en_yuksek_hiz"] = max(self.sayac["en_yuksek_hiz"], self.hiz)
+
+    def reddedildi(self, bekle_sn: float | None = None, ag: bool = False) -> None:
+        """Bir ret, hızı bir kez yarıya indirir: aynı anda başlamış istekler birlikte
+        reddedilir ve her biri ayrı ayrı yarıya indirseydi hız bir anda tabana çakılırdı."""
+        with self._kilit:
+            simdi = time.monotonic()
+            self.sayac["ag" if ag else "ret"] += 1
+            self._seri = 0
+            if simdi - self._son_azalis >= self.ceza_sn:
+                self.hiz = max(self.taban, self.hiz / 2.0)
+                self._son_azalis = simdi
+                self.sayac["en_dusuk_hiz"] = min(self.sayac["en_dusuk_hiz"], self.hiz)
+            self._dur = max(self._dur, simdi + (bekle_sn if bekle_sn else self.ceza_sn))
+
+
+HIZ = Hiz()
+
+
+def hiz_kur(**kw) -> Hiz:
+    """Yeni bir paylaşılan hız sınırı kurar (koşu başına; ayar.toml [indirme])."""
+    global HIZ
+    HIZ = Hiz(**kw)
+    return HIZ
+
+
+def _retry_after(r) -> float | None:
+    try:
+        v = float(r.headers.get("Retry-After", ""))
+        return min(60.0, max(1.0, v))
+    except (TypeError, ValueError):
+        return None
+
+
 def getir(url: str, deneme: int = 6, zaman_asimi: float = 20.0, son_an: float | None = None) -> Yanit:
-    """Tek dosya; 429/5xx ve ağ hatasında üstel bekleyişle yeniden dener.
+    """Tek dosya; 429/5xx ve ağ hatasında paylaşılan hız sınırının bekleyişiyle yeniden dener.
 
     `son_an` (monotonic) geçtiyse yeni deneme başlatılmaz: dosya bu koşuda HATA
     sayılır ve bir sonraki koşu onu yeniden ister (kaldığı yerden sürer)."""
     son = ""
     for i in range(deneme):
-        if son_an is not None and time.monotonic() > son_an:
+        if (son_an is not None and time.monotonic() > son_an) or not HIZ.bekle(son_an):
             return Yanit("hata", ayrinti=f"bütçe ({son})" if son else "bütçe", deneme=i)
         try:
             r = _havuz().request("GET", url, timeout=urllib3.Timeout(connect=10.0, read=zaman_asimi),
                                  retries=False, preload_content=True)
             if r.status == 200:
+                HIZ.basarili()
                 return Yanit("tamam" if r.data else "bos", r.data, deneme=i + 1)
             if r.status == 404:
+                HIZ.basarili()
                 return Yanit("yok", deneme=i + 1)
             son = f"HTTP {r.status}"
             if r.status not in (429, 500, 502, 503, 504):
                 return Yanit("hata", ayrinti=son, deneme=i + 1)
+            HIZ.reddedildi(_retry_after(r))
         except urllib3.exceptions.HTTPError as e:
             son = f"{type(e).__name__}"
-        time.sleep(min(20.0, 1.0 * 2 ** i))
+            HIZ.reddedildi(ag=True)
     return Yanit("hata", ayrinti=son, deneme=deneme)
 
 
@@ -196,6 +279,14 @@ def gunler(bas: date, bit: date) -> list[date]:
     return [bas + timedelta(days=i) for i in range(n + 1)]
 
 
+def istenecek(g: date) -> bool:
+    """Cumartesi istenmez: FX cuma 17:00 ET'de kapanır, pazar 17:00 ET'de açılır; UTC
+    cumartesi gününün bütün dakikaları kapalı piyasadır. İlk iki koşuda 2018–2019'un
+    istenen her cumartesi dosyası boş döndü (künyede `gun_bos`), yani bu bir varsayım
+    değil ölçümdür; isteği atlamak kaynağın hız sınırında indirmenin yedide birini geri kazanır."""
+    return g.weekday() != 5
+
+
 def yil_indir(sembol: str, yil: int, bas: date, bit: date, es_zamanli: int = 8,
               deneme: int = 6, zaman_asimi: float = 20.0, yalniz: list[date] | None = None,
               son_an: float | None = None) -> tuple[pd.DataFrame, dict]:
@@ -205,7 +296,7 @@ def yil_indir(sembol: str, yil: int, bas: date, bit: date, es_zamanli: int = 8,
     birleştirip bir sonraki koşuda yalnız o günleri yeniden ister."""
     ilk = max(bas, date(yil, 1, 1))
     son = min(bit, date(yil, 12, 31))
-    liste = yalniz if yalniz is not None else gunler(ilk, son)
+    liste = [g for g in (yalniz if yalniz is not None else gunler(ilk, son)) if istenecek(g)]
     isler = [(g, t) for g in liste for t in ("BID", "ASK")]
     with ThreadPoolExecutor(max_workers=es_zamanli) as h:
         yanitlar = list(h.map(lambda gt: getir(dakika_url(sembol, gt[0], gt[1]), deneme, zaman_asimi, son_an),
@@ -300,11 +391,26 @@ def fiyatla(ham: pd.DataFrame, nokta: float) -> pd.DataFrame:
 
 
 def kunye_oku(dizin: Path) -> dict:
-    yol = dizin / "kunye.json"
-    return json.loads(yol.read_text(encoding="utf-8")) if yol.exists() else {}
+    """Künye parite başına bir dosyadır (`kunye/<SEMBOL>.json`); okuyucu hepsini birleştirir.
+
+    Parite başına dosya, pariteleri ayrı koşucularda AYNI ANDA indirmeye izin verir:
+    her iş yalnız kendi dosyasına yazar, dala gönderirken çakışma doğmaz."""
+    out: dict = {"birimler": {}}
+    for yol in sorted((dizin / "kunye").glob("*.json")):
+        k = json.loads(yol.read_text(encoding="utf-8"))
+        out["birimler"].update(k.pop("birimler", {}))
+        for a, v in k.items():
+            out.setdefault(a, v)
+    return out
 
 
-def kunye_yaz(dizin: Path, kunye: dict) -> None:
-    dizin.mkdir(parents=True, exist_ok=True)
-    (dizin / "kunye.json").write_text(json.dumps(kunye, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
-                                      encoding="utf-8")
+def kunye_yaz(dizin: Path, kunye: dict, semboller: list[str]) -> None:
+    """Yalnız verilen paritelerin künye dosyalarını yazar (ortak alanlar her dosyada)."""
+    hedef = dizin / "kunye"
+    hedef.mkdir(parents=True, exist_ok=True)
+    ortak = {a: v for a, v in kunye.items() if a != "birimler"}
+    for s in semboller:
+        birimler = {a: v for a, v in kunye.get("birimler", {}).items() if a.split("/")[0] == s}
+        (hedef / f"{s}.json").write_text(
+            json.dumps({**ortak, "birimler": birimler}, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
+            encoding="utf-8")
