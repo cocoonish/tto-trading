@@ -1,0 +1,538 @@
+{
+ "_koşu": {
+  "sure_sn": 122.5,
+  "zaman": "2026-10-16T10:35:43Z"
+ },
+ "https://web.archive.org/cdx/search/cdx?url=federalreserve.gov/newsevents/20&matchType=prefix&output=json&fl=original,timestamp,statuscode&collapse=urlkey&filter=statuscode:200&limit=20000": {
+  "bayt": 19551,
+  "dosya": "web.archive.org_cdx_search_cdx_url_federalreserve.gov_newsevents_20_matchType_prefix_output_json_fl_original_timestamp_statuscode_collapse_urlkey_filt_a0ef5f2e.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/json/calendar.json": {
+  "bayt": 545367,
+  "dosya": "www.federalreserve.gov_json_calendar.json_07e0fb72.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-april.htm": {
+  "bayt": 99500,
+  "dosya": "www.federalreserve.gov_newsevents_2018-april.htm_a3058b29.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-august.htm": {
+  "bayt": 94961,
+  "dosya": "www.federalreserve.gov_newsevents_2018-august.htm_d9cd97ea.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-december.htm": {
+  "bayt": 103767,
+  "dosya": "www.federalreserve.gov_newsevents_2018-december.htm_7ad3cb1c.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-february.htm": {
+  "bayt": 99381,
+  "dosya": "www.federalreserve.gov_newsevents_2018-february.htm_222f4c68.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-january.htm": {
+  "bayt": 97729,
+  "dosya": "www.federalreserve.gov_newsevents_2018-january.htm_8776ac7f.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-july.htm": {
+  "bayt": 99629,
+  "dosya": "www.federalreserve.gov_newsevents_2018-july.htm_060d886d.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-june.htm": {
+  "bayt": 95643,
+  "dosya": "www.federalreserve.gov_newsevents_2018-june.htm_a2aac1f6.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-march.htm": {
+  "bayt": 102677,
+  "dosya": "www.federalreserve.gov_newsevents_2018-march.htm_be358c4b.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-may.htm": {
+  "bayt": 103298,
+  "dosya": "www.federalreserve.gov_newsevents_2018-may.htm_7889fa76.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-november.htm": {
+  "bayt": 105535,
+  "dosya": "www.federalreserve.gov_newsevents_2018-november.htm_36bc25bf.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-october.htm": {
+  "bayt": 107378,
+  "dosya": "www.federalreserve.gov_newsevents_2018-october.htm_c9fb930a.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2018-september.htm": {
+  "bayt": 97751,
+  "dosya": "www.federalreserve.gov_newsevents_2018-september.htm_577776a2.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-april.htm": {
+  "bayt": 98287,
+  "dosya": "www.federalreserve.gov_newsevents_2019-april.htm_e7ec1ddf.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-august.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/newsevents/2019-december.htm": {
+  "bayt": 100308,
+  "dosya": "www.federalreserve.gov_newsevents_2019-december.htm_416ae795.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-february.htm": {
+  "bayt": 114059,
+  "dosya": "www.federalreserve.gov_newsevents_2019-february.htm_e6e1b84d.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-january.htm": {
+  "bayt": 103109,
+  "dosya": "www.federalreserve.gov_newsevents_2019-january.htm_7df345ba.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-july.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/newsevents/2019-june.htm": {
+  "bayt": 103214,
+  "dosya": "www.federalreserve.gov_newsevents_2019-june.htm_f0d87568.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-march.htm": {
+  "bayt": 104740,
+  "dosya": "www.federalreserve.gov_newsevents_2019-march.htm_f451b837.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-may.htm": {
+  "bayt": 113488,
+  "dosya": "www.federalreserve.gov_newsevents_2019-may.htm_2e704756.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-november.htm": {
+  "bayt": 110599,
+  "dosya": "www.federalreserve.gov_newsevents_2019-november.htm_69d6925f.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-october.htm": {
+  "bayt": 117516,
+  "dosya": "www.federalreserve.gov_newsevents_2019-october.htm_b1d1829c.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2019-september.htm": {
+  "bayt": 95568,
+  "dosya": "www.federalreserve.gov_newsevents_2019-september.htm_07310a58.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-april.htm": {
+  "bayt": 96908,
+  "dosya": "www.federalreserve.gov_newsevents_2020-april.htm_349cdbaf.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-august.htm": {
+  "bayt": 97331,
+  "dosya": "www.federalreserve.gov_newsevents_2020-august.htm_6b777866.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-december.htm": {
+  "bayt": 104815,
+  "dosya": "www.federalreserve.gov_newsevents_2020-december.htm_2cd98dbe.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-february.htm": {
+  "bayt": 104925,
+  "dosya": "www.federalreserve.gov_newsevents_2020-february.htm_d543294c.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-january.htm": {
+  "bayt": 103619,
+  "dosya": "www.federalreserve.gov_newsevents_2020-january.htm_b3b47c0a.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-july.htm": {
+  "bayt": 98171,
+  "dosya": "www.federalreserve.gov_newsevents_2020-july.htm_8f3c3041.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-june.htm": {
+  "bayt": 104114,
+  "dosya": "www.federalreserve.gov_newsevents_2020-june.htm_a67d20d0.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-march.htm": {
+  "bayt": 92220,
+  "dosya": "www.federalreserve.gov_newsevents_2020-march.htm_014bf415.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-may.htm": {
+  "bayt": 105412,
+  "dosya": "www.federalreserve.gov_newsevents_2020-may.htm_4b6e860e.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-november.htm": {
+  "bayt": 108928,
+  "dosya": "www.federalreserve.gov_newsevents_2020-november.htm_51d354ca.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-october.htm": {
+  "bayt": 106340,
+  "dosya": "www.federalreserve.gov_newsevents_2020-october.htm_e0a350b3.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2020-september.htm": {
+  "bayt": 113093,
+  "dosya": "www.federalreserve.gov_newsevents_2020-september.htm_26bc05d5.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-april.htm": {
+  "bayt": 101106,
+  "dosya": "www.federalreserve.gov_newsevents_2021-april.htm_0e5e1caa.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-august.htm": {
+  "bayt": 98190,
+  "dosya": "www.federalreserve.gov_newsevents_2021-august.htm_93515acc.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-december.htm": {
+  "bayt": 100063,
+  "dosya": "www.federalreserve.gov_newsevents_2021-december.htm_8d7c16a0.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-february.htm": {
+  "bayt": 111244,
+  "dosya": "www.federalreserve.gov_newsevents_2021-february.htm_b5be2502.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-january.htm": {
+  "bayt": 104821,
+  "dosya": "www.federalreserve.gov_newsevents_2021-january.htm_0271ac1f.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-july.htm": {
+  "bayt": 101130,
+  "dosya": "www.federalreserve.gov_newsevents_2021-july.htm_547bf5f5.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-june.htm": {
+  "bayt": 103016,
+  "dosya": "www.federalreserve.gov_newsevents_2021-june.htm_3cdb6974.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-march.htm": {
+  "bayt": 111767,
+  "dosya": "www.federalreserve.gov_newsevents_2021-march.htm_7c30e676.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-may.htm": {
+  "bayt": 105946,
+  "dosya": "www.federalreserve.gov_newsevents_2021-may.htm_2db4545d.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-november.htm": {
+  "bayt": 109642,
+  "dosya": "www.federalreserve.gov_newsevents_2021-november.htm_7d229125.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-october.htm": {
+  "bayt": 108280,
+  "dosya": "www.federalreserve.gov_newsevents_2021-october.htm_1fdc2c2c.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2021-september.htm": {
+  "bayt": 105591,
+  "dosya": "www.federalreserve.gov_newsevents_2021-september.htm_d21360d5.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-april.htm": {
+  "bayt": 98041,
+  "dosya": "www.federalreserve.gov_newsevents_2022-april.htm_f5d97404.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-august.htm": {
+  "bayt": 95932,
+  "dosya": "www.federalreserve.gov_newsevents_2022-august.htm_cf71be2d.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-december.htm": {
+  "bayt": 96185,
+  "dosya": "www.federalreserve.gov_newsevents_2022-december.htm_093e8d24.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-february.htm": {
+  "bayt": 98355,
+  "dosya": "www.federalreserve.gov_newsevents_2022-february.htm_b2d85513.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-january.htm": {
+  "bayt": 100717,
+  "dosya": "www.federalreserve.gov_newsevents_2022-january.htm_fe6afe89.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-july.htm": {
+  "bayt": 95950,
+  "dosya": "www.federalreserve.gov_newsevents_2022-july.htm_342e0d66.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-june.htm": {
+  "bayt": 103679,
+  "dosya": "www.federalreserve.gov_newsevents_2022-june.htm_bdd71589.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-march.htm": {
+  "bayt": 105086,
+  "dosya": "www.federalreserve.gov_newsevents_2022-march.htm_9d0fc452.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-may.htm": {
+  "bayt": 102042,
+  "dosya": "www.federalreserve.gov_newsevents_2022-may.htm_c0861d5b.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-november.htm": {
+  "bayt": 107724,
+  "dosya": "www.federalreserve.gov_newsevents_2022-november.htm_63f6ea29.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-october.htm": {
+  "bayt": 107092,
+  "dosya": "www.federalreserve.gov_newsevents_2022-october.htm_8ee8e63f.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2022-september.htm": {
+  "bayt": 104584,
+  "dosya": "www.federalreserve.gov_newsevents_2022-september.htm_b854f843.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-april.htm": {
+  "bayt": 102084,
+  "dosya": "www.federalreserve.gov_newsevents_2023-april.htm_47219f82.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-august.htm": {
+  "bayt": 93818,
+  "dosya": "www.federalreserve.gov_newsevents_2023-august.htm_f0e3f3e8.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-december.htm": {
+  "bayt": 99421,
+  "dosya": "www.federalreserve.gov_newsevents_2023-december.htm_0b8d8a29.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-february.htm": {
+  "bayt": 104547,
+  "dosya": "www.federalreserve.gov_newsevents_2023-february.htm_fc135f1c.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-january.htm": {
+  "bayt": 97427,
+  "dosya": "www.federalreserve.gov_newsevents_2023-january.htm_a6bcb652.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-july.htm": {
+  "bayt": 99835,
+  "dosya": "www.federalreserve.gov_newsevents_2023-july.htm_6c9842b8.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-june.htm": {
+  "bayt": 104776,
+  "dosya": "www.federalreserve.gov_newsevents_2023-june.htm_5aea4885.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-march.htm": {
+  "bayt": 107654,
+  "dosya": "www.federalreserve.gov_newsevents_2023-march.htm_b3b0c023.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-may.htm": {
+  "bayt": 111985,
+  "dosya": "www.federalreserve.gov_newsevents_2023-may.htm_8265a571.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-november.htm": {
+  "bayt": 126691,
+  "dosya": "www.federalreserve.gov_newsevents_2023-november.htm_6efee89d.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-october.htm": {
+  "bayt": 121843,
+  "dosya": "www.federalreserve.gov_newsevents_2023-october.htm_c865838a.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2023-september.htm": {
+  "bayt": 101733,
+  "dosya": "www.federalreserve.gov_newsevents_2023-september.htm_6eece1b9.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-april.htm": {
+  "bayt": 108864,
+  "dosya": "www.federalreserve.gov_newsevents_2024-april.htm_aef37c02.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-august.htm": {
+  "bayt": 95824,
+  "dosya": "www.federalreserve.gov_newsevents_2024-august.htm_c6fe87cf.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-december.htm": {
+  "bayt": 100152,
+  "dosya": "www.federalreserve.gov_newsevents_2024-december.htm_a8b2cff4.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-february.htm": {
+  "bayt": 107496,
+  "dosya": "www.federalreserve.gov_newsevents_2024-february.htm_ceef1a36.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-january.htm": {
+  "bayt": 102977,
+  "dosya": "www.federalreserve.gov_newsevents_2024-january.htm_3284ea66.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-july.htm": {
+  "bayt": 109883,
+  "dosya": "www.federalreserve.gov_newsevents_2024-july.htm_38b804a3.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-june.htm": {
+  "bayt": 103290,
+  "dosya": "www.federalreserve.gov_newsevents_2024-june.htm_d4b42252.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-march.htm": {
+  "bayt": 110063,
+  "dosya": "www.federalreserve.gov_newsevents_2024-march.htm_1a5e3f07.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-may.htm": {
+  "bayt": 124405,
+  "dosya": "www.federalreserve.gov_newsevents_2024-may.htm_caa5e3ea.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-november.htm": {
+  "bayt": 105755,
+  "dosya": "www.federalreserve.gov_newsevents_2024-november.htm_91abf961.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-october.htm": {
+  "bayt": 108519,
+  "dosya": "www.federalreserve.gov_newsevents_2024-october.htm_6b5a8178.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2024-september.htm": {
+  "bayt": 113334,
+  "dosya": "www.federalreserve.gov_newsevents_2024-september.htm_a54686da.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-april.htm": {
+  "bayt": 111348,
+  "dosya": "www.federalreserve.gov_newsevents_2025-april.htm_16aa52c3.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-august.htm": {
+  "bayt": 99594,
+  "dosya": "www.federalreserve.gov_newsevents_2025-august.htm_b7292c11.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-december.htm": {
+  "bayt": 105168,
+  "dosya": "www.federalreserve.gov_newsevents_2025-december.htm_4efd0ced.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-february.htm": {
+  "bayt": 119862,
+  "dosya": "www.federalreserve.gov_newsevents_2025-february.htm_6e4348eb.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-january.htm": {
+  "bayt": 105229,
+  "dosya": "www.federalreserve.gov_newsevents_2025-january.htm_a98e8894.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-july.htm": {
+  "bayt": 108483,
+  "dosya": "www.federalreserve.gov_newsevents_2025-july.htm_54601d92.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-june.htm": {
+  "bayt": 116145,
+  "dosya": "www.federalreserve.gov_newsevents_2025-june.htm_8c547de8.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-march.htm": {
+  "bayt": 103852,
+  "dosya": "www.federalreserve.gov_newsevents_2025-march.htm_77325915.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-may.htm": {
+  "bayt": 115101,
+  "dosya": "www.federalreserve.gov_newsevents_2025-may.htm_a2c847ed.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-november.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/newsevents/2025-october.htm": {
+  "bayt": 131496,
+  "dosya": "www.federalreserve.gov_newsevents_2025-october.htm_09d93db8.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2025-september.htm": {
+  "bayt": 106678,
+  "dosya": "www.federalreserve.gov_newsevents_2025-september.htm_1b9c415f.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-april.htm": {
+  "durum": "HTTP 404"
+ },
+ "https://www.federalreserve.gov/newsevents/2026-august.htm": {
+  "bayt": 95798,
+  "dosya": "www.federalreserve.gov_newsevents_2026-august.htm_816e1e99.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-february.htm": {
+  "bayt": 114030,
+  "dosya": "www.federalreserve.gov_newsevents_2026-february.htm_ee596a7e.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-january.htm": {
+  "bayt": 106568,
+  "dosya": "www.federalreserve.gov_newsevents_2026-january.htm_009b1b97.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-july.htm": {
+  "bayt": 113600,
+  "dosya": "www.federalreserve.gov_newsevents_2026-july.htm_711ffb8a.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-june.htm": {
+  "bayt": 104946,
+  "dosya": "www.federalreserve.gov_newsevents_2026-june.htm_43812fb1.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-march.htm": {
+  "bayt": 117461,
+  "dosya": "www.federalreserve.gov_newsevents_2026-march.htm_279678b4.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-may.htm": {
+  "bayt": 112598,
+  "dosya": "www.federalreserve.gov_newsevents_2026-may.htm_6394d394.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-october.htm": {
+  "bayt": 108863,
+  "dosya": "www.federalreserve.gov_newsevents_2026-october.htm_cf223986.html",
+  "durum": 200
+ },
+ "https://www.federalreserve.gov/newsevents/2026-september.htm": {
+  "bayt": 110861,
+  "dosya": "www.federalreserve.gov_newsevents_2026-september.htm_ba4d056c.html",
+  "durum": 200
+ }
+}
