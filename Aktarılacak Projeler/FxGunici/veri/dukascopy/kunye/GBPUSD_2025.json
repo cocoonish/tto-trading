@@ -1,12 +1,12 @@
 {
  "birimler": {
   "GBPUSD/2025": {
-   "bayt": 4080510,
-   "dolgu_dakika": 79269,
+   "bayt": 4123027,
+   "dolgu_dakika": 79615,
    "gun": 313,
    "gun_404": [],
    "gun_bos": [],
-   "gun_dolu": 309,
+   "gun_dolu": 312,
    "gun_dolu_liste": [
     "2025-01-01",
     "2025-01-02",
@@ -304,6 +304,7 @@
     "2025-12-09",
     "2025-12-10",
     "2025-12-11",
+    "2025-12-12",
     "2025-12-14",
     "2025-12-15",
     "2025-12-17",
@@ -312,26 +313,25 @@
     "2025-12-21",
     "2025-12-22",
     "2025-12-23",
+    "2025-12-24",
     "2025-12-25",
     "2025-12-26",
     "2025-12-28",
     "2025-12-29",
-    "2025-12-30"
+    "2025-12-30",
+    "2025-12-31"
    ],
    "gun_hata": [
-    "2025-12-12: BID hata HTTP 503 · ASK tamam",
-    "2025-12-16: BID tamam  · ASK hata ConnectTimeoutError",
-    "2025-12-24: BID tamam  · ASK hata bütçe (HTTP 503)",
-    "2025-12-31: BID tamam  · ASK hata HTTP 503"
+    "2025-12-16: BID hata ReadTimeoutError · ASK tamam"
    ],
-   "icerik_ozu": "10210ee0b8ac4814da9f854b48528ec7f8f62ee8be5c2b75f95e10af144fdab3",
+   "icerik_ozu": "a63b4bf18108e59927a9ab8926b7a0d3c9b905f229972249f7365081b1389757",
    "ilk_gun": "2025-01-01",
-   "indirme": "2026-10-16T12:54:12Z",
-   "istek": 1882,
+   "indirme": "2026-10-16T13:12:23Z",
+   "istek": 1921,
    "kod_ozu": "f5b43a872864e7b250ef03e6c1e01b905d3b910ef08c7613ebf74cb9a43f11c1",
-   "ret": 1230,
-   "satir": 365691,
-   "sha256": "8b765dc4e6b7f431bc6c31b97f68e9167ff0b81c865915a00b125d31fced2070",
+   "ret": 1262,
+   "satir": 369665,
+   "sha256": "56b1e050bccb6759ec55851f0c4fcaa7d748f7f083a0f47e65ad687e113fe9b0",
    "son_gun": "2025-12-31",
    "tam": false
   }
@@ -358,5 +358,5 @@
   "pyarrow": "26.0.0",
   "python": "3.11.17"
  },
- "yazim": "2026-10-16T12:54:12Z"
+ "yazim": "2026-10-16T13:12:23Z"
 }
