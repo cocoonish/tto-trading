@@ -33,10 +33,13 @@ import os
 import re
 import sys
 import time
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import urllib3
+
+import ayar as ay
+import ozler
 
 BURASI = Path(__file__).resolve().parent
 HAM = BURASI / "veri" / "takvim" / "ham"
@@ -44,7 +47,10 @@ BASLIK = {"User-Agent": "tto-trading-arastirma/1.0 (+https://cocoonish.github.io
           "Accept": "text/html,application/json;q=0.9,*/*;q=0.8"}
 BUTCE_SN = 18 * 60
 T0 = time.monotonic()
-BAS, BIT = date(2017, 12, 1), date(2026, 10, 15)
+# İndirme penceresi ayarın penceresinden: başlangıçtan bir ay önce (ilk olayın öncesi), bitişe kadar.
+_AYAR = ay.oku()
+BIT = _AYAR.bitis
+BAS = (_AYAR.baslangic.replace(day=1) - timedelta(days=1)).replace(day=1)
 AYLAR = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
          "november", "december"]
 HAVUZ = urllib3.PoolManager(num_pools=8, maxsize=2, block=True, headers=BASLIK, retries=False)
@@ -250,6 +256,7 @@ def main() -> int:
         print(f"── {p}", flush=True)
         PARCALAR[p]()
     print(f"bitti: {time.monotonic() - T0:.0f} sn")
+    ozler.yaz(HAM)      # ham sayfaların SHA-256 sabitlemesi (takvim_kur okumadan önce sınar)
     return 0
 
 
