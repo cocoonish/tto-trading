@@ -55,7 +55,7 @@ NEDEN = {1: "stop", 2: "hedef", 3: "zaman", 4: "kapanis_stop", 5: "bosluk_stop",
 @njit(cache=True)
 def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
             giris_i, yon, stop, risk, hedef_tur, hedef_k, hedef_seviye, cikis_i, stop_tur,
-            kayma, haber_kayma):
+            kayma, haber_kayma, tek_pozisyon):
     n_emir = len(giris_i)
     n = len(bo)
     durum = np.zeros(n_emir, np.int8)
@@ -77,7 +77,7 @@ def _simule(bo, bh, bl, ao, ah, al, mo, mc, bar_son, haber,
         if i < 0 or i >= n or son <= i:
             durum[e] = 4
             continue
-        if i < serbest:
+        if tek_pozisyon and i < serbest:
             durum[e] = 1
             continue
         y = yon[e]
@@ -203,7 +203,7 @@ def bos_emir(n: int) -> np.ndarray:
 
 
 def simule(d: Dakika, emir: np.ndarray, bar_son: np.ndarray, haber: np.ndarray | None = None,
-           kayma_pip: float = 0.0, haber_kayma_pip: float = 0.0) -> pd.DataFrame:
+           kayma_pip: float = 0.0, haber_kayma_pip: float = 0.0, tek_pozisyon: bool = True) -> pd.DataFrame:
     """Emirleri giriş dakikasına göre sıralar, simüle eder; alınan ve alınmayan her emir için bir satır."""
     if haber is None:
         haber = np.zeros(len(d), dtype=np.bool_)
@@ -214,7 +214,7 @@ def simule(d: Dakika, emir: np.ndarray, bar_son: np.ndarray, haber: np.ndarray |
     (durum, gf, cf, cdk, nd, R, pnl, brut, mae, mfe, bel, hf) = _simule(
         d.bo, d.bh, d.bl, d.ao, d.ah, d.al, d.mo, d.mc, bar_son, haber,
         e["giris_i"], e["yon"], e["stop"], e["risk"], e["hedef_tur"], e["hedef_k"], e["hedef_seviye"],
-        e["cikis_i"], e["stop_tur"], float(k), float(hk))
+        e["cikis_i"], e["stop_tur"], float(k), float(hk), bool(tek_pozisyon))
     gi = e["giris_i"]
     ok = (gi >= 0) & (gi < len(d))
     t_g = np.where(ok, d.t[np.clip(gi, 0, len(d) - 1)], -1)
@@ -224,7 +224,8 @@ def simule(d: Dakika, emir: np.ndarray, bar_son: np.ndarray, haber: np.ndarray |
         "giris_i": gi, "cikis_i": cdk, "giris_t": t_g, "cikis_t": t_c,
         "giris_f": gf, "cikis_f": cf, "stop": e["stop"], "hedef": hf,
         "R": R, "pnl": pnl, "brut": brut, "mae": mae, "mfe": mfe,
-        "neden": nd, "belirsiz": bel,
+        "neden": nd, "belirsiz": bel, "plan_cikis_i": e["cikis_i"], "stop_tur": e["stop_tur"],
+        "hedef_tur": e["hedef_tur"], "hedef_k": e["hedef_k"],
     })
     pip = float(d.pip)
     df["pnl_pip"] = df["pnl"] / pip

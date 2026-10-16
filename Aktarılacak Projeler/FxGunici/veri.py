@@ -15,7 +15,7 @@ mumlarını kendi olay saatine çıpalı ızgaradan alır.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import pandas as pd
@@ -75,6 +75,10 @@ class Mumlar:
     n: np.ndarray               # mumdaki kotasyonlu dakika sayısı
     i0: np.ndarray; i1: np.ndarray  # ilk ve son dakikanın dizini (dahil)
     gun: np.ndarray             # FX işlem günü etiketi (mum başlangıcına göre)
+    # Türetilmiş dizilerin önbelleği (ATR, gün sırası). Nesnenin KENDİSİNDE durur:
+    # id() anahtarlı modül düzeyi bir önbellek, serbest kalan bir nesnenin kimliği
+    # yeniden kullanıldığında başka paritenin dizisini döndürürdü.
+    ek: dict = field(default_factory=dict, repr=False, compare=False)
 
     def __len__(self) -> int:
         return len(self.bt)
