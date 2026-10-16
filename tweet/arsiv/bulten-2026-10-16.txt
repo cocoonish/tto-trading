@@ -1,0 +1,27 @@
+# bulten:2026-10-16 · 2026-10-16T04:29:30+00:00 · https://x.com/i/status/2110951236174483892
+
+Sabah Notu — 16 Ekim 2026
+ABD'de sıcak ÜFE uzun ucu sattırmadı: 10 yıllık 10 bp düştü, dolar geriledi; TL ön ucu indirime yaslandı
+
+· Hazine ve Maliye Bakanlığı'na göre merkezi yönetim bütçesi eylülde 532,2 milyar TL açık verdi; açık geçen yılın aynı ayının (309,6 milyar TL) %72 üstünde ve yılın en yükseği. Faiz gideri ağustostaki 197,1 milyar TL'den 263,0 milyar TL'ye çıktı, faiz dışı denge 269,2 milyar TL açıkta.
+· TL eğrisinin ön ucu indirime yaslandı: 3 aylık spot getiri 34 bp düşüşle %36,80'e indi; Bloomberg HT anketinde 22 Ekim için beklenti 100 bp indirimle %36. 2 yıllık ise 18 bp yükselişle %39,67'ye çıktı.
+· Resmî net rezerv 9 Ekim haftasında 4,0 milyar dolar artışla 57,8 milyar dolara çıktı. Günlük bilançoya göre ise TCMB'nin tahmini döviz akımı ABD TÜFE'sinin geldiği 14 Ekim'de −3,7 milyar dolar oldu.
+· ABD'de eylül ÜFE'si aylık %1,3 ile Mart 2022'den bu yana en hızlı arttı, yıllık %6,3; perakende satışlar %0,8 arttı ama çekirdek grup yalnız %0,1 (BLS, Census). 10 yıllık getiri yine de 10,1 bp düşüşle %5,09'a indi; 30 yıllık 9,6 bp (−2,0σ) geriledi.
+· Dolar endeksi %0,54 düşüşle 18 ayın zirvesinden döndü; USD/CHF %0,98 (−2,6σ) ile G10'un en büyük hareketini yaptı, frankın dolar genelinin iki katına yakın kazancının sebebi netleşmedi. Euro/TL %0,94 (2,3σ) arttı; hareketin tamamına yakını EUR/USD'nin %0,58'lik yükselişinden geldi.
+· Nikkei 225 %4,90 (−2,8σ), Şanghay Bileşik %1,59 (−2,1σ) düştü; satışı SoftBank Group, Advantest ve Tokyo Electron gibi yapay zekâ bağlantılı hisseler sürükledi (Japan Times). Bu sabah Nikkei açılışta %1,8 yükseldi (AFP).
+
+Tez: ABD'deki enflasyon şoku ikinci gün de faize değil büyümeye yazıldı ve bu, Türkiye'de dış baskıyı gevşetirken iç tarafta eğriyi ikiye böldü: ön uç indirimi fiyatlıyor, 2 yıllık bölge bütçenin arz yükünü taşıyor.
+
+Gündem
+Türkiye: TL faizi ve DİBS. Gösterge tahvil 15 bp yükselişle %39,51'e çıktı; 5 yıllık spot getiri 3 bp düşüşle %36,49'da yatay kaldı, 7 yıllık 23 bp düşüşle %33,96'ya indi. 7 yıllık, 14 Ekim'deki 73 bp'lik yükselişin yaklaşık üçte birini geri aldı.
+Küresel: Fed. Cleveland Fed Başkanı Hammack, enflasyonun haneleri sıkıştırdığını söyleyerek daha fazla sıkılaştırma çağrısı yaptı (TradingView); Chicago Fed Başkanı Goolsbee veriyi cesaret kırıcı bulduğunu söyledi (Reuters). UBS veriden sonra Fed'den yılın üçüncü artırımını beklemeye geçti.
+Emtia: Ham petrol. WTI %3,03 yükselişle 97,97 dolara çıkarken Brent %0,13 düşüşle 105,92 dolarda kaldı; Brent ile WTI arasındaki fark 3,0 dolar daralarak 7,95 dolara indi.
+
+Neye bakılacak
+· ABD uzun ucu geri alım desteği bitince yeniden satılır → dolar güçlenir, TL uzun ucu baskıya girer; izlenecek: ABD 10 yıllığın %5,25'in üstünde kapanması.
+
+Pano: USD/TRY 49,41 (+%0,04; 15 Eki, İstanbul 18:00) · 1 aylık yıllıklandırılmış deval. hızı %21,4 (+0,1 puan; 15 Eki) · Swap hariç net rezerv 44,2 mlr USD (+6,3; 9 Eki) · Net rezerv (günlük tahmin) 54,3 mlr USD (−5,2; 14 Eki) · Brüt rezervde altın payı %62,4 (+0,7 puan; 14 Eki) · TLREF %36,79 (+0,02 puan; 15 Eki)
+
+Beklenen: Salı TSİ 17:30 · bütçe finansmanı, borç stoku ve konsolide kamu dengesi. İç borçlanmanın eylül açığını aşan bir hızla arttığı görülürse 2 yıllık bölgedeki yükseliş arz primi olarak teyit edilir; kapanışın nakit rezervinden yapıldığı görülürse yükseliş ön uçtaki fiyatlamanın bir yan etkisi olarak kalır. Çarşamba 10:00 · kapasite kullanımı ve reel kesim güveni. Ekimde kapasite kullanım oranının gerilemesi, sınai endeksin bankacılıktan ayrışmasını talep tarafına bağlar; toparlanma ise ayrışmayı yalnız faiz kanalına bırakır.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
