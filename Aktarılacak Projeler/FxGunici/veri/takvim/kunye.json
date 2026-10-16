@@ -1,0 +1,151 @@
+{
+ "fomc": {
+  "karar": 71,
+  "basin": 65,
+  "basin_saat_kaynagi": {
+   "takvim": 8,
+   "duyuru": 1,
+   "kural": 56
+  },
+  "basin_saat_tarih": {
+   "takvim": [
+    "2025-09-17",
+    "2025-10-29",
+    "2025-12-10",
+    "2026-01-28",
+    "2026-03-18",
+    "2026-06-17",
+    "2026-07-29",
+    "2026-09-16"
+   ],
+   "duyuru": [
+    "2019-01-30"
+   ]
+  },
+  "kuraldan_farkli": 0,
+  "takvim_gun": 68,
+  "kural": {
+   "karar": "14:00",
+   "basin": "14:30",
+   "kaynak": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm",
+   "son_gecerli": null,
+   "yineleme": [
+    {
+     "kaynak": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240809a.htm",
+     "tarih": "2024-08-09",
+     "saat": "14:30",
+     "metin": "news conference at 2:30 p.m."
+    },
+    {
+     "kaynak": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250905a.htm",
+     "tarih": "2025-09-05",
+     "saat": "14:30",
+     "metin": "news conference at 2:30 p.m."
+    }
+   ]
+  },
+  "sorun": [
+   "2020-03-03: olağanüstü toplantının basın toplantısı — saati kaynakta yok ve kural yalnız olağan toplantılar için; yazılmadı",
+   "2020-03-15: olağanüstü toplantının basın toplantısı — saati kaynakta yok ve kural yalnız olağan toplantılar için; yazılmadı"
+  ]
+ },
+ "NFP": {
+  "yayim": 105,
+  "ilk_referans": "2017-12",
+  "son_referans": "2026-09",
+  "yayimi_olmayan_referans_ayi": [
+   "2025-10"
+  ],
+  "referansi_okunamayan_ay": [
+   "2019-11",
+   "2019-12"
+  ],
+  "referansi_okunamayan_yayim": [
+   "2019-12-06",
+   "2020-01-10"
+  ],
+  "saatler": [
+   "08:30"
+  ],
+  "sorun": [],
+  "duzeltme": []
+ },
+ "CPI": {
+  "yayim": 104,
+  "ilk_referans": "2021-10",
+  "son_referans": "2026-08",
+  "yayimi_olmayan_referans_ayi": [
+   "2025-10"
+  ],
+  "referansi_okunamayan_ay": [],
+  "referansi_okunamayan_yayim": [
+   "2018-01-12",
+   "2018-02-14",
+   "2018-03-13",
+   "2018-04-11",
+   "2018-05-10",
+   "2018-06-12",
+   "2018-07-12",
+   "2018-08-10",
+   "2018-09-13",
+   "2018-10-11",
+   "2018-11-14",
+   "2018-12-12",
+   "2019-01-11",
+   "2019-02-13",
+   "2019-03-12",
+   "2019-04-10",
+   "2019-05-10",
+   "2019-06-12",
+   "2019-07-11",
+   "2019-08-13",
+   "2019-09-12",
+   "2019-10-10",
+   "2019-11-13",
+   "2019-12-11",
+   "2020-01-14",
+   "2020-02-13",
+   "2020-03-11",
+   "2020-04-10",
+   "2020-05-12",
+   "2020-06-10",
+   "2020-07-14",
+   "2020-08-12",
+   "2020-09-11",
+   "2020-10-13",
+   "2020-11-12",
+   "2020-12-10",
+   "2021-01-13",
+   "2021-02-10",
+   "2021-03-10",
+   "2021-04-13",
+   "2021-05-12",
+   "2021-06-10",
+   "2021-07-13",
+   "2021-08-11",
+   "2021-09-14",
+   "2021-10-13"
+  ],
+  "saatler": [
+   "08:30"
+  ],
+  "sorun": [],
+  "duzeltme": [
+   "2021-01-13: ambargo satırı yılı 2020 yazıyor; dosya adı ve aynı satırdaki yayım numarası (USDL-21) 2021 diyor — 2021 alındı"
+  ]
+ },
+ "ecb": {
+  "karar": 70,
+  "basin": 70,
+  "sorun": [
+   "2020-03-18: karar listesinde olağan toplantı dışı duyuru; yayım saati metinde yok — yazılmadı"
+  ]
+ },
+ "boe": {
+  "karar": 70,
+  "sorun": [
+   "2020-03-19: Bank Rate değişti, MPC özet listesinde yok (olağanüstü karar); saat kaynakta yok — yazılmadı",
+   "2020-03-11: Bank Rate değişti, MPC özet listesinde yok (olağanüstü karar); saat kaynakta yok — yazılmadı"
+  ]
+ }
+}

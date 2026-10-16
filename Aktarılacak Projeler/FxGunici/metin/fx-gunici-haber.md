@@ -27,8 +27,11 @@ sorusunu soran devam tablosu, ortalama fiyat patikaları ve FOMC'de karar ile ba
 ## Olaylar ve saatleri
 
 Ölçülen olaylar ve eşlendikleri pariteler: ABD verileri (tarım dışı istihdam ve TÜFE) ile FOMC dört paritede; ECB
-kararı ve basın toplantısı EUR/USD'de; BoE kararı GBP/USD'de. Her olayın saati, o olayın kendi resmî kaynağından,
-tarih tarih okundu; hiçbir saat "genelde 08:30'dur" diye varsayılmadı.
+kararı ve basın toplantısı EUR/USD'de; BoE kararı GBP/USD'de. Her olayın saati resmî bir kaynaktan geldi: ABD
+verilerinde yayımın kendi ambargo satırından, FOMC kararında karar metninin yayım satırından, ECB basın toplantısında
+duyurunun kendi cümlesinden, tarih tarih; BoE kararında, ECB kararında ve FOMC basın toplantılarının çoğunda kurumun
+yayımladığı saat kuralından. Hiçbir saat "genelde 08:30'dur" diye varsayılmadı; hangi olayın saatinin nereden geldiği
+metodoloji dersinde.
 
 {{! takvim }}
 

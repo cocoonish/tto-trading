@@ -1,0 +1,556 @@
+olay,tarih,yerel_saat,bolge,kaynak,not
+NFP,2018-01-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01052018.htm,referans ayı 2017-12; ambargo satırı Internet Archive kopyasından (20181211123702)
+CPI,2018-01-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01122018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20180119113123)
+ECB_karar,2018-01-25,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180125.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-01-25,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180125.en.html,
+FOMC_karar,2018-01-31,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20180131a.htm,
+NFP,2018-02-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02022018.htm,referans ayı 2018-01; ambargo satırı Internet Archive kopyasından (20180202234915)
+BoE_karar,2018-02-08,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/february-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+CPI,2018-02-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02142018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20180215095317)
+ECB_karar,2018-03-08,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180308.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-03-08,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180308.en.html,
+NFP,2018-03-09,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03092018.htm,referans ayı 2018-02; ambargo satırı Internet Archive kopyasından (20180312053427)
+CPI,2018-03-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03132018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190618161642)
+FOMC_karar,2018-03-21,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20180321a.htm,
+FOMC_basin,2018-03-21,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2018-03-22,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/march-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2018-04-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04062018.htm,referans ayı 2018-03; ambargo satırı Internet Archive kopyasından (20190716001938)
+CPI,2018-04-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04112018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20181010001905)
+ECB_karar,2018-04-26,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180426.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-04-26,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180426.en.html,
+FOMC_karar,2018-05-02,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20180502a.htm,
+NFP,2018-05-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05042018.htm,referans ayı 2018-04; ambargo satırı Internet Archive kopyasından (20180507043143)
+CPI,2018-05-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05102018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20180515020842)
+BoE_karar,2018-05-10,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/may-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2018-06-01,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06012018.htm,referans ayı 2018-05; ambargo satırı Internet Archive kopyasından (20180713142447)
+CPI,2018-06-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06122018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190121181751)
+FOMC_karar,2018-06-13,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20180613a.htm,
+FOMC_basin,2018-06-13,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+ECB_karar,2018-06-14,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180614.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-06-14,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180614.en.html,
+BoE_karar,2018-06-21,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/june-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2018-07-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07062018.htm,referans ayı 2018-06; ambargo satırı Internet Archive kopyasından (20190227065033)
+CPI,2018-07-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07122018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190227193236)
+ECB_karar,2018-07-26,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180726.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-07-26,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180726.en.html,
+FOMC_karar,2018-08-01,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20180801a.htm,
+BoE_karar,2018-08-02,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/august-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2018-08-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08032018.htm,referans ayı 2018-07; ambargo satırı Internet Archive kopyasından (20190719084145)
+CPI,2018-08-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08102018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190825063320)
+NFP,2018-09-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09072018.htm,referans ayı 2018-08; ambargo satırı Internet Archive kopyasından (20180912181825)
+CPI,2018-09-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09132018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190825063415)
+BoE_karar,2018-09-13,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/september-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2018-09-13,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180913.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-09-13,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp180913.en.html,
+FOMC_karar,2018-09-26,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20180926a.htm,
+FOMC_basin,2018-09-26,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+NFP,2018-10-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10052018.htm,referans ayı 2018-09; ambargo satırı Internet Archive kopyasından (20191113053024)
+CPI,2018-10-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10112018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190119055640)
+ECB_karar,2018-10-25,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp181025.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-10-25,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp181025.en.html,
+BoE_karar,2018-11-01,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/november-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2018-11-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11022018.htm,referans ayı 2018-10; ambargo satırı Internet Archive kopyasından (20181210121402)
+FOMC_karar,2018-11-08,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20181108a.htm,
+CPI,2018-11-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_11142018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190201140134)
+NFP,2018-12-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12072018.htm,referans ayı 2018-11; ambargo satırı Internet Archive kopyasından (20190817171621)
+CPI,2018-12-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12122018.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190716211917)
+ECB_karar,2018-12-13,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp181213.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2018-12-13,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2018/html/ecb.mp181213.en.html,
+FOMC_karar,2018-12-19,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20181219a.htm,
+FOMC_basin,2018-12-19,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2018-12-20,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2018/december-2018,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2019-01-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01042019.htm,referans ayı 2018-12; ambargo satırı Internet Archive kopyasından (20190525055756)
+CPI,2019-01-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01112019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190721191145)
+ECB_karar,2019-01-24,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190124~5c00d09d5d.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-01-24,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190124~5c00d09d5d.en.html,
+FOMC_karar,2019-01-30,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20190130a.htm,
+FOMC_basin,2019-01-30,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2019-january.htm,saat Fed'in aylık etkinlik takvimindeki duyurudan
+NFP,2019-02-01,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02012019.htm,referans ayı 2019-01; ambargo satırı Internet Archive kopyasından (20190708101508)
+BoE_karar,2019-02-07,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/february-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+CPI,2019-02-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02132019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190716204432)
+ECB_karar,2019-03-07,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190307~7d8a9d2665.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-03-07,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190307~7d8a9d2665.en.html,
+NFP,2019-03-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03082019.htm,referans ayı 2019-02; ambargo satırı Internet Archive kopyasından (20190716203818)
+CPI,2019-03-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03122019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190716210754)
+FOMC_karar,2019-03-20,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20190320a.htm,
+FOMC_basin,2019-03-20,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2019-03-21,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/march-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2019-04-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04052019.htm,referans ayı 2019-03; ambargo satırı Internet Archive kopyasından (20190825220609)
+CPI,2019-04-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04102019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20201017193602)
+ECB_karar,2019-04-10,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190410~3df2ed8a4c.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-04-10,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190410~3df2ed8a4c.en.html,
+FOMC_karar,2019-05-01,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20190501a.htm,
+FOMC_basin,2019-05-01,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2019-05-02,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/may-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2019-05-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05032019.htm,referans ayı 2019-04; ambargo satırı Internet Archive kopyasından (20190507164819)
+CPI,2019-05-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05102019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190721084824)
+ECB_karar,2019-06-06,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190606~1876cad9a5.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-06-06,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190606~1876cad9a5.en.html,
+NFP,2019-06-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06072019.htm,referans ayı 2019-05; ambargo satırı Internet Archive kopyasından (20190918093930)
+CPI,2019-06-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06122019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190716183910)
+FOMC_karar,2019-06-19,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20190619a.htm,
+FOMC_basin,2019-06-19,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2019-06-20,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/june-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2019-07-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07052019.htm,referans ayı 2019-06; ambargo satırı Internet Archive kopyasından (20190713115227)
+CPI,2019-07-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07112019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190716190455)
+ECB_karar,2019-07-25,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190725~52d3766c9e.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-07-25,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190725~52d3766c9e.en.html,
+FOMC_karar,2019-07-31,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20190731a.htm,
+FOMC_basin,2019-07-31,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2019-08-01,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/august-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2019-08-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08022019.htm,referans ayı 2019-07; ambargo satırı Internet Archive kopyasından (20190803140414)
+CPI,2019-08-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08132019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20190817065342)
+NFP,2019-09-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09062019.htm,referans ayı 2019-08; ambargo satırı Internet Archive kopyasından (20190917213311)
+CPI,2019-09-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09122019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20191016164054)
+ECB_karar,2019-09-12,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190912~08de50b4d2.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-09-12,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp190912~08de50b4d2.en.html,
+FOMC_karar,2019-09-18,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20190918a.htm,
+FOMC_basin,2019-09-18,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2019-09-19,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/september-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2019-10-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10042019.htm,referans ayı 2019-09; ambargo satırı Internet Archive kopyasından (20191115175700)
+CPI,2019-10-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10102019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20191121090643)
+ECB_karar,2019-10-24,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp191024~438769bd4f.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-10-24,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp191024~438769bd4f.en.html,
+FOMC_karar,2019-10-30,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20191030a.htm,
+FOMC_basin,2019-10-30,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+NFP,2019-11-01,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11012019.htm,referans ayı 2019-10; ambargo satırı Internet Archive kopyasından (20191121081406)
+BoE_karar,2019-11-07,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/november-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+CPI,2019-11-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_11132019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20191211010029)
+NFP,2019-12-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12062019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200512020954)
+CPI,2019-12-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12112019.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200406181305)
+FOMC_karar,2019-12-11,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20191211a.htm,
+FOMC_basin,2019-12-11,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+ECB_karar,2019-12-12,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp191212~06d84240ae.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2019-12-12,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2019/html/ecb.mp191212~06d84240ae.en.html,
+BoE_karar,2019-12-19,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2019/december-2019,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2020-01-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01102020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200512021041)
+CPI,2020-01-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01142020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200921075902)
+ECB_karar,2020-01-23,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200123~ae33d37f6e.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-01-23,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200123~ae33d37f6e.en.html,
+FOMC_karar,2020-01-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200129a.htm,
+FOMC_basin,2020-01-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2020-01-30,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/january-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2020-02-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02072020.htm,referans ayı 2020-01; ambargo satırı Internet Archive kopyasından (20200311042425)
+CPI,2020-02-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02132020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200921063151)
+FOMC_karar,2020-03-03,10:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200303a.htm,olağanüstü toplantı
+NFP,2020-03-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03062020.htm,referans ayı 2020-02; ambargo satırı Internet Archive kopyasından (20200406235041)
+CPI,2020-03-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03112020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200921072518)
+ECB_karar,2020-03-12,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200312~8d3aec3ff2.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-03-12,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200312~8d3aec3ff2.en.html,
+FOMC_karar,2020-03-15,17:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a.htm,olağanüstü toplantı
+BoE_karar,2020-03-26,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/march-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2020-04-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04032020.htm,referans ayı 2020-03; ambargo satırı Internet Archive kopyasından (20200409053421)
+CPI,2020-04-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04102020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200804152934)
+FOMC_karar,2020-04-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200429a.htm,
+FOMC_basin,2020-04-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+ECB_karar,2020-04-30,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200430~1eaa128265.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-04-30,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200430~1eaa128265.en.html,
+BoE_karar,2020-05-07,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/may-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2020-05-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05082020.htm,referans ayı 2020-04; ambargo satırı Internet Archive kopyasından (20200508193548)
+CPI,2020-05-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05122020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200524001900)
+ECB_karar,2020-06-04,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200604~a307d3429c.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-06-04,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200604~a307d3429c.en.html,
+NFP,2020-06-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06052020.htm,referans ayı 2020-05; ambargo satırı Internet Archive kopyasından (20200605131842)
+CPI,2020-06-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06102020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200610180111)
+FOMC_karar,2020-06-10,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200610a.htm,
+FOMC_basin,2020-06-10,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2020-06-18,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/june-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2020-07-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07022020.htm,referans ayı 2020-06; ambargo satırı Internet Archive kopyasından (20200702170521)
+CPI,2020-07-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07142020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200714142845)
+ECB_karar,2020-07-16,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200716~fc5fbe06d9.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-07-16,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200716~fc5fbe06d9.en.html,
+FOMC_karar,2020-07-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200729a.htm,
+FOMC_basin,2020-07-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2020-08-06,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/august-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2020-08-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08072020.htm,referans ayı 2020-07; ambargo satırı Internet Archive kopyasından (20200807190658)
+CPI,2020-08-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08122020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200812235241)
+NFP,2020-09-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09042020.htm,referans ayı 2020-08; ambargo satırı Internet Archive kopyasından (20200904185150)
+ECB_karar,2020-09-10,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200910~f4a8da495e.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-09-10,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp200910~f4a8da495e.en.html,
+CPI,2020-09-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09112020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20200912003426)
+FOMC_karar,2020-09-16,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20200916a.htm,
+FOMC_basin,2020-09-16,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2020-09-17,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/september-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2020-10-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10022020.htm,referans ayı 2020-09; ambargo satırı Internet Archive kopyasından (20201015095155)
+CPI,2020-10-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10132020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20201017173456)
+ECB_karar,2020-10-29,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp201029~4392a355f4.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-10-29,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp201029~4392a355f4.en.html,
+BoE_karar,2020-11-05,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/november-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+FOMC_karar,2020-11-05,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20201105a.htm,
+FOMC_basin,2020-11-05,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+NFP,2020-11-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11062020.htm,referans ayı 2020-10; ambargo satırı Internet Archive kopyasından (20201106133333)
+CPI,2020-11-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_11122020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20201113071844)
+NFP,2020-12-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12042020.htm,referans ayı 2020-11; ambargo satırı Internet Archive kopyasından (20201204133203)
+CPI,2020-12-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12102020.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20201210135414)
+ECB_karar,2020-12-10,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp201210~8c2778b843.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2020-12-10,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2020/html/ecb.mp201210~8c2778b843.en.html,
+FOMC_karar,2020-12-16,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20201216a.htm,
+FOMC_basin,2020-12-16,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2020-12-17,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2020/december-2020,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-01-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01082021.htm,referans ayı 2020-12; ambargo satırı Internet Archive kopyasından (20210108133703)
+CPI,2021-01-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01132021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210113145151)
+ECB_karar,2021-01-21,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210121~eb9154682e.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-01-21,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210121~eb9154682e.en.html,
+FOMC_karar,2021-01-27,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20210127a.htm,
+FOMC_basin,2021-01-27,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-02-04,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/february-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-02-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02052021.htm,referans ayı 2021-01; ambargo satırı Internet Archive kopyasından (20210205133618)
+CPI,2021-02-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02102021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210210135543)
+NFP,2021-03-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03052021.htm,referans ayı 2021-02; ambargo satırı Internet Archive kopyasından (20210305133235)
+CPI,2021-03-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03102021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210314071731)
+ECB_karar,2021-03-11,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210311~35ba71f535.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-03-11,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210311~35ba71f535.en.html,
+FOMC_karar,2021-03-17,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20210317a.htm,
+FOMC_basin,2021-03-17,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-03-18,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/march-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-04-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04022021.htm,referans ayı 2021-03; ambargo satırı Internet Archive kopyasından (20210402123615)
+CPI,2021-04-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04132021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210509223505)
+ECB_karar,2021-04-22,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210422~f075ebe1f0.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-04-22,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210422~f075ebe1f0.en.html,
+FOMC_karar,2021-04-28,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20210428a.htm,
+FOMC_basin,2021-04-28,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-05-06,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/may-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-05-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05072021.htm,referans ayı 2021-04; ambargo satırı Internet Archive kopyasından (20210507123629)
+CPI,2021-05-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05122021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210517112245)
+NFP,2021-06-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06042021.htm,referans ayı 2021-05; ambargo satırı Internet Archive kopyasından (20210604123224)
+CPI,2021-06-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06102021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210610150525)
+ECB_karar,2021-06-10,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210610~b4d5381df0.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-06-10,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210610~b4d5381df0.en.html,
+FOMC_karar,2021-06-16,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20210616a.htm,
+FOMC_basin,2021-06-16,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-06-24,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/june-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-07-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07022021.htm,referans ayı 2021-06; ambargo satırı Internet Archive kopyasından (20210702123231)
+CPI,2021-07-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07132021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210713124735)
+ECB_karar,2021-07-22,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210722~48dc3b436b.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-07-22,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210722~48dc3b436b.en.html,
+FOMC_karar,2021-07-28,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20210728a.htm,
+FOMC_basin,2021-07-28,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-08-05,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/august-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-08-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08062021.htm,referans ayı 2021-07; ambargo satırı Internet Archive kopyasından (20210806131733)
+CPI,2021-08-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08112021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210811123618)
+NFP,2021-09-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09032021.htm,referans ayı 2021-08; ambargo satırı Internet Archive kopyasından (20210903124042)
+ECB_karar,2021-09-09,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210909~2c94b35639.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-09-09,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp210909~2c94b35639.en.html,
+CPI,2021-09-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09142021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20210914211323)
+FOMC_karar,2021-09-22,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20210922a.htm,
+FOMC_basin,2021-09-22,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-09-23,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/september-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-10-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10082021.htm,referans ayı 2021-09; ambargo satırı Internet Archive kopyasından (20211008123207)
+CPI,2021-10-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10132021.htm,referans ayı ?; ambargo satırı Internet Archive kopyasından (20211013124134)
+ECB_karar,2021-10-28,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp211028~85474438a4.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-10-28,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp211028~85474438a4.en.html,
+FOMC_karar,2021-11-03,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20211103a.htm,
+FOMC_basin,2021-11-03,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-11-04,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/november-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2021-11-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11052021.htm,referans ayı 2021-10; ambargo satırı Internet Archive kopyasından (20211105124250)
+CPI,2021-11-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_11102021.htm,referans ayı 2021-10; ambargo satırı Internet Archive kopyasından (20211110142246)
+NFP,2021-12-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12032021.htm,referans ayı 2021-11; ambargo satırı Internet Archive kopyasından (20211203133928)
+CPI,2021-12-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12102021.htm,referans ayı 2021-11; ambargo satırı Internet Archive kopyasından (20211210134325)
+FOMC_karar,2021-12-15,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20211215a.htm,
+FOMC_basin,2021-12-15,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2021-12-16,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2021/december-2021,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2021-12-16,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp211216~1b6d3a1fd8.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2021-12-16,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2021/html/ecb.mp211216~1b6d3a1fd8.en.html,
+NFP,2022-01-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01072022.htm,referans ayı 2021-12; ambargo satırı Internet Archive kopyasından (20220107133858)
+CPI,2022-01-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01122022.htm,referans ayı 2021-12; ambargo satırı Internet Archive kopyasından (20220112134227)
+FOMC_karar,2022-01-26,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220126a.htm,
+FOMC_basin,2022-01-26,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-02-03,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/february-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2022-02-03,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220203~90fbe94662.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-02-03,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220203~90fbe94662.en.html,
+NFP,2022-02-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02042022.htm,referans ayı 2022-01; ambargo satırı Internet Archive kopyasından (20220204133938)
+CPI,2022-02-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02102022.htm,referans ayı 2022-01; ambargo satırı Internet Archive kopyasından (20220210153127)
+NFP,2022-03-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03042022.htm,referans ayı 2022-02; ambargo satırı Internet Archive kopyasından (20220318091438)
+CPI,2022-03-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03102022.htm,referans ayı 2022-02; ambargo satırı Internet Archive kopyasından (20220310140140)
+ECB_karar,2022-03-10,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220310~2d19f8ba60.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-03-10,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220310~2d19f8ba60.en.html,
+FOMC_karar,2022-03-16,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm,
+FOMC_basin,2022-03-16,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-03-17,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/march-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2022-04-01,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04012022.htm,referans ayı 2022-03; ambargo satırı Internet Archive kopyasından (20220401123558)
+CPI,2022-04-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04122022.htm,referans ayı 2022-03; ambargo satırı Internet Archive kopyasından (20220412123935)
+ECB_karar,2022-04-14,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220414~d1b76520c6.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-04-14,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220414~d1b76520c6.en.html,
+FOMC_karar,2022-05-04,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220504a.htm,
+FOMC_basin,2022-05-04,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-05-05,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/may-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2022-05-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05062022.htm,referans ayı 2022-04; ambargo satırı Internet Archive kopyasından (20220506123346)
+CPI,2022-05-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05112022.htm,referans ayı 2022-04; ambargo satırı Internet Archive kopyasından (20220511131143)
+NFP,2022-06-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06032022.htm,referans ayı 2022-05; ambargo satırı Internet Archive kopyasından (20220603123426)
+ECB_karar,2022-06-09,13:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220609~122666c272.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-06-09,14:30,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220609~122666c272.en.html,
+CPI,2022-06-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06102022.htm,referans ayı 2022-05; ambargo satırı Internet Archive kopyasından (20220610123609)
+FOMC_karar,2022-06-15,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm,
+FOMC_basin,2022-06-15,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-06-16,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/june-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2022-07-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07082022.htm,referans ayı 2022-06; ambargo satırı Internet Archive kopyasından (20220708141510)
+CPI,2022-07-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07132022.htm,referans ayı 2022-06; ambargo satırı Internet Archive kopyasından (20220713184439)
+ECB_karar,2022-07-21,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220721~53e5bdd317.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-07-21,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220721~53e5bdd317.en.html,
+FOMC_karar,2022-07-27,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220727a.htm,
+FOMC_basin,2022-07-27,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-08-04,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/august-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2022-08-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08052022.htm,referans ayı 2022-07; ambargo satırı Internet Archive kopyasından (20220808185806)
+CPI,2022-08-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08102022.htm,referans ayı 2022-07; ambargo satırı Internet Archive kopyasından (20220810124223)
+NFP,2022-09-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09022022.htm,referans ayı 2022-08; ambargo satırı Internet Archive kopyasından (20220902123126)
+ECB_karar,2022-09-08,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220908~c1b6839378.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-09-08,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp220908~c1b6839378.en.html,
+CPI,2022-09-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09132022.htm,referans ayı 2022-08; ambargo satırı Internet Archive kopyasından (20220913130236)
+FOMC_karar,2022-09-21,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220921a.htm,
+FOMC_basin,2022-09-21,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-09-22,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/september-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2022-10-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10072022.htm,referans ayı 2022-09; ambargo satırı Internet Archive kopyasından (20221007143204)
+CPI,2022-10-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10132022.htm,referans ayı 2022-09; ambargo satırı Internet Archive kopyasından (20221013124358)
+ECB_karar,2022-10-27,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp221027~df1d778b84.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-10-27,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp221027~df1d778b84.en.html,
+FOMC_karar,2022-11-02,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20221102a.htm,
+FOMC_basin,2022-11-02,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-11-03,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/november-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2022-11-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11042022.htm,referans ayı 2022-10; ambargo satırı Internet Archive kopyasından (20221104123120)
+CPI,2022-11-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_11102022.htm,referans ayı 2022-10; ambargo satırı Internet Archive kopyasından (20221110133357)
+NFP,2022-12-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12022022.htm,referans ayı 2022-11; ambargo satırı Internet Archive kopyasından (20221202212401)
+CPI,2022-12-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12132022.htm,referans ayı 2022-11; ambargo satırı Internet Archive kopyasından (20221213133532)
+FOMC_karar,2022-12-14,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20221214a.htm,
+FOMC_basin,2022-12-14,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2022-12-15,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2022/december-2022,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2022-12-15,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp221215~f3461d7b6e.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2022-12-15,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2022/html/ecb.mp221215~f3461d7b6e.en.html,
+NFP,2023-01-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01062023.htm,referans ayı 2022-12; ambargo satırı Internet Archive kopyasından (20230106133124)
+CPI,2023-01-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01122023.htm,referans ayı 2022-12; ambargo satırı Internet Archive kopyasından (20230112140347)
+FOMC_karar,2023-02-01,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230201a.htm,
+FOMC_basin,2023-02-01,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2023-02-02,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/february-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2023-02-02,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230202~08a972ac76.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-02-02,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230202~08a972ac76.en.html,
+NFP,2023-02-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02032023.htm,referans ayı 2023-01; ambargo satırı Internet Archive kopyasından (20230203173115)
+CPI,2023-02-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02142023.htm,referans ayı 2023-01; ambargo satırı Internet Archive kopyasından (20230214190658)
+NFP,2023-03-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03102023.htm,referans ayı 2023-02; ambargo satırı Internet Archive kopyasından (20230311112736)
+CPI,2023-03-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03142023.htm,referans ayı 2023-02; ambargo satırı Internet Archive kopyasından (20230314123615)
+ECB_karar,2023-03-16,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230316~aad5249f30.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-03-16,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230316~aad5249f30.en.html,
+FOMC_karar,2023-03-22,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230322a.htm,
+FOMC_basin,2023-03-22,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2023-03-23,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/march-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2023-04-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04072023.htm,referans ayı 2023-03; ambargo satırı Internet Archive kopyasından (20230407171117)
+CPI,2023-04-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04122023.htm,referans ayı 2023-03; ambargo satırı Internet Archive kopyasından (20230413041257)
+FOMC_karar,2023-05-03,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230503a.htm,
+FOMC_basin,2023-05-03,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+ECB_karar,2023-05-04,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230504~cdfd11a697.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-05-04,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230504~cdfd11a697.en.html,
+NFP,2023-05-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05052023.htm,referans ayı 2023-04; ambargo satırı Internet Archive kopyasından (20230512165614)
+CPI,2023-05-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05102023.htm,referans ayı 2023-04; ambargo satırı Internet Archive kopyasından (20230513234134)
+BoE_karar,2023-05-11,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/may-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2023-06-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06022023.htm,referans ayı 2023-05; ambargo satırı Internet Archive kopyasından (20230603031151)
+CPI,2023-06-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06132023.htm,referans ayı 2023-05; ambargo satırı Internet Archive kopyasından (20230614033045)
+FOMC_karar,2023-06-14,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230614a.htm,
+FOMC_basin,2023-06-14,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+ECB_karar,2023-06-15,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230615~d34cddb4c6.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-06-15,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230615~d34cddb4c6.en.html,
+BoE_karar,2023-06-22,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/june-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2023-07-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07072023.htm,referans ayı 2023-06; ambargo satırı Internet Archive kopyasından (20230805220814)
+CPI,2023-07-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07122023.htm,referans ayı 2023-06; ambargo satırı Internet Archive kopyasından (20230716052130)
+FOMC_karar,2023-07-26,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230726a.htm,
+FOMC_basin,2023-07-26,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+ECB_karar,2023-07-27,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230727~da80cfcf24.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-07-27,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230727~da80cfcf24.en.html,
+BoE_karar,2023-08-03,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/august-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2023-08-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08042023.htm,referans ayı 2023-07; ambargo satırı Internet Archive kopyasından (20230807105453)
+CPI,2023-08-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08102023.htm,referans ayı 2023-07; ambargo satırı Internet Archive kopyasından (20230813080849)
+NFP,2023-09-01,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09012023.htm,referans ayı 2023-08; ambargo satırı Internet Archive kopyasından (20230901133831)
+CPI,2023-09-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09132023.htm,referans ayı 2023-08; ambargo satırı Internet Archive kopyasından (20230920124755)
+ECB_karar,2023-09-14,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230914~aab39f8c21.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-09-14,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp230914~aab39f8c21.en.html,
+FOMC_karar,2023-09-20,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230920a.htm,
+FOMC_basin,2023-09-20,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2023-09-21,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/september-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2023-10-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10062023.htm,referans ayı 2023-09; ambargo satırı Internet Archive kopyasından (20231007005502)
+CPI,2023-10-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10122023.htm,referans ayı 2023-09; ambargo satırı Internet Archive kopyasından (20231012173732)
+ECB_karar,2023-10-26,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp231026~6028cea576.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-10-26,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp231026~6028cea576.en.html,
+FOMC_karar,2023-11-01,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20231101a.htm,
+FOMC_basin,2023-11-01,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2023-11-02,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/november-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2023-11-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11032023.htm,referans ayı 2023-10; ambargo satırı Internet Archive kopyasından (20231105024849)
+CPI,2023-11-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_11142023.htm,referans ayı 2023-10; ambargo satırı Internet Archive kopyasından (20231114133730)
+NFP,2023-12-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12082023.htm,referans ayı 2023-11; ambargo satırı Internet Archive kopyasından (20231208133405)
+CPI,2023-12-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12122023.htm,referans ayı 2023-11; ambargo satırı Internet Archive kopyasından (20231218071418)
+FOMC_karar,2023-12-13,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20231213a.htm,
+FOMC_basin,2023-12-13,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2023-12-14,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/december-2023,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2023-12-14,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp231214~9846e62f62.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2023-12-14,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2023/html/ecb.mp231214~9846e62f62.en.html,
+NFP,2024-01-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01052024.htm,referans ayı 2023-12; ambargo satırı Internet Archive kopyasından (20240105185434)
+CPI,2024-01-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01112024.htm,referans ayı 2023-12; ambargo satırı Internet Archive kopyasından (20240111162432)
+ECB_karar,2024-01-25,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240125~f738889bde.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-01-25,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240125~f738889bde.en.html,
+FOMC_karar,2024-01-31,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240131a.htm,
+FOMC_basin,2024-01-31,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2024-02-01,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/february-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2024-02-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02022024.htm,referans ayı 2024-01; ambargo satırı Internet Archive kopyasından (20240228125508)
+CPI,2024-02-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02132024.htm,referans ayı 2024-01; ambargo satırı Internet Archive kopyasından (20240225153006)
+ECB_karar,2024-03-07,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240307~a5fa52b82b.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-03-07,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240307~a5fa52b82b.en.html,
+NFP,2024-03-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03082024.htm,referans ayı 2024-02; ambargo satırı Internet Archive kopyasından (20240314235106)
+CPI,2024-03-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03122024.htm,referans ayı 2024-02; ambargo satırı Internet Archive kopyasından (20240326010741)
+FOMC_karar,2024-03-20,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240320a.htm,
+FOMC_basin,2024-03-20,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2024-03-21,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/march-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2024-04-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04052024.htm,referans ayı 2024-03; ambargo satırı Internet Archive kopyasından (20240405172257)
+CPI,2024-04-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04102024.htm,referans ayı 2024-03; ambargo satırı Internet Archive kopyasından (20240410141059)
+ECB_karar,2024-04-11,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240411~1345644915.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-04-11,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240411~1345644915.en.html,
+FOMC_karar,2024-05-01,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240501a.htm,
+FOMC_basin,2024-05-01,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+NFP,2024-05-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05032024.htm,referans ayı 2024-04; ambargo satırı Internet Archive kopyasından (20240503124247)
+BoE_karar,2024-05-09,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/may-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+CPI,2024-05-15,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05152024.htm,referans ayı 2024-04; ambargo satırı Internet Archive kopyasından (20240515203136)
+ECB_karar,2024-06-06,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240606~2148ecdb3c.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-06-06,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240606~2148ecdb3c.en.html,
+NFP,2024-06-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06072024.htm,referans ayı 2024-05; ambargo satırı Internet Archive kopyasından (20240609235930)
+CPI,2024-06-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06122024.htm,referans ayı 2024-05; ambargo satırı Internet Archive kopyasından (20240612141835)
+FOMC_karar,2024-06-12,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240612a.htm,
+FOMC_basin,2024-06-12,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2024-06-20,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/june-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2024-07-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07052024.htm,referans ayı 2024-06; ambargo satırı Internet Archive kopyasından (20240705133046)
+CPI,2024-07-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07112024.htm,referans ayı 2024-06; ambargo satırı Internet Archive kopyasından (20240711135311)
+ECB_karar,2024-07-18,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240718~b9e0ddd9d5.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-07-18,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240718~b9e0ddd9d5.en.html,
+FOMC_karar,2024-07-31,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240731a.htm,
+FOMC_basin,2024-07-31,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2024-08-01,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/august-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2024-08-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08022024.htm,referans ayı 2024-07; ambargo satırı Internet Archive kopyasından (20240803050337)
+CPI,2024-08-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08142024.htm,referans ayı 2024-07; ambargo satırı Internet Archive kopyasından (20240815074248)
+NFP,2024-09-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09062024.htm,referans ayı 2024-08; ambargo satırı Internet Archive kopyasından (20240909153900)
+CPI,2024-09-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09112024.htm,referans ayı 2024-08; ambargo satırı Internet Archive kopyasından (20240911131814)
+ECB_karar,2024-09-12,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240912~67cb23badb.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-09-12,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp240912~67cb23badb.en.html,
+FOMC_karar,2024-09-18,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm,
+FOMC_basin,2024-09-18,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2024-09-19,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/september-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2024-10-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10042024.htm,referans ayı 2024-09; ambargo satırı Internet Archive kopyasından (20241004123133)
+CPI,2024-10-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10102024.htm,referans ayı 2024-09; ambargo satırı Internet Archive kopyasından (20241103011153)
+ECB_karar,2024-10-17,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp241017~aa366eaf20.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-10-17,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp241017~aa366eaf20.en.html,
+NFP,2024-11-01,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11012024.htm,referans ayı 2024-10; ambargo satırı Internet Archive kopyasından (20241101151718)
+BoE_karar,2024-11-07,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/november-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+FOMC_karar,2024-11-07,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20241107a.htm,
+FOMC_basin,2024-11-07,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+CPI,2024-11-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_11132024.htm,referans ayı 2024-10; ambargo satırı Internet Archive kopyasından (20241113134001)
+NFP,2024-12-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12062024.htm,referans ayı 2024-11; ambargo satırı Internet Archive kopyasından (20241209003505)
+CPI,2024-12-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12112024.htm,referans ayı 2024-11; ambargo satırı Internet Archive kopyasından (20241211142059)
+ECB_karar,2024-12-12,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp241212~2acab6e51e.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2024-12-12,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2024/html/ecb.mp241212~2acab6e51e.en.html,
+FOMC_karar,2024-12-18,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20241218a.htm,
+FOMC_basin,2024-12-18,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2024-12-19,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/december-2024,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2025-01-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01102025.htm,referans ayı 2024-12; ambargo satırı Internet Archive kopyasından (20250110200932)
+CPI,2025-01-15,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01152025.htm,referans ayı 2024-12; ambargo satırı Internet Archive kopyasından (20250120140851)
+FOMC_karar,2025-01-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250129a.htm,
+FOMC_basin,2025-01-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+ECB_karar,2025-01-30,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250130~530b29e622.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-01-30,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250130~530b29e622.en.html,
+BoE_karar,2025-02-06,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/february-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2025-02-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02072025.htm,referans ayı 2025-01; ambargo satırı Internet Archive kopyasından (20250208031222)
+CPI,2025-02-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02122025.htm,referans ayı 2025-01; ambargo satırı Internet Archive kopyasından (20250214041039)
+ECB_karar,2025-03-06,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250306~d4340800b3.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-03-06,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250306~d4340800b3.en.html,
+NFP,2025-03-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03072025.htm,referans ayı 2025-02; ambargo satırı Internet Archive kopyasından (20250307233113)
+CPI,2025-03-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03122025.htm,referans ayı 2025-02; ambargo satırı Internet Archive kopyasından (20250313052639)
+FOMC_karar,2025-03-19,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250319a.htm,
+FOMC_basin,2025-03-19,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2025-03-20,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/march-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2025-04-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04042025.htm,referans ayı 2025-03; ambargo satırı Internet Archive kopyasından (20250405010310)
+CPI,2025-04-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04102025.htm,referans ayı 2025-03; ambargo satırı Internet Archive kopyasından (20250410134112)
+ECB_karar,2025-04-17,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250417~42727d0735.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-04-17,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250417~42727d0735.en.html,
+NFP,2025-05-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05022025.htm,referans ayı 2025-04; ambargo satırı Internet Archive kopyasından (20250503215206)
+FOMC_karar,2025-05-07,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250507a.htm,
+FOMC_basin,2025-05-07,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2025-05-08,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+CPI,2025-05-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05132025.htm,referans ayı 2025-04; ambargo satırı Internet Archive kopyasından (20250513192849)
+ECB_karar,2025-06-05,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250605~3b5f67d007.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-06-05,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250605~3b5f67d007.en.html,
+NFP,2025-06-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06062025.htm,referans ayı 2025-05; ambargo satırı Internet Archive kopyasından (20250606173223)
+CPI,2025-06-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06112025.htm,referans ayı 2025-05; ambargo satırı Internet Archive kopyasından (20250612055120)
+FOMC_karar,2025-06-18,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250618a.htm,
+FOMC_basin,2025-06-18,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2025-06-19,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/june-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2025-07-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07032025.htm,referans ayı 2025-06; ambargo satırı Internet Archive kopyasından (20250703161814)
+CPI,2025-07-15,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07152025.htm,referans ayı 2025-06; ambargo satırı Internet Archive kopyasından (20250716174458)
+ECB_karar,2025-07-24,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250724~50bc70e13f.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-07-24,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250724~50bc70e13f.en.html,
+FOMC_karar,2025-07-30,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250730a.htm,
+FOMC_basin,2025-07-30,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+NFP,2025-08-01,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08012025.htm,referans ayı 2025-07; ambargo satırı Internet Archive kopyasından (20250801123513)
+BoE_karar,2025-08-07,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/august-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+CPI,2025-08-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08122025.htm,referans ayı 2025-07; ambargo satırı Internet Archive kopyasından (20250812124207)
+NFP,2025-09-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09052025.htm,referans ayı 2025-08; ambargo satırı Internet Archive kopyasından (20250905124513)
+CPI,2025-09-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09112025.htm,referans ayı 2025-08; ambargo satırı Internet Archive kopyasından (20250911125052)
+ECB_karar,2025-09-11,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250911~6afb7a9490.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-09-11,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp250911~6afb7a9490.en.html,
+FOMC_karar,2025-09-17,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250917a.htm,
+FOMC_basin,2025-09-17,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2025-september.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+BoE_karar,2025-09-18,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/september-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+CPI,2025-10-24,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_10242025.htm,referans ayı 2025-09; ambargo satırı Internet Archive kopyasından (20251024170233)
+FOMC_karar,2025-10-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20251029a.htm,
+FOMC_basin,2025-10-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2025-october.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+ECB_karar,2025-10-30,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp251030~cf0540b5c0.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-10-30,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp251030~cf0540b5c0.en.html,
+BoE_karar,2025-11-06,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/november-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2025-11-20,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_11202025.htm,referans ayı 2025-09; ambargo satırı Internet Archive kopyasından (20251122093048)
+FOMC_karar,2025-12-10,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20251210a.htm,
+FOMC_basin,2025-12-10,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2025-december.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+NFP,2025-12-16,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_12162025.htm,referans ayı 2025-11; ambargo satırı Internet Archive kopyasından (20251216212300)
+CPI,2025-12-18,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_12182025.htm,referans ayı 2025-11; ambargo satırı Internet Archive kopyasından (20251218160625)
+BoE_karar,2025-12-18,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/december-2025,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2025-12-18,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp251218~58b0e415a6.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2025-12-18,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.mp251218~58b0e415a6.en.html,
+NFP,2026-01-09,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_01092026.htm,referans ayı 2025-12; ambargo satırı Internet Archive kopyasından (20260109133152)
+CPI,2026-01-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_01132026.htm,referans ayı 2025-12; ambargo satırı Internet Archive kopyasından (20260113134344)
+FOMC_karar,2026-01-28,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260128a.htm,
+FOMC_basin,2026-01-28,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2026-january.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+BoE_karar,2026-02-05,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/february-2026,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2026-02-05,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260205~001d26959b.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2026-02-05,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260205~001d26959b.en.html,
+NFP,2026-02-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_02112026.htm,referans ayı 2026-01; ambargo satırı Internet Archive kopyasından (20260211133253)
+CPI,2026-02-13,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_02132026.htm,referans ayı 2026-01; ambargo satırı Internet Archive kopyasından (20260213133652)
+NFP,2026-03-06,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_03062026.htm,referans ayı 2026-02; ambargo satırı Internet Archive kopyasından (20260306140910)
+CPI,2026-03-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_03112026.htm,referans ayı 2026-02; ambargo satırı Internet Archive kopyasından (20260311132852)
+FOMC_karar,2026-03-18,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm,
+FOMC_basin,2026-03-18,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2026-march.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+BoE_karar,2026-03-19,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/march-2026,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2026-03-19,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260319~3057739775.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2026-03-19,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260319~3057739775.en.html,
+NFP,2026-04-03,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_04032026.htm,referans ayı 2026-03; ambargo satırı Internet Archive kopyasından (20260403153843)
+CPI,2026-04-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_04102026.htm,referans ayı 2026-03; ambargo satırı Internet Archive kopyasından (20260411021144)
+FOMC_karar,2026-04-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260429a.htm,
+FOMC_basin,2026-04-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm,"saat Fed'in 13.03.2013 kuralından (karar 14:00, basın toplantısı yaklaşık 14:30); bu tarih için ayrı kayıt kaynakta yok"
+BoE_karar,2026-04-30,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/april-2026,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+ECB_karar,2026-04-30,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260430~81b7179e6f.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2026-04-30,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260430~81b7179e6f.en.html,
+NFP,2026-05-08,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_05082026.htm,referans ayı 2026-04; ambargo satırı Internet Archive kopyasından (20260508133844)
+CPI,2026-05-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_05122026.htm,referans ayı 2026-04; ambargo satırı Internet Archive kopyasından (20260512152316)
+NFP,2026-06-05,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_06052026.htm,referans ayı 2026-05; ambargo satırı Internet Archive kopyasından (20260605142533)
+CPI,2026-06-10,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_06102026.htm,referans ayı 2026-05; ambargo satırı Internet Archive kopyasından (20260610145407)
+ECB_karar,2026-06-11,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260611~4d41bd5e83.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2026-06-11,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260611~4d41bd5e83.en.html,
+FOMC_karar,2026-06-17,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm,
+FOMC_basin,2026-06-17,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2026-june.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+BoE_karar,2026-06-18,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/june-2026,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2026-07-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_07022026.htm,referans ayı 2026-06; ambargo satırı Internet Archive kopyasından (20260702152708)
+CPI,2026-07-14,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_07142026.htm,referans ayı 2026-06; ambargo satırı Internet Archive kopyasından (20260714170835)
+ECB_karar,2026-07-23,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260723~29f24d99bc.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2026-07-23,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260723~29f24d99bc.en.html,
+FOMC_karar,2026-07-29,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm,
+FOMC_basin,2026-07-29,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2026-july.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+BoE_karar,2026-07-30,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/july-2026,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2026-08-07,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_08072026.htm,referans ayı 2026-07; ambargo satırı Internet Archive kopyasından (20260810200921)
+CPI,2026-08-12,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_08122026.htm,referans ayı 2026-07; ambargo satırı Internet Archive kopyasından (20260814032849)
+NFP,2026-09-04,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_09042026.htm,referans ayı 2026-08; ambargo satırı Internet Archive kopyasından (20260905045143)
+ECB_karar,2026-09-10,14:15,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html,"karar saati ECB'nin 27.06.2022 duyurusundan (21.07.2022'den itibaren 14:15, önce 13:45); basın toplantısı saati bu duyurudan"
+ECB_basin,2026-09-10,14:45,Europe/Berlin,https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html,
+CPI,2026-09-11,08:30,America/New_York,https://www.bls.gov/news.release/archives/cpi_09112026.htm,referans ayı 2026-08; ambargo satırı Internet Archive kopyasından (20260911134405)
+FOMC_karar,2026-09-16,14:00,America/New_York,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm,
+FOMC_basin,2026-09-16,14:30,America/New_York,https://www.federalreserve.gov/newsevents/2026-september.htm,saat Fed'in aylık etkinlik takviminden (ayrı satır)
+BoE_karar,2026-09-17,12:00,Europe/London,https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/september-2026,saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)
+NFP,2026-10-02,08:30,America/New_York,https://www.bls.gov/news.release/archives/empsit_10022026.htm,referans ayı 2026-09; ambargo satırı Internet Archive kopyasından (20261002144835)

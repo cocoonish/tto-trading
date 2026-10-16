@@ -14,8 +14,12 @@ bloklar karar sayılmaz; olağanüstü toplantılar ("unscheduled") karar metni 
 sayılır. Saat, karar metninin kendi satırından: "For release at 2:00 p.m. EDT".
 Basın toplantısının saati ne karar metninde ne basın toplantısı sayfasında yazar
 (sayfadaki tek saat "Released ... at 2:00 p.m." — KARARIN yayım saati; altı örnekte
-ölçüldü). Saat Fed'in aylık etkinlik takviminden okunur (`fed_takvim`); takvim o gün
-için okunamazsa basın toplantısı YAZILMAZ.
+ölçüldü). Fed'in aylık etkinlik takvimi basın toplantısını ayrı satırla yalnız
+17.09.2025'ten itibaren listeler; öncesinde tek istisna 30.01.2019'un duyurusu
+(`fed_takvim`). Öbür tarihlerde saat Fed'in 13.03.2013 KURALINDAN gelir (`fomc_kurali`:
+olağan toplantıların kararı 14:00, basın toplantısı "yaklaşık" 14:30) ve kural yalnız
+kararı kuralın saatinde yayımlanan olağan toplantıya uygulanır. Olağanüstü toplantının
+basın toplantısı (03.03.2020) kaynakta saatsiz: YAZILMAZ, adıyla sayılır.
 
 NFP · CPI (BLS). Tarih ve saat her yayımın kendi ambargo satırından: "Transmission of
 material in this release is embargoed until 8:30 a.m. (ET) Friday, February 2, 2018".
@@ -69,7 +73,8 @@ BOE_ORAN = "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp"
 
 def _manifest() -> dict:
     m = {}
-    adlar = ["manifest.json", "manifest2.json"] + sorted(p.name for p in HAM.glob("manifest3_*.json"))
+    adlar = (["manifest.json", "manifest2.json"] + sorted(p.name for p in HAM.glob("manifest3_*.json"))
+             + sorted(p.name for p in HAM.glob("manifest5_*.json")))
     for ad in adlar:
         yol = HAM / ad
         if yol.exists():
@@ -137,28 +142,117 @@ def _yayim_saati(t: str) -> tuple[str, str] | None:
     return _saat(int(m.group(1)), int(m.group(2)), m.group(3)), m.group(4).replace(".", "").upper()
 
 
-def fed_takvim(man: dict) -> dict[date, list[tuple[str, str, str]]]:
-    """Fed'in aylık etkinlik takviminden FOMC etkinlikleri: {gün: [(saat, etkinlik, adres)]}.
+_SAAT = re.compile(r"(\d{1,2}):(\d{2}) ?([ap])\.m\.")
+#: Duyuru satırında basın toplantısı saati (30.01.2019: "the Chairman's news conference will start at 2:30 p.m. EST").
+_DUYURU_BASIN = re.compile(r"(?i)(?:news|press) conference will (?:start|begin) at (?:approximately )?"
+                           r"(\d{1,2}):(\d{2}) ?([ap])\.m\.(?:\s*(EST|EDT|ET))?")
 
-    Sayfa biçimi `arsiv_takvim3` koşusunda ölçülür; tanınmayan biçimde boş döner ve
-    basın toplantıları yazılmaz (`fomc` sebebi künyeye yazar)."""
-    out: dict[date, list[tuple[str, str, str]]] = {}
+
+def _satirlar(t: str) -> list[tuple[str, list[tuple[str, str]]]]:
+    """Aylık etkinlik sayfasının satırları: [(bölüm başlığı, [(sütun sınıfı, sütun HTML'i), …])].
+
+    Biçim 16.10.2026'da 103 sayfada ölçüldü (2018–2026 aynı): bölümler `<h4 class="col-md-12">` başlığıyla
+    açılır; her etkinlik bir `panel-body` içinde üç sütundur — `col-xs-2` saat, `col-xs-7` etkinliğin adı
+    (ilk paragraf) ve açıklaması, `col-xs-3` gün. Duyurular bölümünde iki sütun: metin ve gün (`col-xs-2`)."""
+    out = []
+    for p in re.split(r'<h4 class="col-md-12">', t)[1:]:
+        bas, _, govde = p.partition("</h4>")
+        bolum = _duz(bas).strip()
+        for pb in re.split(r'<div class="panel-body">', govde)[1:]:
+            out.append((bolum, re.findall(r'<div class="(col-xs-[^"]*)">(.*?)</div>', pb, re.S)))
+    return out
+
+
+def fed_takvim(man: dict) -> dict[date, list[dict]]:
+    """Fed'in aylık etkinlik sayfalarından FOMC etkinlikleri, gün gün: {gün: [{saat, tur, ad, kaynak}]}.
+
+    tur: "basin" — ayrı satırı olan basın toplantısı ("FOMC Press Conference · 2:30 p.m.", 17.09.2025'ten
+    itibaren); "duyuru" — duyurular bölümünde basın toplantısının saatini veren cümle; "toplanti" — "FOMC
+    Meeting" satırı. Sonuncusunun saati KARARIN yayım saatidir: açıklamada "Press Conference" geçmesi o saatin
+    basın toplantısına ait olduğunu söylemez (ölçüldü: 2018–2025 sayfalarının hepsinde aynı satır 2:00 p.m.)."""
+    out: dict[date, list[dict]] = {}
     for u, v in man.items():
         m = re.search(r"federalreserve\.gov/newsevents/(20\d{2})-([a-z]+)\.htm$", u)
         if not m or m.group(2).capitalize() not in AYLAR:
             continue
         yil, ay = int(m.group(1)), AYLAR[m.group(2).capitalize()]
-        s = _duz(_metin(v["dosya"]))
-        # Biçim (16.10.2026'da ölçülecek): gün başlığı ve saatli etkinlik satırları.
-        for g in re.finditer(r"(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),? "
-                             r"(?:" + "|".join(AY_ADI) + r") (\d{1,2})(.*?)(?=(?:Monday|Tuesday|Wednesday|Thursday"
-                             r"|Friday|Saturday|Sunday),? (?:" + "|".join(AY_ADI) + r") \d{1,2}|\Z)", s):
-            gun = date(yil, ay, int(g.group(1)))
-            for e in re.finditer(r"(\d{1,2}):(\d{2}) ?([ap])\.m\.?\s*([^0-9]{0,120})", g.group(2)):
-                ad = e.group(4).strip()
-                if re.search(r"(?i)FOMC|Press Conference|Federal Open Market", ad):
-                    out.setdefault(gun, []).append((_saat(int(e.group(1)), int(e.group(2)), e.group(3)), ad, u))
+        for bolum, kol in _satirlar(_metin(v["dosya"])):
+            sinif = [c for c, _ in kol]
+            if bolum == "FOMC Meetings" and sinif[:1] == ["col-xs-2"] and len(kol) >= 3:
+                s = _SAAT.search(_duz(kol[0][1]))
+                ilk = re.search(r"<p>(.*?)</p>", kol[1][1], re.S)
+                ad = _duz(ilk.group(1)).strip() if ilk else ""
+                gun = re.fullmatch(r"\s*(\d{1,2})\s*", _duz(kol[-1][1]))
+                if not (s and gun):
+                    continue
+                tur = ("basin" if re.fullmatch(r"(?i)FOMC Press Conference", ad) else
+                       "toplanti" if re.fullmatch(r"(?i)FOMC Meeting", ad) else None)
+                if tur:
+                    out.setdefault(date(yil, ay, int(gun.group(1))), []).append(
+                        {"saat": _saat(int(s.group(1)), int(s.group(2)), s.group(3)), "tur": tur, "ad": ad,
+                         "kaynak": u})
+            elif bolum == "Announcements" and len(kol) >= 2:
+                metin = _duz(kol[0][1])
+                b = _DUYURU_BASIN.search(metin)
+                gun = re.fullmatch(r"\s*(\d{1,2})\s*", _duz(kol[-1][1]))
+                if b and gun:
+                    # Duyurunun günü YAYIM günüdür, toplantınınki olmayabilir (ölçüldü: 27.01.2026 duyurusu
+                    # 28 Ocak'taki basın toplantısını anlatıyor). Metnin adını verdiği günler de anahtar olur.
+                    gunler = {date(yil, ay, int(gun.group(1)))} | {
+                        date(yil, AYLAR[a], int(d)) for a, d in re.findall(r"(" + "|".join(AY_ADI) + r") (\d{1,2})\b",
+                                                                           metin) if AYLAR[a] == ay}
+                    for g in sorted(gunler):
+                        out.setdefault(g, []).append(
+                            {"saat": _saat(int(b.group(1)), int(b.group(2)), b.group(3)), "tur": "duyuru",
+                             "ad": b.group(0), "kaynak": u, "dilim": (b.group(4) or "").upper()})
     return out
+
+
+FED_KURAL = "https://www.federalreserve.gov/newsevents/pressreleases/monetary20130313a.htm"
+_KURAL_KARAR = re.compile(r"(?i)policy statements for all regularly scheduled meetings will now be released at "
+                          r"(\d{1,2})(?::(\d{2}))? ?([ap])\.m\. Eastern Time")
+_KURAL_BASIN = re.compile(r"(?i)news conference will begin at approximately (\d{1,2}):(\d{2}) ?([ap])\.m\. "
+                          r"Eastern Time")
+#: Toplantı takvimi duyurularında kuralın yinelenmesi: saat "at"/"for" ile basın toplantısına bağlı olmalı
+#: ("press conference at 2:30 p.m."); "press conference following the 2:00 p.m. statement" gibi bir cümle
+#: KARARIN saatini taşır ve yineleme sayılmaz.
+_YINELEME = re.compile(r"(?i)(?:news|press) conference\b[^.:]{0,40}?\b(?:at|for)\s+(?:approximately\s+|about\s+)?"
+                       r"(\d{1,2}):(\d{2})\s?([ap])\.m\.")
+
+
+def fomc_kurali(man: dict) -> dict:
+    """Fed'in 13.03.2013 duyurusundaki saat kuralı ve toplantı takvimi duyurularındaki yinelemeleri.
+
+    Döner: {"karar": "14:00" | None, "basin": "14:30" | None, "kaynak": adres, "son_gecerli": tarih | None,
+    "yineleme": [...], "sorun": [...]}. Kural yalnız OLAĞAN toplantılar içindir ("all regularly scheduled
+    meetings"). Bir duyuru basın toplantısına başka bir saat yazıyorsa kural o duyurunun tarihinden sonraki
+    toplantılara uygulanmaz (`son_gecerli`): yeni saat ancak kendi tarih tarih kaynağıyla yazılır."""
+    k: dict = {"karar": None, "basin": None, "kaynak": FED_KURAL, "son_gecerli": None, "yineleme": [], "sorun": []}
+    v = man.get(FED_KURAL)
+    if not v:
+        k["sorun"].append("13.03.2013 saat duyurusu arşivde yok (beşinci geçiş koşmadı)")
+        return k
+    s = _duz(_metin(v["dosya"]))
+    kk, kb = _KURAL_KARAR.search(s), _KURAL_BASIN.search(s)
+    if not (kk and kb):
+        k["sorun"].append("13.03.2013 duyurusunun metni beklenen cümleleri taşımıyor — kural kurulmadı")
+        return k
+    k["karar"] = _saat(int(kk.group(1)), int(kk.group(2) or 0), kk.group(3))
+    k["basin"] = _saat(int(kb.group(1)), int(kb.group(2)), kb.group(3))
+    for u, x in sorted(man.items()):
+        t = re.search(r"/newsevents/pressreleases/[a-z]+(\d{8})[a-z]?\.htm$", u)
+        if u == FED_KURAL or not t or not x.get("dosya"):
+            continue
+        g = date(int(t.group(1)[:4]), int(t.group(1)[4:6]), int(t.group(1)[6:]))
+        for y in _YINELEME.finditer(_duz(_metin(x["dosya"]))):
+            saat = _saat(int(y.group(1)), int(y.group(2)), y.group(3))
+            k["yineleme"].append({"kaynak": u, "tarih": g.isoformat(), "saat": saat, "metin": y.group(0)[:160]})
+            if saat != k["basin"]:
+                k["sorun"].append(f"{g}: {u.rsplit('/', 1)[-1]} basın toplantısını {saat} diye yazıyor, kural "
+                                  f"{k['basin']} — kural bu tarihten sonraki toplantılara uygulanmaz")
+                if k["son_gecerli"] is None or g.isoformat() < k["son_gecerli"]:
+                    k["son_gecerli"] = g.isoformat()
+    return k
 
 
 def fomc(man: dict, kunye: dict) -> list[dict]:
@@ -168,6 +262,11 @@ def fomc(man: dict, kunye: dict) -> list[dict]:
         if "federalreserve.gov/monetarypolicy/fomc" in u and ("calendars" in u or "historical" in u):
             bloklar += _fomc_bloklar(_metin(v["dosya"]))
     takvim = fed_takvim(man)
+    kural = fomc_kurali(man)
+    sorun += [f"kural: {s}" for s in kural["sorun"]]
+    kaynak_say = {"takvim": 0, "duyuru": 0, "kural": 0}
+    kaynak_tarih: dict[str, list[str]] = {"takvim": [], "duyuru": []}
+    kuraldan_farkli = 0
     gorulen = set()
     for b in bloklar:
         bas = b["baslik"].lower()
@@ -197,19 +296,57 @@ def fomc(man: dict, kunye: dict) -> list[dict]:
                       "kaynak": u, "not": "" if olagan else "olağanüstü toplantı"})
         if not b["basin"]:
             continue
-        etk = [e for e in takvim.get(g, []) if re.search(r"(?i)press conference", e[1])]
-        if not etk:
-            sorun.append(f"{g}: basın toplantısı var, saati Fed'in etkinlik takviminde okunamadı — yazılmadı")
+        # Basın toplantısının saati: önce o günün KENDİ kaydı (aylık takvimin ayrı satırı ya da duyurusu), yoksa
+        # Fed'in 13.03.2013 kuralı. Kural yalnız olağan toplantıya ve kararı kuralın saatinde yayımlanan güne
+        # uygulanır (kuralın eşi: karar 14:00 ↔ basın toplantısı 14:30, ECB'deki sınamanın aynısı).
+        etk = sorted((e for e in takvim.get(g, []) if e["tur"] in ("basin", "duyuru")), key=lambda e: e["tur"])
+        saatler = sorted({e["saat"] for e in etk})
+        if len(saatler) > 1:
+            sorun.append(f"{g}: takvim kayıtları basın toplantısına iki saat veriyor {saatler} — yazılmadı")
             continue
-        if len({e[0] for e in etk}) > 1:
-            sorun.append(f"{g}: takvimde birden çok basın toplantısı saati {sorted({e[0] for e in etk})} — yazılmadı")
+        if etk:
+            e = etk[0]
+            dilim = e.get("dilim")
+            if dilim and dilim != "ET" and dilim != kisa:
+                sorun.append(f"{g}: duyuru {dilim} diyor, o gün New York'ta {kisa} geçerli — yazılmadı")
+                continue
+            if kural["basin"] and e["saat"] != kural["basin"]:
+                sorun.append(f"{g}: takvim {e['saat']} diyor, kural {kural['basin']} — takvimin kendi kaydı alındı")
+                kuraldan_farkli += 1
+            kaynak_say["takvim" if e["tur"] == "basin" else "duyuru"] += 1
+            kaynak_tarih["takvim" if e["tur"] == "basin" else "duyuru"].append(g.isoformat())
+            satir.append({"olay": "FOMC_basin", "tarih": g.isoformat(), "yerel_saat": e["saat"],
+                          "bolge": "America/New_York", "kaynak": e["kaynak"],
+                          "not": ("saat Fed'in aylık etkinlik takviminden (ayrı satır)" if e["tur"] == "basin" else
+                                  "saat Fed'in aylık etkinlik takvimindeki duyurudan") +
+                                 ("" if olagan else "; olağanüstü toplantı")})
             continue
-        satir.append({"olay": "FOMC_basin", "tarih": g.isoformat(), "yerel_saat": etk[0][0],
-                      "bolge": "America/New_York", "kaynak": etk[0][2],
-                      "not": "" if olagan else "olağanüstü toplantı"})
+        if not olagan:
+            sorun.append(f"{g}: olağanüstü toplantının basın toplantısı — saati kaynakta yok ve kural yalnız olağan "
+                         f"toplantılar için; yazılmadı")
+            continue
+        if not kural["basin"]:
+            sorun.append(f"{g}: basın toplantısının saati takvimde yok ve kural kurulamadı — yazılmadı")
+            continue
+        if kural["son_gecerli"] and g.isoformat() > kural["son_gecerli"]:
+            sorun.append(f"{g}: kural {kural['son_gecerli']} tarihli duyurudan sonra geçerli değil — yazılmadı")
+            continue
+        if saat != kural["karar"]:
+            sorun.append(f"{g}: karar {saat}'te yayımlandı, kuralın karar saati {kural['karar']} — basın toplantısı "
+                         f"kuraldan kurulamaz, yazılmadı")
+            continue
+        kaynak_say["kural"] += 1
+        satir.append({"olay": "FOMC_basin", "tarih": g.isoformat(), "yerel_saat": kural["basin"],
+                      "bolge": "America/New_York", "kaynak": kural["kaynak"],
+                      "not": f"saat Fed'in 13.03.2013 kuralından (karar {kural['karar']}, basın toplantısı yaklaşık "
+                             f"{kural['basin']}); bu tarih için ayrı kayıt kaynakta yok"})
     kunye["fomc"] = {"karar": sum(1 for s in satir if s["olay"] == "FOMC_karar"),
                      "basin": sum(1 for s in satir if s["olay"] == "FOMC_basin"),
-                     "takvim_gun": len(takvim), "sorun": sorun}
+                     "basin_saat_kaynagi": kaynak_say,
+                     "basin_saat_tarih": {k_: sorted(v_) for k_, v_ in kaynak_tarih.items()},
+                     "kuraldan_farkli": kuraldan_farkli, "takvim_gun": len(takvim),
+                     "kural": {x: kural[x] for x in ("karar", "basin", "kaynak", "son_gecerli", "yineleme")},
+                     "sorun": sorun}
     return satir
 
 

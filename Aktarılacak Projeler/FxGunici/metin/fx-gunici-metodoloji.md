@@ -138,12 +138,35 @@ değiştirmedi:
 
 ## Haber takvimi
 
-Her olayın saati kendi resmî kaynağından, tarih tarih okundu: ABD tarım dışı istihdam ve TÜFE için BLS'nin yayım
-sayfalarının ambargo satırı (BLS'nin sitesi otomatik istekleri reddettiği için Internet Archive'daki kopyalarından;
-her kopyanın arşiv zaman damgası kayıtta), FOMC için Fed'in basın duyuruları, ECB için karar duyuruları, BoE için Para
-Politikası Kurulu kararlarının özet sayfaları. ECB karar saati {{ O.takvim.sayim.ECB_karar.saat_aralik."13:45 Europe/Berlin"[1] | tarih }}
-toplantısına kadar 13:45, {{ O.takvim.sayim.ECB_karar.saat_aralik."14:15 Europe/Berlin"[0] | tarih }} toplantısından
-itibaren 14:15 Frankfurt'tur; takvim her toplantının kendi saatini taşır.
+Her olayın saati resmî bir kaynaktan geldi ve kaynak iki türlüdür. **Tarih tarih**: ABD tarım dışı istihdam ve TÜFE
+için BLS'nin yayım sayfalarının ambargo satırı (BLS'nin sitesi otomatik istekleri reddettiği için Internet Archive'daki
+kopyalarından; her kopyanın arşiv zaman damgası kayıtta), FOMC kararı için karar metninin yayım satırı ("For release
+at 2:00 p.m. EDT"), ECB basın toplantısı için karar duyurusunun kendi cümlesi. **Kuraldan**: BoE kararları perşembe
+12:00 (Para Politikası Kurulu'nun yayım kuralı; tarih her özetin kendi sayfasından), ECB karar saati ECB'nin 27 Haziran
+2022 duyurusundan: {{ O.takvim.sayim.ECB_karar.saat_aralik."13:45 Europe/Berlin"[1] | tarih }} toplantısına kadar 13:45,
+{{ O.takvim.sayim.ECB_karar.saat_aralik."14:15 Europe/Berlin"[0] | tarih }} toplantısından itibaren 14:15 Frankfurt. Her
+toplantıda kuralın verdiği karar saatinin, duyurunun yazdığı basın toplantısı saatiyle eşleştiği ayrıca sınandı (13:45
+↔ 14:30, 14:15 ↔ 14:45).
+
+**FOMC basın toplantısı** saati en zor bulunanıdır. Ne karar metni ne basın toplantısı sayfası onu yazar: sayfadaki tek
+saat kararın yayım saatidir. Fed'in aylık etkinlik takvimi basın toplantısını ayrı satırla yalnız
+{{ O.takvim.kunye.fomc.basin_saat_tarih.takvim[0] | ay_uzun }} toplantısından itibaren listeler ({{ O.takvim.kunye.fomc.basin_saat_kaynagi.takvim | n }} toplantı){% if O.takvim.kunye.fomc.basin_saat_kaynagi.duyuru == 1 %};
+daha önce tek bir toplantının saatini ayın duyurusu yazar ({{ O.takvim.kunye.fomc.basin_saat_tarih.duyuru[0] | tarih }}){% endif %}.
+Kalan {{ O.takvim.kunye.fomc.basin_saat_kaynagi.kural | n }} toplantının saati Fed'in 13 Mart 2013 duyurusundaki
+kuraldan gelir: olağan toplantılarda kararın yayım saati {{ O.takvim.kunye.fomc.kural.karar | t }}, başkanın basın
+toplantısının başlangıcı "yaklaşık" {{ O.takvim.kunye.fomc.kural.basin | t }} (New York).{{? len(O.takvim.kunye.fomc.kural.yineleme) == 2 and O.takvim.kunye.fomc.kural.yineleme[0].tarih == "2024-08-09" and O.takvim.kunye.fomc.kural.yineleme[1].tarih == "2025-09-05" and O.takvim.kunye.fomc.kural.yineleme[0].saat == O.takvim.kunye.fomc.kural.basin and O.takvim.kunye.fomc.kural.yineleme[1].saat == O.takvim.kunye.fomc.kural.basin }}
+Kural Fed'in 2024 ve 2025 toplantı takvimi duyurularında aynen yinelenir.{{? O.takvim.kunye.fomc.kuraldan_farkli == 0 }} Tarih
+tarih kaydı olan toplantıların hepsi kuralla aynı saati taşır. Kural yalnız kararı kuralın saatinde yayımlanan olağan
+toplantıya uygulandı{% if not O.takvim.sayim.FOMC_basin.olaganustu %}; olağanüstü toplantıların basın toplantısı
+kaynakta saatsiz olduğu için takvimde yok{% endif %}. Fiyat kuralla tutarlı: basın toplantısının ilk 15 dakikasında
+EUR/USD'nin ortalama dakikalık aralığı, hemen önceki 15 dakikanın (kararın ilk yarım saatinin ikinci yarısı) medyanda
+{{ O.takvim.sinama.basin_bilgi.FOMC_basin.EURUSD.medyan | s2 }} katı; {{ O.takvim.sinama.basin_bilgi.FOMC_basin.EURUSD.n | n }}
+toplantının {{ O.takvim.sinama.basin_bilgi.FOMC_basin.EURUSD.birden_buyuk | n }} tanesinde 1'in üstünde. Bu bir
+doğrulama değildir: oran fiyatın kuralın saatinden sonra hızlandığını gösterir, toplantının hangi dakikada
+başladığını göstermez. "Yaklaşık"
+kelimesi ölçünün sınırıdır; konuşmanın gerçek başlangıcı bir iki dakika kayabilir. Karar ile basın toplantısının
+karşılaştırması bir saatlik pencereyle kurulduğu için böyle bir kayma onun içinde kalır; 5 dakikalık ilk haber mumunda
+ise kayma mumun önemli bir parçasıdır ve N1–N5'in basın toplantısı sonuçları bu belirsizliği taşır.
 
 Takvimin dışarıda bıraktığı ya da düzelttiği kayıtlar:
 

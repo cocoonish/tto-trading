@@ -275,8 +275,21 @@ def takvim_ozet() -> dict:
                         for o, g in df.groupby("olay")}
     s = _oku(d / "sinama.json")
     if s:
+        # Basın toplantıları fiyattan SINANMAZ (konuşma tek dakikada sıçrama yapmaz); bilgi olarak toplantının ilk
+        # 15 dakikasındaki ortalama dakikalık aralığın önceki 15 dakikaya oranı, parite başına.
+        bilgi: dict = {}
+        for e in s.get("olay") or []:
+            if e.get("hukum") != "basin_bilgi":
+                continue
+            for p, v in (e.get("parite") or {}).items():
+                r = (v or {}).get("ilk15_once15_orani")
+                if r is not None and np.isfinite(r):
+                    bilgi.setdefault(e["olay"], {}).setdefault(p, []).append(float(r))
         out["sinama"] = {"kural": s.get("kural"), "ozet": s.get("ozet"), "celiski": s.get("celiski"),
-                         "celiski_olay": [e for e in s.get("olay") or [] if e.get("hukum") == "celiski"]}
+                         "celiski_olay": [e for e in s.get("olay") or [] if e.get("hukum") == "celiski"],
+                         "basin_bilgi": {o: {p: {"n": len(x), "medyan": float(np.median(x)),
+                                                 "birden_buyuk": int(sum(r > 1 for r in x))}
+                                             for p, x in sorted(v.items())} for o, v in sorted(bilgi.items())}}
     return out
 
 
