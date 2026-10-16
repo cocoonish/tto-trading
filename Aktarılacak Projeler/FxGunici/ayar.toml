@@ -1,0 +1,46 @@
+# FX gün içi stratejiler — proje ayarı.
+#
+# Bütün betikler bu dosyayı `ayar.py` üzerinden okur; sayı ya da liste
+# betiklere ELLE yazılmaz. Bir pariteyi eklemek/çıkarmak, örneklem sınırını ya
+# da maliyet ızgarasını değiştirmek için yalnız burası değişir ve tek komut
+# (`python3 hepsi.py`) her şeyi yeniden üretir.
+
+[veri]
+# Dukascopy sembol adları. Öncelik sırası: ilk parite dersin ana örneğidir.
+ciftler = ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD"]
+# Kapsam (UTC günleri, iki uç dahil). Bitiş DONDURULUR: ders yayımlandığı
+# günün ölçümüdür; yeni bir pencere yeni bir arşivdir.
+baslangic = "2018-01-01"
+bitis = "2026-10-15"
+# Dukascopy fiyatları "nokta" cinsinden tamsayı verir: 1 nokta = 1e-5 (JPY'li
+# paritelerde 1e-3). Pip = 10 nokta. Listede olmayan parite için ayar.py düşer.
+nokta = { EURUSD = 1e-5, GBPUSD = 1e-5, AUDUSD = 1e-5, USDJPY = 1e-3 }
+pip = { EURUSD = 1e-4, GBPUSD = 1e-4, AUDUSD = 1e-4, USDJPY = 1e-2 }
+
+[indirme]
+# Kibar ol: kaynak kendi müşterilerine de hizmet veriyor.
+es_zamanli = 8
+zaman_asimi_sn = 30
+deneme = 5
+# Bulut koşusunda iş sınırı 21 dakika; betik kendi bütçesini bunun altında
+# tutar ve yarım kalan yılı bir sonraki koşuya bırakır (arşiv kaldığı yerden sürer).
+butce_dk = 18
+
+[orneklem]
+# Parametreler YALNIZ örneklem içinde seçilir.
+ic_baslangic = "2018-01-01"
+ic_bitis = "2023-12-31"
+dis_baslangic = "2024-01-01"
+
+[islem]
+zaman_dilimleri = [5, 15, 60]
+# Gün sonu: FX işlem günü 17:00 ET'de kapanır. Pozisyon bu saatten ÖNCE
+# kapatılır, çünkü devir dakikalarında kotasyon makası açılır (ölçüsü
+# kalite raporunda). Saat New York yerel saatidir.
+gun_sonu_et = "16:55"
+# Parametrik kayma (pip, her dolumda) — duyarlılık ızgarası.
+kayma_pip = [0.0, 0.5, 1.0, 2.0]
+# Haber dakikalarında ek kayma (pip). Haber penceresi: olaydan önceki 2,
+# sonraki 15 dakika.
+haber_kayma_pip = 1.0
+haber_pencere_dk = [-2, 15]
