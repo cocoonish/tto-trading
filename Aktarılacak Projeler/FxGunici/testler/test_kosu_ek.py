@@ -201,3 +201,39 @@ def test_yorum_duyarliligi_sentetik(tmp_path, monkeypatch):
     for d in ("oos", "tum"):
         assert yp["varsayilan"][d]["hukum"] in ("calisiyor", "zayif", "calismiyor", "olculemedi")
     assert kosu.birim_kos("orb", k).get("yorum") is None
+
+
+def test_ornek_cizgisi_kuralin_kendi_gostergesi():
+    """Örnek günün çizgisi kuralın kendi tanımından gelir: sıkışmada strateji.sikisma_bantlari, VWAP kurallarında
+    strateji._vwap_mum (dönüşte ± k·σ). Uzunluk mumlarınkiyle aynı; tanımsız değer None; öbür kurallar çizgi taşımaz."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import ayar as ay
+    import strateji as st
+    from gunluk import baglam_kur
+    from sentetik import dakika_uret, olaylar_uret
+    olay = olaylar_uret()
+    b = baglam_kur(dakika_uret(soklar=olay["utc_sn"].to_numpy()), olay)
+    k = kosu.Kosucu(b, ay.oku())
+    m = b.mumlar(15, 0)
+    j0, j1 = 30, 30 + 96
+    c = kosu._ornek_cizgi(k, "sikisma", {"tf": 15}, m, j0, j1)
+    bt = st.sikisma_bantlari(m)
+    assert c["tur"] == "sikisma" and len(c["bb_ust"]) == j1 - j0 == len(c["sikisma"])
+    assert c["sikisma"] == [bool(x) for x in bt["sikisma"][j0:j1]]
+    for i, (u, a, ku, ka) in enumerate(zip(c["bb_ust"], c["bb_alt"], c["kc_ust"], c["kc_alt"])):
+        if None not in (u, a, ku, ka) and c["sikisma"][i]:
+            assert u < ku + 0.1 and a > ka - 0.1           # yuvarlama payı: 0,1 nokta
+    ilk = kosu._ornek_cizgi(k, "sikisma", {"tf": 15}, m, 0, 25)
+    assert all(x is None for x in ilk["bb_ust"][:19])      # ilk 19 mumda 20 mumluk ortalama tanımsız
+    for birim in ("vwap_donus", "vwap_cekilme"):
+        p = {"tf": 15, "capa": "londra", "k": 2.0}
+        v = kosu._ornek_cizgi(k, birim, p, m, j0, j1)
+        _, _, vwb, sgb, _, _ = st._vwap_mum(b, 15, "londra")
+        assert v["tur"] == birim and len(v["vwap"]) == j1 - j0
+        assert v["vwap"] == [kosu._sayi(x) for x in vwb[j0:j1]]
+        assert ("bant_ust" in v) == (birim == "vwap_donus")
+        if birim == "vwap_donus":
+            assert v["bant_ust"] == [kosu._sayi(x) for x in (vwb + 2.0 * sgb)[j0:j1]]
+    assert kosu._ornek_cizgi(k, "orb", {"tf": 15}, m, j0, j1) is None
+    with pytest.raises(AssertionError):
+        kosu._ornek_cizgi(k, "vwap_donus", {"tf": 15, "capa": "londra", "k": 2.0}, b.mumlar(5, 0), j0, j1)

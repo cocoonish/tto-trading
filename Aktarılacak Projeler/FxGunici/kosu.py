@@ -612,6 +612,30 @@ def _sayi(v):
     return None if v is None or not np.isfinite(float(v)) else round(float(v), 1)
 
 
+def _ornek_cizgi(k: Kosucu, birim: str, p: dict, m, j0: int, j1: int) -> dict | None:
+    """Örnek günün figüründe kuralın KENDİ göstergesi, mum mum ve aynı mumlarla (tanım strateji modülünde, figür
+    ikinci bir formül yazmaz): sıkışmada Bollinger ve Keltner bantları ve sıkışma mumları, VWAP kurallarında gün içi
+    VWAP, dönüşte ayrıca ± k·σ bandı. Göstergenin tanımsız olduğu mum (sıkışmada ilk 20 mum, VWAP'ta çapadan önce)
+    None. Öbür kurallar çizgi taşımaz."""
+    import strateji as st
+    aile = BIRIMLER[birim]["aile"]
+    say = lambda a: [_sayi(v) for v in a[j0:j1]]  # noqa: E731
+    if aile == "sikisma":
+        bt = st.sikisma_bantlari(m)
+        return {"tur": aile, **{x: say(bt[x]) for x in ("bb_ust", "bb_alt", "kc_ust", "kc_alt")},
+                "sikisma": [bool(v) for v in bt["sikisma"][j0:j1]]}
+    if aile in ("vwap_donus", "vwap_cekilme"):
+        mm, _, vwb, sgb, _, _ = st._vwap_mum(k.b, int(p["tf"]), str(p["capa"]))
+        if len(mm) != len(m) or not np.array_equal(mm.bt, m.bt):
+            raise AssertionError(f"{birim}: VWAP mumları örnek günün mumları değil")
+        out = {"tur": aile, "vwap": say(vwb)}
+        if aile == "vwap_donus":
+            kk = float(p["k"])
+            out["bant_ust"], out["bant_alt"] = say(vwb + kk * sgb), say(vwb - kk * sgb)
+        return out
+    return None
+
+
 def ornek_gunler(k: Kosucu, birim: str, p: dict, isl: pd.DataFrame, ofset_sabit: int | None) -> list[dict]:
     """Ders figürünün örnek günleri: örneklem DIŞINDAN üç işlem.
 
@@ -664,6 +688,7 @@ def ornek_gunler(k: Kosucu, birim: str, p: dict, isl: pd.DataFrame, ofset_sabit:
             "mum": {"t": [int(v) for v in m.bt[j0:j1]], "o": [round(float(v), 1) for v in m.o[j0:j1]],
                     "h": [round(float(v), 1) for v in m.h[j0:j1]], "l": [round(float(v), 1) for v in m.l[j0:j1]],
                     "c": [round(float(v), 1) for v in m.c[j0:j1]]},
+            "cizgi": _ornek_cizgi(k, birim, p, m, int(j0), int(j1)),
             "islem": {"yon": int(s["yon"]), "giris_t": int(s["giris_t"]), "cikis_t": int(s["cikis_t"]),
                       "giris_f": _sayi(s["giris_f"]), "cikis_f": _sayi(s["cikis_f"]),
                       "stop": None if stopsuz else _sayi(s["stop"]),

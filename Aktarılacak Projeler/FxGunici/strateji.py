@@ -137,10 +137,10 @@ def icmum(b: Baglam, tf: int, referans: str, gecerlilik: int, seans: str):
 
 
 # ───────────────────────────────────────────── 5 · BB/KC sıkışması
-def sikisma(b: Baglam, tf: int, sure: int, yon: str, stop_yeri: str):
-    m = b.mumlar(tf, 0)
-    g = b.g
-    bk = mum_gunu(b, m)
+def sikisma_bantlari(m) -> dict:
+    """Sıkışmanın iki bandı mum mum: Bollinger (20 mumluk ortalama ± 2 standart sapma) ve Keltner (20 mumluk üstel
+    ortalama ± 1,5 × Wilder ATR(20)); `sikisma` Bollinger bandının ikisi de Keltner'in içinde kaldığı mumdur. Kural da
+    örnek günlerin figürü de bantları buradan okur (tek tanım)."""
     c = pd.Series(m.c)
     sma = c.rolling(20).mean().to_numpy()
     sd = c.rolling(20).std(ddof=0).to_numpy()
@@ -149,7 +149,16 @@ def sikisma(b: Baglam, tf: int, sure: int, yon: str, stop_yeri: str):
     tr = np.maximum.reduce([m.h - m.l, np.abs(m.h - onceki), np.abs(m.l - onceki)])
     atr20 = wilder(tr.astype(np.float64), 20)
     sq = (sma + 2 * sd < ema + 1.5 * atr20) & (sma - 2 * sd > ema - 1.5 * atr20)
-    sq = np.nan_to_num(sq, nan=False).astype(bool)
+    return {"sma": sma, "bb_ust": sma + 2 * sd, "bb_alt": sma - 2 * sd, "kc_ust": ema + 1.5 * atr20,
+            "kc_alt": ema - 1.5 * atr20, "sikisma": np.nan_to_num(sq, nan=False).astype(bool)}
+
+
+def sikisma(b: Baglam, tf: int, sure: int, yon: str, stop_yeri: str):
+    m = b.mumlar(tf, 0)
+    g = b.g
+    bk = mum_gunu(b, m)
+    bant = sikisma_bantlari(m)
+    sma, sq = bant["sma"], bant["sikisma"]
     d_ = np.diff(np.concatenate([[0], sq.astype(np.int8), [0]]))
     basl, son = np.flatnonzero(d_ == 1), np.flatnonzero(d_ == -1)      # son: ilk sıkışmasız mum
     hi = g.an["ny_1600"]

@@ -247,6 +247,14 @@ def kova_analizi(f: pd.DataFrame, ic: np.ndarray, asgari: int = 30) -> list[dict
             kova = x.astype(object).where(x.notna(), None).to_numpy()
             sinir = None
         kova = pd.Series(kova, index=f.index)
+        # Örneklem dışının en iyi TEK işleminin kovası (bilgi; hükmü değiştirmez): bir kovanın örneklem dışı katkısının
+        # ne kadarının o işleme dayandığını ders bununla yazar (kuyruk duyarlılığının kova eşi; işlemin kendisi
+        # kuyruk kaydında). Eşit en iyi işlemler varsa ilki; kaç tane olduğu kuyruk kaydında (en_iyi_esit).
+        dis_i = np.flatnonzero(~ic & np.isfinite(r))
+        en_iyi_kova = None
+        if len(dis_i):
+            v_ = kova.iloc[int(dis_i[int(np.argmax(r[dis_i]))])]
+            en_iyi_kova = None if v_ is None or pd.isna(v_) else str(v_)
         satirlar = []
         # Eksik değer kova değildir: pandas `where(..., None)` nesne dizisinde None'u NaN'a
         # çevirebiliyor ve NaN kovası tablolara "nan" adıyla, sıfır işlemle giriyordu.
@@ -277,6 +285,7 @@ def kova_analizi(f: pd.DataFrame, ic: np.ndarray, asgari: int = 30) -> list[dict
                       "oos_secilen_n": int(md.sum()), "oos_tamamlayan_n": int(mt_.sum()),
                       "oos_secilen_isabet": float((pp[md] > 0).mean()) if md.any() else float("nan"),
                       "oos_tamamlayan_isabet": float((pp[mt_] > 0).mean()) if mt_.any() else float("nan"),
+                      "oos_en_iyi_kova": en_iyi_kova,
                       "ters_secim": {"secilen": ters, "hukum": t_hukum, "oos_secilen_r": t_sec,
                                      "oos_tamamlayan_r": t_ters}})
     return sonuc

@@ -128,3 +128,25 @@ def test_tek_denemede_psr_ve_tanimsiz_esikler():
     eski = sg.dsr(sr, np.array([sr, sr]), g)          # eski kurulum: dsr alanı PSR'a eşitti
     assert t["n_deneme"] == 1 and t["dsr"] == t["psr"] == pytest.approx(eski["psr"])
     assert t["dsr_gurultu"] is None and t["sr0_gurultu_yillik"] is None and t["sr0_yillik"] == 0.0
+
+
+def test_orneklem_disinin_en_iyi_isleminin_kovasi():
+    """Değişken başına örneklem dışının en iyi tek işleminin kovası (bilgi): işlem değişkenin tanımsız olduğu bir
+    işlemse kova yok."""
+    f = _tablo()
+    ic = np.arange(len(f)) < 250
+    j = 300
+    f.loc[j, "r"] = 50.0
+    f.loc[j, "onceki_gun_yon"] = "aynı yön"
+    out = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}
+    assert out["onceki_gun_yon"]["oos_en_iyi_kova"] == "aynı yön"
+    assert out["range_atr"]["oos_en_iyi_kova"] in ("alt", "orta", "üst")
+    f.loc[j, "onceki_gun_yon"] = None
+    out = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}
+    assert out["onceki_gun_yon"]["oos_en_iyi_kova"] is None
+    # örneklem içindeki daha büyük bir işlem kovayı belirlemez
+    f.loc[10, "r"] = 99.0
+    f.loc[10, "onceki_gun_yon"] = "ters yön"
+    f.loc[j, "onceki_gun_yon"] = "aynı yön"
+    out = {k["degisken"]: k for k in sg.kova_analizi(f, ic, asgari=30)}
+    assert out["onceki_gun_yon"]["oos_en_iyi_kova"] == "aynı yön"
