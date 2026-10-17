@@ -1,0 +1,157 @@
+{
+ "id": "bgir1992",
+ "aday_baslik": "Survivorship bias in performance studies",
+ "aday_yil": 1992,
+ "zaman": "2026-10-17T23:25:53+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1093/rfs/5.4.553",
+   "durum": 200,
+   "baslik": "Survivorship Bias in Performance Studies"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1093/rfs/5.4.553",
+  "baslik": "Survivorship Bias in Performance Studies",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Brown",
+    "ad": "Stephen J.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Goetzmann",
+    "ad": "William",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Ibbotson",
+    "ad": "Roger G.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Ross",
+    "ad": "Stephen A.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Review of Financial Studies",
+  "cilt": "5",
+  "sayi": "4",
+  "sayfa": "553-580",
+  "yil": 1992,
+  "tur": "journal-article",
+  "yayinci": "Oxford University Press (OUP)",
+  "ozet": null,
+  "url": "https://doi.org/10.1093/rfs/5.4.553",
+  "bag": [
+   "http://academic.oup.com/rfs/article-pdf/5/4/553/5311060/050553.pdf"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W1992897607",
+  "doi": "10.1093/rfs/5.4.553",
+  "baslik": "Survivorship Bias in Performance Studies",
+  "yil": 1992,
+  "yazarlar": [
+   "Stephen J. Brown",
+   "William N. Goetzmann",
+   "Roger G. Ibbotson",
+   "Stephen A. Ross"
+  ],
+  "dergi": "Review of Financial Studies",
+  "issn": [
+   "0893-9454",
+   "1465-7368"
+  ],
+  "cilt": "5",
+  "sayi": "4",
+  "ilk_sayfa": "553",
+  "son_sayfa": "580",
+  "ozet": "Survivorship bias distorts results of virtually all current performance studies based on time series. Thus, researchers need to recognize and adjust for the presence of this bias. Not only does the bias affect the absolute performance measures; it also affects the relative rankings of managers over time.This presentation comes from the Blending Quantitative and Traditional Equity Analysis conference held in Boston, Massachusetts, on March 30-31, 1994.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1093/rfs/5.4.553"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Survivorship Bias in Performance Studies",
+  "yil": 1992,
+  "dergi": "",
+  "ozet": null,
+  "acik": "",
+  "yazarlar": [
+   "Stephen J. Brown",
+   "W. Goetzmann",
+   "R. Ibbotson",
+   "S. Ross"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://terpconnect.umd.edu/~wermers/ftpsite/FAME/Brown_Goetzmann_Ibbotson_Ross.pdf",
+  "son_url": "https://terpconnect.umd.edu/~wermers/ftpsite/FAME/Brown_Goetzmann_Ibbotson_Ross.pdf",
+  "tur": "application/pdf",
+  "sha256": "a98d0e7f5215c7a996396dced216caa2cb36594a3397cf77bc9fa87e151d41aa",
+  "bayt": 267293,
+  "sayfa": 28,
+  "ilk_sayfa": "Survivorship Bias in Performance Studies Stephen J. Brown New York University William Goetzmann Columbia University Roger G. Ibbotson Stephen A. Ross Yale University Recent evidence suggests that past mutual fund performance predicts future performance. We analyze the relationship between volatility and returns in a sample that is truncated by survivorship and show that this relationship gives rise to the appearance of predictability. We present some numerical examples to show that this effect can be strong enough to account for the strength of the evidence favoring return predictability. Past performance does not guarantee future performance. Empirical work from the classic study by Cowles (1933) to work by Jensen (1968) suggests that there is only very limited evidence that professional money managers can outperform the market averages The first-named author acknowledges support of a Yamaichi Faculty Fellowship. We thank, for their unusually constructive comments and support, Campbell Harvey, Thomas Philips, Richard Roll, the editor (Chester Spatt), the referee (Peter Bossaerts), participants in presentations at Berkeley, Columbia, Cornell, New York University, Stanford, University of Massachusetts at Amherst, Vanderbilt University, Washington University at St. Louis, the 1991 Johnson Symposium at the University of Wisconsin, the Second Conference on Finance and Accounting at the University of Buffalo, 1991, and the 1992 Western Finance Association meetings. Remaining error",
+  "pasaj": [
+   {
+    "ifade": "past mutual fund performance predicts future performance",
+    "sayfa": 1,
+    "pasaj": "Survivorship Bias in Performance Studies Stephen J. Brown New York University William Goetzmann Columbia University Roger G. Ibbotson Stephen A. Ross Yale University Recent evidence suggests that past mutual fund performance predicts future performance. We analyze the relationship between volatility and returns in a sample that is truncated by survivorship and show that this relationship gives rise to the appearance of predictability. We present some numerical examples to show that this "
+   },
+   {
+    "ifade": "truncated by survivorship",
+    "sayfa": 1,
+    "pasaj": "nn Columbia University Roger G. Ibbotson Stephen A. Ross Yale University Recent evidence suggests that past mutual fund performance predicts future performance. We analyze the relationship between volatility and returns in a sample that is truncated by survivorship and show that this relationship gives rise to the appearance of predictability. We present some numerical examples to show that this effect can be strong enough to account for the strength of the evidence favoring return predictability. Pa"
+   },
+   {
+    "ifade": "truncated by survivorship",
+    "sayfa": 12,
+    "pasaj": "pt that the unknown spread parameter is not constant, although ranking by volatility is preserved, that is, Proof. Immediate, given This concludes our analytic verification of the relation between volatility and returns in a sample that is truncated by survivorship bias. To say whether this effect is larger or smaller than the natural tendency for regression to the mean depends on the exact sample selection rules. If the selection rule in a two-period model is x1 + x2 > 0 (and/or x1 > 0), then we hav"
+   },
+   {
+    "ifade": "gives rise to the appearance of predictability",
+    "sayfa": 1,
+    "pasaj": "ale University Recent evidence suggests that past mutual fund performance predicts future performance. We analyze the relationship between volatility and returns in a sample that is truncated by survivorship and show that this relationship gives rise to the appearance of predictability. We present some numerical examples to show that this effect can be strong enough to account for the strength of the evidence favoring return predictability. Past performance does not guarantee future performance. Empirical work from the c"
+   },
+   {
+    "ifade": "the relationship between volatility and returns",
+    "sayfa": 1,
+    "pasaj": "ormance Studies Stephen J. Brown New York University William Goetzmann Columbia University Roger G. Ibbotson Stephen A. Ross Yale University Recent evidence suggests that past mutual fund performance predicts future performance. We analyze the relationship between volatility and returns in a sample that is truncated by survivorship and show that this relationship gives rise to the appearance of predictability. We present some numerical examples to show that this effect can be strong enough to account for the strength of t"
+   },
+   {
+    "ifade": "some numerical examples",
+    "sayfa": 1,
+    "pasaj": "nd performance predicts future performance. We analyze the relationship between volatility and returns in a sample that is truncated by survivorship and show that this relationship gives rise to the appearance of predictability. We present some numerical examples to show that this effect can be strong enough to account for the strength of the evidence favoring return predictability. Past performance does not guarantee future performance. Empirical work from the classic study by Cowles (1933) to wor"
+   },
+   {
+    "ifade": "Survivorship Bias in Performance Studies",
+    "sayfa": 1,
+    "pasaj": "Survivorship Bias in Performance Studies Stephen J. Brown New York University William Goetzmann Columbia University Roger G. Ibbotson Stephen A. Ross Yale University Recent evidence suggests that past mutual fund performance predicts future performance. We analyze the relationshi"
+   },
+   {
+    "ifade": "Survivorship Bias in Performance Studies",
+    "sayfa": 3,
+    "pasaj": "Survivorship Bias in Performance Studies funds for the period 1974-1988, while the latter study considers a much larger sample of 728 mutual funds for the period 1976-1988, 258 of which survived for the entire period. The major conclusions of the two studies are similar. Performa"
+   }
+  ],
+  "eksik": [
+   "strength of evidence favoring return predictability"
+  ],
+  "deneme": [
+   {
+    "url": "https://terpconnect.umd.edu/~wermers/ftpsite/FAME/Brown_Goetzmann_Ibbotson_Ross.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

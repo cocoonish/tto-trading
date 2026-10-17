@@ -1,0 +1,175 @@
+{
+ "id": "bllo2014",
+ "aday_baslik": "The cross-section of speculator skill: Evidence from day trading",
+ "aday_yil": 2014,
+ "zaman": "2026-10-17T23:26:01+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1016/j.finmar.2013.05.006",
+   "durum": 200,
+   "baslik": "The cross-section of speculator skill: Evidence from day trading"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/j.finmar.2013.05.006",
+  "baslik": "The cross-section of speculator skill: Evidence from day trading",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Barber",
+    "ad": "Brad M.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Lee",
+    "ad": "Yi-Tsung",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Liu",
+    "ad": "Yu-Jane",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Odean",
+    "ad": "Terrance",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Financial Markets",
+  "cilt": "18",
+  "sayi": null,
+  "sayfa": "1-24",
+  "yil": 2014,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/j.finmar.2013.05.006",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S1386418113000190?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S1386418113000190?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3125339824",
+  "doi": "10.1016/j.finmar.2013.05.006",
+  "baslik": "The cross-section of speculator skill: Evidence from day trading",
+  "yil": 2013,
+  "yazarlar": [
+   "Brad M. Barber",
+   "Yi‐Tsung Lee",
+   "Yu‐Jane Liu",
+   "Terrance Odean B"
+  ],
+  "dergi": "Journal of Financial Markets",
+  "issn": [
+   "1386-4181",
+   "1878-576X"
+  ],
+  "cilt": "18",
+  "sayi": null,
+  "ilk_sayfa": "1",
+  "son_sayfa": "24",
+  "ozet": null,
+  "acik": "https://escholarship.org/content/qt7k75v0qx/qt7k75v0qx.pdf",
+  "adresler": [
+   "https://escholarship.org/content/qt7k75v0qx/qt7k75v0qx.pdf",
+   "https://doi.org/10.1016/j.finmar.2013.05.006",
+   "http://www.sciencedirect.com/science/article/pii/S1386418113000190",
+   "https://escholarship.org/uc/item/7k75v0qx",
+   "http://www.escholarship.org/uc/item/7k75v0qx"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "The Cross-Section of Speculator Skill: Evidence from Day Trading",
+  "yil": 2014,
+  "dergi": "",
+  "ozet": null,
+  "acik": "https://escholarship.org/content/qt7k75v0qx/qt7k75v0qx.pdf",
+  "yazarlar": [
+   "B. Barber",
+   "Yi-Tsung Lee",
+   "Yu-Jane Liu",
+   "T. Odean"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://faculty.haas.berkeley.edu/odean/papers/day%20traders/The%20Cross-Section%20of%20Speculator%20Skill.pdf",
+  "son_url": "https://faculty.haas.berkeley.edu/odean/papers/day%20traders/The%20Cross-Section%20of%20Speculator%20Skill.pdf",
+  "tur": "application/pdf",
+  "sha256": "94495a6b4a81343ca058601bb2666721863193e916d50bf62dd340c586ac8f1e",
+  "bayt": 534448,
+  "sayfa": 24,
+  "ilk_sayfa": "Available online at www.sciencedirect.com Journal of Financial Markets 18 (2014) 1 -24 The cross-section of speculator skill: Evidence from day trading $ Brad M. Barber a,1, Yi-Tsung Lee b,2, Yu-Jane Liu c,n, Terrance Odean d,3 aGraduate School of Management, University of California, Davis, CA 95616, USA bGuanghua School of Management, Peking University, Beijing 100871, People's Republic of China cDepartment of Finance, Guanghua School of Management, Peking University, Beijing 100871, People's Republic of China dHaas School of Business, University of California, Berkeley, CA 94704, USA Received 15 August 2011; received in revised form 9 May 2013; accepted 13 May 2013 Available online 2 July 2013 Abstract We document economically large cross-sectional differences in the before- and after-fee returns earned by speculative traders by analyzing day traders in Taiwan from 1992 to 2006. We sort day traders based on their returns in year y and analyze their performance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees. & 2013 Elsevier B.V. All rights reserved. JEL classi fication: D14; G02 Keywords: Speculative trading; Day traders; Individual investors; Investor performance www.els",
+  "pasaj": [
+   {
+    "ifade": "before- and after-fee returns earned by speculative traders",
+    "sayfa": 1,
+    "pasaj": "s, University of California, Berkeley, CA 94704, USA Received 15 August 2011; received in revised form 9 May 2013; accepted 13 May 2013 Available online 2 July 2013 Abstract We document economically large cross-sectional differences in the before- and after-fee returns earned by speculative traders by analyzing day traders in Taiwan from 1992 to 2006. We sort day traders based on their returns in year y and analyze their performance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3"
+   },
+   {
+    "ifade": "day traders in Taiwan from 1992 to 2006",
+    "sayfa": 1,
+    "pasaj": "011; received in revised form 9 May 2013; accepted 13 May 2013 Available online 2 July 2013 Abstract We document economically large cross-sectional differences in the before- and after-fee returns earned by speculative traders by analyzing day traders in Taiwan from 1992 to 2006. We sort day traders based on their returns in year y and analyze their performance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on "
+   },
+   {
+    "ifade": "daily before-fee (after-fee) returns",
+    "sayfa": 1,
+    "pasaj": "er-fee returns earned by speculative traders by analyzing day traders in Taiwan from 1992 to 2006. We sort day traders based on their returns in year y and analyze their performance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal"
+   },
+   {
+    "ifade": "daily before-fee (after-fee) returns",
+    "sayfa": 1,
+    "pasaj": "t day traders based on their returns in year y and analyze their performance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees. & 2013 Elsevier B.V. All rights reserved. JEL classi fication: D14; G02 Keywords: S"
+   },
+   {
+    "ifade": "61.3 (37.9) bps per day",
+    "sayfa": 1,
+    "pasaj": "ders by analyzing day traders in Taiwan from 1992 to 2006. We sort day traders based on their returns in year y and analyze their performance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees. & 201"
+   },
+   {
+    "ifade": "the 500 top-ranked day traders",
+    "sayfa": 1,
+    "pasaj": "-sectional differences in the before- and after-fee returns earned by speculative traders by analyzing day traders in Taiwan from 1992 to 2006. We sort day traders based on their returns in year y and analyze their performance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able"
+   },
+   {
+    "ifade": "predictably and reliably earn positive abnormal returns",
+    "sayfa": 1,
+    "pasaj": "on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees. & 2013 Elsevier B.V. All rights reserved. JEL classi fication: D14; G02 Keywords: Speculative trading; Day traders; Individual investors; Investor performance www.elsevier.com/locate/finmar 1386-4181/$ - see front matter & 201"
+   },
+   {
+    "ifade": "positive abnormal returns net of fees",
+    "sayfa": 1,
+    "pasaj": "fter-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees. & 2013 Elsevier B.V. All rights reserved. JEL classi fication: D14; G02 Keywords: Speculative trading; Day traders; Individual investors; Investor performance www.elsevier.com/locate/finmar 1386-4181/$ - see front matter & 2013 Elsevier B"
+   },
+   {
+    "ifade": "positive abnormal returns net of fees",
+    "sayfa": 3,
+    "pasaj": "ese individuals engaged in day trading. Among thousands of occasional day traders in the average year, 277,000 individuals engaged in day trades in excess of $NT 600,000 per year (about $US 20,000) 5 and about 20% of these day traders earn positive abnormal returns net of fees (commissions and transaction taxes). 6 Of course, some outperformance would be expected by sheer luck. But luck is not the whole story. Our main result documents the presence of statistically and economically large cross-sectional variatio"
+   },
+   {
+    "ifade": "less than 1%",
+    "sayfa": 1,
+    "pasaj": "mance in year y+1; the 500 top-ranked day traders go on to earn daily before-fee (after-fee) returns of 61.3 (37.9) bps per day; bottom-ranked day traders go on to earn daily before-fee (after-fee) returns of /C011.5 (/C028.9) bps per day. Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees. & 2013 Elsevier B.V. All rights reserved. JEL classi fication: D14; G02 Keywords: Speculative trading; Day traders; Individual inv"
+   },
+   {
+    "ifade": "less than 1%",
+    "sayfa": 3,
+    "pasaj": "accounting for transactions costs. Specifically, we sort investors into groups based on their day trading returns in year y and analyze the performance of each group in year y+1. We document that only the 4,000 most profitable day traders (less than 1% of the total population of day traders) from the prior year go on to earn reliably positive abnormal returns net of trading costs in the subsequent year. But, the stock picking ability of these investors is remarkable. The top 500 day trad"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://faculty.haas.berkeley.edu/odean/papers/day%20traders/The%20Cross-Section%20of%20Speculator%20Skill.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

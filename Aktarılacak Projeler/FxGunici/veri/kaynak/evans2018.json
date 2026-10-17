@@ -1,0 +1,256 @@
+{
+ "id": "evans2018",
+ "aday_baslik": "Forex trading and the WMR Fix",
+ "aday_yil": 2018,
+ "zaman": "2026-10-17T23:27:06+00:00",
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "0378-4266",
+    "87",
+    "233"
+   ],
+   "bulunan": [
+    [
+     "Forex trading and the WMR Fix",
+     "10.1016/j.jbankfin.2017.09.017"
+    ]
+   ]
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/j.jbankfin.2017.09.017",
+  "baslik": "Forex trading and the WMR Fix",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Evans",
+    "ad": "Martin D.D.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Banking &amp; Finance",
+  "cilt": "87",
+  "sayi": null,
+  "sayfa": "233-247",
+  "yil": 2018,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/j.jbankfin.2017.09.017",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S0378426617302327?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S0378426617302327?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3022362291",
+  "doi": "10.1016/j.jbankfin.2017.09.017",
+  "baslik": "Forex trading and the WMR Fix",
+  "yil": 2017,
+  "yazarlar": [
+   "Martin D.D. Evans"
+  ],
+  "dergi": "Journal of Banking & Finance",
+  "issn": [
+   "0378-4266",
+   "1872-6372"
+  ],
+  "cilt": "87",
+  "sayi": null,
+  "ilk_sayfa": "233",
+  "son_sayfa": "247",
+  "ozet": null,
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1016/j.jbankfin.2017.09.017",
+   "https://mpra.ub.uni-muenchen.de/58151/7/MPRA_paper_58151.pdf",
+   "https://gucms-mgmt.georgetown.edu/cs/BlobServer?blobkey=id&blobnocache=false&blobwhere=1242756549435&blobheadername3=MDT-Type&blobheadername2=Content-Disposition&blobheadervalue3=abinary%3B+charset%3DUTF-8&blobheadername1=content-type&blobheadervalue2=inline%3B+filename%3D991%2F127%2Ffixdynamics_combined.pdf&blobheadervalue1=application%2Fpdf&blobcol=urldata&blobtable=MungoBlobs",
+   "https://mpra.ub.uni-muenchen.de/81583/1/MPRA_paper_81583.pdf",
+   "https://econpapers.repec.org/paper/pramprapa/58151.htm",
+   "http://www.sciencedirect.com/science/article/pii/S0378426617302327"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Forex trading and the WMR Fix",
+  "yil": 2018,
+  "dergi": "",
+  "ozet": null,
+  "acik": "",
+  "yazarlar": [
+   "Martin D. D. Evans"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://mpra.ub.uni-muenchen.de/58151/7/MPRA_paper_58151.pdf",
+  "son_url": "https://mpra.ub.uni-muenchen.de/58151/7/MPRA_paper_58151.pdf",
+  "tur": "application/pdf",
+  "sha256": "4af76da61a792a8043bb71d5b364abc4bcc85f69553baa936b7ccb6c6b221ae0",
+  "bayt": 1199359,
+  "sayfa": 80,
+  "ilk_sayfa": "Munich Personal RePEc Archive Forex Trading and the WMR Fix Evans, Martin Department of Economics, Georgetown University 27 August 2014 Online at https://mpra.ub.uni-muenchen.de/58151/ MPRA Paper No. 58151, posted 02 Sep 2014 10:01 UTC",
+  "pasaj": [
+   {
+    "ifade": "Forex trading and the WMR Fix",
+    "sayfa": 1,
+    "pasaj": "Munich Personal RePEc Archive Forex Trading and the WMR Fix Evans, Martin Department of Economics, Georgetown University 27 August 2014 Online at https://mpra.ub.uni-muenchen.de/58151/ MPRA Paper No. 58151, posted 02 Sep 2014 10:01 UTC"
+   },
+   {
+    "ifade": "Forex trading and the WMR Fix",
+    "sayfa": 2,
+    "pasaj": "Forex Trading and the WMR Fix Martin D.D. Evans ∗ August 2014 First Draft Abstract Since 2013 regulators have been investigating the activities of some of the world's largest banks around the setting of daily benchmarks for forex prices. These benchmarks are a key linc"
+   },
+   {
+    "ifade": "the WMR Fix",
+    "sayfa": 1,
+    "pasaj": "Munich Personal RePEc Archive Forex Trading and the WMR Fix Evans, Martin Department of Economics, Georgetown University 27 August 2014 Online at https://mpra.ub.uni-muenchen.de/58151/ MPRA Paper No. 58151, posted 02 Sep 2014 10:01 UTC"
+   },
+   {
+    "ifade": "the WMR Fix",
+    "sayfa": 2,
+    "pasaj": "Forex Trading and the WMR Fix Martin D.D. Evans ∗ August 2014 First Draft Abstract Since 2013 regulators have been investigating the activities of some of the world's largest banks around the setting of daily benchmarks for forex prices. These benchmarks are a key linc"
+   },
+   {
+    "ifade": "around the Fix",
+    "sayfa": 2,
+    "pasaj": "chmarks, called the \"London 4pm Fix\", \"the WMR Fix\" or just the \"Fix\", is published by the WM Company and Reuters based on forex trading around 4:00 pm GMT. This paper un dertakes a detailed empirical analysis of the how forex rates behave around the Fix drawing on a de cade of tick-by-tick data for 21 currency pairs. The analysis reveals that the behavior of spot rat es in the minutes immediately before and after 4:00 pm are quite unlike that observed at other times. P re- and post-Fix ch"
+   },
+   {
+    "ifade": "around the Fix",
+    "sayfa": 3,
+    "pasaj": "y and bond portfolios, to (dynamically) hedge currency exposure , to write and execute derivatives contracts, and administer custodial agreements. In light of this, the fact that so many financial regulators are investigating forex trading around the Fix suggests that the allegation s of collusion are credible. What is much less clear is whether collusion, if indeed it took place, could have materially a ffected the determination of the Fix to the detriment of participants in the forex and"
+   },
+   {
+    "ifade": "after the Fix",
+    "sayfa": 11,
+    "pasaj": "around the Fix. Under these circumstances, the PS mode l implies that the Fix benchmark will equal the (mid-point) of the bid and o ffer rates at 3:45 pm because those rates are consistent with an efficient risk-sharing allocation of forex after the Fix. Dealer-banks are able to fill their fill-at-fix orders by trading with each other at 4:00 pm without generating unwanted long or short positions, and post-fix forex holdings of non-banks will be at desired level because spot rates remain "
+   },
+   {
+    "ifade": "after the Fix",
+    "sayfa": 34,
+    "pasaj": " While high, these incidence rates are well below those reported in Table 7 for pre-Fix changes over compar able horizons. Together, the statistics in Tables7 and 9 clearly establish that rates are unusually volatile immediately before and after the Fix, particularly at the end of the month. I now cons ider how the pre- and post-Fix behavior of rates are linked. For this purpose I estimate the bivariate de nsity for pre- and post-Fix rate changes at di fferent horizons. More specifically,"
+   },
+   {
+    "ifade": "21 currency pairs",
+    "sayfa": 2,
+    "pasaj": "he \"Fix\", is published by the WM Company and Reuters based on forex trading around 4:00 pm GMT. This paper un dertakes a detailed empirical analysis of the how forex rates behave around the Fix drawing on a de cade of tick-by-tick data for 21 currency pairs. The analysis reveals that the behavior of spot rat es in the minutes immediately before and after 4:00 pm are quite unlike that observed at other times. P re- and post-Fix changes in spot rates are extraordinarily volatile and exhibit str"
+   },
+   {
+    "ifade": "21 currency pairs",
+    "sayfa": 2,
+    "pasaj": " and post-Fix changes in spot rates are extraordinarily volatile and exhibit strong negative se rial correlation, particularly on the last trading day of each month. These statistical features appear perv asive, they are present across all 21 currency pairs throughout the decade. However, they are also incon sistent with the predictions of existing microstructure models of competitive forex trading. Keywords: Forex Trading, Order Flows, Forex Price Fixes, Microstr ucture Trading Models JEL Co"
+   },
+   {
+    "ifade": "five minute",
+    "sayfa": 26,
+    "pasaj": "y pairs. Pl ot (i) in each panel shows density functions for ∆hst for h = {5, 15, 30} minutes in green, blue, and red, respectively. Here we can clearly see how that dispersion of the densities increases as the horizon shorten s from 30 to five minutes. Plot (ii) in each panel shows the distributions from the pre-2008 and post-2009 subsamp les. On close inspection it is possible to see di fferences between the densities, but they are extremely small. M oreover, the densities from the su"
+   },
+   {
+    "ifade": "five minute",
+    "sayfa": 37,
+    "pasaj": "to which pre-Fix changes in the level of rates are reversed following the Fix. For example, in the case of the USD/GBP, the projection line has a slope of approximately -0.4. This means that a 10 basis point fall in the USD/GBP rate in the five minutes before th e fix is, on average, followed by a 4 basis point rise in the USD/GBP rate in the five minutes following t he fix. Table 10 provides more information on the projections across all 21 curren cy pairs. The table reports the estima"
+   },
+   {
+    "ifade": "5-minute",
+    "sayfa": 41,
+    "pasaj": "es and other end-of-month trading days. One final feature of Figure 7 deserves particular comment. The paths in all the plots are conditioned on the change in rates between 3:45 and 4:00 pm without regard to when rates chan ged within the 15-minute window. Thus, if most of the movement in rates occurred immediate ly before the Fix, say between 3:59 and 4:00 pm, the paths would be flat until a point just to the left of the ver tical line. Instead, the paths in Figure 7 show that on av"
+   },
+   {
+    "ifade": "one minute",
+    "sayfa": 5,
+    "pasaj": " each month appear in 95th perce ntile of the rate-change distribution six times more frequently than we see under normal tr ading conditions. This pattern applies across all the currency pairs, and across horizons ranging from one hour to one minute before the Fix. It is also evident, to a lesser degree, in the intra-month data. As Figure 1 s hows, intra-month pre-fix rate changes are on average smaller than their end-of-month counterparts, but they s till appear in the 95th. percenti"
+   },
+   {
+    "ifade": "one minute",
+    "sayfa": 7,
+    "pasaj": "cular currency pair) spreads widen as the number of counterparties shrinks. Generally s peaking, forex trading becomes increasing costly (in terms of spreads) as one moves later into the day past the 4:00 pm Fix. The Fix is computed over a one minute window that starts 30 seconds be fore 4:00 pm. The methodology is described on the WMR website (http://www.wmcompany.com) as follo ws: Over a one-minute Fix period, bid and o ffer order rates from the order matching systems and actual trad"
+   },
+   {
+    "ifade": "window",
+    "sayfa": 3,
+    "pasaj": "urate measure of the prices (i.e., spot rates) at which currency pairs trade around a specified time (4:00 pm GMT) 2. This is true in the narrow sense that each Fix is computed from transaction prices in a currency pair durin g a 60 second window around 4:00 pm. But, interpreted more broadly, it is not the case. The central fin ding of my analysis is that the Fix benchmarks are very unrepresentative of the prices at which curre ncy pairs trade in the hour or so around 4:00 pm. This"
+   },
+   {
+    "ifade": "window",
+    "sayfa": 6,
+    "pasaj": "ing activity is heavi ly concentrated around European business hours for most currency pairs (exceptions include Asian cu rrencies where trading is concentrated earlier in the day). Thus the 4:00 pm Fix occurs towards the end of th e daily window where there are a large number of potential counterparties available to participate in forex t rades for major currency pairs. This is an important feature of the Fix. Market participants wanting to trade in the minutes following the Fix w"
+   },
+   {
+    "ifade": "investigation",
+    "sayfa": 3,
+    "pasaj": "Introduction In the summer of 2013 the financial press reported the existence of nume rous regulatory investigations into the foreign currency (forex) trading activities of some of the world' s largest banks. These on-going investigations by the European Commission, Switzerland's markets regulator Fin ma and the country's competition authority Weko, the"
+   },
+   {
+    "ifade": "investigation",
+    "sayfa": 3,
+    "pasaj": "Introduction In the summer of 2013 the financial press reported the existence of nume rous regulatory investigations into the foreign currency (forex) trading activities of some of the world' s largest banks. These on-going investigations by the European Commission, Switzerland's markets regulator Fin ma and the country's competition authority Weko, the UK's Financial Services Authority, the Departmen t of Justice in the US, the Hong Kong Monetary Authority and the Austral"
+   },
+   {
+    "ifade": "30 seconds",
+    "sayfa": 7,
+    "pasaj": "iden as the number of counterparties shrinks. Generally s peaking, forex trading becomes increasing costly (in terms of spreads) as one moves later into the day past the 4:00 pm Fix. The Fix is computed over a one minute window that starts 30 seconds be fore 4:00 pm. The methodology is described on the WMR website (http://www.wmcompany.com) as follo ws: Over a one-minute Fix period, bid and o ffer order rates from the order matching systems and actual trades executed are captured every"
+   },
+   {
+    "ifade": "30 seconds",
+    "sayfa": 7,
+    "pasaj": " pm. The methodology is described on the WMR website (http://www.wmcompany.com) as follo ws: Over a one-minute Fix period, bid and o ffer order rates from the order matching systems and actual trades executed are captured every second from 30 seconds before to 30 seconds after the time of the Fix. Trading occurs in milliseconds on the trading platf orms and therefore not every trade or order is captured, just a sample. Trades are identified as a bid or o ffer and a spread is applied to"
+   },
+   {
+    "ifade": "volatil",
+    "sayfa": 2,
+    "pasaj": "ta for 21 currency pairs. The analysis reveals that the behavior of spot rat es in the minutes immediately before and after 4:00 pm are quite unlike that observed at other times. P re- and post-Fix changes in spot rates are extraordinarily volatile and exhibit strong negative se rial correlation, particularly on the last trading day of each month. These statistical features appear perv asive, they are present across all 21 currency pairs throughout the decade. However, they are also"
+   },
+   {
+    "ifade": "volatil",
+    "sayfa": 5,
+    "pasaj": "of-month counterparts, but they s till appear in the 95th. percentile of the rate-change distribution four times more frequently than in nor mal trading. In sum, the movements in spot rates leading up to the 4:00 pm Fix are extraordinarily volatile acr oss all time periods and currency pairs. My second main finding concerns the relation between spot rates leadin g up to 4:00 pm, the Fix benchmark, and rates after 4:00 pm. The plots in Figure 1 show that the average pat h for the USD"
+   },
+   {
+    "ifade": "revers",
+    "sayfa": 5,
+    "pasaj": " and rates after 4:00 pm. The plots in Figure 1 show that the average pat h for the USD/GBP spot rate at the end of the month slope in opposite directions either side of ( a point close to) the 4:00 pm Fix. In other words there are partial reversals in rate changes around the Fix: on average rates tend to fall after rising towards the Fix, and rise after falling towards the Fix. The se reversals are larger in end-of-month than intra month data (as shown in Figure 1) and are present"
+   },
+   {
+    "ifade": "revers",
+    "sayfa": 5,
+    "pasaj": "tions either side of ( a point close to) the 4:00 pm Fix. In other words there are partial reversals in rate changes around the Fix: on average rates tend to fall after rising towards the Fix, and rise after falling towards the Fix. The se reversals are larger in end-of-month than intra month data (as shown in Figure 1) and are present in the rate-d ynamics of all 21 currencies studied. Like the pre-fix rate changes, unusually large post-fix changes (i.e., rate changes from the Fix"
+   },
+   {
+    "ifade": "Fix",
+    "sayfa": 1,
+    "pasaj": "Munich Personal RePEc Archive Forex Trading and the WMR Fix Evans, Martin Department of Economics, Georgetown University 27 August 2014 Online at https://mpra.ub.uni-muenchen.de/58151/ MPRA Paper No. 58151, posted 02 Sep 2014 10:01 UTC"
+   },
+   {
+    "ifade": "Fix",
+    "sayfa": 2,
+    "pasaj": "Forex Trading and the WMR Fix Martin D.D. Evans ∗ August 2014 First Draft Abstract Since 2013 regulators have been investigating the activities of some of the world's largest banks around the setting of daily benchmarks for forex prices. These benchmarks are a key linc"
+   }
+  ],
+  "eksik": [
+   "price changes around the Fix",
+   "February 2015",
+   "15 February",
+   "five-minute",
+   "calculation window",
+   "manipulation",
+   "spike"
+  ],
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1016/j.jbankfin.2017.09.017",
+    "durum": "metin okunamadı",
+    "tur": "text/html;charset=UTF-8"
+   },
+   {
+    "url": "https://mpra.ub.uni-muenchen.de/58151/7/MPRA_paper_58151.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

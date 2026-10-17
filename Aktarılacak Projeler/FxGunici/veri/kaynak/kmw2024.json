@@ -1,0 +1,239 @@
+{
+ "id": "kmw2024",
+ "aday_baslik": "Foreign Exchange Fixings and Returns Around the Clock",
+ "aday_yil": 2024,
+ "zaman": "2026-10-17T23:27:11+00:00",
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "0022-1082",
+    "79",
+    "541"
+   ],
+   "bulunan": [
+    [
+     "Foreign Exchange Fixings and Returns around the Clock",
+     "10.1111/jofi.13306"
+    ]
+   ]
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1111/jofi.13306",
+  "baslik": "Foreign Exchange Fixings and Returns around the Clock",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "KROHN",
+    "ad": "INGOMAR",
+    "ad_tam": null
+   },
+   {
+    "soyad": "MUELLER",
+    "ad": "PHILIPPE",
+    "ad_tam": null
+   },
+   {
+    "soyad": "WHELAN",
+    "ad": "PAUL",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Journal of Finance",
+  "cilt": "79",
+  "sayi": "1",
+  "sayfa": "541-578",
+  "yil": 2024,
+  "tur": "journal-article",
+  "yayinci": "Wiley",
+  "ozet": "ABSTRACT The U.S. dollar appreciates in the run‐up to foreign exchange (FX) fixes and depreciates thereafter, tracing a W ‐shaped return pattern around the clock. Return reversals for the top nine traded currencies over a 21‐year period are pervasive and highly statistically significant, and they imply daily swings of more than one billion U.S. dollars based on spot volumes. Using natural experiments, we document the existence of a published reference rate determines the timing of intraday return reversals. We present evidence consistent with an inventory risk explanation whereby FX dealers intermediate unconditional demand for U.S. dollars at the fixes.",
+  "url": "https://doi.org/10.1111/jofi.13306",
+  "bag": [
+   "https://onlinelibrary.wiley.com/doi/pdf/10.1111/jofi.13306"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W4389903555",
+  "doi": "10.1111/jofi.13306",
+  "baslik": "Foreign Exchange Fixings and Returns around the Clock",
+  "yil": 2023,
+  "yazarlar": [
+   "Ingomar Krohn",
+   "Philippe Mueller",
+   "Paul Whelan"
+  ],
+  "dergi": "The Journal of Finance",
+  "issn": [
+   "0022-1082",
+   "1540-6261"
+  ],
+  "cilt": "79",
+  "sayi": "1",
+  "ilk_sayfa": "541",
+  "son_sayfa": "578",
+  "ozet": "ABSTRACT The U.S. dollar appreciates in the run‐up to foreign exchange (FX) fixes and depreciates thereafter, tracing a W‐shaped return pattern around the clock. Return reversals for the top nine traded currencies over a 21‐year period are pervasive and highly statistically significant, and they imply daily swings of more than one billion U.S. dollars based on spot volumes. Using natural experiments, we document the existence of a published reference rate determines the timing of intraday return reversals. We present evidence consistent with an inventory risk explanation whereby FX dealers intermediate unconditional demand for U.S. dollars at the fixes.",
+  "acik": "https://doi.org/10.1111/jofi.13306",
+  "adresler": [
+   "https://doi.org/10.1111/jofi.13306",
+   "https://wrap.warwick.ac.uk/177333/1/WRAP-foreign-exchange-fixings-returns-around-clock-Mueller-2023.pdf"
+  ]
+ },
+ "semantic": {
+  "durum": "HTTP 404"
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://wrap.warwick.ac.uk/177333/1/WRAP-foreign-exchange-fixings-returns-around-clock-Mueller-2023.pdf",
+  "son_url": "https://wrap.warwick.ac.uk/id/eprint/177333/1/WRAP-foreign-exchange-fixings-returns-around-clock-Mueller-2023.pdf",
+  "tur": "application/pdf",
+  "sha256": "a7975f26f9b42b837a0b2a6c1474a63e448fff5a0fa7957bc2233b1c0302e6a3",
+  "bayt": 1265557,
+  "sayfa": 54,
+  "ilk_sayfa": "warwick.ac.uk/lib-publications Manuscript version: Author's Accepted Manuscript The version presented in WRAP is the author's accepted manuscript and may differ from the published version or Version of Record. Persistent WRAP URL: http://wrap.warwick.ac.uk/177333 How to cite: Please refer to published version for the most recent bibliographic citation information. If a published version is known of, the repository item page linked to above, will contain details on accessing it. Copyright and reuse: The Warwick Research Archive Portal (WRAP) makes this work by researchers of the University of Warwick available open access under the following conditions. Copyright © and all moral rights to the version of the paper presented here belong to the individual author(s) and/or other copyright owners. To the extent reasonable and practicable the material made available in WRAP has been checked for eligibility before being made available. Copies of full items can be used for personal research or study, educational, or not-for-profit purposes without prior permission or charge. Provided that the authors, title and full bibliographic details are credited, a hyperlink and/or URL is given for the original metadata page and the content is not changed in any way. Publisher's statement: Please refer to the repository item page, publisher's statement section, for further information. For more information, please contact the WRAP Team at: wrap@warwick.ac.uk.",
+  "pasaj": [
+   {
+    "ifade": "Foreign Exchange Fixings and Returns Around the Clock",
+    "sayfa": 2,
+    "pasaj": "Foreign Exchange Fixings and Returns Around the Clock Ingomar Krohn* Philippe Mueller  Paul Whelan Journal of Finance forthcoming Abstract The U.S. dollar appreciates in the run-up to foreign exchange fixes and depreciates thereafter, tracing a W -shaped return pattern around the clock. Retu"
+   },
+   {
+    "ifade": "Returns Around the Clock",
+    "sayfa": 2,
+    "pasaj": "Foreign Exchange Fixings and Returns Around the Clock Ingomar Krohn* Philippe Mueller  Paul Whelan Journal of Finance forthcoming Abstract The U.S. dollar appreciates in the run-up to foreign exchange fixes and depreciates thereafter, tracing a W -shaped return pattern around the clock. Retu"
+   },
+   {
+    "ifade": "Returns Around the Clock",
+    "sayfa": 3,
+    "pasaj": "dures and published at pre-set times. These currency fixes are well established and widely followed but there exists surprisingly little insight on how they affect (intraday) price formation. In this paper, we study high-frequency currency returns around the clock and document a novel intraday return pattern: the U.S. dollar gradually appreciates against all currencies ahead of the three major currency fixes in Tokyo, Frankfurt (the ECB fix) and London, and reverts thereafter. To establish this fact"
+   },
+   {
+    "ifade": "the U.S. dollar",
+    "sayfa": 2,
+    "pasaj": "Foreign Exchange Fixings and Returns Around the Clock Ingomar Krohn* Philippe Mueller  Paul Whelan Journal of Finance forthcoming Abstract The U.S. dollar appreciates in the run-up to foreign exchange fixes and depreciates thereafter, tracing a W -shaped return pattern around the clock. Return reversals for the top nine traded currencies over a 21-year period are pervasive, highly statistica"
+   },
+   {
+    "ifade": "the U.S. dollar",
+    "sayfa": 3,
+    "pasaj": "ablished and widely followed but there exists surprisingly little insight on how they affect (intraday) price formation. In this paper, we study high-frequency currency returns around the clock and document a novel intraday return pattern: the U.S. dollar gradually appreciates against all currencies ahead of the three major currency fixes in Tokyo, Frankfurt (the ECB fix) and London, and reverts thereafter. To establish this fact, we compute intraday returns from January 1999 to December 20"
+   },
+   {
+    "ifade": "ahead of the fix",
+    "sayfa": 23,
+    "pasaj": "sitive expected returns for holding risky assets. Assuming a structural demand for U.S. dollars at the fix as implied by the return patterns presented earlier, the mechanism through which this might occur is an accumulation of U.S. dollars ahead of the fix that are subsequently sold at higher prices to clients at the fix. 14 This is a well-known practice in the foreign exchange market commonly referred to as 'pre-fix hedging.' Indeed, banks with advanced knowledge of order imbalances are exp"
+   },
+   {
+    "ifade": "ahead of the fix",
+    "sayfa": 29,
+    "pasaj": "at dealers supply dollars in exchange for a liquidity premium. The observation that both the pre-fix returns for liquidity provision are significantly positive is further consistent with a situation where clients are demanding U.S. dollars ahead of the fixings and dealers raise their prices when streaming quotes. Indeed, if it were dealers demanding U.S. dollar liquidity, one would expect the opposite finding, i.e., negative returns for an unconditional trade in this direction. 20 F. Discuss"
+   },
+   {
+    "ifade": "after the fix",
+    "sayfa": 27,
+    "pasaj": "asymmetric information and inventory risk together, we estimate ∆spostt =α +β1OF pret +β2OF postt +εt (3) where ∆spostt denotes the return measured over the post-fix window on day t, while OF pret and OF postt are the order flow before and after the fix, respectively. [INSERT TABLE IX HERE] The results are summarized as follows. First, all coefficients on contemporaneous order flow in Table IX are strongly positive and highly significant, consistent with the idea that dealer order flow is"
+   },
+   {
+    "ifade": "February 2015",
+    "sayfa": 8,
+    "pasaj": "ed rates are sourced every second from major FX platforms and a median trade based on bid and offer rates is calculated from the pooled sample of trades. 4 In contrast to the Tokyo fix, the London fix only applies to orders that 4Before 15 February 2015, the length of the window to calculate the fix rate was only a one-minute interval from 6 Electronic copy available at: https://ssrn.com/abstract=3521370"
+   },
+   {
+    "ifade": "15 February",
+    "sayfa": 8,
+    "pasaj": "raded rates are sourced every second from major FX platforms and a median trade based on bid and offer rates is calculated from the pooled sample of trades. 4 In contrast to the Tokyo fix, the London fix only applies to orders that 4Before 15 February 2015, the length of the window to calculate the fix rate was only a one-minute interval from 6 Electronic copy available at: https://ssrn.com/abstract=3521370"
+   },
+   {
+    "ifade": "five-minute",
+    "sayfa": 8,
+    "pasaj": "g the ECB fix. Lastly, the WM/Reuters London fix rate is set at 16:00 London time and published by Thomson Reuters. The benchmark rates are computed based on trades (and quotes for less-liquid currency pairs) in a window around 16:00. In a five-minute interval around the fix (i.e., between 15:57:30 and 16:02:30), traded rates are sourced every second from major FX platforms and a median trade based on bid and offer rates is calculated from the pooled sample of trades. 4 In contrast to t"
+   },
+   {
+    "ifade": "five-minute",
+    "sayfa": 21,
+    "pasaj": "within five-minute intervals as a proxy for trading activity. 11 Figure 8 plots the average quote updates around the London fix as a fraction of the total number for the time period between 8:35 ET and 14:00 ET for the Japanese yen and the British pound. 12 "
+   },
+   {
+    "ifade": "5-minute",
+    "sayfa": 11,
+    "pasaj": "B. Currency Returns Around the Clock We begin our analysis by plotting the average cumulative 5-minute log returns from 17:00 ET on one day until 17:00 ET on the next day for the sample period January 1999 to December 2019. Figure 2 plots the average cumulative returns (in basis points) for holding the euro, British pound, and Japanese yen "
+   },
+   {
+    "ifade": "5-minute",
+    "sayfa": 20,
+    "pasaj": "hat was first published in 1999. As discussed in Section I, the ECB started delaying the publication of the reference rates until 16:00 CET in July 2016 in a further attempt to discourage using the ECB fix for transactions. Table VI shows 15-minute intervals around the ECB fix for the period before the introduction of the euro (Panel A), from January 2000 to June 2016 (Panel B), and after the change of the publication time (Panel C). In the early part of the sample and before the int"
+   },
+   {
+    "ifade": "window",
+    "sayfa": 3,
+    "pasaj": "aily turnover from the 2019 BIS Triennial Survey, we estimate that the patterns we detect imply swings exceeding one billion U.S. dollars per day. In statistical terms, the average fluctuations in the dollar portfolio during the respective windows are highly significant with t-statistics ranging between 4.5 and 11.7. Moreover, patterns for the dollar portfolio are robust across individual currency pairs with a large degree of statistical confidence. All G9 currencies display V -sha"
+   },
+   {
+    "ifade": "window",
+    "sayfa": 4,
+    "pasaj": "grows to 27, 14, and 6 U.S. dollars for the euro, pound, and dollar portfolio, respectively. To show that the fixes are the salient turning points within the day, we calculate alternative reversal returns for both the Tokyo and European windows, and show that the returns are indeed maximized exactly when the reversal points are aligned with the fixing times and not when equity markets open or economic news is released. Providing additional evidence pinning down turning points wi"
+   },
+   {
+    "ifade": "appreciat",
+    "sayfa": 2,
+    "pasaj": "Foreign Exchange Fixings and Returns Around the Clock Ingomar Krohn* Philippe Mueller  Paul Whelan Journal of Finance forthcoming Abstract The U.S. dollar appreciates in the run-up to foreign exchange fixes and depreciates thereafter, tracing a W -shaped return pattern around the clock. Return reversals for the top nine traded currencies over a 21-year period are pervasive, highly statistically signif"
+   },
+   {
+    "ifade": "appreciat",
+    "sayfa": 3,
+    "pasaj": "ed but there exists surprisingly little insight on how they affect (intraday) price formation. In this paper, we study high-frequency currency returns around the clock and document a novel intraday return pattern: the U.S. dollar gradually appreciates against all currencies ahead of the three major currency fixes in Tokyo, Frankfurt (the ECB fix) and London, and reverts thereafter. To establish this fact, we compute intraday returns from January 1999 to December 2019 for the G9 curren"
+   },
+   {
+    "ifade": "depreciat",
+    "sayfa": 2,
+    "pasaj": "Foreign Exchange Fixings and Returns Around the Clock Ingomar Krohn* Philippe Mueller  Paul Whelan Journal of Finance forthcoming Abstract The U.S. dollar appreciates in the run-up to foreign exchange fixes and depreciates thereafter, tracing a W -shaped return pattern around the clock. Return reversals for the top nine traded currencies over a 21-year period are pervasive, highly statistically significant, and imply daily swings of more than one billion U"
+   },
+   {
+    "ifade": "depreciat",
+    "sayfa": 3,
+    "pasaj": "ry 1999 to December 2019 for the G9 currency pairs, which cover roughly 75% of daily spot turnover (see, e.g., BIS, 2019). Consider the dollar portfolio that invests in foreign currencies against the U.S. dollar. On average, this portfolio depreciates by approximately two basis points in the run up to the Tokyo and European fixes and appreciates by the same magnitude during the post-fix period. That is, during Asian or European trading hours, the U.S. dollar remains flat on average bu"
+   },
+   {
+    "ifade": "fixing",
+    "sayfa": 2,
+    "pasaj": "Foreign Exchange Fixings and Returns Around the Clock Ingomar Krohn* Philippe Mueller  Paul Whelan Journal of Finance forthcoming Abstract The U.S. dollar appreciates in the run-up to foreign exchange fixes and depreciates thereafter, tracing a W -shaped return "
+   },
+   {
+    "ifade": "fixing",
+    "sayfa": 2,
+    "pasaj": "nes the timing of intraday return reversals. We present evidence consistent with an inventory risk explanation whereby foreign exchange dealers intermediate an unconditional demand for U.S. dollars at the fixes. Keywords: foreign-exchange, fixings, high-frequency returns, inventory management, intermediation. This Version: January 2023. We are grateful for comments from Stefan Nagel (Editor), the associate editor and two anonymous referees. We also thank Benjamin Anderegg, Daniel A"
+   },
+   {
+    "ifade": "reversal",
+    "sayfa": 2,
+    "pasaj": "gomar Krohn* Philippe Mueller  Paul Whelan Journal of Finance forthcoming Abstract The U.S. dollar appreciates in the run-up to foreign exchange fixes and depreciates thereafter, tracing a W -shaped return pattern around the clock. Return reversals for the top nine traded currencies over a 21-year period are pervasive, highly statistically significant, and imply daily swings of more than one billion U.S. dollars based on spot volumes. Using natural experiments, we show the existence"
+   },
+   {
+    "ifade": "reversal",
+    "sayfa": 2,
+    "pasaj": ", highly statistically significant, and imply daily swings of more than one billion U.S. dollars based on spot volumes. Using natural experiments, we show the existence of a published reference rate determines the timing of intraday return reversals. We present evidence consistent with an inventory risk explanation whereby foreign exchange dealers intermediate an unconditional demand for U.S. dollars at the fixes. Keywords: foreign-exchange, fixings, high-frequency returns, inventory"
+   }
+  ],
+  "eksik": [
+   "the dollar appreciates",
+   "five minute",
+   "one minute",
+   "calculation window",
+   "manipulation",
+   "investigation",
+   "30 seconds"
+  ],
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1111/jofi.13306",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://wrap.warwick.ac.uk/177333/1/WRAP-foreign-exchange-fixings-returns-around-clock-Mueller-2023.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

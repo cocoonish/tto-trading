@@ -1,0 +1,146 @@
+{
+ "id": "hlz2016",
+ "aday_baslik": "…and the Cross-Section of Expected Returns",
+ "aday_yil": 2016,
+ "zaman": "2026-10-17T23:22:34+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1093/rfs/hhv059",
+   "durum": 200,
+   "baslik": "… and the Cross-Section of Expected Returns"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1093/rfs/hhv059",
+  "baslik": "… and the Cross-Section of Expected Returns",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Harvey",
+    "ad": "Campbell R.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Liu",
+    "ad": "Yan",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Zhu",
+    "ad": "Heqing",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Review of Financial Studies",
+  "cilt": "29",
+  "sayi": "1",
+  "sayfa": "5-68",
+  "yil": 2016,
+  "tur": "journal-article",
+  "yayinci": "Oxford University Press (OUP)",
+  "ozet": null,
+  "url": "https://doi.org/10.1093/rfs/hhv059",
+  "bag": [
+   "http://academic.oup.com/rfs/article-pdf/29/1/5/5217300/hhv059.pdf"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W4211170237",
+  "doi": "10.1093/rfs/hhv059",
+  "baslik": "… and the Cross-Section of Expected Returns",
+  "yil": 2015,
+  "yazarlar": [
+   "Campbell R. Harvey",
+   "Yan Liu",
+   "Caroline Zhu"
+  ],
+  "dergi": "Review of Financial Studies",
+  "issn": [
+   "0893-9454",
+   "1465-7368"
+  ],
+  "cilt": "29",
+  "sayi": "1",
+  "ilk_sayfa": "5",
+  "son_sayfa": "68",
+  "ozet": "Hundreds of papers and factors attempt to explain the cross-section of expected returns.Given this extensive data mining, it does not make sense to use the usual criteria for establishing significance.Which hurdle should be used for current research?Our paper introduces a new multiple testing framework and provides historical cutoffs from the first empirical tests in 1967 to today.A new factor needs to clear a much higher hurdle, with a t-statistic greater than 3.0.We argue that most claimed research findings in financial economics are likely false.(JEL C12, C52, G12)",
+  "acik": "https://academic.oup.com/rfs/article-pdf/29/1/5/24450794/hhv059.pdf",
+  "adresler": [
+   "https://academic.oup.com/rfs/article-pdf/29/1/5/24450794/hhv059.pdf",
+   "https://doi.org/10.1093/rfs/hhv059"
+  ]
+ },
+ "semantic": {
+  "durum": "HTTP 404"
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.nber.org/papers/w20592.pdf",
+  "son_url": "https://www.nber.org/system/files/working_papers/w20592/w20592.pdf",
+  "tur": "application/pdf",
+  "sha256": "15387ff6505c7eafdf18a89b63883b130a1497aaa41a9160d260a5ba045dfcef",
+  "bayt": 677490,
+  "sayfa": 101,
+  "ilk_sayfa": "NBER WORKING PAPER SERIES . . . AND THE CROSS-SECTION OF EXPECTED RETURNS Campbell R. Harvey Yan Liu Heqing Zhu Working Paper 20592 http://www.nber.org/papers/w20592 NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138 October 2014 We appreciate the comments of Viral Acharya, Jawad Addoum, Tobias Adrian, Andrew Ang, Ravi Bansal, Mehmet Beceren, Itzhak Ben-David, Bernard Black, Jules van Binsbergen, Oliver Boguth, Tim Bollerslev, Alon Brav, Ian Dew-Becker, Robert Dittmar, Jennifer Conrad, Michael Cooper, Andres Donangelo, Wayne Ferson, Simon Gervais, Bing Han, John Hand, Andrew Karolyi, Abby Yeon Kyeong Kim, Lars-Alexander Kuehn, Sophia Li, Harry Markowitz, Kyle Matoba, David McLean, Marcelo Ochoa, Peter Park, Lubos Pastor, Andrew Patton, Lasse Heje Pedersen, Tapio Pekkala, Jeff Pontiff, Ryan Pratt, Alexandru Rosoiu, Tim Simin, Avanidhar Subrahmanyam, Ivo Welch, Basil Williams, Yuhang Xing, Josef Zechner and Xiaofei Zhao as well as seminar participants at the 2014 New Frontiers in Finance Conference at Vanderbilt University, the 2014 Inquire Europe-UK meeting in Vienna, the 2014 WFA meetings, and seminars at Duke University, University of Utah, and Penn State university. The views expressed herein are those of the authors and do not necessarily reflect the views of the National Bureau of Economic Research. NBER working papers are circulated for discussion and comment purposes. They have not been peerreviewed or been subject to the review by the NB",
+  "pasaj": [
+   {
+    "ifade": "attempt to explain the cross-section of expected returns",
+    "sayfa": 2,
+    "pasaj": ". . . and the Cross-Section of Expected Returns Campbell R. Harvey, Yan Liu, and Heqing Zhu NBER Working Paper No. 20592 October 2014 JEL No. C01,C58,G0,G1,G12,G3 ABSTRACT Hundreds of papers and hundreds of factors attempt to explain the cross-section of expected returns. Given this extensive data mining, it does not make any economic or statistical sense to use the usual significance criteria for a newly discovered factor, e.g., a t-ratio greater than 2.0. However, what hurdle should be used for current r"
+   },
+   {
+    "ifade": "clear a much higher hurdle",
+    "sayfa": 2,
+    "pasaj": "he tests as well as missing data. We also project forward 20 years assuming the rate of factor production remains similar to the experience of the last few years. The estimation of our model suggests that a newly discovered factor needs to clear a much higher hurdle, with a t-ratio greater than 3.0. Echoing a recent disturbing conclusion in the medical literature, we argue that most claimed research findings in financial economics are likely false. Campbell R. Harvey Duke University Fuqua School of Bu"
+   },
+   {
+    "ifade": "t-ratio greater than 3.0",
+    "sayfa": 2,
+    "pasaj": "e also project forward 20 years assuming the rate of factor production remains similar to the experience of the last few years. The estimation of our model suggests that a newly discovered factor needs to clear a much higher hurdle, with a t-ratio greater than 3.0. Echoing a recent disturbing conclusion in the medical literature, we argue that most claimed research findings in financial economics are likely false. Campbell R. Harvey Duke University Fuqua School of Business Durham, NC 27708-0120 and "
+   },
+   {
+    "ifade": "multiple testing framework",
+    "sayfa": 2,
+    "pasaj": "ng, it does not make any economic or statistical sense to use the usual significance criteria for a newly discovered factor, e.g., a t-ratio greater than 2.0. However, what hurdle should be used for current research? Our paper introduces a multiple testing framework and provides a time series of historical significance cutoffs from the first empirical tests in 1967 to today. Our new method allows for correlation among the tests as well as missing data. We also project forward 20 years assuming the rat"
+   },
+   {
+    "ifade": "multiple testing framework",
+    "sayfa": 3,
+    "pasaj": "stimating factor risk premia via cross-sectional regressions and advocate a factor projection approach. Our work focuses on evaluating the statistical significance of a factor given the previous tests on other factors. Our goal is to use a multiple testing framework to both re-evaluate past research and to provide a new benchmark for current and future research. We tackle multiple hypothesis testing from the frequentist perspective. Bayesian approaches on multiple testing and variable selection also e"
+   },
+   {
+    "ifade": "from the first empirical tests in 1967",
+    "sayfa": 2,
+    "pasaj": "eria for a newly discovered factor, e.g., a t-ratio greater than 2.0. However, what hurdle should be used for current research? Our paper introduces a multiple testing framework and provides a time series of historical significance cutoffs from the first empirical tests in 1967 to today. Our new method allows for correlation among the tests as well as missing data. We also project forward 20 years assuming the rate of factor production remains similar to the experience of the last few years. The estimation of our"
+   },
+   {
+    "ifade": "from the first empirical tests in 1967",
+    "sayfa": 3,
+    "pasaj": "e tests and derive recommended statistical significance levels for current research in asset pricing. We begin with 313 papers that study cross-sectional return patterns published in a selection of journals. We provide recommended p-values from the first empirical tests in 1967 through to present day. We also project minimum t-ratios through 2032 assuming the rate of \"factor production\" remains similar to the recent experience. We present a taxonomy of historical factors as well as definitions. 1 Our research is "
+   },
+   {
+    "ifade": "most claimed research findings in financial economics",
+    "sayfa": 2,
+    "pasaj": "f the last few years. The estimation of our model suggests that a newly discovered factor needs to clear a much higher hurdle, with a t-ratio greater than 3.0. Echoing a recent disturbing conclusion in the medical literature, we argue that most claimed research findings in financial economics are likely false. Campbell R. Harvey Duke University Fuqua School of Business Durham, NC 27708-0120 and NBER cam.harvey@duke.edu Yan Liu Texas A&M University, College Station, TX 77843 y-liu@mays.tamu.edu Heqing Zhu University of Oklahoma "
+   },
+   {
+    "ifade": "316 different factors",
+    "sayfa": 5,
+    "pasaj": "t are in review at top journals or have been presented at top conferences or are due to be presented at top conferences. We end up using 63 working papers. In total, we focus on 313 published works and selected working papers. We catalogue 316 different factors. 5 Our collection of 316 factors likely under-represents the factor population. First, we generally only consider top journals. Second, we are very selective in choosing only a handful of working papers. Third, and perhaps most importantly"
+   }
+  ],
+  "eksik": [
+   "t-statistic greater than 3.0"
+  ],
+  "deneme": [
+   {
+    "url": "https://www.nber.org/papers/w20592.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

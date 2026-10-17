@@ -1,0 +1,153 @@
+{
+ "id": "mrw2013",
+ "aday_baslik": "Liquidity in the Foreign Exchange Market: Measurement, Commonality, and Risk Premiums",
+ "aday_yil": 2013,
+ "zaman": "2026-10-17T23:26:31+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1111/jofi.12053",
+   "durum": 200,
+   "baslik": "Liquidity in the Foreign Exchange Market: Measurement, Commonality, and Risk Premiums"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1111/jofi.12053",
+  "baslik": "Liquidity in the Foreign Exchange Market: Measurement, Commonality, and Risk Premiums",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "MANCINI",
+    "ad": "LORIANO",
+    "ad_tam": null
+   },
+   {
+    "soyad": "RANALDO",
+    "ad": "ANGELO",
+    "ad_tam": null
+   },
+   {
+    "soyad": "WRAMPELMEYER",
+    "ad": "JAN",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Journal of Finance",
+  "cilt": "68",
+  "sayi": "5",
+  "sayfa": "1805-1841",
+  "yil": 2013,
+  "tur": "journal-article",
+  "yayinci": "Wiley",
+  "ozet": "ABSTRACT We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. Analyzing the impact of liquidity risk on carry trades, we show that funding (investment) currencies offer insurance against (exposure to) liquidity risk. A liquidity risk factor has a strong impact on carry trade returns from 2007 to 2009, suggesting that liquidity risk is priced. We present evidence that liquidity spirals may trigger these findings.",
+  "url": "https://doi.org/10.1111/jofi.12053",
+  "bag": [
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fjofi.12053",
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fjofi.12053",
+   "https://onlinelibrary.wiley.com/doi/pdf/10.1111/jofi.12053"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2315462057",
+  "doi": "10.1111/jofi.12053",
+  "baslik": "Liquidity in the Foreign Exchange Market: Measurement, Commonality, and Risk Premiums",
+  "yil": 2013,
+  "yazarlar": [
+   "Loriano Mancini",
+   "Angelo Ranaldo",
+   "Jan Wrampelmeyer"
+  ],
+  "dergi": "The Journal of Finance",
+  "issn": [
+   "0022-1082",
+   "1540-6261"
+  ],
+  "cilt": "68",
+  "sayi": "5",
+  "ilk_sayfa": "1805",
+  "son_sayfa": "1841",
+  "ozet": "ABSTRACT We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. Analyzing the impact of liquidity risk on carry trades, we show that funding (investment) currencies offer insurance against (exposure to) liquidity risk. A liquidity risk factor has a strong impact on carry trade returns from 2007 to 2009, suggesting that liquidity risk is priced. We present evidence that liquidity spirals may trigger these findings.",
+  "acik": "http://infoscience.epfl.ch/record/190179",
+  "adresler": [
+   "http://infoscience.epfl.ch/record/190179",
+   "https://doi.org/10.1111/jofi.12053",
+   "https://www.alexandria.unisg.ch/handle/20.500.14171/88656",
+   "https://hdl.handle.net/1871.1/71bd2bf2-fb1b-4d15-ad06-728a2e7f17e3",
+   "https://research.vu.nl/en/publications/71bd2bf2-fb1b-4d15-ad06-728a2e7f17e3"
+  ]
+ },
+ "semantic": {
+  "durum": "HTTP 404"
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.alexandria.unisg.ch/handle/20.500.14171/88656",
+  "son_url": "https://alexandria.unisg.ch/entities/publication/01517814-63ec-4bae-8e56-7e016ff60fe6",
+  "tur": "text/html; charset=utf-8",
+  "sha256": "94b0359771e3ea99357a4af1a849d17e7c5be90995d116d1e92ba804d567c2a8",
+  "bayt": 623707,
+  "sayfa": 1,
+  "ilk_sayfa": "Skip to main content Log In Log in (only for Administrators) Login with HSG credentials Liquidity in the Foreign Exchange Market: Measurement, Commonality, and Risk Premiums Journal Journal of Finance ISSN 0022-1082 ISSN-Digital 1540-6261 Type journal article Date Issued 2013-10 Author(s) Mancini, Loriano ; Ranaldo, Angelo ; Wrampelmeyer, Jan DOI 10.1111/jofi.12053 Abstract We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. We analyze the impact of liquidity risk on carry trades, a popular trading strategy that borrows in low-yielding currencies and invests in high-yielding currencies. Results show that funding (investment) currencies offer insurance against (exposure to) liquidity risk. A liquidity risk factor has a strong impact on carry trade returns from 2007 to 2009, suggesting that liquidity risk is priced. We present evidence that liquidity spirals may trigger these findings.Show more Language English HSG Classification contribution to scientific community Refereed Yes Publisher Wiley-Blackwell Publisher place Oxford Volume 68 Number 5 Start page 1805 End page 1841 Pages 37 URL https://www.alexandria.unisg.ch/handle/20.500.14171/88656 Subject(s) business studies Division(s) SBF - Swiss Institute... SoF - School of Finan... Eprints ID 214648",
+  "pasaj": [
+   {
+    "ifade": "first systematic study of liquidity in the foreign exchange market",
+    "sayfa": 1,
+    "pasaj": "ty, and Risk Premiums Journal Journal of Finance ISSN 0022-1082 ISSN-Digital 1540-6261 Type journal article Date Issued 2013-10 Author(s) Mancini, Loriano ; Ranaldo, Angelo ; Wrampelmeyer, Jan DOI 10.1111/jofi.12053 Abstract We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. We analyze the impact of liquidity risk on carry trad"
+   },
+   {
+    "ifade": "significant variation in liquidity across exchange rates",
+    "sayfa": 1,
+    "pasaj": " 1540-6261 Type journal article Date Issued 2013-10 Author(s) Mancini, Loriano ; Ranaldo, Angelo ; Wrampelmeyer, Jan DOI 10.1111/jofi.12053 Abstract We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. We analyze the impact of liquidity risk on carry trades, a popular trading strategy that borrows in low-yielding curren"
+   },
+   {
+    "ifade": "substantial illiquidity costs",
+    "sayfa": 1,
+    "pasaj": "(s) Mancini, Loriano ; Ranaldo, Angelo ; Wrampelmeyer, Jan DOI 10.1111/jofi.12053 Abstract We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. We analyze the impact of liquidity risk on carry trades, a popular trading strategy that borrows in low-yielding currencies and invests in high-yieldi"
+   },
+   {
+    "ifade": "strong commonality in liquidity",
+    "sayfa": 1,
+    "pasaj": "elo ; Wrampelmeyer, Jan DOI 10.1111/jofi.12053 Abstract We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. We analyze the impact of liquidity risk on carry trades, a popular trading strategy that borrows in low-yielding currencies and invests in high-yielding currencies. Results show that fund"
+   },
+   {
+    "ifade": "liquidity risk is priced",
+    "sayfa": 1,
+    "pasaj": "ests in high-yielding currencies. Results show that funding (investment) currencies offer insurance against (exposure to) liquidity risk. A liquidity risk factor has a strong impact on carry trade returns from 2007 to 2009, suggesting that liquidity risk is priced. We present evidence that liquidity spirals may trigger these findings.Show more Language English HSG Classification contribution to scientific community Refereed Yes Publisher Wiley-Blackwell Publisher place Oxford Volume 68 Number 5 Star"
+   },
+   {
+    "ifade": "liquidity spirals",
+    "sayfa": 1,
+    "pasaj": " funding (investment) currencies offer insurance against (exposure to) liquidity risk. A liquidity risk factor has a strong impact on carry trade returns from 2007 to 2009, suggesting that liquidity risk is priced. We present evidence that liquidity spirals may trigger these findings.Show more Language English HSG Classification contribution to scientific community Refereed Yes Publisher Wiley-Blackwell Publisher place Oxford Volume 68 Number 5 Start page 1805 End page 1841 Pages 37 URL https"
+   },
+   {
+    "ifade": "illiquidity",
+    "sayfa": 1,
+    "pasaj": " Loriano ; Ranaldo, Angelo ; Wrampelmeyer, Jan DOI 10.1111/jofi.12053 Abstract We provide the first systematic study of liquidity in the foreign exchange market. We find significant variation in liquidity across exchange rates, substantial illiquidity costs, and strong commonality in liquidity across currencies and with equity and bond markets. We analyze the impact of liquidity risk on carry trades, a popular trading strategy that borrows in low-yielding currencies and invests in high-"
+   }
+  ],
+  "eksik": [
+   "during the financial crisis",
+   "financial crisis",
+   "time variation",
+   "Lehman",
+   "liquidity dry"
+  ],
+  "deneme": [
+   {
+    "url": "http://infoscience.epfl.ch/record/190179",
+    "durum": "HTTP 202"
+   },
+   {
+    "url": "https://doi.org/10.1111/jofi.12053",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://www.alexandria.unisg.ch/handle/20.500.14171/88656",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

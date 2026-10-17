@@ -1,0 +1,37 @@
+{
+ "id": "grossman_stiglitz1980",
+ "aday_baslik": "On the Impossibility of Informationally Efficient Markets",
+ "aday_yil": 1980,
+ "zaman": "2026-10-17T23:26:48+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.2307/1805228",
+   "durum": "HTTP 404",
+   "baslik": null
+  }
+ ],
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "0002-8282",
+    "70",
+    "393"
+   ],
+   "bulunan": [
+    [
+     "Radio Spectrum Allocation: Role of the Market",
+     null
+    ]
+   ]
+  }
+ ],
+ "crossref": null,
+ "openalex": null,
+ "semantic": null,
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": []
+ },
+ "kunye_cozuldu": false,
+ "ozet_var": false
+}

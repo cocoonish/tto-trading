@@ -1,0 +1,148 @@
+{
+ "id": "cchv2014",
+ "aday_baslik": "Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market",
+ "aday_yil": 2014,
+ "zaman": "2026-10-17T23:26:58+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1111/jofi.12186",
+   "durum": 200,
+   "baslik": "Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1111/jofi.12186",
+  "baslik": "Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "CHABOUD",
+    "ad": "ALAIN P.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "CHIQUOINE",
+    "ad": "BENJAMIN",
+    "ad_tam": null
+   },
+   {
+    "soyad": "HJALMARSSON",
+    "ad": "ERIK",
+    "ad_tam": null
+   },
+   {
+    "soyad": "VEGA",
+    "ad": "CLARA",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Journal of Finance",
+  "cilt": "69",
+  "sayi": "5",
+  "sayfa": "2045-2084",
+  "yil": 2014,
+  "tur": "journal-article",
+  "yayinci": "Wiley",
+  "ozet": "ABSTRACT We study the impact of algorithmic trading (AT) in the foreign exchange market using a long time series of high‐frequency data that identify computer‐generated trading activity. We find that AT causes an improvement in two measures of price efficiency: the frequency of triangular arbitrage opportunities and the autocorrelation of high‐frequency returns. We show that the reduction in arbitrage opportunities is associated primarily with computers taking liquidity. This result is consistent with the view that AT improves informational efficiency by speeding up price discovery, but that it may also impose higher adverse selection costs on slower traders. In contrast, the reduction in the autocorrelation of returns owes more to the algorithmic provision of liquidity. We also find evidence consistent with the strategies of algorithmic traders being highly correlated. This correlation, however, does not appear to cause a degradation in market quality, at least not on average.",
+  "url": "https://doi.org/10.1111/jofi.12186",
+  "bag": [
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fjofi.12186",
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fjofi.12186",
+   "https://onlinelibrary.wiley.com/doi/pdf/10.1111/jofi.12186"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2103467996",
+  "doi": "10.1111/jofi.12186",
+  "baslik": "Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market",
+  "yil": 2014,
+  "yazarlar": [
+   "Alain Chaboud",
+   "Benjamin Chiquoine",
+   "Erik Hjalmarsson",
+   "Clara Vega"
+  ],
+  "dergi": "The Journal of Finance",
+  "issn": [
+   "0022-1082",
+   "1540-6261"
+  ],
+  "cilt": "69",
+  "sayi": "5",
+  "ilk_sayfa": "2045",
+  "son_sayfa": "2084",
+  "ozet": "ABSTRACT We study the impact of algorithmic trading (AT) in the foreign exchange market using a long time series of high‐frequency data that identify computer‐generated trading activity. We find that AT causes an improvement in two measures of price efficiency: the frequency of triangular arbitrage opportunities and the autocorrelation of high‐frequency returns. We show that the reduction in arbitrage opportunities is associated primarily with computers taking liquidity. This result is consistent with the view that AT improves informational efficiency by speeding up price discovery, but that it may also impose higher adverse selection costs on slower traders. In contrast, the reduction in the autocorrelation of returns owes more to the algorithmic provision of liquidity. We also find evidence consistent with the strategies of algorithmic traders being highly correlated. This correlation, however, does not appear to cause a degradation in market quality, at least not on average.",
+  "acik": "http://www.federalreserve.gov/pubs/ifdp/2009/980/ifdp980.pdf",
+  "adresler": [
+   "http://www.federalreserve.gov/pubs/ifdp/2009/980/ifdp980.pdf",
+   "http://www.federalreserve.gov/pubs/ifdp/2009/980/default.htm",
+   "https://doi.org/10.1111/jofi.12186",
+   "http://hdl.handle.net/10.1111/jofi.12186"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market: Rise of the Machines",
+  "yil": 2009,
+  "dergi": "",
+  "ozet": "We study the impact of algorithmic trading (AT) in the foreign exchange market using a long time series of high-frequency data that identify computer-generated trading activity. We find that AT causes an improvement in two measures of price efficiency: the frequency of triangular arbitrage opportunities and the autocorrelation of high-frequency returns. We show that the reduction in arbitrage opportunities is associated primarily with computers taking liquidity. This result is consistent with the view that AT improves informational efficiency by speeding up price discovery, but that it may also impose higher adverse selection costs on slower traders. In contrast, the reduction in the autocorrelation of returns owes more to the algorithmic provision of liquidity. We also find evidence consistent with the strategies of algorithmic traders being highly correlated. This correlation, however, does not appear to cause a degradation in market quality, at least not on average.",
+  "acik": "https://doi.org/10.2139/ssrn.1501135",
+  "yazarlar": [
+   "A. Chaboud",
+   "Benjamin Chiquoine",
+   "Erik Hjalmarsson",
+   "Clara Vega"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "http://www.federalreserve.gov/pubs/ifdp/2009/980/ifdp980.pdf",
+  "son_url": "https://www.federalreserve.gov/pubs/ifdp/2009/980/ifdp980.pdf",
+  "tur": "application/pdf",
+  "sha256": "5010b4e24fb8c56164ea6ad305639d7c8288da109e09a4564d82aabaa38ed460",
+  "bayt": 422915,
+  "sayfa": 51,
+  "ilk_sayfa": "Board of Governors of the Federal Reserve System International Finance Discussion Papers Number 980 October 2009 Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market Alain Chaboud, Benjamin Chiquoine, Erik Hjalmarsson, Clara Vega NOTE: International Finance Discussion Papers are preliminary materials circulated to stimulate discussion and critical comment. References in publications to International Finance Discussion Papers (other than an acknowledgment that the writer has had access to unpublished material) should be cleared with the author or authors. Recent IFDPs are available on the Web at www.federalreserve.gov/pubs/ifdp/. This paper can be downloaded without charge from Social Science Research Network electronic library at http://www.ssrn.com/.",
+  "pasaj": [
+   {
+    "ifade": "arbitrage opportunities",
+    "sayfa": 3,
+    "pasaj": "omputers observe market data and possibly other information at very high frequency, and, based on a built-in algorithm, send back trading instructions, often within milliseconds. A variety of algorithms are used: for example, some look for arbitrage opportunities, including small discrepancies in the exchange rates between three currencies; some seek optimal execution of large orders at the minimum cost; and some seek to implement longer-term trading strategies in search of pro ts. Among the most r"
+   },
+   {
+    "ifade": "arbitrage opportunities",
+    "sayfa": 5,
+    "pasaj": "triangular arbitrage opportunities, where the euro-yen price is brie y out of line with prices in the euro-dollar and dollar-yen markets. Second, we nd that, on average, computers or humans that trade on a price posted by a computer do not impact prices quite as much as th"
+   },
+   {
+    "ifade": "autocorrelation",
+    "sayfa": 23,
+    "pasaj": "panese or the Euro-area economy. Focusing on the order- ow equations, we nd that the rst own lag in both order  ow equations is always highly signi cant, and typically around 0:1 for all currency pairs. There is thus a sizeable rst-order autocorrelation in the human-taker and computer-taker order  ows. The coe¢ cients on the rst order crosslags in the order  ow regressions are most often substantially smaller than the coe¢ cient on the own lag and vary in signs. Lagged returns have a sm"
+   },
+   {
+    "ifade": "autocorrelation",
+    "sayfa": 38,
+    "pasaj": "Table 1: Summary statistics for the one-minute return and order  ow data. The mean and standard deviation, as well as the rst-order autocorrelation, \u001a, are shown for each variable and currency pair. The returns are expressed in basis points and the order  ows in millions of the base currency. The summary statistics are given for both the full 2006-2007 sample, as well as for the thre"
+   }
+  ],
+  "eksik": [
+   "the frequency of triangular arbitrage opportunities",
+   "the autocorrelation of high-frequency returns",
+   "two measures of price efficiency",
+   "computer-generated trading activity",
+   "computers taking liquidity",
+   "the algorithmic provision of liquidity",
+   "strategies of algorithmic traders being highly correlated"
+  ],
+  "deneme": [
+   {
+    "url": "http://www.federalreserve.gov/pubs/ifdp/2009/980/ifdp980.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

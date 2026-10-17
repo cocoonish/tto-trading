@@ -1,0 +1,169 @@
+{
+ "id": "oomen2017",
+ "aday_baslik": "Last look",
+ "aday_yil": 2017,
+ "zaman": "2026-10-17T23:26:40+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1080/14697688.2016.1268708",
+   "durum": 200,
+   "baslik": "Online learning of time-varying stochastic factor structure by variational sequential Bayesian factor analysis"
+  }
+ ],
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "1469-7688",
+    "17",
+    "1057"
+   ],
+   "bulunan": [
+    [
+     "Last look",
+     "10.1080/14697688.2016.1262545"
+    ]
+   ]
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1080/14697688.2016.1262545",
+  "baslik": "Last look",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Oomen",
+    "ad": "Roel",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Quantitative Finance",
+  "cilt": "17",
+  "sayi": "7",
+  "sayfa": "1057-1070",
+  "yil": 2017,
+  "tur": "journal-article",
+  "yayinci": "Informa UK Limited",
+  "ozet": null,
+  "url": "https://doi.org/10.1080/14697688.2016.1262545",
+  "bag": [
+   "https://www.tandfonline.com/doi/pdf/10.1080/14697688.2016.1262545"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W4213246375",
+  "doi": "10.1080/14697688.2016.1262545",
+  "baslik": "Last look",
+  "yil": 2016,
+  "yazarlar": [
+   "Roel C. A. Oomen"
+  ],
+  "dergi": "Quantitative Finance",
+  "issn": [
+   "1469-7688",
+   "1469-7696"
+  ],
+  "cilt": "17",
+  "sayi": "7",
+  "ilk_sayfa": "1057",
+  "son_sayfa": "1070",
+  "ozet": "In over-the-counter markets, a trader typically sources indicative quotes from a number of competing liquidity providers, and then sends a deal request on the best available price for consideration by the originating liquidity provider. Due to the communication and processing latencies involved in this negotiation, and in a continuously evolving market, the price may have moved by the time the liquidity provider considers the trader's request. At what point has the price moved too far away from the quote originally shown for the liquidity provider to reject the deal request? Or perhaps the request can still be accepted but only on a revised rate? 'Last look' is the process that makes this decision, i.e. it determines whether to accept-and if so at what rate-or reject a trader's deal request subject to the constraints of an agreed trading protocol. In this paper, I study how the execution risk and transaction costs faced by the trader are influenced by the last look logic and choice of trading protocol. I distinguish between various 'symmetric' and 'asymmetric' last look designs and consider trading protocols that differ on whether, and if so to what extent, price improvements and slippage can be passed on to the trader. All this is done within a unified framework that allows for a detailed comparative analysis. I present two main findings. Firstly, the choice of last look design and trading protocol determines the degree of execution risk inherent in the process, but the effective transaction costs borne by the trader need not be affected by it. Secondly, when a trader adversely selects the liquidity provider she chooses to deal with, the distinction between the different symmetric and asymmetric last look designs fades and the primary driver of execution risk is the choice of trading protocol.",
+  "acik": "http://eprints.lse.ac.uk/68811/1/Oomen_Last%20look_2017.pdf",
+  "adresler": [
+   "http://eprints.lse.ac.uk/68811/1/Oomen_Last%20look_2017.pdf",
+   "https://doi.org/10.1080/14697688.2016.1262545",
+   "https://researchonline.lse.ac.uk/id/eprint/68811/1/Oomen_Last%20look_2017.pdf",
+   "http://hdl.handle.net/10.1080/14697688.2016.1262545"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Last look",
+  "yil": 2017,
+  "dergi": "",
+  "ozet": null,
+  "acik": "http://eprints.lse.ac.uk/68811/1/Oomen_Last%20look_2017.pdf",
+  "yazarlar": [
+   "R. Oomen"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "http://eprints.lse.ac.uk/68811/1/Oomen_Last%20look_2017.pdf",
+  "son_url": "https://researchonline.lse.ac.uk/id/eprint/68811/1/Oomen_Last%20look_2017.pdf",
+  "tur": "application/pdf",
+  "sha256": "5563e2b6500dd563b93c9413aed223b9dad4b46ea25aeb512e0899020a90ccc0",
+  "bayt": 715556,
+  "sayfa": 28,
+  "ilk_sayfa": "Roel Oomen Last look Article (Accepted version) (Refereed) Original citation: Oomen, Roel (2016) Last look. Quantitative Finance. pp. 1-14. ISSN 1469-7688 DOI: 10.1080/14697688.2016.1262545 © 2016 Informa UK Limited, trading as Taylor & Francis Group This version available at: http://eprints.lse.ac.uk/68811/ Available in LSE Research Online: January 2017 LSE has developed LSE Research Online so that users m ay access research output of the School. Copyright © and Moral Rights for the papers on this site are retained by the individual authors and/or other copyright owners. Users may download and/or print one copy of any article(s) in LSE Research Online to facilitate their private study or for non-commercial research. You may not engage in further distribution of the material or use it for any profit-making activities or any commercial gain. You may freely distribute the URL ( http://eprints.lse.ac.uk) of the LSE Research Online website. This document is the author's final accepted version of the journal article. There may be differences between this version and the publishe d version. You are advised to consult the publisher's version if you wish to cite from it.",
+  "pasaj": [
+   {
+    "ifade": "last look",
+    "sayfa": 1,
+    "pasaj": "Roel Oomen Last look Article (Accepted version) (Refereed) Original citation: Oomen, Roel (2016) Last look. Quantitative Finance. pp. 1-14. ISSN 1469-7688 DOI: 10.1080/14697688.2016.1262545 © 2016 Informa UK Limited, trading as Taylor & Francis Group This vers"
+   },
+   {
+    "ifade": "last look",
+    "sayfa": 1,
+    "pasaj": "Roel Oomen Last look Article (Accepted version) (Refereed) Original citation: Oomen, Roel (2016) Last look. Quantitative Finance. pp. 1-14. ISSN 1469-7688 DOI: 10.1080/14697688.2016.1262545 © 2016 Informa UK Limited, trading as Taylor & Francis Group This version available at: http://eprints.lse.ac.uk/68811/ Available in LSE Research Online: Ja"
+   },
+   {
+    "ifade": "liquidity provider",
+    "sayfa": 2,
+    "pasaj": "Last Look Roel Oomen∗ November, 2016 Abstract In over-the-counter markets, a trader typically sources indicative quotes from a number of competing liquidity providers, and then sends a deal request on the best available price for consideration by the originating liquidity provider. Due to the communication and processing latencies involved in this negotiation, and in a continuously evolving market, the"
+   },
+   {
+    "ifade": "liquidity provider",
+    "sayfa": 2,
+    "pasaj": "ovember, 2016 Abstract In over-the-counter markets, a trader typically sources indicative quotes from a number of competing liquidity providers, and then sends a deal request on the best available price for consideration by the originating liquidity provider. Due to the communication and processing latencies involved in this negotiation, and in a continuously evolving market, the price may have moved by the time the liquidity provider considers the trader' s request. At what point has the pric"
+   },
+   {
+    "ifade": "adverse selection",
+    "sayfa": 4,
+    "pasaj": " hold-period or so-called \"latency buffer\" which postpones the trade acceptance decision for a specified period of time (typically measured in milli-seconds). This acts as a defensive measure on behalf of the liquidity provider to mitigate adverse selection costs that arise from a trader' s latency sensitive flow. In a fragmented market where traders and liquidity providers are dispersed, with major trading platforms and news agencies located in different financial centres, and with market da"
+   },
+   {
+    "ifade": "adverse selection",
+    "sayfa": 4,
+    "pasaj": "iced.3 This is a manifestation of an information asymmetry that is skewed in the trader' s favour. Each liquidity provider is blind to the prices its competitors are showing, but the trader can observe and aggregate all the information and adverse selection is introduced merely by the act of price comparison and the latencies involved in the process of trading and price 3A nice illustration of such dynamics is found in the literature on the so-called \"SOES bandits\" . These traders operated sc"
+   },
+   {
+    "ifade": "reject",
+    "sayfa": 2,
+    "pasaj": "nd in a continuously evolving market, the price may have moved by the time the liquidity provider considers the trader' s request. At what point has the price moved too far away from the quote originally shown for the liquidity provider to reject the deal request? Or perhaps the request can still be accepted but only on a revised rate? \"Last look\" is the process that makes this decision, i.e. it determines whether to accept - and if so at what rate - or reject a trader' s deal requ"
+   },
+   {
+    "ifade": "reject",
+    "sayfa": 2,
+    "pasaj": "liquidity provider to reject the deal request? Or perhaps the request can still be accepted but only on a revised rate? \"Last look\" is the process that makes this decision, i.e. it determines whether to accept - and if so at what rate - or reject a trader' s deal request subject to the constraints of an agreed trading protocol. In this paper I study how the execution risk and transaction costs faced by the trader are influenced by the last look logic and choice of trading protocol."
+   },
+   {
+    "ifade": "symmetric",
+    "sayfa": 2,
+    "pasaj": "t to the constraints of an agreed trading protocol. In this paper I study how the execution risk and transaction costs faced by the trader are influenced by the last look logic and choice of trading protocol. I distinguish between various \"symmetric\" and \"asymmetric\" last look designs and consider trading protocols that differ on whether, and if so to what extent, price improvements and slippage can be passed on to the trader. All this is done within a unified framework that allows fo"
+   },
+   {
+    "ifade": "symmetric",
+    "sayfa": 2,
+    "pasaj": "nts of an agreed trading protocol. In this paper I study how the execution risk and transaction costs faced by the trader are influenced by the last look logic and choice of trading protocol. I distinguish between various \"symmetric\" and \"asymmetric\" last look designs and consider trading protocols that differ on whether, and if so to what extent, price improvements and slippage can be passed on to the trader. All this is done within a unified framework that allows for a detailed comp"
+   }
+  ],
+  "eksik": [
+   "trade request",
+   "reject the trade",
+   "last look window",
+   "latency arbitrage",
+   "hold time",
+   "price check"
+  ],
+  "deneme": [
+   {
+    "url": "http://eprints.lse.ac.uk/68811/1/Oomen_Last%20look_2017.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

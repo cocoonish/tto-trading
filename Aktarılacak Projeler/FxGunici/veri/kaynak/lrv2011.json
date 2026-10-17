@@ -1,0 +1,93 @@
+{
+ "id": "lrv2011",
+ "aday_baslik": "Common Risk Factors in Currency Markets",
+ "aday_yil": 2011,
+ "zaman": "2026-10-17T23:27:01+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1093/rfs/hhr068",
+   "durum": 200,
+   "baslik": "Common Risk Factors in Currency Markets"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1093/rfs/hhr068",
+  "baslik": "Common Risk Factors in Currency Markets",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Lustig",
+    "ad": "Hanno",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Roussanov",
+    "ad": "Nikolai",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Verdelhan",
+    "ad": "Adrien",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Review of Financial Studies",
+  "cilt": "24",
+  "sayi": "11",
+  "sayfa": "3731-3777",
+  "yil": 2011,
+  "tur": "journal-article",
+  "yayinci": "Oxford University Press (OUP)",
+  "ozet": null,
+  "url": "https://doi.org/10.1093/rfs/hhr068",
+  "bag": [
+   "http://academic.oup.com/rfs/article-pdf/24/11/3731/5250722/hhr068.pdf"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3123998694",
+  "doi": "10.1093/rfs/hhr068",
+  "baslik": "Common Risk Factors in Currency Markets",
+  "yil": 2011,
+  "yazarlar": [
+   "Hanno N. Lustig",
+   "Nikolai L. Roussanov",
+   "Adrien Verdelhan"
+  ],
+  "dergi": "Review of Financial Studies",
+  "issn": [
+   "0893-9454",
+   "1465-7368"
+  ],
+  "cilt": "24",
+  "sayi": "11",
+  "ilk_sayfa": "3731",
+  "son_sayfa": "3777",
+  "ozet": "We identify a \"slope\" factor in exchange rates. High interest rate currencies load more on this slope factor than low interest rate currencies. This factor accounts for most of the cross-sectional variation in average excess returns between high and low interest rate currencies. A standard, no-arbitrage model of interest rates with two factors--a country-specific factor and a global factor--can replicate these findings, provided there is sufficient heterogeneity in exposure to global or common innovations. We show that our slope factor identifies these common shocks, and we provide empirical evidence that it is related to changes in global equity market volatility. By investing in high interest rate currencies and borrowing in low interest rate currencies, U.S. investors load up on global risk. The Author 2011. Published by Oxford University Press on behalf of The Society for Financial Studies. All rights reserved. For Permissions, please e-mail: journals.permissions@oup.com., Oxford University Press.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1093/rfs/hhr068",
+   "http://hdl.handle.net/10.1093/rfs/hhr068"
+  ]
+ },
+ "semantic": {
+  "durum": "HTTP 404"
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1093/rfs/hhr068",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "http://hdl.handle.net/10.1093/rfs/hhr068",
+    "durum": "HTTP 403"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

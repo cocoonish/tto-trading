@@ -1,0 +1,138 @@
+{
+ "id": "bailey_ldp2014",
+ "aday_baslik": "The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality",
+ "aday_yil": 2014,
+ "zaman": "2026-10-17T23:22:39+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.3905/jpm.2014.40.5.094",
+   "durum": 200,
+   "baslik": "The Deflated Sharpe Ratio:\n                    <i>Correcting for Selection Bias, Backtest</i>\n                    <i>Overfitting, and Non-Normality</i>"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.3905/jpm.2014.40.5.094",
+  "baslik": "The Deflated Sharpe Ratio:\n                    <i>Correcting for Selection Bias, Backtest</i>\n                    <i>Overfitting, and Non-Normality</i>",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Bailey",
+    "ad": "David H.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "López de Prado",
+    "ad": "Marcos",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Journal of Portfolio Management",
+  "cilt": "40",
+  "sayi": "5",
+  "sayfa": "94-107",
+  "yil": 2014,
+  "tur": "journal-article",
+  "yayinci": "With Intelligence LLC",
+  "ozet": null,
+  "url": "https://doi.org/10.3905/jpm.2014.40.5.094",
+  "bag": [
+   "https://syndication.highwire.org/content/doi/10.3905/jpm.2014.40.5.094"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3124863268",
+  "doi": "10.3905/jpm.2014.40.5.094",
+  "baslik": "The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality",
+  "yil": 2014,
+  "yazarlar": [
+   "David H. Bailey",
+   "Marcos López de Prado"
+  ],
+  "dergi": "The Journal of Portfolio Management",
+  "issn": [
+   "0095-4918",
+   "2168-8656"
+  ],
+  "cilt": "40",
+  "sayi": "5",
+  "ilk_sayfa": "94",
+  "son_sayfa": "107",
+  "ozet": "With the advent in recent years of large financial data sets, machine learning, and high-performance computing, analysts can back test millions (if not billions) of alternative investment strategies. Backtest optimizers search for combinations of parameters that maximize the simulated historical performance of a strategy, leading to back test overfitting. The problem of performance inflation extends beyond back testing. More generally, researchers and investment managers tend to report only positive outcomes, a phenomenon known as selection bias. Not controlling for the number of trials involved in a particular discovery leads to overly optimistic performance expectations. The deflated Sharpe ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non-normally distributed returns. In doing so, DSR helps separate legitimate empirical findings from statistical flukes. TOPICS: Big data/machine learning , factor-based models , statistical methods",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.3905/jpm.2014.40.5.094"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality",
+  "yil": 2014,
+  "dergi": "Journal of Portfolio Management",
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.2460551",
+  "yazarlar": [
+   "David H. Bailey",
+   "Marcos M. López de Prado"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf",
+  "son_url": "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf",
+  "tur": "application/pdf",
+  "sha256": "ca4a1e834a2954b84eb560776e903329cd9cef318d458aadf6d67bc8166d10b5",
+  "bayt": 1048118,
+  "sayfa": 22,
+  "ilk_sayfa": "Electronic copy available at: http://ssrn.com/abstract=2460551 THE DEFLATED SHARPE RATIO: CORRECTING FOR SELECTION BIAS, BACKTEST OVERFITTING AND NON-NORMALITY David H. Bailey † Marcos López de Prado ‡ First version: April 15, 2014 This version: July 31, 2014 Journal of Portfolio Management, Forthcoming, 2014 ________________________________ † Recently re tired from Lawrence Berkeley National Laboratory, Berkeley, CA 94720. Research Fellow at the University of California, Davis, Department of Computer Science. E-mail: david@davidhbailey.com ‡ Senior Managing Director, Guggenheim Partners, New York, NY 10017. Research Affiliate, Computational Research Division, Lawrence Berkeley National Laboratory, Berkeley, CA 94720. E -mail: lopezdeprado@lbl.gov Special thanks are owed to Prof. David J. Hand (Royal Statistical Society), who reviewed an early version of this paper and suggested various extensions. We are also grateful to Matthew Bedda ll (Winton Capital), José Blanco (Credit Suisse), Jonathan M. Borwein (University of Newcastle , Australia), Sid Browne (Credit Suisse), Peter Carr (Morgan Stanley, NYU), Marco Dion (J.P. Morgan), Matthew D. Foreman (University of California, Irvine), Stephanie Ger (Berkeley Lab), Campbell Harvey (Duke University), Kate Land (Winton Capital), Jeffrey S. Lange (Guggenheim Partners), Attilio Meucci (KKR, NYU) , Philip Protter (Columbia University), Riccardo Rebonato (PIMCO, University of Oxford), Mark Roulston (Winton Capital), Luis Viceira (HBS)",
+  "pasaj": [
+   {
+    "ifade": "two leading sources of performance inflation",
+    "sayfa": 2,
+    "pasaj": "port only positive outcomes , a phenomenon known as selection bias. Not controlling for the number of trials involved in a particular discovery leads to over-optimistic performance expectations. The Deflated Sharpe Ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non -Normally distributed returns. In doing so, DSR helps separate legitimate empirical findings from statistical flukes. Keywords: Sharpe ratio, N on-Normality, Probabilistic Sharpe ratio, Backte"
+   },
+   {
+    "ifade": "two leading sources of performance inflation",
+    "sayfa": 11,
+    "pasaj": "past performance does not guarantee future results\" is too lenient when in fact adverse outcomes are very likely. In this paper we have proposed a test to determine whether an estimate d SR is statistically significant after correcting for two leading sources of performance inflation: Selection bias and non-Normal returns. The Deflated Sharpe Ratio (DSR) incorporates information about the unselected trials, such as the number of independent experiments conducted and the variance of the SRs, as well as taking into accou"
+   },
+   {
+    "ifade": "Selection bias under multiple testing",
+    "sayfa": 2,
+    "pasaj": "wn as selection bias. Not controlling for the number of trials involved in a particular discovery leads to over-optimistic performance expectations. The Deflated Sharpe Ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non -Normally distributed returns. In doing so, DSR helps separate legitimate empirical findings from statistical flukes. Keywords: Sharpe ratio, N on-Normality, Probabilistic Sharpe ratio, Backtest overfitting, Minimum Track Record Le"
+   },
+   {
+    "ifade": "separate legitimate empirical findings from statistical flukes",
+    "sayfa": 2,
+    "pasaj": "ads to over-optimistic performance expectations. The Deflated Sharpe Ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non -Normally distributed returns. In doing so, DSR helps separate legitimate empirical findings from statistical flukes. Keywords: Sharpe ratio, N on-Normality, Probabilistic Sharpe ratio, Backtest overfitting, Minimum Track Record Length, Minimum Backtest Length. JEL Classification: G0, G1, G2, G15, G24, E44. AMS Classification: 91G10, 91G60, 91G70, 62C, 6"
+   },
+   {
+    "ifade": "number of trials involved in a particular discovery",
+    "sayfa": 2,
+    "pasaj": "acktest overfitting. The problem of performance inflation extends beyond backtesting. More generally, researchers and investment managers tend to report only positive outcomes , a phenomenon known as selection bias. Not controlling for the number of trials involved in a particular discovery leads to over-optimistic performance expectations. The Deflated Sharpe Ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non -Normally distributed returns. In doing so, DSR hel"
+   },
+   {
+    "ifade": "over-optimistic performance expectations",
+    "sayfa": 2,
+    "pasaj": "ends beyond backtesting. More generally, researchers and investment managers tend to report only positive outcomes , a phenomenon known as selection bias. Not controlling for the number of trials involved in a particular discovery leads to over-optimistic performance expectations. The Deflated Sharpe Ratio (DSR) corrects for two leading sources of performance inflation: Selection bias under multiple testing and non -Normally distributed returns. In doing so, DSR helps separate legitimate empirical findings from sta"
+   },
+   {
+    "ifade": "leading to backtest overfitting",
+    "sayfa": 2,
+    "pasaj": "igh - performance computing, analysts can backtest millions (if not billions) of alternative investment strategies. Backtest optimizers search for combinations of parameters that maximize the simulated historical performance of a strategy, leading to backtest overfitting. The problem of performance inflation extends beyond backtesting. More generally, researchers and investment managers tend to report only positive outcomes , a phenomenon known as selection bias. Not controlling for the number of trials in"
+   }
+  ],
+  "eksik": [
+   "non-Normally distributed returns"
+  ],
+  "deneme": [
+   {
+    "url": "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

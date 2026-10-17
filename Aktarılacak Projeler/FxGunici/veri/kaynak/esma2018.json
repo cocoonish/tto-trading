@@ -1,0 +1,62 @@
+{
+ "id": "esma2018",
+ "aday_baslik": "ESMA agrees to prohibit binary options and restrict CFDs to protect retail investors",
+ "aday_yil": 2018,
+ "zaman": "2026-10-17T23:26:07+00:00",
+ "crossref": null,
+ "openalex": null,
+ "semantic": null,
+ "metin": {
+  "durum": 200,
+  "url": "https://www.esma.europa.eu/sites/default/files/library/esma71-98-128_press_release_product_intervention.pdf",
+  "son_url": "https://www.esma.europa.eu/sites/default/files/library/esma71-98-128_press_release_product_intervention.pdf",
+  "tur": "application/pdf",
+  "sha256": "b5f944a6cc0253e6a4a2856c90d74bf78f3b66ce75523ee884ddeb80655d874f",
+  "bayt": 241599,
+  "sayfa": 4,
+  "ilk_sayfa": "ESMA • CS 60747 - 103 rue de Grenelle • 75345 Paris Cedex 07 • France • Tel. +33 (0) 1 58 36 43 21 • www.esma.europa.eu PRESS RELEASE ESMA agrees to prohibit binary option s and restrict CFDs to protect retail investors The European Securities and Markets Authority (ESMA) has agreed on measures on the provision of contracts for differences (CFDs) and binary option s to retail investors in the European Union (EU). The agreed measures include: 1. Binary Options - a prohibition on the marketing, distribution or sale of binary options to retail investors; and 2. Contracts for Differences - a restriction on the marketing, distribution or sale of CFDs to retail investors. This restriction consist s of: leverage limits on opening positions; a margin close out rule on a per account basis; a negative balance protection on a per account basis; preventing the use of incentives by a CFD provider; and a firm specific risk warning delivered in a standardised way. In accordance with MiFIR , ESMA can only introduce temporary intervention measures on a three monthly basis. Before the end of the three months, ESMA will consider the need to extend the intervention measures for a further three months. Significant Investor Protection Concern ESMA, along with National Competent A uthorities (NCAs ), concluded that there exists a significant investor protection concern in relation to CFDs and binary options offered to retail investors. This is due to their complexity and lack of transparency; the p",
+  "pasaj": [
+   {
+    "ifade": "74-89% of retail accounts typically lose money",
+    "sayfa": 1,
+    "pasaj": "terest between providers and their clients ; the disparity between the expected return and the risk of loss; and issues related to their marketing and distribution. NCAs' analyses on CFD trading across different EU jurisdictions shows that 74-89% of retail accounts typically lose money on their investments, with average losses per client ranging from €1,600 to €29,000. NCAs' analyses for binary options also found consistent losses on retail clients' accounts. 27 March 2018 ESMA71-98-128"
+   },
+   {
+    "ifade": "typically lose money on their investments",
+    "sayfa": 1,
+    "pasaj": "nd their clients ; the disparity between the expected return and the risk of loss; and issues related to their marketing and distribution. NCAs' analyses on CFD trading across different EU jurisdictions shows that 74-89% of retail accounts typically lose money on their investments, with average losses per client ranging from €1,600 to €29,000. NCAs' analyses for binary options also found consistent losses on retail clients' accounts. 27 March 2018 ESMA71-98-128"
+   },
+   {
+    "ifade": "ranging from €1,600 to €29,000",
+    "sayfa": 1,
+    "pasaj": "of loss; and issues related to their marketing and distribution. NCAs' analyses on CFD trading across different EU jurisdictions shows that 74-89% of retail accounts typically lose money on their investments, with average losses per client ranging from €1,600 to €29,000. NCAs' analyses for binary options also found consistent losses on retail clients' accounts. 27 March 2018 ESMA71-98-128"
+   },
+   {
+    "ifade": "NCAs' analyses on CFD trading",
+    "sayfa": 1,
+    "pasaj": "y options - structural expected negative return and embedded conflict of interest between providers and their clients ; the disparity between the expected return and the risk of loss; and issues related to their marketing and distribution. NCAs' analyses on CFD trading across different EU jurisdictions shows that 74-89% of retail accounts typically lose money on their investments, with average losses per client ranging from €1,600 to €29,000. NCAs' analyses for binary options also found consistent losses"
+   },
+   {
+    "ifade": "ESMA's Board of Supervisors on 23 March 2018",
+    "sayfa": 2,
+    "pasaj": "ESMA • CS 60747 - 103 rue de Grenelle • 75345 Paris Cedex 07 • France • Tel. +33 (0) 1 58 36 43 21 • www.esma.europa.eu These measures were agreed by ESMA's Board of Supervisors on 23 March 2018. Steven Maijoor, Chair, said: \"The agreed measures ESMA is announcing today will guarantee greater investor protection across the EU by ensuring a common minimum level of protection for retail investors. The new measures on CFDs will for t"
+   },
+   {
+    "ifade": "negative balance protection on a per account basis",
+    "sayfa": 1,
+    "pasaj": "rs; and 2. Contracts for Differences - a restriction on the marketing, distribution or sale of CFDs to retail investors. This restriction consist s of: leverage limits on opening positions; a margin close out rule on a per account basis; a negative balance protection on a per account basis; preventing the use of incentives by a CFD provider; and a firm specific risk warning delivered in a standardised way. In accordance with MiFIR , ESMA can only introduce temporary intervention measures on a three monthly basis. Before the "
+   }
+  ],
+  "eksik": [
+   "prohibit binary options and restrict CFDs"
+  ],
+  "deneme": [
+   {
+    "url": "https://www.esma.europa.eu/sites/default/files/library/esma71-98-128_press_release_product_intervention.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": false,
+ "ozet_var": false
+}

@@ -1,0 +1,142 @@
+{
+ "id": "glosten_milgrom1985",
+ "aday_baslik": "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders",
+ "aday_yil": 1985,
+ "zaman": "2026-10-17T23:26:17+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1016/0304-405X(85)90044-3",
+   "durum": 200,
+   "baslik": "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/0304-405x(85)90044-3",
+  "baslik": "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Glosten",
+    "ad": "Lawrence R.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Milgrom",
+    "ad": "Paul R.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Financial Economics",
+  "cilt": "14",
+  "sayi": "1",
+  "sayfa": "71-100",
+  "yil": 1985,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/0304-405x(85)90044-3",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:0304405X85900443?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:0304405X85900443?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W1985808284",
+  "doi": "10.1016/0304-405x(85)90044-3",
+  "baslik": "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders",
+  "yil": 1985,
+  "yazarlar": [
+   "Lawrence R. Glosten",
+   "Paul Milgrom"
+  ],
+  "dergi": "Journal of Financial Economics",
+  "issn": [
+   "0304-405X",
+   "1879-2774"
+  ],
+  "cilt": "14",
+  "sayi": "1",
+  "ilk_sayfa": "71",
+  "son_sayfa": "100",
+  "ozet": null,
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1016/0304-405x(85)90044-3",
+   "http://www.kellogg.northwestern.edu/research/math/papers/570.pdf",
+   "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.460.947",
+   "https://econpapers.repec.org/RePEc:nwu:cmsems:570",
+   "http://www.sciencedirect.com/science/article/pii/0304-405X(85)90044-3",
+   "http://hdl.handle.net/10419/220930"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders",
+  "yil": 1985,
+  "dergi": "",
+  "ozet": null,
+  "acik": "https://doi.org/10.1016/0304-405x(85)90044-3",
+  "yazarlar": [
+   "L. Glosten",
+   "P. Milgrom"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.edegan.com/pdfs/Glosten%20Milgrom%20%281985%29%20-%20Bid%20Ask%20and%20Transaction%20Prices%20in%20a%20Specialist%20Market%20with%20Heterogeneously%20Informed%20Trades.pdf",
+  "son_url": "https://www.edegan.com/pdfs/Glosten%20Milgrom%20%281985%29%20-%20Bid%20Ask%20and%20Transaction%20Prices%20in%20a%20Specialist%20Market%20with%20Heterogeneously%20Informed%20Trades.pdf",
+  "tur": "application/pdf",
+  "sha256": "66b4f1a04f5f6ef10fd88c21e1c5fd288033bbbe8f5685b158e022acc07c2aa3",
+  "bayt": 1760264,
+  "sayfa": 30,
+  "ilk_sayfa": "Journal of Financial Economics 14 (1985) 71-100. North-Holland BID, ASK AND' TRANSACTION PRICES IN A SPECIALIST MARKET WITH HETEROGENEOUSLY INFORMED TRADERS* Lawrence R. GLOSTEN Norrhwesrern Uniuerslty, und University oj Chcago, Chicugo, IL 60637, USA Paul R. MILGROM Yale Unrversity, New Haven, CT 06520, US4 Received August 1983, final version received September 1984 The presence of traders with superior information leads to a positive bid-ask spread even when the specialist is risk-neutral and makes zero expected profits. The resulting transaction prices convey information, and the expectation of the average spread squared times volume is bounded by a number that is independent of insider activity. The serial correlation of transaction price differences is a function of the proportion of the spread due to adverse selection. A bid-ask spread implies a divergence between observed returns and realizable returns. Observed returns are approximately realizable returns plus what the uninformed anticipate losing to the insiders. 1. Introduction The usual economic view of markets is as a place where buyers and sellers come together and trade at a common price, the price at which supply equals demand. Securities exchanges are often singled out as excellent examples of markets that operate this way. In fact, however, trading on exchanges takes place over time, and some institutional arrangements are necessary to help match buyers and sellers whose orders arrive at different times. On e",
+  "pasaj": [
+   {
+    "ifade": "traders with superior information",
+    "sayfa": 1,
+    "pasaj": "ED TRADERS* Lawrence R. GLOSTEN Norrhwesrern Uniuerslty, und University oj Chcago, Chicugo, IL 60637, USA Paul R. MILGROM Yale Unrversity, New Haven, CT 06520, US4 Received August 1983, final version received September 1984 The presence of traders with superior information leads to a positive bid-ask spread even when the specialist is risk-neutral and makes zero expected profits. The resulting transaction prices convey information, and the expectation of the average spread squared times volume is bounded by "
+   },
+   {
+    "ifade": "leads to a positive bid-ask spread",
+    "sayfa": 1,
+    "pasaj": "rrhwesrern Uniuerslty, und University oj Chcago, Chicugo, IL 60637, USA Paul R. MILGROM Yale Unrversity, New Haven, CT 06520, US4 Received August 1983, final version received September 1984 The presence of traders with superior information leads to a positive bid-ask spread even when the specialist is risk-neutral and makes zero expected profits. The resulting transaction prices convey information, and the expectation of the average spread squared times volume is bounded by a number that is independent of ins"
+   },
+   {
+    "ifade": "specialist is risk-neutral and makes zero expected profits",
+    "sayfa": 1,
+    "pasaj": "Chicugo, IL 60637, USA Paul R. MILGROM Yale Unrversity, New Haven, CT 06520, US4 Received August 1983, final version received September 1984 The presence of traders with superior information leads to a positive bid-ask spread even when the specialist is risk-neutral and makes zero expected profits. The resulting transaction prices convey information, and the expectation of the average spread squared times volume is bounded by a number that is independent of insider activity. The serial correlation of transaction price differences is"
+   },
+   {
+    "ifade": "The resulting transaction prices convey information",
+    "sayfa": 1,
+    "pasaj": "Haven, CT 06520, US4 Received August 1983, final version received September 1984 The presence of traders with superior information leads to a positive bid-ask spread even when the specialist is risk-neutral and makes zero expected profits. The resulting transaction prices convey information, and the expectation of the average spread squared times volume is bounded by a number that is independent of insider activity. The serial correlation of transaction price differences is a function of the proportion of the spread due to ad"
+   },
+   {
+    "ifade": "proportion of the spread due to adverse selection",
+    "sayfa": 1,
+    "pasaj": "nsaction prices convey information, and the expectation of the average spread squared times volume is bounded by a number that is independent of insider activity. The serial correlation of transaction price differences is a function of the proportion of the spread due to adverse selection. A bid-ask spread implies a divergence between observed returns and realizable returns. Observed returns are approximately realizable returns plus what the uninformed anticipate losing to the insiders. 1. Introduction The usual economic vi"
+   },
+   {
+    "ifade": "what the uninformed anticipate losing to the insiders",
+    "sayfa": 1,
+    "pasaj": "ion price differences is a function of the proportion of the spread due to adverse selection. A bid-ask spread implies a divergence between observed returns and realizable returns. Observed returns are approximately realizable returns plus what the uninformed anticipate losing to the insiders. 1. Introduction The usual economic view of markets is as a place where buyers and sellers come together and trade at a common price, the price at which supply equals demand. Securities exchanges are often singled out as excellent examples"
+   },
+   {
+    "ifade": "heterogeneously informed traders",
+    "sayfa": 1,
+    "pasaj": "Journal of Financial Economics 14 (1985) 71-100. North-Holland BID, ASK AND' TRANSACTION PRICES IN A SPECIALIST MARKET WITH HETEROGENEOUSLY INFORMED TRADERS* Lawrence R. GLOSTEN Norrhwesrern Uniuerslty, und University oj Chcago, Chicugo, IL 60637, USA Paul R. MILGROM Yale Unrversity, New Haven, CT 06520, US4 Received August 1983, final version received September 1984 The presence of traders wi"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://www.edegan.com/pdfs/Glosten%20Milgrom%20%281985%29%20-%20Bid%20Ask%20and%20Transaction%20Prices%20in%20a%20Specialist%20Market%20with%20Heterogeneously%20Informed%20Trades.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

@@ -1,0 +1,140 @@
+{
+ "id": "bh1995",
+ "aday_baslik": "Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing",
+ "aday_yil": 1995,
+ "zaman": "2026-10-17T23:22:49+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1111/j.2517-6161.1995.tb02031.x",
+   "durum": 200,
+   "baslik": "Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1111/j.2517-6161.1995.tb02031.x",
+  "baslik": "Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Benjamini",
+    "ad": "Yoav",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Hochberg",
+    "ad": "Yosef",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of the Royal Statistical Society Series B: Statistical Methodology",
+  "cilt": "57",
+  "sayi": "1",
+  "sayfa": "289-300",
+  "yil": 1995,
+  "tur": "journal-article",
+  "yayinci": "Oxford University Press (OUP)",
+  "ozet": "SUMMARY The common approach to the multiplicity problem calls for controlling the familywise error rate (FWER). This approach, though, has faults, and we point out a few. A different approach to problems of multiple significance testing is presented. It calls for controlling the expected proportion of falsely rejected hypotheses - the false discovery rate. This error rate is equivalent to the FWER when all hypotheses are true but is smaller otherwise. Therefore, in problems where the control of the false discovery rate rather than that of the FWER is desired, there is potential for a gain in power. A simple sequential Bonferronitype procedure is proved to control the false discovery rate for independent test statistics, and a simulation study shows that the gain in power is substantial. The use of the new procedure and the appropriateness of the criterion are illustrated with examples.",
+  "url": "https://doi.org/10.1111/j.2517-6161.1995.tb02031.x",
+  "bag": [
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fj.2517-6161.1995.tb02031.x",
+   "https://academic.oup.com/jrsssb/article-pdf/57/1/289/49173396/jrsssb_57_1_289.pdf",
+   "https://academic.oup.com/jrsssb/article-pdf/57/1/289/49173396/jrsssb_57_1_289.pdf"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2110065044",
+  "doi": "10.1111/j.2517-6161.1995.tb02031.x",
+  "baslik": "Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing",
+  "yil": 1995,
+  "yazarlar": [
+   "Yoav Benjamini",
+   "Yosef Hochberg"
+  ],
+  "dergi": "Journal of the Royal Statistical Society Series B (Statistical Methodology)",
+  "issn": [
+   "1369-7412",
+   "1467-9868"
+  ],
+  "cilt": "57",
+  "sayi": "1",
+  "ilk_sayfa": "289",
+  "son_sayfa": "300",
+  "ozet": "SUMMARY The common approach to the multiplicity problem calls for controlling the familywise error rate (FWER). This approach, though, has faults, and we point out a few. A different approach to problems of multiple significance testing is presented. It calls for controlling the expected proportion of falsely rejected hypotheses - the false discovery rate. This error rate is equivalent to the FWER when all hypotheses are true but is smaller otherwise. Therefore, in problems where the control of the false discovery rate rather than that of the FWER is desired, there is potential for a gain in power. A simple sequential Bonferronitype procedure is proved to control the false discovery rate for independent test statistics, and a simulation study shows that the gain in power is substantial. The use of the new procedure and the appropriateness of the criterion are illustrated with examples.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1111/j.2517-6161.1995.tb02031.x"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Controlling the false discovery rate: a practical and powerful approach to multiple testing",
+  "yil": 1995,
+  "dergi": "",
+  "ozet": null,
+  "acik": "",
+  "yazarlar": [
+   "Y. Benjamini",
+   "Y. Hochberg"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.dcscience.net/Benjamini-Hochberg-1995-FDR.pdf",
+  "son_url": "https://www.dcscience.net/Benjamini-Hochberg-1995-FDR.pdf",
+  "tur": "application/pdf",
+  "sha256": "4d56c465dd4dfd6bcfd97f92acdc17f8d535325d6e760dc5a4ce5427b9766229",
+  "bayt": 1369105,
+  "sayfa": 12,
+  "ilk_sayfa": "J. R. Statist. Soc. B (1995) 57, No. 1, pp. 289-300 Controlling the False Discovery Rate: a Practical and Powerful Approach to Multiple Testing By YOAV BENJAMINIt and YOSEF HOCHBERG Tel Aviv University, Israel [Received January 1993. Revised March 1994] SUMMARY The common approach to the multiplicity problem calls for controlling the familywise error rate (FWER). This approach, though, has faults, and we point out a few. A different approach to problems of multiple significance testing is presented. It calls for controlling the expected proportion of falsely rejected hypotheses-the false discovery rate. This error rate is equivalent to the FWER when all hypotheses are true but is smaller otherwise. Therefore, in problems where the control of the false discovery rate rather than that of the FWER is desired, there is potential for a gain in power. A simple sequential Bonferronitype procedure is proved to control the false discovery rate for independent test statistics, and a simulation study shows that the gain in power is substantial. The use of the new procedure and the appropriateness of the criterion are illustrated with examples. Keywords: BONFERRONI-TYPE PROCEDURES; FAMILYWISE ERROR RATE; MULTIPLECOMPARISON PROCEDURES; p-VALUES 1. INTRODUCTION When pursuing multiple inferences, researchers tend to select the (statistically) significant ones for emphasis, discussion and support of conclusions. An unguarded use of single-inference procedures results in a greatly increased f",
+  "pasaj": [
+   {
+    "ifade": "controlling the familywise error rate (FWER)",
+    "sayfa": 1,
+    "pasaj": "ery Rate: a Practical and Powerful Approach to Multiple Testing By YOAV BENJAMINIt and YOSEF HOCHBERG Tel Aviv University, Israel [Received January 1993. Revised March 1994] SUMMARY The common approach to the multiplicity problem calls for controlling the familywise error rate (FWER). This approach, though, has faults, and we point out a few. A different approach to problems of multiple significance testing is presented. It calls for controlling the expected proportion of falsely rejected hypotheses-the false discovery"
+   },
+   {
+    "ifade": "expected proportion of falsely rejected hypotheses",
+    "sayfa": 1,
+    "pasaj": "plicity problem calls for controlling the familywise error rate (FWER). This approach, though, has faults, and we point out a few. A different approach to problems of multiple significance testing is presented. It calls for controlling the expected proportion of falsely rejected hypotheses-the false discovery rate. This error rate is equivalent to the FWER when all hypotheses are true but is smaller otherwise. Therefore, in problems where the control of the false discovery rate rather than that of the FWER is desired, there "
+   },
+   {
+    "ifade": "equivalent to the FWER when all hypotheses are true",
+    "sayfa": 1,
+    "pasaj": "as faults, and we point out a few. A different approach to problems of multiple significance testing is presented. It calls for controlling the expected proportion of falsely rejected hypotheses-the false discovery rate. This error rate is equivalent to the FWER when all hypotheses are true but is smaller otherwise. Therefore, in problems where the control of the false discovery rate rather than that of the FWER is desired, there is potential for a gain in power. A simple sequential Bonferronitype procedure is proved to contr"
+   },
+   {
+    "ifade": "there is potential for a gain in power",
+    "sayfa": 1,
+    "pasaj": "theses-the false discovery rate. This error rate is equivalent to the FWER when all hypotheses are true but is smaller otherwise. Therefore, in problems where the control of the false discovery rate rather than that of the FWER is desired, there is potential for a gain in power. A simple sequential Bonferronitype procedure is proved to control the false discovery rate for independent test statistics, and a simulation study shows that the gain in power is substantial. The use of the new procedure and the appropria"
+   },
+   {
+    "ifade": "the gain in power is substantial",
+    "sayfa": 1,
+    "pasaj": " rather than that of the FWER is desired, there is potential for a gain in power. A simple sequential Bonferronitype procedure is proved to control the false discovery rate for independent test statistics, and a simulation study shows that the gain in power is substantial. The use of the new procedure and the appropriateness of the criterion are illustrated with examples. Keywords: BONFERRONI-TYPE PROCEDURES; FAMILYWISE ERROR RATE; MULTIPLECOMPARISON PROCEDURES; p-VALUES 1. INTRODUCTION When pursuing multip"
+   },
+   {
+    "ifade": "for independent test statistics",
+    "sayfa": 1,
+    "pasaj": "herefore, in problems where the control of the false discovery rate rather than that of the FWER is desired, there is potential for a gain in power. A simple sequential Bonferronitype procedure is proved to control the false discovery rate for independent test statistics, and a simulation study shows that the gain in power is substantial. The use of the new procedure and the appropriateness of the criterion are illustrated with examples. Keywords: BONFERRONI-TYPE PROCEDURES; FAMILYWISE ERROR RATE; MULTIPLE"
+   },
+   {
+    "ifade": "for independent test statistics",
+    "sayfa": 5,
+    "pasaj": "ered p-values, and denote by Ho) the null hypothesis corresponding to Po). Define the following Bonferronitype multiple-testing procedure: let k be the largest i for which Po) < -Lin q*; then reject all H o) i = 1, 2, . . k. (1) Theorem 1. For independent test statistics and for any configuration of false null hypotheses, the above procedure controls the FDR at q*. Proof. The theorem follows from the following lemma, whose proof is given in Appendix A. Lemma. For any 0 < m o < m independent p-values corres"
+   }
+  ],
+  "eksik": [
+   "sequential Bonferroni-type procedure"
+  ],
+  "deneme": [
+   {
+    "url": "https://www.dcscience.net/Benjamini-Hochberg-1995-FDR.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

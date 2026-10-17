@@ -1,0 +1,150 @@
+{
+ "id": "nwu2009",
+ "aday_baslik": "The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market",
+ "aday_yil": 2009,
+ "zaman": "2026-10-17T23:26:54+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1017/S0022109009090103",
+   "durum": 200,
+   "baslik": "The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1017/s0022109009090103",
+  "baslik": "The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Neely",
+    "ad": "Christopher J.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Weller",
+    "ad": "Paul A.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Ulrich",
+    "ad": "Joshua M.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Financial and Quantitative Analysis",
+  "cilt": "44",
+  "sayi": "2",
+  "sayfa": "467-488",
+  "yil": 2009,
+  "tur": "journal-article",
+  "yayinci": "Cambridge University Press (CUP)",
+  "ozet": "Abstract We analyze the intertemporal stability of excess returns to technical trading rules in the foreign exchange market by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have declined but have probably not completely disappeared. High volatility prevents precise estimation of mean returns. These regularities are consistent with the Adaptive Markets Hypothesis (Lo (2004)), but not with the Efficient Markets Hypothesis.",
+  "url": "https://doi.org/10.1017/s0022109009090103",
+  "bag": [
+   "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S0022109009090103"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3121605682",
+  "doi": "10.1017/s0022109009090103",
+  "baslik": "The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market",
+  "yil": 2009,
+  "yazarlar": [
+   "Christopher J. Neely",
+   "Paul A. Weller",
+   "Joshua M. Ulrich"
+  ],
+  "dergi": "Journal of Financial and Quantitative Analysis",
+  "issn": [
+   "0022-1090",
+   "1756-6916"
+  ],
+  "cilt": "44",
+  "sayi": "2",
+  "ilk_sayfa": "467",
+  "son_sayfa": "488",
+  "ozet": "Abstract We analyze the intertemporal stability of excess returns to technical trading rules in the foreign exchange market by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have declined but have probably not completely disappeared. High volatility prevents precise estimation of mean returns. These regularities are consistent with the Adaptive Markets Hypothesis (Lo (2004)), but not with the Efficient Markets Hypothesis.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1017/s0022109009090103"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market",
+  "yil": 2009,
+  "dergi": "Journal of Financial and Quantitative Analysis",
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.922345",
+  "yazarlar": [
+   "Christopher J. Neely",
+   "Paul A. Weller",
+   "Joshua M. Ulrich"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://doi.org/10.1017/s0022109009090103",
+  "son_url": "https://www.cambridge.org/core/journals/journal-of-financial-and-quantitative-analysis/article/abs/adaptive-markets-hypothesis-evidence-from-the-foreign-exchange-market/9D336CDCA83233819EB5CDD0F4BC0DAA",
+  "tur": "text/html; charset=utf-8",
+  "sha256": "3cf20915b7b1e7cc0cfe5ad8d93ce16bd0f1fe60223dc00fb327ab37c3cb1f2b",
+  "bayt": 945267,
+  "sayfa": 1,
+  "ilk_sayfa": "Skip to main content Accessibility help Login Alert Cancel Log in × × Search Institution Login Search Hostname: page-component-8678677fb7-rvm5s Total loading time: 0 Render date: 2026-10-17T11:39:02.677Z Has data issue: false hasContentIssue false Home >Journals >Journal of Financial and Quantitative Analysis >Volume 44 Issue 2 >The Adaptive Markets Hypothesis: Evidence from the... English Français Journal of Financial and Quantitative Analysis Article contents Abstract References The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market Published online by Cambridge University Press: 01 April 2009 Christopher J. Neely , Paul A. Weller and Joshua M. Ulrich Show author details Christopher J. Neely Affiliation: Federal Reserve Bank of St. Louis, PO Box 442, St. Louis, MO 63166. neely@stls.frb.org Paul A. Weller Affiliation: Tippie College of Business, University of Iowa, 21 E. Market St., Iowa City, IA 52245. paul-weller@uiowa.edu Joshua M. Ulrich Affiliation: joshua.m.ulrich@gmail.com Article Metrics Article contents Abstract References Get access Share Cite Rights & Permissions [Opens in a new window] Abstract We analyze the intertemporal stability of excess returns to technical trading rules in the foreign exchange market by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter",
+  "pasaj": [
+   {
+    "ifade": "out-of-sample tests on previously studied rules",
+    "sayfa": 1,
+    "pasaj": "contents Abstract References Get access Share Cite Rights & Permissions [Opens in a new window] Abstract We analyze the intertemporal stability of excess returns to technical trading rules in the foreign exchange market by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have "
+   },
+   {
+    "ifade": "The excess returns of the 1970s and 1980s",
+    "sayfa": 1,
+    "pasaj": "e Rights & Permissions [Opens in a new window] Abstract We analyze the intertemporal stability of excess returns to technical trading rules in the foreign exchange market by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have declined but have probably not completely d"
+   },
+   {
+    "ifade": "not just the result of data mining",
+    "sayfa": 1,
+    "pasaj": "analyze the intertemporal stability of excess returns to technical trading rules in the foreign exchange market by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have declined but have probably not completely disappeared. High volatility prevents precise estimat"
+   },
+   {
+    "ifade": "had disappeared by the early 1990s",
+    "sayfa": 1,
+    "pasaj": "trading rules in the foreign exchange market by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have declined but have probably not completely disappeared. High volatility prevents precise estimation of mean returns. These regularities are consistent with the Ada"
+   },
+   {
+    "ifade": "filter and moving average rules",
+    "sayfa": 1,
+    "pasaj": "arket by conducting true, out-of-sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have declined but have probably not completely disappeared. High volatility prevents precise estimation of mean returns. These regularities are consistent with the Adaptive Markets Hypothesis (Lo (2004))"
+   },
+   {
+    "ifade": "Returns to less-studied rules also have declined",
+    "sayfa": 1,
+    "pasaj": "sample tests on previously studied rules. The excess returns of the 1970s and 1980s were genuine and not just the result of data mining. But these profit opportunities had disappeared by the early 1990s for filter and moving average rules. Returns to less-studied rules also have declined but have probably not completely disappeared. High volatility prevents precise estimation of mean returns. These regularities are consistent with the Adaptive Markets Hypothesis (Lo (2004)), but not with the Efficient Markets Hypothesis. I"
+   },
+   {
+    "ifade": "adaptive markets hypothesis",
+    "sayfa": 1,
+    "pasaj": "Search Hostname: page-component-8678677fb7-rvm5s Total loading time: 0 Render date: 2026-10-17T11:39:02.677Z Has data issue: false hasContentIssue false Home >Journals >Journal of Financial and Quantitative Analysis >Volume 44 Issue 2 >The Adaptive Markets Hypothesis: Evidence from the... English Français Journal of Financial and Quantitative Analysis Article contents Abstract References The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market Published online by Cambridge University "
+   },
+   {
+    "ifade": "adaptive markets hypothesis",
+    "sayfa": 1,
+    "pasaj": "me >Journals >Journal of Financial and Quantitative Analysis >Volume 44 Issue 2 >The Adaptive Markets Hypothesis: Evidence from the... English Français Journal of Financial and Quantitative Analysis Article contents Abstract References The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market Published online by Cambridge University Press: 01 April 2009 Christopher J. Neely , Paul A. Weller and Joshua M. Ulrich Show author details Christopher J. Neely Affiliation: Federal Reserve Bank "
+   }
+  ],
+  "eksik": [
+   "probably have not completely disappeared"
+  ],
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1017/s0022109009090103",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

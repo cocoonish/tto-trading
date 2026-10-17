@@ -1,0 +1,130 @@
+{
+ "id": "efron2011",
+ "aday_baslik": "Tweedie's Formula and Selection Bias",
+ "aday_yil": 2011,
+ "zaman": "2026-10-17T23:22:56+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1198/jasa.2011.tm11181",
+   "durum": 200,
+   "baslik": "Tweedie’s Formula and Selection Bias"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1198/jasa.2011.tm11181",
+  "baslik": "Tweedie’s Formula and Selection Bias",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Efron",
+    "ad": "Bradley",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of the American Statistical Association",
+  "cilt": "106",
+  "sayi": "496",
+  "sayfa": "1602-1614",
+  "yil": 2011,
+  "tur": "journal-article",
+  "yayinci": "Informa UK Limited",
+  "ozet": null,
+  "url": "https://doi.org/10.1198/jasa.2011.tm11181",
+  "bag": [
+   "http://www.tandfonline.com/doi/pdf/10.1198/jasa.2011.tm11181"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2015810892",
+  "doi": "10.1198/jasa.2011.tm11181",
+  "baslik": "Tweedie’s Formula and Selection Bias",
+  "yil": 2011,
+  "yazarlar": [
+   "Bradley Efron"
+  ],
+  "dergi": "Journal of the American Statistical Association",
+  "issn": [
+   "0162-1459",
+   "1537-274X"
+  ],
+  "cilt": "106",
+  "sayi": "496",
+  "ilk_sayfa": "1602",
+  "son_sayfa": "1614",
+  "ozet": "We suppose that the statistician observes some large number of estimates z(i), each with its own unobserved expectation parameter μ(i). The largest few of the z(i)'s are likely to substantially overestimate their corresponding μ(i)'s, this being an example of selection bias, or regression to the mean. Tweedie's formula, first reported by Robbins in 1956, offers a simple empirical Bayes approach for correcting selection bias. This paper investigates its merits and limitations. In addition to the methodology, Tweedie's formula raises more general questions concerning empirical Bayes theory, discussed here as \"relevance\" and \"empirical Bayes information.\" There is a close connection between applications of the formula and James-Stein estimation.",
+  "acik": "https://www.ncbi.nlm.nih.gov/pmc/articles/3325056",
+  "adresler": [
+   "https://www.ncbi.nlm.nih.gov/pmc/articles/3325056",
+   "https://doi.org/10.1198/jasa.2011.tm11181",
+   "https://pubmed.ncbi.nlm.nih.gov/22505788",
+   "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.220.9517"
+  ]
+ },
+ "semantic": {
+  "durum": "HTTP 429"
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://stacks.stanford.edu/file/druid:vc631wx1024/BIO%20256.pdf",
+  "son_url": "https://stacks.stanford.edu/file/druid:vc631wx1024/BIO%20256.pdf",
+  "tur": "application/pdf",
+  "sha256": "3095b107ec17ce6651ed9518ce704d6563e10dbd5af9b90dc7a60012af11dbe2",
+  "bayt": 491849,
+  "sayfa": 24,
+  "ilk_sayfa": "TWEEDIE'S FORMULA AND SELECTION BIAS By Bradley Efron Technical Report 256 March 2011 Division of Biostatistics STANFORD UNIVERSITY Stanford, California",
+  "pasaj": [
+   {
+    "ifade": "are likely to substantially overestimate their corresponding",
+    "sayfa": 3,
+    "pasaj": "weedie's Formula and Selection Bias Bradley Efron∗ Stanford University Abstract We suppose that the statistician observes some large number of estimates zi, each with its own unobserved expectation parameter μi. The largest few of the zi's are likely to substantially overestimate their corresponding μi's, this being an example of selection bias, or regression to the mean. Tweedie's formula, first reported by Robbins in 1956, offers a simple empirical Bayes approach for correcting selection bias. This paper discusses its merits and lim"
+   },
+   {
+    "ifade": "selection bias, or regression to the mean",
+    "sayfa": 3,
+    "pasaj": "hat the statistician observes some large number of estimates zi, each with its own unobserved expectation parameter μi. The largest few of the zi's are likely to substantially overestimate their corresponding μi's, this being an example of selection bias, or regression to the mean. Tweedie's formula, first reported by Robbins in 1956, offers a simple empirical Bayes approach for correcting selection bias. This paper discusses its merits and limitations. Some extensions of the theory are developed, including connecti"
+   },
+   {
+    "ifade": "first reported by Robbins in 1956",
+    "sayfa": 3,
+    "pasaj": "i, each with its own unobserved expectation parameter μi. The largest few of the zi's are likely to substantially overestimate their corresponding μi's, this being an example of selection bias, or regression to the mean. Tweedie's formula, first reported by Robbins in 1956, offers a simple empirical Bayes approach for correcting selection bias. This paper discusses its merits and limitations. Some extensions of the theory are developed, including connections with the James-Stein estimator, and Benjamini and "
+   },
+   {
+    "ifade": "offers a simple empirical Bayes approach",
+    "sayfa": 3,
+    "pasaj": "ectation parameter μi. The largest few of the zi's are likely to substantially overestimate their corresponding μi's, this being an example of selection bias, or regression to the mean. Tweedie's formula, first reported by Robbins in 1956, offers a simple empirical Bayes approach for correcting selection bias. This paper discusses its merits and limitations. Some extensions of the theory are developed, including connections with the James-Stein estimator, and Benjamini and Hochberg's false discovery rate statistic,"
+   },
+   {
+    "ifade": "for correcting selection bias",
+    "sayfa": 3,
+    "pasaj": " the zi's are likely to substantially overestimate their corresponding μi's, this being an example of selection bias, or regression to the mean. Tweedie's formula, first reported by Robbins in 1956, offers a simple empirical Bayes approach for correcting selection bias. This paper discusses its merits and limitations. Some extensions of the theory are developed, including connections with the James-Stein estimator, and Benjamini and Hochberg's false discovery rate statistic, as well as a definition of em"
+   },
+   {
+    "ifade": "empirical Bayes information",
+    "sayfa": 3,
+    "pasaj": "as. This paper discusses its merits and limitations. Some extensions of the theory are developed, including connections with the James-Stein estimator, and Benjamini and Hochberg's false discovery rate statistic, as well as a definition of empirical Bayes information. Keywords: Bayesian relevance, empirical Bayes information, James-Stein, false discovery rates, regret 1 Introduction Suppose that some large numberN of possibly correlated normal variateszi have been observed, each with its own unobserved"
+   },
+   {
+    "ifade": "empirical Bayes information",
+    "sayfa": 3,
+    "pasaj": "xtensions of the theory are developed, including connections with the James-Stein estimator, and Benjamini and Hochberg's false discovery rate statistic, as well as a definition of empirical Bayes information. Keywords: Bayesian relevance, empirical Bayes information, James-Stein, false discovery rates, regret 1 Introduction Suppose that some large numberN of possibly correlated normal variateszi have been observed, each with its own unobserved mean parameter μi, zi∼N (μi,σ 2) for i = 1, 2,...,N (1.1) "
+   }
+  ],
+  "eksik": [
+   "close connection between applications of the formula"
+  ],
+  "deneme": [
+   {
+    "url": "https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf",
+    "durum": "ConnectTimeout"
+   },
+   {
+    "url": "https://stacks.stanford.edu/file/druid:vc631wx1024/BIO%20256.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

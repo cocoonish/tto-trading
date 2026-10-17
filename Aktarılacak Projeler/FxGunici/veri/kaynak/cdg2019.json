@@ -1,0 +1,152 @@
+{
+ "id": "cdg2019",
+ "aday_baslik": "Day Trading for a Living?",
+ "aday_yil": 2019,
+ "zaman": "2026-10-17T23:26:03+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.2139/ssrn.3423101",
+   "durum": 200,
+   "baslik": "Day Trading for a Living?"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.2139/ssrn.3423101",
+  "baslik": "Day Trading for a Living?",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Chague",
+    "ad": "Fernando",
+    "ad_tam": null
+   },
+   {
+    "soyad": "De-Losso",
+    "ad": "Rodrigo",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Giovannetti",
+    "ad": "Bruno",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "",
+  "cilt": null,
+  "sayi": null,
+  "sayfa": null,
+  "yil": 2019,
+  "tur": "posted-content",
+  "yayinci": "Elsevier BV",
+  "ozet": "We show that it is virtually impossible for individuals to day trade for a living, contrary to what course providers claim. We observe all individuals who began to day trade between 2013 and 2015 in the Brazilian equity futures market, the third in terms of volume in the world. We find that 97% of all individuals who persisted for more than 300 days lost money. Only 1.1% earned more than the Brazilian minimum wage and only 0.5% earned more than the initial salary of a bank teller - all with great risk.",
+  "url": "https://doi.org/10.2139/ssrn.3423101",
+  "bag": []
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3125159030",
+  "doi": "10.2139/ssrn.3423101",
+  "baslik": "Day Trading for a Living?",
+  "yil": 2019,
+  "yazarlar": [
+   "Fernando Chague",
+   "Rodrigo De-Losso",
+   "Bruno Giovannetti"
+  ],
+  "dergi": "SSRN Electronic Journal",
+  "issn": [
+   "1556-5068"
+  ],
+  "cilt": null,
+  "sayi": null,
+  "ilk_sayfa": null,
+  "son_sayfa": null,
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.3423101",
+  "adresler": [
+   "https://doi.org/10.2139/ssrn.3423101",
+   "https://hdl.handle.net/10438/28801",
+   "https://ideas.repec.org/p/fgv/eesptd/525.html",
+   "https://econpapers.repec.org/RePEc:fgv:eesptd:525",
+   "https://repositorio.fgv.br/bitstreams/0f00dd78-6909-4f91-84d5-aef8803e6436/download"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Day Trading for a Living?",
+  "yil": 2020,
+  "dergi": "Social Science Research Network",
+  "ozet": "We show that it is virtually impossible for individuals to compete with HFTs and day trade for a living, contrary to what course providers claim. We observe all individuals who began to day trade between 2013 and 2015 in the Brazilian equity futures market, the third in terms of volume in the world, and who persisted for at least 300 days: 97% of them lost money, only 0.4% earned more than a bank teller (US$54 per day), and the top individual earned only US$310 per day with great risk (a standard deviation of US$2,560). Wefind no evidence of learning by day trading.",
+  "acik": "https://doi.org/10.2139/ssrn.3423101",
+  "yazarlar": [
+   "F. Chague",
+   "Rodrigo De-Losso",
+   "Bruno Giovannetti"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://ebicapital.nl/wp-content/uploads/2022/05/day-trading.pdf",
+  "son_url": "https://ebicapital.nl/wp-content/uploads/2022/05/day-trading.pdf",
+  "tur": "application/pdf",
+  "sha256": "5f7b08f273bf2dd899f7c5047d9ef9bb1b65852d2addd9ec324d62b58c29d99f",
+  "bayt": 174118,
+  "sayfa": 9,
+  "ilk_sayfa": "Day trading for a living? * Fernando Chague , Rodrigo De-Losso , Bruno Giovannetti  June 13, 2020 Abstract We show that it is virtually impossible for individuals to day trade for a living, contrary to what course providers claim. We observe all individuals who began to day trade between 2013 and 2015 in the Brazilian equity futures market, the third in terms of volume in the world. We nd that 97% of all investors who persisted for more than 300 days lost money. Only 1.1% earned more than the Brazilian minimum wage and only 0.5% earned more than the initial salary of a bank teller \u0016 all with great risk. JEL Codes: C92, G02, G11, G12 Keywords: day trade, retail investors, course providers * We thank CVM (Comissão de Valores Mobiliários) for providing the data (Convênio USP/5988; Processo CVM: 19957.003353/2015-85) and Justin Birru, Bernardo Guimaraes, Bernard Herskovic, and Emanuel Ornelas for their valuable comments.  Sao Paulo School of Economics - FGV, Brazil. Department of Economics, University of Sao Paulo, Brazil. E-mail: delosso@usp.br.  Sao Paulo School of Economics - FGV, Brazil. E-mail: bruno.giovannetti@fgv.br. Corresponding author at: Rua Itapeva, 474, Sao Paulo - SP, Brazil. E-mail: bruno.giovannetti@fgv.br. 1 Electronic copy available at: https://ssrn.com/abstract=3423101",
+  "pasaj": [
+   {
+    "ifade": "began to day trade between 2013 and 2015",
+    "sayfa": 1,
+    "pasaj": "? * Fernando Chague , Rodrigo De-Losso , Bruno Giovannetti  June 13, 2020 Abstract We show that it is virtually impossible for individuals to day trade for a living, contrary to what course providers claim. We observe all individuals who began to day trade between 2013 and 2015 in the Brazilian equity futures market, the third in terms of volume in the world. We nd that 97% of all investors who persisted for more than 300 days lost money. Only 1.1% earned more than the Brazilian minimum wage and only 0.5% earned "
+   },
+   {
+    "ifade": "Brazilian equity futures market",
+    "sayfa": 1,
+    "pasaj": "Giovannetti  June 13, 2020 Abstract We show that it is virtually impossible for individuals to day trade for a living, contrary to what course providers claim. We observe all individuals who began to day trade between 2013 and 2015 in the Brazilian equity futures market, the third in terms of volume in the world. We nd that 97% of all investors who persisted for more than 300 days lost money. Only 1.1% earned more than the Brazilian minimum wage and only 0.5% earned more than the initial salary of a bank "
+   },
+   {
+    "ifade": "contrary to what course providers claim",
+    "sayfa": 1,
+    "pasaj": "Day trading for a living? * Fernando Chague , Rodrigo De-Losso , Bruno Giovannetti  June 13, 2020 Abstract We show that it is virtually impossible for individuals to day trade for a living, contrary to what course providers claim. We observe all individuals who began to day trade between 2013 and 2015 in the Brazilian equity futures market, the third in terms of volume in the world. We nd that 97% of all investors who persisted for more than 300 days lost money. On"
+   },
+   {
+    "ifade": "at least 300 days",
+    "sayfa": 5,
+    "pasaj": "e cient of rst third . Table 1 shows the results. In columns 1 and 2 (gross pro t) and 3 and 4 (net pro t) we nd no evidence of learning. [Table 1 about here] Finally, we evaluate the performance of the 1,551 individuals who day traded for at least 300 days. Considering the performance net of exchange and brokerage fees, we nd that 97% of all investors who persisted for more than 300 days lost money. Only 17 individuals (1.1% of 1,551) earned more than the Brazilian minimum wage (US$ 16 per d"
+   },
+   {
+    "ifade": "more than 300 days",
+    "sayfa": 1,
+    "pasaj": "ry to what course providers claim. We observe all individuals who began to day trade between 2013 and 2015 in the Brazilian equity futures market, the third in terms of volume in the world. We nd that 97% of all investors who persisted for more than 300 days lost money. Only 1.1% earned more than the Brazilian minimum wage and only 0.5% earned more than the initial salary of a bank teller \u0016 all with great risk. JEL Codes: C92, G02, G11, G12 Keywords: day trade, retail investors, course provide"
+   },
+   {
+    "ifade": "more than 300 days",
+    "sayfa": 4,
+    "pasaj": "f the 19,646 new day traders, 1,111 (5.7%) day traded only one day, 9,978 (50.8%) between 2 to 50 days, 3,100 (15.8%) between 51 to 100 days, 2,738 (13.9%) between 101 to 200 days, 1,168 (5.9%) between 201 to 300 days, and 1,551 (7.9%) for more than 300 days. Figure 1 shows the fraction of individuals with a positive net pro t in each of these six groups. The probability of an individual exhibiting a positive pro t monotonically decreases with the number of days he or she trades. This peculiar"
+   }
+  ],
+  "eksik": [
+   "97% of them lost money",
+   "earned more than a bank teller",
+   "no evidence of learning by day trading"
+  ],
+  "deneme": [
+   {
+    "url": "https://repositorio.fgv.br/server/api/core/bitstreams/0f00dd78-6909-4f91-84d5-aef8803e6436/content",
+    "durum": "başlık ilk iki sayfada yok",
+    "ilk": "Making sure you're not a bot! Loading... Anubis could not load its JavaScript. The server may be overloaded. Please reload the page to try again. You are seeing this because the administrator of this website has set up Anubis to protect the server against the scourge of AI companies aggressively scr"
+   },
+   {
+    "url": "https://www.researchgate.net/profile/Rodrigo-De-Losso/publication/334630772_Day_Trading_for_a_Living/links/5dc431baa6fdcc2d2ffb57ce/Day-Trading-for-a-Living.pdf",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://ebicapital.nl/wp-content/uploads/2022/05/day-trading.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

@@ -1,0 +1,130 @@
+{
+ "id": "holm1979",
+ "aday_baslik": "A Simple Sequentially Rejective Multiple Test Procedure",
+ "aday_yil": 1979,
+ "zaman": "2026-10-17T23:22:51+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.2307/4615733",
+   "durum": "HTTP 404",
+   "baslik": null
+  }
+ ],
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "0303-6898",
+    "6",
+    "65"
+   ],
+   "bulunan": [
+    [
+     "A Simple Sequentially Rejective Multiple Test Procedure",
+     "10.2307/4615733"
+    ]
+   ]
+  }
+ ],
+ "crossref": null,
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2121044470",
+  "doi": "10.2307/4615733",
+  "baslik": "A Simple Sequentially Rejective Multiple Test Procedure",
+  "yil": 1979,
+  "yazarlar": [
+   "Sture Holm"
+  ],
+  "dergi": "Scandinavian Journal of Statistics",
+  "issn": [
+   "0303-6898",
+   "1467-9469"
+  ],
+  "cilt": "6",
+  "sayi": null,
+  "ilk_sayfa": "65",
+  "son_sayfa": "70",
+  "ozet": "This paper presents a simple and widely ap- plicable multiple test procedure of the sequentially rejective type, i.e. hypotheses are rejected one at a tine until no further rejections can be done. It is shown that the test has a prescribed level of significance protection against error of the first kind for any combination of true hypotheses. The power properties of the test and a number of possible applications are also discussed.",
+  "acik": null,
+  "adresler": [
+   "https://www.ime.usp.br/~abe/lista/pdf4R8xPVzCnX.pdf"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "A Simple Sequentially Rejective Multiple Test Procedure",
+  "yil": 1979,
+  "dergi": "",
+  "ozet": null,
+  "acik": "",
+  "yazarlar": [
+   "S. Holm"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.ime.usp.br/~abe/lista/pdf4R8xPVzCnX.pdf",
+  "son_url": "https://www.ime.usp.br/~abe/lista/pdf4R8xPVzCnX.pdf",
+  "tur": "application/pdf",
+  "sha256": "4317a0d1555dad949dc1760605d925ba20037402827741fdf99cd8ea37e80c46",
+  "bayt": 1059670,
+  "sayfa": 7,
+  "ilk_sayfa": "Board of the Foundation of the Scandinavian Journal of Statistics A Simple Sequentially Rejective Multiple Test Procedure Author(s): Sture Holm Source: Scandinavian Journal of Statistics, Vol. 6, No. 2 (1979), pp. 65-70 Published by: Wiley on behalf of Board of the Foundation of the Scandinavian Journal of Statistics Stable URL: http://www.jstor.org/stable/4615733 . Accessed: 09/10/2013 08:15 Your use of the JSTOR archive indicates your acceptance of the Terms & Conditions of Use, available at . http://www.jstor.org/page/info/about/policies/terms.jsp . JSTOR is a not-for-profit service that helps scholars, researchers, and students discover, use, and build upon a wide range of content in a trusted digital archive. We use information technology and tools to increase productivity and facilitate new forms of scholarship. For more information about JSTOR, please contact support@jstor.org. . Wiley and Board of the Foundation of the Scandinavian Journal of Statistics are collaborating with JSTOR to digitize, preserve and extend access to Scandinavian Journal of Statistics. http://www.jstor.org This content downloaded from 143.107.183.117 on Wed, 9 Oct 2013 08:15:53 AM All use subject to JSTOR Terms and Conditions",
+  "pasaj": [
+   {
+    "ifade": "of the sequentially rejective type",
+    "sayfa": 2,
+    "pasaj": "imple Sequentially Rejective Multiple Test Procedure STURE HOLM Chalmers University of Technology, Goteborg Received December 1977, revised September 1978 ABSTRACT. This paper presents a simple and widely applicable multiple test procedure of the sequentially rejective type, i.e. hypotheses are rejected one at a tine until no further rejections can be done. It is shown that the test has a prescribed level of significance protection against error of the first kind for any combination of true hypotheses. The po"
+   },
+   {
+    "ifade": "hypotheses are rejected one at a time",
+    "sayfa": 3,
+    "pasaj": "otheses that the parameter belongs to intersections nf EI co, of sets coi for different index sets Ic- {1, 2, ..., n}. We will exclusively discuss a type of multiple test procedures, which may be called sequentially rejective because basic hypotheses are rejected one at a time according to certain rules. Thus we do not make separate tests of all the (secondary) hypotheses that the parameter belongs to intersections nflI wi for different Ic {1, 2, ..., n}. We always consider such (secondary) hypotheses to be reje"
+   },
+   {
+    "ifade": "until no further rejections can be done",
+    "sayfa": 2,
+    "pasaj": "sity of Technology, Goteborg Received December 1977, revised September 1978 ABSTRACT. This paper presents a simple and widely applicable multiple test procedure of the sequentially rejective type, i.e. hypotheses are rejected one at a tine until no further rejections can be done. It is shown that the test has a prescribed level of significance protection against error of the first kind for any combination of true hypotheses. The power properties of the test and a number of possible applications are also discussed."
+   },
+   {
+    "ifade": "protection against error of the first kind",
+    "sayfa": 2,
+    "pasaj": "a simple and widely applicable multiple test procedure of the sequentially rejective type, i.e. hypotheses are rejected one at a tine until no further rejections can be done. It is shown that the test has a prescribed level of significance protection against error of the first kind for any combination of true hypotheses. The power properties of the test and a number of possible applications are also discussed. Key words: multiple test, simultaneous test 1. Introduction The statistical problems arising in applications"
+   },
+   {
+    "ifade": "protection against error of the first kind",
+    "sayfa": 2,
+    "pasaj": "nst wrong decisions. Some of those are based on decision theoretic conceptions, while others are based on probabilities of making wrong decisions. In this paper we will study multiple test procedures and we will use the most common type of protection against error of the first kind by requiring the tests to have a small probability of rejecting any true hypotheses. The methodological motivation and exact definition is the following. Let the (detail) hypotheses in a multiple test problem be denoted by H1, H12, ..., Hn"
+   },
+   {
+    "ifade": "for any combination of true hypotheses",
+    "sayfa": 2,
+    "pasaj": "t procedure of the sequentially rejective type, i.e. hypotheses are rejected one at a tine until no further rejections can be done. It is shown that the test has a prescribed level of significance protection against error of the first kind for any combination of true hypotheses. The power properties of the test and a number of possible applications are also discussed. Key words: multiple test, simultaneous test 1. Introduction The statistical problems arising in applications often involve a number of detail probl"
+   },
+   {
+    "ifade": "The power properties of the test",
+    "sayfa": 2,
+    "pasaj": "e type, i.e. hypotheses are rejected one at a tine until no further rejections can be done. It is shown that the test has a prescribed level of significance protection against error of the first kind for any combination of true hypotheses. The power properties of the test and a number of possible applications are also discussed. Key words: multiple test, simultaneous test 1. Introduction The statistical problems arising in applications often involve a number of detail problems, i.e. there are often a number"
+   },
+   {
+    "ifade": "strictly larger probability of rejecting false hypotheses",
+    "sayfa": 4,
+    "pasaj": "le. It can always be replaced by the corresponding sequentially rejective Bonferroni test without loosing any probability of rejecting false hypotheses. Except in trivial non-interesting cases the sequentially rejective Bonferroni test has strictly larger probability of rejecting false hypotheses and thus it ought to replace the classical Bonferroni test at all instants where the latter usually is applied. The power gain obtained by using a sequentially rejective Bonferroni test instead of a classical Bonferroni test depends very m"
+   },
+   {
+    "ifade": "any parametric or non-parametric model",
+    "sayfa": 3,
+    "pasaj": " general procedure we present in the next section, because that procedure can easily be used to make one-sided rejections, which they have posed as a difficult problem. Our test is based on the simple Boole inequality and can be applied to any parametric or non-parametric model, but yet it has good power properties. It will be shown by examples that it may have considerably higher power than classical multiple test procedures. It also has surprisingly small loss of power compared to the special sequentially rejec"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://www.ime.usp.br/~abe/lista/pdf4R8xPVzCnX.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

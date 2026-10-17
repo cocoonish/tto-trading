@@ -1,0 +1,135 @@
+{
+ "id": "ioannidis2008",
+ "aday_baslik": "Why most discovered true associations are inflated",
+ "aday_yil": 2008,
+ "zaman": "2026-10-17T23:25:25+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1097/EDE.0b013e31818131e7",
+   "durum": 200,
+   "baslik": "Why Most Discovered True Associations Are Inflated"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1097/ede.0b013e31818131e7",
+  "baslik": "Why Most Discovered True Associations Are Inflated",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Ioannidis",
+    "ad": "John P. A.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Epidemiology",
+  "cilt": "19",
+  "sayi": "5",
+  "sayfa": "640-648",
+  "yil": 2008,
+  "tur": "journal-article",
+  "yayinci": "Ovid Technologies (Wolters Kluwer Health)",
+  "ozet": null,
+  "url": "https://doi.org/10.1097/ede.0b013e31818131e7",
+  "bag": [
+   "http://journals.lww.com/00001648-200809000-00002"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2150215887",
+  "doi": "10.1097/ede.0b013e31818131e7",
+  "baslik": "Why Most Discovered True Associations Are Inflated",
+  "yil": 2008,
+  "yazarlar": [
+   "John P. A. Ioannidis"
+  ],
+  "dergi": "Epidemiology",
+  "issn": [
+   "1044-3983",
+   "1531-5487"
+  ],
+  "cilt": "19",
+  "sayi": "5",
+  "ilk_sayfa": "640",
+  "son_sayfa": "648",
+  "ozet": "Newly discovered true (non-null) associations often have inflated effects compared with the true effect sizes. I discuss here the main reasons for this inflation. First, theoretical considerations prove that when true discovery is claimed based on crossing a threshold of statistical significance and the discovery study is underpowered, the observed effects are expected to be inflated. This has been demonstrated in various fields ranging from early stopped clinical trials to genome-wide associations. Second, flexible analyses coupled with selective reporting may inflate the published discovered effects. The vibration ratio (the ratio of the largest vs. smallest effect on the same association approached with different analytic choices) can be very large. Third, effects may be inflated at the stage of interpretation due to diverse conflicts of interest. Discovered effects are not always inflated, and under some circumstances may be deflated-for example, in the setting of late discovery of associations in sequentially accumulated overpowered evidence, in some types of misclassification from measurement error, and in conflicts causing reverse biases. Finally, I discuss potential approaches to this problem. These include being cautious about newly discovered effect sizes, considering some rational down-adjustment, using analytical methods that correct for the anticipated inflation, ignoring the magnitude of the effect (if not necessary), conducting large studies in the discovery phase, using strict protocols for analyses, pursuing complete and transparent reporting of all results, placing emphasis on replication, and being fair with interpretation of results.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1097/ede.0b013e31818131e7",
+   "https://pubmed.ncbi.nlm.nih.gov/18633328"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Why Most Discovered True Associations Are Inflated",
+  "yil": 2008,
+  "dergi": "Epidemiology",
+  "ozet": null,
+  "acik": "https://journals.lww.com/epidem/fulltext/2008/09000/why_most_discovered_true_associations_are_inflated.2.aspx",
+  "yazarlar": [
+   "J. Ioannidis"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.dcscience.net/ioannidis-associations-2008.pdf",
+  "son_url": "https://www.dcscience.net/ioannidis-associations-2008.pdf",
+  "tur": "application/pdf",
+  "sha256": "81d9020b4a17812486db35537f4aa5ccbc03a1d074dc146f0937484be4f7259e",
+  "bayt": 357142,
+  "sayfa": 9,
+  "ilk_sayfa": "ORIGINAL ARTICLE Why Most Discovered True Associations Are Inflated John P. A. Ioannidis Abstract: Newly discovered true (non-null) associations often have inflated effects compared with the true effect sizes. I discuss here the main reasons for this inflation. First, theoretical considerations prove that when true discovery is claimed based on crossing a threshold of statistical significance and the discovery study is underpowered, the observed effects are expected to be inflated. This has been demonstrated in various fields ranging from early stopped clinical trials to genome-wide associations. Second, flexible analyses coupled with selective reporting may inflate the published discovered effects. The vibration ratio (the ratio of the largest vs. smallest effect on the same association approached with different analytic choices) can be very large. Third, effects may be inflated at the stage of interpretation due to diverse conflicts of interest. Discovered effects are not always inflated, and under some circumstances may be deflated-for example, in the setting of late discovery of associations in sequentially accumulated overpowered evidence, in some types of misclassification from measurement error, and in conflicts causing reverse biases. Finally, I discuss potential approaches to this problem. These include being cautious about newly discovered effect sizes, considering some rational down-adjustment, using analytical methods that correct for the anticipated inflation, ig",
+  "pasaj": [
+   {
+    "ifade": "inflated effects compared with the true effect sizes",
+    "sayfa": 1,
+    "pasaj": "ORIGINAL ARTICLE Why Most Discovered True Associations Are Inflated John P. A. Ioannidis Abstract: Newly discovered true (non-null) associations often have inflated effects compared with the true effect sizes. I discuss here the main reasons for this inflation. First, theoretical considerations prove that when true discovery is claimed based on crossing a threshold of statistical significance and the discovery study is underpowered, the observe"
+   },
+   {
+    "ifade": "crossing a threshold of statistical significance",
+    "sayfa": 1,
+    "pasaj": "scovered true (non-null) associations often have inflated effects compared with the true effect sizes. I discuss here the main reasons for this inflation. First, theoretical considerations prove that when true discovery is claimed based on crossing a threshold of statistical significance and the discovery study is underpowered, the observed effects are expected to be inflated. This has been demonstrated in various fields ranging from early stopped clinical trials to genome-wide associations. Second, flexible analyses coupl"
+   },
+   {
+    "ifade": "the discovery study is underpowered",
+    "sayfa": 1,
+    "pasaj": "ated effects compared with the true effect sizes. I discuss here the main reasons for this inflation. First, theoretical considerations prove that when true discovery is claimed based on crossing a threshold of statistical significance and the discovery study is underpowered, the observed effects are expected to be inflated. This has been demonstrated in various fields ranging from early stopped clinical trials to genome-wide associations. Second, flexible analyses coupled with selective reporting may inflate "
+   },
+   {
+    "ifade": "the observed effects are expected to be inflated",
+    "sayfa": 1,
+    "pasaj": "ffect sizes. I discuss here the main reasons for this inflation. First, theoretical considerations prove that when true discovery is claimed based on crossing a threshold of statistical significance and the discovery study is underpowered, the observed effects are expected to be inflated. This has been demonstrated in various fields ranging from early stopped clinical trials to genome-wide associations. Second, flexible analyses coupled with selective reporting may inflate the published discovered effects. The vibration ra"
+   },
+   {
+    "ifade": "early stopped clinical trials to genome-wide associations",
+    "sayfa": 1,
+    "pasaj": "t when true discovery is claimed based on crossing a threshold of statistical significance and the discovery study is underpowered, the observed effects are expected to be inflated. This has been demonstrated in various fields ranging from early stopped clinical trials to genome-wide associations. Second, flexible analyses coupled with selective reporting may inflate the published discovered effects. The vibration ratio (the ratio of the largest vs. smallest effect on the same association approached with different analytic choices)"
+   },
+   {
+    "ifade": "Discovered effects are not always inflated",
+    "sayfa": 1,
+    "pasaj": " ratio (the ratio of the largest vs. smallest effect on the same association approached with different analytic choices) can be very large. Third, effects may be inflated at the stage of interpretation due to diverse conflicts of interest. Discovered effects are not always inflated, and under some circumstances may be deflated-for example, in the setting of late discovery of associations in sequentially accumulated overpowered evidence, in some types of misclassification from measurement error, and in conflicts causi"
+   },
+   {
+    "ifade": "flexible analyses coupled with selective reporting",
+    "sayfa": 1,
+    "pasaj": "tatistical significance and the discovery study is underpowered, the observed effects are expected to be inflated. This has been demonstrated in various fields ranging from early stopped clinical trials to genome-wide associations. Second, flexible analyses coupled with selective reporting may inflate the published discovered effects. The vibration ratio (the ratio of the largest vs. smallest effect on the same association approached with different analytic choices) can be very large. Third, effects may be inflated at the st"
+   },
+   {
+    "ifade": "considering some rational down-adjustment",
+    "sayfa": 1,
+    "pasaj": "owered evidence, in some types of misclassification from measurement error, and in conflicts causing reverse biases. Finally, I discuss potential approaches to this problem. These include being cautious about newly discovered effect sizes, considering some rational down-adjustment, using analytical methods that correct for the anticipated inflation, ignoring the magnitude of the effect (if not necessary), conducting large studies in the discovery phase, using strict protocols for analyses, pursuing complete and tran"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://www.dcscience.net/ioannidis-associations-2008.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

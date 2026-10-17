@@ -1,0 +1,106 @@
+{
+ "id": "melvin_prins2015",
+ "aday_baslik": "Equity hedging and exchange rates at the London 4 p.m. fix",
+ "aday_yil": 2015,
+ "zaman": "2026-10-17T23:27:03+00:00",
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "1386-4181",
+    "22",
+    "50"
+   ],
+   "bulunan": [
+    [
+     "Equity hedging and exchange rates at the London 4p.m. fix",
+     "10.1016/j.finmar.2014.11.001"
+    ]
+   ]
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/j.finmar.2014.11.001",
+  "baslik": "Equity hedging and exchange rates at the London 4p.m. fix",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Melvin",
+    "ad": "Michael",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Prins",
+    "ad": "John",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Financial Markets",
+  "cilt": "22",
+  "sayi": null,
+  "sayfa": "50-72",
+  "yil": 2015,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/j.finmar.2014.11.001",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S1386418114000779?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S1386418114000779?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2040846150",
+  "doi": "10.1016/j.finmar.2014.11.001",
+  "baslik": "Equity hedging and exchange rates at the London 4p.m. fix",
+  "yil": 2014,
+  "yazarlar": [
+   "Michael T. Melvin",
+   "John Prins"
+  ],
+  "dergi": "Journal of Financial Markets",
+  "issn": [
+   "1386-4181",
+   "1878-576X"
+  ],
+  "cilt": "22",
+  "sayi": null,
+  "ilk_sayfa": "50",
+  "son_sayfa": "72",
+  "ozet": null,
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1016/j.finmar.2014.11.001",
+   "http://www.sciencedirect.com/science/article/pii/S1386418114000779"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Equity hedging and exchange rates at the London 4p.m. fix",
+  "yil": 2015,
+  "dergi": "",
+  "ozet": null,
+  "acik": "",
+  "yazarlar": [
+   "Michael T. Melvin",
+   "J. Prins"
+  ]
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1016/j.finmar.2014.11.001",
+    "durum": "metin okunamadı",
+    "tur": "text/html;charset=UTF-8"
+   },
+   {
+    "url": "http://www.sciencedirect.com/science/article/pii/S1386418114000779",
+    "durum": "HTTP 403"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

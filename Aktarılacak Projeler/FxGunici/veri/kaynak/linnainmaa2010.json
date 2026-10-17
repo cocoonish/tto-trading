@@ -1,0 +1,97 @@
+{
+ "id": "linnainmaa2010",
+ "aday_baslik": "Do Limit Orders Alter Inferences about Investor Performance and Behavior?",
+ "aday_yil": 2010,
+ "zaman": "2026-10-17T23:26:20+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1111/j.1540-6261.2010.01576.x",
+   "durum": 200,
+   "baslik": "Do Limit Orders Alter Inferences about Investor Performance and Behavior?"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1111/j.1540-6261.2010.01576.x",
+  "baslik": "Do Limit Orders Alter Inferences about Investor Performance and Behavior?",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "LINNAINMAA",
+    "ad": "JUHANI T.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Journal of Finance",
+  "cilt": "65",
+  "sayi": "4",
+  "sayfa": "1473-1506",
+  "yil": 2010,
+  "tur": "journal-article",
+  "yayinci": "Wiley",
+  "ozet": "ABSTRACT Individual investors lose money around earnings announcements, experience poor posttrade returns, exhibit the disposition effect, and make contrarian trades. Using simulations and trading records of all individual investors in Finland, I find that these trading patterns can be explained in large part by investors' use of limit orders. These patterns arise mechanically because limit orders are price‐contingent and suffer from adverse selection. Reverse causality from behavioral biases to order choices does not appear to explain my findings. I propose a simple method for measuring a data set's susceptibility to this limit order effect.",
+  "url": "https://doi.org/10.1111/j.1540-6261.2010.01576.x",
+  "bag": [
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fj.1540-6261.2010.01576.x",
+   "https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1540-6261.2010.01576.x"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2106412046",
+  "doi": "10.1111/j.1540-6261.2010.01576.x",
+  "baslik": "Do Limit Orders Alter Inferences about Investor Performance and Behavior?",
+  "yil": 2010,
+  "yazarlar": [
+   "Juhani T. Linnainmaa"
+  ],
+  "dergi": "The Journal of Finance",
+  "issn": [
+   "0022-1082",
+   "1540-6261"
+  ],
+  "cilt": "65",
+  "sayi": "4",
+  "ilk_sayfa": "1473",
+  "son_sayfa": "1506",
+  "ozet": "ABSTRACT Individual investors lose money around earnings announcements, experience poor posttrade returns, exhibit the disposition effect, and make contrarian trades. Using simulations and trading records of all individual investors in Finland, I find that these trading patterns can be explained in large part by investors' use of limit orders. These patterns arise mechanically because limit orders are price‐contingent and suffer from adverse selection. Reverse causality from behavioral biases to order choices does not appear to explain my findings. I propose a simple method for measuring a data set's susceptibility to this limit order effect.",
+  "acik": "https://doi.org/10.2139/ssrn.474222",
+  "adresler": [
+   "https://doi.org/10.2139/ssrn.474222",
+   "https://doi.org/10.1111/j.1540-6261.2010.01576.x",
+   "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.217.7365",
+   "http://www.blackwell-synergy.com/doi/abs/10.1111/j.1540-6261.2010.01576.x"
+  ]
+ },
+ "semantic": {
+  "durum": "HTTP 404"
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://forexmentoronline.com/wp-content/uploads/2015/11/Linnainmaa_Limit_Order_Effect.pdf",
+    "durum": "başlık ilk iki sayfada yok",
+    "ilk": "The Limit Order Effect ∗ Juhani Linnainmaa † The Anderson School at UCLA November 2005 ∗I am truly indebted to Mark Grinblatt for his guidance and enc ouragement. I also thank Tony Bernardo, Michael Brennan, John Campbell, Eric Hughson (AF A discussa nt), Matti Keloharju, Hanno Lustig, Tuomo Vuoltee"
+   },
+   {
+    "url": "https://doi.org/10.2139/ssrn.474222",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://doi.org/10.1111/j.1540-6261.2010.01576.x",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.217.7365",
+    "durum": "HTTP 429"
+   },
+   {
+    "url": "http://www.blackwell-synergy.com/doi/abs/10.1111/j.1540-6261.2010.01576.x",
+    "durum": "HTTP 403"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

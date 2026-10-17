@@ -1,0 +1,95 @@
+{
+ "id": "evans_lyons2002",
+ "aday_baslik": "Order Flow and Exchange Rate Dynamics",
+ "aday_yil": 2002,
+ "zaman": "2026-10-17T23:26:46+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1086/324391",
+   "durum": 200,
+   "baslik": "Order Flow and Exchange Rate Dynamics"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1086/324391",
+  "baslik": "Order Flow and Exchange Rate Dynamics",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Evans",
+    "ad": "Martin D. D.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Lyons",
+    "ad": "Richard K.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Political Economy",
+  "cilt": "110",
+  "sayi": "1",
+  "sayfa": "170-180",
+  "yil": 2002,
+  "tur": "journal-article",
+  "yayinci": "University of Chicago Press",
+  "ozet": null,
+  "url": "https://doi.org/10.1086/324391",
+  "bag": [
+   "http://www.journals.uchicago.edu/doi/pdf/10.1086/324391"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W4247454715",
+  "doi": "10.1086/324391",
+  "baslik": "Order Flow and Exchange Rate Dynamics",
+  "yil": 2002,
+  "yazarlar": [
+   "Martin D.D. Evans",
+   "Richard K. Lyons"
+  ],
+  "dergi": "Journal of Political Economy",
+  "issn": [
+   "0022-3808",
+   "1537-534X"
+  ],
+  "cilt": "110",
+  "sayi": "1",
+  "ilk_sayfa": "170",
+  "son_sayfa": "180",
+  "ozet": "This paper presents an exchange rate model of a new kind. Instead of relying exclusively on macroeconomic determinants, the model includes a determinant from the field of microstructure finance-order flow. Order flow is a determinant because it conveys information. This is a radically different approach to exchange rates. It is also strikingly successful. Our model of daily deutsche mark/dollar log changes produces an R2 statistic above 60 percent. For the deutsche mark/dollar spot market as a whole, we find that $1 billion of net dollar purchases increases the deutsche mark price of a dollar by 0.5 percent.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1086/324391"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Order Flow and Exchange Rate Dynamics",
+  "yil": 1999,
+  "dergi": "Journal of Political Economy",
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.174888",
+  "yazarlar": [
+   "Martin D. D. Evans",
+   "Richard K. Lyons"
+  ]
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1086/324391",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://doi.org/10.2139/ssrn.174888",
+    "durum": "HTTP 403"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

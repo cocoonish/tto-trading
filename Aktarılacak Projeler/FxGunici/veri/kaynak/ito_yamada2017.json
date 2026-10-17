@@ -1,0 +1,105 @@
+{
+ "id": "ito_yamada2017",
+ "aday_baslik": "Puzzles in the Tokyo fixing in the forex market",
+ "aday_yil": 2017,
+ "zaman": "2026-10-17T23:27:16+00:00",
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "0022-1996",
+    "109",
+    "214"
+   ],
+   "bulunan": [
+    [
+     "Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing",
+     "10.1016/j.jinteco.2017.09.005"
+    ]
+   ]
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/j.jinteco.2017.09.005",
+  "baslik": "Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Ito",
+    "ad": "Takatoshi",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Yamada",
+    "ad": "Masahiro",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of International Economics",
+  "cilt": "109",
+  "sayi": null,
+  "sayfa": "214-234",
+  "yil": 2017,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/j.jinteco.2017.09.005",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S0022199617301204?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S0022199617301204?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2508088338",
+  "doi": "10.1016/j.jinteco.2017.09.005",
+  "baslik": "Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing",
+  "yil": 2017,
+  "yazarlar": [
+   "Takatoshi Ito",
+   "Masahiro Yamada"
+  ],
+  "dergi": "Journal of International Economics",
+  "issn": [
+   "0022-1996",
+   "1873-0353"
+  ],
+  "cilt": "109",
+  "sayi": null,
+  "ilk_sayfa": "214",
+  "son_sayfa": "234",
+  "ozet": null,
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1016/j.jinteco.2017.09.005"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing",
+  "yil": 2017,
+  "dergi": "",
+  "ozet": "\"Fixing\" in the foreign exchange market, in Tokyo at 10am and in London at 4pm, is a market practice that determines the bid-ask-mid-point exchange rate at a scheduled time of the day in Japan. The fixing exchange rate is then applied to the settlement of foreign exchange transactions between banks and retail customers including broker dealers, institutional investors, insurance companies, exporters and importers, with varying bid-ask spreads. The findings for the Tokyo fixing are summarized as follows. (1) Price spikes are more frequent than the London fixing. (2) The customer orders are biased toward buying the foreign currencies, and this is predictable. (3) Trading volumes and liquidity concentrate on the USD/JPY. (4) Before 2008, the fixing price set by banks was biased upward, and higher than the highest transaction price during the fixing time window; the banks were earning monopolistic profits, but this gap disappeared after 2008. (5) The fixing price is still above the average transaction prices in the fixing window, suggesting that banks make profits, but that can be understood considering the risk of maintaining the fix for the rest of the business day. And (6) calendar effects also matter for the determination of the fixing rate and the price fluctuation around fixing.",
+  "acik": "http://www.price.e.u-tokyo.ac.jp/img/researchdata/pdf/p_wp087.pdf",
+  "yazarlar": [
+   "Takatoshi Ito",
+   "M. Yamada"
+  ]
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1016/j.jinteco.2017.09.005",
+    "durum": "metin okunamadı",
+    "tur": "text/html;charset=UTF-8"
+   },
+   {
+    "url": "http://www.price.e.u-tokyo.ac.jp/img/researchdata/pdf/p_wp087.pdf",
+    "durum": "ConnectionError"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

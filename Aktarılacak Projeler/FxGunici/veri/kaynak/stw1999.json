@@ -1,0 +1,150 @@
+{
+ "id": "stw1999",
+ "aday_baslik": "Data-Snooping, Technical Trading Rule Performance, and the Bootstrap",
+ "aday_yil": 1999,
+ "zaman": "2026-10-17T23:22:31+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1111/0022-1082.00163",
+   "durum": 200,
+   "baslik": "Data‐Snooping, Technical Trading Rule Performance, and the Bootstrap"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1111/0022-1082.00163",
+  "baslik": "Data‐Snooping, Technical Trading Rule Performance, and the Bootstrap",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Sullivan",
+    "ad": "Ryan",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Timmermann",
+    "ad": "Allan",
+    "ad_tam": null
+   },
+   {
+    "soyad": "White",
+    "ad": "Halbert",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Journal of Finance",
+  "cilt": "54",
+  "sayi": "5",
+  "sayfa": "1647-1691",
+  "yil": 1999,
+  "tur": "journal-article",
+  "yayinci": "Wiley",
+  "ozet": "In this paper we utilize White's Reality Check bootstrap methodology (White (1999)) to evaluate simple technical trading rules while quantifying the data‐snooping bias and fully adjusting for its effect in the context of the full universe from which the trading rules were drawn. Hence, for the first time, the paper presents a comprehensive test of performance across all technical trading rules examined. We consider the study of Brock, Lakonishok, and LeBaron (1992), expand their universe of 26 trading rules, apply the rules to 100 years of daily data on the Dow Jones Industrial Average, and determine the effects of data‐snooping.",
+  "url": "https://doi.org/10.1111/0022-1082.00163",
+  "bag": [
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2F0022-1082.00163",
+   "https://onlinelibrary.wiley.com/doi/pdf/10.1111/0022-1082.00163"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2143152597",
+  "doi": "10.1111/0022-1082.00163",
+  "baslik": "Data‐Snooping, Technical Trading Rule Performance, and the Bootstrap",
+  "yil": 1999,
+  "yazarlar": [
+   "Ryan Sullivan",
+   "Allan Timmermann",
+   "Halbert White"
+  ],
+  "dergi": "The Journal of Finance",
+  "issn": [
+   "0022-1082",
+   "1540-6261"
+  ],
+  "cilt": "54",
+  "sayi": "5",
+  "ilk_sayfa": "1647",
+  "son_sayfa": "1691",
+  "ozet": "In this paper we utilize White's Reality Check bootstrap methodology (White (1999)) to evaluate simple technical trading rules while quantifying the data‐snooping bias and fully adjusting for its effect in the context of the full universe from which the trading rules were drawn. Hence, for the first time, the paper presents a comprehensive test of performance across all technical trading rules examined. We consider the study of Brock, Lakonishok, and LeBaron (1992), expand their universe of 26 trading rules, apply the rules to 100 years of daily data on the Dow Jones Industrial Average, and determine the effects of data‐snooping.",
+  "acik": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/0022-1082.00163",
+  "adresler": [
+   "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/0022-1082.00163",
+   "https://doi.org/10.1111/0022-1082.00163"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Data‐Snooping, Technical Trading Rule Performance, and the Bootstrap",
+  "yil": 1999,
+  "dergi": "",
+  "ozet": null,
+  "acik": "http://eprints.lse.ac.uk/119144/1/dp303.pdf",
+  "yazarlar": [
+   "Ryan Sullivan",
+   "A. Timmermann",
+   "H. White"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.kevinsheppard.com/files/teaching/mfe/advanced-econometrics/Sullivan_Timmermann_White.pdf",
+  "son_url": "https://www.kevinsheppard.com/files/teaching/mfe/advanced-econometrics/Sullivan_Timmermann_White.pdf",
+  "tur": "application/pdf",
+  "sha256": "4f0292c3d3adea992cfa55014b363840254143f18e7908021ed2109d5a4d7a54",
+  "bayt": 797925,
+  "sayfa": 45,
+  "ilk_sayfa": "Data-Snooping, Technical Trading Rule Performance, and the Bootstrap RYAN SULLIVAN, ALLAN TIMMERMANN, and HALBERT WHITE* ABSTRACT In this paper we utilize White's Reality Check bootstrap methodology ~White ~1999!! to evaluate simple technical trading rules while quantifying the data-snooping bias and fully adjusting for its effect in the context of the full universe from which the trading rules were drawn. Hence, for the first time, the paper presents a comprehensive test of performance across all technical trading rules examined. We consider the study of Brock, Lakonishok, and LeBaron ~1992!, expand their universe of 26 trading rules, apply the rules to 100 years of daily data on the Dow Jones Industrial Average, and determine the effects of data-snooping. TECHNICAL TRADING RULES HAVE BEEN USED in financial markets for more than a century. Numerous studies have been performed to determine whether such rules can be employed to provide superior investing performance. 1 By and large, recent academic literature suggests that technical trading rules are capable of producing valuable economic signals. In perhaps the most comprehensive recent study of technical trading rules using 90 years of daily stock prices, Brock, Lakonishok, and LeBaron ~1992!~ BLL, hereafter! find that 26 technical trading rules applied to the Dow Jones Industrial Average ~DJIA! significantly outperform a benchmark of holding cash. Their findings are especially strong because every one of the trading rules t",
+  "pasaj": [
+   {
+    "ifade": "White's Reality Check bootstrap methodology",
+    "sayfa": 1,
+    "pasaj": "Data-Snooping, Technical Trading Rule Performance, and the Bootstrap RYAN SULLIVAN, ALLAN TIMMERMANN, and HALBERT WHITE* ABSTRACT In this paper we utilize White's Reality Check bootstrap methodology ~White ~1999!! to evaluate simple technical trading rules while quantifying the data-snooping bias and fully adjusting for its effect in the context of the full universe from which the trading rules were drawn. Hence, for the first time, t"
+   },
+   {
+    "ifade": "universe from which the trading rules were drawn",
+    "sayfa": 1,
+    "pasaj": " ABSTRACT In this paper we utilize White's Reality Check bootstrap methodology ~White ~1999!! to evaluate simple technical trading rules while quantifying the data-snooping bias and fully adjusting for its effect in the context of the full universe from which the trading rules were drawn. Hence, for the first time, the paper presents a comprehensive test of performance across all technical trading rules examined. We consider the study of Brock, Lakonishok, and LeBaron ~1992!, expand their universe of 26 trading rules, appl"
+   },
+   {
+    "ifade": "expand their universe of 26 trading rules",
+    "sayfa": 1,
+    "pasaj": "niverse from which the trading rules were drawn. Hence, for the first time, the paper presents a comprehensive test of performance across all technical trading rules examined. We consider the study of Brock, Lakonishok, and LeBaron ~1992!, expand their universe of 26 trading rules, apply the rules to 100 years of daily data on the Dow Jones Industrial Average, and determine the effects of data-snooping. TECHNICAL TRADING RULES HAVE BEEN USED in financial markets for more than a century. Numerous studies have been pe"
+   },
+   {
+    "ifade": "100 years of daily data",
+    "sayfa": 1,
+    "pasaj": "e first time, the paper presents a comprehensive test of performance across all technical trading rules examined. We consider the study of Brock, Lakonishok, and LeBaron ~1992!, expand their universe of 26 trading rules, apply the rules to 100 years of daily data on the Dow Jones Industrial Average, and determine the effects of data-snooping. TECHNICAL TRADING RULES HAVE BEEN USED in financial markets for more than a century. Numerous studies have been performed to determine whether such rules can "
+   },
+   {
+    "ifade": "even after adjustment is made for data-snooping",
+    "sayfa": 3,
+    "pasaj": "s BLL to investigate the potential effects of datasnooping in their experiment. 6 Our results show that, during the 90-year sample period originally investigated by BLL, 1897-1986, certain trading rules did indeed outperform the benchmark, even after adjustment is made for data-snooping. We base our evaluation both on mean returns and on the Sharpe ratio, which adjusts for total risk. Since BLL's study finished in 1986, we benefit from having access to another 10 years of data on the Dow Jones portfolio. We use these data"
+   },
+   {
+    "ifade": "nearly 12 percent",
+    "sayfa": 3,
+    "pasaj": "s portfolio. We use these data to test whether their results hold out-of-sample. Interestingly, we find that this is not the case: The probability that the best-performing trading rule did not outperform the benchmark during this period is nearly 12 percent, suggesting that, at conventional levels of significance, there is scant evidence that technical trading rules were of any economic value during the period 1987-1996. To determine whether transaction costs or short-sale constraints could h"
+   },
+   {
+    "ifade": "scant evidence that technical trading rules",
+    "sayfa": 3,
+    "pasaj": "restingly, we find that this is not the case: The probability that the best-performing trading rule did not outperform the benchmark during this period is nearly 12 percent, suggesting that, at conventional levels of significance, there is scant evidence that technical trading rules were of any economic value during the period 1987-1996. To determine whether transaction costs or short-sale constraints could have accounted for the apparent historical success of the trading rules studied by BLL, we also conduct our boot"
+   },
+   {
+    "ifade": "of any economic value",
+    "sayfa": 3,
+    "pasaj": " probability that the best-performing trading rule did not outperform the benchmark during this period is nearly 12 percent, suggesting that, at conventional levels of significance, there is scant evidence that technical trading rules were of any economic value during the period 1987-1996. To determine whether transaction costs or short-sale constraints could have accounted for the apparent historical success of the trading rules studied by BLL, we also conduct our bootstrap simulation experiment"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://www.kevinsheppard.com/files/teaching/mfe/advanced-econometrics/Sullivan_Timmermann_White.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

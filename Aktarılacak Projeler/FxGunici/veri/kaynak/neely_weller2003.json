@@ -1,0 +1,97 @@
+{
+ "id": "neely_weller2003",
+ "aday_baslik": "Intraday technical trading in the foreign exchange market",
+ "aday_yil": 2003,
+ "zaman": "2026-10-17T23:26:52+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1016/S0261-5606(02)00101-8",
+   "durum": 200,
+   "baslik": "Intraday technical trading in the foreign exchange market"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/s0261-5606(02)00101-8",
+  "baslik": "Intraday technical trading in the foreign exchange market",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Neely",
+    "ad": "C.J.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Weller",
+    "ad": "P.A.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of International Money and Finance",
+  "cilt": "22",
+  "sayi": "2",
+  "sayfa": "223-237",
+  "yil": 2003,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/s0261-5606(02)00101-8",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S0261560602001018?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S0261560602001018?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3124322429",
+  "doi": "10.1016/s0261-5606(02)00101-8",
+  "baslik": "Intraday technical trading in the foreign exchange market",
+  "yil": 2003,
+  "yazarlar": [
+   "Christopher J. Neely",
+   "Paul A. Weller"
+  ],
+  "dergi": "Journal of International Money and Finance",
+  "issn": [
+   "0261-5606",
+   "1873-0639"
+  ],
+  "cilt": "22",
+  "sayi": "2",
+  "ilk_sayfa": "223",
+  "son_sayfa": "237",
+  "ozet": null,
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1016/s0261-5606(02)00101-8"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Intraday Technical Trading in the Foreign Exchange Market",
+  "yil": 2003,
+  "dergi": "",
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.189495",
+  "yazarlar": [
+   "Christopher J. Neely",
+   "Paul A. Weller"
+  ]
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1016/s0261-5606(02)00101-8",
+    "durum": "metin okunamadı",
+    "tur": "text/html;charset=UTF-8"
+   },
+   {
+    "url": "https://doi.org/10.2139/ssrn.189495",
+    "durum": "HTTP 403"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

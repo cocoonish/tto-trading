@@ -1,0 +1,184 @@
+{
+ "id": "fsb2014",
+ "aday_baslik": "Foreign Exchange Benchmarks: Final Report",
+ "aday_yil": 2014,
+ "zaman": "2026-10-17T23:27:49+00:00",
+ "crossref": null,
+ "openalex": null,
+ "semantic": null,
+ "metin": {
+  "durum": 200,
+  "url": "https://www.fsb.org/wp-content/uploads/r_140930.pdf",
+  "son_url": "https://www.fsb.org/uploads/r_140930.pdf",
+  "tur": "application/pdf",
+  "sha256": "9dcdb1fe5bb3accb043a63fd724e20b248c8878400404faf539c9dba411169b2",
+  "bayt": 1245378,
+  "sayfa": 133,
+  "ilk_sayfa": "30 September 2014 Foreign Exchange Benchmarks Final Report",
+  "pasaj": [
+   {
+    "ifade": "Foreign Exchange Benchmarks",
+    "sayfa": 1,
+    "pasaj": "30 September 2014 Foreign Exchange Benchmarks Final Report"
+   },
+   {
+    "ifade": "Foreign Exchange Benchmarks",
+    "sayfa": 3,
+    "pasaj": "t malpractice linked to the structure of trading around the benchmark fixings . As a result, the FSB Plenary formed a working group chaired by Guy Debelle of the Reserve Bank of Australia and Paul Fisher of the Bank of England1 to focus on foreign exchange benchmarks. The mandate of the group was to undertake analysis of the FX market structure and incentives that may promote particular types of trading activity around the benchmark fixings. The group was tasked to propose possible remedies to address "
+   },
+   {
+    "ifade": "30 September 2014",
+    "sayfa": 1,
+    "pasaj": "30 September 2014 Foreign Exchange Benchmarks Final Report"
+   },
+   {
+    "ifade": "a five minute window",
+    "sayfa": 26,
+    "pasaj": ". Benchmark calculation 1) The group recommends the fixing window be widened from its current width of one minute. The group notes that market feedback suggested a range between two and thirty min utes with the median re sponse support ing a five minute window centred on the hour (as is currently the case) for the major currencies . The group's view is that extending the width of the window to 5 minutes strikes a balance between reducing incentives for manipulation while at the same time still e"
+   },
+   {
+    "ifade": "30 seconds either side",
+    "sayfa": 10,
+    "pasaj": "the hours of 6am (Hong Kong/Singapore time) on Monday to 10pm (United Kingdom time) the following Friday. A single bid or der rate, single offer order rate and single executed trade are taken every second over a one minute window from - /+ 30 seconds either side of the specified fix time from a single trading platform. The output is a published median mid- rate and calculated bid and offer rates around that mid-rate. Trade currency methodology 1. WMR captures the rates for single executed trades a"
+   },
+   {
+    "ifade": "five minute",
+    "sayfa": 5,
+    "pasaj": "up recommends the fixing window be widened from its current width of one minute. WM should determine the appropriate width in consultation with market participants. The group notes that the median suggestion from market feedback was that a five minute calculation window centred on the hour for the major (trade) currencies could be appropriate . For less liquid (non- trade) currencies, the group recommends the window be wide r than for the major currencies to incorporate an adequate numb"
+   },
+   {
+    "ifade": "five minute",
+    "sayfa": 26,
+    "pasaj": "Benchmark calculation 1) The group recommends the fixing window be widened from its current width of one minute. The group notes that market feedback suggested a range between two and thirty min utes with the median re sponse support ing a five minute window centred on the hour (as is currently the case) for the major currencies . The group's view is that extending the width of the window to 5 minutes strikes a balance between reducing incentives for manipulation while at the same time "
+   },
+   {
+    "ifade": "one minute",
+    "sayfa": 5,
+    "pasaj": "Summary of recommendations 1. The group recommends the fixing window be widened from its current width of one minute. WM should determine the appropriate width in consultation with market participants. The group notes that the median suggestion from market feedback was that a five minute calculation window centred on the hour for the major (trade) curren"
+   },
+   {
+    "ifade": "one minute",
+    "sayfa": 10,
+    "pasaj": "set every half hour between the hours of 6am (Hong Kong/Singapore time) on Monday to 10pm (United Kingdom time) the following Friday. A single bid or der rate, single offer order rate and single executed trade are taken every second over a one minute window from - /+ 30 seconds either side of the specified fix time from a single trading platform. The output is a published median mid- rate and calculated bid and offer rates around that mid-rate. Trade currency methodology 1. WMR capture"
+   },
+   {
+    "ifade": "calculation window",
+    "sayfa": 4,
+    "pasaj": "nsequent price risk, rather than executing them in the market as agent on behal f of the client. In order to manage the risk associated with this client order flow, dealers hedge by executing foreign exchange transactions in and around the calculation window, which results in the large spike in trading volume. This creates a market wh ere the dealer is agreeing to execute these orders at an unknown price, which is established subsequently during the fixing calculation window. That price should"
+   },
+   {
+    "ifade": "calculation window",
+    "sayfa": 4,
+    "pasaj": " in and around the calculation window, which results in the large spike in trading volume. This creates a market wh ere the dealer is agreeing to execute these orders at an unknown price, which is established subsequently during the fixing calculation window. That price should be the clearing price which reflects the balance of supply and demand going through the market at that time and therefore prices should move as necessary , even if only temporarily, in response to the se flows. In most c"
+   },
+   {
+    "ifade": "window",
+    "sayfa": 2,
+    "pasaj": "............................................................ 16 Trading Patterns during the Day .......................................................................................... 16 Trading Patterns around the WMR 4pm London Fixing Window ....................................... 18 5. Considerations of alternative fix calculations .................................................................. 20 6. IOSCO assessment of implementation ......................................"
+   },
+   {
+    "ifade": "window",
+    "sayfa": 4,
+    "pasaj": "ce risk, rather than executing them in the market as agent on behal f of the client. In order to manage the risk associated with this client order flow, dealers hedge by executing foreign exchange transactions in and around the calculation window, which results in the large spike in trading volume. This creates a market wh ere the dealer is agreeing to execute these orders at an unknown price, which is established subsequently during the fixing calculation window. That price should"
+   },
+   {
+    "ifade": "manipulation",
+    "sayfa": 3,
+    "pasaj": "dverse incentives as well as to examine whether there is a need and scope to improve the construction of the benchmarks themselves. The work of the group w as completely independent of the various conduct investigations into allegations of manipulation of FX being undertaken in different jurisdictions and the group did not have access to the evidence being considered by the relevant authorities. The group progressed its work in part by engagement with a range of FX market participants ac"
+   },
+   {
+    "ifade": "manipulation",
+    "sayfa": 9,
+    "pasaj": "ent of FX benchmarks alongside its ongoing programme of interest rate benchmark analysis. In this report the group presents greater detail on this market structure and make s recommendations which it believes would reduce the incentives to manipulation. In making these recommendations, it should be noted that the work of the group was completely independent of the various conduct investigations being undertaken and the group did not have access to the evidence that is being considered by"
+   },
+   {
+    "ifade": "investigation",
+    "sayfa": 3,
+    "pasaj": "ossible remedies to address these adverse incentives as well as to examine whether there is a need and scope to improve the construction of the benchmarks themselves. The work of the group w as completely independent of the various conduct investigations into allegations of manipulation of FX being undertaken in different jurisdictions and the group did not have access to the evidence being considered by the relevant authorities. The group progressed its work in part by engagement with a "
+   },
+   {
+    "ifade": "investigation",
+    "sayfa": 6,
+    "pasaj": " the relevant market sectors, the group believes that all the recommendations above can and will be accepted and implemented by the market groups concerned. This should deliver a substantial improvement in market structure and conduct. But investigations into alleged misconduct are ongoing across a range of markets, and it is possible that the authorities will ultimately conclude that regulatory change is needed to promote or ensure appropriate behaviours and/or to implement the recommend"
+   },
+   {
+    "ifade": "30 seconds",
+    "sayfa": 10,
+    "pasaj": "the hours of 6am (Hong Kong/Singapore time) on Monday to 10pm (United Kingdom time) the following Friday. A single bid or der rate, single offer order rate and single executed trade are taken every second over a one minute window from - /+ 30 seconds either side of the specified fix time from a single trading platform. The output is a published median mid- rate and calculated bid and offer rates around that mid-rate. Trade currency methodology 1. WMR captures the rates for single execu"
+   },
+   {
+    "ifade": "30 seconds",
+    "sayfa": 10,
+    "pasaj": "dation purposes. Ultimately, the choice of rate used for any particular currency lies with WM on the basis of which is most appropriate to represent the market. 2. 61 single snapshots of trade and order rates are taken over the minute from 30 seconds before to 30 seconds after the fix time. The snap from Thomson Reuters Matching takes the current/last trade and current/last best order rates as at the capture 6 AUD, CAD, CHF, CZK, DKK, EUR, GBP, HKD, HUF, ILS, JPY, MXN, NOK, NZD, PLN, R"
+   },
+   {
+    "ifade": "Recommendation",
+    "sayfa": 2,
+    "pasaj": "Content Page Executive Summary ................................................................................................................... 1 Summary of recommendations ............................................................................................... 3 1. Introduction to the foreign exchange 'fix' problem ........................................................... 5 2. The construction of f"
+   },
+   {
+    "ifade": "Recommendation",
+    "sayfa": 2,
+    "pasaj": " Considerations of alternative fix calculations .................................................................. 20 6. IOSCO assessment of implementation ............................................................................. 21 7. Recommendations ............................................................................................................ 23 a. Benchmark calculation ............................................................................................. 24 b. R"
+   },
+   {
+    "ifade": "widened",
+    "sayfa": 5,
+    "pasaj": "Summary of recommendations 1. The group recommends the fixing window be widened from its current width of one minute. WM should determine the appropriate width in consultation with market participants. The group notes that the median suggestion from market feedback was that a five minute calculation window centred on "
+   },
+   {
+    "ifade": "widened",
+    "sayfa": 26,
+    "pasaj": "structure to support the execution of fix trades. e. The behaviour of market participants around the time of the major FX benchmar ks (primarily the WMR 4pm London fix). a. Benchmark calculation 1) The group recommends the fixing window be widened from its current width of one minute. The group notes that market feedback suggested a range between two and thirty min utes with the median re sponse support ing a five minute window centred on the hour (as is currently the case) for the "
+   },
+   {
+    "ifade": "trade currencies",
+    "sayfa": 2,
+    "pasaj": "onstruction of foreign exchange fixes ....................................................................... 7 a. WM/Reuters ............................................................................................................... 8 Trade Currencies .................................................................................................................... 8 Non-trade Currencies ..................................................................................................."
+   },
+   {
+    "ifade": "trade currencies",
+    "sayfa": 2,
+    "pasaj": "................................................................................................. 8 Trade Currencies .................................................................................................................... 8 Non-trade Currencies ........................................................................................................... 10 Forward and NDF Currencies .............................................................................................. 11 b. "
+   },
+   {
+    "ifade": "WM/Reuters",
+    "sayfa": 2,
+    "pasaj": " 1. Introduction to the foreign exchange 'fix' problem ........................................................... 5 2. The construction of foreign exchange fixes ....................................................................... 7 a. WM/Reuters ............................................................................................................... 8 Trade Currencies ............................................................................................................"
+   },
+   {
+    "ifade": "WM/Reuters",
+    "sayfa": 2,
+    "pasaj": "es ............. 32 Appendix 2: Members of the FSB FX Benchmark Group ...................................................... 33 Appendix 3: Review of the Implementation of IOSCO's Principles for Financial Benchmarks by WM in respect of the WM/Reuters 4pm Closing Spot Rate .... 35 ii"
+   },
+   {
+    "ifade": "WMR",
+    "sayfa": 2,
+    "pasaj": ".................................................................................. 16 Trading Patterns during the Day .......................................................................................... 16 Trading Patterns around the WMR 4pm London Fixing Window ....................................... 18 5. Considerations of alternative fix calculations .................................................................. 20 6. IOSCO assessment of implementation ............."
+   },
+   {
+    "ifade": "WMR",
+    "sayfa": 3,
+    "pasaj": "ll market participants had a chance to submit their views and comment on the proposed course of action.2 A consistent view of market contacts is that there are two FX benchmarks which have preeminence in the global market . The WM/Reuters (WMR) 4pm London fix, produced by the WM Company is by far the dominant benchmark being used, not just in FX, but also as a key input in multi-currency equity, bond and credit indices. The euro foreign exchange rates set by the ECB at 2:15pm CE"
+   }
+  ],
+  "eksik": [
+   "the fix calculation window",
+   "window to five minutes",
+   "a five-minute window",
+   "the one minute window",
+   "February 2015",
+   "15 February",
+   "five-minute",
+   "5-minute"
+  ],
+  "deneme": [
+   {
+    "url": "https://www.fsb.org/wp-content/uploads/r_140930.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": false,
+ "ozet_var": false
+}

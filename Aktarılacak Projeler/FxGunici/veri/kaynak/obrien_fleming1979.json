@@ -1,0 +1,95 @@
+{
+ "id": "obrien_fleming1979",
+ "aday_baslik": "A Multiple Testing Procedure for Clinical Trials",
+ "aday_yil": 1979,
+ "zaman": "2026-10-17T23:27:56+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.2307/2530245",
+   "durum": 200,
+   "baslik": "A Multiple Testing Procedure for Clinical Trials"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.2307/2530245",
+  "baslik": "A Multiple Testing Procedure for Clinical Trials",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "O'Brien",
+    "ad": "Peter C.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Fleming",
+    "ad": "Thomas R.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Biometrics",
+  "cilt": "35",
+  "sayi": "3",
+  "sayfa": "549",
+  "yil": 1979,
+  "tur": "journal-article",
+  "yayinci": "JSTOR",
+  "ozet": null,
+  "url": "https://doi.org/10.2307/2530245",
+  "bag": []
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2059707463",
+  "doi": "10.2307/2530245",
+  "baslik": "A Multiple Testing Procedure for Clinical Trials",
+  "yil": 1979,
+  "yazarlar": [
+   "Peter C. O’Brien",
+   "Thomas R. Fleming"
+  ],
+  "dergi": "Biometrics",
+  "issn": [
+   "0006-341X",
+   "1541-0420"
+  ],
+  "cilt": "35",
+  "sayi": "3",
+  "ilk_sayfa": "549",
+  "son_sayfa": "549",
+  "ozet": "A multiple testing procedure is proposed for comparing two treatments when response to treatment is both dichotomous (i.e., success or failure) and immediate. The proposed test statistic for each test is the usual (Pearson) chi-square statistic based on all data collected to that point. The maximum number (N) of tests and the number (m1 + m2) of observations collected between successive tests is fixed in advance. The overall size of the procedure is shown to be controlled with virtually the same accuracy as the single sample chi-square test based on N(m1 + m2) observations. The power is also found to be virtually the same. However, by affording the opportunity to terminate early when one treatment performs markedly better than the other, the multiple testing procedure may eliminate the ethical dilemmas that often accompany clinical trials.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.2307/2530245",
+   "https://pubmed.ncbi.nlm.nih.gov/497341"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "A multiple testing procedure for clinical trials.",
+  "yil": 1979,
+  "dergi": "Biometrics",
+  "ozet": null,
+  "acik": "",
+  "yazarlar": [
+   "P. C. O'Brien",
+   "T. Fleming"
+  ]
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.2307/2530245",
+    "durum": "başlık ilk iki sayfada yok",
+    "ilk": "A required part of this site couldn't load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable any ad blockers, or try using a different browser."
+   },
+   {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/497341",
+    "durum": "HTTP 203"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

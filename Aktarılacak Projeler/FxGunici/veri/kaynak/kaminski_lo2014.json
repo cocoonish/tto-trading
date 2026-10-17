@@ -1,0 +1,132 @@
+{
+ "id": "kaminski_lo2014",
+ "aday_baslik": "When do stop-loss rules stop losses?",
+ "aday_yil": 2014,
+ "zaman": "2026-10-17T23:26:09+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1016/j.finmar.2013.07.001",
+   "durum": 200,
+   "baslik": "When do stop-loss rules stop losses?"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/j.finmar.2013.07.001",
+  "baslik": "When do stop-loss rules stop losses?",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Kaminski",
+    "ad": "Kathryn M.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Lo",
+    "ad": "Andrew W.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Financial Markets",
+  "cilt": "18",
+  "sayi": null,
+  "sayfa": "234-254",
+  "yil": 2014,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/j.finmar.2013.07.001",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S138641811300030X?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S138641811300030X?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3124187603",
+  "doi": "10.1016/j.finmar.2013.07.001",
+  "baslik": "When do stop-loss rules stop losses?",
+  "yil": 2013,
+  "yazarlar": [
+   "Kathryn M. Kaminski",
+   "Andrew W. Lo"
+  ],
+  "dergi": "Journal of Financial Markets",
+  "issn": [
+   "1386-4181",
+   "1878-576X"
+  ],
+  "cilt": "18",
+  "sayi": null,
+  "ilk_sayfa": "234",
+  "son_sayfa": "254",
+  "ozet": null,
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1016/j.finmar.2013.07.001"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "When Do Stop-Loss Rules Stop Losses?",
+  "yil": 2014,
+  "dergi": "",
+  "ozet": null,
+  "acik": "",
+  "yazarlar": [
+   "Kathryn M. Kaminski",
+   "Andrew W. Lo"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.smallake.kr/wp-content/uploads/2017/02/When_Do_Stop-Loss_Rules_Stop_Losses.pdf",
+  "son_url": "https://www.smallake.kr/wp-content/uploads/2017/02/When_Do_Stop-Loss_Rules_Stop_Losses.pdf",
+  "tur": "application/pdf",
+  "sha256": "4b5265a569e0f1be077d50be09cc8cbab5529de311337000e872b009687b2e86",
+  "bayt": 427040,
+  "sayfa": 42,
+  "ilk_sayfa": "When Do Stop-Loss Rules Stop Losses? ✩ Kathryn M. Kaminski 1,∗, Andrew W. Lo 2,∗ Abstract We propose a simple analytical framework to measure the value adde d or subtracted by stoploss rules-predetermined policies that reduce a portfolio's exposur e after reaching a certain threshold of cumulative losses-on the expected return and volatilit y of an arbitrary portfolio strategy. Using daily futures price data, we provide an empirica l analysis of stop-loss policies applied to a buy-and-hold strategy using index futures cont racts. At longer sampling frequencies, certain stop-loss policies can increase expected return while substantially reducing volatility, consistent with their objectives in practical app lications. Keywords: Investments; Portfolio Management; Risk Management; Asset Allo cation; Performance Attribution; Behavioral Finance JEL Classification: G11, G12 ✩The views and opinions expressed in this article are those of the auth ors, and do not necessarily represent the views and opinions of AlphaSimplex Group, MIT, or any of their affilia tes or employees. The authors make no representations or warranty, either expressed or implied , as to the accuracy or completeness of the information, nor are they recommending that this article serve as t he basis for any investment decisionthis article is for information purposes only. We thank Dimitris Bertsim as, Margret Bjarnadottir, Michael Brennan, Tom Brennan, Florian Ederer, Mike Epstein, Jasmina Hasa nhodzic, Dirk Jenter",
+  "pasaj": [
+   {
+    "ifade": "Random Walk Hypothesis",
+    "sayfa": 16,
+    "pasaj": "4. Analytical Results Having defined the basic framework in Section 3 for evaluating the pe rformance of simple stop-loss rules, we now apply them to several specific return-gen erating processes for {rt}, including the Random Walk Hypothesis in Section 4.1, mean-reversion a nd momentum processes in Section 4.2, and a statistical regime-switching model in Sec tion 4.3. The simplicity of our stop-loss heuristic will allow us to derive explicit conditions unde r which stop-loss p"
+   },
+   {
+    "ifade": "Random Walk Hypothesis",
+    "sayfa": 16,
+    "pasaj": "n Section 4.2, and a statistical regime-switching model in Sec tion 4.3. The simplicity of our stop-loss heuristic will allow us to derive explicit conditions unde r which stop-loss policies can stop losses in each of these cases. 4.1. The Random Walk Hypothesis Since the Random Walk Hypothesis is one of the most widely used retur n-generating processes in the finance literature, any analysis of stop-loss policie s must consider this leading case first. Given the framework proposed in Section 3, w"
+   },
+   {
+    "ifade": "in the presence of momentum",
+    "sayfa": 20,
+    "pasaj": "urn of the portfolio. On the other hand , for a momentum strategy, ρ >0, in which case there is a possibility that the second term dominates t he first, yielding a positive stopping premium. This is also consistent with the intuition tha t in the presence of momentum, losses are likely to persist, therefore, switching to the risk-free asset after certain cumulative losses can be more profitable than staying fully invested. In fact, (17) implies that a sufficient condition for a stop-loss policy w ith r"
+   },
+   {
+    "ifade": "certain stop-loss policies can increase expected return",
+    "sayfa": 1,
+    "pasaj": " and volatilit y of an arbitrary portfolio strategy. Using daily futures price data, we provide an empirica l analysis of stop-loss policies applied to a buy-and-hold strategy using index futures cont racts. At longer sampling frequencies, certain stop-loss policies can increase expected return while substantially reducing volatility, consistent with their objectives in practical app lications. Keywords: Investments; Portfolio Management; Risk Management; Asset Allo cation; Performance Attribution; Behavioral Finance JEL Classifi"
+   }
+  ],
+  "eksik": [
+   "simple 0/1 stop-loss rules",
+   "always decrease the strategy's expected return",
+   "stop-loss rules can add value",
+   "stop-loss rules never stop losses",
+   "buy-and-hold strategy using index futures contracts"
+  ],
+  "deneme": [
+   {
+    "url": "https://dspace.mit.edu/bitstream/handle/1721.1/114876/Lo_When%20Do%20Stop-Loss.pdf",
+    "durum": "HTTP 429"
+   },
+   {
+    "url": "https://www.smallake.kr/wp-content/uploads/2017/02/When_Do_Stop-Loss_Rules_Stop_Losses.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

@@ -1,0 +1,177 @@
+{
+ "id": "nosek2018",
+ "aday_baslik": "The preregistration revolution",
+ "aday_yil": 2018,
+ "zaman": "2026-10-17T23:28:04+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1073/pnas.1708274114",
+   "durum": 200,
+   "baslik": "The preregistration revolution"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1073/pnas.1708274114",
+  "baslik": "The preregistration revolution",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Nosek",
+    "ad": "Brian A.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Ebersole",
+    "ad": "Charles R.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "DeHaven",
+    "ad": "Alexander C.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Mellor",
+    "ad": "David T.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Proceedings of the National Academy of Sciences",
+  "cilt": "115",
+  "sayi": "11",
+  "sayfa": "2600-2606",
+  "yil": 2018,
+  "tur": "journal-article",
+  "yayinci": "National Academy of Sciences",
+  "ozet": "Progress in science relies in part on generating hypotheses with existing observations and testing hypotheses with new observations. This distinction between postdiction and prediction is appreciated conceptually but is not respected in practice. Mistaking generation of postdictions with testing of predictions reduces the credibility of research findings. However, ordinary biases in human reasoning, such as hindsight bias, make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan before observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are available to make the best possible use of preregistration in circumstances that fall short of the ideal application, such as when the data are preexisting. Services are now available for preregistration across all disciplines, facilitating a rapid increase in the practice. Widespread adoption of preregistration will increase distinctiveness between hypothesis generation and hypothesis testing and will improve the credibility of research findings.",
+  "url": "https://doi.org/10.1073/pnas.1708274114",
+  "bag": [
+   "http://www.pnas.org/syndication/doi/10.1073/pnas.1708274114",
+   "https://pnas.org/doi/pdf/10.1073/pnas.1708274114"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2779812635",
+  "doi": "10.1073/pnas.1708274114",
+  "baslik": "The preregistration revolution",
+  "yil": 2018,
+  "yazarlar": [
+   "Brian A. Nosek",
+   "Charles R. Ebersole",
+   "Alexander Carl DeHaven",
+   "David Thomas Mellor"
+  ],
+  "dergi": "Proceedings of the National Academy of Sciences",
+  "issn": [
+   "0027-8424",
+   "1091-6490"
+  ],
+  "cilt": "115",
+  "sayi": "11",
+  "ilk_sayfa": "2600",
+  "son_sayfa": "2606",
+  "ozet": "Progress in science relies in part on generating hypotheses with existing observations and testing hypotheses with new observations. This distinction between postdiction and prediction is appreciated conceptually but is not respected in practice. Mistaking generation of postdictions with testing of predictions reduces the credibility of research findings. However, ordinary biases in human reasoning, such as hindsight bias, make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan before observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are available to make the best possible use of preregistration in circumstances that fall short of the ideal application, such as when the data are preexisting. Services are now available for preregistration across all disciplines, facilitating a rapid increase in the practice. Widespread adoption of preregistration will increase distinctiveness between hypothesis generation and hypothesis testing and will improve the credibility of research findings.",
+  "acik": "https://www.ncbi.nlm.nih.gov/pmc/articles/5856500",
+  "adresler": [
+   "https://www.ncbi.nlm.nih.gov/pmc/articles/5856500",
+   "https://doi.org/10.1073/pnas.1708274114",
+   "https://pubmed.ncbi.nlm.nih.gov/29531091",
+   "https://osf.io/download/594344b4b83f690229b9dc86/"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "The preregistration revolution",
+  "yil": 2018,
+  "dergi": "Proceedings of the National Academy of Sciences of the United States of America",
+  "ozet": "Progress in science relies in part on generating hypotheses with existing observations and testing hypotheses with new observations. This distinction between postdiction and prediction is appreciated conceptually but is not respected in practice. Mistaking generation of postdictions with testing of predictions reduces the credibility of research findings. However, ordinary biases in human reasoning, such as hindsight bias, make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan before observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are available to make the best possible use of preregistration in circumstances that fall short of the ideal application, such as when the data are preexisting. Services are now available for preregistration across all disciplines, facilitating a rapid increase in the practice. Widespread adoption of preregistration will increase distinctiveness between hypothesis generation and hypothesis testing and will improve the credibility of research findings.",
+  "acik": "https://doi.org/10.31219/osf.io/2dxu5",
+  "yazarlar": [
+   "Brian A. Nosek",
+   "C. Ebersole",
+   "A. DeHaven",
+   "D. Mellor"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://osf.io/download/594344b4b83f690229b9dc86/",
+  "son_url": "https://idvyorynw6xy.compat.objectstorage.us-ashburn-1.oraclecloud.com/cos-prod-osf-1-files-ash/937416ea98b92b0df93cd3ab40fa8edfd6b285d9fdfef152ee277faed33bd783?response-content-disposition=attachment%3B+filename%3D%22NEDM2017.pdf%22%3B+filename%2A%3DUTF-8%27%27NEDM2017.pdf&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=8a1e5869d3122814cba7bd4265a84ad444199855%2F20261017%2Fus-ashburn-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T232811Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=a1dde27819c083343b1e67a08f5d4216667827fa6bc55049f7f8d5854351b5d7",
+  "tur": "application/octet-stream",
+  "sha256": "937416ea98b92b0df93cd3ab40fa8edfd6b285d9fdfef152ee277faed33bd783",
+  "bayt": 221013,
+  "sayfa": 19,
+  "ilk_sayfa": "1 The Preregistration Revolution Brian A. Noseka,b ORCID: 0000-0001-6797-5476 Charles R. Ebersoleb ORCID: 0000-0002-8607-2579 Alexander C. DeHavena ORCID: 0000-0002-2241-7259 David T. Mellora ORCID: 0000-0002-3125-5888 a Center for Open Science, 210 Ridge McIntire Road, Suite 500, Charlottesville, VA 22903 b University of Virginia, Department of Psychology, 102 Gilmer Hall, Charlottesville, VA 22904 Corresponding Author: Brian Nosek, 210 Ridge McIntire Road, Suite 500, Charlottesville, VA 22903, nosek@virginia.edu Keywords: prediction, postdiction, methodology, rigor, reproducibility, preregistration, transparency, science policy, philosophy of science Abstract Progress in science relies in part on generating hypotheses with existing observations and testing hypotheses with new observations. This distinction between postdiction and prediction is appreciated conceptually, but is not respected in practice. Mistaking generation of postdictions with testing of predictions reduces the credibility of research findings. However, ordinary biases in human reasoning such as hindsight bias make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan prior to observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are available to make the best possible use of preregistrati",
+  "pasaj": [
+   {
+    "ifade": "The preregistration revolution",
+    "sayfa": 1,
+    "pasaj": "1 The Preregistration Revolution Brian A. Noseka,b ORCID: 0000-0001-6797-5476 Charles R. Ebersoleb ORCID: 0000-0002-8607-2579 Alexander C. DeHavena ORCID: 0000-0002-2241-7259 David T. Mellora ORCID: 0000-0002-3125-5888 a Center for Open Science, 210 Ridge McIntire Road, S"
+   },
+   {
+    "ifade": "The preregistration revolution",
+    "sayfa": 2,
+    "pasaj": "2 The Preregistration Revolution Progress in science is marked by reducing uncertainty about nature. Scientists generate models that may explain prior observations and predict future observations. Those models are approximations and simplifications of reality. Models are "
+   },
+   {
+    "ifade": "distinction between postdiction and prediction",
+    "sayfa": 1,
+    "pasaj": "rigor, reproducibility, preregistration, transparency, science policy, philosophy of science Abstract Progress in science relies in part on generating hypotheses with existing observations and testing hypotheses with new observations. This distinction between postdiction and prediction is appreciated conceptually, but is not respected in practice. Mistaking generation of postdictions with testing of predictions reduces the credibility of research findings. However, ordinary biases in human reasoning such as hindsight bia"
+   },
+   {
+    "ifade": "Preregistration distinguishes analyses and outcomes",
+    "sayfa": 1,
+    "pasaj": "ary biases in human reasoning such as hindsight bias make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan prior to observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are available to make the best possible use of preregistration in circumstances that fall short of the ideal application, such as when"
+   },
+   {
+    "ifade": "predictions from those that result from postdictions",
+    "sayfa": 1,
+    "pasaj": "avoid this mistake. An effective solution is to define the research questions and analysis plan prior to observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are available to make the best possible use of preregistration in circumstances that fall short of the ideal application, such as when the data are pre-existing. Services are now available for preregistra"
+   },
+   {
+    "ifade": "Mistaking generation of postdictions with testing of predictions",
+    "sayfa": 1,
+    "pasaj": " in science relies in part on generating hypotheses with existing observations and testing hypotheses with new observations. This distinction between postdiction and prediction is appreciated conceptually, but is not respected in practice. Mistaking generation of postdictions with testing of predictions reduces the credibility of research findings. However, ordinary biases in human reasoning such as hindsight bias make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan prior to obser"
+   },
+   {
+    "ifade": "a process called preregistration",
+    "sayfa": 1,
+    "pasaj": " research findings. However, ordinary biases in human reasoning such as hindsight bias make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan prior to observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are available to make the best possible use of preregistration in circumstances t"
+   },
+   {
+    "ifade": "between hypothesis generation and hypothesis testing",
+    "sayfa": 1,
+    "pasaj": " application, such as when the data are pre-existing. Services are now available for preregistration across all disciplines facilitating a rapid increase in the practice. Widespread adoption of preregistration will increase distinctiveness between hypothesis generation and hypothesis testing and will improve the credibility of research findings. Classification: Social Science, Psychological and Cognitive Sciences"
+   },
+   {
+    "ifade": "define the research questions and analysis plan",
+    "sayfa": 1,
+    "pasaj": "staking generation of postdictions with testing of predictions reduces the credibility of research findings. However, ordinary biases in human reasoning such as hindsight bias make it hard to avoid this mistake. An effective solution is to define the research questions and analysis plan prior to observing the research outcomes-a process called preregistration. Preregistration distinguishes analyses and outcomes that result from predictions from those that result from postdictions. A variety of practical strategies are ava"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/5856500",
+    "durum": "metin okunamadı",
+    "tur": "text/html; charset=utf-8"
+   },
+   {
+    "url": "https://doi.org/10.1073/pnas.1708274114",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/29531091",
+    "durum": "HTTP 203"
+   },
+   {
+    "url": "https://osf.io/download/594344b4b83f690229b9dc86/",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

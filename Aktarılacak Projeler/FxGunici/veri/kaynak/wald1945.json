@@ -1,0 +1,107 @@
+{
+ "id": "wald1945",
+ "aday_baslik": "Sequential Tests of Statistical Hypotheses",
+ "aday_yil": 1945,
+ "zaman": "2026-10-17T23:28:13+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1214/aoms/1177731118",
+   "durum": 200,
+   "baslik": "Sequential Tests of Statistical Hypotheses"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1214/aoms/1177731118",
+  "baslik": "Sequential Tests of Statistical Hypotheses",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Wald",
+    "ad": "A.",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Annals of Mathematical Statistics",
+  "cilt": "16",
+  "sayi": "2",
+  "sayfa": "117-186",
+  "yil": 1945,
+  "tur": "journal-article",
+  "yayinci": "Institute of Mathematical Statistics",
+  "ozet": null,
+  "url": "https://doi.org/10.1214/aoms/1177731118",
+  "bag": [
+   "http://projecteuclid.org/download/pdf_1/euclid.aoms/1177731118"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W4230704549",
+  "doi": "10.1214/aoms/1177731118",
+  "baslik": "Sequential Tests of Statistical Hypotheses",
+  "yil": 1945,
+  "yazarlar": [
+   "A. Wald"
+  ],
+  "dergi": "The Annals of Mathematical Statistics",
+  "issn": [
+   "0003-4851",
+   "2168-8990"
+  ],
+  "cilt": "16",
+  "sayi": "2",
+  "ilk_sayfa": "117",
+  "son_sayfa": "186",
+  "ozet": null,
+  "acik": "https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-16/issue-2/Sequential-Tests-of-Statistical-Hypotheses/10.1214/aoms/1177731118.pdf",
+  "adresler": [
+   "https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-16/issue-2/Sequential-Tests-of-Statistical-Hypotheses/10.1214/aoms/1177731118.pdf",
+   "https://doi.org/10.1214/aoms/1177731118",
+   "http://projecteuclid.org/euclid.aoms/1177731118"
+  ]
+ },
+ "semantic": {
+  "durum": "HTTP 404"
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://doi.org/10.1214/aoms/1177731118",
+  "son_url": "https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-16/issue-2/Sequential-Tests-of-Statistical-Hypotheses/10.1214/aoms/1177731118.full",
+  "tur": "text/html; charset=utf-8",
+  "sha256": "1d2566ce145c53472515845203640ffdc8684432d1c8283e90b37988ae042811",
+  "bayt": 133994,
+  "sayfa": 1,
+  "ilk_sayfa": "Email Password Forgot your password? Show Remember Email on this computer Remember Password Please wait... No Project Euclid account? Create an account or Sign in with your institutional credentials We can help you reset your password using the email address linked to your Project Euclid account. Email Registered users receive a variety of benefits including the ability to customize email alerts, create favorite journals list, and save searches. Please note that a Project Euclid web account does not automatically grant access to full-text content. An institutional or society member subscription is required to view non-Open Access content. Contact customer_support@projecteuclid.org with any questions. View Project Euclid Privacy Policy All Fields are Required * First Name * Last/Family Name * Email * Password Password Requirements: Minimum 8 characters, must include as least one uppercase, one lowercase letter, and one number or permitted symbol Valid Symbols for password: ~ Tilde ! Exclamation Mark @ At sign $ Dollar sign ^ Caret ( Opening Parenthesis ) Closing Parenthesis _ Underscore . Period * Confirm Password Please wait... Web Account created successfully Advanced Search Search Home > Journals > Ann. Math. Statist. > Volume 16 > Issue 2 > Article June, 1945 Sequential Tests of Statistical Hypotheses A. Wald Ann. Math. Statist. 16(2): 117-186 (June, 1945). DOI: 10.1214/aoms/1177731118 PERSONAL SIGN IN Full access may be available with your subscription Email Password Forg",
+  "pasaj": [
+   {
+    "ifade": "sequential test",
+    "sayfa": 1,
+    "pasaj": "et ( Opening Parenthesis ) Closing Parenthesis _ Underscore . Period * Confirm Password Please wait... Web Account created successfully Advanced Search Search Home > Journals > Ann. Math. Statist. > Volume 16 > Issue 2 > Article June, 1945 Sequential Tests of Statistical Hypotheses A. Wald Ann. Math. Statist. 16(2): 117-186 (June, 1945). DOI: 10.1214/aoms/1177731118 PERSONAL SIGN IN Full access may be available with your subscription Email Password Forgot your password? Show Remember Email "
+   },
+   {
+    "ifade": "sequential test",
+    "sayfa": 1,
+    "pasaj": "AVE > Folder Name Folder Description SAVE < Previous Article | Next Article > Ann. Math. Statist. Vol.16 • No. 2 • June, 1945 Institute of Mathematical Statistics Subscribe to Project Euclid Receive erratum alerts for this article A. Wald \"Sequential Tests of Statistical Hypotheses,\" The Annals of Mathematical Statistics, Ann. Math. Statist. 16(2), 117-186, (June, 1945) Include: Citation Only Citation & Abstract Format: RIS EndNote BibTex Print Friendly Version (PDF) DOWNLOAD CITATION KEYWO"
+   }
+  ],
+  "eksik": [
+   "sequential probability ratio test",
+   "the number of observations",
+   "fixed number of observations"
+  ],
+  "deneme": [
+   {
+    "url": "https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-16/issue-2/Sequential-Tests-of-Statistical-Hypotheses/10.1214/aoms/1177731118.pdf",
+    "durum": "metin okunamadı",
+    "tur": "application/pdf"
+   },
+   {
+    "url": "https://doi.org/10.1214/aoms/1177731118",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

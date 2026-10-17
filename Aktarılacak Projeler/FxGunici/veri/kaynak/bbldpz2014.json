@@ -1,0 +1,121 @@
+{
+ "id": "bbldpz2014",
+ "aday_baslik": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance",
+ "aday_yil": 2014,
+ "zaman": "2026-10-17T23:22:47+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1090/noti1105",
+   "durum": 200,
+   "baslik": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1090/noti1105",
+  "baslik": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Bailey",
+    "ad": "David H.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Borwein",
+    "ad": "Jonathan M.",
+    "ad_tam": null
+   },
+   {
+    "soyad": "López de Prado",
+    "ad": "Marcos",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Zhu",
+    "ad": "Qiji Jim",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Notices of the American Mathematical Society",
+  "cilt": "61",
+  "sayi": "5",
+  "sayfa": "458",
+  "yil": 2014,
+  "tur": "journal-article",
+  "yayinci": "American Mathematical Society (AMS)",
+  "ozet": null,
+  "url": "https://doi.org/10.1090/noti1105",
+  "bag": []
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3125595766",
+  "doi": "10.1090/noti1105",
+  "baslik": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance",
+  "yil": 2014,
+  "yazarlar": [
+   "David H. Bailey",
+   "Jonathan Michael Borwein",
+   "Marcos López de Prado",
+   "Qiji Jim Zhu"
+  ],
+  "dergi": "Notices of the American Mathematical Society",
+  "issn": [
+   "0002-9920",
+   "1088-9477"
+  ],
+  "cilt": "61",
+  "sayi": "5",
+  "ilk_sayfa": "458",
+  "son_sayfa": "458",
+  "ozet": "Another thing I must point out is that you cannot prove a vague theory wrong.[...] Also, if the process of computing the consequences is indefinite, then with a little skill any experimental result can be made to look like the expected consequences.",
+  "acik": "https://doi.org/10.1090/noti1105",
+  "adresler": [
+   "https://doi.org/10.1090/noti1105",
+   "http://hdl.handle.net/1959.13/1303607"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "PSEUDO-MATHEMATICS AND FINANCIALCHARLATANISM: THE EFFECTS OF BACKTEST OVERFITTING ONOUT-OF-SAMPLE PERFORMANCE",
+  "yil": 2014,
+  "dergi": "",
+  "ozet": null,
+  "acik": "https://doi.org/10.1090/noti1105",
+  "yazarlar": [
+   "David H. Bailey",
+   "J. Borwein",
+   "Marcos M. López de Prado",
+   "Q. Zhu"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "https://www.ams.org/notices/201405/rnoti-p458.pdf",
+  "son_url": "https://www.ams.org/notices/201405/rnoti-p458.pdf",
+  "tur": "application/pdf",
+  "sha256": "5a1bca86ab7c690681c4cd38c5f0c58459ecc014e2c04dc54fbeca861611ee3c",
+  "bayt": 3011500,
+  "sayfa": 14,
+  "ilk_sayfa": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance David H. Bailey, Jonathan M. Borwein, Marcos López de Prado, and Qiji Jim Zhu Another thing I must point out is that you cannot prove a vague theory wrong. [...] Also, if the process of computing the consequences is indefinite, then with a little skill any experimental result can be made to look like the expected consequences. -Richard Feynman [1964] Introduction A backtest is a historical simulation of an algorithmic investment strategy. Among other things, it computes the series of profits and losses that such strategy would have generated had that algorithm been run over that time period. Popular performance statistics, such as the Sharpe ratio or the Information ratio, are used to quantify the backtested strategy's return on risk. Investors typically study those backtest statistics and then allocate capital to the best performing scheme. Regarding the measured performance of a backtested strategy, we have to distinguish between two very different readings: in-sample (IS) and outof-sample (OOS). The IS performance is the one simulated over the sample used in the design of the strategy (also known as \"learning period\" or David H. Bailey is retired from Lawrence Berkeley National Laboratory. He is a Research Fellow at the University of California, Davis, Department of Computer Science. His email address is david@davidhbailey.com. Jonathan M. Borwein is Laureate Pro",
+  "pasaj": [],
+  "eksik": [
+   "relatively small number of alternative strategy configurations",
+   "The higher the number of configurations tried",
+   "the probability that the backtest is overfit",
+   "negative expected returns out-of-sample",
+   "rather than zero performance",
+   "rarely report the number of configurations tried",
+   "45 independent model configurations"
+  ],
+  "deneme": [
+   {
+    "url": "https://www.ams.org/notices/201405/rnoti-p458.pdf",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

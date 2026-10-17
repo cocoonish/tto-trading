@@ -1,0 +1,250 @@
+{
+ "kaynak": {
+  "armitage1969": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "bailey_ldp2014": {
+   "eksik": 1,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 7
+  },
+  "bbldpz2014": {
+   "eksik": 7,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 0
+  },
+  "bgir1992": {
+   "eksik": 1,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 8
+  },
+  "bh1995": {
+   "eksik": 1,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 7
+  },
+  "bllo2014": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": 200,
+   "ozet": false,
+   "pasaj": 11
+  },
+  "cchv2014": {
+   "eksik": 7,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 4
+  },
+  "cdg2019": {
+   "eksik": 3,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 6
+  },
+  "efron2011": {
+   "eksik": 1,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 7
+  },
+  "esma2018": {
+   "eksik": 1,
+   "kunye": false,
+   "metin": 200,
+   "ozet": false,
+   "pasaj": 6
+  },
+  "evans2018": {
+   "eksik": 7,
+   "kunye": true,
+   "metin": 200,
+   "ozet": false,
+   "pasaj": 27
+  },
+  "evans_lyons2002": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "fsb2014": {
+   "eksik": 8,
+   "kunye": false,
+   "metin": 200,
+   "ozet": false,
+   "pasaj": 29
+  },
+  "glosten_milgrom1985": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": 200,
+   "ozet": false,
+   "pasaj": 7
+  },
+  "grossman_stiglitz1980": {
+   "eksik": 0,
+   "kunye": false,
+   "metin": "okunamadı",
+   "ozet": false,
+   "pasaj": 0
+  },
+  "hlz2016": {
+   "eksik": 1,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 9
+  },
+  "holm1979": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 9
+  },
+  "ioannidis2008": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 8
+  },
+  "ito_yamada2017": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "kaminski_lo2014": {
+   "eksik": 5,
+   "kunye": true,
+   "metin": 200,
+   "ozet": false,
+   "pasaj": 4
+  },
+  "kmw2024": {
+   "eksik": 7,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 24
+  },
+  "linnainmaa2010": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "lrv2011": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "mclean_pontiff2016": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "melvin_prins2015": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": false,
+   "pasaj": 0
+  },
+  "mrw2013": {
+   "eksik": 5,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 7
+  },
+  "neely_weller2003": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": false,
+   "pasaj": 0
+  },
+  "nosek2018": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 9
+  },
+  "nwu2009": {
+   "eksik": 1,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 8
+  },
+  "obrien_fleming1979": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "oomen2017": {
+   "eksik": 6,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 10
+  },
+  "osler2003": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "stw1999": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 8
+  },
+  "wald1945": {
+   "eksik": 3,
+   "kunye": true,
+   "metin": 200,
+   "ozet": false,
+   "pasaj": 2
+  },
+  "white2000": {
+   "eksik": 0,
+   "kunye": true,
+   "metin": 200,
+   "ozet": true,
+   "pasaj": 15
+  }
+ },
+ "zaman": "2026-10-17T23:22:28+00:00"
+}

@@ -1,0 +1,97 @@
+{
+ "id": "mclean_pontiff2016",
+ "aday_baslik": "Does Academic Research Destroy Stock Return Predictability?",
+ "aday_yil": 2016,
+ "zaman": "2026-10-17T23:26:50+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1111/jofi.12365",
+   "durum": 200,
+   "baslik": "Does Academic Research Destroy Stock Return Predictability?"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1111/jofi.12365",
+  "baslik": "Does Academic Research Destroy Stock Return Predictability?",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "MCLEAN",
+    "ad": "R. DAVID",
+    "ad_tam": null
+   },
+   {
+    "soyad": "PONTIFF",
+    "ad": "JEFFREY",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "The Journal of Finance",
+  "cilt": "71",
+  "sayi": "1",
+  "sayfa": "5-32",
+  "yil": 2016,
+  "tur": "journal-article",
+  "yayinci": "Wiley",
+  "ozet": "ABSTRACT We study the out‐of‐sample and post‐publication return predictability of 97 variables shown to predict cross‐sectional stock returns. Portfolio returns are 26% lower out‐of‐sample and 58% lower post‐publication. The out‐of‐sample decline is an upper bound estimate of data mining effects. We estimate a 32% (58%-26%) lower return from publication‐informed trading. Post‐publication declines are greater for predictors with higher in‐sample returns, and returns are higher for portfolios concentrated in stocks with high idiosyncratic risk and low liquidity. Predictor portfolios exhibit post‐publication increases in correlations with other published‐predictor portfolios. Our findings suggest that investors learn about mispricing from academic publications.",
+  "url": "https://doi.org/10.1111/jofi.12365",
+  "bag": [
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fjofi.12365",
+   "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fjofi.12365",
+   "https://onlinelibrary.wiley.com/doi/pdf/10.1111/jofi.12365"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W2182051792",
+  "doi": "10.1111/jofi.12365",
+  "baslik": "Does Academic Research Destroy Stock Return Predictability?",
+  "yil": 2015,
+  "yazarlar": [
+   "R. David McLean",
+   "Jeffrey Pontiff"
+  ],
+  "dergi": "The Journal of Finance",
+  "issn": [
+   "0022-1082",
+   "1540-6261"
+  ],
+  "cilt": "71",
+  "sayi": "1",
+  "ilk_sayfa": "5",
+  "son_sayfa": "32",
+  "ozet": "ABSTRACT We study the out‐of‐sample and post‐publication return predictability of 97 variables shown to predict cross‐sectional stock returns. Portfolio returns are 26% lower out‐of‐sample and 58% lower post‐publication. The out‐of‐sample decline is an upper bound estimate of data mining effects. We estimate a 32% (58%-26%) lower return from publication‐informed trading. Post‐publication declines are greater for predictors with higher in‐sample returns, and returns are higher for portfolios concentrated in stocks with high idiosyncratic risk and low liquidity. Predictor portfolios exhibit post‐publication increases in correlations with other published‐predictor portfolios. Our findings suggest that investors learn about mispricing from academic publications.",
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1111/jofi.12365"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Does Academic Research Destroy Stock Return Predictability",
+  "yil": 2016,
+  "dergi": "",
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.2080900",
+  "yazarlar": [
+   "R. D. McLean",
+   "Jeffrey E. Pontiff"
+  ]
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1111/jofi.12365",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://doi.org/10.2139/ssrn.2080900",
+    "durum": "HTTP 403"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}
