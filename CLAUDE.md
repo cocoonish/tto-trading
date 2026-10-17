@@ -5133,8 +5133,12 @@ orada tablo zaten kendi içinde kayıyor. Kaydırma artık kapta (`.sayi-tablo`,
 adı her genişlikte yapışık ve zemini kâğıdın dokusuyla boyanır (`--doku`, gövdeyle tek tanım; düz
 renk dokulu sayfada açık bir şerit olurdu); tablonun dikey payı kaba taşındı, çünkü kaydırma
 kabının içindeki pay komşu paragrafınkiyle birleşmez — 246 tablo × genişlik kıyasında üst ve alt
-aralık birebir aynı. Ölçüm elle koşturuldu (Playwright, beş genişlik, katlanırlar açık ve kapalı);
-yayın kapısında taşma ölçütü yok (30.09'un açık (d) maddesi).
+aralık birebir aynı. İlk hâl yayımlanmış Brent analizinde bir geri adımdı: sütundan 78 piksel geniş
+tablo eskiden sağ boşluğa taşıp tam görünüyordu, kaydırılan kapta son sütunu saklandı. Geniş ekranda
+kap artık tablonun en dar genişliğini alır ve sütunun sağındaki boşluğa kadar büyür
+(`--tablo-pay`), kaydırma ancak o pay da yetmezse başlar: 1.280 pikselin üstünde yalnız en geniş üç
+tablo (1.197–1.276 piksel) kayıyor. Ölçüm elle koşturuldu (Playwright, altı genişlik, katlanırlar
+açık ve kapalı); yayın kapısında taşma ölçütü yok (30.09'un açık (d) maddesi).
 
 AÇIK, adıyla (metodoloji dersinin "Ölçülmeyenler"i): gerçek sürpriz (anket medyanı yok; haber
 kovaları ilk mumun hareketinden bir vekil), piyasa derinliği ve kısmi dolum, başka bir likidite
