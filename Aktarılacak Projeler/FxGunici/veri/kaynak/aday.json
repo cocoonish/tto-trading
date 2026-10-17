@@ -112,7 +112,16 @@
     "negative expected returns out-of-sample",
     "rather than zero performance",
     "rarely report the number of configurations tried",
-    "45 independent model configurations"
+    "45 independent model configurations",
+    "overfit",
+    "backtest overfitting",
+    "out-of-sample",
+    "negative",
+    "configurations",
+    "minimum backtest length",
+    "number of trials",
+    "in-sample",
+    "expected"
    ]
   },
   {
@@ -322,7 +331,16 @@
     "stop-loss rules can add value",
     "stop-loss rules never stop losses",
     "certain stop-loss policies can increase expected return",
-    "buy-and-hold strategy using index futures contracts"
+    "buy-and-hold strategy using index futures contracts",
+    "stopping premium",
+    "always negative",
+    "reduces the expected return",
+    "decreases the expected return",
+    "lower expected return",
+    "random walk",
+    "momentum",
+    "can add value",
+    "never"
    ]
   },
   {
@@ -457,6 +475,12 @@
      "0002-8282",
      "70",
      "393"
+    ],
+    [
+     "0002-8282",
+     "70",
+     "",
+     "3"
     ]
    ],
    "url": [],
@@ -467,7 +491,8 @@
     "an equilibrium degree of disequilibrium",
     "do receive compensation",
     "a fundamental conflict between the efficiency",
-    "those who expend resources to obtain information"
+    "those who expend resources to obtain information",
+    "equilibrium degree of disequilibrium"
    ]
   },
   {
@@ -584,7 +609,11 @@
     "the algorithmic provision of liquidity",
     "strategies of algorithmic traders being highly correlated",
     "arbitrage opportunities",
-    "autocorrelation"
+    "autocorrelation",
+    "Neely and Weller",
+    "Neely",
+    "transaction costs",
+    "technical trading"
    ]
   },
   {
@@ -614,7 +643,9 @@
    "id": "melvin_prins2015",
    "baslik": "Equity hedging and exchange rates at the London 4 p.m. fix",
    "yil": 2015,
-   "doi_aday": [],
+   "doi_aday": [
+    "10.1016/j.finmar.2014.11.001"
+   ],
    "koordinat": [
     [
      "1386-4181",
@@ -644,7 +675,10 @@
     "rebalanc",
     "month-end",
     "end of the month",
-    "predict"
+    "predict",
+    "equity returns",
+    "hedge ratio",
+    "portfolio rebalancing"
    ]
   },
   {
@@ -681,7 +715,18 @@
     "volatil",
     "revers",
     "spike",
-    "Fix"
+    "Fix",
+    "21",
+    "negative",
+    "autocorrelat",
+    "serial correlation",
+    "ten years",
+    "2004",
+    "2013",
+    "Melvin",
+    "Melvin and Prins",
+    "hedging",
+    "equity"
    ]
   },
   {
@@ -723,7 +768,12 @@
     "appreciat",
     "depreciat",
     "fixing",
-    "reversal"
+    "reversal",
+    "Melvin",
+    "Melvin and Prins",
+    "Evans (2018)",
+    "hedging",
+    "month-end"
    ]
   },
   {
@@ -765,7 +815,12 @@
     "Gotobi",
     "9:55",
     "order imbalance",
-    "revers"
+    "revers",
+    "9.55",
+    "gotobi",
+    "calendar",
+    "10:00",
+    "fixing time"
    ]
   },
   {
@@ -882,6 +937,55 @@
     "sequential test",
     "the number of observations",
     "fixed number of observations"
+   ]
+  },
+  {
+   "id": "gao2018",
+   "baslik": "Market intraday momentum",
+   "yil": 2018,
+   "doi_aday": [
+    "10.1016/j.jfineco.2018.05.009"
+   ],
+   "koordinat": [
+    [
+     "0304-405X",
+     "129",
+     "394"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "first half-hour",
+    "last half-hour",
+    "intraday momentum",
+    "S&P 500",
+    "ETF",
+    "predicts",
+    "return"
+   ]
+  },
+  {
+   "id": "efl2018",
+   "baslik": "Intraday momentum in FX markets: Disentangling informed trading from liquidity provision",
+   "yil": 2018,
+   "doi_aday": [
+    "10.1016/j.finmar.2017.09.002"
+   ],
+   "koordinat": [
+    [
+     "1386-4181",
+     "37",
+     "35"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "intraday momentum",
+    "RUB",
+    "first half-hour",
+    "last half-hour",
+    "informed trading",
+    "liquidity provision"
    ]
   }
  ]

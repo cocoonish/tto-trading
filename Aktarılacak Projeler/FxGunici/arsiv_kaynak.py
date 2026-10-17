@@ -18,7 +18,7 @@ yerelde sorulur (veri/kaynak/kaynaklar.json, dogrula.py).
 
 Çıktı: veri/kaynak/<id>.json (kaynak başına), veri/kaynak/kunye.json (koşunun özeti), veri/kaynak/ozler.json (dizinin
 özleri; okuyucu okumadan önce sınar). Var olan ve metni okunmuş kaynak yeniden indirilmez (TTO_PARCA=yenile hepsini
-yeniler).
+yeniler; "yenile <id> <id>…" yalnız adı verilenleri).
 """
 from __future__ import annotations
 
@@ -38,6 +38,7 @@ from pathlib import Path
 import requests
 
 import ozler
+from atif import normal  # eşleme biçiminin tek tanımı (kapı da onu kullanır)
 
 BURASI = Path(__file__).resolve().parent
 DIZIN = BURASI / "veri" / "kaynak"
@@ -56,17 +57,6 @@ BASLANGIC = time.monotonic()
 
 def kalan() -> float:
     return BUTCE - (time.monotonic() - BASLANGIC)
-
-
-def normal(s: str) -> str:
-    """Eşleme biçimi: NFKC, tipografik tırnak ve tire düz, yumuşak tire yok, satır sonunda bölünmüş sözcük birleşik,
-    boşluk tek. Yerel doğrulama AYNI fonksiyonu kullanır (kaynak_dogrula.normal)."""
-    s = unicodedata.normalize("NFKC", s).replace("­", "")
-    for a, b in (("‘", "'"), ("’", "'"), ("“", '"'), ("”", '"'), ("–", "-"), ("—", "-"), ("−", "-"),
-                 (" ", " "), ("ﬁ", "fi"), ("ﬂ", "fl")):
-        s = s.replace(a, b)
-    s = re.sub(r"(\w)-\s*\n\s*(\w)", r"\1\2", s)
-    return re.sub(r"\s+", " ", s).strip()
 
 
 def _sade_baslik(s: str | None) -> str:
@@ -177,16 +167,19 @@ def openalex_doi(doi: str) -> dict | None:
     return _openalex_kayit(r["json"])
 
 
-def openalex_koordinat(issn: str, cilt: str, ilk: str) -> list[dict]:
-    """Künye koordinatıyla katalog süzgeci (serbest metin değil): dergi ISSN'i, cilt ve ilk sayfa."""
+def openalex_koordinat(issn: str, cilt: str, ilk: str, sayi: str = "") -> list[dict]:
+    """Künye koordinatıyla katalog süzgeci (serbest metin değil): dergi ISSN'i, cilt, sayı ve ilk sayfa. Sayfa
+    verilmezse o cildin (sayının) bütün eserleri listelenir ve başlık yerelde eşlenir."""
     f = [f"primary_location.source.issn:{issn}"]
     if cilt:
         f.append(f"biblio.volume:{cilt}")
+    if sayi:
+        f.append(f"biblio.issue:{sayi}")
     if ilk:
         f.append(f"biblio.first_page:{ilk}")
-    r = al("https://api.openalex.org/works?per-page=10&filter=" + ",".join(f), json_=True)
+    r = al("https://api.openalex.org/works?per-page=100&filter=" + ",".join(f), json_=True)
     if r.get("durum") != 200:
-        return [{"durum": r.get("durum"), "koordinat": [issn, cilt, ilk]}]
+        return [{"durum": r.get("durum"), "koordinat": [issn, cilt, ilk, sayi]}]
     return [_openalex_kayit(w) for w in r["json"].get("results") or []]
 
 
@@ -318,10 +311,12 @@ def kaynak(a: dict) -> dict:
     if doi:
         oa = openalex_doi(doi)
     else:
-        for issn, cilt, ilk in a.get("koordinat") or []:
-            adaylar = openalex_koordinat(issn, cilt, ilk)
+        for koor in a.get("koordinat") or []:
+            issn, cilt, ilk = koor[:3]
+            sayi = koor[3] if len(koor) > 3 else ""
+            adaylar = openalex_koordinat(issn, cilt, ilk, sayi)
             out.setdefault("koordinat_deneme", []).append(
-                {"koordinat": [issn, cilt, ilk], "bulunan": [(x.get("baslik"), x.get("doi")) for x in adaylar]})
+                {"koordinat": koor, "bulunan": [(x.get("baslik"), x.get("doi")) for x in adaylar][:12]})
             tut = [x for x in adaylar if x.get("durum") == 200 and baslik_tutar(a.get("baslik"), x.get("baslik"))]
             if tut:
                 oa = tut[0]
@@ -351,11 +346,13 @@ def kaynak(a: dict) -> dict:
 def main() -> int:
     DIZIN.mkdir(parents=True, exist_ok=True)
     aday = json.loads(ADAY.read_text(encoding="utf-8"))["kaynak"]
-    yenile = os.environ.get("TTO_PARCA", "") == "yenile"
+    parca = os.environ.get("TTO_PARCA", "").split()
+    yenile = set(parca[1:]) if parca[:1] == ["yenile"] else set()       # "yenile a b" → yalnız a ve b yeniden
+    hepsi = parca == ["yenile"]
     ozet = {"zaman": datetime.now(timezone.utc).isoformat(timespec="seconds"), "kaynak": {}}
     for a in aday:
         yol = DIZIN / f"{a['id']}.json"
-        if yol.exists() and not yenile:
+        if yol.exists() and not hepsi and a["id"] not in yenile:
             eski = json.loads(yol.read_text(encoding="utf-8"))
             if (eski.get("metin") or {}).get("durum") == 200 and eski.get("kunye_cozuldu"):
                 ozet["kaynak"][a["id"]] = {"durum": "var"}
