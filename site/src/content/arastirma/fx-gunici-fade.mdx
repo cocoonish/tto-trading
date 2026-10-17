@@ -1,7 +1,7 @@
 ---
 title: 'FX Gün İçi Stratejiler 4: Fade — Başarısız Kırılım, VWAP, Pivot ve Fiksing Dönüşü'
 description: "Kırılımın tersine, ortalamaya ya da seviyeye dönüşe bahis yapan altı kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: başarısız kırılım (turtle soup) üç seviyede — Londra aralığı, Asya aralığı, önceki gün tepe/dip —, VWAP'a dönüş, pivot dönüşü ve WM/R 16:00 fiksingi sonrası dönüş (ay sonu ayrı). Kural, örnek günler, sonuç, maliyet, rastgele yön sınaması, koşullar ve hüküm."
-pubDate: 2026-10-16
+pubDate: 2026-10-17
 tags: ['fx', 'gun-ici', 'fade', 'turtle-soup', 'vwap', 'fiksing', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'

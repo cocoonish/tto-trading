@@ -1,7 +1,7 @@
 ---
 title: 'FX Gün İçi Stratejiler 3: Yapı Kırılımları — İç Mum, Sıkışma, Önceki Gün Tepe/Dip, Pivot'
 description: "Bir fiyat yapısının ya da referans seviyesinin kırılmasına dayanan dört kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: iç mum (inside bar) kırılımı, Bollinger–Keltner sıkışması, önceki günün tepe ve dibinin kırılımı ve klasik (salon) pivotlarının (R1/S1) kırılımı. Kural, örnek günler, örneklem içi ve dışı sonuç, maliyet, rastgele yön sınaması, koşullar, kontrol listesi ve hüküm."
-pubDate: 2026-10-16
+pubDate: 2026-10-17
 tags: ['fx', 'gun-ici', 'kirilim', 'inside-bar', 'pivot', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'

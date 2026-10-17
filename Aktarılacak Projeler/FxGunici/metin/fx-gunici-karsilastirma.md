@@ -1,7 +1,7 @@
 ---
 title: 'FX Gün İçi Stratejiler 7: Karşılaştırma — Bütün Kurallar Yan Yana'
 description: "Serinin bütün kuralları aynı makinenin aynı ölçüleriyle yan yana: örneklem dışında işlem başına net R ve aralığı, parite parite hüküm, maliyet merdiveni, rastgele yön sınaması, stratejiler arası günlük korelasyon ve koşul analizinin ters seçimle sınanması. Hangi kural bir yön bilgisi taşıyor, hangisi yalnız makas ödüyor ve tutan koşulların ne kadarı şans."
-pubDate: 2026-10-16
+pubDate: 2026-10-17
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'

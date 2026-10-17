@@ -1,7 +1,7 @@
 ---
 title: 'FX Gün İçi Stratejiler 2: Seans Kırılımları — Londra Açılışı, Asya Aralığı, New York İlk Dengesi'
 description: "Bir seansın ilk aralığının kırılmasına dayanan dört kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: Londra açılış aralığı kırılımı (ORB), Asya aralığı kırılımı ve New York ilk dengesinin iki çıpayla (masaların sabahı ve hisse açılışı) kırılımı. Her biri için kural, örnek günler, örneklem içi ve dışı sonuç, maliyet, rastgele yön sınaması, koşullar, kontrol listesi ve hüküm."
-pubDate: 2026-10-16
+pubDate: 2026-10-17
 tags: ['fx', 'gun-ici', 'kirilim', 'orb', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'

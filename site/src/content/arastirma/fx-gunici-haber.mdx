@@ -1,7 +1,7 @@
 ---
 title: 'FX Gün İçi Stratejiler 5: Haber — Kırılım mı Fade mi, FOMC Kararı ve Basın Toplantısı, Beş Haber Stratejisi'
 description: "ABD tarım dışı istihdamı, ABD TÜFE'si, FOMC, ECB ve BoE kararları anında dört majör paritede ne olduğu, 2018–2026 bid/ask verisiyle: resmî takvim ve saat denetimi, haber dakikasının makası, hangi koşulda ilk hareketin sürdüğünü (kırılım) hangisinde geri döndüğünü (fade) gösteren devam tablosu, ortalama fiyat patikaları, FOMC kararı ile basın toplantısının ilişkisi ve beş haber stratejisi (N1–N5)."
-pubDate: 2026-10-16
+pubDate: 2026-10-17
 tags: ['fx', 'gun-ici', 'haber', 'nfp', 'fomc', 'ecb', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · BLS yayım takvimi ve bültenleri (Internet Archive kopyaları) · Fed, ECB, BoE karar arşivleri · önceden kayıt'
