@@ -1,6 +1,6 @@
 ### Ne
 
-Fade dersindeki fiksing dönüşünün tersi: fiksinge giden dakikalarda fiyat bir yöne itiliyorsa itiş fiksinge kadar
+Fade dersindeki fiksing dönüşünün eşi, fiksingden önceki pencerede: fiksinge giden dakikalarda fiyat bir yöne itiliyorsa itiş fiksinge kadar
 **sürer** varsayımı. Kural fiksingden önceki mumun yönünde, fiksingden bir mum önce girer ve tam fiksingde çıkar.
 
 ### Piyasa mantığı
@@ -39,18 +39,15 @@ Noktalı mavi çizgiler sinyal mumunun tepesi ve dibi, mavi bant sinyal mumunun 
 {{! sonuclar }}
 
 Beş dakikalık bir işlemde maliyetin payını havuzun iki sayısı gösteriyor: örneklem dışında maliyetten önce işlem
-başına {{ H.oos.brut_r | r }} R, sonra {{ H.oos.beklenti_r | r }} R.
+başına {{ H.oos.brut_r | ra }} R, sonra {{ H.oos.beklenti_r | ra }} R.
 
 ### Ay sonu
 
 {{! ay_sonu }}
 
-_Önceden kayıtlı varsayılan, net R; her parite iki satır: bütün dönem ve örneklem dışı (2024 →). Fark p: ay
-sonu ile öbür günlerin ortalama farkı, Welch t (iki yönlü)._
-
 Ay sonu, portföy yeniden dengelemesinin fiksinge en büyük akışı taşıdığı gün olarak bilinir (Melvin ve Prins,
-2015) ve momentum savunusu en çok o gün için kurulur. Örneklem küçüktür: EUR/USD'de ay sonu kümesi bütün dönemde
-{{ E.varsayilan.ay_sonu.ay_sonu.tum.n | n }}, örneklem dışında {{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem. {{! ay_sonu_cumle }}
+2015) ve momentum savunusu en çok o gün için kurulur. Örneklem küçüktür: EUR/USD'de ay sonu kümesi 2018–2023
+arasında {{ E.varsayilan.ay_sonu.ay_sonu.is.n | n }}, 2024 → penceresinde {{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem. {{! ay_sonu_cumle }}
 
 ### Koşullar
 

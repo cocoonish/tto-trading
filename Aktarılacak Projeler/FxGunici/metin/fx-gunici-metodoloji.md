@@ -74,21 +74,21 @@ günler adıyla) ve elle yazılmış bir listeye karşı sınanır.
   tanımlamıyorsa giriş, bir sonraki mumun ilk dakikasının açılışındadır (alış ask'tan, satış bid'den); gün içi
   momentum 12:00 New York'ta, fiksing dönüşü "gecikme" parametresi kadar mum sonra girer. Sinyalin görüldüğü
   fiyattan girilmez.
-- **Alınmayan emir.** Stop seviyesi taşıyan emirde giriş tarafının kaymasız açılışı stopun ötesindeyse, seviye
-  hedefi yürütülen girişin (makas ve kayma dahil) gerisinde ya da tam üstündeyse, ya da giriş gün sonunda veya
-  sonrasındaysa emir alınmaz. Stopun ölçütü ham açılıştır, hedefinki yürütülen fiyattır; hedef ölçütü bu yüzden
+- **Alınmayan emir.** Stop seviyesi taşıyan emirde giriş tarafının kaymasız açılışı stopun ötesinde ya da tam
+  üstündeyse, seviye hedefi yürütülen girişin (makas ve kayma dahil) gerisinde ya da tam üstündeyse, ya da giriş gün
+  sonunda veya sonrasındaysa emir alınmaz. Stopun ölçütü ham açılıştır, hedefinki yürütülen fiyattır; hedef ölçütü bu yüzden
   kaymaya bağlıdır ve maliyet merdiveninin her basamağında atılan emir sayısı değişebilir. Alınmayan emirlerin
   sayısı strateji derslerinde, kural kural.
 - **Stop.** Sert stop emir tarafında dakika dakika izlenir; fiyat stopun ötesinde açılırsa (boşluk) dolum açılış
   fiyatındandır. Kapanış stopu, mumun orta fiyat kapanışı stopun ötesindeyse bir sonraki mumun açılışında kapatır.
-  Varsayılanı stopsuz olan iki kuralın (fiksing ve gün içi momentum) stoplu kombinasyonlarında stop, yürütülen
-  giriş fiyatından 1·ATR uzağa konur.
+  Varsayılanı stopsuz olan üç kuralın (fiksing momentumu, fiksing dönüşü ve gün içi momentum) stoplu
+  kombinasyonlarında stop, yürütülen giriş fiyatından 1·ATR uzağa konur.{{? ON.fiks.varsayilan_momentum.stop_turu == "yok" and ON.fiks.varsayilan_donus.stop_turu == "yok" and ON.momentum.varsayilan.stop_turu == "yok" }}
 - **Hedef.** Limit emirdir ve kaymaz. Stop ile hedef aynı strateji mumunun içinde değmişse sıra 1 dakikalık
   veriyle çözülür; aynı dakikada ikisi birden değmişse **stop** sayılır (tutucu varsayım). Zaman hedefi girişten
   {{ ON.genel.desen_zaman_mum | n }} mum sonra{% if ON.haber.zaman_mum != ON.genel.desen_zaman_mum %} (haber kurallarında {{ ON.haber.zaman_mum | n }} mum){% endif %}, o mumun açılışında
   piyasa emriyle çıkar; stop o ana kadar açıktır, çıkış gün sonunu aşmaz.
-- **Gün sonu ve tek pozisyon.** Bütün pozisyonlar en geç {{ K.gun_sonu_et | t }} New York'ta kapanır; gece ve hafta
-  sonu pozisyon taşınmaz. Aynı anda parite başına tek pozisyon vardır; açık pozisyon varken gelen sinyal atlanır.
+- **Gün sonu ve tek pozisyon.** Bütün pozisyonlar en geç {{ K.gun_sonu_et | t }} New York'ta ({{! gun_sonu_tsi }})
+  kapanır; gece ve hafta sonu pozisyon taşınmaz. Aynı anda parite başına tek pozisyon vardır; açık pozisyon varken gelen sinyal atlanır.
   Haber kurallarında kural bütün olaylara birlikte uygulanır: bir olayın pozisyonu açıkken gelen başka bir olayın
   sinyali (ör. aynı gün FOMC kararından sonra basın toplantısının sinyali) alınmaz.
 - **Maliyet.** Makas gerçek bid/ask'tadır. Üstüne her piyasa dolumuna (giriş, zaman çıkışı, stop) temel senaryoda
@@ -204,8 +204,8 @@ aşağıdadır.
 
 ### Ön kayıttan sapmalar
 
-Ölçüm dört yerde ön kaydın harfinden ayrılır. Biri ilk sonuçlardan sonra kararlaştırıldı, üçü sonuçlardan önce
-yazılmış koddadır.
+Ölçüm dört yerde ön kaydın harfinden ayrılır. Biri ilk sonuçlardan sonra kararlaştırıldı, üçü ilk sonuçlardan önce
+sabitlenmiş uygulamadadır.
 
 - **Hüküm penceresi** (karar ilk sonuçlardan sonra, {{! karsi_olgu_zaman hukum_penceresi }} UTC). Ön kayıt varsayılan
   için bütün dönemi örneklem dışı sayar ve hükmü oradan ister, çünkü varsayılan hiçbir veriye bakmadan yazıldı. Bu
@@ -214,7 +214,7 @@ yazılmış koddadır.
   varsayılanların {{ T.hukum_say.oos.toplam | n }} bileşiminde 2024 → hükmü {{ T.hukum_say.oos.calismiyor | n }}
   çalışmıyor ve {{ T.hukum_say.oos.zayif | n }} zayıf, bütün dönem hükmü {{ T.hukum_say.tum.calismiyor | n }} çalışmıyor
   ve {{ T.hukum_say.tum.zayif | n }} zayıf; iki pencerede de "çalışıyor" hükmü alan bileşim yok{{? T.hukum_say.oos.calisiyor == 0 and T.hukum_say.tum.calisiyor == 0 and T.hukum_say.oos.olculemedi == 0 and T.hukum_say.tum.olculemedi == 0 }}. İki pencerenin hükmü {{! pencere_ayrisan }}.
-- **Ailelerin kurallara bölünmesi ve deneme sayısı** (sonuçlardan önce yazılmış kod). Ön kayıt {{ K.aile_n | n }} kural ailesi kaydetti
+- **Ailelerin kurallara bölünmesi ve deneme sayısı** (ilk sonuçlardan önce sabitlenmiş uygulama). Ön kayıt {{ K.aile_n | n }} kural ailesi kaydetti
   ve seçimi de deflated Sharpe'ın deneme sayısını da aile başına ister. Ölçüm dört aileyi kurallara böler (New York
   ilk dengesi başlangıç saatine, başarısız kırılım seviyesine, pivot ve fiksing türüne) ve ikisini de kural başına
   kurar: parite başına {{ K.aile_n | n }} yerine {{ T.birim | n }} seçim yapılır.{{? len(K.bolunen_aile) == 4 and K.bolunen_aile[0] == "fiks" and K.bolunen_aile[1] == "nyib" and K.bolunen_aile[2] == "pivot" and K.bolunen_aile[3] == "sahte" }}
@@ -224,21 +224,33 @@ yazılmış koddadır.
   Başarısız kırılımın ön kayıtlı varsayılanı seviye belirtmez; üç kural aynı varsayılanı kendi seviyesiyle
   kullanır.{{? ON.sahte.varsayilan.seviye == None }} Bölünmenin yönü tutucu değildir: daha az deneme şansla beklenen
   en yüksek Sharpe'ı, yani deflated Sharpe'ın eşiğini düşürür. {{! aile_dsr }}
-- **Üç kuralın dar okuması** (sonuçlardan önce yazılmış kod). Kod üç kuralı ön kaydın harfinden dar okur ve o okuma
-  korunur: VWAP kurallarında çapadan sonraki ilk 60 dakika (kod kuralın durumunu da sıfırlar, yani trend sayacı ve
-  bant dışı gezinti çapadan bir saat sonra başlar; harf yalnız sinyali yasaklar), pivot kırılımı (kod R1'i yalnız
-  yukarı, S1'i yalnız aşağı kesişte sayar; harf her seviyenin günün ilk kesişini iki yönde de sayar) ve başarısız
-  kırılım (kod kırılım mumunu seviyeyi kesen mum sayar; harf pencerenin ilk mumu dışarıda kapanırsa da sayar,
-  yani seviye pencereden önce aşıldıysa açılıştaki geri alınış da kırılımdır; kesiş tanımı ön kaydın "pencere"
-  parametresine anlam verir, çünkü dışarıda her kapanış kırılım sayılsaydı içeride kapanan ilk mum neredeyse her zaman dışarıda
-  kapanmış bir mumun hemen ardından gelirdi ve bir mumluk pencere onu zaten yakalardı). Harfin okuması her koşuda ayrıca
-  ölçülür ve ilgili strateji derslerinde kuralın sonuçlarının yanında durur:
+- **Altı kuralın beş yerde dar ya da farklı okunması** (ilk sonuçlardan önce sabitlenmiş uygulama). Ölçüm altı
+  kuralı beş yerde ön kaydın harfinden dar ya da farklı okur ve o okuma korunur:
+  - VWAP kurallarında çapadan sonraki ilk 60 dakika: ölçüm kuralın durumunu da sıfırlar, yani trend sayacı ve bant
+    dışı gezinti çapadan bir saat sonra başlar; harf yalnız sinyali yasaklar.
+  - VWAP dönüşünde bandın içine dönüş: ölçüm yalnız çıkılan bandı sorar, üst bandın dışından dönen kapanış alt
+    bandın da altında olsa sinyal verir; harf ("bandın içine kapanan ilk mum") kapanışın iki bandın arasında
+    olmasını ister ve karşı bandın ötesindeki kapanışı o yanda yeni bir gezinti sayar.
+  - Pivot kırılımı: ölçüm R1'i yalnız yukarı, S1'i yalnız aşağı kesişte sayar; harf her seviyenin günün ilk
+    kesişini iki yönde de sayar.
+  - Başarısız kırılımın kırılım mumu: ölçüm seviyeyi kesen mumu sayar; harf pencerenin ilk mumu dışarıda kapanırsa
+    da sayar, yani seviye pencereden önce aşıldıysa açılıştaki geri alınış da kırılımdır. Kesiş tanımı ön kaydın
+    "pencere" parametresine anlam verir: dışarıda her kapanış kırılım sayılsaydı içeride kapanan ilk mum neredeyse
+    her zaman dışarıda kapanmış bir mumun hemen ardından gelirdi ve bir mumluk pencere onu zaten yakalardı.
+  - Başarısız kırılımın geri dönüşü: ölçüm yalnız kırılan kenarı sorar, yukarı kırılımdan sonra alt kenarın da
+    altında kapanan mum dönüş mumu sayılır ve satış verir; harf ("yeniden içeride kapanırsa") kapanışın aralığın
+    içinde olmasını ister ve karşı kenarın ötesindeki kapanışı ters yönde yeni bir kırılım sayar (haber dersindeki
+    N4 başarısız kırılımının kuralı).
+
+  Harfin her okuması her koşuda ayrıca ve tek başına ölçülür (öbür okumalar bu serinin kuralında kalır) ve ilgili
+  strateji derslerinde kuralın sonuçlarının yanında durur:
 
 {{! yorum_ozet }}
 
-- **Devam tablosunun "yetersiz örneklem" etiketi** (sonuçlardan önce yazılmış kod). Ön kayıt asgari olay sayısına
-  ulaşmayan hücreyi de "ayrışmıyor" sayar; ölçüm o hücreyi "yetersiz örneklem" diye ayrı etiketler. İki etiket de
-  "kırılım kazanır" ya da "fade kazanır" değildir; hiçbir hüküm bu yüzden değişmez.
+- **Devam tablosunun etiketleri** (ilk sonuçlardan önce sabitlenmiş uygulama). Ön kaydın terimi "ayrışmıyor"
+  her yönü ayrı ayrı sıfıra karşı sınar; tablo onu ölçtüğü şeyle, "kazanan yok" diye yazar. Ön kayıt asgari olay
+  sayısına ulaşmayan hücreyi de "ayrışmıyor" sayar; ölçüm o hücreyi "yetersiz örneklem" diye ayrı etiketler. İki
+  etiket de "kırılım kazanır" ya da "fade kazanır" değildir; hiçbir hüküm bu yüzden değişmez.
 
 ### Sonuçlardan sonra değişen uygulama kuralları
 
@@ -308,7 +320,7 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 - **Uygulama eşikleri.** Ön kayıt hüküm kuralının şartlarını yazar ama asgarilerini yazmaz: %95 aralığı en az
   {{ K.uygulama_esik.bootstrap | n }} işlemle kurulur, rastgele yön sınaması en az {{ K.uygulama_esik.rastgele | n }}
   işlemle koşar, koşul analizinin "tuttu" hükmü örneklem dışında en az {{ K.uygulama_esik.kosul_oos | n }} işlem
-  ister. Üç asgari de sonuçlardan önce yazılmış koddadır. Asgariyi karşılamayan sınama kurulmaz ve "çalışıyor"un
+  ister. Üç asgari de ilk sonuçlardan önce sabitlenmiş uygulamadadır. Asgariyi karşılamayan sınama kurulmaz ve "çalışıyor"un
   şartı sağlanmamış sayılır.
 - **Rastgele yön sınamasının kurgusu.** Ön kayıt yalnız "rastgele yön yüzdeliği"ni ister. Ölçüm her alınan işlemin
   aynasını kurar: aynı giriş dakikası, ters yön, aynanın kendi yürütülen girişinden aynı R uzaklığında stop ve
@@ -334,8 +346,12 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 
 ### Ön kayıtta olmayan ve hükme girmeyen ölçüler
 
-- **Maliyet.** Başabaş kayma (işlem başına net R'yi sıfıra indiren dolum başına kayma) iki dönemde, bütün dönem ve
-  2024 →, R'den ölçülür. Yalnız makas koşusu (kayma ve haber kayması sıfır) merdivenin yanına eklendi; ön kaydın
+- **Maliyet.** Başabaş kayma (işlem başına net R'yi sıfıra indiren dolum başına temel kayma; haber penceresindeki
+  dolumların {{ K.haber_kayma_pip | s1 }} pip ek kayması sabit tutulur) iki dönemde, bütün dönem ve 2024 →, R'den
+  ölçülür. Yalnız makasla bile eksi kalan bileşimde iki hâl ayrılır: brütü (orta fiyattan orta fiyata) de eksiyse
+  hiçbir maliyette başabaş yoktur ("orta fiyattan bile eksi"); brütü artıysa başabaş, sonucu sıfıra indiren makasın bu
+  verinin makasına oranıdır, brüt R / (brüt R − yalnız makas R): maliyet makasla doğrusal ölçeklenir ve işlemler aynı
+  kalır varsayımıyla. Yalnız makas koşusu (kayma ve haber kayması sıfır) merdivenin yanına eklendi; ön kaydın
   merdiveni aynen duruyor.
 - **Deflated Sharpe'ın gürültü eşiği.** Ön kayıt Bailey ve López de Prado'nun deflated Sharpe'ını ister; onun
   eşiği denemelerin kendi Sharpe'larının yayılımından kurulur (**yayılım eşiği**). Denemeler gerçekten farklıysa
@@ -348,6 +364,7 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 - **Gün kümeli parite aralığı.** Hükmün aralığı ön kaydın okumasıyla işlemleri bağımsız örnekler. Aynı paritede aynı
   gün açılan işlemler aynı haberi ve aynı seans hareketini taşır; günde çok işlem açan kurallarda (VWAP dönüşü, iç
   mum) aralık olduğundan dar olabilir. Aynı iki ölçüt gün kümeli aralıkla da soruldu: {{! gun_kumeli }}.
+  {{! gun_kumeli_yon }}
 - **Havuzun aralığı** gün kümeli bootstrap'le kurulur (yukarıda).
 - **Koşul analizinin üç ayrıntısı.** Koşulsuz ortalama değişkenin tanımlı olduğu işlemlerden alınır; aynı ölçünün iki
   adı (Asya aralığı kuralında "aralık" ile "Asya aralığı") tek değişken sayılır; kontrol listesine yalnız en az iki
@@ -370,6 +387,12 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
   büyüklükle işlem yapanın sonucudur; ikisinin işareti ayrıştığında strateji dersleri bunu adıyla yazar ve pip
   ortalamasının %95 aralığını da verir.
 - **Haber dakikasının makası.** Olay anına göre makasın seyri betimleyici bir ölçüdür; hiçbir kurala ve hükme girmez.
+- **Yerel tatiller.** Kurallar yalnız hafta içine düşen 25 Aralık ve 1 Ocak'ı işlem günü saymaz; İngiltere'nin banka
+  tatillerinde Londra kapalıyken, ABD'nin federal tatillerinde New York'un bankaları kapalıyken de sıradan gün gibi
+  işlem açarlar. Bu ölçü o günlerin sonucunu kural kural betimler; ön kayıtta yoktur, sınama yapılmaz ve hükme girmez.
+  Verinin o günlerdeki kapsamı giriş dersinin veri tablosunda.
+
+{{! tatil_betimi }}
 
 ## Haber takvimi
 
@@ -454,6 +477,11 @@ Bu serinin cevaplamadığı sorular, sonuçların sınırlarıyla birlikte:
 - **Gecelik taşıma.** Bütün pozisyonlar gün sonunda kapandığı için faiz farkı (swap) doğmaz; gece taşıyan bir kuralın
   sonucu farklı olurdu.
 - **Gecikme.** Emrin iletilmesi ve kuyruğa girmesi modellenmez; giriş, kuralın giriş dakikasının açılışıdır.
+- **Pasif ya da limit yürütme.** Giriş ve piyasa çıkışları makası öder (alış ask'tan, satış bid'den); makasın bir
+  kısmını kazanan bir limit girişi ya da orta fiyata yakın bir yürütme ölçülmedi. "Brüt" sonuç orta fiyattan orta
+  fiyata ölçülür ve böyle bir yürütmenin üst sınırını verir, kendisini değil: limit emir her zaman dolmaz.
+- **Yerel tatil süzgeci.** İngiltere ve ABD tatillerinde işlem açmayan bir kural sınanmadı; o günlerin sonucu
+  yukarıda yalnız betimlendi.
 - **Gerçek işlem hacmi.** FX'te merkezî hacim yoktur; VWAP kuralları kotasyon likiditesini ağırlık olarak kullanır.
 - **Daha kısa zaman dilimleri.** 5 dakikanın altındaki mumlar ve tick verisi ölçülmedi.
 - **Başka pariteler.** Yalnız dört majör (EUR/USD, GBP/USD, USD/JPY, AUD/USD); çapraz kurlar ve gelişen piyasa paraları

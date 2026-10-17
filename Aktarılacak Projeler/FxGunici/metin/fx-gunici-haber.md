@@ -54,8 +54,8 @@ başlıyordu ve iki saat iki ayrı piyasa dakikasıdır. {{! saat_rejimi_cumle E
 
 {{! saat_rejimi ECB_basin }}
 
-Okuma: 14:30 rejiminde basın toplantısının ilk mumu, kendi haberinden çok ABD verisinin tepkisini taşır. Bu
-dersin devam tablosundaki ve beş stratejideki "ECB basın toplantısı" satırları iki rejimin birleşimidir; aynı
+Okuma: 14:30 rejiminde basın toplantısının ilk mumu ABD'nin 08:30 veri dakikasıyla çakışır. Makasın genişlemesi o
+dakikadan geliyor; fiyat tepkisinin iki haber arasındaki payı bu veriyle ayrılamaz. Bu dersin devam tablosundaki ve beş stratejideki "ECB basın toplantısı" satırları iki rejimin birleşimidir; aynı
 dakikadaki iki takvim olayı devam tablosunda iki ayrı olay satırında durur (ABD TÜFE'si dört paritenin ortalamasıyla,
 basın toplantısı EUR/USD ile), haber stratejilerinde ise o dakika parite başına tek pozisyondur.
 
@@ -84,7 +84,8 @@ pip kayma eklenir. Makasın kendisi gerçek bid/ask'tan geldiği için ayrıca s
 beklentisiyle (anket medyanı) kıyaslamaktır. Bu ders o beklentilere sahip değil; yerine **ilk haber mumunun
 hareketinin, haberden önceki ATR'ye oranı** kullanılır. Bu bir ölçüm değil vekildir: büyük bir ilk hareket büyük bir
 sürprizin de, sığ likiditenin de sonucu olabilir ve ikisi ilk mumda ayırt edilemez. Tablolarda "ilk mum / ATR"
-kovaları bu vekildir: 0,5'in altı, 0,5–1, 1–2 ve 2'nin üstü.
+kovaları bu vekildir: {{ K.haber_sabit.kova_atr[0] | s1 }}'in altı, {{ K.haber_sabit.kova_adi[1] | t }}, {{ K.haber_sabit.kova_adi[2] | t }} ve {{ K.haber_sabit.kova_atr[2] | s0 }}'nin
+üstü.{{? K.haber_sabit.kova_atr[0] == 0.5 and K.haber_sabit.kova_atr[2] == 2.0 and len(K.haber_sabit.kova_atr) == 3 }}
 
 ## Kırılım mı fade mi: devam tablosu
 
@@ -104,6 +105,8 @@ tam ilintili olduğunda örneklemi dörde katlar ve t istatistiğini yapay olara
 **Olaya göre.**
 
 {{! devam olay }}
+
+{{! devam_takvim }}
 
 **İlk mumun büyüklüğüne göre** (sürpriz vekili):
 
@@ -135,13 +138,15 @@ Bu tablo hüküm için değil, bir hücrenin tek başına göze çarpan sayısı
 _Kırılım ve fade: hücredeki olayların net ortalaması, günlük ATR'nin yüzdesi; "{{ K.dis_baslangic | yil }} →" sütunları
 aynı hücrenin örneklem dışındaki olayları (ön kayıt onları ayrıca yazdırır, hüküm bütün dönemden verilir). Hüküm ön
 kaydın kuralıyla: en az {{ O.haber.devam.kural.asgari_olay | n }} olay ve Benjamini–Hochberg q < {{ O.haber.devam.kural.fdr_q | s2 }}
-ise "kırılım kazanır" ya da "fade kazanır"; değilse "ayrışmıyor". "Yetersiz örneklem": hücrede {{ O.haber.devam.kural.asgari_olay | n }} olaydan az var;
-ön kaydın kuralına göre bu da "ayrışmıyor"dur, ayrı etiket yalnız sebebi gösterir._
+ise "kırılım kazanır" ya da "fade kazanır"; değilse "kazanan yok" (ön kaydın terimiyle "ayrışmıyor": iki yönün
+hiçbiri maliyetten sonra sıfırın üstünde ayrışmıyor; iki yön birbiriyle sınanmaz). "Yetersiz örneklem": hücrede
+{{ O.haber.devam.kural.asgari_olay | n }} olaydan az var; ön kaydın kuralına göre bu da "kazanan yok"tur, ayrı etiket
+yalnız sebebi gösterir._
 
 Tabloyu okurken iki şey akılda tutulmalı. Birincisi maliyet: iki yön birlikte negatif olabilir (ikisi de makas ve
 kayma öder), yani "fade kazanır" hükmü yokken fade'in kırılımdan iyi görünmesi bir kenar değildir. İkincisi çoklu
 sınama: tabloların hepsi tek bir ailedir; tek bir hücrenin tek başına "anlamlı" görünmesi beklenen bir şeydir ve
-hüküm bu yüzden ailenin düzeltilmiş q değeriyle verilir.
+hüküm bu yüzden ailenin düzeltilmiş q değeriyle verilir. {{! devam_okuma }}
 
 ## Ortalama fiyat patikaları
 
@@ -149,9 +154,9 @@ Her olay için olay anındaki orta fiyattan değişimin ortalaması, haberden ot
 ilk beş dakikanın yönüne göre iki kümede. Bir patika ilk beş dakikadan sonra aynı yönde sürüyorsa kırılım, geri
 dönüyorsa fade lehine bir betimlemedir; gölge, ortalamanın %95 aralığıdır.
 
-{% if O.haber.cift.EURUSD.patika.NFP %}{{! sekil haber-patika-nfp "Ortalama patika — NFP" }}{% endif %}
+{% if O.haber.cift.EURUSD.patika.NFP %}{{! sekil haber-patika-nfp "Ortalama patika — ABD tarım dışı istihdam (NFP)" }}{% endif %}
 
-{% if O.haber.cift.EURUSD.patika.CPI %}{{! sekil haber-patika-cpi "Ortalama patika — TÜFE" }}{% endif %}
+{% if O.haber.cift.EURUSD.patika.CPI %}{{! sekil haber-patika-cpi "Ortalama patika — ABD TÜFE (CPI)" }}{% endif %}
 
 {% if O.haber.cift.EURUSD.patika.FOMC_karar %}{{! sekil haber-patika-fomc-karar "Ortalama patika — FOMC kararı" }}{% endif %}
 

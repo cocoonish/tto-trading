@@ -1,7 +1,7 @@
 ### Ne
 
 Başarısız kırılım, seviye olarak **dünün tepesi ve dibiyle**: fiyat önceki günün tepesinin üstünde (ya da dibinin
-altında) kapanır, bir ya da iki mum içinde yeniden içeride kapanırsa ters yönde girilir. Yapı kırılımları
+altında) kapanır, bir ya da iki mum içinde kırılan seviyenin berisine dönerse ters yönde girilir. Yapı kırılımları
 dersindeki önceki gün tepe/dip kuralının aynasıdır.
 
 ### Piyasa mantığı
@@ -38,10 +38,13 @@ Noktalı mavi çizgiler dünün tepesi ve dibi, mavi bant içeri dönen sinyal m
 
 {{! sonuclar }}
 
-**Ön kaydın harfiyle.** Ön kayıt kırılımı "bir mum seviyenin dışında kapanır" diye tanımlar ve önceki kapanışı
-sormaz. Harfiyle okunursa pencerenin ilk mumu dışarıda kapandığında, seviye Asya saatlerinde aşılmış olsa da, o
-mum bir kırılımdır ve açılıştan sonraki geri alınış işlem verir. Hüküm sonuçlardan önce yazılan okumayla verilir;
-harfin okuması aynı koşuda ayrıca ölçüldü. {{! yorum_cumle }}
+**Ön kaydın harfiyle.** Ön kaydın harfi iki yerde bu dersteki okumadan farklı okunabilir; iki okuma da ilk
+sonuçlardan önce sabitlendi ve hüküm onlarla verilir. Kırılım mumu: ön kayıt kırılımı "bir mum seviyenin dışında
+kapanır" diye tanımlar ve önceki kapanışı sormaz. Harfiyle okunursa pencerenin ilk mumu dışarıda kapandığında,
+seviye Asya saatlerinde aşılmış olsa da, o mum bir kırılımdır ve açılıştan sonraki geri alınış işlem verir. Geri
+dönüş: harfe göre dönüş mumu dünün aralığının içinde kapanır ve karşı ucun ötesinde kapanan mum ters yönde yeni bir
+kırılımdır; bu ölçüm yalnız kırılan seviyeyi sorar. Harfin iki okuması aynı koşuda ayrıca, her biri tek başına
+ölçüldü. {{! yorum_cumle }}
 
 {{! yorum }}
 
@@ -54,7 +57,7 @@ harfin okuması aynı koşuda ayrıca ölçüldü. {{! yorum_cumle }}
 1. **Hüküm.** {{! kontrol_hukum }}
 2. **Ne zaman.** {{! ne_zaman }}
 3. **Dünün tepe ve dibi.** 17:00 New York'ta ({{! tsi "" "New York 17:00" }}) kapanan günün uçları.
-4. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde içeride kapanış.
+4. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde kırılan seviyenin berisinde kapanış.
 5. **Stop gezintinin ucunda, hedef 1R.** Pencere 14:00 New York'ta kapanır (TSİ 21:00 ya da 22:00).
 6. **Maliyet.** {{! basabas }}
 

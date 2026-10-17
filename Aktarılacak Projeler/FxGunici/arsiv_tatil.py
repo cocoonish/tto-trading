@@ -11,7 +11,8 @@ York kapalıyken de kurallar sıradan gün gibi işlem açar. Ders bunu adıyla 
              takası yapılmaz) ve Fed'in kendi tatil sayfası (yalnız yakın yıllar)
   Sınama     `holidays` kütüphanesinin aynı iki takvimi: resmî listeyle ayrıştığı gün adıyla raporlanır
 
-Yalnız indirir; ayrıştırma yerelde (tatil.py). Var olan dosya yeniden indirilmez.
+Yalnız indirir; ayrıştırma yerelde (tatil.py). Var olan dosya yeniden indirilmez. Dizinin özleri (ozler.json) koşunun
+sonunda yazılır; tatil.py okumadan önce sınar.
 """
 from __future__ import annotations
 
@@ -24,6 +25,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+
+import ozler
 
 BURASI = Path(__file__).resolve().parent
 HAM = BURASI / "veri" / "tatil" / "ham"
@@ -102,6 +105,7 @@ def main() -> int:
                           "ingiltere": len(k.get("ingiltere") or {}), "abd": len(k.get("abd") or {})}
     (HAM / "kunye.json").write_text(json.dumps(kunye, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
                                     encoding="utf-8")
+    ozler.yaz(HAM)      # ham dizinin SHA-256 sabitlemesi (tatil.py okumadan önce sınar)
     print(json.dumps(kunye, ensure_ascii=False, indent=1)[:4000], flush=True)
     return 0 if all(isinstance(v, dict) and v.get("dosya") for v in kunye["kaynak"].values()) else 1
 

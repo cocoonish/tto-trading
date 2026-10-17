@@ -100,6 +100,23 @@
    "sag_kenar_dakika": 180,
    "hafta_sonu_dakika": 0
   },
+  "yerel_tatil": {
+   "tatil_ozu": "6ed59d4fd0d2dc9ade699f7929cbb2a3a246721469c0e10623bd5ec76f7e835e",
+   "ingiltere": {
+    "gun": 60,
+    "kapsam_ort_yuzde": 99.13,
+    "kapsam_min_yuzde": 94.7,
+    "en_dusuk_gun": "2022-12-26",
+    "dusuk_gun": []
+   },
+   "abd": {
+    "gun": 74,
+    "kapsam_ort_yuzde": 98.95,
+    "kapsam_min_yuzde": 94.6,
+    "en_dusuk_gun": "2024-07-04",
+    "dusuk_gun": []
+   }
+  },
   "makas": {
    "sifir_kapanis": 0,
    "sifir_acilis": 0,
@@ -3116,6 +3133,23 @@
    "sag_kenar_dakika": 177,
    "hafta_sonu_dakika": 0
   },
+  "yerel_tatil": {
+   "tatil_ozu": "6ed59d4fd0d2dc9ade699f7929cbb2a3a246721469c0e10623bd5ec76f7e835e",
+   "ingiltere": {
+    "gun": 60,
+    "kapsam_ort_yuzde": 98.89,
+    "kapsam_min_yuzde": 92.9,
+    "en_dusuk_gun": "2022-12-26",
+    "dusuk_gun": []
+   },
+   "abd": {
+    "gun": 74,
+    "kapsam_ort_yuzde": 98.92,
+    "kapsam_min_yuzde": 92.9,
+    "en_dusuk_gun": "2022-12-26",
+    "dusuk_gun": []
+   }
+  },
   "makas": {
    "sifir_kapanis": 0,
    "sifir_acilis": 0,
@@ -5039,6 +5073,45 @@
    "izgara_disi_dakika": 177,
    "sag_kenar_dakika": 177,
    "hafta_sonu_dakika": 0
+  },
+  "yerel_tatil": {
+   "tatil_ozu": "6ed59d4fd0d2dc9ade699f7929cbb2a3a246721469c0e10623bd5ec76f7e835e",
+   "ingiltere": {
+    "gun": 60,
+    "kapsam_ort_yuzde": 98.03,
+    "kapsam_min_yuzde": 79.2,
+    "en_dusuk_gun": "2022-12-26",
+    "dusuk_gun": [
+     [
+      "2022-12-26",
+      79.2
+     ],
+     [
+      "2023-01-02",
+      85.6
+     ],
+     [
+      "2024-03-29",
+      88.7
+     ]
+    ]
+   },
+   "abd": {
+    "gun": 74,
+    "kapsam_ort_yuzde": 97.88,
+    "kapsam_min_yuzde": 79.2,
+    "en_dusuk_gun": "2022-12-26",
+    "dusuk_gun": [
+     [
+      "2022-12-26",
+      79.2
+     ],
+     [
+      "2023-01-02",
+      85.6
+     ]
+    ]
+   }
   },
   "makas": {
    "sifir_kapanis": 0,
@@ -7030,6 +7103,23 @@
    "izgara_disi_dakika": 180,
    "sag_kenar_dakika": 180,
    "hafta_sonu_dakika": 0
+  },
+  "yerel_tatil": {
+   "tatil_ozu": "6ed59d4fd0d2dc9ade699f7929cbb2a3a246721469c0e10623bd5ec76f7e835e",
+   "ingiltere": {
+    "gun": 60,
+    "kapsam_ort_yuzde": 98.98,
+    "kapsam_min_yuzde": 90.3,
+    "en_dusuk_gun": "2022-12-26",
+    "dusuk_gun": []
+   },
+   "abd": {
+    "gun": 74,
+    "kapsam_ort_yuzde": 98.94,
+    "kapsam_min_yuzde": 90.3,
+    "en_dusuk_gun": "2022-12-26",
+    "dusuk_gun": []
+   }
   },
   "makas": {
    "sifir_kapanis": 0,

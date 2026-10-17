@@ -9,6 +9,8 @@ Neyi ölçer, neyi ölçmez:
      örneklemin sağ kenarındaki kısmi gün ve gerçek hafta sonu (New York saatiyle).
   2. TATİL — kapsamı %50'nin altında kalan işlem günleri (Noel, yılbaşı vb.) ve
      %50–90 arası kısmi günler. Ders bunları adıyla dışarıda bırakır; sessizce değil.
+     Ayrıca İngiltere'nin ve ABD'nin (Fed) hafta içi yerel tatillerinde kapsam (tatil.py):
+     kurallar o günlerde sıradan gün gibi işlem açar.
   3. MAKAS — sıfır ve negatif makas (ask ≤ bid) sayısı; saat saat medyan ve
      95. yüzdelik; 17:00 ET devir dakikalarının makas profili (gün sonu
      kapanış saatinin gerekçesi).
@@ -128,6 +130,31 @@ def kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarray) -> dict:
         "sag_kenar_dakika": sag_kenar,
         "hafta_sonu_dakika": hafta_sonu,
     }
+
+
+def yerel_tatil_kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarray) -> dict:
+    """İngiltere'nin ve ABD'nin (Federal Reserve Bankalarının kapalı olduğu) hafta içi yerel tatillerinde kotasyonlu
+    dakika payı (tatil.py). Kurallar yalnız 25 Aralık ve 1 Ocak'ı işlem günü saymaz (gunluk.TATIL_TAKVIM); o iki gün
+    hariç her yerel tatilde sıradan gün gibi işlem açarlar, yani verinin o günlerde de tam olup olmadığı ayrıca sorulur.
+    `tatil_ozu`: listenin kurulduğu ham dizinin özü (ölçüm güncel listeyle kıyaslar)."""
+    import tatil
+    from gunluk import TATIL_TAKVIM
+    gun_iso = [g.date().isoformat() for g in gunler]
+    sira = {g: i for i, g in enumerate(gun_iso)}
+    out: dict = {"tatil_ozu": tatil.ozu()}
+    for ad, liste in (("ingiltere", tatil.ingiltere()), ("abd", tatil.abd())):
+        secim = [x["tarih"] for x in tatil.hafta_ici(liste, gunler[0].date(), gunler[-1].date(), set(TATIL_TAKVIM))
+                 if x["tarih"] in sira]
+        if not secim:
+            out[ad] = {"gun": 0}
+            continue
+        ix = np.array([sira[g] for g in secim], dtype=np.int64)
+        izgara = bas_sn[ix][:, None] + np.arange(1440, dtype=np.int64)[None, :] * 60
+        pay = np.isin(izgara, t).mean(axis=1)
+        out[ad] = {"gun": int(len(ix)), "kapsam_ort_yuzde": round(float(pay.mean()) * 100, 2),
+                   "kapsam_min_yuzde": round(float(pay.min()) * 100, 1), "en_dusuk_gun": secim[int(np.argmin(pay))],
+                   "dusuk_gun": [(g, round(float(v) * 100, 1)) for g, v in zip(secim, pay) if v < 0.9]}
+    return out
 
 
 def makas(f: pd.DataFrame, pip: float) -> dict:
@@ -410,6 +437,7 @@ def denetle(sembol: str, a: ay.Ayar) -> dict:
         "ilk": f.index[0].strftime("%Y-%m-%d %H:%M"),
         "son": f.index[-1].strftime("%Y-%m-%d %H:%M"),
         "kapsam": kapsam(t, gunler, bas_sn),
+        "yerel_tatil": yerel_tatil_kapsam(t, gunler, bas_sn),
         "makas": makas(f, a.pip[sembol]),
         "sicrama": sicrama(f, a.pip[sembol]),
         "capraz": capraz(ham, sembol, a.nokta[sembol]),
@@ -454,6 +482,10 @@ def tablo(rapor: dict) -> str:
     t.append(satir("kapsam, normal günler", lambda s: f"%{s['kapsam']['normal_gun_kapsam_yuzde']:.2f}".replace(".", ",")))
     t.append(satir("boşluk 5–14 / 15–59 / 60+ dk", lambda s: "{5-14} / {15-59} / {60+}".format(**s["kapsam"]["bosluk_kovalari"])))
     t.append(satir("tatil (<%50) / kısmi gün", lambda s: f"{len(s['kapsam']['tatil_gunleri'])} / {len(s['kapsam']['kismi_gunler'])}"))
+    for ad, et in (("ingiltere", "İngiltere tatili: gün / kapsam"), ("abd", "ABD (Fed) tatili: gün / kapsam")):
+        t.append(satir(et, lambda s, ad=ad: (f"{s['yerel_tatil'][ad]['gun']} / "
+                                            f"%{s['yerel_tatil'][ad]['kapsam_ort_yuzde']:.2f}".replace(".", ",")
+                                            if (s.get("yerel_tatil") or {}).get(ad, {}).get("gun") else "—")))
     t.append(satir("makas medyan / p95 (pip)", lambda s: f"{s['makas']['medyan_pip']:.2f} / {s['makas']['p95_pip']:.2f}".replace(".", ",")))
     t.append(satir("sıfır / negatif makas (dk)", lambda s: f"{s['makas']['sifir_kapanis']:,} / {s['makas']['negatif_kapanis']:,}".replace(",", ".")))
     t.append(satir("sıçrama adayı / aşırı fitil", lambda s: f"{s['sicrama']['aday']} / {s['sicrama']['asiri_fitil']}"))

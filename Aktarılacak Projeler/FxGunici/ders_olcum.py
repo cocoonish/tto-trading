@@ -13,14 +13,19 @@ Girdi (hepsi depodaki koşu çıktısı ya da arşiv):
   cikti/ders/olcum.json                 figürler (sekil.py), ders metinleri (ders_yaz.py) ve doğrulayıcı
                                         (dogrula.py) yalnız buradan okur
 
-Burada yeni bir ÖLÇÜM yapılmaz, yalnız toplanır; dört istisna adıyla: (1) dört paritenin
+Burada yeni bir ÖLÇÜM yapılmaz, yalnız toplanır; beş istisna adıyla: (1) dört paritenin
 HAVUZU — aynı stratejiyi dört paritede birlikte koşmanın işlem başına ortalaması ve günlük
 R toplamından Sharpe'ı, kaydedilmiş işlem dosyalarından; (2) stratejiler arası günlük R
 korelasyonu; (3) birimlere bölünen ailelerin AİLE sayımı — ön kaydın deneme sayısı aile
 başınadır, koşu birim başına seçer (aile_secimi); (4) birden çok yerel saati olan olayların
 SAAT REJİMİ — devam satırları ve haber stratejilerinin işlemleri olayın yerel saatine göre
 ayrılır (saat_rejimi; ECB basın toplantısının 14:30 saati çoğu hafta ABD'nin 08:30 veri
-dakikasına düşer). Dördünün tanımı aşağıda, fonksiyonun kendisinde.
+dakikasına düşer); (5) YEREL TATİLLER — varsayılanların İngiltere ve ABD tatillerindeki işlemleri,
+kaydedilmiş işlem dosyalarından (tatil_betimi; ön kayıt dışı, betimleyici). Beşinin tanımı
+aşağıda, fonksiyonun kendisinde. Seçilenin komşuları (komsular) ve ay sonu ailesi (ay_sonu_ailesi)
+ölçüm değil, koşu çıktısının okunuşudur: ızgaranın satırları ve ay sonu ayrımları olduğu gibi.
+
+Künyenin `kod` alanı ölçümü üreten kodun özüdür (kod_kunyesi): kapı onu yalnız hashlib ile sınar.
 """
 from __future__ import annotations
 
@@ -201,9 +206,12 @@ def _eksen_sirala(degerler) -> list[str]:
 ESDEGER_HUCRE = {("nyib", "tf", "ib_pencere"): lambda x, y: "tf" if y == x else None}
 
 
-def isi(s: dict, eksen: tuple[str, str]) -> dict:
-    """İki eksenli ızgara kesiti: öbür parametreler önceden kayıtlı varsayılanda."""
-    v = s["varsayilan"]
+def isi(s: dict, eksen: tuple[str, str], merkez: dict | None = None) -> dict:
+    """İki eksenli ızgara kesiti: öbür parametreler `merkez`de — verilmezse önceden kayıtlı varsayılanda; seçilenin
+    çevresi için ızgaradan seçilen kombinasyonda (öbür parametreleri seçilen değerlerinde tutan kesit; seçilen hücre
+    ve komşuları ancak bu kesitte görünür). `varsayilan` varsayılanın iki ekseni, `merkez` kesitin merkezidir;
+    `varsayilan_kesitte`: varsayılan bu kesitin bir hücresi mi."""
+    v = merkez or s["varsayilan"]
     x_ad, y_ad = eksen
     hucre = {}
     for r in s["izgara"]:
@@ -220,9 +228,43 @@ def isi(s: dict, eksen: tuple[str, str]) -> dict:
                 e = es(x, y)
                 if (x, y) not in hucre and e is not None and (x, e) in hucre:
                     hucre[(x, y)] = {"esleme": e}
+    sv = s["varsayilan"]
     return {"x_ad": x_ad, "y_ad": y_ad, "x": xs, "y": ys,
             "hucre": [[hucre.get((x, y)) for x in xs] for y in ys],
-            "varsayilan": [str(v.get(x_ad)), str(v.get(y_ad))]}
+            "varsayilan": [str(sv.get(x_ad)), str(sv.get(y_ad))], "merkez": [str(v.get(x_ad)), str(v.get(y_ad))],
+            "merkez_p": dict(v),
+            "varsayilan_kesitte": all(sv.get(k) == v.get(k) for k in set(sv) | set(v) if k not in (x_ad, y_ad))}
+
+
+def komsular(s: dict) -> dict | None:
+    """Seçilen kombinasyonun tek parametre komşuları: her serbest parametre için YALNIZ o parametresi değişen ızgara
+    kombinasyonları (öbürleri seçilen değerlerinde), örneklem içi ve dışı. Isı haritası iki boyutluk bir kesittir ve
+    seçilen çoğu zaman o kesitte değildir; bu liste seçimin bir düzlükte mi, tek bir tepede mi durduğunu bütün
+    boyutlarda okutur. Seçilenin kendi satırı her parametrenin listesinde `secilen` diye durur. Tanımsız bileşim
+    (ızgarada olmayan) listede yoktur ve sayısı `tanimsiz` alanında yazar. Seçim yoksa None."""
+    p = s.get("secilen")
+    if not p:
+        return None
+    degerler: dict[str, list] = {}
+    for r in s["izgara"]:
+        for k, v in r["p"].items():
+            degerler.setdefault(k, [])
+            if v not in degerler[k]:
+                degerler[k].append(v)
+    out = {"p": dict(p), "parametre": {}}
+    for k, vs in degerler.items():
+        if len(vs) < 2:
+            continue
+        satir = []
+        for r in s["izgara"]:
+            q = r["p"]
+            if any(q.get(j) != p.get(j) for j in set(p) | set(q) if j != k):
+                continue
+            satir.append({"deger": q.get(k), "secilen": q.get(k) == p.get(k), "is": r["is"], "oos": r["oos"],
+                          "kopya": r.get("kopya"), "bos": r.get("bos")})
+        satir.sort(key=lambda x: vs.index(x["deger"]))
+        out["parametre"][k] = {"satir": satir, "tanimsiz": len(vs) - len(satir)}
+    return out
 
 
 def _tf_bos_neden(aile: str, varsayilan: dict, tf: str) -> str | None:
@@ -630,12 +672,19 @@ def saat_rejimi(kok: Path, a: ay.Ayar, ciftler: list[str], birimler: dict) -> di
     return out
 
 
-def olcu_disi(kok: Path, ciftler: list[str]) -> dict:
-    """Takvimde durup bir haber ölçüsüne girmeyen olaylar, adıyla ve sebebiyle: olay çerçevesinin atladıkları (devam
-    tablosu, beş strateji ve FOMC tablosu bu çerçeveden kurulur; ana mum) ve ortalama patikanın dışında kalanlar.
-    Parite başına; bir olay bütün paritelerinde dışarıdaysa `her_paritede` listesine de girer."""
+def olcu_disi(kok: Path, ciftler: list[str], n1_tf: int | None = None) -> dict:
+    """Takvimde durup bir haber ölçüsüne girmeyen olaylar, adıyla ve sebebiyle — ölçünün GERÇEK düşürmelerinden:
+      cerceve     olay çerçevesinin atladıkları (devam tablosu, beş strateji ve FOMC tablosu bu çerçeveden kurulur;
+                  ana mum)
+      devam       çerçevede olup devam tablosuna (ana mum) girmeyenler: ilk mumda yön yok, sonraki mum, giriş dakikası
+                  ya da çıkış fiyatı yok (strat_haber.devam); sebep ve hangi ufuklarda düştüğü
+      devam_atr   günlük ATR'si olmayan günün olayı: devam tablosunun ölçü birimi kurulamaz (haber_analiz.devam_toplu;
+                  örneklemin ilk haftası)
+      patika      ortalama patikanın dışında kalanlar
+    Parite başına; bir olay bütün paritelerinde dışarıdaysa `her_paritede`. İlk mumda yönü olmayan olay ilk mumun
+    yönüyle giren N1'in varsayılanına da girmez — N1 varsayılanının mumu ana mumla aynıysa (`n1_ana_mumda`)."""
     import haber_analiz as ha
-    cer, pat = {}, {}
+    cer, pat, dev, atr = {}, {}, {}, {}
     for c in ciftler:
         h = _oku(kok / "sonuc" / "haber" / f"{c}.json") or {}
         for e in ((h.get("atlanan_olay") or {}).get(str(ha.ANA_TF)) or []):
@@ -643,14 +692,32 @@ def olcu_disi(kok: Path, ciftler: list[str]) -> dict:
         for o, p in (h.get("patika") or {}).items():
             for e in (p or {}).get("dislanan") or []:
                 pat.setdefault((o, e["tarih"]), {})[c] = e["neden"]
+        for ufuk, lst in ((((h.get("devam_dusen") or {}).get(str(ha.ANA_TF))) or {}).items()):
+            for e in lst or []:
+                dev.setdefault((e["olay"], e["tarih"]), {}).setdefault(c, {}).setdefault(e["neden"], set()).add(
+                    int(ufuk))
+    for e in (_oku(kok / "sonuc" / "haber" / "devam.json") or {}).get("atr_dusen") or []:
+        if e["cift"] in ciftler:
+            atr.setdefault((e["olay"], e["tarih"]), {})[e["cift"]] = "gunluk_atr_yok"
     tk = takvim.tumu()
     esle = {(r["olay"], r["tarih"]): set(r["ciftler"].split()) & set(ciftler) for _, r in tk.iterrows()}
+    ufuklar = sorted(int(u) for u in ha.UFUK)
 
     def liste(d: dict) -> list[dict]:
         return [{"olay": o, "tarih": t, "parite": dict(sorted(v.items())),
                  "her_paritede": bool(esle.get((o, t))) and set(v) >= esle.get((o, t), set())}
                 for (o, t), v in sorted(d.items(), key=lambda kv: (kv[0][1], kv[0][0]))]
-    return {"cerceve": liste(cer), "patika": liste(pat)}
+    devam = []
+    for (o, t), v in sorted(dev.items(), key=lambda kv: (kv[0][1], kv[0][0])):
+        devam.append({"olay": o, "tarih": t,
+                      "parite": {c: sorted(n) for c, n in sorted(v.items())},
+                      # sebep başına düştüğü ufuklar; bütün ufuklarda düştüyse olay o paritede tablonun dışındadır
+                      "ufuk": {c: {nd: sorted(u) for nd, u in sorted(n.items())} for c, n in sorted(v.items())},
+                      "tum_ufuk": {c: sorted(set().union(*n.values())) == ufuklar for c, n in sorted(v.items())},
+                      "her_paritede": bool(esle.get((o, t))) and set(v) >= esle.get((o, t), set())})
+    return {"cerceve": liste(cer), "patika": liste(pat), "devam": devam, "devam_atr": liste(atr),
+            "ana_tf": int(ha.ANA_TF), "ufuklar": ufuklar,
+            "n1_ana_mumda": (n1_tf == int(ha.ANA_TF)) if n1_tf is not None else None}
 
 
 def hedef_uzaklik(isl: pd.DataFrame) -> dict | None:
@@ -682,6 +749,42 @@ def gun_ici_yogunluk(kok: Path, birim: str, ciftler: list[str], p: dict, a: ay.A
         out[c] = {"islem_gunu": int(len(sayi)), "iki_ve_ustu": int((sayi >= 2).sum()),
                   "pay": float((sayi >= 2).mean()) if len(sayi) else None,
                   "atlanan_sinyal": int((x["durum"] == 1).sum()), "islem": int(len(al))}
+    return out
+
+
+# ───────────────────────────────────────────── yerel tatiller (betimleyici)
+def tatil_betimi(kok: Path, birimler: dict, ciftler: list[str], a: ay.Ayar) -> dict:
+    """Yerel tatillerde işlemlerin sonucu — ön kayıt dışı, betimleyici; hükmü değiştirmez. Kurallar yalnız hafta içine
+    düşen 25 Aralık ve 1 Ocak'ı işlem günü saymaz (gunluk.TATIL_TAKVIM); İngiltere'nin banka tatillerinde Londra
+    kapalıyken, ABD'de Federal Reserve Bankaları kapalıyken (dolar takası yok) de sıradan gün gibi işlem açarlar.
+    Listeler resmî kaynaklardan (tatil.py). Her birimin önceden kayıtlı varsayılanı, dört paritenin alınan işlemleri
+    birlikte: İngiltere tatili, ABD tatili ve ikisi de olmayan günler; işlem sayısı ve ortalama net R, bütün dönem ve
+    örneklem dışı. İşlemin günü FX günüdür (New York 17:00'de başlar); Londra ve New York seansları o günün içindedir.
+    İki ülkenin ortak tatili iki satıra da girer. Sınama yapılmaz: on dolayında işlemlik bir kümede ortalama, ancak
+    kuralın o günlerde de sıradan gün gibi işlediğini gösterir."""
+    import tatil
+    from gunluk import TATIL_TAKVIM
+    o = tatil.ozet(a.baslangic, a.bitis, set(TATIL_TAKVIM))
+    ing, ab = {x["tarih"] for x in o["ingiltere"]}, {x["tarih"] for x in o["abd"]}
+    out = {"ingiltere": o["ingiltere"], "abd": o["abd"], "ikisi": o["ikisi"],
+           "kunye": {"kaynak": o["kaynak"], "zaman": o["zaman"], "ingiltere": o["ingiltere_sinama"],
+                     "abd": o["abd_sinama"], "oz": tatil.ozu()},
+           "birim": {}}
+    for b, v in birimler.items():
+        isl = _birlesik_islem(kok, b, ciftler, v["varsayilan"])
+        if not len(isl):
+            continue
+        gun = pd.to_datetime(isl["gun"]).dt.strftime("%Y-%m-%d").to_numpy()
+        dis = isl["gun"].to_numpy().astype("datetime64[D]") >= np.datetime64(a.dis_baslangic)
+        m_ing, m_ab = np.isin(gun, list(ing)), np.isin(gun, list(ab))
+        satir = {}
+        for ad, m in (("ingiltere", m_ing), ("abd", m_ab), ("diger", ~(m_ing | m_ab))):
+            satir[ad] = {}
+            for d, dm in (("tum", np.ones(len(isl), bool)), ("oos", dis)):
+                r = isl["r"].to_numpy(np.float64)[m & dm]
+                satir[ad][d] = {"n": int(len(r)), "r": float(r.mean()) if len(r) else None,
+                                "gun": int(len(set(gun[m & dm])))}
+        out["birim"][b] = satir
     return out
 
 
@@ -718,6 +821,11 @@ def birim_ozet(kok: Path, birim: str, ciftler: list[str], a: ay.Ayar, isi_eksen:
             "walk_forward": {"secimler": wf.get("secimler"), "ozet": wf.get("ozet"),
                              "sinanan_yillar": wf.get("sinanan_yillar")},
             "isi": isi(s, isi_eksen), "izgara_ozet": izgara_ozet(s),
+            # Seçilenin çevresi: öbür parametreleri seçilende tutan kesit ve tek parametre komşuları.
+            "isi_secilen": isi(s, isi_eksen, s["secilen"]) if s.get("secilen") else None,
+            "komsular": komsular(s),
+            # Fiksing kurallarında ay sonu ayrımı üç zaman diliminde (öbür parametreler varsayılanda; kosu.ay_sonu_tf).
+            "ay_sonu_tf": s.get("ay_sonu_tf"),
             "tf": tf_kiyas(s), "tf_haber_kaymasiz": s.get("tf_haber_kaymasiz"),
             "varyant": {pa: varyant(s, pa) for pa in varyant_parametreleri(birim, izgara_deger)},
             "egri": {"varsayilan": haftalik(egri_v[c]), "secilen": haftalik(egri_s[c]),
@@ -817,6 +925,62 @@ def aile_secimi(kok: Path, ciftler: list[str]) -> dict:
                                     "secim": ({"birim": sec["birim"], "p": sec["p"], "hukum": sec["hukum"],
                                                "is_sharpe": sec["is"]["sharpe"]} if sec else None)}
     return out
+
+
+#: Ay sonu ailesinin düzeltilmemiş anlamlılık düzeyi (Bonferroni: düzey / sınama sayısı).
+AY_SONU_DUZEY = 0.05
+
+
+def ay_sonu_ailesi(birimler: dict) -> dict:
+    """Ay sonu ayrımının çoklu sınama ailesi ve "tutan" ayrımlar — tek tanım (ders özetleri ve "Ne öğrendik" bunu okur).
+
+    Aile, derste ölçülen BÜTÜN ay sonu ayrımlarıdır: fiksing kurallarının her paritesinde önceden kayıtlı varsayılan,
+    örneklem içinde seçilen ve varsayılanın zaman dilimi biçimleri (yalnız mum uzunluğu değişir; kosu.ay_sonu_tf).
+    Aynı işlem kümesini veren iki ayrım (işlem imzası aynı) tek sınamadır; hiç işlem açmayan biçim sınama değildir.
+    Eşik Bonferroni: 0,05 / sınama sayısı.
+
+    Bir ayrım TUTAR: örneklem dışında (2024 →) ay sonu ortalamasının %95 aralığının alt ucu sıfırın üstünde ve ay sonu
+    ile öbür günlerin farkı düzeltilmiş eşiğin altında; AYRIK örneklem içinde (2018–2023) de aynı iki şart. Bütün dönem
+    tutarlılık ölçütü olamaz: 2024 →'yü içerir, yani örneklem dışı sonuç kendini doğrular. Rastgele yön sınaması alt
+    kümeye ön kayıttan SONRA uygulanır; tutma şartına girmez, sonucu yanında durur."""
+    uye: list[dict] = []
+    for b, v in birimler.items():
+        if v.get("aile") != "fiks":
+            continue
+        for c, x in v["cift"].items():
+            gorulen: dict[str, dict] = {}
+            adaylar = [("varsayilan", (x.get("varsayilan") or {}).get("p") or v["varsayilan"],
+                        (x.get("varsayilan") or {}).get("imza"), (x.get("varsayilan") or {}).get("ay_sonu")),
+                       ("secilen", x.get("secilen_p"), (x.get("secilen") or {}).get("imza"),
+                        (x.get("secilen") or {}).get("ay_sonu"))]
+            adaylar += [(f"tf{t}", y.get("p"), y.get("imza"), y.get("ayrim"))
+                        for t, y in sorted((x.get("ay_sonu_tf") or {}).items(), key=lambda kv: int(kv[0]))]
+            for kim, p, imza, ayrim in adaylar:
+                if not imza or not ayrim:
+                    continue
+                if imza in gorulen:
+                    gorulen[imza]["esdeger"].append(kim)
+                    continue
+                gorulen[imza] = {"birim": b, "cift": c, "kim": kim, "tf": int((p or {}).get("tf", 0)) or None,
+                                 "p": p, "imza": imza, "esdeger": [], "ayrim": ayrim}
+            uye += list(gorulen.values())
+    n = len(uye)
+    esik = AY_SONU_DUZEY / n if n else None
+    for u_ in uye:
+        a_ = u_["ayrim"]
+        sart = {}
+        for d in ("oos", "is"):
+            x = (a_.get("ay_sonu") or {}).get(d) or {}
+            f = (a_.get("fark") or {}).get(d) or {}
+            sart[d] = {"alt_arti": bool(x.get("ga_alt") is not None and x["ga_alt"] > 0),
+                       "fark_esik": bool(f.get("p") is not None and esik is not None and f["p"] < esik),
+                       "isaret_arti": bool(x.get("beklenti_r") is not None and x["beklenti_r"] > 0)}
+        u_["sart"] = sart
+        u_["tutar"] = sart["oos"]["alt_arti"] and sart["oos"]["fark_esik"] and sart["is"]["alt_arti"] \
+            and sart["is"]["fark_esik"]
+        u_.pop("ayrim")
+    return {"n": n, "duzey": AY_SONU_DUZEY, "esik": esik, "uye": uye,
+            "tutan": [{k: u_[k] for k in ("birim", "cift", "kim")} for u_ in uye if u_["tutar"]]}
 
 
 # ───────────────────────────────────────────── zaman tablosu (TSİ)
@@ -1098,6 +1262,46 @@ def karsi_olgu_ozet(kok: Path) -> dict:
     return out
 
 
+#: Ölçümün okuduğu ama içe aktarmadığı kod dosyaları (ileri_bakma_kapsami sınamanın kendi dosyasından okur).
+KOD_EK = ("testler/test_strateji.py", "testler/sentetik.py")
+
+
+def kod_kunyesi() -> dict:
+    """Ölçümü üreten kod: bu modülün ve içe aktardığı proje modüllerinin (ölçüm sırasında yüklenenler dahil) dosya
+    başına SHA-256'sı ve tek özü; KOD_EK'teki dosyalar da. Kapı (dogrula.py) listedeki dosyaları yalnız hashlib ile
+    yeniden özetler: biri değiştiyse ve ölçüm yeniden koşulmadıysa ENGEL ("yeniden ölçülmeli"). Liste ölçümün SONUNDA
+    alınır, çünkü kapı ağır kütüphaneleri içe aktaramaz ve içe aktarma zincirini kendisi kuramaz."""
+    dosya = set(KOD_EK)
+    for m in list(sys.modules.values()):
+        f = getattr(m, "__file__", None)
+        if not f:
+            continue
+        p = Path(f).resolve()
+        try:
+            rel = p.relative_to(BURASI)
+        except ValueError:
+            continue
+        if p.suffix != ".py" or rel.parts[0].startswith(".") or "__pycache__" in rel.parts:
+            continue
+        dosya.add(rel.as_posix())
+    ozet = {d: _oz(BURASI / d) for d in sorted(dosya)}
+    h = hashlib.sha256()
+    for d, o in ozet.items():
+        h.update(f"{d}\0{o}\0".encode())
+    return {"dosya": ozet, "oz": h.hexdigest()}
+
+
+def haber_sabitleri() -> dict:
+    """Haber ölçülerinin sabitleri (tek tanımları strat_haber, haber_analiz ve gunluk'ta): figür alt yazısı ve dikey
+    çizgileri, şablon cümleleri buradan okur — sayı ikinci kez elle yazılmaz."""
+    import gunluk
+    import haber_analiz as ha
+    import strat_haber as sh
+    return {"atr_gun": int(gunluk.ATR_GUN), "atr_mum": int(sh.ATR_MUM), "patika_yon_sn": int(sh.PATIKA_YON_SN),
+            "fomc_basin_sn": [int(x) for x in sh.FOMC_BASIN_SN], "kova_atr": [float(x) for x in sh.KOVA],
+            "kova_adi": list(sh.KOVA_ADI), "ana_tf": int(ha.ANA_TF), "ufuk_dk": [int(x) for x in ha.UFUK]}
+
+
 def commit_zamani(commit: str | None) -> list[dict]:
     """Bir ya da iki adımlı ("a · b") değişikliğin commit'lerinin işleyen saati (UTC), depodan."""
     zaman = []
@@ -1144,6 +1348,10 @@ def kur(kok: Path | None = None) -> dict:
             # tanımları kodda, ders bunları buradan okur.
             "uygulama_esik": {"bootstrap": mk.ASGARI_BOOTSTRAP, "rastgele": sg.ASGARI_RASTGELE,
                               "kosul_oos": sg.ASGARI_KOSUL_OOS, "az_islem": kosu.ASGARI_RASTGELE},
+            # Rastgele yön yüzdeliğinin duyarlılığı (bilgi): hangi yüzdelikten sonra ölçüldüğü, çıkarılan en iyi işlem
+            # sayıları, sabit tohum listesinin uzunluğu (saglamlik.rastgele_duyarlilik).
+            "rastgele_duyarlilik": {"taban": sg.DUYARLILIK_TABAN, "en_iyi": list(sg.DUYARLILIK_EN_IYI),
+                                    "tohum": mk.SINIR_TOHUM},
             "ileri_bakma": ileri_bakma_kapsami(),
             "ornek": {"esik": kosu.ORNEK_ESIK, "ek_kayma": kosu.ORNEK_EK_KAYMA},
             # Ön kaydın kural aileleri ve ölçümün birimleri: bir aile birden çok birime bölündüyse adıyla.
@@ -1151,8 +1359,10 @@ def kur(kok: Path | None = None) -> dict:
             "bolunen_aile": sorted({v["aile"] for v in kosu.BIRIMLER.values()
                                     if sum(1 for x in kosu.BIRIMLER.values() if x["aile"] == v["aile"]) > 1}),
             "ay_sonu_kayan": ay_sonu_kayan(a.baslangic, a.bitis),
-            # Ön kaydın harfine göre ikinci okuması olan kurallar: birim → [parametre, harfin okuması].
-            "yorum": {b: list(v) for b, v in kosu.YORUM.items()},
+            # Ön kaydın harfine göre ikinci okuması olan kurallar: birim → [[parametre, harfin okuması], …] (bir
+            # kuralın birden çok okuması olabilir; her biri tek başına ölçülür).
+            "yorum": {b: [list(x) for x in v] for b, v in kosu.YORUM.items()},
+            "haber_sabit": haber_sabitleri(),
         },
         "zaman": zaman_tablosu(a),
         "takvim": takvim_ozet(),
@@ -1162,12 +1372,21 @@ def kur(kok: Path | None = None) -> dict:
         "stop_cikis": stop_cikis(kok),
         "aile_secim": aile_secimi(kok, ciftler),
         "haber": {"cift": {c: h for c, h in haber.items() if h}, "devam": _oku(kok / "sonuc" / "haber" / "devam.json"),
-                  "saat_rejimi": saat_rejimi(kok, a, ciftler, birimler), "olcu_disi": olcu_disi(kok, ciftler)},
+                  "saat_rejimi": saat_rejimi(kok, a, ciftler, birimler),
+                  # N1'in varsayılan mumu ana mumsa ilk mumda yönü olmayan olay N1'e de girmez (olcu_disi).
+                  "olcu_disi": olcu_disi(kok, ciftler, n1_tf=(int(birimler["n1"]["varsayilan"]["tf"])
+                                                              if "n1" in birimler else None))},
+        # Ay sonu ayrımının çoklu sınama ailesi ve tutan ayrımlar (tek tanım).
+        "ay_sonu_aile": ay_sonu_ailesi(birimler),
+        # Yerel tatillerde işlemler (ön kayıt dışı, betimleyici).
+        "tatil": tatil_betimi(kok, birimler, ciftler, a),
         # Sonuçlardan sonra değişen kuralların ölçülmüş etkisi: yeniden koşuyla (karsi_olgu.py) ve sayımla.
         "karsi_olgu": {"kosu": karsi_olgu_ozet(kok), "olculemedi": olculemedi_esigi(birimler),
                        "zaman": {ad: commit_zamani(c) for ad, c in SONRADAN_COMMIT.items()}},
     }
     tutarlilik(olcum, a)
+    # Kod künyesi en sonda: ölçüm sırasında yüklenen her proje modülü listeye girsin.
+    olcum["kunye"]["kod"] = kod_kunyesi()
     return _temiz(olcum)
 
 
@@ -1175,11 +1394,16 @@ def tutarlilik(olcum: dict, a: ay.Ayar) -> None:
     """Ölçümün girdileri aynı anın girdileri mi: veri denetiminin haber makası bugünkü takvimle kurulmuş mu, takvim
     ayarın penceresiyle mi kurulmuş, ön kaydın geçmişi beklenen geçmiş mi (onkayit_gecmis). Ayrışırsa ölçüm yazılmaz
     (zincirin sırası, elle koşulan bir adım ya da yeniden yazılmış bir geçmiş)."""
+    import tatil
     simdi = takvim.ozler()
+    tatil_simdi = tatil.ozu()
     hata = []
     for c, v in ((olcum.get("veri") or {}).get("kalite") or {}).items():
         if (v or {}).get("takvim_ozu") != simdi:
             hata.append(f"{c}: veri denetimi (kalite.py) başka bir takvimle koşmuş — takvimden sonra yeniden koşulmalı")
+        if ((v or {}).get("yerel_tatil") or {}).get("tatil_ozu") != tatil_simdi:
+            hata.append(f"{c}: veri denetimi (kalite.py) başka bir tatil listesiyle koşmuş ya da tatil kapsamını "
+                        f"taşımıyor — yeniden koşulmalı")
     k = olcum.get("kunye") or {}
     hata += og.denetle(k.get("onkayit_gecmisi"))
     try:

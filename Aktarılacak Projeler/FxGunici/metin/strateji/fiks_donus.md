@@ -52,10 +52,7 @@ fiksinge en yoğun akışı taşıdığı gündür. Aynı kural, aynı işlemler
 
 {{! ay_sonu }}
 
-_Önceden kayıtlı varsayılan, net R; her parite iki satır: bütün dönem ve örneklem dışı (2024 →). Fark p: ay
-sonu ile öbür günlerin ortalama farkı, Welch t (iki yönlü)._
-
-Ay sonu yılda on iki gündür: EUR/USD'de bütün dönemde {{ E.varsayilan.ay_sonu.ay_sonu.tum.n | n }}, örneklem dışında
+Ay sonu yılda on iki gündür: EUR/USD'de 2018–2023 arasında {{ E.varsayilan.ay_sonu.ay_sonu.is.n | n }}, 2024 → penceresinde
 {{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem; aralıklar bu yüzden geniştir. {{! ay_sonu_cumle }}
 
 ### Koşullar

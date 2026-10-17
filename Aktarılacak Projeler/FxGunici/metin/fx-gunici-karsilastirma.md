@@ -32,7 +32,7 @@ strateji" değil, bu örneklemde en az kaybeden ya da en çok kazanan kuraldır 
 
 ## Parite parite
 
-Aynı kural dört paritede ayrı ayrı ölçüldü. Hücre: örneklem dışında işlem başına net R ve önceden kaydın hükmü; son
+Aynı kural dört paritede ayrı ayrı ölçüldü. Hücre: örneklem dışında işlem başına net R ve varsayılanın 2024 → hükmü; son
 sütun dört paritenin işlemleri birlikte (havuz).
 
 {{! hukum_matris }}
@@ -64,7 +64,7 @@ Brüt ile **yalnız makas** sütunu arasındaki fark yalnız gerçek bid/ask mak
 penceresinin ek kayması da sıfırdır. Dört paritede örneklem dışında brüt sonucu artı olan {{ T.brut_arti | n }}
 kural–parite bileşiminin {{ T.brut_arti_makas_eksi | n }} tanesinde yalnız makasla net sonuç sıfıra ya da altına
 iniyor; kayma sıfır kademesinde (haber penceresinin ek kayması sabit kalır) bu sayı {{ T.brut_arti_sifir_eksi | n }},
-temel senaryoda (dolum başına 0,5 pip) {{ T.brut_arti_net_eksi | n }}. Bir kuralın kâğıt
+temel senaryoda (dolum başına {{ K.temel_kayma_pip | s1 }} pip) {{ T.brut_arti_net_eksi | n }}. Bir kuralın kâğıt
 üstünde (orta fiyatla) artı görünmesi, piyasa yapıcıya her işlemde ödenen makası karşılamaya yetmez. Stopu yakın
 kurallar en çok etkilenir, çünkü makas pip cinsinden sabittir ve R birimi küçüldükçe R cinsinden büyür.
 
@@ -140,13 +140,16 @@ kazandırdı" değil, "hangi fiyatla ölçüldü" olmalıdır.
 
 **Yön seçimi.** Rastgele yön sınamasında {{ T.rastgele_n | n }} bileşimin {{ T.rastgele_ust | n }} tanesi eşiği
 (rastgele dağılımda yüzdelik ≥ 95) geçti; hiçbir kenarın olmadığı bir dünyada beklenen yaklaşık
-{{ T.rastgele_beklenen | n }}. {% if T.rastgele_binom_p < 0.05 %}Bu sayı şansın beklediğinin üstünde (binom p
+{{ T.rastgele_beklenen | n }}. Sayı tohuma bağlıdır: aynı yordam {{ K.rastgele_duyarlilik.tohum | n }} sabit tohumla
+koşunca her tohumda geçen {{ T.rastgele_ust_her_tohum | n }}, en az birinde geçen
+{{ T.rastgele_ust_bir_tohum | n }} bileşim var (tohum sınaması yüzdeliği {{ K.rastgele_duyarlilik.taban | n }}'ın
+üstündeki bileşimlerde yapıldı{{? K.rastgele_duyarlilik.taban == 90 }}; altındakiler iki sayımda da geçmeyen sayıldı). {% if T.rastgele_binom_p < 0.05 %}Bu sayı şansın beklediğinin üstünde (binom p
 {{ T.rastgele_binom_p | s2 }}); eşiği geçen kurallar yukarıdaki bölümde adıyla. Sınamalar bağımsız değildir, aynı
 paritenin kuralları aynı günleri paylaşır.{% else %}Bu sayı şansın beklediğinden ayırt edilemiyor (binom p
 {{ T.rastgele_binom_p | s2 }}): bu kuralların yön seçimi, toplu olarak, yazı turadan ayırt edilemiyor.{% endif %}{% if T.arti_n %}
 Örneklem dışında net sonucu artı olan {{ T.arti_n | n }} bileşimden rastgele yön sınaması yapılabilenler
 {{ T.arti_rastgele_n | n }} tane; bunların {{ T.arti_rastgele_alt | n }} tanesinde yön seçimi tek başına da yazı turadan
-ayırt edilemiyor.{% if T.arti_n > T.arti_rastgele_n %} Öbürlerinde sınama yapılmadı: örneklem dışında
+ayırt edilemiyor. {{! arti_rastgele_ayirt }}{% if T.arti_n > T.arti_rastgele_n %} Öbürlerinde sınama yapılmadı: örneklem dışında
 {{ K.uygulama_esik.rastgele | n }}'den{{? K.uygulama_esik.rastgele == 20 }} az işlem var.{% endif %}{% endif %}
 
 **Örneklem içi seçim.** Seçim {{ T.bilesim | n }} bileşimin {{ T.secilen_n | n }} tanesinde kuruldu{% if T.secimsiz %};

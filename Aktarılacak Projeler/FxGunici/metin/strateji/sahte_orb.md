@@ -1,7 +1,7 @@
 ### Ne
 
 **Başarısız kırılım** kuralı kırılım dersinin aynasıdır: fiyat bir seviyenin dışında kapanır, birkaç mum içinde
-yeniden içeride kapanırsa kırılımın **tersine** işleme girilir. Adı (*turtle soup*) Laurence Connors ve Linda
+kırılan seviyenin berisine dönerse kırılımın **tersine** işleme girilir. Adı (*turtle soup*) Laurence Connors ve Linda
 Bradford Raschke'nin *Street Smarts* kitabından gelir: kitaptaki kural, "kaplumbağaların" yirmi günlük
 kırılım kuralını tersine oynuyordu. Burada aynı fikir gün içi seviyelere uygulanıyor; ilk seviye Londra açılış
 aralığı, yani kırılım dersindeki ORB'nin seviyesi.
@@ -20,8 +20,9 @@ aynı yerden okunur: geri dönüş geçici olabilir ve kırılım gün içinde y
 - **Seviye.** Londra açılış aralığı: Londra 08:00'den ({{! tsi "" "Londra 08:00" }}) itibaren ilk mum (kırılım
   dersindeki ORB aralığı).
 - **Kırılım.** Bir mum aralığın dışında kapanır (önceki kapanış içeride ya da uçta).
-- **Geri dönüş.** Sonraki "pencere" kadar mumun (bir ya da iki) içinde bir mum yeniden içeride kapanırsa kırılımın
-  tersi yönde giriş; gelmezse o kırılım biter ve kural bir sonraki kırılımı bekler.
+- **Geri dönüş.** Sonraki "pencere" kadar mumun (bir ya da iki) içinde bir mum kırılan kenarın berisinde kapanırsa
+  (yukarı kırılımda üst kenarın altında; karşı kenarın da ötesinde kapanan mum dahil) kırılımın tersi yönde giriş;
+  gelmezse o kırılım biter ve kural bir sonraki kırılımı bekler.
 - **Stop.** Kırılım mumundan dönüş mumuna kadarki en uç fiyat (yukarı kırılımda en yüksek tepe).
 - **Pencere.** Aralıktan sonra Londra 14:00'e ({{! tsi "" "Londra 14:00" }}) kadar; gün başına tek işlem.
 
@@ -47,10 +48,17 @@ Kırılım dersindeki Londra açılış aralığı kuralıyla birlikte okunmalı
 Biri kaybettiriyorsa öbürünün kazandırması gerekmez — iki kural da maliyet öder, ve geri dönüşü bekleyen kural
 yalnız geri dönülen günlerde işlem açar.
 
-**Ön kaydın harfiyle.** Ön kayıt kırılımı "bir mum seviyenin dışında kapanır" diye tanımlar ve önceki kapanışı
-sormaz; sonuçlardan önce yazılan kod seviyeyi kesen mumu arar. Açılış aralığında iki okuma tanım gereği aynıdır:
-pencerenin ilk mumundan önceki kapanış aralığı kuran mumun kapanışıdır, yani aralığın içindedir. Aynı koşuda ayrıca
-ölçüldü: dört paritede ızgaranın hiçbir kombinasyonunda tek bir işlem değişmez.{{? E.yorum.degisen == 0 and G.yorum.degisen == 0 and J.yorum.degisen == 0 and A.yorum.degisen == 0 }}
+**Ön kaydın harfiyle.** Ön kaydın harfi iki yerde bu dersteki okumadan farklı okunabilir; iki okuma da ilk
+sonuçlardan önce sabitlendi ve hüküm onlarla verilir. Birincisi kırılım mumu: ön kayıt kırılımı "bir mum seviyenin
+dışında kapanır" diye tanımlar ve önceki kapanışı sormaz; bu ölçüm seviyeyi kesen mumu arar. Açılış aralığında iki
+okuma tanım gereği aynıdır: pencerenin ilk mumundan önceki kapanış aralığı kuran mumun kapanışıdır, yani aralığın
+içindedir. Aynı koşuda ayrıca ölçüldü: dört paritede ızgaranın hiçbir kombinasyonunda tek bir işlem değişmez.{{? E.yorum.acilis.degisen == 0 and G.yorum.acilis.degisen == 0 and J.yorum.acilis.degisen == 0 and A.yorum.acilis.degisen == 0 }}
+İkincisi geri dönüş: harf "yeniden içeride kapanırsa" der, yani dönüş mumu aralığın içinde kapanır; karşı kenarın
+ötesinde kapanan mum o kırılımı bitirir ve ters yönde yeni bir kırılım sayılır (haber dersindeki N4'ün kuralı). Bu
+ölçüm yalnız kırılan kenarı sorar: yukarı kırılımdan sonra alt kenarın da altında kapanan mum dönüş mumu sayılır ve
+satış verir. Harfin iki okuması aynı koşuda ayrıca, her biri tek başına ölçüldü. {{! yorum_cumle }}
+
+{{! yorum }}
 
 ### Koşullar
 
@@ -62,7 +70,8 @@ pencerenin ilk mumundan önceki kapanış aralığı kuran mumun kapanışıdır
 2. **Ne zaman.** {{! ne_zaman }}
 3. **Aralığı işaretle.** Londra 08:00'den ilk mum (TSİ 10:00 ya da 11:00, İngiltere'nin saatine göre).
 4. **Kırılımı gör, girme.** Aralığın dışında kapanış bir sinyal değil, bir hazırlıktır.
-5. **Geri dönüşü bekle.** En çok iki mum içinde aralığın içinde kapanış; giriş sonraki dakikada, ters yönde.
+5. **Geri dönüşü bekle.** En çok iki mum içinde kırılan kenarın berisinde kapanış; giriş sonraki dakikada, ters
+   yönde.
 6. **Stop gezintinin ucunda, hedef 1R.** Pencere Londra 14:00'te kapanır (TSİ 16:00 ya da 17:00).
 7. **Maliyet.** {{! basabas }}
 

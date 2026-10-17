@@ -122,6 +122,19 @@ def mevsim_kovalari(saat_tsi: dict) -> tuple[int, int] | None:
     return erken, gec
 
 
+def turetilmis(b: dict) -> bool:
+    """Birimin varsayılanı ön kayıtta yoksa doğru: birim, ön kaydın varsayılanında TANIMLI bir boyutu kendi sabitiyle
+    değiştirmişse (NY IB 08:00: ön kayıt başlangıcı 09:30 seçti). Ön kaydın boş bıraktığı bir boyutu sabitlemek
+    (başarısız kırılımın seviyesi) türetme değildir. Girdi ölçümün birim kaydıdır (sabit, onkayit_varsayilan)."""
+    s, ov = b.get("sabit") or {}, b.get("onkayit_varsayilan") or {}
+    return any(ov.get(k) is not None and ov.get(k) != v for k, v in s.items())
+
+
+def varsayilan_ad(b: dict) -> str:
+    """Birimin varsayılanının okur adı; metin ve figür bu tek tanımı okur."""
+    return "türetilmiş varsayılan" if turetilmis(b) else "önceden kayıtlı varsayılan"
+
+
 def neden_ad(i: dict, gun_sonu_et: str) -> str:
     """Çıkış nedeninin okur adı. Motor zaman çıkışı ile gün sonu kapanışını aynı kodla (3) yazar; ikisi çıkış
     dakikasının New York saatinden ayrılır (gün sonu kapanışı önceden kaydın gün sonu saatindedir)."""
