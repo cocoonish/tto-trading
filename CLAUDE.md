@@ -19,6 +19,8 @@ TTO Trading/
 │   ├── USDTRYDeval/             # USD/TRY trend kanalları
 │   ├── OVP/                     # Orta Vadeli Program: ima edilen kur (GSYH_TL/GSYH_USD),
 │   │                            #   program tabloları programlar.json'da ELLE tutulur
+│   ├── FxGunici/                # FX gün içi stratejiler: Dukascopy 1 dk bid/ask, ön kayıt,
+│   │                            #   koşu, karşı olgu → sekiz ders; tek komut hepsi.py
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
 ├── teknik/                      # Haftalık teknik analiz ARŞİVİ — yayın 27.09.2026 sayısıyla
 │                                #   sona erdi; yaz.py yalnız arşiv sayısına düzeltme yazar
@@ -5032,3 +5034,72 @@ ekonomistleri Mart 2026'da esnekliği 2025 çalışmasını güncelleyerek buldu
 eski 0,8'lik oranla türetilen senaryo sayıları kaldırıldı, eski oran yalnız
 künye olarak anılıyor — kaynağın kendisinin geride bıraktığı bir tahminle
 "alternatif" sayı basılmaz.
+
+**KARAR (16–17.10.2026, kullanıcı) ve Kurucu ilke — FX GÜN İÇİ STRATEJİLER: ÖN KAYIT GİT
+GEÇMİŞİYLE KANITLANIR; SONUÇTAN SONRA DEĞİŞEN HER UYGULAMA KURALI ÖLÇÜLMÜŞ ETKİSİYLE YAYIMLANIR;
+ve BİR YAYIN KATMANI BİRLİKTE YAZILIR YA DA BİRLİKTE GERİ ALINIR.** Kullanıcının şartnamesi
+(kural tabanlı gün içi stratejiler; EUR/USD · GBP/USD · USD/JPY · AUD/USD; Dukascopy 1 dakikalık
+bid/ask, 2018 →; örneklem içi 2018–2023, dışı 2024 →; "sonuçları güzelleştirme, çalışmayana
+çalışmıyor de"; Bloomberg yok) `Aktarılacak Projeler/FxGunici/`de kuruldu: 22 kural, dört parite,
+sekiz ders (`site/src/content/arastirma/fx-gunici-*.mdx`). Tek komut `hepsi.py`: sınamalar →
+takvim → takvimin fiyat sınaması → veri denetimi → koşu → karşı olgu → ölçüm → şekiller → ders
+metinleri → kapı (`dogrula.py`; sayfa sınavı 26 kendiliğinden koşturur, ağır kütüphane ve git
+istemez — ölçüm dosyasının taşıdığı geçmişi beklenenle kıyaslar, yani yayın koşucusunun sığ
+checkout'u onu düşürmez). Fiyat arşivi ve takvimin ham sayfaları bulutta indirilir
+(`arastirma-veri.yml`) ve okunmadan önce SHA-256 özüne karşı sınanır. Hüküm: önceden kayıtlı
+varsayılanların 88 bileşiminde (22 kural × 4 parite) 2024 → 82 çalışmıyor · 6 zayıf, bütün dönem
+83 · 5; iki pencerede de "çalışıyor" hükmü alan bileşim yok ve havuzda yirmi iki kuralın yirmi
+ikisinde örneklem dışı net R eksi. Ders metni bunu manşette söyler.
+
+(1) ÖN KAYIT GİT'TE DURUR, ÖLÇÜM ONU GİT'TEN OKUR. `onkayit.toml` hiçbir sonuç görülmeden commit
+edildi; metodoloji dersinin geçmiş tablosu dosyanın commit'lerinden ve ilk sonuçların görüldüğü
+andan (koşu çıktısını okuyan ilk kodun commit'i) kurulur. Beklenen geçmiş `onkayit_gecmis.py`de tek
+tanım; sığ bir klonda zincir ilk adımda adıyla düşer, geçmiş uydurulmaz. İlk sonuçlardan sonra ön
+kayda yazılan her kayıt yalnız AÇIKLAMA notudur ve kuralların içerik özü ikinci kayıttakiyle aynı
+kalmalıdır. Ön kaydın harfinden ayrılan her okuma (hüküm penceresi, ailelerin kurallara bölünmesi,
+üç kuralın dar okuması) "Sapmalar"da adıyla durur ve harfin okuması ayrıca ölçülür.
+
+(2) "KÜÇÜK" BİR SAPMA YAZILMAZ, ÖLÇÜLÜR. İlk sonuçlardan sonra değişen her uygulama kuralı (ham
+açılış geçerliliği, giriş dakikasında boşluk, tatil zinciri, tek pozisyon, seçimde eşitlik, stopun
+yeri …) `karsi_olgu.py` ile geçici kopyada TEK BAŞINA eski hâline döndürülüp bütün koşu yeniden
+yapılır ve bileşim bileşim kıyaslanır; ders etkisini hükme yakınlık sırasıyla basar. İkisi birer
+hükmü değiştirdi, ikisi de aynı yönde (N1 kırılımın seçileni AUD/USD'de ham açılışla, EUR/USD'de
+tek pozisyonla: eski kuralla zayıf, bugün çalışmıyor). Kod ve koşu
+çıktısı kayıttakiyle aynıysa yeniden koşmaz; kapsam koşunun içe aktardığı modüller, ayar, ön kayıt,
+takvim ve fiyat künyeleridir (ders motoru, ölçüm ve şekil bilerek dışında).
+
+(3) YAYIN KATMANI. Ölçüm → şekiller → ders metinleri → kapı tek katmandır: ölçümden önce yedeklenir
+ve dört adımdan biri düşerse ya da koşu kesilirse geri konur (`hepsi.Yedek`, dört sınama). Yarım bir
+katman (yeni ölçüm, yeni figürler, eski dersler) diskte kalmaz.
+
+(4) OKURA YAZILAN SAYI, OKURUN GÖRDÜĞÜ SAYILARDAN TÜRER. Kayıttaki R üç haneye yuvarlıdır; onu bir
+daha iki haneye yuvarlamak yanında yazılan "22,8 / 29,05" ile çelişiyordu (0,785 → 0,79; oran
+0,78). Örnek işlemin R'si pip sonucu / risk (`adlar.islem_r`), pratik bloklardaki "a / b = c"
+satırları gösterilen dizgelerin oranıdır.
+
+(5) BİR KURALIN İKİ TÜKETİCİSİ TEK TANIMDAN OKUR. Kova eşiği (30 işlem; metin de figür de, kapının
+9. ölçütü), tek bir yerel saatte giren kuralın iki TSİ kovasının yaz ve kış saati olması
+(`adlar.mevsim_kovalari`; fiksing momentumu, fiksing dönüşü, gün içi momentum — figür kovaları
+"17:00" diye basıyordu ve okur bir giriş saati seçimi okuyordu, oysa iki kova mevsimin kıyasıdır),
+saat parametrelerinin TSİ yazımı (`adlar.tsi_yaz`; kapının 8. ölçütü saat taşıyan her kural
+maddesinde TSİ karşılığını sorar).
+
+(6) SAYIM CÜMLESİ SIFIRI "HİÇBİRİ" DİYE YAZAR. "86 bileşimin 0 tanesinde … 0 tanesinde" ve
+"144 kombinasyonundan 0 tanesinin" yayına kadar geldi; şablon motorunun koşul sözdizimi
+(`{% if %}…{% elif %}`) sayımın sıfır dalını ayrıca taşımak içindir.
+
+(7) Ders kartının alıştırma sayacı yalnız "Çözüm" özetli `<details>`i sayar
+(`site/src/lib/ders.ts`): katlanır tablolar (alınmayan emirler, kova ayrıntısı) alıştırma değildir.
+
+(8) YEŞİL BİR KAPI, ÇIKTISININ DERLENDİĞİNİ SÖYLEMEZ. Kapı sekiz dersin ölçümden birebir
+üretildiğini, sayıları ve figürleri sınıyordu ve yeşildi; site derlemesi ise düştü: katlanır
+tablo `<details><summary>…</summary>` diye TEK satıra yazılmıştı ve MDX aynı satırdaki metni
+paragraf sayıp kapanış etiketini o paragrafta arıyor. Kapının 11. ölçütü artık blok etiketinin
+satırını sorar (kapanışı aynı satırda değilse satırda başka metin yok) ve bozuk metne karşı
+koşturulunca on iki ihlalin on ikisini buldu. Zincir derlemeyi koşturmaz; derlemenin
+düşeceği bir biçimi zincir kendi kapısında sormalıdır.
+
+AÇIK, adıyla (metodoloji dersinin "Ölçülmeyenler"i): gerçek sürpriz (anket medyanı yok; haber
+kovaları ilk mumun hareketinden bir vekil), piyasa derinliği ve kısmi dolum, başka bir likidite
+kaynağının makası, komisyon, emir gecikmesi, 5 dakikanın altı, dört majör dışı pariteler,
+pozisyon büyüklüğü ve kuralların birleşimi.
