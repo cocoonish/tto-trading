@@ -30,7 +30,7 @@ saatlerde açıktır ve bu iki paritede Asya aralığı gerçek bir seansın ara
 {{! kural }}
 
 Varsayılan aralığı Londra açılışında kapatır, 15 dakikalık mumla kırılımı arar, stopu aralığın ortasına
-koyar ve 1R hedefler; son giriş Londra 11:00.{{? B.varsayilan.tf == 15 and B.varsayilan.aralik_sonu_londra == "08:00" and B.varsayilan.stop_yeri == "orta" and B.varsayilan.hedef == "1R" and B.varsayilan.son_giris_londra == "11:00" }}
+koyar ve 1R hedefler; son giriş Londra 11:00 ({{! tsi "" "Londra 11:00" }}).{{? B.varsayilan.tf == 15 and B.varsayilan.aralik_sonu_londra == "08:00" and B.varsayilan.stop_yeri == "orta" and B.varsayilan.hedef == "1R" and B.varsayilan.son_giris_londra == "11:00" }}
 Ortadaki stop bir tercihtir: Asya aralığı sekiz saatin aralığıdır ve açılışın tek mumundan geniştir; karşı
 uçtaki stop riski aralığın tamamı kadar büyütür. Orta, kırılımın geri dönüp aralığın yarısını geçmesini
 "fikir bozuldu" sayar.
@@ -41,7 +41,7 @@ uçtaki stop riski aralığın tamamı kadar büyütür. Orta, kırılımın ger
 
 {{! ornek }}
 
-Asya aralığı figürde iki noktalı mavi çizgidir; çizgiler aralığın başladığı Londra 00:00'dan başlar. Aralık gece boyunca oluştuğu için Londra açıldığında sinyal
+Asya aralığı figürde iki noktalı mavi çizgidir; çizgiler aralığın başladığı Londra 00:00'dan ({{! tsi "" "Londra 00:00" }}) başlar. Aralık gece boyunca oluştuğu için Londra açıldığında sinyal
 çoğu zaman ilk mumlarda gelir; açılıştan önce kırılmış bir aralık da Londra 08:00'den sonraki ilk dışarıda
 kapanışta sinyal üretir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlemdir; tuzak örneği
 önce lehine en az yarım R gidip sonra zararla kapanan işlem, yani kırılımın aralığa geri döndüğü gün.

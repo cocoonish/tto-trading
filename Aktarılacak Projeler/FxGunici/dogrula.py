@@ -29,6 +29,18 @@ depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saa
   11. MDX yapısı — bir blok etiketi (<details>, <div …>) satırı açıyorsa ve kapanışı o satırda değilse satırda başka
      metin taşımaz: MDX aynı satırdaki metni paragraf sayar, kapanış etiketini o paragrafta arar ve site derlemesi
      düşer. Kapı derlemeden önce koşar; bu ölçüt o düşüşü zincirin içinde yakalar.
+  12. Kod özleri — ölçüm dosyası kendisini üreten kodun dosya başına özünü taşır (künye.kod), her gömülen figür
+     kendisini çizen kodun özünü (tto-kod-ozu: sekil_ortak.SEKIL_KODU). İkisi yalnız hashlib ile yeniden hesaplanır;
+     kod değişip ölçüm yeniden koşulmadıysa "yeniden ölçülmeli", figür yeniden çizilmediyse "yeniden çizilmeli".
+     Listelerin asgari kapsamı kapının kendi kümesinden (OLCUM_KODU_ASGARI · SEKIL_KODU_ASGARI): daraltılan bir
+     liste, daralan listeyle yine eşit çıkardı. Figürün çağırdığı plotly.js dosyası sitede durur.
+  13. Pariteler — ders metninde geçen her döviz paritesi künyenin paritelerindendir; şablonlarda paritelerin sayısını
+     söyleyen sözcük ("dört paritede", "dört majör") künyenin parite sayısıdır ("en az", "bu", "öbür" ile başlayan
+     alt küme sayımları hariç). Parite listesi değişince eski sayıyı taşıyan cümleler adıyla düşer.
+  14. Örnek eşiği — metin "yarım R" diyorsa örnek günlerin eşiği (künye.ornek.esik) 0,5'tir.
+  15. TSİ, üretilmiş metinde — bir yerel saat (Londra, New York, Frankfurt, Tokyo) taşıyan her paragraf ve her madde
+     TSİ karşılığını da taşır (tablolar hariç: parametre tablolarının saatleri dipnotta TSİ'siyle). Giriş dersinin
+     "bütün saatler ayrıca TSİ olarak yazılır" cümlesi bu ölçütün sözüdür.
 
 Dersler henüz siteye yazılmamışsa (yayın öncesi) kapı bunu söyler ve geçer; bir kısmı yazılmışsa düşer.
 """
@@ -48,9 +60,16 @@ import ders_yaz as dy  # noqa: E402
 
 GRUP_TS = dy.KOK / "site" / "src" / "lib" / "dersGruplari.ts"
 
-#: Tanım gereği sabit olan sayılar (ölçüm değil): aralık ve eşik düzeyleri, pip büyüklükleri, olasılık tanımları,
-#: kapsam eşiği (gunluk.py: kapsam < 0,5 tatil). Buraya bir ÖLÇÜM yazılamaz.
-TANIM = {"%95", "%5", "%50", "%30", "%70", "0,0001", "0,01", "0,95", "0,5"}
+#: Tanım gereği sabit olan sayılar (ölçüm değil): aralık ve sınama düzeyleri (%95, %5, 0,95), pip büyüklükleri
+#: (0,0001 · 0,01), olasılık tanımları (%50 yazı tura; %30 ve %70 isabet örneği). Buraya bir ÖLÇÜM yazılamaz; bir
+#: kodun sabiti de yazılamaz — örnek gün eşiği, temel kayma ve veri denetiminin kapsam eşikleri künyeden basılır.
+TANIM = {"%95", "%5", "%50", "%30", "%70", "0,0001", "0,01", "0,95"}
+
+#: Ölçüt 12'nin asgari kapsamları (kapının kendi kümesi; sınanan listeler bunları taşımalı).
+OLCUM_KODU_ASGARI = {"ders_olcum.py", "adlar.py", "kosu.py", "motor.py", "strateji.py", "strat_haber.py", "takvim.py",
+                     "metrik.py", "saglamlik.py"}
+SEKIL_KODU_ASGARI = {"Aktarılacak Projeler/FxGunici/sekil.py", "Aktarılacak Projeler/FxGunici/sekil_ortak.py",
+                     "Aktarılacak Projeler/FxGunici/adlar.py", "site/tools/plotly_stil.py"}
 
 _SAYI = re.compile(r"(?<![\w/.,])(?:%\d+(?:,\d+)?|[−+-]?\d+,\d+%?)")
 
@@ -204,6 +223,120 @@ def tsi_denetimi() -> list[str]:
     return hata
 
 
+def olcum_kodu() -> list[str]:
+    """Ölçüt 12, ölçüm yarısı: künye.kod'daki her dosyanın bugünkü özü kayıttakiyle aynı ve tek öz tutarlı."""
+    if not dy.OLCUM.exists():
+        return []
+    k = (json.loads(dy.OLCUM.read_text(encoding="utf-8")).get("kunye") or {}).get("kod") or {}
+    dosya = k.get("dosya") or {}
+    if not dosya:
+        return ["ölçüm dosyası kendisini üreten kodun özünü taşımıyor (yeniden ölçülmeli)"]
+    hata = []
+    eksik = sorted(OLCUM_KODU_ASGARI - set(dosya))
+    if eksik:
+        hata.append(f"ölçümün kod künyesi asgari dosyaları taşımıyor: {', '.join(eksik)}")
+    h = hashlib.sha256()
+    for d, o in sorted(dosya.items()):
+        yol = BURASI / d
+        simdi = hashlib.sha256(yol.read_bytes()).hexdigest() if yol.exists() else None
+        if simdi != o:
+            hata.append(f"{d}: ölçüm koşulduktan sonra değişti (yeniden ölçülmeli)")
+        h.update(f"{d}\0{o}\0".encode())
+    if h.hexdigest() != k.get("oz"):
+        hata.append("ölçümün kod özü dosya özleriyle tutmuyor")
+    return hata
+
+
+def sekil_kodu() -> tuple[str | None, list[str]]:
+    """Ölçüt 12, figür yarısı: figür kodunun bugünkü özü ve listenin asgari kapsamı (sekil_ortak.kod_ozu)."""
+    import sekil_ortak as so
+    liste = {p.relative_to(dy.KOK).as_posix() for p in so.SEKIL_KODU}
+    eksik = sorted(SEKIL_KODU_ASGARI - liste)
+    return so.kod_ozu(), ([f"figür kodu özünün listesi asgari dosyaları taşımıyor: {', '.join(eksik)}"] if eksik else [])
+
+
+_DOVIZ = "USD|EUR|GBP|JPY|AUD|NZD|CAD|CHF|TRY|SEK|NOK|DKK|CNH|CNY|MXN|ZAR|HKD|SGD|PLN|HUF|CZK|RUB|INR|KRW|BRL"
+_PARITE_AD = re.compile(rf"(?<![A-Z])(?:{_DOVIZ})/(?:{_DOVIZ})(?![A-Z])")
+_SAYI_SOZ = {"iki": 2, "üç": 3, "dört": 4, "beş": 5, "altı": 6, "yedi": 7, "sekiz": 8, "dokuz": 9, "on": 10}
+_PARITE_SAYI = re.compile(r"(?<![\wçğıöşüÇĞİÖŞÜ])((?:en az|bu|öbür) )?(iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on) "
+                          r"(?:majör )?parite", re.I)
+
+
+def parite_denetimi(cikti: dict) -> list[str]:
+    """Ölçüt 13: metindeki pariteler künyeden, şablonların parite sayısı künyenin sayısı."""
+    if not dy.OLCUM.exists():
+        return []
+    ciftler = (json.loads(dy.OLCUM.read_text(encoding="utf-8")).get("kunye") or {}).get("ciftler") or []
+    adlar_ = {f"{c[:3]}/{c[3:]}" for c in ciftler}
+    hata = []
+    for slug, (mdx, _) in cikti.items():
+        yabanci = sorted(set(_PARITE_AD.findall(mdx)) - adlar_)
+        if yabanci:
+            hata.append(f"{slug}: künyede olmayan parite geçiyor: {', '.join(yabanci)}")
+    for yol in sorted((BURASI / "metin").glob("*.md")) + sorted((BURASI / "metin" / "strateji").glob("*.md")):
+        metin = re.sub(r"\{\{.*?\}\}|\{%.*?%\}", " ", yol.read_text(encoding="utf-8"), flags=re.S)
+        for m in _PARITE_SAYI.finditer(metin):
+            if m.group(1):
+                continue
+            # Türkçe büyük harf: cümle başındaki "İki" str.lower() ile "i̇ki" olur (i + birleştirici nokta) ve sözlükte
+            # yoktur; büyük İ ve I önce Türkçe kuralla küçültülür.
+            if _SAYI_SOZ[m.group(2).replace("İ", "i").replace("I", "ı").lower()] != len(ciftler):
+                hata.append(f"{yol.relative_to(BURASI)}: parite sayısı elle yazılmış ve künyeyle tutmuyor "
+                            f"({m.group(0)!r}; künyede {len(ciftler)} parite)")
+    return hata
+
+
+def ornek_esigi(cikti: dict) -> list[str]:
+    """Ölçüt 14: "yarım R" diyen metin, örnek günlerin eşiği 0,5 iken doğrudur."""
+    if not dy.OLCUM.exists():
+        return []
+    esik = ((json.loads(dy.OLCUM.read_text(encoding="utf-8")).get("kunye") or {}).get("ornek") or {}).get("esik")
+    yarim = sorted(slug for slug, (mdx, _) in cikti.items() if "yarım R" in mdx)
+    if yarim and esik != 0.5:
+        return [f"metin 'yarım R' diyor ({', '.join(yarim)}), örnek günlerin eşiği {esik}"]
+    return []
+
+
+_SAAT_S = r"(?:[01]\d|2[0-3]):[0-5]\d(?:\s*[–→-]\s*(?:[01]\d|2[0-3]):[0-5]\d)?"
+_SEHIR = r"(?:New York|Londra|Frankfurt|Tokyo)"
+_YEREL_SAAT = re.compile(rf"(?:{_SAAT_S}\s*{_SEHIR}|{_SEHIR}(?:'[a-zçğıöşü]+)?\s+{_SAAT_S})")
+
+
+def _metin_birimleri(mdx: str):
+    """Paragraflar ve maddeler (madde imiyle başlayan satır yeni birimdir), satır numarasıyla; tablo, başlık ve blok
+    etiketi satırları ayrı birimdir ve sınanmaz. Başlık ve etiket satırı TEK satırlık birimdir: ardından boş satırsız
+    gelen metin kendi birimidir ve sınanır (etiketin birimine katılsaydı etiketle birlikte sınamanın dışında kalırdı).
+    Tablonun ardından boş satırsız gelen satır tablonun satırıdır (GFM) ve tabloyla kalır."""
+    cur, bas = [], 1
+    for i, sat in enumerate(mdx.split("\n"), 1):
+        yeni = (not sat.strip()) or bool(re.match(r"\s*(?:[-*] |\d+\. |\||#|<)", sat))
+        if yeni and cur:
+            yield bas, "\n".join(cur)
+            cur = []
+        if sat.strip():
+            if not cur:
+                bas = i
+            cur.append(sat)
+            if re.match(r"\s*[#<]", sat):
+                yield bas, sat
+                cur = []
+    if cur:
+        yield bas, "\n".join(cur)
+
+
+def tsi_metinde(cikti: dict) -> list[str]:
+    """Ölçüt 15: yerel saat taşıyan her paragraf ve madde TSİ karşılığını da taşır (üretilmiş metinde)."""
+    hata = []
+    for slug, (mdx, _) in cikti.items():
+        for bas, b in _metin_birimleri(mdx):
+            if b.lstrip().startswith(("|", "<", "#", "{", "import")):
+                continue
+            m = _YEREL_SAAT.search(b)
+            if m and "TSİ" not in b:
+                hata.append(f"{slug}.mdx:{bas}: yerel saat var, TSİ karşılığı yok: …{b[max(0, m.start() - 40):m.end() + 30]}…")
+    return hata
+
+
 _BLOK_ETIKET = re.compile(r"^\s*<(details|div)\b[^>]*>(.*)$")
 
 
@@ -248,6 +381,7 @@ def main() -> int:
     hata += kunye_denetimi()
     hata += kova_sirasi()
     hata += onkayit_denetimi()
+    hata += olcum_kodu()
     if not var:
         if hata:
             print("✗ FX gün içi: " + "\n  ".join(hata))
@@ -265,6 +399,9 @@ def main() -> int:
             cikti = {}
             hata.append(f"üretim düştü: {type(e).__name__}: {e}")
         oz = hashlib.sha256(dy.OLCUM.read_bytes()).hexdigest()
+        kod_oz, kod_hata = sekil_kodu()
+        hata += kod_hata
+        hata += parite_denetimi(cikti) + ornek_esigi(cikti) + tsi_metinde(cikti)
         gomulen = set()
         for slug, (mdx, u) in cikti.items():
             hata += mdx_yapisi(slug, mdx)
@@ -283,6 +420,14 @@ def main() -> int:
                     hata.append(f"{ad}.html: ölçüm özü yok")
                 elif m.group(1) != oz:
                     hata.append(f"{ad}.html: başka bir ölçümle çizilmiş (yeniden çizilmeli)")
+                m = re.search(r'<meta name="tto-kod-ozu" content="([0-9a-f]{64})">', h)
+                if not m:
+                    hata.append(f"{ad}.html: kod özü yok (yeniden çizilmeli)")
+                elif m.group(1) != kod_oz:
+                    hata.append(f"{ad}.html: figür kodu değişti, figür yeniden çizilmedi (yeniden çizilmeli)")
+                for js in re.findall(r'<script[^>]*\bsrc="(/[^"]+)"', h):
+                    if not (dy.KOK / "site" / "public" / js.lstrip("/")).exists():
+                        hata.append(f"{ad}.html: çağırdığı dosya sitede yok: {js}")
                 hata += figur_bicimi(ad, h)
         if cikti:
             fazla = sorted(p.name for p in dy.SEKIL.glob("*.html") if p.name not in gomulen)

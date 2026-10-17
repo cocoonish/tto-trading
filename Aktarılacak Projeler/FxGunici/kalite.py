@@ -45,6 +45,12 @@ import ayar as ay
 import dukascopy as dk
 import zaman as z
 
+#: Günün kotasyon kapsamının iki eşiği: altında kalan gün tatil (piyasa kapalı), üstündeki gün normal gündür; ikisinin
+#: arası kısmi gün. Yerel tatillerin "düşük kapsamlı gün" sayımı da normal gün eşiğini kullanır. Rapor eşikleri
+#: kendisi taşır (`esik`); ders metni ve tablo başlıkları oradan okur, ikinci kez elle yazılmaz.
+TATIL_ESIK = 0.5
+NORMAL_ESIK = 0.9
+
 SICRAMA_K = 12.0
 SICRAMA_DONUS = 0.70
 FITIL_K = 12.0
@@ -74,7 +80,7 @@ def kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarray) -> dict:
     gun_kapsam = var.mean(axis=1)
     kova = {"1": 0, "2-4": 0, "5-14": 0, "15-59": 0, "60+": 0}
     en_uzun = []
-    normal = gun_kapsam >= 0.9
+    normal = gun_kapsam >= NORMAL_ESIK
     for i in np.flatnonzero(normal):
         eksik = ~var[i]
         for L in _kosular(eksik):
@@ -109,9 +115,9 @@ def kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarray) -> dict:
     sa = (ny.hour * 60 + ny.minute).to_numpy()
     hafta_sonu = int(((hg == 5) | ((hg == 4) & (sa >= 17 * 60)) | ((hg == 6) & (sa < 17 * 60))).sum())
     tatil = [(gunler[i].date().isoformat(), round(float(gun_kapsam[i]) * 100, 1))
-             for i in np.flatnonzero(gun_kapsam < 0.5)]
+             for i in np.flatnonzero(gun_kapsam < TATIL_ESIK)]
     kismi = [(gunler[i].date().isoformat(), round(float(gun_kapsam[i]) * 100, 1))
-             for i in np.flatnonzero((gun_kapsam >= 0.5) & (gun_kapsam < 0.9))]
+             for i in np.flatnonzero((gun_kapsam >= TATIL_ESIK) & (gun_kapsam < NORMAL_ESIK))]
     normal_eksik = int((~var[normal]).sum())
     return {
         "islem_gunu": int(len(gunler)),
@@ -153,7 +159,7 @@ def yerel_tatil_kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarr
         pay = np.isin(izgara, t).mean(axis=1)
         out[ad] = {"gun": int(len(ix)), "kapsam_ort_yuzde": round(float(pay.mean()) * 100, 2),
                    "kapsam_min_yuzde": round(float(pay.min()) * 100, 1), "en_dusuk_gun": secim[int(np.argmin(pay))],
-                   "dusuk_gun": [(g, round(float(v) * 100, 1)) for g, v in zip(secim, pay) if v < 0.9]}
+                   "dusuk_gun": [(g, round(float(v) * 100, 1)) for g, v in zip(secim, pay) if v < NORMAL_ESIK]}
     return out
 
 
@@ -434,6 +440,7 @@ def denetle(sembol: str, a: ay.Ayar) -> dict:
     t = ham["t"].to_numpy(np.int64)
     sonuc = {
         "satir": int(len(ham)),
+        "esik": {"tatil": TATIL_ESIK, "normal": NORMAL_ESIK},
         "ilk": f.index[0].strftime("%Y-%m-%d %H:%M"),
         "son": f.index[-1].strftime("%Y-%m-%d %H:%M"),
         "kapsam": kapsam(t, gunler, bas_sn),

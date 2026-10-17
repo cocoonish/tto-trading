@@ -69,9 +69,9 @@ Dukascopy'nin kendi saatlik mumlarıyla çapraz sınama. Veri değiştirilmez; d
 {{! veri }}
 
 _Kapsam: hafta içi normal günlerde kotasyonu olan dakikaların payı. Tatil: hafta içine düşen 25 Aralık ve 1 Ocak
-(takvimden; kapsamı %50'nin altında kalan günlerle aynı günlerdir). İngiltere banka tatilleri ve ABD federal tatilleri
+(takvimden; kapsamı {{! kalite_esik tatil in }} altında kalan günlerle aynı günlerdir). İngiltere banka tatilleri ve ABD federal tatilleri
 işlem günüdür ve kurallar o günlerde de işlem açar; üçüncü tablo o günlerin kotasyon kapsamını verir (ortalama ve en
-düşük gün; kapsamı %90'ın altında kalan gün sayısı). Boşluk: kotasyonun art arda kaç dakika
+düşük gün; kapsamı {{! kalite_esik normal in }} altında kalan gün sayısı). Boşluk: kotasyonun art arda kaç dakika
 kesildiği; en uzun boşluk TSİ başlangıcıyla. Makas dakika kapanışında. Sıçrama adayı yalnız sayılır, veriden
 çıkarılmaz. Çapraz sınama: dakika arşivinden kurulan saatlik mumların Dukascopy'nin kendi saatlik dosyalarıyla
 birebir eşitlik oranı; {{! capraz_kapsam }}._
@@ -80,7 +80,7 @@ birebir eşitlik oranı; {{! capraz_kapsam }}._
 
 Makas gün içinde sabit değildir. New York 17:00'de (FX gününün kapanışı) likidite sağlayıcılar pozisyonlarını bir
 sonraki güne devrederken makas birkaç katına açılır; bu yüzden bu serideki bütün işlemler en geç
-{{ K.gun_sonu_et | t }} New York'ta kapatılır. Haber dakikalarında da makas açılır; olay olay ölçüsü ve dört paritenin karşılaştırması haber
+{{ K.gun_sonu_et | t }} New York'ta ({{! gun_sonu_tsi }}) kapatılır. Haber dakikalarında da makas açılır; olay olay ölçüsü ve dört paritenin karşılaştırması haber
 dersinde.
 
 **Hacim üzerine bir uyarı.** FX'te merkezî bir borsa ve merkezî bir işlem hacmi yoktur. Dukascopy'nin mumlarındaki
@@ -135,7 +135,7 @@ Bütün stratejiler aynı yürütme kurallarıyla koşar. Kuralların her biri b
 
 **Sinyal mumun kapanışında, giriş sonraki dakikada.** Bir sinyal ancak mumu kapandıktan sonra bilinir. Kural kendi
 giriş saatini tanımlamıyorsa giriş, sinyal mumundan sonraki ilk dakikanın açılışında yapılır; gün içi momentum 12:00
-New York'ta, fiksing dönüşünün gecikmeli biçimi bir mum sonra girer. Bir mumun içinde "fiyat aralığı geçti, hemen
+New York'ta ({{! tsi "" "New York 12:00" }}), fiksing dönüşünün gecikmeli biçimi bir mum sonra girer. Bir mumun içinde "fiyat aralığı geçti, hemen
 girdim" türünden bir giriş yoktur. Bu kural bir sınamayla korunur: girişi sinyal mumunun kapanışından önceye düşen tek
 bir işlem bile koşuyu durdurur. Ayrıca her strateji iki ayrı geleceğe bakmama sınamasından geçer: veri bir anda
 kesilir ya da o andan sonrası değiştirilir ve kararı kesimden önce verilen sinyallerin değişmediği sınanır; kesim
@@ -164,7 +164,7 @@ paritenin bütün olaylarına birlikte uygulanır (bir olayın pozisyonu açıkk
 
 **Alınmayan emir.** Açık pozisyonun dışında üç durumda daha emir alınmaz: giriş dakikasında emrin tarafının açılışı
 (alışta ask, satışta bid) stopun ötesinde ya da tam üstündeyse; seviye hedefi yürütülen girişin (kayma dahil)
-gerisinde ya da tam üstündeyse; giriş gün sonunda ({{ K.gun_sonu_et | t }} New York) ya da sonrasındaysa.
+gerisinde ya da tam üstündeyse; giriş gün sonunda ({{ K.gun_sonu_et | t }} New York; {{! gun_sonu_tsi }}) ya da sonrasındaysa.
 Stopta kayma hesaba katılmaz, çünkü kayma bir işlem yaratmamalıdır; hedefte katılır, çünkü hedefi aşan bir dolumun
 kazancı yoktur. Hızlı bir mumda giriş anında stopu ya da hedefi çoktan geçmiş emir bu yüzden örneklemden çıkar;
 kural kural sayısı strateji derslerinde.

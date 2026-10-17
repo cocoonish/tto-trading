@@ -1,6 +1,6 @@
 ### Ne
 
-Aynı başarısız kırılım kuralı, seviye olarak **Asya aralığıyla** (Londra 00:00 → 08:00): Londra açıldıktan sonra
+Aynı başarısız kırılım kuralı, seviye olarak **Asya aralığıyla** (Londra 00:00 → 08:00; {{! tsi "→" "Londra 00:00" "Londra 08:00" }}): Londra açıldıktan sonra
 fiyat gecenin aralığının dışında kapanır, bir ya da iki mum içinde kırılan kenarın berisine dönerse ters yönde
 girilir.
 Kırılım dersindeki Asya aralığı kuralının aynasıdır.
@@ -30,7 +30,7 @@ Varsayılan: 15 dakikalık mumlar, iki mumluk pencere, 1R hedef.{{? B.varsayilan
 
 {{! ornek }}
 
-Noktalı mavi çizgiler gecenin aralığı (Londra 00:00'dan başlar), mavi bant aralığa geri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: {{! tuzak "geri dönüş başlıyor, sonra kırılım yeniden başlayıp stopu alıyor." "geri dönüş başlıyor ama sürmüyor; işlem stopa değmeden zararla kapanıyor ({cikis})." }}
+Noktalı mavi çizgiler gecenin aralığı (Londra 00:00'dan başlar; {{! tsi "" "Londra 00:00" }}), mavi bant aralığa geri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: {{! tuzak "geri dönüş başlıyor, sonra kırılım yeniden başlayıp stopu alıyor." "geri dönüş başlıyor ama sürmüyor; işlem stopa değmeden zararla kapanıyor ({cikis})." }}
 
 ### Sonuçlar
 

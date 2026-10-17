@@ -24,7 +24,7 @@ Fiyat verisi Dukascopy'nin herkese açık beslemesinden gelir: her parite ve her
 bid'den yürütülür ve makas maliyete ayrıca eklenmez, fiyatın kendisindedir.
 
 Strateji mumları (5, 15, 60 dakika) 1 dakikalık orta fiyattan kurulur ve UTC saatine çıpalıdır. 5 ve 15 dakikalık
-mumlarda seans açılışları (Londra 08:00, New York 08:00 ve 09:30) her zaman bir mumun başına düşer. 60 dakikalık
+mumlarda seans açılışları (Londra 08:00, New York 08:00 ve 09:30; {{! tsi "·" "Londra 08:00" "New York 08:00" "New York 09:30" }}) her zaman bir mumun başına düşer. 60 dakikalık
 mumlarda her kural kendi çıpasını kullanır: saatlik mum saat başında başlar, New York 09:30 ilk dengesinde ise
 :30'da (saat başı çıpanın New York 08:30 verileriyle ilişkisi aşağıda, ön kaydın yorum gerektiren yerleri arasında).
 Haber kurallarının mumları her zaman olay dakikasından başlar: ilk haber mumu olay dakikası ile bir mum
@@ -43,7 +43,7 @@ Veri denetimi giriş dersinde (kapsam, tatil, makas, sıçrama adayı ve Dukasco
 sınama). Denetim veriyi **değiştirmez**: sıçrama adayları sayılır ve listelenir, düzeltilmez ya da atılmaz.
 
 **Tatil** fiyattan değil takvimden gelir: 25 Aralık ve 1 Ocak hafta içine düştüğünde stratejiler o gün işlem açmaz.
-Günün kapsamından okunan bir tatil bayrağı gün bitmeden bilinemezdi; takvim önceden bilinir. Arşivde kapsamı %50'nin
+Günün kapsamından okunan bir tatil bayrağı gün bitmeden bilinemezdi; takvim önceden bilinir. Arşivde kapsamı {{! kalite_esik tatil in }}
 altında kalan işlem günleri dört paritede de tam bu günlerdir ({{ O.veri.tatil_uyum.EURUSD.takvim | n }} gün).{{? O.veri.tatil_uyum.EURUSD.ayni and O.veri.tatil_uyum.GBPUSD.ayni and O.veri.tatil_uyum.USDJPY.ayni and O.veri.tatil_uyum.AUDUSD.ayni }}
 Örneklemin iki kenarında baştan sona kapsanmayan işlem günü de işlem açmaz.
 
@@ -56,7 +56,7 @@ için elle yazılmış bir listeye karşı sınanır; Londra ile New York'un far
 giriş dersindeki tablodadır.
 
 Saatin doğru işlendiğinin bağımsız bir sınaması da var: ABD tarım dışı istihdam verisi 08:30 New York'ta
-yayımlanır, yani damgalar doğruysa yayım günlerinde 1 dakikalık mum aralığının ortalaması yazın da kışın da tam o
+({{! tsi "" "New York 08:30" }}) yayımlanır, yani damgalar doğruysa yayım günlerinde 1 dakikalık mum aralığının ortalaması yazın da kışın da tam o
 dakikada zirve yapmalıdır. Sınama yalnız günü takvimden alır, dakikayı fiyattan ölçer. {% if O.veri.kalite.EURUSD.damga.yaz.zirve_dk == 0 and O.veri.kalite.EURUSD.damga.kis.zirve_dk == 0 %}EUR/USD'de
 yapıyor: yaz saatindeki {{ O.veri.kalite.EURUSD.damga.yaz.gun | n }} günün de kış saatindeki
 {{ O.veri.kalite.EURUSD.damga.kis.gun | n }} günün de ortalama aralığı 08:30 dakikasında en yüksek. Bir saatlik yaz
@@ -72,7 +72,7 @@ günler adıyla) ve elle yazılmış bir listeye karşı sınanır.
 
 - **Sinyal ve giriş.** Sinyal, strateji mumunun orta fiyat kapanışıyla verilir. Kural kendi giriş saatini
   tanımlamıyorsa giriş, bir sonraki mumun ilk dakikasının açılışındadır (alış ask'tan, satış bid'den); gün içi
-  momentum 12:00 New York'ta, fiksing dönüşü "gecikme" parametresi kadar mum sonra girer. Sinyalin görüldüğü
+  momentum 12:00 New York'ta ({{! tsi "" "New York 12:00" }}), fiksing dönüşü "gecikme" parametresi kadar mum sonra girer. Sinyalin görüldüğü
   fiyattan girilmez.
 - **Alınmayan emir.** Stop seviyesi taşıyan emirde giriş tarafının kaymasız açılışı stopun ötesinde ya da tam
   üstündeyse, seviye hedefi yürütülen girişin (makas ve kayma dahil) gerisinde ya da tam üstündeyse, ya da giriş gün
@@ -312,7 +312,7 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 - **Ön kayıtlı iki ölçünün koşuya girişi** ({{! karsi_olgu_zaman onkayitli_iki_olcu }} UTC). Fiksingin ay sonu ayrımı
   ve gün içi momentumun öngörü regresyonu ön kayıtta vardı, ilk sonuçlarda koşulmamıştı. İkisi de hükme girmez.
 - **Yalnız yazıya geçirilen iki kural.** Seviye hedefi yürütülen girişin gerisinde ya da tam üstündeyse işlem
-  yoktur; girişi gün sonunda ({{ K.gun_sonu_et | t }} New York) ya da sonrasında olan sinyal alınmaz. İkisinin
+  yoktur; girişi gün sonunda ({{ K.gun_sonu_et | t }} New York; {{! gun_sonu_tsi }}) ya da sonrasında olan sinyal alınmaz. İkisinin
   davranışı ilk koşudan beri aynıdır; alınmayan emirlerin sayısı strateji derslerindedir.
 
 ### Ön kaydın açık bıraktığı ya da yorum gerektiren yerler
@@ -336,11 +336,11 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
   ölçüm aynı kuralı stop seviyesi taşıyan her emre uygular ve seviye hedefi için eşini ekler (hedef yürütülen girişin
   gerisindeyse işlem yok).
 - **60 dakikalık mumun çıpası.** Haber kuralları ve New York ilk dengesi 09:30 dışındaki kurallarda saatlik mum saat
-  başında başlar, yani New York 08:30 verisi 08:00–09:00 mumunun ortasına düşer. Tek bir saatlik ızgara Londra
+  başında başlar, yani New York 08:30 verisi ({{! tsi "" "New York 08:30" }}) 08:00–09:00 mumunun ortasına düşer. Tek bir saatlik ızgara Londra
   08:00 açılışını ve New York 08:30'u birlikte mum sınırına oturtamaz; Londra açılışı seçildi. Bu çıpayı 60
   dakikalık mumda {{! saat_capa }} kullanır. Sinyal penceresi New York 08:00'den önce başlayıp 09:00'dan sonra biten
   bir kuralda New York 08:00–09:00 mumunun hareketi ABD verisinin tepkisini de taşır.
-- **Asya aralığının başlangıcı.** Ön kayıt aralığın başlangıcını Londra 00:00'da sabit tutar, ızgara yalnız
+- **Asya aralığının başlangıcı.** Ön kayıt aralığın başlangıcını Londra 00:00'da ({{! tsi "" "Londra 00:00" }}) sabit tutar, ızgara yalnız
   bitişini (07:00 · 08:00) sınar; Tokyo açılışı bu başlangıca en çok bir saat uzaktır.
 - **Tatil.** Ön kayıt tatili tanımlamaz; tatil takvimden gelir (yukarıda).
 
@@ -402,8 +402,8 @@ kopyalarından; her kopyanın arşiv zaman damgası kayıtta), FOMC kararı içi
 at 2:00 p.m. EDT"), ECB basın toplantısı için karar duyurusunun kendi cümlesi; kuraldan ayrılan iki BoE kararının
 saati BoE'nin önceden yayımladığı saat duyurusundan (aşağıdaki listede). **Kuraldan**: öbür BoE kararları perşembe
 12:00 (Para Politikası Kurulu'nun yayım kuralı; tarih her özetin kendi sayfasından), ECB karar saati ECB'nin 27 Haziran
-2022 duyurusundan: {{ O.takvim.sayim.ECB_karar.saat_aralik."13:45 Europe/Berlin"[1] | tarih }} toplantısına kadar 13:45,
-{{ O.takvim.sayim.ECB_karar.saat_aralik."14:15 Europe/Berlin"[0] | tarih }} toplantısından itibaren 14:15 Frankfurt. Her
+2022 duyurusundan: {{ O.takvim.sayim.ECB_karar.saat_aralik."13:45 Europe/Berlin"[1] | tarih }} toplantısına kadar 13:45 ({{! tsi "" "Frankfurt 13:45" }}),
+{{ O.takvim.sayim.ECB_karar.saat_aralik."14:15 Europe/Berlin"[0] | tarih }} toplantısından itibaren 14:15 Frankfurt ({{! tsi "" "Frankfurt 14:15" }}). Her
 toplantıda kuralın verdiği karar saatinin, duyurunun yazdığı basın toplantısı saatiyle eşleştiği ayrıca sınandı (13:45
 ↔ 14:30, 14:15 ↔ 14:45).
 
@@ -434,7 +434,7 @@ Takvimin dışarıda bıraktığı ya da düzelttiği kayıtlar:
 
 {{! takvim_sorun }}
 
-Olağanüstü FOMC toplantıları takvimde kendi saatleriyle durur ({{! olaganustu FOMC_karar }}); saatini
+Olağanüstü FOMC toplantıları takvimde kendi saatleriyle durur: {{! olaganustu FOMC_karar }}. Saatini
 kaynağın yazmadığı olağanüstü ECB ve BoE kararları dışarıdadır, çünkü saati tahmin edilen bir olay haber penceresini
 yanlış yere koyardı.
 

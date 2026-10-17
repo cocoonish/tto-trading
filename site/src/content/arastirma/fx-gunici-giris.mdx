@@ -16,14 +16,19 @@ aralığı kırılımı, Asya aralığı, New York'un ilk dengesi, iç mum ve s�
 başarısız kırılımlar, VWAP, klasik (salon) pivotları, WM/R 16:00 fiksingi, gün içi momentum ve beş haber
 stratejisi. Her
 strateji aynı veriyle, aynı maliyetle, aynı yürütme kurallarıyla ve aynı hüküm kuralıyla ölçülür: kuralın şartları
-sonuç görülmeden yazıldı, penceresi ve asgarileri sonradan belirlendi (metodoloji dersinde adıyla). Amaç bir stratejiyi önermek değil; bir stratejinin ne olduğunu, nasıl kullanıldığını, ne kadar iyi
+sonuç görülmeden yazıldı; şartların asgari işlem sayıları ön kayıtta yoktur ve ilk sonuçlardan önce sabitlenmiş
+uygulamada durur; hüküm penceresi ve "ölçülemedi"nin eşiği ilk sonuçlardan sonra belirlendi (metodoloji dersinde
+adıyla). Amaç bir stratejiyi önermek değil; bir stratejinin ne olduğunu, nasıl kullanıldığını, ne kadar iyi
 çalıştığını ve ne zaman çalışmadığını göstermektir. Çalışmayan stratejiye çalışmıyor denir.
 
-Sonuç baştan: 22 kural ve 88 kural–parite bileşiminde önceden kaydın hükmü örneklem
-dışında (2024 →) 0 çalışıyor, 6 zayıf,
-82 çalışmıyor: maliyetten sonra kanıtlanmış
-bir kenar bırakan kural yok. "Zayıf" bir sınama değildir, yalnız örneklem dışı net ortalamanın artı olduğunu
-söyler; kural kuralın dökümü karşılaştırma dersinde.
+Sonuç baştan: 22 kural ve 88 kural–parite bileşiminde varsayılanın hükmü, serinin
+birincil penceresinde (2024 →; pencere ilk sonuçlardan sonra seçildi) 0 çalışıyor,
+6 zayıf, 82 çalışmıyor; ön kaydın istediği bütün
+dönemde 0 çalışıyor, 5 zayıf,
+83 çalışmıyor: iki
+pencerede de maliyetten sonra kanıtlanmış bir kenar bırakan kural yok. "Zayıf" bir sınama değildir, yalnız
+net ortalamanın artı olduğunu söyler; kural kural dökümü karşılaştırma dersinde. Sayıma New York ilk dengesi 08:00
+da girer; o kuralın varsayılanı ön kayıtta yok, 09:30'unkinden yalnız başlangıç değiştirilerek türetildi (dört bileşimi iki pencerede de çalışmıyor).
 
 Bu ders makinenin kendisidir. Sonraki dersler buradaki tanımları tekrar etmez: bir strateji dersinde "net R",
 "örneklem dışı" ya da "rastgele yön yüzdeliği" geçtiğinde tanımı buradadır.
@@ -77,17 +82,26 @@ Dukascopy'nin kendi saatlik mumlarıyla çapraz sınama. Veri değiştirilmez; d
 | USD/JPY | 0,4 | 1,2 | 0 | 126 | 100,0 |
 | AUD/USD | 1,0 | 1,7 | 0 | 102 | 100,0 |
 
+| Parite | İngiltere tatili (gün) | Kapsam: ort. · en düşük (%) | %90'ın altı (gün) | ABD tatili (gün) | Kapsam: ort. · en düşük (%) | %90'ın altı (gün) |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| EUR/USD | 60 | 99,1 · 94,7 | 0 | 74 | 99,0 · 94,6 | 0 |
+| GBP/USD | 60 | 99,0 · 90,3 | 0 | 74 | 98,9 · 90,3 | 0 |
+| USD/JPY | 60 | 98,9 · 92,9 | 0 | 74 | 98,9 · 92,9 | 0 |
+| AUD/USD | 60 | 98,0 · 79,2 | 3 | 74 | 97,9 · 79,2 | 2 |
+
 _Kapsam: hafta içi normal günlerde kotasyonu olan dakikaların payı. Tatil: hafta içine düşen 25 Aralık ve 1 Ocak
-(takvimden; kapsamı %50'nin altında kalan günlerle aynı günlerdir). Boşluk: kotasyonun art arda kaç dakika
+(takvimden; kapsamı %50'nin altında kalan günlerle aynı günlerdir). İngiltere banka tatilleri ve ABD federal tatilleri
+işlem günüdür ve kurallar o günlerde de işlem açar; üçüncü tablo o günlerin kotasyon kapsamını verir (ortalama ve en
+düşük gün; kapsamı %90'ın altında kalan gün sayısı). Boşluk: kotasyonun art arda kaç dakika
 kesildiği; en uzun boşluk TSİ başlangıcıyla. Makas dakika kapanışında. Sıçrama adayı yalnız sayılır, veriden
 çıkarılmaz. Çapraz sınama: dakika arşivinden kurulan saatlik mumların Dukascopy'nin kendi saatlik dosyalarıyla
-birebir eşitlik oranı; bid ve ask tarafı ayrı ayrı, her yılın saklanan Ocak ve Temmuz aylarında (parite başına 12–17 ay; kotasyonlu saatlerin %11,6–%17,3); saatlik dosyası saklanmayan aylar sınanmadı: EUR/USD Ocak ve Temmuz 2021; GBP/USD Ocak ve Temmuz 2021, Ocak ve Temmuz 2025, Ocak ve Temmuz 2026; USD/JPY Ocak ve Temmuz 2021, Ocak ve Temmuz 2023, Ocak ve Temmuz 2024; AUD/USD Temmuz 2023._
+birebir eşitlik oranı; bid ve ask tarafı ayrı ayrı, her yılın saklanan Ocak ve Temmuz aylarında: iki tarafın birlikte sınandığı aylar parite başına 12–17; taraf başına bid 12–18, ask 12–17 ay (kotasyonlu saatlerin bid tarafında %11,6–%17,3, ask tarafında %11,6–%16,4); iki tarafı birlikte sınanamayan aylar: EUR/USD Ocak ve Temmuz 2021; GBP/USD Ocak ve Temmuz 2021, Ocak ve Temmuz 2025, Ocak ve Temmuz 2026; USD/JPY Ocak ve Temmuz 2021, Ocak ve Temmuz 2023, Ocak ve Temmuz 2024; AUD/USD Temmuz 2023; bunların dördünde yalnız bir tarafın saatlik dosyası saklıydı ve o taraf sınandı (EUR/USD Ocak 2021 bid, GBP/USD Temmuz 2026 ask, USD/JPY Ocak 2021 bid, AUD/USD Temmuz 2023 bid; dördünde de %100 eşit)._
 
 <GrafikEmbed src="/arastirma/fx-gunici/veri-makas.html" baslik="Makas: gün içinde ve devir dakikalarında" no="01" kaynak="Dukascopy" />
 
 Makas gün içinde sabit değildir. New York 17:00'de (FX gününün kapanışı) likidite sağlayıcılar pozisyonlarını bir
-sonraki güne devrederken makas birkaç katına açılır; bu yüzden bu serideki bütün işlemler en geç 16:55 New York'ta
-kapatılır. Haber dakikalarında da makas açılır; olay olay ölçüsü ve dört paritenin karşılaştırması haber
+sonraki güne devrederken makas birkaç katına açılır; bu yüzden bu serideki bütün işlemler en geç
+16:55 New York'ta (TSİ yazın 23:55, kışın 00:55) kapatılır. Haber dakikalarında da makas açılır; olay olay ölçüsü ve dört paritenin karşılaştırması haber
 dersinde.
 
 **Hacim üzerine bir uyarı.** FX'te merkezî bir borsa ve merkezî bir işlem hacmi yoktur. Dukascopy'nin mumlarındaki
@@ -96,8 +110,8 @@ VWAP stratejileri bu hacmi ağırlık olarak kullanır ve derste bu sınır aç�
 
 ## Saat
 
-Arşiv UTC'de tutulur ve bütün seans saatleri yerel saatlerinden (Londra, New York, Tokyo, Frankfurt) `zoneinfo`
-saat dilimi kurallarıyla hesaplanır; hiçbir saat elle kaydırılmaz. **FX işlem günü** New York 17:00'de başlar ve ertesi
+Arşiv UTC'de tutulur ve bütün seans saatleri yerel saatlerinden (Londra, New York, Tokyo, Frankfurt) IANA saat
+dilimi veritabanının kurallarıyla hesaplanır; hiçbir saat elle kaydırılmaz. **FX işlem günü** New York 17:00'de başlar ve ertesi
 gün 17:00'de biter: pazartesinin işlem günü pazar akşamı 17:00 New York'ta açılır. Derslerde bütün saatler ayrıca
 **TSİ** olarak yazılır. Türkiye 2016'dan beri yıl boyu UTC+3'tür ve saat değiştirmez; bu yüzden Londra ya da New York
 saat değiştirdiğinde onların TSİ karşılığı kayar.
@@ -166,7 +180,7 @@ Bütün stratejiler aynı yürütme kurallarıyla koşar. Kuralların her biri b
 
 **Sinyal mumun kapanışında, giriş sonraki dakikada.** Bir sinyal ancak mumu kapandıktan sonra bilinir. Kural kendi
 giriş saatini tanımlamıyorsa giriş, sinyal mumundan sonraki ilk dakikanın açılışında yapılır; gün içi momentum 12:00
-New York'ta, fiksing dönüşünün gecikmeli biçimi bir mum sonra girer. Bir mumun içinde "fiyat aralığı geçti, hemen
+New York'ta (TSİ yazın 19:00, kışın 20:00), fiksing dönüşünün gecikmeli biçimi bir mum sonra girer. Bir mumun içinde "fiyat aralığı geçti, hemen
 girdim" türünden bir giriş yoktur. Bu kural bir sınamayla korunur: girişi sinyal mumunun kapanışından önceye düşen tek
 bir işlem bile koşuyu durdurur. Ayrıca her strateji iki ayrı geleceğe bakmama sınamasından geçer: veri bir anda
 kesilir ya da o andan sonrası değiştirilir ve kararı kesimden önce verilen sinyallerin değişmediği sınanır; kesim
@@ -187,14 +201,15 @@ iyimser seçim yapılmaz. **Zaman hedefi** ("zaman") bir fiyat değil bir süred
 12 mum sonra, o mumun açılışında
 piyasa emriyle kapanır; stop o ana kadar açık kalır ve çıkış gün sonunu aşmaz.
 
-**Gün sonu.** Açık pozisyon en geç 16:55 New York'ta (TSİ 23:55, ABD kış saatinde 00:55) kapatılır;
-gece pozisyon taşınmaz.
+**Gün sonu.** Açık pozisyon en geç 16:55 New York'ta (TSİ yazın 23:55, kışın 00:55) kapatılır; gece
+pozisyon taşınmaz.
 
 **Tek pozisyon.** Bir strateji aynı paritede aynı anda en çok bir pozisyon taşır; haber stratejilerinde de bu kural
 paritenin bütün olaylarına birlikte uygulanır (bir olayın pozisyonu açıkken başka bir olayın sinyali alınmaz).
 
-**Alınmayan emir.** Açık pozisyonun dışında iki durumda daha emir alınmaz: giriş dakikasında emrin tarafının açılışı
-(alışta ask, satışta bid) stopun ötesindeyse, ya da yürütülen giriş fiyatı (kayma dahil) seviye hedefinin ötesindeyse.
+**Alınmayan emir.** Açık pozisyonun dışında üç durumda daha emir alınmaz: giriş dakikasında emrin tarafının açılışı
+(alışta ask, satışta bid) stopun ötesinde ya da tam üstündeyse; seviye hedefi yürütülen girişin (kayma dahil)
+gerisinde ya da tam üstündeyse; giriş gün sonunda (16:55 New York; TSİ yazın 23:55, kışın 00:55) ya da sonrasındaysa.
 Stopta kayma hesaba katılmaz, çünkü kayma bir işlem yaratmamalıdır; hedefte katılır, çünkü hedefi aşan bir dolumun
 kazancı yoktur. Hızlı bir mumda giriş anında stopu ya da hedefi çoktan geçmiş emir bu yüzden örneklemden çıkar;
 kural kural sayısı strateji derslerinde.
@@ -255,10 +270,13 @@ dolum başına 0,0 · 0,5 · 1,0 ·
 2,0 pip. Her strateji dersinin maliyet tablosu dört kademede net sonucu verir; **başabaş
 kayma** işlem başına net R'nin sıfıra indiği dolum başına kaymadır ve iki dönemde ayrı ayrı yazılır: bütün dönem
 ve örneklem dışı (2024 →). R'den ölçülür, pipten değil: pozisyon R'ye göre ölçeklendiğinde para sonucu R'yi
-izler (R ile pip ortalamasının farkı yukarıda). Başabaş kayma temel senaryonun yarım pipinin altındaysa kuralın
-kenarı (varsa) o senaryonun yürütme maliyetine sığmaz. Merdivenin her kademesinde haber penceresinin ek kayması
-sabit kalır; yalnız makasın kendisini görmek için ayrıca **yalnız makas** satırı var: kayma da haber kayması da
-sıfır, maliyet yalnız gerçek bid/ask.
+izler (R ile pip ortalamasının farkı yukarıda). Başabaş kayma temel senaryonun 0,5 pip'inin
+altındaysa kuralın kenarı (varsa) o senaryonun yürütme maliyetine sığmaz. Merdivenin her kademesinde haber
+penceresinin ek kayması sabit kalır; yalnız makasın kendisini görmek için ayrıca **yalnız makas** satırı var: kayma da
+haber kayması da sıfır, maliyet yalnız gerçek bid/ask. Başabaşın iki özel hâli tabloda adıyla yazılır. Brüt sonuç
+artı değilse hiçbir kayma kademesi başabaş değildir: "orta fiyattan bile eksi". Brüt artı ama yalnız makasla bile
+eksiyse başabaş bir kayma değil bir makastır: sonucun sıfıra indiği makas, bu verinin makasının payı olarak ("makas ≤
+%X": makas bu verininkinin en çok %X'i olmalı; makasın maliyeti makasla doğrusal ölçeklenir varsayımıyla).
 
 Aynı işlem iki ayrı sayı taşır: **brüt** (orta fiyattan orta fiyata, maliyetsiz) ve **net** (yürütülebilir
 fiyatlarla, makas ve kayma dahil). Brüt sonuç kuralın bir şey yakalayıp yakalamadığını, net sonuç bundan para
@@ -320,10 +338,9 @@ olduğu gibi taşınır. Örneklem içinde koşulsuz ortalamanın üstünde kala
 sıfırın ve seçilmeyen kovaların birlikte ortalamasının (tamamlayanın) üstündeyse koşul **tuttu**, değilse **tutmadı**;
 seçilen kova seçilmeyenlerden birinin altında kalsa da koşul tutabilir. Aynı ölçünün iki adı (Asya aralığı
 kuralında "aralık" ile "Asya aralığı") tek değişken sayılır. On dört değişkenin her biri ayrı bir denemedir ve
-şansla birkaçının tutması beklenir. Bir koşul kontrol listesine en az iki paritede aynı kovayla tutuyorsa aday
-olarak girer; ikinci paritedeki tutuş bir gözlem ekler ama şansı ayıklamaz: aynı kural gerçek seçimde 6 kuralda 10 aday, ters seçimde (örneklem içinde koşulsuz ortalamanın altında kalan kovalar) 4 kuralda 7 aday verir. Şansın payını görmek
-için her bölüm bir de **ters seçimi** sayar: örneklem içinde ortalamanın altında kalan kovalar seçilseydi aynı ölçüt
-kaç değişkende tutardı.
+şansla birkaçının tutması beklenir. Bir koşul, en az iki paritede aynı kovayla tutuyorsa kontrol listesine aday
+olarak girer. İkinci paritedeki tutuş şansı ayıklamaz: aynı ölçüt gerçek seçimde 6 kuralda 10 aday, **ters seçimde** (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi) 4 kuralda 7 aday verir. Şansın payını görmek için her bölüm ters
+seçimi de sayar.
 
 Değişkenlerin tanımı aşağıdaki tabloda. Günlük ATR, önceki on dört FX işlem gününün Wilder ATR'sidir: bugünü
 içermez, tatil günü atlanır. Üç değişken işlemin yönüne göre işaret alır (önceki günün yönü, açılış farkı, 60 dk trend);
@@ -342,7 +359,7 @@ sınırını, örneklem içi ve dışı işlem sayısını, net R'sini ve isabet
 | Oynaklık yüzdeliği | Günlük ATR'nin son 252 işlem günündeki yerini veren yüzdelik: o günlerin kaçta kaçında ATR bugünkünden düşüktü (en az 60 günlük geçmişle). | tercil |
 | 60 dk trend (EMA50 tarafı) | Sinyalden önce kapanan son 60 dakikalık mumun kapanışı, 60 dakikalık mumların EMA50'sinin üstünde mi altında mı; işlemin yönüyle karşılaştırılır (en az 50 mumluk geçmiş). | trend yönünde · trend tersine |
 | Haftanın günü | İşlem gününün etiketi. FX günü New York 17:00'de döner: pazartesinin işlem günü pazar akşamı başlar. | Pzt … Cum |
-| Büyük olay günü | İşlem gününde takvimde o pariteyi ilgilendiren bir olay var mı: ABD olayları (tarım dışı istihdam, TÜFE, FOMC kararı ve basın toplantısı) dört paritede, ECB kararı ve basın toplantısı EUR/USD'de, BoE kararı GBP/USD'de. Olay günün ilerisinde olsa da sabah bellidir. | haber günü · değil |
+| Büyük olay günü | İşlem gününde takvimde o pariteyi ilgilendiren bir olay var mı: ABD olayları (tarım dışı istihdam, TÜFE, FOMC kararı ve basın toplantısı) dört paritede, ECB kararı ve basın toplantısı EUR/USD'de, BoE kararı GBP/USD'de. Planlanmış olay günün ilerisinde olsa da sabah bellidir; önceden duyurulmayan olay (FOMC'nin olağanüstü kararları: 11 Ekim 2019 11:00 New York (TSİ 18:00), 3 Mart 2020 10:00 New York (TSİ 18:00) ve 15 Mart 2020 17:00 New York (TSİ 16.03.2020 00:00)) yalnız olay anından sonraki girişlerde sayılır, FX gününün başındaki olay bütün günü sayar. | haber günü · değil |
 | Ay sonu | Ayın son Londra iş günü (hafta içi ve İngiltere resmî tatili değil). | ay sonu · değil |
 | Saat değişimi haftası | ABD ya da Avrupa saatinin değiştiği pazardan sonraki altı gün (pazartesi–cuma haftası). | geçiş haftası · değil |
 | Londra–NY farkı 4 saat | Londra ile New York arasındaki farkın 5 değil 4 saat olduğu ara dönem: ABD yaz saatine Avrupa'dan önce geçtiği mart haftaları ve Avrupa kışa ABD'den önce döndüğü ekim–kasım haftaları. | ara dönem · değil |
@@ -351,7 +368,8 @@ sınırını, örneklem içi ve dışı işlem sayısını, net R'sini ve isabet
 yarım R kâr), **kaybeden** (en az yarım R zarar ve işlem boyunca lehine yarım R'ye ulaşmamış) ve **tuzak** (lehine en
 az yarım R gidip zararla kapanmış: kırılımda sahte kırılım, dönüşte süren hareket). Uygun işlemler arasından seçim
 sabit bir çekilişle yapılır ve üç örnek ayrı günlerdedir; "en iyi gün" seçilmez. Her örnek işlem ayrıca dolum başına
-yarım pip daha kötü kaymayla yeniden koşturulur; alıştırmaların "dolum daha kötü olsaydı" şıkkı oradan gelir.
+yarım pip daha kötü kaymayla yeniden koşturulur; alıştırmaların "dolum daha kötü olsaydı" şıkkı oradan
+gelir.
 
 **Havuz.** Aynı kural dört paritede birlikte koşturulduğunda işlem başına ortalama, bütün işlemlerin ortalamasıdır;
 Sharpe ve düşüş dört paritenin günlük R toplamından hesaplanır. Havuzun %95 aralığı gün kümelidir: aynı günün
@@ -366,7 +384,8 @@ hareketiyle birbirine bağlıdır.
 | R | İşlemin planlanan riski: yürütülen girişten stopa uzaklık. Sonuçlar R'nin katı olarak yazılır. |
 | Net / brüt | Net: yürütülebilir fiyatlarla, makas ve kayma dahil. Brüt: orta fiyattan orta fiyata. |
 | İsabet | Kazanan işlemlerin payı. Tek başına bir şey söylemez: %30 isabetle de para kazanılır, %70 isabetle de kaybedilir. |
-| Kâr çarpanı | Kazanılan pip toplamının kaybedilen pip toplamına oranı; 1'in altı kaybettirir. |
+| Kâr çarpanı (R) | Kazanılan R toplamının kaybedilen R toplamına oranı; hükmün birimi. 1'in altı, her işlemi riskine göre ölçekleyen birine kaybettirir. |
+| Kâr çarpanı (pip) | Aynı oran pip ile; her işlemde aynı büyüklükle işlem yapanın sonucu. İkisi ayrışabilir (yukarıda, "R ve pip"). |
 | Sharpe | Günlük R serisinin ortalamasının standart sapmasına oranı, yıllıklandırılmış (×√252). Seri dönemin bütün tatil dışı FX işlem günlerini taşır; işlem açılmayan gün sıfırdır, bu yüzden seyrek işlem açan kuralların (haber kuralları) Sharpe'ı çoğunlukla sıfır günlerden oluşan bir seriden gelir. |
 | MAE / MFE | İşlem açıkken gidilen en kötü (*maximum adverse excursion*) ve en iyi (*maximum favorable excursion*) nokta, R biriminde. |
 | Azami düşüş | Birikimli R eğrisinin bir tepeden sonraki en derin çukuru. |
@@ -377,7 +396,7 @@ hareketiyle birbirine bağlıdır.
 | Yürüyen pencere | Her yılı yalnız önceki yıllarla seçip o yılda sınamak. |
 | Makas | Ask − bid; işlemin girişte ve çıkışta ödediği gerçek maliyet. |
 | Kayma | Makasın ötesinde kötüleşen dolum; bir varsayımdır, kademelerle ölçülür. |
-| Başabaş kayma | İşlem başına net R'yi sıfıra indiren dolum başına kayma; bütün dönem ve 2024 → ayrı. |
+| Başabaş kayma | İşlem başına net R'yi sıfıra indiren dolum başına temel kayma (haber penceresinin ek kayması sabit); bütün dönem ve 2024 → ayrı. Brüt artı değilse yoktur ("orta fiyattan bile eksi"); yalnız makasla bile eksiyse makasın payıyla yazılır ("makas ≤ %X"). |
 | Ölçülemedi | Örneklem dışında işlem yok; hüküm verilemez. |
 | Zaman hedefi | Girişten sabit sayıda mum sonra piyasa emriyle çıkış (stop açık kalır, gün sonunu aşmaz). |
 | Kümeli bootstrap | Bağımsız olmayan gözlemlerin birlikte yeniden örneklenmesi: havuzda aynı günün bütün paritelerdeki işlemleri (gün kümeli), haber tablolarında aynı olayın bütün paritelerdeki işlemleri (olay kümeli). |

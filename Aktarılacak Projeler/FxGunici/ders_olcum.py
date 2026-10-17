@@ -40,6 +40,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+import adlar
 import ayar as ay
 import metrik as mk
 import onkayit_gecmis as og
@@ -280,7 +281,9 @@ def _tf_bos_neden(aile: str, varsayilan: dict, tf: str) -> str | None:
             son = datetime(y, a, g, 16, 0, tzinfo=z.NEWYORK).timestamp()
             mumlar.append(int((son - bas) // (60 * int(tf))))
         if max(mumlar) < n + 1:
-            return (f"sinyal penceresine (Londra 09:00 → New York 16:00) en çok {max(mumlar)} tane {tf} dakikalık mum "
+            tsi = adlar.tsi_yaz(["Londra 09:00", "New York 16:00"], "→")
+            return (f"sinyal penceresine (Londra 09:00 → New York 16:00; {tsi}) en çok {max(mumlar)} tane {tf} "
+                    f"dakikalık mum "
                     f"sığar; kural {n} mumluk trendden sonra bir sinyal mumu ister, yani en az {n + 1} mum")
     return None
 
@@ -752,6 +755,58 @@ def gun_ici_yogunluk(kok: Path, birim: str, ciftler: list[str], p: dict, a: ay.A
     return out
 
 
+def _haber_gunleri(cift: str) -> set[date]:
+    """O pariteyi ilgilendiren büyük olay günleri (FX günü), koşul değişkeninin tanımıyla (gunluk.baglam_kur ·
+    _gun_basinda_bilinen): planlanmış olay her zaman; önceden duyurulmayan olay yalnız FX gününün başında çoktan
+    olmuşsa günü işaretler."""
+    o = takvim.olaylar_oku(cift)
+    if not len(o):
+        return set()
+    t0 = o["utc_sn"].to_numpy(np.int64)
+    gunler = [g.date() for g in z.islem_gunu(pd.to_datetime(t0, unit="s", utc=True))]
+    bas = np.array([int(z.islem_gunu_sinirlari(g)[0].timestamp()) for g in gunler], dtype=np.int64)
+    bilinen = ~takvim.olaganustu(o) | (t0 <= bas)
+    return {g for g, b in zip(gunler, bilinen) if b}
+
+
+def haber_gunu_yogunlugu(kok: Path, birim: str, cift: str, p: dict, kosul: list | None, a: ay.Ayar) -> dict | None:
+    """Örneklem dışı net sonucun ne kadarı büyük olay günlerinden: varsayılanın alınan işlemleri (2024 →), koşul
+    değişkeninin günleriyle. Yalnız net toplamı artı olan bileşimde (eksi bir toplamın "payı" okunmaz). En iyi tek
+    işlem çıkarıldığında pay ayrıca: sonucun tek işleme mi yoksa olay günlerine mi bağlı olduğu ayrı sorulardır.
+    Sayım koşul analizinin kendi kovasıyla tutmazsa ValueError (iki ayrı tanım sessizce ayrışmasın)."""
+    yol = _islem_dosyasi(kok, birim, cift, p)
+    if not yol.exists():
+        return None
+    x = mk.alinan(pd.read_parquet(yol))
+    gi = x["gun"].to_numpy().astype("datetime64[D]")
+    x = x[gi >= np.datetime64(a.dis_baslangic)]
+    r = x["r"].to_numpy(np.float64)
+    if not len(r) or r.sum() <= 0:
+        return None
+    hg = _haber_gunleri(cift)
+    m = np.array([g.date() in hg for g in pd.to_datetime(x["gun"])], dtype=bool)
+    kova = next((kv for k in (kosul or []) if k.get("degisken") == "haber_gunu"
+                 for kv in (k.get("kovalar") or []) if kv.get("kova") == "haber günü"), None)
+    if kova is None:
+        return None
+    if int(m.sum()) != int(kova.get("oos_n") or 0):
+        raise ValueError(f"haber_gunu_yogunlugu: {birim} {cift}: {int(m.sum())} olay günü işlemi, koşul kovası "
+                         f"{kova.get('oos_n')}")
+    i = int(np.argmax(r))
+    # En iyi değeri paylaşan işlem sayısı: 2R hedefiyle kapanan işlemler birebir aynı R'yi taşır ve o zaman "en iyi
+    # tek işlem" bir sıra tesadüfüdür (motor tanımı R'yi stop uzaklığına böler; 1e-9 yuvarlama payı).
+    tekil = int((np.abs(r - r[i]) <= 1e-9).sum()) == 1
+    toplam, olay = float(r.sum()), float(r[m].sum())
+    kalan = toplam - float(r[i])
+    return {"n": int(len(r)), "n_olay": int(m.sum()), "toplam_r": toplam, "olay_r": olay,
+            "pay": olay / toplam, "islem_payi": float(m.mean()),
+            "olay_ort": float(r[m].mean()) if m.any() else None,
+            "olay_disi_ort": float(r[~m].mean()) if (~m).any() else None,
+            "en_iyi_gun": str(pd.Timestamp(x["gun"].iloc[i]).date()), "en_iyi_r": float(r[i]),
+            "en_iyi_olay_gunu": bool(m[i]), "en_iyi_tekil": tekil,
+            "pay_en_iyi_haric": float((olay - float(r[i]) * bool(m[i])) / kalan) if kalan > 0 else None}
+
+
 # ───────────────────────────────────────────── yerel tatiller (betimleyici)
 def tatil_betimi(kok: Path, birimler: dict, ciftler: list[str], a: ay.Ayar) -> dict:
     """Yerel tatillerde işlemlerin sonucu — ön kayıt dışı, betimleyici; hükmü değiştirmez. Kurallar yalnız hafta içine
@@ -833,6 +888,8 @@ def birim_ozet(kok: Path, birim: str, ciftler: list[str], a: ay.Ayar, isi_eksen:
             "ornek": ornek_olaylari((va or {}).get("ornek") or [], c),
             # Yorum duyarlılığı (kosu.YORUM): ön kaydın harfinin ikinci okumasıyla varsayılan ve ızgaradan seçim.
             "yorum": s.get("yorum"),
+            # Örneklem dışı net sonucun büyük olay günlerinden gelen payı (yalnız artı toplamda).
+            "haber_yogunluk": haber_gunu_yogunlugu(kok, birim, c, ilk["varsayilan"], (va or {}).get("kosul"), a),
         }
     out["tf_bos"] = tf_bos(out)
     out["havuz"] = {"varsayilan": havuz(kok, birim, list(sonuc), ilk["varsayilan"], egri_v, a)}

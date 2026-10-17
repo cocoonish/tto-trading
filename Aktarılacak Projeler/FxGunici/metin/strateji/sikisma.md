@@ -41,7 +41,9 @@ günü ve saati sınanır.
 
 {{! ornek }}
 
-Figürde noktalı mavi çizgiler sıkışma kutusunun iki ucu (kutunun içinde kalan son kesintisiz mumlardan başlar), mavi bant sinyal mumudur. Kutu birkaç saatlik bir
+Figürde turuncu çizgiler Bollinger bandı, kesikli gri çizgiler Keltner kanalıdır; turuncu gölge sıkışma
+mumlarıdır (Bollinger'in iki bandı da Keltner'in içinde). Noktalı mavi çizgiler sıkışma kutusunun iki ucu (kutunun
+içinde kalan son kesintisiz mumlardan başlar), mavi bant sinyal mumudur. Kutu birkaç saatlik bir
 dengeyi özetler; uzun bir sıkışmanın kutusu da büyüktür ve stopu uzaklaştırır. Sıkışma gün içinde birden çok
 kez oluşabilir: {{! gun_ici }}. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği
 önce lehine en az yarım R gidip zararla kapanan işlemdir.

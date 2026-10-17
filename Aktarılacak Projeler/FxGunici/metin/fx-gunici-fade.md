@@ -24,7 +24,7 @@ hedefleri risk biriminde kısa değildir: yakın stopla ölçüldüğünde seviy
 R'nin ötesindedir (ölçüsü VWAP dönüşü ve pivot dönüşü bölümlerinde).{{? O.birim.vwap_donus.hedef_uzaklik.c1 > 1 and O.birim.pivot_donus.hedef_uzaklik.c1 > 1 }} Yakın stop R'yi küçültür, maliyet ise R'den bağımsız olarak her
 işlemde aynı pip kadar ödenir: aynı makas, riski küçük bir işlemde R cinsinden daha pahalıdır. {{! fade_maliyet }}
 
-Son kural farklı bir yapıdadır: **fiksing dönüşü** bir seviyeye değil bir saate bakar — Londra 16:00'daki WM/R
+Son kural farklı bir yapıdadır: **fiksing dönüşü** bir seviyeye değil bir saate bakar — Londra 16:00'daki ({{! tsi "" "Londra 16:00" }}) WM/R
 fiksingi, akışın en yoğun toplandığı an. Ön kayıt fiksing kurallarının ay sonunda ayrıca raporlanmasını istedi;
 tablosu bölümün içinde.
 

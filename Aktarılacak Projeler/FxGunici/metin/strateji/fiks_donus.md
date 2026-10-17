@@ -1,6 +1,6 @@
 ### Ne
 
-**WM/R fiksingi**, Londra 16:00'da hesaplanan ve en yaygın kullanılan döviz kuru ölçütlerinden biridir: endeks
+**WM/R fiksingi**, Londra 16:00'da ({{! tsi "" "Londra 16:00" }}) hesaplanan ve en yaygın kullanılan döviz kuru ölçütlerinden biridir: endeks
 fonları, saklama bankaları ve portföy değerlemesi bu kuru kullanır. 15 Şubat 2015'ten bu yana kur, 16:00'ı
 ortalayan beş dakikalık pencerenin (15:57:30–16:02:30) işlemlerinden hesaplanır; öncesinde pencere bir dakikaydı.
 Fiksingde yürütülmek istenen emirler o pencereye yığılır. Dönüş kuralı fiksinge giden son mumun **tersine** girer: fiksing akışının yarattığı fiyat baskısının fiksingden

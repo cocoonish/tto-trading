@@ -10,7 +10,7 @@ kuralı FX'in kendi saatlerine taşınmış hâlidir: Londra açılışının il
 İki savunu var. Birincisi bilgi: Londra açılışı günün ilk büyük bilgi ve akış anıdır, ilk hareket bilgili akışın
 yönünü taşıyorsa o yön gün boyunca yeniden fiyatlanmaya devam eder. İkincisi geç kalan akış: yönü sabah belli olan
 bir hareketi öğleden sonra tamamlayan katılımcılar (portföyünü gün sonu kapanışına göre ayarlayanlar) ilk yönü
-uzatır. Karşı savunu basit: sinyal mumunun kapanışından girişe sekiz saat geçer (Londra 09:00 → New York 12:00;
+uzatır. Karşı savunu basit: sinyal mumunun kapanışından girişe sekiz saat geçer (Londra 09:00 → New York 12:00; {{! tsi "→" "Londra 09:00" "New York 12:00" }};
 Londra ile New York arasındaki farkın dört saate indiği ara haftalarda yedi saat) ve ilk mumun bilgisi o arada
 çoktan fiyatlanmıştır.
 
@@ -25,7 +25,7 @@ Londra ile New York arasındaki farkın dört saate indiği ara haftalarda yedi 
 
 {{! kural }}
 
-Varsayılan Londra'nın ilk saatini kullanır ve 12:00 → 16:00 New York arasında taşır.{{? B.varsayilan.tf == 60 and B.varsayilan.cikis_et == "16:00" and B.varsayilan.stop_turu == "yok" }}
+Varsayılan Londra'nın ilk saatini kullanır ve 12:00 → 16:00 New York ({{! tsi "→" "New York 12:00" "New York 16:00" }}) arasında taşır.{{? B.varsayilan.tf == 60 and B.varsayilan.cikis_et == "16:00" and B.varsayilan.stop_turu == "yok" }}
 
 ### Örnekler
 

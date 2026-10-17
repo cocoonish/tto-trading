@@ -40,8 +40,9 @@ bir "kısa hedef" değildir, çoğu işlemde 1R'nin ötesindedir.
 
 {{! ornek }}
 
-Figürde noktalı mavi çizgiler sinyal anındaki bandın iki ucu ve VWAP'ın kendisi (sinyal mumundan başlar: VWAP ve bant gün içinde yürür, figür sinyal anındaki değeri gösterir), yeşil çizgi hedeftir
-(sinyal anındaki VWAP); mavi bant bandın içine kapanan sinyal mumudur. Kaybeden örnek lehine yarım R'ye
+Figürde turuncu çizgi gün içinde yürüyen VWAP, noktalı turuncu çizgiler bandıdır (çapadan başlar); noktalı mavi
+çizgiler aynı üçünün sinyal anındaki değeridir (sinyal mumundan başlar). Yeşil çizgi hedeftir (sinyal anındaki
+VWAP); mavi bant bandın içine kapanan sinyal mumudur. Kaybeden örnek lehine yarım R'ye
 ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: fiyat
 {{! tuzak "ortalamaya dönmeye başlıyor, sonra gezinti yeniden başlayıp stopu alıyor." "ortalamaya dönmeye başlıyor ama dönüş sürmüyor; işlem stopa değmeden zararla kapanıyor ({cikis})." }}
 

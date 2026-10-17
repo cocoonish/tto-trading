@@ -82,7 +82,10 @@ PARAM = {
 }
 DEGER = {
     "karsi_uc": "karşı uç", "orta": "orta", "sert": "sert", "kapanis": "kapanış", "yok": "yok",
-    "1R": "1R", "2R": "2R", "gun_sonu": "gün sonu", "zaman": "zaman", "vwap": "VWAP", "seviye": "seviye",
+    "1R": "1R", "2R": "2R", "gun_sonu": "gün sonu", "zaman": "zaman", "vwap": "VWAP",
+    # Pivot dönüşünün hedefi ("seviye" değeri): R1/S1 dönüşünde P, P dönüşünde R1/S1. Değerin adı "seviye" kalsaydı
+    # "hedef: seviye · seviye: R1/S1" yan yana "hedef R1/S1" diye okunurdu.
+    "seviye": "karşı seviye (R1/S1 → P, P → R1/S1)",
     "oncesi": "haber öncesi fiyat", "itki_ucu": "itkinin ucu",
     "tf": "tek mum", "60": "60 dk", "ic": "iç mum", "ana": "ana mum", "londra_ny": "Londra + New York",
     "tum_gun": "bütün gün", "kutu": "kutu kırılımı", "ttm": "TTM momentumu", "gun_basi": "gün başından",
@@ -130,6 +133,19 @@ def turetilmis(b: dict) -> bool:
     return any(ov.get(k) is not None and ov.get(k) != v for k, v in s.items())
 
 
+def arti_pariteler(b: dict, ciftler) -> list[str]:
+    """Varsayılanı örneklem dışında artı kalan ya da hükmü zayıf/çalışıyor olan pariteler (verilen sırayla): koşul
+    ayrıntısı, ters seçimin sonucu ve parametre ızgarası bunlarda ana paritenin dışında da verilir. Ders metni ve
+    figürler bu tek tanımı okur; iki ayrı liste figürü olmayan bir gömme ya da gömmesi olmayan bir figür üretirdi."""
+    out = []
+    for c in ciftler:
+        v = ((b.get("cift") or {}).get(c) or {}).get("varsayilan") or {}
+        r = (v.get("oos") or {}).get("beklenti_r")
+        if v.get("hukum") in ("zayif", "calisiyor") or (r is not None and r > 0):
+            out.append(c)
+    return out
+
+
 def varsayilan_ad(b: dict) -> str:
     """Birimin varsayılanının okur adı; metin ve figür bu tek tanımı okur."""
     return "türetilmiş varsayılan" if turetilmis(b) else "önceden kayıtlı varsayılan"
@@ -151,6 +167,15 @@ OLAY = {
     "FOMC_basin": "FOMC basın toplantısı", "ECB_karar": "ECB kararı", "ECB_basin": "ECB basın toplantısı",
     "BoE_karar": "BoE kararı",
 }
+
+
+def olay_ic(kod: str) -> str:
+    """Olayın parantez içinde yazılacak adı: adın kendi kısaltma parantezi düşer ("ABD TÜFE (CPI)" → "ABD TÜFE"),
+    çünkü bir parantezin içinde ikinci bir parantez açılmaz. Öbür adlar olduğu gibi."""
+    import re
+    return re.sub(r"\s*\([^()]*\)$", "", OLAY.get(kod, kod))
+
+
 #: Olayların figür etiketindeki kısa adı (örnek günlerin olay çizgisi).
 OLAY_KISA = {
     "NFP": "NFP", "CPI": "ABD TÜFE", "FOMC_karar": "FOMC karar", "FOMC_basin": "FOMC basın", "ECB_karar": "ECB karar",
@@ -266,4 +291,7 @@ def tsi_yaz(saatler, birlestir: str = "") -> str:
         metin = f" {birlestir} ".join(parca) if birlestir else parca[0]
         if all(metin != m_ for _, m_ in sonuc):
             sonuc.append((ad, metin))
+    if len(sonuc) == 1:
+        # Saat değiştirmeyen bir şehrin (Tokyo) saati üç rejimde de aynıdır: "yazın" demek kışın başka olduğunu ima eder.
+        return "TSİ " + sonuc[0][1]
     return "TSİ " + ", ".join(f"{ad} {m_}" for ad, m_ in sonuc)

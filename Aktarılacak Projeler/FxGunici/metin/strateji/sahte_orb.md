@@ -37,7 +37,7 @@ gelmesini bekler; daha uzak hedefler (2R, gün sonu) ızgarada ayrıca ölçül�
 
 {{! ornek }}
 
-Figürde noktalı mavi çizgiler açılış aralığı (Londra 08:00 mumundan başlar), mavi bant aralığa geri dönen sinyal mumudur; kırmızı stop,
+Figürde noktalı mavi çizgiler açılış aralığı (Londra 08:00 mumundan başlar; {{! tsi "" "Londra 08:00" }}), mavi bant aralığa geri dönen sinyal mumudur; kırmızı stop,
 aralığın dışındaki gezintinin ucudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: {{! tuzak "geri dönüş başlıyor, sonra kırılım yeniden başlayıp stopu alıyor." "geri dönüş başlıyor ama sürmüyor; işlem stopa değmeden zararla kapanıyor ({cikis})." }}
 
 ### Sonuçlar

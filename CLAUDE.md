@@ -5099,7 +5099,46 @@ satırını sorar (kapanışı aynı satırda değilse satırda başka metin yok
 koşturulunca on iki ihlalin on ikisini buldu. Zincir derlemeyi koşturmaz; derlemenin
 düşeceği bir biçimi zincir kendi kapısında sormalıdır.
 
+İKİNCİ İNCELEME TURU (donmuş kopyaya karşı, 61 bulgu; 17.10.2026) dört genel ders bıraktı.
+(9) ÖNCEDEN DUYURULMAYAN OLAY GÜNÜN BAŞINDA BİLİNMEZ. "Büyük olay günü" koşul değişkeni olağanüstü
+FOMC kararlarının günlerini kararın saatinden ÖNCE işaretliyordu: o sabahın işlemleri, ancak sonradan
+duyurulan bir kararın günü diye kovalanıyordu — ileriye bakma. İşlemler değişmez, değişen koşul
+kovaları ve onların hükmüdür; kural tek yerde (`gunluk._gun_basinda_bilinen`, ölçüm katmanı aynı
+tanımı okur) ve karşı olgu etkisini ölçüyor (`haber_gunu_olaganustu`).
+(10) BİR ÇIKTI, ONU ÜRETEN KODUN ÖZÜNÜ TAŞIR; LİSTENİN ASGARİSİ KAPININ KENDİ KÜMESİDİR. Ölçüm
+dosyası yalnız girdilerinin özünü taşıyordu: ölçüm kodu değişip ölçüm koşulmasa da kapı yeşildi.
+Artık ölçüm dosyası ölçüm sırasında yüklenen her proje modülünün dosya başına özünü
+(`ders_olcum.kod_kunyesi`), her figür kendisini çizen dört dosyanın özünü (`tto-kod-ozu`) taşıyor;
+kapı ikisini yalnız hashlib ile yeniden hesaplar. Üreticinin listesine güvenilmez: listeden çıkan
+bir dosya daralmış listeyle yine "aynı" çıkar — asgari kapsam kapıda (`OLCUM_KODU_ASGARI` ·
+`SEKIL_KODU_ASGARI`) ve daraltma arıza enjeksiyonunda düşüyor.
+(11) BİR SÖZ KAPIYA KONMADAN DOĞRU DEĞİLDİR. Giriş dersi "bütün saatler TSİ olarak da yazılır"
+diyordu; üretilmiş metinde otuzdan fazla paragrafta yerel saat TSİ'siz duruyordu, çünkü 8. ölçüt
+yalnız strateji şablonlarının kural maddelerine bakıyordu. 15. ölçüt üretilmiş metnin her
+paragrafını ve maddesini sorar (tablolar dipnotlarıyla hariç); başlık ve etiket satırı tek satırlık
+birimdir, ardından gelen metin ayrı sınanır. Aynı sınıftan: sayı envanterinin "tanım" listesi bir
+kodun sabitini (örnek günlerin 0,5 eşiği) tanım sanıyordu — sabit künyeden basılır, veri denetiminin
+kapsam eşikleri de rapora yazılıp metne oradan girer (`kalite.TATIL_ESIK · NORMAL_ESIK` → `esik` →
+`{{! kalite_esik }}`); 13. ölçüt parite adlarını ve şablonun parite sayısı sözcüğünü künyeyle kıyaslar.
+(12) SINAMANIN BULDUĞU: 13. ölçüt cümle başındaki "İki parite"de ÇÖKÜYORDU — `"İki".lower()`
+"i̇ki" verir (i + birleştirici nokta) ve sayı sözlüğünde yoktur; bu dosyada kayıtlı Türkçe büyük İ
+sınıfı, bugünkü şablonlarda tesadüfen ateşlenmiyordu. Kapının yeni ölçütleri birim sınamasıyla
+(`testler/test_dogrula.py`) ve gerçek ağaca karşı arıza enjeksiyonuyla sınanıyor.
+(13) KIRILMAYAN HÜCRELİ BİR TABLO, KABI KAYMIYORSA SAYFAYI KAYDIRIR. Sayı tablosunun değer hücreleri
+kırılmaz; 760 pikselin altında tablo kendi içinde kayar, üstünde yeniden tablo olur ve kaydırmayı
+taşıyan bir şey kalmıyordu. Sekiz-dokuz sütunlu tablolar (en genişi 1.276 piksel) 760 pikselde iki
+dersin sayfasını yana kaydırıyordu; katlanır tablolar açılınca 760–1.440 pikselin her genişliğinde
+altı dersin ve Brent analizinin sayfası taşıyordu. Telefon taraması (353 · 390) bunu göremezdi:
+orada tablo zaten kendi içinde kayıyor. Kaydırma artık kapta (`.sayi-tablo`, her genişlikte), satır
+adı her genişlikte yapışık ve zemini kâğıdın dokusuyla boyanır (`--doku`, gövdeyle tek tanım; düz
+renk dokulu sayfada açık bir şerit olurdu); tablonun dikey payı kaba taşındı, çünkü kaydırma
+kabının içindeki pay komşu paragrafınkiyle birleşmez — 246 tablo × genişlik kıyasında üst ve alt
+aralık birebir aynı. Ölçüm elle koşturuldu (Playwright, beş genişlik, katlanırlar açık ve kapalı);
+yayın kapısında taşma ölçütü yok (30.09'un açık (d) maddesi).
+
 AÇIK, adıyla (metodoloji dersinin "Ölçülmeyenler"i): gerçek sürpriz (anket medyanı yok; haber
 kovaları ilk mumun hareketinden bir vekil), piyasa derinliği ve kısmi dolum, başka bir likidite
 kaynağının makası, komisyon, emir gecikmesi, 5 dakikanın altı, dört majör dışı pariteler,
-pozisyon büyüklüğü ve kuralların birleşimi.
+pozisyon büyüklüğü ve kuralların birleşimi. Takvimde saati kaynakla doğrulanamayan üç BoE günü
+(11.03 ve 19.03.2020 olağanüstü kararları, 07.05.2020 rapor günü) yazılmadı: haber ölçülerine
+girmezler, fiyattan saat yazılmaz.

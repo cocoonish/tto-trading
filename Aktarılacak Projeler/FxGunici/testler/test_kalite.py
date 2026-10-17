@@ -73,6 +73,8 @@ def test_kalite_bilinen_kusurlari_sayar(tmp_path, monkeypatch):
     assert s["makas"]["negatif_kapanis"] == 1
     assert s["sicrama"]["aday"] >= 1
     assert s["capraz"] == {"durum": "saatlik dosya yok"}
+    # Kapsam eşikleri raporun kendisinde: ders metni ve tablo başlıkları oradan okur.
+    assert s["esik"] == {"tatil": kl.TATIL_ESIK, "normal": kl.NORMAL_ESIK}
 
 
 def test_damga_sinamasi_0830_et_zirvesini_yazin_ve_kisin_bulur():
@@ -92,3 +94,45 @@ def test_damga_sinamasi_0830_et_zirvesini_yazin_ve_kisin_bulur():
     kayik.index = kayik.index + pd.Timedelta(minutes=10)
     s2 = kl.damga_sinamasi(kayik, 1e-4)
     assert s2["kis"]["zirve_dk"] == 10 and s2["yaz"]["zirve_dk"] == 10
+
+
+def _dakikalar(gunler, bas_sn, eksik: dict) -> np.ndarray:
+    """Izgaranın bütün dakikaları; `eksik`: gün (iso) → o günün kaç dakikası düşer (günün başından)."""
+    parca = []
+    for g, b in zip(gunler, bas_sn):
+        dk_ = np.arange(1440, dtype=np.int64)[eksik.get(g.date().isoformat(), 0):]
+        parca.append(b + dk_ * 60)
+    return np.concatenate(parca)
+
+
+def test_kapsam_esikleri_sinirda():
+    """Eşiğin kendisi üst kovaya girer: %90 tam kapsamlı gün normal, %50 kısmi; altları bir alttaki kova."""
+    gunler, bas_sn = kl.beklenen_izgara(date(2024, 5, 6), date(2024, 5, 10))   # pazartesi → cuma
+    eksik = {"2024-05-07": 144,              # %90,0 → normal
+             "2024-05-08": 145,              # %89,9 → kısmi
+             "2024-05-09": 720,              # %50,0 → kısmi
+             "2024-05-10": 721}              # %49,9 → tatil
+    k = kl.kapsam(_dakikalar(gunler, bas_sn, eksik), gunler, bas_sn)
+    assert k["normal_gun"] == 2
+    assert [g for g, _ in k["kismi_gunler"]] == ["2024-05-08", "2024-05-09"]
+    assert [list(x) for x in k["tatil_gunleri"]] == [["2024-05-10", 49.9]]
+
+
+def test_yerel_tatil_kapsami_resmi_listeden(monkeypatch):
+    import tatil
+    ing = ({"tarih": "2024-05-06", "ad": "Early May bank holiday"}, {"tarih": "2024-05-27", "ad": "Spring bank holiday"},
+           {"tarih": "2024-05-25", "ad": "cumartesi (hafta sonu)"}, {"tarih": "2024-12-25", "ad": "Christmas Day"})
+    abd = ({"tarih": "2024-05-27", "ad": "Memorial Day"},)
+    monkeypatch.setattr(tatil, "ingiltere", lambda: ing)
+    monkeypatch.setattr(tatil, "abd", lambda: abd)
+    monkeypatch.setattr(tatil, "ozu", lambda: "oz")
+    gunler, bas_sn = kl.beklenen_izgara(date(2024, 5, 1), date(2024, 5, 31))
+    t = _dakikalar(gunler, bas_sn, {"2024-05-06": 864})                       # %40 kapsam
+    y = kl.yerel_tatil_kapsam(t, gunler, bas_sn)
+    assert y["tatil_ozu"] == "oz"
+    # Hafta sonu ve pencere dışı gün sayılmaz; kapsamı normal gün eşiğinin altındaki gün adıyla.
+    assert y["ingiltere"]["gun"] == 2 and y["ingiltere"]["en_dusuk_gun"] == "2024-05-06"
+    assert y["ingiltere"]["kapsam_min_yuzde"] == 40.0 and y["ingiltere"]["dusuk_gun"] == [("2024-05-06", 40.0)]
+    assert y["abd"]["gun"] == 1 and y["abd"]["dusuk_gun"] == [] and y["abd"]["kapsam_ort_yuzde"] == 100.0
+    monkeypatch.setattr(tatil, "abd", lambda: ())
+    assert kl.yerel_tatil_kapsam(t, gunler, bas_sn)["abd"] == {"gun": 0}

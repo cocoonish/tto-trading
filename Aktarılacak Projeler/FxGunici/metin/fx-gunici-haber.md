@@ -183,8 +183,8 @@ arasındaki ilinti ne, ve dönüş olasılığı kararın büyüklüğüne bağl
 {{! fomc }}
 
 _Dönüş oranı: basın toplantısının ilk saatindeki hareketin, kararın ilk yarım saatindekiyle ters işaretli olduğu
-toplantıların payı (%50 yazı turadır). Korelasyon: iki hareketin ilintisi; aralıklar toplantıların yeniden
-örneklenmesiyle. Son üç sütun: dönüş oranı, kararın ilk yarım saatteki hareketinin büyüklüğüne göre (günlük ATR'nin
+toplantıların payı (%50 yazı turadır). {{! fomc_payda }} Korelasyon: iki hareketin ilintisi; aralıklar
+toplantıların yeniden örneklenmesiyle. Son üç sütun: dönüş oranı, kararın ilk yarım saatteki hareketinin büyüklüğüne göre (günlük ATR'nin
 katı; parantezde toplantı sayısı)._
 
 {{! fomc_cumle }}{% else %}FOMC basın toplantılarının saati takvime henüz girmedi; bu bölüm onunla birlikte ölçülecek.{% endif %}

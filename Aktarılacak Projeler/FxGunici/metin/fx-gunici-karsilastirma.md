@@ -26,6 +26,10 @@ strateji" değil, bu örneklemde en az kaybeden ya da en çok kazanan kuraldır 
 
 {{! ders_ozet hepsi }}
 
+Aynı kurallar, havuzun örneklem dışındaki öbür ölçüleriyle:
+
+{{! ozet_olcu hepsi }}
+
 {{! sekil karsilastirma-ozet "Örneklem dışında işlem başına net R — bütün kurallar" }}
 
 {{! genel_hukum }}
@@ -120,7 +124,7 @@ tablonun kendi satırlarıdır.
 
 {{! hangi_kosul }}
 
-Tablonun okunuşu dar tutulmalı. Bir aday, aynı kovanın iki paritede örneklem dışında artı ve öbür kovalardan iyi
+Tablonun okunuşu dar tutulmalı. Bir aday, aynı kovanın en az iki paritede örneklem dışında artı ve öbür kovalardan iyi
 kaldığını söyler; güven aralığını ve rastgele yön sınamasını taşımaz, ve bütün kurallar birlikte sayıldığında gerçek
 seçim ters seçimden ayırt edilemiyor (yukarıdaki bölüm).
 

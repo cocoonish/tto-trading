@@ -117,6 +117,22 @@ _SON_SOZ = {1: "bir", 2: "iki", 3: "üç", 4: "dört", 5: "beş", 6: "altı", 7:
             20: "yirmi", 30: "otuz", 40: "kırk", 50: "elli", 60: "altmış", 70: "yetmiş", 80: "seksen", 90: "doksan"}
 
 
+def _bas_buyuk(s: str) -> str:
+    """İlk harfi büyük (Türkçe i → İ)."""
+    return (("İ" if s[0] == "i" else s[0].upper()) + s[1:]) if s else s
+
+
+def _sayi_ad(n: int) -> str:
+    """Bir ile on arası sayının okunuşu ("dört"), öbürleri rakamla: alt yazıdaki parite sayısı künyeden türer."""
+    return _SON_SOZ.get(n, vir(n, 0)) if 0 < n <= 10 else vir(n, 0)
+
+
+def _turetilmis_not(o: dict) -> str:
+    """Birden çok kuralı birlikte çizen figürün notu: varsayılanı ön kayıtta olmayan kurallar adıyla."""
+    t = [adlar.BIRIM[b][1] for b, v in o["birim"].items() if adlar.turetilmis(v)]
+    return f" (türetilmiş: {', '.join(t)})" if t else ""
+
+
 def _den(n: int) -> str:
     """Sayının ayrılma eki (den · dan · ten · tan), okunuşunun son sözcüğünden: 2018'den, 30'dan, 2023'ten."""
     if n % 10:
@@ -154,9 +170,11 @@ def _saat_param_notu(param: dict) -> str:
 
 
 # ─────────────────────────────────────────────────────── 1 · örnek günler
-def _ornek_pencere(x: dict) -> np.ndarray:
+def _ornek_pencere(x: dict, r0: int | None = None) -> np.ndarray:
     """Panelin mumları: sinyal mumundan (ya da olaydan) önceki birkaç saat ve çıkıştan sonraki bir saat. Bütün FX
-    günü (17:00 ET → 17:00 ET) 5 dakikalık mumda 288 mumdur ve telefonda mum başına bir pikselin altına iner."""
+    günü (17:00 ET → 17:00 ET) 5 dakikalık mumda 288 mumdur ve telefonda mum başına bir pikselin altına iner.
+    Referansı gece boyunca kurulan kurallarda (Asya aralığı; r0 verilir) panel en geç referansın başında açılır:
+    aralığın tepesini ve dibini kuran mumlar panelde görünmeli."""
     m, i = x["mum"], x["islem"]
     sn = 60 * int(x["tf"])
     t = np.asarray(m["t"], dtype=np.int64)
@@ -166,7 +184,10 @@ def _ornek_pencere(x: dict) -> np.ndarray:
     if i.get("olay_t"):
         anlar.append(int(i["olay_t"]))
     once = (3 if sn <= 300 else 6) * 3600
-    return (t + sn > min(anlar) - once) & (t < int(i["cikis_t"]) + 3600)
+    bas = min(anlar) - once
+    if r0 is not None:
+        bas = min(bas, int(r0))
+    return (t + sn > bas) & (t < int(i["cikis_t"]) + 3600)
 
 
 def _referans_bas(b: dict, x: dict) -> int | None:
@@ -208,6 +229,73 @@ def _referans_bas(b: dict, x: dict) -> int | None:
     return None
 
 
+def _gece_referansi(b: dict) -> bool:
+    """Referansı gece boyunca kurulan kural: Asya aralığı ve onun başarısız kırılımı (_referans_bas'ın Asya dalı)."""
+    v = b.get("varsayilan") or {}
+    return b.get("aile") == "asya" or (b.get("aile") == "sahte" and v.get("seviye") == "asya")
+
+
+#: Sıkışma mumlarının gölgesi: sinyal mumunun mavi bandından ayrı, kuralın göstergesi (turuncu) tonunda.
+SIKISMA_BANT = "rgba(184,134,11,0.12)"
+
+
+def _cizgi_ekle(fig, x: dict, sec: np.ndarray, t: np.ndarray, sn: int, p: float, k: int, var: dict, kk,
+                fiyat: str) -> None:
+    """Örnek günün panelinde kuralın KENDİ göstergesi (kosu._ornek_cizgi, tanımı strateji modülünde): sıkışmada
+    Bollinger ve Keltner bantları ve sıkışma mumları, VWAP kurallarında gün içi VWAP, dönüşte ± k·σ bandı. Gösterge
+    mumların aynı sırasında gelir; boyu tutmazsa çizim düşer (yanlış mumla hizalanmış bir bant çizilmez)."""
+    cz = x.get("cizgi") or {}
+    tur = cz.get("tur")
+    if not tur:
+        return
+    tx = _tsi(t + sn // 2)
+
+    def seri(ad):
+        v = cz.get(ad)
+        if v is None:
+            return None
+        if len(v) != len(sec):
+            raise SystemExit(f"örnek gün çizgisi mumlarla aynı boyda değil: {tur} {ad} ({len(v)} ≠ {len(sec)})")
+        a = np.asarray([np.nan if w is None else float(w) for w in v], dtype=float)[sec] * p
+        return [None if not math.isfinite(w) else float(w) for w in a]
+
+    if tur == "sikisma":
+        for ad_, renk, dash, ad, grup in (("bb_ust", TURUNCU, "solid", "Bollinger bandı", "bb"),
+                                          ("bb_alt", TURUNCU, "solid", "Bollinger bandı", "bb"),
+                                          ("kc_ust", "#5e5e5e", "dash", "Keltner kanalı", "kc"),
+                                          ("kc_alt", "#5e5e5e", "dash", "Keltner kanalı", "kc")):
+            fig.add_trace(go.Scatter(x=tx, y=seri(ad_), mode="lines", line=dict(color=renk, width=1, dash=dash),
+                                     name=ad, legendgroup=grup, showlegend=not var[grup], hoverinfo="skip"), k, 1)
+            var[grup] = True
+        sq = list(cz.get("sikisma") or [])
+        if len(sq) != len(sec):
+            raise SystemExit(f"örnek gün sıkışma mumları mumlarla aynı boyda değil ({len(sq)} ≠ {len(sec)})")
+        sq = [bool(w) for w, s_ in zip(sq, sec) if s_]
+        j = 0
+        while j < len(sq):
+            if not sq[j]:
+                j += 1
+                continue
+            e = j
+            while e + 1 < len(sq) and sq[e + 1]:
+                e += 1
+            a0, a1 = _tsi([int(t[j]), int(t[e]) + sn])
+            fig.add_vrect(x0=a0, x1=a1, fillcolor=SIKISMA_BANT, line_width=0, layer="below", row=k, col=1)
+            var["sikisma"] = True
+            j = e + 1
+    elif tur in ("vwap_donus", "vwap_cekilme"):
+        fig.add_trace(go.Scatter(x=tx, y=seri("vwap"), mode="lines", line=dict(color=TURUNCU, width=1.3),
+                                 name="VWAP (gün içinde yürür)", legendgroup="vwap", showlegend=not var["vwap"],
+                                 hovertemplate="VWAP " + fiyat + "<extra></extra>"), k, 1)
+        var["vwap"] = True
+        if tur == "vwap_donus":
+            for ad_ in ("bant_ust", "bant_alt"):
+                fig.add_trace(go.Scatter(x=tx, y=seri(ad_), mode="lines", line=dict(color=TURUNCU, width=1, dash="dot"),
+                                         name=f"VWAP ± {vir(float(kk), 1)}σ bandı", legendgroup="vbant",
+                                         showlegend=not var["vbant"], hoverinfo="skip"), k, 1)
+                var["vbant"] = True
+
+
 def ornek(o: dict, birim: str) -> None:
     b = o["birim"][birim]
     c = ANA
@@ -233,12 +321,14 @@ def ornek(o: dict, birim: str) -> None:
     fig = make_subplots(rows=n, cols=1, vertical_spacing=0.12, subplot_titles=basliklar)
     p, hane = NOKTA[c], _hane(c)
     fiyat = f"%{{y:.{hane}f}}"
-    var = {"seviye": False, "stop": False, "hedef": False, "olay": False, "takvim": False}
+    var = {"seviye": False, "stop": False, "hedef": False, "olay": False, "takvim": False, "bb": False, "kc": False,
+           "sikisma": False, "vwap": False, "vbant": False}
     yonler = set()
     for k, x in enumerate(ornekler, start=1):
         m, i = x["mum"], x["islem"]
         sn = 60 * int(x["tf"])
-        sec = _ornek_pencere(x)
+        r0 = _referans_bas(b, x)
+        sec = _ornek_pencere(x, r0 if _gece_referansi(b) else None)
         t = np.asarray(m["t"], dtype=np.int64)[sec]
         o_, h_, l_, c_ = (np.asarray(m[a], dtype=float)[sec] * p for a in ("o", "h", "l", "c"))
         # Mum, kendi aralığının ORTASINA çizilir: plotly mumu x'te ortalar, başlangıcına çizilen mum sinyal
@@ -249,6 +339,7 @@ def ornek(o: dict, birim: str) -> None:
                                      increasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#ffffff"),
                                      decreasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#9a9a9a"),
                                      name=f"{x['tf']} dk mum (orta fiyat)", showlegend=(k == 1)), k, 1)
+        _cizgi_ekle(fig, x, sec, t, sn, p, k, var, (b.get("varsayilan") or {}).get("k"), fiyat)
         t0, t1 = int(t[0]), int(t[-1]) + sn
         x0, x1 = _tsi([t0, t1])
         xr, yr = ("x" if k == 1 else f"x{k}"), ("y domain" if k == 1 else f"y{k} domain")
@@ -276,7 +367,6 @@ def ornek(o: dict, birim: str) -> None:
                                font=dict(size=10, color=MUREKKEP if kendi else "#5e5e5e"),
                                bgcolor="rgba(255,255,255,0.8)")
             onceki = u
-        r0 = _referans_bas(b, x)
         rx0 = _tsi([max(t0, r0)])[0] if r0 is not None and r0 < t1 else x0
         seviyeler = []
         for a in ("ust", "alt", "seviye"):
@@ -326,19 +416,32 @@ def ornek(o: dict, birim: str) -> None:
                                      marker=dict(symbol=sembol, size=12, color=MUREKKEP)), 1, 1)
     fig.add_trace(go.Scatter(x=[None], y=[None], mode="markers", name="sinyal mumu",
                              marker=dict(symbol="square", size=13, color=SINYAL_BANT)), 1, 1)
+    if var["sikisma"]:
+        fig.add_trace(go.Scatter(x=[None], y=[None], mode="markers", name="sıkışma mumu",
+                                 marker=dict(symbol="square", size=13, color=SIKISMA_BANT)), 1, 1)
     if var["olay"]:
         fig.add_trace(go.Scatter(x=[None], y=[None], mode="lines", name="kuralın olayı",
                                  line=dict(color=MUREKKEP, width=1, dash="dash")), 1, 1)
     if var["takvim"]:
         fig.add_trace(go.Scatter(x=[None], y=[None], mode="lines", name="takvimdeki öbür olay",
                                  line=dict(color=GRI, width=1, dash="dot")), 1, 1)
-    isaret = ["Mavi bant: sinyal mumu"] + (["noktalı mavi: referans seviye (oluştuğu andan)"] if var["seviye"] else []) \
+    vwap_ = var["vwap"]
+    isaret = ["Mavi bant: sinyal mumu"] \
+        + ([(f"noktalı mavi: sinyal anındaki VWAP{' ve bant' if var['vbant'] else ''} (sinyal mumundan)" if vwap_
+             else "noktalı mavi: referans seviye (oluştuğu andan)")] if var["seviye"] else []) \
+        + (["turuncu: Bollinger bandı · kesikli gri: Keltner kanalı · turuncu gölge: sıkışma mumu (Bollinger'in iki "
+            "bandı Keltner'in içinde)"] if var["bb"] else []) \
+        + (["turuncu: gün içinde yürüyen VWAP" + (" · noktalı turuncu: bandı" if var["vbant"] else "")]
+           if vwap_ else []) \
         + (["kırmızı: stop"] if var["stop"] else []) + (["yeşil: hedef"] if var["hedef"] else []) \
         + (["kesikli: kuralın olayı"] if var["olay"] else []) \
         + (["noktalı gri: takvimdeki öbür olay"] if var["takvim"] else []) + ["▲ alış · ▼ satış girişi · × çıkış"]
-    alt = [f"{PARITE[c]} · stratejinin kendi mum uzunluğu (orta fiyat), saatler TSİ · önceden kayıtlı varsayılan",
+    alt = [f"{PARITE[c]} · stratejinin kendi mum uzunluğu (orta fiyat), saatler TSİ · {adlar.varsayilan_ad(b)}",
            f"Örneklem dışından ({_dis(o)}) sabit çekilişle, ayrı günlerde: kazanan, kaybeden ve tuzak (lehine en az "
-           "0,5 R gidip zararla kapanan)", " · ".join(isaret)]
+           f"{vir(float(o['kunye']['ornek']['esik']), 1)} R gidip zararla kapanan)", " · ".join(isaret)]
+    if _gece_referansi(b):
+        alt.append("Panel gece aralığının başından (Londra 00:00) açılır: aralığın tepesini ve dibini kuran mumlar "
+                   "panelde")
     if stopsuz:
         alt.append(f"Stopsuz kural: stop çizgisi yok; R birimi {R_BIRIMI.get(b.get('aile'), 'girişteki ATR')}")
     bas = baslik_koy(fig, f"Örnek günler — {ad}", alt)
@@ -411,7 +514,9 @@ def egri(o: dict, birim: str) -> None:
     fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.8), row=1, col=1)
     fig.update_xaxes(tickformat="%Y")              # sayısal biçim: eksende İngilizce ay adı çıkmaz
     bas = baslik_koy(fig, f"Birikimli sonuç — {adlar.BIRIM[birim][0]}",
-                     [_kunye(o), f"Önceden kayıtlı varsayılan (veriye bakmadan seçildi) · örneklem içi ({_ic(o)}) soluk, "
+                     [_kunye(o), ("Türetilmiş varsayılan (ön kayıtlı varsayılandan tek boyutu değiştirilerek)"
+                                  if adlar.turetilmis(b) else "Önceden kayıtlı varsayılan (veriye bakmadan seçildi)")
+                      + f" · örneklem içi ({_ic(o)}) soluk, "
                       f"örneklem dışı ({_dis(o)}) koyu ve gri alanda",
                       f"Havuz: aynı kural {len(egriler)} paritede birlikte; haftalık birikimli R",
                       f"Düşüş: dolu alan {yil}'{_den(yil)} bu yana en yüksek değere göre; kesikli çizgi örneklem dışının "
@@ -492,7 +597,7 @@ def izgara(o: dict, birim: str, cift: str = "") -> None:
                           y0=isi["y"].index(vy) - 0.5, y1=isi["y"].index(vy) + 0.5,
                           line=dict(color=MUREKKEP, width=2))
     alt = [f"{PARITE[cift]} · işlem başına net ortalama R · satırlar: {y_ad} · sütunlar: zaman dilimi",
-           "Öbür parametreler önceden kayıtlı varsayılanda; çerçeveli hücre varsayılanın kendisi",
+           f"Öbür parametreler {adlar.varsayilan_ad(b)}da; çerçeveli hücre varsayılanın kendisi",
            f"Renk en az {esik} işlemli hücrede; gri: {esik}'{_den(esik)} az işlem (değer ve işlem sayısı yazılı); "
            "—: işlem yok"]
     if esleme:
@@ -501,8 +606,20 @@ def izgara(o: dict, birim: str, cift: str = "") -> None:
     sn_ = _saat_param_notu({isi["y_ad"]: isi["y"]})
     if sn_:
         alt.append(sn_)
-    bas = baslik_koy(fig, f"Parametre ızgarası — {adlar.BIRIM[birim][0]}", alt)
-    so._yaz(fig, f"{birim}-izgara.html", yukseklik(bas, 150 + 2 * 46 * max(2, len(ylab))))
+    bas = baslik_koy(fig, f"Parametre ızgarası — {adlar.BIRIM[birim][0]}" + ("" if cift == ANA else f", {PARITE[cift]}"),
+                     alt)
+    # Ana paritenin dışındaki ızgara (örneklem dışında artı kalan pariteler: adlar.arti_pariteler) paritesinin adıyla.
+    ad = f"{birim}-izgara.html" if cift == ANA else f"{birim}-izgara-{cift.lower()}.html"
+    so._yaz(fig, ad, yukseklik(bas, 150 + 2 * 46 * max(2, len(ylab))))
+
+
+def izgaralar(o: dict, birim: str) -> None:
+    """Ana paritenin ızgarası ve örneklem dışında artı kalan öbür paritelerinki (ders metni aynı listeyi gömer)."""
+    b = o["birim"][birim]
+    izgara(o, birim)
+    for c in adlar.arti_pariteler(b, [x for x in PARITE if (b.get("cift") or {}).get(x)]):
+        if c != ANA:
+            izgara(o, birim, c)
 
 
 # ─────────────────────────────────────────────────────── 4 · koşul kovaları
@@ -574,12 +691,13 @@ def kosul(o: dict, birim: str, cift: str = "") -> None:
     fig.update_yaxes(type="category", categoryorder="array", categoryarray=anahtar, tickvals=anahtar, ticktext=yazi,
                      autorange="reversed", tickfont=dict(size=11))
     fig.update_layout(barmode="group", bargap=0.25, bargroupgap=0.05)
-    alt = [f"{PARITE[cift]} · önceden kayıtlı varsayılan · işlem başına net R, kova kova (fareyle işlem sayısı ve "
-           "kazanan payı)",
+    alt = [f"{PARITE[cift]} · {adlar.varsayilan_ad(o['birim'][birim])} · işlem başına net R, kova kova (fareyle işlem "
+           "sayısı ve kazanan payı)",
            f"Kova sınırları örneklem içinden; seçilen kova örneklem içinde koşulsuz ortalamadan (kesikli) iyi ve en az "
            f"{asgari} işlemli",
-           f"Hüküm değişkenin satırında: tuttu = seçilen kovalar örneklem dışında en az {oos_asgari} işlemle artı ve öbür "
-           "kovalardan iyi; az işlem: seçilen kovanın örneklem dışı işlemi bu sayının altında"]
+           f"Hüküm değişkenin satırında: tuttu = seçilen kovaların örneklem dışındaki birlikte ortalaması en az "
+           f"{oos_asgari} işlemle artı ve seçilmeyen kovaların birlikte ortalamasının üstünde; tek tek kovalar bunun "
+           "altında kalabilir · az işlem: seçilen kovaların örneklem dışı işlemi bu sayının altında"]
     if atlanan:
         alt.append("Sınanamadığı için çizilmeyen: " + ", ".join(atlanan) + " (aynı ölçü ya da bütün kovalar seçildi)")
     bas = baslik_koy(fig, f"Koşul kovaları — {adlar.BIRIM[birim][0]}", alt)
@@ -632,9 +750,13 @@ def saat(o: dict, birim: str) -> None:
     fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.8))
     # Etiket yatay; çok kovalı eksende ikide (yirmi dört kovada üçte) bir saat yazılır: döndürülmüş saat etiketleri
     # telefonda alttaki lejantın üstüne biniyordu.
-    adim = 1 if len(kat) <= 8 else (2 if len(kat) <= 16 else 3)
+    # Saatlerde boşluk varsa (işlem olmayan saat eksende yoktur) her kova etiketlenir: kategori ekseni eşit aralıklıdır
+    # ve etiketsiz bir çubuğun saati komşu etiketlerden okunamaz (18 ile 22 arasındaki etiketsiz çubuk 21'dir, 20 değil).
+    bosluk = any(_saat_sira(b2) - _saat_sira(a2) > 1 for a2, b2 in zip(saatler, saatler[1:]))
+    adim = 1 if (len(kat) <= 8 or bosluk) else (2 if len(kat) <= 16 else 3)
     fig.update_xaxes(type="category", categoryorder="array", categoryarray=kat, tickangle=0,
-                     tickvals=kat[::adim], ticktext=kat[::adim])
+                     tickvals=kat[::adim], ticktext=kat[::adim],
+                     tickfont=dict(size=9 if (bosluk and len(kat) > 12) else 12))
     if yogun:
         y0, y1 = min(0.0, min(yogun)), max(0.0, max(yogun))
         pay = 0.12 * (y1 - y0) or 0.05
@@ -642,9 +764,10 @@ def saat(o: dict, birim: str) -> None:
     fig.update_layout(barmode="group", bargap=0.25)
     eksen = ("kural tek bir yerel saatte girer ve o saatin TSİ karşılığı yaz ve kış saatinde bir saat kayar: iki kova "
              "bir giriş saati seçimi değil, mevsimin kıyasıdır" if mevsim else
-             "eksen: giriş saati, TSİ" if aralik else "eksen: giriş saati (10 = 10:00–10:59 TSİ)")
-    alt = ["İşlem başına net ortalama R, girişin TSİ saatine göre (bütün dönem) · önceden kayıtlı varsayılan · "
-           + eksen]
+             "eksen: giriş saati, TSİ" if aralik else
+             "eksen: giriş saati (10 = 10:00–10:59 TSİ)" + ("; işlem olmayan saat eksende yok, her çubuk kendi saatiyle "
+                                                            "etiketli" if bosluk else ""))
+    alt = [f"İşlem başına net ortalama R, girişin TSİ saatine göre (bütün dönem) · {adlar.varsayilan_ad(b)} · " + eksen]
     if not yogun:
         alt.append(f"Hiçbir saat {esik} işleme ulaşmıyor: çubuklar betimleyicidir, metin saat okuması kurmaz")
     elif soluk:
@@ -692,7 +815,7 @@ def tf(o: dict, birim: str) -> None:
     v = b["varsayilan"]
     aile = b.get("aile") or ""
     oteki = [adlar.param_yaz(k, x, aile) for k, x in v.items() if k != "tf"]
-    alt = [f"Önceden kayıtlı varsayılan; yalnız mum uzunluğu değişir ({', '.join(oteki)})",
+    alt = [f"{_bas_buyuk(adlar.varsayilan_ad(b))}; yalnız mum uzunluğu değişir ({', '.join(oteki)})",
            "İşlem başına net ortalama R · her parite ayrı · varsayılanın kendi dilimi "
            f"{v.get('tf')} dk"]
     for t, x in bos.items():
@@ -704,7 +827,7 @@ def tf(o: dict, birim: str) -> None:
     so._yaz(fig, f"{birim}-tf.html", yukseklik(bas, 520))
 
 
-BIRIM_SEKILLERI = (ornek, egri, izgara, kosul, saat, tf)
+BIRIM_SEKILLERI = (ornek, egri, izgaralar, kosul, saat, tf)
 
 
 # ─────────────────────────────────────────────────────── ortak: karşılaştırma
@@ -735,7 +858,8 @@ def karsilastirma(o: dict) -> None:
         hovertext=[f"{ad[s[0]]}: {_r(s[1], 3)} R · %95 [{_r(s[2], 3)}, {_r(s[3], 3)}] · {vir(s[4], 0)} işlem"
                    for s in satir], hoverinfo="text", showlegend=False), 1, 1)
     fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
-    alt = [_kunye(o), "Önceden kayıtlı varsayılanlar; dört paritenin işlemleri birlikte (havuz), "
+    alt = [_kunye(o), f"Önceden kayıtlı varsayılanlar{_turetilmis_not(o)}; {_sayi_ad(len(PARITE))} paritenin "
+           "işlemleri birlikte (havuz), "
            f"{so.tarih(o['kunye']['dis_baslangic'])} → {so.tarih(o['kunye']['bitis'])} · çizgi: %95 bootstrap aralığı",
            "Mavi: aralığın alt ucu sıfırın üstünde · siyah: ortalama artı, aralık sıfırı kapsıyor · kırmızı: "
            "ortalama eksi"]
@@ -763,7 +887,8 @@ def karsilastirma(o: dict) -> None:
         fig.update_yaxes(autorange="reversed", showgrid=False)
         fig.update_xaxes(tickangle=-50)
         bas = baslik_koy(fig, "Stratejiler arası günlük R korelasyonu",
-                         ["Önceden kayıtlı varsayılanlar, dört paritenin günlük R toplamı · bütün dönem · işlemsiz gün 0",
+                         [f"Önceden kayıtlı varsayılanlar{_turetilmis_not(o)}, {_sayi_ad(len(PARITE))} paritenin günlük R "
+                          "toplamı · bütün dönem · işlemsiz gün 0",
                           f"Sıra derslerin sırası (seans, yapı, fade, haber, akış) · hücrede yalnız |ρ| ≥ {vir(KOR_YAZI, 2)}; "
                           "daha düşük eşiği aşan çiftlerin tamamı metindeki tabloda",
                           "Sıfıra yakın: iki strateji farklı günlerde ya da farklı yönlerde para kazanıp kaybediyor"])
@@ -812,7 +937,8 @@ def maliyet(o: dict, cift: str = "") -> None:
                                  hoverinfo="text"), 1, 1)
     fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
     bas = baslik_koy(fig, "Maliyet merdiveni — aynı kural, artan yürütme maliyeti",
-                     ["Önceden kayıtlı varsayılanlar · kayma her dolumda (giriş, piyasa çıkışı ve stop) ödenir; "
+                     [f"Önceden kayıtlı varsayılanlar{_turetilmis_not(o)} · kayma her dolumda (giriş, piyasa çıkışı ve "
+                      "stop) ödenir; "
                       f"kayma kademelerinde haber penceresindeki dolumlar ayrıca {hk} pip öder",
                       "Brüt ile yalnız makas arasındaki fark gerçek bid/ask makasıdır · R: yürütülen girişten stopa "
                       "planlanan risk, stopsuz kurallarda girişteki ATR(14)"])
@@ -859,7 +985,8 @@ def rastgele(o: dict, cift: str = "") -> None:
     fig.add_trace(go.Scatter(x=[None], y=[None], mode="lines", name=f"rastgele yönün %5–95 bandı ({vir(tekrar, 0)} tekrar)",
                              line=dict(color=BANT, width=9)), 1, 1)
     alt = ["Aynı giriş dakikası, aynı risk uzaklığı, aynı çıkış kuralı; yalnız yön yazı turayla",
-           "Stratejinin elması bandın sağındaysa kenar zamanlamada değil yön seçimindedir",
+           "Stratejinin elması bandın sağındaysa yön seçimi aynı zamanlamaya bir şey katıyordur; bandın yeri "
+           "zamanlamanın ve maliyetin payıdır",
            "Sıra: rastgele dağılımdaki yüzdelik"]
     if disarida:
         alt.append(f"Sınama kurulmayan (örneklem dışında {asgari} işlemden az): " + ", ".join(disarida))
@@ -936,13 +1063,52 @@ def _dk(x: int) -> str:
     return f"{'+' if x > 0 else ('−' if x < 0 else '')}{abs(x)} dk"
 
 
+#: Patikaya girmeyen olayın sebebi (strat_haber.patika `dislanan`); ders metnindeki yazımla aynı anlam
+#: (ders_motor.NEDEN_OLCU_DISI), figüre sığacak kısalıkta. "tatil ya da ATR yok", aynı olay aynı paritede devam
+#: tablosundan da günlük ATR'si olmadığı için düştüyse ölçülmüş sebebiyle yazılır (ders_motor._olcu_disi_kayitlar).
+PATIKA_NEDEN = {"tatil_ya_da_atr_yok": "tatil günü ya da günlük ATR yok", "gunluk_atr_yok": "günlük ATR yok",
+                "pencerede_fiyat_yok": "olay çevresinde fiyatı olmayan dakika var"}
+
+
+def _patika_dislanan(o: dict, olay: str, sira: list[str]) -> str:
+    """Patikaya girmeyen olaylar, tarih ve sebep birlikte; aynı tarih aynı sebeple bütün paritelerde düştüyse parite
+    sayısıyla, yoksa pariteleriyle. Lejanttaki olay sayısı ile takvimin sayısı arasındaki fark buradan okunur."""
+    hc = (o.get("haber") or {}).get("cift") or {}
+    hs = (o.get("kunye") or {}).get("haber_sabit") or {}
+    yon_dk = int(hs.get("patika_yon_sn") or 300) // 60
+    atr_var = {(e["olay"], e["tarih"], c) for e in (((o.get("haber") or {}).get("olcu_disi") or {}).get("devam_atr") or [])
+               for c in (e.get("parite") or {})}
+    grup: dict = {}
+    eslenen = [c for c in sira if ((hc[c].get("patika") or {}).get(olay))]
+    for c in eslenen:
+        for d in (hc[c]["patika"][olay].get("dislanan") or []):
+            n = d["neden"]
+            if n == "tatil_ya_da_atr_yok" and (olay, d["tarih"], c) in atr_var:
+                n = "gunluk_atr_yok"
+            grup.setdefault((d["tarih"], n), []).append(c)
+    if not grup:
+        return ""
+    parca = []
+    for (t, n), cs in sorted(grup.items()):
+        neden = (f"ilk {_sayi_ad(yon_dk)} dakikada fiyat değişmedi, yön yok" if n == "ilk_bes_dakikada_yon_yok"
+                 else PATIKA_NEDEN.get(n, n))
+        kim = (f"{_sayi_ad(len(cs))} parite" if len(cs) == len(eslenen) and len(cs) > 1
+               else ", ".join(PARITE.get(c, c) for c in cs))
+        parca.append(f"{so.tarih(t)} ({kim}: {neden})")
+    return "Çizilmeyen: " + " · ".join(parca)
+
+
 def haber_patika(o: dict) -> None:
     hc = (o.get("haber") or {}).get("cift") or {}
+    hs = o["kunye"]["haber_sabit"]
+    yon_dk = int(hs["patika_yon_sn"]) // 60
+    atr_gun = int(hs["atr_gun"])
     sira = [c for c in PARITE if c in hc] + [c for c in hc if c not in PARITE]   # künye sırası (öbür figürlerle aynı)
     olaylar = sorted({e for h in hc.values() for e in (h.get("patika") or {})})
     for olay in olaylar:
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.1,
-                            subplot_titles=("İlk 5 dakika yukarı kapanan olaylar", "İlk 5 dakika aşağı kapanan olaylar"))
+                            subplot_titles=(f"İlk {yon_dk} dakika yukarı kapanan olaylar",
+                                            f"İlk {yon_dk} dakika aşağı kapanan olaylar"))
         for c in sira:
             pt = (hc[c].get("patika") or {}).get(olay)
             if not pt:
@@ -967,21 +1133,27 @@ def haber_patika(o: dict) -> None:
             continue
         for j in (1, 2):
             fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9), row=j, col=1)
-            fig.add_vline(x=5, line=dict(color=GRI, width=0.9, dash="dot"), row=j, col=1)
+            fig.add_vline(x=yon_dk, line=dict(color=GRI, width=0.9, dash="dot"), row=j, col=1)
             fig.add_hline(y=0, line=dict(color=GRI, width=0.8), row=j, col=1)
             fig.update_yaxes(title_text="% günlük ATR", row=j, col=1)
         fig.update_xaxes(title_text="olaydan dakika", row=2, col=1)
-        bas = baslik_koy(fig, f"Ortalama fiyat patikası — {adlar.OLAY.get(olay, olay)}",
-                         ["Olay anındaki orta fiyattan değişim, önceki 14 günün ATR'sine bölünmüş · ilk 5 dakikanın "
-                          "yönüne göre iki küme; lejantta iki kümenin olay sayısı",
-                          "Gölge: ortalamanın %95 aralığı · noktalı çizgi: ilk 5 dakikanın sonu",
-                          _patika_saat_notu(o, olay)])
+        alt = [f"Olay anındaki orta fiyattan değişim, önceki {atr_gun} günün ATR'sine bölünmüş · ilk {yon_dk} "
+               "dakikanın yönüne göre iki küme; lejantta iki kümenin olay sayısı",
+               f"Gölge: ortalamanın %95 aralığı · noktalı çizgi: ilk {yon_dk} dakikanın sonu",
+               _patika_saat_notu(o, olay)]
+        dis_ = _patika_dislanan(o, olay, sira)
+        if dis_:
+            alt.append(dis_)
+        bas = baslik_koy(fig, f"Ortalama fiyat patikası — {adlar.OLAY.get(olay, olay)}", alt)
         so._yaz(fig, f"haber-patika-{olay.lower().replace('_', '-')}.html", yukseklik(bas, 600))
 
 
 def haber_fomc(o: dict) -> None:
     hc = (o.get("haber") or {}).get("cift") or {}
     sira = [c for c in PARITE if c in hc] + [c for c in hc if c not in PARITE]
+    hs = o["kunye"]["haber_sabit"]
+    atr_gun = int(hs["atr_gun"])
+    basin_dk = int(hs["fomc_basin_sn"][0]) // 60
     toplanti, parite, nokta = set(), 0, 0
     for c in sira:
         st = (hc[c].get("fomc") or {}).get("satir") or []
@@ -1007,17 +1179,36 @@ def haber_fomc(o: dict) -> None:
     fig.add_vline(x=0, line=dict(color=GRI, width=0.8))
     # Eksen başlığı x'te yok (ev stilinin alt lejantına biniyordu); eksenlerin tanımı alt yazıda.
     fig.update_yaxes(title_text="basın (% günlük ATR)")
-    bas = baslik_koy(fig, "FOMC: kararın ilk yarım saati ve basın toplantısının ilk saati",
-                     ["x: karar, 14:00 → 14:30 ET · y: basın toplantısı, 14:30 → 15:30 ET · ikisi orta fiyattan, önceki "
-                      "14 günün ATR'sinin yüzdesi",
-                      "Sol üst ve sağ alt çeyrek: basın toplantısı karara verilen tepkiyi TERSİNE çevirdi",
-                      f"14:00 ET = {adlar.tsi_yaz(['New York 14:00'])}"])
+    # Hareketi sıfır olan nokta eksenin üstündedir: dönüş oranının paydasına girmez (ders_motor.blok_fomc_payda aynı
+    # toplantıları sayar), korelasyona girer. Veriden; elle yazılmaz.
+    sifir = []
+    for c in sira:
+        for r in (hc[c].get("fomc") or {}).get("satir") or []:
+            kz, bz = r.get("karar_atr") == 0, r.get("basin_60_atr") == 0
+            if not (kz or bz):
+                continue
+            ne = " ve ".join(x for x, v in (("kararın ilk yarım saatinde", kz),
+                                            ("basın toplantısının ilk saatinde", bz)) if v)
+            yer = "orijinde" if (kz and bz) else ("x = 0 çizgisinde" if kz else "y = 0 çizgisinde")
+            sifir.append(f"{PARITE.get(c, c)}'de {so.tarih(r['tarih'])} toplantısında {ne} hareket sıfır: nokta {yer}, "
+                         "dönüş oranına girmez")
+    bas_bit = f"{14 + (30 + basin_dk) // 60:02d}:{(30 + basin_dk) % 60:02d}"
+    alt = [f"x: karar, New York 14:00 → 14:30 · y: basın toplantısı, 14:30 → {bas_bit} · ikisi orta fiyattan, önceki "
+           f"{atr_gun} günün ATR'sinin yüzdesi",
+           "Sol üst ve sağ alt çeyrek: basın toplantısı karara verilen tepkiyi TERSİNE çevirdi",
+           f"New York 14:00 = {adlar.tsi_yaz(['New York 14:00'])} · 14:30 = {adlar.tsi_yaz(['New York 14:30'])}"]
+    alt += sifir
+    bas = baslik_koy(fig, "FOMC: kararın ilk yarım saati ve basın toplantısının ilk saati", alt)
     so._yaz(fig, "haber-fomc.html", yukseklik(bas, 470))
 
 
 def main(argv: list[str]) -> int:
     if go is None:
         print("plotly yok: figürler çizilemez (kapı yolu bundan etkilenmez)")
+        return 1
+    sorun = so.plotly_js_sina()
+    if sorun:
+        print(f"✗ {sorun}: figürler çizilmedi")
         return 1
     if "--olcum" in argv:
         i = argv.index("--olcum")

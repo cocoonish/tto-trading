@@ -25,6 +25,17 @@ Ortam:  python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt   
 Koşum:  .venv/bin/python hepsi.py [--sinamasiz] [--kosusuz]
   --sinamasiz   birim sınamalarını atlar (yalnız yerel yineleme için; yayından önceki koşu sınamalıdır)
   --kosusuz     strateji koşusunu atlar ve depodaki koşu çıktısından ölçer (ders metni yinelemesi için)
+
+Güncelleme (örneklemi ileri taşımak):
+  1. ayar.toml'da `bitis`i ilerlet ve dala gönder: bulut betikleri pencereyi dalın ayarından okur.
+  2. Aynı dalda bulutta indir: arastirma-veri.yml · betik "Aktarılacak Projeler/FxGunici/arsiv_dukascopy.py",
+     paketler "pyarrow==26.0.0", parçalar yeni günlerin parite × yıl jetonları (ör. ["EURUSD-2026", …]); arşiv kaldığı
+     yerden sürer. Takvimin yeni yayımlarının ham sayfaları aynı yoldan arsiv_takvim*.py betikleriyle (her betiğin
+     başlığı kaynağını ve parçalarını yazar), yerel tatil listeleri arsiv_tatil.py ile. İş akışı yalnız veri/
+     dizinini dala commit eder; sonra git pull.
+  3. .venv/bin/python hepsi.py (sınamalarla). Takvim kurulumu pencerede kaynağı arşivde olmayan yayımı künyesine
+     sorun olarak yazar; kapı geçmezse yayın katmanı geri konur.
+  Ön kaydın kuralları ve varsayılanları güncellemeyle değişmez: örneklem dışı pencere (dis_baslangic → bitis) uzar.
 """
 from __future__ import annotations
 

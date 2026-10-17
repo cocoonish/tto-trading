@@ -19,8 +19,9 @@ tepe ve dibi ile klasik (salon) pivotları ise herkesin aynı anda baktığı se
 izlenmelerinden alırlar.
 
 Yapı kuralları gün içinde birden çok kez sinyal üretebilir; aynı anda tek pozisyon taşındığı için bir sinyal, açık
-bir pozisyon varken gelirse atlanır. İç mum ve sıkışmada bunun ne kadar sık olduğu kendi bölümlerinde ölçülüyor. Seans kırılımlarında olduğu gibi her
-kuralın fade karşılığı vardır: önceki gün tepe/dip ve pivotun dönüş biçimleri fade dersinde aynı seviyelerle ölçülüyor.
+bir pozisyon varken gelirse atlanır. İç mum ve sıkışmada bunun ne kadar sık olduğu kendi bölümlerinde ölçülüyor. Dört kuralın ikisinin
+fade karşılığı var: önceki gün tepe/dip ve pivotun dönüş biçimleri fade dersinde aynı seviyelerle ölçülüyor; iç mumun
+ve sıkışmanın karşılığı yok.
 
 ## İç mum (inside bar) kırılımı
 

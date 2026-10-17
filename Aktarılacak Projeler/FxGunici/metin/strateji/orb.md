@@ -4,7 +4,7 @@ Londra açılışında oluşan ilk mumun tepesi ve dibi bir **açılış aralı�
 dışında kapanırsa kırılım yönünde işleme girilir: aralığın üstünde kapanış alış, altında kapanış satış.
 Kural vadeli piyasalarda Toby Crabel'in açılış aralığı kırılımı (*opening range breakout*, ORB)
 çalışmalarıyla yaygınlaştı; FX'te "açılış" bir borsa çanı değil, likiditenin el değiştirdiği bir saattir:
-Londra 08:00.
+Londra 08:00 ({{! tsi "" "Londra 08:00" }}).
 
 ### Piyasa mantığı
 
@@ -43,7 +43,7 @@ temkinli biçimleridir ve ızgarada ayrıca ölçülür (sonuçlarda "Stop ve he
 
 {{! ornek }}
 
-Figürde noktalı mavi çizgiler açılış aralığının iki ucu (aralığın oluştuğu Londra 08:00 mumundan başlar), mavi bant sinyal mumu, kırmızı çizgi stop, üçgen
+Figürde noktalı mavi çizgiler açılış aralığının iki ucu (aralığın oluştuğu Londra 08:00 mumundan başlar; {{! tsi "" "Londra 08:00" }}), mavi bant sinyal mumu, kırmızı çizgi stop, üçgen
 yürütülen giriş fiyatıdır. Kazanan örnek kuralın vaat ettiği günü gösterir: kırılım teyit ediliyor ve hareket
 sürüyor. Kaybeden örnek, lehine yarım R'ye bile ulaşmadan zararla kapanan işlemdir: kapanışla teyit edilmiş
 bir kırılımın arkası gelmiyor. Tuzak örneği kuralın en pahalı biçimini gösterir: işlem önce lehine en az

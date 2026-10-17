@@ -9,8 +9,9 @@ alındı; ölçüler orada sayfada sınanmıştı.
 Ders yayımlandığı günün metnidir; figürler de o günün ölçümünü dondurur ve
 statik yola yazılır (`site/public/arastirma/fx-gunici/`). Her figür
 kendi tarih aralığını kendi alt başlığında taşır. Her HTML, çizildiği ölçüm
-dosyasının sha256 özünü bir meta etiketinde taşır (`tto-olcum-ozu`);
-ölçüm dosyası değişip figür yeniden çizilmezse doğrulayıcı düşer.
+dosyasının sha256 özünü bir meta etiketinde taşır (`tto-olcum-ozu`), çizen kodun özünü
+de (`tto-kod-ozu`, SEKIL_KODU); ikisinden biri değişip figür yeniden çizilmezse
+doğrulayıcı düşer.
 
 """
 from __future__ import annotations
@@ -271,6 +272,39 @@ YAZILAN: list[Path] = []
 #: Ev stilinin dosyaya koyduğu işaret (site/tools/plotly_stil.py: ISARET); kapı figürde onu arar.
 EV_STILI_ISARET = "<!-- tto-ev-stili -->"
 EV_STILI = KOK / "site" / "tools" / "plotly_stil.py"
+#: Figürü çizen kod: çizim, ortak yardımcılar, adlar ve sitenin ev stili (o da çıktıyı değiştirir). Her figür bu
+#: dosyaların özünü taşır (`tto-kod-ozu`); biri değişip figürler yeniden çizilmezse kapı düşer. Kapı plotly
+#: içe aktarmaz: özü `kod_ozu` ile (yalnız hashlib) yeniden hesaplar ve listenin asgari kapsamını kendi kümesiyle
+#: sınar (dogrula.SEKIL_KODU_ASGARI).
+SEKIL_KODU = (BURASI / "sekil.py", BURASI / "sekil_ortak.py", BURASI / "adlar.py", EV_STILI)
+
+
+def kod_ozu() -> str:
+    h = hashlib.sha256()
+    for p in SEKIL_KODU:
+        h.update(p.relative_to(KOK).as_posix().encode())
+        h.update(b"\0")
+        h.update(p.read_bytes())
+        h.update(b"\0")
+    return h.hexdigest()
+
+
+def plotly_js_sina() -> str | None:
+    """Python kütüphanesinin figürü yazdığı plotly.js sürümü sitenin paylaşılan dosyasıyla (PLOTLY_JS) aynı mı ve o
+    dosya sitede duruyor mu; değilse sebep. Ayrışan bir sürümde figürün yeni ya da değişmiş bir niteliği tarayıcıda
+    sessizce yok sayılır ve hiçbir kapı düşmez."""
+    import plotly.offline as po
+    surum = po.get_plotlyjs_version()
+    m = re.search(r"plotly-(\d+\.\d+\.\d+)\.min\.js$", PLOTLY_JS)
+    if not m:
+        return f"PLOTLY_JS sürüm taşımıyor: {PLOTLY_JS}"
+    if m.group(1) != surum:
+        return (f"plotly.py figürü plotly.js {surum} için yazıyor, site {m.group(1)} ile çiziyor (requirements.txt'teki "
+                "plotly sabitlemesi)")
+    dosya = KOK / "site" / "public" / PLOTLY_JS.lstrip("/")
+    if not dosya.exists():
+        return f"sitenin plotly.js dosyası yok: {dosya.relative_to(KOK)}"
+    return None
 
 
 def ev_stili(dosyalar: list[Path]) -> int:
@@ -307,7 +341,8 @@ def _yaz(fig, ad: str, yukseklik: int = 500) -> None:
     kimlik = "sekil-" + re.sub(r"[^a-z0-9_-]", "-", Path(ad).stem.lower())
     html = fig.to_html(include_plotlyjs=PLOTLY_JS, full_html=True, div_id=kimlik,
                        config={"displayModeBar": False, "responsive": True})
-    html = html.replace("<head>", f'<head><meta name="tto-olcum-ozu" content="{olcum_ozu()}">', 1)
+    html = html.replace("<head>", f'<head><meta name="tto-olcum-ozu" content="{olcum_ozu()}">'
+                                  f'<meta name="tto-kod-ozu" content="{kod_ozu()}">', 1)
     (CIKTI / ad).write_text(html, encoding="utf-8")
     yol = CIKTI / ad
     YAZILAN.append(yol)

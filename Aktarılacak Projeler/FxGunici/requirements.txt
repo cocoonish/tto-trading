@@ -6,6 +6,8 @@
 # (dogrula.py) ve ders motoru yalnız standart kütüphaneyle koşar. Arşivin bulut koşusu bu dosyayı kurmaz; arşiv
 # baytlarını belirleyen pyarrow'u sürümüyle ister (arsiv_dukascopy.py başlığı), sürüm künyeye yazılır ve kurulu
 # sürüm aşağıdaki sabitlemeyle aynı değilse arşiv betiği yazmadan düşer (arsiv_dukascopy.pyarrow_sart).
+# plotly, sitenin paylaşılan plotly.js dosyasının (site/public/js/plotly-4.0.0.min.js) sürümünü paketleyen
+# sürümdedir: figürler o dosyayla çizilir ve sekil.py iki sürüm ayrışırsa çizmeden düşer (sekil_ortak.plotly_js_sina).
 certifi==2026.7.22
 charset-normalizer==3.5.2
 idna==3.20
@@ -16,7 +18,7 @@ numba==0.68.0
 numpy==2.4.6
 packaging==26.3
 pandas==3.0.6
-plotly==7.1.0
+plotly==7.0.0
 pluggy==1.7.0
 pyarrow==26.0.0
 Pygments==2.21.0
