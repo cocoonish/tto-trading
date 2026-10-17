@@ -2,7 +2,7 @@
  "id": "kmw2024",
  "aday_baslik": "Foreign Exchange Fixings and Returns Around the Clock",
  "aday_yil": 2024,
- "zaman": "2026-10-17T23:27:11+00:00",
+ "zaman": "2026-10-17T23:35:25+00:00",
  "koordinat_deneme": [
   {
    "koordinat": [
@@ -212,6 +212,51 @@
     "ifade": "reversal",
     "sayfa": 2,
     "pasaj": ", highly statistically significant, and imply daily swings of more than one billion U.S. dollars based on spot volumes. Using natural experiments, we show the existence of a published reference rate determines the timing of intraday return reversals. We present evidence consistent with an inventory risk explanation whereby foreign exchange dealers intermediate an unconditional demand for U.S. dollars at the fixes. Keywords: foreign-exchange, fixings, high-frequency returns, inventory"
+   },
+   {
+    "ifade": "Melvin",
+    "sayfa": 2,
+    "pasaj": " Peter Feldh ̈ utter, Michael Fleming, Lukas Frei, Jean-S ́ ebastien Fontaine, Thierry Foucault, Patrick Green, Farouk Jivjav, Christian Julliard, Nina Karnaukh, Sven Klingler, David Lando, Dong Lou, Aytek Malkhozov, Paul Meggyesi, Michael Melvin, Albert Menkveld, Carol Osler, Lasse Pedersen, Tarun Ramadorai, Angelo Ranaldo, Steven Riddiough, Dagfinn Rime, Elvira Sojli, Vania Stavrakeva, Gyuri Venter, Ganesh Viswanath Natraj, Tony Zhang, and seminar and conference participants at v"
+   },
+   {
+    "ifade": "Melvin",
+    "sayfa": 6,
+    "pasaj": "llows us to identify price reversals around major currency fixes that are not explained by working hours patterns. Our paper is also related to a literature in market microstructure studying foreign exchange benchmarks. For the London fix, Melvin and Prins (2015) analyze hedging flows of fund managers at month-end; Evans (2018) assesses price dynamics in tight windows around 4 Electronic copy available at: https://ssrn.com/abstract=3521370"
+   },
+   {
+    "ifade": "Melvin and Prins",
+    "sayfa": 6,
+    "pasaj": "llows us to identify price reversals around major currency fixes that are not explained by working hours patterns. Our paper is also related to a literature in market microstructure studying foreign exchange benchmarks. For the London fix, Melvin and Prins (2015) analyze hedging flows of fund managers at month-end; Evans (2018) assesses price dynamics in tight windows around 4 Electronic copy available at: https://ssrn.com/abstract=3521370"
+   },
+   {
+    "ifade": "Melvin and Prins",
+    "sayfa": 9,
+    "pasaj": "arrive before 16:00 local time and which are requested to execute at the benchmark rate. The London fix is prominently used by various groups of market participants to value their international portfolio positions (see, e.g., Melvin and Prins, 2015). II. Data We compile our data from multiple sources including Refinitiv, CME, ICE, Olsen Financial Technologies, and TickHistory. In this section we briefly describe the main data, while we discuss additional data sources and furthe"
+   },
+   {
+    "ifade": "Evans (2018)",
+    "sayfa": 6,
+    "pasaj": " explained by working hours patterns. Our paper is also related to a literature in market microstructure studying foreign exchange benchmarks. For the London fix, Melvin and Prins (2015) analyze hedging flows of fund managers at month-end; Evans (2018) assesses price dynamics in tight windows around 4 Electronic copy available at: https://ssrn.com/abstract=3521370"
+   },
+   {
+    "ifade": "Evans (2018)",
+    "sayfa": 16,
+    "pasaj": "largest average European reversal 9For discussions related to regulatory changes, the London fixing scandal, and the introduction of the FX Global Code of Conduct ( www.globalfxc.org/docs/fx_global.pdf), see, e.g., Melvin and Prins (2015), Evans (2018) and Evans, O'Neill, Rime, and Saakvitne (2020). 14 Electronic copy available at: https://ssrn.com/abstract=3521370"
+   },
+   {
+    "ifade": "hedging",
+    "sayfa": 6,
+    "pasaj": "sals around major currency fixes that are not explained by working hours patterns. Our paper is also related to a literature in market microstructure studying foreign exchange benchmarks. For the London fix, Melvin and Prins (2015) analyze hedging flows of fund managers at month-end; Evans (2018) assesses price dynamics in tight windows around 4 Electronic copy available at: https://ssrn.com/abstract=3521370"
+   },
+   {
+    "ifade": "hedging",
+    "sayfa": 8,
+    "pasaj": "d and offer prices against the euro, which means that the ECB reference rate is not based on actual transactions. However, the ECB reference rates are often used by non-financial corporations in the euro-area that use forward contracts for hedging purposes (see, e.g., FSB, 2014). To stress that the euro foreign exchange reference rates are for information purposes only, and to discourage using the ECB fix for transactions, the ECB has moved the publication of the reference rates to "
+   },
+   {
+    "ifade": "month-end",
+    "sayfa": 6,
+    "pasaj": "hat are not explained by working hours patterns. Our paper is also related to a literature in market microstructure studying foreign exchange benchmarks. For the London fix, Melvin and Prins (2015) analyze hedging flows of fund managers at month-end; Evans (2018) assesses price dynamics in tight windows around 4 Electronic copy available at: https://ssrn.com/abstract=3521370"
    }
   ],
   "eksik": [

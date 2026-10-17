@@ -2,7 +2,7 @@
  "id": "bbldpz2014",
  "aday_baslik": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance",
  "aday_yil": 2014,
- "zaman": "2026-10-17T23:22:47+00:00",
+ "zaman": "2026-10-17T23:34:27+00:00",
  "crossref_deneme": [
   {
    "doi": "10.1090/noti1105",
@@ -99,7 +99,93 @@
   "bayt": 3011500,
   "sayfa": 14,
   "ilk_sayfa": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance David H. Bailey, Jonathan M. Borwein, Marcos López de Prado, and Qiji Jim Zhu Another thing I must point out is that you cannot prove a vague theory wrong. [...] Also, if the process of computing the consequences is indefinite, then with a little skill any experimental result can be made to look like the expected consequences. -Richard Feynman [1964] Introduction A backtest is a historical simulation of an algorithmic investment strategy. Among other things, it computes the series of profits and losses that such strategy would have generated had that algorithm been run over that time period. Popular performance statistics, such as the Sharpe ratio or the Information ratio, are used to quantify the backtested strategy's return on risk. Investors typically study those backtest statistics and then allocate capital to the best performing scheme. Regarding the measured performance of a backtested strategy, we have to distinguish between two very different readings: in-sample (IS) and outof-sample (OOS). The IS performance is the one simulated over the sample used in the design of the strategy (also known as \"learning period\" or David H. Bailey is retired from Lawrence Berkeley National Laboratory. He is a Research Fellow at the University of California, Davis, Department of Computer Science. His email address is david@davidhbailey.com. Jonathan M. Borwein is Laureate Pro",
-  "pasaj": [],
+  "pasaj": [
+   {
+    "ifade": "overfit",
+    "sayfa": 1,
+    "pasaj": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance David H. Bailey, Jonathan M. Borwein, Marcos López de Prado, and Qiji Jim Zhu Another thing I must point out is that you cannot prove a vague theory wrong. [...] Also, if the process of computing the conseq"
+   },
+   {
+    "ifade": "overfit",
+    "sayfa": 1,
+    "pasaj": "rformance. When an investor receives a promising backtest from a researcher or portfolio manager, one of her key problems is to assess how realistic that simulation is. This is because, given any financial series, it is relatively simple tooverfit an investment strategy so that it performs well IS. Overfitting is a concept borrowed from machine learning and denotes the situation when a model targets particular observations rather than a general structure. For example, a researcher c"
+   },
+   {
+    "ifade": "backtest overfitting",
+    "sayfa": 1,
+    "pasaj": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance David H. Bailey, Jonathan M. Borwein, Marcos López de Prado, and Qiji Jim Zhu Another thing I must point out is that you cannot prove a vague theory wrong. [...] Also, if the process of computing the consequenc"
+   },
+   {
+    "ifade": "backtest overfitting",
+    "sayfa": 2,
+    "pasaj": "R above 2.0. The problem is, AIC's assessment did not take into account the hundreds of other trials that the researcher neglected to mention. For these reasons, commonly used regression overfitting methods are poorly equipped to deal with backtest overfitting. Although there are many academic studies that claim to have identified profitable investment strategies, their reported results are almost always based on IS statistics. Only exceptionally do we find an academic study that applies the \"ho"
+   },
+   {
+    "ifade": "out-of-sample",
+    "sayfa": 1,
+    "pasaj": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance David H. Bailey, Jonathan M. Borwein, Marcos López de Prado, and Qiji Jim Zhu Another thing I must point out is that you cannot prove a vague theory wrong. [...] Also, if the process of computing the consequences is indefinite,"
+   },
+   {
+    "ifade": "negative",
+    "sayfa": 6,
+    "pasaj": "ith highest SR IS. The performance of the first half was optimized IS, and the performance of the second half is what the investor receives OOS. The good news is, in the absence of memory, there is no reason to expect overfitting to induce negative performance. maximum Sharpe ratio above 2.6 (see Figure 1). We suspect, however, that backtested strategies that significantly beat the market typically rely on some combination of valid insight, boosted by some degree of overfitting. Sinc"
+   },
+   {
+    "ifade": "negative",
+    "sayfa": 8,
+    "pasaj": "conditions, there is no reason to expect overfitting to induce negative performance. This is illustrated in Figure 5, which shows how the optimization causes the expected performance IS to range between 1.2 and 2.6, while the OOS performance will range between -1.5 and 1.5 (i.e., aroundμ, which in this case is"
+   },
+   {
+    "ifade": "configurations",
+    "sayfa": 3,
+    "pasaj": "bets on a reversion towards equilibrium values. This model might take the form of a cointegration equation, a vector-error correction model, or a system of stochastic differential equations, just to name a few. The number of possible model configurations (or trials) is enormous, and naturally the researcher would like to select the one that maximizes the performance of the strategy. Practitioners often rely on historical simulations (also called backtests) to discover the optimal specifica"
+   },
+   {
+    "ifade": "configurations",
+    "sayfa": 4,
+    "pasaj": "r of trials (N) and the minimum backtest length (MinBTL) needed to prevent skill-less strategies to be generated with a Sharpe ratio IS of 1. For instance, if only five years of data are available, no more than forty-five independent model configurations should be tried. For that number of trials, the expected maximum SR IS is 1, whereas the expected SR OOS is 0. After trying only seven independent strategy configurations, the expected maximum SR IS is1 for a two-year long backtest, while "
+   },
+   {
+    "ifade": "minimum backtest length",
+    "sayfa": 2,
+    "pasaj": "which is an extreme variation of \"hold-out\". Our Intentions In this paper we shall show that it takes a relatively small number of trials to identify an investment strategy with a spuriously high backtested performance. We also compute the minimum backtest length (MinBTL) that an investor should require given the number of trials attempted. Although in our examples we always choose the Sharpe ratio to evaluate performance, our methodology can be applied to any other performance measure. We believe "
+   },
+   {
+    "ifade": "minimum backtest length",
+    "sayfa": 3,
+    "pasaj": "statistics, and stochastic calculus. Our silence is consent, making us accomplices in these abuses. The rest of our study is organized as follows: The section \"Backtest Overfitting\" introduces the problem in a more formal way. The section \"Minimum Backtest Length (MinBTL)\" defines the concept of Minimum Backtest Length (MinBTL). The section \"Model Complexity\" argues how model complexity leads to backtest overfitting. The section \"Overfitting in Absence of Compensation Effects\" analyzes overfitting "
+   },
+   {
+    "ifade": "number of trials",
+    "sayfa": 2,
+    "pasaj": "mply tuning the forecasting equation. Third, regression overfitting methods are parametric and involve a number of assumptions regarding the underlying data which may not be easily ascertainable. Fourth, some methods do not control for the number of trials attempted. To illustrate this point, suppose that a researcher is given a finite sample and told that she needs to come up with a strategy with an SR (Sharpe Ratio, a popular measure of performance in the presence of risk) above 2.0, based"
+   },
+   {
+    "ifade": "number of trials",
+    "sayfa": 2,
+    "pasaj": "ould publish the results with the pure (yet to be observed) OOS data. They called this approach \"model sequestration\", which is an extreme variation of \"hold-out\". Our Intentions In this paper we shall show that it takes a relatively small number of trials to identify an investment strategy with a spuriously high backtested performance. We also compute the minimum backtest length (MinBTL) that an investor should require given the number of trials attempted. Although in our examples we always"
+   },
+   {
+    "ifade": "in-sample",
+    "sayfa": 1,
+    "pasaj": " on risk. Investors typically study those backtest statistics and then allocate capital to the best performing scheme. Regarding the measured performance of a backtested strategy, we have to distinguish between two very different readings: in-sample (IS) and outof-sample (OOS). The IS performance is the one simulated over the sample used in the design of the strategy (also known as \"learning period\" or David H. Bailey is retired from Lawrence Berkeley National Laboratory. He is a Rese"
+   },
+   {
+    "ifade": "in-sample",
+    "sayfa": 12,
+    "pasaj": "ntly rewarded in our efforts if this paper succeeds in drawing the attention of the mathematical community to the widespread proliferation of journal publications, many of them claiming profitable investment strategies on the sole basis of in-sample performance. This is understandable in business circles, but a higher standard is and should be expected from an academic forum. A depressing parallel can be drawn between today's financial academic research and the situation denounced by "
+   },
+   {
+    "ifade": "expected",
+    "sayfa": 1,
+    "pasaj": "iji Jim Zhu Another thing I must point out is that you cannot prove a vague theory wrong. [...] Also, if the process of computing the consequences is indefinite, then with a little skill any experimental result can be made to look like the expected consequences. -Richard Feynman [1964] Introduction A backtest is a historical simulation of an algorithmic investment strategy. Among other things, it computes the series of profits and losses that such strategy would have generated had th"
+   },
+   {
+    "ifade": "expected",
+    "sayfa": 2,
+    "pasaj": "dom frequency. For instance, trading systems, like the crossing of moving averages explained earlier, generate buy and sell recommendations with little or no indication as to forecasted values, confidence in a particular recommendation, or expected holding period. Second, even if a particular investment strategy relies on such a forecasting equation, other components of the investment strategy may have been overfitted, including entry thresholds, risk sizing, profit taking, stop-loss"
+   }
+  ],
   "eksik": [
    "relatively small number of alternative strategy configurations",
    "The higher the number of configurations tried",

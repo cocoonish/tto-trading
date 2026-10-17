@@ -1,0 +1,190 @@
+{
+ "id": "efl2018",
+ "aday_baslik": "Intraday momentum in FX markets: Disentangling informed trading from liquidity provision",
+ "aday_yil": 2018,
+ "zaman": "2026-10-17T23:36:28+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1016/j.finmar.2017.09.002",
+   "durum": 200,
+   "baslik": "Cognitive reference points, institutional investors' bid prices, and IPO pricing: Evidence from IPO auctions in China"
+  }
+ ],
+ "koordinat_deneme": [
+  {
+   "koordinat": [
+    "1386-4181",
+    "37",
+    "35"
+   ],
+   "bulunan": [
+    [
+     "Intraday momentum in FX markets: Disentangling informed trading from liquidity provision",
+     "10.1016/j.finmar.2016.09.002"
+    ]
+   ]
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/j.finmar.2016.09.002",
+  "baslik": "Intraday momentum in FX markets: Disentangling informed trading from liquidity provision",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Elaut",
+    "ad": "Gert",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Frömmel",
+    "ad": "Michael",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Lampaert",
+    "ad": "Kevin",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Financial Markets",
+  "cilt": "37",
+  "sayi": null,
+  "sayfa": "35-51",
+  "yil": 2018,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/j.finmar.2016.09.002",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S1386418116300313?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S1386418116300313?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3125300284",
+  "doi": "10.1016/j.finmar.2016.09.002",
+  "baslik": "Intraday momentum in FX markets: Disentangling informed trading from liquidity provision",
+  "yil": 2016,
+  "yazarlar": [
+   "Gert Elaut",
+   "Michael Frömmel",
+   "Kevin Lampaert"
+  ],
+  "dergi": "Journal of Financial Markets",
+  "issn": [
+   "1386-4181",
+   "1878-576X"
+  ],
+  "cilt": "37",
+  "sayi": null,
+  "ilk_sayfa": "35",
+  "son_sayfa": "51",
+  "ozet": null,
+  "acik": null,
+  "adresler": [
+   "https://doi.org/10.1016/j.finmar.2016.09.002",
+   "http://hdl.handle.net/1854/LU-8060014"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Intraday Momentum in FX Markets: Disentangling Informed Trading from Liquidity Provision",
+  "yil": 2016,
+  "dergi": "",
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.2694985",
+  "yazarlar": [
+   "Gert Elaut",
+   "Michael Frömmel",
+   "Kevin Lampaert"
+  ]
+ },
+ "metin": {
+  "durum": 200,
+  "url": "http://hdl.handle.net/1854/LU-8060014",
+  "son_url": "https://biblio.ugent.be/publication/8060014",
+  "tur": "text/html; charset=utf-8",
+  "sha256": "3d8e020005c133b391526d4be0be7802696e52db220066a75991247b39846017",
+  "bayt": 34421,
+  "sayfa": 1,
+  "ilk_sayfa": "Academic Bibliography Search 200 years of publications by Ghent University researchers. Search publications and datasets Advanced search 1 file | 443.83 KB Download Download \"(...).pdf\" See all downloads Add to list Search results Intraday momentum in FX markets : dis... Intraday momentum in FX markets : disentangling informed trading from liquidity provision Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) (2018) JOURNAL OF FINANCIAL MARKETS. 37. p.35-51 Author Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) Organization Department of Financial economics (ceased) Project The Russian Currency Market: Microstructure, News and Abstract We examine the likely drivers of intraday momentum, defined as a significantly positive relation between the first half-hour and the last half-hour return, in a foreign exchange market with explicit trading hours. Using transaction-level data from the Moscow Interbank Currency Exchange on the RUB-USD currency pair for the 2005-2014 period, our results suggest that intraday momentum in the ruble market is induced by risk aversion to overnight holdings among liquidity providers. In addition, our results complement earlier findings that suggest that market concentration due to trading hours matters for intraday momentum and that the effect is more pronounced during financial crises. Keywords Liquidity, Intraday, Informed trading, Momentum Downloads Download (...).pdf full text (Published version) | UGen",
+  "pasaj": [
+   {
+    "ifade": "intraday momentum",
+    "sayfa": 1,
+    "pasaj": "Academic Bibliography Search 200 years of publications by Ghent University researchers. Search publications and datasets Advanced search 1 file | 443.83 KB Download Download \"(...).pdf\" See all downloads Add to list Search results Intraday momentum in FX markets : dis... Intraday momentum in FX markets : disentangling informed trading from liquidity provision Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) (2018) JOURNAL OF FINANCIAL MARKETS. 37. p.35-51 Autho"
+   },
+   {
+    "ifade": "intraday momentum",
+    "sayfa": 1,
+    "pasaj": " years of publications by Ghent University researchers. Search publications and datasets Advanced search 1 file | 443.83 KB Download Download \"(...).pdf\" See all downloads Add to list Search results Intraday momentum in FX markets : dis... Intraday momentum in FX markets : disentangling informed trading from liquidity provision Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) (2018) JOURNAL OF FINANCIAL MARKETS. 37. p.35-51 Author Gert Elaut (UGent) , Kevin Lampaert (UG"
+   },
+   {
+    "ifade": "RUB",
+    "sayfa": 1,
+    "pasaj": "fined as a significantly positive relation between the first half-hour and the last half-hour return, in a foreign exchange market with explicit trading hours. Using transaction-level data from the Moscow Interbank Currency Exchange on the RUB-USD currency pair for the 2005-2014 period, our results suggest that intraday momentum in the ruble market is induced by risk aversion to overnight holdings among liquidity providers. In addition, our results complement earlier findings th"
+   },
+   {
+    "ifade": "RUB",
+    "sayfa": 1,
+    "pasaj": "rn, in a foreign exchange market with explicit trading hours. Using transaction-level data from the Moscow Interbank Currency Exchange on the RUB-USD currency pair for the 2005-2014 period, our results suggest that intraday momentum in the ruble market is induced by risk aversion to overnight holdings among liquidity providers. In addition, our results complement earlier findings that suggest that market concentration due to trading hours matters for intraday momentum and that t"
+   },
+   {
+    "ifade": "first half-hour",
+    "sayfa": 1,
+    "pasaj": "nt) Organization Department of Financial economics (ceased) Project The Russian Currency Market: Microstructure, News and Abstract We examine the likely drivers of intraday momentum, defined as a significantly positive relation between the first half-hour and the last half-hour return, in a foreign exchange market with explicit trading hours. Using transaction-level data from the Moscow Interbank Currency Exchange on the RUB-USD currency pair for the 2005-2014 period, our results suggest th"
+   },
+   {
+    "ifade": "first half-hour",
+    "sayfa": 1,
+    "pasaj": "informed trading from liquidity provision,\" JOURNAL OF FINANCIAL MARKETS, vol. 37, pp. 35-51, 2018. @article{8060014, abstract = {{We examine the likely drivers of intraday momentum, defined as a significantly positive relation between the first half-hour and the last half-hour return, in a foreign exchange market with explicit trading hours. Using transaction-level data from the Moscow Interbank Currency Exchange on the RUB-USD currency pair for the 2005-2014 period, our results suggest th"
+   },
+   {
+    "ifade": "last half-hour",
+    "sayfa": 1,
+    "pasaj": "ent of Financial economics (ceased) Project The Russian Currency Market: Microstructure, News and Abstract We examine the likely drivers of intraday momentum, defined as a significantly positive relation between the first half-hour and the last half-hour return, in a foreign exchange market with explicit trading hours. Using transaction-level data from the Moscow Interbank Currency Exchange on the RUB-USD currency pair for the 2005-2014 period, our results suggest that intraday momentum in"
+   },
+   {
+    "ifade": "last half-hour",
+    "sayfa": 1,
+    "pasaj": "quidity provision,\" JOURNAL OF FINANCIAL MARKETS, vol. 37, pp. 35-51, 2018. @article{8060014, abstract = {{We examine the likely drivers of intraday momentum, defined as a significantly positive relation between the first half-hour and the last half-hour return, in a foreign exchange market with explicit trading hours. Using transaction-level data from the Moscow Interbank Currency Exchange on the RUB-USD currency pair for the 2005-2014 period, our results suggest that intraday momentum in"
+   },
+   {
+    "ifade": "informed trading",
+    "sayfa": 1,
+    "pasaj": "rchers. Search publications and datasets Advanced search 1 file | 443.83 KB Download Download \"(...).pdf\" See all downloads Add to list Search results Intraday momentum in FX markets : dis... Intraday momentum in FX markets : disentangling informed trading from liquidity provision Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) (2018) JOURNAL OF FINANCIAL MARKETS. 37. p.35-51 Author Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) Organization D"
+   },
+   {
+    "ifade": "informed trading",
+    "sayfa": 1,
+    "pasaj": "s. In addition, our results complement earlier findings that suggest that market concentration due to trading hours matters for intraday momentum and that the effect is more pronounced during financial crises. Keywords Liquidity, Intraday, Informed trading, Momentum Downloads Download (...).pdf full text (Published version) | UGent only | PDF | 443.83 KB Citation Cite this BibTeX Metrics Please use this url to cite or link to this publication: http://hdl.handle.net/1854/LU-8060014 MLA Elaut,"
+   },
+   {
+    "ifade": "liquidity provision",
+    "sayfa": 1,
+    "pasaj": "tions and datasets Advanced search 1 file | 443.83 KB Download Download \"(...).pdf\" See all downloads Add to list Search results Intraday momentum in FX markets : dis... Intraday momentum in FX markets : disentangling informed trading from liquidity provision Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) (2018) JOURNAL OF FINANCIAL MARKETS. 37. p.35-51 Author Gert Elaut (UGent) , Kevin Lampaert (UGent) and Michael Frömmel (UGent) Organization Department of Financial ec"
+   },
+   {
+    "ifade": "liquidity provision",
+    "sayfa": 1,
+    "pasaj": "PDF | 443.83 KB Citation Cite this BibTeX Metrics Please use this url to cite or link to this publication: http://hdl.handle.net/1854/LU-8060014 MLA Elaut, Gert, et al. \"Intraday Momentum in FX Markets : Disentangling Informed Trading from Liquidity Provision.\" JOURNAL OF FINANCIAL MARKETS, edited by Tarun Chordia, vol. 37, 2018, pp. 35-51, doi:10.1016/j.finmar.2016.09.002. APA Elaut, G., Lampaert, K., & Frömmel, M. (2018). Intraday momentum in FX markets : disentangling informed trading from l"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://doi.org/10.1016/j.finmar.2016.09.002",
+    "durum": "metin okunamadı",
+    "tur": "text/html;charset=UTF-8"
+   },
+   {
+    "url": "http://hdl.handle.net/1854/LU-8060014",
+    "durum": 200
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": false
+}

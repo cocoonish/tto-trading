@@ -2,7 +2,7 @@
  "id": "grossman_stiglitz1980",
  "aday_baslik": "On the Impossibility of Informationally Efficient Markets",
  "aday_yil": 1980,
- "zaman": "2026-10-17T23:26:48+00:00",
+ "zaman": "2026-10-17T23:34:59+00:00",
  "crossref_deneme": [
   {
    "doi": "10.2307/1805228",
@@ -20,6 +20,64 @@
    "bulunan": [
     [
      "Radio Spectrum Allocation: Role of the Market",
+     null
+    ]
+   ]
+  },
+  {
+   "koordinat": [
+    "0002-8282",
+    "70",
+    "",
+    "3"
+   ],
+   "bulunan": [
+    [
+     "The Interpretation of Dummy Variables in Semilogarithmic Equations",
+     null
+    ],
+    [
+     "The Terms of Trade and Equilibrium Growth in the World Economy",
+     null
+    ],
+    [
+     "Global Properties of Flexible Functional Forms",
+     null
+    ],
+    [
+     "Multinational Firms and the Theory of International Trade and Investment",
+     null
+    ],
+    [
+     "Production, Information Costs, and Economic Organization: The Buyer Monitoring Case",
+     null
+    ],
+    [
+     "The Marginal Utility of Income Does Not Increase: Borrowing, Lending, and Friedman-Savage Gambles",
+     null
+    ],
+    [
+     "The Optimal Order for Submitting Manuscripts",
+     null
+    ],
+    [
+     "Optimal Public Investment and Dispersion Policy in a System of Open Cities",
+     null
+    ],
+    [
+     "Further International Evidence of Output-Inflation Tradeoffs",
+     null
+    ],
+    [
+     "On the Effect of Rate of Return Regulation under Uncertainty",
+     null
+    ],
+    [
+     "Paglin's Gini Measure of Inequality: A Modification",
+     null
+    ],
+    [
+     "A Structural Model of Murder Behavior and the Criminal Justice System",
      null
     ]
    ]

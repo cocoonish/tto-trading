@@ -2,20 +2,12 @@
  "id": "melvin_prins2015",
  "aday_baslik": "Equity hedging and exchange rates at the London 4 p.m. fix",
  "aday_yil": 2015,
- "zaman": "2026-10-17T23:27:03+00:00",
- "koordinat_deneme": [
+ "zaman": "2026-10-17T23:35:11+00:00",
+ "crossref_deneme": [
   {
-   "koordinat": [
-    "1386-4181",
-    "22",
-    "50"
-   ],
-   "bulunan": [
-    [
-     "Equity hedging and exchange rates at the London 4p.m. fix",
-     "10.1016/j.finmar.2014.11.001"
-    ]
-   ]
+   "doi": "10.1016/j.finmar.2014.11.001",
+   "durum": 200,
+   "baslik": "Equity hedging and exchange rates at the London 4p.m. fix"
   }
  ],
  "crossref": {

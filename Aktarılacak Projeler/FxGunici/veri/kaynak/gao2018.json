@@ -1,0 +1,117 @@
+{
+ "id": "gao2018",
+ "aday_baslik": "Market intraday momentum",
+ "aday_yil": 2018,
+ "zaman": "2026-10-17T23:36:26+00:00",
+ "crossref_deneme": [
+  {
+   "doi": "10.1016/j.jfineco.2018.05.009",
+   "durum": 200,
+   "baslik": "Market intraday momentum"
+  }
+ ],
+ "crossref": {
+  "durum": 200,
+  "doi": "10.1016/j.jfineco.2018.05.009",
+  "baslik": "Market intraday momentum",
+  "alt_baslik": "",
+  "yazarlar": [
+   {
+    "soyad": "Gao",
+    "ad": "Lei",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Han",
+    "ad": "Yufeng",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Zhengzi Li",
+    "ad": "Sophia",
+    "ad_tam": null
+   },
+   {
+    "soyad": "Zhou",
+    "ad": "Guofu",
+    "ad_tam": null
+   }
+  ],
+  "dergi": "Journal of Financial Economics",
+  "cilt": "129",
+  "sayi": "2",
+  "sayfa": "394-414",
+  "yil": 2018,
+  "tur": "journal-article",
+  "yayinci": "Elsevier BV",
+  "ozet": null,
+  "url": "https://doi.org/10.1016/j.jfineco.2018.05.009",
+  "bag": [
+   "https://api.elsevier.com/content/article/PII:S0304405X18301351?httpAccept=text/xml",
+   "https://api.elsevier.com/content/article/PII:S0304405X18301351?httpAccept=text/plain"
+  ]
+ },
+ "openalex": {
+  "durum": 200,
+  "id": "https://openalex.org/W3123013550",
+  "doi": "10.1016/j.jfineco.2018.05.009",
+  "baslik": "Market intraday momentum",
+  "yil": 2018,
+  "yazarlar": [
+   "Lei Gao",
+   "Yufeng Han",
+   "Sophia Zhengzi Li",
+   "Guofu Zhou"
+  ],
+  "dergi": "Journal of Financial Economics",
+  "issn": [
+   "0304-405X",
+   "1879-2774"
+  ],
+  "cilt": "129",
+  "sayi": "2",
+  "ilk_sayfa": "394",
+  "son_sayfa": "414",
+  "ozet": null,
+  "acik": "https://doi.org/10.2139/ssrn.2440866",
+  "adresler": [
+   "https://doi.org/10.2139/ssrn.2440866",
+   "https://doi.org/10.1016/j.jfineco.2018.05.009",
+   "http://www.sciencedirect.com/science/article/pii/S0304405X18301351"
+  ]
+ },
+ "semantic": {
+  "durum": 200,
+  "baslik": "Market intraday momentum",
+  "yil": 2018,
+  "dergi": "Journal of Financial Economics",
+  "ozet": "Based on high frequency data of the S&P 500 ETF from 1993-2013, we document an intraday momentum pattern: the first half-hour return on the market predicts the last half-hour return. The predictability, both statistically and economically significant, is stronger on more volatile days, on higher volume days, on recession days, and on major macroeconomic news release days. This intraday momentum is also strong for ten other most actively traded domestic and international ETFs, and two major international equity index futures. Theoretically, the intraday momentum is consistent with the trading behavior of informed traders.",
+  "acik": "https://doi.org/10.2139/ssrn.2440866",
+  "yazarlar": [
+   "Lei Gao",
+   "Yu-Feng Han",
+   "Sophia Zhengzi Li",
+   "Guo-Fu Zhou"
+  ]
+ },
+ "metin": {
+  "durum": "okunamadı",
+  "deneme": [
+   {
+    "url": "https://doi.org/10.2139/ssrn.2440866",
+    "durum": "HTTP 403"
+   },
+   {
+    "url": "https://doi.org/10.1016/j.jfineco.2018.05.009",
+    "durum": "metin okunamadı",
+    "tur": "text/html;charset=UTF-8"
+   },
+   {
+    "url": "http://www.sciencedirect.com/science/article/pii/S0304405X18301351",
+    "durum": "HTTP 403"
+   }
+  ]
+ },
+ "kunye_cozuldu": true,
+ "ozet_var": true
+}

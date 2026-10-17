@@ -2,7 +2,7 @@
  "id": "cchv2014",
  "aday_baslik": "Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market",
  "aday_yil": 2014,
- "zaman": "2026-10-17T23:26:58+00:00",
+ "zaman": "2026-10-17T23:35:06+00:00",
  "crossref_deneme": [
   {
    "doi": "10.1111/jofi.12186",
@@ -134,7 +134,11 @@
    "computer-generated trading activity",
    "computers taking liquidity",
    "the algorithmic provision of liquidity",
-   "strategies of algorithmic traders being highly correlated"
+   "strategies of algorithmic traders being highly correlated",
+   "Neely and Weller",
+   "Neely",
+   "transaction costs",
+   "technical trading"
   ],
   "deneme": [
    {

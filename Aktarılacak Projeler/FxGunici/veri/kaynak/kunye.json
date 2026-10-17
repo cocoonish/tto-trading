@@ -8,60 +8,43 @@
    "pasaj": 0
   },
   "bailey_ldp2014": {
-   "eksik": 1,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 7
+   "durum": "var"
   },
   "bbldpz2014": {
    "eksik": 7,
    "kunye": true,
    "metin": 200,
    "ozet": true,
-   "pasaj": 0
+   "pasaj": 17
   },
   "bgir1992": {
-   "eksik": 1,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 8
+   "durum": "var"
   },
   "bh1995": {
-   "eksik": 1,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 7
+   "durum": "var"
   },
   "bllo2014": {
-   "eksik": 0,
-   "kunye": true,
-   "metin": 200,
-   "ozet": false,
-   "pasaj": 11
+   "durum": "var"
   },
   "cchv2014": {
-   "eksik": 7,
+   "eksik": 11,
    "kunye": true,
    "metin": 200,
    "ozet": true,
    "pasaj": 4
   },
   "cdg2019": {
-   "eksik": 3,
+   "durum": "var"
+  },
+  "efl2018": {
+   "eksik": 0,
    "kunye": true,
    "metin": 200,
-   "ozet": true,
-   "pasaj": 6
+   "ozet": false,
+   "pasaj": 12
   },
   "efron2011": {
-   "eksik": 1,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 7
+   "durum": "var"
   },
   "esma2018": {
    "eksik": 1,
@@ -71,11 +54,11 @@
    "pasaj": 6
   },
   "evans2018": {
-   "eksik": 7,
+   "eksik": 8,
    "kunye": true,
    "metin": 200,
    "ozet": false,
-   "pasaj": 27
+   "pasaj": 47
   },
   "evans_lyons2002": {
    "eksik": 0,
@@ -91,12 +74,15 @@
    "ozet": false,
    "pasaj": 29
   },
-  "glosten_milgrom1985": {
+  "gao2018": {
    "eksik": 0,
    "kunye": true,
-   "metin": 200,
-   "ozet": false,
-   "pasaj": 7
+   "metin": "okunamadı",
+   "ozet": true,
+   "pasaj": 0
+  },
+  "glosten_milgrom1985": {
+   "durum": "var"
   },
   "grossman_stiglitz1980": {
    "eksik": 0,
@@ -106,25 +92,13 @@
    "pasaj": 0
   },
   "hlz2016": {
-   "eksik": 1,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 9
+   "durum": "var"
   },
   "holm1979": {
-   "eksik": 0,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 9
+   "durum": "var"
   },
   "ioannidis2008": {
-   "eksik": 0,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 8
+   "durum": "var"
   },
   "ito_yamada2017": {
    "eksik": 0,
@@ -134,18 +108,18 @@
    "pasaj": 0
   },
   "kaminski_lo2014": {
-   "eksik": 5,
+   "eksik": 7,
    "kunye": true,
    "metin": 200,
    "ozet": false,
-   "pasaj": 4
+   "pasaj": 15
   },
   "kmw2024": {
    "eksik": 7,
    "kunye": true,
    "metin": 200,
    "ozet": true,
-   "pasaj": 24
+   "pasaj": 33
   },
   "linnainmaa2010": {
    "eksik": 0,
@@ -176,11 +150,7 @@
    "pasaj": 0
   },
   "mrw2013": {
-   "eksik": 5,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 7
+   "durum": "var"
   },
   "neely_weller2003": {
    "eksik": 0,
@@ -190,18 +160,10 @@
    "pasaj": 0
   },
   "nosek2018": {
-   "eksik": 0,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 9
+   "durum": "var"
   },
   "nwu2009": {
-   "eksik": 1,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 8
+   "durum": "var"
   },
   "obrien_fleming1979": {
    "eksik": 0,
@@ -211,11 +173,7 @@
    "pasaj": 0
   },
   "oomen2017": {
-   "eksik": 6,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 10
+   "durum": "var"
   },
   "osler2003": {
    "eksik": 0,
@@ -225,26 +183,14 @@
    "pasaj": 0
   },
   "stw1999": {
-   "eksik": 0,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 8
+   "durum": "var"
   },
   "wald1945": {
-   "eksik": 3,
-   "kunye": true,
-   "metin": 200,
-   "ozet": false,
-   "pasaj": 2
+   "durum": "var"
   },
   "white2000": {
-   "eksik": 0,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 15
+   "durum": "var"
   }
  },
- "zaman": "2026-10-17T23:22:28+00:00"
+ "zaman": "2026-10-17T23:34:27+00:00"
 }

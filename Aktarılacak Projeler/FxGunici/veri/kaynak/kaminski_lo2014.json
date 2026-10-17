@@ -2,7 +2,7 @@
  "id": "kaminski_lo2014",
  "aday_baslik": "When do stop-loss rules stop losses?",
  "aday_yil": 2014,
- "zaman": "2026-10-17T23:26:09+00:00",
+ "zaman": "2026-10-17T23:34:33+00:00",
  "crossref_deneme": [
   {
    "doi": "10.1016/j.finmar.2013.07.001",
@@ -107,6 +107,61 @@
     "ifade": "certain stop-loss policies can increase expected return",
     "sayfa": 1,
     "pasaj": " and volatilit y of an arbitrary portfolio strategy. Using daily futures price data, we provide an empirica l analysis of stop-loss policies applied to a buy-and-hold strategy using index futures cont racts. At longer sampling frequencies, certain stop-loss policies can increase expected return while substantially reducing volatility, consistent with their objectives in practical app lications. Keywords: Investments; Portfolio Management; Risk Management; Asset Allo cation; Performance Attribution; Behavioral Finance JEL Classifi"
+   },
+   {
+    "ifade": "stopping premium",
+    "sayfa": 3,
+    "pasaj": "e that the stop-loss rule does, indeed, stop losses. Using simple properties of conditional expectations, we are able to c haracterize the marginal impact of stop-loss rules on any given portfolio's expected return, which we define as the \"stopping premium.\" We show that the stopping premium is inext ricably linked to the stochastic process driving the underlying portfolio's return. I f the portfolio follows a random walk (i.e., independently and identically distributed returns) t he stoppin"
+   },
+   {
+    "ifade": "stopping premium",
+    "sayfa": 3,
+    "pasaj": "ed, stop losses. Using simple properties of conditional expectations, we are able to c haracterize the marginal impact of stop-loss rules on any given portfolio's expected return, which we define as the \"stopping premium.\" We show that the stopping premium is inext ricably linked to the stochastic process driving the underlying portfolio's return. I f the portfolio follows a random walk (i.e., independently and identically distributed returns) t he stopping premium is always negative. This m"
+   },
+   {
+    "ifade": "always negative",
+    "sayfa": 3,
+    "pasaj": "at the stopping premium is inext ricably linked to the stochastic process driving the underlying portfolio's return. I f the portfolio follows a random walk (i.e., independently and identically distributed returns) t he stopping premium is always negative. This may explain why the academic and industry liter ature has looked askance at stop-loss policies to date. If returns are unforecast able, stop-loss rules simply force the portfolio out of higher-yielding assets on occasion, ther eby lo"
+   },
+   {
+    "ifade": "lower expected return",
+    "sayfa": 24,
+    "pasaj": "ur stop-loss p olicy never adds value under the Random Walk Hypothesis. Therefore, the only source of potential value-added for the stop-loss policy under a regime-switching process is if the eq uity investment in the low-mean regime has a lower expected return than the risk-free ra te (i.e., μ2 < rf ). In this case, the right side of (25) is positive and less than 1, implying that su fficiently accurate stop-loss policies will yield positive stopping premia. Note that the threshold for positive "
+   },
+   {
+    "ifade": "random walk",
+    "sayfa": 3,
+    "pasaj": "on any given portfolio's expected return, which we define as the \"stopping premium.\" We show that the stopping premium is inext ricably linked to the stochastic process driving the underlying portfolio's return. I f the portfolio follows a random walk (i.e., independently and identically distributed returns) t he stopping premium is always negative. This may explain why the academic and industry liter ature has looked askance at stop-loss policies to date. If returns are unforecast able"
+   },
+   {
+    "ifade": "random walk",
+    "sayfa": 5,
+    "pasaj": " the volatility by 5% causing an increase in the Sharp e Ratio by as much as 20%. These results suggest that stop-loss rules may exploit con ditional momentum effects following periods of losses in equities. These results suggest that th e random walk model is a particularly poor approximation to U.S. stock returns and may impro perly value the use of non-linear policies such as stop-loss rules. This is consistent with Lo a nd MacKinlay (1999) and others using various methods to examine"
+   },
+   {
+    "ifade": "momentum",
+    "sayfa": 4,
+    "pasaj": "However, for non-random-walk portfolios, we find that stop-loss rules can stop losses. For example, if portfolio returns are characterized by \"momentum\" or positive serial correlation, we show that the stopping premium can be positive and is directly prop ortional to the magnitude of return persistence. Not surprisingly, if conditioning o n past cumulative returns changes the conditional "
+   },
+   {
+    "ifade": "momentum",
+    "sayfa": 4,
+    "pasaj": "istribution of a portfolio's return, it shou ld be possible to find a stop-loss policy that yields a positive stopping premium. We provide sp ecific guidelines for finding such policies under several return specifications: mean rev ersion, momentum, and Markov regime-switching processes. In each case, we are able to d erive explicit conditions for stop-loss rules to stop losses. Of course, focusing on expected returns does not account for r isk in any way. It may be the case that a s"
+   },
+   {
+    "ifade": "can add value",
+    "sayfa": 17,
+    "pasaj": "-loss probability po is large enough and the risk premium is small enough, (13) shows that the stop-loss policy can also reduce the volatility of the portfolio. The fact that there are no conditions under which the simple stop-lo ss policy can add value to a portfolio with IID returns may explain why stop-loss rules h ave been given so little attention in the academic finance literature. The fact that the Ran dom Walk Hypothesis was widely accepted in the 1960s and 1970s, and considered t"
+   },
+   {
+    "ifade": "never",
+    "sayfa": 3,
+    "pasaj": "icies to date. If returns are unforecast able, stop-loss rules simply force the portfolio out of higher-yielding assets on occasion, ther eby lowering the overall expected return without adding any benefits. In such cases, sto p-loss rules never stop losses. 3"
+   },
+   {
+    "ifade": "never",
+    "sayfa": 12,
+    "pasaj": "c strategies and static measures of risk such as standard deviation are not sufficient statistics for the intertemporal risk/reward trade-offs that characterize a dynamic rational expectations equilibrium (e.g., Merton, 1973; Lucas, 1978). Nevertheless, it is st ill useful to gauge the impact of a stop-loss policy on volatility of a portfolio strategy P , as only one of possibly many risk characteristics of the combined strategy. To that end, we have: 12"
    }
   ],
   "eksik": [
@@ -114,7 +169,9 @@
    "always decrease the strategy's expected return",
    "stop-loss rules can add value",
    "stop-loss rules never stop losses",
-   "buy-and-hold strategy using index futures contracts"
+   "buy-and-hold strategy using index futures contracts",
+   "reduces the expected return",
+   "decreases the expected return"
   ],
   "deneme": [
    {
