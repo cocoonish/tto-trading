@@ -90,7 +90,7 @@ def al(url: str, sn: int = 45, json_: bool = False, deneme=(0, 4, 12)):
         except requests.RequestException as e:
             son = type(e).__name__
             continue
-        if r.status_code == 200:
+        if r.status_code in (200, 203):          # 203: vekil ya da önbellek üzerinden gelen tam yanıt
             out = {"durum": 200, "url": url, "son_url": r.url, "tur": r.headers.get("content-type", ""), "govde": govde}
             if json_:
                 try:

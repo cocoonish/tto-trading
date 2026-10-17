@@ -483,7 +483,9 @@
      "3"
     ]
    ],
-   "url": [],
+   "url": [
+    "https://ideas.repec.org/a/aea/aecrev/v70y1980i3p393-408.html"
+   ],
    "ifade": [
     "because information is costly",
     "prices cannot perfectly reflect the information",
@@ -492,7 +494,11 @@
     "do receive compensation",
     "a fundamental conflict between the efficiency",
     "those who expend resources to obtain information",
-    "equilibrium degree of disequilibrium"
+    "equilibrium degree of disequilibrium",
+    "costly",
+    "information",
+    "compensation",
+    "efficient"
    ]
   },
   {
@@ -527,7 +533,9 @@
      "223"
     ]
    ],
-   "url": [],
+   "url": [
+    "https://ideas.repec.org/a/eee/jimfin/v22y2003i2p223-237.html"
+   ],
    "ifade": [
     "realistic transaction costs and trading hours",
     "no evidence of excess returns",
@@ -535,7 +543,12 @@
     "an optimized linear forecasting model",
     "derived with either methodology",
     "consistent with market efficiency",
-    "remarkably stable patterns in the data"
+    "remarkably stable patterns in the data",
+    "intraday",
+    "transaction costs",
+    "genetic program",
+    "excess returns",
+    "trading hours"
    ]
   },
   {
@@ -653,7 +666,9 @@
      "50"
     ]
    ],
-   "url": [],
+   "url": [
+    "https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html"
+   ],
    "ifade": [
     "London 4 p.m. fix",
     "Equity hedging and exchange rates",
@@ -678,7 +693,10 @@
     "predict",
     "equity returns",
     "hedge ratio",
-    "portfolio rebalancing"
+    "portfolio rebalancing",
+    "equity",
+    "month",
+    "fix"
    ]
   },
   {
@@ -793,7 +811,10 @@
      ""
     ]
    ],
-   "url": [],
+   "url": [
+    "https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html",
+    "http://www.price.e.u-tokyo.ac.jp/img/researchdata/pdf/p_wp087.pdf"
+   ],
    "ifade": [
     "Puzzles in the Tokyo fixing",
     "the Tokyo fixing",
@@ -820,7 +841,9 @@
     "gotobi",
     "calendar",
     "10:00",
-    "fixing time"
+    "fixing time",
+    "predictable",
+    "10am"
    ]
   },
   {
