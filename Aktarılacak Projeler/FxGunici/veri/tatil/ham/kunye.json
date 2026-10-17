@@ -1,0 +1,52 @@
+{
+ "kaynak": {
+  "fed_k8": {
+   "bayt": 84310,
+   "dosya": "www_federalreserve_gov_aboutthefed_k8_htm.html",
+   "durum": 200,
+   "sha256": "a8440acbb786b0c8be7fb2fddd66cf2a5284619425fea841bf480221d417ff23",
+   "tur": "text/html",
+   "url": "https://www.federalreserve.gov/aboutthefed/k8.htm"
+  },
+  "gov_uk": {
+   "bayt": 22207,
+   "dosya": "www_gov_uk_bank_holidays_json.json",
+   "durum": 200,
+   "sha256": "538b3482c28b85ecd2db606a0d5ae6ad17248900b6498700ce0a48d26a3ecde6",
+   "tur": "application/json; charset=utf-8",
+   "url": "https://www.gov.uk/bank-holidays.json"
+  },
+  "opm": {
+   "bayt": 151930,
+   "dosya": "www_opm_gov_policy_data_oversight_pay_leave_federal_holidays.html",
+   "durum": 200,
+   "sha256": "3797368151ea3b4264f54287097a2120ea9391715fd2b6e6ab7266e4c6bf2e92",
+   "tatil_baglari": [
+    "/policy-data-oversight/pay-leave/federal-holidays/",
+    "/policy-data-oversight/pay-leave/federal-holidays/holidays.ics",
+    "/policy-data-oversight/pay-leave/pay-administration/fact-sheets/holidays-work-schedules-and-pay/",
+    "/policy-data-oversight/pay-leave/work-schedules/fact-sheets/Federal-Holidays-In-Lieu-Of-Determination"
+   ],
+   "tur": "text/html; charset=utf-8",
+   "url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+   "yil_gecen": {
+    "2018": true,
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true,
+    "2026": true
+   }
+  }
+ },
+ "kutuphane": {
+  "abd": 107,
+  "durum": null,
+  "ingiltere": 82,
+  "surum": "0.106"
+ },
+ "zaman": "2026-10-17T10:49:14+00:00"
+}
