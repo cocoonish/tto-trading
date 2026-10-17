@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'haber', 'nfp', 'fomc', 'ecb', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · BLS yayım takvimi ve bültenleri (Internet Archive kopyaları) · Fed, ECB, BoE karar arşivleri · önceden kayıt'
-ozet: "Bir veri ya da merkez bankası kararı anında fiyatın ilk hareketi sürer mi, geri mi döner? Olay olay, ilk hareketin büyüklüğüne ve haber öncesi trende göre ölçülmüş bir devam tablosu, FOMC'de kararın basın toplantısında ne sıklıkla tersine döndüğü ve beş mekanik haber stratejisinin maliyetten sonraki sonucu."
+ozet: "Bir veri ya da merkez bankası kararı anında fiyatın ilk hareketi sürer mi, geri mi döner? Olay olay, ilk hareketin büyüklüğüne ve haber öncesi trende göre ölçülmüş bir devam tablosu, FOMC'de kararın basın toplantısında ne sıklıkla tersine döndüğü ve beş mekanik haber stratejisi. Beşinin hiçbiri hiçbir paritede önceden kayıtlı hüküm kuralının şartlarını sağlamıyor: maliyetten sonra kanıtlanmış bir kenar yok.{{! kural_iddia calisan_yok n1 n2 n3 n4 n5 }}"
 seviye: 'ileri'
 onkosul:
   - fx-gunici-giris
@@ -15,7 +15,7 @@ onkosul:
 
 Haber anı, gün içi FX'in en yoğun ve en pahalı dakikalarıdır. Fiyat bir dakikada günlük aralığının büyük bir kısmını
 yürüyebilir; makas açılır, kayma büyür, ilk tepki bazen dakikalar içinde geri alınır. Masalarda iki karşıt sezgi
-vardır: "ilk hareket sürer, yönü takip et" ve "ilk hareket aşırıdır, sol". Bu ders iki sezgiyi aynı olaylarda, aynı
+vardır: "ilk hareket sürer, yönü takip et" ve "ilk hareket aşırıdır, tersine işlem yap". Bu ders iki sezgiyi aynı olaylarda, aynı
 maliyetle, ön kaydın kuralıyla sınar.
 
 Ders üç parçadır. Önce **takvim ve maliyet**: olayların saati nereden geldi, nasıl denetlendi ve haber dakikasında
@@ -37,13 +37,27 @@ metodoloji dersinde.
 
 _Saatler yerel saattir; TSİ karşılıkları giriş dersinin tablosunda. Saatin kaynağı: tarih tarih (resmî metnin
 kendi saat satırından) ya da kuraldan (kurumun yayımladığı saat kuralından). Fiyat sınaması: resmî saatte 1 dakikalık fiyatta
-olağandışı bir sıçrama var mı (doğrulandı), yoksa bir saat ya da yarım saat önce/sonra mı daha iyi oturuyor (çelişki),
-yoksa piyasa hiç kımıldamadı mı (sessiz). Sınama yalnız raporlar: hiçbir olay fiyat yüzünden dışarıda bırakılmadı.
-Ayrıntısı ve takvimin bilinen boşlukları metodoloji dersinde._
+olağandışı bir sıçrama var mı (doğrulandı), yoksa yarım saat ya da bir saat önce/sonra mı daha iyi oturuyor
+(çelişki), yoksa ne resmî saatte ne o dört aday saatte bir sıçrama var mı (sessiz). Sessiz, piyasanın günün başka bir
+saatinde kımıldamadığı anlamına gelmez; altı saatlik ayrı bir tarama resmî saatten açıkça büyük uzak hareketleri
+raporlar. Sınama yalnız raporlar: hiçbir olay fiyat yüzünden dışarıda bırakılmadı. Ayrıntısı ve takvimin bilinen
+boşlukları metodoloji dersinde._
 
 Fiyat sınamasının bir olayı dışarıda bırakmaması bilinçlidir. Resmî belge birincil kaynaktır; beklenen bir karar
 fiyatı oynatmayabilir, ve tepkisiz ya da çelişkili görünen olayları atmak, bir haber stratejisinin örneklemini
-sonuca bakarak seçmek olurdu. Saati yanlış bir olay sonuçları sulandırır, şişirmez.
+sonuca bakarak seçmek olurdu. Saati yanlış bir olayın etkisinin yönü ise önceden bilinemez: ilgisiz bir saatteki
+hareketi olay sayar ya da olayın kendi hareketini kaçırır, sonucu iki yöne de kaydırabilir. Saat bu yüzden fiyattan
+düzeltilmez, resmî bir metinle düzeltilir.
+
+**ECB basın toplantısının iki saati.** ECB basın toplantısı {{ O.takvim.sayim.ECB_basin.saat_aralik."14:45 Europe/Berlin"[0] | tarih_uzun }}'den bu yana 14:45'te, öncesinde 14:30'da
+başlıyordu ve iki saat iki ayrı piyasa dakikasıdır. {{! saat_rejimi_cumle ECB_basin }}
+
+{{! saat_rejimi ECB_basin }}
+
+Okuma: 14:30 rejiminde basın toplantısının ilk mumu, kendi haberinden çok ABD verisinin tepkisini taşır. Bu
+dersin devam tablosundaki ve beş stratejideki "ECB basın toplantısı" satırları iki rejimin birleşimidir; aynı
+dakikadaki iki takvim olayı devam tablosunda iki ayrı olay satırında durur (ABD TÜFE'si dört paritenin ortalamasıyla,
+basın toplantısı EUR/USD ile), haber stratejilerinde ise o dakika parite başına tek pozisyondur.
 
 ## Haber dakikasının maliyeti
 
@@ -52,8 +66,10 @@ Açıklama anında likidite incelir. Makasın olay saatine göre seyri (EUR/USD,
 {{! haber_makas }}
 
 _Dakika: olay saatine göre 1 dakikalık mumun başlangıcı; değer o mumun kapanışındaki makastır. −1 açıklamadan önceki
-son kotasyon, 0 açıklamadan bir dakika sonrasıdır. Olaysız gün: aynı UTC dakikası, takvimde hiçbir olay olmayan hafta
-içi günlerin medyanı. Zirve: makasın en geniş olduğu dakika ve olaysız güne göre katı._
+son kotasyon, 0 açıklamadan bir dakika sonrasıdır. Olaysız gün: olayın kendi bölgesinin saatinde aynı yerel dakika,
+takvimdeki olayların hiçbirinin olmadığı hafta içi günlerin medyanı (takvim dışı başka verilerin çıktığı günler bu
+kümenin içindedir; yaz ve kış günleri aynı yerel saatte kıyaslanır). Zirve: makasın en geniş olduğu dakika ve olaysız
+güne göre katı._
 
 Dört paritede her olayın zirvesi (pip, parantezde olaysız güne göre katı):
 
@@ -116,9 +132,11 @@ Bu tablo hüküm için değil, bir hücrenin tek başına göze çarpan sayısı
 
 </details>
 
-_Kırılım ve fade: hücredeki olayların net ortalaması, günlük ATR'nin yüzdesi. Hüküm ön kaydın kuralıyla: en az
-{{ O.haber.devam.kural.asgari_olay | n }} olay ve Benjamini–Hochberg q < {{ O.haber.devam.kural.fdr_q | s2 }} ise
-"kırılım kazanır" ya da "fade kazanır"; değilse "ayrışmıyor"._
+_Kırılım ve fade: hücredeki olayların net ortalaması, günlük ATR'nin yüzdesi; "{{ K.dis_baslangic | yil }} →" sütunları
+aynı hücrenin örneklem dışındaki olayları (ön kayıt onları ayrıca yazdırır, hüküm bütün dönemden verilir). Hüküm ön
+kaydın kuralıyla: en az {{ O.haber.devam.kural.asgari_olay | n }} olay ve Benjamini–Hochberg q < {{ O.haber.devam.kural.fdr_q | s2 }}
+ise "kırılım kazanır" ya da "fade kazanır"; değilse "ayrışmıyor". "Yetersiz örneklem": hücrede {{ O.haber.devam.kural.asgari_olay | n }} olaydan az var;
+ön kaydın kuralına göre bu da "ayrışmıyor"dur, ayrı etiket yalnız sebebi gösterir._
 
 Tabloyu okurken iki şey akılda tutulmalı. Birincisi maliyet: iki yön birlikte negatif olabilir (ikisi de makas ve
 kayma öder), yani "fade kazanır" hükmü yokken fade'in kırılımdan iyi görünmesi bir kenar değildir. İkincisi çoklu

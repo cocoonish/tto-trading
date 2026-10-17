@@ -4,7 +4,8 @@
 # urllib3 (arşiv indiricileri); öbürleri onların bağımlılığıdır. requests ve yalnız onun istediği certifi,
 # charset-normalizer, idna ortamda kurulu ama hiçbir betik içe aktarmaz (liste ortamın pip freeze'idir). Kapı
 # (dogrula.py) ve ders motoru yalnız standart kütüphaneyle koşar. Arşivin bulut koşusu bu dosyayı kurmaz; arşiv
-# baytlarını belirleyen pyarrow'u sürümüyle ister (arsiv_dukascopy.py başlığı) ve sürüm künyeye yazılır.
+# baytlarını belirleyen pyarrow'u sürümüyle ister (arsiv_dukascopy.py başlığı), sürüm künyeye yazılır ve kurulu
+# sürüm aşağıdaki sabitlemeyle aynı değilse arşiv betiği yazmadan düşer (arsiv_dukascopy.pyarrow_sart).
 certifi==2026.7.22
 charset-normalizer==3.5.2
 idna==3.20

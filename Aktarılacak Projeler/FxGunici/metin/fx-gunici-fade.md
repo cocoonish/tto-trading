@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'fade', 'turtle-soup', 'vwap', 'fiksing', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Kırılım kurallarının aynası: fiyat bir seviyenin dışına taşıp geri döndüğünde, ortalamadan uzaklaştığında ya da fiksing akışı bittiğinde tersine girmek. Altı kuralın hangisinin geri dönüşü gerçekten yakaladığını, hangisinin yalnız stop'u yakın bir maliyet makinesi olduğunu ölçer."
+ozet: "Kırılım kurallarının aynası: fiyat bir seviyenin dışına taşıp geri döndüğünde, ortalamadan uzaklaştığında ya da fiksing akışı bittiğinde tersine girmek. Altı kural da dört paritenin dördünde maliyetten sonra kaybettiriyor; yakın stop maliyeti R cinsinden büyütüyor.{{! kural_iddia hepsi_eksi sahte_orb sahte_asya sahte_pdhl vwap_donus pivot_donus fiks_donus }}"
 seviye: 'orta'
 onkosul:
   - fx-gunici-giris
@@ -18,13 +18,11 @@ seviyeye zıt bahis yapar ve bu ders o seviyeleri bilerek yeniden kullanır: ba�
 yapı kırılımlarının Londra aralığına, Asya aralığına ve önceki günün uçlarına bakar; pivot dönüşü pivot kırılımının
 aynasıdır.
 
-Fade kurallarının ortak bir yapısal özelliği var: stop'ları çoğu zaman yakındır (gezintinin ucu, sinyal mumunun
+Fade kurallarının ortak bir yapısal özelliği var: stopları çoğu zaman yakındır (gezintinin ucu, sinyal mumunun
 ucu). Hedefleri ya sabit bir R katıdır (başarısız kırılımlarda 1R) ya da bir seviyedir (VWAP, pivot), ve seviye
-hedefleri risk biriminde kısa değildir: yakın stop'la ölçüldüğünde VWAP dönüşünde hedefin uzaklığı
-{{! hedef_uzaklik vwap_donus }}, pivot dönüşünde {{! hedef_uzaklik pivot_donus }}. EUR/USD'de örneklem dışında başarısız kırılımların ve pivot dönüşünün stop
-medyanı, aynı seviyenin kırılım kuralınınkinden küçük (dersin sonundaki ikinci tablo){{? O.birim.sahte_orb.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.orb.cift.EURUSD.varsayilan.oos.risk_pip and O.birim.sahte_asya.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.asya.cift.EURUSD.varsayilan.oos.risk_pip and O.birim.sahte_pdhl.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.pdhl.cift.EURUSD.varsayilan.oos.risk_pip and O.birim.pivot_donus.cift.EURUSD.varsayilan.oos.risk_pip < O.birim.pivot_kirilim.cift.EURUSD.varsayilan.oos.risk_pip }}. Yakın stop R'yi küçültür, maliyet ise R'den bağımsız olarak her işlemde aynı
-pip kadar ödenir: aynı makas, riski küçük bir işlemde R cinsinden daha pahalıdır. Bu yüzden fade kurallarında
-maliyet satırı kırılımlarınkinden daha belirleyicidir.
+hedefleri risk biriminde kısa değildir: yakın stopla ölçüldüğünde seviye işlemlerin dörtte üçünden fazlasında bir
+R'nin ötesindedir (ölçüsü VWAP dönüşü ve pivot dönüşü bölümlerinde).{{? O.birim.vwap_donus.hedef_uzaklik.c1 > 1 and O.birim.pivot_donus.hedef_uzaklik.c1 > 1 }} Yakın stop R'yi küçültür, maliyet ise R'den bağımsız olarak her
+işlemde aynı pip kadar ödenir: aynı makas, riski küçük bir işlemde R cinsinden daha pahalıdır. {{! fade_maliyet }}
 
 Son kural farklı bir yapıdadır: **fiksing dönüşü** bir seviyeye değil bir saate bakar — Londra 16:00'daki WM/R
 fiksingi, akışın en yoğun toplandığı an. Ön kayıt fiksing kurallarının ay sonunda ayrıca raporlanmasını istedi;

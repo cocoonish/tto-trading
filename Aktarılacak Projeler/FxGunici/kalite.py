@@ -209,7 +209,14 @@ def haber_makasi(f: pd.DataFrame, pip: float, olaylar: pd.DataFrame) -> dict:
     olduğu için kıyas aynı yerel saatten kurulur; aynı UTC dakikası yaz ve kış günlerinde iki ayrı yerel saate düşerdi.
     Kıyas günleri "olaysız" değildir: takvimde olmayan başka veriler (ör. 08:30 ET'deki öbür ABD verileri) o günlerde
     de çıkabilir. Oran = haber / kıyas. Dakikası arşivde olmayan gözlem atlanır (sayı yazılır). Ölçü makastır; kayma
-    ve derinlik ölçülmez."""
+    ve derinlik ölçülmez.
+
+    İkinci kıyas (`kiyas_gun_pip`): aynı yerel dakika ve olayla AYNI HAFTA GÜNÜ (her olay kendi gününün kıyasını alır).
+    Takvimde olmayan haftalık bir veri o günün o dakikasında her hafta çıkıyorsa (ABD haftalık işsizlik başvuruları,
+    perşembe 08:30 New York) ilk kıyas onu öbür günlerle sulandırır, ikincisi taşır.
+
+    Bir olay türünün birden çok yerel saati varsa (ECB basın toplantısı 14:30 → 21.07.2022'den bu yana 14:45; ECB
+    kararı 13:45 → 14:15) aynı ölçü saat saat de yazılır (`saat`): iki saat iki ayrı piyasa dakikasına düşebilir."""
     if olaylar is None or len(olaylar) == 0:
         return {}
     # Çözünürlükten bağımsız saniye (pandas 3 dizini saniye ya da nanosaniye çözünürlükte kurabilir).
@@ -219,22 +226,21 @@ def haber_makasi(f: pd.DataFrame, pip: float, olaylar: pd.DataFrame) -> dict:
     olay_gunu = set(pd.DatetimeIndex(pd.to_datetime(olaylar["utc_sn"].to_numpy(np.int64), unit="s", utc=True))
                     .normalize().as_unit("s").asi8)
     olaysiz = ~np.isin(gun, list(olay_gunu))
-    kiyas_bolge: dict[str, pd.Series] = {}
+    kiyas_bolge: dict[str, tuple[pd.Series, pd.Series]] = {}
 
-    def kiyas_seri(bolge: str) -> pd.Series:
+    def kiyas_seri(bolge: str) -> tuple[pd.Series, pd.Series]:
+        """(yerel dakika → medyan) ve ((hafta günü, yerel dakika) → medyan), olaysız hafta içi günlerden."""
         if bolge not in kiyas_bolge:
             dk, hg = _yerel(t, bolge)
             m = olaysiz & (hg < 5)
-            kiyas_bolge[bolge] = pd.Series(sc[m], index=dk[m]).groupby(level=0).median()
+            tum = pd.Series(sc[m], index=dk[m]).groupby(level=0).median()
+            gunluk = pd.Series(sc[m], index=hg[m] * 10_000 + dk[m]).groupby(level=0).median()
+            kiyas_bolge[bolge] = (tum, gunluk)
         return kiyas_bolge[bolge]
 
-    out = {}
-    for olay, g in olaylar.groupby("olay"):
-        bolgeler = sorted(set(g["bolge"]))
-        if len(bolgeler) != 1:
-            raise SystemExit(f"haber makası: {olay} olayının birden çok bölgesi var: {bolgeler}")
-        ks = kiyas_seri(bolgeler[0])
-        satir, kiyas, n_gozlem = [], [], []
+    def profil(g: pd.DataFrame, bolge: str) -> dict:
+        ks, ks_gun = kiyas_seri(bolge)
+        satir, kiyas, kiyas_gun, n_gozlem = [], [], [], []
         for k in HABER_DK:
             hedef = g["utc_sn"].to_numpy(np.int64) + 60 * k
             j = np.searchsorted(t, hedef)
@@ -242,31 +248,49 @@ def haber_makasi(f: pd.DataFrame, pip: float, olaylar: pd.DataFrame) -> dict:
             deger = sc[j[ok]]
             satir.append(round(float(np.median(deger)), 3) if ok.any() else None)
             n_gozlem.append(int(ok.sum()))
-            dk_yerel = _yerel(hedef[ok], bolgeler[0])[0] if ok.any() else np.empty(0, np.int64)
+            dk_yerel, hg_yerel = (_yerel(hedef[ok], bolge) if ok.any()
+                                  else (np.empty(0, np.int64), np.empty(0, np.int64)))
             kv = ks.reindex(dk_yerel).dropna().to_numpy()
             kiyas.append(round(float(np.median(kv)), 3) if len(kv) else None)
+            kg = ks_gun.reindex(hg_yerel * 10_000 + dk_yerel).dropna().to_numpy()
+            kiyas_gun.append(round(float(np.median(kg)), 3) if len(kg) else None)
         oran = [round(h / c, 2) if h is not None and c else None for h, c in zip(satir, kiyas)]
+        oran_gun = [round(h / c, 2) if h is not None and c else None for h, c in zip(satir, kiyas_gun)]
         z = max((i for i in range(len(oran)) if oran[i] is not None), key=lambda i: oran[i], default=None)
-        out[str(olay)] = {"n_olay": int(len(g)), "bolge": bolgeler[0], "dk": HABER_DK, "medyan_pip": satir,
-                          "kiyas_pip": kiyas, "oran": oran, "gozlem": n_gozlem,
-                          "zirve": ({"dk": HABER_DK[z], "pip": satir[z], "kiyas_pip": kiyas[z], "oran": oran[z]}
-                                    if z is not None else None)}
+        return {"n_olay": int(len(g)), "bolge": bolge, "dk": HABER_DK, "medyan_pip": satir,
+                "kiyas_pip": kiyas, "oran": oran, "kiyas_gun_pip": kiyas_gun, "oran_gun": oran_gun, "gozlem": n_gozlem,
+                "zirve": ({"dk": HABER_DK[z], "pip": satir[z], "kiyas_pip": kiyas[z], "oran": oran[z],
+                           "kiyas_gun_pip": kiyas_gun[z], "oran_gun": oran_gun[z]} if z is not None else None)}
+
+    out = {}
+    for olay, g in olaylar.groupby("olay"):
+        bolgeler = sorted(set(g["bolge"]))
+        if len(bolgeler) != 1:
+            raise SystemExit(f"haber makası: {olay} olayının birden çok bölgesi var: {bolgeler}")
+        out[str(olay)] = profil(g, bolgeler[0])
+        if g["yerel_saat"].nunique() > 1:
+            out[str(olay)]["saat"] = {}
+            for s, gs in g.groupby("yerel_saat"):
+                out[str(olay)]["saat"][str(s)] = {**profil(gs, bolgeler[0]), "ilk": str(gs["tarih"].min()),
+                                                  "son": str(gs["tarih"].max())}
     return out
 
 
-def damga_sinamasi(f: pd.DataFrame, pip: float) -> dict:
+def damga_sinamasi(f: pd.DataFrame, pip: float, nfp_gunleri: set | None = None) -> dict:
     """Zaman damgası ve DST sınaması: veri saatinin hareketi DOĞRU dakikada mı?
 
-    Ayın ilk cuması çoğu ay ABD tarım dışı istihdam (NFP) günüdür ve veri 08:30
-    New York saatinde yayımlanır. Damgalar UTC'yse ve yaz saati doğru
-    işleniyorsa, 1 dakikalık mum aralığının ortalaması yazın da kışın da tam
-    08:30 ET dakikasında zirve yapmalıdır (yazın 12:30, kışın 13:30 UTC). Bir
-    saatlik kayma, zirveyi ±60 dakikaya taşır; bu ölçüt onu görür. Takvim
-    yaklaşıktır (bazı aylarda NFP ikinci cumaya kayar); ortalama yine de 08:30'da
-    tepe yapar, çünkü günlerin büyük çoğunluğu doğru gündür.
-    """
+    ABD tarım dışı istihdam (NFP) verisi 08:30 New York saatinde yayımlanır. Damgalar UTC'yse ve yaz saati doğru
+    işleniyorsa, NFP günlerinde 1 dakikalık mum aralığının ortalaması yazın da kışın da tam 08:30 ET dakikasında
+    zirve yapmalıdır (yazın 12:30, kışın 13:30 UTC). Bir saatlik kayma zirveyi ±60 dakikaya taşır; bu ölçüt onu
+    görür. Günler takvimdeki NFP yayımlarının New York tarihleridir (`nfp_gunleri`): sınama yalnız GÜNÜ takvimden
+    alır, dakikayı fiyattan ölçer, yani takvimin saatine dayanmaz. Takvim verilmezse ayın ilk cuması (çoğu ay NFP
+    günü; bazı aylarda yayım ikinci cumaya kayar)."""
     ny = f.index.tz_convert(z.NEWYORK)
-    ilk_cuma = (ny.dayofweek == 4) & (ny.day <= 7)
+    if nfp_gunleri is not None:
+        gun = np.asarray(ny.date)
+        ilk_cuma = np.isin(gun, np.array(sorted(nfp_gunleri), dtype=object))
+    else:
+        ilk_cuma = (ny.dayofweek == 4) & (ny.day <= 7)
     ofs = (ny.hour * 60 + ny.minute).to_numpy() - (8 * 60 + 30)
     # Yaz saati: New York ofseti −4 saat (yerel saat − UTC saati = −4)
     fark_saat = ((ny.hour.to_numpy() - f.index.hour.to_numpy()) % 24)
@@ -283,6 +307,14 @@ def damga_sinamasi(f: pd.DataFrame, pip: float) -> dict:
                      "komsu_medyan_pip": round(float(s.drop(s.idxmax()).median()), 2),
                      "gun": int(len(np.unique(ny[m].normalize())))}
     return sonuc
+
+
+def nfp_gunleri(sembol: str) -> set:
+    """Takvimdeki NFP yayımlarının New York tarihleri (damga sınamasının günleri)."""
+    import takvim
+    o = takvim.olaylar_oku(sembol)
+    o = o[o["olay"] == "NFP"]
+    return {x.date() for x in pd.to_datetime(o["utc_sn"].to_numpy(np.int64), unit="s", utc=True).tz_convert(z.NEWYORK)}
 
 
 def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
@@ -374,7 +406,7 @@ def denetle(sembol: str, a: ay.Ayar) -> dict:
         "makas": makas(f, a.pip[sembol]),
         "sicrama": sicrama(f, a.pip[sembol]),
         "capraz": capraz(ham, sembol, a.nokta[sembol]),
-        "damga": damga_sinamasi(f, a.pip[sembol]),
+        "damga": damga_sinamasi(f, a.pip[sembol], nfp_gunleri(sembol)),
         "hacim": {"sifir_hacimli_dakika": int(((ham["b_v"] == 0) & (ham["a_v"] == 0)).sum()),
                   "medyan": float(np.median(ham["b_v"] + ham["a_v"]))},
     }
@@ -397,7 +429,7 @@ def yazdir(sembol: str, s: dict) -> None:
           f"sıfır (kapanış) {m['sifir_kapanis']:,} · negatif {m['negatif_kapanis']:,}")
     print(f"  devir profili (17:00 ET'ye göre dk → medyan pip): {m['devir_profili_medyan_pip']}")
     print(f"  sıçrama adayı: {sc['aday']} · aşırı fitil: {sc['asiri_fitil']} · en büyükler: {sc['en_buyuk'][:3]}")
-    print(f"  zaman damgası (ilk cumalar, 08:30 ET'ye göre zirve dakikası): {s['damga']}")
+    print(f"  zaman damgası (takvimdeki NFP günleri, 08:30 ET'ye göre zirve dakikası): {s['damga']}")
     if "tam_esit_yuzde" in cp:
         print(f"  çapraz sınama (saatlik, BID+ASK): {cp['tam_esit']}/{cp['saat']} saat birebir "
               f"({cp['tam_esit_yuzde']}%) · sınanan {len(cp['sinanan_aylar'])} ay · eksik {cp['eksik_aylar']}")

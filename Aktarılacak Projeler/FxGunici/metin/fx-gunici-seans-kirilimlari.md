@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'kirilim', 'orb', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Seans açılışında oluşan aralığın kırılmasına girmek gün içi işlem kitaplarının en eski kuralıdır. Bu ders dört biçimini aynı makineyle ölçer: Londra'nın ilk mumu, gecenin aralığı ve New York'un iki ayrı açılışı — ve hangisinin maliyetten sonra bir şey bıraktığını söyler."
+ozet: "Seans açılışında oluşan aralığın kırılmasına girmek gün içi işlem kitaplarının en eski kuralıdır. Bu ders dört biçimini aynı makineyle ölçer: Londra'nın ilk mumu, gecenin aralığı ve New York'un iki ayrı açılışı. Dördü de hiçbir paritede önceden kayıtlı hüküm kuralının şartlarını sağlamıyor: maliyetten sonra kanıtlanmış bir kenar yok.{{! kural_iddia calisan_yok orb asya nyib_0800 nyib_0930 }}"
 seviye: 'orta'
 onkosul:
   - fx-gunici-giris

@@ -6,7 +6,7 @@ Kırılım dersindeki Asya aralığı kuralının aynasıdır.
 
 ### Piyasa mantığı
 
-Asya aralığı geceden kalan stop emirlerinin haritasıdır: gece pozisyon taşıyan herkes stop'unu gecenin tepesinin
+Asya aralığı geceden kalan stop emirlerinin haritasıdır: gece pozisyon taşıyan herkes stopunu gecenin tepesinin
 üstüne ya da dibinin altına koyar. Londra'nın ilk saatinde bu uçların sınanması, Avrupa masalarının o likiditeyi
 kullanmasıdır; yeni bir bilgi yoksa fiyat aralığa geri döner. Asya aralığının ORB'den farkı genişliğidir: sekiz
 saatlik aralığın uçları açılıştaki fiyattan uzak olabilir ve o uçlara gün içinde hiç uzanılmayabilir.
@@ -17,7 +17,7 @@ saatlik aralığın uçları açılıştaki fiyattan uzak olabilir ve o uçlara 
   İngiltere yaz saatindeyken 02:00 → 10:00, kış saatindeyken 03:00 → 11:00).
 - **Kırılım, geri dönüş, stop.** Sahte ORB ile aynı: dışarıda kapanış, en çok "pencere" kadar mum içinde içeride
   kapanış, stop gezintinin ucunda.
-- **Pencere.** Londra 08:00 → 14:00; gün başına tek işlem.
+- **Pencere.** Londra 08:00 → 14:00 ({{! tsi "→" "Londra 08:00" "Londra 14:00" }}); gün başına tek işlem.
 
 {{! kural }}
 
@@ -29,11 +29,16 @@ Varsayılan: 15 dakikalık mumlar, iki mumluk pencere, 1R hedef.{{? B.varsayilan
 
 {{! ornek }}
 
-Noktalı mavi çizgiler gecenin aralığı, mavi bant aralığa geri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: geri dönüş başlıyor, sonra kırılım yeniden başlayıp stop'u alıyor.
+Noktalı mavi çizgiler gecenin aralığı (Londra 00:00'dan başlar), mavi bant aralığa geri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: {{! tuzak "geri dönüş başlıyor, sonra kırılım yeniden başlayıp stopu alıyor." "geri dönüş başlıyor ama sürmüyor; işlem stopa değmeden zararla kapanıyor ({cikis})." }}
 
 ### Sonuçlar
 
 {{! sonuclar }}
+
+**Ön kaydın harfiyle.** Ön kayıt kırılımı "bir mum seviyenin dışında kapanır" diye tanımlar ve önceki kapanışı
+sormaz; sonuçlardan önce yazılan kod seviyeyi kesen mumu arar. Gecenin aralığında iki okuma tanım gereği aynıdır:
+pencerenin ilk mumundan önceki kapanış gecenin son fiyatıdır, yani aralığın içindedir. Aynı koşuda ayrıca ölçüldü:
+dört paritede ızgaranın hiçbir kombinasyonunda tek bir işlem değişmez.{{? E.yorum.degisen == 0 and G.yorum.degisen == 0 and J.yorum.degisen == 0 and A.yorum.degisen == 0 }}
 
 ### Koşullar
 
@@ -43,7 +48,7 @@ Noktalı mavi çizgiler gecenin aralığı, mavi bant aralığa geri dönen siny
 
 1. **Hüküm.** {{! kontrol_hukum }}
 2. **Ne zaman.** {{! ne_zaman }}
-3. **Gece aralığı.** Londra 00:00 → 08:00 tepe ve dip.
+3. **Gece aralığı.** Londra 00:00 → 08:00 ({{! tsi "→" "Londra 00:00" "Londra 08:00" }}) tepe ve dip.
 4. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde aralığın içinde kapanış.
 5. **Stop gezintinin ucunda, hedef 1R.** Pencere Londra 14:00'te kapanır (TSİ 16:00 ya da 17:00).
 6. **Maliyet.** {{! basabas }}

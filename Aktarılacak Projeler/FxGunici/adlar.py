@@ -24,8 +24,8 @@ BIRIM = {
     "vwap_cekilme": ("VWAP geri çekilmesi (trend yönünde)", "VWAP çekilme"),
     "pivot_donus": ("Pivot dönüşü", "Pivot dönüş"),
     "pivot_kirilim": ("Pivot kırılımı", "Pivot kırılım"),
-    "fiks_momentum": ("WM/R 16:00 fiksingi — momentum", "Fiks momentum"),
-    "fiks_donus": ("WM/R 16:00 fiksingi — dönüş", "Fiks dönüş"),
+    "fiks_momentum": ("WM/R 16:00 fiksingi — momentum", "Fiksing momentumu"),
+    "fiks_donus": ("WM/R 16:00 fiksingi — dönüş", "Fiksing dönüşü"),
     "momentum": ("Gün içi momentum: Londra ilk saati → New York öğleden sonrası", "Gün içi momentum"),
     "n1": ("N1 — haber kırılımı (ilk mumun yönünde)", "N1 kırılım"),
     "n2": ("N2 — haber fade'i (ilk mumun tersine)", "N2 fade"),
@@ -95,6 +95,33 @@ DEGER = {
 #: Çıkış nedeni (motor.NEDEN kodları).
 NEDEN = {1: "stop", 2: "hedef", 3: "zaman / gün sonu", 4: "kapanış stopu", 5: "boşlukla stop", 6: "boşlukla hedef"}
 
+def islem_r(i: dict) -> float | None:
+    """Bir örnek işlemin okura yazılan R'si: kaydın pip sonucu / riski (ikisi de iki haneli, okurun gördüğü sayılar).
+    Kayıttaki r üç haneye yuvarlıdır; onu bir kez daha iki haneye yuvarlamak (0,785 → 0,79) yanında yazılan
+    22,8 / 29,05 = 0,78 ile çelişirdi. Ders metni de figür başlığı da bu tanımı okur."""
+    p, risk = i.get("pnl_pip"), i.get("R_pip")
+    if p is not None and risk:
+        return p / risk
+    return i.get("r")
+
+
+def mevsim_kovalari(saat_tsi: dict) -> tuple[int, int] | None:
+    """Tek bir yerel saatte giren kuralın iki TSİ saat kovası: (yaz saati, kış saati); kural öyle değilse None.
+
+    TSİ yıl boyu UTC + 3'tür; aynı yerel saatin TSİ karşılığı o şehrin yaz saatinde bir saat erkendir ve yaz saati
+    yılın yedi-sekiz ayı sürer. Böyle bir kuralın bütün işlemleri iki ardışık TSİ saatine düşer ve erken kova daha
+    kalabalıktır; kovalar yalnız bu iki koşul birlikte tutunca yaz ve kış saati diye adlandırılır. Metin
+    (ders_motor) ve giriş saati figürü (sekil) bu tek tanımı okur."""
+    st = {int(h): int(x.get("n") or 0) for h, x in (saat_tsi or {}).items() if (x.get("n") or 0) > 0}
+    if len(st) != 2:
+        return None
+    a, b = sorted(st)
+    erken, gec = (a, b) if (a + 1) % 24 == b else (b, a) if (b + 1) % 24 == a else (None, None)
+    if erken is None or st[erken] <= st[gec]:
+        return None
+    return erken, gec
+
+
 def neden_ad(i: dict, gun_sonu_et: str) -> str:
     """Çıkış nedeninin okur adı. Motor zaman çıkışı ile gün sonu kapanışını aynı kodla (3) yazar; ikisi çıkış
     dakikasının New York saatinden ayrılır (gün sonu kapanışı önceden kaydın gün sonu saatindedir)."""
@@ -111,10 +138,18 @@ OLAY = {
     "FOMC_basin": "FOMC basın toplantısı", "ECB_karar": "ECB kararı", "ECB_basin": "ECB basın toplantısı",
     "BoE_karar": "BoE kararı",
 }
+#: Olayların figür etiketindeki kısa adı (örnek günlerin olay çizgisi).
+OLAY_KISA = {
+    "NFP": "NFP", "CPI": "ABD TÜFE", "FOMC_karar": "FOMC karar", "FOMC_basin": "FOMC basın", "ECB_karar": "ECB karar",
+    "ECB_basin": "ECB basın", "BoE_karar": "BoE karar",
+}
 
 #: Koşul kovalarının okuma sırası (metin ve figür aynı sırayı kullanır): "değil" önce, terciller küçükten büyüğe,
-#: haftanın günleri takvim sırasıyla. Listede olmayan kova ölçümdeki sırasını korur.
-KOVA_OKUMA = ["değil", "alt", "orta", "üst", "Pzt", "Sal", "Çar", "Per", "Cum"]
+#: haftanın günleri takvim sırasıyla, işlem yönüne göre işaretli kovalarda önce "aynı yön"/"trend yönünde". Ölçümdeki
+#: her kova listede durmalıdır (kapı: dogrula.kova_sirasi); listede olmayan kova ölçümdeki sırasını korurdu ve aynı
+#: değişken figürden figüre ters sırayla basılıyordu.
+KOVA_OKUMA = ["değil", "NR4", "NR7", "haber günü", "ay sonu", "geçiş haftası", "ara dönem", "alt", "orta", "üst",
+              "Pzt", "Sal", "Çar", "Per", "Cum", "aynı yön", "ters yön", "trend yönünde", "trend tersine"]
 
 #: Hüküm (onkayit.toml [hukum]).
 HUKUM = {"calisiyor": "çalışıyor", "zayif": "zayıf", "calismiyor": "çalışmıyor", "olculemedi": "ölçülemedi"}
@@ -130,8 +165,43 @@ KOSUL = {
 }
 
 
-def param_yaz(ad: str, deger) -> str:
-    return f"{PARAM.get(ad, ad)}: {DEGER.get(str(deger), str(deger))}"
+def esik_birimi(aile: str) -> str:
+    """'k' parametresinin birimi aileye göre: VWAP bandında σ, haber fade'inde ilk mum hareketinin ATR katı."""
+    return "σ" if aile == "vwap_donus" else "×ATR"
+
+
+def param_ad(ad: str, aile: str = "") -> str:
+    """Parametrenin okur adı; 'k' aileye göre birimiyle ("eşik (σ)" · "eşik (×ATR)"). Aile verilmezse genel ad."""
+    if ad == "k" and aile:
+        return f"eşik ({esik_birimi(aile)})"
+    return PARAM.get(ad, ad)
+
+
+def _sayi(x: float, b: int) -> str:
+    """Site sözleşmesi (ders_motor.sayi ile aynı): ondalık virgül, binlik nokta, eksi U+2212."""
+    s = f"{abs(x):,.{b}f}".replace(",", "§").replace(".", ",").replace("§", ".")
+    return ("−" + s) if x < 0 and float(s.replace(".", "").replace(",", ".")) != 0 else s
+
+
+def deger_yaz(ad: str, deger, aile: str = "") -> str:
+    """Parametre değerinin okur yazımı (figür etiketi ve alt yazısı): 'k' birimiyle ("1,5σ", "2,0×ATR"), geri çekilme
+    oranı yüzdeyle ("%38,2"), zaman dilimi dakikayla, ondalıklı değer virgülle; öbürleri DEGER'den. Değer ızgara
+    ekseninden dizge olarak da gelebilir ("1.0")."""
+    if deger is None:
+        return "—"
+    if ad == "tf":
+        return f"{deger} dk"
+    if ad in ("k", "geri_cekilme"):
+        x = float(deger)
+        return f"%{_sayi(100 * x, 1)}" if ad == "geri_cekilme" else f"{_sayi(x, 1)}{esik_birimi(aile)}"
+    if isinstance(deger, float):
+        return _sayi(deger, 3 if deger != round(deger, 1) else 1)
+    return DEGER.get(str(deger), str(deger))
+
+
+def param_yaz(ad: str, deger, aile: str = "") -> str:
+    """"ad: değer". Değer birimini taşıyorsa ('k': "2,0σ") ad birimsiz yazılır ("eşik: 2,0σ")."""
+    return f"{'eşik' if ad == 'k' else param_ad(ad, aile)}: {deger_yaz(ad, deger, aile)}"
 
 
 def hepsi() -> dict:
@@ -139,3 +209,48 @@ def hepsi() -> dict:
     return {"birim": {k: {"ad": v[0], "kisa": v[1]} for k, v in BIRIM.items()}, "ders_birim": DERS_BIRIM,
             "param": PARAM, "deger": DEGER, "neden": {str(k): v for k, v in NEDEN.items()}, "olay": OLAY,
             "hukum": HUKUM, "kosul": KOSUL}
+
+
+# ───────────────────────────────────────────── saat: yerel saatin TSİ karşılığı (ders metni ve figürler aynı tanım)
+#: TSİ karşılığının üç saat rejimi, temsilci günlerle: iki şehir de yaz saatinde · ikisi de kış saatinde · ara
+#: hafta (ABD yaz, İngiltere kış saatinde). Giriş dersinin saat tablosuyla aynı rejimler; yıl metinde geçmez.
+TSI_REJIM = (("yazın", "2026-07-15"), ("kışın", "2026-01-15"), ("ara haftalarda", "2026-03-18"))
+SEHIR_BOLGE = {"Londra": "Europe/London", "New York": "America/New_York", "Frankfurt": "Europe/Berlin",
+               "Tokyo": "Asia/Tokyo"}
+#: Saat değerli parametrelerin şehri (değer o şehrin yerel saatidir).
+SAAT_SEHIR = {"son_giris_londra": "Londra", "aralik_sonu_londra": "Londra", "son_giris_et": "New York",
+              "baslangic_et": "New York", "cikis_et": "New York"}
+
+
+def tsi_an(gun: str, saat: str, bolge: str) -> datetime:
+    y, a, d = (int(x) for x in gun[:10].split("-"))
+    hh, mm = (int(x) for x in saat.split(":"))
+    return datetime(y, a, d, hh, mm, tzinfo=ZoneInfo(bolge)).astimezone(ZoneInfo("Europe/Istanbul"))
+
+
+def tsi_yaz(saatler, birlestir: str = "") -> str:
+    """Yerel saatlerin TSİ karşılığı: ["Londra 08:00", "New York 14:00"], "→" → "TSİ yazın 10:00 → 21:00, kışın
+    11:00 → 22:00, ara haftalarda 11:00 → 21:00". Her öğe "<şehir> SS:DD" ya da "<şehir> SS:DD–SS:DD"; aynı sonucu
+    veren rejimler bir kez yazılır (yalnız Londra saati taşıyan bir öğede ara hafta kışla aynıdır). Okunamayan öğe
+    ValueError."""
+    import re
+    cozum = []
+    for s in saatler:
+        m = re.fullmatch(r"(Londra|New York|Frankfurt|Tokyo) (\d{2}:\d{2})(?:–(\d{2}:\d{2}))?", s.strip())
+        if not m:
+            raise ValueError(f"tsi: okunamayan saat: {s!r}")
+        cozum.append((SEHIR_BOLGE[m.group(1)], m.group(2), m.group(3)))
+    if not cozum:
+        raise ValueError("tsi: saat yok")
+    sonuc: list[tuple[str, str]] = []
+    for ad, gun in TSI_REJIM:
+        parca = []
+        for bolge, s1, s2 in cozum:
+            x = f"{tsi_an(gun, s1, bolge):%H:%M}"
+            if s2:
+                x += f"–{tsi_an(gun, s2, bolge):%H:%M}"
+            parca.append(x)
+        metin = f" {birlestir} ".join(parca) if birlestir else parca[0]
+        if all(metin != m_ for _, m_ in sonuc):
+            sonuc.append((ad, metin))
+    return "TSİ " + ", ".join(f"{ad} {m_}" for ad, m_ in sonuc)

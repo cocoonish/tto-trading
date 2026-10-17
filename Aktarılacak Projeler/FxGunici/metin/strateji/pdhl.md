@@ -6,7 +6,7 @@ dünün tepesinin üstünde kapanış alış, dünün dibinin altında kapanış
 
 ### Piyasa mantığı
 
-Dünün uçları, dün o seviyelerde dönen piyasanın bugün yeniden sınayacağı yerlerdir; çoğu masanın stop'u ve
+Dünün uçları, dün o seviyelerde dönen piyasanın bugün yeniden sınayacağı yerlerdir; çoğu masanın stopu ve
 kırılım emri de oradadır. Kırılım savunusu: dünün aralığından çıkan fiyat, dünün dengesini terk etmiştir ve
 emirler tetiklendikçe hareket hızlanır. Karşı savunu fade dersinin "sahte önceki gün tepe/dip" kuralıdır: aynı
 seviyenin aşılıp geri dönülmesi stop toplamanın ta kendisidir. İkisi aynı seviyeyle sınanıyor; hangisinin daha sık
@@ -14,8 +14,10 @@ olduğu ölçünün kendisidir.
 
 ### Kurallar
 
-- **Seviyeler.** Önceki FX işlem gününün (17:00 → 17:00 New York) orta fiyattan tepesi ve dibi.
-- **Pencere.** Gün başından (17:00 New York) ya da Londra 08:00'den 14:00 New York'a kadar kapanan mumlar.
+- **Seviyeler.** Önceki FX işlem gününün (17:00 → 17:00 New York; gün dönümü
+  {{! tsi "" "New York 17:00" }}) orta fiyattan tepesi ve dibi.
+- **Pencere.** Gün başından (17:00 New York) ya da Londra 08:00'den 14:00 New York'a kadar kapanan mumlar
+  ({{! tsi "→" "Londra 08:00" "New York 14:00" }}).
 - **Sinyal.** Seviyeyi **kesen** ilk kapanış: bir önceki mum seviyenin içinde kapanmış, bu mum dışında kapanmış.
   Fiyat pencere açılmadan seviyenin dışındaysa önce içeri girmesi, sonra yeniden kesmesi gerekir. Gün başına tek
   işlem.
@@ -24,7 +26,7 @@ olduğu ölçünün kendisidir.
 
 {{! kural }}
 
-Varsayılan pencereyi Londra açılışında başlatır, stop'u sinyal mumunun karşı ucuna koyar ve 2R hedefler.{{? B.varsayilan.tf == 15 and B.varsayilan.baslangic == "londra" and B.varsayilan.stop_kurali == "sinyal_mumu" and B.varsayilan.hedef == "2R" and B.varsayilan.stop_turu == "sert" }}
+Varsayılan pencereyi Londra açılışında başlatır, stopu sinyal mumunun karşı ucuna koyar ve 2R hedefler.{{? B.varsayilan.tf == 15 and B.varsayilan.baslangic == "londra" and B.varsayilan.stop_kurali == "sinyal_mumu" and B.varsayilan.hedef == "2R" and B.varsayilan.stop_turu == "sert" }}
 Gece seansının kırılımları bu yüzden dışarıda kalır: Asya'da kesilen bir seviye Londra açılışında yeniden
 kesilmedikçe sinyal üretmez.
 
@@ -35,7 +37,7 @@ kesilmedikçe sinyal üretmez.
 {{! ornek }}
 
 Figürde noktalı mavi çizgiler dünün tepesi ve dibi, mavi bant seviyeyi kesen sinyal mumudur. Sinyal mumunun
-boyu riski belirler: seviyeyi uzun bir mumla kesen kırılımın stop'u da uzaktır. Kaybeden örnek lehine yarım R'ye
+boyu riski belirler: seviyeyi uzun bir mumla kesen kırılımın stopu da uzaktır. Kaybeden örnek lehine yarım R'ye
 ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: seviye
 kesiliyor, kırılım bir süre ilerliyor ve fiyat dünün aralığına geri dönüyor.
 

@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'fiksing', 'momentum', 'vwap', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Öngörülebilir saatlerde gelen akışın izini süren üç kural: fiksinge giden emirler, günün ilk hareketini öğleden sonra tamamlayan katılımcılar ve trendin ortalama fiyatına dönen alıcılar. Her birinin fade dersindeki karşılığıyla yan yana, maliyetten sonra ne bıraktığı."
+ozet: "Öngörülebilir saatlerde gelen akışın izini süren üç kural: fiksinge giden emirler, günün ilk hareketini öğleden sonra tamamlayan katılımcılar ve trendin ortalama fiyatına dönen alıcılar. Her biri fade dersindeki karşılığıyla yan yana ölçülür. Üçü de hiçbir paritede önceden kayıtlı hüküm kuralının şartlarını sağlamıyor: maliyetten sonra kanıtlanmış bir kenar yok.{{! kural_iddia calisan_yok fiks_momentum momentum vwap_cekilme }}"
 seviye: 'orta'
 onkosul:
   - fx-gunici-giris
@@ -26,7 +26,7 @@ kural akışı saatte değil fiyatta arar: gün içi bir trendde VWAP, o gün i�
 geri çekilmesi VWAP dönüşünün tersidir. Gün içi momentumun karşılığı yoktur; yerine kuralın ölçtüğü
 ilişkinin kendisi, stop ve hedef taşımayan bir regresyonla ayrıca sınanır.
 
-İki kural stop'suzdur (fiksing momentumu ve gün içi momentum): işlem planlanan saatte kapanır ve R birimi stop
+İki kural stopsuzdur (fiksing momentumu ve gün içi momentum): işlem planlanan saatte kapanır ve R birimi stop
 uzaklığı değil girişteki ATR'dir. Sonuç tablolarının okunuşu öbür derslerle aynıdır; yalnız işlemlerin anatomisi
 tablosunda o satır "R birimi" adını taşır ve bir risk değil oynaklık ölçüsüdür: stop olmadığı için kayıp 1R'de
 durmaz.

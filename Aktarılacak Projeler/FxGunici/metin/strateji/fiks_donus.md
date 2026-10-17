@@ -20,10 +20,10 @@ yönünü önceden bilmektir: fiksinge giden mumun yönünü akışın yönü sa
 
 ### Kurallar
 
-- **Sinyal mumu.** Londra 16:00'da kapanan mum (15 dakikalık mumda 15:45–16:00). Mumun yönü (kapanış − açılış)
-  akışın yönü sayılır.
-- **Giriş.** Sinyal mumunun **tersi** yönde, 16:00 + "gecikme" mum sonra.
-- **Çıkış.** "Tutma" mum sonra; stop'suz (ızgarada sert ve kapanış stop'u da var: girişten 1 × ATR uzakta).
+- **Sinyal mumu.** Londra 16:00'da ({{! tsi "" "Londra 16:00" }}) kapanan mum (15 dakikalık mumda 15:45–16:00).
+  Mumun yönü (kapanış − açılış) akışın yönü sayılır.
+- **Giriş.** Sinyal mumunun **tersi** yönde, Londra 16:00 ({{! tsi "" "Londra 16:00" }}) + "gecikme" mum sonra.
+- **Çıkış.** "Tutma" mum sonra; stopsuz (ızgarada sert ve kapanış stopu da var: girişten 1 × ATR uzakta).
 - **R birimi.** Stop olmadığı için risk birimi girişteki ATR(14)'tür (aynı zaman dilimi).
 - **Günler.** Bütün işlem günleri; ay sonu (ayın son Londra iş günü) ayrıca raporlanır.
 
@@ -31,7 +31,7 @@ yönünü önceden bilmektir: fiksinge giden mumun yönünü akışın yönü sa
 
 Varsayılan 15:45–16:00 mumunun tersine 16:00'da girer ve iki mum (30 dakika) sonra çıkar.{{? B.varsayilan.tf == 15 and B.varsayilan.tur == "donus" and B.varsayilan.gecikme_mum == 0 and B.varsayilan.tutma_mum == 2 and B.varsayilan.stop_turu == "yok" }}
 Gecikmesiz giriş, fiksing penceresinin henüz kapanmadığı dakikaya (16:00–16:02:30) düşer: bu bilerek seçilmiş
-bir saldırganlıktır, ızgarada bir mum gecikmeli giriş de sınanıyor.
+iddialı (agresif) bir tercihtir; ızgarada bir mum gecikmeli giriş de sınanıyor.
 
 ### Örnekler
 
@@ -39,7 +39,7 @@ bir saldırganlıktır, ızgarada bir mum gecikmeli giriş de sınanıyor.
 
 {{! ornek }}
 
-Noktalı mavi çizgiler fiksinge giden sinyal mumunun tepesi ve dibi, mavi bant o mumun kendisidir. Kuralın stop'u olmadığı için figürde stop çizgisi yoktur; R birimi girişteki ATR'dir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
+Noktalı mavi çizgiler fiksinge giden sinyal mumunun tepesi ve dibi, mavi bant o mumun kendisidir. Kuralın stopu olmadığı için figürde stop çizgisi yoktur; R birimi girişteki ATR'dir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
 
 ### Sonuçlar
 
@@ -67,7 +67,7 @@ Ay sonu yılda on iki gündür: EUR/USD'de bütün dönemde {{ E.varsayilan.ay_s
 1. **Hüküm.** {{! kontrol_hukum }}
 2. **Ne zaman.** {{! ne_zaman }}
 3. **Saat.** Londra 16:00: TSİ 18:00 (İngiltere yaz saati) ya da 19:00. Fiksing penceresi 15:57:30–16:02:30 Londra.
-4. **Son mumu oku.** 15:45–16:00 mumunun yönü.
+4. **Son mumu oku.** 15:45–16:00 Londra mumunun yönü ({{! tsi "" "Londra 15:45–16:00" }}).
 5. **Ters yönde gir, otuz dakika tut.** Stop yok; R birimi girişteki ATR.
 6. **Ay sonunu ayrı düşün.** Ay sonu tablosu ayrı bir kural değil, aynı kuralın bir alt kümesi.
 7. **Maliyet.** {{! basabas }}

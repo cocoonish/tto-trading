@@ -18,7 +18,7 @@ bilinemez.
 
 ### Kurallar
 
-- **Bollinger.** 20 mumun kapanış ortalaması ± 2 standart sapma (kapanışlar, nüfus sapması).
+- **Bollinger.** 20 mumun kapanış ortalaması ± 2 standart sapma (kapanışlar, anakütle standart sapması).
 - **Keltner.** 20 mumluk üstel ortalama ± {{= "1,5" }} × ATR(20) (Wilder).
 - **Sıkışma.** Bollinger'ın iki bandı da Keltner'ın içinde. En az "süre" kadar ardışık sıkışma mumu gerekir; sıkışma,
   sıkışmasız ilk mumda biter.
@@ -26,11 +26,12 @@ bilinemez.
 - **Yön.** "Kutu kırılımı": sıkışma bittikten sonraki beş mumun içinde kutunun dışında kapanan ilk mum. "TTM
   momentumu": sıkışmanın bittiği mumun kapanışı 20 mumluk ortalamanın üstündeyse alış, altındaysa satış — Carter'ın
   momentum göstergesinin yerine konmuş basit bir vekildir, göstergenin kendisi değil.
-- **Stop.** Kutunun karşı ucu ya da ortası. Sinyal mumu en geç 16:00 New York'ta kapanır.
+- **Stop.** Kutunun karşı ucu ya da ortası. Sinyal mumu en geç 16:00 New York'ta ({{! tsi "" "New York 16:00" }}) kapanır.
+- **Hedef.** 1R, 2R ya da zaman ({{ ON.genel.desen_zaman_mum | n }} mum).
 
 {{! kural }}
 
-Varsayılan en az altı sıkışma mumu ister, kutu kırılımıyla girer, stop'u kutunun karşı ucuna koyar ve 2R
+Varsayılan en az altı sıkışma mumu ister, kutu kırılımıyla girer, stopu kutunun karşı ucuna koyar ve 2R
 hedefler.{{? B.varsayilan.tf == 15 and B.varsayilan.sure == 6 and B.varsayilan.yon == "kutu" and B.varsayilan.stop_yeri == "karsi_uc" and B.varsayilan.hedef == "2R" and B.varsayilan.stop_turu == "sert" }} Sıkışma gece seansında da oluşabilir; mumlar FX işlem gününe göre gruplanmaz, yalnız sinyal mumunun
 günü ve saati sınanır.
 
@@ -40,8 +41,8 @@ günü ve saati sınanır.
 
 {{! ornek }}
 
-Figürde noktalı mavi çizgiler sıkışma kutusunun iki ucu, mavi bant sinyal mumudur. Kutu birkaç saatlik bir
-dengeyi özetler; uzun bir sıkışmanın kutusu da büyüktür ve stop'u uzaklaştırır. Sıkışma gün içinde birden çok
+Figürde noktalı mavi çizgiler sıkışma kutusunun iki ucu (kutunun içinde kalan son kesintisiz mumlardan başlar), mavi bant sinyal mumudur. Kutu birkaç saatlik bir
+dengeyi özetler; uzun bir sıkışmanın kutusu da büyüktür ve stopu uzaklaştırır. Sıkışma gün içinde birden çok
 kez oluşabilir: {{! gun_ici }}. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği
 önce lehine en az yarım R gidip zararla kapanan işlemdir.
 

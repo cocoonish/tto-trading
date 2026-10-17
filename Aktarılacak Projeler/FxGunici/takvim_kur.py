@@ -591,8 +591,9 @@ def boe(man: dict, kunye: dict) -> list[dict]:
             dogrulanamadi.append({"tarih": g.isoformat(), "rapor": ortak[(g.year, g.month)],
                                   "sebep": "Para Politikası Raporu ile Finansal İstikrar Raporu'nun ortak yayım günü; "
                                            "saat duyurusu arşivde yok"})
-            sorun.append(f"{g}: ortak rapor yayımı ({ortak[(g.year, g.month)]}) ve saat duyurusu arşivde yok — "
-                         f"kuralın 12:00'si kaynakla desteklenmiyor, yazılmadı")
+            sorun.append(f"{g}: Para Politikası Raporu Finansal İstikrar Raporu'yla birlikte yayımlandı; BoE'nin bu güne "
+                         f"ait saat duyurusu arşivde yok ve kuralın 12:00'si ortak yayım gününü kapsamıyor — saat "
+                         f"doğrulanamadığı için yazılmadı")
             continue
         satir.append({"olay": "BoE_karar", "tarih": g.isoformat(), "yerel_saat": "12:00", "bolge": "Europe/London",
                       "kaynak": u, "not": "saat: BoE'nin yayım kuralı (MPC özeti perşembe 12:00)"})

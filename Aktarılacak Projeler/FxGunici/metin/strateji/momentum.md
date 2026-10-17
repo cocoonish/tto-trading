@@ -11,15 +11,16 @@ kuralı FX'in kendi saatlerine taşınmış hâlidir: Londra açılışının il
 yönünü taşıyorsa o yön gün boyunca yeniden fiyatlanmaya devam eder. İkincisi geç kalan akış: yönü sabah belli olan
 bir hareketi öğleden sonra tamamlayan katılımcılar (portföyünü gün sonu kapanışına göre ayarlayanlar) ilk yönü
 uzatır. Karşı savunu basit: sinyal mumunun kapanışından girişe sekiz saat geçer (Londra 09:00 → New York 12:00;
-Londra ile New York arasındaki fark dört saate indiği ara haftalarda yedi saat) ve ilk mumun bilgisi o arada
+Londra ile New York arasındaki farkın dört saate indiği ara haftalarda yedi saat) ve ilk mumun bilgisi o arada
 çoktan fiyatlanmıştır.
 
 ### Kurallar
 
-- **Sinyal.** Londra 08:00'den itibaren ilk mumun getirisi (kapanış − açılış); 60 dakikalık mumda ilk saat.
+- **Sinyal.** Londra 08:00'den ({{! tsi "" "Londra 08:00" }}) itibaren ilk mumun getirisi (kapanış − açılış);
+  60 dakikalık mumda ilk saat.
   Getiri sıfırsa işlem yok.
-- **Giriş.** Getirinin yönünde, 12:00 New York.
-- **Çıkış.** 16:00 ya da 16:55 New York; stop'suz (ızgarada sert ve kapanış stop'u da var: 1 × ATR).
+- **Giriş.** Getirinin yönünde, 12:00 New York ({{! tsi "" "New York 12:00" }}).
+- **Çıkış.** 16:00 ya da 16:55 New York ({{! tsi "ya da" "New York 16:00" "New York 16:55" }}); stopsuz (ızgarada sert ve kapanış stopu da var: 1 × ATR).
 - **R birimi.** Girişteki ATR(14, 60 dakikalık mumlar).
 
 {{! kural }}
@@ -33,7 +34,7 @@ Varsayılan Londra'nın ilk saatini kullanır ve 12:00 → 16:00 New York arası
 {{! ornek }}
 
 Noktalı mavi çizgiler Londra'nın ilk mumunun tepesi ve dibi, mavi bant o mumun kendisidir; giriş sekiz saat
-sonra gelir. Kuralın stop'u olmadığı için figürde stop çizgisi yoktur; R birimi girişteki ATR'dir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
+sonra gelir. Kuralın stopu olmadığı için figürde stop çizgisi yoktur; R birimi girişteki ATR'dir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
 
 ### Sonuçlar
 

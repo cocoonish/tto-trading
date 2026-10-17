@@ -124,6 +124,116 @@ def test_lookahead_yorum_okumasi(birim, k):
     _ileri_bakma(birim, {**v, param: harf}, KESIMLER[k])
 
 
+# ───────────────────────────────────────────── sinyale çıpalı kesim
+# Sabit kesim anları kararı kesimden en az iki mum önce olan sinyalleri kıyaslar: o payın içinde sinyal mumundan sonraki
+# bir iki mum kesimden önce tamamlanır, yani bir iki mumluk ileri bakış görünmez; kesim gününde kıyaslanan bir sinyal
+# yoksa günün kapanmamış verisine bakan bir sızıntı da görünmez. Burada kesim gerçek bir sinyalin KARAR anına konur:
+# T = karar + 1 dk (giriş dakikası verinin içinde, sinyal mumundan sonraki mum henüz tamamlanmamış) ve T = karar + 1 mum
+# + 1 dk (sonraki mum tamamlanmış, ikincisi değil). Kararı T − 1 dk'dan geç olmayan BÜTÜN sinyaller kıyaslanır; çıpanın
+# kendisi kıyaslananların içinde olmalıdır (kesim gününde en az bir sinyal). Metodoloji dersi bu sabitleri okur.
+CIPA_SAYISI = 2
+CIPA_EK_MUM = (0, 1)
+
+
+def _cipalar(b_tam, aile: str, p: dict) -> list[int]:
+    """Tam veride sinyallerin karar anlarından deterministik çıpalar: dizinin üçte biri ve üçte ikisi (ısınma payının
+    ve örneklem kenarının dışında), farklı günlerden."""
+    tam, _ = _sinyaller(b_tam, aile, p)
+    tam = tam[np.isfinite(tam["karar"])].sort_values(["karar", "yon"]).reset_index(drop=True)
+    if not len(tam):
+        return []
+    out, gunler = [], set()
+    for q in np.linspace(1 / 3, 2 / 3, CIPA_SAYISI):
+        i = min(int(len(tam) * q), len(tam) - 1)
+        karar = int(tam.loc[i, "karar"])
+        gun = karar // 86400
+        if gun in gunler:
+            continue
+        gunler.add(gun)
+        out.append(karar)
+    return out
+
+
+def _cipali_ileri_bakma(birim: str, p: dict, karar: int, ek_mum: int, b_tam=None) -> int:
+    """Çıpanın karar anından sonra kesilen veride ve geleceği bozulan veride, kararı kesimden önceki son dakikadan geç
+    olmayan bütün sinyaller tam veriyle birebir aynı; çıpa kıyaslananların içinde. Kıyaslanan sinyal sayısını döndürür."""
+    aile = kosu.BIRIMLER[birim]["aile"]
+    tf = int(p["tf"])
+    t_kes = karar + 60 + ek_mum * tf * 60
+    b_tam = b_tam or B_TAM
+    b_kes, b_boz = (baglam_kur(D.dilim(t_kes), OLAY), baglam_kur(boz(D, t_kes), OLAY))
+    sinir = t_kes - 60
+    sec = lambda x: x[x["karar"] <= sinir].sort_values(["bt", "yon"]).reset_index(drop=True)  # noqa: E731
+    a = sec(_sinyaller(b_tam, aile, p)[0])
+    assert (a["karar"] == karar).any(), f"{birim}: çıpa kıyaslananların içinde değil"
+    pd.testing.assert_frame_equal(a, sec(_sinyaller(b_kes, aile, p)[0]), check_dtype=False,
+                                  obj=f"{birim} çıpalı kırpma (+{ek_mum} mum)")
+    pd.testing.assert_frame_equal(a, sec(_sinyaller(b_boz, aile, p)[0]), check_dtype=False,
+                                  obj=f"{birim} çıpalı bozma (+{ek_mum} mum)")
+    return len(a)
+
+
+CIPALI = [(b, e) for b in kosu.BIRIMLER for e in CIPA_EK_MUM]
+
+
+@pytest.mark.parametrize("birim,ek_mum", CIPALI)
+def test_lookahead_sinyale_cipali(birim, ek_mum):
+    _, v = kosu.izgara(birim)
+    aile = kosu.BIRIMLER[birim]["aile"]
+    cipalar = _cipalar(B_TAM, aile, v)
+    assert cipalar, f"{birim}: sentetik veride çıpa olacak sinyal yok"
+    for karar in cipalar:
+        _cipali_ileri_bakma(birim, v, karar, ek_mum)
+
+
+@pytest.mark.parametrize("birim,ek_mum", [(b, e) for b in kosu.YORUM for e in CIPA_EK_MUM])
+def test_lookahead_sinyale_cipali_yorum(birim, ek_mum):
+    _, v = kosu.izgara(birim)
+    param, harf = kosu.YORUM[birim]
+    p = {**v, param: harf}
+    cipalar = _cipalar(B_TAM, kosu.BIRIMLER[birim]["aile"], p)
+    assert cipalar
+    for karar in cipalar:
+        _cipali_ileri_bakma(birim, p, karar, ek_mum)
+
+
+@pytest.mark.parametrize("kaydir", [1, 2])
+def test_cipali_sinama_bir_iki_mumluk_ileri_bakisi_yakalar(kaydir, monkeypatch):
+    """Sınamanın kendisinin sınaması: aralık kırılımı kararını `kaydir` mum SONRAKİ mumun kapanışından verecek biçimde
+    bozulur (bir iki mumluk ileri bakış). Sinyale çıpalı kesim bunu yakalamalı; sabit kesimin iki mumluk payı yakalayamaz."""
+    import strateji as st
+
+    def sizdiran(b, m, tf, ust, alt, a_sn, b_sn, stop_yeri, gunler):
+        j0, j1 = st.gun_mum_araligi(m, a_sn, b_sn, tf)
+        satir = []
+        for k in gunler:
+            H, L = ust[k], alt[k]
+            if not (np.isfinite(H) and np.isfinite(L)) or H <= L or j1[k] + kaydir > len(m.c):
+                continue
+            c = m.c[j0[k] + kaydir:j1[k] + kaydir]          # karar s mumunda, bilgi s + kaydir mumundan
+            i = st.ilk_dogru((c > H) | (c < L))
+            if i < 0:
+                continue
+            s = j0[k] + i
+            yon = 1 if c[i] > H else -1
+            stop = (L if yon == 1 else H) if stop_yeri == "karsi_uc" else (H + L) / 2.0
+            satir.append((k, s, yon, stop, H - L, H, L))
+        return st._tablo(satir)
+
+    monkeypatch.setattr(st, "_aralik_kirilimi", sizdiran)
+    b_tam = baglam_kur(D, OLAY)
+    _, v = kosu.izgara("orb")
+    cipalar = _cipalar(b_tam, "orb", v)
+    assert cipalar
+    yakalandi = 0
+    for karar in cipalar:
+        try:
+            _cipali_ileri_bakma("orb", v, karar, 0, b_tam=b_tam)
+        except AssertionError:
+            yakalandi += 1
+    assert yakalandi == len(cipalar), "çıpalı sınama bir iki mumluk ileri bakışı yakalamadı"
+
+
 def test_vwap_ilk_saat_okumalari():
     """İlk saatin iki okuması (strateji.VWAP_ILK_SAAT), tarayıcıların kendisinde. `ok`: kuralın durumu yürür;
     `ok_s`: sinyal verilebilir. Ölçümün okumasında ikisi aynıdır (çapa + 60 dk); harfin okumasında durum çapadan yürür."""

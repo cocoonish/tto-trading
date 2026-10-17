@@ -18,42 +18,48 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
 Önceki beş ders kuralları tek tek işledi: kural, örnek günler, sonuç, maliyet, koşullar, hüküm. Bu ders hepsini aynı
 sayfaya koyar. Karşılaştırma adildir çünkü makine aynıdır: her kural aynı veriyle, aynı yürütme fiyatıyla (gerçek
 bid/ask ve dolum başına aynı kayma), aynı örneklem bölmesiyle ve aynı hüküm kuralıyla ölçüldü; hiçbir kuralın
-parametresi sonuca bakarak seçilmedi. Sıralama bir öneri değildir: işlem başına net R'si en yüksek kural "en iyi
+parametresi sonuca bakarak seçilmedi. R'nin paydası kurala göre değişir: stoplu kurallarda stop uzaklığıdır,
+stopsuz kurallarda (Fiksing dönüşü, Fiksing momentumu ve Gün içi momentum) girişteki ATR(14); bu kurallarda R bir risk değil ölçek birimidir (giriş
+dersi, R birimi) ve sıralamada iki tür R yan yana durur. Sıralama bir öneri değildir: işlem başına net R'si en yüksek kural "en iyi
 strateji" değil, bu örneklemde en az kaybeden ya da en çok kazanan kuraldır ve hüküm kuralının üç şartını sağlamadıkça
 şansla ayırt edilemez.
 
 ## Bütün kurallar tek tabloda
 
-| Strateji | İşlem (havuz) | Net R, havuz (%95) | Net pip, EUR/USD | Parite hükümleri | Maliyet yiyor (bütün · 2024 →) | Başabaş kayma, EUR/USD (pip) | R birimi medyanı, EUR/USD (pip) |
+| Strateji | İşlem (havuz) | Net R, havuz (%95) | Net pip, EUR/USD | Parite hükümleri | Maliyet bayrağı (bütün · 2024 →) | Başabaş kayma, EUR/USD (pip) | R birimi medyanı, EUR/USD (pip) |
 | :--- | ---: | ---: | ---: | :--- | ---: | ---: | ---: |
 | Londra ORB | 2.875 | −0,06 (−0,16 / +0,05) | −0,8 | 1 zayıf · 3 çalışmıyor | 1 · 0 | 0,22 | 11,7 |
-| Asya aralığı | 1.850 | −0,06 (−0,10 / −0,01) | +0,2 | 1 zayıf · 3 çalışmıyor | 1 · 0 | 0,38 | 15,1 |
+| Asya aralığı | 1.850 | −0,06 (−0,10 / −0,01) † | +0,2 | 1 zayıf · 3 çalışmıyor | 1 · 0 | 0,38 | 15,1 |
 | NY IB 08:00 | 2.628 | −0,06 (−0,12 / +0,01) | −1,5 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 21,1 |
-| NY IB 09:30 | 2.082 | −0,05 (−0,10 / +0,002) | −0,3 | 4 çalışmıyor | 0 · 0 | 0,26 | 22,7 |
+| NY IB 09:30 | 2.082 | −0,05 (−0,10 / +0,002) † | −0,3 | 4 çalışmıyor | 0 · 0 | 0,26 | 22,7 |
 | İç mum | 5.137 | −0,13 (−0,17 / −0,10) | −1,9 | 4 çalışmıyor | 1 · 0 | sıfırda bile eksi | 12,7 |
 | Sıkışma | 2.265 | −0,10 (−0,16 / −0,04) | −1,9 | 1 zayıf · 3 çalışmıyor | 1 · 0 | sıfırda bile eksi | 16,0 |
-| PDH/PDL | 1.707 | −0,19 (−0,26 / −0,12) | −0,6 | 4 çalışmıyor | 0 · 0 | 0,34 | 9,4 |
-| Pivot kırılım | 1.731 | −0,16 (−0,23 / −0,09) | −1,9 | 4 çalışmıyor | 1 · 1 | sıfırda bile eksi | 10,1 |
+| PDH/PDL | 1.708 | −0,19 (−0,25 / −0,12) | −0,5 | 4 çalışmıyor | 0 · 0 | 0,37 | 9,4 |
+| Pivot kırılım | 1.731 | −0,16 (−0,22 / −0,09) | −1,9 | 4 çalışmıyor | 2 · 0 | sıfırda bile eksi | 10,1 |
 | Sahte ORB | 1.682 | −0,15 (−0,20 / −0,10) | 0,0 | 4 çalışmıyor | 1 · 0 | 0,15 | 7,9 |
 | Sahte Asya | 1.196 | −0,17 (−0,23 / −0,11) | −0,6 | 4 çalışmıyor | 1 · 0 | sıfırda bile eksi | 8,0 |
-| Sahte PDH/PDL | 933 | −0,16 (−0,23 / −0,10) | −0,1 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 9,3 |
-| VWAP dönüş | 6.932 | −0,25 (−0,28 / −0,21) | −0,8 | 4 çalışmıyor | 1 · 0 | 0,01 | 6,6 |
-| Pivot dönüş | 1.395 | −0,35 (−0,45 / −0,24) | −1,8 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 5,0 |
-| Fiks dönüş | 2.886 | −0,18 (−0,23 / −0,12) | −1,1 | 4 çalışmıyor | 3 · 0 | 0,01 | 8,2 |
+| Sahte PDH/PDL | 934 | −0,16 (−0,22 / −0,09) | −0,1 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 9,3 |
+| VWAP dönüş | 6.931 | −0,25 (−0,28 / −0,21) | −0,8 | 4 çalışmıyor | 1 · 0 | 0,01 | 6,6 |
+| Pivot dönüş | 1.394 | −0,35 (−0,45 / −0,24) | −1,8 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 5,0 |
+| Fiksing dönüşü | 2.886 | −0,18 (−0,23 / −0,12) | −1,1 | 4 çalışmıyor | 3 · 0 | 0,01 | 8,2 |
 | N1 kırılım | 429 | −0,26 (−0,39 / −0,13) | −5,7 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 20,6 |
 | N2 fade | 266 | −0,04 (−0,27 / +0,20) | +0,1 | 1 zayıf · 3 çalışmıyor | 0 · 0 | 0,25 | 15,0 |
 | N3 straddle | 433 | −0,16 (−0,28 / −0,04) | −1,6 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 27,2 |
-| N4 başarısız | 43 | −0,01 (−0,50 / +0,67) | −2,9 | 2 zayıf · 2 çalışmıyor | 0 · 0 | sıfırda bile eksi | 19,0 |
-| N5 devam | 251 | −0,25 (−0,48 / −0,01) | −2,7 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 8,3 |
-| Fiks momentum | 2.883 | −0,30 (−0,33 / −0,27) | −1,3 | 4 çalışmıyor | 2 · 0 | sıfırda bile eksi | 5,3 |
+| N4 başarısız | 43 | −0,01 (−0,50 / +0,67) | −2,9 | 2 zayıf (az işlem) · 2 çalışmıyor (az işlem) | 0 · 0 | sıfırda bile eksi | 19,0 |
+| N5 devam | 251 | −0,25 (−0,48 / −0,01) † | −2,7 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 8,3 |
+| Fiksing momentumu | 2.883 | −0,30 (−0,33 / −0,27) | −1,3 | 4 çalışmıyor | 2 · 0 | sıfırda bile eksi | 5,3 |
 | Gün içi momentum | 2.891 | −0,14 (−0,20 / −0,08) | −1,8 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 13,3 |
 | VWAP çekilme | 1.598 | −0,27 (−0,34 / −0,20) | −0,5 | 4 çalışmıyor | 0 · 0 | 0,07 | 4,6 |
 
 _Örneklem dışı (2024 →), önceden kayıtlı varsayılan. Tanımlar giriş dersinde._
 
+_† Havuz aralığının ucu sıfırda (işareti tohum gürültüsüne bağlı; hüküm değişmez): Asya aralığı: üst uç −0,01 R (sıfıra standart hatanın 0,22 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %6'sında ucu sıfırın üstünde verir; NY IB 09:30: üst uç +0,002 R (sıfıra standart hatanın 0,08 katı uzaklıkta); 500.000 tekrarla +0,002 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %90'ında ucu sıfırın üstünde verir; N5 devam: üst uç −0,01 R (sıfıra standart hatanın 0,08 katı uzaklıkta); 500.000 tekrarla +0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %60'ında ucu sıfırın üstünde verir._
+
+_Sınırdaki maliyet bayrakları (yanıp yanmadığı tohum gürültüsüne bağlı): Sıkışma USD/JPY, bütün dönem (bayrak yanıyor; 500.000 tekrarla brüt alt uç +0,002 R, 2.000 tekrarlı yordam tohumların %91'inde yakar); PDH/PDL EUR/USD, örneklem dışı (bayrak yanmıyor; 500.000 tekrarla brüt alt uç −0,003 R, 2.000 tekrarlı yordam tohumların %22'sinde yakar); Pivot kırılım GBP/USD, örneklem dışı (bayrak yanmıyor; 500.000 tekrarla brüt alt uç −0,003 R, 2.000 tekrarlı yordam tohumların %28'inde yakar); VWAP dönüş EUR/USD, örneklem dışı (bayrak yanmıyor; 500.000 tekrarla brüt alt uç −0,002 R, 2.000 tekrarlı yordam tohumların %16'sında yakar); Fiksing momentumu EUR/USD, bütün dönem (bayrak yanıyor; 500.000 tekrarla brüt alt uç +0,001 R, 2.000 tekrarlı yordam tohumların %88'inde yakar)._
+
 <GrafikEmbed src="/arastirma/fx-gunici/karsilastirma-ozet.html" baslik="Örneklem dışında işlem başına net R — bütün kurallar" no="01" kaynak="Dukascopy" />
 
-22 kural ve 88 kural–parite bileşiminde önceden kaydın hükmü, örneklem dışında (2024 →): 0 çalışıyor, 6 zayıf, 82 çalışmıyor. Bütün dönemde (varsayılan için o da örneklem dışıdır): 0 çalışıyor, 5 zayıf, 83 çalışmıyor. En az bir paritede zayıf (2024 →): Londra ORB, Asya aralığı, Sıkışma, N2 fade, N4 başarısız. Havuzda %95 aralığının alt ucu sıfırın üstünde kalan kural: yok. Maliyet bayrağı (brüt aralığı sıfırın üstünde, net sonuç sıfır ya da altında) bütün dönemde 13, 2024 → penceresinde 1 bileşimde yanıyor.
+22 kural ve 88 kural–parite bileşiminde önceden kaydın hükmü, örneklem dışında (2024 →): 0 çalışıyor, 6 zayıf, 82 çalışmıyor. Bütün dönemde (varsayılan için o da örneklem dışıdır): 0 çalışıyor, 5 zayıf, 83 çalışmıyor. En az bir paritede zayıf (2024 →): Londra ORB, Asya aralığı, Sıkışma, N2 fade, N4 başarısız (USD/JPY ve AUD/USD: örneklem dışında en çok 12 işlem; ölçümün ilk kuralı 20 işlemin altını "ölçülemedi" sayardı). Havuzda %95 aralığının alt ucu sıfırın üstünde kalan kural: yok. Maliyet bayrağı (brüt aralığı sıfırın üstünde, net sonuç sıfır ya da altında) bütün dönemde 14, 2024 → penceresinde 0 bileşimde yanıyor. Bayrağın yanıp yanmadığı tohum gürültüsüne bağlı (sınırda): Sıkışma USD/JPY, bütün dönem, brüt alt uç +0,005 R (sıfıra standart hatanın 0,18 katı uzaklıkta); 500.000 tekrarla +0,002 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %91'inde ucu sıfırın üstünde verir; Fiksing momentumu EUR/USD, bütün dönem, brüt alt uç +0,002 R (sıfıra standart hatanın 0,09 katı uzaklıkta); 500.000 tekrarla +0,001 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %88'inde ucu sıfırın üstünde verir; PDH/PDL EUR/USD, örneklem dışı, brüt alt uç −0,01 R (sıfıra standart hatanın 0,11 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %22'sinde ucu sıfırın üstünde verir; Pivot kırılım GBP/USD, örneklem dışı, brüt alt uç −0,001 R (sıfıra standart hatanın 0,01 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %28'inde ucu sıfırın üstünde verir; VWAP dönüş EUR/USD, örneklem dışı, brüt alt uç −0,004 R (sıfıra standart hatanın 0,13 katı uzaklıkta); 500.000 tekrarla −0,002 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %16'sında ucu sıfırın üstünde verir. Sayım önceden kayıtlı 2.000 tekrarla verilir.
 
 ## Parite parite
 
@@ -68,22 +74,22 @@ sütun dört paritenin işlemleri birlikte (havuz).
 | NY IB 09:30 | −0,02 · çalışmıyor | −0,01 · çalışmıyor | −0,06 · çalışmıyor | −0,11 · çalışmıyor | −0,05 |
 | İç mum | −0,14 · çalışmıyor | −0,07 · çalışmıyor | −0,09 · çalışmıyor | −0,23 · çalışmıyor | −0,13 |
 | Sıkışma | −0,15 · çalışmıyor | −0,09 · çalışmıyor | +0,02 · zayıf | −0,18 · çalışmıyor | −0,10 |
-| PDH/PDL | −0,03 · çalışmıyor | −0,16 · çalışmıyor | −0,30 · çalışmıyor | −0,31 · çalışmıyor | −0,19 |
-| Pivot kırılım | −0,21 · çalışmıyor | −0,03 · çalışmıyor | −0,11 · çalışmıyor | −0,29 · çalışmıyor | −0,16 |
+| PDH/PDL | −0,02 · çalışmıyor | −0,16 · çalışmıyor | −0,28 · çalışmıyor | −0,31 · çalışmıyor | −0,19 |
+| Pivot kırılım | −0,20 · çalışmıyor | −0,03 · çalışmıyor | −0,09 · çalışmıyor | −0,29 · çalışmıyor | −0,16 |
 | Sahte ORB | −0,08 · çalışmıyor | −0,17 · çalışmıyor | −0,05 · çalışmıyor | −0,29 · çalışmıyor | −0,15 |
 | Sahte Asya | −0,14 · çalışmıyor | −0,20 · çalışmıyor | −0,05 · çalışmıyor | −0,27 · çalışmıyor | −0,17 |
-| Sahte PDH/PDL | −0,10 · çalışmıyor | −0,09 · çalışmıyor | −0,18 · çalışmıyor | −0,30 · çalışmıyor | −0,16 |
+| Sahte PDH/PDL | −0,11 · çalışmıyor | −0,07 · çalışmıyor | −0,18 · çalışmıyor | −0,29 · çalışmıyor | −0,16 |
 | VWAP dönüş | −0,16 · çalışmıyor | −0,19 · çalışmıyor | −0,24 · çalışmıyor | −0,39 · çalışmıyor | −0,25 |
-| Pivot dönüş | −0,49 · çalışmıyor | −0,13 · çalışmıyor | −0,26 · çalışmıyor | −0,50 · çalışmıyor | −0,35 |
-| Fiks dönüş | −0,12 · çalışmıyor | −0,15 · çalışmıyor | −0,16 · çalışmıyor | −0,26 · çalışmıyor | −0,18 |
+| Pivot dönüş | −0,49 · çalışmıyor | −0,14 · çalışmıyor | −0,26 · çalışmıyor | −0,51 · çalışmıyor | −0,35 |
+| Fiksing dönüşü | −0,12 · çalışmıyor | −0,15 · çalışmıyor | −0,16 · çalışmıyor | −0,26 · çalışmıyor | −0,18 |
 | N1 kırılım | −0,31 · çalışmıyor | −0,29 · çalışmıyor | −0,11 · çalışmıyor | −0,32 · çalışmıyor | −0,26 |
 | N2 fade | −0,04 · çalışmıyor | −0,06 · çalışmıyor | +0,13 · zayıf | −0,18 · çalışmıyor | −0,04 |
 | N3 straddle | −0,09 · çalışmıyor | −0,17 · çalışmıyor | −0,16 · çalışmıyor | −0,26 · çalışmıyor | −0,16 |
-| N4 başarısız | −0,26 · çalışmıyor | −0,46 · çalışmıyor | +0,35 · zayıf | +0,18 · zayıf | −0,01 |
+| N4 başarısız | −0,26 · çalışmıyor · az işlem (10) | −0,46 · çalışmıyor · az işlem (9) | +0,35 · zayıf · az işlem (12) | +0,18 · zayıf · az işlem (12) | −0,01 |
 | N5 devam | −0,29 · çalışmıyor | −0,14 · çalışmıyor | −0,18 · çalışmıyor | −0,42 · çalışmıyor | −0,25 |
-| Fiks momentum | −0,25 · çalışmıyor | −0,27 · çalışmıyor | −0,18 · çalışmıyor | −0,50 · çalışmıyor | −0,30 |
+| Fiksing momentumu | −0,25 · çalışmıyor | −0,27 · çalışmıyor | −0,18 · çalışmıyor | −0,50 · çalışmıyor | −0,30 |
 | Gün içi momentum | −0,15 · çalışmıyor | −0,14 · çalışmıyor | −0,03 · çalışmıyor | −0,23 · çalışmıyor | −0,14 |
-| VWAP çekilme | −0,19 · çalışmıyor | −0,28 · çalışmıyor | −0,21 · çalışmıyor | −0,40 · çalışmıyor | −0,27 |
+| VWAP çekilme | −0,19 · çalışmıyor | −0,29 · çalışmıyor | −0,21 · çalışmıyor | −0,40 · çalışmıyor | −0,27 |
 
 Bir kuralın bir paritede iyi görünüp öbürlerinde görünmemesi iki şekilde okunabilir: ya o paritenin bir özelliği
 (likidite, seans, haber yoğunluğu) kurala uyuyordur, ya da dört sınamadan biri şansla tutmuştur. Şansın payı hangi
@@ -91,35 +97,36 @@ hükümden söz edildiğine bağlıdır. **Çalışıyor** üç şartın birlikt
 başına %5 düzeyinde bir sınamadır ve kenarı olmayan bir kural dört paritenin en az birinde onu şansla en çok
 4 × %5 = %20 olasılıkla geçer (sınamalar bağımsız olsaydı 1 − 0,95⁴ ≈ %19; pariteler aynı dolara
 karşı işlem gördüğü için bağımsız değiller ve üst sınır her durumda geçerli). **Zayıf** ise bir sınama değildir:
-yalnız örneklem dışı ortalamanın artı olmasını ister ve kenarı olmayan bir kuralın ortalaması da maliyetten önce
-kabaca yarı yarıya artı çıkar. Tek paritede "zayıf" kalan bir kuralı o pariteye özgü bir kenar saymak için o
+yalnız örneklem dışı net ortalamanın artı olmasını ister. Kenarı olmayan bir kuralın brüt ortalaması kabaca yarı
+yarıya artı çıkar; maliyetten sonra bu olasılık düşer ama sıfır değildir: 88 bileşimde birkaç
+"zayıf" hüküm şansla da çıkabilir. Tek paritede "zayıf" kalan bir kuralı o pariteye özgü bir kenar saymak için o
 paritenin yapısından gelen ayrı bir gerekçe gerekir.
 
 ## Maliyet
 
 Aynı kural, artan yürütme maliyetiyle (EUR/USD). Brüt sonuç orta fiyattan orta fiyata, yani makassız ve
 kaymasızdır; net sonuçlar gerçek bid/ask makasını ve dolum başına kaymayı içerir. Merdiven aynı işlemlerin değil aynı
-kuralın yeniden koşusudur: kayma dolum fiyatını, dolayısıyla stop'a ya da hedefe değilen dakikayı değiştirebilir.
+kuralın yeniden koşusudur: kayma dolum fiyatını, dolayısıyla stopa ya da hedefe değilen dakikayı değiştirebilir.
 
 <GrafikEmbed src="/arastirma/fx-gunici/karsilastirma-maliyet.html" baslik="Maliyet merdiveni — bütün kurallar" no="02" kaynak="Dukascopy" />
 
-Parite parite, örneklem dışında beklentisi artı olan kural sayısı:
+Parite parite, örneklem dışında işlem başına net R beklentisi artı olan kural sayısı:
 
-| Parite | Kural | Brüt artı | Yalnız makasla artı | Net artı, kayma 0,0 | Net artı, kayma 0,5 | Net artı, kayma 1,0 | Net artı, kayma 2,0 |
+| Parite | Kural | Brüt artı (R) | Yalnız makasla artı (R) | Net artı (R), kayma 0,0 | Net artı (R), kayma 0,5 | Net artı (R), kayma 1,0 | Net artı (R), kayma 2,0 |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | EUR/USD | 22 | 12 | 9 | 9 | 0 | 0 | 0 |
 | GBP/USD | 22 | 15 | 6 | 5 | 0 | 0 | 0 |
 | USD/JPY | 22 | 15 | 9 | 9 | 5 | 4 | 2 |
 | AUD/USD | 22 | 10 | 1 | 1 | 1 | 1 | 1 |
 
-_Örneklem dışı (2024 →). Kayma kademeleri dolum başına; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" sütununda o da sıfırdır._
+_Örneklem dışı (2024 →). Sayım işlem başına R'nin işaretinden; pip ortalamasının işareti stopu dar işlemler yüzünden ayrışabilir (giriş dersi, R ve pip): tablonun 528 kural–parite–kademe hücresinin 29 tanesinde iki işaret ayrışıyor. Kayma kademeleri dolum başına; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" sütununda o da sıfırdır._
 
-Brüt ile **yalnız makas** satırı arasındaki fark yalnız gerçek bid/ask makasıdır: o satırda kayma da haber
+Brüt ile **yalnız makas** sütunu arasındaki fark yalnız gerçek bid/ask makasıdır: o sütunda kayma da haber
 penceresinin ek kayması da sıfırdır. Dört paritede örneklem dışında brüt sonucu artı olan 52
 kural–parite bileşiminin 27 tanesinde yalnız makasla net sonuç sıfıra ya da altına
 iniyor; kayma sıfır kademesinde (haber penceresinin ek kayması sabit kalır) bu sayı 28,
 temel senaryoda (dolum başına 0,5 pip) 46. Bir kuralın kâğıt
-üstünde (orta fiyatla) artı görünmesi, piyasa yapıcıya her işlemde ödenen makası karşılamaya yetmez. Stop'u yakın
+üstünde (orta fiyatla) artı görünmesi, piyasa yapıcıya her işlemde ödenen makası karşılamaya yetmez. Stopu yakın
 kurallar en çok etkilenir, çünkü makas pip cinsinden sabittir ve R birimi küçüldükçe R cinsinden büyür.
 
 ## Yön mü, zamanlama mı?
@@ -128,9 +135,9 @@ Bir kuralın kenarı iki yerden gelebilir: doğru **zamanda** işlem açmak (oyn
 doğru **yönü** seçmek. Rastgele yön sınaması ikisini ayırır: aynı giriş dakikası, aynı risk ve aynı çıkış kuralı, yalnız
 yön yazı turayla. Stratejinin sonucu bu dağılımın sağ kuyruğundaysa (yüzdelik ≥ 95) yön seçimi bir şey katıyordur.
 
-<GrafikEmbed src="/arastirma/fx-gunici/yontem-rastgele.html" baslik="Yön seçmenin değeri — bütün kurallar (EUR/USD)" no="03" kaynak="Dukascopy" />
+<GrafikEmbed src="/arastirma/fx-gunici/yontem-rastgele.html" baslik="Yön seçmenin değeri — sınanan kurallar (EUR/USD)" no="03" kaynak="Dukascopy" />
 
-Örneklem dışı sonucu rastgele yön dağılımında ≥ 95. yüzdelikte kalan kural sayısı — EUR/USD: 1 / 21 (VWAP dönüş 99,8); GBP/USD: 0 / 21; USD/JPY: 3 / 21 (Londra ORB 95,2, Asya aralığı 97,7, Sahte ORB 96,7); AUD/USD: 0 / 21. Hiçbir şeyin çalışmadığı bir dünyada bile her yirmi sınamadan biri bu eşiği şansla geçer. Eşiği geçip net sonucu yine eksi kalan: VWAP dönüş (EUR/USD: kendisi −0,16 R, rastgele yönün ortalaması −0,23 R); Sahte ORB (USD/JPY: kendisi −0,05 R, rastgele yönün ortalaması −0,13 R). Rastgele yönlü işlemler de aynı makası ödediği için dağılımın ortalaması sıfırın altında kalır; o dağılımı yenmek yön seçiminin bir şey kattığını söyler, maliyeti karşıladığını söylemez.
+Örneklem dışı sonucu rastgele yön dağılımında ≥ 95. yüzdelikte kalan kural sayısı — EUR/USD: 1 / 21 (VWAP dönüş 99,9); GBP/USD: 0 / 21; USD/JPY: 3 / 21 (Londra ORB 95,2, Asya aralığı 97,7, Sahte ORB 96,7); AUD/USD: 0 / 21. Hiçbir şeyin çalışmadığı bir dünyada bile her yirmi sınamadan biri bu eşiği şansla geçer. Sınama kurulmayan bileşimler (örneklem dışında 20 işlemden az): N4 başarısız (EUR/USD 10, GBP/USD 9, USD/JPY 12, AUD/USD 12 işlem). Eşiği geçip net sonucu yine eksi kalan: VWAP dönüş (EUR/USD: kendisi −0,16 R, rastgele yönün ortalaması −0,23 R); Sahte ORB (USD/JPY: kendisi −0,05 R, rastgele yönün ortalaması −0,13 R). Rastgele yönlü işlemler de aynı makası ödediği için dağılımın ortalaması sıfırın altında kalır; o dağılımı yenmek yön seçiminin bir şey kattığını söyler, maliyeti karşıladığını söylemez.
 
 ## Kurallar birbirinin kopyası mı?
 
@@ -141,7 +148,33 @@ farklı yönlerde kazanıp kaybettiğini söyler.
 
 <GrafikEmbed src="/arastirma/fx-gunici/karsilastirma-korelasyon.html" baslik="Stratejiler arası günlük R korelasyonu" no="04" kaynak="Dukascopy" />
 
-22 kuralın 231 çiftinden 14 tanesinde günlük R korelasyonu mutlak değerce 0,25'i aşıyor. En yüksek 5 çift: N1 kırılım × N3 straddle +0,79; PDH/PDL × Pivot kırılım +0,42; N2 fade × N3 straddle −0,40; N1 kırılım × N2 fade −0,37; NY IB 08:00 × NY IB 09:30 +0,37.
+Bütün dönemde (2018 → 2026) 22 kuralın 231 çiftinden 14 tanesinde günlük R korelasyonu mutlak değerce 0,25 ya da daha fazla. En yüksek 5 çift: N1 kırılım × N3 straddle +0,79; PDH/PDL × Pivot kırılım +0,42; N2 fade × N3 straddle −0,40; N1 kırılım × N2 fade −0,37; NY IB 08:00 × NY IB 09:30 +0,37. Örneklem dışında (2024 →) aynı eşiği 15 çift geçiyor.
+
+<div class="sayi-tablo">
+
+| Çift | Bütün dönem ρ | Örneklem dışı ρ (2024 →) |
+| :--- | ---: | ---: |
+| N1 kırılım × N3 straddle | +0,79 | +0,80 |
+| PDH/PDL × Pivot kırılım | +0,42 | +0,46 |
+| N2 fade × N3 straddle | −0,40 | −0,50 |
+| N1 kırılım × N2 fade | −0,37 | −0,50 |
+| NY IB 08:00 × NY IB 09:30 | +0,37 | +0,43 |
+| Londra ORB × Asya aralığı | +0,35 | +0,32 |
+| NY IB 08:00 × VWAP dönüş | −0,30 | −0,32 |
+| N3 straddle × N5 devam | +0,29 | +0,35 |
+| N4 başarısız × N5 devam | −0,28 | −0,34 |
+| N1 kırılım × N5 devam | +0,27 | +0,35 |
+| Londra ORB × İç mum | +0,27 | +0,24 |
+| N2 fade × N5 devam | −0,26 | −0,31 |
+| NY IB 08:00 × İç mum | +0,25 | +0,29 |
+| İç mum × VWAP dönüş | −0,25 | −0,22 |
+| Asya aralığı × Sıkışma | +0,23 | +0,26 |
+| VWAP dönüş × Pivot kırılım | −0,21 | −0,26 |
+| Londra ORB × NY IB 08:00 | +0,18 | +0,27 |
+
+</div>
+
+_Mutlak değerce 0,25 ya da daha fazla olan bütün çiftler (iki dönemden birinde); sıra bütün dönemin mutlak değerine göre._
 
 Korelasyonun düşük olması bir portföy argümanı değildir: birbirinden bağımsız iki kaybeden kuralın toplamı, daha
 düzgün bir eğriyle kaybeder. Çeşitlendirme ancak bileşenlerin her biri maliyetten sonra artıysa bir değer yaratır.
@@ -158,22 +191,22 @@ aynı ölçüt **ters seçimle** de koşuldu: örneklem içinde ortalamanın alt
 | Değişken | Sınanan (seçim) | Tuttu | Sınanan (ters seçim) | Tuttu (ters seçim) |
 | :--- | ---: | ---: | ---: | ---: |
 | aralık / günlük ATR | 84 | 6 | 84 | 11 |
-| Asya aralığı / günlük ATR | 76 | 5 | 76 | 8 |
-| önceki gün aralığı / ATR | 76 | 6 | 76 | 7 |
+| Asya aralığı / günlük ATR | 76 | 6 | 76 | 9 |
+| önceki gün aralığı / ATR | 76 | 7 | 76 | 7 |
 | önceki günün yönü | 84 | 6 | 84 | 9 |
 | NR4 (son 4 günün en dar aralığı) | 84 | 7 | 83 | 13 |
-| NR7 (son 7 günün en dar aralığı) | 81 | 11 | 80 | 10 |
+| NR7 (son 7 günün en dar aralığı) | 81 | 10 | 80 | 10 |
 | açılış farkı / ATR | 84 | 5 | 84 | 8 |
-| oynaklık yüzdeliği | 84 | 12 | 84 | 5 |
+| oynaklık yüzdeliği | 84 | 15 | 84 | 6 |
 | 60 dk trend (EMA50 tarafı) | 80 | 6 | 84 | 8 |
 | haftanın günü | 83 | 8 | 82 | 6 |
-| büyük olay günü | 68 | 10 | 68 | 10 |
+| büyük olay günü | 68 | 11 | 68 | 10 |
 | ay sonu | 71 | 7 | 76 | 5 |
 | saat değişimi haftası | 77 | 12 | 80 | 10 |
 | Londra–NY farkı 4 saat | 76 | 10 | 78 | 10 |
-| Toplam | 1.108 | 111 | 1.119 | 120 |
+| Toplam | 1.108 | 116 | 1.119 | 122 |
 
-Örneklem içinde seçilen kovalar 1.108 sınamanın 111 tanesinde (%10) örneklem dışı ölçütü geçti. Örneklem içinde en kötü kovalar seçilseydi aynı ölçüt 1.119 sınamanın 120 tanesinde (%11) geçerdi. İki seçimden yalnız birinin tuttuğu bileşimlerde gerçek seçim 110, ters seçim 117 kez tuttu (kesin McNemar p 0,69). Gerçek seçim ters seçimden ayırt edilemiyor: tutan koşulların çoğu, gürültünün örneklem dışında da sıfırın üstünde kalabilmesiyle açıklanır. Tek tek "tuttu" hücreleri bir karar kuralı değildir.
+Örneklem içinde seçilen kovalar 1.108 sınamanın 116 tanesinde (%10) örneklem dışı ölçütü geçti. Örneklem içinde en kötü kovalar seçilseydi aynı ölçüt 1.119 sınamanın 122 tanesinde (%11) geçerdi. İki seçimden yalnız birinin tuttuğu bileşimlerde gerçek seçim 115, ters seçim 119 kez tuttu (kesin McNemar p 0,84). Gerçek seçim ters seçimden ayırt edilemiyor: tutan koşulların çoğu, gürültünün örneklem dışında da sıfırın üstünde kalabilmesiyle açıklanır. Tek tek "tuttu" hücreleri bir karar kuralı değildir.
 
 _Ters seçim önceden kayıtta yoktu ve sonradan eklendi. Hiçbir hükmü değiştirmez; yalnız "tuttu" sayısının ne
 kadarının şansla açıklanabileceğini ölçer (metodoloji dersi)._
@@ -188,24 +221,24 @@ tablonun kendi satırlarıdır.
 
 | Kural | Koşul: kova | Tutan pariteler: örneklem dışı R (işlem) |
 | :--- | :--- | :--- |
-| Londra ORB | NR7 (son 7 günün en dar aralığı): NR7 | EUR/USD +0,01 (111); GBP/USD +0,05 (105) |
-| Londra ORB | büyük olay günü: haber günü | EUR/USD +0,17 (106); GBP/USD +0,07 (106) |
-| Londra ORB | saat değişimi haftası: geçiş haftası | EUR/USD +0,06 (50); GBP/USD +0,17 (50) |
-| Asya aralığı | saat değişimi haftası: geçiş haftası | USD/JPY +0,09 (25); AUD/USD +0,08 (22) |
-| Asya aralığı | Londra–NY farkı 4 saat: ara dönem | EUR/USD +0,004 (38); USD/JPY +0,13 (24) |
-| NY IB 09:30 | büyük olay günü: haber günü | EUR/USD +0,11 (75); GBP/USD +0,18 (73) |
-| NY IB 09:30 | saat değişimi haftası: geçiş haftası | GBP/USD +0,07 (39); USD/JPY +0,02 (31) |
+| Londra ORB | NR7 günleri | EUR/USD +0,003 (112); GBP/USD +0,04 (106) |
+| Londra ORB | Büyük olay günleri | EUR/USD +0,17 (106); GBP/USD +0,07 (106) |
+| Londra ORB | Saat değişimi haftaları | EUR/USD +0,06 (50); GBP/USD +0,17 (50) |
+| Asya aralığı | Saat değişimi haftaları | USD/JPY +0,09 (25); AUD/USD +0,08 (22) |
+| Asya aralığı | Ara dönem (Londra–NY farkı 4 saat) | EUR/USD +0,004 (38); USD/JPY +0,13 (24) |
+| NY IB 09:30 | Büyük olay günleri | EUR/USD +0,11 (75); GBP/USD +0,18 (73) |
+| NY IB 09:30 | Saat değişimi haftaları | GBP/USD +0,07 (39); USD/JPY +0,02 (31) |
 | Pivot dönüş | 60 dk trend (EMA50 tarafı): trend yönünde | GBP/USD +0,82 (24); USD/JPY +0,07 (21) |
-| N2 fade | haftanın günü: Cum | GBP/USD +0,21 (22); AUD/USD +0,29 (23) |
-| Fiks momentum | ay sonu: ay sonu | GBP/USD +0,38 (33); USD/JPY +0,31 (33) |
-| Gün içi momentum | saat değişimi haftası: geçiş haftası | EUR/USD +0,11 (50); USD/JPY +0,26 (50); AUD/USD +0,02 (50) |
+| Fiksing momentumu | Ay sonu günleri | GBP/USD +0,38 (33); USD/JPY +0,31 (33) |
+| Gün içi momentum | Saat değişimi haftaları | EUR/USD +0,11 (50); USD/JPY +0,26 (50); AUD/USD +0,02 (50) |
 
-_22 kuralın 7 tanesinde en az bir aday var; toplam 11 aday. Aday: örneklem içinde seçilip örneklem dışında en az iki paritede aynı kovayla tutan koşul._
+_22 kuralın 6 tanesinde en az bir aday var; toplam 10 aday. Aday: örneklem içinde seçilip örneklem dışında en az iki paritede aynı kovayla tutan koşul. Şans tabanı: aynı kural gerçek seçimde 6 kuralda 10 aday, ters seçimde (örneklem içinde koşulsuz ortalamanın altında kalan kovalar) 4 kuralda 7 aday verir._
 
 Tablonun okunuşu dar tutulmalı. Bir aday, aynı kovanın iki paritede örneklem dışında artı ve öbür kovalardan iyi
 kaldığını söyler; güven aralığını ve rastgele yön sınamasını taşımaz, ve bütün kurallar birlikte sayıldığında gerçek
-seçim ters seçimden ayırt edilemiyor (yukarıdaki bölüm). Fiksing kurallarının ay sonu ayrımı (fade ve akış dersleri)
-da bir alt küme ölçüsüdür ve aynı uyarıyı taşır: ön kayıt onu ayrı raporlar, ona ayrı hüküm vermez.
+seçim ters seçimden ayırt edilemiyor (yukarıdaki bölüm).
+
+Fiksing kurallarının ay sonu ayrımı (fade ve akış dersleri) adaylardan farklıdır: örneklem içinden seçilmiş bir kova değil, ön kaydın ayrıca raporlanmasını istediği bir alt kümedir ve kendi güven aralığını taşır. 8 bileşimin 2'sinde ay sonunun net sonucu bütün dönemde ve örneklem dışında artı, örneklem dışı aralığın alt ucu sıfırın üstünde ve ay sonu ile öbür günlerin farkı 8 sınamanın düzeltilmiş eşiğinin (0,0063) altında: Fiksing momentumu GBP/USD (2024 → +0,38 R, aralık +0,04 / +0,74, fark p &lt; 0,01); Fiksing momentumu USD/JPY (2024 → +0,31 R, aralık +0,01 / +0,65, fark p &lt; 0,01). Serinin ön kayıtlı, iki dönemde tutarlı ve çoklu sınama düzeltmesini geçen sonucu budur. Sınırları adıyla: örneklem dışında parite başına 32–33 işlem; rastgele yön sınaması alt kümede yapılmadı; ön kayıt alt kümeye ayrı hüküm vermez; aynı kural EUR/USD ve AUD/USD paritelerinde tutmuyor.
 
 ## Ne öğrendik
 
@@ -226,11 +259,17 @@ kazandırdı" değil, "hangi fiyatla ölçüldü" olmalıdır.
 ayırt edilemiyor. Öbürlerinde sınama yapılmadı: örneklem dışında
 20'den az işlem var.
 
-**Örneklem içi seçim.** Izgaradan örneklem içinde seçilen kombinasyonların deflated Sharpe olasılığı
-87 bileşimin 0 tanesinde denemelerin yayılımından kurulan eşikle,
-0 tanesinde örnekleme gürültüsü eşiğiyle 0,95'i aşıyor. Geri
-kalanında en iyi kombinasyonun örneklem içi Sharpe'ı, denenen kombinasyon sayısının şansla üretebileceği en yüksek
-değerden ayırt edilemiyor: örneklem içinde iyi görünen bir ayar, çoğu zaman yalnız en şanslı ayardır. Koşul analizinde gerçek seçim ters seçimden ayırt edilemedi (yukarıdaki bölüm).
+**Örneklem içi seçim.** Seçim 88 bileşimin 86 tanesinde kuruldu;
+öbür 2 bileşimde ızgaranın hiçbir kombinasyonu örneklem içinde asgari işlem sayısına ulaşmadı:
+N4 başarısız (GBP/USD ve AUD/USD). Izgaradan örneklem içinde seçilen kombinasyonların deflated Sharpe olasılığı
+86 bileşimin hiçbirinde ne denemelerin yayılımından
+kurulan eşikle ne örnekleme gürültüsü eşiğiyle 0,95'i aşmıyor. 51
+bileşimde ızgaranın en iyi kombinasyonunun örneklem içi Sharpe'ı bile sıfır ya da eksi: açıklanacak bir artı yok.
+Artı olan 35 bileşimde en iyi kombinasyonun örneklem içi
+Sharpe'ı, denenen kombinasyon sayısının şansla üretebileceği en yüksek değerden ayırt edilemiyor: örneklem içinde iyi
+görünen bir ayar, çoğu zaman yalnız en şanslı ayardır. Koşul analizinde gerçek seçim ters seçimden ayırt edilemedi (yukarıdaki bölüm).
+
+**Ay sonu.** Fiksingin ay sonu ayrımı, serinin önceden kayıtlı, iki dönemde tutarlı ve çoklu sınama düzeltmesini geçen sonucudur: Fiksing momentumu, GBP/USD ve USD/JPY paritelerinde (yukarıdaki bölüm). Bu bir hüküm değil gözlemdir: alt küme örneklem dışında parite başına 32–33 işlem taşır, rastgele yön sınaması alt kümede yapılmadı ve aynı kural EUR/USD ve AUD/USD paritelerinde tutmuyor. Bir sonraki örneklemde ilk sınanacak sonuç budur.
 
 Bu sonuçlar bu kuralların bu biçimleri içindir: başka bir yürütme maliyeti (daha dar makas, likidite sağlayan emirler),
 başka bir zaman dilimi, ya da kuralın bir parçası olarak gerçek bir haber beklentisi başka sonuç verebilir. Ölçülmeyen

@@ -16,12 +16,15 @@ başlatılacağı bir seçimdir ve ızgarada iki çapa sınanıyor.
 
 ### Kurallar
 
-- **VWAP ve bant.** Çapadan (FX günü başı 17:00 New York ya da Londra 08:00) bu yana her dakikanın tipik fiyatı
+- **VWAP ve bant.** Çapadan (FX günü başı 17:00 New York ya da Londra 08:00;
+  {{! tsi "ya da" "New York 17:00" "Londra 08:00" }}) bu yana her dakikanın tipik fiyatı
   (tepe + dip + kapanış) / 3, hacimle ağırlıklı ortalama; σ aynı ağırlıklarla standart sapma. Bant VWAP ± k·σ.
-- **Isınma.** Çapadan sonraki ilk 60 dakika sinyal yok (ortalama ve sapma birkaç dakikalık veriyle anlamsızdır).
+- **Isınma.** Çapadan sonraki ilk 60 dakika sinyal yok ve kuralın durumu da o saat dolunca başlar: ilk saatte
+  bandın dışına çıkış bir gezinti başlatmaz (ortalama ve sapma birkaç dakikalık veriyle anlamsızdır).
 - **Sinyal.** Kapanış bandın dışına çıkar; sonra bandın **içine** kapanan ilk mum VWAP yönünde giriş verir.
 - **Stop.** Bant dışı gezintinin ucu (yukarı gezintide en yüksek tepe).
-- **Hedef.** "VWAP": sinyal anındaki VWAP seviyesi; ya da 1R, 2R, zaman. Sinyal en geç 16:00 New York.
+- **Hedef.** "VWAP": sinyal anındaki VWAP seviyesi; ya da 1R, 2R, zaman ({{ ON.genel.desen_zaman_mum | n }} mum). Seviye yürütülen girişin (makas ve kayma dahil) gerisinde ya da tam üstündeyse işlem yok; atılan sinyal sayısı bu yüzden kaymaya bağlıdır. Sinyal en geç 16:00 New York
+  ({{! tsi "" "New York 16:00" }}).
 
 {{! kural }}
 
@@ -36,14 +39,22 @@ bir "kısa hedef" değildir, çoğu işlemde 1R'nin ötesindedir.
 
 {{! ornek }}
 
-Figürde noktalı mavi çizgiler sinyal anındaki bandın iki ucu ve VWAP'ın kendisi, yeşil çizgi hedeftir
+Figürde noktalı mavi çizgiler sinyal anındaki bandın iki ucu ve VWAP'ın kendisi (sinyal mumundan başlar: VWAP ve bant gün içinde yürür, figür sinyal anındaki değeri gösterir), yeşil çizgi hedeftir
 (sinyal anındaki VWAP); mavi bant bandın içine kapanan sinyal mumudur. Kaybeden örnek lehine yarım R'ye
 ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: fiyat
-ortalamaya dönmeye başlıyor, sonra gezinti yeniden başlayıp stop'u alıyor.
+{{! tuzak "ortalamaya dönmeye başlıyor, sonra gezinti yeniden başlayıp stopu alıyor." "ortalamaya dönmeye başlıyor ama dönüş sürmüyor; işlem stopa değmeden zararla kapanıyor ({cikis})." }}
 
 ### Sonuçlar
 
 {{! sonuclar }}
+
+**Ön kaydın harfiyle.** Ön kayıt "çapadan sonraki ilk 60 dakika sinyal yok" der ve yalnız sinyali yasaklar.
+Sonuçlardan önce yazılan kod ilk saatte kuralın durumunu da sıfırlar (yukarıda, ısınma); harfiyle okunursa bant
+dışı gezinti çapadan başlar ve ilk saatte başlayan bir gezinti, bandın içine ilk saatten sonra kapanırsa sinyal
+verir. Hüküm sonuçlardan önce yazılan okumayla verilir; harfin okuması aynı koşuda ayrıca ölçüldü.
+{{! yorum_cumle }}
+
+{{! yorum }}
 
 ### Koşullar
 

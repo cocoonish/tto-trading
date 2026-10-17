@@ -6,15 +6,21 @@ dersindeki önceki gün tepe/dip kuralının aynasıdır.
 
 ### Piyasa mantığı
 
-Dünün uçları günlerdir izlenen seviyelerdir ve stop'ların en kalabalık olduğu yerlerden biridir. Bir günün tepesinin
+Dünün uçları günlerdir izlenen seviyelerdir ve stopların en kalabalık olduğu yerlerden biridir. Bir günün tepesinin
 kısa bir süre aşılıp geri dönülmesi grafik okumasında "likidite avı" (*liquidity grab*, *stop hunt*) diye anılır.
 Bu kural o okumayı mekanik bir tanıma bağlar: aşılan seviye kapanışla geri alınırsa aşış başarısız sayılır.
 
 ### Kurallar
 
-- **Seviye.** Önceki FX işlem gününün (17:00 → 17:00 New York) orta fiyattan tepesi ve dibi.
-- **Kırılım, geri dönüş, stop.** Sahte ORB ile aynı.
-- **Pencere.** Londra 08:00 → 14:00 New York; gün başına tek işlem.
+- **Seviye.** Önceki FX işlem gününün (17:00 → 17:00 New York; gün dönümü {{! tsi "" "New York 17:00" }})
+  orta fiyattan tepesi ve dibi.
+- **Kırılım, geri dönüş, stop.** Sahte ORB ile aynı. Kırılım mumu seviyeyi kesen mumdur (önceki kapanış içeride
+  ya da uçta): seviye Asya saatlerinde aşılmışsa ve fiyat Londra açıldığında hâlâ dışarıdaysa, pencerenin ilk mumu
+  bir kırılım sayılmaz; kural fiyatın içeri dönüp seviyeyi yeniden kesmesini bekler. Kesiş tanımı "pencere"
+  parametresine anlam verir: dışarıda her kapanış bir kırılım sayılsaydı, içeride kapanan ilk mum neredeyse her zaman dışarıda
+  kapanmış bir mumun hemen ardından gelirdi ve en kısa pencere (bir mum) onu zaten yakalardı.
+- **Pencere.** Londra 08:00 → 14:00 New York ({{! tsi "→" "Londra 08:00" "New York 14:00" }}); gün başına tek
+  işlem.
 
 {{! kural }}
 
@@ -26,11 +32,18 @@ Varsayılan: 15 dakikalık mumlar, iki mumluk pencere, 1R hedef.{{? B.varsayilan
 
 {{! ornek }}
 
-Noktalı mavi çizgiler dünün tepesi ve dibi, mavi bant içeri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: geri dönüş başlıyor, sonra kırılım yeniden başlayıp stop'u alıyor.
+Noktalı mavi çizgiler dünün tepesi ve dibi, mavi bant içeri dönen sinyal mumudur. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir: {{! tuzak "geri dönüş başlıyor, sonra kırılım yeniden başlayıp stopu alıyor." "geri dönüş başlıyor ama sürmüyor; işlem stopa değmeden zararla kapanıyor ({cikis})." }}
 
 ### Sonuçlar
 
 {{! sonuclar }}
+
+**Ön kaydın harfiyle.** Ön kayıt kırılımı "bir mum seviyenin dışında kapanır" diye tanımlar ve önceki kapanışı
+sormaz. Harfiyle okunursa pencerenin ilk mumu dışarıda kapandığında, seviye Asya saatlerinde aşılmış olsa da, o
+mum bir kırılımdır ve açılıştan sonraki geri alınış işlem verir. Hüküm sonuçlardan önce yazılan okumayla verilir;
+harfin okuması aynı koşuda ayrıca ölçüldü. {{! yorum_cumle }}
+
+{{! yorum }}
 
 ### Koşullar
 
@@ -40,7 +53,7 @@ Noktalı mavi çizgiler dünün tepesi ve dibi, mavi bant içeri dönen sinyal m
 
 1. **Hüküm.** {{! kontrol_hukum }}
 2. **Ne zaman.** {{! ne_zaman }}
-3. **Dünün tepe ve dibi.** 17:00 New York'ta kapanan günün uçları.
+3. **Dünün tepe ve dibi.** 17:00 New York'ta ({{! tsi "" "New York 17:00" }}) kapanan günün uçları.
 4. **Kırılımı gör, girme; geri dönüşü bekle.** En çok iki mum içinde içeride kapanış.
 5. **Stop gezintinin ucunda, hedef 1R.** Pencere 14:00 New York'ta kapanır (TSİ 21:00 ya da 22:00).
 6. **Maliyet.** {{! basabas }}

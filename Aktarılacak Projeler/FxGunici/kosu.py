@@ -479,6 +479,18 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
     out["hukum_tum"] = _hukum(out["tum"], out["rastgele"]["tum"])
     out["maliyet_yiyor"] = _maliyet_bayragi(out["tum"])
     out["maliyet_yiyor_oos"] = _maliyet_bayragi(out["oos"])
+    # Gün kümeli aralık (bilgi): hüküm ve maliyet bayrağı ön kaydın okumasıyla, işlemleri bağımsız örnekleyen aralıktan
+    # verilir. Aynı paritede aynı gün açılan işlemler aynı haberi ve aynı seans hareketini taşır; bağımsız sayılmaları
+    # aralığı daraltabilir. Aynı iki ölçüt gün kümeli aralıkla da sorulur ki bağımsızlık varsayımının hükmü ve bayrağı
+    # ne kadar taşıdığı görünsün (havuzun aralığı zaten gün kümelidir).
+    out["gun_kumeli"] = {}
+    for d, x, gunler in (("oos", dis, k.gun_oos), ("tum", isl, k.gun_tum)):
+        m = mk.ozet(x, gunler, kume_sutun="gun")
+        g_ = {kk: m.get(kk) for kk in ("ga_alt", "ga_ust", "ga_brut_alt", "ga_brut_ust")}
+        g_["hukum"] = _hukum({**out[d], "ga_alt": m.get("ga_alt")}, out["rastgele"][d])
+        g_["maliyet_yiyor"] = _maliyet_bayragi({**out[d], "ga_brut_alt": m.get("ga_brut_alt", -1)})
+        g_["n_gun"] = int(mk.alinan(x)["gun"].nunique()) if out[d].get("n") else 0
+        out["gun_kumeli"][d] = g_
     # Sıfıra yakın uçlar (bilgi; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir): hükmü ayıran uç (net artı
     # iken net aralığın alt ucu) ve maliyet bayrağını ayıran uç (net ≤ 0 iken brüt aralığın alt ucu). Bütün dönem
     # yalnız varsayılanda bir hükümdür (seçilenin bütün dönemi seçim dönemini içerir).
@@ -878,9 +890,10 @@ def main(argv: list[str]) -> int:
     from gunluk import baglam_kur
     from takvim import olaylar_oku
     a = ay.oku()
-    birimler = [x for x in argv if x in BIRIMLER] or list(BIRIMLER)
+    # --yalniz-haber: strateji birimleri koşmaz, yalnız haber analizleri (devam, patika, FOMC) yeniden ölçülür.
+    birimler = ([] if "--yalniz-haber" in argv else [x for x in argv if x in BIRIMLER] or list(BIRIMLER))
     ciftler = [x for x in argv if x in a.ciftler] or list(a.ciftler)
-    haber = "--haberli" in argv or not [x for x in argv if x in BIRIMLER]
+    haber = "--haberli" in argv or "--yalniz-haber" in argv or not [x for x in argv if x in BIRIMLER]
     for cift in ciftler:
         t0 = time.monotonic()
         d = vr.oku(cift, a)

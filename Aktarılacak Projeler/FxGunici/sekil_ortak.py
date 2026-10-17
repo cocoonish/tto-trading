@@ -97,7 +97,7 @@ _GENISLIK = {
 }
 _TANIMSIZ = 1000                     # tabloda olmayan işaret (○ ● ◆ ◇ …): geniş say, taşma payı kalsın
 _CIPLAK_SAYI = re.compile(r"\(?[+−-]?%?\d+(?:[.,]\d+)*")   # "(164 yayım" de bölünmez
-_BAGLI_ISARET = ("·", "−", "+", "=", "×", "≥", "≤", "≈", "→")   # satır başına düşmez (sar)
+_BAGLI_ISARET = ("·", "—", "−", "+", "=", "×", "≥", "≤", "≈", "→")   # satır başına düşmez (sar)
 
 
 def satir_em(metin: str) -> float:
@@ -140,9 +140,10 @@ def _satirla(kelimeler: list[str], en: float) -> list[list[str]]:
 
 def sar(metin: str, en: float) -> list[str]:
     """Metni sözcük sınırında en çok `en` em genişliğinde satırlara böler (`_satirla`). Var olan <br>
-    korunur; bölünmez boşluk (U+00A0) bölünmez. Ayraç " · " ve iki yanı boşluklu işlem işaretleri
-    (− + = × ≥ ≤ ≈ →) bir önceki sözcüğe bağlanır: satır onlarla BAŞLAMAZ, onlarla biter — satır başındaki
-    "− yıllık TÜFE" bir eksi işaretli terim gibi okunur. Çıplak sayı ardından gelen sözcükten ayrılmaz
+    korunur; bölünmez boşluk (U+00A0) bölünmez. Ayraç " · ", başlığın uzun çizgisi " — " ve iki yanı boşluklu
+    işlem işaretleri (− + = × ≥ ≤ ≈ →) bir önceki sözcüğe bağlanır: satır onlarla BAŞLAMAZ, onlarla biter — satır
+    başındaki "− yıllık TÜFE" bir eksi işaretli terim gibi okunur, "— 08:00 ET" ile başlayan ikinci satır başlığın
+    yapısını okunmaz yapar. Çıplak sayı ardından gelen sözcükten ayrılmaz
     ("5 yıl", "164 yayım" satır sonunda bölünmez). Sınırdan uzun tek bir sözcük bölünmez, kendi satırında
     kalır (taşma denetimi `tasan_satirlar` onu adıyla gösterir)."""
     cikti = []

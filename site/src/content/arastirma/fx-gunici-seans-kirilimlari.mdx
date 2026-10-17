@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'kirilim', 'orb', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Seans açılışında oluşan aralığın kırılmasına girmek gün içi işlem kitaplarının en eski kuralıdır. Bu ders dört biçimini aynı makineyle ölçer: Londra'nın ilk mumu, gecenin aralığı ve New York'un iki ayrı açılışı — ve hangisinin maliyetten sonra bir şey bıraktığını söyler."
+ozet: "Seans açılışında oluşan aralığın kırılmasına girmek gün içi işlem kitaplarının en eski kuralıdır. Bu ders dört biçimini aynı makineyle ölçer: Londra'nın ilk mumu, gecenin aralığı ve New York'un iki ayrı açılışı. Dördü de hiçbir paritede önceden kayıtlı hüküm kuralının şartlarını sağlamıyor: maliyetten sonra kanıtlanmış bir kenar yok."
 seviye: 'orta'
 onkosul:
   - fx-gunici-giris
@@ -42,17 +42,17 @@ Londra 08:00.
 ### Piyasa mantığı
 
 FX yirmi dört saat işler ama likidite eşit dağılmaz. Asya seansında dar bir aralıkta biriken emirler —
-kurumsal akış, opsiyon bariyerlerinin hedge'i, gece boyunca konmuş stop'lar — Avrupa masaları açıldığında
+kurumsal akış, opsiyon bariyerlerinin hedge'i, gece boyunca konmuş stoplar — Avrupa masaları açıldığında
 işlenir. Kırılımı savunan görüş şöyle der: açılışın ilk mumu bu birikimin hangi yöne boşaldığını gösterir ve
 bilgili akış o yönde sürer. Karşı görüş de aynı gözlemden çıkar: açılıştaki ilk hareket çoğu zaman likidite
-toplamaktır, aralığın hemen dışındaki stop'lar alınır ve fiyat geri döner. Bu dersin işi hangisinin daha sık
+toplamaktır, aralığın hemen dışındaki stoplar alınır ve fiyat geri döner. Bu dersin işi hangisinin daha sık
 olduğunu ölçmek. İkinci görüşün kuralı (**başarısız kırılım**) fade dersinde aynı aralıkla ayrıca sınanıyor.
 
 ### Kurallar
 
 - **Aralık.** Londra 08:00'den itibaren ilk mum (15 dakikalık mumda 08:00–08:15, 60 dakikalıkta
   08:00–09:00). Londra açılışının TSİ saati yalnız İngiltere'nin saatine bağlıdır: İngiltere yaz saatindeyken
-  10:00, kış saatindeyken 11:00. Mart ve ekimdeki ara haftalarda (Avrupa ile ABD'nin saati farklı günlerde
+  10:00, kış saatindeyken 11:00. Mart ve ekim sonu–kasım başındaki ara haftalarda (Avrupa ile ABD'nin saati farklı günlerde
   değiştiği haftalar) İngiltere kış saatindedir, açılış iki ara dönemde de TSİ 11:00'dir.
 - **Sinyal.** Aralıktan sonraki mumlardan, aralığın **dışında kapanan** ilk mum; yön kapanışın tarafı. Gün
   başına tek işlem.
@@ -72,11 +72,11 @@ olduğunu ölçmek. İkinci görüşün kuralı (**başarısız kırılım**) fa
 | hedef | 1R, 2R, gün sonu | gün sonu |
 | son giriş (Londra) | 10:00, 12:00, 14:00 | 12:00 |
 
-_Izgara: 108 kombinasyon._
+_Izgara: 108 kombinasyon. Saatler kuralın yerel saatidir: son giriş (Londra) 10:00 → TSİ yazın 12:00, kışın 13:00; son giriş (Londra) 12:00 → TSİ yazın 14:00, kışın 15:00; son giriş (Londra) 14:00 → TSİ yazın 16:00, kışın 17:00._
 
 Varsayılan, kuralın ders kitabı hâlidir: 15 dakikalık aralık, karşı uçta sert stop, kârı gün sonuna kadar
 bırakmak. Kârın koşmasına izin vermek açılış kırılımının asıl iddiasıdır; 1R ya da 2R hedefler o iddianın daha
-temkinli biçimleridir ve ızgarada ayrıca ölçülür.
+temkinli biçimleridir ve ızgarada ayrıca ölçülür (sonuçlarda "Stop ve hedef" tablosu).
 
 ### Örnekler
 
@@ -84,14 +84,14 @@ temkinli biçimleridir ve ızgarada ayrıca ölçülür.
 
 - **Kazanan** (11 Ağustos 2025, pazartesi; 15 dk mum): satış. Sinyal mumu 10:15–10:30 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,16537 (bid, kayma dahil); stop 1,16659 (12,2 pip). Çıkış 23:55 TSİ'de 1,16194, gün sonu kapanışı: +2,81 R (+34,3 pip, maliyet dahil). İşlem boyunca en kötü −0,57 R, en iyi +5,20 R.
 - **Kaybeden** (3 Haziran 2026, çarşamba; 15 dk mum): alış. Sinyal mumu 10:30–10:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,16224 (ask, kayma dahil); stop 1,16132 (9,2 pip). Çıkış 11:08 TSİ'de 1,16127, stop: −1,05 R (−9,7 pip, maliyet dahil). İşlem boyunca en kötü −1,05 R, en iyi 0,00 R.
-- **Tuzak** (2 Aralık 2024, pazartesi; 15 dk mum): alış. Sinyal mumu 12:00–12:15 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,05145 (ask, kayma dahil); stop 1,049605 (18,45 pip). Çıkış 15:57 TSİ'de 1,049555, stop: −1,03 R (−18,9 pip, maliyet dahil). İşlem boyunca en kötü −1,03 R, en iyi +1,28 R.
+- **Tuzak** (2 Aralık 2024, pazartesi; 15 dk mum): alış. Sinyal mumu 12:00–12:15 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,05145 (ask, kayma dahil); stop 1,049605 (18,45 pip). Çıkış 15:57 TSİ'de 1,049555, stop: −1,03 R (−18,95 pip, maliyet dahil). İşlem boyunca en kötü −1,03 R, en iyi +1,28 R.
 
-Figürde noktalı mavi çizgiler açılış aralığının iki ucu, mavi bant sinyal mumu, kırmızı çizgi stop, üçgen
+Figürde noktalı mavi çizgiler açılış aralığının iki ucu (aralığın oluştuğu Londra 08:00 mumundan başlar), mavi bant sinyal mumu, kırmızı çizgi stop, üçgen
 yürütülen giriş fiyatıdır. Kazanan örnek kuralın vaat ettiği günü gösterir: kırılım teyit ediliyor ve hareket
 sürüyor. Kaybeden örnek, lehine yarım R'ye bile ulaşmadan zararla kapanan işlemdir: kapanışla teyit edilmiş
 bir kırılımın arkası gelmiyor. Tuzak örneği kuralın en pahalı biçimini gösterir: işlem önce lehine en az
 yarım R gidiyor, sonra fiyat geri dönüp zararla kapatıyor. Kârı gün sonuna bırakan bir kural bu kârı korumaz;
-1R ve 2R hedefler ızgarada tam bu yüzden var.
+1R ve 2R hedefler ızgarada tam bu yüzden var; etkileri sonuçlardaki "Stop ve hedef" tablosunda.
 
 ### Sonuçlar
 
@@ -99,7 +99,7 @@ yarım R gidiyor, sonra fiyat geri dönüp zararla kapatıyor. Kârı gün sonun
 
 <GrafikEmbed src="/arastirma/fx-gunici/orb-egri.html" baslik="Birikimli net R ve düşüş — Londra ORB" no="02" kaynak="Dukascopy" />
 
-Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 2.875 işleminin net ortalaması işlem başına −0,06 R (%95 aralığı −0,16 / +0,05, gün kümeli; isabet %25,4). Parite parite: EUR/USD −0,05; GBP/USD −0,08; USD/JPY +0,18; AUD/USD −0,27 (artı olan parite: 1 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,09 R; gerçek makas ve kayma bunun 0,15 R'sini götürüyor ve sonucu eksiye çeviriyor.
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 2.875 işleminin net ortalaması işlem başına −0,06 R (%95 aralığı −0,16 / +0,05, gün kümeli; isabet %25,4). Parite parite: EUR/USD −0,05; GBP/USD −0,08; USD/JPY +0,18; AUD/USD −0,27 (artı olan parite: 1 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,09 R; gerçek makas ve kayma işlem başına 0,15 R tutuyor, brüt kazancın tamamını siliyor ve sonucu −0,06 R'ye çeviriyor.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -109,14 +109,14 @@ yarım R gidiyor, sonra fiyat geri dönüp zararla kapatıyor. Kârı gün sonun
 | %95 aralığı, alt | −0,21 | −0,23 | −0,04 | −0,39 | −0,16 |
 | %95 aralığı, üst | +0,09 | +0,06 | +0,42 | −0,14 | +0,05 |
 | Brüt beklenti (R) | +0,07 | +0,04 | +0,29 | −0,04 | +0,09 |
-| Net beklenti (pip) | −0,8 | −1,2 | +2,6 | −2,3 | −0,4 |
+| Net beklenti (pip) | −0,8 | −1,2 | +2,6 | −2,3 | — |
 | Sharpe (yıllık) | −0,43 | −0,67 | +0,89 | −2,45 | −0,63 |
 
-_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından._
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından; pip satırı havuzda boş (pariteler arası pip toplanamaz)._
 
 Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfırı kapsıyor: kayıp da bu örneklem büyüklüğünde şanstan ayırt edilemiyor; bir kenar yok. Örneklem içinde (2018–2023) 6.183 işlemde işlem başına −0,08 R (%95 aralığı −0,14 / −0,02).
 
-**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için 2018 → 2026 da onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
+**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için bütün dönem de (2018 → 2026) onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -134,12 +134,16 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 | Ort. kazanç (R) | +2,60 | +2,67 | +3,36 | +2,40 | +2,77 |
 | Ort. kayıp (R) | −1,03 | −1,02 | −1,01 | −1,02 | −1,02 |
 | Kâr çarpanı (R) | 0,93 | 0,89 | 1,25 | 0,66 | 0,92 |
-| Kâr çarpanı (pip) | 0,92 | 0,90 | 1,18 | 0,71 | 0,96 |
+| Kâr çarpanı (pip) | 0,92 | 0,90 | 1,18 | 0,71 | — |
 | Azami düşüş (R) | 92,2 | 76,3 | 46,7 | 207,2 | 240,3 |
 | Ort. süre (dk) | 357 | 342 | 361 | 324 | 346 |
 | MAE medyanı (R) | −1,04 | −1,03 | −1,02 | −1,05 | −1,03 |
 | MFE medyanı (R) | +0,88 | +0,88 | +0,82 | +0,59 | +0,78 |
-| Stop uzaklığı medyanı (pip) | 11,7 | 14,9 | 18,9 | 9,1 | 13,0 |
+| Stop uzaklığı medyanı (pip) | 11,7 | 14,9 | 18,9 | 9,1 | — |
+
+_Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnız R'de verilir._
+
+**Alınmayan emirler.** Varsayılanın 9.058 emrinin hepsi işleme dönüştü (bütün dönem, bütün pariteler).
 
 **Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
 
@@ -153,14 +157,16 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 
 Izgaranın 108 kombinasyonundan net beklentisi artı olanlar (örneklem içi · dışı · ikisi birden): EUR/USD 5 · 0 · 0; GBP/USD 9 · 0 · 0; USD/JPY 1 · 48 · 1; AUD/USD 0 · 0 · 0.
 
-| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR (yayılım) | Hüküm |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: | :--- |
 | EUR/USD | 60 dk · stop yeri karşı uç · kapanış stopu · hedef 1R · son giriş 10:00 | +0,04 | +1,3 | −0,15 | −3,0 | 0,00 | çalışmıyor |
 | GBP/USD | 60 dk · stop yeri karşı uç · sert stop · hedef gün sonu · son giriş 10:00 | +0,03 | +1,8 | −0,06 | −2,3 | 0,00 | çalışmıyor |
 | USD/JPY | 60 dk · stop yeri karşı uç · sert stop · hedef 2R · son giriş 14:00 | +0,0004 | +0,7 | +0,09 | +3,6 | 0,00 | zayıf |
 | AUD/USD | 60 dk · stop yeri karşı uç · sert stop · hedef gün sonu · son giriş 10:00 | −0,12 | −1,7 | −0,14 | −2,4 | 0,00 | çalışmıyor |
 
-EUR/USD'de ızgaranın 108 kombinasyonu örneklem içinde denendi. En iyisinin örneklem içi yıllık Sharpe'ı +0,35. Bu kadar denemede salt şansın üreteceği beklenen en yüksek değer 1,03; denemelerin kendi Sharpe yayılımından kurulan eşik (Bailey–López de Prado) 2,10. Deflated Sharpe olasılığı birincisine göre 0,05, ikincisine göre 0,00 (0,95'in altı: seçim şansla açıklanabilir).
+_Artı hükümlü seçilenlerin kuyruğu (örneklem dışı, işlem başına net R): USD/JPY +0,09 R; en iyi işlem hariç +0,08, en iyi üç hariç +0,08 (125 işlem en iyi değeri, +2,00 R'yi, paylaşıyor). Betimleyicidir; hüküm değişmez._
+
+EUR/USD'de ızgaranın 108 kombinasyonu örneklem içinde denendi. Denemelerin 96 tanesi işlem bakımından birbirinden farklıdır; öbürleri bir başkasıyla birebir aynı işlemleri verir (bir parametresi o kombinasyonda hiçbir işlemi değiştirmez). Yayılım eşiğine göre deflated Sharpe tekil denemelerle 0,00, bütün denemelerle 0,00 (tablodaki). En iyisinin örneklem içi yıllık Sharpe'ı +0,35. Bu kadar denemede salt şansın üreteceği beklenen en yüksek değer (gürültü eşiği) 1,03; denemelerin kendi Sharpe yayılımından kurulan eşik (yayılım eşiği, Bailey–López de Prado) 2,10. Deflated Sharpe olasılığı gürültü eşiğine göre 0,05, yayılım eşiğine göre 0,00 (ikisi de 0,95'in altında: seçim şansla açıklanabilir). Yayılım eşiği gürültü eşiğinin 2,0 katı: denemelerin Sharpe'ları örnekleme gürültüsünün açıklayabileceğinden geniş yayılıyor (maliyet bazı kombinasyonları sistematik olarak eksiye iter); bu ızgarada yayılım eşiği şansın değil yayılımın ölçüsüdür ve seçim gürültü eşiğine göre okunur.
 
 Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak; seçim şartını geçen kombinasyon çıkmayan yıl sınanmaz): EUR/USD −0,07 R (793 işlem; 2020–2026); GBP/USD −0,10 R (978 işlem; 2020–2026); USD/JPY +0,05 R (1.419 işlem; 2020–2026); AUD/USD −0,31 R (922 işlem; 2020–2026).
 
@@ -170,6 +176,26 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | GBP/USD | 2020–2026 | 978 | −0,10 | −0,19 | −0,73 |
 | USD/JPY | 2020–2026 | 1.419 | +0,05 | −0,01 | +0,54 |
 | AUD/USD | 2020–2026 | 922 | −0,31 | −0,42 | −2,04 |
+
+**Stop ve hedef.** Izgaranın stop ve hedef boyutları tek tek; öbür parametreler önceden kayıtlı varsayılanda. Bunlar seçim değil karşılaştırmadır: örneklem dışı sütundan en iyi satırı seçmek, ızgaradan seçimin örneklem içinde yaptığını örneklem dışında yapmaktır.
+
+| Stop türü | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| sert stop (varsayılan) | −0,05 · −0,05 (723) | +0,002 · −0,08 (719) | −0,05 · +0,18 (711) | −0,21 · −0,27 (722) |
+| kapanış stopu | −0,07 · −0,14 (723) | −0,05 · −0,12 (719) | −0,04 · +0,24 (711) | −0,27 · −0,30 (722) |
+
+| Stop yeri | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| karşı uç (varsayılan) | −0,05 · −0,05 (723) | +0,002 · −0,08 (719) | −0,05 · +0,18 (711) | −0,21 · −0,27 (722) |
+| orta | −0,08 · −0,07 (723) | +0,03 · −0,09 (719) | −0,07 · −0,09 (711) | −0,27 · −0,44 (722) |
+
+| Hedef | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 1R | −0,06 · −0,07 (723) | −0,07 · −0,08 (719) | −0,06 · −0,08 (711) | −0,19 · −0,24 (722) |
+| 2R | −0,07 · −0,05 (723) | −0,03 · −0,07 (719) | −0,09 · −0,04 (711) | −0,16 · −0,26 (722) |
+| gün sonu (varsayılan) | −0,05 · −0,05 (723) | +0,002 · −0,08 (719) | −0,05 · +0,18 (711) | −0,21 · −0,27 (722) |
+
+_Hücre: örneklem içi · örneklem dışı net R (parantezde örneklem dışı işlem sayısı); öbür parametreler önceden kayıtlı varsayılanda._
 
 **Maliyet.**
 
@@ -183,22 +209,22 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | Başabaş kayma, 2024 → (pip) | 0,22 | sıfırda bile eksi | 1,98 | sıfırda bile eksi |
 | Başabaş kayma, bütün dönem (pip) | 0,19 | 0,28 | 0,65 | sıfırda bile eksi |
 
-_Örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
 
-**Kuyruk.** R ortalaması her işlemi riskine göre büyüklükler; riski küçük tek bir işlem ortalamayı taşıyabilir.
+**Kuyruk.** R ortalaması her işlemi riskine göre ölçekler; riski küçük tek bir işlem ortalamayı taşıyabilir.
 
 | Parite | Net R | En iyi işlem hariç | En iyi üç hariç | Maliyeti riskin yarısını aşanlar hariç | En iyi işlem |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| EUR/USD | −0,05 | −0,08 | −0,11 | −0,05 (%0 çıktı) | +15,03 (5,35 pip risk) |
-| GBP/USD | −0,08 | −0,10 | −0,13 | −0,08 (%0 çıktı) | +11,19 (10,25 pip risk) |
-| USD/JPY | +0,18 | +0,11 | +0,05 | +0,18 (%0 çıktı) | +51,01 (6,85 pip risk) |
-| AUD/USD | −0,27 | −0,29 | −0,32 | −0,27 (%1 çıktı) | +15,25 (7,1 pip risk) |
+| EUR/USD | −0,05 | −0,08 | −0,11 | −0,05 (işlemlerin %0'ı çıkarıldı) | +15,03 (5,35 pip risk) |
+| GBP/USD | −0,08 | −0,10 | −0,13 | −0,08 (işlemlerin %0'ı çıkarıldı) | +11,19 (10,25 pip risk) |
+| USD/JPY | +0,18 | +0,11 | +0,05 | +0,18 (işlemlerin %0'ı çıkarıldı) | +51,01 (6,85 pip risk) |
+| AUD/USD | −0,27 | −0,29 | −0,32 | −0,27 (işlemlerin %1'i çıkarıldı) | +15,25 (7,1 pip risk) |
 
-_Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →), işlem başına net R (artı hükümlü seçilenlerin kuyruğu seçim tablosunun altında). Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
 
 **Yön mü, zamanlama mı?** Örneklem dışı sonucun, yönü yazı turayla seçen 1.000 denemenin dağılımındaki yüzdeliği (hükmün şartı ≥ 95): EUR/USD 64,7 · GBP/USD 90,3 · USD/JPY 95,2 · AUD/USD 56,4.
 
-**Rejim ve saat.** EUR/USD için, bütün dönemde, artı yıl: 2 / 9; en iyi yıl 2018 (+0,179 R), en kötü 2022 (−0,183 R), hemen ardından 2019 (−0,180 R). Oynaklık tercillerinde: düşük −0,02, orta −0,02, yüksek −0,20 R.
+**Rejim ve saat.** EUR/USD için, bütün dönemde, artı yıl: 2 / 9; en iyi yıl 2018 (+0,179 R), en kötü 2022 (−0,183 R), hemen ardından 2019 (−0,180 R). Oynaklık tercillerinde: düşük +0,0003, orta −0,07, yüksek −0,20 R.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
 | :--- | ---: | ---: | ---: | ---: |
@@ -211,15 +237,15 @@ _Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişte
 | 2024 | −0,09 | −0,21 | +0,39 | −0,30 |
 | 2025 | −0,04 | +0,02 | +0,11 | −0,26 |
 | 2026 | −0,03 | −0,05 | +0,0001 | −0,25 |
-| oynaklık düşük | −0,02 | −0,05 | +0,08 | −0,18 |
-| oynaklık orta | −0,02 | −0,05 | −0,15 | −0,45 |
-| oynaklık yüksek | −0,20 | +0,01 | +0,11 | −0,15 |
+| oynaklık düşük | +0,0003 | −0,05 | +0,07 | −0,18 |
+| oynaklık orta | −0,07 | −0,04 | −0,14 | −0,45 |
+| oynaklık yüksek | −0,20 | +0,004 | +0,11 | −0,14 |
 
 _Önceden kayıtlı varsayılan, bütün dönem (2018 → 2026), işlem başına net R. Oynaklık tercili: önceki günlerin ATR(14)'ünün son 252 işlem günündeki yüzdeliği (alt, orta, üst üçte bir); işlem gününü içermez._
 
 <GrafikEmbed src="/arastirma/fx-gunici/orb-saat.html" baslik="Giriş saatine göre — Londra ORB" no="05" kaynak="Dukascopy" />
 
-EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 10:00 TSİ (−0,005 R, 918 işlem), en kötüsü 12:00 TSİ (−0,18 R, 294 işlem); 4 saatin 0 tanesinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
+EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 10:00–10:59 TSİ (−0,005 R, 918 işlem), en kötüsü 12:00–12:59 TSİ (−0,18 R, 294 işlem); 4 saatin hiçbirinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
 
 ### Koşullar
 
@@ -230,14 +256,65 @@ yalnız sınar.
 
 <GrafikEmbed src="/arastirma/fx-gunici/orb-kosul.html" baslik="Koşul kovaları — Londra ORB" no="06" kaynak="Dukascopy" />
 
-EUR/USD, sınanan 14 değişken: 5 tuttu, 9 tutmadı.
-- aralık / günlük ATR: seçilen kova orta. Örneklem dışında seçilen kovalarda 250 işlem, +0,04 R, isabet %29,2; tamamlayanında 473 işlem, −0,10 R, isabet %25,6.
-- NR7 (son 7 günün en dar aralığı): seçilen kova NR7. Örneklem dışında seçilen kovalarda 111 işlem, +0,01 R, isabet %26,1; tamamlayanında 612 işlem, −0,07 R, isabet %27,0.
+EUR/USD, sınanan 14 değişken: 6 tuttu, 8 tutmadı.
+- Aralık / günlük ATR: seçilen kova orta. Örneklem dışında seçilen kovalarda 251 işlem, +0,06 R, isabet %29,9; tamamlayanında 472 işlem, −0,12 R, isabet %25,2.
+- NR7 (son 7 günün en dar aralığı): seçilen kova NR7 günleri. Örneklem dışında seçilen kovalarda 112 işlem, +0,003 R, isabet %25,9; tamamlayanında 611 işlem, −0,06 R, isabet %27,0.
+- Oynaklık yüzdeliği: seçilen kova orta. Örneklem dışında seçilen kovalarda 248 işlem, +0,01 R, isabet %25,8; tamamlayanında 475 işlem, −0,09 R, isabet %27,4.
 - 60 dk trend (EMA50 tarafı): seçilen kova trend tersine. Örneklem dışında seçilen kovalarda 362 işlem, +0,03 R, isabet %28,2; tamamlayanında 361 işlem, −0,14 R, isabet %25,5.
-- büyük olay günü: seçilen kova haber günü. Örneklem dışında seçilen kovalarda 106 işlem, +0,17 R, isabet %20,8; tamamlayanında 617 işlem, −0,09 R, isabet %27,9.
-- saat değişimi haftası: seçilen kova geçiş haftası. Örneklem dışında seçilen kovalarda 50 işlem, +0,06 R, isabet %30,0; tamamlayanında 673 işlem, −0,06 R, isabet %26,6.
-- Tutmayanlar: Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, haftanın günü, ay sonu, Londra–NY farkı 4 saat.
+- Büyük olay günü: seçilen kova büyük olay günleri. Örneklem dışında seçilen kovalarda 106 işlem, +0,17 R, isabet %20,8; tamamlayanında 617 işlem, −0,09 R, isabet %27,9.
+- Saat değişimi haftası: seçilen kova saat değişimi haftaları. Örneklem dışında seçilen kovalarda 50 işlem, +0,06 R, isabet %30,0; tamamlayanında 673 işlem, −0,06 R, isabet %26,6.
+- Tutmayanlar: Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), açılış farkı / ATR, haftanın günü, ay sonu, Londra–NY farkı 4 saat.
 - Ters seçim (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi): aynı ölçüt 14 değişkenin 1 tanesinde tutardı (önceki gün aralığı / ATR). Kova farkları yalnız gürültüyse iki seçim aynı sıklıkla tutar.
+
+<details>
+<summary>Kova ayrıntısı — EUR/USD: sınırlar, işlem sayısı, net R, isabet</summary>
+
+<div class="sayi-tablo">
+
+| Değişken | Kova | İçi işlem | İçi R | İçi isabet | Dışı işlem | Dışı R | Dışı isabet |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Aralık / günlük ATR — tuttu · eşik −0,06 | Alt: x &lt; 0,11 | 510 | −0,16 | %20,4 | 322 | −0,10 | %23,0 |
+|  | **Orta: 0,11 ≤ x &lt; 0,16** | 509 | +0,05 | %29,1 | 251 | +0,06 | %29,9 |
+|  | Üst: x ≥ 0,16 | 510 | −0,06 | %33,5 | 150 | −0,16 | %30,0 |
+| Asya aralığı / günlük ATR — tutmadı · eşik −0,06 | **Alt: x &lt; 0,31** | 510 | −0,02 | %26,3 | 244 | −0,08 | %26,2 |
+|  | Orta: 0,31 ≤ x &lt; 0,41 | 509 | −0,09 | %27,3 | 203 | −0,09 | %27,1 |
+|  | Üst: x ≥ 0,41 | 510 | −0,06 | %29,4 | 276 | −0,01 | %27,2 |
+| Önceki gün aralığı / ATR — tutmadı · eşik −0,06 | Alt: x &lt; 0,80 | 510 | −0,10 | %27,3 | 260 | +0,08 | %28,1 |
+|  | **Orta: 0,80 ≤ x &lt; 1,08** | 509 | −0,02 | %26,9 | 241 | −0,20 | %25,3 |
+|  | **Üst: x ≥ 1,08** | 510 | −0,05 | %28,8 | 222 | −0,05 | %27,0 |
+| Önceki günün yönü — tutmadı · eşik −0,05 | **Aynı yön** | 715 | +0,01 | %29,2 | 348 | −0,08 | %26,4 |
+|  | Ters yön | 826 | −0,10 | %26,5 | 375 | −0,03 | %27,2 |
+| NR4 (son 4 günün en dar aralığı) — tutmadı · eşik −0,05 | NR4 olmayan günler | 1.152 | −0,08 | %27,0 | 537 | −0,06 | %27,4 |
+|  | **NR4 günleri** | 391 | +0,04 | %29,9 | 186 | −0,03 | %25,3 |
+| NR7 (son 7 günün en dar aralığı) — tuttu · eşik −0,05 | NR7 olmayan günler | 1.307 | −0,07 | %27,0 | 611 | −0,06 | %27,0 |
+|  | **NR7 günleri** | 236 | +0,08 | %31,8 | 112 | +0,003 | %25,9 |
+| Açılış farkı / ATR — tutmadı · eşik −0,06 | **Alt: x &lt; −0,11** | 510 | +0,10 | %30,2 | 253 | −0,10 | %27,7 |
+|  | Orta: −0,11 ≤ x &lt; 0,09 | 509 | −0,11 | %26,7 | 229 | +0,03 | %26,6 |
+|  | Üst: x ≥ 0,09 | 510 | −0,15 | %26,1 | 241 | −0,09 | %26,1 |
+| Oynaklık yüzdeliği — tuttu · eşik −0,07 | Alt: x &lt; %13 | 484 | −0,08 | %25,8 | 223 | +0,01 | %29,1 |
+|  | **Orta: %13 ≤ x &lt; %50** | 495 | +0,01 | %29,1 | 248 | +0,01 | %25,8 |
+|  | Üst: x ≥ %50 | 490 | −0,15 | %26,7 | 252 | −0,17 | %25,8 |
+| 60 dk trend (EMA50 tarafı) — tuttu · eşik −0,05 | Trend yönünde | 732 | −0,07 | %28,8 | 361 | −0,14 | %25,5 |
+|  | **Trend tersine** | 809 | −0,03 | %26,8 | 362 | +0,03 | %28,2 |
+| Haftanın günü — tutmadı · eşik −0,05 | **Pazartesi** | 306 | +0,05 | %30,4 | 145 | +0,13 | %39,3 |
+|  | Salı | 311 | −0,05 | %28,9 | 145 | −0,06 | %29,0 |
+|  | Çarşamba | 305 | −0,18 | %23,3 | 144 | +0,06 | %21,5 |
+|  | **Perşembe** | 312 | −0,04 | %29,2 | 144 | −0,19 | %20,1 |
+|  | **Cuma** | 309 | −0,03 | %26,9 | 145 | −0,21 | %24,1 |
+| Büyük olay günü — tuttu · eşik −0,05 | Büyük olay günü olmayan günler | 1.310 | −0,05 | %29,2 | 617 | −0,09 | %27,9 |
+|  | **Büyük olay günleri** | 233 | −0,03 | %19,3 | 106 | +0,17 | %20,8 |
+| Ay sonu — tutmadı · eşik −0,05 | Ay sonu dışındaki günler | 1.471 | −0,06 | %27,9 | 690 | −0,03 | %27,5 |
+|  | **Ay sonu günleri** | 72 | +0,26 | %25,0 | 33 | −0,64 | %12,1 |
+| Saat değişimi haftası — tuttu · eşik −0,05 | Saat değişimi haftası dışı | 1.425 | −0,07 | %27,2 | 673 | −0,06 | %26,6 |
+|  | **Saat değişimi haftaları** | 118 | +0,15 | %33,9 | 50 | +0,06 | %30,0 |
+| Londra–NY farkı 4 saat — tutmadı · eşik −0,05 | Ara dönem dışı (fark 5 saat) | 1.443 | −0,08 | %27,0 | 668 | −0,04 | %27,1 |
+|  | **Ara dönem (Londra–NY farkı 4 saat)** | 100 | +0,43 | %39,0 | 55 | −0,25 | %23,6 |
+
+</div>
+
+_İçi: örneklem içi (2018–2023); dışı: örneklem dışı (2024 →). R: işlem başına net R; isabet: net sonucu artı kapanan işlemlerin payı. Kalın kova örneklem içinde seçilendir: en az 30 işlemle eşiğin, yani değişkenin tanımlı olduğu işlemlerin örneklem içi koşulsuz ortalamasının üstünde. Sürekli değişkenlerin sınırları örneklem içinin tercilleridir ve örneklem dışına olduğu gibi taşınır; örneklem dışında kovalar bu yüzden eşit dolmaz._
+
+</details>
 
 En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seçilen kova):
 
@@ -246,39 +323,39 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 | aralık / günlük ATR | tuttu: orta | tutmadı | tutmadı | tutmadı |
 | önceki gün aralığı / ATR | tutmadı | tutmadı | tuttu: orta, üst | tutmadı |
 | önceki günün yönü | tutmadı | tutmadı | tuttu: ters yön | tutmadı |
-| NR4 (son 4 günün en dar aralığı) | tutmadı | tuttu: NR4 | tuttu: değil | tutmadı |
-| NR7 (son 7 günün en dar aralığı) | tuttu: NR7 | tuttu: NR7 | tutmadı | tutmadı |
-| oynaklık yüzdeliği | tutmadı | tutmadı | tuttu: alt | tutmadı |
+| NR4 (son 4 günün en dar aralığı) | tutmadı | tuttu: NR4 günleri | tuttu: NR4 olmayan günler | tutmadı |
+| NR7 (son 7 günün en dar aralığı) | tuttu: NR7 günleri | tuttu: NR7 günleri | tutmadı | tutmadı |
+| oynaklık yüzdeliği | tuttu: orta | tutmadı | tuttu: alt | tutmadı |
 | 60 dk trend (EMA50 tarafı) | tuttu: trend tersine | tutmadı | tutmadı | tutmadı |
 | haftanın günü | tutmadı | tutmadı | tuttu: Pzt, Çar, Per | tutmadı |
-| büyük olay günü | tuttu: haber günü | tuttu: haber günü | tutmadı | tutmadı |
-| ay sonu | tutmadı | tutmadı | tuttu: ay sonu | tutmadı |
-| saat değişimi haftası | tuttu: geçiş haftası | tuttu: geçiş haftası | tuttu: değil | tutmadı |
-| Londra–NY farkı 4 saat | tutmadı | tutmadı | tuttu: değil | tutmadı |
+| büyük olay günü | tuttu: büyük olay günleri | tuttu: büyük olay günleri | tutmadı | tutmadı |
+| ay sonu | tutmadı | tutmadı | tuttu: ay sonu günleri | tutmadı |
+| saat değişimi haftası | tuttu: saat değişimi haftaları | tuttu: saat değişimi haftaları | tuttu: saat değişimi haftası dışı | tutmadı |
+| Londra–NY farkı 4 saat | tutmadı | tutmadı | tuttu: ara dönem dışı (fark 5 saat) | tutmadı |
 
 Açılış aralığının genişliği bu kuralın en doğal koşuludur ve iki yönlü okunabilir: dar bir açılış henüz
 boşalmamış bir birikimi, geniş bir açılış hareketin ilk mumda tükendiğini anlatabilir. Ölçüm, aralık / günlük
-ATR için: EUR/USD tuttu (seçilen orta: örneklem dışında +0,04 R, 250 işlem; öbür kovalar −0,10 R); GBP/USD tutmadı (seçilen üst: örneklem dışında −0,05 R, 170 işlem; öbür kovalar −0,09 R); USD/JPY tutmadı (seçilen orta, üst: örneklem dışında +0,02 R, 429 işlem; öbür kovalar +0,44 R); AUD/USD tutmadı (seçilen orta, üst: örneklem dışında −0,21 R, 438 işlem; öbür kovalar −0,36 R).
+ATR için: EUR/USD tuttu (seçilen orta: örneklem dışında +0,06 R, 251 işlem; öbür kovalar −0,12 R); GBP/USD tutmadı (seçilen üst: örneklem dışında −0,04 R, 168 işlem; öbür kovalar −0,10 R); USD/JPY tutmadı (seçilen orta, üst: örneklem dışında +0,02 R, 427 işlem; öbür kovalar +0,43 R); AUD/USD tutmadı (seçilen orta, üst: örneklem dışında −0,21 R, 437 işlem; öbür kovalar −0,36 R).
 
 ### Kontrol listesi
 
-1. **Hüküm.** Bu biçimiyle kanıtlanmış bir kenarı yok: örneklem dışında (2024 →) USD/JPY +0,18 R, ama hükmün şartlarını sağlamıyor; öbür paritelerde sonuç sıfır ya da eksi.
-2. **Ne zaman.** Aday, karar kuralı değil. NR7 (son 7 günün en dar aralığı), kova NR7: EUR/USD +0,01 R (111 işlem; tamamlayanı −0,07 R), GBP/USD +0,05 R (105 işlem; tamamlayanı −0,11 R); büyük olay günü, kova haber günü: EUR/USD +0,17 R (106 işlem; tamamlayanı −0,09 R), GBP/USD +0,07 R (106 işlem; tamamlayanı −0,11 R); saat değişimi haftası, kova geçiş haftası: EUR/USD +0,06 R (50 işlem; tamamlayanı −0,06 R), GBP/USD +0,17 R (50 işlem; tamamlayanı −0,10 R). Aday, örneklem içinde seçilip örneklem dışında en az iki paritede aynı yönde duran bir kovadır; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,69; karşılaştırma dersi).
+1. **Hüküm.** Bu biçimiyle kanıtlanmış bir kenarı yok: örneklem dışında (2024 →) USD/JPY +0,18 R, ama hükmün şartlarını sağlamıyor; öbür paritelerde sonuç sıfır ya da eksi. AUD/USD: %95 aralığı iki dönemde de bütünüyle sıfırın altında (2024 → −0,39 / −0,14; bütün dönem −0,30 / −0,16): şansla açıklanmayan, ölçülmüş bir kayıp.
+2. **Ne zaman.** Aday, karar kuralı değil. NR7 günleri: EUR/USD +0,003 R (112 işlem; tamamlayanı −0,06 R), GBP/USD +0,04 R (106 işlem; tamamlayanı −0,11 R); büyük olay günleri: EUR/USD +0,17 R (106 işlem; tamamlayanı −0,09 R), GBP/USD +0,07 R (106 işlem; tamamlayanı −0,11 R); saat değişimi haftaları: EUR/USD +0,06 R (50 işlem; tamamlayanı −0,06 R), GBP/USD +0,17 R (50 işlem; tamamlayanı −0,10 R). Aday: örneklem içinde seçilen aynı kovanın en az iki paritede örneklem dışında da "tuttu" ölçütünü (seçilen kovalarda en az 20 işlem, ortalama artı ve tamamlayanının üstünde) geçtiği koşul; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,84; karşılaştırma dersi).
 3. **Saat.** Aralık Londra 08:00'de başlar: TSİ 10:00 (İngiltere yaz saati) ya da 11:00 (kış saati). Son
    giriş Londra 12:00: TSİ 14:00 ya da 15:00.
 4. **Aralığı işaretle.** İlk mumun tepe ve dibi; mum kapanmadan aralık yoktur.
 5. **Kapanışı bekle.** Mumun aralığın dışına taşması sinyal değildir; dışarıda kapanması sinyaldir. Giriş
    bir sonraki dakikada.
-6. **Stop karşı uçta, emir girişle birlikte.** Stop'un uzaklığı riskin kendisidir; pozisyon büyüklüğü bu
+6. **Stop karşı uçta, emir girişle birlikte.** Stopun uzaklığı riskin kendisidir; pozisyon büyüklüğü bu
    uzaklıktan kurulur (1R = hesap riskinin sabit bir payı).
 7. **Gün sonunda kapat.** 16:55 New York: TSİ 23:55 (ABD yaz saati) ya da 00:55.
-8. **Maliyet.** EUR/USD, örneklem dışı (2024 →): makasın üstüne dolum başına 0,22 pip kayma net beklentiyi sıfıra indiriyor (0,5 pip kaymada net −0,05 R). Bütün dönem: makasın üstüne dolum başına 0,19 pip kayma net beklentiyi sıfıra indiriyor (0,5 pip kaymada net −0,05 R).
+8. **Maliyet.** EUR/USD: iki dönemde de makasın üstüne dolum başına kayma net beklentiyi sıfıra indiriyor: 2024 → 0,22 pip · bütün dönem 0,19 pip (0,5 pip kaymada net −0,05 R · −0,05 R).
 
 ### Hüküm
 
 **Kanıtlanmış bir kenar yok.** USD/JPY: zayıf · EUR/USD, GBP/USD, AUD/USD: çalışmıyor. USD/JPY zayıf: örneklem dışında 711 işlemde +0,18 R, ama %95 aralığının alt ucu −0,04; yani kenar kanıtlanmadı. Aynı varsayılan örneklem içinde (2018–2023) −0,05 R, bütün dönemde +0,02 R. Örneklem dışı yıl yıl: 2024 +0,39 (256 işlem) · 2025 +0,11 (255 işlem) · 2026 +0,0001 (200 işlem). En iyi tek işlem (01.05.2024, +51,01 R, riski 6,85 pip) çıkarılınca +0,11 R, en iyi üç işlem çıkarılınca +0,05 R. Maliyet bayrağı (brüt sonucun %95 aralığı sıfırın üstünde, net sonuç sıfır ya da altında) bütün dönemde GBP/USD.
 
-| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet yiyor (bütün · 2024 →) |
+| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet bayrağı (bütün · 2024 →) |
 | :--- | :--- | :--- | :--- | ---: | :--- |
 | EUR/USD | çalışmıyor · −0,05 | çalışmıyor · −0,05 | çalışmıyor · −0,15 | 64,7 | hayır · hayır |
 | GBP/USD | çalışmıyor · −0,08 | çalışmıyor · −0,03 | çalışmıyor · −0,06 | 90,3 | evet · hayır |
@@ -286,6 +363,8 @@ ATR için: EUR/USD tuttu (seçilen orta: örneklem dışında +0,04 R, 250 işle
 | AUD/USD | çalışmıyor · −0,27 | çalışmıyor · −0,23 | çalışmıyor · −0,14 | 56,4 | hayır · hayır |
 
 _Hücrede hüküm ve işlem başına net R; tanımlar giriş dersinde ("Hüküm")._
+
+_Sınırda: USD/JPY seçilen, örneklem dışı, net aralığın alt ucu −0,01 R (sıfıra standart hatanın 0,12 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %15'inde ucu sıfırın üstünde verir; hükmün öbür iki şartı geniş farkla tutuyor (ortalama +0,09 R, rastgele yön yüzdeliği 100,0), üçüncüsü sıfırda; deflated Sharpe 0,00. Bu uçlarda işaret tohum gürültüsüne bağlıdır; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir ve değişmez._
 
 ## Asya aralığı kırılımı
 
@@ -301,7 +380,7 @@ Asya seansında EUR/USD ve GBP/USD'de işlem hacmi Londra ve New York'un altınd
 geri kalanından dar bir bantta kalır. Bu bant, gece boyunca kimsenin üzerinde anlaşamadığı bir denge gibi
 okunur; Avrupa masaları açıldığında yeni bilgiyle bu denge bozulur ve kırılan yön günün yönü olur — savunusu
 bu. Karşı savunu da aynı yerden gelir: bandın iki ucu, gece boyunca konmuş stop emirlerinin en yoğun olduğu
-yerdir ve Londra'nın ilk hareketi çoğu zaman o stop'ları alıp bandın içine geri döner (fade dersindeki "sahte
+yerdir ve Londra'nın ilk hareketi çoğu zaman o stopları alıp bandın içine geri döner (fade dersindeki "sahte
 Asya" kuralı tam bunu ölçer). USD/JPY ve AUD/USD için Asya saatleri "sakin seans" değildir: Tokyo ve Sidney o
 saatlerde açıktır ve bu iki paritede Asya aralığı gerçek bir seansın aralığıdır.
 
@@ -309,10 +388,14 @@ saatlerde açıktır ve bu iki paritede Asya aralığı gerçek bir seansın ara
 
 - **Aralık.** Londra 00:00'dan aralık sonuna (07:00 ya da 08:00) kadar 1 dakikalık orta fiyatın en
   yükseği ve en düşüğü. TSİ'de Londra 00:00, İngiltere yaz saatindeyken 02:00, kış saatindeyken 03:00'tür.
-- **Sinyal.** Londra 08:00'den sonra aralığın dışında kapanan ilk mum; gün başına tek işlem.
+  Başlangıç ön kayıtta sabittir, ızgara yalnız bitişi sınar. Tokyo açılışı (09:00 Tokyo, 00:00 UTC) kışın bu
+  anın kendisi, yazın bir saat sonrasıdır; Sidney açılışıyla ya da FX gününün başıyla (17:00 New York) kurulan
+  bir pencere sınanmadı.
+- **Sinyal.** Londra 08:00'den (TSİ yazın 10:00, kışın 11:00) sonra aralığın dışında kapanan ilk mum; gün başına tek
+  işlem.
 - **Giriş, stop, hedef.** Giriş sonraki dakikanın açılışında yürütülebilir fiyattan; stop aralığın ortası
   ya da karşı ucu; hedef 1R, 2R ya da gün sonu.
-- **Son giriş.** Londra 11:00 ya da 14:00.
+- **Son giriş.** Londra 11:00 ya da 14:00 (TSİ yazın 13:00 ya da 16:00, kışın 14:00 ya da 17:00).
 
 | Parametre | Izgara | Varsayılan |
 | :--- | :--- | :--- |
@@ -323,9 +406,9 @@ saatlerde açıktır ve bu iki paritede Asya aralığı gerçek bir seansın ara
 | hedef | 1R, 2R, gün sonu | 1R |
 | son giriş (Londra) | 11:00, 14:00 | 11:00 |
 
-_Izgara: 144 kombinasyon._
+_Izgara: 144 kombinasyon. Saatler kuralın yerel saatidir: aralık sonu (Londra) 07:00 → TSİ yazın 09:00, kışın 10:00; aralık sonu (Londra) 08:00 → TSİ yazın 10:00, kışın 11:00; son giriş (Londra) 11:00 → TSİ yazın 13:00, kışın 14:00; son giriş (Londra) 14:00 → TSİ yazın 16:00, kışın 17:00._
 
-Varsayılan aralığı Londra açılışında kapatır, 15 dakikalık mumla kırılımı arar, stop'u aralığın ortasına
+Varsayılan aralığı Londra açılışında kapatır, 15 dakikalık mumla kırılımı arar, stopu aralığın ortasına
 koyar ve 1R hedefler; son giriş Londra 11:00.
 Ortadaki stop bir tercihtir: Asya aralığı sekiz saatin aralığıdır ve açılışın tek mumundan geniştir; karşı
 uçtaki stop riski aralığın tamamı kadar büyütür. Orta, kırılımın geri dönüp aralığın yarısını geçmesini
@@ -335,11 +418,11 @@ uçtaki stop riski aralığın tamamı kadar büyütür. Orta, kırılımın ger
 
 <GrafikEmbed src="/arastirma/fx-gunici/asya-ornek.html" baslik="Örnek günler — Asya aralığı" no="07" kaynak="Dukascopy" />
 
-- **Kazanan** (29 Temmuz 2024, pazartesi; 15 dk mum): satış. Sinyal mumu 10:45–11:00 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,08438 (bid, kayma dahil); stop 1,086048 (16,68 pip); hedef 1,082712. Çıkış 12:22 TSİ'de 1,082712, hedef: +1,00 R (+16,7 pip, maliyet dahil). İşlem boyunca en kötü −0,04 R, en iyi +1,00 R.
-- **Kaybeden** (21 Ağustos 2024, çarşamba; 15 dk mum): satış. Sinyal mumu 11:00–11:15 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,11118 (bid, kayma dahil); stop 1,11229 (11,1 pip); hedef 1,11007. Çıkış 12:17 TSİ'de 1,11234, stop: −1,04 R (−11,6 pip, maliyet dahil). İşlem boyunca en kötü −1,04 R, en iyi 0,00 R.
+- **Kazanan** (29 Temmuz 2024, pazartesi; 15 dk mum): satış. Sinyal mumu 10:45–11:00 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,08438 (bid, kayma dahil); stop 1,086048 (16,68 pip); hedef 1,082712. Çıkış 12:22 TSİ'de 1,082712, hedef: +1,00 R (+16,68 pip, maliyet dahil). İşlem boyunca en kötü −0,04 R, en iyi +1,00 R.
+- **Kaybeden** (21 Ağustos 2024, çarşamba; 15 dk mum): satış. Sinyal mumu 11:00–11:15 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,11118 (bid, kayma dahil); stop 1,11229 (11,1 pip); hedef 1,11007. Çıkış 12:17 TSİ'de 1,11234, stop: −1,05 R (−11,6 pip, maliyet dahil). İşlem boyunca en kötü −1,04 R, en iyi 0,00 R.
 - **Tuzak** (6 Nisan 2026, pazartesi; 15 dk mum): alış. Sinyal mumu 10:30–10:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,15528 (ask, kayma dahil); stop 1,152205 (30,75 pip); hedef 1,158355. Çıkış 23:55 TSİ'de 1,15416, gün sonu kapanışı: −0,36 R (−11,2 pip, maliyet dahil). İşlem boyunca en kötü −0,61 R, en iyi +0,60 R.
 
-Asya aralığı figürde iki noktalı mavi çizgidir. Aralık gece boyunca oluştuğu için Londra açıldığında sinyal
+Asya aralığı figürde iki noktalı mavi çizgidir; çizgiler aralığın başladığı Londra 00:00'dan başlar. Aralık gece boyunca oluştuğu için Londra açıldığında sinyal
 çoğu zaman ilk mumlarda gelir; açılıştan önce kırılmış bir aralık da Londra 08:00'den sonraki ilk dışarıda
 kapanışta sinyal üretir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlemdir; tuzak örneği
 önce lehine en az yarım R gidip sonra zararla kapanan işlem, yani kırılımın aralığa geri döndüğü gün.
@@ -350,7 +433,7 @@ kapanışta sinyal üretir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararl
 
 <GrafikEmbed src="/arastirma/fx-gunici/asya-egri.html" baslik="Birikimli net R ve düşüş — Asya aralığı" no="08" kaynak="Dukascopy" />
 
-Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 1.850 işleminin net ortalaması işlem başına −0,06 R (%95 aralığı −0,10 / −0,01, gün kümeli; isabet %48,1). Parite parite: EUR/USD −0,01; GBP/USD −0,08; USD/JPY +0,04; AUD/USD −0,18 (artı olan parite: 1 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,03 R; gerçek makas ve kayma bunun 0,08 R'sini götürüyor ve sonucu eksiye çeviriyor.
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 1.850 işleminin net ortalaması işlem başına −0,06 R (%95 aralığı −0,10 / −0,01, gün kümeli; isabet %48,1). Parite parite: EUR/USD −0,01; GBP/USD −0,08; USD/JPY +0,04; AUD/USD −0,18 (artı olan parite: 1 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,03 R; gerçek makas ve kayma işlem başına 0,08 R tutuyor, brüt kazancın tamamını siliyor ve sonucu −0,06 R'ye çeviriyor.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -360,14 +443,14 @@ kapanışta sinyal üretir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararl
 | %95 aralığı, alt | −0,09 | −0,16 | −0,06 | −0,27 | −0,10 |
 | %95 aralığı, üst | +0,08 | −0,001 | +0,13 | −0,08 | −0,01 |
 | Brüt beklenti (R) | +0,07 | +0,005 | +0,09 | −0,05 | +0,03 |
-| Net beklenti (pip) | +0,2 | −1,3 | +1,9 | −2,9 | −0,5 |
+| Net beklenti (pip) | +0,2 | −1,3 | +1,9 | −2,9 | — |
 | Sharpe (yıllık) | −0,15 | −1,11 | +0,47 | −2,16 | −1,22 |
 
-_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından._
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından; pip satırı havuzda boş (pariteler arası pip toplanamaz)._
 
-Havuzun örneklem dışı aralığı bütünüyle sıfırın altında: kural maliyetten sonra 4 paritede birlikte kaybettiriyor. Örneklem içinde (2018–2023) 4.248 işlemde işlem başına −0,06 R (%95 aralığı −0,10 / −0,03).
+Havuzun örneklem dışı ortalaması sıfırın altında ve aralığının üst ucu sıfırda: −0,01 R (sıfıra standart hatanın 0,22 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %6'sında ucu sıfırın üstünde verir. Kayıp şanstan güvenle ayırt edilemiyor; bir kenar yok. Örneklem içinde (2018–2023) 4.248 işlemde işlem başına −0,06 R (%95 aralığı −0,10 / −0,03).
 
-**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için 2018 → 2026 da onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
+**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için bütün dönem de (2018 → 2026) onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -385,12 +468,16 @@ Havuzun örneklem dışı aralığı bütünüyle sıfırın altında: kural mal
 | Ort. kazanç (R) | +0,97 | +0,96 | +0,89 | +0,88 | +0,93 |
 | Ort. kayıp (R) | −1,01 | −1,00 | −0,89 | −0,96 | −0,97 |
 | Kâr çarpanı (R) | 0,98 | 0,85 | 1,09 | 0,68 | 0,89 |
-| Kâr çarpanı (pip) | 1,03 | 0,88 | 1,12 | 0,69 | 0,95 |
+| Kâr çarpanı (pip) | 1,03 | 0,88 | 1,12 | 0,69 | — |
 | Azami düşüş (R) | 41,2 | 58,3 | 13,0 | 73,6 | 139,3 |
 | Ort. süre (dk) | 197 | 207 | 321 | 325 | 253 |
 | MAE medyanı (R) | −0,93 | −1,01 | −0,74 | −1,01 | −0,92 |
 | MFE medyanı (R) | +0,92 | +0,81 | +0,80 | +0,57 | +0,76 |
-| Stop uzaklığı medyanı (pip) | 15,1 | 19,3 | 35,7 | 16,1 | 18,7 |
+| Stop uzaklığı medyanı (pip) | 15,1 | 19,3 | 35,7 | 16,1 | — |
+
+_Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnız R'de verilir._
+
+**Alınmayan emirler.** Varsayılanın 6.098 emrinin hepsi işleme dönüştü (bütün dönem, bütün pariteler).
 
 **Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
 
@@ -404,14 +491,16 @@ Havuzun örneklem dışı aralığı bütünüyle sıfırın altında: kural mal
 
 Izgaranın 144 kombinasyonundan net beklentisi artı olanlar (örneklem içi · dışı · ikisi birden): EUR/USD 2 · 29 · 1; GBP/USD 21 · 30 · 11; USD/JPY 20 · 129 · 20; AUD/USD 0 · 0 · 0.
 
-| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR (yayılım) | Hüküm |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: | :--- |
 | EUR/USD | 60 dk · aralık sonu 07:00 · stop yeri karşı uç · sert stop · hedef 2R · son giriş 11:00 | +0,01 | +0,1 | +0,02 | +0,2 | 0,02 | zayıf |
 | GBP/USD | 5 dk · aralık sonu 08:00 · stop yeri karşı uç · sert stop · hedef gün sonu · son giriş 11:00 | +0,04 | +1,3 | +0,01 | +0,6 | 0,11 | zayıf |
 | USD/JPY | 15 dk · aralık sonu 08:00 · stop yeri orta · sert stop · hedef gün sonu · son giriş 14:00 | +0,03 | +0,8 | +0,13 | +2,6 | 0,20 | zayıf |
 | AUD/USD | 15 dk · aralık sonu 08:00 · stop yeri karşı uç · sert stop · hedef 1R · son giriş 11:00 | −0,05 | −1,2 | −0,06 | −1,6 | 0,00 | çalışmıyor |
 
-EUR/USD'de ızgaranın 144 kombinasyonu örneklem içinde denendi. En iyisinin örneklem içi yıllık Sharpe'ı +0,09. Bu kadar denemede salt şansın üreteceği beklenen en yüksek değer 1,07; denemelerin kendi Sharpe yayılımından kurulan eşik (Bailey–López de Prado) 0,92. Deflated Sharpe olasılığı birincisine göre 0,01, ikincisine göre 0,02 (0,95'in altı: seçim şansla açıklanabilir).
+_Artı hükümlü seçilenlerin kuyruğu (örneklem dışı, işlem başına net R): EUR/USD +0,02 R; en iyi işlem hariç +0,02, en iyi üç hariç +0,01 (59 işlem en iyi değeri, +2,00 R'yi, paylaşıyor); GBP/USD +0,01 R; en iyi işlem hariç −0,004, en iyi üç hariç −0,02; USD/JPY +0,13 R; en iyi işlem hariç +0,10, en iyi üç hariç +0,07. Betimleyicidir; hüküm değişmez._
+
+EUR/USD'de ızgaranın 144 kombinasyonu örneklem içinde denendi. En iyisinin örneklem içi yıllık Sharpe'ı +0,09. Bu kadar denemede salt şansın üreteceği beklenen en yüksek değer (gürültü eşiği) 1,07; denemelerin kendi Sharpe yayılımından kurulan eşik (yayılım eşiği, Bailey–López de Prado) 0,92. Deflated Sharpe olasılığı gürültü eşiğine göre 0,01, yayılım eşiğine göre 0,02 (ikisi de 0,95'in altında: seçim şansla açıklanabilir).
 
 Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak; seçim şartını geçen kombinasyon çıkmayan yıl sınanmaz): EUR/USD +0,02 R (1.275 işlem; 2020–2026); GBP/USD −0,002 R (1.556 işlem; 2020–2026); USD/JPY +0,07 R (1.394 işlem; 2020–2026); AUD/USD −0,09 R (1.014 işlem; 2020–2026).
 
@@ -421,6 +510,26 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | GBP/USD | 2020–2026 | 1.556 | −0,002 | −0,06 | −0,02 |
 | USD/JPY | 2020–2026 | 1.394 | +0,07 | −0,02 | +0,60 |
 | AUD/USD | 2020–2026 | 1.014 | −0,09 | −0,14 | −1,21 |
+
+**Stop ve hedef.** Izgaranın stop ve hedef boyutları tek tek; öbür parametreler önceden kayıtlı varsayılanda. Bunlar seçim değil karşılaştırmadır: örneklem dışı sütundan en iyi satırı seçmek, ızgaradan seçimin örneklem içinde yaptığını örneklem dışında yapmaktır.
+
+| Stop türü | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| sert stop (varsayılan) | −0,07 · −0,01 (511) | −0,07 · −0,08 (552) | −0,02 · +0,04 (400) | −0,09 · −0,18 (387) |
+| kapanış stopu | −0,09 · −0,06 (511) | −0,07 · −0,08 (552) | −0,05 · +0,05 (400) | −0,09 · −0,17 (387) |
+
+| Stop yeri | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| karşı uç | −0,04 · −0,003 (511) | −0,01 · −0,02 (552) | −0,01 · −0,0003 (400) | −0,05 · −0,06 (387) |
+| orta (varsayılan) | −0,07 · −0,01 (511) | −0,07 · −0,08 (552) | −0,02 · +0,04 (400) | −0,09 · −0,18 (387) |
+
+| Hedef | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 1R (varsayılan) | −0,07 · −0,01 (511) | −0,07 · −0,08 (552) | −0,02 · +0,04 (400) | −0,09 · −0,18 (387) |
+| 2R | −0,08 · −0,002 (511) | −0,05 · −0,06 (552) | 0,0000 · +0,05 (400) | −0,11 · −0,16 (387) |
+| gün sonu | −0,08 · −0,08 (511) | −0,02 · −0,03 (552) | +0,02 · +0,16 (400) | −0,10 · −0,18 (387) |
+
+_Hücre: örneklem içi · örneklem dışı net R (parantezde örneklem dışı işlem sayısı); öbür parametreler önceden kayıtlı varsayılanda._
 
 **Maliyet.**
 
@@ -434,22 +543,22 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | Başabaş kayma, 2024 → (pip) | 0,38 | sıfırda bile eksi | 1,14 | sıfırda bile eksi |
 | Başabaş kayma, bütün dönem (pip) | sıfırda bile eksi | sıfırda bile eksi | 0,43 | sıfırda bile eksi |
 
-_Örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
 
-**Kuyruk.** R ortalaması her işlemi riskine göre büyüklükler; riski küçük tek bir işlem ortalamayı taşıyabilir.
+**Kuyruk.** R ortalaması her işlemi riskine göre ölçekler; riski küçük tek bir işlem ortalamayı taşıyabilir.
 
 | Parite | Net R | En iyi işlem hariç | En iyi üç hariç | Maliyeti riskin yarısını aşanlar hariç | En iyi işlem |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| EUR/USD | −0,01 | −0,01 | −0,02 | −0,01 (%0 çıktı) | +1,01 (10,12 pip risk) |
-| GBP/USD | −0,08 | −0,08 | −0,09 | −0,08 (%0 çıktı) | +1,02 (21,73 pip risk) |
-| USD/JPY | +0,04 | +0,03 | +0,03 | +0,04 (%0 çıktı) | +1,00 (21,4 pip risk) |
-| AUD/USD | −0,18 | −0,18 | −0,19 | −0,18 (%0 çıktı) | +1,00 (19,07 pip risk) |
+| EUR/USD | −0,01 | −0,01 | −0,02 | −0,01 (işlemlerin %0'ı çıkarıldı) | +1,01 (10,12 pip risk) |
+| GBP/USD | −0,08 | −0,08 | −0,09 | −0,08 (işlemlerin %0'ı çıkarıldı) | +1,02 (21,73 pip risk) |
+| USD/JPY | +0,04 | +0,03 | +0,03 | +0,04 (işlemlerin %0'ı çıkarıldı) | +1,00 (21,4 pip risk) |
+| AUD/USD | −0,18 | −0,18 | −0,19 | −0,18 (işlemlerin %0'ı çıkarıldı) | +1,00 (19,07 pip risk) |
 
-_Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →), işlem başına net R (artı hükümlü seçilenlerin kuyruğu seçim tablosunun altında). Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
 
 **Yön mü, zamanlama mı?** Örneklem dışı sonucun, yönü yazı turayla seçen 1.000 denemenin dağılımındaki yüzdeliği (hükmün şartı ≥ 95): EUR/USD 92,6 · GBP/USD 57,5 · USD/JPY 97,7 · AUD/USD 11,0.
 
-**Rejim ve saat.** EUR/USD için, bütün dönemde, artı yıl: 2 / 9; en iyi yıl 2026 (+0,11 R), en kötü 2019 (−0,20 R). Oynaklık tercillerinde: düşük −0,07, orta +0,01, yüksek −0,08 R.
+**Rejim ve saat.** EUR/USD için, bütün dönemde, artı yıl: 2 / 9; en iyi yıl 2026 (+0,11 R), en kötü 2019 (−0,20 R). Oynaklık tercillerinde: düşük −0,06, orta −0,02, yüksek −0,08 R.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
 | :--- | ---: | ---: | ---: | ---: |
@@ -462,48 +571,97 @@ _Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişte
 | 2024 | −0,01 | −0,07 | +0,03 | −0,23 |
 | 2025 | −0,11 | −0,15 | +0,04 | −0,14 |
 | 2026 | +0,11 | +0,01 | +0,04 | −0,15 |
-| oynaklık düşük | −0,07 | −0,09 | −0,03 | −0,12 |
-| oynaklık orta | +0,01 | −0,06 | −0,10 | −0,15 |
-| oynaklık yüksek | −0,08 | −0,05 | +0,10 | −0,07 |
+| oynaklık düşük | −0,06 | −0,09 | −0,04 | −0,12 |
+| oynaklık orta | −0,02 | −0,07 | −0,09 | −0,15 |
+| oynaklık yüksek | −0,08 | −0,04 | +0,10 | −0,07 |
 
 _Önceden kayıtlı varsayılan, bütün dönem (2018 → 2026), işlem başına net R. Oynaklık tercili: önceki günlerin ATR(14)'ünün son 252 işlem günündeki yüzdeliği (alt, orta, üst üçte bir); işlem gününü içermez._
 
 <GrafikEmbed src="/arastirma/fx-gunici/asya-saat.html" baslik="Giriş saatine göre — Asya aralığı" no="11" kaynak="Dukascopy" />
 
-EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 11:00 TSİ (−0,01 R, 694 işlem), en kötüsü 13:00 TSİ (−0,26 R, 127 işlem); 4 saatin 0 tanesinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
+EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 11:00–11:59 TSİ (−0,01 R, 694 işlem), en kötüsü 13:00–13:59 TSİ (−0,26 R, 127 işlem); 4 saatin hiçbirinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
 
 ### Koşullar
 
 <GrafikEmbed src="/arastirma/fx-gunici/asya-kosul.html" baslik="Koşul kovaları — Asya aralığı" no="12" kaynak="Dukascopy" />
 
-EUR/USD, sınanan 13 değişken: 3 tuttu, 10 tutmadı. Asya aralığı / günlük ATR bu kuralda aralık / günlük ATR ile aynı ölçüdür ve bir kez sayıldı.
-- aralık / günlük ATR: seçilen kova orta, üst. Örneklem dışında seçilen kovalarda 337 işlem, +0,04 R, isabet %52,5; tamamlayanında 174 işlem, −0,10 R, isabet %46,6.
-- haftanın günü: seçilen kova Pzt, Per. Örneklem dışında seçilen kovalarda 197 işlem, +0,13 R, isabet %56,9; tamamlayanında 314 işlem, −0,10 R, isabet %46,5.
-- Londra–NY farkı 4 saat: seçilen kova ara dönem. Örneklem dışında seçilen kovalarda 38 işlem, +0,004 R, isabet %52,6; tamamlayanında 473 işlem, −0,01 R, isabet %50,3.
-- Tutmayanlar: önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, 60 dk trend (EMA50 tarafı), büyük olay günü, ay sonu, saat değişimi haftası.
+EUR/USD, sınanan 13 değişken: 4 tuttu, 9 tutmadı. Asya aralığı / günlük ATR bu kuralda aralık / günlük ATR ile aynı ölçüdür ve bir kez sayıldı.
+- Aralık / günlük ATR: seçilen kova orta, üst. Örneklem dışında seçilen kovalarda 336 işlem, +0,03 R, isabet %52,4; tamamlayanında 175 işlem, −0,09 R, isabet %46,9.
+- Önceki gün aralığı / ATR: seçilen kova alt. Örneklem dışında seçilen kovalarda 165 işlem, +0,01 R, isabet %52,1; tamamlayanında 346 işlem, −0,02 R, isabet %49,7.
+- Haftanın günü: seçilen kova Pzt, Per. Örneklem dışında seçilen kovalarda 197 işlem, +0,13 R, isabet %56,9; tamamlayanında 314 işlem, −0,10 R, isabet %46,5.
+- Londra–NY farkı 4 saat: seçilen kova ara dönem (Londra–NY farkı 4 saat). Örneklem dışında seçilen kovalarda 38 işlem, +0,004 R, isabet %52,6; tamamlayanında 473 işlem, −0,01 R, isabet %50,3.
+- Tutmayanlar: önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, 60 dk trend (EMA50 tarafı), büyük olay günü, ay sonu, saat değişimi haftası.
 - Ters seçim (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi): aynı ölçüt 13 değişkenin 6 tanesinde tutardı (önceki günün yönü, NR7 (son 7 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, 60 dk trend (EMA50 tarafı), büyük olay günü). Kova farkları yalnız gürültüyse iki seçim aynı sıklıkla tutar.
+
+<details>
+<summary>Kova ayrıntısı — EUR/USD: sınırlar, işlem sayısı, net R, isabet</summary>
+
+<div class="sayi-tablo">
+
+| Değişken | Kova | İçi işlem | İçi R | İçi isabet | Dışı işlem | Dışı R | Dışı isabet |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Aralık / günlük ATR — tuttu · eşik −0,08 | Alt: x &lt; 0,29 | 402 | −0,11 | %45,5 | 175 | −0,09 | %46,9 |
+|  | **Orta: 0,29 ≤ x &lt; 0,38** | 402 | −0,06 | %48,0 | 145 | −0,11 | %44,8 |
+|  | **Üst: x ≥ 0,38** | 403 | −0,06 | %47,6 | 191 | +0,14 | %58,1 |
+| Önceki gün aralığı / ATR — tuttu · eşik −0,08 | **Alt: x &lt; 0,79** | 402 | −0,005 | %50,7 | 165 | +0,01 | %52,1 |
+|  | Orta: 0,79 ≤ x &lt; 1,08 | 402 | −0,13 | %44,5 | 175 | +0,02 | %52,0 |
+|  | Üst: x ≥ 1,08 | 403 | −0,10 | %45,9 | 171 | −0,06 | %47,4 |
+| Önceki günün yönü — tutmadı · eşik −0,07 | Aynı yön | 586 | −0,08 | %46,9 | 250 | +0,02 | %52,0 |
+|  | **Ters yön** | 631 | −0,07 | %47,5 | 261 | −0,04 | %49,0 |
+| NR4 (son 4 günün en dar aralığı) — tutmadı · eşik −0,07 | NR4 olmayan günler | 897 | −0,13 | %44,7 | 391 | −0,01 | %50,4 |
+|  | **NR4 günleri** | 322 | +0,07 | %54,3 | 120 | −0,01 | %50,8 |
+| NR7 (son 7 günün en dar aralığı) — tutmadı · eşik −0,07 | NR7 olmayan günler | 1.023 | −0,11 | %45,6 | 442 | +0,02 | %52,0 |
+|  | **NR7 günleri** | 196 | +0,10 | %55,6 | 69 | −0,22 | %40,6 |
+| Açılış farkı / ATR — tutmadı · eşik −0,08 | **Alt: x &lt; 0,01** | 403 | −0,04 | %48,9 | 175 | −0,10 | %46,3 |
+|  | **Orta: 0,01 ≤ x &lt; 0,18** | 402 | −0,04 | %49,0 | 158 | −0,06 | %47,5 |
+|  | Üst: x ≥ 0,18 | 402 | −0,16 | %43,3 | 178 | +0,12 | %57,3 |
+| Oynaklık yüzdeliği — tutmadı · eşik −0,08 | **Alt: x &lt; %13** | 387 | −0,04 | %49,1 | 165 | −0,06 | %48,5 |
+|  | Orta: %13 ≤ x &lt; %47 | 390 | −0,12 | %45,1 | 162 | +0,05 | %53,7 |
+|  | Üst: x ≥ %47 | 388 | −0,08 | %46,4 | 184 | −0,02 | %49,5 |
+| 60 dk trend (EMA50 tarafı) — tutmadı · eşik −0,08 | Trend yönünde | 773 | −0,08 | %46,8 | 331 | +0,03 | %52,9 |
+|  | **Trend tersine** | 444 | −0,06 | %47,7 | 180 | −0,09 | %46,1 |
+| Haftanın günü — tuttu · eşik −0,07 | **Pazartesi** | 233 | −0,05 | %47,6 | 107 | +0,20 | %60,7 |
+|  | Salı | 252 | −0,12 | %45,6 | 110 | −0,03 | %50,0 |
+|  | Çarşamba | 246 | −0,07 | %47,2 | 96 | −0,14 | %43,8 |
+|  | **Perşembe** | 250 | −0,04 | %49,2 | 90 | +0,03 | %52,2 |
+|  | Cuma | 238 | −0,09 | %46,6 | 108 | −0,13 | %45,4 |
+| Büyük olay günü — tutmadı · eşik −0,07 | Büyük olay günü olmayan günler | 1.034 | −0,08 | %47,2 | 436 | +0,01 | %51,6 |
+|  | **Büyük olay günleri** | 185 | −0,07 | %47,6 | 75 | −0,15 | %44,0 |
+| Ay sonu — tutmadı · eşik −0,07 | Ay sonu dışındaki günler | 1.157 | −0,09 | %46,4 | 490 | −0,0003 | %51,0 |
+|  | **Ay sonu günleri** | 62 | +0,25 | %62,9 | 21 | −0,26 | %38,1 |
+| Saat değişimi haftası — tutmadı · eşik −0,07 | Saat değişimi haftası dışı | 1.123 | −0,08 | %46,7 | 481 | −0,01 | %50,7 |
+|  | **Saat değişimi haftaları** | 96 | +0,05 | %54,2 | 30 | −0,09 | %46,7 |
+| Londra–NY farkı 4 saat — tuttu · eşik −0,07 | Ara dönem dışı (fark 5 saat) | 1.141 | −0,08 | %47,1 | 473 | −0,01 | %50,3 |
+|  | **Ara dönem (Londra–NY farkı 4 saat)** | 78 | −0,03 | %50,0 | 38 | +0,004 | %52,6 |
+
+</div>
+
+_İçi: örneklem içi (2018–2023); dışı: örneklem dışı (2024 →). R: işlem başına net R; isabet: net sonucu artı kapanan işlemlerin payı. Kalın kova örneklem içinde seçilendir: en az 30 işlemle eşiğin, yani değişkenin tanımlı olduğu işlemlerin örneklem içi koşulsuz ortalamasının üstünde. Sürekli değişkenlerin sınırları örneklem içinin tercilleridir ve örneklem dışına olduğu gibi taşınır; örneklem dışında kovalar bu yüzden eşit dolmaz. Tabloda bir kez: Asya aralığı / günlük ATR (aralık / günlük ATR ile aynı ölçü)._
+
+</details>
 
 En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seçilen kova):
 
 | Değişken | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
 | :--- | :--- | :--- | :--- | :--- |
 | aralık / günlük ATR | tuttu: orta, üst | tutmadı | tutmadı | tutmadı |
-| NR4 (son 4 günün en dar aralığı) | tutmadı | tutmadı | tuttu: NR4 | tutmadı |
-| NR7 (son 7 günün en dar aralığı) | tutmadı | tuttu: NR7 | tuttu: değil | tutmadı |
+| önceki gün aralığı / ATR | tuttu: alt | tutmadı | tutmadı | tutmadı |
+| NR4 (son 4 günün en dar aralığı) | tutmadı | tutmadı | tuttu: NR4 günleri | tutmadı |
+| NR7 (son 7 günün en dar aralığı) | tutmadı | tuttu: NR7 günleri | tuttu: NR7 olmayan günler | tutmadı |
 | oynaklık yüzdeliği | tutmadı | tutmadı | tuttu: alt, üst | tutmadı |
 | haftanın günü | tuttu: Pzt, Per | tutmadı | tuttu: Çar, Per | tutmadı |
-| büyük olay günü | tutmadı | tutmadı | tuttu: değil | tutmadı |
-| saat değişimi haftası | tutmadı | tutmadı | tuttu: geçiş haftası | tuttu: geçiş haftası |
-| Londra–NY farkı 4 saat | tuttu: ara dönem | tutmadı | tuttu: ara dönem | tutmadı |
+| büyük olay günü | tutmadı | tutmadı | tuttu: büyük olay günü olmayan günler | tutmadı |
+| saat değişimi haftası | tutmadı | tutmadı | tuttu: saat değişimi haftaları | tuttu: saat değişimi haftaları |
+| Londra–NY farkı 4 saat | tuttu: ara dönem (Londra–NY farkı 4 saat) | tutmadı | tuttu: ara dönem (Londra–NY farkı 4 saat) | tutmadı |
 
 Asya aralığının genişliği (aralık / günlük ATR) bu kuralın en doğal koşuludur ve iki yönlü okunabilir: dar
 bir gece sıkışmış bir dengeyi, geniş bir gece hareketin açılıştan önce yaşanmış olabileceğini anlatır. Bu
-kuralda "aralık" ile "Asya aralığı" aynı ölçüdür ve tek değişken sayılır. Ölçüm: EUR/USD tuttu (seçilen orta, üst: örneklem dışında +0,04 R, 337 işlem; öbür kovalar −0,10 R); GBP/USD tutmadı (seçilen alt, orta: örneklem dışında −0,11 R, 348 işlem; öbür kovalar −0,03 R); USD/JPY tutmadı (seçilen orta, üst: örneklem dışında +0,03 R, 274 işlem; öbür kovalar +0,06 R); AUD/USD tutmadı (seçilen üst: örneklem dışında −0,07 R, 119 işlem; öbür kovalar −0,23 R).
+kuralda "aralık" ile "Asya aralığı" aynı ölçüdür ve tek değişken sayılır. Ölçüm: EUR/USD tuttu (seçilen orta, üst: örneklem dışında +0,03 R, 336 işlem; öbür kovalar −0,09 R); GBP/USD tutmadı (seçilen alt, orta: örneklem dışında −0,11 R, 349 işlem; öbür kovalar −0,03 R); USD/JPY tutmadı (seçilen orta, üst: örneklem dışında +0,03 R, 274 işlem; öbür kovalar +0,06 R); AUD/USD tutmadı (seçilen üst: örneklem dışında −0,07 R, 119 işlem; öbür kovalar −0,23 R).
 
 ### Kontrol listesi
 
-1. **Hüküm.** Bu biçimiyle kanıtlanmış bir kenarı yok: örneklem dışında (2024 →) USD/JPY +0,04 R, ama hükmün şartlarını sağlamıyor; öbür paritelerde sonuç sıfır ya da eksi.
-2. **Ne zaman.** Aday, karar kuralı değil. Saat değişimi haftası, kova geçiş haftası: USD/JPY +0,09 R (25 işlem; tamamlayanı +0,03 R), AUD/USD +0,08 R (22 işlem; tamamlayanı −0,19 R); Londra–NY farkı 4 saat, kova ara dönem: EUR/USD +0,004 R (38 işlem; tamamlayanı −0,01 R), USD/JPY +0,13 R (24 işlem; tamamlayanı +0,03 R). Aday, örneklem içinde seçilip örneklem dışında en az iki paritede aynı yönde duran bir kovadır; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,69; karşılaştırma dersi).
+1. **Hüküm.** Bu biçimiyle kanıtlanmış bir kenarı yok: örneklem dışında (2024 →) USD/JPY +0,04 R, ama hükmün şartlarını sağlamıyor; öbür paritelerde sonuç sıfır ya da eksi. GBP/USD: %95 aralığı iki dönemde de bütünüyle sıfırın altında (2024 → −0,16 / −0,001; bütün dönem −0,12 / −0,03); AUD/USD: %95 aralığı iki dönemde de bütünüyle sıfırın altında (2024 → −0,27 / −0,08; bütün dönem −0,17 / −0,06): şansla açıklanmayan, ölçülmüş bir kayıp.
+2. **Ne zaman.** Aday, karar kuralı değil. Saat değişimi haftaları: USD/JPY +0,09 R (25 işlem; tamamlayanı +0,03 R), AUD/USD +0,08 R (22 işlem; tamamlayanı −0,19 R); ara dönem (Londra–NY farkı 4 saat): EUR/USD +0,004 R (38 işlem; tamamlayanı −0,01 R), USD/JPY +0,13 R (24 işlem; tamamlayanı +0,03 R). Aday: örneklem içinde seçilen aynı kovanın en az iki paritede örneklem dışında da "tuttu" ölçütünü (seçilen kovalarda en az 20 işlem, ortalama artı ve tamamlayanının üstünde) geçtiği koşul; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,84; karşılaştırma dersi).
 3. **Saat.** Aralık Londra 00:00 → 08:00: TSİ 02:00 → 10:00 (İngiltere yaz saati) ya da 03:00 → 11:00 (kış
    saati). Son giriş Londra 11:00: TSİ 13:00 ya da 14:00.
 4. **Aralığı işaretle.** Gece boyunca en yüksek ve en düşük orta fiyat.
@@ -515,7 +673,7 @@ kuralda "aralık" ile "Asya aralığı" aynı ölçüdür ve tek değişken say�
 
 **Kanıtlanmış bir kenar yok.** USD/JPY: zayıf · EUR/USD, GBP/USD, AUD/USD: çalışmıyor. USD/JPY zayıf: örneklem dışında 400 işlemde +0,04 R, ama %95 aralığının alt ucu −0,06; yani kenar kanıtlanmadı. Aynı varsayılan örneklem içinde (2018–2023) −0,02 R, bütün dönemde −0,004 R. Örneklem dışı yıl yıl: 2024 +0,03 (142 işlem) · 2025 +0,04 (141 işlem) · 2026 +0,04 (117 işlem). En iyi tek işlem (20.06.2024, +1,00 R, riski 21,4 pip) çıkarılınca +0,03 R, en iyi üç işlem çıkarılınca +0,03 R. Bütün dönemin hükmü (varsayılan için o da örneklem dışıdır) ayrışıyor: USD/JPY zayıf → çalışmıyor (−0,004 R). Maliyet bayrağı (brüt sonucun %95 aralığı sıfırın üstünde, net sonuç sıfır ya da altında) bütün dönemde USD/JPY. USD/JPY: bayrak bütün dönemden yanıyor; aynı paritenin 2024 → net sonucu artı. Önceden kayıtlı kuralda örneklem dışında R ile pipin işareti ayrışıyor: EUR/USD −0,01 R ama +0,2 pip (pip ortalamasının %95 aralığı −1,5 / +1,9). R'nin işaretini stopu dar işlemler belirliyor (giriş dersi, "R ve pip"); hüküm ön kayıt gereği R'den verilir.
 
-| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet yiyor (bütün · 2024 →) |
+| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet bayrağı (bütün · 2024 →) |
 | :--- | :--- | :--- | :--- | ---: | :--- |
 | EUR/USD | çalışmıyor · −0,01 | çalışmıyor · −0,06 | zayıf · +0,02 | 92,6 | hayır · hayır |
 | GBP/USD | çalışmıyor · −0,08 | çalışmıyor · −0,07 | zayıf · +0,01 | 57,5 | hayır · hayır |
@@ -523,6 +681,8 @@ kuralda "aralık" ile "Asya aralığı" aynı ölçüdür ve tek değişken say�
 | AUD/USD | çalışmıyor · −0,18 | çalışmıyor · −0,11 | çalışmıyor · −0,06 | 11,0 | hayır · hayır |
 
 _Hücrede hüküm ve işlem başına net R; tanımlar giriş dersinde ("Hüküm")._
+
+_Sınırda: USD/JPY seçilen, örneklem dışı, net aralığın alt ucu −0,001 R (sıfıra standart hatanın 0,02 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %16'sında ucu sıfırın üstünde verir; hükmün öbür iki şartı geniş farkla tutuyor (ortalama +0,13 R, rastgele yön yüzdeliği 99,7), üçüncüsü sıfırda; deflated Sharpe 0,20. Bu uçlarda işaret tohum gürültüsüne bağlıdır; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir ve değişmez._
 
 ## New York ilk dengesi — 08:00
 
@@ -543,33 +703,34 @@ dersin 09:30 ET kuralı (ABD hisse açılışı) aynı fikrin öbür çıpasıd�
 ### Kurallar
 
 - **Başlangıç.** 08:00 New York: TSİ 15:00 (ABD yaz saati) ya da 16:00 (kış saati). TSİ karşılığı yalnız
-  ABD'nin saatine bağlıdır; mart ve ekimdeki ara haftalarda ABD yaz saatinde olduğu için TSİ 15:00'tir.
+  ABD'nin saatine bağlıdır; mart ve ekim sonu–kasım başındaki ara haftalarda ABD yaz saatinde olduğu için TSİ
+  15:00'tir.
 - **İlk denge.** Başlangıçtan itibaren ilk mum ya da ilk 60 dakika. 60 dakikalık mumda ikisi aynı penceredir
   (ilk mumun kendisi) ve tek sayılır; 60 dakikalık mumlar başlangıca çıpalıdır.
 - **Sinyal.** İlk denge bittikten sonra onun dışında kapanan ilk mum; gün başına tek işlem.
 - **Stop ve hedef.** Stop ilk dengenin karşı ucu ya da ortası; hedef 1R, 2R ya da gün sonu.
-- **Son giriş.** 12:00 ya da 14:00 New York.
+- **Son giriş.** 12:00 ya da 14:00 New York (TSİ yazın 19:00 ya da 21:00, kışın 20:00 ya da 22:00).
 
 | Parametre | Izgara | Varsayılan |
 | :--- | :--- | :--- |
 | zaman dilimi | 5 dk, 15 dk, 60 dk | 15 dk |
-| başlangıç (New York) | 08:00 (bu birimde sabit) | 08:00 (ön kayıtta 09:30) |
+| başlangıç (New York) | 08:00 (bu kuralda sabit) | 08:00 (ön kayıtta 09:30) |
 | ilk denge penceresi | tek mum, 60 dk | 60 dk |
 | stop yeri | karşı uç, orta | karşı uç |
 | stop türü | sert, kapanış | sert |
 | hedef | 1R, 2R, gün sonu | gün sonu |
 | son giriş (New York) | 12:00, 14:00 | 12:00 |
 
-_Izgara: 120 kombinasyon (144 bileşimden; 60 dakikalık mumda "tek mum" ilk denge ile "60 dk" ilk denge aynı penceredir ve bir kez sayılır)._
+_Izgara: 120 kombinasyon (144 bileşimden; 60 dakikalık mumda "tek mum" ilk denge ile "60 dk" ilk denge aynı penceredir ve bir kez sayılır). Saatler kuralın yerel saatidir: başlangıç (New York) 08:00 → TSİ yazın 15:00, kışın 16:00; son giriş (New York) 12:00 → TSİ yazın 19:00, kışın 20:00; son giriş (New York) 14:00 → TSİ yazın 21:00, kışın 22:00._
 
 Varsayılan: 15 dakikalık mumlar, ilk 60 dakikanın aralığı, karşı uçta sert stop, gün sonu çıkışı; son giriş
 12:00 New York.
 Ön kayıt New York ilk dengesini tek bir aile olarak kaydetti ve varsayılanın başlangıcını 09:30 seçti; 08:00
-birimi o varsayılandan yalnız başlangıç değiştirilerek türetildi.
+kuralı o varsayılandan yalnız başlangıç değiştirilerek türetildi.
 
-**İlk dengenin uzunluğu.** Şartname aralık penceresinin teyit mumuyla aynı dilimde olmasını ister (15
-dakikalık mumda 15 dakikalık ilk denge); ön kayıt piyasa profilinin tanımını, 60 dakikalık ilk dengeyi
-varsayılan seçti. Bu bir sapmadır ve iki pencere yan yana ölçüldü:
+**İlk dengenin uzunluğu.** Aralığı teyit mumuyla aynı uzunlukta kurmak da savunulabilir (15 dakikalık mumda
+15 dakikalık ilk denge); ön kayıt piyasa profilinin tanımını, 60 dakikalık ilk dengeyi varsayılan seçti. İki
+pencere yan yana:
 
 | İlk denge penceresi | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
 | :--- | ---: | ---: | ---: | ---: |
@@ -583,10 +744,10 @@ _Hücre: örneklem içi · örneklem dışı net R (parantezde örneklem dışı
 <GrafikEmbed src="/arastirma/fx-gunici/nyib_0800-ornek.html" baslik="Örnek günler — NY IB 08:00" no="13" kaynak="Dukascopy" />
 
 - **Kazanan** (1 Nisan 2024, pazartesi; 15 dk mum): satış. Sinyal mumu 16:30–16:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,07763 (bid, kayma dahil); stop 1,07858 (9,5 pip). Çıkış 23:55 TSİ'de 1,07432, gün sonu kapanışı: +3,48 R (+33,1 pip, maliyet dahil). İşlem boyunca en kötü −0,24 R, en iyi +4,76 R.
-- **Kaybeden** (27 Mart 2024, çarşamba; 15 dk mum): satış. Sinyal mumu 16:30–16:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,08123 (bid, kayma dahil); stop 1,082165 (9,35 pip). Çıkış 18:42 TSİ'de 1,082215, stop: −1,05 R (−9,8 pip, maliyet dahil). İşlem boyunca en kötü −1,05 R, en iyi 0,00 R.
+- **Kaybeden** (27 Mart 2024, çarşamba; 15 dk mum): satış. Sinyal mumu 16:30–16:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,08123 (bid, kayma dahil); stop 1,082165 (9,35 pip). Çıkış 18:42 TSİ'de 1,082215, stop: −1,05 R (−9,85 pip, maliyet dahil). İşlem boyunca en kötü −1,05 R, en iyi 0,00 R.
 - **Tuzak** (4 Aralık 2024, çarşamba; 15 dk mum): alış. Sinyal mumu 18:00–18:15 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,05223 (ask, kayma dahil); stop 1,04793 (43,0 pip). Çıkış 00:55 TSİ'de 1,05089, gün sonu kapanışı: −0,31 R (−13,4 pip, maliyet dahil). İşlem boyunca en kötü −0,41 R, en iyi +0,50 R.
 
-Noktalı mavi çizgiler ilk dengenin iki ucudur; mavi bant ilk dengenin dışında kapanan sinyal mumunu
+Noktalı mavi çizgiler ilk dengenin iki ucudur (ilk denge New York 08:00'da başlar); mavi bant ilk dengenin dışında kapanan sinyal mumunu
 işaretler. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlem, tuzak örneği önce lehine en az
 yarım R gidip zararla kapanan işlemdir.
 
@@ -596,7 +757,7 @@ yarım R gidip zararla kapanan işlemdir.
 
 <GrafikEmbed src="/arastirma/fx-gunici/nyib_0800-egri.html" baslik="Birikimli net R ve düşüş — NY IB 08:00" no="14" kaynak="Dukascopy" />
 
-Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 2.628 işleminin net ortalaması işlem başına −0,06 R (%95 aralığı −0,12 / +0,01, gün kümeli; isabet %40,3). Parite parite: EUR/USD −0,08; GBP/USD −0,02; USD/JPY −0,02; AUD/USD −0,11 (artı olan parite: 0 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,03 R; gerçek makas ve kayma bunun 0,09 R'sini götürüyor ve sonucu eksiye çeviriyor.
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 2.628 işleminin net ortalaması işlem başına −0,06 R (%95 aralığı −0,12 / +0,01, gün kümeli; isabet %40,3). Parite parite: EUR/USD −0,08; GBP/USD −0,02; USD/JPY −0,02; AUD/USD −0,11 (artı olan parite: 0 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,03 R; gerçek makas ve kayma işlem başına 0,09 R tutuyor, brüt kazancın tamamını siliyor ve sonucu −0,06 R'ye çeviriyor.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -606,14 +767,14 @@ yarım R gidip zararla kapanan işlemdir.
 | %95 aralığı, alt | −0,16 | −0,10 | −0,12 | −0,20 | −0,12 |
 | %95 aralığı, üst | −0,001 | +0,07 | +0,08 | −0,02 | +0,01 |
 | Brüt beklenti (R) | −0,01 | +0,06 | +0,04 | +0,02 | +0,03 |
-| Net beklenti (pip) | −1,5 | −1,3 | −0,6 | −2,2 | −1,4 |
+| Net beklenti (pip) | −1,5 | −1,3 | −0,6 | −2,2 | — |
 | Sharpe (yıllık) | −1,20 | −0,22 | −0,22 | −1,44 | −1,10 |
 
-_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından._
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından; pip satırı havuzda boş (pariteler arası pip toplanamaz)._
 
 Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfırı kapsıyor: kayıp da bu örneklem büyüklüğünde şanstan ayırt edilemiyor; bir kenar yok. Örneklem içinde (2018–2023) 5.766 işlemde işlem başına −0,07 R (%95 aralığı −0,10 / −0,03).
 
-**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için 2018 → 2026 da onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
+**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için bütün dönem de (2018 → 2026) onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -631,12 +792,16 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 | Ort. kazanç (R) | +0,87 | +1,02 | +0,98 | +1,01 | +0,97 |
 | Ort. kayıp (R) | −0,77 | −0,76 | −0,71 | −0,76 | −0,75 |
 | Kâr çarpanı (R) | 0,81 | 0,96 | 0,95 | 0,77 | 0,87 |
-| Kâr çarpanı (pip) | 0,85 | 0,90 | 0,96 | 0,73 | 0,87 |
+| Kâr çarpanı (pip) | 0,85 | 0,90 | 0,96 | 0,73 | — |
 | Azami düşüş (R) | 58,8 | 27,9 | 36,5 | 75,1 | 153,8 |
 | Ort. süre (dk) | 317 | 312 | 317 | 304 | 312 |
 | MAE medyanı (R) | −0,69 | −0,72 | −0,64 | −0,78 | −0,70 |
 | MFE medyanı (R) | +0,51 | +0,52 | +0,54 | +0,47 | +0,51 |
-| Stop uzaklığı medyanı (pip) | 21,1 | 26,8 | 34,1 | 16,0 | 23,4 |
+| Stop uzaklığı medyanı (pip) | 21,1 | 26,8 | 34,1 | 16,0 | — |
+
+_Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnız R'de verilir._
+
+**Alınmayan emirler.** Varsayılanın 8.394 emrinin hepsi işleme dönüştü (bütün dönem, bütün pariteler).
 
 **Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
 
@@ -650,14 +815,14 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 
 Izgaranın 120 kombinasyonundan net beklentisi artı olanlar (örneklem içi · dışı · ikisi birden): EUR/USD 0 · 0 · 0; GBP/USD 0 · 6 · 0; USD/JPY 4 · 0 · 0; AUD/USD 0 · 0 · 0.
 
-| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR (yayılım) | Hüküm |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: | :--- |
 | EUR/USD | 60 dk · ilk denge tek mum · stop yeri karşı uç · sert stop · hedef gün sonu · son giriş 12:00 | −0,03 | −1,3 | −0,03 | −0,8 | 0,00 | çalışmıyor |
 | GBP/USD | 5 dk · ilk denge 60 dk · stop yeri karşı uç · kapanış stopu · hedef 1R · son giriş 12:00 | −0,01 | −0,1 | −0,10 | −3,2 | 0,00 | çalışmıyor |
 | USD/JPY | 15 dk · ilk denge tek mum · stop yeri karşı uç · sert stop · hedef gün sonu · son giriş 12:00 | +0,02 | +0,4 | −0,15 | −3,5 | 0,00 | çalışmıyor |
 | AUD/USD | 60 dk · ilk denge tek mum · stop yeri karşı uç · kapanış stopu · hedef gün sonu · son giriş 14:00 | −0,07 | −1,2 | −0,14 | −2,4 | 0,00 | çalışmıyor |
 
-EUR/USD'de ızgaranın 120 kombinasyonu örneklem içinde denendi. Seçilen en iyi kombinasyonun bile örneklem içi yıllık Sharpe'ı −0,47: deflated Sharpe'ın sorusu (en iyi sonuç şansla açıklanır mı) burada sorulmaz, açıklanacak bir artı yok.
+EUR/USD'de ızgaranın 120 kombinasyonu örneklem içinde denendi. Denemelerin 108 tanesi işlem bakımından birbirinden farklıdır; öbürleri bir başkasıyla birebir aynı işlemleri verir (bir parametresi o kombinasyonda hiçbir işlemi değiştirmez). Yayılım eşiğine göre deflated Sharpe tekil denemelerle 0,00, bütün denemelerle 0,00 (tablodaki). Seçilen en iyi kombinasyonun bile örneklem içi yıllık Sharpe'ı −0,47: deflated Sharpe'ın sorusu (en iyi sonuç şansla açıklanır mı) burada sorulmaz, açıklanacak bir artı yok.
 
 Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak; seçim şartını geçen kombinasyon çıkmayan yıl sınanmaz): EUR/USD −0,06 R (1.542 işlem; 2020–2026); GBP/USD −0,06 R (1.682 işlem; 2020–2026); USD/JPY −0,04 R (1.758 işlem; 2020–2026); AUD/USD −0,11 R (1.584 işlem; 2020–2026).
 
@@ -667,6 +832,26 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | GBP/USD | 2020–2026 | 1.682 | −0,06 | −0,10 | −0,94 |
 | USD/JPY | 2020–2026 | 1.758 | −0,04 | −0,15 | −0,26 |
 | AUD/USD | 2020–2026 | 1.584 | −0,11 | −0,16 | −1,75 |
+
+**Stop ve hedef.** Izgaranın stop ve hedef boyutları tek tek; öbür parametreler önceden kayıtlı varsayılanda. Bunlar seçim değil karşılaştırmadır: örneklem dışı sütundan en iyi satırı seçmek, ızgaradan seçimin örneklem içinde yaptığını örneklem dışında yapmaktır.
+
+| Stop türü | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| sert stop (varsayılan) | −0,03 · −0,08 (656) | −0,06 · −0,02 (661) | −0,07 · −0,02 (646) | −0,10 · −0,11 (665) |
+| kapanış stopu | −0,05 · −0,06 (656) | −0,05 · −0,05 (661) | −0,07 · −0,02 (646) | −0,11 · −0,14 (665) |
+
+| Stop yeri | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| karşı uç (varsayılan) | −0,03 · −0,08 (656) | −0,06 · −0,02 (661) | −0,07 · −0,02 (646) | −0,10 · −0,11 (665) |
+| orta | −0,07 · −0,11 (655) | −0,11 · −0,06 (661) | −0,10 · −0,004 (646) | −0,17 · −0,21 (665) |
+
+| Hedef | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 1R | −0,04 · −0,09 (656) | −0,03 · −0,06 (661) | −0,06 · −0,06 (646) | −0,09 · −0,15 (665) |
+| 2R | −0,03 · −0,09 (656) | −0,05 · −0,06 (661) | −0,05 · −0,06 (646) | −0,10 · −0,15 (665) |
+| gün sonu (varsayılan) | −0,03 · −0,08 (656) | −0,06 · −0,02 (661) | −0,07 · −0,02 (646) | −0,10 · −0,11 (665) |
+
+_Hücre: örneklem içi · örneklem dışı net R (parantezde örneklem dışı işlem sayısı); öbür parametreler önceden kayıtlı varsayılanda._
 
 **Maliyet.**
 
@@ -680,18 +865,18 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | Başabaş kayma, 2024 → (pip) | sıfırda bile eksi | 0,29 | 0,23 | sıfırda bile eksi |
 | Başabaş kayma, bütün dönem (pip) | sıfırda bile eksi | sıfırda bile eksi | sıfırda bile eksi | sıfırda bile eksi |
 
-_Örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
 
-**Kuyruk.** R ortalaması her işlemi riskine göre büyüklükler; riski küçük tek bir işlem ortalamayı taşıyabilir.
+**Kuyruk.** R ortalaması her işlemi riskine göre ölçekler; riski küçük tek bir işlem ortalamayı taşıyabilir.
 
 | Parite | Net R | En iyi işlem hariç | En iyi üç hariç | Maliyeti riskin yarısını aşanlar hariç | En iyi işlem |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| EUR/USD | −0,08 | −0,09 | −0,11 | −0,08 (%0 çıktı) | +6,69 (11,8 pip risk) |
-| GBP/USD | −0,02 | −0,03 | −0,05 | −0,02 (%0 çıktı) | +8,09 (12,65 pip risk) |
-| USD/JPY | −0,02 | −0,05 | −0,07 | −0,02 (%0 çıktı) | +19,52 (17,05 pip risk) |
-| AUD/USD | −0,11 | −0,13 | −0,16 | −0,11 (%0 çıktı) | +10,97 (9,25 pip risk) |
+| EUR/USD | −0,08 | −0,09 | −0,11 | −0,08 (işlemlerin %0'ı çıkarıldı) | +6,69 (11,8 pip risk) |
+| GBP/USD | −0,02 | −0,03 | −0,05 | −0,02 (işlemlerin %0'ı çıkarıldı) | +8,09 (12,65 pip risk) |
+| USD/JPY | −0,02 | −0,05 | −0,07 | −0,02 (işlemlerin %0'ı çıkarıldı) | +19,52 (17,05 pip risk) |
+| AUD/USD | −0,11 | −0,13 | −0,16 | −0,11 (işlemlerin %0'ı çıkarıldı) | +10,97 (9,25 pip risk) |
 
-_Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
 
 **Yön mü, zamanlama mı?** Örneklem dışı sonucun, yönü yazı turayla seçen 1.000 denemenin dağılımındaki yüzdeliği (hükmün şartı ≥ 95): EUR/USD 52,1 · GBP/USD 67,7 · USD/JPY 64,8 · AUD/USD 53,1.
 
@@ -708,15 +893,15 @@ _Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişte
 | 2024 | −0,15 | −0,08 | +0,04 | −0,08 |
 | 2025 | −0,08 | −0,01 | +0,01 | −0,15 |
 | 2026 | −0,01 | +0,05 | −0,12 | −0,11 |
-| oynaklık düşük | −0,03 | −0,03 | −0,04 | −0,09 |
-| oynaklık orta | −0,09 | −0,06 | −0,08 | −0,12 |
-| oynaklık yüksek | −0,06 | −0,07 | −0,05 | −0,11 |
+| oynaklık düşük | −0,03 | −0,02 | −0,05 | −0,09 |
+| oynaklık orta | −0,09 | −0,07 | −0,06 | −0,11 |
+| oynaklık yüksek | −0,06 | −0,07 | −0,06 | −0,12 |
 
 _Önceden kayıtlı varsayılan, bütün dönem (2018 → 2026), işlem başına net R. Oynaklık tercili: önceki günlerin ATR(14)'ünün son 252 işlem günündeki yüzdeliği (alt, orta, üst üçte bir); işlem gününü içermez._
 
 <GrafikEmbed src="/arastirma/fx-gunici/nyib_0800-saat.html" baslik="Giriş saatine göre — NY IB 08:00" no="17" kaynak="Dukascopy" />
 
-EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 19:00 TSİ (+0,05 R, 75 işlem), en kötüsü 16:00 TSİ (−0,08 R, 872 işlem); 4 saatin 1 tanesinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
+EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 19:00–19:59 TSİ (+0,05 R, 75 işlem), en kötüsü 16:00–16:59 TSİ (−0,08 R, 872 işlem); 4 saatin 1 tanesinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
 
 ### Koşullar
 
@@ -726,6 +911,56 @@ EUR/USD, sınanan 14 değişken: 0 tuttu, 14 tutmadı.
 - Tutmayanlar: aralık / günlük ATR, Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), açılış farkı / ATR, oynaklık yüzdeliği, 60 dk trend (EMA50 tarafı), haftanın günü, büyük olay günü, ay sonu, saat değişimi haftası, Londra–NY farkı 4 saat.
 - Ters seçim (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi): aynı ölçüt 14 değişkenin 3 tanesinde tutardı (aralık / günlük ATR, büyük olay günü, saat değişimi haftası). Kova farkları yalnız gürültüyse iki seçim aynı sıklıkla tutar.
 
+<details>
+<summary>Kova ayrıntısı — EUR/USD: sınırlar, işlem sayısı, net R, isabet</summary>
+
+<div class="sayi-tablo">
+
+| Değişken | Kova | İçi işlem | İçi R | İçi isabet | Dışı işlem | Dışı R | Dışı isabet |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Aralık / günlük ATR — tutmadı · eşik −0,03 | **Alt: x &lt; 0,21** | 475 | +0,003 | %41,5 | 251 | −0,21 | %32,3 |
+|  | Orta: 0,21 ≤ x &lt; 0,31 | 476 | −0,08 | %41,4 | 192 | +0,06 | %48,4 |
+|  | **Üst: x ≥ 0,31** | 475 | −0,02 | %47,6 | 213 | −0,06 | %47,4 |
+| Asya aralığı / günlük ATR — tutmadı · eşik −0,03 | **Alt: x &lt; 0,31** | 475 | +0,02 | %44,4 | 217 | −0,07 | %40,1 |
+|  | Orta: 0,31 ≤ x &lt; 0,41 | 475 | −0,06 | %42,3 | 184 | −0,09 | %39,7 |
+|  | Üst: x ≥ 0,41 | 476 | −0,05 | %43,7 | 255 | −0,09 | %45,1 |
+| Önceki gün aralığı / ATR — tutmadı · eşik −0,03 | **Alt: x &lt; 0,80** | 476 | +0,07 | %46,8 | 239 | −0,11 | %39,7 |
+|  | Orta: 0,80 ≤ x &lt; 1,09 | 475 | −0,07 | %42,5 | 220 | −0,07 | %41,8 |
+|  | Üst: x ≥ 1,09 | 475 | −0,09 | %41,1 | 197 | −0,07 | %44,7 |
+| Önceki günün yönü — tutmadı · eşik −0,03 | Aynı yön | 757 | −0,04 | %45,4 | 321 | −0,004 | %45,2 |
+|  | **Ters yön** | 680 | −0,02 | %41,2 | 335 | −0,16 | %38,8 |
+| NR4 (son 4 günün en dar aralığı) — tutmadı · eşik −0,03 | **NR4 olmayan günler** | 1.071 | −0,03 | %43,2 | 485 | −0,04 | %42,9 |
+|  | NR4 günleri | 368 | −0,04 | %43,8 | 171 | −0,22 | %39,2 |
+| NR7 (son 7 günün en dar aralığı) — tutmadı · eşik −0,03 | NR7 olmayan günler | 1.218 | −0,04 | %42,7 | 556 | −0,05 | %43,0 |
+|  | **NR7 günleri** | 221 | −0,01 | %47,1 | 100 | −0,26 | %36,0 |
+| Açılış farkı / ATR — tutmadı · eşik −0,03 | **Alt: x &lt; −0,11** | 475 | +0,01 | %45,5 | 226 | −0,16 | %39,4 |
+|  | Orta: −0,11 ≤ x &lt; 0,10 | 476 | −0,03 | %41,4 | 199 | −0,03 | %42,2 |
+|  | Üst: x ≥ 0,10 | 475 | −0,06 | %43,6 | 231 | −0,05 | %44,2 |
+| Oynaklık yüzdeliği — tutmadı · eşik −0,03 | **Alt: x &lt; %13** | 456 | +0,04 | %45,8 | 191 | −0,10 | %40,8 |
+|  | Orta: %13 ≤ x &lt; %49 | 456 | −0,09 | %42,1 | 227 | −0,09 | %41,4 |
+|  | Üst: x ≥ %49 | 457 | −0,05 | %42,7 | 238 | −0,06 | %43,3 |
+| 60 dk trend (EMA50 tarafı) — tutmadı · eşik −0,03 | Trend yönünde | 876 | −0,04 | %43,6 | 387 | −0,04 | %43,9 |
+|  | **Trend tersine** | 561 | −0,03 | %43,0 | 269 | −0,14 | %39,0 |
+| Haftanın günü — tutmadı · eşik −0,03 | **Pazartesi** | 294 | −0,01 | %43,2 | 132 | −0,08 | %40,2 |
+|  | Salı | 284 | −0,04 | %45,1 | 136 | −0,11 | %42,6 |
+|  | Çarşamba | 290 | −0,04 | %39,3 | 133 | +0,12 | %48,1 |
+|  | Perşembe | 285 | −0,04 | %43,9 | 130 | −0,08 | %42,3 |
+|  | Cuma | 286 | −0,04 | %45,5 | 125 | −0,27 | %36,0 |
+| Büyük olay günü — tutmadı · eşik −0,03 | **Büyük olay günü olmayan günler** | 1.246 | −0,03 | %43,3 | 575 | −0,12 | %41,0 |
+|  | Büyük olay günleri | 193 | −0,04 | %44,0 | 81 | +0,16 | %48,1 |
+| Ay sonu — tutmadı · eşik −0,03 | Ay sonu dışındaki günler | 1.369 | −0,04 | %42,7 | 623 | −0,09 | %41,7 |
+|  | **Ay sonu günleri** | 70 | +0,06 | %55,7 | 33 | −0,02 | %45,5 |
+| Saat değişimi haftası — tutmadı · eşik −0,03 | **Saat değişimi haftası dışı** | 1.325 | −0,03 | %43,5 | 615 | −0,09 | %41,5 |
+|  | Saat değişimi haftaları | 114 | −0,05 | %41,2 | 41 | +0,001 | %48,8 |
+| Londra–NY farkı 4 saat — tutmadı · eşik −0,03 | **Ara dönem dışı (fark 5 saat)** | 1.344 | −0,02 | %43,5 | 609 | −0,09 | %41,4 |
+|  | Ara dönem (Londra–NY farkı 4 saat) | 95 | −0,16 | %42,1 | 47 | −0,03 | %48,9 |
+
+</div>
+
+_İçi: örneklem içi (2018–2023); dışı: örneklem dışı (2024 →). R: işlem başına net R; isabet: net sonucu artı kapanan işlemlerin payı. Kalın kova örneklem içinde seçilendir: en az 30 işlemle eşiğin, yani değişkenin tanımlı olduğu işlemlerin örneklem içi koşulsuz ortalamasının üstünde. Sürekli değişkenlerin sınırları örneklem içinin tercilleridir ve örneklem dışına olduğu gibi taşınır; örneklem dışında kovalar bu yüzden eşit dolmaz._
+
+</details>
+
 En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seçilen kova):
 
 | Değişken | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
@@ -734,15 +969,15 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 | Asya aralığı / günlük ATR | tutmadı | tutmadı | tuttu: alt | tutmadı |
 | açılış farkı / ATR | tutmadı | tutmadı | tuttu: orta | tutmadı |
 | oynaklık yüzdeliği | tutmadı | tuttu: alt | tutmadı | tutmadı |
-| Londra–NY farkı 4 saat | tutmadı | tutmadı | tutmadı | tuttu: ara dönem |
+| Londra–NY farkı 4 saat | tutmadı | tutmadı | tutmadı | tuttu: ara dönem (Londra–NY farkı 4 saat) |
 
 ### Kontrol listesi
 
-1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi GBP/USD, −0,02 R).
-2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,69; karşılaştırma dersi).
+1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi GBP/USD, −0,02 R). EUR/USD: %95 aralığı iki dönemde de bütünüyle sıfırın altında (2024 → −0,16 / −0,001; bütün dönem −0,09 / −0,01); AUD/USD: %95 aralığı iki dönemde de bütünüyle sıfırın altında (2024 → −0,20 / −0,02; bütün dönem −0,15 / −0,06): şansla açıklanmayan, ölçülmüş bir kayıp.
+2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,84; karşılaştırma dersi).
 3. **Saat.** İlk denge 08:00–09:00 New York: TSİ 15:00–16:00 (ABD yaz saati) ya da 16:00–17:00. Son giriş
    12:00 New York: TSİ 19:00 ya da 20:00.
-4. **Veri saatini bil.** 08:30'daki ABD verisi ilk dengenin içindedir; o gün aralık genişse risk de geniştir.
+4. **Veri saatini bil.** 08:30 New York'taki (TSİ yazın 15:30, kışın 16:30) ABD verisi ilk dengenin içindedir; o gün aralık genişse risk de geniştir.
 5. **Kapanışı bekle, stop karşı uçta, gün sonunda kapat.**
 6. **Maliyet.** EUR/USD, örneklem dışı (2024 →): maliyetten önce de artı değil (brüt −0,01 R): hiçbir yürütme bu kuralı artıya çevirmez. Bütün dönem: brüt artı (+0,02 R) ama kayma hiç yokken, yalnız gerçek makasla bile eksi (−0,002 R): kenar varsa bu makastan küçük.
 
@@ -750,7 +985,7 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 
 **Çalışmıyor.** Önceden kayıtlı kural, sınanan 4 paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil.
 
-| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet yiyor (bütün · 2024 →) |
+| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet bayrağı (bütün · 2024 →) |
 | :--- | :--- | :--- | :--- | ---: | :--- |
 | EUR/USD | çalışmıyor · −0,08 | çalışmıyor · −0,05 | çalışmıyor · −0,03 | 52,1 | hayır · hayır |
 | GBP/USD | çalışmıyor · −0,02 | çalışmıyor · −0,05 | çalışmıyor · −0,10 | 67,7 | hayır · hayır |
@@ -779,32 +1014,33 @@ kesimi ise 09:30–10:30 ilk dengesinin içindedir: o günlerde aralık bir veri
 ### Kurallar
 
 - **Başlangıç.** 09:30 New York: TSİ 16:30 (ABD yaz saati) ya da 17:30 (kış saati).
-- **İlk denge.** İlk mum ya da ilk 60 dakika (09:30–10:30). 60 dakikalık mumda ikisi aynı penceredir ve tek
+- **İlk denge.** İlk mum ya da ilk 60 dakika (09:30–10:30 New York; TSİ yazın 16:30–17:30, kışın 17:30–18:30). 60 dakikalık mumda ikisi aynı penceredir ve tek
   sayılır; 60 dakikalık mumlar başlangıca çıpalı, yani :30 ızgarasında.
 - **Sinyal, stop, hedef, son giriş.** 08:00 kuralıyla aynı: ilk dengenin dışında ilk kapanış, karşı uç ya da
-  orta stop, 1R / 2R / gün sonu, son giriş 12:00 ya da 14:00 New York.
+  orta stop, 1R / 2R / gün sonu, son giriş 12:00 ya da 14:00 New York
+  (TSİ yazın 19:00 ya da 21:00, kışın 20:00 ya da 22:00).
 
 | Parametre | Izgara | Varsayılan |
 | :--- | :--- | :--- |
 | zaman dilimi | 5 dk, 15 dk, 60 dk | 15 dk |
-| başlangıç (New York) | 09:30 (bu birimde sabit) | 09:30 |
+| başlangıç (New York) | 09:30 (bu kuralda sabit) | 09:30 |
 | ilk denge penceresi | tek mum, 60 dk | 60 dk |
 | stop yeri | karşı uç, orta | karşı uç |
 | stop türü | sert, kapanış | sert |
 | hedef | 1R, 2R, gün sonu | gün sonu |
 | son giriş (New York) | 12:00, 14:00 | 12:00 |
 
-_Izgara: 120 kombinasyon (144 bileşimden; 60 dakikalık mumda "tek mum" ilk denge ile "60 dk" ilk denge aynı penceredir ve bir kez sayılır)._
+_Izgara: 120 kombinasyon (144 bileşimden; 60 dakikalık mumda "tek mum" ilk denge ile "60 dk" ilk denge aynı penceredir ve bir kez sayılır). Saatler kuralın yerel saatidir: başlangıç (New York) 09:30 → TSİ yazın 16:30, kışın 17:30; son giriş (New York) 12:00 → TSİ yazın 19:00, kışın 20:00; son giriş (New York) 14:00 → TSİ yazın 21:00, kışın 22:00._
 
 Varsayılan: 15 dakikalık mumlar, ilk 60 dakika, karşı uçta sert stop, gün sonu çıkışı, son giriş 12:00.
 Bu, ön kaydın New York ilk dengesi için yazdığı varsayılanın kendisidir.
 
-**İlk dengenin uzunluğu.** 08:00 kuralındaki sapma burada da geçerlidir: şartnamenin "aynı dilim" kuralı (15
-dakikalık mumda 15 dakikalık ilk denge) ile varsayılanın 60 dakikalık ilk dengesi yan yana:
+**İlk dengenin uzunluğu.** 08:00 kuralındaki gibi iki pencere yan yana: teyit mumuyla aynı uzunlukta ilk denge
+(15 dakikalık mumda 15 dakika) ve varsayılanın 60 dakikalık ilk dengesi:
 
 | İlk denge penceresi | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
 | :--- | ---: | ---: | ---: | ---: |
-| ilk denge tek mum | −0,08 · −0,05 (714) | −0,13 · +0,03 (715) | −0,14 · −0,11 (710) | −0,13 · −0,19 (708) |
+| ilk denge tek mum | −0,08 · −0,05 (714) | −0,13 · +0,03 (715) | −0,13 · −0,11 (710) | −0,13 · −0,19 (708) |
 | ilk denge 60 dk (varsayılan) | −0,04 · −0,02 (520) | −0,11 · −0,01 (542) | −0,11 · −0,06 (514) | −0,12 · −0,11 (506) |
 
 _Hücre: örneklem içi · örneklem dışı net R (parantezde örneklem dışı işlem sayısı); öbür parametreler önceden kayıtlı varsayılanda._
@@ -813,11 +1049,11 @@ _Hücre: örneklem içi · örneklem dışı net R (parantezde örneklem dışı
 
 <GrafikEmbed src="/arastirma/fx-gunici/nyib_0930-ornek.html" baslik="Örnek günler — NY IB 09:30" no="19" kaynak="Dukascopy" />
 
-- **Kazanan** (30 Nisan 2024, salı; 15 dk mum): satış. Sinyal mumu 17:45–18:00 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,06905 (bid, kayma dahil); stop 1,071955 (29,05 pip). Çıkış 23:55 TSİ'de 1,06677, gün sonu kapanışı: +0,79 R (+22,8 pip, maliyet dahil). İşlem boyunca en kötü −0,30 R, en iyi +0,83 R.
-- **Kaybeden** (30 Aralık 2025, salı; 15 dk mum): satış. Sinyal mumu 18:30–18:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,17468 (bid, kayma dahil); stop 1,176625 (19,45 pip). Çıkış 19:49 TSİ'de 1,176675, stop: −1,03 R (−19,9 pip, maliyet dahil). İşlem boyunca en kötü −1,03 R, en iyi +0,01 R.
+- **Kazanan** (30 Nisan 2024, salı; 15 dk mum): satış. Sinyal mumu 17:45–18:00 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,06905 (bid, kayma dahil); stop 1,071955 (29,05 pip). Çıkış 23:55 TSİ'de 1,06677, gün sonu kapanışı: +0,78 R (+22,8 pip, maliyet dahil). İşlem boyunca en kötü −0,30 R, en iyi +0,83 R.
+- **Kaybeden** (30 Aralık 2025, salı; 15 dk mum): satış. Sinyal mumu 18:30–18:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,17468 (bid, kayma dahil); stop 1,176625 (19,45 pip). Çıkış 19:49 TSİ'de 1,176675, stop: −1,03 R (−19,95 pip, maliyet dahil). İşlem boyunca en kötü −1,03 R, en iyi +0,01 R.
 - **Tuzak** (11 Şubat 2026, çarşamba; 15 dk mum): alış. Sinyal mumu 19:30–19:45 TSİ; giriş mum kapanınca, sonraki dakikanın açılışında, 1,18778 (ask, kayma dahil); stop 1,18528 (25,0 pip). Çıkış 00:55 TSİ'de 1,18704, gün sonu kapanışı: −0,30 R (−7,4 pip, maliyet dahil). İşlem boyunca en kötü −0,37 R, en iyi +0,62 R.
 
-Noktalı mavi çizgiler 09:30–10:30 ilk dengesinin iki ucudur. Kaybeden örnek lehine yarım R'ye ulaşmadan
+Noktalı mavi çizgiler 09:30–10:30 ilk dengesinin iki ucudur (09:30'dan başlar). Kaybeden örnek lehine yarım R'ye ulaşmadan
 zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla kapanan işlemdir.
 
 ### Sonuçlar
@@ -826,7 +1062,7 @@ zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla
 
 <GrafikEmbed src="/arastirma/fx-gunici/nyib_0930-egri.html" baslik="Birikimli net R ve düşüş — NY IB 09:30" no="20" kaynak="Dukascopy" />
 
-Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 2.082 işleminin net ortalaması işlem başına −0,05 R (%95 aralığı −0,10 / +0,002, gün kümeli; isabet %44,4). Parite parite: EUR/USD −0,02; GBP/USD −0,01; USD/JPY −0,06; AUD/USD −0,11 (artı olan parite: 0 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,03 R; gerçek makas ve kayma bunun 0,08 R'sini götürüyor ve sonucu eksiye çeviriyor.
+Örneklem dışında (01.01.2024 → 15.10.2026) önceden kayıtlı varsayılanın 4 paritedeki 2.082 işleminin net ortalaması işlem başına −0,05 R (%95 aralığı −0,10 / +0,002, gün kümeli; isabet %44,4). Parite parite: EUR/USD −0,02; GBP/USD −0,01; USD/JPY −0,06; AUD/USD −0,11 (artı olan parite: 0 / 4). Maliyetten önce (orta fiyattan orta fiyata) işlem başına +0,03 R; gerçek makas ve kayma işlem başına 0,08 R tutuyor, brüt kazancın tamamını siliyor ve sonucu −0,05 R'ye çeviriyor.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -836,14 +1072,14 @@ zararla kapanan işlem, tuzak örneği önce lehine en az yarım R gidip zararla
 | %95 aralığı, alt | −0,09 | −0,08 | −0,14 | −0,18 | −0,10 |
 | %95 aralığı, üst | +0,05 | +0,05 | +0,03 | −0,04 | +0,002 |
 | Brüt beklenti (R) | +0,04 | +0,06 | +0,004 | +0,01 | +0,03 |
-| Net beklenti (pip) | −0,3 | −0,1 | −1,8 | −1,5 | −0,9 |
+| Net beklenti (pip) | −0,3 | −0,1 | −1,8 | −1,5 | — |
 | Sharpe (yıllık) | −0,36 | −0,16 | −0,77 | −1,93 | −1,12 |
 
-_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından._
+_Önceden kayıtlı varsayılan, örneklem dışı. Net: gerçek makas ve dolum başına 0,5 pip kayma (haber penceresinde ayrıca 1,0 pip). Havuz: aynı kural bütün paritelerde birlikte; Sharpe havuzda günlük R toplamından; pip satırı havuzda boş (pariteler arası pip toplanamaz)._
 
 Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfırı kapsıyor: kayıp da bu örneklem büyüklüğünde şanstan ayırt edilemiyor; bir kenar yok. Örneklem içinde (2018–2023) 4.430 işlemde işlem başına −0,09 R (%95 aralığı −0,12 / −0,06).
 
-**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için 2018 → 2026 da onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
+**Bütün dönem.** Varsayılan veriye bakmadan seçildiği için bütün dönem de (2018 → 2026) onun örneklem dışıdır; hüküm 2024 → penceresinden verilir, bütün dönemin hükmü burada.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD | Havuz |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -851,7 +1087,7 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 | Net beklenti (R) | −0,04 | −0,08 | −0,09 | −0,12 | −0,08 |
 | %95 aralığı, alt | −0,08 | −0,11 | −0,13 | −0,15 | −0,11 |
 | %95 aralığı, üst | +0,001 | −0,04 | −0,05 | −0,08 | −0,05 |
-| Brüt beklenti (R) | +0,03 | −0,01 | −0,02 | −0,0001 | −0,002 |
+| Brüt beklenti (R) | +0,03 | −0,01 | −0,02 | 0,0000 | −0,002 |
 | Hüküm (bütün dönem) | çalışmıyor | çalışmıyor | çalışmıyor | çalışmıyor | — |
 
 **İşlemlerin anatomisi** (örneklem dışı).
@@ -861,12 +1097,16 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 | Ort. kazanç (R) | +0,66 | +0,66 | +0,70 | +0,58 | +0,65 |
 | Ort. kayıp (R) | −0,61 | −0,60 | −0,61 | −0,62 | −0,61 |
 | Kâr çarpanı (R) | 0,93 | 0,97 | 0,84 | 0,68 | 0,85 |
-| Kâr çarpanı (pip) | 0,96 | 0,98 | 0,85 | 0,77 | 0,90 |
+| Kâr çarpanı (pip) | 0,96 | 0,98 | 0,85 | 0,77 | — |
 | Azami düşüş (R) | 33,3 | 21,5 | 33,0 | 62,9 | 128,1 |
 | Ort. süre (dk) | 303 | 302 | 300 | 297 | 301 |
 | MAE medyanı (R) | −0,52 | −0,49 | −0,54 | −0,56 | −0,53 |
 | MFE medyanı (R) | +0,44 | +0,46 | +0,42 | +0,38 | +0,43 |
-| Stop uzaklığı medyanı (pip) | 22,7 | 29,2 | 35,0 | 18,0 | 25,2 |
+| Stop uzaklığı medyanı (pip) | 22,7 | 29,2 | 35,0 | 18,0 | — |
+
+_Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnız R'de verilir._
+
+**Alınmayan emirler.** Varsayılanın 6.512 emrinin hepsi işleme dönüştü (bütün dönem, bütün pariteler).
 
 **Mum uzunluğu.** Aynı kural 5, 15 ve 60 dakikalık mumlarla; öbür parametreler önceden kayıtlı varsayılanda.
 
@@ -880,14 +1120,14 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 
 Izgaranın 120 kombinasyonundan net beklentisi artı olanlar (örneklem içi · dışı · ikisi birden): EUR/USD 4 · 0 · 0; GBP/USD 0 · 4 · 0; USD/JPY 0 · 0 · 0; AUD/USD 0 · 0 · 0.
 
-| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR | Hüküm |
+| Parite | Seçilen | İçi (R) | İçi (pip) | Dışı (R) | Dışı (pip) | DSR (yayılım) | Hüküm |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: | :--- |
 | EUR/USD | 60 dk · ilk denge tek mum · stop yeri orta · kapanış stopu · hedef 1R · son giriş 12:00 | +0,003 | +0,4 | −0,04 | −0,5 | 0,00 | çalışmıyor |
 | GBP/USD | 60 dk · ilk denge tek mum · stop yeri karşı uç · kapanış stopu · hedef gün sonu · son giriş 12:00 | −0,05 | −1,8 | −0,01 | −0,2 | 0,00 | çalışmıyor |
 | USD/JPY | 60 dk · ilk denge tek mum · stop yeri orta · kapanış stopu · hedef 1R · son giriş 12:00 | −0,04 | +0,6 | −0,11 | −2,5 | 0,00 | çalışmıyor |
 | AUD/USD | 60 dk · ilk denge tek mum · stop yeri karşı uç · kapanış stopu · hedef gün sonu · son giriş 12:00 | −0,06 | −1,6 | −0,12 | −2,4 | 0,00 | çalışmıyor |
 
-EUR/USD'de ızgaranın 120 kombinasyonu örneklem içinde denendi. En iyisinin örneklem içi yıllık Sharpe'ı +0,04. Bu kadar denemede salt şansın üreteceği beklenen en yüksek değer 1,04; denemelerin kendi Sharpe yayılımından kurulan eşik (Bailey–López de Prado) 1,43. Deflated Sharpe olasılığı birincisine göre 0,01, ikincisine göre 0,00 (0,95'in altı: seçim şansla açıklanabilir).
+EUR/USD'de ızgaranın 120 kombinasyonu örneklem içinde denendi. Denemelerin 108 tanesi işlem bakımından birbirinden farklıdır; öbürleri bir başkasıyla birebir aynı işlemleri verir (bir parametresi o kombinasyonda hiçbir işlemi değiştirmez). Yayılım eşiğine göre deflated Sharpe tekil denemelerle 0,00, bütün denemelerle 0,00 (tablodaki). En iyisinin örneklem içi yıllık Sharpe'ı +0,04. Bu kadar denemede salt şansın üreteceği beklenen en yüksek değer (gürültü eşiği) 1,04; denemelerin kendi Sharpe yayılımından kurulan eşik (yayılım eşiği, Bailey–López de Prado) 1,44. Deflated Sharpe olasılığı gürültü eşiğine göre 0,01, yayılım eşiğine göre 0,00 (ikisi de 0,95'in altında: seçim şansla açıklanabilir).
 
 Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda sınamak; seçim şartını geçen kombinasyon çıkmayan yıl sınanmaz): EUR/USD −0,06 R (776 işlem; 2020–2026); GBP/USD −0,04 R (793 işlem; 2020–2026); USD/JPY −0,05 R (755 işlem; 2020–2026); AUD/USD −0,09 R (747 işlem; 2020–2026).
 
@@ -897,6 +1137,26 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | GBP/USD | 2020–2026 | 793 | −0,04 | −0,09 | −0,57 |
 | USD/JPY | 2020–2026 | 755 | −0,05 | −0,12 | −0,57 |
 | AUD/USD | 2020–2026 | 747 | −0,09 | −0,15 | −1,13 |
+
+**Stop ve hedef.** Izgaranın stop ve hedef boyutları tek tek; öbür parametreler önceden kayıtlı varsayılanda. Bunlar seçim değil karşılaştırmadır: örneklem dışı sütundan en iyi satırı seçmek, ızgaradan seçimin örneklem içinde yaptığını örneklem dışında yapmaktır.
+
+| Stop türü | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| sert stop (varsayılan) | −0,04 · −0,02 (520) | −0,11 · −0,01 (542) | −0,11 · −0,06 (514) | −0,12 · −0,11 (506) |
+| kapanış stopu | −0,05 · −0,04 (520) | −0,10 · −0,02 (542) | −0,12 · −0,05 (514) | −0,14 · −0,13 (506) |
+
+| Stop yeri | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| karşı uç (varsayılan) | −0,04 · −0,02 (520) | −0,11 · −0,01 (542) | −0,11 · −0,06 (514) | −0,12 · −0,11 (506) |
+| orta | −0,09 · −0,10 (520) | −0,16 · −0,04 (542) | −0,17 · −0,12 (514) | −0,20 · −0,20 (506) |
+
+| Hedef | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
+| :--- | ---: | ---: | ---: | ---: |
+| 1R | −0,04 · −0,03 (520) | −0,11 · −0,02 (542) | −0,09 · −0,08 (514) | −0,10 · −0,13 (506) |
+| 2R | −0,04 · −0,02 (520) | −0,11 · −0,02 (542) | −0,09 · −0,09 (514) | −0,11 · −0,11 (506) |
+| gün sonu (varsayılan) | −0,04 · −0,02 (520) | −0,11 · −0,01 (542) | −0,11 · −0,06 (514) | −0,12 · −0,11 (506) |
+
+_Hücre: örneklem içi · örneklem dışı net R (parantezde örneklem dışı işlem sayısı); öbür parametreler önceden kayıtlı varsayılanda._
 
 **Maliyet.**
 
@@ -910,22 +1170,22 @@ Yürüyen pencere (her yıl yalnız önceki yılların verisiyle seçip o yılda
 | Başabaş kayma, 2024 → (pip) | 0,26 | 0,37 | sıfırda bile eksi | sıfırda bile eksi |
 | Başabaş kayma, bütün dönem (pip) | 0,08 | sıfırda bile eksi | sıfırda bile eksi | sıfırda bile eksi |
 
-_Örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →) net beklenti, R. Kademeler dolum başına temel kaymadır; haber penceresindeki dolumlar her kademede ayrıca 1,0 pip öder, "yalnız makas" satırında o da sıfırdır. Bu kuralın girişleri haber penceresine düşmüyor. Başabaş: net beklentiyi sıfıra indiren dolum başına kayma._
 
-**Kuyruk.** R ortalaması her işlemi riskine göre büyüklükler; riski küçük tek bir işlem ortalamayı taşıyabilir.
+**Kuyruk.** R ortalaması her işlemi riskine göre ölçekler; riski küçük tek bir işlem ortalamayı taşıyabilir.
 
 | Parite | Net R | En iyi işlem hariç | En iyi üç hariç | Maliyeti riskin yarısını aşanlar hariç | En iyi işlem |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| EUR/USD | −0,02 | −0,04 | −0,05 | −0,02 (%0 çıktı) | +6,81 (12,75 pip risk) |
-| GBP/USD | −0,01 | −0,02 | −0,03 | −0,01 (%0 çıktı) | +4,44 (21,75 pip risk) |
-| USD/JPY | −0,06 | −0,08 | −0,09 | −0,06 (%0 çıktı) | +10,28 (22,95 pip risk) |
-| AUD/USD | −0,11 | −0,12 | −0,14 | −0,11 (%0 çıktı) | +4,00 (22,35 pip risk) |
+| EUR/USD | −0,02 | −0,04 | −0,05 | −0,02 (işlemlerin %0'ı çıkarıldı) | +6,81 (12,75 pip risk) |
+| GBP/USD | −0,01 | −0,02 | −0,03 | −0,01 (işlemlerin %0'ı çıkarıldı) | +4,44 (21,75 pip risk) |
+| USD/JPY | −0,06 | −0,08 | −0,09 | −0,06 (işlemlerin %0'ı çıkarıldı) | +10,28 (22,95 pip risk) |
+| AUD/USD | −0,11 | −0,12 | −0,14 | −0,11 (işlemlerin %0'ı çıkarıldı) | +4,00 (22,35 pip risk) |
 
-_Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
+_Önceden kayıtlı varsayılan, örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişteki makas, iki dolumun temel kayması ve giriş haber penceresindeyse haber kayması. Betimleyicidir; hüküm değişmez._
 
 **Yön mü, zamanlama mı?** Örneklem dışı sonucun, yönü yazı turayla seçen 1.000 denemenin dağılımındaki yüzdeliği (hükmün şartı ≥ 95): EUR/USD 67,6 · GBP/USD 90,3 · USD/JPY 57,9 · AUD/USD 52,2.
 
-**Rejim ve saat.** EUR/USD için, bütün dönemde, artı yıl: 3 / 9; en iyi yıl 2026 (+0,05 R), en kötü 2022 (−0,10 R). Oynaklık tercillerinde: düşük −0,02, orta +0,01, yüksek −0,09 R.
+**Rejim ve saat.** EUR/USD için, bütün dönemde, artı yıl: 3 / 9; en iyi yıl 2026 (+0,05 R), en kötü 2022 (−0,10 R). Oynaklık tercillerinde: düşük −0,02, orta −0,01, yüksek −0,09 R.
 
 |  | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
 | :--- | ---: | ---: | ---: | ---: |
@@ -939,55 +1199,105 @@ _Örneklem dışı (2024 →), işlem başına net R. Beklenen maliyet: girişte
 | 2025 | −0,08 | +0,02 | −0,06 | −0,19 |
 | 2026 | +0,05 | −0,08 | −0,12 | −0,08 |
 | oynaklık düşük | −0,02 | −0,04 | −0,11 | −0,16 |
-| oynaklık orta | +0,01 | −0,04 | −0,09 | −0,05 |
-| oynaklık yüksek | −0,09 | −0,14 | −0,06 | −0,10 |
+| oynaklık orta | −0,01 | −0,05 | −0,08 | −0,06 |
+| oynaklık yüksek | −0,09 | −0,13 | −0,07 | −0,10 |
 
 _Önceden kayıtlı varsayılan, bütün dönem (2018 → 2026), işlem başına net R. Oynaklık tercili: önceki günlerin ATR(14)'ünün son 252 işlem günündeki yüzdeliği (alt, orta, üst üçte bir); işlem gününü içermez._
 
 <GrafikEmbed src="/arastirma/fx-gunici/nyib_0930-saat.html" baslik="Giriş saatine göre — NY IB 09:30" no="23" kaynak="Dukascopy" />
 
-EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 18:00 TSİ (−0,03 R, 840 işlem), en kötüsü 19:00 TSİ (−0,05 R, 386 işlem); 3 saatin 0 tanesinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
+EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 18:00–18:59 TSİ (−0,03 R, 840 işlem), en kötüsü 19:00–19:59 TSİ (−0,05 R, 386 işlem); 3 saatin hiçbirinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
 
 ### Koşullar
 
 <GrafikEmbed src="/arastirma/fx-gunici/nyib_0930-kosul.html" baslik="Koşul kovaları — NY IB 09:30" no="24" kaynak="Dukascopy" />
 
 EUR/USD, sınanan 14 değişken: 4 tuttu, 10 tutmadı.
-- açılış farkı / ATR: seçilen kova orta. Örneklem dışında seçilen kovalarda 166 işlem, +0,12 R, isabet %49,4; tamamlayanında 354 işlem, −0,09 R, isabet %44,6.
-- oynaklık yüzdeliği: seçilen kova orta. Örneklem dışında seçilen kovalarda 182 işlem, +0,10 R, isabet %53,8; tamamlayanında 338 işlem, −0,09 R, isabet %42,0.
-- büyük olay günü: seçilen kova haber günü. Örneklem dışında seçilen kovalarda 75 işlem, +0,11 R, isabet %46,7; tamamlayanında 445 işlem, −0,04 R, isabet %46,1.
-- ay sonu: seçilen kova ay sonu. Örneklem dışında seçilen kovalarda 28 işlem, +0,15 R, isabet %60,7; tamamlayanında 492 işlem, −0,03 R, isabet %45,3.
+- Açılış farkı / ATR: seçilen kova orta. Örneklem dışında seçilen kovalarda 166 işlem, +0,12 R, isabet %49,4; tamamlayanında 354 işlem, −0,09 R, isabet %44,6.
+- Oynaklık yüzdeliği: seçilen kova orta. Örneklem dışında seçilen kovalarda 185 işlem, +0,07 R, isabet %52,4; tamamlayanında 335 işlem, −0,08 R, isabet %42,7.
+- Büyük olay günü: seçilen kova büyük olay günleri. Örneklem dışında seçilen kovalarda 75 işlem, +0,11 R, isabet %46,7; tamamlayanında 445 işlem, −0,04 R, isabet %46,1.
+- Ay sonu: seçilen kova ay sonu günleri. Örneklem dışında seçilen kovalarda 28 işlem, +0,15 R, isabet %60,7; tamamlayanında 492 işlem, −0,03 R, isabet %45,3.
 - Tutmayanlar: aralık / günlük ATR, Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), 60 dk trend (EMA50 tarafı), haftanın günü, saat değişimi haftası, Londra–NY farkı 4 saat.
-- Ters seçim (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi): aynı ölçüt 14 değişkenin 8 tanesinde tutardı (aralık / günlük ATR, Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), saat değişimi haftası, Londra–NY farkı 4 saat). Kova farkları yalnız gürültüyse iki seçim aynı sıklıkla tutar.
+- Ters seçim (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi): aynı ölçüt 14 değişkenin 7 tanesinde tutardı (Asya aralığı / günlük ATR, önceki gün aralığı / ATR, önceki günün yönü, NR4 (son 4 günün en dar aralığı), NR7 (son 7 günün en dar aralığı), saat değişimi haftası, Londra–NY farkı 4 saat). Kova farkları yalnız gürültüyse iki seçim aynı sıklıkla tutar.
+
+<details>
+<summary>Kova ayrıntısı — EUR/USD: sınırlar, işlem sayısı, net R, isabet</summary>
+
+<div class="sayi-tablo">
+
+| Değişken | Kova | İçi işlem | İçi R | İçi isabet | Dışı işlem | Dışı R | Dışı isabet |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Aralık / günlük ATR — tutmadı · eşik −0,04 | Alt: x &lt; 0,23 | 366 | −0,04 | %42,1 | 211 | −0,07 | %39,8 |
+|  | Orta: 0,23 ≤ x &lt; 0,33 | 367 | −0,04 | %43,1 | 166 | +0,04 | %50,6 |
+|  | **Üst: x ≥ 0,33** | 366 | −0,04 | %48,4 | 143 | −0,03 | %50,3 |
+| Asya aralığı / günlük ATR — tutmadı · eşik −0,04 | Alt: x &lt; 0,31 | 366 | −0,05 | %44,3 | 168 | +0,05 | %44,6 |
+|  | **Orta: 0,31 ≤ x &lt; 0,41** | 366 | −0,03 | %45,1 | 142 | +0,02 | %45,8 |
+|  | **Üst: x ≥ 0,41** | 367 | −0,04 | %44,1 | 210 | −0,11 | %47,6 |
+| Önceki gün aralığı / ATR — tutmadı · eşik −0,04 | **Alt: x &lt; 0,80** | 366 | +0,04 | %48,6 | 195 | −0,08 | %43,6 |
+|  | Orta: 0,80 ≤ x &lt; 1,08 | 366 | −0,07 | %42,1 | 170 | −0,04 | %46,5 |
+|  | Üst: x ≥ 1,08 | 367 | −0,09 | %42,8 | 155 | +0,07 | %49,0 |
+| Önceki günün yönü — tutmadı · eşik −0,04 | Aynı yön | 598 | −0,05 | %43,5 | 260 | +0,001 | %47,3 |
+|  | **Ters yön** | 509 | −0,04 | %45,2 | 260 | −0,05 | %45,0 |
+| NR4 (son 4 günün en dar aralığı) — tutmadı · eşik −0,04 | NR4 olmayan günler | 815 | −0,05 | %44,3 | 381 | +0,02 | %47,2 |
+|  | **NR4 günleri** | 294 | −0,01 | %44,6 | 139 | −0,14 | %43,2 |
+| NR7 (son 7 günün en dar aralığı) — tutmadı · eşik −0,04 | NR7 olmayan günler | 930 | −0,05 | %44,1 | 433 | +0,01 | %47,3 |
+|  | **NR7 günleri** | 179 | +0,01 | %45,8 | 87 | −0,19 | %40,2 |
+| Açılış farkı / ATR — tuttu · eşik −0,04 | Alt: x &lt; −0,11 | 367 | −0,05 | %46,6 | 179 | −0,12 | %39,1 |
+|  | **Orta: −0,11 ≤ x &lt; 0,10** | 366 | −0,03 | %42,3 | 166 | +0,12 | %49,4 |
+|  | Üst: x ≥ 0,10 | 366 | −0,05 | %44,5 | 175 | −0,06 | %50,3 |
+| Oynaklık yüzdeliği — tuttu · eşik −0,04 | Alt: x &lt; %13 | 349 | −0,05 | %43,0 | 160 | −0,12 | %39,4 |
+|  | **Orta: %13 ≤ x &lt; %53** | 356 | −0,01 | %45,5 | 185 | +0,07 | %52,4 |
+|  | Üst: x ≥ %53 | 353 | −0,06 | %45,0 | 175 | −0,03 | %45,7 |
+| 60 dk trend (EMA50 tarafı) — tutmadı · eşik −0,04 | Trend yönünde | 652 | −0,07 | %42,6 | 291 | −0,03 | %46,4 |
+|  | **Trend tersine** | 455 | −0,003 | %46,8 | 229 | −0,01 | %45,9 |
+| Haftanın günü — tutmadı · eşik −0,04 | Pazartesi | 231 | −0,09 | %40,7 | 110 | −0,05 | %49,1 |
+|  | **Salı** | 225 | −0,01 | %44,9 | 95 | −0,06 | %48,4 |
+|  | Çarşamba | 215 | −0,05 | %43,7 | 112 | +0,03 | %44,6 |
+|  | **Perşembe** | 217 | +0,02 | %46,1 | 108 | −0,03 | %45,4 |
+|  | Cuma | 221 | −0,08 | %46,6 | 95 | −0,01 | %43,2 |
+| Büyük olay günü — tuttu · eşik −0,04 | Büyük olay günü olmayan günler | 951 | −0,05 | %44,4 | 445 | −0,04 | %46,1 |
+|  | **Büyük olay günleri** | 158 | −0,04 | %44,3 | 75 | +0,11 | %46,7 |
+| Ay sonu — tuttu · eşik −0,04 | Ay sonu dışındaki günler | 1.047 | −0,05 | %44,1 | 492 | −0,03 | %45,3 |
+|  | **Ay sonu günleri** | 62 | +0,06 | %48,4 | 28 | +0,15 | %60,7 |
+| Saat değişimi haftası — tutmadı · eşik −0,04 | **Saat değişimi haftası dışı** | 1.018 | −0,04 | %45,0 | 484 | −0,03 | %46,3 |
+|  | Saat değişimi haftaları | 91 | −0,12 | %37,4 | 36 | +0,01 | %44,4 |
+| Londra–NY farkı 4 saat — tutmadı · eşik −0,04 | **Ara dönem dışı (fark 5 saat)** | 1.028 | −0,04 | %44,9 | 485 | −0,04 | %45,2 |
+|  | Ara dönem (Londra–NY farkı 4 saat) | 81 | −0,09 | %37,0 | 35 | +0,19 | %60,0 |
+
+</div>
+
+_İçi: örneklem içi (2018–2023); dışı: örneklem dışı (2024 →). R: işlem başına net R; isabet: net sonucu artı kapanan işlemlerin payı. Kalın kova örneklem içinde seçilendir: en az 30 işlemle eşiğin, yani değişkenin tanımlı olduğu işlemlerin örneklem içi koşulsuz ortalamasının üstünde. Sürekli değişkenlerin sınırları örneklem içinin tercilleridir ve örneklem dışına olduğu gibi taşınır; örneklem dışında kovalar bu yüzden eşit dolmaz._
+
+</details>
 
 En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seçilen kova):
 
 | Değişken | EUR/USD | GBP/USD | USD/JPY | AUD/USD |
 | :--- | :--- | :--- | :--- | :--- |
-| aralık / günlük ATR | tutmadı | tuttu: üst | tutmadı | tutmadı |
+| aralık / günlük ATR | tutmadı | tuttu: alt, üst | tutmadı | tutmadı |
 | Asya aralığı / günlük ATR | tutmadı | tutmadı | tuttu: üst | tutmadı |
 | açılış farkı / ATR | tuttu: orta | tutmadı | tutmadı | tutmadı |
 | oynaklık yüzdeliği | tuttu: orta | tuttu: alt, orta | tutmadı | tutmadı |
-| büyük olay günü | tuttu: haber günü | tuttu: haber günü | tutmadı | tutmadı |
-| ay sonu | tuttu: ay sonu | tutmadı | tutmadı | tutmadı |
-| saat değişimi haftası | tutmadı | tuttu: geçiş haftası | tuttu: geçiş haftası | tutmadı |
-| Londra–NY farkı 4 saat | tutmadı | tutmadı | tuttu: ara dönem | tutmadı |
+| büyük olay günü | tuttu: büyük olay günleri | tuttu: büyük olay günleri | tutmadı | tutmadı |
+| ay sonu | tuttu: ay sonu günleri | tutmadı | tutmadı | tutmadı |
+| saat değişimi haftası | tutmadı | tuttu: saat değişimi haftaları | tuttu: saat değişimi haftaları | tutmadı |
+| Londra–NY farkı 4 saat | tutmadı | tutmadı | tuttu: ara dönem (Londra–NY farkı 4 saat) | tutmadı |
 
 ### Kontrol listesi
 
-1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi GBP/USD, −0,01 R).
-2. **Ne zaman.** Aday, karar kuralı değil. Büyük olay günü, kova haber günü: EUR/USD +0,11 R (75 işlem; tamamlayanı −0,04 R), GBP/USD +0,18 R (73 işlem; tamamlayanı −0,04 R); saat değişimi haftası, kova geçiş haftası: GBP/USD +0,07 R (39 işlem; tamamlayanı −0,02 R), USD/JPY +0,02 R (31 işlem; tamamlayanı −0,06 R). Aday, örneklem içinde seçilip örneklem dışında en az iki paritede aynı yönde duran bir kovadır; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,69; karşılaştırma dersi).
+1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi GBP/USD, −0,01 R). AUD/USD: %95 aralığı iki dönemde de bütünüyle sıfırın altında (2024 → −0,18 / −0,04; bütün dönem −0,15 / −0,08): şansla açıklanmayan, ölçülmüş bir kayıp.
+2. **Ne zaman.** Aday, karar kuralı değil. Büyük olay günleri: EUR/USD +0,11 R (75 işlem; tamamlayanı −0,04 R), GBP/USD +0,18 R (73 işlem; tamamlayanı −0,04 R); saat değişimi haftaları: GBP/USD +0,07 R (39 işlem; tamamlayanı −0,02 R), USD/JPY +0,02 R (31 işlem; tamamlayanı −0,06 R). Aday: örneklem içinde seçilen aynı kovanın en az iki paritede örneklem dışında da "tuttu" ölçütünü (seçilen kovalarda en az 20 işlem, ortalama artı ve tamamlayanının üstünde) geçtiği koşul; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,84; karşılaştırma dersi).
 3. **Saat.** İlk denge 09:30–10:30 New York: TSİ 16:30–17:30 (ABD yaz saati) ya da 17:30–18:30. Son giriş
    12:00 New York: TSİ 19:00 ya da 20:00.
-4. **10:00'u bil.** O gün 10:00 ET'de veri ya da büyük bir opsiyon vadesi varsa ilk denge onu içinde taşır.
+4. **10:00'u bil.** O gün 10:00 New York'ta (TSİ yazın 17:00, kışın 18:00) veri ya da büyük bir opsiyon vadesi varsa ilk denge onu içinde taşır.
 5. **Kapanışı bekle, stop karşı uçta, gün sonunda kapat.**
-6. **Maliyet.** EUR/USD, örneklem dışı (2024 →): makasın üstüne dolum başına 0,26 pip kayma net beklentiyi sıfıra indiriyor (0,5 pip kaymada net −0,02 R). Bütün dönem: makasın üstüne dolum başına 0,08 pip kayma net beklentiyi sıfıra indiriyor (0,5 pip kaymada net −0,04 R).
+6. **Maliyet.** EUR/USD: iki dönemde de makasın üstüne dolum başına kayma net beklentiyi sıfıra indiriyor: 2024 → 0,26 pip · bütün dönem 0,08 pip (0,5 pip kaymada net −0,02 R · −0,04 R).
 
 ### Hüküm
 
 **Çalışmıyor.** Önceden kayıtlı kural, sınanan 4 paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil.
 
-| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet yiyor (bütün · 2024 →) |
+| Parite | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → | Rastgele yüzdelik, 2024 → | Maliyet bayrağı (bütün · 2024 →) |
 | :--- | :--- | :--- | :--- | ---: | :--- |
 | EUR/USD | çalışmıyor · −0,02 | çalışmıyor · −0,04 | çalışmıyor · −0,04 | 67,6 | hayır · hayır |
 | GBP/USD | çalışmıyor · −0,01 | çalışmıyor · −0,08 | çalışmıyor · −0,01 | 90,3 | hayır · hayır |
@@ -998,14 +1308,16 @@ _Hücrede hüküm ve işlem başına net R; tanımlar giriş dersinde ("Hüküm"
 
 ## Dört kuralın özeti
 
-| Strateji | İşlem (havuz) | Net R, havuz (%95) | Net pip, EUR/USD | Parite hükümleri | Maliyet yiyor (bütün · 2024 →) | Başabaş kayma, EUR/USD (pip) | R birimi medyanı, EUR/USD (pip) |
+| Strateji | İşlem (havuz) | Net R, havuz (%95) | Net pip, EUR/USD | Parite hükümleri | Maliyet bayrağı (bütün · 2024 →) | Başabaş kayma, EUR/USD (pip) | R birimi medyanı, EUR/USD (pip) |
 | :--- | ---: | ---: | ---: | :--- | ---: | ---: | ---: |
 | Londra ORB | 2.875 | −0,06 (−0,16 / +0,05) | −0,8 | 1 zayıf · 3 çalışmıyor | 1 · 0 | 0,22 | 11,7 |
-| Asya aralığı | 1.850 | −0,06 (−0,10 / −0,01) | +0,2 | 1 zayıf · 3 çalışmıyor | 1 · 0 | 0,38 | 15,1 |
+| Asya aralığı | 1.850 | −0,06 (−0,10 / −0,01) † | +0,2 | 1 zayıf · 3 çalışmıyor | 1 · 0 | 0,38 | 15,1 |
 | NY IB 08:00 | 2.628 | −0,06 (−0,12 / +0,01) | −1,5 | 4 çalışmıyor | 0 · 0 | sıfırda bile eksi | 21,1 |
-| NY IB 09:30 | 2.082 | −0,05 (−0,10 / +0,002) | −0,3 | 4 çalışmıyor | 0 · 0 | 0,26 | 22,7 |
+| NY IB 09:30 | 2.082 | −0,05 (−0,10 / +0,002) † | −0,3 | 4 çalışmıyor | 0 · 0 | 0,26 | 22,7 |
 
 _Örneklem dışı (2024 →), önceden kayıtlı varsayılan. Tanımlar giriş dersinde._
+
+_† Havuz aralığının ucu sıfırda (işareti tohum gürültüsüne bağlı; hüküm değişmez): Asya aralığı: üst uç −0,01 R (sıfıra standart hatanın 0,22 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %6'sında ucu sıfırın üstünde verir; NY IB 09:30: üst uç +0,002 R (sıfıra standart hatanın 0,08 katı uzaklıkta); 500.000 tekrarla +0,002 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %90'ında ucu sıfırın üstünde verir._
 
 <div class="pratik">
   <span class="etiket">Pratik — seans kırılımları</span>
@@ -1015,7 +1327,7 @@ _Örneklem dışı (2024 →), önceden kayıtlı varsayılan. Tanımlar giriş 
 <details>
 <summary>Çözüm</summary>
 
-(a) Risk, yürütülen giriş fiyatından stop'a uzaklıktır: 1,15528 ile 1,152205 arası **30,75 pip**.
+(a) Risk, yürütülen giriş fiyatından stopa uzaklıktır: 1,15528 ile 1,152205 arası **30,75 pip**.
 
 (b) Sonuç 1,15416 − 1,15528 = **−11,2 pip**; R = sonuç / risk = −11,2 / 30,75 = **−0,36 R**.
 
@@ -1028,11 +1340,11 @@ _Örneklem dışı (2024 →), önceden kayıtlı varsayılan. Tanımlar giriş 
 <details>
 <summary>Çözüm</summary>
 
-(a) Risk, yürütülen giriş fiyatından stop'a uzaklıktır: 1,06905 ile 1,071955 arası **29,05 pip**.
+(a) Risk, yürütülen giriş fiyatından stopa uzaklıktır: 1,06905 ile 1,071955 arası **29,05 pip**.
 
-(b) Sonuç 1,06905 − 1,06677 (satışta giriş eksi çıkış) = **+22,8 pip**; R = sonuç / risk = 22,8 / 29,05 = **+0,79 R**.
+(b) Sonuç 1,06905 − 1,06677 (satışta giriş eksi çıkış) = **+22,8 pip**; R = sonuç / risk = 22,8 / 29,05 = **+0,78 R**.
 
-(c) Backtest işlemi aynı emirle, dolum başına 0,5 pip ek kaymayla yeniden koşturuldu. Yeni giriş 1,06900; stop seviyesi aynı kaldığı için risk 29,55 pip olur. Çıkış emri de piyasada dolar ve o da kayar: çıkış 1,06682, sonuç +21,8 pip. Yeni R = 21,8 / 29,55 = **+0,74 R**. Pay küçülür, payda büyür: kazanç R cinsinden, pip cinsinden olduğundan hızlı erir; en çok da stop'u yakın kurallarda.
+(c) Backtest işlemi aynı emirle, dolum başına 0,5 pip ek kaymayla yeniden koşturuldu. Yeni giriş 1,06900; stop seviyesi aynı kaldığı için risk 29,55 pip olur. Çıkış emri de piyasada dolar ve o da kayar: çıkış 1,06682, sonuç +21,8 pip. Yeni R = 21,8 / 29,55 = **+0,74 R**. Pay küçülür, payda büyür: kazanç R cinsinden, pip cinsinden olduğundan hızlı erir; en çok da stopu yakın kurallarda.
 
 </details>
 

@@ -5,7 +5,8 @@
 Koşum (iki yol, aynı betik):
   · Bulut: `.github/workflows/arastirma-veri.yml`, betik =
     "Aktarılacak Projeler/FxGunici/arsiv_dukascopy.py", paketler = "pyarrow==26.0.0" (arşivin baytlarını
-    pyarrow belirler; sürümü künyeye de yazılır).
+    pyarrow belirler; sürümü künyeye de yazılır ve kurulu sürüm requirements.txt'deki sabitlemeyle aynı değilse
+    betik hiçbir şey yazmadan adıyla düşer: `pyarrow_sart`).
     İş akışı yalnız bu klasörün `veri/` dizinini dala commit eder.
   · Yerel (kaynağa ağ erişimi olan makinede):  .venv/bin/python arsiv_dukascopy.py
 
@@ -103,7 +104,22 @@ def parca(a: ay.Ayar) -> list[tuple[str, int]]:
     return list(dict.fromkeys(out))
 
 
+def pyarrow_sart() -> str:
+    """Arşivin baytlarını pyarrow belirler: arşivin istediği sürüm requirements.txt'deki sabitlemedir (tek tanım).
+    Sürüm tutmuyorsa koşu YAZMADAN önce adıyla düşer; iş akışı paketi boş ya da sürümsüz verirse ("pyarrow") rastgele
+    bir sürüm kurulur ve yeni birimler eskilerden farklı baytla yazılırdı. Döndürdüğü: istenen sürüm."""
+    for satir in (ay.BURASI / "requirements.txt").read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^pyarrow==([\w.]+)\s*$", satir.strip())
+        if m:
+            if pyarrow.__version__ != m.group(1):
+                raise SystemExit(f"pyarrow {pyarrow.__version__} kurulu; arşiv pyarrow=={m.group(1)} ister "
+                                 f"(requirements.txt). İş akışının paketler girdisi: \"pyarrow=={m.group(1)}\"")
+            return m.group(1)
+    raise SystemExit("requirements.txt pyarrow sürümünü sabitlemiyor; arşivin baytları sürümsüz yazılamaz")
+
+
 def main() -> int:
+    pyarrow_sart()
     a = ay.oku()
     dizin = ay.DUKA
     birimler = parca(a)

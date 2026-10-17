@@ -59,12 +59,16 @@ def gun_sirasi(b: Baglam, t_sn) -> np.ndarray:
 def olay_cercevesi(b: Baglam, tf: int, olaylar: pd.DataFrame, on_trend: int = TREND_MUM) -> pd.DataFrame:
     """Her olay için çıpalı mum dizini, ATR, ilk mum hareketi, haber öncesi trend.
 
-    Atlanan olaylar sebebiyle `b.ek[("haber_atlanan", tf)]` sayacına yazılır.
+    Atlanan olaylar sebebiyle `b.ek[("haber_atlanan", tf)]` sayacına, adıyla (olay, tarih, sebep)
+    `b.ek[("haber_atlanan_olay", tf)]` listesine yazılır: takvimde durup hiçbir haber ölçüsüne girmeyen bir olay
+    (ör. piyasa kapalıyken, pazar 17:00 New York'ta açıklanan karar) sayıyla değil adıyla görünsün.
     """
     satir = []
     atlanan: dict[str, int] = {}
+    atlanan_olay: list[dict] = []
     def atla(neden):
         atlanan[neden] = atlanan.get(neden, 0) + 1
+        atlanan_olay.append({"olay": str(o["olay"]), "tarih": str(o["tarih"]), "neden": neden})
     for _, o in olaylar.iterrows():
         t0 = int(o["utc_sn"])
         dk = (t0 // 60) % 60
@@ -107,6 +111,7 @@ def olay_cercevesi(b: Baglam, tf: int, olaylar: pd.DataFrame, on_trend: int = TR
                       "gun_k": gun_k, "atr": float(atr), "hareket": hareket, "hareket_atr": hareket / atr,
                       "kova": kova_adi(hareket / atr), "trend_uyum": uyum})
     b.ek[("haber_atlanan", tf)] = atlanan
+    b.ek[("haber_atlanan_olay", tf)] = atlanan_olay
     return pd.DataFrame(satir, columns=["olay", "tarih", "t0", "ofset", "k0", "gun_k", "atr", "hareket",
                                         "hareket_atr", "kova", "trend_uyum"])
 
@@ -402,19 +407,26 @@ def fomc_ozet(df: pd.DataFrame, tekrar: int = 2000, tohum: int = 7) -> dict:
 
 # ───────────────────────────────────────────── patikalar
 def patika(b: Baglam, olaylar: pd.DataFrame, olay: str, once_dk: int = 30, sonra_dk: int = 120) -> dict:
-    """Günlük ATR'ye bölünmüş ortalama fiyat patikası; ilk 5 dakikanın yönüne göre iki küme."""
+    """Günlük ATR'ye bölünmüş ortalama fiyat patikası; ilk 5 dakikanın yönüne göre iki küme. Patikaya girmeyen olay
+    adıyla ve sebebiyle `dislanan` listesinde durur (tatil ya da ATR yok · pencerede fiyat yok · ilk beş dakikada yön
+    yok)."""
     o = olaylar[olaylar["olay"] == olay]
     tau = np.arange(-once_dk, sonra_dk + 1)
-    yukari, asagi = [], []
+    yukari, asagi, dislanan = [], [], []
     for _, r in o.iterrows():
         t0 = int(r["utc_sn"])
         gun_k = int(gun_sirasi(b, t0)[0])
         if gun_k < 0 or b.g.tatil[gun_k] or not np.isfinite(b.g.atr[gun_k]) or b.g.atr[gun_k] <= 0:
+            dislanan.append({"tarih": str(r["tarih"]), "neden": "tatil_ya_da_atr_yok"})
             continue
         p = mid_an(b, t0 + tau * 60)
         p0 = mid_an(b, np.array([t0]))[0]
         p5 = mid_an(b, np.array([t0 + 300]))[0]
-        if not (np.isfinite(p).all() and np.isfinite(p0) and np.isfinite(p5)) or p5 == p0:
+        if not (np.isfinite(p).all() and np.isfinite(p0) and np.isfinite(p5)):
+            dislanan.append({"tarih": str(r["tarih"]), "neden": "pencerede_fiyat_yok"})
+            continue
+        if p5 == p0:
+            dislanan.append({"tarih": str(r["tarih"]), "neden": "ilk_bes_dakikada_yon_yok"})
             continue
         yol = (p - p0) / b.g.atr[gun_k]
         (yukari if p5 > p0 else asagi).append(yol)
@@ -429,4 +441,4 @@ def patika(b: Baglam, olaylar: pd.DataFrame, olay: str, once_dk: int = 30, sonra
                 "medyan": np.median(a, axis=0).round(4).tolist(),
                 "alt": (a.mean(axis=0) - 1.96 * se).round(4).tolist(),
                 "ust": (a.mean(axis=0) + 1.96 * se).round(4).tolist()}
-    return {"tau": tau.tolist(), "yukari": ozet(yukari), "asagi": ozet(asagi)}
+    return {"tau": tau.tolist(), "yukari": ozet(yukari), "asagi": ozet(asagi), "dislanan": dislanan}

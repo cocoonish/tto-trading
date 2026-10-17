@@ -58,6 +58,7 @@ def haber_analizi(b: Baglam, cift: str, zaman_dilimleri, kayma_pip: float, haber
     for tf in zaman_dilimleri:
         cer = sh.cerceve(b, tf)
         out["atlanan"][str(tf)] = {"olculen": int(len(cer)), **b.ek.get(("haber_atlanan", tf), {})}
+        out.setdefault("atlanan_olay", {})[str(tf)] = list(b.ek.get(("haber_atlanan_olay", tf), []))
         out.setdefault("kova_dagilimi", {})[str(tf)] = {
             o: {k: int(v) for k, v in g["kova"].value_counts().items()} for o, g in cer.groupby("olay")}
         for ufuk in UFUK:

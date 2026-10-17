@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · BLS, Fed, ECB, BoE resmî takvimleri · önceden kayıt'
-ozet: "Serinin bütün derslerinin dayandığı makineyi anlatır: veri nereden geliyor ve ne kadar temiz, saatler TSİ'de nereye düşüyor, bir işlem nasıl açılıp kapanıyor, maliyet nasıl ölçülüyor ve bir stratejiye 'çalışıyor' demek için hangi üç şartın birlikte tutması gerekiyor."
+ozet: "Serinin bütün derslerinin dayandığı makineyi anlatır: veri nereden geliyor ve ne kadar temiz, saatler TSİ'de nereye düşüyor, bir işlem nasıl açılıp kapanıyor, maliyet nasıl ölçülüyor ve bir stratejiye 'çalışıyor' demek için hangi üç şartın birlikte tutması gerekiyor. Serinin sonucu baştan: hiçbir kural, hiçbir paritede bu üç şartı birlikte sağlamıyor.{{? T.hukum_say.oos.calisiyor == 0 }}"
 seviye: 'giris'
 ---
 
@@ -13,9 +13,15 @@ Bu seri, profesyonel FX masalarında adı sıkça geçen gün içi stratejileri 
 aralığı kırılımı, Asya aralığı, New York'un ilk dengesi, iç mum ve sıkışma kırılımları, önceki günün tepe ve dibi,
 başarısız kırılımlar, VWAP, klasik (salon) pivotları, WM/R 16:00 fiksingi, gün içi momentum ve beş haber
 stratejisi. Her
-strateji aynı veriyle, aynı maliyetle, aynı yürütme kurallarıyla ve sonuç görülmeden yazılmış aynı hüküm kuralıyla
-ölçülür. Amaç bir stratejiyi önermek değil; bir stratejinin ne olduğunu, nasıl kullanıldığını, ne kadar iyi
+strateji aynı veriyle, aynı maliyetle, aynı yürütme kurallarıyla ve aynı hüküm kuralıyla ölçülür: kuralın şartları
+sonuç görülmeden yazıldı, penceresi ve asgarileri sonradan belirlendi (metodoloji dersinde adıyla). Amaç bir stratejiyi önermek değil; bir stratejinin ne olduğunu, nasıl kullanıldığını, ne kadar iyi
 çalıştığını ve ne zaman çalışmadığını göstermektir. Çalışmayan stratejiye çalışmıyor denir.
+
+Sonuç baştan: {{ T.birim | n }} kural ve {{ T.bilesim | n }} kural–parite bileşiminde önceden kaydın hükmü örneklem
+dışında (2024 →) {{ T.hukum_say.oos.calisiyor | n }} çalışıyor, {{ T.hukum_say.oos.zayif | n }} zayıf,
+{{ T.hukum_say.oos.calismiyor | n }} çalışmıyor{% if T.hukum_say.oos.calisiyor == 0 %}: maliyetten sonra kanıtlanmış
+bir kenar bırakan kural yok{% endif %}. "Zayıf" bir sınama değildir, yalnız örneklem dışı net ortalamanın artı olduğunu
+söyler; kural kuralın dökümü karşılaştırma dersinde.
 
 Bu ders makinenin kendisidir. Sonraki dersler buradaki tanımları tekrar etmez: bir strateji dersinde "net R",
 "örneklem dışı" ya da "rastgele yön yüzdeliği" geçtiğinde tanımı buradadır.
@@ -61,7 +67,7 @@ _Kapsam: hafta içi normal günlerde kotasyonu olan dakikaların payı. Tatil: h
 (takvimden; kapsamı %50'nin altında kalan günlerle aynı günlerdir). Boşluk: kotasyonun art arda kaç dakika
 kesildiği; en uzun boşluk TSİ başlangıcıyla. Makas dakika kapanışında. Sıçrama adayı yalnız sayılır, veriden
 çıkarılmaz. Çapraz sınama: dakika arşivinden kurulan saatlik mumların Dukascopy'nin kendi saatlik dosyalarıyla
-birebir eşitlik oranı._
+birebir eşitlik oranı; {{! capraz_kapsam }}._
 
 {{! sekil veri-makas "Makas: gün içinde ve devir dakikalarında" }}
 
@@ -88,6 +94,8 @@ Dört rejimde olayların TSİ saati:
 
 {{! zaman }}
 
+{{! zaman_diger }}
+
 Ara dönemler, yıl yıl:
 
 {{! dst }}
@@ -111,30 +119,35 @@ kuralları ucun kesilmesinin hareketi hızlandıracağına, fade kuralları kesi
 **Kapanış teyidi.** Bütün kurallar aralığın dışına taşmayı değil, dışında **kapanmayı** sinyal sayar. Sebep piyasanın
 kendisindedir: ucun hemen ötesindeki stop emirleri fiyatı bir an dışarı taşır ve fiyat çoğu zaman geri döner; mum
 içinde "geçti, girdim" diye kurulan bir kural bu gezintileri kırılım sayar. Kapanış o gürültünün bir kısmını ayıklar,
-bedeli de girişin geç ve stop'un uzak olmasıdır. İkisinin dengesi ölçülen şeyin parçasıdır: aynı kural 5, 15 ve 60
+bedeli de girişin geç ve stopun uzak olmasıdır. İkisinin dengesi ölçülen şeyin parçasıdır: aynı kural 5, 15 ve 60
 dakikalık mumla, yani üç ayrı teyit uzunluğuyla sınanır.
 
 ## İşlem mekaniği
 
 Bütün stratejiler aynı yürütme kurallarıyla koşar. Kuralların her biri bir yanılgıyı engellemek için oradadır.
 
-**Sinyal mumun kapanışında, giriş sonraki dakikada.** Bir sinyal ancak mumu kapandıktan sonra bilinir. Giriş
-sinyal mumundan sonraki ilk dakikanın açılışında yapılır; bir mumun içinde "fiyat aralığı geçti, hemen girdim"
-türünden bir giriş yoktur. Bu kural bir sınamayla korunur: girişi sinyal mumunun kapanışından önceye düşen tek bir
-işlem bile koşuyu durdurur. Ayrıca her strateji iki ayrı geleceğe bakmama sınamasından geçer (veriyi bir anda
-kesip ya da o andan sonrasını değiştirip, kesimden önceki sinyallerin değişmediği sınanır).
+**Sinyal mumun kapanışında, giriş sonraki dakikada.** Bir sinyal ancak mumu kapandıktan sonra bilinir. Kural kendi
+giriş saatini tanımlamıyorsa giriş, sinyal mumundan sonraki ilk dakikanın açılışında yapılır; gün içi momentum 12:00
+New York'ta, fiksing dönüşünün gecikmeli biçimi bir mum sonra girer. Bir mumun içinde "fiyat aralığı geçti, hemen
+girdim" türünden bir giriş yoktur. Bu kural bir sınamayla korunur: girişi sinyal mumunun kapanışından önceye düşen tek
+bir işlem bile koşuyu durdurur. Ayrıca her strateji iki ayrı geleceğe bakmama sınamasından geçer: veri bir anda
+kesilir ya da o andan sonrası değiştirilir ve kararı kesimden önce verilen sinyallerin değişmediği sınanır; kesim
+anlarının bir kısmı gerçek bir sinyalin karar anının hemen ardındadır, yani bir iki mum sonrasına bakan bir kural da
+yakalanır (kapsamı metodoloji dersinde).
 
 **Yürütülebilir fiyat.** Alış ask'tan, satış bid'den dolar; dolum başına ayrıca **kayma** eklenir (temel senaryoda
 {{ K.temel_kayma_pip | s1 }} pip). Haber penceresinde (olaydan önceki iki dakikadan sonraki on beş dakikaya
 kadar){{? K.haber_pencere_dk[0] == -2 and K.haber_pencere_dk[1] == 15 }} ek {{ K.haber_kayma_pip | s1 }} pip kayma eklenir.
 
 **Stop.** "Sert" stop emir tarafında dakika dakika izlenir (alışta bid stop seviyesine değdiğinde dolar). "Kapanış"
-stop'u yalnız mumun orta fiyattan kapanışı stop'un ötesindeyse tetiklenir ve bir sonraki mumun açılışında doldurulur.
-Bir veri boşluğundan sonra fiyat stop'un ötesinde açılırsa dolum açılış fiyatındadır (boşlukla stop); hedefte de aynı.
+stopu yalnız mumun orta fiyattan kapanışı stopun ötesindeyse tetiklenir ve bir sonraki mumun açılışında doldurulur.
+Sert stopta bir dakika stopun ötesinde açılırsa (önceki dakikanın kapanışıyla arasında sıçrama olduğunda da, bir veri boşluğundan sonra da) dolum o açılış fiyatındadır (boşlukla stop); hedefin ötesinde açılan dakikada da dolum açılıştır.
 
 **Hedef.** Limit emirdir ve kaymaz: hedef seviyesine değen dakika hedefte doldurur. Aynı dakikada hem stop hem hedef
 değerse **stop sayılır**: dakikanın içinde hangisinin önce geldiği 1 dakikalık veriden bilinemez ve belirsizlikte
-iyimser seçim yapılmaz.
+iyimser seçim yapılmaz. **Zaman hedefi** ("zaman") bir fiyat değil bir süredir: işlem girişten
+{{ ON.genel.desen_zaman_mum | n }} mum sonra{% if ON.haber.zaman_mum != ON.genel.desen_zaman_mum %} (haber kurallarında {{ ON.haber.zaman_mum | n }} mum){% endif %}, o mumun açılışında
+piyasa emriyle kapanır; stop o ana kadar açık kalır ve çıkış gün sonunu aşmaz.
 
 **Gün sonu.** Açık pozisyon en geç {{ K.gun_sonu_et | t }} New York'ta (TSİ 23:55, ABD kış saatinde 00:55) kapatılır;
 gece pozisyon taşınmaz.
@@ -142,16 +155,24 @@ gece pozisyon taşınmaz.
 **Tek pozisyon.** Bir strateji aynı paritede aynı anda en çok bir pozisyon taşır; haber stratejilerinde de bu kural
 paritenin bütün olaylarına birlikte uygulanır (bir olayın pozisyonu açıkken başka bir olayın sinyali alınmaz).
 
+**Alınmayan emir.** Açık pozisyonun dışında iki durumda daha emir alınmaz: giriş dakikasında emrin tarafının açılışı
+(alışta ask, satışta bid) stopun ötesindeyse, ya da yürütülen giriş fiyatı (kayma dahil) seviye hedefinin ötesindeyse.
+Stopta kayma hesaba katılmaz, çünkü kayma bir işlem yaratmamalıdır; hedefte katılır, çünkü hedefi aşan bir dolumun
+kazancı yoktur. Hızlı bir mumda giriş anında stopu ya da hedefi çoktan geçmiş emir bu yüzden örneklemden çıkar;
+kural kural sayısı strateji derslerinde.
+
 **R birimi.** Her işlemin sonucu pip olarak ve **R** olarak yazılır. 1R, işlemin planlanan riskidir: yürütülen
 giriş fiyatından stop seviyesine uzaklık. +2R, riskin iki katı kazanç demektir. R paritelerin pip değerlerinden ve
-oynaklıklarından bağımsızdır; dört paritenin sonuçları ancak R ile toplanabilir. Stop'u olmayan stratejilerde
+oynaklıklarından bağımsızdır; dört paritenin sonuçları ancak R ile toplanabilir. Stopu olmayan stratejilerde
 (fiksing kuralları ve gün içi momentum) R birimi girişteki ATR'dir: fiksingde kuralın kendi mumlarının, gün içi
 momentumda 60 dakikalık mumların on dört mumluk ortalama gerçek aralığı. Orada R bir risk değil bir **ölçek
-birimidir**: stop olmadığı için kayıp 1R'de durmaz ve tek bir işlem birkaç R kaybedebilir. Stop'lu kurallarda da
-kayıp 1R'yi biraz aşabilir: stop'ta çıkış makas ve kaymayla stop seviyesinin ötesinde dolar, boşlukla stop daha da
-ötede.
+birimidir**: stop olmadığı için kayıp 1R'de durmaz ve tek bir işlem birkaç R kaybedebilir. Stoplu kurallarda da
+kayıp 1R'yi aşabilir. Sert stopta çıkış, stop seviyesinden yalnız kayma kadar öteden dolar (haber penceresinde haber
+kayması dahil); makas stop emir tarafında sorulduğu için tetiklenmeyi öne alır, dolum uzaklığına girmez. Boşlukla stop
+daha ötede dolar. Kapanış stopunda mum stopun ötesinde kapandıktan sonra sonraki açılışta çıkıldığı için kayıp 1R'yi
+belirgin aşabilir. {{! stop_cikis }}
 
-**R ve pip.** R'nin bir bedeli var. İşlem başına ortalama R, her işlemi riskine göre büyüklükleyen birinin sonucudur: stopu
+**R ve pip.** R'nin bir bedeli var. İşlem başına ortalama R, her işlemi riskine göre ölçekleyen birinin sonucudur: stopu
 dar bir işlemde 1R birkaç pip olabilir ve aynı pip hareketi o işlemde büyük bir R'ye dönüşür. Pip ortalaması ise
 her işlemde aynı büyüklükle işlem yapanın sonucudur. İkisi aynı işareti taşımadığında sonucun işaretini stopu dar
 işlemler belirliyor demektir; strateji dersleri bunu parite parite adıyla yazar. Hüküm ön kayıt gereği R'den
@@ -173,7 +194,7 @@ Bir işlemin maliyeti iki parçadır: girişte ve çıkışta ödenen **makas** 
 dolum başına {{ K.kayma_pip[0] | s1 }} · {{ K.kayma_pip[1] | s1 }} · {{ K.kayma_pip[2] | s1 }} ·
 {{ K.kayma_pip[3] | s1 }} pip. Her strateji dersinin maliyet tablosu dört kademede net sonucu verir; **başabaş
 kayma** işlem başına net R'nin sıfıra indiği dolum başına kaymadır ve iki dönemde ayrı ayrı yazılır: bütün dönem
-ve örneklem dışı (2024 →). R'den ölçülür, pipten değil: pozisyon R'ye göre büyüklüklendiğinde para sonucu R'yi
+ve örneklem dışı (2024 →). R'den ölçülür, pipten değil: pozisyon R'ye göre ölçeklendiğinde para sonucu R'yi
 izler (R ile pip ortalamasının farkı yukarıda). Başabaş kayma temel senaryonun yarım pipinin altındaysa kuralın
 kenarı (varsa) o senaryonun yürütme maliyetine sığmaz. Merdivenin her kademesinde haber penceresinin ek kayması
 sabit kalır; yalnız makasın kendisini görmek için ayrıca **yalnız makas** satırı var: kayma da haber kayması da
@@ -181,7 +202,7 @@ sıfır, maliyet yalnız gerçek bid/ask.
 
 Aynı işlem iki ayrı sayı taşır: **brüt** (orta fiyattan orta fiyata, maliyetsiz) ve **net** (yürütülebilir
 fiyatlarla, makas ve kayma dahil). Brüt sonuç kuralın bir şey yakalayıp yakalamadığını, net sonuç bundan para
-kalıp kalmadığını söyler. İkisi arasındaki fark, kısa işlemlerde ve yakın stop'larda büyür.
+kalıp kalmadığını söyler. İkisi arasındaki fark, kısa işlemlerde ve yakın stoplarda büyür.
 
 ## Sonuçların okunuşu
 
@@ -190,13 +211,15 @@ kalıp kalmadığını söyler. İkisi arasındaki fark, kısa işlemlerde ve ya
 örneklem dışı yalnız sınar. Bir stratejinin geçmişe iyi uyması kolaydır; asıl soru seçimden sonra gelen veride ne
 yaptığıdır.
 
-**Önceden kayıtlı varsayılan ve seçilen.** Her stratejinin parametre ızgarası ve "ders kitabı" varsayılanı hiçbir
-sonuç görülmeden yazılıp kayda geçirildi (metodoloji dersinde tarihçesiyle). İki sonuç birlikte raporlanır:
+**Önceden kayıtlı varsayılan ve seçilen.** Her strateji ailesinin parametre ızgarası ve "ders kitabı" varsayılanı
+hiçbir sonuç görülmeden yazılıp kayda geçirildi (metodoloji dersinde tarihçesiyle; New York ilk dengesi 08:00'in
+varsayılanı 09:30'unkinden yalnız başlangıç saati değiştirilerek türetildi). İki sonuç birlikte raporlanır:
 **varsayılan** (veriye hiç bakmadan seçilmiş) ve **seçilen** (ızgaradan yalnız örneklem içinde, en yüksek günlük
 Sharpe'la, en az {{ K.secim.asgari_islem | n }} işlem şartıyla seçilmiş; haber stratejilerinde
-{{ K.secim.asgari_islem_haber | n }}). Hüküm varsayılan üzerinden ve örneklem dışından (2024 →) verilir. Ön kayıt
-varsayılan için bütün dönemi de örneklem dışı sayar, çünkü varsayılan hiçbir veriye bakmadan yazıldı; bütün dönemin
-hükmü bu yüzden her tabloda yan sütunda durur ve iki hüküm ayrıştığında adıyla yazılır.
+{{ K.secim.asgari_islem_haber | n }}). Ön kayıt varsayılanın hükmünü bütün dönemden kurar: varsayılan hiçbir veriye bakmadan yazıldığı
+için bütün dönem onun örneklem dışıdır. Bu seri iki sonucu aynı pencerede kıyaslamak için birincil hükmü 2024 →
+penceresinden verir; bütün dönemin hükmü her tabloda yan sütunda durur ve iki hüküm ayrıştığında adıyla yazılır
+(gerekçesi ve ayrışan bileşimler metodoloji dersinde).
 
 **Hüküm kuralı.** Bir stratejiye bir paritede "çalışıyor" demek için üç şartın birlikte tutması gerekir:
 1. örneklem dışında işlem başına net ortalama R sıfırın üstünde;
@@ -225,7 +248,8 @@ olabilir. **Deflated Sharpe** (Bailey ve López de Prado) en iyi kombinasyonun S
 üreteceği en yüksek Sharpe'a göre düzeltir. Eşik iki biçimde kurulur: yalnız örnekleme gürültüsünden (her deneme
 sıfır kenarlı olsaydı) ve denemelerin kendi Sharpe yayılımından (Bailey–López de Prado'nun önerisi); ikisi birlikte
 yazılır. **Yürüyen pencere** her yılı yalnız önceki yılların verisiyle seçip o yılda
-sınar ({{ K.saglamlik.walk_forward_ilk_test_yili | t }} → bugün).
+sınar ({{ K.saglamlik.walk_forward_ilk_test_yili | t }} → bugün; seçim şartını sağlayan kombinasyonu olmayan yıl sınanmaz,
+sınanan yıllar strateji derslerinde adıyla yazılır).
 
 **Koşul analizi.** Girişin olduğu anda bilinen on dört değişken{{? len(K.kosul.degiskenler) == 14 }} (aralığın ATR'ye oranı,
 önceki günün yönü, oynaklık yüzdeliği, haftanın günü, büyük olay günü, saat değişimi haftası…) kovalara ayrılır.
@@ -233,11 +257,20 @@ Sürekli değişkenler örneklem içinin tercillerine (üçte birlik dilimlerine
 olduğu gibi taşınır. Örneklem içinde koşulsuz ortalamanın üstünde kalan kovalar (en az
 {{ K.kosul.asgari_kova_islem | n }} işlemle) seçilir; örneklem dışında seçilen kovaların ortalaması (en az
 {{ K.uygulama_esik.kosul_oos | n }} işlemle)
-sıfırın ve öbür kovaların üstündeyse koşul **tuttu**, değilse **tutmadı**. Aynı ölçünün iki adı (Asya aralığı
+sıfırın ve seçilmeyen kovaların birlikte ortalamasının (tamamlayanın) üstündeyse koşul **tuttu**, değilse **tutmadı**;
+seçilen kova seçilmeyenlerden birinin altında kalsa da koşul tutabilir. Aynı ölçünün iki adı (Asya aralığı
 kuralında "aralık" ile "Asya aralığı") tek değişken sayılır. On dört değişkenin her biri ayrı bir denemedir ve
-şansla birkaçının tutması beklenir; bir koşul kontrol listesine ancak en az iki paritede aynı kovayla tutuyorsa
-aday olarak girer. Şansın payını görmek için her bölüm bir de **ters seçimi** sayar: örneklem içinde ortalamanın
-altında kalan kovalar seçilseydi aynı ölçüt kaç değişkende tutardı.
+şansla birkaçının tutması beklenir. Bir koşul kontrol listesine en az iki paritede aynı kovayla tutuyorsa aday
+olarak girer; ikinci paritedeki tutuş bir gözlem ekler ama şansı ayıklamaz: {{! aday_taban }}. Şansın payını görmek
+için her bölüm bir de **ters seçimi** sayar: örneklem içinde ortalamanın altında kalan kovalar seçilseydi aynı ölçüt
+kaç değişkende tutardı.
+
+Değişkenlerin tanımı aşağıdaki tabloda. Günlük ATR, önceki on dört FX işlem gününün Wilder ATR'sidir: bugünü
+içermez, tatil günü atlanır. Üç değişken işlemin yönüne göre işaret alır (önceki günün yönü, açılış farkı, 60 dk trend);
+aynı gün alışta bir kovaya, satışta karşı kovaya düşer. Her strateji bölümünün koşul kısmı, ana paritede her kovanın
+sınırını, örneklem içi ve dışı işlem sayısını, net R'sini ve isabetini katlanır bir tabloda verir.
+
+{{! kosul_tanim }}
 
 **Örnekler.** Her stratejinin figüründeki üç işlem örneklem dışından, sonuca bakmadan seçilir: **kazanan** (en az
 yarım R kâr), **kaybeden** (en az yarım R zarar ve işlem boyunca lehine yarım R'ye ulaşmamış) ve **tuzak** (lehine en
@@ -246,18 +279,20 @@ sabit bir çekilişle yapılır ve üç örnek ayrı günlerdedir; "en iyi gün"
 yarım pip daha kötü kaymayla yeniden koşturulur; alıştırmaların "dolum daha kötü olsaydı" şıkkı oradan gelir.
 
 **Havuz.** Aynı kural dört paritede birlikte koşturulduğunda işlem başına ortalama, bütün işlemlerin ortalamasıdır;
-Sharpe ve düşüş dört paritenin günlük R toplamından hesaplanır.
+Sharpe ve düşüş dört paritenin günlük R toplamından hesaplanır. Havuzun %95 aralığı gün kümelidir: aynı günün
+bütün paritelerdeki işlemleri birlikte yeniden örneklenir, çünkü dört paritenin aynı günkü sonuçları ortak dolar
+hareketiyle birbirine bağlıdır.
 
 ## Sözlük
 
 | Terim | Anlamı |
 | :--- | :--- |
 | ATR | Ortalama gerçek aralık (*average true range*): son on dört mumun (ya da günün) aralığının, boşlukları da sayan, Wilder ortalaması. |
-| R | İşlemin planlanan riski: yürütülen girişten stop'a uzaklık. Sonuçlar R'nin katı olarak yazılır. |
+| R | İşlemin planlanan riski: yürütülen girişten stopa uzaklık. Sonuçlar R'nin katı olarak yazılır. |
 | Net / brüt | Net: yürütülebilir fiyatlarla, makas ve kayma dahil. Brüt: orta fiyattan orta fiyata. |
 | İsabet | Kazanan işlemlerin payı. Tek başına bir şey söylemez: %30 isabetle de para kazanılır, %70 isabetle de kaybedilir. |
 | Kâr çarpanı | Kazanılan pip toplamının kaybedilen pip toplamına oranı; 1'in altı kaybettirir. |
-| Sharpe | Günlük R serisinin ortalamasının standart sapmasına oranı, yıllıklandırılmış (×√252). |
+| Sharpe | Günlük R serisinin ortalamasının standart sapmasına oranı, yıllıklandırılmış (×√252). Seri dönemin bütün tatil dışı FX işlem günlerini taşır; işlem açılmayan gün sıfırdır, bu yüzden seyrek işlem açan kuralların (haber kuralları) Sharpe'ı çoğunlukla sıfır günlerden oluşan bir seriden gelir. |
 | MAE / MFE | İşlem açıkken gidilen en kötü (*maximum adverse excursion*) ve en iyi (*maximum favorable excursion*) nokta, R biriminde. |
 | Azami düşüş | Birikimli R eğrisinin bir tepeden sonraki en derin çukuru. |
 | Örneklem içi / dışı | Parametrenin seçildiği dönem / seçimin sınandığı dönem. |
@@ -269,10 +304,12 @@ Sharpe ve düşüş dört paritenin günlük R toplamından hesaplanır.
 | Kayma | Makasın ötesinde kötüleşen dolum; bir varsayımdır, kademelerle ölçülür. |
 | Başabaş kayma | İşlem başına net R'yi sıfıra indiren dolum başına kayma; bütün dönem ve 2024 → ayrı. |
 | Ölçülemedi | Örneklem dışında işlem yok; hüküm verilemez. |
+| Zaman hedefi | Girişten sabit sayıda mum sonra piyasa emriyle çıkış (stop açık kalır, gün sonunu aşmaz). |
+| Kümeli bootstrap | Bağımsız olmayan gözlemlerin birlikte yeniden örneklenmesi: havuzda aynı günün bütün paritelerdeki işlemleri (gün kümeli), haber tablolarında aynı olayın bütün paritelerdeki işlemleri (olay kümeli). |
 | Kova · tercil | Bir koşul değişkeninin dilimi; sürekli değişkende örneklem içinin üçte birlik dilimleri. |
 | Welch t | İki grubun ortalamasını, varyansları eşit saymadan kıyaslayan t sınaması. |
 | Benjamini–Hochberg q | Çok sayıda sınamada yanlış keşif oranını denetleyen düzeltilmiş p değeri. |
-| McNemar | Aynı birimlerde iki ikili sonucun (ör. gerçek ve ters seçimin tuttu/tutmadı) farkını sınayan kesin sınama. |
+| McNemar | Aynı gözlemlerde (ör. aynı kural–parite bileşimlerinde) iki ikili sonucun (ör. gerçek ve ters seçimin tuttu/tutmadı) farkını sınayan kesin sınama. |
 | Binom sınaması | Bir olayın görülme sayısının, belirli bir olasılıkla şansın beklediğinden fazla olup olmadığı. |
 | HAC (Newey–West) | Komşu gözlemlerin hataları ilintiliyken de geçerli standart hata; Bartlett çekirdeği ağırlık verir. |
 | Pip | EUR/USD, GBP/USD, AUD/USD'de 0,0001; USD/JPY'de 0,01. |

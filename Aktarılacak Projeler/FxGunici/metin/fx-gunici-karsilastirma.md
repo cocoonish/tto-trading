@@ -16,7 +16,9 @@ onkosul:
 Önceki beş ders kuralları tek tek işledi: kural, örnek günler, sonuç, maliyet, koşullar, hüküm. Bu ders hepsini aynı
 sayfaya koyar. Karşılaştırma adildir çünkü makine aynıdır: her kural aynı veriyle, aynı yürütme fiyatıyla (gerçek
 bid/ask ve dolum başına aynı kayma), aynı örneklem bölmesiyle ve aynı hüküm kuralıyla ölçüldü; hiçbir kuralın
-parametresi sonuca bakarak seçilmedi. Sıralama bir öneri değildir: işlem başına net R'si en yüksek kural "en iyi
+parametresi sonuca bakarak seçilmedi. R'nin paydası kurala göre değişir: stoplu kurallarda stop uzaklığıdır,
+stopsuz kurallarda ({{! stopsuz_ad }}) girişteki ATR(14); bu kurallarda R bir risk değil ölçek birimidir (giriş
+dersi, R birimi) ve sıralamada iki tür R yan yana durur. Sıralama bir öneri değildir: işlem başına net R'si en yüksek kural "en iyi
 strateji" değil, bu örneklemde en az kaybeden ya da en çok kazanan kuraldır ve hüküm kuralının üç şartını sağlamadıkça
 şansla ayırt edilemez.
 
@@ -41,28 +43,29 @@ hükümden söz edildiğine bağlıdır. **Çalışıyor** üç şartın birlikt
 başına %5 düzeyinde bir sınamadır ve kenarı olmayan bir kural dört paritenin en az birinde onu şansla en çok
 4 × %5 = {{= "%20" }} olasılıkla geçer (sınamalar bağımsız olsaydı 1 − 0,95⁴ ≈ {{= "%19" }}; pariteler aynı dolara
 karşı işlem gördüğü için bağımsız değiller ve üst sınır her durumda geçerli). **Zayıf** ise bir sınama değildir:
-yalnız örneklem dışı ortalamanın artı olmasını ister ve kenarı olmayan bir kuralın ortalaması da maliyetten önce
-kabaca yarı yarıya artı çıkar. Tek paritede "zayıf" kalan bir kuralı o pariteye özgü bir kenar saymak için o
+yalnız örneklem dışı net ortalamanın artı olmasını ister. Kenarı olmayan bir kuralın brüt ortalaması kabaca yarı
+yarıya artı çıkar; maliyetten sonra bu olasılık düşer ama sıfır değildir: {{ T.bilesim | n }} bileşimde birkaç
+"zayıf" hüküm şansla da çıkabilir. Tek paritede "zayıf" kalan bir kuralı o pariteye özgü bir kenar saymak için o
 paritenin yapısından gelen ayrı bir gerekçe gerekir.
 
 ## Maliyet
 
 Aynı kural, artan yürütme maliyetiyle (EUR/USD). Brüt sonuç orta fiyattan orta fiyata, yani makassız ve
 kaymasızdır; net sonuçlar gerçek bid/ask makasını ve dolum başına kaymayı içerir. Merdiven aynı işlemlerin değil aynı
-kuralın yeniden koşusudur: kayma dolum fiyatını, dolayısıyla stop'a ya da hedefe değilen dakikayı değiştirebilir.
+kuralın yeniden koşusudur: kayma dolum fiyatını, dolayısıyla stopa ya da hedefe değilen dakikayı değiştirebilir.
 
 {{! sekil karsilastirma-maliyet "Maliyet merdiveni — bütün kurallar" }}
 
-Parite parite, örneklem dışında beklentisi artı olan kural sayısı:
+Parite parite, örneklem dışında işlem başına net R beklentisi artı olan kural sayısı:
 
 {{! maliyet_ozet }}
 
-Brüt ile **yalnız makas** satırı arasındaki fark yalnız gerçek bid/ask makasıdır: o satırda kayma da haber
+Brüt ile **yalnız makas** sütunu arasındaki fark yalnız gerçek bid/ask makasıdır: o sütunda kayma da haber
 penceresinin ek kayması da sıfırdır. Dört paritede örneklem dışında brüt sonucu artı olan {{ T.brut_arti | n }}
 kural–parite bileşiminin {{ T.brut_arti_makas_eksi | n }} tanesinde yalnız makasla net sonuç sıfıra ya da altına
 iniyor; kayma sıfır kademesinde (haber penceresinin ek kayması sabit kalır) bu sayı {{ T.brut_arti_sifir_eksi | n }},
 temel senaryoda (dolum başına 0,5 pip) {{ T.brut_arti_net_eksi | n }}. Bir kuralın kâğıt
-üstünde (orta fiyatla) artı görünmesi, piyasa yapıcıya her işlemde ödenen makası karşılamaya yetmez. Stop'u yakın
+üstünde (orta fiyatla) artı görünmesi, piyasa yapıcıya her işlemde ödenen makası karşılamaya yetmez. Stopu yakın
 kurallar en çok etkilenir, çünkü makas pip cinsinden sabittir ve R birimi küçüldükçe R cinsinden büyür.
 
 ## Yön mü, zamanlama mı?
@@ -71,7 +74,7 @@ Bir kuralın kenarı iki yerden gelebilir: doğru **zamanda** işlem açmak (oyn
 doğru **yönü** seçmek. Rastgele yön sınaması ikisini ayırır: aynı giriş dakikası, aynı risk ve aynı çıkış kuralı, yalnız
 yön yazı turayla. Stratejinin sonucu bu dağılımın sağ kuyruğundaysa (yüzdelik ≥ 95) yön seçimi bir şey katıyordur.
 
-{{! sekil yontem-rastgele "Yön seçmenin değeri — bütün kurallar (EUR/USD)" }}
+{{! sekil yontem-rastgele "Yön seçmenin değeri — sınanan kurallar (EUR/USD)" }}
 
 {{! rastgele_ozet }}
 
@@ -85,6 +88,8 @@ farklı yönlerde kazanıp kaybettiğini söyler.
 {{! sekil karsilastirma-korelasyon "Stratejiler arası günlük R korelasyonu" }}
 
 {{! korelasyon_cumle }}
+
+{{! korelasyon_tablo }}
 
 Korelasyonun düşük olması bir portföy argümanı değildir: birbirinden bağımsız iki kaybeden kuralın toplamı, daha
 düzgün bir eğriyle kaybeder. Çeşitlendirme ancak bileşenlerin her biri maliyetten sonra artıysa bir değer yaratır.
@@ -117,8 +122,9 @@ tablonun kendi satırlarıdır.
 
 Tablonun okunuşu dar tutulmalı. Bir aday, aynı kovanın iki paritede örneklem dışında artı ve öbür kovalardan iyi
 kaldığını söyler; güven aralığını ve rastgele yön sınamasını taşımaz, ve bütün kurallar birlikte sayıldığında gerçek
-seçim ters seçimden ayırt edilemiyor (yukarıdaki bölüm). Fiksing kurallarının ay sonu ayrımı (fade ve akış dersleri)
-da bir alt küme ölçüsüdür ve aynı uyarıyı taşır: ön kayıt onu ayrı raporlar, ona ayrı hüküm vermez.
+seçim ters seçimden ayırt edilemiyor (yukarıdaki bölüm).
+
+{{! ay_sonu_ozet }}
 
 ## Ne öğrendik
 
@@ -143,16 +149,26 @@ paritenin kuralları aynı günleri paylaşır.{% else %}Bu sayı şansın bekle
 ayırt edilemiyor.{% if T.arti_n > T.arti_rastgele_n %} Öbürlerinde sınama yapılmadı: örneklem dışında
 {{ K.uygulama_esik.rastgele | n }}'den{{? K.uygulama_esik.rastgele == 20 }} az işlem var.{% endif %}{% endif %}
 
-**Örneklem içi seçim.** Izgaradan örneklem içinde seçilen kombinasyonların deflated Sharpe olasılığı
-{{ T.dsr_n | n }} bileşimin {{ T.dsr_ust | n }} tanesinde denemelerin yayılımından kurulan eşikle,
-{{ T.dsr_gurultu_ust | n }} tanesinde örnekleme gürültüsü eşiğiyle 0,95'i aşıyor. {% if T.dsr_n and T.dsr_ust_oran < 0.5 %}Geri
-kalanında en iyi kombinasyonun örneklem içi Sharpe'ı, denenen kombinasyon sayısının şansla üretebileceği en yüksek
-değerden ayırt edilemiyor: örneklem içinde iyi görünen bir ayar, çoğu zaman yalnız en şanslı ayardır.{% else %}Bu
+**Örneklem içi seçim.** Seçim {{ T.bilesim | n }} bileşimin {{ T.secilen_n | n }} tanesinde kuruldu{% if T.secimsiz %};
+öbür {{ T.secimsiz | n }} bileşimde ızgaranın hiçbir kombinasyonu örneklem içinde asgari işlem sayısına ulaşmadı:
+{{! secimsiz }}{% endif %}. Izgaradan örneklem içinde seçilen kombinasyonların deflated Sharpe olasılığı
+{{ T.dsr_n | n }} bileşimin {% if T.dsr_ust == 0 and T.dsr_gurultu_ust == 0 %}hiçbirinde ne denemelerin yayılımından
+kurulan eşikle ne örnekleme gürültüsü eşiğiyle 0,95'i aşmıyor.{% elif T.dsr_ust == 0 %}{{ T.dsr_gurultu_ust | n }}
+tanesinde örnekleme gürültüsü eşiğiyle 0,95'i aşıyor; denemelerin yayılımından kurulan eşikle hiçbirinde
+aşmıyor.{% elif T.dsr_gurultu_ust == 0 %}{{ T.dsr_ust | n }} tanesinde denemelerin yayılımından kurulan eşikle 0,95'i
+aşıyor; örnekleme gürültüsü eşiğiyle hiçbirinde aşmıyor.{% else %}{{ T.dsr_ust | n }} tanesinde denemelerin
+yayılımından kurulan eşikle, {{ T.dsr_gurultu_ust | n }} tanesinde örnekleme gürültüsü eşiğiyle 0,95'i aşıyor.{% endif %} {% if T.dsr_n and T.dsr_ust_oran < 0.5 %}{% if T.secilen_sr_eksi %}{{ T.secilen_sr_eksi | n }}
+bileşimde ızgaranın en iyi kombinasyonunun örneklem içi Sharpe'ı bile sıfır ya da eksi: açıklanacak bir artı yok.
+Artı olan {{ T.secilen_sr_arti | n }} bileşimde{{? T.dsr_ust == 0 and T.dsr_gurultu_ust == 0 }}{% else %}Geri kalanında{% endif %} en iyi kombinasyonun örneklem içi
+Sharpe'ı, denenen kombinasyon sayısının şansla üretebileceği en yüksek değerden ayırt edilemiyor: örneklem içinde iyi
+görünen bir ayar, çoğu zaman yalnız en şanslı ayardır.{% else %}Bu
 bileşimlerde seçimin örneklem içi üstünlüğü denenen kombinasyon sayısıyla açıklanamıyor; örneklem dışı sonuçları
 seçim tablolarında.{% endif %}{% if T.kosul.ters_sinanan %} Koşul analizinde {% if T.kosul.ayirt %}gerçek seçim ters
 seçimden daha sık tuttu, ama fark tek tek koşulları karar kuralı yapacak kadar büyük değil{% elif T.kosul.ters_ustun %}ters
 seçim gerçek seçimden daha sık tuttu: örneklem içinde iyi görünen koşullar örneklem dışında daha sık kötü kovaya
 döndü{% else %}gerçek seçim ters seçimden ayırt edilemedi{% endif %} (yukarıdaki bölüm).{% endif %}
+
+{{! ay_sonu_ders }}
 
 Bu sonuçlar bu kuralların bu biçimleri içindir: başka bir yürütme maliyeti (daha dar makas, likidite sağlayan emirler),
 başka bir zaman dilimi, ya da kuralın bir parçası olarak gerçek bir haber beklentisi başka sonuç verebilir. Ölçülmeyen

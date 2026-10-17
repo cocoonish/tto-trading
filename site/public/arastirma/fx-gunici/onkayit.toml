@@ -17,6 +17,38 @@
 #   stop'u mid kapanış stop ötesinde → sonraki mum açılışı; hedef limit
 #   (kayma yok); aynı dakikada stop ve hedef → stop; tek pozisyon; gün sonu
 #   16:55 ET; R = gerçek giriş fiyatından stop seviyesine planlanan risk.
+#
+# SONRADAN — 16.10.2026. Bu not ilk sonuçlardan (8aa94c7e, 10:23 UTC) SONRA
+# eklendi ve yalnız açıklamadır: ayrıştırılan içerik (kurallar, ızgaralar,
+# varsayılanlar, hüküm kuralı) değişmedi. Ölçümün UYGULAMASI sonuçlardan sonra
+# şu yerlerde değişti; her birinin zamanı, önceki hâli ve ölçülmüş etkisi
+# metodoloji dersinde:
+#   · hüküm penceresi: varsayılanın birincil hükmü 2024 → penceresinden
+#     verilir, seçilenle aynı pencerede kıyaslansın diye (yukarıda varsayılan
+#     için örneklem dışı sayılan bütün dönemin hükmü yan sütunda yazılır);
+#   · ortak mekanik: stop seviyeli emirde giriş tarafının KAYMASIZ açılışı
+#     stop'un ötesindeyse işlem yok (önce yalnız kaymalı dolum sorulurdu);
+#     sert stop'un boşluk kuralı giriş dakikasında da; önceki gün ölçüleri
+#     (H, L, C, O, gün ATR'si, NR4/NR7) tatil olmayan son FX işlem gününden;
+#     seçimde 1e−9'dan küçük Sharpe farkı eşitliktir (ızgaradaki ilk);
+#   · ay sonu ayın son Londra iş günü (önce verideki ayın son işlem günü);
+#     fiksingde ay sonu ayrımı ve momentumda HAC regresyonu koşuya sonradan
+#     girdi; fiksing ve gün içi momentumda stop yürütülen girişten 1·ATR;
+#   · "ölçülemedi" yalnız örneklem dışında hiç işlem yoksa (önce 20'nin
+#     altı); tatil günün kapsamından değil takvimden; haber kurallarında tek
+#     pozisyon parite başına bütün olaylara; devam tablosunda ufku gün sonunu
+#     aşan gözlem kırpılmaz, düşer; başabaş kayma pip'ten değil R'den.
+# Yalnız yazıya geçirilen (davranışı değişmeyen) iki kural: seviye hedefi
+# yürütülen girişin gerisindeyse işlem yok (bu yüzden kaymaya bağlıdır);
+# girişi 16:55 ET'de ya da sonrasında olan sinyal alınmaz.
+# Sonuçtan ÖNCE yazılmış kod iki yerde bu dosyanın harfinden ayrılır ve o
+# okuma korunur: (1) üç kuralı harften dar okur — VWAP'ın ilk 60 dakikası
+# (kuralın durumu da sıfırlanır; harf: yalnız sinyal yok), pivot kırılımı (R1
+# yalnız yukarı, S1 yalnız aşağı; harf: iki yönde ilk kesiş), başarısız
+# kırılım (kırılım mumu bir kesiştir; harf: pencerenin ilk mumu dışarıda
+# kapanırsa da); harfin okuması her koşuda ayrıca ölçülür (kosu.YORUM).
+# (2) Dört aile birimlere bölündü; deflated Sharpe'ın deneme sayısı ve seçim
+# ailenin değil birimin ızgarasıdır (ders aile sayımını da verir).
 
 [genel]
 # Temel senaryo kayması (pip, piyasa ve stop dolumu başına); ızgara ayar.toml'da.

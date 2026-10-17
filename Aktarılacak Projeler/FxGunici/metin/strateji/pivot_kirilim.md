@@ -26,7 +26,9 @@ geri iter. Hangisinin baskın olduğu bir inanç değil ölçü sorusudur.
 - **Sinyal.** Kapanışın seviyeyi kesmesi: bir önceki kapanış seviyenin öbür yanında (ya da tam seviyede). R1 yalnız
   yukarı kesişte alış, S1 yalnız aşağı kesişte satış verir; P iki yönde de.
 - **Stop.** Sinyal mumunun karşı ucu.
-- **Pencere.** Londra 08:00 → 14:00 New York; her seviye için günde tek işlem.
+- **Hedef.** 1R, 2R ya da zaman ({{ ON.genel.desen_zaman_mum | n }} mum).
+- **Pencere.** Londra 08:00 → 14:00 New York ({{! tsi "→" "Londra 08:00" "New York 14:00" }}); her seviye için
+  günde tek işlem.
 
 {{! kural }}
 
@@ -46,6 +48,15 @@ işlemdir.
 ### Sonuçlar
 
 {{! sonuclar }}
+
+**Ön kaydın harfiyle.** Ön kayıt kesişin yönünü sınırlamaz ("kapanış seviyeyi keser, kesiş yönünde giriş").
+Sonuçlardan önce yazılan kod R1'i direnç, S1'i destek okur ve yalnız R1'in yukarı, S1'in aşağı kesişini sayar;
+harfiyle okunursa her seviyenin günün ilk kesişi iki yönde de işlem verir (R1'in aşağı kesişi satış, S1'in yukarı
+kesişi alış). P iki okumada aynıdır: ızgaranın P'li yarısında hiçbir işlem değişmez, R1 ve S1'li yarısının
+hepsinde değişir.{{? B.kombinasyon == 36 and E.yorum.degisen == 18 and G.yorum.degisen == 18 and J.yorum.degisen == 18 and A.yorum.degisen == 18 }}
+Hüküm sonuçlardan önce yazılan okumayla verilir; harfin okuması aynı koşuda ayrıca ölçüldü. {{! yorum_cumle }}
+
+{{! yorum }}
 
 ### Koşullar
 

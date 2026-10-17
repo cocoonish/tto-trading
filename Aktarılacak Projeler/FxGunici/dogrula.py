@@ -20,6 +20,15 @@ depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saa
   6. Künye — ölçüm dosyasının pariteleri, nokta/pip büyüklükleri ve penceresi bugünkü ayarla aynıdır.
   7. Ön kaydın geçmişi — ölçüm dosyasının taşıdığı geçmiş beklenen geçmiştir (onkayit_gecmis.BEKLENEN) ve ön kaydın
      içeriğini değiştiren her kayıt ilk sonuçlardan öncedir.
+  8. TSİ — strateji şablonlarında bir kural ya da kontrol listesi maddesi (madde imiyle başlayan satır ve devamı) bir
+     saat (SS:DD) taşıyorsa TSİ karşılığını da taşır: ya metinde "TSİ" geçer ya da {{! tsi … }} bloğu saat dilimi
+     kurallarından hesaplar. Okurun kullanacağı yer tam bu maddelerdir.
+  9. Kova sırası — ölçümdeki her koşul kovasının okuma sırası tanımlıdır (adlar.KOVA_OKUMA).
+  10. Örnek günler — her panelde stop ve hedef çizgisi en az bir mum uzunluğundadır (sıfır uzunluktaki çizgi ekranda
+     yoktur ve alt yazı onu anlatır).
+  11. MDX yapısı — bir blok etiketi (<details>, <div …>) satırı açıyorsa ve kapanışı o satırda değilse satırda başka
+     metin taşımaz: MDX aynı satırdaki metni paragraf sayar, kapanış etiketini o paragrafta arar ve site derlemesi
+     düşer. Kapı derlemeden önce koşar; bu ölçüt o düşüşü zincirin içinde yakalar.
 
 Dersler henüz siteye yazılmamışsa (yayın öncesi) kapı bunu söyler ve geçer; bir kısmı yazılmışsa düşer.
 """
@@ -94,7 +103,50 @@ def figur_bicimi(ad: str, h: str) -> list[str]:
     bas = ((d["layout"].get("title") or {}).get("text")) or ""
     hata += [f"{ad}.html: başlık satırı telefonun gömme çerçevesinde taşar — {t}" for t in so.tasan_satirlar(bas)]
     hata += [f"{ad}.html: panel başlığı telefonun gömme çerçevesinde — {t}" for t in so.panel_tasmasi(d)]
+    if ad.endswith("-ornek"):
+        hata += ornek_cizgileri(ad, d)
     return hata
+
+
+def _an(x) -> float | None:
+    from datetime import datetime
+    try:
+        return datetime.strptime(str(x)[:19], "%Y-%m-%d %H:%M:%S").timestamp()
+    except ValueError:
+        return None
+
+
+def ornek_cizgileri(ad: str, d: dict) -> list[str]:
+    """Örnek gün panellerinde stop ve hedef çizgisi en az bir mum uzunluğunda görünür. Giriş ile çıkış aynı
+    dakikadayken girişten çıkışa çizilen çizgi sıfır uzunlukta kalıyor ve alt yazının "kırmızı: stop" dediği
+    seviye ekranda yoktu. Mum uzunluğu panelin kendi mumlarından (ardışık iki mumun en küçük aralığı)."""
+    mum: dict = {}
+    for iz in d.get("data") or []:
+        if iz.get("type") == "candlestick" and isinstance(iz.get("x"), list):
+            t = sorted(a for a in (_an(x) for x in iz["x"]) if a is not None)
+            fark = [b - a for a, b in zip(t, t[1:]) if b > a]
+            if fark:
+                mum[iz.get("xaxis") or "x"] = min(fark)
+    hata = []
+    for iz in d.get("data") or []:
+        if iz.get("name") in ("stop", "hedef") and isinstance(iz.get("x"), list) and len(iz["x"]) == 2:
+            a, b = (_an(x) for x in iz["x"])
+            uzun = mum.get(iz.get("xaxis") or "x")
+            if a is None or b is None or uzun is None or b - a < uzun:
+                hata.append(f"{ad}.html: {iz['name']} çizgisi bir mumdan kısa ({iz.get('xaxis') or 'x'} paneli)")
+    return hata
+
+
+def kova_sirasi() -> list[str]:
+    """Ölçüm dosyasındaki her koşul kovası adlar.KOVA_OKUMA'da durur: listede olmayan kova ölçümdeki sırasını korur ve
+    aynı değişken figürden figüre (ve metinde) ters sırayla basılırdı."""
+    if not dy.OLCUM.exists():
+        return []
+    o = json.loads(dy.OLCUM.read_text(encoding="utf-8"))
+    eksik = sorted({kv["kova"] for b in (o.get("birim") or {}).values() for v in (b.get("cift") or {}).values()
+                    for k in (((v or {}).get("varsayilan") or {}).get("kosul") or [])
+                    for kv in (k.get("kovalar") or []) if kv.get("kova") not in adlar.KOVA_OKUMA})
+    return [f"okuma sırası tanımsız koşul kovası (adlar.KOVA_OKUMA): {', '.join(eksik)}"] if eksik else []
 
 
 def kunye_denetimi() -> list[str]:
@@ -128,6 +180,43 @@ def onkayit_denetimi() -> list[str]:
     return hata
 
 
+_MADDE = re.compile(r"^(?:- |\d+\. )\*\*")
+_SAAT = re.compile(r"(?<![\d,.])\d{1,2}:\d{2}(?!\d)")
+
+
+def tsi_denetimi() -> list[str]:
+    """Ölçüt 8: saat taşıyan kural ve kontrol listesi maddesinin TSİ karşılığı (şablonda)."""
+    hata = []
+    for yol in sorted((BURASI / "metin" / "strateji").glob("*.md")):
+        satir = yol.read_text(encoding="utf-8").split("\n")
+        i = 0
+        while i < len(satir):
+            if not _MADDE.match(satir[i]):
+                i += 1
+                continue
+            j = i + 1
+            while j < len(satir) and satir[j].startswith("  ") and not _MADDE.match(satir[j].lstrip()):
+                j += 1
+            madde = " ".join(satir[i:j])
+            if _SAAT.search(re.sub(r"\{\{.*?\}\}", " ", madde)) and "TSİ" not in madde and "{{! tsi " not in madde:
+                hata.append(f"{yol.relative_to(BURASI)}:{i + 1}: saat var, TSİ karşılığı yok: {madde[:80]}…")
+            i = j
+    return hata
+
+
+_BLOK_ETIKET = re.compile(r"^\s*<(details|div)\b[^>]*>(.*)$")
+
+
+def mdx_yapisi(slug: str, mdx: str) -> list[str]:
+    """Ölçüt 11: kapanışı aynı satırda olmayan bir blok etiketi satırında başka metin yoktur."""
+    hata = []
+    for i, s in enumerate(mdx.split("\n"), 1):
+        m = _BLOK_ETIKET.match(s)
+        if m and m.group(2).strip() and f"</{m.group(1)}>" not in s:
+            hata.append(f"{slug}.mdx:{i}: blok etiketi kendi satırında değil (MDX derlemesi düşer): {s.strip()[:80]}")
+    return hata
+
+
 def sira_denetimi() -> list[str]:
     hata = []
     if not GRUP_TS.exists():
@@ -154,8 +243,10 @@ def main() -> int:
     hata: list[str] = []
     var = [s for s in adlar.DERS_SIRA if (dy.ICERIK / f"{s}.mdx").exists()]
     hata += sayi_envanteri()
+    hata += tsi_denetimi()
     hata += sira_denetimi()
     hata += kunye_denetimi()
+    hata += kova_sirasi()
     hata += onkayit_denetimi()
     if not var:
         if hata:
@@ -176,6 +267,7 @@ def main() -> int:
         oz = hashlib.sha256(dy.OLCUM.read_bytes()).hexdigest()
         gomulen = set()
         for slug, (mdx, u) in cikti.items():
+            hata += mdx_yapisi(slug, mdx)
             yol = dy.ICERIK / f"{slug}.mdx"
             if yol.exists() and yol.read_text(encoding="utf-8") != mdx:
                 hata.append(f"{slug}: sitedeki metin ölçümden yeniden üretilen metinle aynı değil")
