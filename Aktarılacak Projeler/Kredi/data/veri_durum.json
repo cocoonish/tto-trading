@@ -1,11 +1,11 @@
 {
- "kosum": "2026-10-08",
- "son_hafta": "2026-10-02",
- "son_gun": "2026-10-07",
+ "kosum": "2026-10-15",
+ "son_hafta": "2026-10-09",
+ "son_gun": "2026-10-14",
  "son_ay": "2026-08-01",
  "son_ceyrek": "2026-07-01",
  "haftalik": [
-  1135,
+  1136,
   81
  ],
  "arsiv": [
@@ -13,7 +13,7 @@
   16
  ],
  "gunluk": [
-  3970,
+  3975,
   19
  ],
  "aylik": [
@@ -24,5 +24,9 @@
   84,
   8
  ],
- "uyarilar": []
+ "uyarilar": [
+  "TAZELİK: 'f_ticari_tl' son gözlemi 02.10.2026 — bugün 15.10.2026 itibarıyla 13 gün geride (tolerans 12). Haftalık Para ve Banka İstatistikleri (Perşembe, 6 gün) yayını durmuş olabilir.",
+  "TAZELİK: 'mev_tl' son gözlemi 02.10.2026 — bugün 15.10.2026 itibarıyla 13 gün geride (tolerans 12). Haftalık Para ve Banka İstatistikleri (Perşembe, 6 gün) yayını durmuş olabilir.",
+  "TAZELİK: 'kkm_tl' son gözlemi 01.07.2026 — bugün 15.10.2026 itibarıyla 76 gün geride (tolerans 70). Aylık para ve banka istatistikleri (51 gün) yayını durmuş olabilir."
+ ]
 }

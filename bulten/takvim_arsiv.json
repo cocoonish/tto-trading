@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-12",
+ "_son_guncelleme": "2026-10-16",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1231,6 +1231,66 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-12"
+  },
+  "2026-11-03|TÜİK: TÜFE (Ekim 2026)": {
+   "tarih": "2026-11-03",
+   "olay": "TÜİK: TÜFE (Ekim 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "anket (PKA Eylül, 61 katılımcı): yıl sonu %29,61 · 12 ay sonrası %23,70 · baz etkisi modelimiz, yıl sonu: momentum senaryosu %31,53, tekrar senaryosu %29,73",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-13"
+  },
+  "2026-11-03|TÜİK: Yİ-ÜFE (Ekim 2026)": {
+   "tarih": "2026-11-03",
+   "olay": "TÜİK: Yİ-ÜFE (Ekim 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-13"
+  },
+  "2026-11-04|ABD Hazinesi üç aylık refinansman duyurusu (Quarterly Refunding)": {
+   "tarih": "2026-11-04",
+   "olay": "ABD Hazinesi üç aylık refinansman duyurusu (Quarterly Refunding)",
+   "saat": "",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "gelecek çeyreğin ihraç kompozisyonu ve geri alım büyüklükleri burada ilan edilir",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-14"
+  },
+  "2026-11-05|TCMB: Haftalık para-banka (44. Hafta 2026)": {
+   "tarih": "2026-11-05",
+   "olay": "TCMB: Haftalık para-banka (44. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-15"
+  },
+  "2026-11-05|TCMB: Menkul kıymet ist. (44. Hafta 2026)": {
+   "tarih": "2026-11-05",
+   "olay": "TCMB: Menkul kıymet ist. (44. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-15"
+  },
+  "2026-11-06|ABD tarım dışı istihdam (Ekim)": {
+   "tarih": "2026-11-06",
+   "olay": "ABD tarım dışı istihdam (Ekim)",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-16"
   }
  }
 }
