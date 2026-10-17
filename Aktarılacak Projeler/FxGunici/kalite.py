@@ -329,6 +329,7 @@ def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
     t = pd.to_datetime(f_ham["t"].to_numpy(np.int64), unit="s", utc=True)
     out: dict = {"taraf": {}}
     toplam_saat = toplam_esit = 0
+    tum_saat = int(pd.DatetimeIndex(t).floor("h").nunique())
     for taraf, kok in (("BID", "b"), ("ASK", "a")):
         if kok == "b":
             fiyat = {x: f_ham[f"b_{x}"].to_numpy(np.int64) for x in "ohlc"}
@@ -343,6 +344,7 @@ def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
         hacim_fark = []
         ornek = []
         aylar = []
+        ay_esit: dict[str, list[int]] = {}
         for yol in sorted(dizin.glob(f"*_{taraf}.bi5")):
             yil, ay_ = (int(x) for x in yol.stem.split("_")[0].split("-"))
             k = dk.coz(yol.read_bytes(), adim_sn=3600, azami=744)
@@ -359,6 +361,7 @@ def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
             toplam += len(ort)
             esit += int(tam.sum())
             aylar.append(f"{yil}-{ay_:02d}")
+            ay_esit[f"{yil}-{ay_:02d}"] = [int(len(ort)), int(tam.sum())]
             hacim_fark.extend(((ort["v"] - ort["v_ref"]) / ort["v_ref"].where(ort["v_ref"] > 0)).dropna().tolist())
             for an in ort.index[~tam][:2]:
                 if len(ornek) < 6:
@@ -371,7 +374,9 @@ def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
             "tam_esit_yuzde": round(100 * esit / toplam, 3) if toplam else None,
             "alan_esit_yuzde": {a_: round(100 * n / toplam, 3) if toplam else None for a_, n in alan_esit.items()},
             "hacim_goreli_fark_medyan": float(np.nanmedian(hf)),
-            "aylar": aylar, "uyusmayan_ornekler": ornek}
+            # Kapsam taraf başına: kotasyonlu saatlerin bu tarafta sınanan payı (iki tarafın saklanan ayları ayrışabilir).
+            "kapsam_yuzde": round(100 * toplam / tum_saat, 2) if tum_saat else None,
+            "aylar": aylar, "ay_esit": ay_esit, "uyusmayan_ornekler": ornek}
         toplam_saat += toplam
         toplam_esit += esit
     # Kapsam: sınanan aylar ve örneklemde olup dosyası olmayan Ocak/Temmuz ayları; kotasyonlu saatlerin payı.
@@ -380,11 +385,13 @@ def capraz(f_ham: pd.DataFrame, sembol: str, nokta: float) -> dict:
                 if pd.Timestamp(year=y, month=m, day=28, tz="UTC") <= bit and pd.Timestamp(year=y, month=m, day=1,
                                                                                          tz="UTC") >= bas.normalize().replace(day=1)]
     sinanan = sorted(set(out["taraf"]["BID"]["aylar"]) & set(out["taraf"]["ASK"]["aylar"]))
-    tum_saat = int(pd.DatetimeIndex(t).floor("h").nunique())
+    # İki tarafı birlikte sınanamayan beklenen aylardan birinin saatlik dosyası saklıysa o taraf sınanmıştır.
+    tek = {m: [tr for tr in ("BID", "ASK") if m in out["taraf"][tr]["aylar"]] for m in beklenen if m not in sinanan}
     out.update({
         "saat": toplam_saat, "tam_esit": toplam_esit,
         "tam_esit_yuzde": round(100 * toplam_esit / toplam_saat, 3) if toplam_saat else None,
         "sinanan_aylar": sinanan, "eksik_aylar": [m for m in beklenen if m not in sinanan],
+        "tek_taraf_aylar": {m: v[0] for m, v in tek.items() if len(v) == 1},
         "kotasyonlu_saat": tum_saat,
         "kapsam_yuzde": round(100 * out["taraf"]["BID"]["saat"] / tum_saat, 2) if tum_saat else None,
     })

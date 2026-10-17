@@ -66,6 +66,9 @@ def haber_analizi(b: Baglam, cift: str, zaman_dilimleri, kayma_pip: float, haber
             kp = b.ek.get(("devam_kirpilan", tf, ufuk), {})
             if kp:
                 out.setdefault("devam_kirpilan", {}).setdefault(str(tf), {})[str(ufuk)] = kp
+            dz = b.ek.get(("devam_dusen", tf, ufuk), [])
+            if dz:
+                out.setdefault("devam_dusen", {}).setdefault(str(tf), {})[str(ufuk)] = dz
             if len(dv):
                 dv.insert(0, "ufuk", ufuk)
                 dv.insert(0, "tf", tf)
@@ -135,7 +138,12 @@ def devam_toplu(ciftler: list[str] | tuple[str, ...]) -> dict:
     if not dosyalar:
         return {"hucre": [], "not": "devam satırı yok"}
     df = pd.concat([pd.read_parquet(d) for d in dosyalar], ignore_index=True)
-    df = df[np.isfinite(df["gun_atr_pip"]) & (df["gun_atr_pip"] > 0)]
+    # Günlük ATR'si olmayan günün olayı ölçü birimini kuramaz ve düşer (örneklemin ilk haftası: önceki 14 günün ATR'si
+    # yok). Düşen olay parite parite adıyla yazılır: ders takvimle tablonun farkını oradan yazar.
+    atr_var = np.isfinite(df["gun_atr_pip"]) & (df["gun_atr_pip"] > 0)
+    atr_dusen = (df[~atr_var][["cift", "olay", "tarih"]].drop_duplicates()
+                 .sort_values(["tarih", "olay", "cift"]).to_dict(orient="records"))
+    df = df[atr_var]
     hucre = []
 
     def ekle(boyut: str, deger: str, tf: int, ufuk: int, g: pd.DataFrame, kume: bool = True):
@@ -174,7 +182,8 @@ def devam_toplu(ciftler: list[str] | tuple[str, ...]) -> dict:
     for h in hucre:
         sayim[h["hukum"]] = sayim.get(h["hukum"], 0) + 1
     return {"kural": {"asgari_olay": ASGARI, "fdr_q": FDR_Q, "ana_tf": ANA_TF, "ufuk_dk": UFUK},
-            "sinama_sayisi": int(np.isfinite(p).sum()), "hukum_sayimi": sayim, "hucre": hucre}
+            "sinama_sayisi": int(np.isfinite(p).sum()), "hukum_sayimi": sayim, "hucre": hucre,
+            "atr_dusen": atr_dusen}
 
 
 def yaz(yol: Path, veri) -> None:

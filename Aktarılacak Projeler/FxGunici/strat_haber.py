@@ -39,6 +39,10 @@ ONKAYIT = tomllib.loads((Path(__file__).resolve().parent / "onkayit.toml").read_
 H = ONKAYIT["haber"]
 KOVA = [float(x) for x in H["kova_atr"]]
 KOVA_ADI = ["<0,5", "0,5–1", "1–2", ">2"]
+#: Ortalama patikanın küme yönü olaydan bu kadar saniye sonraki orta fiyattan okunur (ilk beş dakika).
+PATIKA_YON_SN = 300
+#: FOMC basın toplantısının iki ufku, toplantının başından saniye (bir saat · bir buçuk saat).
+FOMC_BASIN_SN = (3600, 5400)
 ATR_MUM = int(H["atr_mum"])
 TREND_MUM = int(H["oncesi_trend_mum"])
 SUTUN = ["gun_k", "s", "yon", "stop", "yapi", "ust", "alt", "olay", "tarih", "t0", "ofset", "kova",
@@ -306,20 +310,28 @@ def devam(b: Baglam, tf: int, ufuk_dk: int, kayma_pip: float, haber_kayma_pip: f
     maliyetini öder, yani biri kazandığında öbürü maliyetin iki katı kadar kaybeder.
     Ufku gün sonuna (16:55 ET) yetişmeyen gözlem DÜŞER: kırpılmış bir tutuş o hücrenin
     ufkunu ölçmez (60 dakikalık mumda FOMC'nin 120 dakikası 16:55'i aşar). Düşenler
-    olay olay `b.ek[("devam_kirpilan", tf, ufuk)]` sayacına yazılır.
+    olay olay `b.ek[("devam_kirpilan", tf, ufuk)]` sayacına yazılır. Başka sebeple düşen
+    olay (ilk mumda yön yok, sonraki mum ya da çıkış fiyatı yok) adıyla ve sebebiyle
+    `b.ek[("devam_dusen", tf, ufuk)]` listesine: ders takvimle tablonun farkını oradan yazar.
     """
     cer = cerceve(b, tf)
     d, g = b.d, b.g
     satir = []
     kirpilan: dict[str, int] = {}
+    dusen: list[dict] = []
     for _, c in cer.iterrows():
         m = b.mumlar(tf, int(c["ofset"]))
         k0 = int(c["k0"])
-        if k0 + 1 >= len(m) or c["hareket"] == 0:
+        if k0 + 1 >= len(m):
+            dusen.append({"olay": c["olay"], "tarih": c["tarih"], "neden": "sonraki_mum_yok"})
+            continue
+        if c["hareket"] == 0:
+            dusen.append({"olay": c["olay"], "tarih": c["tarih"], "neden": "ilk_mumda_yon_yok"})
             continue
         t_g = int(m.bt[k0]) + tf * 60
         gi = int(_dakika_ici(b, np.array([t_g]))[0])
         if gi < 0:
+            dusen.append({"olay": c["olay"], "tarih": c["tarih"], "neden": "giris_dakikasi_yok"})
             continue
         gun_sonu = int(g.sinir[int(c["gun_k"])])
         t_c = t_g + ufuk_dk * 60
@@ -328,6 +340,7 @@ def devam(b: Baglam, tf: int, ufuk_dk: int, kayma_pip: float, haber_kayma_pip: f
             kirpilan[c["olay"]] = kirpilan.get(c["olay"], 0) + 1
             continue
         if ci <= gi or ci >= len(d.t) or (d.t[ci] - t_c) > 300:
+            dusen.append({"olay": c["olay"], "tarih": c["tarih"], "neden": "cikis_fiyati_yok"})
             continue
         yon = 1 if c["hareket"] > 0 else -1
         s_g = (kayma_pip + (haber_kayma_pip if b.haber[gi] else 0.0)) * d.pip
@@ -345,6 +358,7 @@ def devam(b: Baglam, tf: int, ufuk_dk: int, kayma_pip: float, haber_kayma_pip: f
                       "gun_atr_pip": float(g.atr[int(c["gun_k"])]) / d.pip,
                       "brut_pip": brut / d.pip, "kirilim_pip": kir / d.pip, "fade_pip": fad / d.pip})
     b.ek[("devam_kirpilan", tf, ufuk_dk)] = kirpilan
+    b.ek[("devam_dusen", tf, ufuk_dk)] = dusen
     return pd.DataFrame(satir)
 
 
@@ -358,7 +372,7 @@ def fomc(b: Baglam, olaylar: pd.DataFrame) -> pd.DataFrame:
     for t in ortak:
         t_k = int(k.loc[k["tarih"] == t, "utc_sn"].iloc[0])
         t_b = int(bs.loc[bs["tarih"] == t, "utc_sn"].iloc[0])
-        p = mid_an(b, np.array([t_k, t_b, t_b + 3600, t_b + 5400]))
+        p = mid_an(b, np.array([t_k, t_b, t_b + FOMC_BASIN_SN[0], t_b + FOMC_BASIN_SN[1]]))
         gun_k = int(gun_sirasi(b, t_k)[0])
         atr = b.g.atr[gun_k] if gun_k >= 0 else np.nan
         if gun_k < 0 or not np.isfinite(p).all() or not np.isfinite(atr) or atr <= 0:
@@ -421,7 +435,7 @@ def patika(b: Baglam, olaylar: pd.DataFrame, olay: str, once_dk: int = 30, sonra
             continue
         p = mid_an(b, t0 + tau * 60)
         p0 = mid_an(b, np.array([t0]))[0]
-        p5 = mid_an(b, np.array([t0 + 300]))[0]
+        p5 = mid_an(b, np.array([t0 + PATIKA_YON_SN]))[0]
         if not (np.isfinite(p).all() and np.isfinite(p0) and np.isfinite(p5)):
             dislanan.append({"tarih": str(r["tarih"]), "neden": "pencerede_fiyat_yok"})
             continue

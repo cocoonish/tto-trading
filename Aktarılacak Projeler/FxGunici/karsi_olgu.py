@@ -178,6 +178,17 @@ DEGISIKLIKLER: tuple[dict, ...] = (
                   "        ci = min(ci, int(gun_sonu))\n")],
     },
     {
+        # Büyük olay günü koşul değişkeni: önceden duyurulmayan karar günü olay saatinden ÖNCE işaretliyordu. İşlemler
+        # değişmez (haber penceresinin maliyeti bu ayrımı yapmaz); değişen koşul kovaları ve onların hükmüdür.
+        "ad": "haber_gunu_olaganustu",
+        "commit": "dda21888",
+        "birimler": None,
+        "yama": [("gunluk.py",
+                  "        bilinen = _gun_basinda_bilinen(olaylar, t0, j, g.gun_basi)\n"
+                  "        haber_gun[j[(j >= 0) & bilinen]] = True\n",
+                  "        haber_gun[j[j >= 0]] = True\n")],
+    },
+    {
         "ad": "haber_tek_pozisyon",
         "commit": "4d5fa720",
         "birimler": HABER_BIRIM,

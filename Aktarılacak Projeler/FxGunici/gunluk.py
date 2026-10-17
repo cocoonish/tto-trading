@@ -29,6 +29,11 @@ import zaman as z
 from veri import Dakika, Mumlar, mumla, bar_son_dakika, yerel_an_sn
 
 
+#: Günlük ATR'nin uzunluğu (Wilder, gün): koşul değişkenleri, stop uzaklıkları ve haber ölçülerinin birimi. Ders ve
+#: figürler sayıyı ölçüm dosyasının künyesinden okur (tek tanım).
+ATR_GUN = 14
+
+
 def _wilder(x: np.ndarray, n: int) -> np.ndarray:
     """Wilder ortalaması (RMA); ilk n−1 değer NaN."""
     out = np.full(len(x), np.nan)
@@ -127,7 +132,7 @@ def onceki_zincir(h: np.ndarray, l: np.ndarray, c: np.ndarray, o: np.ndarray, ta
     if len(idx):
         tr[0] = hs[0] - ls[0]
         tr[1:] = np.maximum.reduce([hs[1:] - ls[1:], np.abs(hs[1:] - cs[:-1]), np.abs(ls[1:] - cs[:-1])])
-    atr_alt = _wilder(tr, 14)                        # alt dizide: o günün kendisi dahil
+    atr_alt = _wilder(tr, ATR_GUN)                   # alt dizide: o günün kendisi dahil
     atr = np.where(var, atr_alt[np.clip(p, 0, None)] if len(idx) else np.nan, np.nan)
     # Yüzdelik: tatil olmayan günlerin "o günün başındaki ATR"si (atr_alt bir kaydırılmış) dizisinde.
     bas = np.concatenate([[np.nan], atr_alt[:-1]]) if len(idx) else np.array([])
