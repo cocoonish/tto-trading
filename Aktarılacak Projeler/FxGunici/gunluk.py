@@ -242,6 +242,16 @@ class Baglam:
         return self.son[self._anahtar(tf, ofset)]
 
 
+def _gun_basinda_bilinen(olaylar: pd.DataFrame, t0: np.ndarray, j: np.ndarray, gun_basi: np.ndarray) -> np.ndarray:
+    """Olay, işlem gününün başında takvimden bilinir mi: planlanmış olay her zaman; önceden duyurulmayan olay
+    (takvim.olaganustu) yalnız anı günün başında ya da öncesindeyse. j < 0 (tablo dışı gün) için sonuç önemsizdir."""
+    import takvim
+    bas = np.full(len(j), np.iinfo(np.int64).max, dtype=np.int64)
+    ic = j >= 0
+    bas[ic] = gun_basi[j[ic]]
+    return ~takvim.olaganustu(olaylar) | (t0 <= bas)
+
+
 def baglam_kur(d: Dakika, olaylar: pd.DataFrame | None = None, pencere_dk=(-2, 15),
                orneklem: tuple | None = None) -> Baglam:
     g = gunluk_kur(d, orneklem)
@@ -255,5 +265,9 @@ def baglam_kur(d: Dakika, olaylar: pd.DataFrame | None = None, pencere_dk=(-2, 1
             haber[x:y] = True
         etiket = z.islem_gunu(pd.to_datetime(t0, unit="s", utc=True)).to_numpy().astype("datetime64[D]")
         j = g.indeks(etiket)
-        haber_gun[j[j >= 0]] = True
+        # "Büyük olay günü" bir koşul değişkenidir: günün ilk sinyalinden önce bilinmelidir. Önceden duyurulmayan bir
+        # karar ancak olduğu anda bilinir ve günü yalnız FX gününün başında (önceki gün 17:00 New York) çoktan
+        # olmuşsa işaretler. Haber penceresi (maliyet) bu ayrımı yapmaz: o dakikalar olay anının kendisidir.
+        bilinen = _gun_basinda_bilinen(olaylar, t0, j, g.gun_basi)
+        haber_gun[j[(j >= 0) & bilinen]] = True
     return Baglam(d, g, {}, {}, haber, haber_gun, olaylar if olaylar is not None else pd.DataFrame())

@@ -31,6 +31,16 @@ ANA = DIZIN / "olaylar.csv"
 EK = DIZIN / "ek.csv"
 ONKAYIT = tomllib.loads((BURASI / "onkayit.toml").read_text(encoding="utf-8"))
 SUTUN = ["olay", "tarih", "yerel_saat", "bolge", "kaynak", "not"]
+#: Kaynağın önceden duyurmadığı olayın notundaki iz (takvim_kur.py "olağanüstü toplantı" yazar).
+OLAGANUSTU_IZ = "olağanüstü"
+
+
+def olaganustu(df: pd.DataFrame) -> np.ndarray:
+    """Önceden duyurulmayan olaylar (notunda OLAGANUSTU_IZ). Böyle bir olay ancak olduğu anda bilinir; planlanmış
+    olay takvimde haftalar önce durur. Not sütunu olmayan çerçevede hiçbir olay olağanüstü sayılmaz."""
+    if "not" not in df.columns:
+        return np.zeros(len(df), dtype=bool)
+    return df["not"].fillna("").astype(str).str.contains(OLAGANUSTU_IZ, regex=False).to_numpy()
 
 
 def olay_ciftleri(olay: str) -> list[str]:

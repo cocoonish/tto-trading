@@ -223,6 +223,16 @@ def islem_imzasi(isl: pd.DataFrame) -> tuple[str, np.ndarray] | None:
     return h, a["r"].to_numpy(np.float64)[sira]
 
 
+def imza_ozu(isl: pd.DataFrame) -> str | None:
+    """İmzanın tek dizgelik özü (işlemler + 1e−9'a yuvarlanmış R'ler): ölçüm dosyasında iki kombinasyonun aynı işlem
+    kümesini verip vermediği bu dizgeyle sorulur (ör. ay sonu ayrımlarının çoklu sınama paydası)."""
+    import hashlib
+    im = islem_imzasi(isl)
+    if im is None:
+        return None
+    return im[0] + ":" + hashlib.sha1(np.round(im[1], 9).tobytes()).hexdigest()[:16]
+
+
 def imza_ayni(x: tuple | None, y: tuple | None) -> bool:
     """İki imza aynı işlemleri ve aynı R'leri (1e−9 içinde) mi taşıyor; iki boş imza aynıdır."""
     if x is None or y is None:
@@ -252,21 +262,24 @@ class ImzaSiniflayici:
         return len(self.siniflar) - 1
 
 
-#: Ön kaydın harfine göre İKİNCİ bir okuması olan kurallar: birim → (sinyal parametresi, harfin okuması). Ölçümün kuralı
-#: sonuçtan önce yazılmış okumadır (sinyal fonksiyonlarının varsayılanı) ve hüküm onunla verilir; harfin okuması aynı
-#: koşuda ayrıca ölçülür ve etkisi derste yazılır (yorum_duyarlilik). Okumalar strateji.py'de, fonksiyon belgelerinde:
+#: Ön kaydın harfine göre İKİNCİ bir okuması olan kurallar: birim → ((sinyal parametresi, harfin okuması), …). Ölçümün
+#: kuralı sonuçtan önce yazılmış okumadır (sinyal fonksiyonlarının varsayılanı) ve hüküm onunla verilir; harfin okuması
+#: aynı koşuda ayrıca ölçülür ve etkisi derste yazılır (yorum_duyarlilik). Bir kuralın birden çok okuması varsa her biri
+#: TEK BAŞINA ölçülür (öbürü ölçümün kuralında kalır). Okumalar strateji.py'de, fonksiyon belgelerinde:
 #:   VWAP dönüşü ve geri çekilmesi   ilk saat: kuralın durumu da sıfırlanır ↔ yalnız sinyal verilmez (ön kaydın harfi)
+#:   VWAP dönüşü                      bandın içine dönüş: yalnız çıkılan kenar sorulur ↔ kapanış iki bandın arasında
 #:   pivot kırılımı                   R1 yalnız yukarı, S1 yalnız aşağı ↔ her seviyede iki yönde ilk kesiş (harf)
 #:   başarısız kırılım                kırılım mumu bir kesiştir ↔ pencerenin ilk mumu dışarıda kapanırsa da kırılım
-#: Başarısız kırılımda ORB ve Asya'nın iki okuması tanım gereği aynıdır (pencerenin ilk mumundan önceki kapanış aralığın
-#: içindedir); o iki birim de koşulur ki "aynı" bir beyan değil ölçüm olsun.
-YORUM: dict[str, tuple[str, str]] = {
-    "vwap_donus": ("ilk_saat", "yalniz_sinyal"),
-    "vwap_cekilme": ("ilk_saat", "yalniz_sinyal"),
-    "pivot_kirilim": ("kesis", "iki_yon"),
-    "sahte_pdhl": ("acilis", "acilis_ici"),
-    "sahte_orb": ("acilis", "acilis_ici"),
-    "sahte_asya": ("acilis", "acilis_ici"),
+#:   başarısız kırılım                dönüş: kapanış kırılan kenarın berisinde ↔ aralığın içinde ("yeniden içeride")
+#: Başarısız kırılımda ORB ve Asya'nın açılış okumaları tanım gereği aynıdır (pencerenin ilk mumundan önceki kapanış
+#: aralığın içindedir); o iki birim de koşulur ki "aynı" bir beyan değil ölçüm olsun.
+YORUM: dict[str, tuple[tuple[str, str], ...]] = {
+    "vwap_donus": (("ilk_saat", "yalniz_sinyal"), ("bant", "iki_kenar")),
+    "vwap_cekilme": (("ilk_saat", "yalniz_sinyal"),),
+    "pivot_kirilim": (("kesis", "iki_yon"),),
+    "sahte_pdhl": (("acilis", "acilis_ici"), ("donus", "iki_kenar")),
+    "sahte_orb": (("acilis", "acilis_ici"), ("donus", "iki_kenar")),
+    "sahte_asya": (("acilis", "acilis_ici"), ("donus", "iki_kenar")),
 }
 
 
@@ -335,7 +348,10 @@ def birim_kos(birim: str, kosucu: Kosucu, ayrinti: bool = True) -> dict:
     if tanim.get("haber"):
         sonuc["tf_haber_kaymasiz"] = tf_haber_kaymasiz(aile, liste, varsayilan, k)
     if birim in YORUM:
-        sonuc["yorum"] = yorum_duyarlilik(birim, aile, varsayilan, satirlar, secilen, k, asgari)
+        sonuc["yorum"] = {param: yorum_duyarlilik(birim, aile, param, harf, varsayilan, satirlar, secilen, k, asgari)
+                          for param, harf in YORUM[birim]}
+    if aile == "fiks":
+        sonuc["ay_sonu_tf"] = ay_sonu_tf(birim, aile, liste, varsayilan, k)
     return sonuc
 
 
@@ -354,18 +370,21 @@ def _yorum_sonuc(aile: str, p: dict, k: Kosucu, donemler: tuple[str, ...]) -> di
                                                      "ga_ust", "ga_brut_alt")},
                  "rastgele": {"yuzdelik": ry.get("yuzdelik"), "n": ry.get("n")}, "hukum": _hukum(m, ry)}
         r_ = m.get("beklenti_r")
-        if m.get("n") and r_ is not None and np.isfinite(r_) and r_ > 0:
-            s_ = mk.sinir_bilgisi(mk.alinan(x)["r"].to_numpy(np.float64), m.get("ga_alt"), "alt")
+        if m.get("n") and r_ is not None and np.isfinite(r_):
+            rr = mk.alinan(x)["r"].to_numpy(np.float64)
+            s_ = (mk.sinir_bilgisi(rr, m.get("ga_alt"), "alt") if r_ > 0
+                  else mk.sinir_bilgisi(rr, m.get("ga_ust"), "ust"))
             if s_:
-                satir["sinir"] = {"ga_alt": s_}
+                satir["sinir"] = {("ga_alt" if r_ > 0 else "ga_ust"): s_}
         out[d] = satir
     return out
 
 
-def yorum_duyarlilik(birim: str, aile: str, varsayilan: dict, satirlar: list[dict], secilen: dict | None,
-                     k: Kosucu, asgari: int) -> dict:
+def yorum_duyarlilik(birim: str, aile: str, param: str, harf: str, varsayilan: dict, satirlar: list[dict],
+                     secilen: dict | None, k: Kosucu, asgari: int) -> dict:
     """Yorum duyarlılığı (YORUM): ızgara harfin okumasıyla baştan koşulur. Hüküm ölçümün okumasıyla verilir; bu kayıt
-    harfin okuması seçilseydi neyin değişeceğini söyler.
+    harfin okuması seçilseydi neyin değişeceğini söyler. Bir kuralın her okuması ayrı bir kayıttır (öbür okumalar
+    ölçümün kuralında kalır).
 
       degisen          işlemleri (giriş ve çıkış dakikası, yön, R) değişen kombinasyon sayısı; bos_kombinasyon:
                        harfin okumasında hiç işlem açmayan kombinasyon
@@ -376,7 +395,8 @@ def yorum_duyarlilik(birim: str, aile: str, varsayilan: dict, satirlar: list[dic
     Okumanın parametresi ızgaranın bir boyutu DEĞİLDİR: seçim ızgaranın kendi kombinasyonları arasında yapılır, deneme
     sayısı değişmez."""
     import inspect
-    param, harf = YORUM[birim]
+    if (param, harf) not in YORUM[birim]:
+        raise ValueError(f"{birim}: kayıtsız okuma {param}={harf}")
     olcum = inspect.signature(AILE_TUM[aile]).parameters[param].default
     alt = lambda p: {**p, param: harf}  # noqa: E731
     degisen, bos, adaylar, v_degisti = 0, 0, [], None
@@ -426,7 +446,7 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
           sr_tekil=None) -> dict:
     isl = k.islem(aile, p)
     ic, dis = k.bol(isl)
-    out = {"p": p,
+    out = {"p": p, "imza": imza_ozu(isl),
            "is": mk.ozet(ic, k.gun_is), "oos": mk.ozet(dis, k.gun_oos), "tum": mk.ozet(isl, k.gun_tum)}
     # maliyet duyarlılığı
     maliyet = {}
@@ -445,7 +465,10 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
                            for d, v in (("is", mk.ozet(xi, k.gun_is, bootstrap=False)),
                                         ("oos", mk.ozet(xd, k.gun_oos, bootstrap=False)),
                                         ("tum", mk.ozet(x, k.gun_tum, bootstrap=False)))}
+    # Haber penceresine düşen giriş payı dönem başına: maliyet tablosu örneklem dışını basar, notu da onun payını
+    # söylemelidir (bütün dönemin payı ondan ayrışabilir).
     out["haber_payi"] = k.haber_payi(isl)
+    out["haber_payi_donem"] = {"is": k.haber_payi(ic), "oos": k.haber_payi(dis), "tum": k.haber_payi(isl)}
     # başabaş: kayma ızgarasında işlem başına net R (serinin ölçüsü; her işlem 1 R riske eder) = 0'ın doğrusal
     # kestirimi, x ekseni dolum başına pip (haber kayması 1,0 pip'te sabit). Pip ortalaması R ortalamasıyla işaret
     # değiştirebilir (geniş stop'lu işlemler pipte ağır basar): ölçüldü, EUR/USD N4'te sıfır kaymada pip +2,48, R +0,05;
@@ -458,10 +481,18 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
         out["basabas_sifir_r" + son] = sifir.get("beklenti_r")          # sıfır kaymada (haber kayması dahil) net R
         out["basabas_ek_maliyet_pip" + son] = sifir.get("beklenti_pip")   # aynı, pip'te (bilgi)
     # rastgele yön (örneklem dışı ve bütün dönem)
-    out["rastgele"] = {"oos": sg.rastgele_yon(k.b, dis, int(p["tf"]), k.sinyal(aile, p)[1], KAYMA_TEMEL,
-                                              k.a.haber_kayma_pip),
-                       "tum": sg.rastgele_yon(k.b, isl, int(p["tf"]), k.sinyal(aile, p)[1], KAYMA_TEMEL,
-                                              k.a.haber_kayma_pip)}
+    ofset = k.sinyal(aile, p)[1]
+    out["rastgele"] = {"oos": sg.rastgele_yon(k.b, dis, int(p["tf"]), ofset, KAYMA_TEMEL, k.a.haber_kayma_pip),
+                       "tum": sg.rastgele_yon(k.b, isl, int(p["tf"]), ofset, KAYMA_TEMEL, k.a.haber_kayma_pip)}
+    # Yüzdeliğin duyarlılığı (bilgi; hüküm önceden kayıtlı tohumla verilir): eşiğe yakın ya da üstündeki yüzdelik
+    # tek işleme mi, tohuma mı bağlı — en iyi işlem(ler) çıkarılınca yüzdelik ve sabit bir tohum listesinde eşik payı.
+    out["rastgele_duyarlilik"] = {}
+    for d, x in (("oos", dis), ("tum", isl)):
+        yz = out["rastgele"][d].get("yuzdelik")
+        if yz is not None and np.isfinite(yz) and yz >= sg.DUYARLILIK_TABAN:
+            out["rastgele_duyarlilik"][d] = sg.rastgele_duyarlilik(k.b, x, int(p["tf"]), ofset, KAYMA_TEMEL,
+                                                                   k.a.haber_kayma_pip,
+                                                                   float(ONKAYIT["hukum"]["rastgele_esik_yuzdelik"]))
     # deflated Sharpe (yalnız ızgaradan SEÇİLEN için anlamlı; varsayılanda PSR)
     gr_is = mk.gunluk_r(ic, k.gun_is)
     sr_is = float(gr_is.mean() / gr_is.std(ddof=1)) if gr_is.std(ddof=1) > 0 else float("nan")
@@ -492,7 +523,8 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
         g_["n_gun"] = int(mk.alinan(x)["gun"].nunique()) if out[d].get("n") else 0
         out["gun_kumeli"][d] = g_
     # Sıfıra yakın uçlar (bilgi; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir): hükmü ayıran uç (net artı
-    # iken net aralığın alt ucu) ve maliyet bayrağını ayıran uç (net ≤ 0 iken brüt aralığın alt ucu). Bütün dönem
+    # iken net aralığın alt ucu), maliyet bayrağını ayıran uç (net ≤ 0 iken brüt aralığın alt ucu) ve "kayıp şansla
+    # açıklanmıyor" cümlesini ayıran uç (net ≤ 0 iken net aralığın üst ucu; havuzda da aynı uç sorulur). Bütün dönem
     # yalnız varsayılanda bir hükümdür (seçilenin bütün dönemi seçim dönemini içerir).
     for d, x in (("oos", dis), ("tum", isl)):
         if d == "tum" and sr_denemeler is not None:
@@ -511,6 +543,9 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
             s_ = mk.sinir_bilgisi(ax["r_brut"].to_numpy(np.float64), m.get("ga_brut_alt"), "alt")
             if s_:
                 sinir["ga_brut_alt"] = s_
+            s_ = mk.sinir_bilgisi(ax["r"].to_numpy(np.float64), m.get("ga_ust"), "ust")
+            if s_:
+                sinir["ga_ust"] = s_
         if sinir:
             m["sinir"] = sinir
     out["az_islem"] = {d: bool(out[d].get("n", 0) < ASGARI_RASTGELE) for d in ("is", "oos", "tum")}
@@ -533,7 +568,8 @@ def derin(birim: str, aile: str, p: dict, k: Kosucu, sr_denemeler, yillik, ornek
     out["kosul"] = sg.kova_analizi(f, icm, int(ONKAYIT["kosul"]["asgari_kova_islem"]))
     # Ön kaydın aileye özgü iki ölçüsü: fiksingde ay sonu ayrı ([fiks]), momentumda regresyon ([momentum]).
     if aile == "fiks":
-        out["ay_sonu"] = ay_sonu_ayrimi(a, icm)
+        out["ay_sonu"] = ay_sonu_ayrimi(a, icm, ry=lambda x: sg.rastgele_yon(k.b, x, int(p["tf"]), ofset, KAYMA_TEMEL,
+                                                                            k.a.haber_kayma_pip))
     if aile == "momentum":
         out["regresyon"] = momentum_regresyon(k, aile, p)
     if "olay" in a.columns:
@@ -726,13 +762,17 @@ def _welch(x1: np.ndarray, x0: np.ndarray) -> dict:
     return {"fark_r": float(x1.mean() - x0.mean()), "t": float(t), "p": float(p)}
 
 
-def ay_sonu_ayrimi(a: pd.DataFrame, icm: np.ndarray) -> dict:
+def ay_sonu_ayrimi(a: pd.DataFrame, icm: np.ndarray, ry=None) -> dict:
     """WM/R fiksingi, ön kayıt [fiks]: "bütün günler ve ay sonu (ayın son Londra iş günü) ayrı".
 
     Aynı kural, aynı işlemler; yalnız ayrı raporlanır (ay sonu için ayrı parametre SEÇİLMEZ). Her
     kümede örneklem içi, dışı ve bütün dönem: işlem sayısı, ortalama R ve bootstrap %95 aralığı;
     ay sonu ile öbür günlerin farkı Welch t ile. Ay sonu yılda on iki gündür: örneklem dışında küme
-    otuz dolayında işlemdir ve aralık buna göre geniştir."""
+    otuz dolayında işlemdir ve aralık buna göre geniştir.
+
+    `ry` (verilirse): ay sonu kümesinde rastgele yön sınaması (aynı giriş dakikaları, yazı tura yön). Ön kayıt ay
+    sonuna ayrı hüküm vermez; bu, hüküm kuralının üçüncü şartının alt kümeye SONRADAN uygulanmasıdır ve derste öyle
+    adlandırılır."""
     m = a["ay_sonu"].to_numpy(bool)
     out: dict = {"ay_sonu": {}, "diger": {}, "fark": {}}
     for d, dm in (("is", icm), ("oos", ~icm), ("tum", np.ones(len(a), bool))):
@@ -741,9 +781,32 @@ def ay_sonu_ayrimi(a: pd.DataFrame, icm: np.ndarray) -> dict:
             kk = _kisa(x)
             if kk["n"] >= 2:
                 kk["ga_alt"], kk["ga_ust"] = mk.bootstrap_ort(x["r"].to_numpy())
+            if ry is not None and ad == "ay_sonu":
+                r_ = ry(x)
+                kk["rastgele"] = {"yuzdelik": r_.get("yuzdelik"), "n": r_.get("n")}
             out[ad][d] = kk
         out["fark"][d] = _welch(a[m & dm]["r"].to_numpy(), a[~m & dm]["r"].to_numpy())
     return out
+
+
+def ay_sonu_tf(birim: str, aile: str, liste: list[dict], v: dict, k: Kosucu) -> dict:
+    """Ay sonu ayrımı üç zaman diliminde: öbür parametreler varsayılanda, yalnız mum uzunluğu değişir (ön kaydın tf
+    kıyası; varsayılanın kendi ayrımı derin()'de). Ayrımın çoklu sınama paydası derste ölçülen bütün ayrımlardan kurulur
+    (varsayılan, seçilen, bu varyantlar; aynı işlem kümesi bir kez)."""
+    out = {}
+    for p in liste:
+        if any(p.get(x) != v.get(x) for x in v if x != "tf"):
+            continue
+        isl = k.islem(aile, p)
+        a = mk.alinan(isl)
+        if not len(a):
+            continue
+        icm = (a["gun"].to_numpy() <= np.datetime64(k.a.ic_bitis))
+        ofset = k.sinyal(aile, p)[1]
+        out[str(p["tf"])] = {"p": p, "imza": imza_ozu(isl),
+                             "ayrim": ay_sonu_ayrimi(a, icm, ry=lambda x, p=p, ofset=ofset: sg.rastgele_yon(
+                                 k.b, x, int(p["tf"]), ofset, KAYMA_TEMEL, k.a.haber_kayma_pip))}
+    return dict(sorted(out.items(), key=lambda kv: int(kv[0])))
 
 
 def nw_ols(x: np.ndarray, y: np.ndarray, lag: int | None = None) -> dict:

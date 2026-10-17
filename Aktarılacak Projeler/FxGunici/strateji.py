@@ -212,12 +212,22 @@ def pdhl(b: Baglam, tf: int, baslangic: str, stop_kurali: str):
 
 
 # ───────────────────────────────────────────── 7 · Başarısız kırılım
-def sahte(b: Baglam, tf: int, seviye: str, pencere: int, acilis: str = "kesis"):
-    """`acilis` (yorum duyarlılığı; ölçümün kuralı "kesis"): kırılım mumu seviyeyi KESEN mumdur (önceki kapanış içeride
-    ya da uçta). "acilis_ici": pencerenin İLK mumu önceki kapanışa bakılmadan dışarıda kapanırsa da kırılım mumudur —
-    PDH/PDL'de seviye pencereden önce (Asya'da) aşılmış ve Londra açılışında fiyat hâlâ dışarıdaysa, açılıştaki geri
-    alınış ancak bu okumada sayılır. ORB ve Asya'da iki okuma aynıdır (pencerenin ilk mumundan önceki kapanış
-    tanım gereği aralığın içindedir)."""
+def sahte(b: Baglam, tf: int, seviye: str, pencere: int, acilis: str = "kesis", donus: str = "tek_kenar"):
+    """İki yorum duyarlılığı (kosu.YORUM); ikisinde de ölçümün kuralı sonuçlardan önce yazılan okumadır.
+
+    `acilis` (ölçümün kuralı "kesis"): kırılım mumu seviyeyi KESEN mumdur — yukarı kırılımda önceki kapanış üst
+    kenarın berisinde ya da üstündedir (alt kenarın altında olabilir), aşağıda simetriği. "acilis_ici": pencerenin
+    İLK mumu önceki kapanışa bakılmadan dışarıda kapanırsa da kırılım mumudur — PDH/PDL'de seviye pencereden önce
+    (Asya'da) aşılmış ve Londra açılışında fiyat hâlâ dışarıdaysa, açılıştaki geri alınış ancak bu okumada sayılır.
+    ORB ve Asya'da iki okuma aynıdır (pencerenin ilk mumundan önceki kapanış tanım gereği aralığın içindedir).
+
+    `donus` (ölçümün kuralı "tek_kenar"): yukarı kırılımdan sonra kapanışı üst kenarın altına dönen ilk mum dönüş
+    mumudur — alt kenarın da altında kapansa bile (aşağıda simetriği). Ön kaydın harfi "iki_kenar" ("yeniden içeride
+    kapanırsa"): dönüş mumu aralığın İÇİNDE kapanır; karşı kenarın ötesinde kapanan mum o kırılımı bitirir ve dış
+    döngü onu ters yönde yeni bir kırılım olarak ele alır (N4'ün kuralı, strat_haber.n4)."""
+    if donus not in ("tek_kenar", "iki_kenar"):
+        raise ValueError(f"bilinmeyen dönüş okuması: {donus}")
+    iki = donus == "iki_kenar"
     m = b.mumlar(tf, 0)
     g = b.g
     if seviye == "orb":
@@ -244,12 +254,16 @@ def sahte(b: Baglam, tf: int, seviye: str, pencere: int, acilis: str = "kesis"):
                 p = (H + L) / 2.0                   # pencerenin ilk mumu: önceki kapanış sorulmaz
             if m.c[j] > H and p <= H:
                 for q in range(j + 1, min(j + 1 + pencere, j1[k])):
+                    if iki and m.c[q] < L:
+                        break                       # karşı kenarın ötesi: başarısızlık değil, yeni kırılım
                     if m.c[q] < H:
                         satir.append((k, q, -1, m.h[j:q + 1].max(), H - L, H, L))
                         bulundu = True
                         break
             elif m.c[j] < L and p >= L:
                 for q in range(j + 1, min(j + 1 + pencere, j1[k])):
+                    if iki and m.c[q] > H:
+                        break
                     if m.c[q] > L:
                         satir.append((k, q, 1, m.l[j:q + 1].min(), H - L, H, L))
                         bulundu = True
@@ -291,9 +305,11 @@ def vwap_dakika(b: Baglam, capa: str):
 
 
 @njit(cache=True)
-def _vwap_donus_tara(c, h, l, vw, sg, bk, ok, ok_s, k):
+def _vwap_donus_tara(c, h, l, vw, sg, bk, ok, ok_s, k, iki_kenar):
     """`ok`: kuralın durumu (bant dışı gezinti) yürür; `ok_s`: sinyal verilebilir (çapa + 60 dk sonrası, 16:00 ET'ye
-    kadar). Ölçümün kuralında ikisi aynıdır; ön kaydın harfi okumasında gezinti çapadan başlar."""
+    kadar). Ölçümün kuralında ikisi aynıdır; ön kaydın harfi okumasında gezinti çapadan başlar.
+    `iki_kenar` (bkz. VWAP_BANT): üst bant dışından dönen kapanış alt bandın da altındaysa sinyal yok, yeni gezinti
+    alt bandın dışında başlar (alt banttan simetriği)."""
     n = len(c)
     out_s = np.empty(n, np.int64); out_y = np.empty(n, np.int8)
     out_st = np.empty(n); out_lv = np.empty(n)
@@ -316,14 +332,18 @@ def _vwap_donus_tara(c, h, l, vw, sg, bk, ok, ok_s, k):
         elif durum == 1:
             if h[j] > uc:
                 uc = h[j]
-            if c[j] <= ust:
+            if iki_kenar and c[j] < alt:
+                durum = -1; uc = l[j]
+            elif c[j] <= ust:
                 if ok_s[j]:
                     out_s[m] = j; out_y[m] = -1; out_st[m] = uc; out_lv[m] = vw[j]; m += 1
                 durum = 0
         else:
             if l[j] < uc:
                 uc = l[j]
-            if c[j] >= alt:
+            if iki_kenar and c[j] > ust:
+                durum = 1; uc = h[j]
+            elif c[j] >= alt:
                 if ok_s[j]:
                     out_s[m] = j; out_y[m] = 1; out_st[m] = uc; out_lv[m] = vw[j]; m += 1
                 durum = 0
@@ -357,6 +377,12 @@ def _vwap_cekilme_tara(c, h, l, vw, bk, ok, ok_s, n_trend):
 #: (ilk saatte VWAP ve σ birkaç dakikalık veriden kurulur). Ön kaydın harfi ("yalniz_sinyal"): durum çapadan yürür,
 #: yalnız sinyal ilk saatte verilmez. İkincisi yorum duyarlılığı olarak ölçülür (kosu.YORUM).
 VWAP_ILK_SAAT = ("durum_sifir", "yalniz_sinyal")
+#: Bandın içine dönüşün okunuşu (yalnız VWAP dönüşü). Ön kayıt "bandın İÇİNE kapanan ilk mum" der. Ölçümün kuralı
+#: ("tek_kenar", sonuçtan önce yazıldı) yalnız çıkılan kenarı sorar: üst bandın dışından dönen kapanış alt bandın da
+#: altında olsa sinyaldir. Ön kaydın harfi ("iki_kenar"): kapanış iki bandın arasındadır; karşı bandın ötesindeki
+#: kapanış o yanda yeni bir gezinti başlatır (gezintinin ucu o mumdan başlar). İkincisi yorum duyarlılığı olarak
+#: ölçülür (kosu.YORUM).
+VWAP_BANT = ("tek_kenar", "iki_kenar")
 
 
 def _vwap_mum(b: Baglam, tf: int, capa: str, ilk_saat: str = "durum_sifir"):
@@ -377,9 +403,11 @@ def _vwap_mum(b: Baglam, tf: int, capa: str, ilk_saat: str = "durum_sifir"):
     return m, bk, vwb, sgb, ok, ok_s
 
 
-def vwap_donus(b: Baglam, tf: int, capa: str, k: float, ilk_saat: str = "durum_sifir"):
+def vwap_donus(b: Baglam, tf: int, capa: str, k: float, ilk_saat: str = "durum_sifir", bant: str = "tek_kenar"):
+    if bant not in VWAP_BANT:
+        raise ValueError(f"bilinmeyen bant okuması: {bant}")
     m, bk, vwb, sgb, ok, ok_s = _vwap_mum(b, tf, capa, ilk_saat)
-    s, y, st, lv = _vwap_donus_tara(m.c, m.h, m.l, vwb, sgb, bk, ok, ok_s, float(k))
+    s, y, st, lv = _vwap_donus_tara(m.c, m.h, m.l, vwb, sgb, bk, ok, ok_s, float(k), bant == "iki_kenar")
     df = pd.DataFrame({"gun_k": bk[s], "s": s, "yon": y.astype(np.int64), "stop": st,
                        "yapi": np.abs(m.c[s] - st), "ust": vwb[s] + k * sgb[s], "alt": vwb[s] - k * sgb[s],
                        "seviye": lv})

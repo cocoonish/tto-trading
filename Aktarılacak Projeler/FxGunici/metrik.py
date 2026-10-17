@@ -39,12 +39,12 @@ def alinan(isl: pd.DataFrame) -> pd.DataFrame:
     return isl[isl["durum"] == 0]
 
 
-def gunluk_r(isl: pd.DataFrame, gunler: np.ndarray) -> np.ndarray:
-    """Dönemin işlem günlerinde günlük toplam R (işlemsiz gün 0)."""
+def gunluk_r(isl: pd.DataFrame, gunler: np.ndarray, sutun: str = "r") -> np.ndarray:
+    """Dönemin işlem günlerinde günlük toplam R (işlemsiz gün 0); `sutun="pnl_pip"` ile aynısı pip'te."""
     a = alinan(isl)
     s = pd.Series(0.0, index=pd.Index(gunler))
     if len(a):
-        t = a.groupby("gun")["r"].sum()
+        t = a.groupby("gun")[sutun].sum()
         t = t[t.index.isin(s.index)]
         s.loc[t.index] = t.to_numpy()
     return s.to_numpy()
@@ -208,6 +208,7 @@ def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True, kume_sut
         out.update({k: float("nan") for k in ("isabet", "beklenti_r", "beklenti_pip", "brut_r", "brut_pip",
                                               "ort_kazanc_r", "ort_kayip_r", "ort_kazanc_pip", "ort_kayip_pip",
                                               "pf", "pf_r", "sharpe", "azami_dusus_r", "sure_dk", "mae_r", "mfe_r",
+                                              "azami_dusus_pip", "mae_pip", "mfe_pip",
                                               "risk_pip", "basabas_pip", "ga_alt", "ga_ust", "ga_brut_alt",
                                               "ga_brut_ust", "ga_pip_alt", "ga_pip_ust", "toplam_r")})
         return out
@@ -233,6 +234,11 @@ def ozet(isl: pd.DataFrame, gunler: np.ndarray, bootstrap: bool = True, kume_sut
         "sure_dk": float(a["sure_dk"].mean()),
         "mae_r": float(a["mae_r"].median()),
         "mfe_r": float(a["mfe_r"].median()),
+        # Aynı üçü pip'te (her işlemde aynı büyüklükle işlem yapanın ölçüsü): MAE ve MFE işlem başına R katı × o
+        # işlemin risk uzaklığı, azami düşüş günlük pip toplamlarından.
+        "azami_dusus_pip": azami_dusus(gunluk_r(isl, gunler, "pnl_pip")),
+        "mae_pip": float((a["mae_r"] * a["R_pip"]).median()),
+        "mfe_pip": float((a["mfe_r"] * a["R_pip"]).median()),
         "risk_pip": float(a["R_pip"].median()),
         # Ek gidiş-dönüş maliyeti c pip, işlem başına net pipi c kadar düşürür:
         # beklenti_pip − c = 0 → c* = beklenti_pip.

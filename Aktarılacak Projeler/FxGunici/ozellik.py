@@ -7,8 +7,9 @@ kurulur. Gün düzeyindeki ATR, yüzdelik, NR4/NR7 ve önceki gün bilgisi BUGÜ
 içermez (gunluk.py). Asya aralığı ve gece hareketi ancak Londra 08:00'den sonra
 bilinir; daha erken sinyalde boş kalır. 60 dakikalık trend, sinyal anından ÖNCE
 kapanmış son 60 dakikalık mumun kapanışının EMA50'ye göre yeri; işlem yönüyle
-karşılaştırılır. Haber günü takvimden bilinir (olay o gün daha sonra olsa da
-sabah bellidir).
+karşılaştırılır. Haber günü takvimden bilinir: planlanmış olay o gün daha sonra
+olsa da sabah bellidir; önceden duyurulmayan bir karar günü yalnız FX gününün
+başında çoktan olmuşsa işaretler (gunluk.baglam_kur).
 """
 from __future__ import annotations
 

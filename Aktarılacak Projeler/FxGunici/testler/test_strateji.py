@@ -115,12 +115,15 @@ def test_lookahead_kirpma_ve_bozma(birim, i, k):
     _ileri_bakma(birim, ornek[i], KESIMLER[k])
 
 
-@pytest.mark.parametrize("birim,k", [(b, k) for b in kosu.YORUM for k in range(len(KESIMLER))])
-def test_lookahead_yorum_okumasi(birim, k):
-    """Yorum duyarlılığının harf okuması da (kosu.YORUM) aynı iki ileriye bakma sınamasından geçer: ölçülüp derste
+YORUM_OKUMALARI = [(b, param, harf) for b, okumalar in kosu.YORUM.items() for param, harf in okumalar]
+
+
+@pytest.mark.parametrize("birim,param,harf,k", [(b, p, h, k) for b, p, h in YORUM_OKUMALARI
+                                                for k in range(len(KESIMLER))])
+def test_lookahead_yorum_okumasi(birim, param, harf, k):
+    """Yorum duyarlılığının her harf okuması da (kosu.YORUM) aynı iki ileriye bakma sınamasından geçer: ölçülüp derste
     yazılan bir sayı, kural hangi okumayla kurulmuş olursa olsun geleceği görmemelidir."""
     _, v = kosu.izgara(birim)
-    param, harf = kosu.YORUM[birim]
     _ileri_bakma(birim, {**v, param: harf}, KESIMLER[k])
 
 
@@ -186,10 +189,10 @@ def test_lookahead_sinyale_cipali(birim, ek_mum):
         _cipali_ileri_bakma(birim, v, karar, ek_mum)
 
 
-@pytest.mark.parametrize("birim,ek_mum", [(b, e) for b in kosu.YORUM for e in CIPA_EK_MUM])
-def test_lookahead_sinyale_cipali_yorum(birim, ek_mum):
+@pytest.mark.parametrize("birim,param,harf,ek_mum", [(b, p, h, e) for b, p, h in YORUM_OKUMALARI
+                                                      for e in CIPA_EK_MUM])
+def test_lookahead_sinyale_cipali_yorum(birim, param, harf, ek_mum):
     _, v = kosu.izgara(birim)
-    param, harf = kosu.YORUM[birim]
     p = {**v, param: harf}
     cipalar = _cipalar(B_TAM, kosu.BIRIMLER[birim]["aile"], p)
     assert cipalar
@@ -234,6 +237,84 @@ def test_cipali_sinama_bir_iki_mumluk_ileri_bakisi_yakalar(kaydir, monkeypatch):
     assert yakalandi == len(cipalar), "çıpalı sınama bir iki mumluk ileri bakışı yakalamadı"
 
 
+def test_kosul_degiskeni_olaganustu_olayi_gormez():
+    """Koşul değişkenleri de ileriye bakma sınamasından geçer. Önceden duyurulmayan bir karar (takvimin notunda
+    "olağanüstü") ancak olduğu anda bilinir: gün ortasındaki böyle bir olay, kararı olaydan ÖNCE verilen sinyallerin
+    hiçbir koşul değişkenini değiştirmemeli. Aynı olay planlanmış olsaydı (not boş) günü baştan işaretler; ikinci kısım
+    sınamanın kör olmadığını, değişkenin takvimi gerçekten okuduğunu gösterir."""
+    import ozellik
+    t0 = int(pd.Timestamp("2023-11-22 11:00").tz_localize("America/New_York").timestamp())
+    ek = {"olay": "FOMC_karar", "tarih": "2023-11-22", "yerel_saat": "11:00", "bolge": "America/New_York",
+          "utc_sn": t0}
+    olagan = pd.concat([OLAY.assign(**{"not": ""}), pd.DataFrame([{**ek, "not": "olağanüstü toplantı"}])],
+                       ignore_index=True)
+    planli = pd.concat([OLAY.assign(**{"not": ""}), pd.DataFrame([{**ek, "not": ""}])], ignore_index=True)
+    b_yok, b_ola, b_pla = baglam_kur(D, OLAY), baglam_kur(D, olagan), baglam_kur(D, planli)
+    k_gun = int(b_yok.g.indeks(np.array(["2023-11-22"], dtype="datetime64[D]"))[0])
+    assert k_gun >= 0
+    assert not b_ola.haber_gun[k_gun] and b_pla.haber_gun[k_gun]
+    sayi = 0
+    for birim in kosu.BIRIMLER:
+        aile = kosu.BIRIMLER[birim]["aile"]
+        _, v = kosu.izgara(birim)
+        bag = (b_yok, b_ola, b_pla)
+        islem = [kosu.Kosucu(b, A).islem(aile, v) for b in bag]
+        x = [ozellik.ozellikler(b, i) for b, i in zip(bag, islem)]
+        # Sonuç sütunları (R, pip) haber penceresinin kaymasını taşır ve olayın penceresine düşen çıkışta haklı olarak
+        # değişir; sınanan, giriş anında bilinen değişkenlerdir.
+        kol = [c for c in x[0].columns if c not in ("r", "pnl_pip")]
+        sec = [((i["gun_k"].to_numpy() == k_gun) & (i["sinyal_t"].to_numpy() < t0)) for i in islem]
+        if not sec[0].any():
+            continue
+        sayi += int(sec[0].sum())
+        pd.testing.assert_frame_equal(x[0].loc[sec[0], kol].reset_index(drop=True),
+                                      x[1].loc[sec[1], kol].reset_index(drop=True),
+                                      obj=f"{birim} olağanüstü olay öncesi koşul değişkenleri")
+        assert (x[2].loc[sec[2], "haber_gunu"] == "haber günü").all(), f"{birim}: planlanmış olay günü işaretlemedi"
+    assert sayi > 0, "sentetik veride olaydan önce kararı verilen sinyal yok: sınama boş geçerdi"
+
+
+def test_sahte_donus_okumasi():
+    """Başarısız kırılımın dönüş okuması. Ölçümün okumasında ("tek_kenar") yukarı kırılımdan sonra kapanışı üst kenarın
+    altına dönen ilk mum dönüş mumudur, alt kenarın altında kapansa bile. Harfin okumasında ("iki_kenar") dönüş mumu
+    aralığın İÇİNDE kapanır; karşı kenarın ötesindeki kapanış o kırılımı bitirir (ters yönde yeni kırılım)."""
+    for seviye in ("orb", "asya", "pdhl"):
+        b, _ = AILE["sahte"](B_TAM, tf=15, seviye=seviye, pencere=2, donus="iki_kenar")
+        assert len(b)
+        m = B_TAM.mumlar(15, 0)
+        c = m.c[b["s"].to_numpy()]
+        H, L = b["ust"].to_numpy(), b["alt"].to_numpy()
+        assert ((L <= c) & (c <= H)).all(), f"{seviye}: harfin okumasında dönüş mumu aralığın dışında kapandı"
+    a, _ = AILE["sahte"](B_TAM, tf=15, seviye="orb", pencere=2)
+    c = B_TAM.mumlar(15, 0).c[a["s"].to_numpy()]
+    disari = ((a["yon"] == -1) & (c < a["alt"])) | ((a["yon"] == 1) & (c > a["ust"]))
+    assert disari.any(), "sentetik veride karşı kenarın ötesine dönen kırılım yok: iki okuma ayrışmıyor, sınama boş"
+    with pytest.raises(ValueError):
+        AILE["sahte"](B_TAM, tf=15, seviye="orb", pencere=2, donus="bilinmeyen")
+
+
+def test_vwap_bant_okumasi():
+    """VWAP dönüşünün bant okuması (strateji.VWAP_BANT), tarayıcının kendisinde. Üst bandın dışından dönen kapanış alt
+    bandın da altındaysa: ölçümün okumasında ("tek_kenar") satış sinyali, harfin okumasında ("iki_kenar") sinyal yok ve
+    alt bandın dışında yeni gezinti başlar; o gezintiden içeri dönen kapanış alış sinyalidir."""
+    import strateji as st
+    hep = np.ones(6, bool)
+    bk = np.zeros(6, np.int64)
+    vw, sg = np.ones(6), np.full(6, 0.1)                 # k = 2: üst bant 1,2, alt bant 0,8
+    c = np.array([1.0, 1.3, 0.7, 0.9, 1.0, 1.0])
+    h, l = c + 0.02, c - 0.02
+    s, y, stop, _ = st._vwap_donus_tara(c, h, l, vw, sg, bk, hep, hep, 2.0, False)
+    assert list(s) == [2] and list(y) == [-1] and stop[0] == pytest.approx(1.32)
+    s, y, stop, _ = st._vwap_donus_tara(c, h, l, vw, sg, bk, hep, hep, 2.0, True)
+    assert list(s) == [3] and list(y) == [1] and stop[0] == pytest.approx(0.68)
+    p = {"tf": 15, "capa": "londra", "k": 2.0}
+    a, _ = AILE["vwap_donus"](B_TAM, **p)
+    b, _ = AILE["vwap_donus"](B_TAM, **p, bant="tek_kenar")
+    pd.testing.assert_frame_equal(a, b)
+    with pytest.raises(ValueError):
+        AILE["vwap_donus"](B_TAM, **p, bant="bilinmeyen")
+
+
 def test_vwap_ilk_saat_okumalari():
     """İlk saatin iki okuması (strateji.VWAP_ILK_SAAT), tarayıcıların kendisinde. `ok`: kuralın durumu yürür;
     `ok_s`: sinyal verilebilir. Ölçümün okumasında ikisi aynıdır (çapa + 60 dk); harfin okumasında durum çapadan yürür."""
@@ -253,14 +334,14 @@ def test_vwap_ilk_saat_okumalari():
     sg = np.full(6, 0.1)
     c = np.array([1.0, 1.3, 1.35, 1.2, 1.0, 1.0])
     h, l = c + 0.02, c - 0.02
-    assert len(st._vwap_donus_tara(c, h, l, vw, sg, bk, ilk, ilk, 2.0)[0]) == 0
-    s, y, stop, _ = st._vwap_donus_tara(c, h, l, vw, sg, bk, hep, ilk, 2.0)
+    assert len(st._vwap_donus_tara(c, h, l, vw, sg, bk, ilk, ilk, 2.0, False)[0]) == 0
+    s, y, stop, _ = st._vwap_donus_tara(c, h, l, vw, sg, bk, hep, ilk, 2.0, False)
     assert list(s) == [3] and list(y) == [-1] and stop[0] == pytest.approx(1.37)
     # Gezinti ilk saatin içinde biterse iki okumada da sinyal yok ve durum sonraki mumlara taşınmaz.
     c = np.array([1.0, 1.3, 1.1, 1.1, 1.0, 1.0])
     h, l = c + 0.02, c - 0.02
     for ok in (ilk, hep):
-        assert len(st._vwap_donus_tara(c, h, l, vw, sg, bk, ok, ilk, 2.0)[0]) == 0
+        assert len(st._vwap_donus_tara(c, h, l, vw, sg, bk, ok, ilk, 2.0, False)[0]) == 0
     # Ölçümün okuması tam koşuda da değişmedi: varsayılan okuma ile adıyla verilen "durum_sifir" aynı sinyaller.
     for aile, p in (("vwap_donus", {"tf": 15, "capa": "londra", "k": 2.0}), ("vwap_cekilme", {"tf": 15, "capa": "londra", "n": 12})):
         a, _ = AILE[aile](B_TAM, **p)

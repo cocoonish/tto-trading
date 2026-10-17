@@ -179,15 +179,22 @@ def test_yorum_duyarliligi_sentetik(tmp_path, monkeypatch):
     b = baglam_kur(dakika_uret(soklar=olay["utc_sn"].to_numpy()), olay)
     k = kosu.Kosucu(b, ay.oku())
     s = kosu.birim_kos("sahte_orb", k)
-    y = s["yorum"]
+    assert set(s["yorum"]) == {param for param, _ in kosu.YORUM["sahte_orb"]}
+    y = s["yorum"]["acilis"]
     assert (y["param"], y["olcum"], y["harf"]) == ("acilis", "kesis", "acilis_ici")
     assert y["degisen"] == 0 and y["varsayilan_degisti"] is False and y["secim_ayni"] is True
     assert y["kombinasyon"] == s["kombinasyon"]
     assert y["varsayilan"]["oos"]["hukum"] == s["varsayilan_analiz"]["hukum"]
     assert y["varsayilan"]["tum"]["hukum"] == s["varsayilan_analiz"]["hukum_tum"]
     assert y["varsayilan"]["oos"]["ozet"]["beklenti_r"] == pytest.approx(s["varsayilan_analiz"]["oos"]["beklenti_r"])
+    # Her okuma ayrı bir kayıttır ve öbür okuma ölçümün kuralında kalır: dönüş okumasının kaydı kendi parametresini taşır.
+    yd = s["yorum"]["donus"]
+    assert (yd["param"], yd["olcum"], yd["harf"]) == ("donus", "tek_kenar", "iki_kenar")
+    assert yd["kombinasyon"] == s["kombinasyon"] and 0 <= yd["degisen"] <= yd["kombinasyon"]
+    with pytest.raises(ValueError):
+        kosu.yorum_duyarlilik("sahte_orb", "sahte", "donus", "bilinmeyen", {}, [], None, k, 20)
     p = kosu.birim_kos("pivot_kirilim", k)
-    yp = p["yorum"]
+    yp = p["yorum"]["kesis"]
     liste, _ = kosu.izgara("pivot_kirilim")
     r1s1 = sum(1 for q in liste if q["seviye"] == "R1S1")
     assert 0 < yp["degisen"] <= r1s1

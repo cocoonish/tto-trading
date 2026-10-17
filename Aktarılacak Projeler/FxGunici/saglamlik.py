@@ -107,9 +107,70 @@ def rastgele_yon(b: Baglam, isl: pd.DataFrame, tf: int, ofset: int | None, kayma
     `ofset=None`: mum çıpası işlem başına (haber stratejileri); kapanış stop'unun
     sorulduğu mum sonu her işlemin kendi çıpasından okunur.
     """
+    cift = _ayni_ters(b, isl, tf, ofset, kayma_pip, haber_kayma_pip)
+    if cift is None:
+        return {"yuzdelik": float("nan"), "ort": float("nan"), "p95": float("nan")}
+    return _karisim(*cift, tekrar, tohum)
+
+
+#: Yüzdeliğin duyarlılığı bu yüzdelikten itibaren ölçülür (eşiğin beş puan altı: geçenler ve eşiğe yakın kalanlar).
+#: Tohum listesi sınır uçlarınınkiyle aynıdır (metrik.SINIR_TOHUM_TABAN + 0 … SINIR_TOHUM − 1): ikisi tek tanımdan
+#: okunur.
+DUYARLILIK_TABAN = 90.0
+#: Kuyruk duyarlılığında çıkarılan en iyi işlem sayıları.
+DUYARLILIK_EN_IYI = (1, 3)
+
+
+def rastgele_duyarlilik(b: Baglam, isl: pd.DataFrame, tf: int, ofset: int | None, kayma_pip: float,
+                        haber_kayma_pip: float, esik: float, tekrar: int = 1000, tohum: int = 11) -> dict:
+    """Rastgele yön yüzdeliğinin iki duyarlılığı (bilgi; hüküm önceden kayıtlı tohumla verilir):
+
+      haric_<k>   en iyi k işlem (net R'ye göre) çıkarılınca aynı tohumla yüzdelik: geçiş tek işleme mi bağlı
+      tohum_pay   aynı yordam SINIR_TOHUM farklı tohumla koşunca yüzdeliğin eşiği geçme payı; medyan, en düşük, en
+                  yüksek. Pay %5–95 arasındaysa "sınırda": eşiğin hangi yanında kaldığı tohum gürültüsüne bağlıdır."""
+    cift = _ayni_ters(b, isl, tf, ofset, kayma_pip, haber_kayma_pip)
+    if cift is None:
+        return {}
+    r_ayni, r_ters = cift
+    out: dict = {"yuzdelik": _karisim(r_ayni, r_ters, tekrar, tohum)["yuzdelik"], "esik": esik}
+    sira = np.argsort(-r_ayni, kind="stable")
+    for kk in DUYARLILIK_EN_IYI:
+        tut = np.ones(len(r_ayni), bool)
+        tut[sira[:kk]] = False
+        out[f"haric_{kk}"] = (_karisim(r_ayni[tut], r_ters[tut], tekrar, tohum)["yuzdelik"]
+                              if tut.sum() >= ASGARI_RASTGELE else float("nan"))
+        out[f"en_iyi_{kk}_r"] = [float(x) for x in r_ayni[sira[:kk]]]
+    yz = np.array([_karisim(r_ayni, r_ters, tekrar, mk.SINIR_TOHUM_TABAN + t)["yuzdelik"]
+                   for t in range(mk.SINIR_TOHUM)])
+    pay = float((yz >= esik).mean())
+    out.update({"tohum_sayisi": mk.SINIR_TOHUM, "tohum_pay": pay, "tohum_medyan": float(np.median(yz)),
+                "tohum_min": float(yz.min()), "tohum_max": float(yz.max()),
+                "sinirda": bool(0.05 <= pay <= 0.95)})
+    return out
+
+
+def _karisim(r_ayni: np.ndarray, r_ters: np.ndarray, tekrar: int, tohum: int) -> dict:
+    """Her işlemde yazı tura: gerçek yön ya da ters yön; tekrarların ortalama R dağılımında gerçek ortalamanın
+    yüzdeliği."""
+    rng = np.random.default_rng(tohum)
+    ort = np.empty(tekrar)
+    for q in range(0, tekrar, 200):
+        n = min(200, tekrar - q)
+        secim = rng.random((n, len(r_ayni))) < 0.5
+        ort[q:q + n] = np.where(secim, r_ayni, r_ters).mean(axis=1)
+    gercek = float(r_ayni.mean())
+    return {"yuzdelik": float((ort < gercek).mean() * 100), "ort": float(ort.mean()),
+            "p05": float(np.percentile(ort, 5)), "p95": float(np.percentile(ort, 95)),
+            "ters_ort": float(r_ters.mean()), "n": int(len(r_ayni))}
+
+
+def _ayni_ters(b: Baglam, isl: pd.DataFrame, tf: int, ofset: int | None, kayma_pip: float,
+               haber_kayma_pip: float) -> tuple[np.ndarray, np.ndarray] | None:
+    """Gerçek işlemlerin R'leri ve aynı giriş dakikasında ters yönde simüle edilmiş eşlerinin R'leri (geçerli
+    çiftler); işlem sayısı asgarinin altındaysa None."""
     a = mk.alinan(isl).reset_index(drop=True)
     if len(a) < ASGARI_RASTGELE:
-        return {"yuzdelik": float("nan"), "ort": float("nan"), "p95": float("nan")}
+        return None
     d = b.d
     i = a["giris_i"].to_numpy(np.int64)
     yon_t = -a["yon"].to_numpy(np.int8)
@@ -143,17 +204,7 @@ def rastgele_yon(b: Baglam, isl: pd.DataFrame, tf: int, ofset: int | None, kayma
     r_ayni = a["r"].to_numpy()
     r_ters = ters["r"].to_numpy()
     gecerli = np.isfinite(r_ters)
-    r_ayni, r_ters = r_ayni[gecerli], r_ters[gecerli]
-    rng = np.random.default_rng(tohum)
-    ort = np.empty(tekrar)
-    for q in range(0, tekrar, 200):
-        n = min(200, tekrar - q)
-        secim = rng.random((n, len(r_ayni))) < 0.5
-        ort[q:q + n] = np.where(secim, r_ayni, r_ters).mean(axis=1)
-    gercek = float(r_ayni.mean())
-    return {"yuzdelik": float((ort < gercek).mean() * 100), "ort": float(ort.mean()),
-            "p05": float(np.percentile(ort, 5)), "p95": float(np.percentile(ort, 95)),
-            "ters_ort": float(r_ters.mean()), "n": int(len(r_ayni))}
+    return r_ayni[gecerli], r_ters[gecerli]
 
 
 # ───────────────────────────────────────────── koşul kovaları
