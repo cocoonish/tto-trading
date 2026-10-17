@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'fiksing', 'momentum', 'vwap', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Öngörülebilir saatlerde gelen akışın izini süren üç kural: fiksinge giden emirler, günün ilk hareketini öğleden sonra tamamlayan katılımcılar ve trendin ortalama fiyatına dönen alıcılar. İkisi (fiksing momentumu ve VWAP geri çekilmesi) fade dersindeki karşılığıyla yan yana ölçülür. Üçü de hiçbir paritede önceden kayıtlı hüküm kuralının şartlarını sağlamıyor: maliyetten sonra kanıtlanmış bir kenar yok."
+ozet: "Öngörülebilir saatlerde gelen akışın izini süren üç kural: fiksinge giden emirler, günün ilk hareketini öğleden sonra tamamlayan katılımcılar ve trendin ortalama fiyatına dönen alıcılar. İkisi (fiksing momentumu ve VWAP geri çekilmesi) fade dersindeki karşılığıyla yan yana ölçülür. Üçü de hiçbir paritede önceden kayıtlı hüküm kuralının şartlarını sağlamıyor: maliyetten sonra kanıtlanmış bir kenar yok. Tek istisna ön kaydın ayrıca raporlattığı bir alt küme: hüküm kuralının şartları örneklem dışında (2024 →) fiksing momentumunun ay sonu işlemlerinde, GBP/USD ve USD/JPY paritelerinde (33'er işlem; alt uç USD/JPY'de sınırda, işareti tohuma bağlı) tutuyor; ön kayıt alt kümeye ayrı hüküm vermez."
 seviye: 'orta'
 onkosul:
   - fx-gunici-giris
@@ -16,16 +16,16 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
 Kırılım ve fade kuralları bir **seviyeye** bakar: bir aralığın ucu, dünün tepesi, bir pivot. Bu dersin üç kuralı
 seviyeye değil **akışa** bakar — belli saatlerde gelen, büyüklüğü ve yönü önceden bilinmese de varlığı bilinen emir
-akışına. Bu seride sınanan iki an var: Londra 16:00'daki WM/R fiksingi (TSİ yazın 18:00, kışın 19:00; fon yöneticilerinin, endeks fonlarının,
+akışına. Bu seride sınanan iki an var: Londra 16:00'daki WM/R fiksingi (TSİ İngiltere yaz saatinde 18:00, kış saatinde 19:00; fon yöneticilerinin, endeks fonlarının,
 kurumsal hazinelerin değerleme ve işlem kuru) ve günün ilk büyük akışını taşıyan Londra açılışı. Döviz piyasasında
 başka akış anları da var ve burada sınanmadı: Tokyo fiksingi (Tokyo 09:55, TSİ 03:55; Japon
 şirketlerinin günlük kur ihtiyacının toplandığı an, USD/JPY'de) ve New York 10:00 opsiyon vade kesimi
-(TSİ yazın 17:00, kışın 18:00). Üçüncü kural akışı saatte değil fiyatta arar: gün içi bir trendde VWAP, o
+(TSİ ABD yaz saatinde 17:00, kış saatinde 18:00). Üçüncü kural akışı saatte değil fiyatta arar: gün içi bir trendde VWAP, o
 gün işlem yapanların ortalama maliyetidir ve geri çekilme kuralı oraya dönen fiyatın trendi taşıyanlarla karşılaşacağına bahis yapar.
 
 İkisinin fade dersinde bir karşılığı var ve bu ders onları yan yana okur. Fiksing momentumu fiksingin öncesini
-(Londra 15:55–16:00; TSİ yazın 17:55–18:00, kışın 18:55–19:00), fiksing dönüşü sonrasını (Londra 16:00–16:30;
-TSİ yazın 18:00–18:30, kışın 19:00–19:30) işler; VWAP geri çekilmesi VWAP'a dokunuşta trend yönünde, VWAP dönüşü bant dışından içeri dönüşte VWAP yönünde girer.
+(Londra 15:55–16:00; TSİ İngiltere yaz saatinde 17:55–18:00, kış saatinde 18:55–19:00), fiksing dönüşü sonrasını (Londra 16:00–16:30;
+TSİ İngiltere yaz saatinde 18:00–18:30, kış saatinde 19:00–19:30) işler; VWAP geri çekilmesi VWAP'a dokunuşta trend yönünde, VWAP dönüşü bant dışından içeri dönüşte VWAP yönünde girer.
 İkisi aynı yerin iki ayrı bahsidir, birbirinin tersi değildir; brütleri ve günlük korelasyonları dersin sonundaki
 karşılık tablosunda. Gün içi momentumun karşılığı yoktur; yerine kuralın ölçtüğü ilişkinin kendisi, stop ve hedef
 taşımayan bir regresyonla ayrıca sınanır.
@@ -53,10 +53,10 @@ konusudur: itiş fiksingde bitebilir, hatta fiksingden önce tersine dönebilir.
 
 ### Kurallar
 
-- **Sinyal mumu.** Londra 16:00'dan iki mum önce başlayan mum (5 dakikalık mumda 15:50–15:55;
-  TSİ yazın 17:50–17:55, kışın 18:50–18:55).
-- **Giriş.** Sinyal mumunun yönünde, 16:00'dan bir mum önce (Londra 15:55; TSİ yazın 17:55, kışın 18:55).
-- **Çıkış.** Londra 16:00 (TSİ yazın 18:00, kışın 19:00); stopsuz (ızgarada sert ve kapanış stopu da var: girişten 1 × ATR uzakta).
+- **Sinyal mumu.** Londra 16:00'dan (TSİ İngiltere yaz saatinde 18:00, kış saatinde 19:00) iki mum önce başlayan mum (5 dakikalık mumda 15:50–15:55;
+  TSİ İngiltere yaz saatinde 17:50–17:55, kış saatinde 18:50–18:55).
+- **Giriş.** Sinyal mumunun yönünde, fiksingden bir mum önce (Londra 15:55; TSİ İngiltere yaz saatinde 17:55, kış saatinde 18:55).
+- **Çıkış.** Londra 16:00 (TSİ İngiltere yaz saatinde 18:00, kış saatinde 19:00); stopsuz (ızgarada sert ve kapanış stopu da var: girişten 1 × ATR uzakta).
 - **R birimi.** Girişteki ATR(14), aynı zaman dilimi.
 - **Günler.** Bütün işlem günleri; ay sonu (ayın son Londra iş günü) ayrıca raporlanır.
 
@@ -68,8 +68,9 @@ konusudur: itiş fiksingde bitebilir, hatta fiksingden önce tersine dönebilir.
 
 _Izgara: 9 kombinasyon._
 
-Varsayılan 5 dakikalık mumlarla 15:50–15:55'in yönünde 15:55'te girer, 16:00'da çıkar. İşlem beş dakika sürer
-ve fiksing penceresinin ilk yarısına (15:57:30 → 16:00) uzanır; çıkış penceresinin ortasındadır.
+Varsayılan 5 dakikalık mumlarla Londra 15:50–15:55'in yönünde 15:55'te girer, 16:00'da çıkar
+(TSİ İngiltere yaz saatinde 17:50–17:55 → 17:55 → 18:00, kış saatinde 18:50–18:55 → 18:55 → 19:00). İşlem beş dakika sürer
+ve fiksing penceresinin ilk yarısına (Londra 15:57:30 → 16:00; TSİ İngiltere yaz saatinde 17:57:30 → 18:00, kış saatinde 18:57:30 → 19:00) uzanır; çıkış penceresinin ortasındadır.
 
 ### Örnekler
 
@@ -157,7 +158,7 @@ Izgaranın 9 kombinasyonundan net beklentisi artı olanlar (örneklem içi · d�
 | USD/JPY | 60 dk · stop yok | −0,05 | −0,6 | −0,11 | −2,2 | 0,00 | 0,00 | çalışmıyor |
 | AUD/USD | 60 dk · stop yok | −0,13 | −1,5 | −0,24 | −2,6 | 0,00 | 0,00 | çalışmıyor |
 
-EUR/USD'de seçilenin 4 tek adımlık komşusundan hiçbiri örneklem içinde, hiçbiri örneklem dışında net artı.
+EUR/USD'de seçilenin 4 tek adımlık komşusu var: örneklem içinde hiçbiri net artı değil, örneklem dışında hiçbiri net artı değil.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -310,7 +311,7 @@ _Zaman dilimi biçimlerinde öbür parametreler varsayılandadır. Aynı işleml
 
 Ay sonu, portföy yeniden dengelemesinin fiksinge en büyük akışı taşıdığı gün olarak bilinir (Melvin ve Prins,
 2015) ve momentum savunusu en çok o gün için kurulur. Örneklem küçüktür: EUR/USD'de ay sonu kümesi 2018–2023
-arasında 72, 2024 → penceresinde 32 işlem. 2018–2023 arasında ay sonu ile öbür günlerin farkı dört paritenin hepsinde artı; p < 0,05 olan: GBP/USD, USD/JPY (düzeltilmiş eşiğin, 0,0018, altında: GBP/USD). Ay sonunun kendi net sonucu EUR/USD, GBP/USD ve USD/JPY paritelerinde artı; %95 aralığının alt ucu sıfırın üstünde kalan: GBP/USD. 2024 → penceresinde ay sonu ile öbür günlerin farkı dört paritenin hepsinde artı; p < 0,05 olan: GBP/USD, USD/JPY (düzeltilmiş eşiğin, 0,0018, altında: GBP/USD). Ay sonunun kendi net sonucu GBP/USD ve USD/JPY paritelerinde artı; %95 aralığının alt ucu sıfırın üstünde kalan: GBP/USD, USD/JPY. İki ayrık pencerede de aralığın alt ucu sıfırın üstünde ve fark düzeltilmiş eşiğin altında: GBP/USD paritesinde. Bu bir alt küme ölçüsüdür: ön kayıt ay sonunu ayrı raporlamayı ister, ona ayrı hüküm vermez. Ay sonu ayrımı derste 28 biçimde ölçüldü (iki fiksing kuralı, dört parite; varsayılan, örneklem içinde seçilen ve varsayılanın üç zaman dilimi biçimi; aynı işlemleri veren biçimler bir kez) ve düzeltilmiş eşik 0,05 / 28 = 0,0018'dir. Sınamalar bağımsız olsaydı 28 sınamadan en az birinin şansla 0,05'in altına düşme olasılığı %76 olurdu.
+arasında 72, 2024 → penceresinde 32 işlem. 2018–2023 arasında ay sonu ile öbür günlerin farkı dört paritenin hepsinde artı; p < 0,05 olan: GBP/USD, USD/JPY (düzeltilmiş eşiğin, 0,0018, altında: GBP/USD). Ay sonunun kendi net sonucu EUR/USD, GBP/USD ve USD/JPY paritelerinde artı; %95 aralığının alt ucu sıfırın üstünde kalan: GBP/USD. 2024 → penceresinde ay sonu ile öbür günlerin farkı dört paritenin hepsinde artı; p < 0,05 olan: GBP/USD, USD/JPY (düzeltilmiş eşiğin, 0,0018, altında: GBP/USD). Ay sonunun kendi net sonucu GBP/USD ve USD/JPY paritelerinde artı; %95 aralığının alt ucu sıfırın üstünde kalan: GBP/USD, USD/JPY. İki ayrık pencerede de aralığın alt ucu sıfırın üstünde ve fark düzeltilmiş eşiğin altında: GBP/USD paritesinde. 2018–2023 alt ucu sınırda: sıfıra standart hatanın 0,02 katı uzaklıkta, 500.000 tekrarla +0,01 R; 2.000 tekrarlı yordam tohumların %78'inde sıfırın üstünde verir. Tutması tohum gürültüsüne bağlıdır; ölçüt önceden kayıtlı yordamla kurulur. Bu bir alt küme ölçüsüdür: ön kayıt ay sonunu ayrı raporlamayı ister, ona ayrı hüküm vermez. Ay sonu ayrımı derste 28 biçimde ölçüldü (iki fiksing kuralı, dört parite; varsayılan, örneklem içinde seçilen ve varsayılanın üç zaman dilimi biçimi; aynı işlemleri veren biçimler bir kez) ve düzeltilmiş eşik 0,05 / 28 = 0,0018'dir. Sınamalar bağımsız olsaydı 28 sınamadan en az birinin şansla 0,05'in altına düşme olasılığı %76 olurdu.
 
 ### Koşullar
 
@@ -379,9 +380,9 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi USD/JPY, −0,18 R). EUR/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,29 / −0,21; bütün dönem −0,23 / −0,16); GBP/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,32 / −0,22; bütün dönem −0,26 / −0,18); USD/JPY: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,23 / −0,12; bütün dönem −0,19 / −0,12); AUD/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,55 / −0,45; bütün dönem −0,46 / −0,39): şansla açıklanmayan, ölçülmüş bir kayıp.
-2. **Ne zaman.** Aday, karar kuralı değil. Ay sonu günleri: GBP/USD +0,38 R (33 işlem; tamamlayanı −0,30 R), USD/JPY +0,31 R (33 işlem; tamamlayanı −0,20 R). Ay sonu kovası bu kuralda ön kayıtlı ay sonu alt kümesinin kendisidir ve kendi güven aralığını taşır: GBP/USD 2018–2023 +0,30 R, aralık +0,003 / +0,61, fark p 0,0012; 2024 → +0,38 R, aralık +0,04 / +0,74, fark p 0,0008 · USD/JPY 2018–2023 +0,19 R, aralık −0,15 / +0,51, fark p 0,0353; 2024 → +0,31 R, aralık +0,01 / +0,65, fark p 0,0049; iki ayrık pencerede de tutan (aralığın alt ucu sıfırın üstünde, fark düzeltilmiş eşiğin altında, eşik 0,0018): GBP/USD (ay sonu bölümü). Aday: örneklem içinde seçilen aynı kovanın en az iki paritede örneklem dışında da "tuttu" ölçütünü (seçilen kovalarda en az 20 işlem, ortalama artı ve tamamlayanının üstünde) geçtiği koşul; ay sonu kovasında rastgele yön sınaması alt kümeye sonradan uygulandı ve tutma ölçütüne girmez. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Aday, karar kuralı değil. Ay sonu günleri: GBP/USD +0,38 R (33 işlem; tamamlayanı −0,30 R), USD/JPY +0,31 R (33 işlem; tamamlayanı −0,20 R). Ay sonu kovası bu kuralda ön kayıtlı ay sonu alt kümesinin kendisidir ve kendi güven aralığını taşır: GBP/USD 2018–2023 +0,30 R, aralık +0,003 / +0,61, fark p 0,0012; 2024 → +0,38 R, aralık +0,04 / +0,74, fark p 0,0008 · USD/JPY 2018–2023 +0,19 R, aralık −0,15 / +0,51, fark p 0,0353; 2024 → +0,31 R, aralık +0,01 / +0,65, fark p 0,0049; iki ayrık pencerede de tutan (aralığın alt ucu sıfırın üstünde, fark düzeltilmiş eşiğin altında, eşik 0,0018): GBP/USD (ay sonu bölümü). Aday: örneklem içinde yapılan aynı kova seçiminin en az iki paritede örneklem dışında da "tuttu" ölçütünü (seçilen kovalarda en az 20 işlem, ortalama artı ve tamamlayanının üstünde) geçtiği koşul; ay sonu kovasında rastgele yön sınaması alt kümeye sonradan uygulandı ve tutma ölçütüne girmez. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **Saat.** 15:50–15:55 Londra: TSİ 17:50–17:55 (İngiltere yaz saati) ya da 18:50–18:55.
-4. **Yönü oku, 15:55'te gir, 16:00'da çık** (Londra; TSİ yazın 17:55 → 18:00, kışın 18:55 → 19:00). Stop yok; R
+4. **Yönü oku, 15:55'te gir, 16:00'da çık** (Londra; TSİ İngiltere yaz saatinde 17:55 → 18:00, kış saatinde 18:55 → 19:00). Stop yok; R
    birimi girişteki ATR.
 5. **Maliyeti önce hesapla.** EUR/USD, örneklem dışı (2024 →): orta fiyattan orta fiyata da artı değil (brüt −0,0001 R, aralık −0,04 / +0,04): bu örneklemde makası ödeyen bir dolum onu artıya çevirmez, ama brüt sıfırdan ayrışmıyor. Bütün dönem (2024 →'yü kapsar): brüt artı (+0,03 R) ama kayma hiç yokken, yalnız gerçek makasla bile eksi (−0,01 R): kenar varsa bu makastan küçük; sonuç makas bu verininkinin %71'i olduğunda sıfıra iner.
 
@@ -398,7 +399,7 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 
 _Hücrede hüküm ve işlem başına net R; tanımlar giriş dersinde ("Hüküm")._
 
-_Sınırda: EUR/USD varsayılan, bütün dönem, brüt aralığın alt ucu +0,002 R (sıfıra standart hatanın 0,09 katı uzaklıkta); 500.000 tekrarla +0,001 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %88'inde ucu sıfırın üstünde verir; GBP/USD seçilen, örneklem dışı, aralığın üst ucu +0,004 R (sıfıra standart hatanın 0,09 katı uzaklıkta); 500.000 tekrarla +0,002 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %72'sinde ucu sıfırın üstünde verir. Bu uçlarda işaret tohum gürültüsüne bağlıdır; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir ve değişmez._
+_Sınırda: EUR/USD varsayılan, bütün dönem, brüt aralığın alt ucu +0,002 R (sıfıra standart hatanın 0,09 katı uzaklıkta); 500.000 tekrarla +0,001 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %88'inde ucu sıfırın üstünde verir. Bu uçlarda işaret tohum gürültüsüne bağlıdır; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir ve değişmez._
 
 ## Gün içi momentum
 
@@ -420,11 +421,11 @@ Londra ile New York arasındaki farkın dört saate indiği ara haftalarda yedi 
 
 ### Kurallar
 
-- **Sinyal.** Londra 08:00'den (TSİ yazın 10:00, kışın 11:00) itibaren ilk mumun getirisi (kapanış − açılış);
+- **Sinyal.** Londra 08:00'den (TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) itibaren ilk mumun getirisi (kapanış − açılış);
   60 dakikalık mumda ilk saat.
   Getiri sıfırsa işlem yok.
-- **Giriş.** Getirinin yönünde, 12:00 New York (TSİ yazın 19:00, kışın 20:00).
-- **Çıkış.** 16:00 ya da 16:55 New York (TSİ yazın 23:00 ya da 23:55, kışın 00:00 ya da 00:55); stopsuz (ızgarada sert ve kapanış stopu da var: 1 × ATR).
+- **Giriş.** Getirinin yönünde, 12:00 New York (TSİ ABD yaz saatinde 19:00, kış saatinde 20:00).
+- **Çıkış.** 16:00 ya da 16:55 New York (TSİ ABD yaz saatinde 23:00 ya da 23:55, kış saatinde 00:00 ya da 00:55); stopsuz (ızgarada sert ve kapanış stopu da var: 1 × ATR).
 - **R birimi.** Girişteki ATR(14, 60 dakikalık mumlar).
 
 | Parametre | Izgara | Varsayılan |
@@ -433,9 +434,9 @@ Londra ile New York arasındaki farkın dört saate indiği ara haftalarda yedi 
 | çıkış (New York) | 16:00, 16:55 | 16:00 |
 | stop türü | yok, sert, kapanış | yok |
 
-_Izgara: 18 kombinasyon. Saatler kuralın yerel saatidir: çıkış (New York) 16:00 → TSİ yazın 23:00, kışın 00:00; çıkış (New York) 16:55 → TSİ yazın 23:55, kışın 00:55._
+_Izgara: 18 kombinasyon. Saatler kuralın yerel saatidir: çıkış (New York) 16:00 → TSİ ABD yaz saatinde 23:00, kış saatinde 00:00; çıkış (New York) 16:55 → TSİ ABD yaz saatinde 23:55, kış saatinde 00:55._
 
-Varsayılan Londra'nın ilk saatini kullanır ve 12:00 → 16:00 New York (TSİ yazın 19:00 → 23:00, kışın 20:00 → 00:00) arasında taşır.
+Varsayılan Londra'nın ilk saatini kullanır ve 12:00 → 16:00 New York (TSİ ABD yaz saatinde 19:00 → 23:00, kış saatinde 20:00 → 00:00) arasında taşır.
 
 ### Örnekler
 
@@ -524,7 +525,7 @@ Izgaranın 18 kombinasyonundan net beklentisi artı olanlar (örneklem içi · d
 | USD/JPY | 15 dk · çıkış 16:00 · stop yok | −0,04 | −0,6 | −0,03 | −0,7 | 0,00 | 0,00 | çalışmıyor |
 | AUD/USD | 5 dk · çıkış 16:00 · stop yok | −0,15 | −2,0 | −0,25 | −3,0 | 0,00 | 0,00 | çalışmıyor |
 
-EUR/USD'de seçilenin 5 tek adımlık komşusundan hiçbiri örneklem içinde, hiçbiri örneklem dışında net artı.
+EUR/USD'de seçilenin 5 tek adımlık komşusu var: örneklem içinde hiçbiri net artı değil, örneklem dışında hiçbiri net artı değil.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -622,7 +623,7 @@ EUR/USD'de, bütün dönemde giriş iki saate düşer, çünkü kural tek bir ye
 ### Öngörü gücü
 
 Ön kayıt, kuralın kendisinden ayrı olarak sinyalin öngörü gücünü bir regresyonla sordu: öğleden sonra getirisi
-(12:00 → çıkış, orta fiyat) ilk mumun getirisinin bir fonksiyonu mu? İki getiri de girişteki 60 dakikalık
+(New York 12:00 → çıkış, orta fiyat; TSİ ABD yaz saatinde 19:00, kış saatinde 20:00) ilk mumun getirisinin bir fonksiyonu mu? İki getiri de girişteki 60 dakikalık
 ATR(14)'e bölünür, yani yıllar ve pariteler arasında aynı birimdedir. Bu ölçü stop, hedef, makas ve kayma içermez: işlem kuralının
 sonucundan bağımsız olarak "bilgi var mı" sorusunu sorar.
 
@@ -720,7 +721,7 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi USD/JPY, −0,03 R). EUR/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,25 / −0,06; bütün dönem −0,13 / −0,02); GBP/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,23 / −0,05; bütün dönem −0,15 / −0,05); AUD/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,31 / −0,15; bütün dönem −0,24 / −0,14): şansla açıklanmayan, ölçülmüş bir kayıp.
-2. **Ne zaman.** Aday, karar kuralı değil. Saat değişimi haftaları: EUR/USD +0,11 R (50 işlem; tamamlayanı −0,17 R), USD/JPY +0,26 R (50 işlem; tamamlayanı −0,05 R), AUD/USD +0,02 R (50 işlem; tamamlayanı −0,25 R). Aday: örneklem içinde seçilen aynı kovanın en az iki paritede örneklem dışında da "tuttu" ölçütünü (seçilen kovalarda en az 20 işlem, ortalama artı ve tamamlayanının üstünde) geçtiği koşul; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Aday, karar kuralı değil. Saat değişimi haftaları: EUR/USD +0,11 R (50 işlem; tamamlayanı −0,17 R), USD/JPY +0,26 R (50 işlem; tamamlayanı −0,05 R), AUD/USD +0,02 R (50 işlem; tamamlayanı −0,25 R). Aday: örneklem içinde yapılan aynı kova seçiminin en az iki paritede örneklem dışında da "tuttu" ölçütünü (seçilen kovalarda en az 20 işlem, ortalama artı ve tamamlayanının üstünde) geçtiği koşul; bu sınama hükmün öbür iki şartını (güven aralığı, rastgele yön) taşımaz. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **Londra'nın ilk saatini oku.** 08:00–09:00 Londra: TSİ 10:00–11:00 (İngiltere yaz saati) ya da 11:00–12:00.
 4. **12:00 New York'ta gir** (TSİ 19:00 ya da 20:00, ABD'nin saatine göre), **16:00'da çık** (TSİ 23:00 ya da 00:00).
 5. **Stop yok, R birimi ATR.** Pozisyon büyüklüğü girişteki 60 dakikalık ATR'den kurulur.
@@ -764,7 +765,7 @@ işlem hacmi değil.
 - **Trend.** Son N mumun hepsi VWAP'ın aynı yanında kapandı (N on iki ya da altı).
 - **Sinyal.** Mum VWAP'a değer (yükselişte dibi VWAP'a iner ya da altına geçer) ve trend yanında kapanır (yükselişte
   VWAP'ın üstünde). Trend sürdükçe aynı gün yeni dokunuşlar yeni sinyal verir; aynı anda tek pozisyon.
-- **Stop.** Sinyal mumunun karşı ucu (alışta dibi). Sinyal en geç 16:00 New York (TSİ yazın 23:00, kışın 00:00).
+- **Stop.** Sinyal mumunun karşı ucu (alışta dibi). Sinyal en geç 16:00 New York (TSİ ABD yaz saatinde 23:00, kış saatinde 00:00).
 - **Hedef.** 1R, 2R ya da zaman (12 mum).
 
 | Parametre | Izgara | Varsayılan |
@@ -779,10 +780,11 @@ _Izgara: 72 kombinasyon._
 
 Varsayılan VWAP'ı Londra açılışında başlatır, trendi on iki mumla tanımlar ve 2R hedefler. On iki on beş
 dakikalık mum üç saattir ve çapadan sonraki ilk saat sayılmaz; varsayılanın ilk sinyali en erken Londra 12:00–12:15
-mumunda (TSİ yazın 14:00–14:15, kışın 15:00–15:15) gelebilir.
+mumunda (TSİ İngiltere yaz saatinde 14:00–14:15, kış saatinde 15:00–15:15) gelebilir.
 
 Aynı sayım 60 dakikalık mumda Londra çapasıyla on iki mumu sığdırmaz: sayılabilen ilk mum Londra 09:00–10:00,
-on ikincisi 20:00–21:00'dir; sinyal mumu en erken 21:00–22:00 olur, oysa sinyal en geç 16:00 New York'ta (TSİ yazın 23:00, kışın 00:00; Londra
+on ikincisi Londra 20:00–21:00'dir; sinyal mumu en erken Londra 21:00–22:00 olur
+(TSİ İngiltere yaz saatinde 11:00–12:00 · 22:00–23:00 · 23:00–00:00, kış saatinde 12:00–13:00 · 23:00–00:00 · 00:00–01:00), oysa sinyal en geç 16:00 New York'ta (TSİ ABD yaz saatinde 23:00, kış saatinde 00:00; Londra
 21:00, Londra–New York farkının 4 saat olduğu ara dönemde 20:00) kapanmalıdır. Izgaranın 72 kombinasyonundan bu altısı
 (60 dakika, Londra çapası, on iki mum; üç hedef ve iki stop türüyle) dört paritede de hiç işlem açmaz; zaman dilimi
 kıyasında 60 dakikalık satırın boş olması bu yüzdendir.
@@ -906,7 +908,7 @@ _Artı hükümlü seçilenlerin kuyruğu (örneklem dışı, işlem başına net
 
 _Örneklem içi ortalaması tek işleme dayanan seçimler (işlem başına net R; en iyi işlem çıkınca işaret dönüyor): EUR/USD +0,11 R, en iyi işlem çıkınca −0,005 (16.06.2021 işlemi, +25,28 R; risk 4,7 pip); GBP/USD +0,06 R, en iyi işlem çıkınca −0,02 (04.11.2019 işlemi, +17,25 R; risk 2,0 pip). Betimleyicidir; seçim ve hüküm değişmez._
 
-EUR/USD'de seçilenin 6 tek adımlık komşusundan hiçbiri örneklem içinde, 2 tanesi örneklem dışında net artı.
+EUR/USD'de seçilenin 6 tek adımlık komşusu var: örneklem içinde hiçbiri net artı değil, örneklem dışında 2 tanesi net artı.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -1013,18 +1015,18 @@ EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati
 **Ön kaydın harfiyle.** Ön kayıt yalnız sinyali yasaklar ("çapadan sonraki ilk 60 dakika sinyal yok").
 Bu ölçüm o saatin kapanışlarını trend sayımına da almaz (yukarıda; bu okuma ilk sonuçlardan önce sabitlendi);
 harfiyle okunursa sayım çapadan başlar. O okumada 60 dakikalık Londra kombinasyonları da işlem açar: on iki mum
-Londra 08:00–20:00, sinyal mumu 20:00–21:00'dir ve kapanışı 16:00 New York'a (TSİ yazın 23:00, kışın 00:00) denk gelir (Londra–New York farkının
+Londra 08:00–20:00, sinyal mumu Londra 20:00–21:00'dir (TSİ İngiltere yaz saatinde 10:00–22:00 · 22:00–23:00, kış saatinde 11:00–23:00 · 23:00–00:00) ve kapanışı 16:00 New York'a (TSİ ABD yaz saatinde 23:00, kış saatinde 00:00) denk gelir (Londra–New York farkının
 4 saat olduğu ara dönemde gelmez).
 Hüküm ilk sonuçlardan önce sabitlenen okumayla verilir; harfin okuması aynı koşuda ayrıca ölçüldü. Harfin okumasıyla hüküm değişir: AUD/USD'de seçilenin hükmü çalışmıyor yerine zayıf.
 
-| Parite | İşlemi değişen kombinasyon | Varsayılan, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → |
-| :--- | ---: | ---: | ---: | ---: |
-| EUR/USD | 72 / 72 | çalışmıyor, −0,21 R | çalışmıyor, −0,25 R | zayıf, +0,12 R |
-| GBP/USD | 72 / 72 | çalışmıyor, −0,32 R | çalışmıyor, −0,28 R | çalışmıyor, −0,22 R |
-| USD/JPY | 72 / 72 | çalışmıyor, −0,21 R | çalışmıyor, −0,34 R | çalışmıyor, −0,06 R |
-| AUD/USD | 72 / 72 | çalışmıyor, −0,41 R | çalışmıyor, −0,48 R | zayıf, +0,02 R |
+| Parite | İşlemi değişen kombinasyon | Varsayılan, 2024 → | İşlem, 2024 → | Rastgele yön, 2024 → | Varsayılan, bütün dönem | Seçilen, 2024 → |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| EUR/USD | 72 / 72 | çalışmıyor, −0,21 R | 382 → 414 | 89,5 → 93,2 | çalışmıyor, −0,25 R | zayıf, +0,12 R |
+| GBP/USD | 72 / 72 | çalışmıyor, −0,32 R | 394 → 432 | 57,5 → 51,0 | çalışmıyor, −0,28 R | çalışmıyor, −0,22 R |
+| USD/JPY | 72 / 72 | çalışmıyor, −0,21 R | 420 → 449 | 89,1 → 85,9 | çalışmıyor, −0,34 R | çalışmıyor, −0,06 R |
+| AUD/USD | 72 / 72 | çalışmıyor, −0,41 R | 402 → 425 | 94,0 → 95,4 | çalışmıyor, −0,48 R | zayıf, +0,02 R |
 
-_Ön kaydın harfinin okumasıyla aynı ölçüm: hüküm ve işlem başına net R. Bu dersteki okumanın hükmü sonuç tablosundadır. Kombinasyon sayısı ızgaranın bütünüdür; işlem listesi iki okumada birebir aynı olmayan kombinasyon değişmiş sayılır._
+_Ön kaydın harfinin okumasıyla aynı ölçüm: hüküm ve işlem başına net R; işlem sayısında ve rastgele yön yüzdeliğinde ok bu dersteki okumadan harfin okumasına gider. Bu dersteki okumanın hükmü sonuç tablosundadır. Kombinasyon sayısı ızgaranın bütünüdür; işlem listesi iki okumada birebir aynı olmayan kombinasyon değişmiş sayılır._
 
 ### Koşullar
 
@@ -1098,7 +1100,7 @@ yeri) onun en doğal koşuludur: kuralın kendi trend tanımıyla aynı yönü g
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi EUR/USD, −0,19 R). EUR/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,33 / −0,05; bütün dönem −0,34 / −0,18); GBP/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,41 / −0,16; bütün dönem −0,34 / −0,19); USD/JPY: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,33 / −0,09; bütün dönem −0,39 / −0,26); AUD/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,52 / −0,28; bütün dönem −0,54 / −0,40): şansla açıklanmayan, ölçülmüş bir kayıp.
-2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kova seçimiyle tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **Çapa Londra 08:00** (TSİ 10:00 ya da 11:00); ilk saat sinyal yok.
 4. **Trendi say.** On iki mum üst üste VWAP'ın aynı yanında kapanış.
 5. **Dokunuşu bekle.** Mum VWAP'a değip trend yanında kapanır; giriş sonraki dakikada.
@@ -1141,7 +1143,7 @@ Fade dersindeki karşılıklarıyla yan yana — aynı saatin ve aynı ortalaman
 
 _Örneklem dışı (2024 →), önceden kayıtlı varsayılan. Tanımlar giriş dersinde._
 
-_Sınırdaki maliyet bayrakları (yanıp yanmadığı tohum gürültüsüne bağlı): Fiksing momentumu EUR/USD, bütün dönem (bayrak yanıyor; 2.000 tekrarla brüt alt uç +0,002 R, sıfıra standart hatanın 0,09 katı uzaklıkta; 500.000 tekrarla +0,001 R; 2.000 tekrarlı yordam tohumların %88'inde yakar); VWAP dönüş EUR/USD, örneklem dışı (bayrak yanmıyor; 2.000 tekrarla brüt alt uç −0,004 R, sıfıra standart hatanın 0,13 katı uzaklıkta; 500.000 tekrarla −0,002 R; 2.000 tekrarlı yordam tohumların %16'sında yakar)._
+_Sınırdaki maliyet bayrakları (yanıp yanmadığı tohum gürültüsüne bağlı): VWAP dönüş EUR/USD, örneklem dışı (bayrak yanmıyor; 2.000 tekrarla brüt alt uç −0,004 R, sıfıra standart hatanın 0,13 katı uzaklıkta; 500.000 tekrarla −0,002 R; 2.000 tekrarlı yordam tohumların %16'sında yakar); Fiksing momentumu EUR/USD, bütün dönem (ayrıntı yukarıdaki tablonun notunda)._
 
 İki kural ayrı pencerede ya da ayrı tetikle işlem açar; birinin kaybetmesi öbürünün kazanacağı anlamına gelmez.
 İkisi de aynı makası öder. Karşılık tablosu bütün dönemin brütünü ve çiftin günlük korelasyonunu verir: bu

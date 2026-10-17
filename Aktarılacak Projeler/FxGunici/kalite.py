@@ -61,7 +61,7 @@ def beklenen_izgara(bas: date, bit: date) -> tuple[pd.DatetimeIndex, np.ndarray]
     gunler = pd.date_range(bas, bit, freq="D")
     gunler = gunler[gunler.dayofweek < 5]
     onceki = gunler - pd.Timedelta(days=1)
-    bas_utc = z.yerel_utc(onceki, "17:00", z.NEWYORK)
+    bas_utc = z.yerel_utc(onceki, z.GUN_SONU, z.NEWYORK)
     return gunler, bas_utc.as_unit("s").asi8
 
 
@@ -113,7 +113,8 @@ def kapsam(t: np.ndarray, gunler: pd.DatetimeIndex, bas_sn: np.ndarray) -> dict:
     ny = pd.to_datetime(t, unit="s", utc=True).tz_convert(z.NEWYORK)
     hg = ny.dayofweek.to_numpy()
     sa = (ny.hour * 60 + ny.minute).to_numpy()
-    hafta_sonu = int(((hg == 5) | ((hg == 4) & (sa >= 17 * 60)) | ((hg == 6) & (sa < 17 * 60))).sum())
+    sinir = z.GUN_SONU.hour * 60 + z.GUN_SONU.minute
+    hafta_sonu = int(((hg == 5) | ((hg == 4) & (sa >= sinir)) | ((hg == 6) & (sa < sinir))).sum())
     tatil = [(gunler[i].date().isoformat(), round(float(gun_kapsam[i]) * 100, 1))
              for i in np.flatnonzero(gun_kapsam < TATIL_ESIK)]
     kismi = [(gunler[i].date().isoformat(), round(float(gun_kapsam[i]) * 100, 1))
@@ -180,9 +181,10 @@ def makas(f: pd.DataFrame, pip: float) -> dict:
     g = saat.groupby(level=0)
     sonuc["saatlik_ny"] = {int(h): {"medyan": round(float(v.median()), 3), "p95": round(float(v.quantile(0.95)), 3)}
                            for h, v in g}
-    # Devir profili: 17:00 ET'ye göre −30 … +30 dakika
+    # Devir profili: FX gününün sınırına (zaman.GUN_SONU, 17:00 ET) göre −30 … +30 dakika; figür sıfırı künyeden
+    # (fx_gun_siniri_et) okur, iki taraf aynı tanımdan
     dk_ = (ny.hour * 60 + ny.minute).to_numpy()
-    fark = dk_ - 17 * 60
+    fark = dk_ - (z.GUN_SONU.hour * 60 + z.GUN_SONU.minute)
     profil = {}
     for d in range(-30, 31, 5):
         m = (fark >= d) & (fark < d + 5)

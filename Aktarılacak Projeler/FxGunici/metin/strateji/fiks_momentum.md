@@ -14,17 +14,18 @@ konusudur: itiş fiksingde bitebilir, hatta fiksingden önce tersine dönebilir.
 
 ### Kurallar
 
-- **Sinyal mumu.** Londra 16:00'dan iki mum önce başlayan mum (5 dakikalık mumda 15:50–15:55;
+- **Sinyal mumu.** Londra 16:00'dan ({{! tsi "" "Londra 16:00" }}) iki mum önce başlayan mum (5 dakikalık mumda 15:50–15:55;
   {{! tsi "" "Londra 15:50–15:55" }}).
-- **Giriş.** Sinyal mumunun yönünde, 16:00'dan bir mum önce (Londra 15:55; {{! tsi "" "Londra 15:55" }}).
+- **Giriş.** Sinyal mumunun yönünde, fiksingden bir mum önce (Londra 15:55; {{! tsi "" "Londra 15:55" }}).
 - **Çıkış.** Londra 16:00 ({{! tsi "" "Londra 16:00" }}); stopsuz (ızgarada sert ve kapanış stopu da var: girişten 1 × ATR uzakta).
 - **R birimi.** Girişteki ATR(14), aynı zaman dilimi.
 - **Günler.** Bütün işlem günleri; ay sonu (ayın son Londra iş günü) ayrıca raporlanır.
 
 {{! kural }}
 
-Varsayılan 5 dakikalık mumlarla 15:50–15:55'in yönünde 15:55'te girer, 16:00'da çıkar.{{? B.varsayilan.tf == 5 and B.varsayilan.tur == "momentum" and B.varsayilan.stop_turu == "yok" }} İşlem beş dakika sürer
-ve fiksing penceresinin ilk yarısına (15:57:30 → 16:00) uzanır; çıkış penceresinin ortasındadır.
+Varsayılan 5 dakikalık mumlarla Londra 15:50–15:55'in yönünde 15:55'te girer, 16:00'da çıkar
+({{! tsi "→" "Londra 15:50–15:55" "Londra 15:55" "Londra 16:00" }}).{{? B.varsayilan.tf == 5 and B.varsayilan.tur == "momentum" and B.varsayilan.stop_turu == "yok" }} İşlem beş dakika sürer
+ve fiksing penceresinin ilk yarısına (Londra 15:57:30 → 16:00; {{! tsi "→" "Londra 15:57:30" "Londra 16:00" }}) uzanır; çıkış penceresinin ortasındadır.
 
 ### Örnekler
 

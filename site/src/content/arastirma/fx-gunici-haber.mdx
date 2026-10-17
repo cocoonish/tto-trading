@@ -32,20 +32,21 @@ sorusunu soran devam tablosu, ortalama fiyat patikaları ve FOMC'de karar ile ba
 kararı ve basın toplantısı EUR/USD'de; BoE kararı GBP/USD'de. Her olayın saati resmî bir kaynaktan geldi: ABD
 verilerinde yayımın kendi ambargo satırından, FOMC kararında karar metninin yayım satırından, ECB basın toplantısında
 duyurunun kendi cümlesinden, tarih tarih; BoE kararında, ECB kararında ve FOMC basın toplantılarının çoğunda kurumun
-yayımladığı saat kuralından. Hiçbir saat "genelde 08:30'dur" diye varsayılmadı; hangi olayın saatinin nereden geldiği
+yayımladığı saat kuralından. Hiçbir olayın saati "genelde bu saattedir" diye varsayılmadı; hangi olayın saatinin nereden geldiği
 metodoloji dersinde.
 
-| Olay | Sayı | Dönem | Yerel saat (olay sayısı) | Saatin kaynağı | Kaynak | Fiyat sınaması |
+| Olay | Sayı | Dönem | Yerel saat (olay sayısı; TSİ karşılığı) | Saatin kaynağı | Kaynak | Fiyat sınaması |
 | :--- | ---: | :--- | :--- | :--- | :--- | :--- |
-| ABD tarım dışı istihdam (NFP) | 105 | 05.01.2018 → 02.10.2026 | 08:30 New York (105) | tarih tarih (105) | www.bls.gov | 105 doğrulandı |
-| ABD TÜFE (CPI) | 104 | 12.01.2018 → 11.09.2026 | 08:30 New York (104) | tarih tarih (104) | www.bls.gov | 100 doğrulandı · 3 sessiz · 1 çelişki |
-| FOMC kararı | 72 | 31.01.2018 → 16.09.2026 | 14:00 New York (69); 10:00 New York (1); 11:00 New York (1); 17:00 New York (1) | tarih tarih (72) | www.federalreserve.gov | 71 doğrulandı · 1 değerlendirilemedi |
-| FOMC basın toplantısı | 65 | 21.03.2018 → 16.09.2026 | 14:30 New York (65) | tarih tarih (9) · kuraldan (56) | www.federalreserve.gov | sınanmadı (konuşma tek dakikada sıçrama yapmaz; yalnız bilgi) |
-| ECB kararı | 70 | 25.01.2018 → 10.09.2026 | 13:45 Frankfurt (36); 14:15 Frankfurt (34) | kuraldan (70) | www.ecb.europa.eu | 59 doğrulandı · 10 sessiz · 1 çelişki |
-| ECB basın toplantısı | 70 | 25.01.2018 → 10.09.2026 | 14:30 Frankfurt (36); 14:45 Frankfurt (34) | tarih tarih (70) | www.ecb.europa.eu | sınanmadı (konuşma tek dakikada sıçrama yapmaz; yalnız bilgi) |
-| BoE kararı | 69 | 08.02.2018 → 17.09.2026 | 12:00 Londra (67); 07:00 Londra (2) | tarih tarih (2) · kuraldan (67) | www.bankofengland.co.uk | 68 doğrulandı · 1 sessiz |
+| ABD tarım dışı istihdam (NFP) | 105 | 05.01.2018 → 02.10.2026 | 08:30 New York (105 olay; TSİ ABD yaz saatinde 15:30, kış saatinde 16:30) | tarih tarih (105) | www.bls.gov | 105 doğrulandı |
+| ABD TÜFE (CPI) | 104 | 12.01.2018 → 11.09.2026 | 08:30 New York (104 olay; TSİ ABD yaz saatinde 15:30, kış saatinde 16:30) | tarih tarih (104) | www.bls.gov | 100 doğrulandı · 3 sessiz · 1 çelişki |
+| FOMC kararı | 72 | 31.01.2018 → 16.09.2026 | 14:00 New York (69 olay; TSİ ABD yaz saatinde 21:00, kış saatinde 22:00); 03.03.2020 10:00 New York (1 olay; TSİ 18:00); 11.10.2019 11:00 New York (1 olay; TSİ 18:00); 15.03.2020 17:00 New York (1 olay; TSİ 16.03.2020 00:00) | tarih tarih (72) | www.federalreserve.gov | 71 doğrulandı · 1 değerlendirilemedi |
+| FOMC basın toplantısı | 65 | 21.03.2018 → 16.09.2026 | 14:30 New York (65 olay; TSİ ABD yaz saatinde 21:30, kış saatinde 22:30) | tarih tarih (9) · kuraldan (56) | www.federalreserve.gov | sınanmadı (konuşma tek dakikada sıçrama yapmaz; yalnız bilgi) |
+| ECB kararı | 70 | 25.01.2018 → 10.09.2026 | 13:45 Frankfurt (36 olay; TSİ Avrupa yaz saatinde 14:45, kış saatinde 15:45); 14:15 Frankfurt (34 olay; TSİ Avrupa yaz saatinde 15:15, kış saatinde 16:15) | kuraldan (70) | www.ecb.europa.eu | 59 doğrulandı · 10 sessiz · 1 çelişki |
+| ECB basın toplantısı | 70 | 25.01.2018 → 10.09.2026 | 14:30 Frankfurt (36 olay; TSİ Avrupa yaz saatinde 15:30, kış saatinde 16:30); 14:45 Frankfurt (34 olay; TSİ Avrupa yaz saatinde 15:45, kış saatinde 16:45) | tarih tarih (70) | www.ecb.europa.eu | sınanmadı (konuşma tek dakikada sıçrama yapmaz; yalnız bilgi) |
+| BoE kararı | 69 | 08.02.2018 → 17.09.2026 | 12:00 Londra (67 olay; TSİ İngiltere yaz saatinde 14:00, kış saatinde 15:00); 07:00 Londra (2 olay; TSİ İngiltere yaz saatinde 09:00, kış saatinde 10:00) | tarih tarih (2) · kuraldan (67) | www.bankofengland.co.uk | 68 doğrulandı · 1 sessiz |
 
-_Saatler yerel saattir; TSİ karşılıkları giriş dersinin tablosunda. Saatin kaynağı: tarih tarih (resmî metnin
+_Saatler yerel saattir; TSİ karşılıkları yanlarında (saat değiştiren şehirde yaz ve kış saatiyle, tek günlük olayda
+o günün kendisinden). Saatin kaynağı: tarih tarih (resmî metnin
 kendi saat satırından) ya da kuraldan (kurumun yayımladığı saat kuralından). Fiyat sınaması: resmî saatte 1 dakikalık fiyatta
 olağandışı bir sıçrama var mı (doğrulandı), yoksa yarım saat ya da bir saat önce/sonra mı daha iyi oturuyor
 (çelişki), yoksa ne resmî saatte ne o dört aday saatte bir sıçrama var mı (sessiz). Sessiz, piyasanın günün başka bir
@@ -59,13 +60,13 @@ sonuca bakarak seçmek olurdu. Saati yanlış bir olayın etkisinin yönü ise �
 hareketi olay sayar ya da olayın kendi hareketini kaçırır, sonucu iki yöne de kaydırabilir. Saat bu yüzden fiyattan
 düzeltilmez, resmî bir metinle düzeltilir.
 
-**ECB basın toplantısının iki saati.** ECB basın toplantısı 21 Temmuz 2022'den bu yana 14:45'te, öncesinde 14:30'da
-başlıyordu ve iki saat iki ayrı piyasa dakikasıdır. 21 Temmuz 2022 öncesindeki 36 toplantının 34'ü New York saatiyle 08:30'a (TSİ yazın 15:30, kışın 16:30), sonraki 34 toplantının 31'i 08:45'e (TSİ yazın 15:45, kışın 16:45) denk gelir. 08:30 New York ABD verilerinin dakikasıdır: 14:30 rejimindeki toplantıların 35'i perşembe ve ABD haftalık işsizlik başvuruları her perşembe 08:30'da açıklanır (bu veri takvimde yok). 6 günde ABD TÜFE (CPI) de aynı dakikada çıktı. Açıklamadan önceki son dakikanın makası 14:30 rejiminde 0,8 pip; aynı dakikada olaysız günlerin medyanı 0,4, olaysız perşembelerinki 0,7 pip: genişleme basın toplantısından değil, perşembe sabahının ABD veri dakikasından gelir. Örneklem içindeki 48 basın toplantısının 36'sı 14:30 rejiminde, örneklem dışındaki 22 toplantının hiçbiri: basın toplantısı satırlarında örneklem içi ile örneklem dışının kıyası aynı zamanda iki saatin kıyasıdır.
+**ECB basın toplantısının iki saati.** ECB basın toplantısı 21 Temmuz 2022'den bu yana Frankfurt 14:45'te, öncesinde
+Frankfurt 14:30'da başlıyordu (TSİ Avrupa yaz saatinde 15:45 ve 15:30, kış saatinde 16:45 ve 16:30) ve iki saat iki ayrı piyasa dakikasıdır. 21 Temmuz 2022 öncesindeki 36 toplantının 34'ü New York saatiyle 08:30'a (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30), sonraki 34 toplantının 31'i 08:45'e (TSİ ABD yaz saatinde 15:45, kış saatinde 16:45) denk gelir. 08:30 New York ABD verilerinin dakikasıdır: 14:30 rejimindeki toplantıların 35'i perşembe ve ABD haftalık işsizlik başvuruları her perşembe 08:30'da açıklanır (bu veri takvimde yok). 6 günde ABD TÜFE (CPI) de aynı dakikada çıktı. Açıklamadan önceki son dakikanın makası 14:30 rejiminde 0,8 pip; aynı dakikada olaysız günlerin medyanı 0,4, olaysız perşembelerinki 0,7 pip: genişleme basın toplantısından değil, perşembe sabahının ABD veri dakikasından gelir. Örneklem içindeki 48 basın toplantısının 36'sı 14:30 rejiminde, örneklem dışındaki 22 toplantının hiçbiri o rejimde değil: basın toplantısı satırlarında örneklem içi ile örneklem dışının kıyası aynı zamanda iki saatin kıyasıdır.
 
-| Ölçü | 14:30 Frankfurt (25.01.2018 → 09.06.2022) | 14:45 Frankfurt (21.07.2022 → 10.09.2026) |
+| Ölçü | 14:30 Frankfurt (25.01.2018 → 09.06.2022; TSİ Avrupa yaz saatinde 15:30, kış saatinde 16:30) | 14:45 Frankfurt (21.07.2022 → 10.09.2026; TSİ Avrupa yaz saatinde 15:45, kış saatinde 16:45) |
 | :--- | ---: | ---: |
 | Toplantı (örneklem içi · dışı) | 36 (36 · 0) | 34 (12 · 22) |
-| New York saati (toplantı) | 08:30 (34) · 09:30 (2) | 08:45 (31) · 09:45 (3) |
+| New York saati (toplantı) | 08:30 New York (34) · ara hafta: 09:30 New York (2) | 08:45 New York (31) · ara hafta: 09:45 New York (3) |
 | Hafta günü | çarşamba (1) · perşembe (35) | perşembe (34) |
 | Aynı dakikada takvimde başka olay | ABD TÜFE (CPI): 6 gün | yok |
 | Makas, açıklamadan önceki son dakika (pip) | 0,8 | 0,4 |
@@ -82,7 +83,8 @@ başlıyordu ve iki saat iki ayrı piyasa dakikasıdır. 21 Temmuz 2022 öncesin
 
 _EUR/USD. Makas: dakika kapanışında medyan; kıyaslar olayın kendi bölgesindeki aynı yerel dakikadan, takvimde olay olmayan hafta içi günlerinden (ikinci kıyas yalnız toplantıyla aynı hafta gününden). Devam: ana mum, olay düzeyinde, yön başına net ortalama. Stratejiler: önceden kayıtlı varsayılan, bütün dönem. Bu tablo bilgi içindir; devam tablosunun sınama ailesine girmez._
 
-Okuma: 14:30 rejiminde basın toplantısının ilk mumu ABD'nin 08:30 veri dakikasıyla çakışır. Makasın genişlemesi o
+Okuma: 14:30 rejiminde basın toplantısının ilk mumu ABD'nin 08:30 veri dakikasıyla (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30)
+çakışır. Makasın genişlemesi o
 dakikadan geliyor; fiyat tepkisinin iki haber arasındaki payı bu veriyle ayrılamaz. Bu dersin devam tablosundaki ve beş stratejideki "ECB basın toplantısı" satırları iki rejimin birleşimidir; aynı
 dakikadaki iki takvim olayı devam tablosunda iki ayrı olay satırında durur (ABD TÜFE'si dört paritenin ortalamasıyla,
 basın toplantısı EUR/USD ile), haber stratejilerinde ise o dakika parite başına tek pozisyondur.
@@ -384,7 +386,7 @@ arasındaki ilinti ne, ve dönüş olasılığı kararın büyüklüğüne bağl
 | USD/JPY | 64 | %55 (%44–%67) | −0,04 (−0,27 / +0,19) | %55 (56) | %57 (7) | %0 (1) |
 | AUD/USD | 65 | %43 (%31–%55) | +0,04 (−0,18 / +0,27) | %46 (50) | %33 (12) | %33 (3) |
 
-Basın penceresi 16:00'ya uzatıldığında (New York 14:30 → 16:00; TSİ yazın 21:30 → 23:00, kışın 22:30 → 00:00):
+Basın penceresi 16:00'ya uzatıldığında (New York 14:30 → 16:00; TSİ ABD yaz saatinde 21:30 → 23:00, kış saatinde 22:30 → 00:00):
 
 | Parite | Toplantı | Dönüş oranı (%95) | Korelasyon (%95) |
 | :--- | ---: | ---: | ---: |
@@ -398,7 +400,7 @@ toplantıların payı (%50 yazı turadır). Toplantı sütunu dönüş oranını
 toplantıların yeniden örneklenmesiyle. Son üç sütun: dönüş oranı, kararın ilk yarım saatteki hareketinin büyüklüğüne göre (günlük ATR'nin
 katı; parantezde toplantı sayısı)._
 
-Dört paritenin hiçbirinde dönüş oranının %95 aralığı %50'yi dışarıda bırakmıyor: basın toplantısının ilk saati kararın ilk yarım saatini ne sistematik olarak tersine çeviriyor ne de sürdürüyor. İki hareketin ilintisi hiçbir paritede sıfırdan ayırt edilemiyor. Hareketin büyüklüğü: EUR/USD'de basın toplantısının ilk saatindeki ortalama mutlak hareket 0,43, kararın ilk yarım saatindeki 0,34 günlük ATR (oran 1,25). Basın penceresi iki kat uzun olduğu için oran tek başına bir şey söylemez: fiyat rastgele yürüseydi bile iki kat uzun pencerede 1,41 kat hareket beklenirdi. Dört paritenin hepsinde oran bunun altında: dakika başına kararın yarım saati basın toplantısının ilk saatinden daha hareketli. Basın penceresi 16:00'ya uzatıldığında da sonuç aynı: dönüş oranı hiçbir paritede yazı turadan, ilinti sıfırdan ayırt edilemiyor.
+Dört paritenin hiçbirinde dönüş oranının %95 aralığı %50'yi dışarıda bırakmıyor: basın toplantısının ilk saati kararın ilk yarım saatini ne sistematik olarak tersine çeviriyor ne de sürdürüyor. İki hareketin ilintisi hiçbir paritede sıfırdan ayırt edilemiyor. Hareketin büyüklüğü: EUR/USD'de basın toplantısının ilk saatindeki ortalama mutlak hareket 0,43, kararın ilk yarım saatindeki 0,34 günlük ATR (oran 1,25). Basın penceresi iki kat uzun olduğu için oran tek başına bir şey söylemez: fiyat rastgele yürüseydi bile iki kat uzun pencerede 1,41 kat hareket beklenirdi. Dört paritenin hepsinde oran bunun altında: dakika başına kararın yarım saati basın toplantısının ilk saatinden daha hareketli. Basın penceresi New York 16:00'ya (TSİ ABD yaz saatinde 23:00, kış saatinde 00:00) uzatıldığında da sonuç aynı: dönüş oranı hiçbir paritede yazı turadan, ilinti sıfırdan ayırt edilemiyor.
 
 ## N1 — haber kırılımı
 
@@ -417,14 +419,14 @@ ince likiditede atılan ilk büyük emirler fiyatı gerekenden uzağa taşır ve
 
 ### Kurallar
 
-- **İlk haber mumu.** Olay anına çıpalı mumların ilki (New York 08:30'da, TSİ yazın 15:30, kışın 16:30,
+- **İlk haber mumu.** Olay anına çıpalı mumların ilki (New York 08:30'da, TSİ ABD yaz saatinde 15:30, kış saatinde 16:30,
   açıklanan bir veride 5 dakikalık mumla
   08:30–08:35).
 - **Giriş.** İlk mumun kapanış yönünde (kapanış − açılış), "giriş mumu" kadar mum kapandıktan sonraki açılışta.
   İlk mum hareketsiz kapanmışsa işlem yok.
 - **Stop.** İlk haber mumunun karşı ucu (alışta dibi); giriş anında fiyat onun ötesindeyse işlem yok.
 - **Hedef.** 1R, 2R ya da zaman (12 mum).
-- **Gün sonu.** Girişi gün sonu çıkışına (New York 16:55, TSİ yazın 23:55, kışın 00:55) ya da sonrasına
+- **Gün sonu.** Girişi gün sonu çıkışına (New York 16:55, TSİ ABD yaz saatinde 23:55, kış saatinde 00:55) ya da sonrasına
   düşen sinyal alınmaz.
 
 | Parametre | Izgara | Varsayılan |
@@ -565,11 +567,11 @@ _Artı hükümlü seçilenlerin kuyruğu (örneklem dışı, işlem başına net
 
 _Örneklem içi ortalaması tek işleme dayanan seçimler (işlem başına net R; en iyi işlem çıkınca işaret dönüyor): GBP/USD +0,16 R, en iyi işlem çıkınca −0,13 (11.03.2020 işlemi, +65,30 R; risk 2,0 pip); USD/JPY +0,56 R, en iyi işlem çıkınca −0,15 (13.08.2019 işlemi, +138,30 R; risk 1,0 pip). Betimleyicidir; seçim ve hüküm değişmez._
 
-_Gün sonu (bütün dönem): girişi gün sonu çıkışına (New York 16:55, TSİ yazın 23:55, kışın 00:55) ya da sonrasına düşen emir alınmaz. Seçilenlerde böyle düşen emirler: EUR/USD — FOMC kararı 71 emrin 69'u, FOMC basın toplantısı 65 emrin hepsi. Emirlerinin hepsi düşen olayı seçilen hiç işlemez. Sonuç yalnız alınan emirlerden._
+_Gün sonu (bütün dönem): girişi gün sonu çıkışına (New York 16:55, TSİ ABD yaz saatinde 23:55, kış saatinde 00:55) ya da sonrasına düşen emir alınmaz. Seçilenlerde böyle düşen emirler: EUR/USD — FOMC kararı 71 emrin 69'u, FOMC basın toplantısı 65 emrin hepsi. Emirlerinin hepsi düşen olayı seçilen hiç işlemez. Sonuç yalnız alınan emirlerden._
 
 Seçilen kombinasyonlarda örneklem dışında R ile pipin işareti ayrışıyor: GBP/USD +0,13 R ama −0,9 pip (pip ortalamasının %95 aralığı −7,8 / +5,5); USD/JPY −0,26 R ama +3,9 pip (pip ortalamasının %95 aralığı −5,8 / +14,9). R'nin işaretini stopu dar işlemler belirliyor (giriş dersi, "R ve pip"); hüküm ön kayıt gereği R'den verilir.
 
-EUR/USD'de seçilenin 7 tek adımlık komşusundan 1 tanesi örneklem içinde, hiçbiri örneklem dışında net artı.
+EUR/USD'de seçilenin 7 tek adımlık komşusu var: örneklem içinde biri net artı, örneklem dışında hiçbiri net artı değil.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -767,7 +769,7 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi USD/JPY, −0,11 R). EUR/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,47 / −0,15; bütün dönem −0,37 / −0,19); GBP/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,45 / −0,12; bütün dönem −0,31 / −0,11); AUD/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,49 / −0,13; bütün dönem −0,39 / −0,18): şansla açıklanmayan, ölçülmüş bir kayıp.
-2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kova seçimiyle tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **Takvimi doğrula.** Olayın saatini resmî takvimden oku; TSİ karşılığı saat değişimi haftalarında kayar.
 4. **İlk mumu bekle.** 5 dakikalık mum kapanmadan giriş yok.
 5. **Stop ilk mumun karşı ucunda, hedef 1R.**
@@ -901,14 +903,14 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 
 _Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnız R'de verilir._
 
-**Alınmayan emirler.** Varsayılanın 791 emrinin 735'i işleme dönüştü; 1'i açık bir pozisyon yüzünden, 55'i yürütülen giriş seviye hedefini çoktan geçtiği için alınmadı (bütün dönem, bütün pariteler). Alınmayan emir örneklemden çıkar: sonuç yalnız alınan işlemlerden.
+**Alınmayan emirler.** Varsayılanın 791 emrinin 735'i işleme dönüştü; 1'i açık bir pozisyon yüzünden, 55'i yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için alınmadı (bütün dönem, bütün pariteler). Alınmayan emir örneklemden çıkar: sonuç yalnız alınan işlemlerden.
 
 <details>
 <summary>Alınmayan emirler parite parite: varsayılan ve seçilen</summary>
 
 <div class="sayi-tablo">
 
-| Parite | Kural | Emir | İşlem | Açık pozisyon | Stopta ya da ötesinde açılış | Hedef çoktan geçilmiş |
+| Parite | Kural | Emir | İşlem | Açık pozisyon | Stopta ya da ötesinde açılış | Hedefte ya da ötesinde giriş |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
 | EUR/USD | varsayılan | 220 | 207 | 1 | 0 | 12 |
 | EUR/USD | seçilen | 195 | 181 | 14 | 0 | 0 |
@@ -921,7 +923,7 @@ _Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnı
 
 </div>
 
-_Bütün dönem. Açık pozisyon: aynı paritede açık bir pozisyon var; Stopta ya da ötesinde açılış: giriş dakikasında fiyat stopun ötesinde ya da tam üstünde; Hedef çoktan geçilmiş: yürütülen giriş seviye hedefinin gerisinde ya da üstünde (kaymaya bağlı)._
+_Bütün dönem. Açık pozisyon: aynı paritede açık bir pozisyon var; Stopta ya da ötesinde açılış: giriş dakikasında fiyat stopun ötesinde ya da tam üstünde; Hedefte ya da ötesinde giriş: yürütülen giriş (kayma dahil) seviye hedefine varmış ya da onu geçmiş._
 
 </details>
 
@@ -952,7 +954,7 @@ _Artı hükümlü seçilenlerin kuyruğu (örneklem dışı, işlem başına net
 
 Seçilen kombinasyonlarda örneklem dışında R ile pipin işareti ayrışıyor: EUR/USD −0,001 R ama +2,7 pip (pip ortalamasının %95 aralığı −3,3 / +8,9); USD/JPY −0,37 R ama +4,3 pip (pip ortalamasının %95 aralığı −2,7 / +11,6). R'nin işaretini stopu dar işlemler belirliyor (giriş dersi, "R ve pip"); hüküm ön kayıt gereği R'den verilir.
 
-EUR/USD'de seçilenin 8 tek adımlık komşusundan 2 tanesi örneklem içinde, 2 tanesi örneklem dışında net artı. USD/JPY'de seçilenin 8 tek adımlık komşusundan 2 tanesi örneklem içinde, 1 tanesi örneklem dışında net artı.
+EUR/USD'de seçilenin 8 tek adımlık komşusu var: örneklem içinde 2 tanesi net artı, örneklem dışında 2 tanesi net artı. USD/JPY'de seçilenin 8 tek adımlık komşusu var: örneklem içinde 2 tanesi net artı, örneklem dışında biri net artı.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -1083,7 +1085,7 @@ _Önceden kayıtlı varsayılan, bütün dönem (2018 → 2026), işlem başına
 
 <GrafikEmbed src="/arastirma/fx-gunici/n2-saat.html" baslik="Giriş saatine göre — N2 fade" no="20" kaynak="Dukascopy" />
 
-EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 16:00–16:59 TSİ (+0,21 R, 53 işlem), en kötüsü 21:00–21:59 TSİ (−0,32 R, 40 işlem); 3 saatin 1 tanesinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
+EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati 16:00–16:59 TSİ (+0,21 R, 53 işlem), en kötüsü 21:00–21:59 TSİ (−0,32 R, 40 işlem); 3 saatin birinde artı. Saat kovaları ayrı birer sınamadır; en iyi saat şansla da en iyi çıkar.
 
 **Olaya göre.**
 
@@ -1097,7 +1099,7 @@ EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati
 | ECB basın toplantısı | 4 (4) | +0,15 (— / —) | — | — |
 | BoE kararı | 41 (41) | +0,17 (−0,26 / +0,66) | 15 (15) | +0,21 (−0,49 / +0,91) |
 
-_Bütün dönem 2018 → 2026, örneklem dışı 2024 →. Dört paritenin işlemleri birlikte; %95 aralığı olay kümeli. Satırların her biri ayrı bir sınamadır (7 satır): aralığı sıfırın dışında kalan tek bir satır şansla da çıkabilir. Sinyal verip hiçbir paritede işleme dönüşmeyen olay bu tabloda yoktur; satır yalnız işlem açılan olayları taşır: ABD tarım dışı istihdam (NFP) takvimde 105, sinyal veren 89, işlem açılan 84 olay (alınmayan 5 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); ABD TÜFE (CPI) takvimde 104, sinyal veren 78, işlem açılan 76 olay (alınmayan 2 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); FOMC basın toplantısı takvimde 65, sinyal veren 16, işlem açılan 14 olay (alınmayan 2 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); ECB kararı takvimde 70, sinyal veren 31, işlem açılan 30 olay (alınmayan tek olay yürütülen giriş seviye hedefini çoktan geçtiği için); ECB basın toplantısı takvimde 70, sinyal veren 5, işlem açılan 4 olay (alınmayan tek olay açık bir pozisyon yüzünden; açık pozisyonu açan olay: ABD TÜFE 1); BoE kararı takvimde 69, sinyal veren 43, işlem açılan 41 olay (alınmayan 2 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için)._
+_Bütün dönem 2018 → 2026, örneklem dışı 2024 →. Dört paritenin işlemleri birlikte; %95 aralığı olay kümeli. Satırların her biri ayrı bir sınamadır (7 satır): aralığı sıfırın dışında kalan tek bir satır şansla da çıkabilir. Sinyal verip hiçbir paritede işleme dönüşmeyen olay bu tabloda yoktur; satır yalnız işlem açılan olayları taşır: ABD tarım dışı istihdam (NFP) takvimde 105, sinyal veren 89, işlem açılan 84 olay (alınmayan 5 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); ABD TÜFE (CPI) takvimde 104, sinyal veren 78, işlem açılan 76 olay (alınmayan 2 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); FOMC basın toplantısı takvimde 65, sinyal veren 16, işlem açılan 14 olay (alınmayan 2 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); ECB kararı takvimde 70, sinyal veren 31, işlem açılan 30 olay (alınmayan tek olay yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); ECB basın toplantısı takvimde 70, sinyal veren 5, işlem açılan 4 olay (alınmayan tek olay açık bir pozisyon yüzünden; açık pozisyonu açan olay: ABD TÜFE 1); BoE kararı takvimde 69, sinyal veren 43, işlem açılan 41 olay (alınmayan 2 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için)._
 
 **İlk mumun büyüklüğüne göre.** Kural yalnız eşiği aşan olaylarda işlem açtığı için alt kovalar boş kalabilir.
 
@@ -1240,7 +1242,7 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kanıtlanmış bir kenarı yok: örneklem dışında (2024 →) USD/JPY +0,13 R, ama hükmün şartlarını sağlamıyor; öbür paritelerde sonuç sıfır ya da eksi.
-2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kova seçimiyle tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **İlk mumu ölç.** Hareket, haberden önceki ATR'nin iki katını aşıyor mu?
 4. **Teyidi bekle.** Sonraki üç mum içinde ters yönde kapanan mum.
 5. **Stop itkinin ucunda, hedef haber öncesi fiyat.**
@@ -1407,9 +1409,9 @@ Izgaranın 72 kombinasyonundan net beklentisi artı olanlar (örneklem içi · d
 
 _Artı hükümlü seçilenlerin kuyruğu (örneklem dışı, işlem başına net R): GBP/USD +0,01 R; en iyi işlem hariç −0,01, en iyi üç hariç −0,03. Betimleyicidir; hüküm değişmez._
 
-_Gün sonu (bütün dönem): girişi gün sonu çıkışına (New York 16:55, TSİ yazın 23:55, kışın 00:55) ya da sonrasına düşen emir alınmaz. Seçilenlerde böyle düşen emirler: EUR/USD — FOMC kararı 66 emrin 5'i, FOMC basın toplantısı 54 emrin 6'sı; GBP/USD — FOMC kararı 57 emrin 7'si, FOMC basın toplantısı 47 emrin 8'i; USD/JPY — FOMC kararı 69 emrin 2'si, FOMC basın toplantısı 56 emrin 7'si; AUD/USD — FOMC kararı 68 emrin 1'i, FOMC basın toplantısı 55 emrin 6'sı. Sonuç yalnız alınan emirlerden._
+_Gün sonu (bütün dönem): girişi gün sonu çıkışına (New York 16:55, TSİ ABD yaz saatinde 23:55, kış saatinde 00:55) ya da sonrasına düşen emir alınmaz. Seçilenlerde böyle düşen emirler: EUR/USD — FOMC kararı 66 emrin 5'i, FOMC basın toplantısı 54 emrin 6'sı; GBP/USD — FOMC kararı 57 emrin 7'si, FOMC basın toplantısı 47 emrin 8'i; USD/JPY — FOMC kararı 69 emrin 2'si, FOMC basın toplantısı 56 emrin 7'si; AUD/USD — FOMC kararı 68 emrin 1'i, FOMC basın toplantısı 55 emrin 6'sı. Sonuç yalnız alınan emirlerden._
 
-EUR/USD'de seçilenin 7 tek adımlık komşusundan hiçbiri örneklem içinde, hiçbiri örneklem dışında net artı.
+EUR/USD'de seçilenin 7 tek adımlık komşusu var: örneklem içinde hiçbiri net artı değil, örneklem dışında hiçbiri net artı değil.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -1532,11 +1534,11 @@ EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati
 
 _Bütün dönem 2018 → 2026, örneklem dışı 2024 →. Dört paritenin işlemleri birlikte; %95 aralığı olay kümeli. Satırların her biri ayrı bir sınamadır (7 satır): aralığı sıfırın dışında kalan tek bir satır şansla da çıkabilir. Sinyal verip hiçbir paritede işleme dönüşmeyen olay bu tabloda yoktur; satır yalnız işlem açılan olayları taşır: FOMC kararı takvimde 72, sinyal veren 71, işlem açılan 70 olay (alınmayan tek olay açık bir pozisyon yüzünden; açık pozisyonu açan olay: ABD TÜFE 1); FOMC basın toplantısı takvimde 65, sinyal veren 60, işlem açılan 42 olay (alınmayan 18 olayın hepsi açık bir pozisyon yüzünden; açık pozisyonu açan olay: FOMC kararı 17 · ABD TÜFE 1); ECB basın toplantısı takvimde 70, sinyal veren 54, işlem açılan 34 olay (alınmayan 20 olayın hepsi açık bir pozisyon yüzünden; açık pozisyonu açan olay: ECB kararı 16 · ABD TÜFE 4). FOMC basın toplantısı ve ECB basın toplantısı satırları bu yüzden rastgele bir alt küme değildir: aynı günün kararının işlemi toplantı başladığında hâlâ açıksa toplantı alınmaz, yani satırlar yalnız kararın işleminin toplantıdan önce kapandığı ya da kararın işlem açmadığı toplantılardan oluşur._
 
-**Basın toplantıları.** FOMC'de (karar 14:00, basın toplantısı 14:30 New York; TSİ yazın 21:00 ve 21:30, kışın 22:00 ve 22:30) ve
-21 Temmuz 2022'den bu yana ECB'de (karar 14:15, basın toplantısı 14:45 Frankfurt; TSİ yazın 15:15 ve 15:45, kışın 16:15 ve 16:45) haber öncesi aralık, yarım saat önce açıklanan kararın
+**Basın toplantıları.** FOMC'de (karar 14:00, basın toplantısı 14:30 New York; TSİ ABD yaz saatinde 21:00 ve 21:30, kış saatinde 22:00 ve 22:30) ve
+21 Temmuz 2022'den bu yana ECB'de (karar 14:15, basın toplantısı 14:45 Frankfurt; TSİ Avrupa yaz saatinde 15:15 ve 15:45, kış saatinde 16:15 ve 16:45) haber öncesi aralık, yarım saat önce açıklanan kararın
 tepkisini içinde taşır: bekleyen bir piyasanın değil, karara tepki vermiş bir piyasanın aralığıdır ve medyanı
-kararın kendi aralığından geniştir (son sütun). Bu olaylarda stop ve hedef risk biriminde aynı kalır ama pip olarak uzaklaşır. 2022 öncesinde ECB kararı 13:45'te, basın toplantısı 14:30'da açıklanıyordu (Frankfurt; TSİ yazın 14:45 ve 15:30, kışın 15:45 ve 16:30): aralık (Frankfurt 14:00–14:30) kararın ilk
-on beş dakikasını dışarıda bırakır ve basın toplantısının ilk mumu çoğu hafta ABD'nin 08:30 veri dakikasına düşer
+kararın kendi aralığından geniştir (son sütun). Bu olaylarda stop ve hedef risk biriminde aynı kalır ama pip olarak uzaklaşır. 2022 öncesinde ECB kararı Frankfurt 13:45'te, basın toplantısı Frankfurt 14:30'da açıklanıyordu (TSİ Avrupa yaz saatinde 14:45 ve 15:30, kış saatinde 15:45 ve 16:30): aralık (Frankfurt 14:00–14:30; TSİ Avrupa yaz saatinde 15:00–15:30, kış saatinde 16:00–16:30) kararın ilk
+on beş dakikasını dışarıda bırakır ve basın toplantısının ilk mumu çoğu hafta ABD'nin 08:30 veri dakikasına (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30) düşer
 (yukarıda, "Olaylar ve saatleri" bölümünde, "ECB basın toplantısının iki saati" tablosunda). Haber öncesi aralığın medyanı ECB basın toplantısında 14:30 rejiminde 13,3 pip (19 işlem); aynı dönemde kararın kendi aralığı 10,8 pip, 14:45 rejiminde 31,1 pip (15 işlem); aynı dönemde kararın kendi aralığı 11,3 pip.
 
 **İlk mumun büyüklüğüne göre.**
@@ -1622,7 +1624,7 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi EUR/USD, −0,09 R). AUD/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,44 / −0,08; bütün dönem −0,31 / −0,11): şansla açıklanmayan, ölçülmüş bir kayıp. GBP/USD: bütün dönemde %95 aralığı bütünüyle sıfırın altında (−0,26 / −0,08); 2024 → penceresinde üst ucu sıfırda: −0,001 R (sıfıra standart hatanın 0,02 katı uzaklıkta); 500.000 tekrarla −0,004 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %12'sinde ucu sıfırın üstünde verir: üst ucu sıfırda olan pencerede kayıp şanstan güvenle ayırt edilemiyor.
-2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kova seçimiyle tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **Aralığı işaretle.** Haberden önceki yarım saatin tepesi ve dibi. FOMC'nin ve 2022'den bu yana ECB'nin basın
    toplantısında bu aralık kararın tepkisidir; 2022 öncesi ECB toplantılarında kararın ilk on beş dakikası aralığın
    dışında kalır.
@@ -1644,8 +1646,6 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 | AUD/USD | çalışmıyor · −0,26 | çalışmıyor · −0,21 | çalışmıyor · −0,28 | 7,7 | hayır · hayır |
 
 _Hücrede hüküm ve işlem başına net R; tanımlar giriş dersinde ("Hüküm")._
-
-_Sınırda: EUR/USD seçilen, örneklem dışı, aralığın üst ucu −0,01 R (sıfıra standart hatanın 0,12 katı uzaklıkta); 500.000 tekrarla −0,01 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %6'sında ucu sıfırın üstünde verir; GBP/USD varsayılan, örneklem dışı, aralığın üst ucu −0,001 R (sıfıra standart hatanın 0,02 katı uzaklıkta); 500.000 tekrarla −0,004 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %12'sinde ucu sıfırın üstünde verir; USD/JPY varsayılan, bütün dönem, aralığın üst ucu +0,01 R (sıfıra standart hatanın 0,13 katı uzaklıkta); 500.000 tekrarla +0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %83'ünde ucu sıfırın üstünde verir. Bu uçlarda işaret tohum gürültüsüne bağlıdır; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir ve değişmez._
 
 ## N4 — başarısız haber kırılımı
 
@@ -1749,14 +1749,14 @@ Havuzun örneklem dışı ortalaması sıfırın altında ama aralığı sıfır
 
 _Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnız R'de verilir._
 
-**Alınmayan emirler.** Varsayılanın 161 emrinin 154'ü işleme dönüştü; 7'si yürütülen giriş seviye hedefini çoktan geçtiği için alınmadı (bütün dönem, bütün pariteler). Alınmayan emir örneklemden çıkar: sonuç yalnız alınan işlemlerden.
+**Alınmayan emirler.** Varsayılanın 161 emrinin 154'ü işleme dönüştü; 7'si yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için alınmadı (bütün dönem, bütün pariteler). Alınmayan emir örneklemden çıkar: sonuç yalnız alınan işlemlerden.
 
 <details>
 <summary>Alınmayan emirler parite parite: varsayılan ve seçilen</summary>
 
 <div class="sayi-tablo">
 
-| Parite | Kural | Emir | İşlem | Açık pozisyon | Hedef çoktan geçilmiş |
+| Parite | Kural | Emir | İşlem | Açık pozisyon | Hedefte ya da ötesinde giriş |
 | :--- | :--- | ---: | ---: | ---: | ---: |
 | EUR/USD | varsayılan | 48 | 46 | 0 | 2 |
 | EUR/USD | seçilen | 51 | 47 | 1 | 3 |
@@ -1767,7 +1767,7 @@ _Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnı
 
 </div>
 
-_Bütün dönem. Açık pozisyon: aynı paritede açık bir pozisyon var; Hedef çoktan geçilmiş: yürütülen giriş seviye hedefinin gerisinde ya da üstünde (kaymaya bağlı)._
+_Bütün dönem. Açık pozisyon: aynı paritede açık bir pozisyon var; Hedefte ya da ötesinde giriş: yürütülen giriş (kayma dahil) seviye hedefine varmış ya da onu geçmiş._
 
 </details>
 
@@ -1802,7 +1802,7 @@ _Artı hükümlü seçilenlerin kuyruğu (örneklem dışı, işlem başına net
 
 _Seçilemedi: GBP/USD'de örneklem içinde en az 30 işlemli kombinasyon yok (en kalabalığı 29 işlem); AUD/USD'de örneklem içinde en az 30 işlemli kombinasyon yok (en kalabalığı 29 işlem). Seçim ön kayıtlı asgari işlem sayısını ister; o paritede ızgaradan seçilen bir kural yoktur ve hüküm yalnız varsayılandan verilir._
 
-EUR/USD'de seçilenin 7 tek adımlık komşusundan 2 tanesi örneklem içinde, hiçbiri örneklem dışında net artı. USD/JPY'de seçilenin 7 tek adımlık komşusundan 5 tanesi örneklem içinde, 3 tanesi örneklem dışında net artı.
+EUR/USD'de seçilenin 7 tek adımlık komşusu var: örneklem içinde 2 tanesi net artı, örneklem dışında hiçbiri net artı değil. USD/JPY'de seçilenin 7 tek adımlık komşusu var: örneklem içinde 5 tanesi net artı, örneklem dışında 3 tanesi net artı.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -1943,13 +1943,13 @@ EUR/USD'de, bütün dönemde hiçbir giriş saatinde en az 30 işlem yok: figür
 | ECB basın toplantısı | 2 (2) | +1,25 (— / —) | — | — | 24,4 |
 | BoE kararı | 4 (4) | −0,40 (— / —) | — | — | 23,7 |
 
-_Bütün dönem 2018 → 2026, örneklem dışı 2024 →. Dört paritenin işlemleri birlikte; %95 aralığı olay kümeli. Satırların her biri ayrı bir sınamadır (7 satır): aralığı sıfırın dışında kalan tek bir satır şansla da çıkabilir. Sinyal verip hiçbir paritede işleme dönüşmeyen olay bu tabloda yoktur; satır yalnız işlem açılan olayları taşır: ABD TÜFE (CPI) takvimde 104, sinyal veren 28, işlem açılan 25 olay (alınmayan 3 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); ECB kararı takvimde 70, sinyal veren 9, işlem açılan 8 olay (alınmayan tek olay yürütülen giriş seviye hedefini çoktan geçtiği için)._
+_Bütün dönem 2018 → 2026, örneklem dışı 2024 →. Dört paritenin işlemleri birlikte; %95 aralığı olay kümeli. Satırların her biri ayrı bir sınamadır (7 satır): aralığı sıfırın dışında kalan tek bir satır şansla da çıkabilir. Sinyal verip hiçbir paritede işleme dönüşmeyen olay bu tabloda yoktur; satır yalnız işlem açılan olayları taşır: ABD TÜFE (CPI) takvimde 104, sinyal veren 28, işlem açılan 25 olay (alınmayan 3 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); ECB kararı takvimde 70, sinyal veren 9, işlem açılan 8 olay (alınmayan tek olay yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için)._
 
-**Basın toplantıları.** FOMC'de (karar 14:00, basın toplantısı 14:30 New York; TSİ yazın 21:00 ve 21:30, kışın 22:00 ve 22:30) ve
-21 Temmuz 2022'den bu yana ECB'de (karar 14:15, basın toplantısı 14:45 Frankfurt; TSİ yazın 15:15 ve 15:45, kışın 16:15 ve 16:45) haber öncesi aralık, yarım saat önce açıklanan kararın
+**Basın toplantıları.** FOMC'de (karar 14:00, basın toplantısı 14:30 New York; TSİ ABD yaz saatinde 21:00 ve 21:30, kış saatinde 22:00 ve 22:30) ve
+21 Temmuz 2022'den bu yana ECB'de (karar 14:15, basın toplantısı 14:45 Frankfurt; TSİ Avrupa yaz saatinde 15:15 ve 15:45, kış saatinde 16:15 ve 16:45) haber öncesi aralık, yarım saat önce açıklanan kararın
 tepkisini içinde taşır: bekleyen bir piyasanın değil, karara tepki vermiş bir piyasanın aralığıdır ve medyanı
-kararın kendi aralığından geniştir (son sütun). Bu olaylarda karşı uca kadar olan hedef de pip olarak uzaklaşır. 2022 öncesinde ECB kararı 13:45'te, basın toplantısı 14:30'da açıklanıyordu (Frankfurt; TSİ yazın 14:45 ve 15:30, kışın 15:45 ve 16:30): aralık (Frankfurt 14:00–14:30) kararın ilk
-on beş dakikasını dışarıda bırakır ve basın toplantısının ilk mumu çoğu hafta ABD'nin 08:30 veri dakikasına düşer
+kararın kendi aralığından geniştir (son sütun). Bu olaylarda karşı uca kadar olan hedef de pip olarak uzaklaşır. 2022 öncesinde ECB kararı Frankfurt 13:45'te, basın toplantısı Frankfurt 14:30'da açıklanıyordu (TSİ Avrupa yaz saatinde 14:45 ve 15:30, kış saatinde 15:45 ve 16:30): aralık (Frankfurt 14:00–14:30; TSİ Avrupa yaz saatinde 15:00–15:30, kış saatinde 16:00–16:30) kararın ilk
+on beş dakikasını dışarıda bırakır ve basın toplantısının ilk mumu çoğu hafta ABD'nin 08:30 veri dakikasına (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30) düşer
 (yukarıda, "Olaylar ve saatleri" bölümünde, "ECB basın toplantısının iki saati" tablosunda). Haber öncesi aralığın medyanı ECB basın toplantısında 14:30 rejiminde 24,4 pip (2 işlem); aynı dönemde kararın kendi aralığı 9,0 pip, 14:45 rejiminde bu kuralın işlemi yok.
 
 **İlk mumun büyüklüğüne göre.**
@@ -2092,7 +2092,7 @@ _İçi: örneklem içi (2018–2023); dışı: örneklem dışı (2024 →). R: 
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kanıtlanmış bir kenarı yok: örneklem dışında (2024 →) USD/JPY +0,35 R, AUD/USD +0,18 R, ama hükmün şartlarını sağlamıyor; öbür paritelerde sonuç sıfır ya da eksi.
-2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kova seçimiyle tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **Aralığı işaretle.** Haberden önceki yarım saatin tepesi ve dibi. FOMC'nin ve 2022'den bu yana ECB'nin basın
    toplantısında bu aralık kararın tepkisidir; 2022 öncesi ECB toplantılarında kararın ilk on beş dakikası aralığın
    dışında kalır.
@@ -2135,7 +2135,7 @@ oluşmuşsa yeniden görülmeyebilir.
 - **Sinyal.** Geri çekilmeden sonra itki yönünde kapanan (yukarı itkide kapanışı açılışının üstünde olan) ilk mum.
 - **Stop.** Geri çekilmenin ucu (yukarı itkide geri çekilmenin en düşük dibi).
 - **Hedef.** "İtkinin ucu": ilk mumun tepesi (yukarı itkide); ya da 1R, 2R. Seviye yürütülen girişin (makas ve kayma dahil) gerisinde ya da tam üstündeyse işlem yok; atılan sinyal sayısı bu yüzden kaymaya bağlıdır.
-- **Gün sonu.** Girişi gün sonu çıkışına (New York 16:55, TSİ yazın 23:55, kışın 00:55) ya da sonrasına düşen sinyal alınmaz.
+- **Gün sonu.** Girişi gün sonu çıkışına (New York 16:55, TSİ ABD yaz saatinde 23:55, kış saatinde 00:55) ya da sonrasına düşen sinyal alınmaz.
 
 | Parametre | Izgara | Varsayılan |
 | :--- | :--- | :--- |
@@ -2215,14 +2215,14 @@ Havuzun örneklem dışı ortalaması sıfırın altında ve aralığının üst
 
 _Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnız R'de verilir._
 
-**Alınmayan emirler.** Varsayılanın 978 emrinin 789'u işleme dönüştü; 3'ü açık bir pozisyon yüzünden, 186'sı yürütülen giriş seviye hedefini çoktan geçtiği için alınmadı (bütün dönem, bütün pariteler). Alınmayan emir örneklemden çıkar: sonuç yalnız alınan işlemlerden.
+**Alınmayan emirler.** Varsayılanın 978 emrinin 789'u işleme dönüştü; 3'ü açık bir pozisyon yüzünden, 186'sı yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için alınmadı (bütün dönem, bütün pariteler). Alınmayan emir örneklemden çıkar: sonuç yalnız alınan işlemlerden.
 
 <details>
 <summary>Alınmayan emirler parite parite: varsayılan ve seçilen</summary>
 
 <div class="sayi-tablo">
 
-| Parite | Kural | Emir | İşlem | Açık pozisyon | Hedef çoktan geçilmiş | Gün sonundan sonra |
+| Parite | Kural | Emir | İşlem | Açık pozisyon | Hedefte ya da ötesinde giriş | Gün sonundan sonra |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
 | EUR/USD | varsayılan | 287 | 226 | 2 | 59 | 0 |
 | EUR/USD | seçilen | 257 | 168 | 16 | 37 | 36 |
@@ -2235,7 +2235,7 @@ _Pip satırlarında havuz boştur: pariteler arası pip toplanamaz, havuz yalnı
 
 </div>
 
-_Bütün dönem. Açık pozisyon: aynı paritede açık bir pozisyon var; Hedef çoktan geçilmiş: yürütülen giriş seviye hedefinin gerisinde ya da üstünde (kaymaya bağlı); Gün sonundan sonra: giriş gün sonu çıkışına ya da sonrasına düşüyor._
+_Bütün dönem. Açık pozisyon: aynı paritede açık bir pozisyon var; Hedefte ya da ötesinde giriş: yürütülen giriş (kayma dahil) seviye hedefine varmış ya da onu geçmiş; Gün sonundan sonra: giriş gün sonu çıkışına ya da sonrasına düşüyor._
 
 </details>
 
@@ -2258,9 +2258,9 @@ Izgaranın 36 kombinasyonundan net beklentisi artı olanlar (örneklem içi · d
 | USD/JPY | 5 dk · geri çekilme %50,0 · sert stop · hedef itkinin ucu | +0,20 | +2,0 | −0,18 | −5,2 | 0,19 | 0,25 | çalışmıyor |
 | AUD/USD | 60 dk · geri çekilme %50,0 · kapanış stopu · hedef itkinin ucu | −0,12 | −0,5 | −0,48 | −4,8 | 0,00 | 0,00 | çalışmıyor |
 
-_Gün sonu (bütün dönem): girişi gün sonu çıkışına (New York 16:55, TSİ yazın 23:55, kışın 00:55) ya da sonrasına düşen emir alınmaz. Seçilenlerde böyle düşen emirler: EUR/USD — FOMC kararı 37 emrin 24'ü, FOMC basın toplantısı 21 emrin 12'si; GBP/USD — FOMC kararı 42 emrin 24'ü, FOMC basın toplantısı 35 emrin 15'i; AUD/USD — FOMC kararı 36 emrin 25'i, FOMC basın toplantısı 33 emrin 22'si. Sonuç yalnız alınan emirlerden._
+_Gün sonu (bütün dönem): girişi gün sonu çıkışına (New York 16:55, TSİ ABD yaz saatinde 23:55, kış saatinde 00:55) ya da sonrasına düşen emir alınmaz. Seçilenlerde böyle düşen emirler: EUR/USD — FOMC kararı 37 emrin 24'ü, FOMC basın toplantısı 21 emrin 12'si; GBP/USD — FOMC kararı 42 emrin 24'ü, FOMC basın toplantısı 35 emrin 15'i; AUD/USD — FOMC kararı 36 emrin 25'i, FOMC basın toplantısı 33 emrin 22'si. Sonuç yalnız alınan emirlerden._
 
-EUR/USD'de seçilenin 6 tek adımlık komşusundan 2 tanesi örneklem içinde, hiçbiri örneklem dışında net artı.
+EUR/USD'de seçilenin 6 tek adımlık komşusu var: örneklem içinde 2 tanesi net artı, örneklem dışında hiçbiri net artı değil.
 
 <details>
 <summary>Seçilenin çevresi — EUR/USD: tek parametre komşuları</summary>
@@ -2374,7 +2374,7 @@ EUR/USD'de, bütün dönemde ve en az 30 işlemli saatlerde: en iyi giriş saati
 | ECB basın toplantısı | 20 (20) | −0,29 (−0,76 / +0,26) | 6 (6) | −0,01 (— / —) |
 | BoE kararı | 36 (36) | +0,08 (−0,45 / +0,66) | 10 (10) | −0,31 (−1,06 / +0,87) |
 
-_Bütün dönem 2018 → 2026, örneklem dışı 2024 →. Dört paritenin işlemleri birlikte; %95 aralığı olay kümeli. Satırların her biri ayrı bir sınamadır (7 satır): aralığı sıfırın dışında kalan tek bir satır şansla da çıkabilir. Sinyal verip hiçbir paritede işleme dönüşmeyen olay bu tabloda yoktur; satır yalnız işlem açılan olayları taşır: ABD tarım dışı istihdam (NFP) takvimde 105, sinyal veren 86, işlem açılan 85 olay (alınmayan tek olay yürütülen giriş seviye hedefini çoktan geçtiği için); ABD TÜFE (CPI) takvimde 104, sinyal veren 89, işlem açılan 82 olay (alınmayan 7 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); FOMC kararı takvimde 72, sinyal veren 60, işlem açılan 55 olay (alınmayan 5 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); FOMC basın toplantısı takvimde 65, sinyal veren 56, işlem açılan 38 olay (alınmayan 18 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); ECB kararı takvimde 70, sinyal veren 40, işlem açılan 31 olay (alınmayan 9 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için); ECB basın toplantısı takvimde 70, sinyal veren 33, işlem açılan 20 olay (alınmayan 13 olayın 1'i açık bir pozisyon yüzünden, 12'si yürütülen giriş seviye hedefini çoktan geçtiği için; açık pozisyonu açan olay: ABD TÜFE 1); BoE kararı takvimde 69, sinyal veren 44, işlem açılan 36 olay (alınmayan 8 olayın hepsi yürütülen giriş seviye hedefini çoktan geçtiği için)._
+_Bütün dönem 2018 → 2026, örneklem dışı 2024 →. Dört paritenin işlemleri birlikte; %95 aralığı olay kümeli. Satırların her biri ayrı bir sınamadır (7 satır): aralığı sıfırın dışında kalan tek bir satır şansla da çıkabilir. Sinyal verip hiçbir paritede işleme dönüşmeyen olay bu tabloda yoktur; satır yalnız işlem açılan olayları taşır: ABD tarım dışı istihdam (NFP) takvimde 105, sinyal veren 86, işlem açılan 85 olay (alınmayan tek olay yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); ABD TÜFE (CPI) takvimde 104, sinyal veren 89, işlem açılan 82 olay (alınmayan 7 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); FOMC kararı takvimde 72, sinyal veren 60, işlem açılan 55 olay (alınmayan 5 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); FOMC basın toplantısı takvimde 65, sinyal veren 56, işlem açılan 38 olay (alınmayan 18 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); ECB kararı takvimde 70, sinyal veren 40, işlem açılan 31 olay (alınmayan 9 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için); ECB basın toplantısı takvimde 70, sinyal veren 33, işlem açılan 20 olay (alınmayan 13 olayın 1'i açık bir pozisyon yüzünden, 12'si yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için; açık pozisyonu açan olay: ABD TÜFE 1); BoE kararı takvimde 69, sinyal veren 44, işlem açılan 36 olay (alınmayan 8 olayın hepsi yürütülen giriş seviye hedefine vardığı ya da onu geçtiği için)._
 
 **İlk mumun büyüklüğüne göre.** Kural yalnız itkisi yarım ATR'yi aşan olaylarda işlem açar.
 
@@ -2455,7 +2455,7 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 ### Kontrol listesi
 
 1. **Hüküm.** Bu biçimiyle kullanılmaz: dört paritenin hiçbirinde örneklem dışında (2024 →) maliyetten sonra artı değil (en iyisi GBP/USD, −0,14 R). AUD/USD: %95 aralığı 2024 → penceresinde ve onu kapsayan bütün dönemde bütünüyle sıfırın altında (2024 → −0,72 / −0,05; bütün dönem −0,61 / −0,28): şansla açıklanmayan, ölçülmüş bir kayıp.
-2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kovayla tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
+2. **Ne zaman.** Ölçülen koşulların hiçbiri bu kuralın kullanılacağı bir gün tarif etmiyor: hiçbir koşul iki paritede aynı kova seçimiyle tutmadı. Bütün kurallar birlikte sayıldığında gerçek seçim ile ters seçimin tutma sıklığı ayırt edilemiyor (kesin McNemar p 0,74; karşılaştırma dersi).
 3. **İtkiyi ölç.** İlk mumun hareketi haberden önceki ATR'nin en az yarısı mı?
 4. **Geri çekilmeyi bekle.** Altı mum içinde itkinin yarısı geri alınmalı.
 5. **İtki yönünde kapanışta gir.** Stop geri çekilmenin ucunda, hedef itkinin ucu.
@@ -2473,8 +2473,6 @@ En az bir paritede tutan değişkenler, dört paritede ("tuttu" hücresinde seç
 | AUD/USD | çalışmıyor · −0,42 | çalışmıyor · −0,45 | çalışmıyor · −0,48 | 41,6 | hayır · hayır |
 
 _Hücrede hüküm ve işlem başına net R; tanımlar giriş dersinde ("Hüküm")._
-
-_Sınırda: EUR/USD seçilen, örneklem dışı, aralığın üst ucu +0,01 R (sıfıra standart hatanın 0,07 katı uzaklıkta); 500.000 tekrarla +0,01 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %85'inde ucu sıfırın üstünde verir. Bu uçlarda işaret tohum gürültüsüne bağlıdır; hüküm ve bayrak önceden kayıtlı 2.000 tekrarla verilir ve değişmez._
 
 ## Beş stratejinin özeti
 

@@ -31,7 +31,8 @@ dakikalık mum üç saattir ve çapadan sonraki ilk saat sayılmaz; varsayılan�
 mumunda ({{! tsi "" "Londra 12:00–12:15" }}) gelebilir.
 
 Aynı sayım 60 dakikalık mumda Londra çapasıyla on iki mumu sığdırmaz: sayılabilen ilk mum Londra 09:00–10:00,
-on ikincisi 20:00–21:00'dir; sinyal mumu en erken 21:00–22:00 olur, oysa sinyal en geç 16:00 New York'ta ({{! tsi "" "New York 16:00" }}; Londra
+on ikincisi Londra 20:00–21:00'dir; sinyal mumu en erken Londra 21:00–22:00 olur
+({{! tsi "·" "Londra 09:00–10:00" "Londra 20:00–21:00" "Londra 21:00–22:00" }}), oysa sinyal en geç 16:00 New York'ta ({{! tsi "" "New York 16:00" }}; Londra
 21:00, Londra–New York farkının 4 saat olduğu ara dönemde 20:00) kapanmalıdır. Izgaranın {{ B.kombinasyon | n }} kombinasyonundan bu altısı
 (60 dakika, Londra çapası, on iki mum; üç hedef ve iki stop türüyle) dört paritede de hiç işlem açmaz; zaman dilimi
 kıyasında 60 dakikalık satırın boş olması bu yüzdendir.{{? B.kombinasyon == 72 and E.izgara_ozet.islem_acan == 66 and G.izgara_ozet.islem_acan == 66 and J.izgara_ozet.islem_acan == 66 and A.izgara_ozet.islem_acan == 66 }}
@@ -58,7 +59,7 @@ zararla kapanan işlemdir: trend bir süre devam ediyor, sonra VWAP'a dokunuş d
 **Ön kaydın harfiyle.** Ön kayıt yalnız sinyali yasaklar ("çapadan sonraki ilk 60 dakika sinyal yok").
 Bu ölçüm o saatin kapanışlarını trend sayımına da almaz (yukarıda; bu okuma ilk sonuçlardan önce sabitlendi);
 harfiyle okunursa sayım çapadan başlar. O okumada 60 dakikalık Londra kombinasyonları da işlem açar: on iki mum
-Londra 08:00–20:00, sinyal mumu 20:00–21:00'dir ve kapanışı 16:00 New York'a ({{! tsi "" "New York 16:00" }}) denk gelir (Londra–New York farkının
+Londra 08:00–20:00, sinyal mumu Londra 20:00–21:00'dir ({{! tsi "·" "Londra 08:00–20:00" "Londra 20:00–21:00" }}) ve kapanışı 16:00 New York'a ({{! tsi "" "New York 16:00" }}) denk gelir (Londra–New York farkının
 4 saat olduğu ara dönemde gelmez).{{? E.yorum.ilk_saat.bos_kombinasyon == 0 and G.yorum.ilk_saat.bos_kombinasyon == 0 and J.yorum.ilk_saat.bos_kombinasyon == 0 and A.yorum.ilk_saat.bos_kombinasyon == 0 }}
 Hüküm ilk sonuçlardan önce sabitlenen okumayla verilir; harfin okuması aynı koşuda ayrıca ölçüldü. {{! yorum_cumle }}
 

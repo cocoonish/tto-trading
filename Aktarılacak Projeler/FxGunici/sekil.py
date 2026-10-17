@@ -363,7 +363,7 @@ def ornek(o: dict, birim: str) -> None:
             sag = (u - t0) > 0.65 * (t1 - t0)
             fig.add_annotation(x=_tsi([u])[0], xref=xr, y=0.98 - 0.14 * kat_, yref=yr, yanchor="top",
                                xanchor="right" if sag else "left", showarrow=False,
-                               text=f"{adlar.OLAY_KISA.get(ol, ol)} {_saat(u)}",
+                               text=f"{adlar.OLAY_KISA.get(ol, ol)} {_saat(u)} TSİ",
                                font=dict(size=10, color=MUREKKEP if kendi else "#5e5e5e"),
                                bgcolor="rgba(255,255,255,0.8)")
             onceki = u
@@ -440,8 +440,8 @@ def ornek(o: dict, birim: str) -> None:
            f"Örneklem dışından ({_dis(o)}) sabit çekilişle, ayrı günlerde: kazanan, kaybeden ve tuzak (lehine en az "
            f"{vir(float(o['kunye']['ornek']['esik']), 1)} R gidip zararla kapanan)", " · ".join(isaret)]
     if _gece_referansi(b):
-        alt.append("Panel gece aralığının başından (Londra 00:00) açılır: aralığın tepesini ve dibini kuran mumlar "
-                   "panelde")
+        alt.append(f"Panel gece aralığının başından (Londra 00:00; {adlar.tsi_yaz(['Londra 00:00'])}) açılır: "
+                   "aralığın tepesini ve dibini kuran mumlar panelde")
     if stopsuz:
         alt.append(f"Stopsuz kural: stop çizgisi yok; R birimi {R_BIRIMI.get(b.get('aile'), 'girişteki ATR')}")
     bas = baslik_koy(fig, f"Örnek günler — {ad}", alt)
@@ -776,8 +776,8 @@ def saat(o: dict, birim: str) -> None:
     alt.append("TSİ = UTC + 3, yıl boyu (Türkiye 2016'dan beri saat değiştirmiyor); seans saatleri Avrupa ve ABD saat "
                "değişimiyle bir saat kayar")
     if 0 in saatler and len(saatler) > 1:
-        alt.append("Eksen FX gününün sırasıyla: 01'den 00'a; 00 kovası kışın günün son saati (New York 16:00), "
-                   "yazın ilk saatidir (New York 17:00)")
+        alt.append("Eksen FX gününün sırasıyla: 01'den 00'a; 00 kovası (TSİ 00:00–01:00) kışın günün son saatidir "
+                   "(New York 16:00–17:00), yazın ilk saatidir (New York 17:00–18:00)")
     bas = baslik_koy(fig, f"Giriş saatine göre — {adlar.BIRIM[birim][0]}", alt)
     so._yaz(fig, f"{birim}-saat.html", yukseklik(bas, 400))
 
@@ -995,20 +995,37 @@ def rastgele(o: dict, cift: str = "") -> None:
 
 
 # ─────────────────────────────────────────────────────── ortak: veri kalitesi
-def _et_dk(x: int) -> str:
-    """17:00 ET'den x dakika: saat olarak ("16:55")."""
-    t = (17 * 60 + x) % (24 * 60)
+def _saat_dk(saat: str) -> int:
+    """"SS:DD" → günün dakikası."""
+    s, d = (int(x) for x in saat.split(":")[:2])
+    return 60 * s + d
+
+
+def _et_dk(x: int, sinir: str) -> str:
+    """FX gününün sınırından (künye: fx_gun_siniri_et, New York) x dakika: saat olarak ("16:55")."""
+    t = (_saat_dk(sinir) + x) % (24 * 60)
     return f"{t // 60:02d}:{t % 60:02d}"
+
+
+def _ny_tsi(saat: str) -> str:
+    """New York saatinin TSİ karşılığı, ABD yaz ve kış saatinde ("23:55 ya da 00:55"; adlar.tsi_an tek tanım). Kısa
+    yazım panel başlığına sığar; hangi değerin hangi rejim olduğunu figürün alt yazısı söyler."""
+    yaz, kis = (f"{adlar.tsi_an(g, saat, 'America/New_York'):%H:%M}" for _, g in adlar.TSI_REJIM[:2])
+    return yaz if yaz == kis else f"{yaz} ya da {kis}"
 
 
 def veri(o: dict) -> None:
     k = ((o.get("veri") or {}).get("kalite") or {})
     if not k:
         return
+    # Devir profilinin sıfırı FX gününün sınırı, kesikli çizgi pozisyonların kapandığı dilim: ikisi de künyeden
+    # (zaman.GUN_SONU · ayar gun_sonu_et); elle yazılan saat ayar değiştiği gün figürde yanlış dilimi gösterirdi.
+    sinir, gun_sonu = o["kunye"]["fx_gun_siniri_et"], o["kunye"]["gun_sonu_et"]
     # İki panel ALT ALTA: yan yana dizildiğinde telefonda (353 px) iki panel başlığı üst üste biniyordu.
     fig = make_subplots(rows=2, cols=1, vertical_spacing=0.16,
                         subplot_titles=("Saat saat medyan makas (New York saati)",
-                                        "17:00 ET devri çevresinde<br>beş dakikalık dilimler (dilim medyanı)"))
+                                        f"Devir çevresinde beş dakikalık dilimler<br>(New York {sinir} = TSİ "
+                                        f"{_ny_tsi(sinir)})"))
     for c in [x for x in PARITE if x in k] + [x for x in k if x not in PARITE]:
         v = k[c]
         m = v.get("makas") or {}
@@ -1023,12 +1040,12 @@ def veri(o: dict) -> None:
         dk = sorted(int(x) for x in dv)
         fig.add_trace(go.Scatter(x=dk, y=[dv[str(x)] for x in dk], mode="lines+markers", showlegend=False,
                                  line=dict(color=RENK.get(c, GRI), width=1.6), marker=dict(size=4),
-                                 hovertext=[f"{_et_dk(x)}–{_et_dk(x + 5)} ET · {vir(dv[str(x)], 1)} pip "
-                                            f"({PARITE.get(c, c)})" for x in dk],
+                                 hovertext=[f"{_et_dk(x, sinir)}–{_et_dk(x + 5, sinir)} New York · "
+                                            f"{vir(dv[str(x)], 1)} pip ({PARITE.get(c, c)})" for x in dk],
                                  hoverinfo="text"), 2, 1)
-    fig.add_vline(x=-5, line=dict(color=CLARET, width=1, dash="dash"), row=2, col=1)
+    fig.add_vline(x=_saat_dk(gun_sonu) - _saat_dk(sinir), line=dict(color=CLARET, width=1, dash="dash"), row=2, col=1)
     fig.update_xaxes(dtick=3, title_text="New York saati", row=1, col=1)
-    fig.update_xaxes(dtick=10, title_text="17:00 ET'den dakika (dilimin başı)", row=2, col=1)
+    fig.update_xaxes(dtick=10, title_text=f"New York {sinir}'den dakika (dilimin başı)", row=2, col=1)
     fig.update_yaxes(title_text="pip", row=1, col=1)
     fig.update_yaxes(title_text="pip", row=2, col=1)
     bas = baslik_koy(fig, "Makas: gün içinde ve devir dakikalarında",
@@ -1036,7 +1053,7 @@ def veri(o: dict) -> None:
                       "dakika kapanışlarında ask − bid",
                       "TSİ = New York + 7 saat (ABD yaz saati) ya da + 8 saat (ABD kış saati)",
                       "Alt panel: her nokta beş dakikalık bir dilimin medyan makası · kırmızı kesikli: pozisyonların "
-                      "kapandığı 16:55 ET dilimi"])
+                      f"kapandığı New York {gun_sonu} dilimi (TSİ {_ny_tsi(gun_sonu)})"])
     so._yaz(fig, "veri-makas.html", yukseklik(bas, 700))
 
 
@@ -1196,7 +1213,8 @@ def haber_fomc(o: dict) -> None:
     alt = [f"x: karar, New York 14:00 → 14:30 · y: basın toplantısı, 14:30 → {bas_bit} · ikisi orta fiyattan, önceki "
            f"{atr_gun} günün ATR'sinin yüzdesi",
            "Sol üst ve sağ alt çeyrek: basın toplantısı karara verilen tepkiyi TERSİNE çevirdi",
-           f"New York 14:00 = {adlar.tsi_yaz(['New York 14:00'])} · 14:30 = {adlar.tsi_yaz(['New York 14:30'])}"]
+           f"New York 14:00 → 14:30 → {bas_bit} = "
+           f"{adlar.tsi_yaz(['New York 14:00', 'New York 14:30', f'New York {bas_bit}'], '→')}"]
     alt += sifir
     bas = baslik_koy(fig, "FOMC: kararın ilk yarım saati ve basın toplantısının ilk saati", alt)
     so._yaz(fig, "haber-fomc.html", yukseklik(bas, 470))

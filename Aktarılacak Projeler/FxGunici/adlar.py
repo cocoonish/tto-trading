@@ -12,8 +12,8 @@ from zoneinfo import ZoneInfo
 BIRIM = {
     "orb": ("Londra açılış aralığı kırılımı (ORB)", "Londra ORB"),
     "asya": ("Asya aralığı kırılımı", "Asya aralığı"),
-    "nyib_0800": ("New York ilk denge kırılımı — 08:00 ET", "NY IB 08:00"),
-    "nyib_0930": ("New York ilk denge kırılımı — 09:30 ET", "NY IB 09:30"),
+    "nyib_0800": ("New York ilk denge kırılımı — 08:00", "NY IB 08:00"),
+    "nyib_0930": ("New York ilk denge kırılımı — 09:30", "NY IB 09:30"),
     "icmum": ("İç mum (inside bar) kırılımı", "İç mum"),
     "sikisma": ("Sıkışma kırılımı (Bollinger–Keltner)", "Sıkışma"),
     "pdhl": ("Önceki gün tepe/dip kırılımı (PDH/PDL)", "PDH/PDL"),
@@ -262,31 +262,44 @@ SAAT_SEHIR = {"son_giris_londra": "Londra", "aralik_sonu_londra": "Londra", "son
 
 def tsi_an(gun: str, saat: str, bolge: str) -> datetime:
     y, a, d = (int(x) for x in gun[:10].split("-"))
-    hh, mm = (int(x) for x in saat.split(":"))
-    return datetime(y, a, d, hh, mm, tzinfo=ZoneInfo(bolge)).astimezone(ZoneInfo("Europe/Istanbul"))
+    hh, mm, *ss = (int(x) for x in saat.split(":"))
+    return datetime(y, a, d, hh, mm, ss[0] if ss else 0, tzinfo=ZoneInfo(bolge)).astimezone(ZoneInfo("Europe/Istanbul"))
+
+
+#: Tek bir saat rejimi kuralı taşıyan şehirlerin TSİ etiketi: hangi ülkenin yaz saati. "Yazın" tek başına ABD saati
+#: için mart ve kasım başındaki ara haftaları da kapsar (Avrupa o haftalarda kış saatindedir); takvime ya da Avrupa
+#: saatine bakan okur o haftalarda "kışın" değerini seçerdi. Ülkesiyle yazılan rejim bu belirsizliği taşımaz.
+REJIM_ULKE = {frozenset({"America/New_York"}): "ABD", frozenset({"Europe/London"}): "İngiltere",
+              frozenset({"Europe/Berlin"}): "Avrupa", frozenset({"Europe/London", "Europe/Berlin"}): "Avrupa"}
 
 
 def tsi_yaz(saatler, birlestir: str = "") -> str:
-    """Yerel saatlerin TSİ karşılığı: ["Londra 08:00", "New York 14:00"], "→" → "TSİ yazın 10:00 → 21:00, kışın
-    11:00 → 22:00, ara haftalarda 11:00 → 21:00". Her öğe "<şehir> SS:DD" ya da "<şehir> SS:DD–SS:DD"; aynı sonucu
-    veren rejimler bir kez yazılır (yalnız Londra saati taşıyan bir öğede ara hafta kışla aynıdır). Okunamayan öğe
-    ValueError."""
+    """Yerel saatlerin TSİ karşılığı. Tek bir saat rejimi kuralı varsa ülkesiyle: ["New York 08:30"] → "TSİ ABD yaz
+    saatinde 15:30, kış saatinde 16:30"; Londra ile New York birlikteyse üç rejim: ["Londra 08:00", "New York 14:00"],
+    "→" → "TSİ yazın 10:00 → 21:00, kışın 11:00 → 22:00, ara haftalarda 11:00 → 21:00" (ara hafta: ABD yaz, Avrupa
+    kış saatinde). Her öğe "<şehir> SS:DD[:SS]" ya da "<şehir> SS:DD[:SS]–SS:DD[:SS]"; aynı sonucu veren rejimler bir
+    kez yazılır. Okunamayan öğe ValueError."""
     import re
+    z = r"\d{2}:\d{2}(?::\d{2})?"
     cozum = []
     for s in saatler:
-        m = re.fullmatch(r"(Londra|New York|Frankfurt|Tokyo) (\d{2}:\d{2})(?:–(\d{2}:\d{2}))?", s.strip())
+        m = re.fullmatch(rf"(Londra|New York|Frankfurt|Tokyo) ({z})(?:–({z}))?", s.strip())
         if not m:
             raise ValueError(f"tsi: okunamayan saat: {s!r}")
         cozum.append((SEHIR_BOLGE[m.group(1)], m.group(2), m.group(3)))
     if not cozum:
         raise ValueError("tsi: saat yok")
+
+    def yaz(t: datetime, ornek: str) -> str:
+        return f"{t:%H:%M:%S}" if ornek.count(":") == 2 else f"{t:%H:%M}"
+
     sonuc: list[tuple[str, str]] = []
     for ad, gun in TSI_REJIM:
         parca = []
         for bolge, s1, s2 in cozum:
-            x = f"{tsi_an(gun, s1, bolge):%H:%M}"
+            x = yaz(tsi_an(gun, s1, bolge), s1)
             if s2:
-                x += f"–{tsi_an(gun, s2, bolge):%H:%M}"
+                x += f"–{yaz(tsi_an(gun, s2, bolge), s2)}"
             parca.append(x)
         metin = f" {birlestir} ".join(parca) if birlestir else parca[0]
         if all(metin != m_ for _, m_ in sonuc):
@@ -294,4 +307,7 @@ def tsi_yaz(saatler, birlestir: str = "") -> str:
     if len(sonuc) == 1:
         # Saat değiştirmeyen bir şehrin (Tokyo) saati üç rejimde de aynıdır: "yazın" demek kışın başka olduğunu ima eder.
         return "TSİ " + sonuc[0][1]
+    ulke = REJIM_ULKE.get(frozenset(b for b, _, _ in cozum))
+    if ulke and len(sonuc) == 2:
+        return f"TSİ {ulke} yaz saatinde {sonuc[0][1]}, kış saatinde {sonuc[1][1]}"
     return "TSİ " + ", ".join(f"{ad} {m_}" for ad, m_ in sonuc)

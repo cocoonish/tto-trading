@@ -5046,10 +5046,14 @@ takvim → takvimin fiyat sınaması → veri denetimi → koşu → karşı olg
 metinleri → kapı (`dogrula.py`; sayfa sınavı 26 kendiliğinden koşturur, ağır kütüphane ve git
 istemez — ölçüm dosyasının taşıdığı geçmişi beklenenle kıyaslar, yani yayın koşucusunun sığ
 checkout'u onu düşürmez). Fiyat arşivi ve takvimin ham sayfaları bulutta indirilir
-(`arastirma-veri.yml`) ve okunmadan önce SHA-256 özüne karşı sınanır. Hüküm: önceden kayıtlı
-varsayılanların 88 bileşiminde (22 kural × 4 parite) 2024 → 82 çalışmıyor · 6 zayıf, bütün dönem
-83 · 5; iki pencerede de "çalışıyor" hükmü alan bileşim yok ve havuzda yirmi iki kuralın yirmi
-ikisinde örneklem dışı net R eksi. Ders metni bunu manşette söyler.
+(`arastirma-veri.yml`) ve okunmadan önce SHA-256 özüne karşı sınanır. Hüküm: varsayılanların 88
+bileşiminde (22 kural × 4 parite; 84'ü önceden kayıtlı, NY IB 08:00'ın 4'ü ön kayıttan türetilmiş)
+2024 → 82 çalışmıyor · 6 zayıf, bütün dönem 83 · 5 — yalnız önceden kayıtlı 84'te 78 · 6 ve
+79 · 5; iki pencerede de "çalışıyor" hükmü alan bileşim yok. Havuzda yirmi iki kuralın yirmi
+ikisinde örneklem dışı net R'nin nokta tahmini eksi; %95 aralığı on altısında bütünüyle sıfırın
+altında, N5'te üst uç sınırda (işareti tohuma bağlı), beşinde (Londra ORB, NY IB 08:00, NY IB
+09:30, N2, N4) sıfırı kapsıyor; hiçbir kuralda alt uç sıfırın üstünde değil. Ders metni bunu
+manşette söyler.
 
 (1) ÖN KAYIT GİT'TE DURUR, ÖLÇÜM ONU GİT'TEN OKUR. `onkayit.toml` hiçbir sonuç görülmeden commit
 edildi; metodoloji dersinin geçmiş tablosu dosyanın commit'lerinden ve ilk sonuçların görüldüğü
@@ -5139,6 +5143,41 @@ kap artık tablonun en dar genişliğini alır ve sütunun sağındaki boşluğa
 (`--tablo-pay`), kaydırma ancak o pay da yetmezse başlar: 1.280 pikselin üstünde yalnız en geniş üç
 tablo (1.197–1.276 piksel) kayıyor. Ölçüm elle koşturuldu (Playwright, altı genişlik, katlanırlar
 açık ve kapalı); yayın kapısında taşma ölçütü yok (30.09'un açık (d) maddesi).
+
+ÜÇÜNCÜ TUR (kapanış doğrulaması: ikinci turun düzeltmeleri donmuş kopyaya karşı yeniden okundu;
+kısmen kapanmış 14 düzeltme ve manşetin 6 bulgusu) kusurların çoğunu düzeltmelerin KENARINDA buldu.
+(14) BİR KAPI VARLIĞI DEĞİL DEĞERİ SORMALIDIR. 15. ölçüt bir paragrafta "TSİ" sözcüğünü arıyordu; tek
+bir TSİ karşılığı aynı paragraftaki öbür saatleri de geçiriyordu ve FX gününün sınırı (New York
+17:00) beş yerde TSİ'siz yayına gidecekti. Ölçüt artık her yerel saatin karşılığını saat dilimi
+kurallarından kendisi hesaplar ve aynı cümlede DEĞERİYLE arar; yanlış bir karşılık da düşer. Tek bir
+saat rejimi kuralı taşıyan şehrin TSİ'si ülkesiyle yazılır ("TSİ ABD yaz saatinde 15:30, kış saatinde
+16:30"; `adlar.REJIM_ULKE`): "yazın" tek başına mart ve kasımın ara haftalarını da kapsar, o haftalarda
+Avrupa kış saatindedir ve takvime bakan okur yanlış değeri seçerdi.
+(15) ELLE YAZILAN SABİT, ÖLÇÜYE BAĞLANMADIKÇA İKİNCİ BİR KOPYADIR. Gün sonu (16:55) ve FX gününün
+sınırı figürde, kayma karşılaştırma dersinde, patikanın yön penceresi haber dersinde ve ölçü dışı
+sebebinde, FOMC pencereleri motor cümlelerinde, parite listesi ve pip tanımı giriş ve metodoloji
+derslerinde elle yazılıydı; hepsi künyeden basılıyor (`pariteler` biçimi · `pip_tanimi` ·
+`_fomc_saat`) ya da `{{? }}` iddiasıyla künyeye bağlı (FOMC ve ECB saatleri takvimin kuralına ve
+ölçülen saat rejimine). Sözcükle yazılan pencere adı ("ilk doksan dakikasında") başka bir sabitte
+yanlış olacağı için üretim o hâlde düşer. ATR periyodu kapının 16. ölçütüdür: metinde ve figürde
+yazılan her "ATR(N)" ön kaydın periyotlarındandır ve kural kodundaki periyodun ön kayıtla aynı olduğunu
+birim sınaması sorar — kod periyodu ön kayıttan okumuyor, ikisi ayrı yazılı.
+(16) BİR KALIBIN AYRACI DA SÖZLEŞMEDİR. 13. ölçüt iki yerde kördü: "dört majör (…)" sayımı "parite"
+sözcüğü olmadan geçtiği için sayılmıyordu, ve şablonlar satır sonundan bölündüğü için "en az⏎iki
+paritede" bir alt küme sayımıyken yalnız boşluk arayan kalıba elle yazılmış parite sayısı gibi
+görünüyordu (ilk kalıbın yanlış alarmı; düzeltmenin kendi sınaması yakaladı). Sözcük araları her
+boşluktur.
+(17) İŞARETİ TOHUMA BAĞLI BİR UÇ ADIYLA YAZILIR. Ay sonu alt kümesinin iki bileşiminde (GBP/USD
+2018–2023 · USD/JPY 2024 →) ve N5 havuzunda %95 aralığının ucu sıfıra o kadar yakın ki işareti
+bootstrap tohumuna bağlı; ders bunları "sınırda" diye adlandırır ve tohumların payını basar, hüküm
+önceden kayıtlı 2.000 tekrarla verilir ve değişmez.
+Bir süreç dersi de kayda geçsin: bir dosyanın tamamına uygulanan düzenli ifade değiştirmesi, aynı
+değişikliğin eklediği yardımcının kendi dönüş satırını da yeniden yazdı ve yardımcı kendini çağırır
+oldu; bir toplu değiştirme kendi eklediği tanımı da tarar, sonucu çalıştırılmadan bitmiş sayılmaz.
+İkinci süreç kusuru da bir yardımcıdaydı: figüre eklenen saat→dakika yardımcısı, dosyanın ilerisindeki
+aynı adlı dakika yazıcısıyla gölgelendi ve şekil adımı ancak zincirde düştü — derleme ve içe aktarma temizdi, zincir
+yayın katmanını geri koydu. Aynı tarama ders motorunda susmuş bir ölü tanım daha buldu; aynı adla iki üst düzey
+tanım artık sınamada (`testler/test_tanimlar.py`).
 
 AÇIK, adıyla (metodoloji dersinin "Ölçülmeyenler"i): gerçek sürpriz (anket medyanı yok; haber
 kovaları ilk mumun hareketinden bir vekil), piyasa derinliği ve kısmi dolum, başka bir likidite

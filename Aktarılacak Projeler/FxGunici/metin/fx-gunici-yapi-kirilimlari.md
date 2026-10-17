@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'kirilim', 'inside-bar', 'pivot', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Seansın saatine değil fiyatın kendi yapısına bakan dört kırılım kuralı: dar bir mumun, sakin bir oynaklık döneminin, dünün uçlarının ve pivot seviyelerinin kırılması. Dördünde de yön seçimi hiçbir paritede rastgele yönden ayrışmıyor ve maliyetten sonra kanıtlanmış bir kenar yok.{{! kural_iddia rastgele_yok icmum sikisma pdhl pivot_kirilim }}{{! kural_iddia calisan_yok icmum sikisma pdhl pivot_kirilim }}"
+ozet: "Seansın saatine değil fiyatın kendi yapısına bakan dört kırılım kuralı: dar bir mumun, sakin bir oynaklık döneminin, dünün uçlarının ve pivot seviyelerinin kırılması. Dördünde de örneklem dışında (2024 →) yön seçimi hiçbir paritede rastgele yönden ayrışmıyor{{! rastgele_tum_istisna icmum sikisma pdhl pivot_kirilim }} ve maliyetten sonra kanıtlanmış bir kenar yok.{{! kural_iddia rastgele_yok icmum sikisma pdhl pivot_kirilim }}{{! kural_iddia calisan_yok icmum sikisma pdhl pivot_kirilim }}"
 seviye: 'orta'
 onkosul:
   - fx-gunici-giris

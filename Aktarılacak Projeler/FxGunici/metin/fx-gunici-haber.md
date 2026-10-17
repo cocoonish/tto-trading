@@ -30,12 +30,13 @@ sorusunu soran devam tablosu, ortalama fiyat patikaları ve FOMC'de karar ile ba
 kararı ve basın toplantısı EUR/USD'de; BoE kararı GBP/USD'de. Her olayın saati resmî bir kaynaktan geldi: ABD
 verilerinde yayımın kendi ambargo satırından, FOMC kararında karar metninin yayım satırından, ECB basın toplantısında
 duyurunun kendi cümlesinden, tarih tarih; BoE kararında, ECB kararında ve FOMC basın toplantılarının çoğunda kurumun
-yayımladığı saat kuralından. Hiçbir saat "genelde 08:30'dur" diye varsayılmadı; hangi olayın saatinin nereden geldiği
+yayımladığı saat kuralından. Hiçbir olayın saati "genelde bu saattedir" diye varsayılmadı; hangi olayın saatinin nereden geldiği
 metodoloji dersinde.
 
 {{! takvim }}
 
-_Saatler yerel saattir; TSİ karşılıkları giriş dersinin tablosunda. Saatin kaynağı: tarih tarih (resmî metnin
+_Saatler yerel saattir; TSİ karşılıkları yanlarında (saat değiştiren şehirde yaz ve kış saatiyle, tek günlük olayda
+o günün kendisinden). Saatin kaynağı: tarih tarih (resmî metnin
 kendi saat satırından) ya da kuraldan (kurumun yayımladığı saat kuralından). Fiyat sınaması: resmî saatte 1 dakikalık fiyatta
 olağandışı bir sıçrama var mı (doğrulandı), yoksa yarım saat ya da bir saat önce/sonra mı daha iyi oturuyor
 (çelişki), yoksa ne resmî saatte ne o dört aday saatte bir sıçrama var mı (sessiz). Sessiz, piyasanın günün başka bir
@@ -49,12 +50,13 @@ sonuca bakarak seçmek olurdu. Saati yanlış bir olayın etkisinin yönü ise �
 hareketi olay sayar ya da olayın kendi hareketini kaçırır, sonucu iki yöne de kaydırabilir. Saat bu yüzden fiyattan
 düzeltilmez, resmî bir metinle düzeltilir.
 
-**ECB basın toplantısının iki saati.** ECB basın toplantısı {{ O.takvim.sayim.ECB_basin.saat_aralik."14:45 Europe/Berlin"[0] | tarih_uzun }}'den bu yana 14:45'te, öncesinde 14:30'da
-başlıyordu ve iki saat iki ayrı piyasa dakikasıdır. {{! saat_rejimi_cumle ECB_basin }}
+**ECB basın toplantısının iki saati.** ECB basın toplantısı {{ O.takvim.sayim.ECB_basin.saat_aralik."14:45 Europe/Berlin"[0] | tarih_uzun }}'den bu yana Frankfurt 14:45'te, öncesinde
+Frankfurt 14:30'da başlıyordu ({{! tsi "ve" "Frankfurt 14:45" "Frankfurt 14:30" }}) ve iki saat iki ayrı piyasa dakikasıdır. {{! saat_rejimi_cumle ECB_basin }}
 
 {{! saat_rejimi ECB_basin }}
 
-Okuma: 14:30 rejiminde basın toplantısının ilk mumu ABD'nin 08:30 veri dakikasıyla çakışır. Makasın genişlemesi o
+Okuma: 14:30 rejiminde basın toplantısının ilk mumu ABD'nin 08:30 veri dakikasıyla ({{! tsi "" "New York 08:30" }})
+çakışır. Makasın genişlemesi o
 dakikadan geliyor; fiyat tepkisinin iki haber arasındaki payı bu veriyle ayrılamaz. Bu dersin devam tablosundaki ve beş stratejideki "ECB basın toplantısı" satırları iki rejimin birleşimidir; aynı
 dakikadaki iki takvim olayı devam tablosunda iki ayrı olay satırında durur (ABD TÜFE'si dört paritenin ortalamasıyla,
 basın toplantısı EUR/USD ile), haber stratejilerinde ise o dakika parite başına tek pozisyondur.
@@ -152,7 +154,7 @@ hüküm bu yüzden ailenin düzeltilmiş q değeriyle verilir. {{! devam_okuma }
 
 Her olay için olay anındaki orta fiyattan değişimin ortalaması, haberden otuz dakika öncesinden iki saat sonrasına,
 ilk beş dakikanın yönüne göre iki kümede. Bir patika ilk beş dakikadan sonra aynı yönde sürüyorsa kırılım, geri
-dönüyorsa fade lehine bir betimlemedir; gölge, ortalamanın %95 aralığıdır.
+dönüyorsa fade lehine bir betimlemedir; gölge, ortalamanın %95 aralığıdır.{{? K.haber_sabit.patika_yon_sn == 300 }}
 
 {% if O.haber.cift.EURUSD.patika.NFP %}{{! sekil haber-patika-nfp "Ortalama patika — ABD tarım dışı istihdam (NFP)" }}{% endif %}
 
@@ -169,7 +171,7 @@ dönüyorsa fade lehine bir betimlemedir; gölge, ortalamanın %95 aralığıdı
 {% if O.haber.cift.GBPUSD.patika.BoE_karar %}{{! sekil haber-patika-boe-karar "Ortalama patika — BoE kararı" }}{% endif %}
 
 Patikalar betimleyicidir: ortalama bir patika tek bir olayın yolunu anlatmaz, ve ilk beş dakikanın yönüne göre
-kümelemek patikanın ilk beş dakikasını tanımı gereği o yöne iter. Asıl bilgi beşinci dakikadan sonrasıdır.
+kümelemek patikanın ilk beş dakikasını tanımı gereği o yöne iter. Asıl bilgi beşinci dakikadan sonrasıdır.{{? K.haber_sabit.patika_yon_sn == 300 }}
 
 ## FOMC: karar ve basın toplantısı
 

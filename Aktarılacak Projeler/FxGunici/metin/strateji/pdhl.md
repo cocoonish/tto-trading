@@ -16,9 +16,10 @@ olduğu ölçünün kendisidir.
 
 - **Seviyeler.** Önceki FX işlem gününün (17:00 → 17:00 New York; gün dönümü
   {{! tsi "" "New York 17:00" }}) orta fiyattan tepesi ve dibi.
-- **Pencere.** Gün başından (17:00 New York) ya da Londra 08:00'den 14:00 New York'a kadar kapanan mumlar
+- **Pencere.** Gün başından (17:00 New York; {{! tsi "" "New York 17:00" }}) ya da Londra 08:00'den 14:00 New York'a kadar kapanan mumlar
   ({{! tsi "→" "Londra 08:00" "New York 14:00" }}).
-- **Sinyal.** Seviyeyi **kesen** ilk kapanış: bir önceki mum seviyenin içinde kapanmış, bu mum dışında kapanmış.
+- **Sinyal.** Seviyeyi **kesen** ilk kapanış: bir önceki mum kesilen seviyenin berisinde ya da tam seviyede
+  kapanmış (öbür seviyenin ötesinde de olabilir), bu mum seviyenin ötesinde kapanmış.
   Fiyat pencere açılmadan seviyenin dışındaysa önce içeri girmesi, sonra yeniden kesmesi gerekir. Gün başına tek
   işlem.
 - **Stop.** Sinyal mumunun karşı ucu ya da seviyenin {{= "0,5" }} × ATR(14) içi (alışta tepenin altında, satışta dibin

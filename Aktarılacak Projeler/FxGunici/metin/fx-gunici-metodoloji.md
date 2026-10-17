@@ -25,13 +25,14 @@ bid'den yürütülür ve makas maliyete ayrıca eklenmez, fiyatın kendisindedir
 
 Strateji mumları (5, 15, 60 dakika) 1 dakikalık orta fiyattan kurulur ve UTC saatine çıpalıdır. 5 ve 15 dakikalık
 mumlarda seans açılışları (Londra 08:00, New York 08:00 ve 09:30; {{! tsi "·" "Londra 08:00" "New York 08:00" "New York 09:30" }}) her zaman bir mumun başına düşer. 60 dakikalık
-mumlarda her kural kendi çıpasını kullanır: saatlik mum saat başında başlar, New York 09:30 ilk dengesinde ise
-:30'da (saat başı çıpanın New York 08:30 verileriyle ilişkisi aşağıda, ön kaydın yorum gerektiren yerleri arasında).
+mumlarda her kural kendi çıpasını kullanır: saatlik mum saat başında başlar, New York ilk dengesi — 09:30 kuralında
+ise :30'da. Saat başı çıpanın New York 08:30 verileriyle ({{! tsi "" "New York 08:30" }}) ilişkisi aşağıda, ön kaydın
+yorum gerektiren yerleri arasında.
 Haber kurallarının mumları her zaman olay dakikasından başlar: ilk haber mumu olay dakikası ile bir mum
 sonrası arasıdır.
 
 Arşiv dört paritede örneklemin bütün iş günlerini kapsar. UTC cumartesisi arşivde yoktur: FX cuma 17:00'de (New
-York) kapanır, pazar 17:00'de açılır ve UTC cumartesisinin bütün dakikaları kapalı piyasadır (ilk iki yılın bütün
+York; {{! tsi "" "New York 17:00" }}) kapanır, pazar aynı saatte açılır ve UTC cumartesisinin bütün dakikaları kapalı piyasadır (ilk iki yılın bütün
 cumartesileri kaynakta boştur).
 
 {{! arsiv_ozet }}
@@ -50,7 +51,7 @@ altında kalan işlem günleri dört paritede de tam bu günlerdir ({{ O.veri.ta
 ## Saat
 
 Bütün zaman damgaları UTC olarak saklanır; yerel saatler (Londra, New York, Frankfurt) IANA saat dilimi tablosundan
-çevrilir ve hiçbir saat farkı elle yazılmaz. FX günü New York 17:00'de başlar ve biter. İşlem saatleri okura TSİ
+çevrilir ve hiçbir saat farkı elle yazılmaz. FX günü New York 17:00'de ({{! tsi "" "New York 17:00" }}) başlar ve biter. İşlem saatleri okura TSİ
 olarak verilir (UTC+3, yaz saati yok); olay saatleri ayrıca kendi yerel saatleriyle. Yaz saati geçişleri her yıl
 için elle yazılmış bir listeye karşı sınanır; Londra ile New York'un farklı haftalarda saat değiştirdiği ara dönemler
 giriş dersindeki tablodadır.
@@ -130,6 +131,11 @@ bütün fiyatlar başka bir yürüyüşle değiştirilir. İki türlü kesim var
   sinyaller üç koşuda birebir aynı olmalıdır; varsayılanın kesimden önce açılmış işlemlerinin giriş fiyatı, stopu ve
   R'si de geleceğin değişmesinden etkilenmemelidir. İki mumluk pay bu kesimi bir iki mumluk ileri bakışa kör yapar; o
   sızıntıyı çıpalı kesim yakalar.
+- **Koşul değişkenleri.** Koşul analizinin kovaları da girişin anında bilinen bilgiden kurulmalıdır. Önceden
+  duyurulmayan bir karar (FOMC'nin olağanüstü toplantıları) ancak olduğu anda bilinir: sınama sentetik seride günün
+  ortasına böyle bir olay koyar ve kararı olaydan önce verilen sinyallerin hiçbir koşul değişkeninin değişmediğini
+  ister. Aynı olay planlanmış olsaydı günü baştan işaretlerdi; sınama bunu da ister, yani değişkenin takvimi gerçekten
+  okuduğunu gösterir.{{? "test_kosul_degiskeni_olaganustu_olayi_gormez" in K.ileri_bakma.sinama }}
 
 Yorum duyarlılığının harf okumaları da (aşağıda) iki kesimden geçer. Sınama gerçek fiyatla yapılmadığı için bir kuralın
 kazancı hakkında bir şey söylemez. Kapsamı da sınırlıdır: bir sızıntının görünmesi için onu tetikleyen durumun sentetik
@@ -179,13 +185,14 @@ ve işlem açılmayan gün sıfırdır (ön kaydın tanımı); Sharpe ×√252 i
   ortalamasını (tamamlayanı) aşar ve en az {{ K.uygulama_esik.kosul_oos | n }} işlemle ölçülürse "tuttu". Seçilen
   kova, seçilmeyenlerden birinin altında kalsa da tutabilir. Hiçbir kova seçilmediyse ya da bütün kovalar
   seçildiyse sınama kurulamaz ve adıyla yazılır. Bütün işlemlerde aynı değeri taşıyan iki değişken tek sayılır.
-  Kontrol listesine aday olarak yalnız en az iki paritede aynı kovayla tutan koşul girer.
+  Kontrol listesine aday olarak yalnız en az iki paritede aynı kova seçimiyle tutan koşul girer.
 
 ### Ön kayıt
 
 Kuralların, ızgaraların, kural ailelerinin varsayılanlarının ve hüküm kuralının şartlarının hepsi tek bir ön kayıt
 dosyasında, hiçbir backtest sonucu görülmeden yazıldı ve kaydedildi. Ön kayıtta olmayan iki şey var: New York ilk
-dengesi 08:00 kuralının varsayılanı (09:30 varsayılanından yalnız başlangıç değiştirilerek türetildi) ve hüküm
+denge kırılımının 08:00 sürümünün varsayılanı (ön kayıtlı 09:30 sürümününkinden yalnız başlangıç saati değiştirilerek
+türetildi; iki başlangıç {{! tsi "ve" "New York 08:00" "New York 09:30" }}) ve hüküm
 kuralının şartlarının asgari işlem sayıları. İkisi de, ölçümün ön kaydın harfinden ayrıldığı yerler de
 (varsayılanın hükmünün penceresi dahil: ön kayıt bütün dönemi ister, bu seri 2024 →'yü birincil sayar) aşağıda
 adıyla durur.{{? ON.nyib.varsayilan.baslangic_et == "09:30" }} Dosyanın bütün geçmişi, ilk sonuçların
@@ -207,19 +214,18 @@ aşağıdadır.
 Ölçüm dört yerde ön kaydın harfinden ayrılır. Biri ilk sonuçlardan sonra kararlaştırıldı, üçü ilk sonuçlardan önce
 sabitlenmiş uygulamadadır.
 
-- **Hüküm penceresi** (karar ilk sonuçlardan sonra, {{! karsi_olgu_zaman hukum_penceresi }} UTC). Ön kayıt varsayılan
+- **Hüküm penceresi** (karar ilk sonuçlardan sonra, {{! karsi_olgu_zaman hukum_penceresi }}). Ön kayıt varsayılan
   için bütün dönemi örneklem dışı sayar ve hükmü oradan ister, çünkü varsayılan hiçbir veriye bakmadan yazıldı. Bu
   seri iki sonucu (varsayılan ve seçilen) aynı veride kıyaslamak için birincil hükmü 2024 → penceresinden verir;
-  ön kaydın istediği bütün dönem hükmü her tabloda yan sütunda durur. Seçimin etkisi: önceden kayıtlı
-  varsayılanların {{ T.hukum_say.oos.toplam | n }} bileşiminde 2024 → hükmü {{ T.hukum_say.oos.calismiyor | n }}
-  çalışmıyor ve {{ T.hukum_say.oos.zayif | n }} zayıf, bütün dönem hükmü {{ T.hukum_say.tum.calismiyor | n }} çalışmıyor
-  ve {{ T.hukum_say.tum.zayif | n }} zayıf; iki pencerede de "çalışıyor" hükmü alan bileşim yok{{? T.hukum_say.oos.calisiyor == 0 and T.hukum_say.tum.calisiyor == 0 and T.hukum_say.oos.olculemedi == 0 and T.hukum_say.tum.olculemedi == 0 }}. İki pencerenin hükmü {{! pencere_ayrisan }}.
+  ön kaydın istediği bütün dönem hükmü her tabloda yan sütunda durur. Seçimin etkisi:
+  {{! hukum_secim_etkisi }}; iki pencerede de "çalışıyor" hükmü alan bileşim yok{{? T.hukum_say.oos.calisiyor == 0 and T.hukum_say.tum.calisiyor == 0 and T.hukum_say.oos.olculemedi == 0 and T.hukum_say.tum.olculemedi == 0 }}. İki pencerenin hükmü {{! pencere_ayrisan }}.
 - **Ailelerin kurallara bölünmesi ve deneme sayısı** (ilk sonuçlardan önce sabitlenmiş uygulama). Ön kayıt {{ K.aile_n | n }} kural ailesi kaydetti
   ve seçimi de deflated Sharpe'ın deneme sayısını da aile başına ister. Ölçüm dört aileyi kurallara böler (New York
   ilk dengesi başlangıç saatine, başarısız kırılım seviyesine, pivot ve fiksing türüne) ve ikisini de kural başına
   kurar: parite başına {{ K.aile_n | n }} yerine {{ T.birim | n }} seçim yapılır.{{? len(K.bolunen_aile) == 4 and K.bolunen_aile[0] == "fiks" and K.bolunen_aile[1] == "nyib" and K.bolunen_aile[2] == "pivot" and K.bolunen_aile[3] == "sahte" }}
-  New York ilk dengesinin ön kaydı tek varsayılan taşır (09:30); 08:00 kuralının varsayılanı ondan yalnız başlangıç
-  saati değiştirilerek türetildi ve ön kayıtta yoktur.{{? ON.nyib.varsayilan.baslangic_et == "09:30" }}
+  New York ilk dengesinin ön kaydı tek varsayılan taşır (başlangıç 09:30 New York; {{! tsi "" "New York 09:30" }});
+  08:00 sürümünün ({{! tsi "" "New York 08:00" }}) varsayılanı ondan yalnız başlangıç saati değiştirilerek türetildi
+  ve ön kayıtta yoktur.{{? ON.nyib.varsayilan.baslangic_et == "09:30" }}
   Pivot ve fiksingin ön kaydı her tür için ayrı varsayılan taşır.{{? ON.pivot.varsayilan_donus and ON.pivot.varsayilan_kirilim and ON.fiks.varsayilan_momentum and ON.fiks.varsayilan_donus }}
   Başarısız kırılımın ön kayıtlı varsayılanı seviye belirtmez; üç kural aynı varsayılanı kendi seviyesiyle
   kullanır.{{? ON.sahte.varsayilan.seviye == None }} Bölünmenin yönü tutucu değildir: daha az deneme şansla beklenen
@@ -254,29 +260,28 @@ sabitlenmiş uygulamadadır.
 
 ### Sonuçlardan sonra değişen uygulama kuralları
 
-İlk sonuçlar {{! ilk_sonuc_zaman }} UTC'de görüldü:
-koşu çıktısını okuyan ilk kod o andadır. Dört paritenin ilk tam koşusu {{! karsi_olgu_zaman tam_kosu }} UTC'dedir.
+İlk sonuçların görüldüğü an: {{! ilk_sonuc_zaman }}. Koşunun sonuçları ilk kez o anda okundu. Dört paritenin ilk tam koşusu: {{! karsi_olgu_zaman tam_kosu }}.
 Aşağıdaki kurallar ilk sonuçlardan sonra değişti; ön kaydın kuralları değişmedi,
 değişen ölçümün uygulamasıdır. İşlemleri değiştiren her kuralın etkisi ölçüldü: kural tek başına eski hâline
 döndürüldü, bütün koşu yeniden yapıldı ve sonuç bugünküyle bileşim bileşim kıyaslandı (öbür bütün kurallar
 bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 
-- **"Ölçülemedi"nin eşiği** ({{! karsi_olgu_zaman olculemedi }} UTC). Önce: örneklem dışında 20'den az işlemi olan
+- **"Ölçülemedi"nin eşiği** ({{! karsi_olgu_zaman olculemedi }}). Önce: örneklem dışında 20'den az işlemi olan
   bileşim ölçülemedi sayılırdı.{{? O.karsi_olgu.olculemedi.esik == 20 }} Bugün: yalnız hiç işlem yoksa; az işlemli sonuç hükmünü taşır ve
   "az işlem" diye işaretlenir (ön kayıt asgari yazmaz). Etkisi: {{! olculemedi_etki }}.
-- **Stop seviyeli emirde ham açılış** ({{! karsi_olgu_zaman ham_acilis }} UTC). Önce: yalnız kaymalı dolum sorulurdu;
+- **Stop seviyeli emirde ham açılış** ({{! karsi_olgu_zaman ham_acilis }}). Önce: yalnız kaymalı dolum sorulurdu;
   giriş tarafının açılışı stopun ötesinde olsa da kayma dolumu stopun berisine itiyorsa işlem açılır ve planlanan
   risk kayma kadar küçük olurdu. Bugün: kaymasız açılış stopun ötesindeyse işlem yok; kayma emirden sonra gelen bir
   maliyettir, olmayacak bir işlemi doğuramaz. Etkisi: {{! karsi_olgu ham_acilis }}
-- **Giriş dakikasında boşluk** ({{! karsi_olgu_zaman bosluk_giris }} UTC). Önce: sert stopun boşluk kuralı (stopun
+- **Giriş dakikasında boşluk** ({{! karsi_olgu_zaman bosluk_giris }}). Önce: sert stopun boşluk kuralı (stopun
   ötesinde açılan dakikada dolum açılıştan) yalnız girişten sonraki dakikalarda sorulurdu; giriş dakikasında makas
   stopu kapsıyorsa çıkış stop seviyesinden yazılırdı. Bugün: giriş dakikası dahil. Etkisi:
   {{! karsi_olgu bosluk_giris }}
-- **Önceki gün ölçüleri tatili atlar** ({{! karsi_olgu_zaman onceki_gun }} UTC). Önce: önceki günün tepesi, dibi,
+- **Önceki gün ölçüleri tatili atlar** ({{! karsi_olgu_zaman onceki_gun }}). Önce: önceki günün tepesi, dibi,
   kapanışı ve açılışı, gün ATR'si ve yüzdeliği ve NR4/NR7 bir önceki satırdan kurulurdu; 25 Aralık ve 1 Ocak'tan
   sonraki günün "önceki günü" tatilin ince kotasyonuydu. Bugün: tatil olmayan son işlem gününden (ön kayıt "önceki
   FX işlem günü" der). Etkisi: {{! karsi_olgu onceki_gun }}
-- **Fiksing ve gün içi momentumda stopun yeri** ({{! karsi_olgu_zaman stop_yeri }} UTC, iki adımda). Önce: fiksingde
+- **Fiksing ve gün içi momentumda stopun yeri** ({{! karsi_olgu_zaman stop_yeri }}; iki adımda). Önce: fiksingde
   stop sinyal mumunun kapanışından, o mumun ATR'si kadar uzaktaydı ve R birimi o mumun ATR'siydi; gün içi momentumda
   stop giriş dakikasının orta açılışından 1·ATR uzaktaydı. İlk adım ({{! karsi_olgu_zaman stop_yeri "1" }}) yalnız
   fiksingi değiştirdi: stop giriş dakikasının orta açılışına taşındı ve ATR girişten önce kapanan son mumdan alındı.
@@ -287,29 +292,35 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
   gecikmesiz kombinasyonlar, varsayılanlar dahil, etkilenmez. Gerekçe: stop sinyal mumunun kapanışından ölçülürse,
   girişi bir mum geciken dönüş kombinasyonlarında fiyat o mumda stopa yaklaşabilir, planlanan risk birkaç pipe iner
   ve R'ye bölünen sonuç anlamsız büyür. Etkisi (iki adım birlikte): {{! karsi_olgu stop_yeri }}
-- **Haber kurallarında tek pozisyon** ({{! karsi_olgu_zaman haber_tek_pozisyon }} UTC). Önce: tek pozisyon kuralı olay
+- **Haber kurallarında tek pozisyon** ({{! karsi_olgu_zaman haber_tek_pozisyon }}). Önce: tek pozisyon kuralı olay
   × ofset grubunun içinde uygulanırdı; aynı gün FOMC kararı ve basın toplantısı iki ayrı pozisyon açabilirdi (iki
   olayın sonucu ayrı okunsun diye bilerek seçilmişti). Bugün: parite başına bütün olaylara birlikte (ön kaydın
   ortak mekaniği). Basın toplantısı satırları bu yüzden yalnız karar pozisyonunun kapandığı toplantılardan oluşur
   (haber dersinde). Etkisi: {{! karsi_olgu haber_tek_pozisyon }}
-- **Devam tablosunda gün sonu** ({{! karsi_olgu_zaman devam_kirpma }} UTC). Önce: ufku gün sonunu aşan gözlem gün
+- **Devam tablosunda gün sonu** ({{! karsi_olgu_zaman devam_kirpma }}). Önce: ufku gün sonunu aşan gözlem gün
   sonuna kırpılırdı (motorun "gün sonunu aşamaz" okumasıyla aynı). Bugün: düşer, çünkü kırpılmış bir tutuş o hücrenin
   ufkunu ölçmez; ön kaydın aynı ifadesi böylece iki yerde iki biçimde uygulanır. Etkisi: {{! karsi_olgu devam_kirpma }}
-- **Seçimde eşitlik** ({{! karsi_olgu_zaman secim_esitlik }} UTC). Önce: örneklem içi Sharpe'lar kesin
+- **Seçimde eşitlik** ({{! karsi_olgu_zaman secim_esitlik }}). Önce: örneklem içi Sharpe'lar kesin
   karşılaştırılırdı; işlem işlem aynı olan iki kombinasyon (ör. tek mum tutulan fiksing momentumunda kapanış stopu
   ile stopsuz) yalnız kayan nokta artığıyla ayrışır ve sonraki seçilebilirdi. Bugün: milyarda birden küçük fark
   eşitliktir ve ızgaradaki ilk alınır (ön kaydın eşitlik kuralı). Etkisi: {{! karsi_olgu secim_esitlik }}
-- **Ay sonu** ({{! karsi_olgu_zaman ay_sonu }} UTC). Önce: ayın son hafta içi günü. Bugün: ayın son Londra iş günü
+- **Büyük olay günü ve olağanüstü kararlar** ({{! karsi_olgu_zaman haber_gunu_olaganustu }}). Önce: önceden
+  duyurulmayan bir FOMC kararı da planlanmış olaylar gibi kendi gününü baştan "büyük olay günü" sayardı; o günün
+  karardan önceki girişleri, olay anında bilinemeyen bir bilgiyle kovalanırdı (ileriye bakma). Bugün: önceden
+  duyurulmayan olay günü yalnız FX gününün başında ya da öncesinde olmuşsa işaretler (giriş dersindeki koşul tablosu,
+  ileriye bakma sınaması yukarıda). İşlemler bu değişkenden etkilenmez; değişen yalnız koşul analizinin kovalarıdır.
+  Etkisi: {{! karsi_olgu haber_gunu_olaganustu }}
+- **Ay sonu** ({{! karsi_olgu_zaman ay_sonu }}). Önce: ayın son hafta içi günü. Bugün: ayın son Londra iş günü
   (ön kaydın tanımı); ikisinin ayrıştığı aylar, son hafta içi gününün bir İngiltere tatiline düştüğü aylardır:
   {{ K.ay_sonu_kayan | ay_liste }}. Tanımın iki tüketicisi var: fiksingin ay sonu ayrımı ve her kuralın "ay sonu"
   koşul değişkeni. Etkisi: {{! karsi_olgu ay_sonu }}
-- **Tatil** ({{! karsi_olgu_zaman tatil }} UTC). Önce: kotasyonlu dakikaları günün yarısından az olan gün tatil
+- **Tatil** ({{! karsi_olgu_zaman tatil }}). Önce: kotasyonlu dakikaları günün yarısından az olan gün tatil
   sayılırdı. Bugün: takvimden (hafta içine düşen 25 Aralık ve 1 Ocak, örneklemin iki kenarında baştan sona
   kapsanmayan gün); günün kapsamı gün bitmeden bilinemez. Etkisi: iki tanım dört paritede de aynı günleri verir,
   hiçbir işlem değişmez.{{? O.veri.tatil_uyum.EURUSD.ayni and O.veri.tatil_uyum.GBPUSD.ayni and O.veri.tatil_uyum.USDJPY.ayni and O.veri.tatil_uyum.AUDUSD.ayni }}
-- **Başabaş kayma** ({{! karsi_olgu_zaman basabas_r }} UTC). Önce: pip ortalamasından. Bugün: serinin ölçüsünden,
+- **Başabaş kayma** ({{! karsi_olgu_zaman basabas_r }}). Önce: pip ortalamasından. Bugün: serinin ölçüsünden,
   işlem başına net R'den. Hükme girmez.
-- **Ön kayıtlı iki ölçünün koşuya girişi** ({{! karsi_olgu_zaman onkayitli_iki_olcu }} UTC). Fiksingin ay sonu ayrımı
+- **Ön kayıtlı iki ölçünün koşuya girişi** ({{! karsi_olgu_zaman onkayitli_iki_olcu }}). Fiksingin ay sonu ayrımı
   ve gün içi momentumun öngörü regresyonu ön kayıtta vardı, ilk sonuçlarda koşulmamıştı. İkisi de hükme girmez.
 - **Yalnız yazıya geçirilen iki kural.** Seviye hedefi yürütülen girişin gerisinde ya da tam üstündeyse işlem
   yoktur; girişi gün sonunda ({{ K.gun_sonu_et | t }} New York; {{! gun_sonu_tsi }}) ya da sonrasında olan sinyal alınmaz. İkisinin
@@ -335,13 +346,14 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 - **Emir geçerliliği.** Ön kayıt "giriş stopun ötesindeyse işlem yok" kuralını yalnız haber kırılımında (N1) yazar;
   ölçüm aynı kuralı stop seviyesi taşıyan her emre uygular ve seviye hedefi için eşini ekler (hedef yürütülen girişin
   gerisindeyse işlem yok).
-- **60 dakikalık mumun çıpası.** Haber kuralları ve New York ilk dengesi 09:30 dışındaki kurallarda saatlik mum saat
-  başında başlar, yani New York 08:30 verisi ({{! tsi "" "New York 08:30" }}) 08:00–09:00 mumunun ortasına düşer. Tek bir saatlik ızgara Londra
-  08:00 açılışını ve New York 08:30'u birlikte mum sınırına oturtamaz; Londra açılışı seçildi. Bu çıpayı 60
+- **60 dakikalık mumun çıpası.** Haber kuralları ve New York ilk dengesi — 09:30 dışındaki kurallarda saatlik mum
+  saat başında başlar, yani New York 08:30 verisi ({{! tsi "" "New York 08:30" }}) New York 08:00–09:00 mumunun
+  ({{! tsi "" "New York 08:00–09:00" }}) ortasına düşer. Tek bir saatlik ızgara Londra 08:00 açılışını
+  ({{! tsi "" "Londra 08:00" }}) ve New York 08:30'u birlikte mum sınırına oturtamaz; Londra açılışı seçildi. Bu çıpayı 60
   dakikalık mumda {{! saat_capa }} kullanır. Sinyal penceresi New York 08:00'den önce başlayıp 09:00'dan sonra biten
   bir kuralda New York 08:00–09:00 mumunun hareketi ABD verisinin tepkisini de taşır.
 - **Asya aralığının başlangıcı.** Ön kayıt aralığın başlangıcını Londra 00:00'da ({{! tsi "" "Londra 00:00" }}) sabit tutar, ızgara yalnız
-  bitişini (07:00 · 08:00) sınar; Tokyo açılışı bu başlangıca en çok bir saat uzaktır.
+  bitişini (Londra 07:00 · 08:00; {{! tsi "·" "Londra 07:00" "Londra 08:00" }}) sınar; Tokyo açılışı bu başlangıca en çok bir saat uzaktır.
 - **Tatil.** Ön kayıt tatili tanımlamaz; tatil takvimden gelir (yukarıda).
 
 ### Ön kayıtta olmayan ve hükme girmeyen ölçüler
@@ -368,7 +380,7 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 - **Havuzun aralığı** gün kümeli bootstrap'le kurulur (yukarıda).
 - **Koşul analizinin üç ayrıntısı.** Koşulsuz ortalama değişkenin tanımlı olduğu işlemlerden alınır; aynı ölçünün iki
   adı (Asya aralığı kuralında "aralık" ile "Asya aralığı") tek değişken sayılır; kontrol listesine yalnız en az iki
-  paritede aynı kovayla tutan koşul aday olarak girer.
+  paritede aynı kova seçimiyle tutan koşul aday olarak girer.
 - **Ters seçim.** Koşul analizinin "tuttu" sayısının ne kadarının şansla açıklanabileceğini görmek için aynı ölçüt,
   örneklem içinde ortalamanın altında kalan kovalar seçilerek de koşulur; karşılaştırma dersinde.
 - **Örnek günler.** Her kuralın üç örnek işlemi örneklem dışındaki uygun işlemlerden seçilir: kazanan net en az yarım
@@ -401,11 +413,12 @@ için BLS'nin yayım sayfalarının ambargo satırı (BLS'nin sitesi otomatik is
 kopyalarından; her kopyanın arşiv zaman damgası kayıtta), FOMC kararı için karar metninin yayım satırı ("For release
 at 2:00 p.m. EDT"), ECB basın toplantısı için karar duyurusunun kendi cümlesi; kuraldan ayrılan iki BoE kararının
 saati BoE'nin önceden yayımladığı saat duyurusundan (aşağıdaki listede). **Kuraldan**: öbür BoE kararları perşembe
-12:00 (Para Politikası Kurulu'nun yayım kuralı; tarih her özetin kendi sayfasından), ECB karar saati ECB'nin 27 Haziran
-2022 duyurusundan: {{ O.takvim.sayim.ECB_karar.saat_aralik."13:45 Europe/Berlin"[1] | tarih }} toplantısına kadar 13:45 ({{! tsi "" "Frankfurt 13:45" }}),
+12:00 Londra ({{! tsi "" "Londra 12:00" }}; Para Politikası Kurulu'nun yayım kuralı, tarih her özetin kendi
+sayfasından), ECB karar saati ECB'nin 27 Haziran 2022 duyurusundan: {{ O.takvim.sayim.ECB_karar.saat_aralik."13:45 Europe/Berlin"[1] | tarih }} toplantısına kadar 13:45 Frankfurt ({{! tsi "" "Frankfurt 13:45" }}),
 {{ O.takvim.sayim.ECB_karar.saat_aralik."14:15 Europe/Berlin"[0] | tarih }} toplantısından itibaren 14:15 Frankfurt ({{! tsi "" "Frankfurt 14:15" }}). Her
-toplantıda kuralın verdiği karar saatinin, duyurunun yazdığı basın toplantısı saatiyle eşleştiği ayrıca sınandı (13:45
-↔ 14:30, 14:15 ↔ 14:45).
+toplantıda kuralın verdiği karar saatinin, duyurunun yazdığı basın toplantısı saatiyle eşleştiği ayrıca sınandı
+(Frankfurt saatiyle karar 13:45 ↔ basın toplantısı 14:30, karar 14:15 ↔ basın toplantısı 14:45; basın toplantısı
+{{! tsi "ya da" "Frankfurt 14:30" "Frankfurt 14:45" }}).
 
 **FOMC basın toplantısı** saati en zor bulunanıdır. Ne karar metni ne basın toplantısı sayfası onu yazar: sayfadaki tek
 saat kararın yayım saatidir. Fed'in aylık etkinlik takvimi basın toplantısını ayrı satırla yalnız
@@ -416,7 +429,7 @@ toplantısında yok){% endif %}{{? O.takvim.fomc_takvim_donemi.satirli == O.takv
 daha önce tek bir toplantının saatini ayın duyurusu yazar ({{ O.takvim.kunye.fomc.basin_saat_tarih.duyuru[0] | tarih }}){% endif %}.
 Kalan {{ O.takvim.kunye.fomc.basin_saat_kaynagi.kural | n }} toplantının saati Fed'in 13 Mart 2013 duyurusundaki
 kuraldan gelir: olağan toplantılarda kararın yayım saati {{ O.takvim.kunye.fomc.kural.karar | t }}, başkanın basın
-toplantısının başlangıcı "yaklaşık" {{ O.takvim.kunye.fomc.kural.basin | t }} (New York).{{? len(O.takvim.kunye.fomc.kural.yineleme) == 2 and O.takvim.kunye.fomc.kural.yineleme[0].tarih == "2024-08-09" and O.takvim.kunye.fomc.kural.yineleme[1].tarih == "2025-09-05" and O.takvim.kunye.fomc.kural.yineleme[0].saat == O.takvim.kunye.fomc.kural.basin and O.takvim.kunye.fomc.kural.yineleme[1].saat == O.takvim.kunye.fomc.kural.basin }}
+toplantısının başlangıcı "yaklaşık" {{ O.takvim.kunye.fomc.kural.basin | t }} (New York; {{! tsi "ve" "New York 14:00" "New York 14:30" }}){{? O.takvim.kunye.fomc.kural.karar == "14:00" and O.takvim.kunye.fomc.kural.basin == "14:30" }}.{{? len(O.takvim.kunye.fomc.kural.yineleme) == 2 and O.takvim.kunye.fomc.kural.yineleme[0].tarih == "2024-08-09" and O.takvim.kunye.fomc.kural.yineleme[1].tarih == "2025-09-05" and O.takvim.kunye.fomc.kural.yineleme[0].saat == O.takvim.kunye.fomc.kural.basin and O.takvim.kunye.fomc.kural.yineleme[1].saat == O.takvim.kunye.fomc.kural.basin }}
 Kural Fed'in 2024 ve 2025 toplantı takvimi duyurularında aynen yinelenir.{{? O.takvim.kunye.fomc.kuraldan_farkli == 0 }} Tarih
 tarih kaydı olan toplantıların hepsi kuralla aynı saati taşır. Kural yalnız kararı kuralın saatinde yayımlanan olağan
 toplantıya uygulandı{% if not O.takvim.sayim.FOMC_basin.olaganustu %}; olağanüstü toplantıların basın toplantısı
@@ -449,7 +462,7 @@ dakikanın en büyük dakikalık aralığının olaydan önceki otuz ile üç da
 saatte oran {{ O.takvim.sinama.kural.esik | s1 }} ya da üstündeyse olay doğrulanır; bir saat ya da yarım saat önce ya da
 sonra oran eşiği aşıyor ve resmî saatinkinin en az iki katıysa çelişki sayılır; ikisi de değilse sessiz: piyasa ne
 resmî dakikada ne o dört aday saatte kımıldamıştır. Dört aday saat ancak bir saatlik kaymayı (yaz saati hatası) ve yarım
-saatlik kaymayı (ECB 13:45 ↔ 14:15) yakalar; daha büyük bir kayma için resmî saatin altı saat öncesi ve sonrası yarım
+saatlik kaymayı (ECB kararında Frankfurt 13:45 ↔ 14:15; {{! tsi "↔" "Frankfurt 13:45" "Frankfurt 14:15" }}) yakalar; daha büyük bir kayma için resmî saatin altı saat öncesi ve sonrası yarım
 saatte bir ayrıca taranır. {{! uzak_tarama }} Sınama yalnız raporlar: resmî belge birincil kaynaktır ve hiçbir olay
 fiyat yüzünden dışarıda bırakılmadı. Çelişki veren olaylar:
 
@@ -484,7 +497,7 @@ Bu serinin cevaplamadığı sorular, sonuçların sınırlarıyla birlikte:
   yukarıda yalnız betimlendi.
 - **Gerçek işlem hacmi.** FX'te merkezî hacim yoktur; VWAP kuralları kotasyon likiditesini ağırlık olarak kullanır.
 - **Daha kısa zaman dilimleri.** 5 dakikanın altındaki mumlar ve tick verisi ölçülmedi.
-- **Başka pariteler.** Yalnız dört majör (EUR/USD, GBP/USD, USD/JPY, AUD/USD); çapraz kurlar ve gelişen piyasa paraları
+- **Başka pariteler.** Yalnız dört majör ({{ K.ciftler | pariteler }}); çapraz kurlar ve gelişen piyasa paraları
   yok.
 - **Pozisyon büyüklüğü.** Her işlem 1 R'dir; kaldıraç, portföy düzeyinde risk ve kuralların birleşimi ölçülmedi.
 - **Uyarlanan kurallar.** Yürüyen pencere dışında rejime göre değişen ya da öğrenen bir model denenmedi.

@@ -19,7 +19,8 @@ aynı yerden okunur: geri dönüş geçici olabilir ve kırılım gün içinde y
 
 - **Seviye.** Londra açılış aralığı: Londra 08:00'den ({{! tsi "" "Londra 08:00" }}) itibaren ilk mum (kırılım
   dersindeki ORB aralığı).
-- **Kırılım.** Bir mum aralığın dışında kapanır (önceki kapanış içeride ya da uçta).
+- **Kırılım.** Bir mum aralığın dışında kapanır; önceki kapanış kırılan kenarın berisinde ya da tam kenardadır
+  (karşı kenarın ötesinde de olabilir).
 - **Geri dönüş.** Sonraki "pencere" kadar mumun (bir ya da iki) içinde bir mum kırılan kenarın berisinde kapanırsa
   (yukarı kırılımda üst kenarın altında; karşı kenarın da ötesinde kapanan mum dahil) kırılımın tersi yönde giriş;
   gelmezse o kırılım biter ve kural bir sonraki kırılımı bekler.

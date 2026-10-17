@@ -14,8 +14,8 @@ Bu kural o okumayı mekanik bir tanıma bağlar: aşılan seviye kapanışla ger
 
 - **Seviye.** Önceki FX işlem gününün (17:00 → 17:00 New York; gün dönümü {{! tsi "" "New York 17:00" }})
   orta fiyattan tepesi ve dibi.
-- **Kırılım, geri dönüş, stop.** Sahte ORB ile aynı. Kırılım mumu seviyeyi kesen mumdur (önceki kapanış içeride
-  ya da uçta): seviye Asya saatlerinde aşılmışsa ve fiyat Londra açıldığında hâlâ dışarıdaysa, pencerenin ilk mumu
+- **Kırılım, geri dönüş, stop.** Sahte ORB ile aynı. Kırılım mumu seviyeyi kesen mumdur (önceki kapanış kırılan
+  kenarın berisinde ya da tam kenarda; karşı kenarın ötesinde de olabilir): seviye Asya saatlerinde aşılmışsa ve fiyat Londra açıldığında hâlâ dışarıdaysa, pencerenin ilk mumu
   bir kırılım sayılmaz; kural fiyatın içeri dönüp seviyeyi yeniden kesmesini bekler. Kesiş tanımı "pencere"
   parametresine anlam verir: dışarıda her kapanış bir kırılım sayılsaydı, içeride kapanan ilk mum neredeyse her zaman dışarıda
   kapanmış bir mumun hemen ardından gelirdi ve en kısa pencere (bir mum) onu zaten yakalardı.

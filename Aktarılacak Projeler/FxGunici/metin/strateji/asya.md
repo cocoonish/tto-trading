@@ -16,11 +16,11 @@ saatlerde açıktır ve bu iki paritede Asya aralığı gerçek bir seansın ara
 
 ### Kurallar
 
-- **Aralık.** Londra 00:00'dan aralık sonuna (07:00 ya da 08:00) kadar 1 dakikalık orta fiyatın en
-  yükseği ve en düşüğü. TSİ'de Londra 00:00, İngiltere yaz saatindeyken 02:00, kış saatindeyken 03:00'tür.
-  Başlangıç ön kayıtta sabittir, ızgara yalnız bitişi sınar. Tokyo açılışı (09:00 Tokyo, 00:00 UTC) kışın bu
-  anın kendisi, yazın bir saat sonrasıdır; Sidney açılışıyla ya da FX gününün başıyla (17:00 New York) kurulan
-  bir pencere sınanmadı.
+- **Aralık.** Londra 00:00'dan aralık sonuna (Londra 07:00 ya da 08:00) kadar 1 dakikalık orta fiyatın en
+  yükseği ve en düşüğü ({{! tsi "ya da" "Londra 00:00–07:00" "Londra 00:00–08:00" }}). Başlangıç ön kayıtta
+  sabittir, ızgara yalnız bitişi sınar. Tokyo açılışı (09:00 Tokyo; TSİ 03:00, UTC 00:00) İngiltere kış saatinde
+  aralığın başladığı anın kendisi, yaz saatinde bir saat sonrasıdır; Sidney açılışıyla ya da FX gününün başıyla
+  (17:00 New York; {{! tsi "" "New York 17:00" }}) kurulan bir pencere sınanmadı.
 - **Sinyal.** Londra 08:00'den ({{! tsi "" "Londra 08:00" }}) sonra aralığın dışında kapanan ilk mum; gün başına tek
   işlem.
 - **Giriş, stop, hedef.** Giriş sonraki dakikanın açılışında yürütülebilir fiyattan; stop aralığın ortası
@@ -42,7 +42,7 @@ uçtaki stop riski aralığın tamamı kadar büyütür. Orta, kırılımın ger
 {{! ornek }}
 
 Asya aralığı figürde iki noktalı mavi çizgidir; çizgiler aralığın başladığı Londra 00:00'dan ({{! tsi "" "Londra 00:00" }}) başlar. Aralık gece boyunca oluştuğu için Londra açıldığında sinyal
-çoğu zaman ilk mumlarda gelir; açılıştan önce kırılmış bir aralık da Londra 08:00'den sonraki ilk dışarıda
+çoğu zaman ilk mumlarda gelir; açılıştan önce kırılmış bir aralık da Londra 08:00'den ({{! tsi "" "Londra 08:00" }}) sonraki ilk dışarıda
 kapanışta sinyal üretir. Kaybeden örnek lehine yarım R'ye ulaşmadan zararla kapanan işlemdir; tuzak örneği
 önce lehine en az yarım R gidip sonra zararla kapanan işlem, yani kırılımın aralığa geri döndüğü gün.
 

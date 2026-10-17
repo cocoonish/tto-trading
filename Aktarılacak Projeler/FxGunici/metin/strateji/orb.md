@@ -17,9 +17,9 @@ olduğunu ölçmek. İkinci görüşün kuralı (**başarısız kırılım**) fa
 
 ### Kurallar
 
-- **Aralık.** Londra 08:00'den itibaren ilk mum (15 dakikalık mumda 08:00–08:15, 60 dakikalıkta
-  08:00–09:00). Londra açılışının TSİ saati yalnız İngiltere'nin saatine bağlıdır: İngiltere yaz saatindeyken
-  10:00, kış saatindeyken 11:00. Mart ve ekim sonu–kasım başındaki ara haftalarda (Avrupa ile ABD'nin saati farklı günlerde
+- **Aralık.** Londra 08:00'den itibaren ilk mum: 15 dakikalık mumda 08:00–08:15, 60 dakikalıkta 08:00–09:00 Londra
+  ({{! tsi "ya da" "Londra 08:00–08:15" "Londra 08:00–09:00" }}). Londra açılışının TSİ saati yalnız İngiltere'nin
+  saatine bağlıdır. Mart ve ekim sonu–kasım başındaki ara haftalarda (Avrupa ile ABD'nin saati farklı günlerde
   değiştiği haftalar) İngiltere kış saatindedir, açılış iki ara dönemde de TSİ 11:00'dir.
 - **Sinyal.** Aralıktan sonraki mumlardan, aralığın **dışında kapanan** ilk mum; yön kapanışın tarafı. Gün
   başına tek işlem.

@@ -177,6 +177,34 @@ def test_kalite_esigi_raporun_kendisinden():
             dm.blok_kalite_esik(_u2(veri={"kalite": kalite}), {}, "normal")
 
 
+def test_parite_listesi_ve_pip_kunyeden():
+    # Tam parite listesi ve pip tanımı künyeden: ayara bir parite eklenince ikisi de kendiliğinden genişler.
+    k = {**K2, "ciftler": ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD"],
+         "nokta": {"EURUSD": 1e-5, "GBPUSD": 1e-5, "USDJPY": 1e-3, "AUDUSD": 1e-5},
+         "pip": {"EURUSD": 1e-4, "GBPUSD": 1e-4, "USDJPY": 1e-2, "AUDUSD": 1e-4}}
+    u = dm.Uretim({"kunye": k, "birim": {}}, {})
+    assert u.isle("{{ K.ciftler | pariteler }}", u.kok_ctx()) == "EUR/USD, GBP/USD, USD/JPY ve AUD/USD"
+    assert dm.blok_pip_tanimi(u, {}) == ("EUR/USD, GBP/USD ve AUD/USD paritelerinde 0,0001; "
+                                         "USD/JPY paritesinde 0,01")
+    k5 = {**k, "ciftler": k["ciftler"] + ["NZDUSD"], "nokta": {**k["nokta"], "NZDUSD": 1e-5},
+          "pip": {**k["pip"], "NZDUSD": 1e-4}}
+    u5 = dm.Uretim({"kunye": k5, "birim": {}}, {})
+    assert "NZD/USD" in u5.isle("{{ K.ciftler | pariteler }}", u5.kok_ctx()) and "NZD/USD" in dm.blok_pip_tanimi(u5, {})
+    with pytest.raises(dm.SablonHatasi, match="pip_tanimi"):
+        dm.blok_pip_tanimi(dm.Uretim({"kunye": {**k, "pip": {**k["pip"], "USDJPY": 0.005}}, "birim": {}}, {}), {})
+
+
+def test_patika_yon_penceresi_sebebi_kunyeden():
+    # Patikanın yön penceresi ölçümün sabitinden: pencere 300 sn iken "beş", 180 sn olsaydı "üç" dakika yazılır.
+    u = _u2(haber={"olcu_disi": {"ana_tf": 5}})
+    u.O["kunye"] = {**K2, "haber_sabit": {"patika_yon_sn": 300}}
+    od = dm._olcu_disi(u)
+    assert dm._neden_olcu_disi("ilk_bes_dakikada_yon_yok", od) == "ilk beş dakikada fiyat değişmedi, yön yok"
+    assert dm._neden_olcu_disi("ilk_bes_dakikada_yon_yok", {**od, "patika_yon_sn": 180}).startswith("ilk üç dakikada")
+    with pytest.raises(dm.SablonHatasi, match="patika_yon_sn"):
+        dm._neden_olcu_disi("ilk_bes_dakikada_yon_yok", {"ana_tf": 5})
+
+
 def _havuz(brut, b_alt, net):
     return {"havuz": {"varsayilan": {"tum": {"brut_r": brut, "ga_brut_alt": b_alt, "ga_brut_ust": brut + 0.03,
                                              "beklenti_r": net, "ga_alt": net - 0.03, "ga_ust": net + 0.03}}}}
@@ -198,9 +226,13 @@ def test_karsilik_okumasi_ve_korelasyon():
         dm.blok_karsilik(u, {}, "fiks_momentum:vwap_donus")
 
 
-def _fomc(satir, n60, n90):
+def _fomc(satir, n60, n90, basin="14:30", sn=(3600, 5400)):
+    # Pencerelerin saati ölçümün kendi kaynaklarından: basın toplantısının başı takvimin FOMC kuralından, pencerelerin
+    # sonu ölçümün sabitinden (künye.haber_sabit.fomc_basin_sn).
     return {"haber": {"cift": {"EURUSD": {"fomc": {"satir": satir, "ozet": {"basin_60": {"donus": {"n": n60}},
-                                                                             "basin_90": {"donus": {"n": n90}}}}}}}}
+                                                                             "basin_90": {"donus": {"n": n90}}}}}}},
+            "takvim": {"kunye": {"fomc": {"kural": {"karar": "14:00", "basin": basin}}}},
+            "kunye": {**K2, "haber_sabit": {"fomc_basin_sn": list(sn)}}}
 
 
 def test_fomc_paydasi_dusenleri_adiyla_ve_sayimla():
@@ -220,6 +252,11 @@ def test_fomc_paydasi_dusenleri_adiyla_ve_sayimla():
         dm.blok_fomc_payda(_u2(haber={"cift": {}}), {})
     sifirsiz = [dict(r, karar=0.2, basin_90=0.3) for r in satir]
     assert "hiçbir toplantıda iki hareketten biri sıfır değil" in dm.blok_fomc_payda(_u2(**_fomc(sifirsiz, 3, 3)), {})
+    # Uzatılan pencerenin sonu elle yazılmaz: basın toplantısı 14:00'te başlasaydı pencere 15:30'a uzanırdı.
+    assert "(15:30'a uzatılan pencerede)" in dm.blok_fomc_payda(_u2(**_fomc(satir, 2, 1, basin="14:00")), {})
+    # Pencerelerin sözcükle adı ("ilk doksan dakikasında") 60 ve 90 dakikaya yazılı: sabit değişirse üretim düşer.
+    with pytest.raises(dm.SablonHatasi, match="fomc saatleri"):
+        dm.blok_fomc_payda(_u2(**_fomc(satir, 2, 1, sn=(3600, 7200))), {})
 
 
 def _yogunluk(tekil: bool, **ek) -> dict:

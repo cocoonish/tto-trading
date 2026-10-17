@@ -5,7 +5,7 @@ pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · BLS, Fed, ECB, BoE resmî takvimleri · önceden kayıt'
-ozet: "Serinin bütün derslerinin dayandığı makineyi anlatır: veri nereden geliyor ve ne kadar temiz, saatler TSİ'de nereye düşüyor, bir işlem nasıl açılıp kapanıyor, maliyet nasıl ölçülüyor ve bir stratejiye 'çalışıyor' demek için hangi üç şartın birlikte tutması gerekiyor. Serinin sonucu baştan: hiçbir kural, hiçbir paritede bu üç şartı birlikte sağlamıyor.{{? T.hukum_say.oos.calisiyor == 0 }}"
+ozet: "Serinin bütün derslerinin dayandığı makineyi anlatır: veri nereden geliyor ve ne kadar temiz, saatler TSİ'de nereye düşüyor, bir işlem nasıl açılıp kapanıyor, maliyet nasıl ölçülüyor ve bir stratejiye 'çalışıyor' demek için hangi üç şartın birlikte tutması gerekiyor. Serinin sonucu baştan: hiçbir kural, hiçbir paritede bu üç şartı birlikte sağlamıyor.{{! ay_sonu_istisna }}{{? T.hukum_say.oos.calisiyor == 0 }}"
 seviye: 'giris'
 ---
 
@@ -24,9 +24,10 @@ birincil penceresinde (2024 →; pencere ilk sonuçlardan sonra seçildi) {{ T.h
 {{ T.hukum_say.oos.zayif | n }} zayıf, {{ T.hukum_say.oos.calismiyor | n }} çalışmıyor; ön kaydın istediği bütün
 dönemde {{ T.hukum_say.tum.calisiyor | n }} çalışıyor, {{ T.hukum_say.tum.zayif | n }} zayıf,
 {{ T.hukum_say.tum.calismiyor | n }} çalışmıyor{% if T.hukum_say.oos.calisiyor == 0 and T.hukum_say.tum.calisiyor == 0 %}: iki
-pencerede de maliyetten sonra kanıtlanmış bir kenar bırakan kural yok{% endif %}. "Zayıf" bir sınama değildir, yalnız
-net ortalamanın artı olduğunu söyler; kural kural dökümü karşılaştırma dersinde. Sayıma New York ilk dengesi 08:00
-da girer; o kuralın varsayılanı ön kayıtta yok, 09:30'unkinden yalnız başlangıç değiştirilerek türetildi{{! turetilmis_hukum nyib_0800 }}.
+pencerede de maliyetten sonra kanıtlanmış bir kenar bırakan kural yok{% endif %}.{{! ay_sonu_istisna }} "Zayıf" bir sınama değildir, yalnız
+net ortalamanın artı olduğunu söyler; kural kural dökümü karşılaştırma dersinde. Sayıma New York ilk denge
+kırılımının iki sürümü de girer, 08:00 ve 09:30 New York ({{! tsi "ve" "New York 08:00" "New York 09:30" }}); 08:00
+sürümünün varsayılanı ön kayıtta yok, 09:30 sürümününkinden yalnız başlangıç saati değiştirilerek türetildi{{! turetilmis_hukum nyib_0800 }}.
 
 Bu ders makinenin kendisidir. Sonraki dersler buradaki tanımları tekrar etmez: bir strateji dersinde "net R",
 "örneklem dışı" ya da "rastgele yön yüzdeliği" geçtiğinde tanımı buradadır.
@@ -36,7 +37,7 @@ Bu ders makinenin kendisidir. Sonraki dersler buradaki tanımları tekrar etmez:
 | Ders | Konu | Stratejiler |
 | :--- | :--- | :--- |
 | 1 · Giriş | veri, saat, işlem mekaniği, sonuçların okunuşu | — |
-| 2 · Seans kırılımları | bir seansın açılış aralığının kırılması | Londra açılış aralığı, Asya aralığı, New York ilk dengesi (08:00 ve 09:30) |
+| 2 · Seans kırılımları | bir seansın açılış aralığının kırılması | Londra açılış aralığı, Asya aralığı, New York ilk dengesi (iki çıpa: masaların sabahı, hisse açılışı) |
 | 3 · Yapı kırılımları | bir fiyat yapısının ya da seviyenin kırılması | iç mum, Bollinger–Keltner sıkışması, önceki gün tepe/dip, pivot kırılımı |
 | 4 · Fade (harekete karşı işlem) | kırılımın tersine, ortalamaya dönüş | başarısız kırılım (üç seviye), VWAP'a dönüş, pivot dönüşü, fiksing dönüşü |
 | 5 · Haber | veri ve merkez bankası kararı anında | N1–N5, kırılım ↔ fade devam tablosu, FOMC karar ↔ basın toplantısı |
@@ -57,7 +58,7 @@ zaman, nasıl) ve **hüküm**.
 
 Fiyatlar Dukascopy'nin halka açık 1 dakikalık mumlarıdır: her dakika için ayrı ayrı **bid** (piyasa yapıcının
 alış fiyatı) ve **ask** (piyasa yapıcının satış fiyatı) açılış, en yüksek, en düşük ve kapanış. Dönem {{ K.baslangic | tarih }} →
-{{ K.bitis | tarih }}, pariteler EUR/USD, GBP/USD, USD/JPY ve AUD/USD. İki fiyattan iki türev kurulur: **orta
+{{ K.bitis | tarih }}, pariteler {{ K.ciftler | pariteler }}. İki fiyattan iki türev kurulur: **orta
 fiyat** (bid ile ask'ın ortalaması; sinyaller ondan okunur) ve **makas** (ask − bid; işlemin maliyetinin bir
 parçası). Sinyalin orta fiyattan, yürütmenin bid/ask'tan yapılması bilinçlidir: piyasa orta fiyatla işlem yapmaz;
 müşterinin alışı ask'tan, satışı bid'den dolar.
@@ -78,7 +79,7 @@ birebir eşitlik oranı; {{! capraz_kapsam }}._
 
 {{! sekil veri-makas "Makas: gün içinde ve devir dakikalarında" }}
 
-Makas gün içinde sabit değildir. New York 17:00'de (FX gününün kapanışı) likidite sağlayıcılar pozisyonlarını bir
+Makas gün içinde sabit değildir. New York 17:00'de (FX gününün kapanışı; {{! tsi "" "New York 17:00" }}) likidite sağlayıcılar pozisyonlarını bir
 sonraki güne devrederken makas birkaç katına açılır; bu yüzden bu serideki bütün işlemler en geç
 {{ K.gun_sonu_et | t }} New York'ta ({{! gun_sonu_tsi }}) kapatılır. Haber dakikalarında da makas açılır; olay olay ölçüsü ve dört paritenin karşılaştırması haber
 dersinde.
@@ -90,8 +91,9 @@ VWAP stratejileri bu hacmi ağırlık olarak kullanır ve derste bu sınır aç�
 ## Saat
 
 Arşiv UTC'de tutulur ve bütün seans saatleri yerel saatlerinden (Londra, New York, Tokyo, Frankfurt) IANA saat
-dilimi veritabanının kurallarıyla hesaplanır; hiçbir saat elle kaydırılmaz. **FX işlem günü** New York 17:00'de başlar ve ertesi
-gün 17:00'de biter: pazartesinin işlem günü pazar akşamı 17:00 New York'ta açılır. Derslerde bütün saatler ayrıca
+dilimi veritabanının kurallarıyla hesaplanır; hiçbir saat elle kaydırılmaz. **FX işlem günü** New York 17:00'de
+({{! tsi "" "New York 17:00" }}) başlar ve ertesi gün aynı saatte biter: pazartesinin işlem günü pazar akşamı New
+York'ta açılır. Derslerde bütün saatler ayrıca
 **TSİ** olarak yazılır. Türkiye 2016'dan beri yıl boyu UTC+3'tür ve saat değiştirmez; bu yüzden Londra ya da New York
 saat değiştirdiğinde onların TSİ karşılığı kayar.
 
@@ -108,17 +110,19 @@ Ara dönemler, yıl yıl:
 {{! dst }}
 
 İki pratik sonuç var. Birincisi takvim: bir olayın TSİ saati yalnız kendi şehrinin saatine bağlıdır. Londra
-açılışı İngiltere yaz saatindeyken 10:00, değilken 11:00; ABD verisi ABD yaz saatindeyken 15:30, değilken 16:30.
-Ara dönemde ikisi farklı rejimdedir ve iki ara dönemde de aynı şey olur: Londra açılışı 11:00'de, ABD verisi
-15:30'da — Londra ile New York arasındaki fark bir saat kısalır. İkincisi ölçü: saat değişimi haftası ve ara dönemin kendisi koşul analizinde ayrı birer
+açılışı TSİ'de İngiltere yaz saatindeyken 10:00, değilken 11:00; ABD verisi ABD yaz saatindeyken 15:30, değilken
+16:30. Ara dönemde ikisi farklı rejimdedir ve iki ara dönemde de aynı şey olur: Londra açılışı TSİ 11:00'de, ABD
+verisi 15:30'da — Londra ile New York arasındaki fark bir saat kısalır. İkincisi ölçü: saat değişimi haftası ve ara dönemin kendisi koşul analizinde ayrı birer
 değişkendir; bir stratejinin bu haftalarda farklı davranıp davranmadığı her strateji dersinde ayrıca sorulur.
 
 ## Seanslar ve aralık
 
 FX'in likiditesi üç seansa dağılır. **Asya** (Tokyo ve Sidney; TSİ gece yarısından sabaha) USD/JPY ve AUD/USD için
-gerçek bir seanstır, EUR/USD ve GBP/USD için çoğu gün dar bir banttır. **Londra** (08:00 yerel) günün en büyük
-hacmini taşır: Avrupa masaları gecenin emirlerini o saatte işler. **New York** (08:00 yerel) Londra öğleden sonrasıyla
-dört saat örtüşür; ABD verisinin çoğu 08:30'da, hisse piyasası 09:30'da açılır. Bu serinin kırılım kurallarının çoğu
+gerçek bir seanstır, EUR/USD ve GBP/USD için çoğu gün dar bir banttır. **Londra** (yerel 08:00;
+{{! tsi "" "Londra 08:00" }}) günün en büyük hacmini taşır: Avrupa masaları gecenin emirlerini o saatte işler.
+**New York** masaları 08:00 New York'ta ({{! tsi "" "New York 08:00" }}) devralır ve Londra öğleden sonrasıyla dört
+saat örtüşür; ABD verisinin çoğu New York 08:30'da ({{! tsi "" "New York 08:30" }}), hisse piyasası New York
+09:30'da ({{! tsi "" "New York 09:30" }}) açılır. Bu serinin kırılım kurallarının çoğu
 bir seansın başında oluşan bir **aralığa** bakar: bir zaman penceresinin en yüksek ve en düşük fiyatı (Londra'nın ilk
 mumu, gecenin sekiz saati, New York'un ilk saati, dünün tamamı). Aralığın iki ucu emirlerin biriktiği yerdir; kırılım
 kuralları ucun kesilmesinin hareketi hızlandıracağına, fade kuralları kesilen ucun geri alınacağına bahis yapar.
@@ -166,7 +170,7 @@ paritenin bütün olaylarına birlikte uygulanır (bir olayın pozisyonu açıkk
 (alışta ask, satışta bid) stopun ötesinde ya da tam üstündeyse; seviye hedefi yürütülen girişin (kayma dahil)
 gerisinde ya da tam üstündeyse; giriş gün sonunda ({{ K.gun_sonu_et | t }} New York; {{! gun_sonu_tsi }}) ya da sonrasındaysa.
 Stopta kayma hesaba katılmaz, çünkü kayma bir işlem yaratmamalıdır; hedefte katılır, çünkü hedefi aşan bir dolumun
-kazancı yoktur. Hızlı bir mumda giriş anında stopu ya da hedefi çoktan geçmiş emir bu yüzden örneklemden çıkar;
+kazancı yoktur. Hızlı bir mumda giriş anında stopa ya da hedefe varmış ya da onu geçmiş emir bu yüzden örneklemden çıkar;
 kural kural sayısı strateji derslerinde.
 
 **R birimi.** Her işlemin sonucu pip olarak ve **R** olarak yazılır. 1R, işlemin planlanan riskidir: yürütülen
@@ -206,10 +210,13 @@ ve örneklem dışı (2024 →). R'den ölçülür, pipten değil: pozisyon R'ye
 izler (R ile pip ortalamasının farkı yukarıda). Başabaş kayma temel senaryonun {{ K.temel_kayma_pip | s1 }} pip'inin
 altındaysa kuralın kenarı (varsa) o senaryonun yürütme maliyetine sığmaz. Merdivenin her kademesinde haber
 penceresinin ek kayması sabit kalır; yalnız makasın kendisini görmek için ayrıca **yalnız makas** satırı var: kayma da
-haber kayması da sıfır, maliyet yalnız gerçek bid/ask. Başabaşın iki özel hâli tabloda adıyla yazılır. Brüt sonuç
+haber kayması da sıfır, maliyet yalnız gerçek bid/ask. Başabaşın dört özel hâli tabloda adıyla yazılır. Brüt sonuç
 artı değilse hiçbir kayma kademesi başabaş değildir: "orta fiyattan bile eksi". Brüt artı ama yalnız makasla bile
 eksiyse başabaş bir kayma değil bir makastır: sonucun sıfıra indiği makas, bu verinin makasının payı olarak ("makas ≤
-%X": makas bu verininkinin en çok %X'i olmalı; makasın maliyeti makasla doğrusal ölçeklenir varsayımıyla).
+%X": makas bu verininkinin en çok %X'i olmalı; makasın maliyeti makasla doğrusal ölçeklenir varsayımıyla). Yalnız
+makasla artı ama temel kayma sıfırken de haber penceresinin {{ K.haber_kayma_pip | s1 }} pip'i sonucu eksiye
+çeviriyorsa: "{{= "0,0" }} pip kademesinde bile eksi". Merdivenin en yüksek kademesinde de artı kalan sonuçta başabaş
+merdivenin dışındadır: "2 pip'te bile artı".{{? len(K.kayma_pip) == 4 and K.kayma_pip[0] == 0.0 and K.kayma_pip[3] == 2.0 }}
 
 Aynı işlem iki ayrı sayı taşır: **brüt** (orta fiyattan orta fiyata, maliyetsiz) ve **net** (yürütülebilir
 fiyatlarla, makas ve kayma dahil). Brüt sonuç kuralın bir şey yakalayıp yakalamadığını, net sonuç bundan para
@@ -223,8 +230,9 @@ kalıp kalmadığını söyler. İkisi arasındaki fark, kısa işlemlerde ve ya
 yaptığıdır.
 
 **Önceden kayıtlı varsayılan ve seçilen.** Her strateji ailesinin parametre ızgarası ve "ders kitabı" varsayılanı
-hiçbir sonuç görülmeden yazılıp kayda geçirildi (metodoloji dersinde tarihçesiyle; New York ilk dengesi 08:00'in
-varsayılanı 09:30'unkinden yalnız başlangıç saati değiştirilerek türetildi). İki sonuç birlikte raporlanır:
+hiçbir sonuç görülmeden yazılıp kayda geçirildi (metodoloji dersinde tarihçesiyle; New York ilk denge kırılımının
+08:00 New York ({{! tsi "" "New York 08:00" }}) başlangıçlı sürümünün varsayılanı, 09:30
+({{! tsi "" "New York 09:30" }}) başlangıçlı sürümününkinden yalnız başlangıç saati değiştirilerek türetildi). İki sonuç birlikte raporlanır:
 **varsayılan** (veriye hiç bakmadan seçilmiş) ve **seçilen** (ızgaradan yalnız örneklem içinde, en yüksek günlük
 Sharpe'la, en az {{ K.secim.asgari_islem | n }} işlem şartıyla seçilmiş; haber stratejilerinde
 {{ K.secim.asgari_islem_haber | n }}). Ön kayıt varsayılanın hükmünü bütün dönemden kurar: varsayılan hiçbir veriye bakmadan yazıldığı
@@ -271,7 +279,7 @@ olduğu gibi taşınır. Örneklem içinde koşulsuz ortalamanın üstünde kala
 sıfırın ve seçilmeyen kovaların birlikte ortalamasının (tamamlayanın) üstündeyse koşul **tuttu**, değilse **tutmadı**;
 seçilen kova seçilmeyenlerden birinin altında kalsa da koşul tutabilir. Aynı ölçünün iki adı (Asya aralığı
 kuralında "aralık" ile "Asya aralığı") tek değişken sayılır. On dört değişkenin her biri ayrı bir denemedir ve
-şansla birkaçının tutması beklenir. Bir koşul, en az iki paritede aynı kovayla tutuyorsa kontrol listesine aday
+şansla birkaçının tutması beklenir. Bir koşul, en az iki paritede aynı kova seçimiyle tutuyorsa kontrol listesine aday
 olarak girer. İkinci paritedeki tutuş şansı ayıklamaz: {{! aday_taban }}. Şansın payını görmek için her bölüm ters
 seçimi de sayar.
 
@@ -324,7 +332,7 @@ hareketiyle birbirine bağlıdır.
 | McNemar | Aynı gözlemlerde (ör. aynı kural–parite bileşimlerinde) iki ikili sonucun (ör. gerçek ve ters seçimin tuttu/tutmadı) farkını sınayan kesin sınama. |
 | Binom sınaması | Bir olayın görülme sayısının, belirli bir olasılıkla şansın beklediğinden fazla olup olmadığı. |
 | HAC (Newey–West) | Komşu gözlemlerin hataları ilintiliyken de geçerli standart hata; Bartlett çekirdeği ağırlık verir. |
-| Pip | EUR/USD, GBP/USD, AUD/USD'de 0,0001; USD/JPY'de 0,01. |
+| Pip | {{! pip_tanimi }}. |
 | TSİ | Türkiye saati, yıl boyu UTC+3. |
 
 ## Ne değildir

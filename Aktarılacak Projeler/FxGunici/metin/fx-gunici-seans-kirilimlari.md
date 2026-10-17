@@ -1,6 +1,6 @@
 ---
 title: 'FX Gün İçi Stratejiler 2: Seans Kırılımları — Londra Açılışı, Asya Aralığı, New York İlk Dengesi'
-description: "Bir seansın ilk aralığının kırılmasına dayanan dört kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: Londra açılış aralığı kırılımı (ORB), Asya aralığı kırılımı ve New York ilk dengesinin (08:00 ve 09:30) kırılımı. Her biri için kural, örnek günler, örneklem içi ve dışı sonuç, maliyet, rastgele yön sınaması, koşullar, kontrol listesi ve hüküm."
+description: "Bir seansın ilk aralığının kırılmasına dayanan dört kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: Londra açılış aralığı kırılımı (ORB), Asya aralığı kırılımı ve New York ilk dengesinin iki çıpayla (masaların sabahı ve hisse açılışı) kırılımı. Her biri için kural, örnek günler, örneklem içi ve dışı sonuç, maliyet, rastgele yön sınaması, koşullar, kontrol listesi ve hüküm."
 pubDate: 2026-10-16
 tags: ['fx', 'gun-ici', 'kirilim', 'orb', 'backtest', 'ders']
 durum: 'aktif'
@@ -14,18 +14,18 @@ onkosul:
 Bir seans açıldığında o seansın katılımcıları ilk dakikalarda fiyatın nerede durması gerektiği üzerine pazarlık
 eder; bu pazarlığın sonucu bir **açılış aralığıdır**. Kırılım kuralları aralığın dışına çıkışı yeni bir yönün
 başlangıcı sayar. Bu derste dört biçimi var: **Londra açılış aralığı** (Avrupa masalarının ilk mumu), **Asya
-aralığı** (gecenin tamamı), ve **New York ilk dengesi** iki çıpayla — New York masalarının sabahı (08:00) ve ABD hisse
-açılışı (09:30).
+aralığı** (gecenin tamamı), ve **New York ilk dengesi** iki çıpayla — New York masalarının sabahı (08:00 New York;
+{{! tsi "" "New York 08:00" }}) ve ABD hisse açılışı (09:30 New York; {{! tsi "" "New York 09:30" }}).
 
 Dördü de aynı soruyu sorar: kırılan aralık bir bilgi mi taşıyor, yoksa yalnız stop emirlerinin yeri mi? İlk
 cevap kırılım kuralını, ikinci cevap fade dersindeki başarısız kırılım kuralını haklı çıkarır. İki aileyi aynı
 seviyelerle ayrı ayrı ölçmenin değeri buradadır: biri kaybettiriyorsa öbürünün kazandırması gerekmez — ikisi de
 maliyet öder.
 
-Sonuçlar her stratejide aynı dizide verilir (giriş dersinde tanımlandı): önceden kayıtlı varsayılanın birikimli
-eğrisi ve örneklem dışı tablosu, işlemlerin anatomisi, zaman dilimi kıyası, parametre ızgarası ve örneklem içi
-seçim, maliyet merdiveni, rastgele yön sınaması, yıl ve oynaklık rejimleri, giriş saatine göre sonuç ve koşul
-analizi.
+Sonuçlar her stratejide aynı dizide verilir (giriş dersinde tanımlandı): varsayılanın birikimli eğrisi ve
+örneklem dışı tablosu, işlemlerin anatomisi, zaman dilimi kıyası, parametre ızgarası ve örneklem içi seçim, maliyet
+merdiveni, rastgele yön sınaması, yıl ve oynaklık rejimleri, giriş saatine göre sonuç ve koşul analizi. Dört kuraldan
+üçünün varsayılanı önceden kayıtlıdır; birininki türetilmiştir ve bölümünde adıyla yazılır.{{? T.turetilmis_bilesim == 4 and len(T.turetilmis_birim) == 1 and T.turetilmis_birim[0] == "nyib_0800" }}
 
 ## Londra açılış aralığı kırılımı (ORB)
 

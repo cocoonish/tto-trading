@@ -43,7 +43,7 @@ sonra gelir. Kuralın stopu olmadığı için figürde stop çizgisi yoktur; R b
 ### Öngörü gücü
 
 Ön kayıt, kuralın kendisinden ayrı olarak sinyalin öngörü gücünü bir regresyonla sordu: öğleden sonra getirisi
-(12:00 → çıkış, orta fiyat) ilk mumun getirisinin bir fonksiyonu mu? İki getiri de girişteki 60 dakikalık
+(New York 12:00 → çıkış, orta fiyat; {{! tsi "" "New York 12:00" }}) ilk mumun getirisinin bir fonksiyonu mu? İki getiri de girişteki 60 dakikalık
 ATR(14)'e bölünür, yani yıllar ve pariteler arasında aynı birimdedir. Bu ölçü stop, hedef, makas ve kayma içermez: işlem kuralının
 sonucundan bağımsız olarak "bilgi var mı" sorusunu sorar.
 

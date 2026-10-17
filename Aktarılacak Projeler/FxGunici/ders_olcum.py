@@ -32,6 +32,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
 import sys
 import tomllib
 from datetime import date
@@ -988,7 +989,37 @@ def aile_secimi(kok: Path, ciftler: list[str]) -> dict:
 AY_SONU_DUZEY = 0.05
 
 
-def ay_sonu_ailesi(birimler: dict) -> dict:
+def ay_sonu_sinir(kok: Path, u_: dict, ayrim: dict, ic_bitis) -> dict:
+    """Bir ay sonu ayrımının sıfıra yakın %95 alt uçları (iki ayrık pencere): metrik.sinir_bilgisi ile büyük tekrarlı
+    kestirim ve tohum duyarlılığı — havuzun, parite hükmünün ve maliyet bayrağının sınır notuyla aynı ölçü. İşlemler
+    kombinasyonun işlem dosyasından (yalnız varsayılan ve seçilen yazılır; zaman dilimi biçimlerinin dosyası yoktur ve
+    "olculemedi" kaydı alır). Yeniden kurulan alt ucun ayrımdakiyle aynı olduğu sınanır: aynı alt küme değilse düşer."""
+    out: dict = {}
+    yol = _islem_dosyasi(kok, u_["birim"], u_["cift"], u_["p"] or {}) if u_["kim"] in ("varsayilan", "secilen") \
+        else None
+    if yol is None or not yol.exists():
+        return {"olculemedi": "işlem dosyası yok"}
+    al = mk.alinan(pd.read_parquet(yol))
+    gi = al["gun"].to_numpy().astype("datetime64[D]")
+    m = al["ay_sonu"].to_numpy(bool)
+    for d, dm in (("is", gi <= np.datetime64(ic_bitis)), ("oos", gi > np.datetime64(ic_bitis))):
+        x = (ayrim.get("ay_sonu") or {}).get(d) or {}
+        uc = x.get("ga_alt")
+        r = al["r"].to_numpy(np.float64)[m & dm]
+        if uc is None or len(r) != int(x.get("n") or 0):
+            raise ValueError(f"ay sonu sınırı: {u_['birim']} {u_['cift']} {u_['kim']} {d}: işlem dosyasının alt kümesi "
+                             f"ayrımla aynı değil ({len(r)} ↔ {x.get('n')})")
+        yeniden = mk.bootstrap_ort(r)[0]
+        if abs(yeniden - uc) > 1e-5:                      # ayrım altı haneye yuvarlı yazılır
+            raise ValueError(f"ay sonu sınırı: {u_['birim']} {u_['cift']} {u_['kim']} {d}: yeniden kurulan alt uç "
+                             f"{yeniden} ↔ ayrım {uc}")
+        s_ = mk.sinir_bilgisi(r, uc, "alt")
+        if s_:
+            out[d] = s_
+    return out
+
+
+def ay_sonu_ailesi(birimler: dict, kok: Path | None = None, ic_bitis=None) -> dict:
     """Ay sonu ayrımının çoklu sınama ailesi ve "tutan" ayrımlar — tek tanım (ders özetleri ve "Ne öğrendik" bunu okur).
 
     Aile, derste ölçülen BÜTÜN ay sonu ayrımlarıdır: fiksing kurallarının her paritesinde önceden kayıtlı varsayılan,
@@ -1035,6 +1066,10 @@ def ay_sonu_ailesi(birimler: dict) -> dict:
         u_["sart"] = sart
         u_["tutar"] = sart["oos"]["alt_arti"] and sart["oos"]["fark_esik"] and sart["is"]["alt_arti"] \
             and sart["is"]["fark_esik"]
+        # Sıfıra yakın alt uç: tutma ölçütü önceden kayıtlı yordamla (2.000 tekrar, sabit tohum) kurulur; işaretinin
+        # tohuma bağlı olup olmadığı yanında durur (hüküm değişmez, okura söylenir).
+        if kok is not None:
+            u_["sinir"] = ay_sonu_sinir(kok, u_, a_, ic_bitis)
         u_.pop("ayrim")
     return {"n": n, "duzey": AY_SONU_DUZEY, "esik": esik, "uye": uye,
             "tutan": [{k: u_[k] for k in ("birim", "cift", "kim")} for u_ in uye if u_["tutar"]]}
@@ -1392,7 +1427,16 @@ def kur(kok: Path | None = None) -> dict:
             "ciftler": ciftler, "nokta": {c: a.nokta[c] for c in ciftler}, "pip": {c: a.pip[c] for c in ciftler},
             "zaman_dilimleri": list(a.zaman_dilimleri), "kayma_pip": list(a.kayma_pip),
             "temel_kayma_pip": onk["genel"]["temel_kayma_pip"], "haber_kayma_pip": a.haber_kayma_pip,
+            # Kuralların mum ATR'sinin periyodu (stopsuz kuralların R birimi; kural kodundaki periyot sınamada bununla
+            # kıyaslanır): metin ve figürler "ATR(N)" yazımını buna karşı sınar (kapının 16. ölçütü).
+            "atr_kural": int(onk["genel"]["atr_mum"]),
+            # Ön kaydın kendi yazdığı ATR periyotları (ör. sıkışmanın Keltner kanalı "ATR20"): metinde meşrudur;
+            # liste elle değil ön kaydın metninden türer.
+            "atr_onkayit": sorted({int(x) for x in re.findall(r"ATR\s*\(?(\d+)",
+                                                               ONKAYIT_YOL.read_text(encoding="utf-8"))}),
             "haber_pencere_dk": list(a.haber_pencere_dk), "gun_sonu_et": a.gun_sonu_et,
+            # FX işlem gününün sınırı (New York): olağanüstü bir kararın günü işaretleyip işaretlemediği buna bağlı.
+            "fx_gun_siniri_et": z.GUN_SONU.strftime("%H:%M"),
             "onkayit_ozu": _oz(ONKAYIT_YOL), "ayar_ozu": _oz(BURASI / "ayar.toml"),
             "takvim_ozleri": takvim.ozler(),
             "onkayit_icerik_ozu": _icerik_ozu(onk), "onkayit_gecmisi": (gecmis := onkayit_gecmisi()),
@@ -1434,7 +1478,7 @@ def kur(kok: Path | None = None) -> dict:
                   "olcu_disi": olcu_disi(kok, ciftler, n1_tf=(int(birimler["n1"]["varsayilan"]["tf"])
                                                               if "n1" in birimler else None))},
         # Ay sonu ayrımının çoklu sınama ailesi ve tutan ayrımlar (tek tanım).
-        "ay_sonu_aile": ay_sonu_ailesi(birimler),
+        "ay_sonu_aile": ay_sonu_ailesi(birimler, kok, a.ic_bitis),
         # Yerel tatillerde işlemler (ön kayıt dışı, betimleyici).
         "tatil": tatil_betimi(kok, birimler, ciftler, a),
         # Sonuçlardan sonra değişen kuralların ölçülmüş etkisi: yeniden koşuyla (karsi_olgu.py) ve sayımla.

@@ -51,7 +51,7 @@ strateji" değil, bu örneklemde en az kaybeden ya da en çok kazanan kuraldır 
 | Gün içi momentum | 2.891 | −0,14 (−0,20 / −0,08) | −1,8 | 4 çalışmıyor | 0 · 0 | orta fiyattan bile eksi | 13,3 |
 | VWAP çekilme | 1.598 | −0,27 (−0,34 / −0,20) | −0,5 | 4 çalışmıyor | 0 · 0 | 0,07 | 4,6 |
 
-_Örneklem dışı (2024 →), önceden kayıtlı varsayılan. NY IB 08:00: varsayılanı ön kayıtta yok; ön kayıtlı varsayılandan yalnız başlangıç saati New York 09:30 → 08:00 (TSİ yazın 16:30 → 15:00, kışın 17:30 → 16:00) değiştirilerek türetildi. Tanımlar giriş dersinde._
+_Örneklem dışı (2024 →), önceden kayıtlı varsayılan. NY IB 08:00: varsayılanı ön kayıtta yok; ön kayıtlı varsayılandan yalnız başlangıç saati New York 09:30 → 08:00 (TSİ ABD yaz saatinde 16:30 → 15:00, kış saatinde 17:30 → 16:00) değiştirilerek türetildi. Tanımlar giriş dersinde._
 
 _† Havuz aralığının ucu sıfırda (işareti tohum gürültüsüne bağlı; hüküm değişmez): Asya aralığı: üst uç −0,01 R (sıfıra standart hatanın 0,22 katı uzaklıkta); 500.000 tekrarla −0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %6'sında ucu sıfırın üstünde verir; NY IB 09:30: üst uç +0,002 R (sıfıra standart hatanın 0,08 katı uzaklıkta); 500.000 tekrarla +0,002 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %90'ında ucu sıfırın üstünde verir; N5 devam: üst uç −0,01 R (sıfıra standart hatanın 0,08 katı uzaklıkta); 500.000 tekrarla +0,003 R, önceden kayıtlı yordam (2.000 tekrar) 200 tohumun %60'ında ucu sıfırın üstünde verir._
 
@@ -84,11 +84,11 @@ Aynı kurallar, havuzun örneklem dışındaki öbür ölçüleriyle:
 | Gün içi momentum | −2,58 | %42,8 | 0,71 | 399,9 | +0,80 | −0,84 |
 | VWAP çekilme | −4,30 | %29,5 | 0,65 | 443,0 | +1,69 | −1,09 |
 
-_Örneklem dışı (2024 →), önceden kayıtlı varsayılan, dört paritenin işlemleri birlikte (havuz). Sharpe ve azami düşüş paritelerin günlük R toplamından; kâr çarpanı 1'in altındaysa kaybedilen R kazanılandan büyüktür. Tanımlar giriş dersinde, paritelerin pip karşılıkları strateji bölümlerinin anatomi tablolarında._
+_Örneklem dışı (2024 →), önceden kayıtlı varsayılan, dört paritenin işlemleri birlikte (havuz). NY IB 08:00: varsayılanı ön kayıtta yok; ön kayıtlı varsayılandan yalnız başlangıç saati New York 09:30 → 08:00 (TSİ ABD yaz saatinde 16:30 → 15:00, kış saatinde 17:30 → 16:00) değiştirilerek türetildi. Sharpe ve azami düşüş paritelerin günlük R toplamından; kâr çarpanı 1'in altındaysa kaybedilen R kazanılandan büyüktür. Tanımlar giriş dersinde, paritelerin pip karşılıkları strateji bölümlerinin anatomi tablolarında._
 
 <GrafikEmbed src="/arastirma/fx-gunici/karsilastirma-ozet.html" baslik="Örneklem dışında işlem başına net R — bütün kurallar" no="01" kaynak="Dukascopy" />
 
-22 kural ve 88 kural–parite bileşiminde varsayılanın hükmü, birincil pencerede (2024 →): 0 çalışıyor, 6 zayıf, 82 çalışmıyor. Ön kaydın istediği bütün dönemde (varsayılan için o da örneklem dışıdır): 0 çalışıyor, 5 zayıf, 83 çalışmıyor. En az bir paritede zayıf (2024 →): Londra ORB, Asya aralığı, Sıkışma, N2 fade, N4 başarısız (USD/JPY ve AUD/USD: örneklem dışında her birinde 12 işlem, "az işlem" işaretli; ilk sonuçlardan sonra değişen "ölçülemedi" eşiğinden önce bu iki bileşim ölçülemedi sayılırdı, metodoloji dersinde). Havuzda %95 aralığının alt ucu sıfırın üstünde kalan kural: yok. Maliyet bayrağı (brüt aralığı sıfırın üstünde, net sonuç sıfır ya da altında) bütün dönemde 14 bileşimde yanıyor, 2024 → penceresinde hiçbirinde. Bayrağın yanıp yanmadığı 5 bileşimde tohum gürültüsüne bağlı (ayrıntı tablonun notunda); sayım önceden kayıtlı 2.000 tekrarla verilir.
+22 kural ve 88 kural–parite bileşiminde varsayılanın hükmü, birincil pencerede (2024 →): 0 çalışıyor, 6 zayıf, 82 çalışmıyor. Ön kaydın istediği bütün dönemde (varsayılan için o da örneklem dışıdır): 0 çalışıyor, 5 zayıf, 83 çalışmıyor. En az bir paritede zayıf (2024 →): Londra ORB, Asya aralığı, Sıkışma, N2 fade, N4 başarısız (USD/JPY ve AUD/USD: örneklem dışında her birinde 12 işlem, "az işlem" işaretli; ilk sonuçlardan sonra değişen "ölçülemedi" eşiğinden önce bu iki bileşim ölçülemedi sayılırdı, metodoloji dersinde). Havuzda %95 aralığının alt ucu sıfırın üstünde kalan kural: yok. Maliyet bayrağı (brüt aralığı sıfırın üstünde, net sonuç sıfır ya da altında) bütün dönemde 14 bileşimde yanıyor, 2024 → penceresinde hiçbirinde. Bayrağın yanıp yanmadığı 5 bileşimde tohum gürültüsüne bağlı (ayrıntı "Bütün kurallar tek tabloda" bölümündeki ilk tablonun notunda); sayım önceden kayıtlı 2.000 tekrarla verilir.
 
 ## Parite parite
 
@@ -120,7 +120,7 @@ sütun dört paritenin işlemleri birlikte (havuz).
 | Gün içi momentum | −0,15 · çalışmıyor | −0,14 · çalışmıyor | −0,03 · çalışmıyor | −0,23 · çalışmıyor | −0,14 |
 | VWAP çekilme | −0,19 · çalışmıyor | −0,29 · çalışmıyor | −0,21 · çalışmıyor | −0,40 · çalışmıyor | −0,27 |
 
-_NY IB 08:00: varsayılanı ön kayıtta yok; ön kayıtlı varsayılandan yalnız başlangıç saati New York 09:30 → 08:00 (TSİ yazın 16:30 → 15:00, kışın 17:30 → 16:00) değiştirilerek türetildi._
+_NY IB 08:00: varsayılanı ön kayıtta yok; ön kayıtlı varsayılandan yalnız başlangıç saati New York 09:30 → 08:00 (TSİ ABD yaz saatinde 16:30 → 15:00, kış saatinde 17:30 → 16:00) değiştirilerek türetildi._
 
 Bir kuralın bir paritede iyi görünüp öbürlerinde görünmemesi iki şekilde okunabilir: ya o paritenin bir özelliği
 (likidite, seans, haber yoğunluğu) kurala uyuyordur, ya da dört sınamadan biri şansla tutmuştur. Şansın payı hangi
@@ -246,8 +246,8 @@ kadarının şansla açıklanabileceğini ölçer (metodoloji dersi)._
 
 Bir karşılaştırmanın son sorusu bir karar tablosudur: hangi koşulda hangi kural. Bu serinin cevabı ölçümün izin
 verdiği kadardır. Önceden kayıtlı kuralların hiçbiri örneklem dışında hükmün üç şartını sağlamadı, yani "bu koşulda
-şunu kullan" diyebilecek ölçülmüş bir kural yok. Ölçümün verebildiği şey **adaylardır**: örneklem içinde seçilip örneklem
-dışında en az iki paritede aynı kovayla tutan koşullar. Her kuralın kontrol listesindeki "Ne zaman" maddesi bu
+şunu kullan" diyebilecek ölçülmüş bir kural yok. Tek istisna ön kaydın ayrıca raporlattığı bir alt küme: hüküm kuralının şartları örneklem dışında (2024 →) fiksing momentumunun ay sonu işlemlerinde, GBP/USD ve USD/JPY paritelerinde (33'er işlem; alt uç USD/JPY'de sınırda, işareti tohuma bağlı) tutuyor; ön kayıt alt kümeye ayrı hüküm vermez. Ölçümün verebildiği şey **adaylardır**: örneklem içinde seçilip örneklem
+dışında en az iki paritede aynı kova seçimiyle tutan koşullar. Her kuralın kontrol listesindeki "Ne zaman" maddesi bu
 tablonun kendi satırlarıdır.
 
 | Kural | Koşul: kova | Tutan pariteler: örneklem dışı R (işlem) |
@@ -263,13 +263,14 @@ tablonun kendi satırlarıdır.
 | Fiksing momentumu | Ay sonu günleri | GBP/USD +0,38 (33); USD/JPY +0,31 (33) |
 | Gün içi momentum | Saat değişimi haftaları | EUR/USD +0,11 (50); USD/JPY +0,26 (50); AUD/USD +0,02 (50) |
 
-_22 kuralın 6 tanesinde en az bir aday var; toplam 10 aday. Aday: örneklem içinde seçilip örneklem dışında en az iki paritede aynı kovayla tutan koşul. Şans tabanı: aynı ölçüt gerçek seçimde 6 kuralda 10 aday, **ters seçimde** (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi) 4 kuralda 7 aday verir._
+_22 kuralın 6 tanesinde en az bir aday var; toplam 10 aday. Aday: örneklem içinde seçilip örneklem dışında en az iki paritede aynı kova seçimiyle tutan koşul. Şans tabanı: aynı ölçüt gerçek seçimde 6 kuralda 10 aday, **ters seçimde** (örneklem içinde koşulsuz ortalamanın altında kalan kovalar seçilseydi) 4 kuralda 7 aday verir._
 
-Tablonun okunuşu dar tutulmalı. Bir aday, aynı kovanın en az iki paritede örneklem dışında artı ve öbür kovalardan iyi
-kaldığını söyler; güven aralığını ve rastgele yön sınamasını taşımaz, ve bütün kurallar birlikte sayıldığında gerçek
-seçim ters seçimden ayırt edilemiyor (yukarıdaki bölüm).
+Tablonun okunuşu dar tutulmalı. Bir aday, örneklem içinde yapılan aynı kova seçiminin (bir ya da birkaç kova) en az
+iki paritede örneklem dışında da birlikte artı ve seçilmeyen kovaların birlikte ortalamasının üstünde kaldığını
+söyler; seçimin içindeki tek tek kovalar bunun altında kalabilir. Aday güven aralığını ve rastgele yön sınamasını
+taşımaz; bütün kurallar birlikte sayıldığında gerçek seçim ters seçimden ayırt edilemiyor (yukarıdaki bölüm).
 
-Fiksing kurallarının ay sonu ayrımı (fade ve akış dersleri) adaylardan farklıdır: örneklem içinden seçilmiş bir kova değil, ön kaydın ayrıca raporlanmasını istediği bir alt kümedir ve kendi güven aralığını taşır. Ders ayrımı 28 biçimde ölçtü (iki fiksing kuralı, dört parite; varsayılan, örneklem içinde seçilen ve varsayılanın üç zaman dilimi biçimi; aynı işlemleri veren biçimler bir kez) ve düzeltilmiş eşik 0,0018. Bir ayrım şu durumda tutar: iki ayrık pencerede de (2018–2023 ve 2024 →) ay sonu ortalamasının %95 aralığının alt ucu sıfırın üstünde ve ay sonu ile öbür günlerin farkı düzeltilmiş eşiğin altında. Bütün dönem bu ölçüte giremez, çünkü 2024 → penceresini de içerir. Tutan: Fiksing momentumu GBP/USD (önceden kayıtlı varsayılan, 5 dk): 2018–2023 +0,30 R, aralık +0,003 / +0,61, fark p 0,0012; 2024 → +0,38 R, aralık +0,04 / +0,74, fark p 0,0008; rastgele yön yüzdeliği 99,9 ve 100,0. Aynı kuralın aynı paritedeki öbür biçimleri 2024 → penceresinde tutmuyor: örneklem içinde seçilen, 60 dk · stop yok: −0,13 R, aralık −0,75 / +0,49; varsayılanın 15 dk biçimi: +0,36 R, aralık −0,20 / +1,00. 2024 → penceresinde aralığı sıfırın üstünde olup tutmayan: Fiksing momentumu USD/JPY, önceden kayıtlı varsayılan, 5 dk: 2024 → +0,31 R, aralık +0,01 / +0,65; eksik kalan: 2024 → farkı eşiğin üstünde, p 0,0049 ve 2018–2023 aralığı sıfırı kapsar, −0,15 / +0,51. Sınırları adıyla: alt küme örneklem dışında parite başına otuz dolayında işlem taşır; ön kayıt alt kümeye ayrı hüküm vermez; rastgele yön sınaması alt kümeye sonradan uygulandı ve tutma ölçütüne girmez.
+Fiksing kurallarının ay sonu ayrımı (fade ve akış dersleri) adaylardan farklıdır: örneklem içinden seçilmiş bir kova değil, ön kaydın ayrıca raporlanmasını istediği bir alt kümedir ve kendi güven aralığını taşır. Ders ayrımı 28 biçimde ölçtü (iki fiksing kuralı, dört parite; varsayılan, örneklem içinde seçilen ve varsayılanın üç zaman dilimi biçimi; aynı işlemleri veren biçimler bir kez) ve düzeltilmiş eşik 0,0018. Bir ayrım şu durumda tutar: iki ayrık pencerede de (2018–2023 ve 2024 →) ay sonu ortalamasının %95 aralığının alt ucu sıfırın üstünde ve ay sonu ile öbür günlerin farkı düzeltilmiş eşiğin altında. Bütün dönem bu ölçüte giremez, çünkü 2024 → penceresini de içerir. Tutan: Fiksing momentumu GBP/USD (önceden kayıtlı varsayılan, 5 dk): 2018–2023 +0,30 R, aralık +0,003 / +0,61, fark p 0,0012; 2024 → +0,38 R, aralık +0,04 / +0,74, fark p 0,0008; rastgele yön yüzdeliği 99,9 ve 100,0. Fiksing momentumu GBP/USD: 2018–2023 alt ucu sınırda: sıfıra standart hatanın 0,02 katı uzaklıkta, 500.000 tekrarla +0,01 R; 2.000 tekrarlı yordam tohumların %78'inde sıfırın üstünde verir. Tutması tohum gürültüsüne bağlıdır; ölçüt önceden kayıtlı yordamla kurulur. Aynı kuralın aynı paritedeki öbür biçimleri 2024 → penceresinde tutmuyor: örneklem içinde seçilen, 60 dk · stop yok: −0,13 R, aralık −0,75 / +0,49; varsayılanın 15 dk biçimi: +0,36 R, aralık −0,20 / +1,00. 2024 → penceresinde aralığı sıfırın üstünde olup tutmayan: Fiksing momentumu USD/JPY, önceden kayıtlı varsayılan, 5 dk: 2024 → +0,31 R, aralık +0,01 / +0,65; eksik kalan: 2024 → farkı eşiğin üstünde, p 0,0049 ve 2018–2023 aralığı sıfırı kapsar, −0,15 / +0,51. Sınırları adıyla: alt küme örneklem dışında parite başına otuz dolayında işlem taşır; ön kayıt alt kümeye ayrı hüküm vermez; rastgele yön sınaması alt kümeye sonradan uygulandı ve tutma ölçütüne girmez.
 
 ## Ne öğrendik
 
@@ -277,21 +278,22 @@ Seri, gün içi FX işlem kitaplarının en çok anılan kurallarını aynı mak
 kuralıyla ölçtü. Üç soru bütün derslerde tekrar etti.
 
 **Makas.** Orta fiyatla artı görünen kural–parite
-bileşimlerinin çoğu, dolum başına yarım pip kaymayla eksiye dönüyor; çoğu için makasın
+bileşimlerinin çoğu, makas ve dolum başına 0,5 pip kaymayla eksiye dönüyor; çoğu için makasın
 kendisi yetiyor (maliyet bölümü). Bir backtest'in ilk sorusu "kaç R
 kazandırdı" değil, "hangi fiyatla ölçüldü" olmalıdır.
 
-**Yön seçimi.** Rastgele yön sınamasında 84 bileşimin 4 tanesi eşiği
-(rastgele dağılımda yüzdelik ≥ 95) geçti; hiçbir kenarın olmadığı bir dünyada beklenen yaklaşık
+**Yön seçimi.** Örneklem dışında (2024 →) rastgele yön sınamasında 84 bileşimin
+4 tanesi eşiği (rastgele dağılımda yüzdelik ≥ 95) geçti; hiçbir kenarın olmadığı bir dünyada beklenen yaklaşık
 4. Sayı tohuma bağlıdır: aynı yordam 200 sabit tohumla
 koşunca her tohumda geçen 2, en az birinde geçen
 8 bileşim var (tohum sınaması yüzdeliği 90'ın
 üstündeki bileşimlerde yapıldı; altındakiler iki sayımda da geçmeyen sayıldı). Bu sayı şansın beklediğinden ayırt edilemiyor (binom p
-0,61): bu kuralların yön seçimi, toplu olarak, yazı turadan ayırt edilemiyor.
+0,61): bu pencerede kuralların yön seçimi, toplu olarak, yazı turadan ayırt edilemiyor.
 Örneklem dışında net sonucu artı olan 6 bileşimden rastgele yön sınaması yapılabilenler
 4 tane; bunların 2 tanesinde yön seçimi tek başına da yazı turadan
-ayırt edilemiyor. Ayırt edilebilen 2 bileşim: Londra ORB USD/JPY (yüzdelik 95,2; sınırda: +51,01 R'lik en iyi işlem çıkınca 90,7; en iyi üç işlem çıkınca 81,3; 200 tohumun %58'inde eşiği geçer); Asya aralığı USD/JPY (yüzdelik 97,7; +1,00 R'lik en iyi işlem çıkınca 97,6; en iyi üç işlem çıkınca 96,9; 200 tohumun %100'ünde eşiği geçer). Öbürlerinde sınama yapılmadı: örneklem dışında
+ayırt edilemiyor. Ayırt edilebilen tek bileşim: Asya aralığı USD/JPY (yüzdelik 97,7; +1,00 R'lik en iyi işlem çıkınca 97,6; en iyi üç işlem çıkınca 96,9; 200 tohumun %100'ünde eşiği geçer). Sınırda (eşiğin hangi yanında kaldığı tohuma bağlı) tek bileşim: Londra ORB USD/JPY (yüzdelik 95,2; +51,01 R'lik en iyi işlem çıkınca 90,7; en iyi üç işlem çıkınca 81,3; 200 tohumun %58'inde eşiği geçer). Öbürlerinde sınama yapılmadı: örneklem dışında
 20'den az işlem var.
+Bütün dönemde (01.01.2018 → 15.10.2026) 88 bileşimin 11 tanesi eşiği geçiyor (Asya aralığı USD/JPY 98,0; İç mum GBP/USD 96,9; Sahte ORB USD/JPY 98,3; Sahte Asya USD/JPY 98,7; VWAP dönüş AUD/USD 97,5; Fiksing dönüşü EUR/USD 99,9, GBP/USD 99,9, AUD/USD 100,0; N4 başarısız AUD/USD 97,2; Fiksing momentumu EUR/USD 97,5, USD/JPY 100,0); şansın beklediği yaklaşık 4,4. Bağımsızlık varsayımıyla binom p &lt; 0,01; sınamalar bağımsız olmadığı için (aynı paritenin kuralları aynı günleri paylaşır) gerçek p bundan büyüktür. Hepsi 200 sabit tohumun her birinde eşiği geçiyor; en iyi işlem çıkınca 10'u eşiğin üstünde kalıyor. 10'unda brüt sonuç artı, net sonuç eksi: bu pencerede yön bilgisi var, maliyet onu yiyor. Net sonucu artı kalan tek bileşim N4 başarısız AUD/USD (+0,12 R; en iyi işlem çıkınca yüzdelik 92,4).
 
 **Örneklem içi seçim.** Seçim 88 bileşimin 86 tanesinde kuruldu;
 öbür 2 bileşimde ızgaranın hiçbir kombinasyonu örneklem içinde asgari işlem sayısına ulaşmadı:
@@ -303,7 +305,7 @@ Artı olan 35 bileşimde en iyi kombinasyonun örneklem içi
 Sharpe'ı, denenen kombinasyon sayısının şansla üretebileceği en yüksek değerden ayırt edilemiyor: örneklem içinde iyi
 görünen bir ayar, çoğu zaman yalnız en şanslı ayardır. Koşul analizinde gerçek seçim ters seçimden ayırt edilemedi (yukarıdaki bölüm).
 
-**Ay sonu.** Ay sonu ayrımının 28 biçiminden iki ayrık pencerede de tutan tek biçim Fiksing momentumu GBP/USD (önceden kayıtlı varsayılan, 5 dk); ayrıntısı yukarıdaki bölümde. Bu bir hüküm değil gözlemdir: alt küme örneklem dışında 33 işlem taşır, ön kayıt alt kümeye ayrı hüküm vermez ve aynı kuralın öbür biçimleri ile öbür pariteleri tutmuyor. Bir sonraki örneklemde ilk sınanacak sonuç budur.
+**Ay sonu.** Ay sonu ayrımının 28 biçiminden iki ayrık pencerede de tutan tek biçim Fiksing momentumu GBP/USD (önceden kayıtlı varsayılan, 5 dk); ayrıntısı yukarıdaki bölümde ve tutması tohum gürültüsüne bağlı (Fiksing momentumu GBP/USD: 2018–2023 alt ucu sınırda: sıfıra standart hatanın 0,02 katı uzaklıkta, 500.000 tekrarla +0,01 R; 2.000 tekrarlı yordam tohumların %78'inde sıfırın üstünde verir). Bu bir hüküm değil gözlemdir: alt küme örneklem dışında 33 işlem taşır, ön kayıt alt kümeye ayrı hüküm vermez ve aynı kuralın öbür biçimleri ile öbür pariteleri tutmuyor. Bir sonraki örneklemde ilk sınanacak sonuç budur.
 
 Bu sonuçlar bu kuralların bu biçimleri içindir: başka bir yürütme maliyeti (daha dar makas, likidite sağlayan emirler),
 başka bir zaman dilimi, ya da kuralın bir parçası olarak gerçek bir haber beklentisi başka sonuç verebilir. Ölçülmeyen
