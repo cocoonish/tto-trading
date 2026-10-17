@@ -2,7 +2,7 @@
  "id": "ito_yamada2017",
  "aday_baslik": "Puzzles in the Tokyo fixing in the forex market",
  "aday_yil": 2017,
- "zaman": "2026-10-17T23:35:30+00:00",
+ "zaman": "2026-10-17T23:49:25+00:00",
  "koordinat_deneme": [
   {
    "koordinat": [
@@ -87,16 +87,119 @@
   ]
  },
  "metin": {
-  "durum": "okunamadı",
-  "deneme": [
+  "durum": 200,
+  "url": "https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html",
+  "son_url": "https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html",
+  "tur": "text/html; charset=UTF-8",
+  "sha256": "a4734f60c56fd7479276cb21883379a198f6f548fccb58f0703288fcd3d3eb11",
+  "bayt": 68385,
+  "sayfa": 1,
+  "ilk_sayfa": "Advanced search Browse Econ Literature Working papers Journals Software components Books Book chapters JEL classification More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html My bibliography Save this article Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing Author & abstract Download 17 References 4 Citations Most related Related works & more Corrections Author Listed: Ito, Takatoshi Yamada, Masahiro Registered: Takatoshi Ito † Abstract \"Fixing\" in the foreign exchange market determines the mid-point exchange rate that is applied to spot foreign exchange transactions between banks and bank customers. The paper analyzed the Tokyo fixing practices, which allow each bank to announce the fixing rate based on the interbank exchange rate transactions at 9:55a.m. Based on volumes of customer orders, submitted for transaction at the fixing price, banks submit orders to the interbank market at the fixing time window. Three puzzles regarding the Tokyo fixing are: (1) the spikes in prices at the fixing time occur despite a high level of liquidity in the market; (2) the order flows before the fixing are biased toward the dollar, which generates a predictable price pattern; and (3) the bank-announced fixing rates are biased toward dollar appreciation. These puzzles can be explained as a consequence of unique in",
+  "pasaj": [
    {
-    "url": "https://doi.org/10.1016/j.jinteco.2017.09.005",
-    "durum": "metin okunamadı",
-    "tur": "text/html;charset=UTF-8"
+    "ifade": "Puzzles in the Tokyo fixing",
+    "sayfa": 1,
+    "pasaj": "ation More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html My bibliography Save this article Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing Author & abstract Download 17 References 4 Citations Most related Related works & more Corrections Author Listed: Ito, Takatoshi Yamada, Masahiro Registered: Takatoshi Ito † Abstract \""
    },
    {
-    "url": "http://www.price.e.u-tokyo.ac.jp/img/researchdata/pdf/p_wp087.pdf",
-    "durum": "ConnectionError"
+    "ifade": "Puzzles in the Tokyo fixing",
+    "sayfa": 1,
+    "pasaj": "iased toward dollar appreciation. These puzzles can be explained as a consequence of unique institutional features of the Tokyo fixing and of banks' real-side customers in Japan. Suggested Citation Ito, Takatoshi & Yamada, Masahiro, 2017. \"Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing,\" Journal of International Economics, Elsevier, vol. 109(C), pages 214-234. Handle: RePEc:eee:inecon:v:109:y:2017:i:c:p:214-234 DOI: 10.1016/j.jinteco.2017.09.005 as HTML HTML with abs"
+   },
+   {
+    "ifade": "the Tokyo fixing",
+    "sayfa": 1,
+    "pasaj": "features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html My bibliography Save this article Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing Author & abstract Download 17 References 4 Citations Most related Related works & more Corrections Author Listed: Ito, Takatoshi Yamada, Masahiro Registered: Takatoshi Ito † Abstract \""
+   },
+   {
+    "ifade": "the Tokyo fixing",
+    "sayfa": 1,
+    "pasaj": "Yamada, Masahiro Registered: Takatoshi Ito † Abstract \"Fixing\" in the foreign exchange market determines the mid-point exchange rate that is applied to spot foreign exchange transactions between banks and bank customers. The paper analyzed the Tokyo fixing practices, which allow each bank to announce the fixing rate based on the interbank exchange rate transactions at 9:55a.m. Based on volumes of customer orders, submitted for transaction at the fixing price, banks submit orders to the inter"
+   },
+   {
+    "ifade": "Order imbalances and bank pricing",
+    "sayfa": 1,
+    "pasaj": "Ec Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html My bibliography Save this article Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing Author & abstract Download 17 References 4 Citations Most related Related works & more Corrections Author Listed: Ito, Takatoshi Yamada, Masahiro Registered: Takatoshi Ito † Abstract \"Fixing\" in the foreign exchange market determines the m"
+   },
+   {
+    "ifade": "Order imbalances and bank pricing",
+    "sayfa": 1,
+    "pasaj": "an be explained as a consequence of unique institutional features of the Tokyo fixing and of banks' real-side customers in Japan. Suggested Citation Ito, Takatoshi & Yamada, Masahiro, 2017. \"Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing,\" Journal of International Economics, Elsevier, vol. 109(C), pages 214-234. Handle: RePEc:eee:inecon:v:109:y:2017:i:c:p:214-234 DOI: 10.1016/j.jinteco.2017.09.005 as HTML HTML with abstract plain text plain text with abstract BibTeX RIS (E"
+   },
+   {
+    "ifade": "before the fixing",
+    "sayfa": 1,
+    "pasaj": "ce, banks submit orders to the interbank market at the fixing time window. Three puzzles regarding the Tokyo fixing are: (1) the spikes in prices at the fixing time occur despite a high level of liquidity in the market; (2) the order flows before the fixing are biased toward the dollar, which generates a predictable price pattern; and (3) the bank-announced fixing rates are biased toward dollar appreciation. These puzzles can be explained as a consequence of unique institutional features of t"
+   },
+   {
+    "ifade": "window",
+    "sayfa": 1,
+    "pasaj": "nk to announce the fixing rate based on the interbank exchange rate transactions at 9:55a.m. Based on volumes of customer orders, submitted for transaction at the fixing price, banks submit orders to the interbank market at the fixing time window. Three puzzles regarding the Tokyo fixing are: (1) the spikes in prices at the fixing time occur despite a high level of liquidity in the market; (2) the order flows before the fixing are biased toward the dollar, which generates a predict"
+   },
+   {
+    "ifade": "9:55",
+    "sayfa": 1,
+    "pasaj": "e that is applied to spot foreign exchange transactions between banks and bank customers. The paper analyzed the Tokyo fixing practices, which allow each bank to announce the fixing rate based on the interbank exchange rate transactions at 9:55a.m. Based on volumes of customer orders, submitted for transaction at the fixing price, banks submit orders to the interbank market at the fixing time window. Three puzzles regarding the Tokyo fixing are: (1) the spikes in prices at the fi"
+   },
+   {
+    "ifade": "order imbalance",
+    "sayfa": 1,
+    "pasaj": "Ec Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html My bibliography Save this article Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing Author & abstract Download 17 References 4 Citations Most related Related works & more Corrections Author Listed: Ito, Takatoshi Yamada, Masahiro Registered: Takatoshi Ito † Abstract \"Fixing\" in the foreign exchange marke"
+   },
+   {
+    "ifade": "order imbalance",
+    "sayfa": 1,
+    "pasaj": "an be explained as a consequence of unique institutional features of the Tokyo fixing and of banks' real-side customers in Japan. Suggested Citation Ito, Takatoshi & Yamada, Masahiro, 2017. \"Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing,\" Journal of International Economics, Elsevier, vol. 109(C), pages 214-234. Handle: RePEc:eee:inecon:v:109:y:2017:i:c:p:214-234 DOI: 10.1016/j.jinteco.2017.09.005 as HTML HTML with abstract plain text plain text with abst"
+   },
+   {
+    "ifade": "revers",
+    "sayfa": 1,
+    "pasaj": "Melbourne Institute Working Paper Series wp2011n14, Melbourne Institute of Applied Economic and Social Research, The University of Melbourne. Kitamura, Yoshihiro, 2016. \"The probability of informed trading measured with price impact, price reversal, and volatility,\" Journal of International Financial Markets, Institutions and Money, Elsevier, vol. 42(C), pages 77-90. John A. Carlson & Christian M. Dahl & Carol L. Osler, 2008. \"Short-run Exchange-rate Dynamics: Theory And Evidence,\""
+   },
+   {
+    "ifade": "calendar",
+    "sayfa": 1,
+    "pasaj": "Advanced search Browse Econ Literature Working papers Journals Software components Books Book chapters JEL classification More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html My bibliography Save this article Puzzles in the Tokyo fixing in the forex market: Order imbalances and Bank pricing Author & abstract Download 17 "
+   },
+   {
+    "ifade": "fixing time",
+    "sayfa": 1,
+    "pasaj": "llow each bank to announce the fixing rate based on the interbank exchange rate transactions at 9:55a.m. Based on volumes of customer orders, submitted for transaction at the fixing price, banks submit orders to the interbank market at the fixing time window. Three puzzles regarding the Tokyo fixing are: (1) the spikes in prices at the fixing time occur despite a high level of liquidity in the market; (2) the order flows before the fixing are biased toward the dollar, which generates a "
+   },
+   {
+    "ifade": "fixing time",
+    "sayfa": 1,
+    "pasaj": "55a.m. Based on volumes of customer orders, submitted for transaction at the fixing price, banks submit orders to the interbank market at the fixing time window. Three puzzles regarding the Tokyo fixing are: (1) the spikes in prices at the fixing time occur despite a high level of liquidity in the market; (2) the order flows before the fixing are biased toward the dollar, which generates a predictable price pattern; and (3) the bank-announced fixing rates are biased toward dollar apprec"
+   },
+   {
+    "ifade": "predictable",
+    "sayfa": 1,
+    "pasaj": " window. Three puzzles regarding the Tokyo fixing are: (1) the spikes in prices at the fixing time occur despite a high level of liquidity in the market; (2) the order flows before the fixing are biased toward the dollar, which generates a predictable price pattern; and (3) the bank-announced fixing rates are biased toward dollar appreciation. These puzzles can be explained as a consequence of unique institutional features of the Tokyo fixing and of banks' real-side customers in Japan. "
+   }
+  ],
+  "eksik": [
+   "on Gotobi days",
+   "after the fixing",
+   "February 2015",
+   "15 February",
+   "five minute",
+   "five-minute",
+   "5-minute",
+   "one minute",
+   "calculation window",
+   "manipulation",
+   "investigation",
+   "30 seconds",
+   "Gotobi",
+   "9.55",
+   "gotobi",
+   "10:00",
+   "10am"
+  ],
+  "deneme": [
+   {
+    "url": "https://ideas.repec.org/a/eee/inecon/v109y2017icp214-234.html",
+    "durum": 200
    }
   ]
  },

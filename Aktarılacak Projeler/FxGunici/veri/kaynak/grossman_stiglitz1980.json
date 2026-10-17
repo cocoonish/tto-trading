@@ -2,7 +2,7 @@
  "id": "grossman_stiglitz1980",
  "aday_baslik": "On the Impossibility of Informationally Efficient Markets",
  "aday_yil": 1980,
- "zaman": "2026-10-17T23:34:59+00:00",
+ "zaman": "2026-10-17T23:49:09+00:00",
  "crossref_deneme": [
   {
    "doi": "10.2307/1805228",
@@ -87,8 +87,54 @@
  "openalex": null,
  "semantic": null,
  "metin": {
-  "durum": "okunamadı",
-  "deneme": []
+  "durum": 200,
+  "url": "https://ideas.repec.org/a/aea/aecrev/v70y1980i3p393-408.html",
+  "son_url": "https://ideas.repec.org/a/aea/aecrev/v70y1980i3p393-408.html",
+  "tur": "text/html; charset=UTF-8",
+  "sha256": "16210b448ff21a1fa2e8a822a6544835add170a6b0e4bfd2cc5f2dc256381010",
+  "bayt": 28143,
+  "sayfa": 1,
+  "ilk_sayfa": "Advanced search Browse Econ Literature Working papers Journals Software components Books Book chapters JEL classification More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/aea/aecrev/v70y1980i3p393-408.html My bibliography Save this article On the Impossibility of Informationally Efficient Markets Author & abstract Download & other version 2259 Citations Related works & more Corrections Author Listed: Grossman, Sanford J Stiglitz, Joseph E Registered: Sanford Jay Grossman Joseph E. Stiglitz Abstract No abstract is available for this item. Suggested Citation Grossman, Sanford J & Stiglitz, Joseph E, 1980. \"On the Impossibility of Informationally Efficient Markets,\" American Economic Review, American Economic Association, vol. 70(3), pages 393-408, June. Handle: RePEc:aea:aecrev:v:70:y:1980:i:3:p:393-408 as HTML HTML with abstract plain text plain text with abstract BibTeX RIS (EndNote, RefMan, ProCite) ReDIF JSON Download full text from publisher To our knowledge, this item is not available for download. To find whether it is available, there are three options: 1. Check below whether another version of this item is available online. 2. Check on the provider's web page whether it is in fact available. 3. Perform a search for a similarly titled item that would be available. Other versions of this item: Sanford J Grossman & Joseph E Stiglitz, 1997. \"On the Impossibili",
+  "pasaj": [
+   {
+    "ifade": "information",
+    "sayfa": 1,
+    "pasaj": "scribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/aea/aecrev/v70y1980i3p393-408.html My bibliography Save this article On the Impossibility of Informationally Efficient Markets Author & abstract Download & other version 2259 Citations Related works & more Corrections Author Listed: Grossman, Sanford J Stiglitz, Joseph E Registered: Sanford Jay Grossman Joseph E. Stiglitz Abstract No abstract"
+   },
+   {
+    "ifade": "information",
+    "sayfa": 1,
+    "pasaj": "Listed: Grossman, Sanford J Stiglitz, Joseph E Registered: Sanford Jay Grossman Joseph E. Stiglitz Abstract No abstract is available for this item. Suggested Citation Grossman, Sanford J & Stiglitz, Joseph E, 1980. \"On the Impossibility of Informationally Efficient Markets,\" American Economic Review, American Economic Association, vol. 70(3), pages 393-408, June. Handle: RePEc:aea:aecrev:v:70:y:1980:i:3:p:393-408 as HTML HTML with abstract plain text plain text with abstract BibTeX RIS "
+   },
+   {
+    "ifade": "efficient",
+    "sayfa": 1,
+    "pasaj": "search RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/aea/aecrev/v70y1980i3p393-408.html My bibliography Save this article On the Impossibility of Informationally Efficient Markets Author & abstract Download & other version 2259 Citations Related works & more Corrections Author Listed: Grossman, Sanford J Stiglitz, Joseph E Registered: Sanford Jay Grossman Joseph E. Stiglitz Abstract No abstract is available "
+   },
+   {
+    "ifade": "efficient",
+    "sayfa": 1,
+    "pasaj": ", Sanford J Stiglitz, Joseph E Registered: Sanford Jay Grossman Joseph E. Stiglitz Abstract No abstract is available for this item. Suggested Citation Grossman, Sanford J & Stiglitz, Joseph E, 1980. \"On the Impossibility of Informationally Efficient Markets,\" American Economic Review, American Economic Association, vol. 70(3), pages 393-408, June. Handle: RePEc:aea:aecrev:v:70:y:1980:i:3:p:393-408 as HTML HTML with abstract plain text plain text with abstract BibTeX RIS (EndNote, RefM"
+   }
+  ],
+  "eksik": [
+   "because information is costly",
+   "prices cannot perfectly reflect the information",
+   "would receive no compensation",
+   "an equilibrium degree of disequilibrium",
+   "do receive compensation",
+   "a fundamental conflict between the efficiency",
+   "those who expend resources to obtain information",
+   "equilibrium degree of disequilibrium",
+   "costly",
+   "compensation"
+  ],
+  "deneme": [
+   {
+    "url": "https://ideas.repec.org/a/aea/aecrev/v70y1980i3p393-408.html",
+    "durum": 200
+   }
+  ]
  },
  "kunye_cozuldu": false,
  "ozet_var": false

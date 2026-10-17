@@ -2,7 +2,7 @@
  "id": "obrien_fleming1979",
  "aday_baslik": "A Multiple Testing Procedure for Clinical Trials",
  "aday_yil": 1979,
- "zaman": "2026-10-17T23:36:14+00:00",
+ "zaman": "2026-10-17T23:49:35+00:00",
  "crossref_deneme": [
   {
    "doi": "10.2307/2530245",
@@ -86,7 +86,8 @@
    },
    {
     "url": "https://pubmed.ncbi.nlm.nih.gov/497341",
-    "durum": "HTTP 203"
+    "durum": "metin okunamadı",
+    "tur": "text/html; charset=utf-8"
    }
   ]
  },

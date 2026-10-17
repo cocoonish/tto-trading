@@ -2,7 +2,7 @@
  "id": "melvin_prins2015",
  "aday_baslik": "Equity hedging and exchange rates at the London 4 p.m. fix",
  "aday_yil": 2015,
- "zaman": "2026-10-17T23:35:11+00:00",
+ "zaman": "2026-10-17T23:49:22+00:00",
  "crossref_deneme": [
   {
    "doi": "10.1016/j.finmar.2014.11.001",
@@ -80,16 +80,120 @@
   ]
  },
  "metin": {
-  "durum": "okunamadı",
-  "deneme": [
+  "durum": 200,
+  "url": "https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html",
+  "son_url": "https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html",
+  "tur": "text/html; charset=UTF-8",
+  "sha256": "dc5c495218d4d9b51d20d6c568037aefdd6ccfada2c34b8c2a040108b5adace1",
+  "bayt": 49501,
+  "sayfa": 1,
+  "ilk_sayfa": "Advanced search Browse Econ Literature Working papers Journals Software components Books Book chapters JEL classification More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html My bibliography Save this article Equity hedging and exchange rates at the London 4p.m. fix Author & abstract Download 4 References 40 Citations Most related Related works & more Corrections Author Listed: Melvin, Michael Prins, John Registered: Michael Melvin Abstract We test the hypothesis that hedging by international equity portfolio managers affects exchange rates-the \"hedging channel of exchange rate adjustment\". A key institutional feature of the foreign exchange market, the \"London 4p.m. fix\", is used to identify times when hedging trades concentrate. The direction of hedging trades is identified by past equity returns. The findings show that equity market appreciation over the month can be used to predict currency depreciation before the end-of-month fix, providing evidence that hedging activity plays a role in exchange rate determination. Suggested Citation Melvin, Michael & Prins, John, 2015. \"Equity hedging and exchange rates at the London 4p.m. fix,\" Journal of Financial Markets, Elsevier, vol. 22(C), pages 50-72. Handle: RePEc:eee:finmar:v:22:y:2015:i:c:p:50-72 DOI: 10.1016/j.finmar.2014.11.001 as HTML HTML with abstract plain text plain text with a",
+  "pasaj": [
    {
-    "url": "https://doi.org/10.1016/j.finmar.2014.11.001",
-    "durum": "metin okunamadı",
-    "tur": "text/html;charset=UTF-8"
+    "ifade": "Equity hedging and exchange rates",
+    "sayfa": 1,
+    "pasaj": "fication More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html My bibliography Save this article Equity hedging and exchange rates at the London 4p.m. fix Author & abstract Download 4 References 40 Citations Most related Related works & more Corrections Author Listed: Melvin, Michael Prins, John Registered: Michael Melvin Abstract We test the hypothesis that hedging b"
    },
    {
-    "url": "http://www.sciencedirect.com/science/article/pii/S1386418114000779",
-    "durum": "HTTP 403"
+    "ifade": "Equity hedging and exchange rates",
+    "sayfa": 1,
+    "pasaj": "ciation over the month can be used to predict currency depreciation before the end-of-month fix, providing evidence that hedging activity plays a role in exchange rate determination. Suggested Citation Melvin, Michael & Prins, John, 2015. \"Equity hedging and exchange rates at the London 4p.m. fix,\" Journal of Financial Markets, Elsevier, vol. 22(C), pages 50-72. Handle: RePEc:eee:finmar:v:22:y:2015:i:c:p:50-72 DOI: 10.1016/j.finmar.2014.11.001 as HTML HTML with abstract plain text plain text with abstract Bi"
+   },
+   {
+    "ifade": "hedg",
+    "sayfa": 1,
+    "pasaj": "n More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html My bibliography Save this article Equity hedging and exchange rates at the London 4p.m. fix Author & abstract Download 4 References 40 Citations Most related Related works & more Corrections Author Listed: Melvin, Michael Prins, John Registered: Michael Melvin Abstract We test the hyp"
+   },
+   {
+    "ifade": "hedg",
+    "sayfa": 1,
+    "pasaj": "nge rates at the London 4p.m. fix Author & abstract Download 4 References 40 Citations Most related Related works & more Corrections Author Listed: Melvin, Michael Prins, John Registered: Michael Melvin Abstract We test the hypothesis that hedging by international equity portfolio managers affects exchange rates-the \"hedging channel of exchange rate adjustment\". A key institutional feature of the foreign exchange market, the \"London 4p.m. fix\", is used to identify times when hedg"
+   },
+   {
+    "ifade": "rebalanc",
+    "sayfa": 1,
+    "pasaj": " want to search for a different version of it. References listed on IDEAS as HTML HTML with abstract plain text plain text with abstract BibTeX RIS (EndNote, RefMan, ProCite) ReDIF JSON Rey, HÃ©lÃ ̈ne & Hau, Harald, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" CEPR Discussion Papers 6901, Centre for Economic Policy Research. Harald Hau & Hélène Rey, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" NBER Working Papers 14165, National Bureau of Economic Research"
+   },
+   {
+    "ifade": "rebalanc",
+    "sayfa": 1,
+    "pasaj": "ndNote, RefMan, ProCite) ReDIF JSON Rey, HÃ©lÃ ̈ne & Hau, Harald, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" CEPR Discussion Papers 6901, Centre for Economic Policy Research. Harald Hau & Hélène Rey, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" NBER Working Papers 14165, National Bureau of Economic Research, Inc. Chaban, Maxym, 2009. \"Commodity currencies and equity flows,\" Journal of International Money and Finance, Elsevier, vol. 28(5), pages 836-852, "
+   },
+   {
+    "ifade": "predict",
+    "sayfa": 1,
+    "pasaj": "arket, the \"London 4p.m. fix\", is used to identify times when hedging trades concentrate. The direction of hedging trades is identified by past equity returns. The findings show that equity market appreciation over the month can be used to predict currency depreciation before the end-of-month fix, providing evidence that hedging activity plays a role in exchange rate determination. Suggested Citation Melvin, Michael & Prins, John, 2015. \"Equity hedging and exchange rates at the Lond"
+   },
+   {
+    "ifade": "equity returns",
+    "sayfa": 1,
+    "pasaj": "ging channel of exchange rate adjustment\". A key institutional feature of the foreign exchange market, the \"London 4p.m. fix\", is used to identify times when hedging trades concentrate. The direction of hedging trades is identified by past equity returns. The findings show that equity market appreciation over the month can be used to predict currency depreciation before the end-of-month fix, providing evidence that hedging activity plays a role in exchange rate determination. Suggested Cit"
+   },
+   {
+    "ifade": "portfolio rebalancing",
+    "sayfa": 1,
+    "pasaj": "d, you may want to search for a different version of it. References listed on IDEAS as HTML HTML with abstract plain text plain text with abstract BibTeX RIS (EndNote, RefMan, ProCite) ReDIF JSON Rey, HÃ©lÃ ̈ne & Hau, Harald, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" CEPR Discussion Papers 6901, Centre for Economic Policy Research. Harald Hau & Hélène Rey, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" NBER Working Papers 14165, National Bureau of Economic Research, I"
+   },
+   {
+    "ifade": "portfolio rebalancing",
+    "sayfa": 1,
+    "pasaj": "TeX RIS (EndNote, RefMan, ProCite) ReDIF JSON Rey, HÃ©lÃ ̈ne & Hau, Harald, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" CEPR Discussion Papers 6901, Centre for Economic Policy Research. Harald Hau & Hélène Rey, 2008. \"Global Portfolio Rebalancing Under the Microscope,\" NBER Working Papers 14165, National Bureau of Economic Research, Inc. Chaban, Maxym, 2009. \"Commodity currencies and equity flows,\" Journal of International Money and Finance, Elsevier, vol. 28(5), pages 836-852, Sep"
+   },
+   {
+    "ifade": "equity",
+    "sayfa": 1,
+    "pasaj": "fication More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html My bibliography Save this article Equity hedging and exchange rates at the London 4p.m. fix Author & abstract Download 4 References 40 Citations Most related Related works & more Corrections Author Listed: Melvin, Michael Prins, John Registered: Michael Melvin Abstract We test th"
+   },
+   {
+    "ifade": "equity",
+    "sayfa": 1,
+    "pasaj": "p.m. fix Author & abstract Download 4 References 40 Citations Most related Related works & more Corrections Author Listed: Melvin, Michael Prins, John Registered: Michael Melvin Abstract We test the hypothesis that hedging by international equity portfolio managers affects exchange rates-the \"hedging channel of exchange rate adjustment\". A key institutional feature of the foreign exchange market, the \"London 4p.m. fix\", is used to identify times when hedging trades concentrate. The"
+   },
+   {
+    "ifade": "month",
+    "sayfa": 1,
+    "pasaj": "he foreign exchange market, the \"London 4p.m. fix\", is used to identify times when hedging trades concentrate. The direction of hedging trades is identified by past equity returns. The findings show that equity market appreciation over the month can be used to predict currency depreciation before the end-of-month fix, providing evidence that hedging activity plays a role in exchange rate determination. Suggested Citation Melvin, Michael & Prins, John, 2015. \"Equity hedging and exc"
+   },
+   {
+    "ifade": "month",
+    "sayfa": 1,
+    "pasaj": "fy times when hedging trades concentrate. The direction of hedging trades is identified by past equity returns. The findings show that equity market appreciation over the month can be used to predict currency depreciation before the end-of-month fix, providing evidence that hedging activity plays a role in exchange rate determination. Suggested Citation Melvin, Michael & Prins, John, 2015. \"Equity hedging and exchange rates at the London 4p.m. fix,\" Journal of Financial Markets, E"
+   },
+   {
+    "ifade": "fix",
+    "sayfa": 1,
+    "pasaj": " Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html My bibliography Save this article Equity hedging and exchange rates at the London 4p.m. fix Author & abstract Download 4 References 40 Citations Most related Related works & more Corrections Author Listed: Melvin, Michael Prins, John Registered: Michael Melvin Abstract We test the hypothesis that hedging by international equity p"
+   },
+   {
+    "ifade": "fix",
+    "sayfa": 1,
+    "pasaj": "Abstract We test the hypothesis that hedging by international equity portfolio managers affects exchange rates-the \"hedging channel of exchange rate adjustment\". A key institutional feature of the foreign exchange market, the \"London 4p.m. fix\", is used to identify times when hedging trades concentrate. The direction of hedging trades is identified by past equity returns. The findings show that equity market appreciation over the month can be used to predict currency depreciatio"
+   }
+  ],
+  "eksik": [
+   "London 4 p.m. fix",
+   "the 4 p.m. fix",
+   "foreign equity investors",
+   "equity market returns",
+   "February 2015",
+   "15 February",
+   "five minute",
+   "five-minute",
+   "5-minute",
+   "one minute",
+   "calculation window",
+   "window",
+   "manipulation",
+   "investigation",
+   "30 seconds",
+   "month-end",
+   "end of the month",
+   "hedge ratio"
+  ],
+  "deneme": [
+   {
+    "url": "https://ideas.repec.org/a/eee/finmar/v22y2015icp50-72.html",
+    "durum": 200
    }
   ]
  },

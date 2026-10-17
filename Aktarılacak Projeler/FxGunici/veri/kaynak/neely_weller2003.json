@@ -2,7 +2,7 @@
  "id": "neely_weller2003",
  "aday_baslik": "Intraday technical trading in the foreign exchange market",
  "aday_yil": 2003,
- "zaman": "2026-10-17T23:35:03+00:00",
+ "zaman": "2026-10-17T23:49:15+00:00",
  "crossref_deneme": [
   {
    "doi": "10.1016/S0261-5606(02)00101-8",
@@ -79,16 +79,91 @@
   ]
  },
  "metin": {
-  "durum": "okunamadı",
-  "deneme": [
+  "durum": 200,
+  "url": "https://ideas.repec.org/a/eee/jimfin/v22y2003i2p223-237.html",
+  "son_url": "https://ideas.repec.org/a/eee/jimfin/v22y2003i2p223-237.html",
+  "tur": "text/html; charset=UTF-8",
+  "sha256": "e927e9c2089c9bafa68d3656cab3b063e2ac1457eaca728ddf98b3a045734a54",
+  "bayt": 56261,
+  "sayfa": 1,
+  "ilk_sayfa": "Advanced search Browse Econ Literature Working papers Journals Software components Books Book chapters JEL classification More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/jimfin/v22y2003i2p223-237.html My bibliography Save this article Intraday technical trading in the foreign exchange market Author & abstract Download & other version 25 References 70 Citations Most related Related works & more Corrections Author Listed: Neely, C. J. Weller, P. A. Registered: Christopher J. Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkably stable patterns in the data. (This abstract was borrowed from another version of this item.) Suggested Citation Neely, C. J. & Weller, P. A., 2003. \"Intraday technical trading in the foreign exchange market,\" Journal of International Money and Finance, Elsevier, vol. 22(2), pages 223-237, April. Handle: RePEc:eee:jimfin:v:22:y:2003:i:2:p:223-237 as HTML HTML with abstract plain text plain text with abstra",
+  "pasaj": [
    {
-    "url": "https://doi.org/10.1016/s0261-5606(02)00101-8",
-    "durum": "metin okunamadı",
-    "tur": "text/html;charset=UTF-8"
+    "ifade": "realistic transaction costs and trading hours",
+    "sayfa": 1,
+    "pasaj": " P. A. Registered: Christopher J. Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkab"
    },
    {
-    "url": "https://doi.org/10.2139/ssrn.189495",
-    "durum": "HTTP 403"
+    "ifade": "no evidence of excess returns",
+    "sayfa": 1,
+    "pasaj": "f-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkably stable patterns in the data. (This abstract was borrowed fr"
+   },
+   {
+    "ifade": "intraday technical trading strategies",
+    "sayfa": 1,
+    "pasaj": "ract Download & other version 25 References 70 Citations Most related Related works & more Corrections Author Listed: Neely, C. J. Weller, P. A. Registered: Christopher J. Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived wi"
+   },
+   {
+    "ifade": "an optimized linear forecasting model",
+    "sayfa": 1,
+    "pasaj": "rections Author Listed: Neely, C. J. Weller, P. A. Registered: Christopher J. Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however"
+   },
+   {
+    "ifade": "derived with either methodology",
+    "sayfa": 1,
+    "pasaj": "strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkably stable patterns in the data. (This abstract was borrowed from another version of this item.) Suggested Citation "
+   },
+   {
+    "ifade": "consistent with market efficiency",
+    "sayfa": 1,
+    "pasaj": "program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkably stable patterns in the data. (This abstract was borrowed from another version of this item.) Suggested Citation Neely, C. J. & Weller, P. A., 2003. \"Intraday technical t"
+   },
+   {
+    "ifade": "remarkably stable patterns in the data",
+    "sayfa": 1,
+    "pasaj": "ng hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkably stable patterns in the data. (This abstract was borrowed from another version of this item.) Suggested Citation Neely, C. J. & Weller, P. A., 2003. \"Intraday technical trading in the foreign exchange market,\" Journal of International Money and Finance, Elsevier, vol."
+   },
+   {
+    "ifade": "intraday",
+    "sayfa": 1,
+    "pasaj": "cation More features Subscribe to new research RePEc Biblio Author registration Economics Virtual Seminar Calendar ConfWatcher NEW! Printed from https://ideas.repec.org/a/eee/jimfin/v22y2003i2p223-237.html My bibliography Save this article Intraday technical trading in the foreign exchange market Author & abstract Download & other version 25 References 70 Citations Most related Related works & more Corrections Author Listed: Neely, C. J. Weller, P. A. Registered: Christopher J. Neely"
+   },
+   {
+    "ifade": "intraday",
+    "sayfa": 1,
+    "pasaj": "ract Download & other version 25 References 70 Citations Most related Related works & more Corrections Author Listed: Neely, C. J. Weller, P. A. Registered: Christopher J. Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to"
+   },
+   {
+    "ifade": "transaction costs",
+    "sayfa": 1,
+    "pasaj": "istered: Christopher J. Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules disc"
+   },
+   {
+    "ifade": "genetic program",
+    "sayfa": 1,
+    "pasaj": "ted works & more Corrections Author Listed: Neely, C. J. Weller, P. A. Registered: Christopher J. Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consist"
+   },
+   {
+    "ifade": "genetic program",
+    "sayfa": 1,
+    "pasaj": "xchange Dealers Think Their Market Operates?,\" NBER Working Papers 7524, National Bureau of Economic Research, Inc. Neely, Christopher & Weller, Paul & Dittmar, Rob, 1997. \"Is Technical Analysis in the Foreign Exchange Market Profitable? A Genetic Programming Approach,\" Journal of Financial and Quantitative Analysis, Cambridge University Press, vol. 32(4), pages 405-426, December. Weller, Paul & Neely, Christopher J & Dittmar, Robert, 1996. \"Is Technical Analysis in the Foreign Exchange Mar"
+   },
+   {
+    "ifade": "excess returns",
+    "sayfa": 1,
+    "pasaj": "mance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkably stable patterns in the data. (This abstract was borrowed fr"
+   },
+   {
+    "ifade": "trading hours",
+    "sayfa": 1,
+    "pasaj": ". Neely Abstract This paper examines the out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model. When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology. Thus, our results are consistent with market efficiency. We do, however, find that the trading rules discover some remarkab"
+   }
+  ],
+  "eksik": [],
+  "deneme": [
+   {
+    "url": "https://ideas.repec.org/a/eee/jimfin/v22y2003i2p223-237.html",
+    "durum": 200
    }
   ]
  },

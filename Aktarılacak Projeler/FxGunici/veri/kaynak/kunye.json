@@ -11,11 +11,7 @@
    "durum": "var"
   },
   "bbldpz2014": {
-   "eksik": 7,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 17
+   "durum": "var"
   },
   "bgir1992": {
    "durum": "var"
@@ -27,21 +23,13 @@
    "durum": "var"
   },
   "cchv2014": {
-   "eksik": 11,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 4
+   "durum": "var"
   },
   "cdg2019": {
    "durum": "var"
   },
   "efl2018": {
-   "eksik": 0,
-   "kunye": true,
-   "metin": 200,
-   "ozet": false,
-   "pasaj": 12
+   "durum": "var"
   },
   "efron2011": {
    "durum": "var"
@@ -54,11 +42,7 @@
    "pasaj": 6
   },
   "evans2018": {
-   "eksik": 8,
-   "kunye": true,
-   "metin": 200,
-   "ozet": false,
-   "pasaj": 47
+   "durum": "var"
   },
   "evans_lyons2002": {
    "eksik": 0,
@@ -85,11 +69,11 @@
    "durum": "var"
   },
   "grossman_stiglitz1980": {
-   "eksik": 0,
+   "eksik": 10,
    "kunye": false,
-   "metin": "okunamadı",
+   "metin": 200,
    "ozet": false,
-   "pasaj": 0
+   "pasaj": 4
   },
   "hlz2016": {
    "durum": "var"
@@ -101,25 +85,17 @@
    "durum": "var"
   },
   "ito_yamada2017": {
-   "eksik": 0,
+   "eksik": 17,
    "kunye": true,
-   "metin": "okunamadı",
+   "metin": 200,
    "ozet": true,
-   "pasaj": 0
+   "pasaj": 16
   },
   "kaminski_lo2014": {
-   "eksik": 7,
-   "kunye": true,
-   "metin": 200,
-   "ozet": false,
-   "pasaj": 15
+   "durum": "var"
   },
   "kmw2024": {
-   "eksik": 7,
-   "kunye": true,
-   "metin": 200,
-   "ozet": true,
-   "pasaj": 33
+   "durum": "var"
   },
   "linnainmaa2010": {
    "eksik": 0,
@@ -143,11 +119,11 @@
    "pasaj": 0
   },
   "melvin_prins2015": {
-   "eksik": 0,
+   "eksik": 18,
    "kunye": true,
-   "metin": "okunamadı",
+   "metin": 200,
    "ozet": false,
-   "pasaj": 0
+   "pasaj": 16
   },
   "mrw2013": {
    "durum": "var"
@@ -155,9 +131,9 @@
   "neely_weller2003": {
    "eksik": 0,
    "kunye": true,
-   "metin": "okunamadı",
+   "metin": 200,
    "ozet": false,
-   "pasaj": 0
+   "pasaj": 14
   },
   "nosek2018": {
    "durum": "var"
@@ -192,5 +168,5 @@
    "durum": "var"
   }
  },
- "zaman": "2026-10-17T23:34:27+00:00"
+ "zaman": "2026-10-17T23:48:51+00:00"
 }
