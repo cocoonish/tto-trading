@@ -1,0 +1,888 @@
+{
+ "_aciklama": "arsiv_kaynak.py'nin girdisi: derste anılan kaynakların künye adayları (DOI ya da dergi ISSN'i, cilt, ilk sayfa), açık erişimli metin adresleri ve tam metinde aranacak ifadeler. Serbest metin araması yapılmaz; adres DOI'den ya da künye koordinatından çözülür.",
+ "kaynak": [
+  {
+   "id": "white2000",
+   "baslik": "A Reality Check for Data Snooping",
+   "yil": 2000,
+   "doi_aday": [
+    "10.1111/1468-0262.00152"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://users.ssc.wisc.edu/~bhansen/718/White2000.pdf",
+    "https://users.ssc.wisc.edu/~behansen/718/White2000.pdf",
+    "https://par.cse.nsysu.edu.tw/resource/paper/2011/111226/A%20Reality%20Check%20for%20Data%20Snooping.pdf"
+   ],
+   "ifade": [
+    "used more than once for purposes of inference",
+    "may simply be due to chance",
+    "any merit inherent in the method",
+    "data snooping is a dangerous practice",
+    "but in fact it is endemic",
+    "best model encountered in a specification search",
+    "no predictive superiority over a given benchmark",
+    "genuinely good results"
+   ]
+  },
+  {
+   "id": "stw1999",
+   "baslik": "Data-Snooping, Technical Trading Rule Performance, and the Bootstrap",
+   "yil": 1999,
+   "doi_aday": [
+    "10.1111/0022-1082.00163"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://www.kevinsheppard.com/files/teaching/mfe/advanced-econometrics/Sullivan_Timmermann_White.pdf",
+    "https://researchonline.lse.ac.uk/id/eprint/119144/1/dp303.pdf",
+    "https://eprints.lse.ac.uk/119144/1/dp303.pdf",
+    "https://www.fmg.ac.uk/sites/default/files/2020-11/dp303.pdf"
+   ],
+   "ifade": [
+    "White's Reality Check bootstrap methodology",
+    "universe from which the trading rules were drawn",
+    "expand their universe of 26 trading rules",
+    "100 years of daily data",
+    "even after adjustment is made for data-snooping",
+    "nearly 12 percent",
+    "scant evidence that technical trading rules",
+    "of any economic value"
+   ]
+  },
+  {
+   "id": "hlz2016",
+   "baslik": "…and the Cross-Section of Expected Returns",
+   "yil": 2016,
+   "doi_aday": [
+    "10.1093/rfs/hhv059"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://www.nber.org/papers/w20592.pdf"
+   ],
+   "ifade": [
+    "attempt to explain the cross-section of expected returns",
+    "clear a much higher hurdle",
+    "t-statistic greater than 3.0",
+    "t-ratio greater than 3.0",
+    "multiple testing framework",
+    "from the first empirical tests in 1967",
+    "most claimed research findings in financial economics",
+    "316 different factors"
+   ]
+  },
+  {
+   "id": "bailey_ldp2014",
+   "baslik": "The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality",
+   "yil": 2014,
+   "doi_aday": [
+    "10.3905/jpm.2014.40.5.094"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf"
+   ],
+   "ifade": [
+    "two leading sources of performance inflation",
+    "Selection bias under multiple testing",
+    "non-Normally distributed returns",
+    "separate legitimate empirical findings from statistical flukes",
+    "number of trials involved in a particular discovery",
+    "over-optimistic performance expectations",
+    "leading to backtest overfitting"
+   ]
+  },
+  {
+   "id": "bbldpz2014",
+   "baslik": "Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance",
+   "yil": 2014,
+   "doi_aday": [
+    "10.1090/noti1105"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://www.ams.org/notices/201405/rnoti-p458.pdf",
+    "https://carmamaths.org/jon/backtest.pdf"
+   ],
+   "ifade": [
+    "relatively small number of alternative strategy configurations",
+    "The higher the number of configurations tried",
+    "the probability that the backtest is overfit",
+    "negative expected returns out-of-sample",
+    "rather than zero performance",
+    "rarely report the number of configurations tried",
+    "45 independent model configurations"
+   ]
+  },
+  {
+   "id": "bh1995",
+   "baslik": "Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing",
+   "yil": 1995,
+   "doi_aday": [
+    "10.1111/j.2517-6161.1995.tb02031.x"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://www.dcscience.net/Benjamini-Hochberg-1995-FDR.pdf"
+   ],
+   "ifade": [
+    "controlling the familywise error rate (FWER)",
+    "expected proportion of falsely rejected hypotheses",
+    "equivalent to the FWER when all hypotheses are true",
+    "there is potential for a gain in power",
+    "the gain in power is substantial",
+    "for independent test statistics",
+    "sequential Bonferroni-type procedure"
+   ]
+  },
+  {
+   "id": "holm1979",
+   "baslik": "A Simple Sequentially Rejective Multiple Test Procedure",
+   "yil": 1979,
+   "doi_aday": [
+    "10.2307/4615733"
+   ],
+   "koordinat": [
+    [
+     "0303-6898",
+     "6",
+     "65"
+    ]
+   ],
+   "url": [
+    "https://www.ime.usp.br/~abe/lista/pdf4R8xPVzCnX.pdf"
+   ],
+   "ifade": [
+    "of the sequentially rejective type",
+    "hypotheses are rejected one at a time",
+    "until no further rejections can be done",
+    "protection against error of the first kind",
+    "for any combination of true hypotheses",
+    "The power properties of the test",
+    "strictly larger probability of rejecting false hypotheses",
+    "any parametric or non-parametric model"
+   ]
+  },
+  {
+   "id": "efron2011",
+   "baslik": "Tweedie's Formula and Selection Bias",
+   "yil": 2011,
+   "doi_aday": [
+    "10.1198/jasa.2011.tm11181"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf",
+    "https://stacks.stanford.edu/file/druid:vc631wx1024/BIO%20256.pdf"
+   ],
+   "ifade": [
+    "are likely to substantially overestimate their corresponding",
+    "selection bias, or regression to the mean",
+    "first reported by Robbins in 1956",
+    "offers a simple empirical Bayes approach",
+    "for correcting selection bias",
+    "empirical Bayes information",
+    "close connection between applications of the formula"
+   ]
+  },
+  {
+   "id": "ioannidis2008",
+   "baslik": "Why most discovered true associations are inflated",
+   "yil": 2008,
+   "doi_aday": [
+    "10.1097/EDE.0b013e31818131e7"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://www.dcscience.net/ioannidis-associations-2008.pdf",
+    "https://gwern.net/doc/statistics/bias/2008-ioannidis.pdf",
+    "https://www.rama.mahidol.ac.th/ceb/sites/default/files/public/pdf/Repository/Why_Most_Discovered_True_Associations_Are_Inflated.2.pdf"
+   ],
+   "ifade": [
+    "inflated effects compared with the true effect sizes",
+    "crossing a threshold of statistical significance",
+    "the discovery study is underpowered",
+    "the observed effects are expected to be inflated",
+    "early stopped clinical trials to genome-wide associations",
+    "Discovered effects are not always inflated",
+    "flexible analyses coupled with selective reporting",
+    "considering some rational down-adjustment"
+   ]
+  },
+  {
+   "id": "bgir1992",
+   "baslik": "Survivorship bias in performance studies",
+   "yil": 1992,
+   "doi_aday": [
+    "10.1093/rfs/5.4.553"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://terpconnect.umd.edu/~wermers/ftpsite/FAME/Brown_Goetzmann_Ibbotson_Ross.pdf"
+   ],
+   "ifade": [
+    "past mutual fund performance predicts future performance",
+    "truncated by survivorship",
+    "gives rise to the appearance of predictability",
+    "the relationship between volatility and returns",
+    "strength of evidence favoring return predictability",
+    "some numerical examples",
+    "Survivorship Bias in Performance Studies"
+   ]
+  },
+  {
+   "id": "bllo2014",
+   "baslik": "The cross-section of speculator skill: Evidence from day trading",
+   "yil": 2014,
+   "doi_aday": [
+    "10.1016/j.finmar.2013.05.006"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://faculty.haas.berkeley.edu/odean/papers/day%20traders/The%20Cross-Section%20of%20Speculator%20Skill.pdf",
+    "https://www.escholarship.org/content/qt7k75v0qx/qt7k75v0qx.pdf?t=ohrd1z",
+    "https://faculty.haas.berkeley.edu/odean/papers/day%20traders/Day%20Trading%20Skill%20110523.pdf"
+   ],
+   "ifade": [
+    "before- and after-fee returns earned by speculative traders",
+    "day traders in Taiwan from 1992 to 2006",
+    "daily before-fee (after-fee) returns",
+    "61.3 (37.9) bps per day",
+    "the 500 top-ranked day traders",
+    "predictably and reliably earn positive abnormal returns",
+    "positive abnormal returns net of fees",
+    "less than 1%"
+   ]
+  },
+  {
+   "id": "cdg2019",
+   "baslik": "Day Trading for a Living?",
+   "yil": 2019,
+   "doi_aday": [
+    "10.2139/ssrn.3423101"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://repositorio.fgv.br/server/api/core/bitstreams/0f00dd78-6909-4f91-84d5-aef8803e6436/content",
+    "https://www.researchgate.net/profile/Rodrigo-De-Losso/publication/334630772_Day_Trading_for_a_Living/links/5dc431baa6fdcc2d2ffb57ce/Day-Trading-for-a-Living.pdf",
+    "https://ebicapital.nl/wp-content/uploads/2022/05/day-trading.pdf"
+   ],
+   "ifade": [
+    "97% of them lost money",
+    "began to day trade between 2013 and 2015",
+    "Brazilian equity futures market",
+    "earned more than a bank teller",
+    "no evidence of learning by day trading",
+    "contrary to what course providers claim",
+    "at least 300 days",
+    "more than 300 days"
+   ]
+  },
+  {
+   "id": "esma2018",
+   "baslik": "ESMA agrees to prohibit binary options and restrict CFDs to protect retail investors",
+   "yil": 2018,
+   "doi_aday": [],
+   "koordinat": [],
+   "url": [
+    "https://www.esma.europa.eu/sites/default/files/library/esma71-98-128_press_release_product_intervention.pdf",
+    "https://www.esma.europa.eu/press-news/esma-news/esma-agrees-prohibit-binary-options-and-restrict-cfds-protect-retail-investors",
+    "https://www.esma.europa.eu/sites/default/files/library/esma35-43-1000_additional_information_on_the_agreed_product_intervention_measures_relating_to_contracts_for_differences_and_binary_options.pdf",
+    "https://www.mfsa.mt/news-item/esma-press-release-esma-agrees-to-prohibit-binary-options-and-restrict-cfds-to-protect-retail-investors/",
+    "https://www.knf.gov.pl/knf/en/komponenty/img/Press_Release_Product_Intervention_61271.pdf"
+   ],
+   "ifade": [
+    "74-89% of retail accounts typically lose money",
+    "typically lose money on their investments",
+    "ranging from €1,600 to €29,000",
+    "NCAs' analyses on CFD trading",
+    "ESMA's Board of Supervisors on 23 March 2018",
+    "negative balance protection on a per account basis",
+    "prohibit binary options and restrict CFDs"
+   ]
+  },
+  {
+   "id": "kaminski_lo2014",
+   "baslik": "When do stop-loss rules stop losses?",
+   "yil": 2014,
+   "doi_aday": [
+    "10.1016/j.finmar.2013.07.001"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://dspace.mit.edu/bitstream/handle/1721.1/114876/Lo_When%20Do%20Stop-Loss.pdf",
+    "https://www.smallake.kr/wp-content/uploads/2017/02/When_Do_Stop-Loss_Rules_Stop_Losses.pdf"
+   ],
+   "ifade": [
+    "Random Walk Hypothesis",
+    "simple 0/1 stop-loss rules",
+    "always decrease the strategy's expected return",
+    "in the presence of momentum",
+    "stop-loss rules can add value",
+    "stop-loss rules never stop losses",
+    "certain stop-loss policies can increase expected return",
+    "buy-and-hold strategy using index futures contracts"
+   ]
+  },
+  {
+   "id": "glosten_milgrom1985",
+   "baslik": "Bid, ask and transaction prices in a specialist market with heterogeneously informed traders",
+   "yil": 1985,
+   "doi_aday": [
+    "10.1016/0304-405X(85)90044-3"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://www.edegan.com/pdfs/Glosten%20Milgrom%20%281985%29%20-%20Bid%20Ask%20and%20Transaction%20Prices%20in%20a%20Specialist%20Market%20with%20Heterogeneously%20Informed%20Trades.pdf",
+    "http://www.kellogg.northwestern.edu/research/math/papers/570.pdf"
+   ],
+   "ifade": [
+    "traders with superior information",
+    "leads to a positive bid-ask spread",
+    "specialist is risk-neutral and makes zero expected profits",
+    "The resulting transaction prices convey information",
+    "proportion of the spread due to adverse selection",
+    "what the uninformed anticipate losing to the insiders",
+    "heterogeneously informed traders"
+   ]
+  },
+  {
+   "id": "linnainmaa2010",
+   "baslik": "Do Limit Orders Alter Inferences about Investor Performance and Behavior?",
+   "yil": 2010,
+   "doi_aday": [
+    "10.1111/j.1540-6261.2010.01576.x"
+   ],
+   "koordinat": [],
+   "url": [
+    "https://forexmentoronline.com/wp-content/uploads/2015/11/Linnainmaa_Limit_Order_Effect.pdf"
+   ],
+   "ifade": [
+    "lose money around earnings announcements",
+    "experience poor posttrade returns",
+    "trading records of all individual investors in Finland",
+    "investors' use of limit orders",
+    "limit orders are price-contingent",
+    "suffer from adverse selection",
+    "Reverse causality from behavioral biases to order choices",
+    "susceptibility to this limit order effect"
+   ]
+  },
+  {
+   "id": "mrw2013",
+   "baslik": "Liquidity in the Foreign Exchange Market: Measurement, Commonality, and Risk Premiums",
+   "yil": 2013,
+   "doi_aday": [
+    "10.1111/jofi.12053"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "first systematic study of liquidity in the foreign exchange market",
+    "significant variation in liquidity across exchange rates",
+    "substantial illiquidity costs",
+    "strong commonality in liquidity",
+    "liquidity risk is priced",
+    "liquidity spirals",
+    "during the financial crisis",
+    "financial crisis",
+    "time variation",
+    "Lehman",
+    "liquidity dry",
+    "illiquidity"
+   ]
+  },
+  {
+   "id": "oomen2017",
+   "baslik": "Last look",
+   "yil": 2017,
+   "doi_aday": [
+    "10.1080/14697688.2016.1268708"
+   ],
+   "koordinat": [
+    [
+     "1469-7688",
+     "17",
+     "1057"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "last look",
+    "liquidity provider",
+    "trade request",
+    "reject the trade",
+    "last look window",
+    "adverse selection",
+    "latency arbitrage",
+    "hold time",
+    "reject",
+    "price check",
+    "symmetric"
+   ]
+  },
+  {
+   "id": "evans_lyons2002",
+   "baslik": "Order Flow and Exchange Rate Dynamics",
+   "yil": 2002,
+   "doi_aday": [
+    "10.1086/324391",
+    "10.1086/324388"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "statistics above 50 percent",
+    "statistics as high as 10 percent are rare",
+    "the proximate determinant of price",
+    "net dollar purchases increases the DM price",
+    "about 1 pfennig",
+    "short-horizon forecasts than a random walk",
+    "60 percent",
+    "R2",
+    "order flow",
+    "percent"
+   ]
+  },
+  {
+   "id": "grossman_stiglitz1980",
+   "baslik": "On the Impossibility of Informationally Efficient Markets",
+   "yil": 1980,
+   "doi_aday": [
+    "10.2307/1805228"
+   ],
+   "koordinat": [
+    [
+     "0002-8282",
+     "70",
+     "393"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "because information is costly",
+    "prices cannot perfectly reflect the information",
+    "would receive no compensation",
+    "an equilibrium degree of disequilibrium",
+    "do receive compensation",
+    "a fundamental conflict between the efficiency",
+    "those who expend resources to obtain information"
+   ]
+  },
+  {
+   "id": "mclean_pontiff2016",
+   "baslik": "Does Academic Research Destroy Stock Return Predictability?",
+   "yil": 2016,
+   "doi_aday": [
+    "10.1111/jofi.12365"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "Portfolio returns are 26% lower out-of-sample",
+    "58% lower post-publication",
+    "97 variables shown to predict cross-sectional stock returns",
+    "upper bound estimate of data mining effects",
+    "lower return from publication-informed trading",
+    "investors learn about mispricing from academic publications"
+   ]
+  },
+  {
+   "id": "neely_weller2003",
+   "baslik": "Intraday technical trading in the foreign exchange market",
+   "yil": 2003,
+   "doi_aday": [
+    "10.1016/S0261-5606(02)00101-8"
+   ],
+   "koordinat": [
+    [
+     "0261-5606",
+     "22",
+     "223"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "realistic transaction costs and trading hours",
+    "no evidence of excess returns",
+    "intraday technical trading strategies",
+    "an optimized linear forecasting model",
+    "derived with either methodology",
+    "consistent with market efficiency",
+    "remarkably stable patterns in the data"
+   ]
+  },
+  {
+   "id": "nwu2009",
+   "baslik": "The Adaptive Markets Hypothesis: Evidence from the Foreign Exchange Market",
+   "yil": 2009,
+   "doi_aday": [
+    "10.1017/S0022109009090103"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "out-of-sample tests on previously studied rules",
+    "The excess returns of the 1970s and 1980s",
+    "not just the result of data mining",
+    "had disappeared by the early 1990s",
+    "filter and moving average rules",
+    "Returns to less-studied rules also have declined",
+    "probably have not completely disappeared",
+    "adaptive markets hypothesis"
+   ]
+  },
+  {
+   "id": "osler2003",
+   "baslik": "Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis",
+   "yil": 2003,
+   "doi_aday": [
+    "10.1111/1540-6261.00588"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "stop-loss and take-profit orders",
+    "take-profit orders cluster strongly at round numbers",
+    "just above round numbers",
+    "just below round numbers",
+    "support and resistance levels",
+    "trends tend to reverse course",
+    "Predictive Success of Technical Analysis",
+    "February 2015",
+    "15 February",
+    "five minute",
+    "five-minute",
+    "5-minute",
+    "one minute",
+    "calculation window",
+    "window",
+    "manipulation",
+    "investigation",
+    "30 seconds",
+    "round numbers",
+    "stop-loss orders",
+    "take-profit"
+   ]
+  },
+  {
+   "id": "cchv2014",
+   "baslik": "Rise of the Machines: Algorithmic Trading in the Foreign Exchange Market",
+   "yil": 2014,
+   "doi_aday": [
+    "10.1111/jofi.12186"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "the frequency of triangular arbitrage opportunities",
+    "the autocorrelation of high-frequency returns",
+    "two measures of price efficiency",
+    "computer-generated trading activity",
+    "computers taking liquidity",
+    "the algorithmic provision of liquidity",
+    "strategies of algorithmic traders being highly correlated",
+    "arbitrage opportunities",
+    "autocorrelation"
+   ]
+  },
+  {
+   "id": "lrv2011",
+   "baslik": "Common Risk Factors in Currency Markets",
+   "yil": 2011,
+   "doi_aday": [
+    "10.1093/rfs/hhr068"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "factor in exchange rates",
+    "load more on this slope factor",
+    "cross-sectional variation in average excess returns",
+    "a country-specific factor and a global factor",
+    "global equity market volatility",
+    "high interest rate currencies",
+    "the carry trade",
+    "Common Risk Factors in Currency Markets",
+    "risk premia",
+    "global risk",
+    "volatility"
+   ]
+  },
+  {
+   "id": "melvin_prins2015",
+   "baslik": "Equity hedging and exchange rates at the London 4 p.m. fix",
+   "yil": 2015,
+   "doi_aday": [],
+   "koordinat": [
+    [
+     "1386-4181",
+     "22",
+     "50"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "London 4 p.m. fix",
+    "Equity hedging and exchange rates",
+    "the 4 p.m. fix",
+    "foreign equity investors",
+    "equity market returns",
+    "February 2015",
+    "15 February",
+    "five minute",
+    "five-minute",
+    "5-minute",
+    "one minute",
+    "calculation window",
+    "window",
+    "manipulation",
+    "investigation",
+    "30 seconds",
+    "hedg",
+    "rebalanc",
+    "month-end",
+    "end of the month",
+    "predict"
+   ]
+  },
+  {
+   "id": "evans2018",
+   "baslik": "Forex trading and the WMR Fix",
+   "yil": 2018,
+   "doi_aday": [],
+   "koordinat": [
+    [
+     "0378-4266",
+     "87",
+     "233"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "Forex trading and the WMR Fix",
+    "the WMR Fix",
+    "around the Fix",
+    "after the Fix",
+    "price changes around the Fix",
+    "21 currency pairs",
+    "February 2015",
+    "15 February",
+    "five minute",
+    "five-minute",
+    "5-minute",
+    "one minute",
+    "calculation window",
+    "window",
+    "manipulation",
+    "investigation",
+    "30 seconds",
+    "volatil",
+    "revers",
+    "spike",
+    "Fix"
+   ]
+  },
+  {
+   "id": "kmw2024",
+   "baslik": "Foreign Exchange Fixings and Returns Around the Clock",
+   "yil": 2024,
+   "doi_aday": [],
+   "koordinat": [
+    [
+     "0022-1082",
+     "79",
+     "541"
+    ],
+    [
+     "1540-6261",
+     "79",
+     "541"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "Foreign Exchange Fixings and Returns Around the Clock",
+    "Returns Around the Clock",
+    "the U.S. dollar",
+    "the dollar appreciates",
+    "ahead of the fix",
+    "after the fix",
+    "February 2015",
+    "15 February",
+    "five minute",
+    "five-minute",
+    "5-minute",
+    "one minute",
+    "calculation window",
+    "window",
+    "manipulation",
+    "investigation",
+    "30 seconds",
+    "appreciat",
+    "depreciat",
+    "fixing",
+    "reversal"
+   ]
+  },
+  {
+   "id": "ito_yamada2017",
+   "baslik": "Puzzles in the Tokyo fixing in the forex market",
+   "yil": 2017,
+   "doi_aday": [],
+   "koordinat": [
+    [
+     "0022-1996",
+     "109",
+     "214"
+    ],
+    [
+     "0889-1583",
+     "",
+     ""
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "Puzzles in the Tokyo fixing",
+    "the Tokyo fixing",
+    "Order imbalances and bank pricing",
+    "on Gotobi days",
+    "before the fixing",
+    "after the fixing",
+    "February 2015",
+    "15 February",
+    "five minute",
+    "five-minute",
+    "5-minute",
+    "one minute",
+    "calculation window",
+    "window",
+    "manipulation",
+    "investigation",
+    "30 seconds",
+    "Gotobi",
+    "9:55",
+    "order imbalance",
+    "revers"
+   ]
+  },
+  {
+   "id": "fsb2014",
+   "baslik": "Foreign Exchange Benchmarks: Final Report",
+   "yil": 2014,
+   "doi_aday": [],
+   "koordinat": [],
+   "url": [
+    "https://www.fsb.org/wp-content/uploads/r_140930.pdf",
+    "https://www.financialstabilityboard.org/wp-content/uploads/r_140930.pdf"
+   ],
+   "ifade": [
+    "Foreign Exchange Benchmarks",
+    "30 September 2014",
+    "the fix calculation window",
+    "window to five minutes",
+    "a five minute window",
+    "a five-minute window",
+    "the one minute window",
+    "30 seconds either side",
+    "February 2015",
+    "15 February",
+    "five minute",
+    "five-minute",
+    "5-minute",
+    "one minute",
+    "calculation window",
+    "window",
+    "manipulation",
+    "investigation",
+    "30 seconds",
+    "Recommendation",
+    "widened",
+    "trade currencies",
+    "WM/Reuters",
+    "WMR"
+   ]
+  },
+  {
+   "id": "armitage1969",
+   "baslik": "Repeated Significance Tests on Accumulating Data",
+   "yil": 1969,
+   "doi_aday": [
+    "10.2307/2343787"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "Repeated Significance Tests on Accumulating Data",
+    "repeated significance tests",
+    "tests on accumulating data",
+    "nominal significance level",
+    "the null hypothesis is true",
+    "probability of rejecting the null hypothesis"
+   ]
+  },
+  {
+   "id": "obrien_fleming1979",
+   "baslik": "A Multiple Testing Procedure for Clinical Trials",
+   "yil": 1979,
+   "doi_aday": [
+    "10.2307/2530245"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "A Multiple Testing Procedure for Clinical Trials",
+    "The overall size of the procedure",
+    "virtually the same accuracy as the single sample",
+    "also found to be virtually the same",
+    "the opportunity to terminate early",
+    "the usual (Pearson) chi-square statistic",
+    "ethical dilemmas that often accompany clinical trials"
+   ]
+  },
+  {
+   "id": "nosek2018",
+   "baslik": "The preregistration revolution",
+   "yil": 2018,
+   "doi_aday": [
+    "10.1073/pnas.1708274114"
+   ],
+   "koordinat": [],
+   "url": [],
+   "ifade": [
+    "The preregistration revolution",
+    "distinction between postdiction and prediction",
+    "Preregistration distinguishes analyses and outcomes",
+    "predictions from those that result from postdictions",
+    "Mistaking generation of postdictions with testing of predictions",
+    "a process called preregistration",
+    "between hypothesis generation and hypothesis testing",
+    "define the research questions and analysis plan"
+   ]
+  },
+  {
+   "id": "wald1945",
+   "baslik": "Sequential Tests of Statistical Hypotheses",
+   "yil": 1945,
+   "doi_aday": [
+    "10.1214/aoms/1177731118"
+   ],
+   "koordinat": [
+    [
+     "0003-4851",
+     "16",
+     "117"
+    ]
+   ],
+   "url": [],
+   "ifade": [
+    "sequential probability ratio test",
+    "sequential test",
+    "the number of observations",
+    "fixed number of observations"
+   ]
+  }
+ ]
+}
