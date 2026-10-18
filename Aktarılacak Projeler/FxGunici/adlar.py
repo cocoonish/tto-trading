@@ -46,7 +46,8 @@ DERS_BIRIM = {
 #: Serinin okuma sırası (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır; dogrula.py iki
 #: listeyi karşılaştırır).
 DERS_SIRA = ["fx-gunici-giris", "fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari", "fx-gunici-fade",
-             "fx-gunici-haber", "fx-gunici-akis", "fx-gunici-karsilastirma", "fx-gunici-metodoloji"]
+             "fx-gunici-haber", "fx-gunici-akis", "fx-gunici-karsilastirma", "fx-gunici-metodoloji",
+             "fx-gunici-neden-basarisiz"]
 
 #: Parametrelerin okur adı ve değerlerinin okur yazımı.
 PARAM = {

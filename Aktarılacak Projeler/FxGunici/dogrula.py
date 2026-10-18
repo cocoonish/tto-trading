@@ -6,7 +6,7 @@ Yalnız standart kütüphane: yayın koşucusunda pandas, numba ya da plotly yok
 depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saati okumaz.
 
 Ölçütler:
-  1. Yeniden üretim — sekiz ders ölçüm dosyasından ve şablonlardan yeniden üretilir ve sitedeki MDX'le BİREBİR
+  1. Yeniden üretim — serinin dersleri ölçüm dosyasından ve şablonlardan yeniden üretilir ve sitedeki MDX'le BİREBİR
      aynı olmalıdır. Elle düzeltilmiş bir ders, ölçümü değişip yeniden yazılmamış bir ders ya da şablonu değişip
      üretilmemiş bir ders düşer. Üretimin kendisi de bir kapıdır: şablonların bütün iddiaları ölçüme karşı sınanır.
   2. Figürler — her gömülen figür sitede durur ve çizildiği ölçüm dosyasının özünü taşır; özü bugünkü ölçümden
@@ -51,6 +51,10 @@ depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saa
      mum ATR'si atr_kural, haber kurallarının ve gün ATR'sinin periyodu haber_sabit). Periyot ön kayıtta değişirse
      eski sayıyı taşıyan cümle ve figür adıyla düşer; kural kodundaki periyodun ön kayıtla aynı olduğunu birim
      sınaması sorar (testler/test_dogrula.py).
+  17. Atıflar — derslerin her literatür atfı (anlatı ve parantez biçimi) atıf kaydında doğrulanmış bir kayda karşılık
+     gelir ve kayıt o dersi anar; kaydın her alıntısı bulutta dondurulmuş kaynağın kendi metninde (özet, ilk sayfa ya
+     da tam metinden bir pasaj) geçer; künyenin yılı, cildi, sayısı, sayfaları ve başlığı dondurulmuş künyeyle
+     tutar; dondurulmuş dizin kayıtlı özleriyle aynıdır. Kaynakça listesi kayıttan basılır. Tanım ve ayrıntı atif.py.
 
 Dersler henüz siteye yazılmamışsa (yayın öncesi) kapı bunu söyler ve geçer; bir kısmı yazılmışsa düşer.
 """
@@ -66,6 +70,7 @@ BURASI = Path(__file__).resolve().parent
 sys.path.insert(0, str(BURASI))
 
 import adlar  # noqa: E402
+import atif  # noqa: E402
 import ders_yaz as dy  # noqa: E402
 
 GRUP_TS = dy.KOK / "site" / "src" / "lib" / "dersGruplari.ts"
@@ -77,7 +82,7 @@ TANIM = {"%95", "%5", "%50", "%30", "%70", "0,0001", "0,01", "0,95"}
 
 #: Ölçüt 12'nin asgari kapsamları (kapının kendi kümesi; sınanan listeler bunları taşımalı).
 OLCUM_KODU_ASGARI = {"ders_olcum.py", "adlar.py", "kosu.py", "motor.py", "strateji.py", "strat_haber.py", "takvim.py",
-                     "metrik.py", "saglamlik.py"}
+                     "metrik.py", "saglamlik.py", "basarisiz.py"}
 SEKIL_KODU_ASGARI = {"Aktarılacak Projeler/FxGunici/sekil.py", "Aktarılacak Projeler/FxGunici/sekil_ortak.py",
                      "Aktarılacak Projeler/FxGunici/adlar.py", "site/tools/plotly_stil.py"}
 
@@ -751,6 +756,7 @@ def main() -> int:
         kod_oz, kod_hata = sekil_kodu()
         hata += kod_hata
         hata += parite_denetimi(cikti) + ornek_esigi(cikti) + tsi_metinde(cikti) + atr_denetimi(cikti)
+        hata += atif.denetim({slug: mdx for slug, (mdx, _) in cikti.items()})
         gomulen = set()
         for slug, (mdx, u) in cikti.items():
             hata += mdx_yapisi(slug, mdx)

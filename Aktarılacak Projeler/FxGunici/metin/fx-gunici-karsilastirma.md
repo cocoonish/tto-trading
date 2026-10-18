@@ -181,7 +181,8 @@ döndü{% else %}gerçek seçim ters seçimden ayırt edilemedi{% endif %} (yuka
 
 Bu sonuçlar bu kuralların bu biçimleri içindir: başka bir yürütme maliyeti (daha dar makas, likidite sağlayan emirler),
 başka bir zaman dilimi, ya da kuralın bir parçası olarak gerçek bir haber beklentisi başka sonuç verebilir. Ölçülmeyen
-şeylerin listesi metodoloji dersinde.
+şeylerin listesi metodoloji dersinde. Kuralların neden kaybettiği ve bir kuralın hangi şartla kullanılabilir
+sayılabileceği serinin son dersinde ("Neden başarısız oluyorlar").
 
 _Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
 değildir._

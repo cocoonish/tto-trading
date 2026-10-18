@@ -7,12 +7,14 @@ Bir atıf, kaynağın kendi metninde görülmeden yayımlanmaz. Kaynağın küny
 hangi kaynağa dayandığı ve kaynağın o cümleyi taşıyan kendi ifadesi elle yazılır (veri/kaynaklar.json). Kapı:
 
   1. Dondurulmuş dizin kayıtlı özleriyle aynıdır (değişmiş, eksik ya da kayıtsız dosya yok).
-  2. Derslerin metnindeki her atıf (anlatı "Evans (2018)" ve parantez "(Holm, 1979)" biçimi, aynı parantezde ";" ile
-     birden çok) bir kayda karşılık gelir; kaydın durumu "dogrulandi" ya da "kismen"dir ve kayıt o dersi adıyla anar.
+  2. Derslerin metnindeki her atıf (anlatı "Evans (2018)", ekli anlatı "Prins'e (2015)" ve parantez "(Holm, 1979)"
+     biçimi, aynı parantezde ";" ile birden çok, yıldan sonra devam eden parantez dahil) bir kayda karşılık gelir; yazar
+     ile yılı arasında virgülü olmayan parantez atfı ("Melvin ve Prins 2015") biçim hatasıdır; kaydın durumu "dogrulandi" ya da "kismen"dir ve kayıt o dersi adıyla anar.
      Bir kaydın andığı ders o atfı taşımıyorsa da düşer (kaynakça listesi sessizce şişmesin).
   3. Kaydın her alıntısı dondurulmuş kaynakta geçer (özet, ilk sayfa ya da pasajlardan birinde; biçim `normal`).
-  4. Kaydın künyesi dondurulmuş künyeyle tutar: yıl, cilt, sayı ve sayfa aralığı (iki taraf da biliyorsa) ve başlığın
-     sözcükleri. Bellekten yazılmış bir künye kayan ciltle ya da sayfayla düşer.
+  4. Kaydın künyesi dondurulmuş künyeyle tutar: yazarlar ve sıraları, yıl, cilt, sayı ve sayfa aralığı (iki taraf da
+     biliyorsa) ve başlığın sözcükleri. Bellekten yazılmış bir künye kayan ciltle ya da sayfayla düşer. Katalogun bilmediği bir alan
+     (yalnız ilk sayfayı veren kayıtlarda son sayfa) kayıtta adıyla "açık" yazılır; yazılmazsa da düşer.
 Kaynakça listesi kayıttan basılır (ders_motor `kaynaklar` bloğu): liste ile metin arasında elle tutulan ikinci bir
 kopya yoktur.
 """
@@ -34,7 +36,7 @@ def normal(s: str) -> str:
     bölünmüş sözcük birleşik, boşluk tek. Bulut betiği (arsiv_kaynak) aynı fonksiyonu kullanır."""
     s = unicodedata.normalize("NFKC", s).replace("­", "")
     for a, b in (("‘", "'"), ("’", "'"), ("“", '"'), ("”", '"'), ("–", "-"), ("—", "-"), ("−", "-"),
-                 (" ", " "), ("ﬁ", "fi"), ("ﬂ", "fl")):
+                 ("\u2010", "-"), ("\u2011", "-"), ("\u00a0", " "), ("ﬁ", "fi"), ("ﬂ", "fl")):
         s = s.replace(a, b)
     s = re.sub(r"(\w)-\s*\n\s*(\w)", r"\1\2", s)
     return re.sub(r"\s+", " ", s).strip()
@@ -48,11 +50,28 @@ def sade(s: str | None) -> str:
 
 
 # ───────────────────────────────────────────── atıfın biçimi
-_AD = r"[A-ZÇĞİÖŞÜ][\w'’\-]+(?: de [A-ZÇĞİÖŞÜ][\w'’\-]+)?"
+#: Bir soyad. Kesme işareti yalnız ardından büyük harf gelirse adın parçasıdır (O'Brien); küçük harfle süren kesme
+#: Türkçe ektir ("Prins'e (2015)", "White'ın") ve adın dışında kalır.
+_ADS = r"[A-ZÇĞİÖŞÜ](?:['’](?=[A-ZÇĞİÖŞÜ])|[\w\-])+"
+_AD = rf"{_ADS}(?: de {_ADS})?"
 _LISTE = rf"{_AD}(?:(?:, | ve ){_AD})*"
-ANLATI = re.compile(rf"({_LISTE}) \((\d{{4}})[a-z]?\)")
-PARANTEZ = re.compile(r"\(([^()]*?\d{4}[a-z]?)\)")
+_EK = r"(?:['’][a-zçğıöşü]+)?"
+ANLATI = re.compile(rf"({_LISTE}){_EK} \((\d{{4}})[a-z]?\)")
+#: Yıl taşıyan her parantez: atıf ortada da durabilir ("(Melvin ve Prins, 2015; akış dersi)").
+PARANTEZ = re.compile(r"\(([^()]*?\d{4}[^()]*)\)")
 PARCA = re.compile(rf"^({_LISTE}), (\d{{4}})[a-z]?$")
+#: Virgülü eksik atıf ("Melvin ve Prins 2015"): kayda karşılık aranamaz, sessizce atlanırdı. Ay adıyla başlayan
+#: parça ("Mart 2024") tarihtir.
+BOZUK = re.compile(rf"^({_LISTE}) (\d{{4}})[a-z]?$")
+_AYLAR = {"Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım",
+          "Aralık"}
+
+
+def _parcalar(metin: str):
+    n = re.sub(r"\s+", " ", metin)
+    for m in PARANTEZ.finditer(n):
+        for parca in m.group(1).split(";"):
+            yield parca.strip(), m.start()
 
 
 def atiflar(metin: str) -> list[tuple[str, int]]:
@@ -60,12 +79,16 @@ def atiflar(metin: str) -> list[tuple[str, int]]:
     yılı olmayan parça (ör. "kazananın laneti") atıf değildir."""
     n = re.sub(r"\s+", " ", metin)
     out = [(m.group(1), int(m.group(2)), m.start()) for m in ANLATI.finditer(n)]
-    for m in PARANTEZ.finditer(n):
-        for parca in m.group(1).split(";"):
-            p = PARCA.match(parca.strip())
-            if p:
-                out.append((p.group(1), int(p.group(2)), m.start()))
+    for parca, yer in _parcalar(metin):
+        p = PARCA.match(parca)
+        if p:
+            out.append((p.group(1), int(p.group(2)), yer))
     return [(a, y) for a, y, _ in sorted(out, key=lambda x: x[2])]
+
+
+def bozuk_atiflar(metin: str) -> list[str]:
+    """Parantez içinde yazar ile yılı arasında virgülü olmayan parçalar (ay adıyla başlayan tarih hariç)."""
+    return [p for p, _ in _parcalar(metin) if BOZUK.match(p) and p.split()[0] not in _AYLAR]
 
 
 def anahtar(yazarlar: str, yil: int) -> str:
@@ -77,11 +100,16 @@ KUNYE = re.compile(r"^(?P<yazar>.+?) \((?P<yil>\d{4})\)\. (?P<geri>.+)$")
 DERGI = re.compile(r"_(?P<dergi>[^_]+)_, (?P<cilt>\d+)(?:\((?P<sayi>[\w\-–]+)\))?, (?P<ilk>\d+)[–-](?P<son>\d+)\.?$")
 
 
+_BAS = r"[A-ZÇĞİÖŞÜ][a-zçğıöşü]?\."
+#: Künyenin yazar dizisindeki soyadlar: "Soyad, A. B." öbekleri, virgül ya da " ve " ile ayrık.
+SOYAD = re.compile(rf"(?:^|, | ve )([^,]+?), {_BAS}(?:[ \-]?{_BAS})*(?=,| ve |$)")
+
+
 def kunye_ayristir(satir: str) -> dict:
     m = KUNYE.match(satir.strip())
     if not m:
         return {}
-    out = {"yazar": m.group("yazar"), "yil": int(m.group("yil"))}
+    out = {"yazar": m.group("yazar"), "yil": int(m.group("yil")), "soyadlar": SOYAD.findall(m.group("yazar"))}
     geri = m.group("geri")
     d = DERGI.search(geri)
     if d:
@@ -101,8 +129,14 @@ def baslik_tutar(a: str | None, b: str | None) -> bool:
     return bool(x and y) and len(x & y) / min(len(x), len(y)) >= 0.7
 
 
+def eslesme(s: str) -> str:
+    """Alıntı araması: `normal`, küçük harf ve boşluksuz. PDF'ten çıkarılan metin sözcükleri satır ve sütun
+    kırılımında bölebilir ("de cade", "se rial"); boşluğu atmak alıntıyı kaynağın kendi harf dizisiyle kıyaslar."""
+    return re.sub(r"\s+", "", normal(s).lower())
+
+
 def _metinler(d: dict) -> list[str]:
-    """Dondurulmuş kaydın alıntı aranabilen metinleri."""
+    """Dondurulmuş kaydın alıntı aranabilen metinleri (eşleşme biçiminde)."""
     out = []
     for alan in ("crossref", "openalex", "semantic"):
         oz = (d.get(alan) or {}).get("ozet")
@@ -112,7 +146,7 @@ def _metinler(d: dict) -> list[str]:
     if m.get("ilk_sayfa"):
         out.append(m["ilk_sayfa"])
     out += [p["pasaj"] for p in m.get("pasaj") or []]
-    return [normal(x).lower() for x in out]
+    return [eslesme(x) for x in out]
 
 
 def _sayfa(s: str | None) -> tuple[str | None, str | None]:
@@ -132,6 +166,13 @@ def kunye_denetimi(kayit: dict, d: dict) -> list[str]:
     if not (cr or oa):
         return []                                 # kurum belgesi: künyesi adresinden (kayıt notunda)
     hata = []
+    katalog = ([a.get("soyad") or a.get("ad_tam") for a in cr.get("yazarlar") or []]
+               or [n for n in oa.get("yazarlar") or [] if n])
+    if katalog:                                   # yazarlar ve sıraları (soyadın son sözcüğü)
+        a = [sade(x).split()[-1] for x in katalog if sade(x)]
+        b = [sade(x).split()[-1] for x in k["soyadlar"] if sade(x)]
+        if a != b:
+            hata.append(f"{ad}: künyenin yazarları {b}, kaynağın {a}")
     yil = cr.get("yil") or oa.get("yil")
     if yil and int(yil) != k["yil"]:
         hata.append(f"{ad}: künyenin yılı {k['yil']}, kaynağın {yil}")
@@ -147,12 +188,20 @@ def kunye_denetimi(kayit: dict, d: dict) -> list[str]:
         if k.get("sayi") and sayi and str(sayi) != k["sayi"]:
             hata.append(f"{ad}: künyenin sayısı {k['sayi']}, kaynağın {sayi}")
         ilk, son = _sayfa(cr.get("sayfa"))
-        ilk = ilk or oa.get("ilk_sayfa")
-        son = son or oa.get("son_sayfa")
+        oa_ilk, oa_son = oa.get("ilk_sayfa"), oa.get("son_sayfa")
+        if oa_son is not None and oa_son == oa_ilk:
+            oa_son = None                         # katalog ilk sayfayı son sayfa diye de yazmış: bilinmiyor
+        ilk = ilk or oa_ilk
+        son = son or oa_son
+        acik = set(kayit.get("acik") or [])
         if ilk and str(ilk) != k["ilk"]:
             hata.append(f"{ad}: künyenin ilk sayfası {k['ilk']}, kaynağın {ilk}")
         if son and str(son) != k["son"]:
             hata.append(f"{ad}: künyenin son sayfası {k['son']}, kaynağın {son}")
+        if son is None and "son sayfa" not in acik:
+            hata.append(f"{ad}: son sayfa katalogda yok; kayıt bunu 'acik' alanında adıyla anmalı")
+        if son is not None and "son sayfa" in acik:
+            hata.append(f"{ad}: son sayfa katalogda var; 'acik' kaydı gereksiz")
     return hata
 
 
@@ -194,8 +243,10 @@ def denetim(metinler: dict[str, str], yol: Path = KAYIT, donmus: Path = DONMUS) 
             hata.append(f"{k['id']}: doğrulanmış kayıtta alıntı yok")
         metin = _metinler(d)
         for al in k.get("alinti") or []:
-            hedef = normal(al).lower()
-            if not any(hedef in m for m in metin):
+            hedef = eslesme(al)
+            if len(hedef) < 24:
+                hata.append(f"{k['id']}: alıntı çok kısa (en az 24 harf): {al!r}")
+            elif not any(hedef in m for m in metin):
                 hata.append(f"{k['id']}: alıntı dondurulmuş kaynakta yok: {al[:70]!r}")
         hata += kunye_denetimi(k, d)
     for slug, mdx in metinler.items():
@@ -211,6 +262,8 @@ def denetim(metinler: dict[str, str], yol: Path = KAYIT, donmus: Path = DONMUS) 
                 hata.append(f"{slug}: atıf doğrulanmamış ({k['durum']}): {yazar} ({yil})")
             if slug not in k.get("ders", []):
                 hata.append(f"{slug}: atıf kaydı bu dersi anmıyor: {k['id']}")
+        for p in bozuk_atiflar(govde):
+            hata.append(f"{slug}: atıf biçimi bozuk (yazar ile yıl arasında virgül yok): ({p})")
         for k in kay:
             if slug in k.get("ders", []) and k["id"] not in anilan:
                 hata.append(f"{slug}: kayıt bu dersi anıyor ama metinde atfı yok: {k['id']}")

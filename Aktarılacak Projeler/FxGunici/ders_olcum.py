@@ -21,8 +21,12 @@ başınadır, koşu birim başına seçer (aile_secimi); (4) birden çok yerel s
 SAAT REJİMİ — devam satırları ve haber stratejilerinin işlemleri olayın yerel saatine göre
 ayrılır (saat_rejimi; ECB basın toplantısının 14:30 saati çoğu hafta ABD'nin 08:30 veri
 dakikasına düşer); (5) YEREL TATİLLER — varsayılanların İngiltere ve ABD tatillerindeki işlemleri,
-kaydedilmiş işlem dosyalarından (tatil_betimi; ön kayıt dışı, betimleyici). Beşinin tanımı
-aşağıda, fonksiyonun kendisinde. Seçilenin komşuları (komsular) ve ay sonu ailesi (ay_sonu_ailesi)
+kaydedilmiş işlem dosyalarından (tatil_betimi; ön kayıt dışı, betimleyici); (6) AY SONUNUN ESKİ
+TANIMI — ilk sonuçlardan sonra değişen ay sonu tanımının (ayın son hafta içi günü → son Londra iş
+günü) ay sonu ayrımına etkisi, işlem dosyalarından (ay_sonu_eski_tanim; işlemler iki tanımda aynı,
+yalnız bayrak değişir); (7) DOKUZUNCU DERSİN ÖLÇÜLERİ — kuralların neden kaybettiği (basarisiz.py;
+iki pencere de görüldükten sonra kuruldu, hepsi betimleyici). Yedisinin tanımı aşağıda, fonksiyonun
+ya da modülün kendisinde. Seçilenin komşuları (komsular) ve ay sonu ailesi (ay_sonu_ailesi)
 ölçüm değil, koşu çıktısının okunuşudur: ızgaranın satırları ve ay sonu ayrımları olduğu gibi.
 
 Künyenin `kod` alanı ölçümü üreten kodun özüdür (kod_kunyesi): kapı onu yalnız hashlib ile sınar.
@@ -35,7 +39,7 @@ import math
 import re
 import sys
 import tomllib
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import numpy as np
@@ -43,6 +47,7 @@ import pandas as pd
 
 import adlar
 import ayar as ay
+import basarisiz
 import metrik as mk
 import onkayit_gecmis as og
 import saglamlik as sg
@@ -1019,6 +1024,87 @@ def ay_sonu_sinir(kok: Path, u_: dict, ayrim: dict, ic_bitis) -> dict:
     return out
 
 
+def ay_sonu_sart(ayrim: dict, esik) -> tuple[dict, bool]:
+    """Bir ay sonu ayrımının tutma şartları (tek tanım; ay_sonu_ailesi ve ay_sonu_eski_tanim): iki ayrık pencerede
+    ay sonu ortalamasının %95 alt ucu sıfırın üstünde ve ay sonu ile öbür günlerin farkı düzeltilmiş eşiğin altında."""
+    sart = {}
+    for d in ("oos", "is"):
+        x = (ayrim.get("ay_sonu") or {}).get(d) or {}
+        f = (ayrim.get("fark") or {}).get(d) or {}
+        sart[d] = {"alt_arti": bool(x.get("ga_alt") is not None and x["ga_alt"] > 0),
+                   "fark_esik": bool(f.get("p") is not None and esik is not None and f["p"] < esik),
+                   "isaret_arti": bool(x.get("beklenti_r") is not None and x["beklenti_r"] > 0)}
+    tutar = sart["oos"]["alt_arti"] and sart["oos"]["fark_esik"] and sart["is"]["alt_arti"] and sart["is"]["fark_esik"]
+    return sart, tutar
+
+
+def ay_sonu_eski(g: date) -> bool:
+    """Ay sonunun 2c01d199 öncesi tanımı: ayın son hafta içi günü (İngiltere tatili sorulmaz). Koşunun eski kodu bayrağı
+    günlük tablonun sırasından alıyordu (ayın son günü); verinin boş günleri hiçbir ayın son hafta içi gününe düşmediği
+    için iki okuma aynı günleri verir (sınamada)."""
+    if g.weekday() >= 5:
+        return False
+    x = g + timedelta(days=1)
+    while x.month == g.month:
+        if x.weekday() < 5:
+            return False
+        x += timedelta(days=1)
+    return True
+
+
+def ay_sonu_eski_tanim(kok: Path, aile: dict, birimler: dict, ic_bitis, kayan: list[str]) -> dict:
+    """Ay sonu tanımının değişmesinin (ayın son hafta içi günü → son Londra iş günü) ay sonu ayrımına etkisi.
+
+    Kural değişikliği işlemleri değiştirmez (karşı olgu: işlemlerin hepsi aynı), yalnız bayrak değişir; bu yüzden eski
+    bayrakla işlem dosyasından kurulan ayrım eski koşunun ayrımıdır. Ölçülebilen üyeler işlem dosyası olanlardır
+    (varsayılan ve seçilen); zaman dilimi biçimlerinin dosyası yoktur ve "olculemedi" kaydı alır. Bugünkü bayrakla
+    yeniden kurulan ayrımın kayıtlı ayrımı ürettiği sınanır (n birebir; R, aralık ve fark p 1e−5): ayrışırsa ölçüm
+    yazılmaz. Rastgele yön eski tanımla ölçülmez (koşunun bağlamını ister). Aile eşiği değişmez: işlem kümeleri aynı."""
+    import karsi_olgu as ko
+    import kosu
+    commit = next(x["commit"] for x in ko.DEGISIKLIKLER if x["ad"] == "ay_sonu")
+    uye = []
+    for u_ in aile["uye"]:
+        kayit = {k: u_[k] for k in ("birim", "cift", "kim")}
+        if u_["kim"] not in ("varsayilan", "secilen"):
+            uye.append({**kayit, "olculemedi": "işlem dosyası yok"})
+            continue
+        yol = _islem_dosyasi(kok, u_["birim"], u_["cift"], u_["p"] or {})
+        al = mk.alinan(pd.read_parquet(yol))
+        icm = al["gun"].to_numpy().astype("datetime64[D]") <= np.datetime64(ic_bitis)
+        bugun = kosu.ay_sonu_ayrimi(al, icm)
+        kayitli = ((birimler[u_["birim"]]["cift"][u_["cift"]].get(u_["kim"]) or {}).get("ay_sonu")) or {}
+        for d in ("is", "oos", "tum"):
+            for ad in ("ay_sonu", "diger"):
+                a_, b_ = bugun[ad][d], (kayitli.get(ad) or {}).get(d) or {}
+                if a_["n"] != b_.get("n") or any(abs((a_.get(k) or 0) - (b_.get(k) or 0)) > 1e-5
+                                                 for k in ("beklenti_r", "ga_alt", "ga_ust")):
+                    raise ValueError(f"ay sonu eski tanımı: {u_['birim']} {u_['cift']} {u_['kim']} {d} {ad}: işlem "
+                                     f"dosyası kayıtlı ayrımı üretmiyor")
+            p0 = ((kayitli.get("fark") or {}).get(d) or {}).get("p")
+            if p0 is None or abs(bugun["fark"][d]["p"] - p0) > 1e-5:
+                raise ValueError(f"ay sonu eski tanımı: {u_['birim']} {u_['cift']} {u_['kim']} {d}: fark p ayrışıyor")
+        gunler = pd.to_datetime(al["gun"]).dt.date
+        eski_b = np.array([ay_sonu_eski(g) for g in gunler], dtype=bool)
+        eski = kosu.ay_sonu_ayrimi(al.assign(ay_sonu=eski_b), icm)
+        sart, tutar = ay_sonu_sart(eski, aile["esik"])
+        yeni_b = al["ay_sonu"].to_numpy(bool)
+        degisen = [{"gun": g.isoformat(), "tanim": "eski" if e else "bugun", "r": float(r)}
+                   for g, e, y, r in zip(gunler, eski_b, yeni_b, al["r"].to_numpy()) if e != y]
+        aylar = sorted({x["gun"][:7] for x in degisen})
+        if not set(aylar) <= set(kayan):
+            raise ValueError(f"ay sonu eski tanımı: {u_['birim']} {u_['cift']} {u_['kim']}: kayan aylar dışında "
+                             f"ayrışan gün ({sorted(set(aylar) - set(kayan))})")
+        uye.append({**kayit, "tutar_bugun": bool(u_["tutar"]), "tutar": tutar, "sart": sart,
+                    "ay_sonu": {d: {k: eski["ay_sonu"][d].get(k) for k in ("n", "beklenti_r", "ga_alt", "ga_ust")}
+                                for d in ("is", "oos", "tum")},
+                    "fark": {d: eski["fark"][d]["p"] for d in ("is", "oos")}, "degisen": degisen})
+    olculen = [x for x in uye if "olculemedi" not in x]
+    return {"commit": commit, "uye": uye, "olculen": len(olculen), "olculemedi": len(uye) - len(olculen),
+            "tutan_bugun": [{k: x[k] for k in ("birim", "cift", "kim")} for x in olculen if x["tutar_bugun"]],
+            "tutan_eski": [{k: x[k] for k in ("birim", "cift", "kim")} for x in olculen if x["tutar"]]}
+
+
 def ay_sonu_ailesi(birimler: dict, kok: Path | None = None, ic_bitis=None) -> dict:
     """Ay sonu ayrımının çoklu sınama ailesi ve "tutan" ayrımlar — tek tanım (ders özetleri ve "Ne öğrendik" bunu okur).
 
@@ -1056,16 +1142,7 @@ def ay_sonu_ailesi(birimler: dict, kok: Path | None = None, ic_bitis=None) -> di
     esik = AY_SONU_DUZEY / n if n else None
     for u_ in uye:
         a_ = u_["ayrim"]
-        sart = {}
-        for d in ("oos", "is"):
-            x = (a_.get("ay_sonu") or {}).get(d) or {}
-            f = (a_.get("fark") or {}).get(d) or {}
-            sart[d] = {"alt_arti": bool(x.get("ga_alt") is not None and x["ga_alt"] > 0),
-                       "fark_esik": bool(f.get("p") is not None and esik is not None and f["p"] < esik),
-                       "isaret_arti": bool(x.get("beklenti_r") is not None and x["beklenti_r"] > 0)}
-        u_["sart"] = sart
-        u_["tutar"] = sart["oos"]["alt_arti"] and sart["oos"]["fark_esik"] and sart["is"]["alt_arti"] \
-            and sart["is"]["fark_esik"]
+        u_["sart"], u_["tutar"] = ay_sonu_sart(a_, esik)
         # Sıfıra yakın alt uç: tutma ölçütü önceden kayıtlı yordamla (2.000 tekrar, sabit tohum) kurulur; işaretinin
         # tohuma bağlı olup olmadığı yanında durur (hüküm değişmez, okura söylenir).
         if kok is not None:
@@ -1420,6 +1497,8 @@ def kur(kok: Path | None = None) -> dict:
         v.pop("_gunluk_varsayilan", None)
     haber = {c: _oku(kok / "sonuc" / "haber" / f"{c}.json") for c in ciftler}
     onk = tomllib.loads(ONKAYIT_YOL.read_text(encoding="utf-8"))
+    aile = ay_sonu_ailesi(birimler, kok, a.ic_bitis)
+    kayan = ay_sonu_kayan(a.baslangic, a.bitis)
     olcum = {
         "kunye": {
             "baslangic": a.baslangic.isoformat(), "bitis": a.bitis.isoformat(),
@@ -1459,7 +1538,7 @@ def kur(kok: Path | None = None) -> dict:
             "aile_n": len({v["aile"] for v in kosu.BIRIMLER.values()}),
             "bolunen_aile": sorted({v["aile"] for v in kosu.BIRIMLER.values()
                                     if sum(1 for x in kosu.BIRIMLER.values() if x["aile"] == v["aile"]) > 1}),
-            "ay_sonu_kayan": ay_sonu_kayan(a.baslangic, a.bitis),
+            "ay_sonu_kayan": kayan,
             # Ön kaydın harfine göre ikinci okuması olan kurallar: birim → [[parametre, harfin okuması], …] (bir
             # kuralın birden çok okuması olabilir; her biri tek başına ölçülür).
             "yorum": {b: [list(x) for x in v] for b, v in kosu.YORUM.items()},
@@ -1478,13 +1557,17 @@ def kur(kok: Path | None = None) -> dict:
                   "olcu_disi": olcu_disi(kok, ciftler, n1_tf=(int(birimler["n1"]["varsayilan"]["tf"])
                                                               if "n1" in birimler else None))},
         # Ay sonu ayrımının çoklu sınama ailesi ve tutan ayrımlar (tek tanım).
-        "ay_sonu_aile": ay_sonu_ailesi(birimler, kok, a.ic_bitis),
+        "ay_sonu_aile": aile,
         # Yerel tatillerde işlemler (ön kayıt dışı, betimleyici).
         "tatil": tatil_betimi(kok, birimler, ciftler, a),
         # Sonuçlardan sonra değişen kuralların ölçülmüş etkisi: yeniden koşuyla (karsi_olgu.py) ve sayımla.
         "karsi_olgu": {"kosu": karsi_olgu_ozet(kok), "olculemedi": olculemedi_esigi(birimler),
+                       # Ay sonu tanımının değişmesinin ay sonu ayrımına etkisi (işlem dosyalarından; koşu gerekmez).
+                       "ay_sonu_alt_kume": ay_sonu_eski_tanim(kok, aile, birimler, a.ic_bitis, kayan),
                        "zaman": {ad: commit_zamani(c) for ad, c in SONRADAN_COMMIT.items()}},
     }
+    # Dokuzuncu dersin ölçüleri (betimleyici): ölçümün kendi kayıtlarını da okur, en sonda kurulur.
+    olcum["basarisiz"] = basarisiz.bolum(kok, olcum, a, _islem_dosyasi)
     tutarlilik(olcum, a)
     # Kod künyesi en sonda: ölçüm sırasında yüklenen her proje modülü listeye girsin.
     olcum["kunye"]["kod"] = kod_kunyesi()

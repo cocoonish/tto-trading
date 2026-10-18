@@ -2,7 +2,9 @@
 
 **Gün içi momentum**: günün ilk hareketinin yönü günün sonraki bir dilimini öngörür mü? Hisse piyasasında Gao, Han,
 Li ve Zhou (2018) S&P 500 borsa yatırım fonunda ilk yarım saatin getirisinin son yarım saatin getirisini
-öngördüğünü gösterdi; FX'te aynı soruyu soran çalışmalar da var (Elaut, Frömmel ve Lampaert, 2018). Bu dersin
+öngördüğünü gösterdi. FX'te aynı soruyu açık işlem saatleri olan bir piyasada, Moskova bankalar arası döviz borsasının
+2005–2014 ruble/dolar işlemlerinde soran bir çalışma, gün içi momentumu likidite sağlayıcılarının geceye pozisyon
+taşımaktan kaçınmasına bağladı (Elaut, Frömmel ve Lampaert, 2018). Bu dersin
 kuralı FX'in kendi saatlerine taşınmış hâlidir: Londra açılışının ilk mumu, New York öğleden sonrasının yönü.
 
 ### Piyasa mantığı

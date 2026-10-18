@@ -9,7 +9,8 @@ Strateji başına altı figür (birim adıyla):
   <birim>-kosul.html   koşul kovaları: örneklem içinde seçilen, örneklem dışında sınanan
   <birim>-saat.html    giriş saatine (TSİ) göre işlem başına R
   <birim>-tf.html      zaman dilimi kıyası (5 / 15 / 60 dk): varsayılanın yalnız mum uzunluğu değişir
-Ortak figürler: karsilastirma-*.html, haber-*.html, veri-*.html, yontem-*.html.
+Ortak figürler: karsilastirma-*.html, haber-*.html, veri-*.html, yontem-*.html; dokuzuncu dersin (neden başarısız)
+figürleri neden-*.html.
 
 Biçim seçimi (görev tanımı 10: "hızlı yüklenen bir grafik biçimi seç ve gerekçelendir"):
 Plotly HTML, sayfaya `loading="lazy"` iframe olarak gömülür (GrafikEmbed). Kütüphane tek
@@ -1220,6 +1221,349 @@ def haber_fomc(o: dict) -> None:
     so._yaz(fig, "haber-fomc.html", yukseklik(bas, 470))
 
 
+# ─────────────────────────────────────────────────────── ortak: dokuzuncu ders (neden başarısız)
+#: Kaybın bileşenleri: parite renkleri yalnız paritelere ayrıldığı için bileşenler kendi tonlarını taşır (yön payı
+#: koyu camgöbeği, zamanlama payı mor, maliyetin ölçülen makası koyu, varsayılan kayması açık gri).
+BILESEN_RENK = {"y": SECILEN_RENK, "z": "#6b4f8a", "c_makas": "#3a3a3a", "c_kayma": "#b8b3a8"}
+
+
+def _bs(o: dict) -> dict:
+    """Dokuzuncu dersin ölçüleri (ders_olcum → basarisiz.bolum); yoksa çizim DÜŞER: boş figür "sonuç yok" der."""
+    b = o.get("basarisiz")
+    if not b:
+        raise SystemExit("ölçümde dokuzuncu dersin kaydı yok (basarisiz)")
+    return b
+
+
+def _kural_ad(o: dict, b: str, stopsuz: bool = False) -> str:
+    """Kuralın figür adı; R birimi stop uzaklığı olmayan kural ‡ ile (karsilastirma figürüyle aynı işaret)."""
+    return adlar.BIRIM[b][1] + (" ‡" if stopsuz and ((o["birim"][b].get("varsayilan") or {}).get("stop_turu")) == "yok"
+                                else "")
+
+
+def _stopsuz_notu(o: dict, kurallar) -> list[str]:
+    s = [b for b in kurallar if ((o["birim"][b].get("varsayilan") or {}).get("stop_turu")) == "yok"]
+    return (["‡ Stopsuz kural: R girişteki ATR(14), bir risk değil ölçek birimi; öbür kurallarda R stop uzaklığıdır"]
+            if s else [])
+
+
+def _puan(x: float) -> str:
+    return _r(100 * x, 1) + " puan"
+
+
+def neden_basabas(o: dict) -> None:
+    """Kural başına isabetin başabaş isabetine uzaklığı, orta fiyattan ve maliyetten sonra (dört paritenin havuzu)."""
+    h = _bs(o)["basabas"]["havuz"]["oos"]
+    sira = sorted(h, key=lambda b: (h[b]["acik"], b))
+    ad = [_kural_ad(o, b) for b in sira]
+    fig = make_subplots(rows=1, cols=1, subplot_titles=("İsabet − başabaş isabeti (puan)",))
+    for b, a in zip(sira, ad):
+        fig.add_trace(go.Scatter(x=[100 * h[b]["brut_acik"], 100 * h[b]["acik"]], y=[a, a], mode="lines",
+                                 line=dict(color="#c9c4ba", width=2), showlegend=False, hoverinfo="skip"), 1, 1)
+    fig.add_trace(go.Scatter(
+        x=[100 * h[b]["brut_acik"] for b in sira], y=ad, mode="markers", name="orta fiyattan (brüt)",
+        marker=dict(symbol="circle-open", size=9, color=GRI, line=dict(width=1.6, color=GRI)),
+        hovertext=[f"{a}: brüt isabet {so.yuzde(100 * h[b]['brut_isabet'], 1)} · başabaş "
+                   f"{so.yuzde(100 * h[b]['brut_pstar'], 1)} · açık {_puan(h[b]['brut_acik'])}" for b, a in zip(sira, ad)],
+        hoverinfo="text"), 1, 1)
+    fig.add_trace(go.Scatter(
+        x=[100 * h[b]["acik"] for b in sira], y=ad, mode="markers", name="maliyetten sonra (net)",
+        marker=dict(symbol="circle", size=9, color=[CLARET if h[b]["acik"] < 0 else MAVI for b in sira]),
+        hovertext=[f"{a}: isabet {so.yuzde(100 * h[b]['isabet'], 1)} · başabaş {so.yuzde(100 * h[b]['pstar'], 1)} · "
+                   f"açık {_puan(h[b]['acik'])} · {vir(h[b]['n'], 0)} işlem" for b, a in zip(sira, ad)],
+        hoverinfo="text"), 1, 1)
+    fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
+    fig.update_xaxes(title_text="puan")
+    bas = baslik_koy(fig, "İsabet başabaş isabetine ne kadar uzak — maliyetten önce ve sonra",
+                     [_kunye(o), f"Örneklem dışı ({_dis(o)}), önceden kayıtlı varsayılanlar{_turetilmis_not(o)}; "
+                      f"{_sayi_ad(len(PARITE))} paritenin işlemleri birlikte",
+                      "Başabaş isabeti p* = |ortalama kayıp| / (ortalama kazanç + |ortalama kayıp|); açık = isabet − p*. "
+                      "Sıfırın solundaki kural kaybettirir: beklenti = açık × (ortalama kazanç + |ortalama kayıp|)",
+                      "Boş daire: orta fiyattan orta fiyata (brüt) · dolu daire: gerçek makas ve kaymayla (net)"])
+    so._yaz(fig, "neden-basabas.html", yukseklik(bas, 90 + 26 * len(sira)))
+
+
+def neden_anatomi(o: dict) -> None:
+    """Kaybın yön, zamanlama ve maliyet payları (ayna işlemle ayrışım), kural başına."""
+    a = _bs(o)["ayrisim"]["oos"]
+    k = a["kural"]
+    sira = sorted(k, key=lambda b: (k[b]["net"], b))
+    ad = [_kural_ad(o, b, stopsuz=True) for b in sira]
+    fig = make_subplots(rows=1, cols=1, subplot_titles=("R / işlem",))
+    parca = (("y", "yön payı", 1), ("z", "zamanlama payı", 1), ("c_makas", "ölçülen makas", -1),
+             ("c_kayma", "varsayılan kayma", -1))
+    for alan, etiket, isaret in parca:
+        fig.add_trace(go.Bar(
+            x=[isaret * k[b][alan] for b in sira], y=ad, orientation="h", name=etiket,
+            marker=dict(color=BILESEN_RENK[alan], line=dict(width=0)),
+            hovertext=[f"{x}: {etiket} {_r(isaret * k[b][alan], 3)} R" for b, x in zip(sira, ad)],
+            hoverinfo="text"), 1, 1)
+    fig.add_trace(go.Scatter(x=[k[b]["net"] for b in sira], y=ad, mode="markers", name="net = yön + zamanlama − maliyet",
+                             marker=dict(symbol="diamond", size=9, color=MUREKKEP, line=dict(width=1, color="white")),
+                             hovertext=[f"{x}: net {_r(k[b]['net'], 3)} R · {vir(k[b]['n'], 0)} işlem, "
+                                        f"{vir(k[b]['bilesim'], 0)} parite" for b, x in zip(sira, ad)],
+                             hoverinfo="text"), 1, 1)
+    fig.update_layout(barmode="relative", bargap=0.35)
+    fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
+    dis = sorted({x.split(":")[0] for x in a.get("dislanan") or []})
+    alt = [_kunye(o), f"Örneklem dışı ({_dis(o)}), önceden kayıtlı varsayılanlar{_turetilmis_not(o)}; kural başına "
+           "paritelerin işlem sayısıyla ağırlıklı ortalaması",
+           "Ayna işlem: aynı dakikada, aynı stop ve hedef uzaklığıyla TERS yönde açılan işlem. Yön payı = (net − ayna) / 2, "
+           "zamanlama payı = (net + ayna) / 2 + maliyet; aynanın maliyeti gerçek işleminkine eşit sayılır",
+           "Maliyet iki parça: gerçek bid/ask makası (koyu) ve dolum başına varsayılan kayma (açık)"]
+    if dis:
+        alt.append("Dışarıda: " + ", ".join(adlar.BIRIM[b][1] for b in dis)
+                   + f" (örneklem dışında {vir(int(o['kunye']['uygulama_esik']['rastgele']), 0)} işlemden az; ayna kurulmaz)")
+    bas = baslik_koy(fig, "Kaybın anatomisi — yön, zamanlama ve maliyet", alt + _stopsuz_notu(o, sira))
+    so._yaz(fig, "neden-anatomi.html", yukseklik(bas, 120 + 26 * len(sira)))
+
+
+def neden_olcek(o: dict) -> None:
+    """R büyüklüğüne göre üçte birlikler: maliyetin R payı R'yle küçülür, brüt büyümez."""
+    u = _bs(o)["olcek"]["ucte_bir"]["oos"]
+    ad = [f"{s}<br>R ≈ {vir(r, 1)} pip" for s, r in zip(("dar", "orta", "geniş"), u["R"])]
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.2, row_heights=[0.6, 0.4],
+                        subplot_titles=("R / işlem (bileşimlerin medyanı)", "pip / işlem"))
+    for alan, etiket, renk in (("brut", "brüt", SECILEN_RENK), ("maliyet", "maliyet", "#8a8a8a"),
+                               ("net", "net", MUREKKEP)):
+        fig.add_trace(go.Bar(x=ad, y=u[alan], name=etiket, marker=dict(color=renk),
+                             hovertext=[f"{etiket}: {_r(v, 3)} R" for v in u[alan]], hoverinfo="text"), 1, 1)
+    fig.add_trace(go.Bar(x=ad, y=u["maliyet_pip"], name="maliyet (pip)", marker=dict(color="#c9c4ba"),
+                         hovertext=[f"gidiş-dönüş maliyeti {vir(v, 2)} pip" for v in u["maliyet_pip"]],
+                         hoverinfo="text"), 2, 1)
+    fig.update_layout(barmode="group", bargap=0.3)
+    fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.8), row=1, col=1)
+    fig.update_yaxes(title_text="R", row=1, col=1)
+    fig.update_yaxes(title_text="pip", row=2, col=1)
+    bas = baslik_koy(fig, "Ölçek — R büyüdükçe maliyetin payı küçülür, brüt büyümez",
+                     [_kunye(o), f"Örneklem dışı ({_dis(o)}); her bileşimin işlemleri kendi R'sine göre üç eşit dilime "
+                      f"bölündü (pencerede en az {vir(u['asgari'], 0)} işlemli {vir(u['bilesim'], 0)} bileşim)",
+                      "Çubuk: bileşimlerin medyanı; medyanlar toplanmaz (net medyanı brüt medyanı eksi maliyet medyanı "
+                      "değildir) · R: girişten stopa planlanan risk, stopsuz kurallarda girişteki ATR(14)",
+                      "Alt panel: aynı dilimlerin gidiş-dönüş maliyeti pip olarak; pip maliyeti hemen hemen sabit kalır, "
+                      "R'nin pip karşılığı büyür"])
+    so._yaz(fig, "neden-olcek.html", yukseklik(bas, 560))
+
+
+def neden_kenar(o: dict) -> None:
+    """Örneklem içinden dışına ne taşındı: maliyet neredeyse birebir, brüt dağınık (bileşim başına)."""
+    ken = _bs(o)["kenar"]
+    nokta = ken["nokta"]
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.17,
+                        subplot_titles=("Maliyet (R / işlem)", "Brüt (R / işlem)"))
+    for j, alan in ((1, "maliyet"), (2, "brut")):
+        xs = [p[f"{alan}_is"] for p in nokta] + [p[f"{alan}_oos"] for p in nokta]
+        lo, hi = min(xs), max(xs)
+        fig.add_trace(go.Scatter(x=[lo, hi], y=[lo, hi], mode="lines", line=dict(color=GRI, width=1, dash="dot"),
+                                 showlegend=False, hoverinfo="skip"), j, 1)
+        for c in PARITE:
+            for disari in (False, True):
+                ps = [p for p in nokta if p["cift"] == c and p["dislanan"] == disari]
+                if not ps:
+                    continue
+                fig.add_trace(go.Scatter(
+                    x=[p[f"{alan}_is"] for p in ps], y=[p[f"{alan}_oos"] for p in ps], mode="markers",
+                    name=PARITE[c], legendgroup=c, showlegend=(j == 1 and not disari),
+                    marker=dict(size=7, color=RENK[c], symbol="circle-open" if disari else "circle",
+                                line=dict(width=1.4, color=RENK[c]), opacity=0.85),
+                    hovertext=[f"{adlar.BIRIM[p['kural']][1]} · {PARITE[c]}: örneklem içi {_r(p[f'{alan}_is'], 3)} → "
+                               f"dışı {_r(p[f'{alan}_oos'], 3)} R · dışında {vir(p['n_oos'], 0)} işlem"
+                               for p in ps], hoverinfo="text"), j, 1)
+        fig.add_hline(y=0, line=dict(color=GRI, width=0.8), row=j, col=1)
+        fig.add_vline(x=0, line=dict(color=GRI, width=0.8), row=j, col=1)
+        fig.update_xaxes(title_text=f"örneklem içi ({_ic(o)})", row=j, col=1)
+        fig.update_yaxes(title_text=f"dışı ({_dis(o)})", row=j, col=1)
+    g, s = ken["guvenilirlik"], ken["sira_bilesim"]
+    dis = sorted({x.split(":")[0] for x in ken.get("dislanan") or []})
+    alt = [_kunye(o), f"Her nokta bir kural–parite bileşimi, önceden kayıtlı varsayılanlar{_turetilmis_not(o)}; noktalı "
+           "çizgi: iki pencerede aynı değer",
+           f"Sıra korelasyonu (bileşimler): maliyet {vir(s['maliyet'], 2)} · brüt {vir(s['brut'], 2)}; brüt yayılımın "
+           f"sinyal payı (güvenilirlik) örneklem içinde {vir(g['is'], 2)}, dışında {vir(g['oos'], 2)}"]
+    if dis:
+        alt.append("Boş daire: " + ", ".join(adlar.BIRIM[b][1] for b in dis)
+                   + f" (örneklem dışında {vir(int(o['kunye']['uygulama_esik']['rastgele']), 0)} işlemden az; "
+                     "korelasyon ve güvenilirliğe girmez)")
+    bas = baslik_koy(fig, "Örneklemden örnekleme ne taşındı — maliyet evet, brüt hayır", alt)
+    so._yaz(fig, "neden-kenar.html", yukseklik(bas, 760))
+
+
+def neden_sans(o: dict) -> None:
+    """Kenarsız bir dünyada örneklem dışında net artı çıkan bileşim sayısının dağılımı ve gözlenen sayı."""
+    s = _bs(o)["sans"]
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.2,
+                        subplot_titles=("Önceden kayıtlı varsayılanlar", "Örneklem içinde seçilen kombinasyonlar"))
+    for j, an in ((1, "varsayilan"), (2, "secilen")):
+        v = s[an]
+        d = v["dagilim"]
+        son = max([i for i, p in enumerate(d) if p >= 1e-3] + [v["gozlenen"]]) + 1
+        d = d[:son + 1]
+        k = list(range(len(d)))
+        fig.add_trace(go.Bar(x=k, y=[100 * p for p in d], marker=dict(color=[CLARET if i == v["gozlenen"] else "#c9c4ba"
+                                                                              for i in k]),
+                             showlegend=False,
+                             hovertext=[f"{i} bileşim: olasılık {so.yuzde(100 * p, 1)}" for i, p in zip(k, d)],
+                             hoverinfo="text"), j, 1)
+        fig.add_vline(x=v["beklenen"], line=dict(color=MUREKKEP, width=1, dash="dot"), row=j, col=1)
+        fig.add_annotation(x=v["gozlenen"], y=100 * d[v["gozlenen"]], text=f"gözlenen {v['gozlenen']}", showarrow=True,
+                           arrowhead=0, ax=30, ay=-24, font=dict(size=11, color=CLARET), row=j, col=1)
+        fig.update_yaxes(title_text="olasılık (%)", row=j, col=1)
+        fig.update_xaxes(range=[-0.6, len(d) - 0.4], row=j, col=1)
+    fig.update_xaxes(title_text="örneklem dışında net artı çıkan bileşim sayısı", row=2, col=1)
+    v, w = s["varsayilan"], s["secilen"]
+    bas = baslik_koy(fig, "Şansın beklediği — kenarsız dünyada kaç bileşim artı çıkardı",
+                     [_kunye(o), f"Örneklem dışı ({_dis(o)}): brüt sonuç sıfır olsaydı her bileşimin artı çıkma olasılığı "
+                      "Φ(−maliyet / standart hata); sayı bu olasılıkların toplamı gibi dağılır",
+                      f"Noktalı çizgi: beklenen sayı (varsayılanlarda {vir(v['beklenen'], 1)}, seçilenlerde "
+                      f"{vir(w['beklenen'], 1)}) · kırmızı çubuk: gözlenen ({v['gozlenen']} ve {w['gozlenen']})",
+                      "Bileşimler aynı günleri paylaşır: beklenen sayı bundan etkilenmez, dağılım genişler"])
+    so._yaz(fig, "neden-sans.html", yukseklik(bas, 600))
+
+
+def neden_maliyet_esigi(o: dict) -> None:
+    """Kuralın başabaş gidiş-dönüş maliyeti (pip) ile ödediği maliyet, kural başına."""
+    h = _bs(o)["esik"]["havuz"]["oos"]
+    sira = sorted(h, key=lambda b: (h[b]["cstar"], b))
+    ad = [_kural_ad(o, b) for b in sira]
+    # Eksen, aralığı öbürlerinin dört katından geniş olan kuralın (az işlemli) aralığına göre kurulmaz: o aralık eksenin
+    # dışına taşar ve adıyla alt yazıda yazılır. Noktaların hepsi (c* ve ödenen) eksenin içindedir.
+    gen = sorted(h[b]["ust"] - h[b]["alt"] for b in sira)
+    tasan = [b for b in sira if h[b]["ust"] - h[b]["alt"] > 4 * gen[len(gen) // 2]]
+    uclar = [v for b in sira for v in (h[b]["cstar"], h[b]["odenen"])]
+    uclar += [v for b in sira if b not in tasan for v in (h[b]["alt"], h[b]["ust"])]
+    pay = 0.05 * (max(uclar) - min(uclar))
+    fig = make_subplots(rows=1, cols=1, subplot_titles=("pip / işlem (gidiş-dönüş)",))
+    fig.update_xaxes(range=[min(uclar) - pay, max(uclar) + pay])
+    fig.add_trace(go.Scatter(
+        x=[h[b]["cstar"] for b in sira], y=ad, mode="markers", name="başabaş maliyeti c* ve %95 aralığı",
+        marker=dict(symbol="diamond", size=9, color=MUREKKEP),
+        error_x=dict(type="data", symmetric=False, array=[h[b]["ust"] - h[b]["cstar"] for b in sira],
+                     arrayminus=[h[b]["cstar"] - h[b]["alt"] for b in sira], color=GRI, thickness=1.2),
+        hovertext=[f"{a}: c* {vir(h[b]['cstar'], 2)} pip · %95 [{vir(h[b]['alt'], 2)}, {vir(h[b]['ust'], 2)}] · ödenen "
+                   f"{vir(h[b]['odenen'], 2)} pip" for b, a in zip(sira, ad)], hoverinfo="text"), 1, 1)
+    fig.add_trace(go.Scatter(x=[h[b]["odenen"] for b in sira], y=ad, mode="markers", name="ödenen maliyet",
+                             marker=dict(symbol="x-thin", size=10, color=CLARET, line=dict(width=2, color=CLARET)),
+                             hovertext=[f"{a}: ödenen {vir(h[b]['odenen'], 2)} pip" for b, a in zip(sira, ad)],
+                             hoverinfo="text"), 1, 1)
+    fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
+    bas = baslik_koy(fig, "Bir kural ne kadar maliyet kaldırır — başabaş maliyeti ve ödenen",
+                     [_kunye(o), f"Örneklem dışı ({_dis(o)}), önceden kayıtlı varsayılanlar{_turetilmis_not(o)}; "
+                      f"{_sayi_ad(len(PARITE))} paritenin işlemleri birlikte",
+                      "c* = ortalama brüt R / ortalama (1 / R'nin pip karşılığı): işlem başına sabit bir gidiş-dönüş maliyeti "
+                      "c* olsaydı net R sıfır olurdu (işlemler maliyetle değişmez sayılır)",
+                      "Aralık: brüt sonucun önceden kayıtlı bootstrap aralığından · çarpı: kuralın ödediği maliyet "
+                      "(makas + kayma); c* ödenenin solundaysa kural kaybettirir"]
+                     + ([" · ".join(f"{_kural_ad(o, b)}: aralık {vir(h[b]['alt'], 1)} / {vir(h[b]['ust'], 1)} pip, eksenin "
+                                    f"dışına taşar ({vir(h[b]['n'], 0)} işlem)" for b in tasan)] if tasan else []))
+    so._yaz(fig, "neden-maliyet-esigi.html", yukseklik(bas, 90 + 26 * len(sira)))
+
+
+def neden_ay_sonu(o: dict) -> None:
+    """Fiksing momentumunun ay sonu alt kümesi: parite × pencere (bugünkü ve eski ay sonu tanımı), GBP/USD yıl yıl."""
+    a = _bs(o)["ay_sonu"]
+    # Eski tanımın kaydı ailenin bütün üyelerini taşır (fiksing dönüşü dahil): anahtar kural + parite + biçimdir.
+    eski = {(u["birim"], u["cift"], u["kim"]): u
+            for u in (((o.get("karsi_olgu") or {}).get("ay_sonu_alt_kume") or {}).get("uye") or []) if u.get("ay_sonu")}
+    sira = [c for c in PARITE if c in a["parite"]]
+    pen = (("is", f"{_ic(o)}"), ("oos", f"{_dis(o)}"))
+    satir = [(c, d, f"{PARITE[c]} · {et}") for c in sira for d, et in pen]
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.16, row_heights=[0.58, 0.42],
+                        subplot_titles=("Ay sonu · net R ve %95 aralığı",
+                                        f"{PARITE.get('GBPUSD', 'GBP/USD')} · yıl yıl net R"))
+    y = [s[2] for s in satir][::-1]
+    v = {s[2]: a["parite"][s[0]][s[1]]["ay_sonu"] for s in satir}
+    fig.add_trace(go.Scatter(
+        x=[v[k]["net"] for k in y], y=y, mode="markers", name="net (bugünkü tanım: ayın son Londra iş günü)",
+        marker=dict(size=9, color=[MAVI if v[k]["alt"] > 0 else (MUREKKEP if v[k]["net"] > 0 else CLARET) for k in y]),
+        error_x=dict(type="data", symmetric=False, array=[v[k]["ust"] - v[k]["net"] for k in y],
+                     arrayminus=[v[k]["net"] - v[k]["alt"] for k in y], color=GRI, thickness=1.2),
+        hovertext=[f"{k}: net {_r(v[k]['net'], 3)} R · %95 [{_r(v[k]['alt'], 3)}, {_r(v[k]['ust'], 3)}] · brüt "
+                   f"{_r(v[k]['brut'], 3)} R · {vir(v[k]['n'], 0)} ay sonu" for k in y], hoverinfo="text"), 1, 1)
+    fig.add_trace(go.Scatter(x=[v[k]["brut"] for k in y], y=y, mode="markers", name="brüt (orta fiyattan)",
+                             marker=dict(symbol="circle-open", size=9, color=GRI, line=dict(width=1.5, color=GRI)),
+                             hoverinfo="skip"), 1, 1)
+    ex, ey = [], []
+    for c, d, et in satir:
+        u = eski.get(("fiks_momentum", c, "varsayilan"))
+        if u:
+            ex.append(u["ay_sonu"][d]["beklenti_r"])
+            ey.append(et)
+    if ex:
+        fig.add_trace(go.Scatter(x=ex, y=ey, mode="markers", name="net, eski tanımla (ayın son hafta içi günü)",
+                                 marker=dict(symbol="x-thin", size=10, color=TURUNCU, line=dict(width=2, color=TURUNCU)),
+                                 hovertext=[f"{k}: eski tanımla net {_r(x, 3)} R" for x, k in zip(ex, ey)],
+                                 hoverinfo="text"), 1, 1)
+    fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9), row=1, col=1)
+    gy = a["parite"].get("GBPUSD", {}).get("yil") or {}
+    yillar = sorted(gy)
+    fig.add_trace(go.Bar(x=yillar, y=[gy[k] for k in yillar], showlegend=False,
+                         marker=dict(color=[RENK.get("GBPUSD", CLARET) if gy[k] > 0 else "#c9c4ba" for k in yillar]),
+                         hovertext=[f"{k}: {_r(gy[k], 3)} R" for k in yillar], hoverinfo="text"), 2, 1)
+    fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.8), row=2, col=1)
+    fig.update_xaxes(type="category", row=2, col=1)
+    k_ = o["kunye"]
+    bas = baslik_koy(fig, "Ay sonu fiksingi — tek aday, dört paritede",
+                     [_kunye(o), "Fiksing momentumu, önceden kayıtlı varsayılan; yalnız ayın son Londra iş günündeki işlemler "
+                      "(ayda bir işlem) · aralık: önceden kayıtlı bootstrap",
+                      "Mavi: aralığın alt ucu sıfırın üstünde · siyah: net artı, aralık sıfırı kapsıyor · kırmızı: net eksi",
+                      f"Çarpı: ay sonunun eski tanımı (ayın son hafta içi günü); iki tanım İngiltere tatiline denk gelen "
+                      f"{vir(len(k_.get('ay_sonu_kayan') or []), 0)} ayda ayrışır",
+                      f"Alt panel: {so.tarih(k_['baslangic'])}–{so.tarih(k_['bitis'])}; son yıl eksik"])
+    so._yaz(fig, "neden-ay-sonu.html", yukseklik(bas, 640))
+
+
+def neden_guc(o: dict) -> None:
+    """İleriye dönük bir sınamanın gücü: net etkiye göre gereken süre (ayda bir işlem), iki düzeyde."""
+    g = _bs(o)["guc"]
+    e = g["egri"]
+    k_ = o["kunye"]
+    gb = g["gbp"]
+    aile = _bs(o)["ay_sonu"]["aile"]["n"]
+    fig = make_subplots(rows=1, cols=1, subplot_titles=("Gereken süre (yıl)",))
+    fig.add_trace(go.Scatter(x=[p["mu"] for p in e], y=[p["yil"] for p in e], mode="lines", name="tek yönlü %5 düzey",
+                             line=dict(color=MUREKKEP, width=2),
+                             hovertext=[f"etki {_r(p['mu'], 3)} R: {vir(p['yil'], 1)} yıl" for p in e], hoverinfo="text"),
+                  1, 1)
+    fig.add_trace(go.Scatter(x=[p["mu"] for p in e], y=[p["yil_esik"] for p in e], mode="lines",
+                             name=f"aile düzeyi (%5 / {vir(aile, 0)}, iki yönlü)",
+                             line=dict(color=MUREKKEP, width=1.4, dash="dash"),
+                             hovertext=[f"etki {_r(p['mu'], 3)} R: {vir(p['yil_esik'], 1)} yıl" for p in e],
+                             hoverinfo="text"), 1, 1)
+    # Noktalar lejantta adlarıyla (ölçülen ile büzülmüş etki birbirine çok yakın: yazı etiketi eğriye ve birbirine biner).
+    ad = (("gozlenen", "ölçülen etki", "circle"), ("buzulmus", "büzülmüş etki", "square"),
+          ("yari", "yarı etki", "diamond"))
+    for k, a, sembol in ad:
+        v = gb["senaryo"].get(k)
+        if not v:
+            continue
+        fig.add_trace(go.Scatter(x=[v["mu"]], y=[v["yil"]], mode="markers",
+                                 name=f"{a}: {vir(v['mu'], 2)} R → {vir(v['yil'], 1)} yıl",
+                                 marker=dict(size=9, symbol=sembol, color=RENK.get("GBPUSD", CLARET),
+                                             line=dict(width=1, color="white")),
+                                 hovertext=[f"{a}: {_r(v['mu'], 3)} R → {vir(v['yil'], 1)} yıl (aile düzeyinde "
+                                            f"{vir(v['yil_esik'], 1)} yıl)"], hoverinfo="text"), 1, 1)
+    seri = (datetime.fromisoformat(k_["bitis"]) - datetime.fromisoformat(k_["baslangic"])).days / 365.25
+    fig.add_hline(y=seri, line=dict(color=GRI, width=1, dash="dot"))
+    # Kısa etiket solda, çizginin altında: o bölgede eğri yok, noktalar sağda (uzun yazı noktalara biniyordu).
+    fig.add_annotation(x=e[0]["mu"], y=math.log10(seri), text=f"seri: {vir(seri, 1)} yıl",
+                       showarrow=False, xanchor="left", yanchor="top", font=dict(size=11, color=GRI))
+    cizgi = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000]
+    fig.update_yaxes(type="log", tickvals=cizgi, ticktext=[vir(v, 0) for v in cizgi], title_text="yıl")
+    # Yatay eksenin başlığı alt yazıda: ev stilinin alt lejantına biniyordu (haber_fomc ile aynı).
+    bas = baslik_koy(fig, "Bir etkiyi görmek ne kadar sürer — ayda bir işlemle",
+                     [f"{PARITE.get('GBPUSD', 'GBP/USD')} ay sonu fiksingi örneği: ayda bir işlem; işlem başına standart sapma "
+                      f"{vir(gb['sd'], 2)} R (bütün dönem) · yatay eksen: gerçek net etki (R / işlem), dikey: logaritmik",
+                      "%80 güç: gerçek etki bu büyüklükteyse sınamanın onu sıfırdan ayırma olasılığı %80; n = ((z düzey + "
+                      "z güç) × σ / etki)², süre = n / 12",
+                      f"Kesikli: {vir(aile, 0)} biçimlik ailenin Bonferroni düzeyi · noktalar: ölçülen etki, ampirik Bayes "
+                      "büzülmesinden sonraki etki ve yarıya inmiş etki · noktalı çizgi: bu serinin uzunluğu "
+                      f"({so.tarih(k_['baslangic'])}–{so.tarih(k_['bitis'])})"])
+    so._yaz(fig, "neden-guc.html", yukseklik(bas, 470))
+
+
+NEDEN_SEKILLERI = (neden_basabas, neden_anatomi, neden_olcek, neden_kenar, neden_sans, neden_maliyet_esigi,
+                   neden_ay_sonu, neden_guc)
+
+
 def main(argv: list[str]) -> int:
     if go is None:
         print("plotly yok: figürler çizilemez (kapı yolu bundan etkilenmez)")
@@ -1243,7 +1587,7 @@ def main(argv: list[str]) -> int:
         for f in BIRIM_SEKILLERI:
             f(o, b)
     if not argv:
-        for f in (karsilastirma, maliyet, rastgele, veri, haber_patika, haber_fomc):
+        for f in (karsilastirma, maliyet, rastgele, veri, haber_patika, haber_fomc) + NEDEN_SEKILLERI:
             f(o)
     return so.ev_stili(so.YAZILAN)
 

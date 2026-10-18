@@ -44,6 +44,7 @@ Bu ders makinenin kendisidir. Sonraki dersler buradaki tanımları tekrar etmez:
 | 6 · Akış | gün içi akışın yönü | fiksing momentumu, gün içi momentum, VWAP geri çekilmesi |
 | 7 · Karşılaştırma | stratejiler yan yana | sonuç, maliyet, ilinti, hangi koşulda hangisi |
 | 8 · Metodoloji | sınamanın kendisi | önceden kayıt, seçim, sağlamlık, veri ve takvim denetimi, ölçülmeyenler |
+| 9 · Neden başarısız oluyorlar | kayıp nereden geliyor, bir kural hangi şartla kullanılabilir | başabaş isabeti, kaybın ayrışımı, ölçek, şans ve seçim, başabaş maliyeti, ay sonu fiksingi, güç ve sınama planı |
 
 Kurallar ölçtükleri bahse göre gruplandı: devam bahsi yapanlar kırılım derslerinde, dönüş bahsi yapanlar fade
 dersinde, belirli bir saatin akışına bahis yapanlar akış dersinde. Bu yüzden pivot kırılımı yapı kırılımlarında,
@@ -263,7 +264,7 @@ zamanlama mı" sorusunu ayırır: yazı turayla aynı saatte girmek aynı sonucu
 değeri yoktur.
 
 **Çoklu sınama.** Bir ızgara onlarca kombinasyon dener; en iyisinin örneklem içi Sharpe'ı şans eseri yüksek
-olabilir. **Deflated Sharpe** (Bailey ve López de Prado) en iyi kombinasyonun Sharpe'ını, aynı sayıda denemenin şansla
+olabilir. **Deflated Sharpe** (Bailey ve López de Prado, 2014) en iyi kombinasyonun Sharpe'ını, aynı sayıda denemenin şansla
 üreteceği en yüksek Sharpe'a göre düzeltir. Eşik iki biçimde kurulur: yalnız örnekleme gürültüsünden (her deneme
 sıfır kenarlı olsaydı) ve denemelerin kendi Sharpe yayılımından (Bailey–López de Prado'nun önerisi); ikisi birlikte
 yazılır. **Yürüyen pencere** her yılı yalnız önceki yılların verisiyle seçip o yılda
@@ -310,6 +311,7 @@ hareketiyle birbirine bağlıdır.
 | R | İşlemin planlanan riski: yürütülen girişten stopa uzaklık. Sonuçlar R'nin katı olarak yazılır. |
 | Net / brüt | Net: yürütülebilir fiyatlarla, makas ve kayma dahil. Brüt: orta fiyattan orta fiyata. |
 | İsabet | Kazanan işlemlerin payı. Tek başına bir şey söylemez: %30 isabetle de para kazanılır, %70 isabetle de kaybedilir. |
+| Başabaş isabeti | İşlem başına beklentiyi sıfırlayan isabet: ortalama kaybın büyüklüğü / (ortalama kazanç + ortalama kaybın büyüklüğü). İsabetin ondan uzaklığı beklentinin işaretini taşır. |
 | Kâr çarpanı (R) | Kazanılan R toplamının kaybedilen R toplamına oranı; hükmün birimi. 1'in altı, her işlemi riskine göre ölçekleyen birine kaybettirir. |
 | Kâr çarpanı (pip) | Aynı oran pip ile; her işlemde aynı büyüklükle işlem yapanın sonucu. İkisi ayrışabilir (yukarıda, "R ve pip"). |
 | Sharpe | Günlük R serisinin ortalamasının standart sapmasına oranı, yıllıklandırılmış (×√252). Seri dönemin bütün tatil dışı FX işlem günlerini taşır; işlem açılmayan gün sıfırdır, bu yüzden seyrek işlem açan kuralların (haber kuralları) Sharpe'ı çoğunlukla sıfır günlerden oluşan bir seriden gelir. |
@@ -318,10 +320,12 @@ hareketiyle birbirine bağlıdır.
 | Örneklem içi / dışı | Parametrenin seçildiği dönem / seçimin sınandığı dönem. |
 | Önceden kayıt | Kuralın, ızgaranın ve hüküm ölçütünün sonuç görülmeden yazılıp kayda geçirilmesi. |
 | Rastgele yön sınaması | Aynı giriş dakikası, aynı risk uzaklığı ve aynı çıkış kuralıyla, yönü yazı turayla seçen denemelerin dağılımı. |
+| Ayna işlem | Gerçek işlemle aynı dakikada ters yönde açılan, stopu ve hedefi girişe aynı R uzaklığında duran işlem; rastgele yön sınamasının ters yönlü yarısı. Kaybı yön, zamanlama ve maliyet paylarına ayırır. |
 | Deflated Sharpe | Çok sayıda kombinasyon denenmişken en iyisinin Sharpe'ının şans payından arındırılmış olasılığı; eşik iki biçimde (örnekleme gürültüsü · denemelerin yayılımı). |
 | Yürüyen pencere | Her yılı yalnız önceki yıllarla seçip o yılda sınamak. |
 | Makas | Ask − bid; işlemin girişte ve çıkışta ödediği gerçek maliyet. |
 | Kayma | Makasın ötesinde kötüleşen dolum; bir varsayımdır, kademelerle ölçülür. |
+| Başabaş maliyeti | Kuralın işlem başına kaldırabildiği en yüksek gidiş-dönüş maliyeti (pip): ortalama brüt R / ortalama (1 / R'nin pip karşılığı). |
 | Başabaş kayma | İşlem başına net R'yi sıfıra indiren dolum başına temel kayma (haber penceresinin ek kayması sabit); bütün dönem ve 2024 → ayrı. Brüt artı değilse yoktur ("orta fiyattan bile eksi"); yalnız makasla bile eksiyse makasın payıyla yazılır ("makas ≤ %X"). |
 | Ölçülemedi | Örneklem dışında işlem yok; hüküm verilemez. |
 | Zaman hedefi | Girişten sabit sayıda mum sonra piyasa emriyle çıkış (stop açık kalır, gün sonunu aşmaz). |
@@ -331,6 +335,10 @@ hareketiyle birbirine bağlıdır.
 | Benjamini–Hochberg q | Çok sayıda sınamada yanlış keşif oranını denetleyen düzeltilmiş p değeri. |
 | McNemar | Aynı gözlemlerde (ör. aynı kural–parite bileşimlerinde) iki ikili sonucun (ör. gerçek ve ters seçimin tuttu/tutmadı) farkını sınayan kesin sınama. |
 | Binom sınaması | Bir olayın görülme sayısının, belirli bir olasılıkla şansın beklediğinden fazla olup olmadığı. |
+| Güvenilirlik | Bileşimler arasındaki farkların örnekleme gürültüsü olmayan payı: (gözlenen varyans − ortalama örnekleme varyansı) / gözlenen varyans. |
+| Kazananın laneti | Bir eşikten geçtiği için seçilen bir etkinin gerçek büyüklüğünden büyük ölçülmesi; seçilen sonuç gelecekte ortalamaya doğru döner. |
+| Güç | Gerçek bir etki varken sınamanın onu görme olasılığı. |
+| En küçük görülebilir etki | Belirli bir işlem sayısıyla, belirli bir düzey ve güçle sıfırdan ayrılabilecek en küçük etki. |
 | HAC (Newey–West) | Komşu gözlemlerin hataları ilintiliyken de geçerli standart hata; Bartlett çekirdeği ağırlık verir. |
 | Pip | {{! pip_tanimi }}. |
 | TSİ | Türkiye saati, yıl boyu UTC+3. |
@@ -341,3 +349,7 @@ Bu seri bir sinyal servisi değildir ve **yatırım tavsiyesi değildir**. Ölç
 sonuçlar gelecekteki sonuçların göstergesi değildir. Sınanan kurallar yayımlanmış ya da yaygın biçimleriyle,
 tek tek ve mekanik olarak ölçüldü: bir masanın bu kuralları takdirle, başka bilgiyle ve başka risk yönetimiyle
 kullanması ayrı bir şeydir ve burada ölçülmedi.
+
+## Kaynaklar
+
+{{! kaynaklar fx-gunici-giris }}

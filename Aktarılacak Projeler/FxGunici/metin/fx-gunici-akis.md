@@ -68,5 +68,9 @@ tablonun okunuşu "hangisi daha az kaybediyor" değil, "maliyetten önce bir yö
 
 </div>
 
+## Kaynaklar
+
+{{! kaynaklar fx-gunici-akis }}
+
 _Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
 değildir._

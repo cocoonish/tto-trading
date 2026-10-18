@@ -56,5 +56,9 @@ merdiveni, rastgele yön sınaması, yıl ve oynaklık rejimleri, giriş saatine
 
 </div>
 
+## Kaynaklar
+
+{{! kaynaklar fx-gunici-seans-kirilimlari }}
+
 _Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
 değildir._

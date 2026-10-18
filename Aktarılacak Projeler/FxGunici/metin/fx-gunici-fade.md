@@ -69,5 +69,9 @@ Kırılım dersleriyle aynı seviyelerin iki tarafı yan yana:
 
 </div>
 
+## Kaynaklar
+
+{{! kaynaklar fx-gunici-fade }}
+
 _Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
 değildir._

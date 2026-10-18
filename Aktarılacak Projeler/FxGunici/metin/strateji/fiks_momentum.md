@@ -46,9 +46,20 @@ başına {{ H.oos.brut_r | ra }} R, sonra {{ H.oos.beklenti_r | ra }} R.
 
 {{! ay_sonu }}
 
-Ay sonu, portföy yeniden dengelemesinin fiksinge en büyük akışı taşıdığı gün olarak bilinir (Melvin ve Prins,
-2015) ve momentum savunusu en çok o gün için kurulur. Örneklem küçüktür: EUR/USD'de ay sonu kümesi 2018–2023
+Uluslararası hisse portföylerinin kur koruma işlemleri Londra fiksinginde yoğunlaşır ve hisse piyasasının ay içindeki
+değer artışı, ay sonu fiksinginden önceki kur değer kaybını öngörür (Melvin ve Prins, 2015); momentum savunusu en çok
+ay sonu için kurulur. Örneklem küçüktür: EUR/USD'de ay sonu kümesi 2018–2023
 arasında {{ E.varsayilan.ay_sonu.ay_sonu.is.n | n }}, 2024 → penceresinde {{ E.varsayilan.ay_sonu.ay_sonu.oos.n | n }} işlem. {{! ay_sonu_cumle }}
+
+<div class="not">
+  <span class="etiket">Düzeltme · 18.10.2026 — kaynak atfı</span>
+  Bu paragraf ay sonunu, Melvin ve Prins'e (2015) dayanarak, "portföy yeniden dengelemesinin fiksinge en büyük akışı
+  taşıdığı gün" diye tanımlıyordu. Çalışma akışlar arasında bir büyüklük sıralaması vermez: kur koruma işlemlerinin
+  fiksingde yoğunlaştığını ve ay sonu fiksinginden önceki kur hareketinin ayın hisse getirilerinden öngörülebildiğini
+  gösterir. Ölçümler ve hükümler değişmedi.
+</div>
+
+{{! ay_sonu_eski_tanim kisa }}
 
 ### Koşullar
 

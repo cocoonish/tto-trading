@@ -11,7 +11,7 @@ takvim_kur.main okumadan önce çağırır). Takvim veri denetiminden ÖNCE kuru
 takvimi okur ve eski bir takvimle ölçmemelidir.
 
 Adımlardan biri düşerse SONRAKİ adımlar koşmaz. Son dört adım (ölçüm → şekiller → ders metinleri → kapı) tek bir
-yayın katmanı yazar (YAYIN_YOLLARI: ölçüm dosyası, figür dizini, sekiz ders); o katman ölçüm adımından önce yedeklenir
+yayın katmanı yazar (YAYIN_YOLLARI: ölçüm dosyası, figür dizini, serinin dersleri); o katman ölçüm adımından önce yedeklenir
 ve dört adımdan biri düşerse yedek geri konur. Yani yarım bir yayın katmanı (yeni ölçüm ve yeni figürlerle eski dersler)
 diskte kalmaz; düşüşten sonra katman, zincir başlamadan önceki hâlidir. Daha önceki adımların çıktısı (takvim, veri
 denetimi, koşu, karşı olgu) geri alınmaz: onlar yayın katmanının girdisidir ve bir sonraki koşu onları baştan yazar.
@@ -78,8 +78,8 @@ YAYIN_ILK = "ölçüm"
 
 
 def yayin_yollari() -> list[Path]:
-    """Yayın katmanının dosyaları: ölçüm dosyası, figür dizini (sekil.py ve ders_yaz.py'nin ön kayıt kopyası) ve sekiz
-    ders. Liste ders sırasından (adlar.DERS_SIRA) kurulur; elle tutulan bir ders listesi yeni bir dersi dışarıda bırakırdı."""
+    """Yayın katmanının dosyaları: ölçüm dosyası, figür dizini (sekil.py ve ders_yaz.py'nin ön kayıt kopyası) ve serinin
+    dersleri. Liste ders sırasından (adlar.DERS_SIRA) kurulur; elle tutulan bir ders listesi yeni bir dersi dışarıda bırakırdı."""
     import adlar
     icerik = KOK / "site" / "src" / "content" / "arastirma"
     return ([BURASI / "cikti" / "ders" / "olcum.json", KOK / "site" / "public" / "arastirma" / "fx-gunici"]

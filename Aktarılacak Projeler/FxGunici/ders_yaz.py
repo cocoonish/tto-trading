@@ -3,11 +3,11 @@
 """Ders metinleri: metin/<slug>.md şablonlarını ölçüm dosyasıyla MDX'e çevirir ve siteye yazar.
 
 Çıktı:
-  site/src/content/arastirma/<slug>.mdx            sekiz ders (adlar.DERS_SIRA)
+  site/src/content/arastirma/<slug>.mdx            serinin dersleri (adlar.DERS_SIRA)
   site/public/arastirma/fx-gunici/onkayit.toml     ön kaydın yayımlanan kopyası (metodoloji dersi bağ verir)
 
 Sayıların hepsi ölçüm dosyasından gelir. Bir şablonda bir iddia tutmazsa, bir yer tutucu ölçülemezse ya da bir
-dersin gömdüğü figür sitede yoksa üretim düşer ve HİÇBİR dosya yazılmaz: sekiz ders aynı ölçümün sekiz görünüşüdür,
+dersin gömdüğü figür sitede yoksa üretim düşer ve HİÇBİR dosya yazılmaz: serinin dersleri aynı ölçümün görünüşleridir,
 yarısı yeni yarısı eski bir seri yayımlanmaz.
 
 Koşum:  .venv/bin/python ders_yaz.py [--olcum <yol>] [--denetle]

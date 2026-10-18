@@ -313,7 +313,7 @@ bugünkü hâliyle). Sıra hükme yakınlığa göredir.
 - **Ay sonu** ({{! karsi_olgu_zaman ay_sonu }}). Önce: ayın son hafta içi günü. Bugün: ayın son Londra iş günü
   (ön kaydın tanımı); ikisinin ayrıştığı aylar, son hafta içi gününün bir İngiltere tatiline düştüğü aylardır:
   {{ K.ay_sonu_kayan | ay_liste }}. Tanımın iki tüketicisi var: fiksingin ay sonu ayrımı ve her kuralın "ay sonu"
-  koşul değişkeni. Etkisi: {{! karsi_olgu ay_sonu }}
+  koşul değişkeni. Etkisi: {{! karsi_olgu ay_sonu }} {{! ay_sonu_eski_tanim }}
 - **Tatil** ({{! karsi_olgu_zaman tatil }}). Önce: kotasyonlu dakikaları günün yarısından az olan gün tatil
   sayılırdı. Bugün: takvimden (hafta içine düşen 25 Aralık ve 1 Ocak, örneklemin iki kenarında baştan sona
   kapsanmayan gün); günün kapsamı gün bitmeden bilinemez. Etkisi: iki tanım dört paritede de aynı günleri verir,
@@ -511,6 +511,10 @@ açık 1 dakikalık bid/ask beslemesidir ve dönemi yukarıdaki tablodadır; ola
 bölümünde tek tek yazılıdır; yürütme ve maliyet kuralları yukarıdadır; kuralların, ızgaraların ve hüküm kuralının
 tam metni yayımlanan ön kayıttadır ve dosyanın özü yukarıdadır. Ölçüm deterministtir: aynı veri ve aynı kurallarla
 her koşu aynı işlemleri ve aynı sayıları verir (bootstrap ve rastgele yön sabit tohumludur).
+
+## Kaynaklar
+
+{{! kaynaklar fx-gunici-metodoloji }}
 
 _Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
 değildir._
