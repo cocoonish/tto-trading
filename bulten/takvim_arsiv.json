@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-16",
+ "_son_guncelleme": "2026-10-18",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1261,6 +1261,16 @@
    "beklenti": "gelecek çeyreğin ihraç kompozisyonu ve geri alım büyüklükleri burada ilan edilir",
    "beklenti_sayi": null,
    "gorulme": "2026-10-14"
+  },
+  "2026-11-05|BDDK: Bankacılık sektörü (44. Hafta 2026)": {
+   "tarih": "2026-11-05",
+   "olay": "BDDK: Bankacılık sektörü (44. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-18"
   },
   "2026-11-05|TCMB: Haftalık para-banka (44. Hafta 2026)": {
    "tarih": "2026-11-05",
