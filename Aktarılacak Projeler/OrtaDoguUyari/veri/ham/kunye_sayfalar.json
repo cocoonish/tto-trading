@@ -1,0 +1,602 @@
+{
+ "kaynak/1997_2001_state_gov_1bacf30abc.html.gz": {
+  "url": "https://1997-2001.state.gov/regions/africa/sudan_afghan.html",
+  "durum": 200,
+  "bayt": 10065,
+  "sha256": "d11daad5b024373fff4e2a39db4b4fc593b35c918f96c7c644358b10f779957b",
+  "an": "2026-10-19T19:07:35+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/2009_2017_state_gov_664355d0b8.html.gz": {
+  "url": "https://2009-2017.state.gov/m/rls/remarks/2011/157173.htm",
+  "durum": 200,
+  "bayt": 61782,
+  "sha256": "836788543b60f0c02577b383571104ee2811a110638fa18190fc47fd4a37f63b",
+  "an": "2026-10-19T19:07:47+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/2009_2017_state_gov_e71511d1d0.html.gz": {
+  "url": "https://2009-2017.state.gov/r/pa/prs/ps/2011/02/155762.htm",
+  "durum": 200,
+  "bayt": 30519,
+  "sha256": "a6bd4de2d89dad9a3ba793e9068d5b1fd59e815653751f4a6f35e1c30bbd7f23",
+  "an": "2026-10-19T19:07:47+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aa_com_tr_974bdb4909.html.gz": {
+  "url": "https://www.aa.com.tr/en/middle-east/us-orders-non-emergency-staff-in-6-arab-countries-to-leave-amid-iran-war/3847583",
+  "durum": 200,
+  "bayt": 428218,
+  "sha256": "d1e8dd74dc63550d3bccc8d24b347f37913bfb7c03d8a22268536afe209be64b",
+  "an": "2026-10-19T19:05:13+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aa_com_tr_d9b4e9d1aa.html.gz": {
+  "url": "https://www.aa.com.tr/en/energy/oil/oil-prices-surge-over-4-on-reports-of-possible-new-us-strikes-on-iran/60120",
+  "durum": 200,
+  "bayt": 588345,
+  "sha256": "c3310fc53aaf9223866d6dc05c95c24a039043042d4d9dadbf9ea2b983c6a913",
+  "an": "2026-10-19T19:05:31+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/abcnews_go_com_8930cabba0.html.gz": {
+  "url": "https://abcnews.go.com/Politics/state-department-orders-emergency-government-employees-iraq/story?id=63046559",
+  "durum": 200,
+  "bayt": 210179,
+  "sha256": "74be3204dbc626a2f4f520dad245fb299e34ede3bfa5f959192f6e7675b66daa",
+  "an": "2026-10-19T19:09:32+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/ae_usembassy_gov_c7940090f2.html.gz": {
+  "url": "https://ae.usembassy.gov/security-alert-u-s-mission-united-arab-emirates-october-18-2026/",
+  "durum": 200,
+  "bayt": 158656,
+  "sha256": "b062e006b6bfca774bb32568a6de14d38b0604828722a1083cbcc6663bfaa916",
+  "an": "2026-10-19T19:10:11+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/algemeiner_com_2087064000.html.gz": {
+  "url": "https://www.algemeiner.com/2025/06/23/iran-attacks-us-base-qatar-missiles/",
+  "durum": 200,
+  "bayt": 125617,
+  "sha256": "d2a607f8ec251ecae1fcd2fc79716cddc5299a340b51640af360348bcf2cec51",
+  "an": "2026-10-19T19:09:52+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_07e216b6e5.html.gz": {
+  "url": "https://www.aljazeera.com/news/2026/10/10/attack-on-airport-in-saudi-capital-riyadh-leaves-several-injured",
+  "durum": 200,
+  "bayt": 205838,
+  "sha256": "04dbe5e2a16150f47b5bb5de5a198dfeb89d158a71f4a32b9ed7cf830004dae8",
+  "an": "2026-10-19T19:07:01+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_176c606b1a.html.gz": {
+  "url": "https://www.aljazeera.com/news/2025/6/12/us-evacuates-personnel-from-middle-east-in-sign-of-growing-regional-tension",
+  "durum": 200,
+  "bayt": 214821,
+  "sha256": "02a2205fccaefcf1f88f78d1e310fdcd0c7bf14e5e613c0e8f5e78db8a6194dd",
+  "an": "2026-10-19T19:09:48+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_3195d5f06a.html.gz": {
+  "url": "https://www.aljazeera.com/news/2026/9/8/saudi-houthi-fighting-in-yemen-escalates-what-happened-and-whats-next",
+  "durum": 200,
+  "bayt": 239363,
+  "sha256": "334ef0811ddc89c9678c00311d1e96ce34e661411dfb853eb6395998f69648ab",
+  "an": "2026-10-19T19:05:22+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_3bd6168cb1.html.gz": {
+  "url": "https://aljazeera.com/news/2026/4/7/trump-suspends-iran-bombing-for-two-weeks-following-dire-threats",
+  "durum": 200,
+  "bayt": 227931,
+  "sha256": "96fc70c499b9a0a984e289d50c1503d144a7961d447620e4a58cfeef3b579c0f",
+  "an": "2026-10-19T19:05:21+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_4d27ac6d50.html.gz": {
+  "url": "https://www.aljazeera.com/news/2026/10/7/saudi-arabia-says-three-foreign-nationals-killed-in-attacks-on-airports",
+  "durum": 200,
+  "bayt": 191951,
+  "sha256": "c9c83263c95c09d6d587b451cfa4b6e5f0954f9c29677f0766262a3bbb7ed43f",
+  "an": "2026-10-19T19:05:27+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_86ad11b568.html.gz": {
+  "url": "https://www.aljazeera.com/news/2026/2/23/us-orders-non-emergency-personnel-to-leave-beirut-embassy-amid-tensions",
+  "durum": 200,
+  "bayt": 206009,
+  "sha256": "7594d4d900a060ea044df4c4fbe6dfb563f03a4a3626e3aafefc8606a3d1a110",
+  "an": "2026-10-19T19:05:17+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_a4232e20b7.html.gz": {
+  "url": "https://www.aljazeera.com/news/2026/3/3/us-urges-citizens-to-immediately-leave-over-a-dozen-middle-east-countries",
+  "durum": 200,
+  "bayt": 203900,
+  "sha256": "26dc687a3fb04ed7f950ea053a3de170573d0e1f258fb6eda51b3fd7ab27a80e",
+  "an": "2026-10-19T19:05:17+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/aljazeera_com_f96bead888.html.gz": {
+  "url": "https://www.aljazeera.com/news/2026/10/9/trump-says-us-will-not-strike-iran-before-midterm-elections",
+  "durum": 200,
+  "bayt": 213513,
+  "sha256": "94b787703b15a0e2b3e62501d47500e9f7cdc843d8d25b74e72b0c3d722d1369",
+  "an": "2026-10-19T19:07:00+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/avalon_law_yale_edu_f5cbdd498c.html.gz": {
+  "url": "https://avalon.law.yale.edu/sept11/state_dept_brief020.asp",
+  "durum": 200,
+  "bayt": 68664,
+  "sha256": "7ef47681f13190af6bb51d1fa4f1ea6b64a8e17838e8eb7cfd97b664154ce587",
+  "an": "2026-10-19T19:07:42+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/benzinga_com_dc27958b51.html.gz": {
+  "url": "https://www.benzinga.com/markets/prediction-markets/26/02/50742807/when-will-us-strike-iran-prediction-market-is-betting-on-a-strike-on-the-islamic-republic-by-this-date",
+  "durum": 200,
+  "bayt": 1084880,
+  "sha256": "e95a2b772e95cae38312ebe992124345627511bd83d1e2d1556170c226141a7c",
+  "an": "2026-10-19T19:07:23+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/bh_usembassy_gov_d2ddff57d9.html.gz": {
+  "url": "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-october-18-2026/",
+  "durum": 200,
+  "bayt": 155883,
+  "sha256": "f053852dd3fc56c3774926404f51d75ac2ddfd9950017650db507ab03b77ede6",
+  "an": "2026-10-19T19:10:11+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/breitbart_com_df53d1ecc5.html.gz": {
+  "url": "https://www.breitbart.com/politics/2026/10/18/iran-threatens-trump-netanyahu-endorsement-try-your-luck/",
+  "durum": 200,
+  "bayt": 117211,
+  "sha256": "e643f828e833b8ef78256343bdca8e34420a481bb6313249f947c5dc4c2120e9",
+  "an": "2026-10-19T19:07:03+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnbc_com_0789fc502b.html.gz": {
+  "url": "https://www.cnbc.com/2026/10/02/us-iran-war-trump-hormuz-.html",
+  "durum": 200,
+  "bayt": 791059,
+  "sha256": "3971c329ea4d440947dca861b40924bc6e047089e6dc0cf4909d5f9bab31877d",
+  "an": "2026-10-19T19:05:25+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnbc_com_4d2f0bcaed.html.gz": {
+  "url": "https://www.cnbc.com/2026/10/01/oil-prices-today-wti-brent.html",
+  "durum": 200,
+  "bayt": 832178,
+  "sha256": "9db41c4f008e852bf172d34ef8c293d611cd07620c03f83acce99c3fcee2d561",
+  "an": "2026-10-19T19:05:26+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnbc_com_8cd1b36248.html.gz": {
+  "url": "https://www.cnbc.com/2020/01/03/us-embassy-urges-americans-to-flee-iraq-immediately.html",
+  "durum": 200,
+  "bayt": 814186,
+  "sha256": "1e59f872c851645d9b344b9866ffed58f50a6fd77cee6aff29bd5de018f3f203",
+  "an": "2026-10-19T19:09:35+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnbc_com_c429bdf7df.html.gz": {
+  "url": "https://www.cnbc.com/2026/08/03/kalshi-traders-are-not-expecting-a-us-and-iran-nuclear-deal-soon.html",
+  "durum": 200,
+  "bayt": 773437,
+  "sha256": "da5befda82a44af91316365b1281fb49a132702d90ef5ed5bd313ddbf883c7c3",
+  "an": "2026-10-19T19:07:10+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnn_com_0d38f9ff8d.html.gz": {
+  "url": "https://www.cnn.com/2026/10/15/politics/us-considering-mother-of-all-bombs-iran",
+  "durum": 200,
+  "bayt": 4822568,
+  "sha256": "b1c78b82ac2f31829594af414b7d03a796a6733cf420fb33508e3dc12a920c15",
+  "an": "2026-10-19T19:07:08+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnn_com_1cd7e1f0f1.html.gz": {
+  "url": "https://www.cnn.com/2026/10/08/middleeast/riyadh-airport-houthis-explosion-intl",
+  "durum": 200,
+  "bayt": 4767697,
+  "sha256": "e4e9c12b7c4fde398e27d9809559a50d47ba9a5cb9e9ef7771f16f3dc96b66ad",
+  "an": "2026-10-19T19:07:00+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnn_com_4f9ba19018.html.gz": {
+  "url": "https://www.cnn.com/2013/08/03/politics/embassies-list/index.html",
+  "durum": 200,
+  "bayt": 4662021,
+  "sha256": "6de3a726058136265693ac76a59a6f046d9d5336b1f03b50f2afd9a5b93c1f49",
+  "an": "2026-10-19T19:07:49+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/cnn_com_e8703ba64d.html.gz": {
+  "url": "https://www.cnn.com/2013/08/04/politics/us-embassies-close/index.html",
+  "durum": 200,
+  "bayt": 4847178,
+  "sha256": "e6dc277ae5b476618aaa46255e189cc820780917c4f36ba0cb0b03f7a60208ac",
+  "an": "2026-10-19T19:07:50+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/coindesk_com_4c2825afdf.html.gz": {
+  "url": "https://www.coindesk.com/markets/2025/06/17/polymarket-odds-on-us-military-action-against-iran-slide-as-trump-team-proposes-tehran-talks",
+  "durum": 200,
+  "bayt": 665484,
+  "sha256": "e3c964724e63f16e92ffc719011fa3feb18da3eb09deb61f2e5ef4d546735c8d",
+  "an": "2026-10-19T19:07:19+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/congress_gov_03c54a9300.pdf.gz": {
+  "url": "https://www.congress.gov/crs_external_products/R/PDF/R48887/R48887.1.pdf",
+  "durum": 200,
+  "bayt": 704419,
+  "sha256": "c31812840cfacb6efd223eaa66240859e2950e37362d4dcf8db5214c9a0a4bad",
+  "an": "2026-10-19T19:05:20+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/coreinsightsintl_com_884bac75b5.html.gz": {
+  "url": "https://www.coreinsightsintl.com/post/u-s-issues-security-alerts-for-twelve-12-middle-east-countries",
+  "durum": 200,
+  "bayt": 1152114,
+  "sha256": "2332ed75adc50fd76431bbcd1a1b886bfe8ba51ec9dd3fe696b019fffac6a1ce",
+  "an": "2026-10-19T19:05:06+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/decrypt_co_eebc8507f7.html.gz": {
+  "url": "https://decrypt.co/325506/polymarket-bets-on-us-strike-against-iran-spike-then-fall",
+  "durum": 200,
+  "bayt": 685684,
+  "sha256": "6fd0d9d6d5d3b9912d0ea024b34f513c0d4e32ae3a232b55dc87bc23cc54a80b",
+  "an": "2026-10-19T19:07:18+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/euronews_com_7aeccee6d3.html.gz": {
+  "url": "https://www.euronews.com/2026/10/19/us-issues-rare-middle-east-red-alert-warning-to-its-citizens-in-the-region",
+  "durum": 200,
+  "bayt": 310855,
+  "sha256": "61d8bb79ab9247aad69986384b3d5d918dcead90c98d39af95269fe236666912",
+  "an": "2026-10-19T19:05:04+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/fortune_com_53dfff1d3c.html.gz": {
+  "url": "https://fortune.com/2026/02/01/us-attack-iran-probability-75-percent-disruption-risk-oil-supply-crude-prices",
+  "durum": 200,
+  "bayt": 442525,
+  "sha256": "c396eb7ee4394d651c3b628a9f13e09373bd5512d0aef2ea94e190b80a64113d",
+  "an": "2026-10-19T19:07:21+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/foxnews_com_1990535144.html.gz": {
+  "url": "https://www.foxnews.com/politics/americans-more-than-dozen-middle-east-nations-urged-flee",
+  "durum": 200,
+  "bayt": 459356,
+  "sha256": "91615deefd2cafbed8bd4a4c4624f09fd6fd0bf6e77b5b58a961476a6c2fa024",
+  "an": "2026-10-19T19:05:16+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/foxnews_com_5cc3ad8645.html.gz": {
+  "url": "https://www.foxnews.com/world/state-department-urges-worldwide-caution-americans-overseas-israel-hamas-war-rages",
+  "durum": 200,
+  "bayt": 449189,
+  "sha256": "acb82e1eb87f738ce76df94e1d735e9f34903e46e9ea7a4354a7eaf23ca88638",
+  "an": "2026-10-19T19:09:38+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/foxnews_com_64c6818873.html.gz": {
+  "url": "https://www.foxnews.com/live-news/us-iran-war-peace-talks-oil-strait-hormuz-trump-october-18",
+  "durum": 200,
+  "bayt": 703228,
+  "sha256": "6959a2c2a09ba7747ae44148a255ce575633ef456a422474114ee83d63c3b6b2",
+  "an": "2026-10-19T19:07:05+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/gjopen_com_ccdc96b991.html.gz": {
+  "url": "https://www.gjopen.com/questions/1477-before-1-january-2021-will-there-be-a-lethal-confrontation-between-the-national-military-forces-of-iran-and-the-united-states-either-in-iran-or-at-sea",
+  "durum": 200,
+  "bayt": 450417,
+  "sha256": "a68abb30e9ce61c941b1133adcbacbc985f1d8f4347b80817a78fea1023fb507",
+  "an": "2026-10-19T19:07:26+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/govexec_com_35adf612a5.html.gz": {
+  "url": "https://govexec.com/defense/2003/03/state-department-orders-nonemergency-employees-out-of-iraq/13654",
+  "durum": 200,
+  "bayt": 144338,
+  "sha256": "ffbce0707f278271565b2472e0f92ad935dd63b0bf9e034ad0a8efa1a0a3be71",
+  "an": "2026-10-19T19:07:45+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/gulfnews_com_a7e3e46ee3.html.gz": {
+  "url": "https://gulfnews.com/world/mena/will-the-us-and-israel-strike-iran-again-or-is-it-just-rhetoric-5-big-questions-1.500715840",
+  "durum": 200,
+  "bayt": 1720178,
+  "sha256": "76a894f13a0024c2f6ee50f1e50fd77f57524e0cdc1031b7342bff7330ff7368",
+  "an": "2026-10-19T19:07:07+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/il_usembassy_gov_ba00600caa.html.gz": {
+  "url": "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-april-14-2024/",
+  "durum": 200,
+  "bayt": 158605,
+  "sha256": "75bff52d9245c08a77eaa15c081d554212c9c1709c24421f96b4d666378fcdb1",
+  "an": "2026-10-19T19:09:46+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/investinglive_com_06c54fcfc5.html.gz": {
+  "url": "https://investinglive.com/commodities/catch-up-time-oil-settles-mixed-brent-near-106-booms-reported-near-aramco-hq-in-dhahran/",
+  "durum": 200,
+  "bayt": 622968,
+  "sha256": "e8d030236c51bd473530dd2304be6be7f8698dd53b9df37675224b6ce9ff7fe6",
+  "an": "2026-10-19T19:07:03+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/ir_usembassy_gov_114ecf76bd.html.gz": {
+  "url": "https://ir.usembassy.gov/security-alert-iran-october-8-2026/",
+  "durum": 200,
+  "bayt": 242016,
+  "sha256": "2e2c5d674738d65c1353dc3cf6ada4973bba3c8f1b1562447cfca873d0f207f7",
+  "an": "2026-10-19T19:10:07+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/ir_usembassy_gov_f608b76d91.html.gz": {
+  "url": "https://ir.usembassy.gov/security-alert-iran-october-18-2026/",
+  "durum": 200,
+  "bayt": 242248,
+  "sha256": "d93fdf2d4265bb68d8874667ff2eacb3426823ee827e9b1503dfd334c2d32d88",
+  "an": "2026-10-19T19:10:07+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/iranwire_com_c4485ff300.html.gz": {
+  "url": "https://iranwire.com/en/news/158636-us-media-pentagon-prepares-strike-options-on-iran-ahead-of-midterm-elections/",
+  "durum": 200,
+  "bayt": 156878,
+  "sha256": "a5be3766f25015a1e096eb701e5c647c3e65d58b9849b613858ef36b0d652445",
+  "an": "2026-10-19T19:05:28+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/jns_org_346812ca20.html.gz": {
+  "url": "https://www.jns.org/news/world/after-trump-threat-araghchi-warns-iran-has-unfinished-business",
+  "durum": 200,
+  "bayt": 497435,
+  "sha256": "114caa5aa8b427de1213b747d9fcaa40aeeabb9cc2931cd4f678fe972f17e447",
+  "an": "2026-10-19T19:07:05+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/jo_usembassy_gov_6cfecb582c.html.gz": {
+  "url": "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-october-18-2026/",
+  "durum": 200,
+  "bayt": 156152,
+  "sha256": "d9d8eae7121592893ebc2104faad7f823854bb4de78e8d3d021b27f22b6ae0a2",
+  "an": "2026-10-19T19:10:12+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/kw_usembassy_gov_d251e255c9.html.gz": {
+  "url": "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-october-18-2026/",
+  "durum": 200,
+  "bayt": 157857,
+  "sha256": "7572e5077b44cf41ddad724624e93d9c49f3ca520b31ad02d8fc71607243629b",
+  "an": "2026-10-19T19:10:10+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/military_com_8053b1a24c.html.gz": {
+  "url": "https://www.military.com/daily-news/2025/06/11/us-prepares-order-departure-of-all-nonessential-staff-baghdad-embassy-officials-say.html",
+  "durum": 200,
+  "bayt": 268563,
+  "sha256": "55c5ac2284bed3d73396157bdec1a64f0e14e369abcac01d9cb67162d160e2a8",
+  "an": "2026-10-19T19:09:49+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/nbcnews_com_ad5265937d.html.gz": {
+  "url": "https://www.nbcnews.com/world/iran/iran-says-choice-reopening-hormuz-rests-united-states-offer-rcna599956",
+  "durum": 200,
+  "bayt": 498980,
+  "sha256": "6474fb16ac05eff152fc016f4cabc653243df4a84731f8836a1d91d24950b865",
+  "an": "2026-10-19T19:05:23+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/nbcnews_com_de41343dfe.html.gz": {
+  "url": "https://www.nbcnews.com/world/iran/us-allows-embassy-staff-leave-israel-citing-safety-risks-iran-threats-rcna260929",
+  "durum": 200,
+  "bayt": 515830,
+  "sha256": "09d5c3a735ff1810e9ee4610abd60aa91769f0fece4c597026a789054260194c",
+  "an": "2026-10-19T19:05:18+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/nbcnews_com_fe11c9f6f1.html.gz": {
+  "url": "https://www.nbcnews.com/politics/national-security/state-department-urges-americans-mideast-depart-strikes-continue-rcna261313",
+  "durum": 200,
+  "bayt": 446444,
+  "sha256": "f66e4c82d280ca55157ad87b920ff51678be5ae7d307d60e9a72e4f218636712",
+  "an": "2026-10-19T19:05:09+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/npr_org_43d4a3ab6d.html.gz": {
+  "url": "https://www.npr.org/2026/10/10/nx-s1-5997512/saudi-arabia-riyadh-airport-bombing-attack",
+  "durum": 200,
+  "bayt": 149950,
+  "sha256": "36ce852116e5479ffb165de147b73e49b9c7e6f3db7e304a6b80c310a0ec005c",
+  "an": "2026-10-19T19:07:02+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/npr_org_5ba9937568.html.gz": {
+  "url": "https://www.npr.org/2019/06/21/734683701/trump-reportedly-orders-strike-on-iran-then-calls-off-attack-plan",
+  "durum": 200,
+  "bayt": 170160,
+  "sha256": "a5bcb88b3d28e755a416640f28d477a6c6a7b7bb7be5ef314be9914f58be0bbd",
+  "an": "2026-10-19T19:09:34+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/npr_org_74d6b202c5.html.gz": {
+  "url": "https://www.npr.org/2026/08/02/nx-s1-5917113/trump-says-hes-cancelling-iran-strikes-deal-pending",
+  "durum": 200,
+  "bayt": 149341,
+  "sha256": "ef8960e5d10ca31e037d5c19d8a8f2b0a2c92a5f7e7c76066b81a98693281a48",
+  "an": "2026-10-19T19:07:08+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/om_usembassy_gov_0fe1bc2219.html.gz": {
+  "url": "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-october-18-2026/",
+  "durum": 200,
+  "bayt": 155098,
+  "sha256": "7493131a2dc07709cacb9a3fa82232e1657fa8e43e8594eda814d784a5651970",
+  "an": "2026-10-19T19:10:12+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/pbs_org_0148e4b00b.html.gz": {
+  "url": "https://www.pbs.org/newshour/world/international-jan-june03-evacuate_03-17",
+  "durum": 200,
+  "bayt": 252930,
+  "sha256": "c3ce76c21dc87ae5ab9887f8a42a01cd370249eaf72eec632fffafe3822c7ee4",
+  "an": "2026-10-19T19:07:44+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/pbs_org_4bc9571a07.html.gz": {
+  "url": "https://www.pbs.org/newshour/world/state-department-urges-u-s-citizens-to-leave-more-than-a-dozen-middle-eastern-countries",
+  "durum": 200,
+  "bayt": 260109,
+  "sha256": "97a33fdaf59c6374cdb37455b011e3f7118ad3d893e1e911bb9eb4f8a9bcb32c",
+  "an": "2026-10-19T19:05:15+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/pbs_org_c690762627.html.gz": {
+  "url": "https://www.pbs.org/newshour/nation/us-and-russia-reach-agreement-on-syria-weapons-1",
+  "durum": 200,
+  "bayt": 252367,
+  "sha256": "1a9d729a8a0d922254c688afa4b2028862fcc6f2814e8946bbebd659fc461030",
+  "an": "2026-10-19T19:08:04+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/republicworld_com_bdf56d43d7.html.gz": {
+  "url": "https://www.republicworld.com/world-news/us-issues-middle-east-travel-advisory-urges-americans-to-reconsider-travel-amid-houthi-attacks-on-saudi-arabia-2026-09-20-137329",
+  "durum": 200,
+  "bayt": 445930,
+  "sha256": "5cf76fd266612bedc20e8e69c6446a0f0abc1bb4a1e5a6239485ee12c33d67d8",
+  "an": "2026-10-19T19:05:08+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/rg_org_71894026fa.html.gz": {
+  "url": "https://rg.org/news/prediction-markets/polymarket-daily-israel-election-eisenkot-netanyahu-ethereum-nba-champion-october-19-2026",
+  "durum": 200,
+  "bayt": 446632,
+  "sha256": "2b569548ea10e5a5d1fb2d475e2df3a0e4484fc472c9a32a341b4c713aae2a93",
+  "an": "2026-10-19T19:07:14+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/rg_org_9dbe72d9d7.html.gz": {
+  "url": "https://rg.org/news/prediction-markets/polymarket-daily-brazil-runoff-bolsonaro-lula-hyperliquid-super-bowl-october-18-2026",
+  "durum": 200,
+  "bayt": 448405,
+  "sha256": "eef0e4b8c12ebbbdf59ddc56bced9a9dfce0045848019d1776b609ce1c34d319",
+  "an": "2026-10-19T19:07:15+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/riotimesonline_com_6d95b055a9.html.gz": {
+  "url": "https://www.riotimesonline.com/israel-iran-ceasefire-odds-fall-to-45",
+  "durum": 200,
+  "bayt": 352706,
+  "sha256": "d2ab19df827725f093f49f9260b9a1b4de213125a1cd5c9f57dd0f1c471ec9be",
+  "an": "2026-10-19T19:07:13+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/riotimesonline_com_964faf13b7.html.gz": {
+  "url": "https://www.riotimesonline.com/iran-ceasefire-odds-drop-17-points-in-a-day",
+  "durum": 200,
+  "bayt": 360117,
+  "sha256": "c6777d1715a7fc26cdb21b04de01819bb590b29e7b84b7b5fd0c6ded8ecc5041",
+  "an": "2026-10-19T19:07:12+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/sa_usembassy_gov_aa3090d6a3.html.gz": {
+  "url": "https://sa.usembassy.gov/travel-advisory-update-saudi-arabia-october-10-2026/",
+  "durum": 200,
+  "bayt": 250093,
+  "sha256": "bb13c6a6654843ad90a3b2b1777a4b12f6f0f8b246ae101ea1950052c9997d8c",
+  "an": "2026-10-19T19:10:09+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/sa_usembassy_gov_b5405519f3.html.gz": {
+  "url": "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-17-2026/",
+  "durum": 200,
+  "bayt": 247035,
+  "sha256": "19795ca16d20566cae4f604591b86d62de167d3f459037fed1252d5aa9bc5cd5",
+  "an": "2026-10-19T19:10:08+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/sa_usembassy_gov_e0ab607fe8.html.gz": {
+  "url": "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-18-2026/",
+  "durum": 200,
+  "bayt": 245378,
+  "sha256": "cbee4c04f69ee17585fc00df758a2042be675045fceb7fdcfa7b7088fbfdbda2",
+  "an": "2026-10-19T19:10:08+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/sa_usembassy_gov_f773aa0e4f.html.gz": {
+  "url": "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-12-2026/",
+  "durum": 200,
+  "bayt": 246965,
+  "sha256": "cb967c38c7d4c138bbafe24c7fe1dc5a14533c5319ddfbe3f277455aa8e9fe4d",
+  "an": "2026-10-19T19:10:09+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/semafor_com_fbbf47f59f.html.gz": {
+  "url": "https://www.semafor.com/article/10/14/2026/iran-ramps-up-ship-strikes-in-hormuz-ahead-of-us-midterms",
+  "durum": 200,
+  "bayt": 132766,
+  "sha256": "26aa79235bcf8497f64e42ec17fe7705ec914054e92ba3fab652fb5e8f942fb4",
+  "an": "2026-10-19T19:07:06+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/state_gov_32cd7968ad.html.gz": {
+  "url": "https://www.state.gov/releases/office-of-the-spokesperson/2025/06/worldwide-caution/",
+  "durum": 200,
+  "bayt": 173816,
+  "sha256": "20fafafd07c94819c841ca121fa71a40a0048db6e11a500654b8eaf981b19558",
+  "an": "2026-10-19T19:09:51+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/thenationalnews_com_1e1307e0fc.html.gz": {
+  "url": "https://www.thenationalnews.com/news/us/2026/10/01/us-sends-third-aircraft-carrier-to-middle-east/",
+  "durum": 200,
+  "bayt": 673881,
+  "sha256": "aa93217ec1979cf5ee96fb9891cb0e55e2fd519d0160983ab5476e4c15fe5abb",
+  "an": "2026-10-19T19:05:24+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/time_com_bca624cc33.html.gz": {
+  "url": "https://time.com/5758287/soleimani-us-citizens-leave-iraq/",
+  "durum": 200,
+  "bayt": 306505,
+  "sha256": "d92f6aeba5d9fd2fce623bfccfd29ff9108ce70a42850f08cf875a62bf8b72d0",
+  "an": "2026-10-19T19:09:36+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/tokenpost_com_53814796fe.html.gz": {
+  "url": "https://www.tokenpost.com/news/investing/32712",
+  "durum": 200,
+  "bayt": 26369,
+  "sha256": "6179597362e6e8230094e209c186868ea3cec23d9a32d03975da513c97adb649",
+  "an": "2026-10-19T19:07:16+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/usinfo_org_2dad55b214.html.gz": {
+  "url": "https://usinfo.org/usia/usinfo.state.gov/topical/pol/terror/archive2.htm",
+  "durum": 200,
+  "bayt": 17813,
+  "sha256": "d45dd66cd55ff378b872eed37cca347a3e1f4a0d3a318fdefa1e4aad0b48d072",
+  "an": "2026-10-19T19:07:34+00:00",
+  "not": "atıf kaynağı"
+ },
+ "kaynak/ye_usembassy_gov_7b1ddf83fa.html.gz": {
+  "url": "https://ye.usembassy.gov/security-alert-yemen-october-18-2026/",
+  "durum": 200,
+  "bayt": 156199,
+  "sha256": "c119bfb4fce44ade4090c33678de3d8f2e95337d27535a09c648d1038c05b0f2",
+  "an": "2026-10-19T19:10:13+00:00",
+  "not": "atıf kaynağı"
+ }
+}

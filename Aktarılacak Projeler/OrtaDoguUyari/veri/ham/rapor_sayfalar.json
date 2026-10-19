@@ -1,0 +1,592 @@
+{
+ "2026-10-19T19:05:04Z": {
+  "Kaynak sayfaları": {
+   "durum": "tamam",
+   "https://www.euronews.com/2026/10/19/us-issues-rare-middle-east-red-alert-warning-to-its-citizens-in-the-region": {
+    "durum": 200,
+    "bayt": 310855,
+    "dosya": "kaynak/euronews_com_7aeccee6d3.html.gz"
+   },
+   "https://www.washingtontimes.com/news/2026/oct/19/state-department-updates-travel-advisory-middle-east-houthi-attacks/": {
+    "durum": 403,
+    "bayt": 6042
+   },
+   "https://www.coreinsightsintl.com/post/u-s-issues-security-alerts-for-twelve-12-middle-east-countries": {
+    "durum": 200,
+    "bayt": 1152114,
+    "dosya": "kaynak/coreinsightsintl_com_884bac75b5.html.gz"
+   },
+   "https://www.republicworld.com/world-news/us-issues-middle-east-travel-advisory-urges-americans-to-reconsider-travel-amid-houthi-attacks-on-saudi-arabia-2026-09-20-137329": {
+    "durum": 200,
+    "bayt": 445930,
+    "dosya": "kaynak/republicworld_com_bdf56d43d7.html.gz"
+   },
+   "https://www.nbcnews.com/politics/national-security/state-department-urges-americans-mideast-depart-strikes-continue-rcna261313": {
+    "durum": 200,
+    "bayt": 446444,
+    "dosya": "kaynak/nbcnews_com_fe11c9f6f1.html.gz"
+   },
+   "https://www.aa.com.tr/en/middle-east/us-orders-non-emergency-staff-in-6-arab-countries-to-leave-amid-iran-war/3847583": {
+    "durum": 200,
+    "bayt": 428218,
+    "dosya": "kaynak/aa_com_tr_974bdb4909.html.gz"
+   },
+   "https://www.pbs.org/newshour/world/state-department-urges-u-s-citizens-to-leave-more-than-a-dozen-middle-eastern-countries": {
+    "durum": 200,
+    "bayt": 260109,
+    "dosya": "kaynak/pbs_org_4bc9571a07.html.gz"
+   },
+   "https://www.foxnews.com/politics/americans-more-than-dozen-middle-east-nations-urged-flee": {
+    "durum": 200,
+    "bayt": 459356,
+    "dosya": "kaynak/foxnews_com_1990535144.html.gz"
+   },
+   "https://www.aljazeera.com/news/2026/3/3/us-urges-citizens-to-immediately-leave-over-a-dozen-middle-east-countries": {
+    "durum": 200,
+    "bayt": 203900,
+    "dosya": "kaynak/aljazeera_com_a4232e20b7.html.gz"
+   },
+   "https://www.aljazeera.com/news/2026/2/23/us-orders-non-emergency-personnel-to-leave-beirut-embassy-amid-tensions": {
+    "durum": 200,
+    "bayt": 206009,
+    "dosya": "kaynak/aljazeera_com_86ad11b568.html.gz"
+   },
+   "https://www.nbcnews.com/world/iran/us-allows-embassy-staff-leave-israel-citing-safety-risks-iran-threats-rcna260929": {
+    "durum": 200,
+    "bayt": 515830,
+    "dosya": "kaynak/nbcnews_com_de41343dfe.html.gz"
+   },
+   "https://commonslibrary.parliament.uk/research-briefings/cbp-10637/": {
+    "durum": 403,
+    "bayt": 5815
+   },
+   "https://www.congress.gov/crs-product/R48887": {
+    "durum": 403,
+    "bayt": 5706
+   },
+   "https://www.congress.gov/crs_external_products/R/PDF/R48887/R48887.1.pdf": {
+    "durum": 200,
+    "bayt": 704419,
+    "dosya": "kaynak/congress_gov_03c54a9300.pdf.gz"
+   },
+   "https://aljazeera.com/news/2026/4/7/trump-suspends-iran-bombing-for-two-weeks-following-dire-threats": {
+    "durum": 200,
+    "bayt": 227931,
+    "dosya": "kaynak/aljazeera_com_3bd6168cb1.html.gz"
+   },
+   "https://www.france24.com/en/middle-east/20260714-us-military-reimposes-naval-blockade-on-iranian-ports-launches-new-strikes": {
+    "durum": 403,
+    "bayt": 641
+   },
+   "https://www.aljazeera.com/news/2026/9/8/saudi-houthi-fighting-in-yemen-escalates-what-happened-and-whats-next": {
+    "durum": 200,
+    "bayt": 239363,
+    "dosya": "kaynak/aljazeera_com_3195d5f06a.html.gz"
+   },
+   "https://www.nbcnews.com/world/iran/iran-says-choice-reopening-hormuz-rests-united-states-offer-rcna599956": {
+    "durum": 200,
+    "bayt": 498980,
+    "dosya": "kaynak/nbcnews_com_ad5265937d.html.gz"
+   },
+   "https://www.thenationalnews.com/news/us/2026/10/01/us-sends-third-aircraft-carrier-to-middle-east/": {
+    "durum": 200,
+    "bayt": 673881,
+    "dosya": "kaynak/thenationalnews_com_1e1307e0fc.html.gz"
+   },
+   "https://www.cnbc.com/2026/10/02/us-iran-war-trump-hormuz-.html": {
+    "durum": 200,
+    "bayt": 791059,
+    "dosya": "kaynak/cnbc_com_0789fc502b.html.gz"
+   },
+   "https://www.cnbc.com/2026/10/01/oil-prices-today-wti-brent.html": {
+    "durum": 200,
+    "bayt": 832178,
+    "dosya": "kaynak/cnbc_com_4d2f0bcaed.html.gz"
+   },
+   "https://www.aljazeera.com/news/2026/10/7/saudi-arabia-says-three-foreign-nationals-killed-in-attacks-on-airports": {
+    "durum": 200,
+    "bayt": 191951,
+    "dosya": "kaynak/aljazeera_com_4d27ac6d50.html.gz"
+   },
+   "https://iranwire.com/en/news/158636-us-media-pentagon-prepares-strike-options-on-iran-ahead-of-midterm-elections/": {
+    "durum": 200,
+    "bayt": 156878,
+    "dosya": "kaynak/iranwire_com_c4485ff300.html.gz"
+   },
+   "https://www.axios.com/2026/10/07/trump-us-central-command-iran-israel-war-elections": {
+    "durum": 403,
+    "bayt": 5875
+   },
+   "https://www.aa.com.tr/en/energy/oil/oil-prices-surge-over-4-on-reports-of-possible-new-us-strikes-on-iran/60120": {
+    "durum": 200,
+    "bayt": 588345,
+    "dosya": "kaynak/aa_com_tr_d9b4e9d1aa.html.gz"
+   },
+   "https://thehill.com/policy/energy-environment/6136014-oil-gas-prices-surge-reports-fresh-iran-strikes-white-house/": {
+    "durum": 403,
+    "bayt": 427
+   },
+   "https://www.usnews.com/news/world/articles/2026-10-08/trump-says-he-will-not-attack-before-us-elections-in-november": {
+    "hata": "indirilemedi: https://www.usnews.com/news/world/articles/2026-10-08/trump-says-he-will-not-attack-before-us-elections-in-november — TimeoutError('The read opera"
+   },
+   "https://www.axios.com/2026/10/08/trump-iran-strikes-midterm-elections": {
+    "durum": 403,
+    "bayt": 5833
+   },
+   "https://www.aljazeera.com/news/2026/10/9/trump-says-us-will-not-strike-iran-before-midterm-elections": {
+    "durum": 200,
+    "bayt": 213513,
+    "dosya": "kaynak/aljazeera_com_f96bead888.html.gz"
+   },
+   "https://www.cnn.com/2026/10/08/middleeast/riyadh-airport-houthis-explosion-intl": {
+    "durum": 200,
+    "bayt": 4767697,
+    "dosya": "kaynak/cnn_com_1cd7e1f0f1.html.gz"
+   },
+   "https://www.aljazeera.com/news/2026/10/10/attack-on-airport-in-saudi-capital-riyadh-leaves-several-injured": {
+    "durum": 200,
+    "bayt": 205838,
+    "dosya": "kaynak/aljazeera_com_07e216b6e5.html.gz"
+   },
+   "https://www.npr.org/2026/10/10/nx-s1-5997512/saudi-arabia-riyadh-airport-bombing-attack": {
+    "durum": 200,
+    "bayt": 149950,
+    "dosya": "kaynak/npr_org_43d4a3ab6d.html.gz"
+   },
+   "https://investinglive.com/commodities/catch-up-time-oil-settles-mixed-brent-near-106-booms-reported-near-aramco-hq-in-dhahran/": {
+    "durum": 200,
+    "bayt": 622968,
+    "dosya": "kaynak/investinglive_com_06c54fcfc5.html.gz"
+   },
+   "https://www.breitbart.com/politics/2026/10/18/iran-threatens-trump-netanyahu-endorsement-try-your-luck/": {
+    "durum": 200,
+    "bayt": 117211,
+    "dosya": "kaynak/breitbart_com_df53d1ecc5.html.gz"
+   },
+   "https://www.jns.org/news/world/after-trump-threat-araghchi-warns-iran-has-unfinished-business": {
+    "durum": 200,
+    "bayt": 497435,
+    "dosya": "kaynak/jns_org_346812ca20.html.gz"
+   },
+   "https://www.foxnews.com/live-news/us-iran-war-peace-talks-oil-strait-hormuz-trump-october-18": {
+    "durum": 200,
+    "bayt": 703228,
+    "dosya": "kaynak/foxnews_com_64c6818873.html.gz"
+   },
+   "https://www.semafor.com/article/10/14/2026/iran-ramps-up-ship-strikes-in-hormuz-ahead-of-us-midterms": {
+    "durum": 200,
+    "bayt": 132766,
+    "dosya": "kaynak/semafor_com_fbbf47f59f.html.gz"
+   },
+   "https://gulfnews.com/world/mena/will-the-us-and-israel-strike-iran-again-or-is-it-just-rhetoric-5-big-questions-1.500715840": {
+    "durum": 200,
+    "bayt": 1720178,
+    "dosya": "kaynak/gulfnews_com_a7e3e46ee3.html.gz"
+   },
+   "https://www.cnn.com/2026/10/15/politics/us-considering-mother-of-all-bombs-iran": {
+    "durum": 200,
+    "bayt": 4822568,
+    "dosya": "kaynak/cnn_com_0d38f9ff8d.html.gz"
+   },
+   "https://www.npr.org/2026/08/02/nx-s1-5917113/trump-says-hes-cancelling-iran-strikes-deal-pending": {
+    "durum": 200,
+    "bayt": 149341,
+    "dosya": "kaynak/npr_org_74d6b202c5.html.gz"
+   },
+   "https://www.cnbc.com/2026/08/03/kalshi-traders-are-not-expecting-a-us-and-iran-nuclear-deal-soon.html": {
+    "durum": 200,
+    "bayt": 773437,
+    "dosya": "kaynak/cnbc_com_c429bdf7df.html.gz"
+   },
+   "https://www.riotimesonline.com/iran-ceasefire-odds-drop-17-points-in-a-day": {
+    "durum": 200,
+    "bayt": 360117,
+    "dosya": "kaynak/riotimesonline_com_964faf13b7.html.gz"
+   },
+   "https://www.riotimesonline.com/israel-iran-ceasefire-odds-fall-to-45": {
+    "durum": 200,
+    "bayt": 352706,
+    "dosya": "kaynak/riotimesonline_com_6d95b055a9.html.gz"
+   },
+   "https://rg.org/news/prediction-markets/polymarket-daily-israel-election-eisenkot-netanyahu-ethereum-nba-champion-october-19-2026": {
+    "durum": 200,
+    "bayt": 446632,
+    "dosya": "kaynak/rg_org_71894026fa.html.gz"
+   },
+   "https://rg.org/news/prediction-markets/polymarket-daily-brazil-runoff-bolsonaro-lula-hyperliquid-super-bowl-october-18-2026": {
+    "durum": 200,
+    "bayt": 448405,
+    "dosya": "kaynak/rg_org_9dbe72d9d7.html.gz"
+   },
+   "https://www.tokenpost.com/news/investing/32712": {
+    "durum": 200,
+    "bayt": 26369,
+    "dosya": "kaynak/tokenpost_com_53814796fe.html.gz"
+   },
+   "https://goodjudgment.substack.com/p/superforecasting-the-week-ahead-19": {
+    "durum": 403,
+    "bayt": 5819
+   },
+   "https://decrypt.co/325506/polymarket-bets-on-us-strike-against-iran-spike-then-fall": {
+    "durum": 200,
+    "bayt": 685684,
+    "dosya": "kaynak/decrypt_co_eebc8507f7.html.gz"
+   },
+   "https://www.coindesk.com/markets/2025/06/17/polymarket-odds-on-us-military-action-against-iran-slide-as-trump-team-proposes-tehran-talks": {
+    "durum": 200,
+    "bayt": 665484,
+    "dosya": "kaynak/coindesk_com_4c2825afdf.html.gz"
+   },
+   "https://www.thestreet.com/crypto/markets/is-the-u-s-about-to-strike-iran-theres-a-48-chance-": {
+    "durum": 403,
+    "bayt": 773
+   },
+   "https://fortune.com/2026/02/01/us-attack-iran-probability-75-percent-disruption-risk-oil-supply-crude-prices": {
+    "durum": 200,
+    "bayt": 442525,
+    "dosya": "kaynak/fortune_com_53dfff1d3c.html.gz"
+   },
+   "https://www.benzinga.com/markets/prediction-markets/26/02/50742807/when-will-us-strike-iran-prediction-market-is-betting-on-a-strike-on-the-islamic-republic-by-this-date": {
+    "durum": 200,
+    "bayt": 1084880,
+    "dosya": "kaynak/benzinga_com_dc27958b51.html.gz"
+   },
+   "https://www.metaculus.com/questions/41594/will-the-us-attack-iran-before-april-2026/": {
+    "durum": 403,
+    "bayt": 5870
+   },
+   "https://www.gjopen.com/questions/1477-before-1-january-2021-will-there-be-a-lethal-confrontation-between-the-national-military-forces-of-iran-and-the-united-states-either-in-iran-or-at-sea": {
+    "durum": 200,
+    "bayt": 450417,
+    "dosya": "kaynak/gjopen_com_ccdc96b991.html.gz"
+   },
+   "https://www.globalsecurity.org/security/library/congress/1991_cr/h910117-terror.htm": {
+    "hata": "indirilemedi: https://www.globalsecurity.org/security/library/congress/1991_cr/h910117-terror.htm — <HTTPError 402: 'Payment Required'>"
+   },
+   "https://chronology.palestine-studies.org/node/11396": {
+    "durum": 403,
+    "bayt": 5612
+   },
+   "https://usinfo.org/usia/usinfo.state.gov/topical/pol/terror/archive2.htm": {
+    "durum": 200,
+    "bayt": 17813,
+    "dosya": "kaynak/usinfo_org_2dad55b214.html.gz"
+   },
+   "https://1997-2001.state.gov/regions/africa/sudan_afghan.html": {
+    "durum": 200,
+    "bayt": 10065,
+    "dosya": "kaynak/1997_2001_state_gov_1bacf30abc.html.gz"
+   },
+   "https://www.globalsecurity.org/intell/library/news/1998/12/98122804_tlt.html": {
+    "hata": "indirilemedi: https://www.globalsecurity.org/intell/library/news/1998/12/98122804_tlt.html — <HTTPError 402: 'Payment Required'>"
+   },
+   "https://avalon.law.yale.edu/sept11/state_dept_brief020.asp": {
+    "durum": 200,
+    "bayt": 68664,
+    "dosya": "kaynak/avalon_law_yale_edu_f5cbdd498c.html.gz"
+   },
+   "https://www.semissourian.com/news/state-department-issues-warning-101210": {
+    "durum": 403,
+    "bayt": 919
+   },
+   "https://www.pbs.org/newshour/world/international-jan-june03-evacuate_03-17": {
+    "durum": 200,
+    "bayt": 252930,
+    "dosya": "kaynak/pbs_org_0148e4b00b.html.gz"
+   },
+   "https://govexec.com/defense/2003/03/state-department-orders-nonemergency-employees-out-of-iraq/13654": {
+    "durum": 200,
+    "bayt": 144338,
+    "dosya": "kaynak/govexec_com_35adf612a5.html.gz"
+   },
+   "https://www.gao.gov/products/GAO-07-893R": {
+    "durum": 403,
+    "bayt": 395
+   },
+   "https://2009-2017.state.gov/r/pa/prs/ps/2011/02/155762.htm": {
+    "durum": 200,
+    "bayt": 30519,
+    "dosya": "kaynak/2009_2017_state_gov_e71511d1d0.html.gz"
+   },
+   "https://2009-2017.state.gov/m/rls/remarks/2011/157173.htm": {
+    "durum": 200,
+    "bayt": 61782,
+    "dosya": "kaynak/2009_2017_state_gov_664355d0b8.html.gz"
+   },
+   "https://www.france24.com/en/20120916-us-orders-embassy-staff-leave-sudan-tunisia-protests-travel-muslim-riots": {
+    "durum": 403,
+    "bayt": 641
+   },
+   "https://www.cnn.com/2013/08/03/politics/embassies-list/index.html": {
+    "durum": 200,
+    "bayt": 4662021,
+    "dosya": "kaynak/cnn_com_4f9ba19018.html.gz"
+   },
+   "https://www.cnn.com/2013/08/04/politics/us-embassies-close/index.html": {
+    "durum": 200,
+    "bayt": 4847178,
+    "dosya": "kaynak/cnn_com_e8703ba64d.html.gz"
+   },
+   "https://www.cbsnews.com/news/18-of-19-closed-us-embassies-consulates-to-reopen/": {
+    "hata": "indirilemedi: https://www.cbsnews.com/news/18-of-19-closed-us-embassies-consulates-to-reopen/ — <HTTPError 406: 'Not Acceptable'>"
+   },
+   "https://www.cbsnews.com/news/u-s-orders-diplomatic-military-families-out-of-south-turkey/": {
+    "hata": "indirilemedi: https://www.cbsnews.com/news/u-s-orders-diplomatic-military-families-out-of-south-turkey/ — <HTTPError 406: 'Not Acceptable'>"
+   },
+   "https://www.pbs.org/newshour/nation/us-and-russia-reach-agreement-on-syria-weapons-1": {
+    "durum": 200,
+    "bayt": 252367,
+    "dosya": "kaynak/pbs_org_c690762627.html.gz"
+   },
+   "https://www.washingtonpost.com/world/us-ordersnon-emergency-government-employees-to-leave-iraq/2019/05/15/80ec7fb4-76e8-11e9-ac17-284a66782c41_story.html": {
+    "hata": "indirilemedi: https://www.washingtonpost.com/world/us-ordersnon-emergency-government-employees-to-leave-iraq/2019/05/15/80ec7fb4-76e8-11e9-ac17-284a66782c41_sto"
+   },
+   "https://abcnews.go.com/Politics/state-department-orders-emergency-government-employees-iraq/story?id=63046559": {
+    "durum": 200,
+    "bayt": 210179,
+    "dosya": "kaynak/abcnews_go_com_8930cabba0.html.gz"
+   },
+   "https://www.npr.org/2019/06/21/734683701/trump-reportedly-orders-strike-on-iran-then-calls-off-attack-plan": {
+    "durum": 200,
+    "bayt": 170160,
+    "dosya": "kaynak/npr_org_5ba9937568.html.gz"
+   },
+   "https://www.cnbc.com/2020/01/03/us-embassy-urges-americans-to-flee-iraq-immediately.html": {
+    "durum": 200,
+    "bayt": 814186,
+    "dosya": "kaynak/cnbc_com_8cd1b36248.html.gz"
+   },
+   "https://time.com/5758287/soleimani-us-citizens-leave-iraq/": {
+    "durum": 200,
+    "bayt": 306505,
+    "dosya": "kaynak/time_com_bca624cc33.html.gz"
+   },
+   "https://www.iranwatch.org/news-brief/us-strikes-iran-backed-militias-iraq": {
+    "durum": 403,
+    "bayt": 5815
+   },
+   "https://www.foxnews.com/world/state-department-urges-worldwide-caution-americans-overseas-israel-hamas-war-rages": {
+    "durum": 200,
+    "bayt": 449189,
+    "dosya": "kaynak/foxnews_com_5cc3ad8645.html.gz"
+   },
+   "https://www.osac.gov/Content/Report/316380bb-4206-4d4f-9523-184ac459d927": {
+    "hata": "indirilemedi: https://www.osac.gov/Content/Report/316380bb-4206-4d4f-9523-184ac459d927 — <HTTPError 405: 'Not Allowed'>"
+   },
+   "https://www.iranwatch.org/library/governments/united-states/executive-branch/department-defense/secretary-defense-lloyd-j-austin-iiis-statement-us-military-strikes-eastern": {
+    "durum": 403,
+    "bayt": 6237
+   },
+   "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-april-14-2024/": {
+    "durum": 200,
+    "bayt": 158605,
+    "dosya": "kaynak/il_usembassy_gov_ba00600caa.html.gz"
+   },
+   "https://thehill.com/policy/international/4909402-iran-attack-israel-us-embassy/": {
+    "durum": 403,
+    "bayt": 427
+   },
+   "https://english.alarabiya.net/News/united-states/2024/09/28/us-orders-some-beirut-embassy-staff-members-to-leave-lebanon": {
+    "durum": 403,
+    "bayt": 180400
+   },
+   "https://www.aljazeera.com/news/2025/6/12/us-evacuates-personnel-from-middle-east-in-sign-of-growing-regional-tension": {
+    "durum": 200,
+    "bayt": 214821,
+    "dosya": "kaynak/aljazeera_com_176c606b1a.html.gz"
+   },
+   "https://www.military.com/daily-news/2025/06/11/us-prepares-order-departure-of-all-nonessential-staff-baghdad-embassy-officials-say.html": {
+    "durum": 200,
+    "bayt": 268563,
+    "dosya": "kaynak/military_com_8053b1a24c.html.gz"
+   },
+   "https://www.state.gov/releases/office-of-the-spokesperson/2025/06/worldwide-caution/": {
+    "durum": 200,
+    "bayt": 173816,
+    "dosya": "kaynak/state_gov_32cd7968ad.html.gz"
+   },
+   "https://www.maritime.dot.gov/msci/2025-003a-arabian-gulf-strait-hormuz-gulf-oman-and-arabian-sea-retaliatory-strikes-iranian": {
+    "durum": 403,
+    "bayt": 527
+   },
+   "https://www.algemeiner.com/2025/06/23/iran-attacks-us-base-qatar-missiles/": {
+    "durum": 200,
+    "bayt": 125617,
+    "dosya": "kaynak/algemeiner_com_2087064000.html.gz"
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/global-events/worldwide-caution.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/ea/worldwide-caution.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/iran.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/iran-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/iraq.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/iraq-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/saudi-arabia.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/saudi-arabia-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/israel.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/israel-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/lebanon.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/lebanon-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/yemen.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/yemen-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/qatar.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/qatar-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/kuwait.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/kuwait-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/bahrain.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/bahrain-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/oman.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/oman-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/jordan.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/jordan-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/united-arab-emirates.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/united-arab-emirates-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/en/international-travel/travel-advisories/syria.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/syria-travel-advisory.html": {
+    "durum": 403,
+    "bayt": 5851
+   },
+   "https://ir.usembassy.gov/security-alert-iran-october-18-2026/": {
+    "durum": 200,
+    "bayt": 242248,
+    "dosya": "kaynak/ir_usembassy_gov_f608b76d91.html.gz"
+   },
+   "https://ir.usembassy.gov/security-alert-iran-october-8-2026/": {
+    "durum": 200,
+    "bayt": 242016,
+    "dosya": "kaynak/ir_usembassy_gov_114ecf76bd.html.gz"
+   },
+   "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-18-2026/": {
+    "durum": 200,
+    "bayt": 245378,
+    "dosya": "kaynak/sa_usembassy_gov_e0ab607fe8.html.gz"
+   },
+   "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-17-2026/": {
+    "durum": 200,
+    "bayt": 247035,
+    "dosya": "kaynak/sa_usembassy_gov_b5405519f3.html.gz"
+   },
+   "https://sa.usembassy.gov/travel-advisory-update-saudi-arabia-october-10-2026/": {
+    "durum": 200,
+    "bayt": 250093,
+    "dosya": "kaynak/sa_usembassy_gov_aa3090d6a3.html.gz"
+   },
+   "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-12-2026/": {
+    "durum": 200,
+    "bayt": 246965,
+    "dosya": "kaynak/sa_usembassy_gov_f773aa0e4f.html.gz"
+   },
+   "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-october-18-2026/": {
+    "durum": 200,
+    "bayt": 157857,
+    "dosya": "kaynak/kw_usembassy_gov_d251e255c9.html.gz"
+   },
+   "https://ae.usembassy.gov/security-alert-u-s-mission-united-arab-emirates-october-18-2026/": {
+    "durum": 200,
+    "bayt": 158656,
+    "dosya": "kaynak/ae_usembassy_gov_c7940090f2.html.gz"
+   },
+   "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-october-18-2026/": {
+    "durum": 200,
+    "bayt": 155883,
+    "dosya": "kaynak/bh_usembassy_gov_d2ddff57d9.html.gz"
+   },
+   "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-october-18-2026/": {
+    "durum": 200,
+    "bayt": 155098,
+    "dosya": "kaynak/om_usembassy_gov_0fe1bc2219.html.gz"
+   },
+   "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-october-18-2026/": {
+    "durum": 200,
+    "bayt": 156152,
+    "dosya": "kaynak/jo_usembassy_gov_6cfecb582c.html.gz"
+   },
+   "https://ye.usembassy.gov/security-alert-yemen-october-18-2026/": {
+    "durum": 200,
+    "bayt": 156199,
+    "dosya": "kaynak/ye_usembassy_gov_7b1ddf83fa.html.gz"
+   },
+   "sure_sn": 309.0
+  }
+ }
+}
