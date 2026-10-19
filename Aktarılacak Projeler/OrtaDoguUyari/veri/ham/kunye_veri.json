@@ -1,0 +1,178 @@
+{
+ "cnbc/altin.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40GC.1/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 57557,
+  "sha256": "7fe0626aceb0f31b9e366fb7605e354bd6961e95c264192266b677e5951de44a",
+  "an": "2026-10-19T19:05:09+00:00",
+  "not": "@GC.1 günlük"
+ },
+ "cnbc/bist100.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.XU100/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 60295,
+  "sha256": "cd8cde68c24ae89891264525b14097ba84d46bc7e1c9093e944ef746097516ba",
+  "an": "2026-10-19T19:05:13+00:00",
+  "not": ".XU100 günlük"
+ },
+ "cnbc/brent.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40LCO.1/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 56404,
+  "sha256": "e08bbe5ecf802065343a3e8cd7c66ab19a167c1ce5290333ff15e57f39fbaeb7",
+  "an": "2026-10-19T19:05:08+00:00",
+  "not": "@LCO.1 günlük"
+ },
+ "cnbc/dxy.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.DXY/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 55028,
+  "sha256": "99c93da04c101aaea0be100c8a73ad9ffb18a6cda5a252d1a30239a779c88bce",
+  "an": "2026-10-19T19:05:11+00:00",
+  "not": ".DXY günlük"
+ },
+ "cnbc/spx.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 56458,
+  "sha256": "9461ba7f675a608a571bfe0695e6cbf13a0c473bd5969126428bf7cb61f492e2",
+  "an": "2026-10-19T19:05:09+00:00",
+  "not": ".SPX günlük"
+ },
+ "cnbc/try.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 60253,
+  "sha256": "fb93278457fdcad1ca2c09e13181587932fad72c1b34591476eb47206b2287ff",
+  "an": "2026-10-19T19:05:12+00:00",
+  "not": "TRY= günlük"
+ },
+ "cnbc/us10y.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 51785,
+  "sha256": "e57c4131304255498302a2a95e0d82cf8c5c9d0600dd4cd9747b0047e2ac18cd",
+  "an": "2026-10-19T19:05:11+00:00",
+  "not": "US10Y günlük"
+ },
+ "cnbc/vix.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/.VIX/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 54411,
+  "sha256": "4d51c8e66d1390381f839180fbd27b3fcba835149a8670bc44333cce62a8bb2f",
+  "an": "2026-10-19T19:05:10+00:00",
+  "not": ".VIX günlük"
+ },
+ "cnbc/wti.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20250501000000/20261020000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 54241,
+  "sha256": "00e48c6c0a22f640e870b77c5569db5ad11b59c33dc0908a38306ff82b5408f7",
+  "an": "2026-10-19T19:05:08+00:00",
+  "not": "@CL.1 günlük"
+ },
+ "gpr/data_gpr_daily_recent_xls.gz": {
+  "url": "https://www.matteoiacoviello.com/gpr_files/data_gpr_daily_recent.xls",
+  "durum": 200,
+  "bayt": 3273216,
+  "sha256": "d44b5b75c3c9c3851f832c6878a14c2aa343791ef70a718015b874d1d8d39d7e",
+  "an": "2026-10-19T19:05:14+00:00",
+  "not": ""
+ },
+ "gpr/data_gpr_export_xls.gz": {
+  "url": "https://www.matteoiacoviello.com/gpr_files/data_gpr_export.xls",
+  "durum": 200,
+  "bayt": 2716160,
+  "sha256": "97af839913606a4bbf4315130b3b1d08d25e37398110c3d2207dc1179f9ff0eb",
+  "an": "2026-10-19T19:05:15+00:00",
+  "not": ""
+ },
+ "wiki/en_wikipedia_org_01b7fdc1c9.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Embassy_of_the_United_States%2C_Berlin",
+  "durum": 200,
+  "bayt": 191407,
+  "sha256": "e220dd5c58d0eefb12f93f966cafb88d96b8d98846e6ee441e4da10885f3382c",
+  "an": "2026-10-19T19:06:02+00:00",
+  "not": "Wikipedia: Embassy of the United States, Berlin"
+ },
+ "wiki/en_wikipedia_org_1e9fc038ad.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Killing_of_Ayman_al-Zawahiri",
+  "durum": 200,
+  "bayt": 343904,
+  "sha256": "e6dc15b0c42852aa579cc6575da743437ac15905ae9a451eb050cc35682fec32",
+  "an": "2026-10-19T19:06:03+00:00",
+  "not": "Wikipedia: Killing of Ayman al-Zawahiri"
+ },
+ "wiki/en_wikipedia_org_3d575c3f2c.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/List_of_Iranian_officials_killed_during_the_2026_Iran_war",
+  "durum": 200,
+  "bayt": 355157,
+  "sha256": "f80aac6b9b7a0447e0cce2e1353bca65783a0d39915adcaf0b3329fa2f20a1ae",
+  "an": "2026-10-19T19:05:27+00:00",
+  "not": "Wikipedia: List of Iranian officials killed during the 2026 Iran war"
+ },
+ "wiki/en_wikipedia_org_461027d941.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_Iran_war",
+  "durum": 200,
+  "bayt": 2943915,
+  "sha256": "a1358103981f27cd7e0fd505599f18f1f38ca7a166d88b7974e5afec0e7a44a9",
+  "an": "2026-10-19T19:05:26+00:00",
+  "not": "Wikipedia: 2026 Iran war"
+ },
+ "wiki/en_wikipedia_org_5990fb3901.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_Strait_of_Hormuz_campaign",
+  "durum": 200,
+  "bayt": 367304,
+  "sha256": "1d474b35b09c6ac11fc09cce5434100852cf8255db174d38bfebf67546ecaedb",
+  "an": "2026-10-19T19:06:08+00:00",
+  "not": "Wikipedia: 2026 Strait of Hormuz campaign"
+ },
+ "wiki/en_wikipedia_org_8106037c12.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Operation_Project_Freedom",
+  "durum": 200,
+  "bayt": 324569,
+  "sha256": "aeb86734a330141c9bb5f7b3223cf4d721cb886391c435600c8e181dcc8d3c18",
+  "an": "2026-10-19T19:05:28+00:00",
+  "not": "Wikipedia: Operation Project Freedom"
+ },
+ "wiki/en_wikipedia_org_a22adf4998.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Embassy_of_the_United_States%2C_Beirut",
+  "durum": 200,
+  "bayt": 101228,
+  "sha256": "7b256917b5a184704a3b30a10e54099d56a3d9f343a9771a13827dae8dabb12b",
+  "an": "2026-10-19T19:06:01+00:00",
+  "not": "Wikipedia: Embassy of the United States, Beirut"
+ },
+ "wiki/en_wikipedia_org_b90d63d07c.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Timeline_of_the_2026_Iran_war",
+  "durum": 200,
+  "bayt": 3211298,
+  "sha256": "385a7d5f2b35da2030b9be069b7ab5b0b2a1815e3449e36e7ec4b066bb3c571d",
+  "an": "2026-10-19T19:05:25+00:00",
+  "not": "Wikipedia: Timeline of the 2026 Iran war"
+ },
+ "wiki/en_wikipedia_org_c079b2702a.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_in_the_United_States",
+  "durum": 200,
+  "bayt": 2670572,
+  "sha256": "f59ef2b540e2ce0630998235f2b51a23803ce0d0196efb6baefc00fd3bcef5b1",
+  "an": "2026-10-19T19:05:33+00:00",
+  "not": "Wikipedia: 2026 in the United States"
+ },
+ "wiki/en_wikipedia_org_c3c1e5c0fb.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_Strait_of_Hormuz_crisis",
+  "durum": 200,
+  "bayt": 1978717,
+  "sha256": "dbb90106a955b0ba4a419f5f3331d19860d0d42a964e1a58d3433b35843083e4",
+  "an": "2026-10-19T19:06:07+00:00",
+  "not": "Wikipedia: 2026 Strait of Hormuz crisis"
+ },
+ "wiki/en_wikipedia_org_e8f47ae999.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Lust%2C_Caution",
+  "durum": 200,
+  "bayt": 313923,
+  "sha256": "ad5a3091061ebe0fd30f79837684798061249d5106401cf74ca1e792d2e4bcd3",
+  "an": "2026-10-19T19:06:03+00:00",
+  "not": "Wikipedia: Lust, Caution"
+ }
+}
