@@ -1,18 +1,18 @@
 ---
-title: 'FX Gün İçi Stratejiler 3: Bir Kuralı Denemeden Önce — Kontrol Listesi'
+title: 'FX Gün İçi Stratejiler 6: Bir Kuralı Denemeden Önce — Kontrol Listesi'
 description: "Bir gün içi FX kuralını kendiniz sınamak ya da uygulamak istiyorsanız önce bakılacak altı şey: maliyetinizin pip karşılığı, stopun maliyete oranı, kazanma oranı yerine işlem başına net sonuç, kaç işlemin yeteceği, ayarların önceden yazılması ve ileriye dönük izleme."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders', 'risk']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Bir kuralın sonucunu ilk iki ders anlattı; bu ders, bir kuralı kendiniz denemek isterseniz neye bakmanız gerektiğini sayılarla veriyor: maliyetin pip karşılığı, stopun maliyete oranı, net sonuç, gereken işlem sayısı, önceden yazılmış ayarlar ve tek adayın ileriye dönük izlenmesi."
+ozet: "Kuralların sonucunu önceki dersler anlattı; bu ders, bir kuralı kendiniz denemek isterseniz neye bakmanız gerektiğini sayılarla veriyor: maliyetin pip karşılığı, stopun maliyete oranı, net sonuç, gereken işlem sayısı, önceden yazılmış ayarlar ve adayların ileriye dönük izlenmesi."
 seviye: 'giris'
 onkosul:
   - fx-gunici-sonuc
   - fx-gunici-stop-hedef
 ---
 
-İlk iki ders iki şey gösterdi: sınanan kuralların hiçbiri maliyetten sonra güvenilir biçimde kazandırmıyor, ve stop ile
+Önceki dersler iki şey gösterdi: sınanan kuralların hiçbiri maliyetten sonra güvenilir biçimde kazandırmıyor, ve stop ile
 hedefi değiştirmek bunu değiştirmiyor. Bu ders bir adım geri çekilip pratik bir soru soruyor: bir kuralı kendiniz denemek
 ya da birinin önerdiği bir kuralı değerlendirmek isterseniz, neye bakmanız gerekir?
 
@@ -71,15 +71,16 @@ en küçük hücresinin bile çok altında{{? O.basarisiz.ayrisim.oos.ort.brut <
 
 ## 5. Ayarları önceden yazın, sonra bakın
 
-Bir kuralı denerken en kolay yanılgı, çok sayıda ayarı deneyip en iyisini seçmektir. İkinci derste bunu ölçtük: 2018–2023
+Bir kuralı denerken en kolay yanılgı, çok sayıda ayarı deneyip en iyisini seçmektir. Stop ve hedef dersinde bunu ölçtük: 2018–2023
 döneminde en iyi çıkan {{ O.kisa.secim.n | n }} ayar o dönemde işlem başına {{ O.kisa.secim.is_r | ra }} R kazandırıyordu,
 2024 →'de ortalama {{ O.kisa.secim.oos_r | ra }} R kaybettirdi{{? O.kisa.secim.oos_r < 0 and O.kisa.secim.is_r > 0 }}.
 Doğru sıra şudur: kuralı, stopu, hedefi, saatleri ve "işe yarıyor" demenin şartını **sonuca bakmadan** yazın; sonra bir
 kez sınayın. Sonucu gördükten sonra değiştirdiğiniz her ayar, sınamayı biraz daha az güvenilir yapar.
 
-## 6. Tek adayı ileriye dönük izleyin
+## 6. Adayları ileriye dönük izleyin
 
-Serinin tek ilginç alt kümesi GBP/USD'de Londra fiksingi momentumunun ay sonu işlemleriydi (birinci ders). Kural basit:
+Serinin en belirgin adayı GBP/USD'de Londra fiksingi momentumunun ay sonu işlemleri (birinci ders); ikincisi başarısız
+haber kırılımında süreyle çıkış (dördüncü ders). Birincisinin kuralı basit:
 ayın son iş günü Londra 15:50–15:55 mumunun ({{! tsi "" "Londra 15:50–15:55" }}) yönünde Londra 15:55'te
 ({{! tsi "" "Londra 15:55" }}) girilir, Londra 16:00'da ({{! tsi "" "Londra 16:00" }}) çıkılır. Bu alt küme sonuçlar
 görüldükten sonra seçildiği için geçmiş veri onu kanıtlayamaz. Geriye tek dürüst yol kalıyor: kuralı bugünden itibaren

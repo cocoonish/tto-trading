@@ -6726,7 +6726,174 @@ def blok_kisa_guc_tablo(u: Uretim, ctx: dict) -> str:
         (f"\n\n_Hücre: o sıklık ve sürede sıfırdan ayırt edilebilecek en küçük kenar, R / işlem. İşlem sonuçlarının "
          f"oynaklığı serinin ölçülen değeri ({sayi(float(m['sigma']), 2)} R); %80 olasılıkla, tek yönlü %5 düzeyinde._")
 
+#: Kural kartının okur adları (kısa seri; strateji derslerinin adlarından kısa).
+KART_DEGER = {"karsi_uc": "karşı uç", "orta": "aralığın ortası", "sinyal_mumu": "sinyal mumunun ucu",
+              "atr_yarim": "seviyenin 0,5·ATR içi", "sert": "sert", "kapanis": "kapanış", "yok": "stop yok"}
+KART_HEDEF = {"gun_sonu": "gün sonu", "seviye": "karşı pivot seviyesi", "karsi_uc": "aralığın öbür ucu",
+              "oncesi": "haber öncesi fiyat", "itki_ucu": "itkinin ucu", "vwap": "VWAP"}
+
+
+def _kart(u: Uretim, birim: str) -> dict:
+    k = (_kisa(u).get("kart") or {}).get(birim)
+    if not k:
+        raise SablonHatasi(f"{birim}: kural kartı ölçülmedi (kisa.kart)")
+    return k
+
+
+def _kart_stop_ad(p: dict, boyut: list[str]) -> str:
+    st = [k for k in ("stop_yeri", "stop_kurali", "stop_turu") if k in boyut]
+    if not st:
+        return "—"
+    return bas_buyuk(" · ".join(KART_DEGER.get(p.get(k), adlar.DEGER.get(p.get(k), p.get(k))) for k in st))
+
+
+def _kart_hedef_ad(x: str, aile: str) -> str:
+    if x == "zaman":
+        n = ZAMAN_MUM.get("haber" if aile in HABER_AILE else "desen")
+        if not n:
+            raise SablonHatasi("zaman hedefinin mum sayısı kurulmadı (zaman_kur)")
+        return f"{n} mum sonra çık"
+    return KART_HEDEF.get(x) or _deger_yaz(x, "hedef", aile)
+
+
+def _kart_ayar_ad(p: dict, boyut: list[str], aile: str) -> str:
+    """Hücrenin okur adı: "stop karşı uç · sert, hedef 2R"."""
+    st = [k for k in ("stop_yeri", "stop_kurali", "stop_turu") if k in boyut]
+    par = []
+    if st:
+        par.append("stopsuz" if p.get("stop_turu") == "yok" and len(st) == 1 else
+                   "stop " + " · ".join(KART_DEGER.get(p.get(k), str(p.get(k))) for k in st))
+    if "hedef" in boyut:
+        par.append("hedef " + _kart_hedef_ad(p.get("hedef"), aile))
+    return ", ".join(par) or "tek ayar"
+
+
+def _secilen_sayim(b: dict) -> tuple[str, list]:
+    """Her paritede 2018–2023'ün en iyi ayarı (bütün ızgara) seçildiğinde 2024 → hükümlerinin sayımı."""
+    say: dict = {}
+    r = []
+    for c in _ciftler(b):
+        s = b["cift"][c].get("secilen") or {}
+        h = s.get("hukum") if b["cift"][c].get("secilen_p") else None
+        h = h or "secilemedi"
+        say[h] = say.get(h, 0) + 1
+        if (s.get("oos") or {}).get("beklenti_r") is not None and h != "secilemedi":
+            r.append((c, s["oos"]["beklenti_r"]))
+    ad = dict(adlar.HUKUM, secilemedi="seçilemedi (az işlem)")
+    return " · ".join(f"{say[h]} {ad[h]}" for h in ("calisiyor", "zayif", "calismiyor", "olculemedi", "secilemedi")
+                      if say.get(h)), r
+
+
+def blok_kisa_kart(u: Uretim, ctx: dict, birim: str) -> str:
+    """Bir kuralın kartı: varsayılan sonuç (2024 →, dört parite birlikte), stop × hedef tablosu (öbür ayarlar
+    varsayılanda) ve "çalışır hale gelir miydi" cevabı: 2018–2023'te en iyi stop/hedef hücresinin 2024 → sonucu,
+    bütün ızgaradan parite parite seçilen ayarın hükmü, ve sonradan bakınca 2024 →'ün en iyi hücresi."""
+    k = _kart(u, birim)
+    b = u.O["birim"][birim]
+    aile = b.get("aile") or ""
+    h = (((u.O.get("basarisiz") or {}).get("basabas") or {}).get("havuz") or {})
+    ho, hi = (h.get("oos") or {}).get(birim), (h.get("is") or {}).get(birim)
+    if not ho or not hi:
+        raise SablonHatasi(f"{birim}: başabaş havuzu yok")
+    stopsuz = (b.get("varsayilan") or {}).get("stop_turu") == "yok"
+    p = [f"**Sonuç (varsayılan ayar, dört parite birlikte).** 2024 →'de {sayi(ho['n'], 0)} işlem, kazanma oranı "
+         f"{_hucre(ho['isabet'], 'yz1')}; kâra geçmek için gereken {_hucre(ho['pstar'], 'yz1')}. İşlem başına "
+         f"{_hucre(ho['net'], 'ra')} R (2018–2023'te {_hucre(hi['net'], 'ra')} R). Parite parite hüküm: "
+         f"{hukum_sayim_yaz(b)}.", ""]
+    H = k["hucre"]
+    boyut = k["boyut"]
+    sira = {kk: [str(x) for x in ((b.get("izgara_deger") or {}).get(kk) or [])] for kk in boyut}
+
+    def siralama(kk, x):
+        L = sira.get(kk) or []
+        return L.index(x) if x in L else len(L)
+
+    def hucre(d):
+        t = f"{_hucre(d['oos']['r'], 'ra')} · {_hucre(d['oos']['isabet'], 'yz0')}"
+        if not d["sayilir"]:
+            t += " (az)"
+        return f"**{t}**" if d["varsayilan"] else t
+    st = [kk for kk in ("stop_yeri", "stop_kurali", "stop_turu") if kk in boyut]
+    sutun = sorted({tuple(d["p"].get(kk) for kk in st) for d in H},
+                   key=lambda t: tuple(siralama(kk, x) for kk, x in zip(st, t)))
+    if "hedef" in boyut:
+        hedefler = sorted({d["p"]["hedef"] for d in H}, key=lambda x: siralama("hedef", x))
+        govde = []
+        for hd in hedefler:
+            satir = [bas_buyuk(_kart_hedef_ad(hd, aile))]
+            for t in sutun:
+                d = [x for x in H if x["p"].get("hedef") == hd and tuple(x["p"].get(kk) for kk in st) == t]
+                satir.append(hucre(d[0]) if d else "—")
+            govde.append(satir)
+        bas = ["Hedef / stop"] + [_kart_stop_ad(dict(zip(st, t)), boyut) for t in sutun]
+    else:
+        govde = [[_kart_stop_ad(d["p"], boyut), hucre(d)] for t in sutun
+                 for d in H if tuple(d["p"].get(kk) for kk in st) == t]
+        bas = ["Stop", "İşlem başına (R) · kazanma oranı"]
+    p += ['<div class="sayi-tablo">', "", _tablo(bas, govde, ["l"] + ["r"] * (len(bas) - 1)), "", "</div>", "",
+          "_2024 →, dört parite birlikte, maliyetten sonra. Hücre: işlem başına net R · kazanma oranı. Kalın hücre "
+          "kuralın varsayılan ayarı; öbür ayarlar (mum, saat, seviye) varsayılanda. \"az\": bir dönemde "
+          f"{sayi(_kisa(u)['asgari'], 0)} işlemden az."
+          + (" R birimi girişteki oynaklık (1 ATR); sert ve kapanış stopu girişten 1 ATR uzakta." if stopsuz else "")
+          + "_", ""]
+    # Çalışır hale gelir miydi?
+    v = [d for d in H if d["varsayilan"]][0]
+    cumle = []
+    if "is_en_iyi" in k:
+        ie, oe = H[k["is_en_iyi"]], H[k["oos_en_iyi"]]
+        if ie["varsayilan"]:
+            cumle.append(f"2018–2023'te en iyi çıkan stop/hedef bileşimi varsayılanın kendisi "
+                         f"({_hucre(ie['is']['r'], 'ra')} R).")
+        else:
+            cumle.append(f"2018–2023'te en iyi çıkan stop/hedef bileşimi ({_kart_ayar_ad(ie['p'], boyut, aile)}) o dönemde "
+                         f"{_hucre(ie['is']['r'], 'ra')} R veriyordu; 2024 →'de {_hucre(ie['oos']['r'], 'ra')} R.")
+        if k["oos_arti"] == 0:
+            cumle.append(f"Sonradan bakınca bile tablodaki {sayi(k['sayilan'], 0)} bileşimin hiçbiri 2024 →'de artıda "
+                         f"değil; en iyisi ({_kart_ayar_ad(oe['p'], boyut, aile)}) {_hucre(oe['oos']['r'], 'ra')} R.")
+        else:
+            g = u.O["basarisiz"]["guc"]
+            mde = (float(g["z_alfa"]) + float(g["z_guc"])) * float(g["mde"]["sigma"]) / math.sqrt(oe["oos"]["n"])
+            cumle.append(f"Tablodaki {sayi(k['sayilan'], 0)} bileşimin {sayi(k['oos_arti'], 0)} tanesi 2024 →'de artıda; "
+                         f"en iyisi ({_kart_ayar_ad(oe['p'], boyut, aile)}) {_hucre(oe['oos']['r'], 'ra')} R, "
+                         f"{sayi(oe['oos']['n'], 0)} işlemde (2018–2023'te {_hucre(oe['is']['r'], 'ra')} R). "
+                         f"Bu kadar işlemle şanstan ayrılabilecek en küçük sonuç yaklaşık {sayi(mde, 2)} R"
+                         + ("; ölçülen sonuç onun altında, yani şanstan ayrılamıyor." if oe["oos"]["r"] < mde else ".")
+                         + " Parite parite: " + ", ".join(f"{PARITE[c]} {_hucre(x['r'], 'ra')} R ({sayi(x['n'], 0)} işlem)"
+                                                         for c, x in (oe.get("parite") or {}).items()) + ".")
+    sec, _ = _secilen_sayim(b)
+    cumle.append(f"Bütün ayarlar serbest bırakılıp her paritede 2018–2023'ün en iyisi seçildiğinde 2024 →'de hüküm: "
+                 f"{sec}.")
+    p.append("**Stop ve hedefle çalışır hale gelir miydi?** " + " ".join(cumle))
+    return "\n".join(p)
+
+
+def blok_kisa_kart_ozet(u: Uretim, ctx: dict, ders: str) -> str:
+    """Bir kural dersinin özet tablosu: kural başına varsayılan ayarın 2024 → sonucu, 2018–2023'te en iyi çıkan
+    stop/hedef bileşiminin 2024 → sonucu ve sonradan bakınca 2024 →'ün en iyi bileşimi (dört parite birlikte)."""
+    L = adlar.KISA_DERS_BIRIM.get(ders)
+    if not L:
+        raise SablonHatasi(f"kisa_kart_ozet: bilinmeyen ders {ders}")
+    govde = []
+    for b in L:
+        k = _kart(u, b)
+        H = k["hucre"]
+        v = [d for d in H if d["varsayilan"]][0]
+        ie = H[k["is_en_iyi"]] if "is_en_iyi" in k else None
+        oe = H[k["oos_en_iyi"]] if "oos_en_iyi" in k else None
+        govde.append([adlar.BIRIM[b][1], _hucre(v["oos"]["r"], "ra"),
+                      _hucre(ie["oos"]["r"], "ra") if ie else "—", _hucre(oe["oos"]["r"], "ra") if oe else "—",
+                      f"{sayi(k['oos_arti'], 0)} / {sayi(k['sayilan'], 0)}"])
+    return (_tablo(["Kural", "Varsayılan", "2018–2023'ün en iyisi", "Sonradan en iyi", "Artı bileşim"], govde,
+                   ["l", "r", "r", "r", "r"]) +
+            "\n\n_İşlem başına net R, 2024 →, dört parite birlikte, maliyetten sonra. \"2018–2023'ün en iyisi\": o "
+            "dönemde en iyi çıkan stop/hedef bileşiminin 2024 → sonucu (bir trader'ın o gün seçebileceği). \"Sonradan "
+            "en iyi\": 2024 →'e bakarak seçilen bileşim (önceden seçilemezdi). Son sütun: 2024 →'de artıda kalan "
+            "stop/hedef bileşimi / tablodaki bileşim._")
+
+
 BLOKLAR = {
+    "kisa_kart_ozet": blok_kisa_kart_ozet,
+    "kisa_kart": blok_kisa_kart,
     "kisa_kural_tablo": blok_kisa_kural_tablo, "kisa_hedef_ornek": blok_kisa_hedef_ornek,
     "kisa_grup_tablo": blok_kisa_grup_tablo, "kisa_esli_tablo": blok_kisa_esli_tablo,
     "kisa_maliyet_stop": blok_kisa_maliyet_stop, "kisa_parite_maliyet": blok_kisa_parite_maliyet,

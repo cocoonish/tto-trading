@@ -45,7 +45,15 @@ DERS_BIRIM = {
 
 #: Serinin okuma sırası: yayındaki kısa seri (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır;
 #: dogrula.py iki listeyi karşılaştırır).
-DERS_SIRA = ["fx-gunici-sonuc", "fx-gunici-stop-hedef", "fx-gunici-kontrol"]
+DERS_SIRA = ["fx-gunici-sonuc", "fx-gunici-kirilim", "fx-gunici-donus", "fx-gunici-akis-haber",
+             "fx-gunici-stop-hedef", "fx-gunici-kontrol"]
+#: Kısa serinin kural dersleri ve kuralları (okuma sırası): arşivdeki derslerin birimlerinden türer, elle ikinci
+#: bir liste tutulmaz.
+KISA_DERS_BIRIM = {
+    "fx-gunici-kirilim": DERS_BIRIM["fx-gunici-seans-kirilimlari"] + DERS_BIRIM["fx-gunici-yapi-kirilimlari"],
+    "fx-gunici-donus": list(DERS_BIRIM["fx-gunici-fade"]),
+    "fx-gunici-akis-haber": DERS_BIRIM["fx-gunici-akis"] + DERS_BIRIM["fx-gunici-haber"],
+}
 #: Arşivdeki dokuz uzun ders (karar 19.10.2026: kısa seri yerlerini aldı). Sitede `durum: 'arsiv'` taşırlar, listelerde
 #: görünmezler, adresleri açık kalır; ölçümden birebir üretilmeye ve kapıdan geçmeye devam ederler.
 ARSIV_SIRA = ["fx-gunici-giris", "fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari", "fx-gunici-fade",

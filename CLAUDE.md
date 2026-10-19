@@ -5305,3 +5305,17 @@ okunuşuna bağlı (yirmi iki → "si") ve sayı ölçümle değişir; cümle sa
 BAŞLIĞI GÖRÜNENİ SÖYLEMELİ: "kazanma oranı değişiyor, sonuç değişmiyor" başlığı, sağa doğru hafifçe yükselen bulutun
 üstündeydi (kazanma oranı yüksek ayarlar daha az kaybettiriyor); başlık "sonuç çoğunlukla eksi"ye çekildi ve
 eğimin ölçüsü metne yazıldı. Ekseni kesilen şekil kestiği nokta sayısını alt yazıda söyler.
+Aynı gün ikinci istek: "Bu stratejileri anlatalım ve backtest sonuçlarını sunalım. Stop TP nerede olsaydı ne fark
+ederdi, çalışıyor hale getirebilir miydik." Seri altı derse çıktı: sonuç → üç kural dersi (`fx-gunici-kirilim` ·
+`fx-gunici-donus` · `fx-gunici-akis-haber`; kurallar `adlar.KISA_DERS_BIRIM`, arşiv derslerinin birimlerinden türer) →
+stop/hedef aritmetiği → kontrol listesi. Her kural bir KART: sade kural tanımı (saatler yalnız TSİ), varsayılan
+sonuç, stop × hedef tablosu ve "çalışır hale gelir miydi" cümlesi (`kisa.kart` → `olcum["kisa"]["kart"]`, motor
+`kisa_kart`). Tablo kuralın stop ve hedef DIŞINDAKİ bütün ayarlarını varsayılanda tutar ve dört paritenin işlemlerini
+işlem ağırlığıyla birleştirir (varsayılan hücre başabaş havuzuyla birebir). Cevap üç katmanlı ve sırası önemli:
+2018–2023'te en iyi hücrenin 2024 → sonucu (o gün seçilebilecek olan), bütün ızgaradan parite parite seçilenin hükmü
+(arşiv koşusunun `secilen`i), ve sonradan bakınca 2024 →'ün en iyi hücresi (seçilemezdi). Artı bir hücre varsa
+işlem sayısı, o sayıyla şanstan ayrılabilecek en küçük sonuç (güç ölçüsünün katsayısı ve σ'sı) ve parite parite
+sonuç cümleye girer — "artı" tek başına basılmaz. Ölçülen: 22 kuralın 20'sinde hiçbir stop/hedef hücresi 2024 →'de
+artı değil; N2'de tek hücre sıfırın hemen üstünde ve 2018–2023'te eksi; N4'te (başarısız haber kırılımı) süreyle
+çıkış iki dönemde de artı ama 2024 →'de 45 işlem, artı dört paritenin yarısında ve şanstan ayrılamıyor — ay sonu
+fiksinginin yanında ikinci ileriye dönük aday olarak yazıldı.

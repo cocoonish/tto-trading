@@ -11,9 +11,10 @@ seviye: 'giris'
 
 Bu seri tek bir soruya cevap verir: gün içi FX işlemlerinde sık önerilen kurallar, gerçek maliyetle uygulandığında para
 kazandırıyor mu? Kısa cevap: **hayır.** Sınanan {{ O.basarisiz.kapsam.kural | n }} kuralın hiçbiri, dört paritenin
-hiçbirinde, maliyetten sonra güvenilir bir kazanç göstermedi. Bu ders sonucu sade bir tabloyla verir; ikinci ders stop ve
-hedef seçiminin neden bunu değiştirmediğini, üçüncüsü bir kuralı kendiniz denemek isterseniz neye bakmanız gerektiğini
-anlatır.
+hiçbirinde, maliyetten sonra güvenilir bir kazanç göstermedi. Bu ders sonucu sade bir tabloyla verir. Sonraki üç ders kuralları
+tek tek anlatır (kırılım, dönüş, akış ve haber): her kural ne yapar, backtest ne verdi, stop ve hedef nerede olsaydı ne
+değişirdi. Beşinci ders stop ve hedefin genel aritmetiğini, altıncısı bir kuralı kendiniz denemeden önceki kontrol
+listesini verir.
 
 ## Ne sınandı
 
@@ -70,9 +71,9 @@ Sebep tek cümleye sığar: **kurallar fiyatın yönünü ve zamanını şanstan
 Kurallar "yanlış" değil; tutturdukları yön ve zaman, ödenen maliyeti karşılamaya yetmiyor. Bir kural ancak maliyetten
 büyük ve tekrar eden bir avantaj taşıyorsa kazandırır. Bu serideki kuralların hiçbirinde böyle bir avantaj ölçülmedi.
 
-## Tek aday: ay sonu fiksingi
+## Dikkat çeken bir alt küme: ay sonu fiksingi
 
-Tabloda görünmeyen ama dikkat çeken tek yer, Londra fiksingi momentumunun **yalnız ay sonu günlerindeki**
+Tabloda görünmeyen ama en çok dikkat çeken yer, Londra fiksingi momentumunun **yalnız ay sonu günlerindeki**
 işlemleri. Kural, fiksingden
 önceki beş dakikanın yönünde girer: Londra 15:50–15:55 mumuna bakar ({{! tsi "" "Londra 15:50–15:55" }}), 15:55'te
 girer ({{! tsi "" "Londra 15:55" }}) ve tam fiksingde, Londra 16:00'da çıkar ({{! tsi "" "Londra 16:00" }}).
@@ -86,7 +87,7 @@ Bunu bir kural saymak için üç sebeple erken:
 1. **Seçim sonradan yapıldı.** "Ay sonu" ayrımı, iki dönemin sonuçları görüldükten sonra öne çıktı. Çok sayıda alt küme
    arasından sonradan seçilen bir kazanan, şansla bulunmuş olabilir.
 2. **İşlem az.** Ayda bir işlem, yılda yaklaşık {{ O.basarisiz.ay_sonu.olcek.islem_yil | s0 }} işlem eder. Bu kadar
-   az işlemle bir kazancın gerçek olduğunu göstermek yıllar sürer (üçüncü ders).
+   az işlemle bir kazancın gerçek olduğunu göstermek yıllar sürer (altıncı ders).
 3. **Pariteler aynı şeyi söylemiyor.** Ay sonu işlemleri 2024 →'de USD/JPY'de de artıda
    ({{ O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.net | r }} R), EUR/USD'de sıfıra yakın
    ({{ O.basarisiz.ay_sonu.parite.EURUSD.oos.ay_sonu.net | r }} R), AUD/USD'de eksi
@@ -100,9 +101,10 @@ Dürüst sınama, bu kuralı bugünden itibaren yazılı ayarlarıyla izlemektir
 - {{ O.basarisiz.kapsam.kural | n }} kuralın hiçbiri, maliyetten sonra, güvenilir biçimde kazandırmıyor.
 - Kurallar maliyetten önce yaklaşık başabaş; kayıp neredeyse tamamen makas ve kaymadan geliyor.
 - Kazanma oranı tek başına bir şey söylemez; kâra geçmek için gereken oranla birlikte okunur.
-- Tek ilginç alt küme (GBP/USD ay sonu fiksingi) sonradan seçildi ve henüz kanıtlanmış değil.
+- İki ileriye dönük aday var — GBP/USD ay sonu fiksingi ve (dördüncü derste) başarısız haber kırılımında süreyle çıkış;
+  ikisi de sonradan seçildi ve henüz kanıtlanmış değil.
 
-Sonraki ders: stop ve hedefi değiştirmek bu sonucu değiştirir mi?
+Sonraki ders: kırılım kuralları tek tek — ne yapıyorlar, ne verdiler, stop ve hedef neyi değiştirirdi.
 
 Bu serinin ayrıntılı backtest notları — her kuralın tam tanımı, parametre ızgaraları, koşul analizleri ve yöntem —
 [arşivdeki dokuz derste](/arastirma/fx-gunici-giris/) duruyor.

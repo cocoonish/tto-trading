@@ -1,5 +1,5 @@
 ---
-title: 'FX Gün İçi Stratejiler 2: Stop ve Hedef — Kazanma Oranı Neden Kâr Getirmiyor'
+title: 'FX Gün İçi Stratejiler 5: Stop ve Hedef — Kazanma Oranı Neden Kâr Getirmiyor'
 description: "Hedefi yaklaştırınca kazanma oranı yükselir, uzaklaştırınca düşer; kâr ise neredeyse hiç değişmez. {{ O.kisa.toplam.n | n }} farklı stop ve hedef ayarında ölçülmüş sonuç, kâra geçmek için gereken kazanma oranının basit hesabı ve dar stopun gizli maliyeti."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders', 'risk']
@@ -10,6 +10,9 @@ seviye: 'giris'
 onkosul:
   - fx-gunici-sonuc
 ---
+
+Önceki üç ders her kuralın stop/hedef tablosunu tek tek verdi. Bu ders aynı soruyu bütün kurallar için birlikte sorar
+ve arkasındaki aritmetiği anlatır.
 
 Bir işlem kuralının kazanma oranını yükseltmenin en kolay yolu hedefi yaklaştırmaktır: fiyatın 10 pip gitmesi 30 pip
 gitmesinden daha sık olur. Ama kazanma oranı kâr değildir. Bu ders, aynı kuralı farklı stop ve hedeflerle denediğimiz

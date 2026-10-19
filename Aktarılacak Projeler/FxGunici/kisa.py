@@ -15,6 +15,7 @@ kayıtlı varsayılanlarındır). Üç soru sorar:
      Gruplar arası kıyas kural karışımına bağlıdır (gün sonu hedefi yalnız kırılım kurallarında var); eşli kıyas değil.
   3. Yüksek kazanma oranı ve "en iyi ayarı seçmek": örneklem dışında kazanma oranı yüksek ayarların net sonucu, ve
      örneklem içinde en iyi çıkan ayarların örneklem dışındaki net sonucu.
+  4. Kural kartı (kart): her kuralın stop × hedef tablosu, öbür parametreler varsayılanda, dört parite birlikte.
 """
 from __future__ import annotations
 
@@ -101,6 +102,66 @@ def esli(sat: list[dict], param: str, a: str, b: str) -> dict:
             "b_arti": sum(1 for k in ortak if sag[k]["oos_r"] > 0)}
 
 
+#: Kural kartının stop ve hedef boyutları (kuralın ızgarasında birden çok değeri olanlar tabloya girer).
+KART_STOP = ("stop_yeri", "stop_kurali", "stop_turu")
+KART_BOYUT = KART_STOP + ("hedef",)
+
+
+def kart(kok: Path, b: str, v: dict) -> dict:
+    """Bir kuralın stop × hedef tablosu: stop ve hedef dışındaki bütün parametreler önceden kayıtlı varsayılanda, dört
+    paritenin işlemleri birlikte (işlem ağırlıklı ortalama). Boş bileşim sayılmaz; kopya bileşim (aynı işlemleri
+    üreten ikinci yazım) sayılır, çünkü stop/hedef hücresi yine o ayardır. Bir hücre iki pencerede de en az ASGARI
+    işlem taşımıyorsa tabloda durur ama seçime girmez.
+
+    `is_en_iyi`: 2018–2023'te en iyi hücre (o günden bakan birinin seçebileceği); `oos_en_iyi`: 2024 →'de en iyi hücre
+    (sonradan bakınca; seçilemezdi). İkisi de betimlemedir; hükümler varsayılanındır."""
+    vs = {k: str(x) for k, x in v.items()}
+    hucre: dict = {}
+    for c in sorted(p.stem for p in (kok / "sonuc" / b).glob("*.json")):
+        s = json.loads((kok / "sonuc" / b / f"{c}.json").read_text(encoding="utf-8"))
+        for iz in s.get("izgara") or []:
+            if iz.get("bos"):
+                continue
+            p = {k: str(x) for k, x in iz["p"].items()}
+            if any(p.get(k) != vs[k] for k in p if k not in KART_BOYUT and k in vs):
+                continue
+            anahtar = tuple((k, p[k]) for k in KART_BOYUT if k in p)
+            h = hucre.setdefault(anahtar, {"is": [0, 0.0, 0.0], "oos": [0, 0.0, 0.0], "cift": set(), "parite": {}})
+            h["cift"].add(c)
+            xo = iz.get("oos") or {}
+            if xo.get("n") and xo.get("beklenti_r") is not None:
+                h["parite"][c] = {"n": xo["n"], "r": xo["beklenti_r"]}
+            for w in ("is", "oos"):
+                x = iz.get(w) or {}
+                n = x.get("n") or 0
+                if n and x.get("beklenti_r") is not None and x.get("isabet") is not None:
+                    h[w][0] += n
+                    h[w][1] += n * x["beklenti_r"]
+                    h[w][2] += n * x["isabet"]
+    if not hucre:
+        raise ValueError(f"kisa.kart: {b} için varsayılana uyan ızgara satırı yok")
+    satir = []
+    for anahtar, h in hucre.items():
+        d = {"p": dict(anahtar), "cift": len(h["cift"]), "parite": dict(sorted(h["parite"].items())),
+             "varsayilan": all(vs.get(k) == x for k, x in anahtar)}
+        for w in ("is", "oos"):
+            n, r, i = h[w]
+            d[w] = {"n": n, "r": r / n if n else None, "isabet": i / n if n else None}
+        d["sayilir"] = d["is"]["n"] >= ASGARI and d["oos"]["n"] >= ASGARI
+        satir.append(d)
+    boyut = [k for k in KART_BOYUT if len({d["p"].get(k) for d in satir}) > 1]
+    say = [i for i, d in enumerate(satir) if d["sayilir"]]
+    if not any(d["varsayilan"] for d in satir):
+        raise ValueError(f"kisa.kart: {b} varsayılan hücresi yok")
+    out = {"boyut": boyut, "hucre": satir, "sayilan": len(say),
+           "oos_arti": sum(1 for i in say if satir[i]["oos"]["r"] > 0),
+           "iki_arti": sum(1 for i in say if satir[i]["oos"]["r"] > 0 and satir[i]["is"]["r"] > 0)}
+    if say:
+        out["is_en_iyi"] = max(say, key=lambda i: (satir[i]["is"]["r"], -i))
+        out["oos_en_iyi"] = max(say, key=lambda i: (satir[i]["oos"]["r"], -i))
+    return out
+
+
 def bolum(kok: Path, birimler: dict) -> dict:
     sat = satirlar(kok, birimler)
     if not sat:
@@ -120,6 +181,7 @@ def bolum(kok: Path, birimler: dict) -> dict:
         "grup": gruplar,
         "esli": {param: esli(sat, param, a, b) for param, a, b in ESLI},
         "yuksek_isabet": yuksek,
+        "kart": {b: kart(kok, b, v["varsayilan"]) for b, v in birimler.items()},
         "secim": {"n": len(en_iyi), "is_r": _ort([s["is_r"] for s in en_iyi]),
                   "oos_r": _ort([s["oos_r"] for s in en_iyi]),
                   "oos_arti": sum(1 for s in en_iyi if s["oos_r"] > 0)},

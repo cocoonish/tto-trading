@@ -1653,7 +1653,44 @@ def kisa_stop_hedef(o: dict) -> None:
     so._yaz(fig, "kisa-stop-hedef.html", yukseklik(bas, 520))
 
 
-KISA_SEKILLERI = (kisa_kurallar, kisa_stop_hedef)
+def kisa_aralik(o: dict) -> None:
+    """Kural dersleri: her kuralın stop × hedef bileşimlerinin 2024 → sonuç aralığı (en kötü → en iyi), varsayılan ve
+    2018–2023'te en iyi çıkan bileşim işaretli. Bir ders, bir figür (adlar.KISA_DERS_BIRIM)."""
+    k = _kisa(o)
+    for ders, birimler in adlar.KISA_DERS_BIRIM.items():
+        fig = make_subplots(rows=1, cols=1, subplot_titles=("İşlem başına net sonuç, 2024 → (R)",))
+        ad = [adlar.BIRIM[b][1] for b in birimler][::-1]
+        lo, hi, vy, iy = [], [], [], []
+        for b in birimler[::-1]:
+            kk = k["kart"][b]
+            say = [d for d in kk["hucre"] if d["sayilir"]] or kk["hucre"]
+            r = [d["oos"]["r"] for d in say]
+            lo.append(min(r))
+            hi.append(max(r))
+            vy.append([d for d in kk["hucre"] if d["varsayilan"]][0]["oos"]["r"])
+            iy.append(kk["hucre"][kk["is_en_iyi"]]["oos"]["r"] if "is_en_iyi" in kk else None)
+        for i in range(len(ad)):
+            fig.add_trace(go.Scatter(x=[lo[i], hi[i]], y=[ad[i], ad[i]], mode="lines",
+                                     line=dict(color="#c9c4ba", width=6), showlegend=i == 0,
+                                     name="bütün stop/hedef bileşimleri (en kötü → en iyi)", hoverinfo="skip"), 1, 1)
+        fig.add_trace(go.Scatter(x=iy, y=ad, mode="markers", name="2018–2023'te en iyi çıkan bileşim",
+                                 marker=dict(symbol="diamond", size=10, color=MAVI),
+                                 hovertemplate="%{y}: %{x:.2f} R<extra>2018–2023'ün en iyisi</extra>"), 1, 1)
+        fig.add_trace(go.Scatter(x=vy, y=ad, mode="markers", name="varsayılan ayar",
+                                 marker=dict(symbol="circle", size=9, color=CLARET),
+                                 hovertemplate="%{y}: %{x:.2f} R<extra>varsayılan</extra>"), 1, 1)
+        fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
+        # Eksen bütün çizgileri ve sıfırı içine alır (otomatik aralık kalın çizginin ucunu kenara yapıştırıyordu).
+        sol, sag = min(lo + [0.0]), max(hi + [0.0])
+        pay = 0.06 * (sag - sol)
+        fig.update_xaxes(title_text="R / işlem", range=[sol - pay, sag + pay])
+        bas = baslik_koy(fig, "Stop ve hedef nerede olursa olsun",
+                         [f"Her satır bir kural; çizgi stop × hedef bileşimlerinin {_dis(o)} sonucu, dört parite "
+                          "birlikte, maliyetten sonra", "Öbür ayarlar varsayılanda. Sıfır çizgisinin sağı kârlı"])
+        so._yaz(fig, f"kisa-aralik-{ders.removeprefix('fx-gunici-')}.html", yukseklik(bas, 120 + 40 * len(ad)))
+
+
+KISA_SEKILLERI = (kisa_kurallar, kisa_stop_hedef, kisa_aralik)
 
 
 
