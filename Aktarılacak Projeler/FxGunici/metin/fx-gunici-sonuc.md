@@ -3,11 +3,13 @@ title: 'FX Gün İçi Stratejiler 1: Hangisi İşe Yarıyor? — {{ O.basarisiz.
 description: "Gün içi FX işlem kitaplarının en çok anılan {{ O.basarisiz.kapsam.kural | n }} kuralı dört majör paritede, gerçek alış-satış fiyatlarıyla ve maliyet düşülerek sınandı. Hangi kural ne kadar kazandırdı, kazanma oranı ne oldu, kâra geçmek için ne gerekiyordu — tek tabloda."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders']
-durum: 'aktif'
+durum: 'arsiv'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
 ozet: "{{ O.basarisiz.kapsam.kural | n }} gün içi kuralın hiçbiri maliyetten sonra güvenilir biçimde kazandırmıyor. Kuralların yön ve zaman tahmini maliyetten önce sıfıra yakın; ödenen makas ve kayma sonucu eksiye çeviriyor. Ders sonucu tek tabloda, kazanma oranı ve kâra geçmek için gereken kazanma oranıyla veriyor."
 seviye: 'giris'
 ---
+
+<div class="not gezinme"><span class="etiket">Arşiv</span> Bu ders gün içi FX kurallarının ayrıntılı sınamasındandır ve arşivdedir. Gün içi seri şimdi açılış, fiksing ve haber anlarının oyun planı olarak beş derste: [1 · İlk mumu okumak](/arastirma/fx-oyun-okuma/) · [2 · Açılışlar](/arastirma/fx-oyun-acilislar/) · [3 · Fiksingler](/arastirma/fx-oyun-fiksingler/) · [4 · Haber mumları](/arastirma/fx-oyun-haberler/) · [5 · Backtest](/arastirma/fx-oyun-backtest/).</div>
 
 Bu seri tek bir soruya cevap verir: gün içi FX işlemlerinde sık önerilen kurallar, gerçek maliyetle uygulandığında para
 kazandırıyor mu? Kısa cevap: **hayır.** Sınanan {{ O.basarisiz.kapsam.kural | n }} kuralın hiçbiri, dört paritenin

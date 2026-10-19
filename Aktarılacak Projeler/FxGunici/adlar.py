@@ -43,10 +43,9 @@ DERS_BIRIM = {
     "fx-gunici-akis": ["fiks_momentum", "momentum", "vwap_cekilme"],
 }
 
-#: Serinin okuma sırası: yayındaki kısa seri (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır;
-#: dogrula.py iki listeyi karşılaştırır).
-DERS_SIRA = ["fx-gunici-sonuc", "fx-gunici-nasil", "fx-gunici-kirilim", "fx-gunici-donus", "fx-gunici-akis-haber",
-             "fx-gunici-stop-hedef", "fx-gunici-suzgec", "fx-gunici-kontrol"]
+#: Serinin yayındaki okuma sırası: BOŞ (karar 19.10.2026: gün içi seri oyun planına geçti, `Aktarılacak Projeler/FxOyun`;
+#: sitedeki 'fx-gunici' ders grubu artık onun sırasını taşır ve dogrula.py bu serinin hiçbir dersinin orada olmadığını sorar).
+DERS_SIRA: list[str] = []
 #: Adım adım dersinin grafik etiketleri (sekil.nasil): kural başına referansın adı (yoksa None) ve sinyal mumunun adı.
 #: Ders metnindeki adım numaraları bu tablodan türeyen sırayla yazılır: referans varsa ①, sinyal ve giriş (aynı
 #: andaysa birlikte) sonra, çıkış en sonda. Sırası ve sayısı tek yerde durur.
@@ -82,9 +81,12 @@ KISA_DERS_BIRIM = {
     "fx-gunici-donus": list(DERS_BIRIM["fx-gunici-fade"]),
     "fx-gunici-akis-haber": DERS_BIRIM["fx-gunici-akis"] + DERS_BIRIM["fx-gunici-haber"],
 }
-#: Arşivdeki dokuz uzun ders (karar 19.10.2026: kısa seri yerlerini aldı). Sitede `durum: 'arsiv'` taşırlar, listelerde
-#: görünmezler, adresleri açık kalır; ölçümden birebir üretilmeye ve kapıdan geçmeye devam ederler.
-ARSIV_SIRA = ["fx-gunici-giris", "fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari", "fx-gunici-fade",
+#: Arşivdeki on yedi ders: sekiz kısa ders ve onların yerini aldığı dokuz uzun ders (karar 19.10.2026: ikisinin yerini
+#: oyun planı serisi aldı). Sitede `durum: 'arsiv'` taşırlar, listelerde görünmezler, adresleri açık kalır; ölçümden
+#: birebir üretilmeye ve kapıdan geçmeye devam ederler.
+ARSIV_SIRA = ["fx-gunici-sonuc", "fx-gunici-nasil", "fx-gunici-kirilim", "fx-gunici-donus", "fx-gunici-akis-haber",
+              "fx-gunici-stop-hedef", "fx-gunici-suzgec", "fx-gunici-kontrol",
+              "fx-gunici-giris", "fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari", "fx-gunici-fade",
               "fx-gunici-haber", "fx-gunici-akis", "fx-gunici-karsilastirma", "fx-gunici-metodoloji",
               "fx-gunici-neden-basarisiz"]
 #: Üretilen bütün dersler (yayındaki seri, sonra arşiv).

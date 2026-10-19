@@ -19,8 +19,10 @@ TTO Trading/
 │   ├── USDTRYDeval/             # USD/TRY trend kanalları
 │   ├── OVP/                     # Orta Vadeli Program: ima edilen kur (GSYH_TL/GSYH_USD),
 │   │                            #   program tabloları programlar.json'da ELLE tutulur
-│   ├── FxGunici/                # FX gün içi stratejiler: Dukascopy 1 dk bid/ask, ön kayıt,
-│   │                            #   koşu, karşı olgu → sekiz ders; tek komut hepsi.py
+│   ├── FxGunici/                # FX gün içi kural sınamaları: Dukascopy 1 dk bid/ask, ön kayıt,
+│   │                            #   koşu, karşı olgu → 17 ders (hepsi arşivde); tek komut hepsi.py
+│   ├── FxOyun/                  # FX gün içi oyun planı: açılış/fiksing/haber ilk mumu, gözlem
+│   │                            #   (yalnız 2018–2023) → plan → 2024 sınaması → beş ders; kapı dogrula.py
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
 ├── teknik/                      # Haftalık teknik analiz ARŞİVİ — yayın 27.09.2026 sayısıyla
 │                                #   sona erdi; yaz.py yalnız arşiv sayısına düzeltme yazar
@@ -5342,3 +5344,33 @@ zincirde `suzgec.py --gerekirse` ölçümden önce koşar. Hüküm: seçilen sü
 60 dk trend: 98 işlem, 2018–2023'te −0,16 R, yani işaret döndü) · 21 çalışmıyor; 132 tekil sınamanın hiçbirinde alt uç
 sıfırın üstünde değil (şans 3,3), BH geçen yok. Oynaklık şartının iyileşmesinin çoğu maliyet payından: brüt fark
 +0,011 R, stop 1,21 kat geniş. Ders `fx-gunici-suzgec` (seri 8 derse çıktı; kontrol listesi 8.).
+
+**KARAR (19.10.2026, kullanıcı) — FX GÜN İÇİ SERİSİ OYUN PLANINA GEÇTİ; ESKİ ON YEDİ DERS ARŞİVDE.** Kullanıcı:
+"intraday stratejileri kısmı beni hiç tatmin etmedi … bu kadar düşük win rate olmaması gerekiyor … açılışları,
+fixingleri, haber mumlarını inceleyelim, ilk mumlara, genel trende göre sınıflayalım ve bir oyun planı yazalım …
+biraz daha instinctive". Dört seçim ona soruldu: tek seri, eski dersler arşive, kapsam açılışlar + fiksingler + ABD
+verisi + merkez bankası, ve "2018–2023'ten yaz, 2024 → sına". Proje `Aktarılacak Projeler/FxOyun/` (FxGunici'nin veri
+ve takvim katmanını okur, motorunu kullanmaz): on an × dört ilk mum sınıfı (güçlü · normal · reddedilen · küçük; tipik
+boy o anın kendi GEÇMİŞ olaylarının ortancası) × günlük EMA20 trendi. Gözlem (`gozlem.py`) ayar dosyasının bitişi
+31.12.2023'e çekilerek yüklenir, 2024 dosyaları hiç açılmaz (assert); plan ve sınama betiği ön kayıtla birlikte 2024
+koşmadan commit edildi (4cf2dc43). Ders sayıları yalnız `veri/ders.json`dan; şablonda elle yazılmış ondalık ya da
+yüzde kapıda ENGEL. Hüküm: okumalar iki dönemde tuttu (normal açılış mumu %88–89 yarısına döner, güçlü mum dönüşten sık
+devam eder, fiksing koşusu geri verilir ama dönmez, ay sonu WM/R koşusu daha da az sürer), tepkilerin hiçbiri
+"çalışıyor" almadı. Sık anlarda (açılış, fiksing) yakın hedefli tepkiler işlemlerin yarısından çoğunu kazanıp maliyetten
+sonra −0,10 … −0,28 R kaldı: yön sınıflarında kenar maliyetten ÖNCE de yok (limit girişte maliyet 0,02–0,04 R; yarıya
+dönüşten sonra kendi ucuna gitme yarı yarıya), küçük mumda maliyetsiz kenar var ve dar stop yüzünden maliyet onu yutuyor.
+Tek artı işaret merkez bankası kararlarında ve işlem sayısı (11 · 51 · 7) hüküm kurmaya yetmiyor; ABD verisinin ilk
+beş dakikasının davranışı 2024 sonrasında değişti. Eski seri (`FxGunici/adlar.DERS_SIRA` boş, on yedi ders
+`ARSIV_SIRA`'da) üretilmeye ve kapıdan geçmeye devam eder; sitedeki 'fx-gunici' grubu artık FxOyun'un sırasını taşır,
+iki kapı da bunu sorar (FxGunici: grupta arşiv dersi yok; FxOyun: grup = `ders_yaz.SIRA`).
+
+Yol boyunca dört kusur kayda değer. (1) AYNI ADLI MODÜL GÖLGELER: FxOyun'un simülatörü `kosu.py` adını taşıyordu ve
+FxGunici yola BAŞTAN eklendiği için `import kosu` öbür projenin koşusunu getirdi (AttributeError); dosya `oyun_sim.py`
+oldu, FxGunici yola SONDAN eklenir ve iki çıktı yeniden üretilip bayt bayt aynı çıktı. (2) DAKİKA VERİSİNDE İNDEKS
+SAAT DEĞİLDİR: ortalama patikanın noktaları `j0 + k` diye indeksten okunuyordu; veride boşluk olunca nokta sayısı
+tutmuyor ve patika SESSİZCE boş yazılıyordu (ölçüm yeşil bitti). Noktalar artık saatten aranır. (3) BİR ŞEKİL
+BAŞLIĞI ÇİZDİĞİ VERİYE KARŞI OKUNUR: "kazanma oranı yükseldikçe net sonuç iyileşmiyor" başlığı, bütün tepkilerde
+eğimi ARTI olan bir dağılımın üstündeydi (merkez bankasının az işlemli noktaları sağ üstte); başlık ölçülen kümeyi
+söyleyecek biçimde yeniden yazıldı. (4) ARŞİVE ALMAK DA BİR KOD DEĞİŞİKLİĞİDİR: `adlar.py` FxGunici'nin ölçüm ve figür
+kod özüne girdiği için sıranın boşaltılması zinciri yeniden koşturdu (`hepsi.py --kosusuz`); koşu çıktısı değişmedi.
+

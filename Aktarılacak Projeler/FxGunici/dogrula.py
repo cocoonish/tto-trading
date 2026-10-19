@@ -15,7 +15,8 @@ depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saa
      sığmalıdır (ölçü çizim katmanının kendisinden: sekil_ortak.tasan_satirlar).
   3. Sayı envanteri — şablonlardaki her ondalık sayı ve yüzde ya bir yer tutucudan gelir, ya bildirilmiş bir sabittir
      ({{= "…" }}), ya da aşağıdaki tanım listesindedir. Elle yazılmış bir ölçüm şablona giremez.
-  4. Sıra — serinin okuma sırası (adlar.DERS_SIRA) sitedeki ders grubunun sırasıyla aynıdır; ön koşullar kendi listesindedir
+  4. Sıra — serinin okuma sırası (adlar.DERS_SIRA) sitedeki ders grubunun sırasıyla aynıdır; seri bütünüyle arşivdeyse
+     (DERS_SIRA boş) gruptaki hiçbir ders bu seriden değildir; ön koşullar kendi listesindedir
      (kısa seri · arşiv) ve durum alanı listesine uyar (aktif · arsiv).
   5. Ön kayıt — yayımlanan kopya kaynağın kendisidir.
   6. Künye — ölçüm dosyasının pariteleri, nokta/pip büyüklükleri ve penceresi bugünkü ayarla aynıdır.
@@ -714,8 +715,13 @@ def sira_denetimi() -> list[str]:
     if not m:
         return ["sitedeki ders gruplarında 'fx-gunici' grubu ya da sırası yok"]
     ts_sira = re.findall(r"'([^']+)'", m.group(1))
-    if ts_sira != adlar.DERS_SIRA:
-        hata.append(f"ders sırası ayrışıyor: site {ts_sira} ↔ seri {adlar.DERS_SIRA}")
+    if adlar.DERS_SIRA:
+        if ts_sira != adlar.DERS_SIRA:
+            hata.append(f"ders sırası ayrışıyor: site {ts_sira} ↔ seri {adlar.DERS_SIRA}")
+    else:                                     # seri bütünüyle arşivde: grup oyun planı serisinindir (FxOyun/dogrula.py)
+        for s in ts_sira:
+            if s in adlar.TUM_DERSLER:
+                hata.append(f"arşivdeki ders sitedeki ders grubunda duruyor: {s}")
     for liste, beklenen in ((adlar.DERS_SIRA, "aktif"), (adlar.ARSIV_SIRA, "arsiv")):
         for slug in liste:
             sablon = (BURASI / "metin" / f"{slug}.md").read_text(encoding="utf-8")
