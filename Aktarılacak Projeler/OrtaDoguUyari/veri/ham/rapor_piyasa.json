@@ -1,0 +1,1333 @@
+{
+ "2026-10-19T19:05:08Z": {
+  "Polymarket": {
+   "durum": "tamam",
+   "arama": {
+    "US strike Iran|active": 200,
+    "US strike Iran|closed": 200,
+    "US military action against Iran|active": 200,
+    "US military action against Iran|closed": 200,
+    "Iran ceasefire|active": 200,
+    "Iran ceasefire|closed": 200,
+    "US Iran ceasefire|active": 200,
+    "US Iran ceasefire|closed": 200,
+    "invade Iran|active": 200,
+    "invade Iran|closed": 200,
+    "Israel strike Iran|active": 200,
+    "Israel strike Iran|closed": 200,
+    "Iran war|active": 200,
+    "Iran war|closed": 200,
+    "US Iran deal|active": 200,
+    "US Iran deal|closed": 200,
+    "Fordow|active": 200,
+    "Fordow|closed": 200,
+    "Iran Gulf state|active": 200,
+    "Iran Gulf state|closed": 200,
+    "Iran attack|active": 200,
+    "Iran attack|closed": 200,
+    "Khamenei|active": 200,
+    "Khamenei|closed": 200,
+    "Hormuz|active": 200,
+    "Hormuz|closed": 200
+   },
+   "piyasa": {
+    "2036399": {
+     "soru": "US x Iran ceasefire extended by April 22, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 10
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 11
+      }
+     }
+    },
+    "2270330": {
+     "soru": "US x Iran permanent peace deal by June 15, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 34
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1706788": {
+     "soru": "US x Iran ceasefire by April 7?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 6
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 199
+      }
+     }
+    },
+    "1919425": {
+     "soru": "US x Iran permanent peace deal by May 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 42
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "665374": {
+     "soru": "Will the U.S. invade Iran before 2027?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 347
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 711
+      }
+     }
+    },
+    "1962237": {
+     "soru": "US x Iran permanent peace deal by June 30, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 58
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1466015": {
+     "soru": "US x Iran ceasefire by March 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 28
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 0
+      }
+     }
+    },
+    "2308197": {
+     "soru": "Will the Iran ceasefire continue through May 24?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 13
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 0
+      }
+     }
+    },
+    "532741": {
+     "soru": "US military action against Iran before July?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 83
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1919417": {
+     "soru": "US x Iran permanent peace deal by April 22, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 3
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 159
+      }
+     }
+    },
+    "1569627": {
+     "soru": "US x Iran ceasefire by April 15?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 14
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1919421": {
+     "soru": "US x Iran permanent peace deal by April 30, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 12
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2324252": {
+     "soru": "US x Iran permanent peace deal by May 26, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 6
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 126
+      }
+     }
+    },
+    "2334107": {
+     "soru": "US x Iran permanent peace deal by June 7, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 17
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2099029": {
+     "soru": "US x Iran permanent peace deal by May 15, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 19
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "552106": {
+     "soru": "Will the US officially declare war on Iran before July?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 20
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1466016": {
+     "soru": "US x Iran ceasefire by April 30?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 27
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 0
+      }
+     }
+    },
+    "994900": {
+     "soru": "Israel strikes Iran by January 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 41
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2155052": {
+     "soru": "US x Iran permanent peace deal by December 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 45
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2270338": {
+     "soru": "US x Iran permanent peace deal by July 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 34
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "957019": {
+     "soru": "US-Iran nuclear deal by June 30?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 156
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2420771": {
+     "soru": "US announces new Iran agreement/ceasefire extension by June 12?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 14
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "508671": {
+     "soru": "Israel strike on Iranian nuclear facility in 2024?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 48
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2308196": {
+     "soru": "Will the Iran ceasefire continue through May 22?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 4
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 0
+      }
+     }
+    },
+    "2937525": {
+     "soru": "US x Iran Effective Ceasefire by July 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 27
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2508397": {
+     "soru": "US announces new Iran agreement/ceasefire extension by June 13?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 7
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 51
+      }
+     }
+    },
+    "2002564": {
+     "soru": "Israel x Iran permanent peace deal by June 30, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 74
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1484894": {
+     "soru": "US x Iran ceasefire by May 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 27
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2297854": {
+     "soru": "US x Iran permanent peace deal by May 22, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 5
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 96
+      }
+     }
+    },
+    "2111640": {
+     "soru": "US-Iran nuclear deal by May 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 33
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1139942": {
+     "soru": "Will US or Israel strike Iran by January 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 24
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "552656": {
+     "soru": "Will Iran close the Strait of Hormuz before July?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 16
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1198479": {
+     "soru": "Will US or Israel strike Iran by February 28, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 43
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273937": {
+     "soru": "Will the US next strike Iran on February 28, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 31
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1918791": {
+     "soru": "US x Iran ceasefire extended by April 21, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 4
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 75
+      }
+     }
+    },
+    "2340844": {
+     "soru": "US announces new Iran agreement/ceasefire extension by June 7?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 16
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1394368": {
+     "soru": "Will the U.S. invade Iran by March 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 42
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "665307": {
+     "soru": "Will Iran close the Strait of Hormuz before 2027?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 130
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2340843": {
+     "soru": "US announces new Iran agreement/ceasefire extension by May 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 9
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 171
+      }
+     }
+    },
+    "2182249": {
+     "soru": "US x Iran permanent peace deal by May 11, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 5
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 104
+      }
+     }
+    },
+    "1484895": {
+     "soru": "US x Iran ceasefire by June 30?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 27
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2334097": {
+     "soru": "Will the Iran ceasefire continue through May 25?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 4
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 73
+      }
+     }
+    },
+    "1169205": {
+     "soru": "Iran Strike on Israel by February 28?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 47
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273936": {
+     "soru": "Will the US next strike Iran on February 27, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 30
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "4641065": {
+     "soru": "US x Iran ceasefire continues through October 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 32
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 707
+      }
+     }
+    },
+    "2633430": {
+     "soru": "US-Iran Final Nuclear Deal by August 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 71
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1170143": {
+     "soru": "Will the US officially declare war on Iran by March 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 66
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "554010": {
+     "soru": "US military action against Iran by Saturday?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 3
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 53
+      }
+     }
+    },
+    "552084": {
+     "soru": "Iran strike on Israel by Friday?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 0
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 20
+      }
+     }
+    },
+    "2937524": {
+     "soru": "US x Iran Effective Ceasefire by July 24?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 14
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 243
+      }
+     }
+    },
+    "2420753": {
+     "soru": "US announces new Iran agreement/ceasefire extension by June 9?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 8
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1198451": {
+     "soru": "Israel strikes Iran by February 28, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 40
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2354003": {
+     "soru": "US announces new Iran agreement/ceasefire extension by June 30?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 21
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "554012": {
+     "soru": "US military action against Iran by Sunday?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 3
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 52
+      }
+     }
+    },
+    "1167607": {
+     "soru": "Will the US not strike Iran by January 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 22
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2413571": {
+     "soru": "US x Iran permanent peace deal by August 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 17
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "553998": {
+     "soru": "Israel strike on Iran on June 22?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 6
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 97
+      }
+     }
+    },
+    "2696747": {
+     "soru": "US-Iran Final Nuclear Deal by December 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 114
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 708
+      }
+     }
+    },
+    "519695": {
+     "soru": "Will Iran close the Strait of Hormuz in 2025?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 344
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273914": {
+     "soru": "Will the US next strike Iran on February 9, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 16
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1466012": {
+     "soru": "US x Iran ceasefire by March 2?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 3
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 0
+      }
+     }
+    },
+    "2952486": {
+     "soru": "Israel x Iran ceasefire continues through July 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 17
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "3399458": {
+     "soru": "Israel x Iran ceasefire continues through September 30?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 54
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 267
+      }
+     }
+    },
+    "2952493": {
+     "soru": "Israel x Iran ceasefire continues through August 31?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 48
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "791705": {
+     "soru": "Israel strikes Iran by March 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 89
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1359799": {
+     "soru": "Will the US next strike Iran on March 1, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 19
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2334096": {
+     "soru": "Will the Iran ceasefire continue through May 23?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 3
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 25
+      }
+     }
+    },
+    "2633426": {
+     "soru": "US-Iran Final Nuclear Deal by June 30, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 10
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 225
+      }
+     }
+    },
+    "511042": {
+     "soru": "Another Iran strike on Israel in 2024?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 67
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273935": {
+     "soru": "Will the US next strike Iran on February 26, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 35
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273931": {
+     "soru": "Will the US next strike Iran on February 22, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 25
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "3128787": {
+     "soru": "Israel x Iran ceasefire continues through August 2?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 8
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 152
+      }
+     }
+    },
+    "537195": {
+     "soru": "US-Iran nuclear deal before July?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 78
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2047426": {
+     "soru": "US x Iran permanent peace deal by April 24, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 4
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 74
+      }
+     }
+    },
+    "1273915": {
+     "soru": "Will the US next strike Iran on February 10, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 17
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1200889": {
+     "soru": "Will US or Israel strike Iran by February 15, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 30
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "521878": {
+     "soru": "US-Iran nuclear deal in 2025?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 331
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2420774": {
+     "soru": "US announces new Iran agreement/ceasefire extension by June 15?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 13
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2633429": {
+     "soru": "US-Iran Final Nuclear Deal by August 18, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 58
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2126515": {
+     "soru": "Israel x Iran permanent peace deal by May 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 32
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "2952472": {
+     "soru": "Israel x Iran ceasefire continues through July 25?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 12
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 240
+      }
+     }
+    },
+    "2182250": {
+     "soru": "US x Iran permanent peace deal by May 13, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 7
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 152
+      }
+     }
+    },
+    "2413572": {
+     "soru": "US x Iran permanent peace deal by October 31, 2026?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 17
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1167627": {
+     "soru": "Will the US next strike Iran on January 31, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 22
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273913": {
+     "soru": "Will the US next strike Iran on February 8, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 15
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "546305": {
+     "soru": "Israel strike on Iranian nuclear facility before July?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 23
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273916": {
+     "soru": "Will the US next strike Iran on February 11, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 18
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "1273934": {
+     "soru": "Will the US next strike Iran on February 25, 2026 (ET)?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 32
+      },
+      "saatlik": {
+       "durum": 400,
+       "nokta": 0
+      }
+     }
+    },
+    "4095052": {
+     "soru": "US x Iran Effective Ceasefire by September 4?",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 16
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 95
+      }
+     }
+    },
+    "2508398": {
+     "soru": "US announces new Iran agreement/ceasefire extension by June 14",
+     "durum": 200,
+     "gecmis": {
+      "gunluk": {
+       "durum": 200,
+       "nokta": 4
+      },
+      "saatlik": {
+       "durum": 200,
+       "nokta": 75
+      }
+     }
+    }
+   },
+   "sure_sn": 172.8
+  },
+  "Kalshi ve Metaculus": {
+   "durum": "tamam",
+   "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXUSAIRANAGREEMENT&limit=100": {
+    "durum": 200,
+    "bayt": 47760,
+    "dosya": "tahmin/api_elections_kalshi_com_c0661ff438.json.gz"
+   },
+   "https://api.elections.kalshi.com/trade-api/v2/events?series_ticker=KXUSAIRANAGREEMENT&limit=100": {
+    "durum": 200,
+    "bayt": 2351,
+    "dosya": "tahmin/api_elections_kalshi_com_976c273449.json.gz"
+   },
+   "https://api.elections.kalshi.com/trade-api/v2/markets?limit=200&status=open&series_ticker=KXIRANSTRIKE": {
+    "durum": 200,
+    "bayt": 27,
+    "dosya": "tahmin/api_elections_kalshi_com_9c7f19d513.json.gz"
+   },
+   "https://www.metaculus.com/api2/questions/41594/": {
+    "durum": 403,
+    "bayt": 134
+   },
+   "https://www.metaculus.com/api/posts/41594/": {
+    "durum": 403,
+    "bayt": 134
+   },
+   "https://www.metaculus.com/api2/questions/?search=Iran%20attack&limit=50": {
+    "durum": 403,
+    "bayt": 134
+   },
+   "https://www.metaculus.com/api/posts/?search=Iran&limit=50": {
+    "durum": 403,
+    "bayt": 134
+   },
+   "sure_sn": 3.5
+  }
+ }
+}
