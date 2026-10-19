@@ -1,0 +1,28 @@
+# bulten:2026-10-19 · 2026-10-19T05:22:52+00:00 · https://x.com/i/status/2112051833698992566
+
+Sabah Notu — 19 Ekim 2026
+Yaptırım muafiyeti petrolü 110 dolardan çevirdi; cumanın hisse satışında TL tahvili satılmadı
+
+· BIST 100 cuma %2,89 düşüşle 11.722 puana indi. Satış sınai endekste yoğunlaştı: endeks %3,37 (−2,0σ) düştü, bankacılık %1,87 geriledi. Dolar bazlı iShares Türkiye ETF'i %3,25 (−2,2σ) kaybetti, gelişen ülke hisseleri %1,74; Türkiye'ye özgü farkın sebebi netleşmedi.
+· Dolar/TL cuma İstanbul kapanışında %0,22 (2,6σ) artışla 49,52'ye çıktı; sebebi netleşmedi. Bir aylık yıllıklandırılmış devalüasyon hızı tek günde %24,4'e sıçradı, beş günlük ortalaması %21,5. Sterlin/TL %0,98 (2,2σ) arttı; dolar/TL'yi aşan kısım sterlinin dolar karşısındaki kazancından geldi.
+· TL eğrisinin ön ucu ikiye ayrıldı: 3 aylık spot getiri 19 bp düşüşle %36,61'e indi ve TLREF'in altına geçti, 1 yıllık ise 13 bp yükseldi. 2 yıllık yalnız 4 bp oynadı; hisse satışı tahvile geçmedi.
+· Nasdaq 100 cuma %2,50 (−2,1σ) düştü; CNBC'ye göre yatırımcılar yapay zekâ hisselerinden çıktı ve petrol sıçradı. VIX %21,45 (3,4σ) artışla 19,99'a çıktı.
+· Brent cuma %3,72 artışla 109,86 dolara çıkmıştı, sıçramanın sebebi netleşmedi. Bu sabah geriliyor: Trump, Graham Yasası'nın ulusal çıkar muafiyetiyle Rus mallarına ve büyük Rus enerji alıcılarına yönelik yeni vergileri askıya aldı (CNBC). Dünya Gazetesi'ne göre Türkiye de Rus dizelinden pay alacak.
+· Asya'da Çin'in üçüncü çeyrek büyümesi beklentiyi aştı, yuan dört yılın zirvesine çıktı (Investing); Endonezya borsası MSCI not indirimi kaygısıyla altı yılın dibine indi (CNBC).
+
+Tez: Cumanın satışı Türkiye'ye hisse kanalından girdi, faiz kanalından girmedi. Dolar bazlı Türkiye fonu gelişen ülke hisselerinin neredeyse iki katı kaybetti; aynı seansta mevduatın fiyatlandığı 3 aylık vade indirim fiyatlamasını derinleştirdi. PPK haftasının asıl sorusu bu yüzden kur ya da faiz değil: petrolün TCMB'ye ne kadar alan bırakacağı.
+
+Gündem
+Türkiye: TL faizi ve DİBS. Gösterge tahvil 3 bp yükselişle %39,54'te, 5 yıllık getiri 9 bp yükselişle %36,58'de kapandı. İki yıl sonrasının 1 yıllık forward faizi 15 bp arttı.
+Küresel: ABD faizi ve maliye. ABD Hazinesi'nin cuma yayımladığı rakamlara göre 2026 mali yılı bütçe açığı bir yılda %12 artışla yaklaşık 2 trilyon dolara çıktı (CNBC); net faiz gideri 1,05 trilyon dolarla rekor kırdı (Bloomberg HT).
+Emtia: Ham petrol. Muafiyet Rus ham petrolü ve ürünlerinin alıcılarını vergiden koruyor; Hürmüz'deki mayın olayı ise arzın öbür kanadındaki riski canlı tutuyor. Doğal gaz (Henry Hub) %3,71 düştü, sebebi netleşmedi.
+
+Neye bakılacak
+· Hürmüz'deki mayın olayı tekrarlanır → Brent muafiyetin getirdiği düşüşü geri alır, PPK'nın alanı daralır; izlenecek: Brent'in 110 dolar üstü kapanışı.
+· Yapay zekâ satışı krediye yayılır → gelişen ülke hissesi ve BIST baskıda kalır; izlenecek: HYG'nin 52 haftalık dibini kırması.
+
+Pano: Net rezerv (günlük tahmin) 53,6 mlr USD (−0,7; 15 Eki) · Brüt rezervde altın payı %62,7 (+0,3 puan; 15 Eki) · TLREF %36,80 (+0,01 puan; 16 Eki) · 2 yıllık başabaş enflasyon %30,38 (+0,03 puan; 16 Eki)
+
+Beklenen: Salı TSİ 17:30 · eylül bütçe finansmanı ve borç stoku. Eylül açığının iç borçlanmayla finanse edildiği görülürse 2–5 yıllık bölgenin primi kalıcılaşır; Hazine'nin nakit tamponunu kullandığı görülürse orta vade sakin kalır. Çarşamba 10:00 · kapasite kullanımı ve reel kesim güveni. Ekimde imalat güveninin düşmesi sınai hisselerdeki kaybı talep tarafına bağlar; güven tutunursa kayıp maliyet ve küresel satışla sınırlı kalır. Perşembe · tüketici güveni (10:00), PPK (14:00), haftalık para-banka ve menkul kıymet verileri (14:30). Beklenen büyüklükte bir indirim 3 aylık getiriyi TLREF'in altında tutar; daha küçük bir adım ya da sabit karar onu politika faizine doğru yukarı çeker.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
