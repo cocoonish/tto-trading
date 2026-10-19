@@ -1,0 +1,1906 @@
+{
+ "polymarket/ek_arama_Iran_midterms.json.gz": {
+  "url": "https://gamma-api.polymarket.com/public-search?q=Iran+midterms&events_status=active&limit_per_type=50",
+  "durum": 200,
+  "bayt": 252487,
+  "sha256": "991abd56aaeeb2437040ccab536881d650bea502a4fff826921f10b756868b6a",
+  "an": "2026-10-19T19:13:04+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_arama_Iran_strike_November.json.gz": {
+  "url": "https://gamma-api.polymarket.com/public-search?q=Iran+strike+November&events_status=active&limit_per_type=50",
+  "durum": 200,
+  "bayt": 244649,
+  "sha256": "8a6cdd395e11283fa6883a8102e5272b489b115652177e600f6cbb227aa66fa1",
+  "an": "2026-10-19T19:13:03+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_arama_US_strike_Iran_December.json.gz": {
+  "url": "https://gamma-api.polymarket.com/public-search?q=US+strike+Iran+December&events_status=active&limit_per_type=50",
+  "durum": 200,
+  "bayt": 114210,
+  "sha256": "eb0fd64d2356e21730e8da2ff70259a7151794a247ec88567c4fcb7ea63b74ee",
+  "an": "2026-10-19T19:13:05+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_arama_US_strike_Iran_November.json.gz": {
+  "url": "https://gamma-api.polymarket.com/public-search?q=US+strike+Iran+November&events_status=active&limit_per_type=50",
+  "durum": 200,
+  "bayt": 114210,
+  "sha256": "eb0fd64d2356e21730e8da2ff70259a7151794a247ec88567c4fcb7ea63b74ee",
+  "an": "2026-10-19T19:13:04+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_arama_US_x_Iran.json.gz": {
+  "url": "https://gamma-api.polymarket.com/public-search?q=US+x+Iran&events_status=active&limit_per_type=50",
+  "durum": 200,
+  "bayt": 811175,
+  "sha256": "73d666c4c03ef48345eae3caea1e331d91b9e2b0fc6326b6425d36c14b261b1f",
+  "an": "2026-10-19T19:13:02+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_arama_US_x_Iran_ceasefire_continues.json.gz": {
+  "url": "https://gamma-api.polymarket.com/public-search?q=US+x+Iran+ceasefire+continues&events_status=active&limit_per_type=50",
+  "durum": 200,
+  "bayt": 126755,
+  "sha256": "6022df0c248755629fd6ef446883a768e912151a9bd58087c34a727a69cabfe4",
+  "an": "2026-10-19T19:13:02+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_arama_ceasefire_continues_through.json.gz": {
+  "url": "https://gamma-api.polymarket.com/public-search?q=ceasefire+continues+through&events_status=active&limit_per_type=50",
+  "durum": 200,
+  "bayt": 365791,
+  "sha256": "c68b77a3795acc67b4333b47bcd3326479d638d144bfaa2890330f3f6f4219fc",
+  "an": "2026-10-19T19:13:01+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_events_iran.json.gz": {
+  "url": "https://gamma-api.polymarket.com/events?tag_slug=iran&closed=false&limit=200",
+  "durum": 200,
+  "bayt": 3504655,
+  "sha256": "e4bbcc4b16bcc4ba2bff1154efdf1537b3dfc110fe3459b8aaeef7abaa4b871b",
+  "an": "2026-10-19T19:13:00+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_olay_31ekim.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets?slug=us-x-iran-ceasefire-continues-through-october-31-20260917",
+  "durum": 200,
+  "bayt": 10295,
+  "sha256": "4fa99503085a95a3909f54b7bb71b2100318cad17ea52339e292e5661f20c429",
+  "an": "2026-10-19T19:13:05+00:00",
+  "not": "Polymarket ek liste"
+ },
+ "polymarket/ek_olay_us_iran_ceasefire_continues_throughptptpt.json.gz": {
+  "url": "https://gamma-api.polymarket.com/events?slug=us-iran-ceasefire-continues-throughptptpt",
+  "durum": 200,
+  "bayt": 114218,
+  "sha256": "3ef19b773b2c27e2f465f2d80e72052398aef529f40e088cfd1f454c56c817f5",
+  "an": "2026-10-19T19:13:06+00:00",
+  "not": "Polymarket olay"
+ },
+ "polymarket/gecmis_1170144_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=7557290671053949208699445220310834898387867585937374554219472108856099537227&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 6625,
+  "sha256": "a0bed555495f3227f02aeb781429beaa1d5bf55c919a4f329339e42e34896759",
+  "an": "2026-10-19T19:13:07+00:00",
+  "not": "Will the US officially declare war on Iran by December 31, 2026?"
+ },
+ "polymarket/gecmis_1170144_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=7557290671053949208699445220310834898387867585937374554219472108856099537227&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18960,
+  "sha256": "d87faebbb9d07e586a02e55496e44b5ff126ce20bf106bb08509ca380608ba9f",
+  "an": "2026-10-19T19:13:07+00:00",
+  "not": "Will the US officially declare war on Iran by December 31, 2026?"
+ },
+ "polymarket/gecmis_1707316_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=93852170807587967635291782617381311707737235945251339459489022960438892285682&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 538,
+  "sha256": "09821907aa1fd3bf28c9ee1fbec1cf67923cc4143eecb33b2cafe1f80aba6f7d",
+  "an": "2026-10-19T19:13:08+00:00",
+  "not": "Will the US officially declare war on Iran by April 30, 2026?"
+ },
+ "polymarket/gecmis_1707316_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=93852170807587967635291782617381311707737235945251339459489022960438892285682&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:08+00:00",
+  "not": "Will the US officially declare war on Iran by April 30, 2026?"
+ },
+ "polymarket/gecmis_2569893_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=8090922843179374147482633836493191013460250419465244414673033414966352011034&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3357,
+  "sha256": "db5e72c24a73c38211a16987eaa8b93cc7a0681698da0c77aa9d637e3e169fe0",
+  "an": "2026-10-19T19:13:09+00:00",
+  "not": "Congress approves Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2569893_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=8090922843179374147482633836493191013460250419465244414673033414966352011034&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18812,
+  "sha256": "b72b723b62361e891b2e05ad97909b133e2358ca32aad73dd101bac3dd625c16",
+  "an": "2026-10-19T19:13:10+00:00",
+  "not": "Congress approves Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2633427_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=59540726726105191759377646221923566586595020352558312380615459160189274262446&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1118,
+  "sha256": "a33e5553215dc843f8d13a6213d1e3bcf70554a08a20b4eb993949132a622b06",
+  "an": "2026-10-19T19:13:11+00:00",
+  "not": "US-Iran Final Nuclear Deal by July 31, 2026?"
+ },
+ "polymarket/gecmis_2633427_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=59540726726105191759377646221923566586595020352558312380615459160189274262446&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:12+00:00",
+  "not": "US-Iran Final Nuclear Deal by July 31, 2026?"
+ },
+ "polymarket/gecmis_2633428_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=29430262678395537319199326140215396124984682262418982262247273209405979834308&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1499,
+  "sha256": "12b4eafaa75bce1e38bc284de094a0ebb67acdaaf630cd72f4800c67340cbd15",
+  "an": "2026-10-19T19:13:12+00:00",
+  "not": "US-Iran Final Nuclear Deal by August 13, 2026?"
+ },
+ "polymarket/gecmis_2633428_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=29430262678395537319199326140215396124984682262418982262247273209405979834308&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:13+00:00",
+  "not": "US-Iran Final Nuclear Deal by August 13, 2026?"
+ },
+ "polymarket/gecmis_2647846_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=9752985741873181500412050470133848226355434216247706513840008380426990951786&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3204,
+  "sha256": "cd584c6da70f4b8b01387d5aea9045854f470fb5927952807671738c8e0fd0a8",
+  "an": "2026-10-19T19:13:17+00:00",
+  "not": "UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31?"
+ },
+ "polymarket/gecmis_2647846_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=9752985741873181500412050470133848226355434216247706513840008380426990951786&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19071,
+  "sha256": "8d55c0d3ebb4e7d86246b03dd8ab3e712bbf9d619db566c1c9958d012b627329",
+  "an": "2026-10-19T19:13:18+00:00",
+  "not": "UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31?"
+ },
+ "polymarket/gecmis_2663602_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=96459096350293979949150549694293228485495944927529905541533983606476871296950&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3122,
+  "sha256": "c55ea1c239d69ceeb445ee3ea69389274ac2e391674b3126acfba7a96819de1a",
+  "an": "2026-10-19T19:13:19+00:00",
+  "not": "Will a 1+ Year Enrichment Moratorium be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2663602_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=96459096350293979949150549694293228485495944927529905541533983606476871296950&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19005,
+  "sha256": "181b6a18a5532cf3483fdb0fcea6a0549a1f25783de0a80743c92818bb166ae1",
+  "an": "2026-10-19T19:13:19+00:00",
+  "not": "Will a 1+ Year Enrichment Moratorium be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2663603_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=34121477552603842220562776406803032728334731986482841432311709319160089219357&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3164,
+  "sha256": "ed53ce4eab2457512e605e3b572c4d6a0da46ee9650e03ebee15294225e87811",
+  "an": "2026-10-19T19:13:20+00:00",
+  "not": "Will any Uranium Enrichment % Cap (1+ Year) be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2663603_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=34121477552603842220562776406803032728334731986482841432311709319160089219357&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19100,
+  "sha256": "6d33f5120a05f9af2ed8619d3c476b98f6c90f33ed94974fb0fe5e0cbb79276b",
+  "an": "2026-10-19T19:13:21+00:00",
+  "not": "Will any Uranium Enrichment % Cap (1+ Year) be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2668004_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=114245191503232465363315640409504870951153657459002191006584916453493620924528&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3149,
+  "sha256": "45b19e1483ff332a656f29bbd0f4eb2bc178c42af5c4f6c86e14b6f68c92d81d",
+  "an": "2026-10-19T19:13:21+00:00",
+  "not": "Will a ≤5% Uranium Enrichment Cap (1+ Year) be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2668004_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=114245191503232465363315640409504870951153657459002191006584916453493620924528&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18990,
+  "sha256": "7124023c0922812235bbfa8ad603a1a9b4e2e1be1c1b197134422761ec10f2a8",
+  "an": "2026-10-19T19:13:22+00:00",
+  "not": "Will a ≤5% Uranium Enrichment Cap (1+ Year) be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2668005_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=17306927942046812963523554047158683729350184908440966752162806116949623483484&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3090,
+  "sha256": "a4f66ec18931baeccb82415d323c5ca9e919d74c121d4d5689ca672e13a99c9f",
+  "an": "2026-10-19T19:13:23+00:00",
+  "not": "Will Iran Reconstruction Funding be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2668005_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=17306927942046812963523554047158683729350184908440966752162806116949623483484&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18738,
+  "sha256": "b8b0cb8067a6064e51768f344b6baaf14f5f806a9be2cb7781af8ab153080c86",
+  "an": "2026-10-19T19:13:24+00:00",
+  "not": "Will Iran Reconstruction Funding be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2668006_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=32959319162469428241742931252794025673861016626327139344084864031443960739513&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3044,
+  "sha256": "4044c37c0d8f859eedf77464979ddff300eb574212402fb41ec642c2c7fa05fa",
+  "an": "2026-10-19T19:13:25+00:00",
+  "not": "Will Dilution of Iranian Uranium be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2668006_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=32959319162469428241742931252794025673861016626327139344084864031443960739513&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18513,
+  "sha256": "b0abbdf1c225c857c9e8d69bfb9b079ff68f948aeda1fcb5532565eeeb686d33",
+  "an": "2026-10-19T19:13:25+00:00",
+  "not": "Will Dilution of Iranian Uranium be in a US-Iran deal in 2026?"
+ },
+ "polymarket/gecmis_2668007_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=91018615335730146607757681488229678302578412531919233895751415772249975890108&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 3124,
+  "sha256": "41bf3b26a2594440dc75327b2d72c053c14a46652b2809ab04aa01ef2c80a41b",
+  "an": "2026-10-19T19:13:26+00:00",
+  "not": "Will a US-Iran deal in 2026 include Surrender of Iranian Enriched Uranium?"
+ },
+ "polymarket/gecmis_2668007_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=91018615335730146607757681488229678302578412531919233895751415772249975890108&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18977,
+  "sha256": "233d04358a63d32c5daeff1d321610e35e3fb13e9516a93ed7ae378c66d730a6",
+  "an": "2026-10-19T19:13:26+00:00",
+  "not": "Will a US-Iran deal in 2026 include Surrender of Iranian Enriched Uranium?"
+ },
+ "polymarket/gecmis_2686765_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=19248118701345337783027862126645802354931513041374671216864060975949935504627&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 585,
+  "sha256": "752f195e0ae1088e3c3a7694e1c4575642d25e54895188fe4cae563759854183",
+  "an": "2026-10-19T19:13:27+00:00",
+  "not": "Iran charges Hormuz fees by July 15?"
+ },
+ "polymarket/gecmis_2686765_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=19248118701345337783027862126645802354931513041374671216864060975949935504627&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:28+00:00",
+  "not": "Iran charges Hormuz fees by July 15?"
+ },
+ "polymarket/gecmis_2686766_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=9225500616646857630124704690284065786811292595510371759719805962740870955812&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1814,
+  "sha256": "5d2d4168dec9013c2e176a46352ded4f72459332836bafcd0665ce000cdab946",
+  "an": "2026-10-19T19:13:28+00:00",
+  "not": "Iran charges Hormuz fees by August 31?"
+ },
+ "polymarket/gecmis_2686766_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=9225500616646857630124704690284065786811292595510371759719805962740870955812&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:29+00:00",
+  "not": "Iran charges Hormuz fees by August 31?"
+ },
+ "polymarket/gecmis_2696746_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=14466055037608627931561046129222135087821973151712155655664112537759623167836&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 2632,
+  "sha256": "b1999483b1bc99889da5dca7b7c04b90f267782d40c31d0563f8a96815980322",
+  "an": "2026-10-19T19:13:14+00:00",
+  "not": "US-Iran Final Nuclear Deal by September 30, 2026?"
+ },
+ "polymarket/gecmis_2696746_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=14466055037608627931561046129222135087821973151712155655664112537759623167836&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 7658,
+  "sha256": "1676422fbd115feb820e59649ab2b393a64d8c3355032a02b9de2bc272a38384",
+  "an": "2026-10-19T19:13:14+00:00",
+  "not": "US-Iran Final Nuclear Deal by September 30, 2026?"
+ },
+ "polymarket/gecmis_2757754_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=42894130249541195207287239751047299712517353957818777938153218245255549672763&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 821,
+  "sha256": "4848007288d37116de9ed2e3a9398beb9b8972cafa8d2f4fbded29b4ab8c5a82",
+  "an": "2026-10-19T19:13:30+00:00",
+  "not": "Iran charges Hormuz fees by July 31?"
+ },
+ "polymarket/gecmis_2757754_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=42894130249541195207287239751047299712517353957818777938153218245255549672763&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:30+00:00",
+  "not": "Iran charges Hormuz fees by July 31?"
+ },
+ "polymarket/gecmis_2757806_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=28124160639561291369865852757900361591346814138837883756455228145975719395425&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 2909,
+  "sha256": "dac12fe14ab5da0fdd16e2e91878abba958121e494c2bd0211ded599f20e95e4",
+  "an": "2026-10-19T19:13:31+00:00",
+  "not": "Iran charges Hormuz fees by October 31?"
+ },
+ "polymarket/gecmis_2757806_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=28124160639561291369865852757900361591346814138837883756455228145975719395425&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18793,
+  "sha256": "a27e0672828f62244df2de04391cb990649c29c48d265f3f6f612760a2d6e4ab",
+  "an": "2026-10-19T19:13:31+00:00",
+  "not": "Iran charges Hormuz fees by October 31?"
+ },
+ "polymarket/gecmis_2824614_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=30084046110340630915815124176402512146373063505864644025251039436415886255442&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 2635,
+  "sha256": "f742dbe43027fb05e3bb488f627b839a6b1af1b90fb227c532325fddd210706f",
+  "an": "2026-10-19T19:13:32+00:00",
+  "not": "Iran charges Hormuz fees by December 31?"
+ },
+ "polymarket/gecmis_2824614_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=30084046110340630915815124176402512146373063505864644025251039436415886255442&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18386,
+  "sha256": "2386ebf57e566ae3d6fec8a76b5654f6641dbdce4e0dc9a9828c5e9071c5687a",
+  "an": "2026-10-19T19:13:32+00:00",
+  "not": "Iran charges Hormuz fees by December 31?"
+ },
+ "polymarket/gecmis_2952457_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=114937803941081877560961025721440367956127017940684514090246121694104479600905&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 149,
+  "sha256": "1135af296c7c24a3fd16a66089ac9fe89345550e96e26813e0843a2238f0f5e7",
+  "an": "2026-10-19T19:13:34+00:00",
+  "not": "Israel x Iran ceasefire continues through July 18?"
+ },
+ "polymarket/gecmis_2952457_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=114937803941081877560961025721440367956127017940684514090246121694104479600905&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:34+00:00",
+  "not": "Israel x Iran ceasefire continues through July 18?"
+ },
+ "polymarket/gecmis_2952467_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=62074667087255747412382561081475311823484268378809285620641251664614873335395&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 201,
+  "sha256": "925ec59943921a352f54d55a3217e2eba1125d920e1bb8a71c14c6257ab54748",
+  "an": "2026-10-19T19:13:35+00:00",
+  "not": "Israel x Iran ceasefire continues through July 20?"
+ },
+ "polymarket/gecmis_2952467_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=62074667087255747412382561081475311823484268378809285620641251664614873335395&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:36+00:00",
+  "not": "Israel x Iran ceasefire continues through July 20?"
+ },
+ "polymarket/gecmis_2952471_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=58261307118108936367430768346218679796444242208550226624418473434210861808681&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 254,
+  "sha256": "9f2f41149f144e881c30d9cfab8ab0412ebee05d95c44b18b0707bf64b293339",
+  "an": "2026-10-19T19:13:37+00:00",
+  "not": "Israel x Iran ceasefire continues through July 22?"
+ },
+ "polymarket/gecmis_2952471_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=58261307118108936367430768346218679796444242208550226624418473434210861808681&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:37+00:00",
+  "not": "Israel x Iran ceasefire continues through July 22?"
+ },
+ "polymarket/gecmis_2952488_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=77550960228341204288120509394963885549177211314903311399404330431381651171385&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 873,
+  "sha256": "e8ba69ba32933c01fa4af5974d7c6975e002e9f0e77476223b9c2050567a7b3e",
+  "an": "2026-10-19T19:13:38+00:00",
+  "not": "Israel x Iran ceasefire continues through August 15?"
+ },
+ "polymarket/gecmis_2952488_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=77550960228341204288120509394963885549177211314903311399404330431381651171385&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:38+00:00",
+  "not": "Israel x Iran ceasefire continues through August 15?"
+ },
+ "polymarket/gecmis_2995849_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=60103272199873253699429787599729713836119083943063400446481249102594803535596&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 401,
+  "sha256": "d1e495b6cedc4895b1b29768be4211961a69063f97e0ab1c03ee4b8c18927246",
+  "an": "2026-10-19T19:14:04+00:00",
+  "not": "Will a European country take military action on Iran by July 31?"
+ },
+ "polymarket/gecmis_2995849_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=60103272199873253699429787599729713836119083943063400446481249102594803535596&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:05+00:00",
+  "not": "Will a European country take military action on Iran by July 31?"
+ },
+ "polymarket/gecmis_2995850_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=56770815036931494983320474273919914668624182078498296056220675100426847655181&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1272,
+  "sha256": "da65622f9fd148f30052f2360b7618bb0296b7da639de2d332f6c96623fffbca",
+  "an": "2026-10-19T19:14:05+00:00",
+  "not": "Will a European country take military action on Iran by August 31?"
+ },
+ "polymarket/gecmis_2995850_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=56770815036931494983320474273919914668624182078498296056220675100426847655181&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:06+00:00",
+  "not": "Will a European country take military action on Iran by August 31?"
+ },
+ "polymarket/gecmis_2995865_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=112116986487582983110725433887437675341694796977367658203522866720846890762433&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 319,
+  "sha256": "2d819dd6ed13b382397223441e999ff11ffbef81c7b323dc5df3ef7826d7ddb1",
+  "an": "2026-10-19T19:14:09+00:00",
+  "not": "Iran invades Kuwait by July 31?"
+ },
+ "polymarket/gecmis_2995865_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=112116986487582983110725433887437675341694796977367658203522866720846890762433&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:10+00:00",
+  "not": "Iran invades Kuwait by July 31?"
+ },
+ "polymarket/gecmis_2995866_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=104539585373326792190307838695744325434462982606629157374937992998423597078951&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1230,
+  "sha256": "6f74f0d5b042af794ffc737e90b07d5415626a03fe29afcc3c1087a797b2c979",
+  "an": "2026-10-19T19:14:11+00:00",
+  "not": "Iran invades Kuwait by August 31?"
+ },
+ "polymarket/gecmis_2995866_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=104539585373326792190307838695744325434462982606629157374937992998423597078951&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:11+00:00",
+  "not": "Iran invades Kuwait by August 31?"
+ },
+ "polymarket/gecmis_3009264_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=112698603933232109246278408801707523871367336252189288928843472292264731972610&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 289,
+  "sha256": "2d280daebf12ea08d72d5d53f6eb0152b8f4f30bd1aae74673c3de4190bef966",
+  "an": "2026-10-19T19:14:14+00:00",
+  "not": "Hormuz Island no longer under Iranian control by July 31?"
+ },
+ "polymarket/gecmis_3009264_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=112698603933232109246278408801707523871367336252189288928843472292264731972610&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:15+00:00",
+  "not": "Hormuz Island no longer under Iranian control by July 31?"
+ },
+ "polymarket/gecmis_3009265_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=64231382298501375693146127436555204021102427550152343656323798072111013651473&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1143,
+  "sha256": "bdb9ee841e22b231d2e8bd1e76b1d4e5fbe07830ad12fd41d9b2066c3aa6743d",
+  "an": "2026-10-19T19:14:16+00:00",
+  "not": "Hormuz Island no longer under Iranian control by August 31?"
+ },
+ "polymarket/gecmis_3009265_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=64231382298501375693146127436555204021102427550152343656323798072111013651473&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:16+00:00",
+  "not": "Hormuz Island no longer under Iranian control by August 31?"
+ },
+ "polymarket/gecmis_3044537_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=42949002876187767574757199648176932679215258199919532732580925377564379129450&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 124,
+  "sha256": "154d3347cf50dc75eca5da41b59033f20b51cd06b23b490c59bbe419451d21dd",
+  "an": "2026-10-19T19:13:39+00:00",
+  "not": "Israel x Iran ceasefire continues through July 23?"
+ },
+ "polymarket/gecmis_3044537_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=42949002876187767574757199648176932679215258199919532732580925377564379129450&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:40+00:00",
+  "not": "Israel x Iran ceasefire continues through July 23?"
+ },
+ "polymarket/gecmis_3044545_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=81550871322336801322309189468015671938618863157862077518508196397668399397251&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 124,
+  "sha256": "4a4d68f21109ffd5ef547b4316b6a0644beda84007ffef05a6700c141c730756",
+  "an": "2026-10-19T19:13:40+00:00",
+  "not": "Israel x Iran ceasefire continues through July 24?"
+ },
+ "polymarket/gecmis_3044545_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=81550871322336801322309189468015671938618863157862077518508196397668399397251&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:41+00:00",
+  "not": "Israel x Iran ceasefire continues through July 24?"
+ },
+ "polymarket/gecmis_3044546_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=95970203500150390696017820790991771432553030593132347633957312670362563399618&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 148,
+  "sha256": "cce099a06f1dc064b2e359d0ba336407cfc40369ab3c53dfb306628c7d31d201",
+  "an": "2026-10-19T19:13:42+00:00",
+  "not": "Israel x Iran ceasefire continues through July 26?"
+ },
+ "polymarket/gecmis_3044546_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=95970203500150390696017820790991771432553030593132347633957312670362563399618&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:42+00:00",
+  "not": "Israel x Iran ceasefire continues through July 26?"
+ },
+ "polymarket/gecmis_3083664_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=90664643079633325229069388592013287463357580070351448429341061965362517324082&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 152,
+  "sha256": "06a426b566151b93b5bda20b4607c44ac11c03427b5475cc8a7a248cbd4ce5cb",
+  "an": "2026-10-19T19:13:43+00:00",
+  "not": "Israel x Iran ceasefire continues through July 27?"
+ },
+ "polymarket/gecmis_3083664_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=90664643079633325229069388592013287463357580070351448429341061965362517324082&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:44+00:00",
+  "not": "Israel x Iran ceasefire continues through July 27?"
+ },
+ "polymarket/gecmis_3083667_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=38886322264669784027672286592774757444905080686185967143832131463205582863002&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 205,
+  "sha256": "c73c6673e353161b6f4049605da2adf96cfb1beeffa434315e4daf724bc16662",
+  "an": "2026-10-19T19:13:45+00:00",
+  "not": "Israel x Iran ceasefire continues through July 28?"
+ },
+ "polymarket/gecmis_3083667_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=38886322264669784027672286592774757444905080686185967143832131463205582863002&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:45+00:00",
+  "not": "Israel x Iran ceasefire continues through July 28?"
+ },
+ "polymarket/gecmis_3083701_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=43783728297751003049731197784493047712213881171251242252606704800494333274628&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 205,
+  "sha256": "266a1f0bd02b161789df09d6c7129db3a426890e22b4e161e1bf398e330f6c19",
+  "an": "2026-10-19T19:13:46+00:00",
+  "not": "Israel x Iran ceasefire continues through July 29?"
+ },
+ "polymarket/gecmis_3083701_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=43783728297751003049731197784493047712213881171251242252606704800494333274628&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:46+00:00",
+  "not": "Israel x Iran ceasefire continues through July 29?"
+ },
+ "polymarket/gecmis_3083724_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=85120775770768568171037319691430512769043349724236381575493834592043972740948&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 231,
+  "sha256": "52281cca0331fe2ac15d966ce3a6af89b25cb5b555dab81e5a9b9cfb7aca634b",
+  "an": "2026-10-19T19:13:47+00:00",
+  "not": "Israel x Iran ceasefire continues through July 30?"
+ },
+ "polymarket/gecmis_3083724_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=85120775770768568171037319691430512769043349724236381575493834592043972740948&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:48+00:00",
+  "not": "Israel x Iran ceasefire continues through July 30?"
+ },
+ "polymarket/gecmis_3128786_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=51783880760599120440014289525159847949469877325479084384177696513850906603472&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 450,
+  "sha256": "3e9fafd550c9dbb739f9721e12cc61107456ecec5f1e75a023552d83c2011e9e",
+  "an": "2026-10-19T19:13:49+00:00",
+  "not": "Israel x Iran ceasefire continues through August 9?"
+ },
+ "polymarket/gecmis_3128786_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=51783880760599120440014289525159847949469877325479084384177696513850906603472&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:49+00:00",
+  "not": "Israel x Iran ceasefire continues through August 9?"
+ },
+ "polymarket/gecmis_3247931_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=10286659768913348993358470598849242742860975803412404099275992956393149144886&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 124,
+  "sha256": "ee993b1dba4a87e76d1c74d13f0f769ebc326a04bc05eb59929024f8559e5f7d",
+  "an": "2026-10-19T19:13:50+00:00",
+  "not": "Israel x Iran ceasefire continues through August 1?"
+ },
+ "polymarket/gecmis_3247931_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=10286659768913348993358470598849242742860975803412404099275992956393149144886&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:51+00:00",
+  "not": "Israel x Iran ceasefire continues through August 1?"
+ },
+ "polymarket/gecmis_3247963_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=33031857528917237204569970205279313088825982927565857984494884985176333977929&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 179,
+  "sha256": "3a282121beeb1afa85f2da3b5e1c7cee0b4f1b2e9b269498d53863a6fbb847e2",
+  "an": "2026-10-19T19:13:51+00:00",
+  "not": "Israel x Iran ceasefire continues through August 3?"
+ },
+ "polymarket/gecmis_3247963_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=33031857528917237204569970205279313088825982927565857984494884985176333977929&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:52+00:00",
+  "not": "Israel x Iran ceasefire continues through August 3?"
+ },
+ "polymarket/gecmis_3247965_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=33744138537867316771530492434898210310112816831581011996696181212558287270655&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 206,
+  "sha256": "3d078196629ce39db681aef563cc662500c74f478591f361574632e4cd4d79b2",
+  "an": "2026-10-19T19:13:53+00:00",
+  "not": "Israel x Iran ceasefire continues through August 4?"
+ },
+ "polymarket/gecmis_3247965_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=33744138537867316771530492434898210310112816831581011996696181212558287270655&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:53+00:00",
+  "not": "Israel x Iran ceasefire continues through August 4?"
+ },
+ "polymarket/gecmis_3324624_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=75799333315352016520170433382192890474283005430766993151173841964954210124597&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 340,
+  "sha256": "117e580869db640471c72db699f09ceb8ed26dd05f1fad5738bda621eab5b005",
+  "an": "2026-10-19T19:14:20+00:00",
+  "not": "US-Iran Hormuz Agreement by August 15?"
+ },
+ "polymarket/gecmis_3324624_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=75799333315352016520170433382192890474283005430766993151173841964954210124597&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:20+00:00",
+  "not": "US-Iran Hormuz Agreement by August 15?"
+ },
+ "polymarket/gecmis_3324625_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=91570590690641088544290660823634625453926632109992583886416794033671791601246&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 767,
+  "sha256": "ff63a3612cda71ced03b8a29ee14a486f4e500368b6582930c235a26abc2ca19",
+  "an": "2026-10-19T19:14:21+00:00",
+  "not": "US-Iran Hormuz Agreement by August 31?"
+ },
+ "polymarket/gecmis_3324625_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=91570590690641088544290660823634625453926632109992583886416794033671791601246&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:22+00:00",
+  "not": "US-Iran Hormuz Agreement by August 31?"
+ },
+ "polymarket/gecmis_3348047_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=71291515246065865697464881673640533460377825060659760338752842130576525141987&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 389,
+  "sha256": "60dfec8b531fa919d5f334992aeebfc1846d1b7631121edd619b0b53c3e912c2",
+  "an": "2026-10-19T19:14:32+00:00",
+  "not": "Iran-Oman Hormuz Agreement by August 15?"
+ },
+ "polymarket/gecmis_3348047_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=71291515246065865697464881673640533460377825060659760338752842130576525141987&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:32+00:00",
+  "not": "Iran-Oman Hormuz Agreement by August 15?"
+ },
+ "polymarket/gecmis_3348048_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=71542982741394376771627006689338880117415417908788827680925028639627563224055&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 758,
+  "sha256": "0bd94b7a01e8915db496c22709ea09a0762e240b8adce1ec5907bc72b1ae4c55",
+  "an": "2026-10-19T19:14:33+00:00",
+  "not": "Iran-Oman Hormuz Agreement by August 31?"
+ },
+ "polymarket/gecmis_3348048_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=71542982741394376771627006689338880117415417908788827680925028639627563224055&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:34+00:00",
+  "not": "Iran-Oman Hormuz Agreement by August 31?"
+ },
+ "polymarket/gecmis_3399459_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=36595575197199846398267481972385180643951985822505187477756829088194676076340&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1937,
+  "sha256": "796657673110f5df37325bd4aee1a316ea73c42911621e3776885c2756d2fe81",
+  "an": "2026-10-19T19:13:54+00:00",
+  "not": "Israel x Iran ceasefire continues through October 31?"
+ },
+ "polymarket/gecmis_3399459_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=36595575197199846398267481972385180643951985822505187477756829088194676076340&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18823,
+  "sha256": "b8d2e870a225a2f077c4c8ccf6adfa15b5c9c90ef6e79f3cb7df2290d2dca868",
+  "an": "2026-10-19T19:13:54+00:00",
+  "not": "Israel x Iran ceasefire continues through October 31?"
+ },
+ "polymarket/gecmis_3399468_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=34732988886981510167874389845708832808627284379840131351229635795767825787404&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1973,
+  "sha256": "690bbf25003d23454ab7a8f45805b64ac8daa0d821b837156c2b28de4e6c36ef",
+  "an": "2026-10-19T19:13:55+00:00",
+  "not": "Israel x Iran ceasefire continues through December 31?"
+ },
+ "polymarket/gecmis_3399468_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=34732988886981510167874389845708832808627284379840131351229635795767825787404&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18943,
+  "sha256": "94ebbd6536db456748d8e5c06494719a375e821a69af078825fc77a68c52b948",
+  "an": "2026-10-19T19:13:55+00:00",
+  "not": "Israel x Iran ceasefire continues through December 31?"
+ },
+ "polymarket/gecmis_3399473_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=44007830652896102192190752247260840647145635365565932624201614697565663183502&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1479,
+  "sha256": "940650bca3e00dc0c8d503c191165866a87b4d87e4a1ef66ceab55e65defd685",
+  "an": "2026-10-19T19:13:33+00:00",
+  "not": "Iran charges Hormuz fees by September 30?"
+ },
+ "polymarket/gecmis_3399473_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=44007830652896102192190752247260840647145635365565932624201614697565663183502&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 7571,
+  "sha256": "bc107ebdd95bf770a51ebded8c1232caf1bc79ff628cd3d78efc081fa690f222",
+  "an": "2026-10-19T19:13:33+00:00",
+  "not": "Iran charges Hormuz fees by September 30?"
+ },
+ "polymarket/gecmis_3491438_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=53124553100683680148684669408493487426994479513620598765154459171610394573330&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1903,
+  "sha256": "667bb65f911f1c1b66f747fc38d9ec09b178ff7cae933787568867805c00e6c4",
+  "an": "2026-10-19T19:13:15+00:00",
+  "not": "US-Iran Final Nuclear Deal by November 30, 2026?"
+ },
+ "polymarket/gecmis_3491438_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=53124553100683680148684669408493487426994479513620598765154459171610394573330&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19065,
+  "sha256": "ee2d2425e5e8b6cdc2803eab4d8d6234843d0c80a3da079d079316caf365fee7",
+  "an": "2026-10-19T19:13:15+00:00",
+  "not": "US-Iran Final Nuclear Deal by November 30, 2026?"
+ },
+ "polymarket/gecmis_3491459_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=19257192402836672827194864841796808376768686511060585979006316721934662443508&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1968,
+  "sha256": "e248922e5ddb073c3c735acffd023f0b4d631f1b800b7af8817e6bcab2f49ead",
+  "an": "2026-10-19T19:13:16+00:00",
+  "not": "US-Iran Final Nuclear Deal by October 31, 2026?"
+ },
+ "polymarket/gecmis_3491459_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=19257192402836672827194864841796808376768686511060585979006316721934662443508&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19638,
+  "sha256": "9b5a9f09b3b7eae2ba841d3b9cca51fe386912fec8279ffd378b511a337b5469",
+  "an": "2026-10-19T19:13:17+00:00",
+  "not": "US-Iran Final Nuclear Deal by October 31, 2026?"
+ },
+ "polymarket/gecmis_3701629_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=3937726183724121397938767335168339674393355059024923317120625910960723572093&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 859,
+  "sha256": "d0611793e7319b8494255d8f07209f3811406d2f65a81e1825206a715efaad50",
+  "an": "2026-10-19T19:14:22+00:00",
+  "not": "US-Iran Hormuz Agreement by September 15?"
+ },
+ "polymarket/gecmis_3701629_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=3937726183724121397938767335168339674393355059024923317120625910960723572093&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:14:23+00:00",
+  "not": "US-Iran Hormuz Agreement by September 15?"
+ },
+ "polymarket/gecmis_3701662_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=70797640598204507566607682904927330776781230123700201973007682185470910680582&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1208,
+  "sha256": "e94ab0564fe61c58f4afeb241bb3c0fb338ff041f848342bdd8ad0dd9f27a85f",
+  "an": "2026-10-19T19:14:24+00:00",
+  "not": "US-Iran Hormuz Agreement by September 30?"
+ },
+ "polymarket/gecmis_3701662_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=70797640598204507566607682904927330776781230123700201973007682185470910680582&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 7674,
+  "sha256": "e727297571e3eabfbc44958d81fa3413dbf843304a3fd11a65b5167121d2f6df",
+  "an": "2026-10-19T19:14:24+00:00",
+  "not": "US-Iran Hormuz Agreement by September 30?"
+ },
+ "polymarket/gecmis_3902370_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=80480615864496054518534481664401458122946181878204882508499859562482914861231&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1475,
+  "sha256": "368dd16683b7e28cc3106a3567fec894dd05d95eb3c09f4d3e810fd707cbae00",
+  "an": "2026-10-19T19:13:56+00:00",
+  "not": "Israel x Iran ceasefire continues through November 30?"
+ },
+ "polymarket/gecmis_3902370_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=80480615864496054518534481664401458122946181878204882508499859562482914861231&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18884,
+  "sha256": "7b6f8e10d9c6f2e5329e67dbf9e249e26e54ed4ff7326900f2c8747dd35b68ad",
+  "an": "2026-10-19T19:13:56+00:00",
+  "not": "Israel x Iran ceasefire continues through November 30?"
+ },
+ "polymarket/gecmis_3902371_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=71220137234869176769751142503092057387461302420569334601166793336312625466499&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1498,
+  "sha256": "093c8ce420a5d37514c402cf04b0a006db39412cff1f0fd373687079cef0db80",
+  "an": "2026-10-19T19:14:07+00:00",
+  "not": "Will a European country take military action on Iran by October 31?"
+ },
+ "polymarket/gecmis_3902371_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=71220137234869176769751142503092057387461302420569334601166793336312625466499&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19499,
+  "sha256": "5426c9c3871b7122fee45577e4735f2b1fcc390f26a2b109fc2dfac57bf1646c",
+  "an": "2026-10-19T19:14:07+00:00",
+  "not": "Will a European country take military action on Iran by October 31?"
+ },
+ "polymarket/gecmis_3902374_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=77691698979085340626870176564246109706910466808866921848076733697737538615065&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1476,
+  "sha256": "cce14138be0fb148415628b4baca200b2fe9321e6ba463594cb6e8ec5955974d",
+  "an": "2026-10-19T19:14:08+00:00",
+  "not": "Will a European country take military action on Iran by December 31?"
+ },
+ "polymarket/gecmis_3902374_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=77691698979085340626870176564246109706910466808866921848076733697737538615065&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 18955,
+  "sha256": "dd917b65aa387996aec64eab7a257a91dbaf0a396b6fa395c5d040f1f31e7e43",
+  "an": "2026-10-19T19:14:09+00:00",
+  "not": "Will a European country take military action on Iran by December 31?"
+ },
+ "polymarket/gecmis_3903076_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=100251386924567434813610073998110849042928844262201505163683636677492830208176&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1488,
+  "sha256": "243f44586e52c49159a6db9a96ac51d8ac283582e85a6a7ec00192373e094884",
+  "an": "2026-10-19T19:14:12+00:00",
+  "not": "Iran invades Kuwait by October 31?"
+ },
+ "polymarket/gecmis_3903076_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=100251386924567434813610073998110849042928844262201505163683636677492830208176&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19507,
+  "sha256": "c651917669cb338f1a77c9aa3eefa0a630b00d440b30810b80cda5de99e50f17",
+  "an": "2026-10-19T19:14:12+00:00",
+  "not": "Iran invades Kuwait by October 31?"
+ },
+ "polymarket/gecmis_3903085_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=57994291686593450353841336932718144379528750065759713968679744787106709491075&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1484,
+  "sha256": "17c1cedd5c0acf0592ac4f5d0b83d6c2b9711ee55515f0d442b9712c65b27669",
+  "an": "2026-10-19T19:14:13+00:00",
+  "not": "Iran invades Kuwait by December 31?"
+ },
+ "polymarket/gecmis_3903085_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=57994291686593450353841336932718144379528750065759713968679744787106709491075&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 19084,
+  "sha256": "befc6eccadde35caa1be1e6a8af201f4340c6f40b9039d7672d2bd3727ed74b6",
+  "an": "2026-10-19T19:14:14+00:00",
+  "not": "Iran invades Kuwait by December 31?"
+ },
+ "polymarket/gecmis_3903117_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=29319958433784322392992851856980698872126753243015826140950274712529287520896&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 1008,
+  "sha256": "e313e81a574181c194852f427f8d1d8eb4e7f7595e261113360cbff060981b8c",
+  "an": "2026-10-19T19:14:17+00:00",
+  "not": "Hormuz Island no longer under Iranian control by September 30?"
+ },
+ "polymarket/gecmis_3903117_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=29319958433784322392992851856980698872126753243015826140950274712529287520896&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 7646,
+  "sha256": "9a8d75e52577000e69a193d1578797a0ce0b2f5fa4130c17df0ed05cef1f868f",
+  "an": "2026-10-19T19:14:18+00:00",
+  "not": "Hormuz Island no longer under Iranian control by September 30?"
+ },
+ "polymarket/gecmis_4443001_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=81455995459587775821311420488665758990681594615113079518876286804187992055554&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 152,
+  "sha256": "d4b84e2d5ddbb7cdf339981b81b42033eb594c8ff24991cfa5db459a5ca13843",
+  "an": "2026-10-19T19:13:57+00:00",
+  "not": "Israel x Iran ceasefire continues through September 15?"
+ },
+ "polymarket/gecmis_4443001_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=81455995459587775821311420488665758990681594615113079518876286804187992055554&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 15,
+  "sha256": "7f8b497c3d718d756d8c2130e657c4c414d5da9bed777aa29bc3221fdbcf0dc5",
+  "an": "2026-10-19T19:13:58+00:00",
+  "not": "Israel x Iran ceasefire continues through September 15?"
+ },
+ "polymarket/gecmis_5074918_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=18121823163183446419580104480237085736687284346743322398635634469872767508250&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 498,
+  "sha256": "293b782f608661eb090e4ef599ceaec22603fd2a921a27d5dfbf0d0971fbb217",
+  "an": "2026-10-19T19:14:26+00:00",
+  "not": "US-Iran Hormuz Agreement by October 15?"
+ },
+ "polymarket/gecmis_5074918_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=18121823163183446419580104480237085736687284346743322398635634469872767508250&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 11412,
+  "sha256": "f0160c916c3f0d63b62bfa570765a65b39e351649618ec3f7bdb545ae3c1cbeb",
+  "an": "2026-10-19T19:14:27+00:00",
+  "not": "US-Iran Hormuz Agreement by October 15?"
+ },
+ "polymarket/gecmis_5074920_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=62865105917534279918379008021805675209057971304971907560830989799715631254802&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 611,
+  "sha256": "828fd37538b6f810480683a23f69a78c4c20bb9c3f54494f5e66660dfd2d4fb4",
+  "an": "2026-10-19T19:14:25+00:00",
+  "not": "US-Iran Hormuz Agreement by October 31?"
+ },
+ "polymarket/gecmis_5074920_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=62865105917534279918379008021805675209057971304971907560830989799715631254802&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 13492,
+  "sha256": "07568211a1cf9cbdd566fb4c6fca85f8d416ada235da1687e211b6ef797f74d6",
+  "an": "2026-10-19T19:14:25+00:00",
+  "not": "US-Iran Hormuz Agreement by October 31?"
+ },
+ "polymarket/gecmis_5087226_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=115493632799264792730434819071535743213979554073329435975177567583389396615289&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 597,
+  "sha256": "4304f5cfff7a4e32f2b33519947a5a2af094d5d19ba2577a8afdad3fb87faf95",
+  "an": "2026-10-19T19:14:27+00:00",
+  "not": "US-Iran Hormuz Agreement by November 30?"
+ },
+ "polymarket/gecmis_5087226_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=115493632799264792730434819071535743213979554073329435975177567583389396615289&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 13172,
+  "sha256": "ef17db03b878fe866b4f1f3b5c9b406dad4cc804ae316eba3318931628f7314a",
+  "an": "2026-10-19T19:14:28+00:00",
+  "not": "US-Iran Hormuz Agreement by November 30?"
+ },
+ "polymarket/gecmis_5087227_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=61514028701368977354321151052477513695015649337302383269332905849925728645607&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 287,
+  "sha256": "81d09b08461c2f12c1a6f758b8e8a4c3a673f6e1676fe5017716a96e180c3648",
+  "an": "2026-10-19T19:14:29+00:00",
+  "not": "US-Iran Hormuz Agreement by October 7?"
+ },
+ "polymarket/gecmis_5087227_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=61514028701368977354321151052477513695015649337302383269332905849925728645607&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 6445,
+  "sha256": "2c78d0890c675a3d2a1edf9df806358f477519008c2b76e1429ee6acea33be48",
+  "an": "2026-10-19T19:14:29+00:00",
+  "not": "US-Iran Hormuz Agreement by October 7?"
+ },
+ "polymarket/gecmis_5087228_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=43993028952467754802149615067191589532111111085206465426867400888500760876097&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 603,
+  "sha256": "b0beb3a7861550cbdd8a50440f85ec3e6faf310430a3b614b38b3468703377ae",
+  "an": "2026-10-19T19:14:30+00:00",
+  "not": "US-Iran Hormuz Agreement by December 31?"
+ },
+ "polymarket/gecmis_5087228_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=43993028952467754802149615067191589532111111085206465426867400888500760876097&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 13257,
+  "sha256": "6135cdd1f6e1c89f8ef23931dfce45dee46faeb61e5cf97c221fb57cf3c64df6",
+  "an": "2026-10-19T19:14:30+00:00",
+  "not": "US-Iran Hormuz Agreement by December 31?"
+ },
+ "polymarket/gecmis_5165443_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=3352700214696497248132150090019456394188773090735635350602399178579145364277&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 534,
+  "sha256": "60f7541b1083bb071aae93362f10f1e1de0c5c7d8ec9be5d8d9a86c2cd10f3c4",
+  "an": "2026-10-19T19:14:18+00:00",
+  "not": "Hormuz Island no longer under Iranian control by October 31?"
+ },
+ "polymarket/gecmis_5165443_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=3352700214696497248132150090019456394188773090735635350602399178579145364277&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 12101,
+  "sha256": "79d008b2d87b7dc38d37874be47c802c5a8b723f5a5ad7c17d42e67649b1b9f3",
+  "an": "2026-10-19T19:14:19+00:00",
+  "not": "Hormuz Island no longer under Iranian control by October 31?"
+ },
+ "polymarket/gecmis_5339986_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=81002737208387436195452690077971321124621678141221296249970319056583686458028&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 415,
+  "sha256": "fdfd2080bed5007ed272b93152f7a86fdbdb3d729a8728e93db2707565752e74",
+  "an": "2026-10-19T19:14:01+00:00",
+  "not": "Israel x Iran ceasefire continues through November 15?"
+ },
+ "polymarket/gecmis_5339986_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=81002737208387436195452690077971321124621678141221296249970319056583686458028&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 8736,
+  "sha256": "1ae0f9442559a4b1ba2bc4efdb38ec8f3e19a9b63d74145aad99a480421f8069",
+  "an": "2026-10-19T19:14:01+00:00",
+  "not": "Israel x Iran ceasefire continues through November 15?"
+ },
+ "polymarket/gecmis_5339988_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=18092319243255801260524611222949546655679245299042332944161651044825954090328&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 285,
+  "sha256": "9eeb4674124635294aaac6de252c4aa41f3e81da9207459617c01338fddb229e",
+  "an": "2026-10-19T19:13:58+00:00",
+  "not": "Israel x Iran ceasefire continues through October 15?"
+ },
+ "polymarket/gecmis_5339988_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=18092319243255801260524611222949546655679245299042332944161651044825954090328&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 6509,
+  "sha256": "678d29d7f66dda66f6dd27a3e1230cb5454c6a13943581c706c57fa6f4d2c38f",
+  "an": "2026-10-19T19:13:59+00:00",
+  "not": "Israel x Iran ceasefire continues through October 15?"
+ },
+ "polymarket/gecmis_5339991_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=86633645419196889669568344621800671084105954229029566371337166125566245659964&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 68,
+  "sha256": "8df122d4001a929caf665f1f932893da66bca1c7ca6fca7d377c9acb24d3f6ca",
+  "an": "2026-10-19T19:13:59+00:00",
+  "not": "Israel x Iran ceasefire continues through October 9?"
+ },
+ "polymarket/gecmis_5339991_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=86633645419196889669568344621800671084105954229029566371337166125566245659964&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 2456,
+  "sha256": "7dadb9125a0a967907db41f33ce0b3cf1dd46e6988600cd528d4c47a18f013ac",
+  "an": "2026-10-19T19:14:00+00:00",
+  "not": "Israel x Iran ceasefire continues through October 9?"
+ },
+ "polymarket/gecmis_5571194_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=11196059633424088251565576341000502663990021396961888443608590973643317640973&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 259,
+  "sha256": "a4f6789ff1ab63dd371267fb042de7468e4beb2e3580b42f34a93f772b13a07e",
+  "an": "2026-10-19T19:14:31+00:00",
+  "not": "US-Iran Hormuz Agreement by November 2?"
+ },
+ "polymarket/gecmis_5571194_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=11196059633424088251565576341000502663990021396961888443608590973643317640973&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 5023,
+  "sha256": "ecfa60902606e60ba6ebbbc0c55d4b5d1a3e0fd201bf5a27bc145669171dcae4",
+  "an": "2026-10-19T19:14:31+00:00",
+  "not": "US-Iran Hormuz Agreement by November 2?"
+ },
+ "polymarket/gecmis_5697537_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=89934143411893138333951542357208271255449441787454915251869419003486856118425&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 95,
+  "sha256": "ea0f0f0ae1246c02965a90e502694a3407b510d0cd8971d2460e74f66c246a36",
+  "an": "2026-10-19T19:14:03+00:00",
+  "not": "Israel x Iran ceasefire continues through October 18?"
+ },
+ "polymarket/gecmis_5697537_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=89934143411893138333951542357208271255449441787454915251869419003486856118425&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 2372,
+  "sha256": "e9685dbcdc64fdcb66f0585ec9bff6d0f0b5d86c59dccc8ed1d5841c0653f74c",
+  "an": "2026-10-19T19:14:03+00:00",
+  "not": "Israel x Iran ceasefire continues through October 18?"
+ },
+ "polymarket/gecmis_5697539_gunluk.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=24399767988117113521472412724678339180207513110495231843644050348352296275787&interval=max&fidelity=1440",
+  "durum": 200,
+  "bayt": 124,
+  "sha256": "26a9f664a6fbfbb75d24e8cfe21cfafb5022ec02ae3dc2b04aebca63c1b7bfa3",
+  "an": "2026-10-19T19:14:02+00:00",
+  "not": "Israel x Iran ceasefire continues through October 21?"
+ },
+ "polymarket/gecmis_5697539_saatlik.json.gz": {
+  "url": "https://clob.polymarket.com/prices-history?market=24399767988117113521472412724678339180207513110495231843644050348352296275787&interval=max&fidelity=60",
+  "durum": 200,
+  "bayt": 2829,
+  "sha256": "c24d180b6721493982780908b5ec8f69c910a6cd4c72b2f253aafac44436cf39",
+  "an": "2026-10-19T19:14:02+00:00",
+  "not": "Israel x Iran ceasefire continues through October 21?"
+ },
+ "polymarket/piyasa_1170144.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/1170144",
+  "durum": 200,
+  "bayt": 3973,
+  "sha256": "81d6ec28dd6522631d8bea0201e7fc4ed86666a89281a0d1d5bed72c9190f57e",
+  "an": "2026-10-19T19:13:06+00:00",
+  "not": "Will the US officially declare war on Iran by December 31, 2026?"
+ },
+ "polymarket/piyasa_1707316.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/1707316",
+  "durum": 200,
+  "bayt": 3300,
+  "sha256": "ecaf002715b71dd07222b5fad6d6859adb28678fe96cc46416ca5f1a3a0fb32f",
+  "an": "2026-10-19T19:13:08+00:00",
+  "not": "Will the US officially declare war on Iran by April 30, 2026?"
+ },
+ "polymarket/piyasa_2569893.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2569893",
+  "durum": 200,
+  "bayt": 3401,
+  "sha256": "4876050c57ab456e4e9c79856668aadf6bd999272ecb1f94a9195bb56eed4a9a",
+  "an": "2026-10-19T19:13:09+00:00",
+  "not": "Congress approves Iran deal in 2026?"
+ },
+ "polymarket/piyasa_2633427.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2633427",
+  "durum": 200,
+  "bayt": 8044,
+  "sha256": "c8bc80f0581fe9b350a4006ecef44cf2053836ddd52f1500983ea4974f15d4b9",
+  "an": "2026-10-19T19:13:11+00:00",
+  "not": "US-Iran Final Nuclear Deal by July 31, 2026?"
+ },
+ "polymarket/piyasa_2633428.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2633428",
+  "durum": 200,
+  "bayt": 8221,
+  "sha256": "3a3ef05f2c2b432d9a1a4e0deb4a3051a905df9652a89c6286b102c12d88bca2",
+  "an": "2026-10-19T19:13:12+00:00",
+  "not": "US-Iran Final Nuclear Deal by August 13, 2026?"
+ },
+ "polymarket/piyasa_2647846.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2647846",
+  "durum": 200,
+  "bayt": 3881,
+  "sha256": "fc8545a6ccd74208984944c66fc11d77a93a05457ed96fa453668ba33c5d996b",
+  "an": "2026-10-19T19:13:17+00:00",
+  "not": "UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31?"
+ },
+ "polymarket/piyasa_2663602.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2663602",
+  "durum": 200,
+  "bayt": 7996,
+  "sha256": "d3e43d9384ccbc05e03f6709aeaa683014993a878326a9f8b9c814f0814ccc05",
+  "an": "2026-10-19T19:13:18+00:00",
+  "not": "Will a 1+ Year Enrichment Moratorium be in a US-Iran deal in 2026?"
+ },
+ "polymarket/piyasa_2663603.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2663603",
+  "durum": 200,
+  "bayt": 8547,
+  "sha256": "ee1faea2389c8237f3026ac336bdb4e7833de4543b4f959431729acb70c82a01",
+  "an": "2026-10-19T19:13:20+00:00",
+  "not": "Will any Uranium Enrichment % Cap (1+ Year) be in a US-Iran deal in 2026?"
+ },
+ "polymarket/piyasa_2668004.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2668004",
+  "durum": 200,
+  "bayt": 8578,
+  "sha256": "7c05775fa24ca238af8217d3b9072e58b22abff1032273a4485047adc1fb96cd",
+  "an": "2026-10-19T19:13:21+00:00",
+  "not": "Will a ≤5% Uranium Enrichment Cap (1+ Year) be in a US-Iran deal in 2026?"
+ },
+ "polymarket/piyasa_2668005.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2668005",
+  "durum": 200,
+  "bayt": 8548,
+  "sha256": "9859a1bcc6fe7626653c34fdcd9584a5e365ccd213255f3729c0cf488fd53d0b",
+  "an": "2026-10-19T19:13:22+00:00",
+  "not": "Will Iran Reconstruction Funding be in a US-Iran deal in 2026?"
+ },
+ "polymarket/piyasa_2668006.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2668006",
+  "durum": 200,
+  "bayt": 8136,
+  "sha256": "52800c101ccfd3c37b6d3a90197c330fe268dabe0ec3f9e961b4063237196458",
+  "an": "2026-10-19T19:13:24+00:00",
+  "not": "Will Dilution of Iranian Uranium be in a US-Iran deal in 2026?"
+ },
+ "polymarket/piyasa_2668007.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2668007",
+  "durum": 200,
+  "bayt": 7569,
+  "sha256": "4c881be3928d9abe28359206e9b8daa7d037e5464179a7c781af73429edea2b7",
+  "an": "2026-10-19T19:13:26+00:00",
+  "not": "Will a US-Iran deal in 2026 include Surrender of Iranian Enriched Uranium?"
+ },
+ "polymarket/piyasa_2686765.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2686765",
+  "durum": 200,
+  "bayt": 4243,
+  "sha256": "f7b7300cc0570bf56200ed3c414c063d119cb450b1f9421a88cbde775660d260",
+  "an": "2026-10-19T19:13:27+00:00",
+  "not": "Iran charges Hormuz fees by July 15?"
+ },
+ "polymarket/piyasa_2686766.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2686766",
+  "durum": 200,
+  "bayt": 4776,
+  "sha256": "c27f4f8e73b8a91fa376f1b9f3c3c9042c19d5239ecc95cbb97865fe6d571928",
+  "an": "2026-10-19T19:13:28+00:00",
+  "not": "Iran charges Hormuz fees by August 31?"
+ },
+ "polymarket/piyasa_2696746.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2696746",
+  "durum": 200,
+  "bayt": 8226,
+  "sha256": "ef1ac50c3c801210bcaeda98e7b5ef64bd5493468f6bdf1d3b9034b2ab8ee73e",
+  "an": "2026-10-19T19:13:13+00:00",
+  "not": "US-Iran Final Nuclear Deal by September 30, 2026?"
+ },
+ "polymarket/piyasa_2757754.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2757754",
+  "durum": 200,
+  "bayt": 4536,
+  "sha256": "47503d8eb5c79f49019ea5710fd4a9d218974408478556b3fe88944c93923991",
+  "an": "2026-10-19T19:13:29+00:00",
+  "not": "Iran charges Hormuz fees by July 31?"
+ },
+ "polymarket/piyasa_2757806.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2757806",
+  "durum": 200,
+  "bayt": 5003,
+  "sha256": "5f21fb2f3aaf0f6ca3e55a285dff254b4446f57fb35b1d6d5740d10ca75596b4",
+  "an": "2026-10-19T19:13:30+00:00",
+  "not": "Iran charges Hormuz fees by October 31?"
+ },
+ "polymarket/piyasa_2824614.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2824614",
+  "durum": 200,
+  "bayt": 5024,
+  "sha256": "c1d48b0a144c4a687592524df7933993ee951ee84325393f00975da88f409a5e",
+  "an": "2026-10-19T19:13:31+00:00",
+  "not": "Iran charges Hormuz fees by December 31?"
+ },
+ "polymarket/piyasa_2952457.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2952457",
+  "durum": 200,
+  "bayt": 5811,
+  "sha256": "6364fb3abee0e25b001cbb14f67b842c551b64e024cd75f1c987473a679ea71f",
+  "an": "2026-10-19T19:13:34+00:00",
+  "not": "Israel x Iran ceasefire continues through July 18?"
+ },
+ "polymarket/piyasa_2952467.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2952467",
+  "durum": 200,
+  "bayt": 5809,
+  "sha256": "aff7e1a0e06b51168c10e388bf7de8e6a0959ebb0f0d923288afd927fd17b3f2",
+  "an": "2026-10-19T19:13:35+00:00",
+  "not": "Israel x Iran ceasefire continues through July 20?"
+ },
+ "polymarket/piyasa_2952471.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2952471",
+  "durum": 200,
+  "bayt": 5877,
+  "sha256": "0e67a4f6a51d83d3fdefbdef1b93bc73a8c0e612aa8c0cd613bf46656cd603dd",
+  "an": "2026-10-19T19:13:36+00:00",
+  "not": "Israel x Iran ceasefire continues through July 22?"
+ },
+ "polymarket/piyasa_2952488.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2952488",
+  "durum": 200,
+  "bayt": 6048,
+  "sha256": "a93e15143f9b22e6fd11c666ef9274240489e053ab70a0a54ec31bfe180c5649",
+  "an": "2026-10-19T19:13:38+00:00",
+  "not": "Israel x Iran ceasefire continues through August 15?"
+ },
+ "polymarket/piyasa_2995849.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2995849",
+  "durum": 200,
+  "bayt": 5716,
+  "sha256": "e1bc3b46d5c92a54c86dc9293215c1d9b8a15658a418880be7c801112742d2b6",
+  "an": "2026-10-19T19:14:04+00:00",
+  "not": "Will a European country take military action on Iran by July 31?"
+ },
+ "polymarket/piyasa_2995850.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2995850",
+  "durum": 200,
+  "bayt": 5865,
+  "sha256": "c8fddd86bdc153016b5171b63f4eec22830ea68a1222a7d89fddf906c657fa95",
+  "an": "2026-10-19T19:14:05+00:00",
+  "not": "Will a European country take military action on Iran by August 31?"
+ },
+ "polymarket/piyasa_2995865.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2995865",
+  "durum": 200,
+  "bayt": 4851,
+  "sha256": "3d0c05d2747b8e7051b024b37974b220c9b91d7bc76afd09439e6f48a5fc4c4f",
+  "an": "2026-10-19T19:14:09+00:00",
+  "not": "Iran invades Kuwait by July 31?"
+ },
+ "polymarket/piyasa_2995866.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/2995866",
+  "durum": 200,
+  "bayt": 5083,
+  "sha256": "03a76a7e238af900e413631be7abc1fa08d6de2e8de16b70b7a6ea7e33652b13",
+  "an": "2026-10-19T19:14:10+00:00",
+  "not": "Iran invades Kuwait by August 31?"
+ },
+ "polymarket/piyasa_3009264.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3009264",
+  "durum": 200,
+  "bayt": 3573,
+  "sha256": "c950f9682fce6b2bdce9c5c4dc208297b5592e77aaf75e002b5adbba746c09fe",
+  "an": "2026-10-19T19:14:14+00:00",
+  "not": "Hormuz Island no longer under Iranian control by July 31?"
+ },
+ "polymarket/piyasa_3009265.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3009265",
+  "durum": 200,
+  "bayt": 3795,
+  "sha256": "9a599f4be3a355a7f7b97bde6fdb43e4d5fc745c64323894e07608deb763e14f",
+  "an": "2026-10-19T19:14:16+00:00",
+  "not": "Hormuz Island no longer under Iranian control by August 31?"
+ },
+ "polymarket/piyasa_3044537.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3044537",
+  "durum": 200,
+  "bayt": 5781,
+  "sha256": "90d16ef6019835e94ef6276b50b071daceeedb4035321f1f6ee5ddf78645a4f5",
+  "an": "2026-10-19T19:13:39+00:00",
+  "not": "Israel x Iran ceasefire continues through July 23?"
+ },
+ "polymarket/piyasa_3044545.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3044545",
+  "durum": 200,
+  "bayt": 5764,
+  "sha256": "efa484fc2aef31a97b0aff5c0071c81fc83b4c75571a76691cf065ef68e3f57c",
+  "an": "2026-10-19T19:13:40+00:00",
+  "not": "Israel x Iran ceasefire continues through July 24?"
+ },
+ "polymarket/piyasa_3044546.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3044546",
+  "durum": 200,
+  "bayt": 5781,
+  "sha256": "f30fb98f5a06207e0501361102119da6861b2a41b87da797e8333a01c5250817",
+  "an": "2026-10-19T19:13:41+00:00",
+  "not": "Israel x Iran ceasefire continues through July 26?"
+ },
+ "polymarket/piyasa_3083664.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3083664",
+  "durum": 200,
+  "bayt": 5806,
+  "sha256": "139bb2e563b0385b0de1d2105c2e19631926da9a27f0fbb87bae024dabcd5969",
+  "an": "2026-10-19T19:13:43+00:00",
+  "not": "Israel x Iran ceasefire continues through July 27?"
+ },
+ "polymarket/piyasa_3083667.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3083667",
+  "durum": 200,
+  "bayt": 5809,
+  "sha256": "eb2c2b39473dd78db635f5cd17295ce514a94d1855a63158445fa1f5af838daa",
+  "an": "2026-10-19T19:13:44+00:00",
+  "not": "Israel x Iran ceasefire continues through July 28?"
+ },
+ "polymarket/piyasa_3083701.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3083701",
+  "durum": 200,
+  "bayt": 5835,
+  "sha256": "43953f9ab5689af67c980447f66db16fc3228ccafcaa4d1282803074ad8608a6",
+  "an": "2026-10-19T19:13:46+00:00",
+  "not": "Israel x Iran ceasefire continues through July 29?"
+ },
+ "polymarket/piyasa_3083724.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3083724",
+  "durum": 200,
+  "bayt": 5808,
+  "sha256": "7c019c6fd4a68907f5fa2c83ee94b91e820ab486d7f6c212aac73ee66d88d38b",
+  "an": "2026-10-19T19:13:47+00:00",
+  "not": "Israel x Iran ceasefire continues through July 30?"
+ },
+ "polymarket/piyasa_3128786.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3128786",
+  "durum": 200,
+  "bayt": 5988,
+  "sha256": "b3c1ead1e09e231df01d12ed29352ab0648de5aa2c402362f5d35afea4336c95",
+  "an": "2026-10-19T19:13:48+00:00",
+  "not": "Israel x Iran ceasefire continues through August 9?"
+ },
+ "polymarket/piyasa_3247931.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3247931",
+  "durum": 200,
+  "bayt": 5782,
+  "sha256": "49c31162962e2bf2ebf4c506252caa4332b322b69658f20965f45efe3a921973",
+  "an": "2026-10-19T19:13:50+00:00",
+  "not": "Israel x Iran ceasefire continues through August 1?"
+ },
+ "polymarket/piyasa_3247963.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3247963",
+  "durum": 200,
+  "bayt": 5479,
+  "sha256": "51e55560773bde84897d5a4cdc401995eb69dfc48b34224c1dc3c061c32d6df9",
+  "an": "2026-10-19T19:13:51+00:00",
+  "not": "Israel x Iran ceasefire continues through August 3?"
+ },
+ "polymarket/piyasa_3247965.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3247965",
+  "durum": 200,
+  "bayt": 5506,
+  "sha256": "0649d7f2be40376d300b0e51f47580fa411fd849b5683368a3018f58cff6f70d",
+  "an": "2026-10-19T19:13:52+00:00",
+  "not": "Israel x Iran ceasefire continues through August 4?"
+ },
+ "polymarket/piyasa_3324624.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3324624",
+  "durum": 200,
+  "bayt": 5404,
+  "sha256": "a40acf1ee6ef312f5551321de7eb60bbf2875b1deec622fb858a2c8d7fbb0775",
+  "an": "2026-10-19T19:14:19+00:00",
+  "not": "US-Iran Hormuz Agreement by August 15?"
+ },
+ "polymarket/piyasa_3324625.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3324625",
+  "durum": 200,
+  "bayt": 5426,
+  "sha256": "98dbf4aa07c2431a401ccb2c33ace6109dea0189e4611de4b877cb14d6b04817",
+  "an": "2026-10-19T19:14:21+00:00",
+  "not": "US-Iran Hormuz Agreement by August 31?"
+ },
+ "polymarket/piyasa_3348047.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3348047",
+  "durum": 200,
+  "bayt": 5524,
+  "sha256": "8c8028686f67db2b87daf947f426a6dd67e85f696435754356c2d3ddfc482c94",
+  "an": "2026-10-19T19:14:32+00:00",
+  "not": "Iran-Oman Hormuz Agreement by August 15?"
+ },
+ "polymarket/piyasa_3348048.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3348048",
+  "durum": 200,
+  "bayt": 5587,
+  "sha256": "686ecdb8ed347d1c5819f958f9ed9d6563dc87495ebad49c3af2fcf921d4a4f9",
+  "an": "2026-10-19T19:14:33+00:00",
+  "not": "Iran-Oman Hormuz Agreement by August 31?"
+ },
+ "polymarket/piyasa_3399459.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3399459",
+  "durum": 200,
+  "bayt": 6387,
+  "sha256": "8a4ce5d5b059ffb0c17e01bff7eb884a046fcee755c25bb13c3360580bac0301",
+  "an": "2026-10-19T19:13:54+00:00",
+  "not": "Israel x Iran ceasefire continues through October 31?"
+ },
+ "polymarket/piyasa_3399468.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3399468",
+  "durum": 200,
+  "bayt": 6375,
+  "sha256": "874a3fe0ebff3bb29259b460b68d08fccebd4bd8c187d8d852d39f071bd33270",
+  "an": "2026-10-19T19:13:55+00:00",
+  "not": "Israel x Iran ceasefire continues through December 31?"
+ },
+ "polymarket/piyasa_3399473.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3399473",
+  "durum": 200,
+  "bayt": 4834,
+  "sha256": "0db757b58bd7669dac6b605c0b2f4418c739c6fb6fa2b985170ddc16adf44fb6",
+  "an": "2026-10-19T19:13:32+00:00",
+  "not": "Iran charges Hormuz fees by September 30?"
+ },
+ "polymarket/piyasa_3491438.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3491438",
+  "durum": 200,
+  "bayt": 8539,
+  "sha256": "9648cee461e725c1b3d2fe2101ed6e402a7cff13404da742ae05a3065778fbdd",
+  "an": "2026-10-19T19:13:15+00:00",
+  "not": "US-Iran Final Nuclear Deal by November 30, 2026?"
+ },
+ "polymarket/piyasa_3491459.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3491459",
+  "durum": 200,
+  "bayt": 8313,
+  "sha256": "707c4949685970c83bbb4704bb2689ea629829bad59125bb7efdb260699d552c",
+  "an": "2026-10-19T19:13:16+00:00",
+  "not": "US-Iran Final Nuclear Deal by October 31, 2026?"
+ },
+ "polymarket/piyasa_3701629.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3701629",
+  "durum": 200,
+  "bayt": 5416,
+  "sha256": "7739cf490c16c67a4dfad5606ca26281fa4832af63f8adf0a7596b3232717468",
+  "an": "2026-10-19T19:14:22+00:00",
+  "not": "US-Iran Hormuz Agreement by September 15?"
+ },
+ "polymarket/piyasa_3701662.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3701662",
+  "durum": 200,
+  "bayt": 5401,
+  "sha256": "c44932b6b515adf29ceba48482ba7188001617f2f97d183d1ac4b70a1707318f",
+  "an": "2026-10-19T19:14:23+00:00",
+  "not": "US-Iran Hormuz Agreement by September 30?"
+ },
+ "polymarket/piyasa_3902370.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3902370",
+  "durum": 200,
+  "bayt": 6361,
+  "sha256": "f95ea352af72fefa64406209a26ab9b0fa98e9a13ffaa702b00768890afd830f",
+  "an": "2026-10-19T19:13:56+00:00",
+  "not": "Israel x Iran ceasefire continues through November 30?"
+ },
+ "polymarket/piyasa_3902371.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3902371",
+  "durum": 200,
+  "bayt": 6071,
+  "sha256": "712ffc6812d13dcdf0ad4d0864b44bb372abcde719a81969ba1abbb4b96ae588",
+  "an": "2026-10-19T19:14:06+00:00",
+  "not": "Will a European country take military action on Iran by October 31?"
+ },
+ "polymarket/piyasa_3902374.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3902374",
+  "durum": 200,
+  "bayt": 6120,
+  "sha256": "7967f55b8d565d7e39ed134c71769a149504c10b08d52baddcfc9c6ade0f8603",
+  "an": "2026-10-19T19:14:08+00:00",
+  "not": "Will a European country take military action on Iran by December 31?"
+ },
+ "polymarket/piyasa_3903076.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3903076",
+  "durum": 200,
+  "bayt": 5013,
+  "sha256": "7b511071dc3b0d147c990d5183dad5425157edb2d3fa0932031dc800045901e1",
+  "an": "2026-10-19T19:14:11+00:00",
+  "not": "Iran invades Kuwait by October 31?"
+ },
+ "polymarket/piyasa_3903085.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3903085",
+  "durum": 200,
+  "bayt": 4972,
+  "sha256": "01eda951e4accd86f6f3c0421a0610413bbd2e475ed2aadad03dc613860f56c8",
+  "an": "2026-10-19T19:14:13+00:00",
+  "not": "Iran invades Kuwait by December 31?"
+ },
+ "polymarket/piyasa_3903117.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/3903117",
+  "durum": 200,
+  "bayt": 3724,
+  "sha256": "24da21731b25e2748ca30002118fe81ecfdcee62aba5830e829c8364cdd8acca",
+  "an": "2026-10-19T19:14:17+00:00",
+  "not": "Hormuz Island no longer under Iranian control by September 30?"
+ },
+ "polymarket/piyasa_4443001.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/4443001",
+  "durum": 200,
+  "bayt": 5867,
+  "sha256": "1c132cbc141d0a06491439a5103e3dd5f7936e2321a1dea4d9e44ce50a3e947c",
+  "an": "2026-10-19T19:13:57+00:00",
+  "not": "Israel x Iran ceasefire continues through September 15?"
+ },
+ "polymarket/piyasa_5074918.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5074918",
+  "durum": 200,
+  "bayt": 5310,
+  "sha256": "604f9c89fb6f48254377a07394ba1354e28e738d1662a86e59694fad07025aa0",
+  "an": "2026-10-19T19:14:26+00:00",
+  "not": "US-Iran Hormuz Agreement by October 15?"
+ },
+ "polymarket/piyasa_5074920.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5074920",
+  "durum": 200,
+  "bayt": 5775,
+  "sha256": "73cecd81476df759ab2936fffe2ffe412f2a69f6fa0d40ebf3cee9de54ca802d",
+  "an": "2026-10-19T19:14:25+00:00",
+  "not": "US-Iran Hormuz Agreement by October 31?"
+ },
+ "polymarket/piyasa_5087226.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5087226",
+  "durum": 200,
+  "bayt": 5746,
+  "sha256": "b890ee8b75f014993eaf7646d952384228c0e9f899189d8b8b8ffa5dde65955e",
+  "an": "2026-10-19T19:14:27+00:00",
+  "not": "US-Iran Hormuz Agreement by November 30?"
+ },
+ "polymarket/piyasa_5087227.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5087227",
+  "durum": 200,
+  "bayt": 5467,
+  "sha256": "7fd09a4c36fb2b96c2806b92e230984e423987a6d4a3f75ef13f1583fadbf0ab",
+  "an": "2026-10-19T19:14:28+00:00",
+  "not": "US-Iran Hormuz Agreement by October 7?"
+ },
+ "polymarket/piyasa_5087228.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5087228",
+  "durum": 200,
+  "bayt": 5816,
+  "sha256": "66c4d57d81e9ca0d05100cfc48728e169db68ee88d55f32ffae279b3efdf8299",
+  "an": "2026-10-19T19:14:29+00:00",
+  "not": "US-Iran Hormuz Agreement by December 31?"
+ },
+ "polymarket/piyasa_5165443.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5165443",
+  "durum": 200,
+  "bayt": 3660,
+  "sha256": "6eeff062dfdf8d541b57bde39f01c718cbb0c085b81010668714697f60cc4d3b",
+  "an": "2026-10-19T19:14:18+00:00",
+  "not": "Hormuz Island no longer under Iranian control by October 31?"
+ },
+ "polymarket/piyasa_5339986.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5339986",
+  "durum": 200,
+  "bayt": 6250,
+  "sha256": "38dad08bb99f6935586e0c7facedd6db073d38a5afd6b7f034f94fd1da6419af",
+  "an": "2026-10-19T19:14:00+00:00",
+  "not": "Israel x Iran ceasefire continues through November 15?"
+ },
+ "polymarket/piyasa_5339988.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5339988",
+  "durum": 200,
+  "bayt": 5820,
+  "sha256": "ef8df10ce60a225f8e96e6e88362cd963c97ab63b78874bfe5d5db6397bd5aa1",
+  "an": "2026-10-19T19:13:58+00:00",
+  "not": "Israel x Iran ceasefire continues through October 15?"
+ },
+ "polymarket/piyasa_5339991.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5339991",
+  "durum": 200,
+  "bayt": 5761,
+  "sha256": "a7290d52ae84482483b387b08b3813a19c20d7b3421779e0f53f15884a92c070",
+  "an": "2026-10-19T19:13:59+00:00",
+  "not": "Israel x Iran ceasefire continues through October 9?"
+ },
+ "polymarket/piyasa_5571194.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5571194",
+  "durum": 200,
+  "bayt": 5828,
+  "sha256": "79203d3f85401557999846a5110412029bbf101287c0166ba37b3002893e724b",
+  "an": "2026-10-19T19:14:30+00:00",
+  "not": "US-Iran Hormuz Agreement by November 2?"
+ },
+ "polymarket/piyasa_5697537.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5697537",
+  "durum": 200,
+  "bayt": 6017,
+  "sha256": "be01e7329ccca9e6921c1dc3520e1c81ee1ba1aacf2dd2e4c4922a104b5d0f34",
+  "an": "2026-10-19T19:14:03+00:00",
+  "not": "Israel x Iran ceasefire continues through October 18?"
+ },
+ "polymarket/piyasa_5697539.json.gz": {
+  "url": "https://gamma-api.polymarket.com/markets/5697539",
+  "durum": 200,
+  "bayt": 6020,
+  "sha256": "57a6c9e708cd139b045cb7bae7414623ae676970f033a11eb2126cab05f3e84d",
+  "an": "2026-10-19T19:14:01+00:00",
+  "not": "Israel x Iran ceasefire continues through October 21?"
+ },
+ "wiki/en_wikipedia_org_0c4c7c738a.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Operation_Martyr_Soleimani",
+  "durum": 200,
+  "bayt": 503378,
+  "sha256": "51878f21f44f2bf7671d99e14b25b4fcd8a580d986e0953f46895e2876ef0eb9",
+  "an": "2026-10-19T19:14:48+00:00",
+  "not": "Wikipedia: Operation Martyr Soleimani"
+ },
+ "wiki/en_wikipedia_org_0ebabe605c.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/United_States_strikes_on_Iranian_nuclear_sites",
+  "durum": 200,
+  "bayt": 1403406,
+  "sha256": "d5c3d47f3643bec718dd0a39a959905c08846e3551fee2ada6615b7ef49cf3f7",
+  "an": "2026-10-19T19:14:41+00:00",
+  "not": "Wikipedia: United States strikes on Iranian nuclear sites"
+ },
+ "wiki/en_wikipedia_org_2fb1d7ad88.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Killing_of_Qasem_Soleimani",
+  "durum": 200,
+  "bayt": 1566282,
+  "sha256": "c86065fe15d0eaa9e8d4c13a3a46d189f1fc8b71c9ee8c4ac227732bdb90f368",
+  "an": "2026-10-19T19:14:45+00:00",
+  "not": "Wikipedia: Killing of Qasem Soleimani"
+ },
+ "wiki/en_wikipedia_org_30a058d6ba.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2023_Hamas-led_attack_on_Israel",
+  "durum": 200,
+  "bayt": 2225044,
+  "sha256": "ee167627f3b95293e32da2bcee172778d1c892a7a07834ad5d1d60a070e3313c",
+  "an": "2026-10-19T19:16:32+00:00",
+  "not": "Wikipedia: 2023 Hamas-led attack on Israel"
+ },
+ "wiki/en_wikipedia_org_4534edc4d1.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Gulf_War",
+  "durum": 200,
+  "bayt": 1780141,
+  "sha256": "3cebe346f921293171bbe98fd727b6fe78c248288fa8bea1dce3c2954ee3b054",
+  "an": "2026-10-19T19:15:11+00:00",
+  "not": "Wikipedia: Gulf War"
+ },
+ "wiki/en_wikipedia_org_5276a6c316.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/October_2024_Iranian_strikes_on_Israel",
+  "durum": 200,
+  "bayt": 814378,
+  "sha256": "47b3baf23da3340b371efb2cb7fd6080ade9c1120567d268752ce2d04292b933",
+  "an": "2026-10-19T19:16:27+00:00",
+  "not": "Wikipedia: October 2024 Iranian strikes on Israel"
+ },
+ "wiki/en_wikipedia_org_601fcc4299.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/1998_United_States_embassy_bombings",
+  "durum": 200,
+  "bayt": 365816,
+  "sha256": "ef5ce1c39363e52b191f6b213ff399f3dafe5b9c8e3e612356eaf3013fe3697f",
+  "an": "2026-10-19T19:15:04+00:00",
+  "not": "Wikipedia: 1998 United States embassy bombings"
+ },
+ "wiki/en_wikipedia_org_63544c23bd.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Operation_Infinite_Reach",
+  "durum": 200,
+  "bayt": 702416,
+  "sha256": "5077c097470c054dd9b3f3cfc6cfa0fbf4d25b1422252bd660d280c819088f7d",
+  "an": "2026-10-19T19:14:53+00:00",
+  "not": "Wikipedia: Operation Infinite Reach"
+ },
+ "wiki/en_wikipedia_org_6c3b4fb0c5.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2019%E2%80%932021_Persian_Gulf_crisis",
+  "durum": 200,
+  "bayt": 1122011,
+  "sha256": "e70ab349beb19b436b1af3e54239613e1b8a4b7a504fd635525569d1eebc1741",
+  "an": "2026-10-19T19:14:51+00:00",
+  "not": "Wikipedia: 2019–2021 Persian Gulf crisis"
+ },
+ "wiki/en_wikipedia_org_789fb4f845.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Islamabad_Talks",
+  "durum": 200,
+  "bayt": 444031,
+  "sha256": "3d4e49c576bbb44d4062167867e5addd1314eb1c1a4c859dc31bf65b52d3ae82",
+  "an": "2026-10-19T19:16:09+00:00",
+  "not": "Wikipedia: Islamabad Talks"
+ },
+ "wiki/en_wikipedia_org_88b521443e.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2013_Ghouta_chemical_attack",
+  "durum": 200,
+  "bayt": 1241066,
+  "sha256": "89368d47981e44199791d1b56e35a641ca1aebd1d08fe2298bfeebb930aad095",
+  "an": "2026-10-19T19:15:23+00:00",
+  "not": "Wikipedia: 2013 Ghouta chemical attack"
+ },
+ "wiki/en_wikipedia_org_8b1c0f6654.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Operation_Desert_Storm",
+  "durum": 200,
+  "bayt": 1780141,
+  "sha256": "3cebe346f921293171bbe98fd727b6fe78c248288fa8bea1dce3c2954ee3b054",
+  "an": "2026-10-19T19:15:16+00:00",
+  "not": "Wikipedia: Operation Desert Storm"
+ },
+ "wiki/en_wikipedia_org_8c87f8f328.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2003_invasion_of_Iraq",
+  "durum": 200,
+  "bayt": 1552804,
+  "sha256": "2f71cf6d5c5c9eae195599da216971ed521a628ce9cae53006a36bc64787943b",
+  "an": "2026-10-19T19:15:08+00:00",
+  "not": "Wikipedia: 2003 invasion of Iraq"
+ },
+ "wiki/en_wikipedia_org_8dd3d64c5f.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Twelve-Day_War",
+  "durum": 200,
+  "bayt": 2118374,
+  "sha256": "2951e5e7e5516bbd7721c2669ba9a52dd03e1e86af76bd3ebc8805e882c51aef",
+  "an": "2026-10-19T19:14:37+00:00",
+  "not": "Wikipedia: Twelve-Day War"
+ },
+ "wiki/en_wikipedia_org_b898be5479.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2024_Iran%E2%80%93Israel_conflict",
+  "durum": 200,
+  "bayt": 824561,
+  "sha256": "877bf8f74718afea2e2e42d6efc5de939e52ac12902adbb18dd0bf73341ed600",
+  "an": "2026-10-19T19:16:21+00:00",
+  "not": "Wikipedia: 2024 Iran–Israel conflict"
+ },
+ "wiki/en_wikipedia_org_be892ac34b.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Timeline_of_the_Syrian_civil_war_%28May%E2%80%93August_2013%29",
+  "durum": 200,
+  "bayt": 515814,
+  "sha256": "c94155a3a1c1941f3fcb4630be38979d4b7c8c6ee4b3d6b180b69f0aeb18f4b4",
+  "an": "2026-10-19T19:15:26+00:00",
+  "not": "Wikipedia: Timeline of the Syrian civil war (May–August 2013)"
+ },
+ "wiki/en_wikipedia_org_cdb2f1e2f5.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/April_2024_Iranian_strikes_on_Israel",
+  "durum": 200,
+  "bayt": 1098206,
+  "sha256": "5d7e5cf860eb232f4c22a0289e160444fe116abcad0391ff1c87a5ba5508e9b8",
+  "an": "2026-10-19T19:16:24+00:00",
+  "not": "Wikipedia: April 2024 Iranian strikes on Israel"
+ },
+ "wiki/en_wikipedia_org_d898d16f5f.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Operation_Epic_Fury",
+  "durum": 200,
+  "bayt": 2943915,
+  "sha256": "a1358103981f27cd7e0fd505599f18f1f38ca7a166d88b7974e5afec0e7a44a9",
+  "an": "2026-10-19T19:16:07+00:00",
+  "not": "Wikipedia: Operation Epic Fury"
+ },
+ "wiki/en_wikipedia_org_deb226e8a6.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2012_Benghazi_attack",
+  "durum": 200,
+  "bayt": 1101948,
+  "sha256": "09f5e56c8554c4753870febb0bcaaf74509e0b303949b1b0758a8aeacd1a4109",
+  "an": "2026-10-19T19:15:20+00:00",
+  "not": "Wikipedia: 2012 Benghazi attack"
+ },
+ "wiki/en_wikipedia_org_ea275c030c.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_Iran_war_ceasefire",
+  "durum": 200,
+  "bayt": 778476,
+  "sha256": "41c32d0ff76fdbf0ab4f12f2aff83d7d5a6ab38165f276b4e229bea69738259b",
+  "an": "2026-10-19T19:16:02+00:00",
+  "not": "Wikipedia: 2026 Iran war ceasefire"
+ },
+ "wiki/en_wikipedia_org_f491259947.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Reactions_to_the_2026_Iran_war",
+  "durum": 200,
+  "bayt": 2427406,
+  "sha256": "78b4a94a78362ab1e29cdc66d17772ebeaacbf58c322ea45c5bf93f50fbb9cc2",
+  "an": "2026-10-19T19:16:14+00:00",
+  "not": "Wikipedia: Reactions to the 2026 Iran war"
+ }
+}

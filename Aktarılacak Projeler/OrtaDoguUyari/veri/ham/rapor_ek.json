@@ -1,0 +1,631 @@
+{
+ "2026-10-19T19:13:00Z": {
+  "Polymarket ek": {
+   "durum": "tamam",
+   "olay": {
+    "events_iran": 200,
+    "arama_ceasefire_continues_through": 200,
+    "arama_US_x_Iran_ceasefire_continues": 200,
+    "arama_US_x_Iran": 200,
+    "arama_Iran_strike_November": 200,
+    "arama_Iran_midterms": 200,
+    "arama_US_strike_Iran_November": 200,
+    "arama_US_strike_Iran_December": 200,
+    "olay_31ekim": 200
+   },
+   "piyasa": {
+    "1170144": {
+     "soru": "Will the US officially declare war on Iran by December 31, 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "1707316": {
+     "soru": "Will the US officially declare war on Iran by April 30, 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2569893": {
+     "soru": "Congress approves Iran deal in 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2633427": {
+     "soru": "US-Iran Final Nuclear Deal by July 31, 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2633428": {
+     "soru": "US-Iran Final Nuclear Deal by August 13, 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2696746": {
+     "soru": "US-Iran Final Nuclear Deal by September 30, 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3491438": {
+     "soru": "US-Iran Final Nuclear Deal by November 30, 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3491459": {
+     "soru": "US-Iran Final Nuclear Deal by October 31, 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2647846": {
+     "soru": "UNSC Resolution Endorsing Final U.S.-Iran Deal by December 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2663602": {
+     "soru": "Will a 1+ Year Enrichment Moratorium be in a US-Iran deal in 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2663603": {
+     "soru": "Will any Uranium Enrichment % Cap (1+ Year) be in a US-Iran deal in 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2668004": {
+     "soru": "Will a ≤5% Uranium Enrichment Cap (1+ Year) be in a US-Iran deal in 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2668005": {
+     "soru": "Will Iran Reconstruction Funding be in a US-Iran deal in 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2668006": {
+     "soru": "Will Dilution of Iranian Uranium be in a US-Iran deal in 2026?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2668007": {
+     "soru": "Will a US-Iran deal in 2026 include Surrender of Iranian Enriched Uranium?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2686765": {
+     "soru": "Iran charges Hormuz fees by July 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2686766": {
+     "soru": "Iran charges Hormuz fees by August 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2757754": {
+     "soru": "Iran charges Hormuz fees by July 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2757806": {
+     "soru": "Iran charges Hormuz fees by October 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2824614": {
+     "soru": "Iran charges Hormuz fees by December 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3399473": {
+     "soru": "Iran charges Hormuz fees by September 30?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2952457": {
+     "soru": "Israel x Iran ceasefire continues through July 18?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2952467": {
+     "soru": "Israel x Iran ceasefire continues through July 20?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2952471": {
+     "soru": "Israel x Iran ceasefire continues through July 22?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2952488": {
+     "soru": "Israel x Iran ceasefire continues through August 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3044537": {
+     "soru": "Israel x Iran ceasefire continues through July 23?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3044545": {
+     "soru": "Israel x Iran ceasefire continues through July 24?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3044546": {
+     "soru": "Israel x Iran ceasefire continues through July 26?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3083664": {
+     "soru": "Israel x Iran ceasefire continues through July 27?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3083667": {
+     "soru": "Israel x Iran ceasefire continues through July 28?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3083701": {
+     "soru": "Israel x Iran ceasefire continues through July 29?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3083724": {
+     "soru": "Israel x Iran ceasefire continues through July 30?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3128786": {
+     "soru": "Israel x Iran ceasefire continues through August 9?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3247931": {
+     "soru": "Israel x Iran ceasefire continues through August 1?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3247963": {
+     "soru": "Israel x Iran ceasefire continues through August 3?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3247965": {
+     "soru": "Israel x Iran ceasefire continues through August 4?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3399459": {
+     "soru": "Israel x Iran ceasefire continues through October 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3399468": {
+     "soru": "Israel x Iran ceasefire continues through December 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3902370": {
+     "soru": "Israel x Iran ceasefire continues through November 30?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "4443001": {
+     "soru": "Israel x Iran ceasefire continues through September 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5339988": {
+     "soru": "Israel x Iran ceasefire continues through October 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5339991": {
+     "soru": "Israel x Iran ceasefire continues through October 9?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5339986": {
+     "soru": "Israel x Iran ceasefire continues through November 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5697539": {
+     "soru": "Israel x Iran ceasefire continues through October 21?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5697537": {
+     "soru": "Israel x Iran ceasefire continues through October 18?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2995849": {
+     "soru": "Will a European country take military action on Iran by July 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2995850": {
+     "soru": "Will a European country take military action on Iran by August 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3902371": {
+     "soru": "Will a European country take military action on Iran by October 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3902374": {
+     "soru": "Will a European country take military action on Iran by December 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2995865": {
+     "soru": "Iran invades Kuwait by July 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "2995866": {
+     "soru": "Iran invades Kuwait by August 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3903076": {
+     "soru": "Iran invades Kuwait by October 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3903085": {
+     "soru": "Iran invades Kuwait by December 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3009264": {
+     "soru": "Hormuz Island no longer under Iranian control by July 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3009265": {
+     "soru": "Hormuz Island no longer under Iranian control by August 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3903117": {
+     "soru": "Hormuz Island no longer under Iranian control by September 30?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5165443": {
+     "soru": "Hormuz Island no longer under Iranian control by October 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3324624": {
+     "soru": "US-Iran Hormuz Agreement by August 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3324625": {
+     "soru": "US-Iran Hormuz Agreement by August 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3701629": {
+     "soru": "US-Iran Hormuz Agreement by September 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3701662": {
+     "soru": "US-Iran Hormuz Agreement by September 30?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5074920": {
+     "soru": "US-Iran Hormuz Agreement by October 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5074918": {
+     "soru": "US-Iran Hormuz Agreement by October 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5087226": {
+     "soru": "US-Iran Hormuz Agreement by November 30?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5087227": {
+     "soru": "US-Iran Hormuz Agreement by October 7?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5087228": {
+     "soru": "US-Iran Hormuz Agreement by December 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "5571194": {
+     "soru": "US-Iran Hormuz Agreement by November 2?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3348047": {
+     "soru": "Iran-Oman Hormuz Agreement by August 15?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    },
+    "3348048": {
+     "soru": "Iran-Oman Hormuz Agreement by August 31?",
+     "gecmis": {
+      "gunluk": 200,
+      "saatlik": 200
+     }
+    }
+   },
+   "sure_sn": 94.1
+  },
+  "Wikipedia başlıkla": {
+   "durum": "tamam",
+   "Twelve-Day War": {
+    "durum": 200,
+    "bayt": 2118374,
+    "dosya": "wiki/en_wikipedia_org_8dd3d64c5f.html.gz"
+   },
+   "United States strikes on Iranian nuclear sites": {
+    "durum": 200,
+    "bayt": 1403406,
+    "dosya": "wiki/en_wikipedia_org_0ebabe605c.html.gz"
+   },
+   "Killing of Qasem Soleimani": {
+    "durum": 200,
+    "bayt": 1566282,
+    "dosya": "wiki/en_wikipedia_org_2fb1d7ad88.html.gz"
+   },
+   "Operation Martyr Soleimani": {
+    "durum": 200,
+    "bayt": 503378,
+    "dosya": "wiki/en_wikipedia_org_0c4c7c738a.html.gz"
+   },
+   "2019–2021 Persian Gulf crisis": {
+    "durum": 200,
+    "bayt": 1122011,
+    "dosya": "wiki/en_wikipedia_org_6c3b4fb0c5.html.gz"
+   },
+   "Operation Infinite Reach": {
+    "durum": 200,
+    "bayt": 702416,
+    "dosya": "wiki/en_wikipedia_org_63544c23bd.html.gz"
+   },
+   "Operation Desert Fox": {
+    "hata": "indirilemedi: https://en.wikipedia.org/api/rest_v1/page/html/Operation_Desert_Fox — <HTTPError 429: 'Too Many Requests'>"
+   },
+   "1998 United States embassy bombings": {
+    "durum": 200,
+    "bayt": 365816,
+    "dosya": "wiki/en_wikipedia_org_601fcc4299.html.gz"
+   },
+   "2003 invasion of Iraq": {
+    "durum": 200,
+    "bayt": 1552804,
+    "dosya": "wiki/en_wikipedia_org_8c87f8f328.html.gz"
+   },
+   "Gulf War": {
+    "durum": 200,
+    "bayt": 1780141,
+    "dosya": "wiki/en_wikipedia_org_4534edc4d1.html.gz"
+   },
+   "Operation Desert Storm": {
+    "durum": 200,
+    "bayt": 1780141,
+    "dosya": "wiki/en_wikipedia_org_8b1c0f6654.html.gz"
+   },
+   "2012 Benghazi attack": {
+    "durum": 200,
+    "bayt": 1101948,
+    "dosya": "wiki/en_wikipedia_org_deb226e8a6.html.gz"
+   },
+   "2013 Ghouta chemical attack": {
+    "durum": 200,
+    "bayt": 1241066,
+    "dosya": "wiki/en_wikipedia_org_88b521443e.html.gz"
+   },
+   "Timeline of the Syrian civil war (May–August 2013)": {
+    "durum": 200,
+    "bayt": 515814,
+    "dosya": "wiki/en_wikipedia_org_be892ac34b.html.gz"
+   },
+   "October 2026 Houthi attacks on Saudi Arabian airports": {
+    "hata": "indirilemedi: https://en.wikipedia.org/api/rest_v1/page/html/October_2026_Houthi_attacks_on_Saudi_Arabian_airports — <HTTPError 429: 'Too Many Requests'>"
+   },
+   "Houthi blockade of Saudi Arabia": {
+    "hata": "indirilemedi: https://en.wikipedia.org/api/rest_v1/page/html/Houthi_blockade_of_Saudi_Arabia — <HTTPError 429: 'Too Many Requests'>"
+   },
+   "September 2026 United States strikes on Iran": {
+    "hata": "indirilemedi: https://en.wikipedia.org/api/rest_v1/page/html/September_2026_United_States_strikes_on_Iran — <HTTPError 429: 'Too Many Requests'>"
+   },
+   "Islamabad Memorandum": {
+    "hata": "indirilemedi: https://en.wikipedia.org/api/rest_v1/page/html/Islamabad_Memorandum — <HTTPError 429: 'Too Many Requests'>"
+   },
+   "2026 Iran war ceasefire": {
+    "durum": 200,
+    "bayt": 778476,
+    "dosya": "wiki/en_wikipedia_org_ea275c030c.html.gz"
+   },
+   "Operation Epic Fury": {
+    "durum": 200,
+    "bayt": 2943915,
+    "dosya": "wiki/en_wikipedia_org_d898d16f5f.html.gz"
+   },
+   "Islamabad Talks": {
+    "durum": 200,
+    "bayt": 444031,
+    "dosya": "wiki/en_wikipedia_org_789fb4f845.html.gz"
+   },
+   "Reactions to the 2026 Iran war": {
+    "durum": 200,
+    "bayt": 2427406,
+    "dosya": "wiki/en_wikipedia_org_f491259947.html.gz"
+   },
+   "2024 Iran–Israel conflict": {
+    "durum": 200,
+    "bayt": 824561,
+    "dosya": "wiki/en_wikipedia_org_b898be5479.html.gz"
+   },
+   "April 2024 Iranian strikes on Israel": {
+    "durum": 200,
+    "bayt": 1098206,
+    "dosya": "wiki/en_wikipedia_org_cdb2f1e2f5.html.gz"
+   },
+   "October 2024 Iranian strikes on Israel": {
+    "durum": 200,
+    "bayt": 814378,
+    "dosya": "wiki/en_wikipedia_org_5276a6c316.html.gz"
+   },
+   "2023 Hamas-led attack on Israel": {
+    "durum": 200,
+    "bayt": 2225044,
+    "dosya": "wiki/en_wikipedia_org_30a058d6ba.html.gz"
+   },
+   "Attacks on United States bases during the Gaza war": {
+    "hata": "indirilemedi: https://en.wikipedia.org/api/rest_v1/page/html/Attacks_on_United_States_bases_during_the_Gaza_war — <HTTPError 429: 'Too Many Requests'>"
+   },
+   "sure_sn": 127.6
+  }
+ }
+}
