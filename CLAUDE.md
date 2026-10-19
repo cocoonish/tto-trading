@@ -5354,13 +5354,13 @@ ve takvim katmanını okur, motorunu kullanmaz): on an × dört ilk mum sınıf�
 boy o anın kendi GEÇMİŞ olaylarının ortancası) × günlük EMA20 trendi. Gözlem (`gozlem.py`) ayar dosyasının bitişi
 31.12.2023'e çekilerek yüklenir, 2024 dosyaları hiç açılmaz (assert); plan ve sınama betiği ön kayıtla birlikte 2024
 koşmadan commit edildi (4cf2dc43). Ders sayıları yalnız `veri/ders.json`dan; şablonda elle yazılmış ondalık ya da
-yüzde kapıda ENGEL. Hüküm: okumalar iki dönemde tuttu (normal açılış mumu %88–89 yarısına döner, güçlü mum dönüşten sık
-devam eder, fiksing koşusu geri verilir ama dönmez, ay sonu WM/R koşusu daha da az sürer), tepkilerin hiçbiri
-"çalışıyor" almadı. Sık anlarda (açılış, fiksing) yakın hedefli tepkiler işlemlerin yarısından çoğunu kazanıp maliyetten
-sonra −0,10 … −0,28 R kaldı: yön sınıflarında kenar maliyetten ÖNCE de yok (limit girişte maliyet 0,02–0,04 R; yarıya
-dönüşten sonra kendi ucuna gitme yarı yarıya), küçük mumda maliyetsiz kenar var ve dar stop yüzünden maliyet onu yutuyor.
-Tek artı işaret merkez bankası kararlarında ve işlem sayısı (11 · 51 · 7) hüküm kurmaya yetmiyor; ABD verisinin ilk
-beş dakikasının davranışı 2024 sonrasında değişti. Eski seri (`FxGunici/adlar.DERS_SIRA` boş, on yedi ders
+yüzde kapıda ENGEL. Hüküm: tepkilerin hiçbiri "çalışıyor" almadı. Sık anlarda (açılış, fiksing) yakın hedefli
+tepkiler işlemlerin yarısından çoğunu kazanıp maliyetten sonra −0,10 … −0,28 R kaldı, ve okumaların hangisinin bilgi
+taşıdığını AYNA YOLU söyledi (aşağıda): açılışın ilk mumu kendi şeklinin ötesinde hiçbir şey söylemiyor (gerçek ile ayna
+iki dönemde de birkaç puan içinde; maliyetsiz sonuç 2024 → −0,08 … +0,02 R); fiksingde geri verme gerçek ama küçük
+(yarısına dönüş aynadan +3 … +7 puan, devam −3 … −5 puan; 2024 → maliyetsiz −0,03 … +0,05 R) ve 0,2 R'lik maliyet onu yutuyor; ABD verisinde
+normal ilk mumun devamı iki dönemde de aynanın altında (2024 → %13'e karşı %34) — bir okuma, sınanmış bir tepki değil.
+Artı işaretler merkez bankası kararlarında ve işlem sayısı (7–51) hüküm kurmaya yetmiyor. Eski seri (`FxGunici/adlar.DERS_SIRA` boş, on yedi ders
 `ARSIV_SIRA`'da) üretilmeye ve kapıdan geçmeye devam eder; sitedeki 'fx-gunici' grubu artık FxOyun'un sırasını taşır,
 iki kapı da bunu sorar (FxGunici: grupta arşiv dersi yok; FxOyun: grup = `ders_yaz.SIRA`).
 
@@ -5373,4 +5373,17 @@ BAŞLIĞI ÇİZDİĞİ VERİYE KARŞI OKUNUR: "kazanma oranı yükseldikçe net 
 eğimi ARTI olan bir dağılımın üstündeydi (merkez bankasının az işlemli noktaları sağ üstte); başlık ölçülen kümeyi
 söyleyecek biçimde yeniden yazıldı. (4) ARŞİVE ALMAK DA BİR KOD DEĞİŞİKLİĞİDİR: `adlar.py` FxGunici'nin ölçüm ve figür
 kod özüne girdiği için sıranın boşaltılması zinciri yeniden koşturdu (`hepsi.py --kosusuz`); koşu çıktısı değişmedi.
+
+Donmuş kopyaya karşı iki inceleme turu yazının iki hükmünü düşürdü ve ikisi de "sayı doğru, kıyası yanlış" sınıfından.
+(5) BİR PAYIN ŞANS DÜZEYİ, ŞEKLİN KENDİSİNDEN ÖLÇÜLÜR. "Güçlü açılış mumu dönüşten sık devam eder" cümlesi doğru bir
+sayıydı ve hiçbir şey söylemiyordu: güçlü mum ucuna yakın kapanır, yani kendi ucunun yarım mum ötesi öbür ucundan
+yapısal olarak yakındır. Kıyas noktası mumdan sonraki yolun kapanış etrafında AYNASIDIR (p' = 2c − p; aynı oynaklık,
+aynı geometri, ters yön); gerçek − ayna farkı yön bilgisidir (`ders_olcum.sonuc_ayna`). Açılışta fark sıfıra yakın,
+fiksingde ve ABD verisinde iki dönemde de aynı işaretli. Bir sınıflamanın bulgusu, sınıflamanın tanımından ne kadarının
+geldiği sorulmadan yazılmaz. (6) "MALİYETSİZ" AYNI KURALIN ORTA FİYATLA YENİDEN BENZETİMİDİR, R'YE MALİYETİN EKLENMESİ
+DEĞİL. Eski brüt, kırılım girişini tetik dakikasının açılışından ölçüyordu ve küçük mumda "maliyetsiz kenar var" hükmü
+bu artefakttan doğdu; doğrusu bütün bacaklar orta fiyatla, kaymasız ve aynı kuralla yeniden koşar (`oyun_sim.brut`).
+Net R değişmedi, maliyetsiz sayı küçüldü ve kırılımın kenarı sıfıra indi. (7) BİR SEÇİM GÜVENCESİ METİNDE ADIYLA DURUR:
+2018–2023'te seçilen tepkinin 2024 → sonucu seçimin kendisini ölçer, sonradan bakılan en iyi hücre seçilemezdi; ders
+ikisini ayrı yazıyor ve gün kümeli aralığı bilgi olarak veriyor (hüküm önceden kayıtlı işlem düzeyindeki aralıktır).
 
