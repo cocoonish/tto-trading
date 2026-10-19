@@ -1,0 +1,90 @@
+{
+ "wiki/en_wikipedia_org_01b7fdc1c9.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Embassy_of_the_United_States%2C_Berlin",
+  "tur": "html",
+  "kaynak_sha256": "e220dd5c58d0eefb12f93f966cafb88d96b8d98846e6ee441e4da10885f3382c",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_01b7fdc1c9.txt.gz",
+  "metin_sha256": "8c6595e308353263ed8d96bac3c7fae19c910fbce9258974461bac8e75a555f4",
+  "karakter": 28646
+ },
+ "wiki/en_wikipedia_org_1e9fc038ad.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Killing_of_Ayman_al-Zawahiri",
+  "tur": "html",
+  "kaynak_sha256": "e6dc15b0c42852aa579cc6575da743437ac15905ae9a451eb050cc35682fec32",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_1e9fc038ad.txt.gz",
+  "metin_sha256": "b0262a30585096a040935f80320ee9588f47fe013593e9038259fbf29c8c04ae",
+  "karakter": 38882
+ },
+ "wiki/en_wikipedia_org_3d575c3f2c.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/List_of_Iranian_officials_killed_during_the_2026_Iran_war",
+  "tur": "html",
+  "kaynak_sha256": "f80aac6b9b7a0447e0cce2e1353bca65783a0d39915adcaf0b3329fa2f20a1ae",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_3d575c3f2c.txt.gz",
+  "metin_sha256": "dfb6d3e88dfdfcfcdf29f4ab20d28f29948dd3f9d844dacac0e88f99ab23ecd4",
+  "karakter": 29726
+ },
+ "wiki/en_wikipedia_org_461027d941.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_Iran_war",
+  "tur": "html",
+  "kaynak_sha256": "a1358103981f27cd7e0fd505599f18f1f38ca7a166d88b7974e5afec0e7a44a9",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_461027d941.txt.gz",
+  "metin_sha256": "7547aa9cd3b6a7131e249125c004ccb1ce6d44bdb44b9ea3413bd732e85307f9",
+  "karakter": 263250
+ },
+ "wiki/en_wikipedia_org_5990fb3901.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_Strait_of_Hormuz_campaign",
+  "tur": "html",
+  "kaynak_sha256": "1d474b35b09c6ac11fc09cce5434100852cf8255db174d38bfebf67546ecaedb",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_5990fb3901.txt.gz",
+  "metin_sha256": "7460785ee05982d0719b65c691da3103df5471be315ce608a35c6173132ec9f4",
+  "karakter": 41083
+ },
+ "wiki/en_wikipedia_org_8106037c12.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Operation_Project_Freedom",
+  "tur": "html",
+  "kaynak_sha256": "aeb86734a330141c9bb5f7b3223cf4d721cb886391c435600c8e181dcc8d3c18",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_8106037c12.txt.gz",
+  "metin_sha256": "8ff73f5f853de160ed7a1bf193c946632fc188858ac030bd2a7ae5199fd5aca0",
+  "karakter": 32723
+ },
+ "wiki/en_wikipedia_org_a22adf4998.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Embassy_of_the_United_States%2C_Beirut",
+  "tur": "html",
+  "kaynak_sha256": "7b256917b5a184704a3b30a10e54099d56a3d9f343a9771a13827dae8dabb12b",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_a22adf4998.txt.gz",
+  "metin_sha256": "e4784c0d9b6b2a2f72122b7c2edfa4253a81cf05422890ba9ef2842e5373f05e",
+  "karakter": 8020
+ },
+ "wiki/en_wikipedia_org_b90d63d07c.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Timeline_of_the_2026_Iran_war",
+  "tur": "html",
+  "kaynak_sha256": "385a7d5f2b35da2030b9be069b7ab5b0b2a1815e3449e36e7ec4b066bb3c571d",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_b90d63d07c.txt.gz",
+  "metin_sha256": "93f835c325234813d05c5eb6821e26e7c8240db3127614f24c334d610a0db22a",
+  "karakter": 311613
+ },
+ "wiki/en_wikipedia_org_c079b2702a.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_in_the_United_States",
+  "tur": "html",
+  "kaynak_sha256": "f59ef2b540e2ce0630998235f2b51a23803ce0d0196efb6baefc00fd3bcef5b1",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_c079b2702a.txt.gz",
+  "metin_sha256": "a7d57e4beeff92ed3d46088a93876aa99f6c76328d21937a02a964ba05ab72e9",
+  "karakter": 271241
+ },
+ "wiki/en_wikipedia_org_c3c1e5c0fb.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/2026_Strait_of_Hormuz_crisis",
+  "tur": "html",
+  "kaynak_sha256": "dbb90106a955b0ba4a419f5f3331d19860d0d42a964e1a58d3433b35843083e4",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_c3c1e5c0fb.txt.gz",
+  "metin_sha256": "4bdac5fdc46d1b50a39d55cd0b05db4e3ad765abe67edf0e8e49027e01793220",
+  "karakter": 176598
+ },
+ "wiki/en_wikipedia_org_e8f47ae999.html.gz": {
+  "url": "https://en.wikipedia.org/api/rest_v1/page/html/Lust%2C_Caution",
+  "tur": "html",
+  "kaynak_sha256": "ad5a3091061ebe0fd30f79837684798061249d5106401cf74ca1e792d2e4bcd3",
+  "metin": "kaynak_metin/wiki__en_wikipedia_org_e8f47ae999.txt.gz",
+  "metin_sha256": "7328e4b353a12489abff8008fc2c20ec6934fe1b753da06c665da9348fe5ccb7",
+  "karakter": 38695
+ }
+}
