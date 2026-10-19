@@ -1,0 +1,1235 @@
+{
+ "2026-10-19T19:05:03Z": {
+  "Elçilik uyarıları": {
+   "durum": "tamam",
+   "sa": {
+    "liste_n": 5,
+    "uyari_n": 19,
+    "liste": {
+     "https://sa.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 248791,
+      "dosya": "elcilik/sa/sa_usembassy_gov_53ab3aadd7.html.gz"
+     },
+     "https://sa.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 248728,
+      "dosya": "elcilik/sa/sa_usembassy_gov_17a057ecb0.html.gz"
+     },
+     "https://sa.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 248842,
+      "dosya": "elcilik/sa/sa_usembassy_gov_99736da067.html.gz"
+     },
+     "https://sa.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 229314
+     },
+     "https://sa.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 229314
+     }
+    },
+    "uyari": {
+     "https://sa.usembassy.gov/security-alert-saudi-arabia-october-11-2026/": {
+      "durum": 200,
+      "bayt": 243920,
+      "dosya": "elcilik/sa/sa_usembassy_gov_cbc38a448e.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-10-2026/": {
+      "durum": 200,
+      "bayt": 244686,
+      "dosya": "elcilik/sa/sa_usembassy_gov_ff863642f5.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-11-2026/": {
+      "durum": 200,
+      "bayt": 244205,
+      "dosya": "elcilik/sa/sa_usembassy_gov_df385ffd1e.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-12-2026/": {
+      "durum": 200,
+      "bayt": 246965,
+      "dosya": "elcilik/sa/sa_usembassy_gov_f773aa0e4f.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-18-2026/": {
+      "durum": 200,
+      "bayt": 245378,
+      "dosya": "elcilik/sa/sa_usembassy_gov_e0ab607fe8.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-5-2026/": {
+      "durum": 200,
+      "bayt": 242446,
+      "dosya": "elcilik/sa/sa_usembassy_gov_75fa69dcc2.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-7-2026/": {
+      "durum": 200,
+      "bayt": 242933,
+      "dosya": "elcilik/sa/sa_usembassy_gov_e3047c7b5d.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-8-2026-update-1/": {
+      "durum": 200,
+      "bayt": 243953,
+      "dosya": "elcilik/sa/sa_usembassy_gov_1277fd7174.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-october-8-2026/": {
+      "durum": 200,
+      "bayt": 242967,
+      "dosya": "elcilik/sa/sa_usembassy_gov_5386b64eea.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-september-1-2026/": {
+      "durum": 200,
+      "bayt": 243567,
+      "dosya": "elcilik/sa/sa_usembassy_gov_b719f95395.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-saudi-arabia-september-20-2026/": {
+      "durum": 200,
+      "bayt": 241845,
+      "dosya": "elcilik/sa/sa_usembassy_gov_58009fedad.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-13-2026/": {
+      "durum": 200,
+      "bayt": 246622,
+      "dosya": "elcilik/sa/sa_usembassy_gov_8cb942a63a.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-14-2026/": {
+      "durum": 200,
+      "bayt": 245653,
+      "dosya": "elcilik/sa/sa_usembassy_gov_af69ffd000.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-15-2026/": {
+      "durum": 200,
+      "bayt": 246901,
+      "dosya": "elcilik/sa/sa_usembassy_gov_629e18b77d.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-16-2026/": {
+      "durum": 200,
+      "bayt": 245669,
+      "dosya": "elcilik/sa/sa_usembassy_gov_49895a2d86.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-17-2026/": {
+      "durum": 200,
+      "bayt": 247035,
+      "dosya": "elcilik/sa/sa_usembassy_gov_b5405519f3.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-u-s-mission-to-saudi-arabia-october-18-2026/": {
+      "durum": 200,
+      "bayt": 248427,
+      "dosya": "elcilik/sa/sa_usembassy_gov_00e6375032.html.gz"
+     },
+     "https://sa.usembassy.gov/security-alert-us-mission-saudi-arabia-september-19-2026/": {
+      "durum": 200,
+      "bayt": 243166,
+      "dosya": "elcilik/sa/sa_usembassy_gov_fee0a11ed2.html.gz"
+     },
+     "https://sa.usembassy.gov/travel-advisory-update-saudi-arabia-october-10-2026/": {
+      "durum": 200,
+      "bayt": 250093,
+      "dosya": "elcilik/sa/sa_usembassy_gov_aa3090d6a3.html.gz"
+     }
+    }
+   },
+   "ae": {
+    "liste_n": 5,
+    "uyari_n": 16,
+    "liste": {
+     "https://ae.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 164534,
+      "dosya": "elcilik/ae/ae_usembassy_gov_f115505afe.html.gz"
+     },
+     "https://ae.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 164134,
+      "dosya": "elcilik/ae/ae_usembassy_gov_daef968dfc.html.gz"
+     },
+     "https://ae.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 162868,
+      "dosya": "elcilik/ae/ae_usembassy_gov_a374ee51c4.html.gz"
+     },
+     "https://ae.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 144941
+     },
+     "https://ae.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 144941
+     }
+    },
+    "uyari": {
+     "https://ae.usembassy.gov/security-alert-u-s-embassy-abu-dhabi-united-arab-emirates-september-1-2026/": {
+      "durum": 200,
+      "bayt": 158960,
+      "dosya": "elcilik/ae/ae_usembassy_gov_7393546035.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-embassy-abu-dhabi-united-arab-emirates-september-11-2026/": {
+      "durum": 200,
+      "bayt": 157285,
+      "dosya": "elcilik/ae/ae_usembassy_gov_2af308cdb0.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-13-2026/": {
+      "durum": 200,
+      "bayt": 186534,
+      "dosya": "elcilik/ae/ae_usembassy_gov_558dc046c2.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-14-2026/": {
+      "durum": 200,
+      "bayt": 162745,
+      "dosya": "elcilik/ae/ae_usembassy_gov_664b2783b4.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-15-2026/": {
+      "durum": 200,
+      "bayt": 161540,
+      "dosya": "elcilik/ae/ae_usembassy_gov_1867c7dd5e.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-16-2026/": {
+      "durum": 200,
+      "bayt": 162405,
+      "dosya": "elcilik/ae/ae_usembassy_gov_b77d3cf1cf.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-17-2026/": {
+      "durum": 200,
+      "bayt": 161316,
+      "dosya": "elcilik/ae/ae_usembassy_gov_ed4c6193cd.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-18-2026/": {
+      "durum": 200,
+      "bayt": 162544,
+      "dosya": "elcilik/ae/ae_usembassy_gov_27f2a3337b.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-19-2026/": {
+      "durum": 200,
+      "bayt": 161805,
+      "dosya": "elcilik/ae/ae_usembassy_gov_6ce2861a36.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-20-2026/": {
+      "durum": 200,
+      "bayt": 162500,
+      "dosya": "elcilik/ae/ae_usembassy_gov_ab42a54caf.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-23-2026/": {
+      "durum": 200,
+      "bayt": 161403,
+      "dosya": "elcilik/ae/ae_usembassy_gov_3bedcb74ee.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-26-2026/": {
+      "durum": 200,
+      "bayt": 162821,
+      "dosya": "elcilik/ae/ae_usembassy_gov_373fbce169.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-to-the-united-arab-emirates-march-31-2026/": {
+      "durum": 200,
+      "bayt": 162853,
+      "dosya": "elcilik/ae/ae_usembassy_gov_5f6499f8bc.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-united-arab-emirates-october-18-2026/": {
+      "durum": 200,
+      "bayt": 158656,
+      "dosya": "elcilik/ae/ae_usembassy_gov_c7940090f2.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-united-arab-emirates-october-8-2026/": {
+      "durum": 200,
+      "bayt": 160500,
+      "dosya": "elcilik/ae/ae_usembassy_gov_02efaf257e.html.gz"
+     },
+     "https://ae.usembassy.gov/security-alert-u-s-mission-united-arab-emirates-september-19-2026/": {
+      "durum": 200,
+      "bayt": 158886,
+      "dosya": "elcilik/ae/ae_usembassy_gov_7b8f63316f.html.gz"
+     }
+    }
+   },
+   "kw": {
+    "liste_n": 5,
+    "uyari_n": 14,
+    "liste": {
+     "https://kw.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 161773,
+      "dosya": "elcilik/kw/kw_usembassy_gov_c446a3fd05.html.gz"
+     },
+     "https://kw.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 162393,
+      "dosya": "elcilik/kw/kw_usembassy_gov_2287e501cb.html.gz"
+     },
+     "https://kw.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 162291,
+      "dosya": "elcilik/kw/kw_usembassy_gov_11065fec86.html.gz"
+     },
+     "https://kw.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 143475
+     },
+     "https://kw.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 143475
+     }
+    },
+    "uyari": {
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-14-2026/": {
+      "durum": 200,
+      "bayt": 159821,
+      "dosya": "elcilik/kw/kw_usembassy_gov_64ffd5a71c.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-15-2026/": {
+      "durum": 200,
+      "bayt": 160728,
+      "dosya": "elcilik/kw/kw_usembassy_gov_dbe49adb84.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-16-2026/": {
+      "durum": 200,
+      "bayt": 161290,
+      "dosya": "elcilik/kw/kw_usembassy_gov_c984833849.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-17-2026/": {
+      "durum": 200,
+      "bayt": 160900,
+      "dosya": "elcilik/kw/kw_usembassy_gov_66a3648ea3.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-18-2026/": {
+      "durum": 200,
+      "bayt": 161282,
+      "dosya": "elcilik/kw/kw_usembassy_gov_023353178c.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-19-2026/": {
+      "durum": 200,
+      "bayt": 161525,
+      "dosya": "elcilik/kw/kw_usembassy_gov_9baff2ef4b.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-20-2026/": {
+      "durum": 200,
+      "bayt": 162245,
+      "dosya": "elcilik/kw/kw_usembassy_gov_8f8df07d84.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-25-2026/": {
+      "durum": 200,
+      "bayt": 164313,
+      "dosya": "elcilik/kw/kw_usembassy_gov_05877af814.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-march-28-2026/": {
+      "durum": 200,
+      "bayt": 163880,
+      "dosya": "elcilik/kw/kw_usembassy_gov_8b48d4cb8e.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-october-18-2026/": {
+      "durum": 200,
+      "bayt": 157857,
+      "dosya": "elcilik/kw/kw_usembassy_gov_d251e255c9.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-september-1-2026/": {
+      "durum": 200,
+      "bayt": 156829,
+      "dosya": "elcilik/kw/kw_usembassy_gov_a272aeb511.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-september-19-2026/": {
+      "durum": 200,
+      "bayt": 156710,
+      "dosya": "elcilik/kw/kw_usembassy_gov_a0b65d61ff.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-embassy-kuwait-september-2-2026/": {
+      "durum": 200,
+      "bayt": 158210,
+      "dosya": "elcilik/kw/kw_usembassy_gov_7feb0ee859.html.gz"
+     },
+     "https://kw.usembassy.gov/security-alert-u-s-mission-kuwait-october-8-2026/": {
+      "durum": 200,
+      "bayt": 156512,
+      "dosya": "elcilik/kw/kw_usembassy_gov_3772fe2703.html.gz"
+     }
+    }
+   },
+   "jo": {
+    "liste_n": 5,
+    "uyari_n": 8,
+    "liste": {
+     "https://jo.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 162405,
+      "dosya": "elcilik/jo/jo_usembassy_gov_632fe7384c.html.gz"
+     },
+     "https://jo.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 162405,
+      "dosya": "elcilik/jo/jo_usembassy_gov_31a0dc132a.html.gz"
+     },
+     "https://jo.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 163223,
+      "dosya": "elcilik/jo/jo_usembassy_gov_b9c30afeb5.html.gz"
+     },
+     "https://jo.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 143259
+     },
+     "https://jo.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 143259
+     }
+    },
+    "uyari": {
+     "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-jordan-march-23-2026/": {
+      "durum": 200,
+      "bayt": 159918,
+      "dosya": "elcilik/jo/jo_usembassy_gov_309c861417.html.gz"
+     },
+     "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-jordan-march-27-2026/": {
+      "durum": 200,
+      "bayt": 160115,
+      "dosya": "elcilik/jo/jo_usembassy_gov_be14b57b14.html.gz"
+     },
+     "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-jordan-march-31-2026-2/": {
+      "durum": 200,
+      "bayt": 154435,
+      "dosya": "elcilik/jo/jo_usembassy_gov_34c0c057ab.html.gz"
+     },
+     "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-october-18-2026/": {
+      "durum": 200,
+      "bayt": 156152,
+      "dosya": "elcilik/jo/jo_usembassy_gov_6cfecb582c.html.gz"
+     },
+     "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-october-8-2026/": {
+      "durum": 200,
+      "bayt": 156076,
+      "dosya": "elcilik/jo/jo_usembassy_gov_d8bc8a2e67.html.gz"
+     },
+     "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-september-1-2026/": {
+      "durum": 200,
+      "bayt": 155630,
+      "dosya": "elcilik/jo/jo_usembassy_gov_2323219eab.html.gz"
+     },
+     "https://jo.usembassy.gov/security-alert-u-s-embassy-amman-september-19-2026/": {
+      "durum": 200,
+      "bayt": 156478,
+      "dosya": "elcilik/jo/jo_usembassy_gov_9407abe9af.html.gz"
+     },
+     "https://jo.usembassy.gov/security-alert-worldwide-caution-march-22-2026/": {
+      "durum": 200,
+      "bayt": 154949,
+      "dosya": "elcilik/jo/jo_usembassy_gov_d74b794b5a.html.gz"
+     }
+    }
+   },
+   "bh": {
+    "liste_n": 5,
+    "uyari_n": 14,
+    "liste": {
+     "https://bh.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 161347,
+      "dosya": "elcilik/bh/bh_usembassy_gov_1161aeb5a8.html.gz"
+     },
+     "https://bh.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 162943,
+      "dosya": "elcilik/bh/bh_usembassy_gov_a8ba2c5d6a.html.gz"
+     },
+     "https://bh.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 163235,
+      "dosya": "elcilik/bh/bh_usembassy_gov_6e25a731e2.html.gz"
+     },
+     "https://bh.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 142117
+     },
+     "https://bh.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 142117
+     }
+    },
+    "uyari": {
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-15-2026/": {
+      "durum": 200,
+      "bayt": 156293,
+      "dosya": "elcilik/bh/bh_usembassy_gov_a7404780ea.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-16-2026/": {
+      "durum": 200,
+      "bayt": 156540,
+      "dosya": "elcilik/bh/bh_usembassy_gov_f0a5acf4d7.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-17-2026/": {
+      "durum": 200,
+      "bayt": 156046,
+      "dosya": "elcilik/bh/bh_usembassy_gov_e29160f9af.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-18-2026/": {
+      "durum": 200,
+      "bayt": 156332,
+      "dosya": "elcilik/bh/bh_usembassy_gov_63fa5ef11a.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-19-2026/": {
+      "durum": 200,
+      "bayt": 156318,
+      "dosya": "elcilik/bh/bh_usembassy_gov_a063e15b59.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-20-2026/": {
+      "durum": 200,
+      "bayt": 156410,
+      "dosya": "elcilik/bh/bh_usembassy_gov_7e4b0dba1f.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-22-2026/": {
+      "durum": 200,
+      "bayt": 157082,
+      "dosya": "elcilik/bh/bh_usembassy_gov_aa0782682f.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-24-2026/": {
+      "durum": 200,
+      "bayt": 155819,
+      "dosya": "elcilik/bh/bh_usembassy_gov_3e1626d1dd.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-bahrain-march-26-2026/": {
+      "durum": 200,
+      "bayt": 160203,
+      "dosya": "elcilik/bh/bh_usembassy_gov_9e1d28dacb.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-october-18-2026/": {
+      "durum": 200,
+      "bayt": 155883,
+      "dosya": "elcilik/bh/bh_usembassy_gov_d2ddff57d9.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-october-8-2026/": {
+      "durum": 200,
+      "bayt": 154678,
+      "dosya": "elcilik/bh/bh_usembassy_gov_18fc306f1e.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-september-1-2026/": {
+      "durum": 200,
+      "bayt": 154510,
+      "dosya": "elcilik/bh/bh_usembassy_gov_82253a5ac5.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-september-19-2026/": {
+      "durum": 200,
+      "bayt": 154986,
+      "dosya": "elcilik/bh/bh_usembassy_gov_ec8da395b4.html.gz"
+     },
+     "https://bh.usembassy.gov/security-alert-u-s-embassy-manama-september-5-2026/": {
+      "durum": 200,
+      "bayt": 155117,
+      "dosya": "elcilik/bh/bh_usembassy_gov_d0170b813d.html.gz"
+     }
+    }
+   },
+   "om": {
+    "liste_n": 5,
+    "uyari_n": 16,
+    "liste": {
+     "https://om.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 160980,
+      "dosya": "elcilik/om/om_usembassy_gov_af2057cb16.html.gz"
+     },
+     "https://om.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 161805,
+      "dosya": "elcilik/om/om_usembassy_gov_241a3861f4.html.gz"
+     },
+     "https://om.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 161597,
+      "dosya": "elcilik/om/om_usembassy_gov_50840a9d1e.html.gz"
+     },
+     "https://om.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 142553
+     },
+     "https://om.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 142553
+     }
+    },
+    "uyari": {
+     "https://om.usembassy.gov/security-alert-oman-september-1-2026/": {
+      "durum": 200,
+      "bayt": 154183,
+      "dosya": "elcilik/om/om_usembassy_gov_a8dd661046.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-october-18-2026/": {
+      "durum": 200,
+      "bayt": 155098,
+      "dosya": "elcilik/om/om_usembassy_gov_0fe1bc2219.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-october-8-2026/": {
+      "durum": 200,
+      "bayt": 154660,
+      "dosya": "elcilik/om/om_usembassy_gov_f1e1a50ce3.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-13-2026-update-2/": {
+      "durum": 200,
+      "bayt": 158851,
+      "dosya": "elcilik/om/om_usembassy_gov_533d7745a1.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-15-2026/": {
+      "durum": 200,
+      "bayt": 158722,
+      "dosya": "elcilik/om/om_usembassy_gov_e793324ef9.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-16-2026/": {
+      "durum": 200,
+      "bayt": 157876,
+      "dosya": "elcilik/om/om_usembassy_gov_084396326b.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-17-2026/": {
+      "durum": 200,
+      "bayt": 156994,
+      "dosya": "elcilik/om/om_usembassy_gov_aaa7bf0de2.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-18-2026/": {
+      "durum": 200,
+      "bayt": 157195,
+      "dosya": "elcilik/om/om_usembassy_gov_11f76deb8d.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-19-2026/": {
+      "durum": 200,
+      "bayt": 159435,
+      "dosya": "elcilik/om/om_usembassy_gov_d31b5a55e5.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-20-2026/": {
+      "durum": 200,
+      "bayt": 156982,
+      "dosya": "elcilik/om/om_usembassy_gov_b68bd8e458.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-23-2026-2/": {
+      "durum": 200,
+      "bayt": 153714,
+      "dosya": "elcilik/om/om_usembassy_gov_8421a85a74.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-23-2026-3/": {
+      "durum": 200,
+      "bayt": 156793,
+      "dosya": "elcilik/om/om_usembassy_gov_f1b29375ab.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-23-2026/": {
+      "durum": 200,
+      "bayt": 156827,
+      "dosya": "elcilik/om/om_usembassy_gov_676104bf64.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-26-2026/": {
+      "durum": 200,
+      "bayt": 158719,
+      "dosya": "elcilik/om/om_usembassy_gov_03abd05991.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-oman-march-30-2026/": {
+      "durum": 200,
+      "bayt": 159871,
+      "dosya": "elcilik/om/om_usembassy_gov_567722fdbb.html.gz"
+     },
+     "https://om.usembassy.gov/security-alert-u-s-embassy-muscat-september-19-2026/": {
+      "durum": 200,
+      "bayt": 155053,
+      "dosya": "elcilik/om/om_usembassy_gov_fff164240b.html.gz"
+     }
+    }
+   },
+   "ir": {
+    "liste_n": 5,
+    "uyari_n": 21,
+    "liste": {
+     "https://ir.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 248105,
+      "dosya": "elcilik/ir/ir_usembassy_gov_1eaab6a011.html.gz"
+     },
+     "https://ir.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 247848,
+      "dosya": "elcilik/ir/ir_usembassy_gov_621f23db70.html.gz"
+     },
+     "https://ir.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 247958,
+      "dosya": "elcilik/ir/ir_usembassy_gov_1a27fd4cd7.html.gz"
+     },
+     "https://ir.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 229546
+     },
+     "https://ir.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 229546
+     }
+    },
+    "uyari": {
+     "https://ir.usembassy.gov/security-alert-iran-march-10-2026-update-2/": {
+      "durum": 200,
+      "bayt": 250012,
+      "dosya": "elcilik/ir/ir_usembassy_gov_e93f08276f.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-12-2026-update/": {
+      "durum": 200,
+      "bayt": 249662,
+      "dosya": "elcilik/ir/ir_usembassy_gov_6b12ef4b22.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-13-2026-update/": {
+      "durum": 200,
+      "bayt": 248421,
+      "dosya": "elcilik/ir/ir_usembassy_gov_09914c4561.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-14-2026-update/": {
+      "durum": 200,
+      "bayt": 249061,
+      "dosya": "elcilik/ir/ir_usembassy_gov_594c2e9e16.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-15-2026-update/": {
+      "durum": 200,
+      "bayt": 249601,
+      "dosya": "elcilik/ir/ir_usembassy_gov_e88fbb9eba.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-16-2026-update/": {
+      "durum": 200,
+      "bayt": 248834,
+      "dosya": "elcilik/ir/ir_usembassy_gov_02fb28318f.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-17-2026-update/": {
+      "durum": 200,
+      "bayt": 248903,
+      "dosya": "elcilik/ir/ir_usembassy_gov_4b92dbd768.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-18-2026-update/": {
+      "durum": 200,
+      "bayt": 250888,
+      "dosya": "elcilik/ir/ir_usembassy_gov_fe2af28709.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-19-2026-update/": {
+      "durum": 200,
+      "bayt": 249159,
+      "dosya": "elcilik/ir/ir_usembassy_gov_c2f1ea1f7d.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-20-2026-update/": {
+      "durum": 200,
+      "bayt": 249239,
+      "dosya": "elcilik/ir/ir_usembassy_gov_a17d012295.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-24-2026/": {
+      "durum": 200,
+      "bayt": 249007,
+      "dosya": "elcilik/ir/ir_usembassy_gov_fae30f02be.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-26-2026/": {
+      "durum": 200,
+      "bayt": 248697,
+      "dosya": "elcilik/ir/ir_usembassy_gov_e0c1057b7f.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-31-2026-update/": {
+      "durum": 200,
+      "bayt": 249308,
+      "dosya": "elcilik/ir/ir_usembassy_gov_956064ae50.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-8-2026-update-2/": {
+      "durum": 200,
+      "bayt": 247865,
+      "dosya": "elcilik/ir/ir_usembassy_gov_4c15638382.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-march-9-2026-update-1/": {
+      "durum": 200,
+      "bayt": 247766,
+      "dosya": "elcilik/ir/ir_usembassy_gov_7570fef99d.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-october-18-2026/": {
+      "durum": 200,
+      "bayt": 242248,
+      "dosya": "elcilik/ir/ir_usembassy_gov_f608b76d91.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-october-8-2026/": {
+      "durum": 200,
+      "bayt": 242016,
+      "dosya": "elcilik/ir/ir_usembassy_gov_114ecf76bd.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-september-1-2026/": {
+      "durum": 200,
+      "bayt": 242022,
+      "dosya": "elcilik/ir/ir_usembassy_gov_0549939965.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-iran-september-19-2026/": {
+      "durum": 200,
+      "bayt": 242303,
+      "dosya": "elcilik/ir/ir_usembassy_gov_de2e3eb8d1.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-security-alert-iran-march-10-2026-update-1/": {
+      "durum": 200,
+      "bayt": 253810,
+      "dosya": "elcilik/ir/ir_usembassy_gov_c35e6fab77.html.gz"
+     },
+     "https://ir.usembassy.gov/security-alert-security-alert-iran-march-11-2026/": {
+      "durum": 200,
+      "bayt": 249102,
+      "dosya": "elcilik/ir/ir_usembassy_gov_4438f788d9.html.gz"
+     }
+    }
+   },
+   "qa": {
+    "liste_n": 5,
+    "uyari_n": 19,
+    "liste": {
+     "https://qa.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 247903,
+      "dosya": "elcilik/qa/qa_usembassy_gov_7dd4341713.html.gz"
+     },
+     "https://qa.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 248331,
+      "dosya": "elcilik/qa/qa_usembassy_gov_64cfeeedee.html.gz"
+     },
+     "https://qa.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 247142,
+      "dosya": "elcilik/qa/qa_usembassy_gov_41727f18a1.html.gz"
+     },
+     "https://qa.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 228679
+     },
+     "https://qa.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 228679
+     }
+    },
+    "uyari": {
+     "https://qa.usembassy.gov/security-alert-qatar-september-1-2026/": {
+      "durum": 200,
+      "bayt": 240186,
+      "dosya": "elcilik/qa/qa_usembassy_gov_c490a9b2ea.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-security-alert-u-s-embassy-doha-qatar-march-30-2026/": {
+      "durum": 200,
+      "bayt": 243965,
+      "dosya": "elcilik/qa/qa_usembassy_gov_0f65dc49bd.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-october-18-2026/": {
+      "durum": 200,
+      "bayt": 241300,
+      "dosya": "elcilik/qa/qa_usembassy_gov_24b3256b71.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-october-8-2026/": {
+      "durum": 200,
+      "bayt": 240631,
+      "dosya": "elcilik/qa/qa_usembassy_gov_8ba2adc05d.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-10-2026-update-2/": {
+      "durum": 200,
+      "bayt": 243470,
+      "dosya": "elcilik/qa/qa_usembassy_gov_224b870501.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-11-2026/": {
+      "durum": 200,
+      "bayt": 244158,
+      "dosya": "elcilik/qa/qa_usembassy_gov_c5d5e1f1a0.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-12-2026/": {
+      "durum": 200,
+      "bayt": 245651,
+      "dosya": "elcilik/qa/qa_usembassy_gov_2fb5d1387f.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-13-2026/": {
+      "durum": 200,
+      "bayt": 264842,
+      "dosya": "elcilik/qa/qa_usembassy_gov_c36774bd2d.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-14-2026/": {
+      "durum": 200,
+      "bayt": 244110,
+      "dosya": "elcilik/qa/qa_usembassy_gov_8bb959d594.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-15-2026/": {
+      "durum": 200,
+      "bayt": 243753,
+      "dosya": "elcilik/qa/qa_usembassy_gov_06a921d78b.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-16-2026/": {
+      "durum": 200,
+      "bayt": 244043,
+      "dosya": "elcilik/qa/qa_usembassy_gov_94a4bcaaa0.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-17-2026/": {
+      "durum": 200,
+      "bayt": 242313,
+      "dosya": "elcilik/qa/qa_usembassy_gov_7df09f6a57.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-18-2026/": {
+      "durum": 200,
+      "bayt": 256747,
+      "dosya": "elcilik/qa/qa_usembassy_gov_217442a7da.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-19-2026/": {
+      "durum": 200,
+      "bayt": 242974,
+      "dosya": "elcilik/qa/qa_usembassy_gov_06e22f2c2b.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-20-2026/": {
+      "durum": 200,
+      "bayt": 243233,
+      "dosya": "elcilik/qa/qa_usembassy_gov_3f4ff55cf2.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-23-2026/": {
+      "durum": 200,
+      "bayt": 242793,
+      "dosya": "elcilik/qa/qa_usembassy_gov_a89f0302f8.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-26-2026/": {
+      "durum": 200,
+      "bayt": 245804,
+      "dosya": "elcilik/qa/qa_usembassy_gov_13043173a3.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-qatar-march-29-2026/": {
+      "durum": 200,
+      "bayt": 243018,
+      "dosya": "elcilik/qa/qa_usembassy_gov_517ee65aca.html.gz"
+     },
+     "https://qa.usembassy.gov/security-alert-u-s-embassy-doha-september-19-2026/": {
+      "durum": 200,
+      "bayt": 241124,
+      "dosya": "elcilik/qa/qa_usembassy_gov_a433611c5e.html.gz"
+     }
+    }
+   },
+   "iq": {
+    "liste_n": 5,
+    "uyari_n": 12,
+    "liste": {
+     "https://iq.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 248638,
+      "dosya": "elcilik/iq/iq_usembassy_gov_fc02e97f09.html.gz"
+     },
+     "https://iq.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 248866,
+      "dosya": "elcilik/iq/iq_usembassy_gov_1b8fa1f227.html.gz"
+     },
+     "https://iq.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 248277,
+      "dosya": "elcilik/iq/iq_usembassy_gov_6f7ea8239f.html.gz"
+     },
+     "https://iq.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 229663
+     },
+     "https://iq.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 229663
+     }
+    },
+    "uyari": {
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-and-u-s-consulate-general-erbil-september-1-2026/": {
+      "durum": 200,
+      "bayt": 244893,
+      "dosya": "elcilik/iq/iq_usembassy_gov_db06cfe61e.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-16-2026/": {
+      "durum": 200,
+      "bayt": 251389,
+      "dosya": "elcilik/iq/iq_usembassy_gov_52376c08fb.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-17-2026/": {
+      "durum": 200,
+      "bayt": 252844,
+      "dosya": "elcilik/iq/iq_usembassy_gov_8cfc04b1a1.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-18-2026/": {
+      "durum": 200,
+      "bayt": 251918,
+      "dosya": "elcilik/iq/iq_usembassy_gov_5d14073d21.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-19-2026/": {
+      "durum": 200,
+      "bayt": 252368,
+      "dosya": "elcilik/iq/iq_usembassy_gov_db770b3a08.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-21-2026/": {
+      "durum": 200,
+      "bayt": 249948,
+      "dosya": "elcilik/iq/iq_usembassy_gov_365ea43a89.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-23-2026/": {
+      "durum": 200,
+      "bayt": 251517,
+      "dosya": "elcilik/iq/iq_usembassy_gov_8f1c1ba435.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-26-2026/": {
+      "durum": 200,
+      "bayt": 250895,
+      "dosya": "elcilik/iq/iq_usembassy_gov_18b9ed5925.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-embassy-baghdad-iraq-march-29-2026/": {
+      "durum": 200,
+      "bayt": 251702,
+      "dosya": "elcilik/iq/iq_usembassy_gov_61180e5d11.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-mission-iraq-october-18-2026/": {
+      "durum": 200,
+      "bayt": 244634,
+      "dosya": "elcilik/iq/iq_usembassy_gov_9400f50547.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-mission-iraq-october-8-2026/": {
+      "durum": 200,
+      "bayt": 242017,
+      "dosya": "elcilik/iq/iq_usembassy_gov_728831029f.html.gz"
+     },
+     "https://iq.usembassy.gov/security-alert-u-s-mission-iraq-september-19-2026/": {
+      "durum": 200,
+      "bayt": 242965,
+      "dosya": "elcilik/iq/iq_usembassy_gov_db1a1bf059.html.gz"
+     }
+    }
+   },
+   "lb": {
+    "liste_n": 5,
+    "uyari_n": 17,
+    "liste": {
+     "https://lb.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 249769,
+      "dosya": "elcilik/lb/lb_usembassy_gov_5d377c9aaa.html.gz"
+     },
+     "https://lb.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 250240,
+      "dosya": "elcilik/lb/lb_usembassy_gov_0aa5d34c69.html.gz"
+     },
+     "https://lb.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 250348,
+      "dosya": "elcilik/lb/lb_usembassy_gov_512018f826.html.gz"
+     },
+     "https://lb.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 230635
+     },
+     "https://lb.usembassy.gov/news-events/": {
+      "durum": 200,
+      "bayt": 251629,
+      "dosya": "elcilik/lb/lb_usembassy_gov_af04df021c.html.gz"
+     }
+    },
+    "uyari": {
+     "https://lb.usembassy.gov/security-alert-lebanon-september-1-2026/": {
+      "durum": 200,
+      "bayt": 242979,
+      "dosya": "elcilik/lb/lb_usembassy_gov_bdede7e48f.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-security-alert-u-s-embassy-beirut-lebanon-march-11-2026/": {
+      "durum": 200,
+      "bayt": 245921,
+      "dosya": "elcilik/lb/lb_usembassy_gov_c92b64f4ea.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-12-2026/": {
+      "durum": 200,
+      "bayt": 244748,
+      "dosya": "elcilik/lb/lb_usembassy_gov_4efc325f12.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-13-2026/": {
+      "durum": 200,
+      "bayt": 259923,
+      "dosya": "elcilik/lb/lb_usembassy_gov_d0ecbf9232.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-14-2026/": {
+      "durum": 200,
+      "bayt": 244419,
+      "dosya": "elcilik/lb/lb_usembassy_gov_bc16cf7be7.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-15-2026/": {
+      "durum": 200,
+      "bayt": 244353,
+      "dosya": "elcilik/lb/lb_usembassy_gov_6d878a8809.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-16-2026/": {
+      "durum": 200,
+      "bayt": 245203,
+      "dosya": "elcilik/lb/lb_usembassy_gov_b0096e440c.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-17-2026/": {
+      "durum": 200,
+      "bayt": 244607,
+      "dosya": "elcilik/lb/lb_usembassy_gov_ed7ac8d9b0.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-18-2026/": {
+      "durum": 200,
+      "bayt": 244973,
+      "dosya": "elcilik/lb/lb_usembassy_gov_b598209779.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-19-2026/": {
+      "durum": 200,
+      "bayt": 244983,
+      "dosya": "elcilik/lb/lb_usembassy_gov_3e0db33b16.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-20-2026/": {
+      "durum": 200,
+      "bayt": 245826,
+      "dosya": "elcilik/lb/lb_usembassy_gov_34984df798.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-23-2026/": {
+      "durum": 200,
+      "bayt": 244648,
+      "dosya": "elcilik/lb/lb_usembassy_gov_845d4282b1.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-26-2026/": {
+      "durum": 200,
+      "bayt": 244882,
+      "dosya": "elcilik/lb/lb_usembassy_gov_116a6259af.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-lebanon-march-31-2026/": {
+      "durum": 200,
+      "bayt": 244934,
+      "dosya": "elcilik/lb/lb_usembassy_gov_96148a4ed2.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-october-18-2026/": {
+      "durum": 200,
+      "bayt": 243195,
+      "dosya": "elcilik/lb/lb_usembassy_gov_366c7a6f1d.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-october-8-2026/": {
+      "durum": 200,
+      "bayt": 242759,
+      "dosya": "elcilik/lb/lb_usembassy_gov_d4ecde4df0.html.gz"
+     },
+     "https://lb.usembassy.gov/security-alert-u-s-embassy-beirut-september-19-2026/": {
+      "durum": 200,
+      "bayt": 243259,
+      "dosya": "elcilik/lb/lb_usembassy_gov_ddd6902c9a.html.gz"
+     }
+    }
+   },
+   "ye": {
+    "liste_n": 5,
+    "uyari_n": 3,
+    "liste": {
+     "https://ye.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 162172,
+      "dosya": "elcilik/ye/ye_usembassy_gov_5ff06781d4.html.gz"
+     },
+     "https://ye.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 152216,
+      "dosya": "elcilik/ye/ye_usembassy_gov_6daadaddea.html.gz"
+     },
+     "https://ye.usembassy.gov/category/alert/page/3/": {
+      "durum": 404,
+      "bayt": 143349
+     },
+     "https://ye.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 143349
+     },
+     "https://ye.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 143349
+     }
+    },
+    "uyari": {
+     "https://ye.usembassy.gov/security-alert-yemen-october-18-2026/": {
+      "durum": 200,
+      "bayt": 156199,
+      "dosya": "elcilik/ye/ye_usembassy_gov_7b1ddf83fa.html.gz"
+     },
+     "https://ye.usembassy.gov/security-alert-yemen-october-8-2026/": {
+      "durum": 200,
+      "bayt": 156489,
+      "dosya": "elcilik/ye/ye_usembassy_gov_53d511049c.html.gz"
+     },
+     "https://ye.usembassy.gov/travel-advisory-yemen-october-10-2026/": {
+      "durum": 200,
+      "bayt": 163432,
+      "dosya": "elcilik/ye/ye_usembassy_gov_55c7235437.html.gz"
+     }
+    }
+   },
+   "il": {
+    "liste_n": 5,
+    "uyari_n": 12,
+    "liste": {
+     "https://il.usembassy.gov/category/alert/": {
+      "durum": 200,
+      "bayt": 161051,
+      "dosya": "elcilik/il/il_usembassy_gov_9df8ee5019.html.gz"
+     },
+     "https://il.usembassy.gov/category/alert/page/2/": {
+      "durum": 200,
+      "bayt": 161651,
+      "dosya": "elcilik/il/il_usembassy_gov_045a82e95f.html.gz"
+     },
+     "https://il.usembassy.gov/category/alert/page/3/": {
+      "durum": 200,
+      "bayt": 161804,
+      "dosya": "elcilik/il/il_usembassy_gov_23ebde8a9e.html.gz"
+     },
+     "https://il.usembassy.gov/u-s-citizen-services/security-and-travel-information/": {
+      "durum": 404,
+      "bayt": 142442
+     },
+     "https://il.usembassy.gov/news-events/": {
+      "durum": 404,
+      "bayt": 142442
+     }
+    },
+    "uyari": {
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-israel-march-29-2026/": {
+      "durum": 200,
+      "bayt": 165572,
+      "dosya": "elcilik/il/il_usembassy_gov_01d4b3bbf5.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-march-26-2026/": {
+      "durum": 200,
+      "bayt": 164038,
+      "dosya": "elcilik/il/il_usembassy_gov_adc3a0ebc8.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-march-27-2026/": {
+      "durum": 200,
+      "bayt": 165909,
+      "dosya": "elcilik/il/il_usembassy_gov_c30175a248.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-march-30-2026/": {
+      "durum": 200,
+      "bayt": 174088,
+      "dosya": "elcilik/il/il_usembassy_gov_f54d1cf7cb.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-march-31-2026/": {
+      "durum": 200,
+      "bayt": 176109,
+      "dosya": "elcilik/il/il_usembassy_gov_a04b11091a.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-october-13-2026/": {
+      "durum": 200,
+      "bayt": 159254,
+      "dosya": "elcilik/il/il_usembassy_gov_3ec1541821.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-october-18-2026/": {
+      "durum": 200,
+      "bayt": 157334,
+      "dosya": "elcilik/il/il_usembassy_gov_b3cafbb650.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-october-4-2026/": {
+      "durum": 200,
+      "bayt": 167623,
+      "dosya": "elcilik/il/il_usembassy_gov_7d76f808ef.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-october-8-2026/": {
+      "durum": 200,
+      "bayt": 156098,
+      "dosya": "elcilik/il/il_usembassy_gov_f0de5497bc.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-september-1-2026/": {
+      "durum": 200,
+      "bayt": 168071,
+      "dosya": "elcilik/il/il_usembassy_gov_327080164d.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-september-19-2026/": {
+      "durum": 200,
+      "bayt": 157228,
+      "dosya": "elcilik/il/il_usembassy_gov_264be47a2d.html.gz"
+     },
+     "https://il.usembassy.gov/security-alert-u-s-embassy-jerusalem-september-27-2026/": {
+      "durum": 200,
+      "bayt": 159724,
+      "dosya": "elcilik/il/il_usembassy_gov_722c483243.html.gz"
+     }
+    }
+   },
+   "sure_sn": 286.8
+  }
+ }
+}
