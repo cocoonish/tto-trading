@@ -11,9 +11,10 @@ seviye: 'giris'
 
 Bu seri tek bir soruya cevap verir: gün içi FX işlemlerinde sık önerilen kurallar, gerçek maliyetle uygulandığında para
 kazandırıyor mu? Kısa cevap: **hayır.** Sınanan {{ O.basarisiz.kapsam.kural | n }} kuralın hiçbiri, dört paritenin
-hiçbirinde, maliyetten sonra güvenilir bir kazanç göstermedi. Bu ders sonucu sade bir tabloyla verir. Sonraki üç ders kuralları
-tek tek anlatır (kırılım, dönüş, akış ve haber): her kural ne yapar, backtest ne verdi, stop ve hedef nerede olsaydı ne
-değişirdi. Beşinci ders stop ve hedefin genel aritmetiğini, altıncısı bir kuralı kendiniz denemeden önceki kontrol
+hiçbirinde, maliyetten sonra güvenilir bir kazanç göstermedi. Bu ders sonucu sade bir tabloyla verir. İkinci ders her kuralın
+nasıl uygulandığını grafik üstünde adım adım gösterir (hangi saatte ne olursa ne yapılır). Sonraki üç ders kuralları
+tek tek sonuçlarıyla anlatır (kırılım, dönüş, akış ve haber): backtest ne verdi, stop ve hedef nerede olsaydı ne
+değişirdi. Altıncı ders stop ve hedefin genel aritmetiğini, yedincisi bir kuralı kendiniz denemeden önceki kontrol
 listesini verir.
 
 ## Ne sınandı
@@ -87,7 +88,7 @@ Bunu bir kural saymak için üç sebeple erken:
 1. **Seçim sonradan yapıldı.** "Ay sonu" ayrımı, iki dönemin sonuçları görüldükten sonra öne çıktı. Çok sayıda alt küme
    arasından sonradan seçilen bir kazanan, şansla bulunmuş olabilir.
 2. **İşlem az.** Ayda bir işlem, yılda yaklaşık {{ O.basarisiz.ay_sonu.olcek.islem_yil | s0 }} işlem eder. Bu kadar
-   az işlemle bir kazancın gerçek olduğunu göstermek yıllar sürer (altıncı ders).
+   az işlemle bir kazancın gerçek olduğunu göstermek yıllar sürer (yedinci ders).
 3. **Pariteler aynı şeyi söylemiyor.** Ay sonu işlemleri 2024 →'de USD/JPY'de de artıda
    ({{ O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.net | r }} R), EUR/USD'de sıfıra yakın
    ({{ O.basarisiz.ay_sonu.parite.EURUSD.oos.ay_sonu.net | r }} R), AUD/USD'de eksi
@@ -101,10 +102,10 @@ Dürüst sınama, bu kuralı bugünden itibaren yazılı ayarlarıyla izlemektir
 - {{ O.basarisiz.kapsam.kural | n }} kuralın hiçbiri, maliyetten sonra, güvenilir biçimde kazandırmıyor.
 - Kurallar maliyetten önce yaklaşık başabaş; kayıp neredeyse tamamen makas ve kaymadan geliyor.
 - Kazanma oranı tek başına bir şey söylemez; kâra geçmek için gereken oranla birlikte okunur.
-- İki ileriye dönük aday var — GBP/USD ay sonu fiksingi ve (dördüncü derste) başarısız haber kırılımında süreyle çıkış;
+- İki ileriye dönük aday var — GBP/USD ay sonu fiksingi ve (beşinci derste) başarısız haber kırılımında süreyle çıkış;
   ikisi de sonradan seçildi ve henüz kanıtlanmış değil.
 
-Sonraki ders: kırılım kuralları tek tek — ne yapıyorlar, ne verdiler, stop ve hedef neyi değiştirirdi.
+Sonraki ders: kurallar adım adım — hangi saatte ne olursa ne yapılır.
 
 Bu serinin ayrıntılı backtest notları — her kuralın tam tanımı, parametre ızgaraları, koşul analizleri ve yöntem —
 [arşivdeki dokuz derste](/arastirma/fx-gunici-giris/) duruyor.

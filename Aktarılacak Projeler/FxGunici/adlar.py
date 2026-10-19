@@ -45,8 +45,36 @@ DERS_BIRIM = {
 
 #: Serinin okuma sırası: yayındaki kısa seri (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır;
 #: dogrula.py iki listeyi karşılaştırır).
-DERS_SIRA = ["fx-gunici-sonuc", "fx-gunici-kirilim", "fx-gunici-donus", "fx-gunici-akis-haber",
+DERS_SIRA = ["fx-gunici-sonuc", "fx-gunici-nasil", "fx-gunici-kirilim", "fx-gunici-donus", "fx-gunici-akis-haber",
              "fx-gunici-stop-hedef", "fx-gunici-kontrol"]
+#: Adım adım dersinin grafik etiketleri (sekil.nasil): kural başına referansın adı (yoksa None) ve sinyal mumunun adı.
+#: Ders metnindeki adım numaraları bu tablodan türeyen sırayla yazılır: referans varsa ①, sinyal ve giriş (aynı
+#: andaysa birlikte) sonra, çıkış en sonda. Sırası ve sayısı tek yerde durur.
+NASIL_ADIM = {
+    "orb": ("aralık", "aralığın dışında kapanış"),
+    "asya": ("Asya aralığı", "aralığın dışında kapanış"),
+    "nyib_0800": ("ilk saatin aralığı", "aralığın dışında kapanış"),
+    "nyib_0930": ("ilk saatin aralığı", "aralığın dışında kapanış"),
+    "icmum": ("ana mum", "ana mumun dışında kapanış"),
+    "sikisma": ("sıkışma kutusu", "kutunun dışında kapanış"),
+    "pdhl": ("önceki günün tepesi ve dibi", "seviyeyi kesen kapanış"),
+    "pivot_kirilim": ("R1 ve S1", "seviyeyi kesen kapanış"),
+    "sahte_orb": ("aralık", "aralığa geri dönen kapanış"),
+    "sahte_asya": ("Asya aralığı", "aralığa geri dönen kapanış"),
+    "sahte_pdhl": ("önceki günün tepesi ve dibi", "seviyeye geri dönen kapanış"),
+    "vwap_donus": ("VWAP bandı", "bandın içine dönen kapanış"),
+    "pivot_donus": ("R1, S1 ve P", "seviyeye değip geri kapanış"),
+    "fiks_donus": (None, "fiksinge giden mum"),
+    "fiks_momentum": (None, "fiksingden önceki mum"),
+    "momentum": (None, "Londra'nın ilk saati"),
+    "vwap_cekilme": (None, "VWAP'a değip trend yönünde kapanış"),
+    "n1": (None, "ilk haber mumu"),
+    "n2": (None, "ters yönde kapanan mum"),
+    "n3": ("haber öncesi aralık", "aralığın dışında kapanış"),
+    "n4": ("haber öncesi aralık", "aralığa geri dönen ikinci mum"),
+    "n5": (None, "geri çekilmeden sonra itki yönünde kapanış"),
+}
+
 #: Kısa serinin kural dersleri ve kuralları (okuma sırası): arşivdeki derslerin birimlerinden türer, elle ikinci
 #: bir liste tutulmaz.
 KISA_DERS_BIRIM = {

@@ -1,5 +1,5 @@
 ---
-title: 'FX Gün İçi Stratejiler 4: Akış ve Haber Kuralları — Fiksing, Gün İçi Momentum, VWAP Geri Çekilmesi ve Beş Haber Kuralı'
+title: 'FX Gün İçi Stratejiler 5: Akış ve Haber Kuralları — Fiksing, Gün İçi Momentum, VWAP Geri Çekilmesi ve Beş Haber Kuralı'
 description: "Sekiz kural tek tek: Londra fiksingi momentumu, Londra açılışından New York öğleden sonrasına momentum, VWAP geri çekilmesi ve haber anında kullanılan beş kural (kırılım, fade, straddle, başarısız kırılım, geri çekilme sonrası devam). Her kural için sade tanım, backtest sonucu ve bütün stop/hedef bileşimlerinin 2024 sonrası sonucu."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders', 'haber']

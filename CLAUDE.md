@@ -5319,3 +5319,14 @@ sonuç cümleye girer — "artı" tek başına basılmaz. Ölçülen: 22 kuralı
 artı değil; N2'de tek hücre sıfırın hemen üstünde ve 2018–2023'te eksi; N4'te (başarısız haber kırılımı) süreyle
 çıkış iki dönemde de artı ama 2024 →'de 45 işlem, artı dört paritenin yarısında ve şanstan ayrılamıyor — ay sonu
 fiksinginin yanında ikinci ileriye dönük aday olarak yazıldı.
+Üçüncü istek: "Bu stratejilerin nasıl yapıldığını da bir ders olarak yazmamız lazım, ama bu da pratik olsun, şu
+saatteki şu olursa şöyle olur gibi net olsun, grafikte gösterilsin." Seri yedi derse çıktı; ikinci ders
+`fx-gunici-nasil` (≈12 dk): 22 kuralın her biri için numaralı adımlar (saatler yalnız TSİ), gerçek bir günün tek
+panelli grafiği ve "grafikteki gün" cümlesi. Grafik arşivin örnek gün çizimiyle AYNI koddan çıkar
+(`sekil._ornek_panel`; arşivin üç panelli figürleri refaktörden sonra kod özü dışında bayt bayt aynı) ve üstüne ①②③
+konur; numaraların sırası ve etiketleri tek tabloda (`adlar.NASIL_ADIM`): referans varsa ①, sinyal ve giriş aynı
+andaysa tek adım, çıkış en sonda — metindeki adım listesi, grafik (`sekil.nasil`) ve cümle (`nasil_ornek`) aynı
+sırayı oradan türetir. Örnek gün KAZANAN işlemdir (bütün adımlar, hedef dahil, görünsün diye) ve alt yazı kuralın
+2024 → ortalamasını yanında basar: bir uygulama resmi başarı öyküsü gibi okunmamalı. Etiket yerleşimi ölçülerek
+kuruldu: sinyal etiketi kırılım yönünde, referans etiketi karşı uçta, çıkış sinyalin karşı yanında; panelin sol ya da
+sağ üçte birindeki etiket içeri açılır (telefonda kesilmesin).

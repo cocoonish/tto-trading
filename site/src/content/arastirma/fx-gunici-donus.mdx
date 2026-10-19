@@ -1,5 +1,5 @@
 ---
-title: 'FX Gün İçi Stratejiler 3: Dönüş Kuralları — Sahte Kırılım, VWAP, Pivot ve Fiksing Sonrası'
+title: 'FX Gün İçi Stratejiler 4: Dönüş Kuralları — Sahte Kırılım, VWAP, Pivot ve Fiksing Sonrası'
 description: "Altı dönüş kuralı tek tek: açılış aralığının, Asya aralığının ve önceki günün tepe/dibinin sahte kırılımı, VWAP'a dönüş, pivottan dönüş ve fiksing sonrası dönüş. Her kural için sade tanım, backtest sonucu ve bütün stop/hedef bileşimlerinin 2024 sonrası sonucu."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders', 'donus']

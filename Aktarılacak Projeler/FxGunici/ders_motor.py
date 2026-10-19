@@ -6891,7 +6891,52 @@ def blok_kisa_kart_ozet(u: Uretim, ctx: dict, ders: str) -> str:
             "stop/hedef bileşimi / tablodaki bileşim._")
 
 
+NUMARA = "①②③④⑤"
+
+
+def blok_nasil_ornek(u: Uretim, ctx: dict, birim: str) -> str:
+    """Adım adım dersinin örnek gün cümlesi: grafikteki numaralarla aynı sırada (sekil.nasil; numaralar
+    adlar.NASIL_ADIM'dan türer): referans (varsa), sinyal ve giriş (aynı andaysa tek adım), çıkış. Ana parite,
+    örneklem dışındaki kazanan örnek gün."""
+    c = ana()
+    b = u.O["birim"][birim]
+    x = next((e for e in ((b["cift"].get(c) or {}).get("ornek") or []) if e["etiket"] == "kazanan"), None)
+    if x is None:
+        raise SablonHatasi(f"nasil_ornek: {birim} için kazanan örnek gün yok")
+    ref_ad, sin_ad = adlar.NASIL_ADIM[birim]
+    i, tf = x["islem"], int(x["tf"])
+    yon = "alış" if i["yon"] > 0 else "satış"
+    stopsuz = (b.get("varsayilan") or {}).get("stop_turu") == "yok" or i.get("stop") is None
+    no, parca = 0, []
+    if ref_ad and any(i.get(k) is not None for k in ("ust", "alt", "seviye")):
+        parca.append(f"{NUMARA[no]} {ref_ad}")
+        no += 1
+    s_t = int(i["sinyal_t"]) if i.get("sinyal_t") else int(i["giris_t"])
+    giris = (f"{yon}, {fiyat_yaz(i['giris_f'], c)}"
+             + ("" if stopsuz else f"; stop {fiyat_yaz(i['stop'], c)} ({_pip(i['R_pip'])} pip uzakta)")
+             + (f"; hedef {fiyat_yaz(i['hedef'], c)}" if i.get("hedef") is not None else ""))
+    if int(i["giris_t"]) == s_t:
+        parca.append(f"{NUMARA[no]} {saat_tsi(s_t - 60 * tf)}–{saat_tsi(s_t)} TSİ mumu: {sin_ad}; mum kapanınca "
+                     f"{giris}")
+        no += 1
+    else:
+        parca.append(f"{NUMARA[no]} {saat_tsi(s_t - 60 * tf)}–{saat_tsi(s_t)} TSİ: {sin_ad}")
+        no += 1
+        parca.append(f"{NUMARA[no]} {saat_tsi(i['giris_t'])} TSİ'de {giris}")
+        no += 1
+    parca.append(f"{NUMARA[no]} {saat_tsi(i['cikis_t'])} TSİ'de çıkış ({adlar.neden_ad(i, u.O['kunye']['gun_sonu_et'])}"
+                 f"): {_pip_a(i['pnl_pip'])} pip, {sayi(adlar.islem_r(i), 2, arti=True)} R")
+    olay = ""
+    if i.get("olay"):
+        olay = f" Olay: {adlar.OLAY.get(i['olay'], i['olay'])}" + (f", {saat_tsi(i['olay_t'])} TSİ." if i.get("olay_t")
+                                                                    else ".")
+    return (f"**Grafikteki gün** ({tarih_uzun(x['gun'])}, {_gun_adi(x['gun'])}; {PARITE[c]}, {tf} dakikalık mum)."
+            + olay + " " + " · ".join(parca) + "."
+            + (" Stopsuz kural: R birimi girişteki oynaklıktır (1 ATR)." if stopsuz else ""))
+
+
 BLOKLAR = {
+    "nasil_ornek": blok_nasil_ornek,
     "kisa_kart_ozet": blok_kisa_kart_ozet,
     "kisa_kart": blok_kisa_kart,
     "kisa_kural_tablo": blok_kisa_kural_tablo, "kisa_hedef_ornek": blok_kisa_hedef_ornek,

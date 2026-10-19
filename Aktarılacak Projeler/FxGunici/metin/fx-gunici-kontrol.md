@@ -1,5 +1,5 @@
 ---
-title: 'FX Gün İçi Stratejiler 6: Bir Kuralı Denemeden Önce — Kontrol Listesi'
+title: 'FX Gün İçi Stratejiler 7: Bir Kuralı Denemeden Önce — Kontrol Listesi'
 description: "Bir gün içi FX kuralını kendiniz sınamak ya da uygulamak istiyorsanız önce bakılacak altı şey: maliyetinizin pip karşılığı, stopun maliyete oranı, kazanma oranı yerine işlem başına net sonuç, kaç işlemin yeteceği, ayarların önceden yazılması ve ileriye dönük izleme."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders', 'risk']
@@ -80,7 +80,7 @@ kez sınayın. Sonucu gördükten sonra değiştirdiğiniz her ayar, sınamayı 
 ## 6. Adayları ileriye dönük izleyin
 
 Serinin en belirgin adayı GBP/USD'de Londra fiksingi momentumunun ay sonu işlemleri (birinci ders); ikincisi başarısız
-haber kırılımında süreyle çıkış (dördüncü ders). Birincisinin kuralı basit:
+haber kırılımında süreyle çıkış (beşinci ders). Birincisinin kuralı basit:
 ayın son iş günü Londra 15:50–15:55 mumunun ({{! tsi "" "Londra 15:50–15:55" }}) yönünde Londra 15:55'te
 ({{! tsi "" "Londra 15:55" }}) girilir, Londra 16:00'da ({{! tsi "" "Londra 16:00" }}) çıkılır. Bu alt küme sonuçlar
 görüldükten sonra seçildiği için geçmiş veri onu kanıtlayamaz. Geriye tek dürüst yol kalıyor: kuralı bugünden itibaren

@@ -103,7 +103,8 @@ export const GRUPLAR: DersGrubu[] = [
     baslik: 'FX gün içi stratejiler — backtest serisi',
     aciklama:
       'Gün içi FX işlem kitaplarının en çok anılan kuralları dört majör paritede, gerçek alış-satış ' +
-      'fiyatıyla ve maliyet düşülerek sınandı. Altı kısa ders: hangi kural işe yarıyor, kurallar tek tek ' +
+      'fiyatıyla ve maliyet düşülerek sınandı. Yedi kısa ders: hangi kural işe yarıyor, her kural adım ' +
+      'adım grafik üstünde (hangi saatte ne olursa ne yapılır), kurallar tek tek ' +
       '(ne yapar, ne verdi, stop ve hedef nerede olsaydı ne değişirdi), stop ve hedefin aritmetiği, bir kuralı ' +
       'denemeden önce neye bakılmalı. ' +
       'Ayrıntılı yöntem notları arşivde.',
@@ -112,6 +113,7 @@ export const GRUPLAR: DersGrubu[] = [
     // Arşivdeki dokuz uzun ders (adlar.ARSIV_SIRA) listede görünmez.
     slugSirasi: [
       'fx-gunici-sonuc',
+      'fx-gunici-nasil',
       'fx-gunici-kirilim',
       'fx-gunici-donus',
       'fx-gunici-akis-haber',

@@ -1,5 +1,5 @@
 ---
-title: 'FX Gün İçi Stratejiler 2: Kırılım Kuralları — Ne Yapıyorlar, Ne Verdiler, Stop ve Hedef Neyi Değiştirirdi'
+title: 'FX Gün İçi Stratejiler 3: Kırılım Kuralları — Ne Yapıyorlar, Ne Verdiler, Stop ve Hedef Neyi Değiştirirdi'
 description: "Sekiz kırılım kuralı tek tek: açılış aralığı, Asya aralığı, New York ilk saati, iç mum, sıkışma, önceki günün tepe ve dibi, pivot kırılımı. Her kural için sade tanım, backtest sonucu ve bütün stop/hedef bileşimlerinin 2024 sonrası sonucu."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders', 'kirilim']

@@ -297,6 +297,98 @@ def _cizgi_ekle(fig, x: dict, sec: np.ndarray, t: np.ndarray, sn: int, p: float,
                 var["vbant"] = True
 
 
+def _ornek_panel(fig, b: dict, x: dict, k: int, var: dict, yonler: set, c: str, p: float, hane: int,
+                 fiyat: str) -> dict:
+    """Örnek günün tek paneli (mumlar, sinyal bandı, takvim olayları, referans seviye, stop/hedef, giriş ve
+    çıkış işaretleri, TSİ ekseni). Arşivdeki üç panelli örnek figür ile kısa serinin adım adım figürü aynı çizimi
+    kullanır; panelin konum bilgisi (zaman aralığı, mumlar, seviyeler) adım işaretleri için döner."""
+    m, i = x["mum"], x["islem"]
+    sn = 60 * int(x["tf"])
+    r0 = _referans_bas(b, x)
+    sec = _ornek_pencere(x, r0 if _gece_referansi(b) else None)
+    t = np.asarray(m["t"], dtype=np.int64)[sec]
+    o_, h_, l_, c_ = (np.asarray(m[a], dtype=float)[sec] * p for a in ("o", "h", "l", "c"))
+    # Mum, kendi aralığının ORTASINA çizilir: plotly mumu x'te ortalar, başlangıcına çizilen mum sinyal
+    # bandından yarım mum kayık görünürdü. Fareyle okunan saat aralığın kendisidir.
+    aralik = [f"{_saat(a)}–{_saat(a + sn)} TSİ" for a in t]
+    fig.add_trace(go.Candlestick(x=_tsi(t + sn // 2), open=o_, high=h_, low=l_, close=c_, hovertext=aralik,
+                                 hoverinfo="text+y",
+                                 increasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#ffffff"),
+                                 decreasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#9a9a9a"),
+                                 name=f"{x['tf']} dk mum (orta fiyat)", showlegend=(k == 1)), k, 1)
+    _cizgi_ekle(fig, x, sec, t, sn, p, k, var, (b.get("varsayilan") or {}).get("k"), fiyat)
+    t0, t1 = int(t[0]), int(t[-1]) + sn
+    x0, x1 = _tsi([t0, t1])
+    xr, yr = ("x" if k == 1 else f"x{k}"), ("y domain" if k == 1 else f"y{k} domain")
+    if i.get("sinyal_t"):
+        s0, s1 = _tsi([int(i["sinyal_t"]) - sn, int(i["sinyal_t"])])
+        fig.add_vrect(x0=s0, x1=s1, fillcolor=SINYAL_BANT, line_width=0, layer="below", row=k, col=1)
+    # Takvim olayları (paritenin kendi takvimi): kuralın olayı kesikli, günün öbür olayı ince noktalı; adı ve
+    # TSİ saati çizginin üstünde. Yakın iki olayın etiketi alt alta düşer.
+    olaylar = sorted(((int(e["t"]), e["olay"]) for e in (x.get("takvim") or []) if t0 <= int(e["t"]) <= t1))
+    if i.get("olay_t") and all(u != int(i["olay_t"]) for u, _ in olaylar) and t0 <= int(i["olay_t"]) <= t1:
+        olaylar = sorted(olaylar + [(int(i["olay_t"]), i.get("olay") or "")])
+    onceki, kat_ = None, 0
+    for u, ol in olaylar:
+        kendi = bool(i.get("olay_t")) and u == int(i["olay_t"])
+        var["olay" if kendi else "takvim"] = True
+        fig.add_vline(x=_tsi([u])[0], line=dict(color=MUREKKEP if kendi else GRI, width=1,
+                                                   dash="dash" if kendi else "dot"), row=k, col=1)
+        kat_ = (1 - kat_) if (onceki is not None and u - onceki < 0.3 * (t1 - t0)) else 0
+        # Panelin sağ üçte birine düşen olayın etiketi çizginin soluna yaslanır: sağa yazılsaydı telefonun gömme
+        # çerçevesinden taşardı (ör. akşam saatindeki FOMC kararı).
+        sag = (u - t0) > 0.65 * (t1 - t0)
+        fig.add_annotation(x=_tsi([u])[0], xref=xr, y=0.98 - 0.14 * kat_, yref=yr, yanchor="top",
+                           xanchor="right" if sag else "left", showarrow=False,
+                           text=f"{adlar.OLAY_KISA.get(ol, ol)} {_saat(u)} TSİ",
+                           font=dict(size=10, color=MUREKKEP if kendi else "#5e5e5e"),
+                           bgcolor="rgba(255,255,255,0.8)")
+        onceki = u
+    rx0 = _tsi([max(t0, r0)])[0] if r0 is not None and r0 < t1 else x0
+    seviyeler = []
+    for a in ("ust", "alt", "seviye"):
+        v = i.get(a)
+        if v is not None and all(abs(v - w) > 1e-9 for w in seviyeler):
+            seviyeler.append(v)
+    for j, v in enumerate(seviyeler):
+        fig.add_trace(go.Scatter(x=[rx0, x1], y=[v * p] * 2, mode="lines", line=dict(color=MAVI, width=1, dash="dot"),
+                                 name="referans seviye", legendgroup="seviye", showlegend=not var["seviye"],
+                                 hovertemplate="seviye " + fiyat + "<extra></extra>"), k, 1)
+        var["seviye"] = True
+    # Stop ve hedef çizgisi sinyal mumunun başından (sinyal yoksa girişten bir mum önce) çıkıştan bir mum sonrasına
+    # uzanır: giriş ile çıkış aynı dakikadaysa girişten çıkışa çizilen çizgi sıfır uzunlukta kalıp görünmüyordu.
+    a0 = int(i["sinyal_t"]) - sn if i.get("sinyal_t") else int(i["giris_t"]) - sn
+    a1 = max(int(i["cikis_t"]), int(i["giris_t"]) + sn) + sn
+    g0, g1 = _tsi([max(t0, a0), min(t1, a1)])
+    if i.get("stop") is not None:
+        fig.add_trace(go.Scatter(x=[g0, g1], y=[i["stop"] * p] * 2, mode="lines", line=dict(color=CLARET, width=1.6),
+                                 name="stop", legendgroup="stop", showlegend=not var["stop"],
+                                 hovertemplate="stop " + fiyat + "<extra></extra>"), k, 1)
+        var["stop"] = True
+    if i.get("hedef") is not None:
+        fig.add_trace(go.Scatter(x=[g0, g1], y=[i["hedef"] * p] * 2, mode="lines", line=dict(color=YESIL, width=1.6),
+                                 name="hedef", legendgroup="hedef", showlegend=not var["hedef"],
+                                 hovertemplate="hedef " + fiyat + "<extra></extra>"), k, 1)
+        var["hedef"] = True
+    yon = "alış" if i["yon"] > 0 else "satış"
+    yonler.add(yon)
+    # İşaretler eksende kırpılmaz: gün sonu kapanışıyla biten işlemin çıkışı panelin sağ kenarına düşer.
+    fig.add_trace(go.Scatter(x=[_tsi([i["giris_t"]])[0]], y=[i["giris_f"] * p], mode="markers", cliponaxis=False,
+                             marker=dict(symbol="triangle-up" if i["yon"] > 0 else "triangle-down", size=13,
+                                         color=MUREKKEP, line=dict(color="white", width=1.5)),
+                             name=f"giriş ({yon})", legendgroup="giris", showlegend=False,
+                             hovertemplate=f"giriş ({yon}) {_saat(i['giris_t'])} TSİ · " + fiyat + "<extra></extra>"),
+                  k, 1)
+    fig.add_trace(go.Scatter(x=[_tsi([i["cikis_t"]])[0]], y=[i["cikis_f"] * p], mode="markers", cliponaxis=False,
+                             marker=dict(symbol="x", size=11, color=MUREKKEP),
+                             name="çıkış", legendgroup="cikis", showlegend=(k == 1),
+                             hovertemplate=f"çıkış {_saat(i['cikis_t'])} TSİ · " + fiyat + "<extra></extra>"), k, 1)
+    fig.update_xaxes(rangeslider_visible=False, tickformat="%H:%M", range=[x0, x1], row=k, col=1)
+    fig.update_yaxes(tickformat=f".{max(1, hane - 1)}f", row=k, col=1)
+    return {"t": t, "h": h_, "l": l_, "sn": sn, "t0": t0, "t1": t1, "r0": r0, "rx0": rx0,
+            "seviyeler": seviyeler, "x1": x1}
+
+
 def ornek(o: dict, birim: str) -> None:
     b = o["birim"][birim]
     c = ANA
@@ -326,89 +418,7 @@ def ornek(o: dict, birim: str) -> None:
            "sikisma": False, "vwap": False, "vbant": False}
     yonler = set()
     for k, x in enumerate(ornekler, start=1):
-        m, i = x["mum"], x["islem"]
-        sn = 60 * int(x["tf"])
-        r0 = _referans_bas(b, x)
-        sec = _ornek_pencere(x, r0 if _gece_referansi(b) else None)
-        t = np.asarray(m["t"], dtype=np.int64)[sec]
-        o_, h_, l_, c_ = (np.asarray(m[a], dtype=float)[sec] * p for a in ("o", "h", "l", "c"))
-        # Mum, kendi aralığının ORTASINA çizilir: plotly mumu x'te ortalar, başlangıcına çizilen mum sinyal
-        # bandından yarım mum kayık görünürdü. Fareyle okunan saat aralığın kendisidir.
-        aralik = [f"{_saat(a)}–{_saat(a + sn)} TSİ" for a in t]
-        fig.add_trace(go.Candlestick(x=_tsi(t + sn // 2), open=o_, high=h_, low=l_, close=c_, hovertext=aralik,
-                                     hoverinfo="text+y",
-                                     increasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#ffffff"),
-                                     decreasing=dict(line=dict(color="#4d4d4d", width=1), fillcolor="#9a9a9a"),
-                                     name=f"{x['tf']} dk mum (orta fiyat)", showlegend=(k == 1)), k, 1)
-        _cizgi_ekle(fig, x, sec, t, sn, p, k, var, (b.get("varsayilan") or {}).get("k"), fiyat)
-        t0, t1 = int(t[0]), int(t[-1]) + sn
-        x0, x1 = _tsi([t0, t1])
-        xr, yr = ("x" if k == 1 else f"x{k}"), ("y domain" if k == 1 else f"y{k} domain")
-        if i.get("sinyal_t"):
-            s0, s1 = _tsi([int(i["sinyal_t"]) - sn, int(i["sinyal_t"])])
-            fig.add_vrect(x0=s0, x1=s1, fillcolor=SINYAL_BANT, line_width=0, layer="below", row=k, col=1)
-        # Takvim olayları (paritenin kendi takvimi): kuralın olayı kesikli, günün öbür olayı ince noktalı; adı ve
-        # TSİ saati çizginin üstünde. Yakın iki olayın etiketi alt alta düşer.
-        olaylar = sorted(((int(e["t"]), e["olay"]) for e in (x.get("takvim") or []) if t0 <= int(e["t"]) <= t1))
-        if i.get("olay_t") and all(u != int(i["olay_t"]) for u, _ in olaylar) and t0 <= int(i["olay_t"]) <= t1:
-            olaylar = sorted(olaylar + [(int(i["olay_t"]), i.get("olay") or "")])
-        onceki, kat_ = None, 0
-        for u, ol in olaylar:
-            kendi = bool(i.get("olay_t")) and u == int(i["olay_t"])
-            var["olay" if kendi else "takvim"] = True
-            fig.add_vline(x=_tsi([u])[0], line=dict(color=MUREKKEP if kendi else GRI, width=1,
-                                                       dash="dash" if kendi else "dot"), row=k, col=1)
-            kat_ = (1 - kat_) if (onceki is not None and u - onceki < 0.3 * (t1 - t0)) else 0
-            # Panelin sağ üçte birine düşen olayın etiketi çizginin soluna yaslanır: sağa yazılsaydı telefonun gömme
-            # çerçevesinden taşardı (ör. akşam saatindeki FOMC kararı).
-            sag = (u - t0) > 0.65 * (t1 - t0)
-            fig.add_annotation(x=_tsi([u])[0], xref=xr, y=0.98 - 0.14 * kat_, yref=yr, yanchor="top",
-                               xanchor="right" if sag else "left", showarrow=False,
-                               text=f"{adlar.OLAY_KISA.get(ol, ol)} {_saat(u)} TSİ",
-                               font=dict(size=10, color=MUREKKEP if kendi else "#5e5e5e"),
-                               bgcolor="rgba(255,255,255,0.8)")
-            onceki = u
-        rx0 = _tsi([max(t0, r0)])[0] if r0 is not None and r0 < t1 else x0
-        seviyeler = []
-        for a in ("ust", "alt", "seviye"):
-            v = i.get(a)
-            if v is not None and all(abs(v - w) > 1e-9 for w in seviyeler):
-                seviyeler.append(v)
-        for j, v in enumerate(seviyeler):
-            fig.add_trace(go.Scatter(x=[rx0, x1], y=[v * p] * 2, mode="lines", line=dict(color=MAVI, width=1, dash="dot"),
-                                     name="referans seviye", legendgroup="seviye", showlegend=not var["seviye"],
-                                     hovertemplate="seviye " + fiyat + "<extra></extra>"), k, 1)
-            var["seviye"] = True
-        # Stop ve hedef çizgisi sinyal mumunun başından (sinyal yoksa girişten bir mum önce) çıkıştan bir mum sonrasına
-        # uzanır: giriş ile çıkış aynı dakikadaysa girişten çıkışa çizilen çizgi sıfır uzunlukta kalıp görünmüyordu.
-        a0 = int(i["sinyal_t"]) - sn if i.get("sinyal_t") else int(i["giris_t"]) - sn
-        a1 = max(int(i["cikis_t"]), int(i["giris_t"]) + sn) + sn
-        g0, g1 = _tsi([max(t0, a0), min(t1, a1)])
-        if i.get("stop") is not None:
-            fig.add_trace(go.Scatter(x=[g0, g1], y=[i["stop"] * p] * 2, mode="lines", line=dict(color=CLARET, width=1.6),
-                                     name="stop", legendgroup="stop", showlegend=not var["stop"],
-                                     hovertemplate="stop " + fiyat + "<extra></extra>"), k, 1)
-            var["stop"] = True
-        if i.get("hedef") is not None:
-            fig.add_trace(go.Scatter(x=[g0, g1], y=[i["hedef"] * p] * 2, mode="lines", line=dict(color=YESIL, width=1.6),
-                                     name="hedef", legendgroup="hedef", showlegend=not var["hedef"],
-                                     hovertemplate="hedef " + fiyat + "<extra></extra>"), k, 1)
-            var["hedef"] = True
-        yon = "alış" if i["yon"] > 0 else "satış"
-        yonler.add(yon)
-        # İşaretler eksende kırpılmaz: gün sonu kapanışıyla biten işlemin çıkışı panelin sağ kenarına düşer.
-        fig.add_trace(go.Scatter(x=[_tsi([i["giris_t"]])[0]], y=[i["giris_f"] * p], mode="markers", cliponaxis=False,
-                                 marker=dict(symbol="triangle-up" if i["yon"] > 0 else "triangle-down", size=13,
-                                             color=MUREKKEP, line=dict(color="white", width=1.5)),
-                                 name=f"giriş ({yon})", legendgroup="giris", showlegend=False,
-                                 hovertemplate=f"giriş ({yon}) {_saat(i['giris_t'])} TSİ · " + fiyat + "<extra></extra>"),
-                      k, 1)
-        fig.add_trace(go.Scatter(x=[_tsi([i["cikis_t"]])[0]], y=[i["cikis_f"] * p], mode="markers", cliponaxis=False,
-                                 marker=dict(symbol="x", size=11, color=MUREKKEP),
-                                 name="çıkış", legendgroup="cikis", showlegend=(k == 1),
-                                 hovertemplate=f"çıkış {_saat(i['cikis_t'])} TSİ · " + fiyat + "<extra></extra>"), k, 1)
-        fig.update_xaxes(rangeslider_visible=False, tickformat="%H:%M", range=[x0, x1], row=k, col=1)
-        fig.update_yaxes(tickformat=f".{max(1, hane - 1)}f", row=k, col=1)
+        _ornek_panel(fig, b, x, k, var, yonler, c, p, hane, fiyat)
     # Lejantta girişin iki yönü ayrı (paneller alış ve satışı karıştırabilir); bant ve olay çizgileri birer şekildir,
     # lejant girdileri boş izlerle kurulur.
     for yon, sembol in (("alış", "triangle-up"), ("satış", "triangle-down")):
@@ -1690,7 +1700,87 @@ def kisa_aralik(o: dict) -> None:
         so._yaz(fig, f"kisa-aralik-{ders.removeprefix('fx-gunici-')}.html", yukseklik(bas, 120 + 40 * len(ad)))
 
 
-KISA_SEKILLERI = (kisa_kurallar, kisa_stop_hedef, kisa_aralik)
+NUMARA = "①②③④⑤"
+
+
+def nasil(o: dict) -> None:
+    """Adım adım dersi: her kural için örneklem dışındaki kazanan örnek günün tek paneli (arşivin örnek gün çizimi,
+    _ornek_panel) ve üstüne numaralı adımlar: ① referans (aralık ya da seviye; varsa), ② sinyal mumu ve giriş (aynı
+    andaysa tek adım), son adım çıkış. Saatler TSİ. Kazanan gün kuralın bütün adımları görünsün diye seçilir;
+    sonucu temsil etmez ve alt yazı kuralın ortalamasını yanında söyler."""
+    c = ANA
+    h = o["basarisiz"]["basabas"]["havuz"]["oos"]
+    gun_sonu = o["kunye"]["gun_sonu_et"]
+    for birim, (ref_ad, sin_ad) in adlar.NASIL_ADIM.items():
+        b = o["birim"][birim]
+        x = next((e for e in ((b["cift"].get(c) or {}).get("ornek") or []) if e["etiket"] == "kazanan"), None)
+        if x is None:
+            raise SystemExit(f"nasil: {birim} için kazanan örnek gün yok")
+        i = x["islem"]
+        fig = make_subplots(rows=1, cols=1, subplot_titles=(f"{PARITE[c]} · {so.tarih(x['gun'])} · {x['tf']} dk mum",))
+        var = {"seviye": False, "stop": False, "hedef": False, "olay": False, "takvim": False, "bb": False, "kc": False,
+               "sikisma": False, "vwap": False, "vbant": False}
+        p, hane = NOKTA[c], _hane(c)
+        d = _ornek_panel(fig, b, x, 1, var, set(), c, p, hane, f"%{{y:.{hane}f}}")
+        sn, t, hh, ll = d["sn"], d["t"], d["h"], d["l"]
+        yon = "alış" if i["yon"] > 0 else "satış"
+        no = 0
+        # Alışta sinyal etiketi mumun üstüne, satışta altına (kırılımın yönüne) yazılır; referansın etiketi karşı
+        # uçtaki seviyenin öbür yanına düşer, iki etiket üst üste binmez.
+        ust = i["yon"] > 0
+        t0, t1 = d["t0"], d["t1"]
+
+        def yatay(xx_t, ax):
+            """Etiket panelin sol üçte birindeyse sağa, sağ üçte birindeyse sola açılır (telefonda kesilmesin)."""
+            f = (xx_t - t0) / max(1, t1 - t0)
+            return abs(ax) if f < 0.34 else (-abs(ax) if f > 0.66 else ax)
+
+        def etiket(xx, yy, metin, ax, ay, xx_t):
+            ax = yatay(xx_t, ax)
+            fig.add_annotation(x=xx, y=yy, xref="x", yref="y", text=metin, showarrow=True, arrowhead=0,
+                               arrowwidth=1, arrowcolor=MUREKKEP, ax=ax, ay=ay, font=dict(size=11, color=MUREKKEP),
+                               bgcolor="rgba(255,255,255,0.88)", bordercolor="#c9c4ba", borderwidth=1, borderpad=2)
+        if ref_ad and d["seviyeler"]:
+            r_t = max(t0, d["r0"]) if d["r0"] is not None else t0
+            if ust:
+                etiket(d["rx0"], min(d["seviyeler"]) * p, f"{NUMARA[no]} {ref_ad}", 40, 35, r_t)
+            else:
+                etiket(d["rx0"], max(d["seviyeler"]) * p, f"{NUMARA[no]} {ref_ad}", 40, -35, r_t)
+            no += 1
+        s_t = int(i["sinyal_t"]) if i.get("sinyal_t") else int(i["giris_t"])
+        j = int(np.searchsorted(t, s_t - sn))
+        j = min(max(j, 0), len(t) - 1)
+        sx = _tsi([s_t - sn // 2])[0]
+        sy = float(hh[j]) if ust else float(ll[j])
+        birlikte = int(i["giris_t"]) == s_t
+        if birlikte:
+            etiket(sx, sy, f"{NUMARA[no]} {_saat(s_t - sn)}–{_saat(s_t)} TSİ<br>{sin_ad} → {yon}", 30, -45 if ust else 45, s_t)
+            no += 1
+        else:
+            etiket(sx, sy, f"{NUMARA[no]} {sin_ad}<br>{_saat(s_t - sn)}–{_saat(s_t)} TSİ", 30, -45 if ust else 45, s_t)
+            no += 1
+            etiket(_tsi([int(i["giris_t"])])[0], i["giris_f"] * p, f"{NUMARA[no]} {_saat(i['giris_t'])} TSİ: {yon}",
+                   -40, -40, int(i["giris_t"]))
+            no += 1
+        cikis = adlar.neden_ad(i, gun_sonu).replace("gün sonu kapanışı", "gün sonu")
+        etiket(_tsi([int(i["cikis_t"])])[0], i["cikis_f"] * p,
+               f"{NUMARA[no]} {_saat(i['cikis_t'])} TSİ<br>çıkış: {cikis}", -60, 40 if i["yon"] > 0 else -40,
+               int(i["cikis_t"]))
+        r_ort = h[birim]["net"]
+        stopsuz = (b.get("varsayilan") or {}).get("stop_turu") == "yok"
+        alt = ["Saatler TSİ. Numaralar dersteki adımlar",
+               f"Kazanan bir örnek gün (bütün adımlar görünsün diye): bu işlem {_r(adlar.islem_r(i))} R; kuralın "
+               f"{_dis(o)} ortalaması {_r(r_ort)} R",
+               "Kırmızı: stop · yeşil: hedef · noktalı mavi: referans seviye · mavi bant: sinyal mumu"
+               + (" · turuncu: VWAP" if var["vwap"] else "") + (" · turuncu: Bollinger, kesikli: Keltner" if var["bb"] else "")
+               if not stopsuz else
+               f"Stopsuz kural: çıkış saatle; R birimi {R_BIRIMI.get(b.get('aile'), 'girişteki ATR')}"]
+        bas = baslik_koy(fig, f"Adım adım — {adlar.BIRIM[birim][1]}", alt)
+        fig.update_layout(showlegend=False)
+        so._yaz(fig, f"nasil-{birim}.html", yukseklik(bas, 430))
+
+
+KISA_SEKILLERI = (kisa_kurallar, kisa_stop_hedef, kisa_aralik, nasil)
 
 
 
