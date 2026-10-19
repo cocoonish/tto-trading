@@ -1,0 +1,71 @@
+# Süzgeç çalışması — ÖN KAYIT (19.10.2026)
+#
+# Soru (kullanıcı): "20 günlük EMA'nın üstündeyse yalnız long, altındaysa yalnız short gibi koşullar, kırılım için
+# ATR şartı ya da başka bir şeyle kuralları artıya çekebilir miyiz?"
+#
+# Bu dosya HİÇBİR süzgeç sonucu görülmeden commit edilir; commit zamanı ön kaydın kanıtıdır. Süzgeç tanımları, eşikler,
+# seçim kuralı ve hüküm kuralı aşağıdadır ve ölçümden sonra DEĞİŞMEZ. Değişen her şey (bir hata düzeltmesi dahil)
+# "sapmalar" bölümüne tarihiyle ve etkisi ölçülerek yazılır.
+#
+# DÜRÜSTLÜK NOTU — neyin önceden GÖRÜLDÜĞÜ. Ana koşunun koşul analizi (onkayit.toml [kosul]) range_atr, oynaklık
+# yüzdeliği ve 60 dakikalık trend değişkenlerini örneklem içi tercil kovalarıyla zaten ölçmüş ve arşiv derslerinde
+# yayımlamıştı; yani S2, S3 ve S4'ün kova sonuçları bu kayıttan ÖNCE görülmüştür. Bu kayıt onları yalnız SÜZGEÇ
+# olarak (eşik ve yön sabit) tanımlar. Günlük EMA20 (S1) ve onun bileşimleri (S5, S6) daha önce hiç ölçülmedi.
+
+[girdi]
+# Ana koşunun ön kayıtlı VARSAYILAN ayarlarının işlem listeleri (cikti/islem/<kural>/<parite>__<ayar>.parquet).
+# Yeniden koşu yok: süzgeç bir işlemi ya tutar ya atar. Kurallar ve pariteler ana koşununkiler (22 × 4).
+ayar = "varsayilan"
+ic = ["2018-01-01", "2023-12-31"]
+dis_baslangic = "2024-01-01"
+
+[suzgec]
+# Her süzgeç işlemin GİRİŞ anında bilinen bilgiden kurulur; bugünün kapanışı, bugünün ATR'si kullanılmaz.
+# Uygulama "atla" kipidir: süzgecin reddettiği işlem açılmaz ve o gün yerine başka sinyal aranmaz.
+#
+# S1 ema20     Günlük EMA20: FX günü kapanışlarının (New York 17:00; tatil olmayan günler) 20 günlük üstel
+#              ortalaması (span = 20, ilk değer ilk kapanış), işlem gününden ÖNCEKİ son tatil olmayan güne kadar.
+#              Fiyat = işlemin giriş fiyatı. Alış yalnız fiyat > EMA20, satış yalnız fiyat < EMA20. İlk 20 tatil
+#              olmayan günde EMA tanımsız sayılır ve işlem atılır.
+# S2 trend60   Ana koşunun 60 dakikalık trend değişkeni "trend yönünde" (giriş anından önce kapanmış son 60 dk mumun
+#              kapanışı EMA50'nin işlem yönündeki tarafında).
+# S3 oynak     Oynaklık yüksek: önceki günlerin ATR(14)'ünün son 252 gündeki yüzdeliği ≥ 0,5.
+# S4 dar       Dar yapı: range_atr (kuralın yapısı ÷ önceki günlerin ATR'si) ≤ aynı kural × paritenin 2018–2023
+#              işlemlerindeki range_atr medyanı. Yapısı tanımsız kurallarda (range_atr boş) S4 ve S6 uygulanmaz.
+# S5 ema20+oynak   S1 ve S3 birlikte.
+# S6 ema20+dar     S1 ve S4 birlikte.
+liste = ["ema20", "trend60", "oynak", "dar", "ema20_oynak", "ema20_dar"]
+oynak_esik = 0.5
+ema_gun = 20
+
+[olcu]
+# Birincil birim kural başına DÖRT PARİTE BİRLİKTE (işlemler birleştirilir). Parite parite sonuç bilgi olarak yazılır.
+# Ölçüler: işlem sayısı, kazanma oranı (net pip > 0), işlem başına net R (maliyet sonrası), brüt R.
+# Sharpe: dört paritenin günlük R toplamlarından, yıllıklandırılmış (√252), ana koşunun tanımıyla.
+
+[secim]
+# Kural başına aday kümesi: süzgeçsiz + altı süzgeç. 2018–2023 havuz Sharpe'ı en yüksek aday seçilir;
+# 2018–2023'te 100'den az işlemi olan aday seçilemez (haber kurallarında 30, ana koşunun eşikleri).
+# Eşitlikte listedeki ilk (süzgeçsiz önce).
+asgari_islem = 100
+asgari_islem_haber = 30
+
+[hukum]
+# Ana ön kaydın kuralı, aynen: seçilen adayın 2024 → havuzunda
+#   calisiyor : net R > 0, %95 bootstrap alt sınırı > 0 (2.000 tekrar) ve rastgele yön yüzdeliği ≥ 95
+#               (aynı giriş dakikası, aynı R uzaklığı, ters yön; işlem başına yazı tura; 1.000 tekrar, tohum 11)
+#   zayif     : net R > 0 ama ikisinden biri tutmuyor
+#   calismiyor: net R ≤ 0
+
+[coklu]
+# Bilgi (hükmü değiştirmez): 22 × 6 = 132 süzgeçli havuzun HER BİRİ 2024 →'de ayrıca ölçülür ve raporlanır.
+# Tek taraflı p = bootstrap ortalamalarının ≤ 0 payı; Benjamini–Hochberg q ≤ 0,05 sayımı ve sıfır hipotezinde
+# şansla beklenen sayı (%2,5 × 132 ≈ 3,3 alt ucu sıfırın üstünde) yanında yazılır.
+bh_q = 0.05
+
+[yayin]
+# Sonuç ne çıkarsa çıksın kullanıcıya olduğu gibi sunulur; siteye yalnız kullanıcı onayıyla girer.
+# Çalışmayan bir süzgece "çalışmıyor" denir.
+
+[sapmalar]
+# (boş — ölçümden sonra yazılır)
