@@ -71,6 +71,7 @@ def main() -> int:
     islemler, olaylar = [], []
     for cift in a.ciftler:
         d = vr.oku(cift, a)
+        do = kosu.orta(d)
         for an in sf.ANLAR:
             ev = sf.olaylar(d, an, cift)
             if len(ev) == 0:
@@ -84,7 +85,8 @@ def main() -> int:
                         continue
                     r = kosu.simule(d, e, bacak(x["bacak"]))
                     if r is not None:
-                        r.update(rol=rol, bacak=kimlik(rol, x), aile=an.aile, donem=e["donem"])
+                        r.update(rol=rol, bacak=kimlik(rol, x), aile=an.aile, donem=e["donem"],
+                                 brut_R=kosu.brut(do, e, bacak(x["bacak"])))
                         islemler.append(r)
         print(f"  {cift}: {len(islemler)} işlem", flush=True)
     df = pd.DataFrame(islemler)
@@ -97,7 +99,9 @@ def main() -> int:
         for dn in ("ic", "dis"):
             gd = g[g["donem"] == dn]
             satir[dn] = ozet(gd["R"].to_numpy(), rng if dn == "dis" else None)
-            satir[dn]["brut_R"] = float(gd["brut_R"].mean()) if len(gd) else None
+            bb = gd["brut_R"].dropna()                      # orta fiyatta dolmayan emir brüt ortalamaya girmez
+            satir[dn]["brut_R"] = float(bb.mean()) if len(bb) else None
+            satir[dn]["brut_n"] = int(len(bb))
             satir[dn]["cift"] = {c: ozet(gg["R"].to_numpy()) for c, gg in gd.groupby("cift")}
             satir[dn]["yil"] = {str(y): ozet(gg["R"].to_numpy())
                                 for y, gg in gd.groupby(pd.to_datetime(gd["t0"], unit="s").dt.year)}

@@ -171,73 +171,91 @@ def seri() -> None:
 
 # ─────────────────────────────────────────────────────────────── 7 · iddialar
 def iddialar() -> None:
-    A, Dv, K, F, T = D["aile_davranis"], D["davranis"], D["kucuk"], D["fiksing_ay_sonu"], D["trend"]
+    A, K, F, T, Y = D["aile_davranis"], D["kucuk"], D["fiksing_ay_sonu"], D["trend"], D["ayna"]["aile"]
     B = {(b["rol"], b["aile"], b["sinif"]): b for b in D["bacak"]}
-    iki = ("ic", "dis")
-    # okuma ve açılışlar
+    G = {k: D["dagilim"][b["bacak"]] for k, b in B.items()}
+    iki, uc_sinif = ("ic", "dis"), ("guclu", "normal", "reddedilen")
+    fark = lambda aile, s, dn, m: Y[aile][s][dn][m] - Y[aile][s][dn][f"{m}_ayna"]
+    # ── açılış: yön bilgisi yok (gerçek ≈ ayna), güçlü mumda devam > dönüş (geometri), normal mum yarıya döner
     for dn in iki:
-        dogru(A[dn]["acilis"]["normal"]["orta"] > 0.85, f"{dn}: normal açılış mumunun yarısına dönüşü 'neredeyse her zaman' değil")
-        dogru(A[dn]["acilis"]["guclu"]["devam"] > A[dn]["acilis"]["guclu"]["donus"], f"{dn}: güçlü açılış mumu dönüşten sık devam etmiyor")
-        for s in ("normal", "reddedilen"):
-            dogru(abs(A[dn]["acilis"][s]["devam"] - A[dn]["acilis"][s]["donus"]) < 0.05, f"{dn}: açılış {s} mumunda devam ile dönüş yarı yarıya değil")
-        for s in ("guclu", "normal", "reddedilen"):
+        for s in uc_sinif:
+            for m in ("orta", "devam", "donus"):
+                dogru(abs(fark("acilis", s, dn, m)) < 0.04, f"{dn}: açılış {s} {m}: gerçek ile ayna 'birkaç puan içinde' değil")
             uo = A[dn]["acilis"][s]["orta_uc"] / A[dn]["acilis"][s]["orta"]
-            dogru(0.4 < uo < 0.55, f"{dn}: açılış {s}: yarısına dönen mumun kendi ucuna gitmesi yarı yarıya değil ({uo:.2f})")
-        for a in ("tokyo_acilis", "londra_acilis", "ny_acilis"):
-            dogru(0.4 < K[dn][a]["kirilim_1R"] < 0.6, f"{dn}: {a} küçük mum kırılımı yarı yarıya değil")
-    for s in ("guclu", "normal", "reddedilen"):
+            dogru(0.4 < uo < 0.55, f"{dn}: açılış {s}: yarısına dönenin kendi ucuna gitmesi yarı yarıya değil ({uo:.2f})")
+        g = Y["acilis"]["guclu"][dn]
+        dogru(g["devam"] > g["donus"] and g["devam_ayna"] > g["donus_ayna"], f"{dn}: güçlü açılış mumunda devam > dönüş değil")
+        dogru(Y["acilis"]["normal"][dn]["orta"] > 0.85, f"{dn}: normal açılış mumu çoğunlukla yarısına dönmüyor")
+        dogru(abs(Y["acilis"]["normal"][dn]["devam"] - Y["acilis"]["normal"][dn]["donus"]) < 0.04,
+              f"{dn}: normal açılış mumunda devam ile dönüş eşit değil")
+    for s in uc_sinif:
         dogru(abs(T["acilis"][s]["trendle"]["devam"] - T["acilis"][s]["karsi"]["devam"]) < 0.05, f"açılış {s}: trend devamı değiştiriyor")
         dogru(abs(T["fiksing"][s]["trendle"]["devam"] - T["fiksing"][s]["karsi"]["devam"]) < 0.05, f"fiksing {s}: trend devamı değiştiriyor")
-    # fiksingler
+    # ── fiksing: geri verme şanstan sık, sürme şanstan seyrek (her sınıf, iki dönem); dönüş şansla aynı (güçlü)
     for dn in iki:
-        g = A[dn]["fiksing"]["guclu"]
-        dogru(g["orta"] > 0.5 and g["donus"] < g["devam"] < g["orta"], f"{dn}: güçlü fiksing koşusu 'geri verilir ama dönmez' değil")
+        for s in uc_sinif:
+            dogru(fark("fiksing", s, dn, "orta") > 0 and fark("fiksing", s, dn, "devam") < 0,
+                  f"{dn}: fiksing {s}: geri verme şanstan sık / sürme şanstan seyrek değil")
+        dogru(abs(fark("fiksing", "guclu", dn, "donus")) < 0.03, f"{dn}: güçlü fiksing koşusunda dönüş şansla aynı değil")
+        dogru(fark("fiksing", "guclu", dn, "orta") > fark("fiksing", "normal", dn, "orta") - 0.03,
+              f"{dn}: normal koşudaki fark güçlü koşudakinden belirgin büyük (metin 'daha küçük' diyor)")
         dogru(K[dn]["wmr"]["kirilim_1R"] < 0.35 and K[dn]["tokyo_fiks"]["kirilim_1R"] > K[dn]["wmr"]["kirilim_1R"],
               f"{dn}: sessiz Londra fiksinginden sonraki kırılım 'çoğu zaman bir yere gitmiyor' değil ya da Tokyo'dan yüksek")
         dogru(F["wmr"][dn]["ay_sonu"]["guclu"]["devam"] < F["wmr"][dn]["diger"]["guclu"]["devam"],
-              f"{dn}: ay sonunda Londra fiksingine güçlü koşu öbür günlerden az devam etmiyor")
+              f"{dn}: ay sonunda Londra fiksingine güçlü koşu öbür günlerden az sürmüyor")
+    dogru(A["ic"]["fiksing"]["guclu"]["orta_uc"] / A["ic"]["fiksing"]["guclu"]["orta"]
+          < A["ic"]["acilis"]["guclu"]["orta_uc"] / A["ic"]["acilis"]["guclu"]["orta"], "fiksing ucuna dönüş açılıştan az değil")
     o_ic = F["wmr"]["ic"]["ay_sonu"]["guclu"]["orta"] - F["wmr"]["ic"]["diger"]["guclu"]["orta"]
     o_dis = F["wmr"]["dis"]["ay_sonu"]["guclu"]["orta"] - F["wmr"]["dis"]["diger"]["guclu"]["orta"]
-    dogru(o_ic * o_dis < 0, "metin ay sonu geri verme farkını 'iki dönemde farklı' diyor; iki dönemde aynı yöne bakıyor")
+    dogru(o_ic * o_dis < 0, "metin ay sonu geri verme farkını 'iki dönemde farklı yöne bakıyor' diyor; aynı yöne bakıyor")
     t_ic = F["tokyo_fiks"]["ic"]["ay_sonu"]["normal"]["donus"] - F["tokyo_fiks"]["ic"]["diger"]["normal"]["donus"]
     t_dis = F["tokyo_fiks"]["dis"]["ay_sonu"]["normal"]["donus"] - F["tokyo_fiks"]["dis"]["diger"]["normal"]["donus"]
     dogru(abs(t_ic) < 0.05 < t_dis, "Tokyo ay sonu farkı 'iki dönemde aynı yöne bakmıyor' değil")
-    # haberler
-    for m in ("devam",):
-        for s in ("guclu", "normal"):
-            dogru(A["dis"]["veri"][s][m] < A["ic"]["veri"][s][m] - 0.1, f"ABD verisi {s}: devam payı 2024 sonrasında belirgin düşmedi")
-    dogru(A["dis"]["veri"]["guclu"]["donus"] < A["ic"]["veri"]["guclu"]["donus"], "ABD verisi güçlü: dönüş payı düşmedi")
-    dogru(A["ic"]["veri"]["guclu"]["devam"] > A["ic"]["veri"]["guclu"]["donus"], "ABD verisi güçlü 2018–2023: devam dönüşten sık değil")
-    dogru(A["dis"]["mb"]["guclu"]["donus"] == 0, "güçlü karar mumunda 2024 sonrasında tersine dönen var")
+    # ── haberler
     for dn in iki:
-        dogru(A[dn]["mb"]["reddedilen"]["devam"] > A[dn]["mb"]["reddedilen"]["donus"], f"{dn}: reddedilen karar mumu devamı dönüşten sık değil")
+        for s in ("normal", "reddedilen"):
+            dogru(fark("veri", s, dn, "devam") < -0.05, f"{dn}: ABD verisi {s}: sürme şanstan seyrek değil")
+        dogru(fark("mb", "reddedilen", dn, "devam") > 0.1, f"{dn}: reddedilen karar mumu şanstan sık sürmüyor")
         dogru(K[dn]["fomc"]["kirilim_1R"] > 0.5, f"{dn}: Fed küçük mum kırılımı 'çoğu zaman yol aldı' değil")
+    dogru(fark("veri", "normal", "dis", "devam") < fark("veri", "normal", "ic", "devam"), "ABD verisi normal: fark 2024'te büyümedi")
+    dogru(abs(fark("veri", "guclu", "ic", "devam")) < 0.03, "güçlü veri mumunda devam aynayla aynı değil")
+    dogru(abs(fark("mb", "guclu", "ic", "devam")) < 0.05, "güçlü karar mumu 2018–2023'te aynayla aynı değil")
+    dogru(A["dis"]["mb"]["guclu"]["donus"] == 0, "güçlü karar mumunda 2024 sonrasında tersine dönen var")
     dogru(K["dis"]["cpi"]["kirilim_1R"] < K["ic"]["cpi"]["kirilim_1R"], "TÜFE küçük mum kırılımı 2024 sonrasında düşmedi")
-    # bacaklar
+    # ── tepkiler
     sik = [b for b in D["bacak"] if b["rol"] == "referans" and b["aile"] in ("acilis", "fiksing")]
     dogru(all(b["hukum"] == "calismiyor" and b["dis"]["ust"] < 0 for b in sik), "sık anların referans tepkilerinden biri çalışmıyor değil ya da aralığı sıfırı kapsıyor")
-    dogru(sum(b["dis"]["kazanma"] > 0.5 for b in sik) > len(sik) / 2, "sık anların tepkilerinin çoğunda kazanma oranı yarının üstünde değil")
-    for s in ("guclu", "normal", "reddedilen"):
-        dogru(B[("referans", "acilis", s)]["dis"]["brut_R"] < 0, f"açılış {s}: maliyetsiz sonuç eksi değil")
-    for a in ("acilis", "fiksing"):
-        b = B[("referans", a, "kucuk")]["dis"]
-        dogru(b["brut_R"] > 0 > b["ort_R"] and b["brut_R"] - b["ort_R"] > b["brut_R"], f"{a} küçük: maliyet maliyetsiz kenardan büyük değil")
-    dogru(abs(B[("referans", "fiksing", "guclu")]["dis"]["brut_R"]) < 0.1, "güçlü fiksing tepkisinin maliyetsiz sonucu sıfıra yakın değil")
+    for s in ("guclu", "normal", "reddedilen", "kucuk"):
+        o = B[("referans", "acilis", s)]["dis"]
+        dogru(o["kazanma"] > 0.5, f"açılış {s}: kazanma oranı yarının üstünde değil")
+        dogru(o["brut_R"] < 0.03, f"açılış {s}: maliyetsiz sonuç 'sıfıra yakın ya da eksi' değil")
+        dogru(o["ort_R"] < o["brut_R"] - 0.05, f"açılış {s}: maliyet sıfırı belirgin eksiye çevirmiyor")
+    dogru(B[("referans", "acilis", "normal")]["dis"]["kazanma"] <= B[("referans", "acilis", "guclu")]["dis"]["kazanma"],
+          "açılış kazanma aralığının uçları ters (normal–güçlü)")
+    for s in uc_sinif:
+        o_ic, o_dis = B[("referans", "fiksing", s)]["ic"], B[("referans", "fiksing", s)]["dis"]
+        dogru(o_ic["brut_R"] > 0, f"fiksing {s}: 2018–2023 maliyetsiz sonuç artı değil")
+        dogru(o_dis["brut_R"] - o_dis["ort_R"] > o_dis["brut_R"], f"fiksing {s}: maliyet maliyetsiz kenardan büyük değil")
+    g = G[("referans", "fiksing", "guclu")]["dis"]
+    fg = B[("referans", "fiksing", "guclu")]["dis"]
+    dogru(fg["kazanma"] < -g["kayip_ort"] / (g["kazanc_ort"] - g["kayip_ort"]), "güçlü fiksing tepkisi başa baş oranını tuttu")
+    mk = B[("referans", "mb", "kucuk")]
+    dogru(mk["dis"]["brut_R"] > mk["dis"]["ort_R"] > 0 and mk["ic"]["ort_R"] < 0, "küçük karar mumu kırılımı metindeki gibi değil")
+    for k in (("referans", "mb", "normal"), ("referans", "mb", "kucuk")):
+        o = B[k]["dis"]
+        dogru(o["ort_R"] > 0 and o["alt"] <= 0 < o["ust"], f"{k}: 2024 → artı ve aralığı sıfırı kapsıyor değil")
     izle = {(x["aile"], x["sinif"]) for x in D["plan"]["izle"]}
     dogru({(a, s) for a in ("acilis", "fiksing") for s in ("guclu", "normal", "reddedilen", "kucuk")} <= izle,
           "açılış ve fiksinglerin bütün hücreleri 'izle' değil")
     mg = B[("islem", "mb", "guclu")]
-    dogru(D["dagilim"][mg["bacak"]]["dis"]["neden"].get("stop", 0) == 0, "güçlü karar mumu tepkisinde stopta biten işlem var")
-    dogru(abs(mg["ic"]["ort_R"]) < 0.05, "güçlü karar mumu tepkisinin 2018–2023 sonucu sıfıra yakın değil")
-    dogru(mg["ic"]["ort_R"] > 0 and mg["dis"]["ort_R"] > 0 and B[("islem", "mb", "normal")]["ic"]["ort_R"] > 0
-          and B[("islem", "mb", "normal")]["dis"]["ort_R"] > 0, "merkez bankası tepkileri iki dönemde de artı değil")
-    vg = B[("islem", "veri", "guclu")]
-    dogru(vg["ic"]["ort_R"] > 0 > vg["dis"]["ort_R"], "güçlü veri mumu: 2018–2023 artı, 2024 → eksi değil")
-    mk = B[("referans", "mb", "kucuk")]
-    dogru(mk["ic"]["ort_R"] < 0 < mk["dis"]["ort_R"], "küçük karar mumu kırılımı iki dönemde ayrı işaret vermiyor")
-    for k in (("referans", "mb", "normal"), ("referans", "mb", "kucuk")):
-        o = B[k]["dis"]
-        dogru(o["ort_R"] > 0 and o["alt"] <= 0 < o["ust"], f"{k}: 2024 → artı ve aralığı sıfırı kapsıyor değil")
+    dogru(G[("islem", "mb", "guclu")]["dis"]["neden"].get("stop", 0) == 0, "güçlü karar mumu tepkisinde stopta biten işlem var")
+    dogru(G[("islem", "mb", "guclu")]["dis"]["gun_n"] < mg["dis"]["n"], "güçlü karar mumu işlemleri karar günlerinden az değil")
+    dogru(all(B[("islem", "mb", s)]["dis"]["ort_R"] > 0 for s in uc_sinif), "merkez bankasındaki üç işlem tepkisi 2024 → artıda değil")
+    dogru(all(B[("islem", b["aile"], b["sinif"])]["ic"]["ort_R"] > 0 for b in D["bacak"] if b["rol"] == "islem"),
+          "seçilen bir işlem tepkisinin 2018–2023 sonucu artı değil (seçim kuralı)")
+    vg, vk = B[("islem", "veri", "guclu")], B[("islem", "veri", "kucuk")]
+    dogru(vg["dis"]["ort_R"] < 0, "güçlü veri mumu tepkisi 2024 → eksi değil")
+    dogru(vk["dis"]["brut_R"] > 0 > vk["dis"]["ort_R"], "küçük veri mumu: maliyetsiz artı, net eksi değil")
     dogru(not any(b["hukum"] == "calisiyor" for b in D["bacak"]), "bir tepki 'çalışıyor' hükmü almış; metin hiçbirinin almadığını söylüyor")
 
 

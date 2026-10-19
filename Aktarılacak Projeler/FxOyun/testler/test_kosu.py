@@ -67,3 +67,15 @@ def test_kirilim_iki_uc_ayni_dakikada_islem_yok():
     d = dakikalar([(1050, 1200, 900, 1050)] * 3)
     e = olay(d, yon=0)
     assert kosu.simule(d, e, kosu.Bacak("kirilim", 1.0)) is None
+
+
+def test_kirilim_brut_seviyeden_olculur():
+    # Küçük mum 1000–1040 (boy 40 nokta = 4 pip, en az riskin üstünde). Dakika 1 1030'da açılıp 1041'e çıkar (kırılım),
+    # dakika 2 hedefi geçer. Orta fiyattan maliyetsiz sonuç TAM hedef katıdır: giriş seviyeden (1040) sayılır, tetik
+    # dakikasının açılışından (1030) değil.
+    d = dakikalar([(1020, 1025, 1015, 1020), (1030, 1041, 1029, 1040), (1040, 1100, 1039, 1090)])
+    e = {**olay(d, h=1040.0, l=1000.0, o=1020.0, c=1020.0, yon=0), "sinif": "kucuk"}
+    b = kosu.Bacak("kirilim", 0.5)
+    assert abs(kosu.brut(kosu.orta(d), e, b) - 0.5) < 1e-9
+    x = kosu.simule(d, e, b, kayma_pip=0.5)
+    assert x["R"] < 0.5                                   # gerçek işlem makas ve kayma öder

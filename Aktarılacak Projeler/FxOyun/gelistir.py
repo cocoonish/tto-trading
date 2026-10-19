@@ -5,6 +5,10 @@
 Gözlem fiyatın ne yaptığını söyler; bu dosya o davranışa verilebilecek birkaç makul tepkinin (aday bacak)
 2018–2023'te maliyet sonrası ne getirdiğini ölçer. Plan bu tablodan ve gözlemden yazılır, sonra 2024 ve
 sonrasında AYNI kodla (kosu.simule) sınanır. Veri buraya da 31.12.2023'e kırpılarak yüklenir.
+
+Depodaki veri/gelistir.json maliyetsiz sütunu (brut_R) ilk tanımla taşır (oyun_sim başlığına bakın); seçim yalnız
+net sonuçtan (ort_R) yapılır ve o tanım değişikliğinden etkilenmez, bu yüzden ön kayıtlı plan için dosya yeniden
+üretilmedi. Derslerin maliyetsiz sayıları sina.json'dan, yeni tanımla gelir.
 """
 from __future__ import annotations
 
@@ -51,7 +55,7 @@ def adaylar(an: sf.An, sinif: str) -> list[kosu.Bacak]:
 def ozet(g: pd.DataFrame) -> dict:
     r = g["R"].to_numpy()
     return {"n": int(len(r)), "kazanma": float((r > 0).mean()), "ort_R": float(r.mean()),
-            "brut_R": float(g["brut_R"].mean()), "risk_pip_med": float(g["risk_pip"].median())}
+            "brut_R": float(g["brut_R"].dropna().mean()), "risk_pip_med": float(g["risk_pip"].median())}
 
 
 def main() -> int:
@@ -59,6 +63,7 @@ def main() -> int:
     kayit = []
     for cift in a.ciftler:
         d = vr.oku(cift, a)
+        do = kosu.orta(d)
         assert pd.Timestamp(d.t[-1], unit="s") < pd.Timestamp("2024-01-01")
         for an in sf.ANLAR:
             ev = sf.olaylar(d, an, cift)
@@ -68,6 +73,7 @@ def main() -> int:
                 for b in adaylar(an, e["sinif"]):
                     x = kosu.simule(d, e, b)
                     if x is not None:
+                        x["brut_R"] = kosu.brut(do, e, b)
                         x["bacak"] = bacak_ad(b)
                         x["aile"] = an.aile
                         kayit.append(x)

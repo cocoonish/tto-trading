@@ -20,6 +20,10 @@ Dolum kuralları (kötümser):
   (olaydan 2 dk önce – 15 dk sonra) `haber_kayma` eklenir.
 - Dolum dakikasında hedef sayılmaz, stop sayılır. Bir dakikada hem stop hem hedef görülürse stop sayılır.
 - R, PLANLANAN riskle ölçülür (planlanan giriş ile stop arası); boşlukla dolan bir emir R'yi şişirmez.
+
+Maliyetsiz sonuç (`brut`) aynı kuralların orta fiyatla, makas ve kayma olmadan yeniden simülasyonudur. (İlk yazımda
+maliyetsiz sonuç gerçek işlemin seviyelerinden kuruluyordu ve kırılım emrinin girişini tetik dakikasının açılışından
+alıyordu; bu, kırılımda ~0,2 R'lik sahte bir maliyetsiz kenar üretti. Net sonuç o değişiklikten etkilenmez.)
 """
 from __future__ import annotations
 
@@ -89,14 +93,15 @@ def emir(e: dict, b: Bacak) -> dict | None:
             "hedef": hedef, "risk": risk}
 
 
-def simule(d, e: dict, b: Bacak, kayma_pip: float = KAYMA_PIP) -> dict | None:
+def simule(d, e: dict, b: Bacak, kayma_pip: float = KAYMA_PIP,
+           haber_kayma_pip: float = HABER_KAYMA_PIP) -> dict | None:
     """Tek olayın tek bacağı. Dönüş: None (emir yok / dolmadı) ya da işlem kaydı."""
     em = emir(e, b)
     if em is None:
         return None
     pip = e["pip"]
     kayma = kayma_pip * pip
-    hk = HABER_KAYMA_PIP * pip
+    hk = haber_kayma_pip * pip
     j0, j1 = e["j0"], e["j1"]
     son_giris = min(j1, int(np.searchsorted(d.t, d.t[j0] + b.bekle * 60)))
     t = d.t
@@ -166,9 +171,27 @@ def simule(d, e: dict, b: Bacak, kayma_pip: float = KAYMA_PIP) -> dict | None:
         cikis = (cl[k] - ek) if y > 0 else (cl[k] + ek)
         neden = "zaman"
     r = (cikis - giris) * y / risk                          # net: makas ve kayma dahil
-    orta_giris = plan if em["tur"] == "limit" else d.mo[i]  # brüt: orta fiyattan, maliyetsiz
-    orta_cikis = {"stop": stop, "hedef": hedef}.get(neden, d.mc[i + k])
     return {"cift": e["cift"], "an": e["an"], "t0": e["t0"], "gun": e["gun"], "sinif": e["sinif"],
             "uyum": e["uyum"], "y": int(y), "giris_dk": int(t[i]), "cikis_dk": int(t[i + k]), "neden": neden,
-            "R": float(r), "brut_R": float((orta_cikis - orta_giris) * y / risk), "risk_pip": float(risk / pip),
-            "kazandi": bool(r > 0)}
+            "R": float(r), "risk_pip": float(risk / pip), "kazandi": bool(r > 0)}
+
+
+class _Orta:
+    """Dakika verisinin orta fiyat görünümü: alış ve satış dizilerinin yerine orta fiyat (kopya yok)."""
+
+    def __init__(self, d):
+        self.t, self.pip = d.t, d.pip
+        for x in "ohlc":
+            m = getattr(d, f"m{x}")
+            setattr(self, f"b{x}", m), setattr(self, f"a{x}", m), setattr(self, f"m{x}", m)
+
+
+def orta(d) -> _Orta:
+    return _Orta(d)
+
+
+def brut(d_orta, e: dict, b: Bacak) -> float | None:
+    """Maliyetsiz sonuç: AYNI kurallar orta fiyatla, makas ve kayma olmadan (dolum, stop ve hedef de orta fiyattan
+    sorulur). Dönüş: R ya da None (orta fiyatta emir dolmadıysa)."""
+    x = simule(d_orta, e, b, kayma_pip=0.0, haber_kayma_pip=0.0)
+    return None if x is None else x["R"]

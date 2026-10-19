@@ -90,9 +90,19 @@ def anahtarlar() -> dict[str, str]:
         for an, ss in ans.items():
             for s, v in ss.items():
                 K[f"A.{dn}.{an}.{s}.n"] = tam(v["n_yonlu"])
+                if v.get("ilk_orta_dk_med") is not None:
+                    K[f"A.{dn}.{an}.{s}.orta_dk"] = tam(round(v["ilk_orta_dk_med"]))
                 for m in M:
                     if m in v:
                         K[f"A.{dn}.{an}.{s}.{m}"] = yuzde(v[m])
+    for duzey, kk in DERS["ayna"].items():                      # Y: gerçek ve ayna yolu payları, fark (puan)
+        for k, ss in kk.items():
+            for s, dd in ss.items():
+                for dn, v in dd.items():
+                    for m in ("orta", "devam", "donus"):
+                        K[f"Y.{dn}.{k}.{s}.{m}"] = yuzde(v[m])
+                        K[f"Y.{dn}.{k}.{s}.{m}_ayna"] = yuzde(v[f"{m}_ayna"])
+                        K[f"Y.{dn}.{k}.{s}.{m}_fark"] = sayi((v[m] - v[f"{m}_ayna"]) * 100, 0, arti=True)
     for aile, ss in DERS["trend"].items():
         for s, uu in ss.items():
             for u, v in uu.items():
@@ -129,6 +139,8 @@ def anahtarlar() -> dict[str, str]:
                 K[f"{k}.{dn}.maliyet"] = sayi(o["brut_R"] - o["ort_R"], 2)
             g = DERS["dagilim"].get(b["bacak"], {}).get(dn)
             if g:
+                K[f"{k}.{dn}.gun_n"] = tam(g["gun_n"])
+                K[f"{k}.{dn}.gun_alt"], K[f"{k}.{dn}.gun_ust"] = r(g["gun_alt"]), r(g["gun_ust"])
                 K[f"{k}.{dn}.risk_pip"] = sayi(g["risk_pip_med"], 0)
                 if g["kazanc_ort"] is not None:
                     K[f"{k}.{dn}.kazanc"] = r(g["kazanc_ort"])
@@ -166,7 +178,15 @@ def anahtarlar() -> dict[str, str]:
     ref = [b for b in DERS["bacak"] if b["rol"] == "referans"]
     isl = [b for b in DERS["bacak"] if b["rol"] == "islem"]
     K["ref_sayi"], K["islem_sayi"] = str(len(ref)), str(len(isl))
+    tamponlar = {x["bacak"]["tampon"] for x in DERS["plan"]["referans"]}
+    assert len(tamponlar) == 1, "referans tepkilerin stop payı tek değer değil"
+    K["ref_tampon"] = sayi(tamponlar.pop(), 1)
     K["izle_sayi"] = str(len(DERS["plan"]["izle"]))
+    for x in DERS["plan"]["izle"]:
+        K[f"I.{x['aile']}.{x['sinif']}.R"] = r(x["en_iyi_R"])
+        K[f"I.{x['aile']}.{x['sinif']}.ad"] = bacak_ad(dict(zip(("tur", "hedef", "tampon"), _coz(x["en_iyi"]))))
+    for x in DERS["plan"]["islem"]:
+        K[f"B.islem.{x['aile']}.{x['sinif']}.ic.R3"] = sayi(x["ic"]["ort_R"], 3, arti=True)
     adaylar = [x["aday"] for x in DERS["plan"]["islem"] + DERS["plan"]["izle"]]
     K["aday_alt"], K["aday_ust"] = SAYI_AD[min(adaylar)], SAYI_AD[max(adaylar)]
     sik = [b for b in ref if b["aile"] in ("acilis", "fiksing")]
@@ -186,6 +206,12 @@ def anahtarlar() -> dict[str, str]:
     return K
 
 
+def _coz(ad: str) -> tuple:
+    """Aday adı ('devam:1.0:t0.5') → (tür, hedef, stop payı); secim.bacak_coz ile aynı okuma."""
+    p = ad.split(":")
+    return p[0], (p[1] if p[1] in ("uc", "orta") else float(p[1])), (float(p[2][1:]) if len(p) > 2 else 0.1)
+
+
 def bacak_ad(b: dict) -> str:
     """Bacağın okunuşu. R = planlanan risk (giriş ile stop arası); stop payı ilk mumun boyu cinsinden."""
     h = b["hedef"]
@@ -199,21 +225,45 @@ def bacak_ad(b: dict) -> str:
 
 
 # ─────────────────────────────────────────────────────────────── bloklar
-def _tablo(bas: list[str], satirlar: list[list[str]]) -> str:
-    out = ["| " + " | ".join(bas) + " |", "|" + "|".join(["---"] + ["---:"] * (len(bas) - 1)) + "|"]
+def _tablo(bas: list[str], satirlar: list[list[str]], sol: list[int] | None = None) -> str:
+    """Sayı sütunları sağa, metin sütunları (sol) sola yaslanır."""
+    sol = [0] if sol is None else sol
+    out = ["| " + " | ".join(bas) + " |", "|" + "|".join("---" if i in sol else "---:" for i in range(len(bas))) + "|"]
     out += ["| " + " | ".join(s) + " |" for s in satirlar]
     return "\n".join(out)
 
 
+KIS_SAATI = {"Londra": "İngiltere", "New York": "ABD", "Frankfurt": "Avrupa"}
+
+
 def b_an_tablo(*aileler: str) -> str:
-    sat = []
+    sat, notlar = [], []
     for a in DERS["an"]:
         if aileler and a["aile"] not in aileler:
             continue
-        tsi = a["tsi_yaz"] if a["tsi_yaz"] == a["tsi_kis"] else f"{a['tsi_yaz']} (kışın {a['tsi_kis']})"
+        tsi = a["tsi_yaz"] if a["tsi_yaz"] == a["tsi_kis"] else \
+            f"{a['tsi_yaz']} ({KIS_SAATI[a['bolge']]} kış saatinde {a['tsi_kis']})"
         ilk = f"{a['tf']} dk" + (" (fiksinge kadar)" if a["aile"] == "fiksing" else "")
         sat.append([a["ad"], f"{a['bolge']} {a['yerel']}", tsi, ilk, f"{a['pencere']} dk"])
-    return _tablo(["An", "Yerel saat", "TSİ", "İlk mum", "İzlenen süre"], sat)
+        for g in a.get("gecmis", []):
+            bit = ".".join(reversed(g["bit"].split("-")))
+            notlar.append(f"{a['ad']} {bit} tarihine kadar {a['bolge']} {g['yerel']}'te açıklanıyordu (TSİ {g['tsi_yaz']}; "
+                          f"{KIS_SAATI[a['bolge']]} kış saatinde {g['tsi_kis']}); ölçüm her olayı kendi gününün saatinden okur.")
+    tablo = _tablo(["An", "Yerel saat", "TSİ", "İlk mum", "İzlenen süre"], sat, sol=[0, 1, 2])
+    return tablo + ("\n\n" + " ".join(notlar) if notlar else "")
+
+
+def b_ayna(aile: str) -> str:
+    """Gerçek pay ile yolun aynasındaki pay (yön bilgisi yokken beklenen) yan yana, iki dönem."""
+    sat = []
+    for s in ("guclu", "normal", "reddedilen"):
+        for dn in ("ic", "dis"):
+            v = DERS["ayna"]["aile"][aile][s][dn]
+            sat.append([f"{SINIF_AD[s]} · {'2018–23' if dn == 'ic' else '2024 →'}", tam(v["n"])] +
+                       [f"{yuzde(v[m])} · {yuzde(v[m + '_ayna'])}" for m in ("orta", "devam", "donus")])
+    orta = "yarısını geri verdi" if aile == "fiksing" else "yarısına döndü"
+    return _tablo(["İlk mum · dönem", "n", f"{orta} (gerçek · ayna)", "devam etti (gerçek · ayna)",
+                   "tersine döndü (gerçek · ayna)"], sat, sol=[0])
 
 
 def b_davranis(aile: str) -> str:
@@ -223,11 +273,12 @@ def b_davranis(aile: str) -> str:
         if a["aile"] != aile:
             continue
         for s in ("guclu", "normal", "reddedilen"):
-            i, o = DERS["davranis"]["ic"][a["an"]].get(s), DERS["davranis"]["dis"][a["an"]].get(s)
-            if not i or not o:
+            i, o = DERS["davranis"]["ic"][a["an"]].get(s), DERS["davranis"]["dis"].get(a["an"], {}).get(s)
+            if not i and not o:
                 continue
-            sat.append([f"{a['ad']} · {SINIF_AD[s]}", tam(i["n_yonlu"]), yuzde(i["orta"]), yuzde(i["devam"]),
-                        yuzde(i["donus"]), tam(o["n_yonlu"]), yuzde(o["orta"]), yuzde(o["devam"]), yuzde(o["donus"])])
+            hucre = lambda v: [tam(v["n_yonlu"]), yuzde(v["orta"]), yuzde(v["devam"]), yuzde(v["donus"])] if v \
+                else ["0", "—", "—", "—"]
+            sat.append([f"{a['ad']} · {SINIF_AD[s]}"] + hucre(i) + hucre(o))
     orta = "yarısını geri verdi" if aile == "fiksing" else "yarısına döndü"
     ilk = "Fiksing · koşu" if aile == "fiksing" else "An · ilk mum"
     return _tablo([ilk, "2018–23 n", orta, "devam etti", "tersine döndü",
@@ -280,8 +331,22 @@ def b_bacaklar(rol: str, *aileler: str) -> str:
                     tam(i["n"]), yuzde(i["kazanma"]), r(i["ort_R"]),
                     tam(o["n"]), yuzde(o["kazanma"]) if o["n"] else "—", r(o["ort_R"]) if o["n"] else "—", aralik,
                     HUKUM_AD[b["hukum"]]])
-    return _tablo(["An ailesi · ilk mum", "Plan", "2018–23 n", "kazanma", "net R", "2024 → n", "kazanma", "net R",
-                   "%95 aralık", "hüküm"], sat)
+    return _tablo(["An ailesi · ilk mum", "Tepki", "2018–23 n", "kazanma", "net R", "2024 → n", "kazanma", "net R",
+                   "%95 aralık", "hüküm"], sat, sol=[0, 1, 9])
+
+
+def b_kisa(rol: str, *aileler: str) -> str:
+    """Derslerin içindeki kısa tepki tablosu (2024 →): kazanma, başa baş, net R, hüküm. Tepkinin kuralı metinde."""
+    sat = []
+    for b in DERS["bacak"]:
+        if b["rol"] != rol or (aileler and b["aile"] not in aileler):
+            continue
+        o, g = b["dis"], DERS["dagilim"].get(b["bacak"], {}).get("dis", {})
+        bb = (yuzde(-g["kayip_ort"] / (g["kazanc_ort"] - g["kayip_ort"]))
+              if g.get("kazanc_ort") is not None and g.get("kayip_ort") is not None else "—")
+        sat.append([f"{AILE_AD[b['aile']]} · {SINIF_AD[b['sinif']]}", tam(o["n"]),
+                    yuzde(o["kazanma"]) if o["n"] else "—", bb, r(o["ort_R"]) if o["n"] else "—", HUKUM_AD[b["hukum"]]])
+    return _tablo(["Ailesi · ilk mum", "2024 → işlem", "kazanma", "başa baş için", "net R", "hüküm"], sat, sol=[0, 5])
 
 
 def b_izle() -> str:
@@ -296,8 +361,8 @@ def b_sekil(slug: str, ad: str, *baslik: str) -> str:
     return f'<GrafikEmbed src="/arastirma/{slug}/{ad}.html" baslik="{" ".join(baslik)}" no="{no}" kaynak="Dukascopy" />'
 
 
-BLOK = {"an_tablo": b_an_tablo, "davranis": b_davranis, "trend": b_trend, "kucuk": b_kucuk, "ay_sonu": b_ay_sonu,
-        "bacaklar": b_bacaklar, "izle": b_izle}
+BLOK = {"an_tablo": b_an_tablo, "ayna": b_ayna, "davranis": b_davranis, "trend": b_trend, "kucuk": b_kucuk, "ay_sonu": b_ay_sonu,
+        "bacaklar": b_bacaklar, "kisa": b_kisa, "izle": b_izle}
 
 YER = re.compile(r"\{\{\s*(#?)\s*(.*?)\s*\}\}", re.S)
 

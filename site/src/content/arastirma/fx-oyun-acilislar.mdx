@@ -1,11 +1,11 @@
 ---
 title: 'FX Gün İçi Oyun Planı 2: Açılışlar'
-description: "Tokyo, Londra ve New York açılışlarının ilk 15 dakikası: güçlü, normal, reddedilen ve küçük ilk mumdan sonra fiyat ne yapıyor, trend bunu değiştiriyor mu, ve bu davranışa dayanan tepkiler maliyetten sonra ne verdi."
+description: "Tokyo, Londra ve New York açılışlarının ilk 15 dakikası: güçlü, normal, reddedilen ve küçük ilk mumdan sonra fiyat ne yapıyor, bunun ne kadarı mumun kendi şeklinden geliyor, trend bunu değiştiriyor mu, ve bu davranışa dayanan tepkiler maliyetten sonra ne verdi."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'oyun-plani', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Açılışın ilk mumu neredeyse her zaman yarısına geri döner ve oradan sonrası yazı turadır. Güçlü ilk mum biraz daha sık devam eder ama bu fark, makas ve stopla birlikte bir kazanca dönüşmüyor. Ders açılışların oyun planını sınıf sınıf verir."
+ozet: "Açılışın ilk mumu çoğu zaman yarısına geri döner ve güçlü mum çoğu zaman devam ediyor gibi görünür; ikisi de mumun kendi şeklinden geliyor, fiyat yön bilgisi taşımıyor. Ders açılışların oyun planını sınıf sınıf verir: ne beklenir, ne kadar sürer, neye işlem açılmaz."
 seviye: 'giris'
 onkosul: ['fx-oyun-okuma']
 ---
@@ -13,21 +13,21 @@ onkosul: ['fx-oyun-okuma']
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
 Açılış bir seansın ilk sözüdür. Tokyo'da gece birikmiş emirler, Londra'da günün en büyük likiditesinin gelişi, New
-York'ta hisse piyasasıyla birlikte ABD'nin masaya oturması. Üçünde de ilk 15 dakika çoğu zaman
-günün ilk aralığını çizer ve işlemcilerin çoğu o aralığa göre plan yapar. Bu ders o aralıktan sonra fiyatın genelde ne
-yaptığını anlatır.
+York'ta hisse piyasasıyla birlikte ABD'nin masaya oturması. Üçünde de ilk 15 dakika günün ilk
+aralığını çizer ve işlemcilerin çoğu o aralığa göre plan yapar. Bu ders o aralıktan sonra fiyatın genelde ne yaptığını
+ve bunun ne kadarının bir şey söylediğini anlatır.
 
 | An | Yerel saat | TSİ | İlk mum | İzlenen süre |
-|---|---:|---:|---:|---:|
+|---|---|---|---:|---:|
 | Tokyo açılışı | Tokyo 09:00 | 03:00 | 15 dk | 180 dk |
-| Londra açılışı | Londra 08:00 | 10:00 (kışın 11:00) | 15 dk | 180 dk |
-| New York açılışı | New York 09:30 | 16:30 (kışın 17:30) | 15 dk | 120 dk |
+| Londra açılışı | Londra 08:00 | 10:00 (İngiltere kış saatinde 11:00) | 15 dk | 180 dk |
+| New York açılışı | New York 09:30 | 16:30 (ABD kış saatinde 17:30) | 15 dk | 120 dk |
 
 ## Plan tek cümlede
 
-**Açılışın ilk mumunu kovalamak da, yarısına döndüğünde ona katılmak da maliyetten sonra kaybettiriyor.** İlk mum
-neredeyse her zaman yarısına geri döner, ama oradan sonra kendi ucuna gitme ihtimali yarı yarıyadır. Açılışın bir işlem
-fırsatı değil bir **okuma** fırsatı olduğu, iki dönemde de aynı sayılarla görülüyor.
+**Açılışın ilk mumu bir aralık çizer, bir yön değil.** Yarısına dönmesi de, güçlü mumun devam etmesi de mumun kendi
+şeklinin verdiği paydır; fiyatın yönü rastgele olsaydı da aynı sayılar çıkardı. Açılış bir işlem fırsatı değil, günün
+ilk referanslarını işaretleme anıdır.
 
 ## İlk mumdan sonra fiyat nereye gidiyor
 
@@ -36,13 +36,25 @@ yukarı, mumun yönüne devam demektir.
 
 <GrafikEmbed src="/arastirma/fx-oyun-acilislar/01_patika.html" baslik="Açılıştan sonra ortalama fiyat yolu, ilk mumun yönünde" no="01" kaynak="Dukascopy" />
 
-Çizgilerin hepsi sıfıra yakın dolaşıyor. Güçlü bir açılış mumundan sonra bile **ortalama** fiyat mumun yönünde anlamlı
-bir yol almıyor. Bu, güçlü mumun hiç devam etmediği anlamına gelmez; devam ettiği günlerle döndüğü günlerin ortalamada
-birbirini götürdüğü anlamına gelir.
+Çizgilerin hepsi sıfıra yakın dolaşıyor. Güçlü bir açılış mumundan sonra bile ortalama fiyat mumun yönünde yol
+almıyor: devam ettiği günlerle döndüğü günler ortalamada birbirini götürüyor.
 
-## Sınıf sınıf
+## Sınıf sınıf, şansın payıyla
 
-Aşağıdaki tablo her açılışın her sınıfında yarısına dönüş, devam ve dönüş paylarını iki dönemde verir:
+Her sınıfta yarısına dönüş, devam ve dönüş payı; yanında yolun aynasında, yani yön rastgele olsaydı, aynı payın
+değeri. Üç açılışın toplamı:
+
+| İlk mum · dönem | n | yarısına döndü (gerçek · ayna) | devam etti (gerçek · ayna) | tersine döndü (gerçek · ayna) |
+|---|---:|---:|---:|---:|
+| güçlü · 2018–23 | 2.801 | %74 · %75 | %54 · %53 | %36 · %37 |
+| güçlü · 2024 → | 1.341 | %77 · %76 | %56 · %55 | %37 · %37 |
+| normal · 2018–23 | 10.403 | %88 · %88 | %49 · %49 | %49 · %49 |
+| normal · 2024 → | 4.864 | %89 · %87 | %48 · %51 | %50 · %48 |
+| reddedilen · 2018–23 | 3.233 | %89 · %88 | %48 · %49 | %50 · %49 |
+| reddedilen · 2024 → | 1.461 | %89 · %89 | %48 · %48 | %51 · %51 |
+
+Gerçek pay ile aynadaki pay her satırda birkaç puan içinde. Açılışın ilk mumu, kendi şeklinin ötesinde, fiyatın
+sonraki iki üç saati hakkında bir şey söylemiyor. Her açılış tek tek, iki dönemde:
 
 | An · ilk mum | 2018–23 n | yarısına döndü | devam etti | tersine döndü | 2024 → n | yarısına döndü | devam etti | tersine döndü |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -56,48 +68,43 @@ Aşağıdaki tablo her açılışın her sınıfında yarısına dönüş, devam
 | New York açılışı · normal | 3.414 | %88 | %50 | %48 | 1.625 | %89 | %47 | %52 |
 | New York açılışı · reddedilen | 1.143 | %88 | %51 | %47 | 515 | %88 | %51 | %47 |
 
-İki dönemin sayıları birbirine çok yakın. Bu serinin en sağlam bulgusu budur: açılışların davranışı yıldan yıla
-değişmiyor.
-
-<GrafikEmbed src="/arastirma/fx-oyun-acilislar/02_devam_donus.html" baslik="Devam ve dönüş: üç açılış, üç sınıf, iki dönem" no="02" kaynak="Dukascopy" />
+<GrafikEmbed src="/arastirma/fx-oyun-acilislar/02_devam_donus.html" baslik="Devam ve dönüş: üç açılış, üç sınıf, gerçek ve ayna" no="02" kaynak="Dukascopy" />
 
 ### Güçlü ilk mum
 
-Fiyat açılışta bir yöne gitmiş ve o yönde kapanmış. Üç açılışın toplamında 2018–2023'te güçlü mum
-%54 devam etti, %36 tersine döndü; 2024 → döneminde
-%56 ve %37. Devam dönüşten daha sık. Ama güçlü mum da çoğu
-zaman yarısına döner: %74 (2024 → %77).
+Fiyat açılışta bir yöne gitmiş ve o yönde kapanmış. Devam payı (%54) dönüşten
+(%36) yüksek, ve bu fark akla "yön var" dedirtir. Aynada da aynı fark çıkıyor
+(%53 ve %37): güçlü mum ucuna yakın kapandığı için
+kendi ucunun yarım mum boyu ötesi, öbür ucundan çok daha yakındır. 2024 → döneminde de aynı: gerçek
+%56, ayna %55.
+
+Güçlü mum yarısına dönmeyi genelde biraz zaman alarak yapar. Yarısına dönenlerde ortanca süre Londra'da
+14, Tokyo'da 20, New York'ta
+14 dakika.
 
 Oyun planı şöyle okur:
 
-- Güçlü mumun yönü günün ilk ipucudur. Ama mumun ucunda, kapanışta mumun yönünde girmek en kötü yerdir: fiyatın
-  çoğu zaman yarıya geri geleceği bilinir.
-- Yarıya geri gelen güçlü mum ikiye ayrılır: kendi ucuna dönenler ve öbür uca gidenler. Yarısına dönen güçlü
-  mumların yalnız %47 kadarı kendi ucuna geri gitti (2024 → %46).
-  Yani geri çekilme "ucuz giriş" değil, yazı turanın başladığı yerdir.
-- Güçlü mumun karşı ucu kırılırsa açılışın sözü geri alınmıştır. O günler azınlıktadır ama hepsi stopa gider.
+- Güçlü mumun yönü bir işlem gerekçesi değildir. Kovalamak da, yarısına gelince katılmak da maliyetten sonra
+  kaybettirdi (aşağıda).
+- Güçlü mumun iki ucu günün ilk referanslarıdır. Gün içinde fiyat bu uçlara geldiğinde ne yaptığı bu derste
+  ölçülmedi.
 
-### Normal ilk mum
+### Normal ve reddedilen ilk mum
 
-Açılışların çoğu buraya düşer. Normal mum %88 yarısına döndü; devam
-(%49) ile dönüş (%49) eşit. 2024 → döneminde
-%48 ve %50.
+Açılışların çoğu buraya düşer. Normal mum %88 yarısına döndü ve bu çoğu zaman hemen olur:
+ortanca süre Londra'da 5, New York'ta 4
+dakika. Ama normal mum ortasına yakın kapanır, yani yarısına dönüş aynada da %88.
+Devam ile dönüş eşit (%49 ve %49).
 
-Oyun planı: normal mum yön söylemez. Açılış aralığı günün ilk referansıdır; üst ve alt ucu, gün içinde fiyatın
-nerede tepki verdiğine bakmak için işaretlenir. Mumun kendisi işlem gerekçesi değildir.
-
-### Reddedilen ilk mum
-
-Açılışta fiyat bir yöne gitmiş, geri itilmiş ve uzun bir fitil bırakmış. İşlemcilerin çoğu bunu güçlü bir işaret
-olarak okur: "o seviyede satıcı var". Sayılar bu okumayı desteklemiyor. Reddin yönünde devam
-%48, dönüş %50; 2024 → döneminde
-%48 ve %51. Fitil bir şey söylüyorsa bile, açılıştan
-sonraki saatlere taşımıyor.
+Reddedilen mum işlemcilerin çoğunun güçlü bir işaret saydığı mumdur: "o seviyede satıcı var". Sayılar bu okumayı
+desteklemiyor. Reddin yönünde devam %48, dönüş %50;
+aynada %49 ve %49. Fitil bir şey söylüyorsa
+bile, açılıştan sonraki saatlere taşımıyor.
 
 ### Küçük ilk mum
 
-Açılış sessiz geçmiş: ilk mum tipik boyun altında. Burada akla gelen tepki, aralık kırıldığında kırılan tarafa
-gitmektir ("sıkışma patlar"). Kırılan tarafta fiyatın bir mum boyu ilerleme payı:
+Açılış sessiz geçmiş: ilk mum tipik boyun altında. Akla gelen tepki, aralık kırıldığında kırılan tarafa gitmektir
+("sıkışma patlar"). Kırılan tarafta fiyatın bir mum boyu daha ilerleme payı:
 
 | An | 2018–23 n | kırılan tarafta 1 mum boyu gitti | 2024 → n | kırılan tarafta 1 mum boyu gitti |
 |---|---:|---:|---:|---:|
@@ -105,12 +112,17 @@ gitmektir ("sıkışma patlar"). Kırılan tarafta fiyatın bir mum boyu ilerlem
 | Londra açılışı | 603 | %52 | 324 | %52 |
 | New York açılışı | 663 | %52 | 349 | %52 |
 
-Pay yarı yarıya. Sıkışmanın bir yöne patladığı doğru olabilir, ama hangi yöne patladığını kırılımın ilk dakikası
-söylemiyor.
+Bu payın tek başına bir anlamı yok; anlamı tepkinin sonucundadır, o da aşağıda: kırılımın yönüne girmek maliyetten
+önce sıfıra yakın, maliyetten sonra eksi.
 
 ## Trend bir şey değiştiriyor mu
 
-Günlük trend yönünde açılan bir güçlü mumun daha sık devam etmesi beklenir. 2018–2023'te üç açılışın toplamında:
+Günlük trend yönünde açılan güçlü bir mumun daha sık devam etmesi beklenir. 2018–2023'te üç açılışın toplamında
+trend yönündeki güçlü mum %55, trende karşı olanı %54,
+trend yatayken %55 devam etti. Trend sayıyı değiştirmiyor. Bütün sınıflar:
+
+<details>
+<summary>Trend ayrımı tablosu (2018–2023)</summary>
 
 | İlk mum · trend | n | devam etti | tersine döndü | yarısına döndü |
 |---|---:|---:|---:|---:|
@@ -124,44 +136,44 @@ Günlük trend yönünde açılan bir güçlü mumun daha sık devam etmesi bekl
 | reddedilen · trende karşı | 1.419 | %49 | %50 | %88 |
 | reddedilen · trend yatay | 502 | %50 | %47 | %90 |
 
-Değiştirmiyor. Trend yönündeki güçlü mum %55, trende karşı olanı
-%54 devam etti. Plan trendi bir okuma bilgisi olarak taşır; karar ölçütü yapmaz.
+</details>
 
 ## Bu okumaları işleme çevirmek
 
-Her sınıf için akla ilk gelen tepki, önceden yazılmış kurallarla sınandı. Yön sınıflarında tepki: mumun yarısına
-limit emirle mumun yönünde gir, stopu öbür ucun hemen ötesine koy, yarım R hedefle. Küçük mumda: kırılan uçtan gir,
-stopu öbür uca koy, yarım R hedefle. Sonuç:
+Her sınıf için akla ilk gelen tepki sınandı. Yön sınıflarında: mumun yarısına limit emirle mumun yönünde gir, stopu
+öbür ucun 0,1 mum boyu ötesine koy, yarım R hedefle. Küçük mumda: kırılan uçtan gir, stopu öbür ucun
+0,1 mum boyu ötesine koy, yarım R hedefle. 2024 → dönemindeki sonuç:
 
-| An ailesi · ilk mum | Plan | 2018–23 n | kazanma | net R | 2024 → n | kazanma | net R | %95 aralık | hüküm |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Seans açılışları · güçlü | mumun yarısına limitle mumun yönünde · stop öbür ucun 0,1 mum boyu ötesinde · hedef 0,5 R | 1.703 | %61 | −0,10 | 845 | %61 | −0,10 | −0,15 … −0,05 | çalışmıyor |
-| Seans açılışları · normal | mumun yarısına limitle mumun yönünde · stop öbür ucun 0,1 mum boyu ötesinde · hedef 0,5 R | 7.239 | %55 | −0,20 | 3.238 | %55 | −0,19 | −0,22 … −0,17 | çalışmıyor |
-| Seans açılışları · reddedilen | mumun yarısına limitle mumun yönünde · stop öbür ucun 0,1 mum boyu ötesinde · hedef 0,5 R | 2.411 | %57 | −0,18 | 1.041 | %56 | −0,19 | −0,24 … −0,15 | çalışmıyor |
-| Seans açılışları · küçük | küçük mumun kırılan ucundan · stop öbür ucun 0,1 mum boyu ötesinde · hedef 0,5 R | 1.614 | %60 | −0,23 | 804 | %61 | −0,20 | −0,26 … −0,15 | çalışmıyor |
+| Ailesi · ilk mum | 2024 → işlem | kazanma | başa baş için | net R | hüküm |
+|---|---:|---:|---:|---:|---|
+| Seans açılışları · güçlü | 845 | %61 | %68 | −0,10 | çalışmıyor |
+| Seans açılışları · normal | 3.238 | %55 | %68 | −0,19 | çalışmıyor |
+| Seans açılışları · reddedilen | 1.041 | %56 | %68 | −0,19 | çalışmıyor |
+| Seans açılışları · küçük | 804 | %61 | %74 | −0,20 | çalışmıyor |
 
-Kazanma oranları yüksek: güçlü mumda %61, küçük mumda
-%61. Dört tepkinin dördü de "çalışmıyor" hükmü aldı. Sebepleri ayrı:
+Kazanma oranları yüksek, dördü de "çalışmıyor". İki şey birlikte kaybettiriyor:
 
-- **Yön sınıflarında kenar maliyetten önce de yok.** Güçlü mum tepkisinin maliyetsiz sonucu
-  −0,07 R, normal mumunki −0,17 R. Limit emir
-  makas ve kayma ödemediği için maliyet küçük (0,02 R); kaybettiren şey
-  geri çekilmeden sonraki yazı turadır. Yarım R hedefle başa baş için işlemlerin
-  %68 kadarını kazanmak gerekirdi.
-- **Küçük mumda kenar var ama maliyet onu yutuyor.** Kırılım tepkisinin maliyetsiz sonucu
-  +0,13 R, maliyet 0,34 R: küçük mum küçük
-  stop demektir (ortanca risk 6 pip) ve makasla kayma o stopun büyük bir
-  parçasıdır. Net sonuç −0,20 R.
+- **Maliyetten önce kenar yok.** Aynı kurallar orta fiyatla, makas ve kayma olmadan sınandığında da sonuç sıfıra yakın
+  ya da eksi: güçlü mumda −0,02 R, normal mumda −0,05 R,
+  küçük mumun kırılımında +0,02 R. Limit emir yalnız fiyat geri geldiğinde dolar, ve
+  geri gelen günlerden sonrası yazı turadır.
+- **Maliyet sıfırı eksiye çeviriyor.** Açılış mumu küçüktür, stop da küçüktür (ortanca risk normal mumda
+  5, küçük mumda 6 pip). Makas bu
+  stopun görünür bir parçasıdır: normal mumda maliyetin payı 0,14 R, küçük mumun
+  kırılımında (kayma da ödenir) 0,22 R.
 
-2018–2023'te açılışların hiçbir sınıfında, denenen hiçbir tepki maliyetten sonra artıda kalmadı. Plan bu hücrelerde
-"izle, işlem açma" der; ayrıntı [backtest dersinde](/arastirma/fx-oyun-backtest/).
+2018–2023'te açılışın her sınıfında beş altı tepki daha denendi: kapanışta mumun yönünde girmek, daha uzak hedef,
+daha geniş stop. Hiçbiri maliyetten sonra artıda kalmadı. En iyisi güçlü mumda kapanışta mumun yönünde girmekti
+(mum kapanınca mumun yönünde · stop öbür ucun 0,5 mum boyu ötesinde · hedef 1,0 R): işlem başına −0,08 R. Yarısına limitle girmekle arasında belirgin fark
+yok, ve kovalamak 2024 sonrasında sınanmadı. Plan bu hücrelerde "izle, işlem açma" der; ayrıntı
+[backtest dersinde](/arastirma/fx-oyun-backtest/).
 
 ## Açılış için masa kartı
 
-- **Açılışın ilk mumu bir aralık çizer, bir yön değil.** Aralığın üst ve alt ucu günün ilk referanslarıdır.
-- **Yarısına dönüş beklenir.** Yarıya geri gelen fiyat ne alış ne satış yeridir; açılışın olağan hâlidir.
-- **Güçlü mumun yönü hafif bir eğilimdir.** Gün içinde sonraki bir kurulumun yönünü seçerken işe yarayabilir;
-  tek başına bir giriş sebebi değildir.
-- **Fitile ve trende fazla anlam yükleme.** İkisi de sayılarda görünmüyor.
-- **Küçük stop, büyük maliyet.** Sessiz bir açılışın kırılımına girmek, maliyetin stopun büyük bir parçası olduğu
-  bir işlemdir.
+- **İlk 15 dakika bir aralık çizer.** Üst ve alt ucu günün ilk referanslarıdır.
+- **Normal mumda yarısına dönüş birkaç dakika içinde beklenir.** Bu, mumun şeklinin sonucudur; ne alış ne satış
+  sebebidir.
+- **Güçlü mumun "devam ediyor" görüntüsü yanıltıcıdır.** Yön rastgele olsaydı da aynı oranda devam ederdi.
+- **Fitile ve trende anlam yükleme.** İkisi de sayılarda görünmüyor.
+- **Sessiz açılışın kırılımı bir sinyal değildir.** Kırılımın yönüne girmek maliyetten önce de kazandırmadı.
+- **Açılışta masada kalmanın sebebi işlem değil, referanstır.** Plan bu anda işlem önermiyor.

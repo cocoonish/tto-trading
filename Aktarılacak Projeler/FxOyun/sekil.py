@@ -105,29 +105,35 @@ def okuma_01():
 
 # ─────────────────────────────────────────────────────────────── okuma 02: yarısı / devam / dönüş
 def okuma_02():
-    A = D["aile_davranis"]
-    kat = [(a, s) for a in AILE_AD for s in ("guclu", "normal", "reddedilen")]
+    Y = D["ayna"]["aile"]
+    # Merkez bankası satırları dışarıda: birkaç düzine olayla fark ±50 puana çıkar ve öbür ailelerin birkaç puanlık
+    # farkını eksene ezer; o aile haber dersinde kendi tablosuyla verilir.
+    kat = [(a, s) for a in ("acilis", "fiksing", "veri") for s in ("guclu", "normal", "reddedilen")]
     etiket = [f"{AILE_AD[a]} · {SINIF_AD[s]}" for a, s in kat][::-1]
-    olcu = [("orta", "Yarısına döndü"), ("devam", "Devam etti"), ("donus", "Tersine döndü")]
+    olcu = [("orta", "Yarısına döndü (fiksingde: geri verdi)"), ("devam", "Devam etti"), ("donus", "Tersine döndü")]
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.07,
                         subplot_titles=[ad for _, ad in olcu])
+    uc = 0
     for i, (m, _) in enumerate(olcu):
         for dn, renk, sembol in (("ic", GRI, "circle"), ("dis", CLARET, "diamond")):
-            x = [A[dn][a][s][m] * 100 for a, s in kat][::-1]
-            n = [A[dn][a][s]["n"] for a, s in kat][::-1]
+            v = [Y[a][s][dn] for a, s in kat][::-1]
+            x = [(r[m] - r[f"{m}_ayna"]) * 100 for r in v]
+            uc = max(uc, max(abs(t) for t in x))
             fig.add_trace(go.Scatter(x=x, y=etiket, mode="markers", name=DONEM[dn], showlegend=i == 0,
                                      marker=dict(color=renk, size=9, symbol=sembol),
-                                     customdata=[f"{e} · {DONEM[dn]} · {so.yuzde(v, 0)} · {nn} olay"
-                                                 for e, v, nn in zip(etiket, x, n)],
+                                     customdata=[f"{e} · {DONEM[dn]} · gerçek {pay(r[m])}, ayna {pay(r[m + '_ayna'])}"
+                                                 f" · {r['n']} olay" for e, r in zip(etiket, v)],
                                      hovertemplate="%{customdata}<extra></extra>"), row=i + 1, col=1)
-    fig.update_xaxes(range=[0, 100], ticksuffix="", tickprefix="%", row=3, col=1)
-    fig.update_xaxes(range=[0, 100], tickprefix="%")
+        fig.add_vline(x=0, line=dict(color="#bdb8ad", width=1), row=i + 1, col=1)
+    uc = 5 * (int(uc // 5) + 1)
+    fig.update_xaxes(range=[-uc, uc], title_text="gerçek pay eksi aynadaki pay, puan", title_font=dict(size=11),
+                     row=3, col=1)
     fig.update_yaxes(tickfont=dict(size=11))
     _bitir(fig, "fx-oyun-okuma", "02_yarisi",
-           "Şekil 02 — Açılışta yarısına dönüş neredeyse kesin; fiksingte koşu geri verilir ama dönmez",
-           ["İlk mumdan sonra izlenen süre içinde: fiyat mumun yarısına döndü mü, kendi ucunu yarım mum boyu aştı mı, "
-            "öbür ucunu kırdı mı. Gri daire 2018–2023, bordo elmas 2024 →; dört an ailesi, üç yönlü sınıf.", KAYNAK],
-           1180)
+           "Şekil 02 — Gerçek pay eksi şansın payı: açılışta sıfır, fiksingte geri verme",
+           ["Her olayda ilk mumdan sonraki yol, ilk mumun kapanışına göre aynalanıp aynı ölçüler yeniden hesaplandı "
+            "(yön rastgele olsaydı beklenen pay). Sıfırın sağı şanstan sık, solu şanstan seyrek. Gri daire "
+            "2018–2023, bordo elmas 2024 →. Merkez bankası kararları olay az olduğu için haber dersinde.", KAYNAK], 1000)
 
 
 # ─────────────────────────────────────────────────────────────── patika (açılış, fiksing, haber)
@@ -175,9 +181,15 @@ def _havuz_yol(anlar: list[str]) -> dict:
     return out
 
 
+def _an_baslik(a: str) -> str:
+    x = AN[a]
+    if x["tsi_yaz"] == x["tsi_kis"]:
+        return f"{x['ad']} (TSİ {x['tsi_yaz']})"
+    return f"{x['ad']} (TSİ {x['tsi_yaz']}; kış saatinde {x['tsi_kis']})"
+
+
 def acilis_01():
-    g = [(f"{AN[a]['ad']} (TSİ {AN[a]['tsi_yaz']}; kışın {AN[a]['tsi_kis']})" if AN[a]["tsi_yaz"] != AN[a]["tsi_kis"]
-          else f"{AN[a]['ad']} (TSİ {AN[a]['tsi_yaz']})", D["patika"][a]) for a in ("tokyo_acilis", "londra_acilis", "ny_acilis")]
+    g = [(_an_baslik(a), D["patika"][a]) for a in ("tokyo_acilis", "londra_acilis", "ny_acilis")]
     _patika("fx-oyun-acilislar", "01_patika", g,
             "Şekil 01 — Açılıştan sonra ortalama fiyat ilk mumun yönünde yol almıyor",
             "İlk mum kapandıktan sonra ortalama fiyat, ilk mumun kapanışından ve ilk mumun yönünde, ilk mumun boyu "
@@ -185,8 +197,7 @@ def acilis_01():
 
 
 def fiksing_01():
-    g = [(f"{AN[a]['ad']} (TSİ {AN[a]['tsi_yaz']}; kışın {AN[a]['tsi_kis']})" if AN[a]["tsi_yaz"] != AN[a]["tsi_kis"]
-          else f"{AN[a]['ad']} (TSİ {AN[a]['tsi_yaz']})", D["patika"][a]) for a in ("tokyo_fiks", "wmr")]
+    g = [(_an_baslik(a), D["patika"][a]) for a in ("tokyo_fiks", "wmr")]
     _patika("fx-oyun-fiksingler", "01_patika", g,
             "Şekil 01 — Fiksingden sonra koşunun küçük bir kısmı geri veriliyor, büyük dönüş yok",
             "Fiksingden sonra ortalama fiyat, fiksing anındaki fiyattan ve fiksinge giden koşunun yönünde, koşunun boyu "
@@ -203,31 +214,37 @@ def haber_01():
 
 
 # ─────────────────────────────────────────────────────────────── açılış 02: devam ve dönüş
-def _cift_panel(slug, ad, kat, etiket, olcu, bas, alt, satir_px=34):
+def _cift_panel(slug, ad, kat, etiket, olcu, bas, alt, satir_px=34, ayna=None):
     fig = make_subplots(rows=1, cols=len(olcu), shared_yaxes=True, horizontal_spacing=0.06,
                         subplot_titles=[o[1] for o in olcu])
     for j, (getir, _) in enumerate(olcu):
-        for dn, renk, sembol in (("ic", GRI, "circle"), ("dis", CLARET, "diamond")):
-            x = [getir(k, dn) for k in kat]
-            fig.add_trace(go.Scatter(x=[v * 100 for v in x], y=etiket, mode="markers", name=DONEM[dn], showlegend=j == 0,
-                                     marker=dict(color=renk, size=9, symbol=sembol),
-                                     customdata=[f"{e} · {DONEM[dn]} · {pay(v)}" for e, v in zip(etiket, x)],
+        izler = [("ic", GRI, "circle", getir, DONEM["ic"]), ("dis", CLARET, "diamond", getir, DONEM["dis"])]
+        if ayna:
+            izler += [("ic", GRI, "circle-open", ayna[j], DONEM["ic"] + " ayna"),
+                      ("dis", CLARET, "diamond-open", ayna[j], DONEM["dis"] + " ayna")]
+        for dn, renk, sembol, f, ad_ in izler:
+            x = [f(k, dn) for k in kat]
+            fig.add_trace(go.Scatter(x=[v * 100 for v in x], y=etiket, mode="markers", name=ad_, showlegend=j == 0,
+                                     marker=dict(color=renk, size=9, symbol=sembol, line=dict(width=1.5, color=renk)),
+                                     customdata=[f"{e} · {ad_} · {pay(v)}" for e, v in zip(etiket, x)],
                                      hovertemplate="%{customdata}<extra></extra>"), row=1, col=j + 1)
-        fig.update_xaxes(range=[0, 100], tickvals=[25, 50, 75], tickprefix="%", row=1, col=j + 1)
+        fig.update_xaxes(range=[0, 100], tickvals=[25, 50, 75], ticktext=["%25", "%50", "%75"], row=1, col=j + 1)
     fig.update_yaxes(autorange="reversed", tickfont=dict(size=11))
-    _bitir(fig, slug, ad, bas, [alt, KAYNAK], satir_px * len(kat) + 150)
+    _bitir(fig, slug, ad, bas, [alt, KAYNAK], satir_px * len(kat) + 170)
 
 
 def acilis_02():
     kat = [(a, s) for a in ("tokyo_acilis", "londra_acilis", "ny_acilis") for s in ("guclu", "normal", "reddedilen")]
     etiket = [f"{AN[a]['ad'].removesuffix(' açılışı')} · {SINIF_AD[s]}" for a, s in kat]
-    dv = D["davranis"]
+    Ya = D["ayna"]["an"]
     _cift_panel("fx-oyun-acilislar", "02_devam_donus", kat, etiket,
-                [(lambda k, dn: dv[dn][k[0]][k[1]]["devam"], "Devam etti"),
-                 (lambda k, dn: dv[dn][k[0]][k[1]]["donus"], "Tersine döndü")],
-                "Şekil 02 — Güçlü açılış mumu dönüşten sık devam ediyor; normal ve reddedilen mumda yarı yarıya",
+                [(lambda k, dn: Ya[k[0]][k[1]][dn]["devam"], "Devam etti"),
+                 (lambda k, dn: Ya[k[0]][k[1]][dn]["donus"], "Tersine döndü")],
+                "Şekil 02 — Güçlü açılış mumu dönüşten sık devam ediyor gibi görünür; yolun aynası da aynısını veriyor",
                 "Devam: fiyat öbür ucu görmeden kendi ucunu yarım mum boyu aştı. Dönüş: kendi ucunu yarım mum boyu "
-                "aşmadan öbür ucu kırdı. Gri daire 2018–2023, bordo elmas 2024 →.")
+                "aşmadan öbür ucu kırdı. Dolu işaret gerçek, boş işaret yolun aynası (yön rastgele olsaydı). Gri "
+                "2018–2023, bordo 2024 →.",
+                ayna=[lambda k, dn: Ya[k[0]][k[1]][dn]["devam_ayna"], lambda k, dn: Ya[k[0]][k[1]][dn]["donus_ayna"]])
 
 
 def fiksing_02():
@@ -269,9 +286,10 @@ def _r_aralik(slug, ad, liste, bas, alt):
 def haber_02():
     liste = [b for b in bacaklar("islem")]
     _r_aralik("fx-oyun-haberler", "02_bacaklar", liste,
-              "Şekil 02 — İşlem tepkileri: merkez bankasında iki dönemde artı, veride 2024 sonrasında eksi",
-              "İşlem başına maliyet sonrası sonuç (R = riske edilen mesafe). Gri daire 2018–2023, bordo elmas 2024 → "
-              "ve %95 güven aralığı. Merkez bankasının güçlü ve reddedilen mumunda 2024 → işlem sayısı hüküm için az.")
+              "Şekil 02 — İşlem tepkileri: merkez bankasında 2024 sonrasında artı, veride eksi",
+              "İşlem başına maliyet sonrası sonuç (R = riske edilen mesafe). Gri daire 2018–2023 (seçim kuralı gereği "
+              "artı), bordo elmas 2024 → ve işlem düzeyinde %95 güven aralığı. Merkez bankasının güçlü ve reddedilen "
+              "mumunda 2024 → işlemleri birkaç karar gününe düşer; hüküm için az.")
 
 
 def backtest_01():
@@ -317,9 +335,9 @@ def backtest_02():
     fig.update_yaxes(autorange="reversed", tickfont=dict(size=11))
     fig.update_xaxes(title_text="işlem başına sonuç, R (2024 →)", title_font=dict(size=11))
     _bitir(fig, "fx-oyun-backtest", "02_maliyet",
-           "Şekil 02 — Yön sınıflarında kenar maliyetten önce de yok; küçük mumda maliyet onu yutuyor",
-           [f"2024 → döneminde en az {EN_AZ} işlemi olan tepkiler (daha azında hüküm kurulmaz). Gri: orta fiyattan, makas ve kayma yok. Bordo: alış-satış "
-            "fiyatından, kayma dahil.", KAYNAK], 34 * len(liste) + 160)
+           "Şekil 02 — Açılışta kenar maliyetten önce de yok; fiksingteki küçük kenarı maliyet yiyor",
+           [f"2024 → döneminde en az {EN_AZ} işlemi olan tepkiler (daha azında hüküm kurulmaz). Gri: aynı kurallar "
+            "orta fiyatla, makas ve kayma olmadan. Bordo: alış-satış fiyatından, kayma dahil.", KAYNAK], 34 * len(liste) + 160)
 
 
 def backtest_03():
