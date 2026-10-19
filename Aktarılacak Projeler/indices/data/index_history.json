@@ -3083,10 +3083,10 @@
     "kalibrasyon": "2026-10-03T16:53:45"
   },
   {
-    "timestamp": "2026-10-19T16:08:38.972829+00:00",
+    "timestamp": "2026-10-19T18:49:12.114393+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.4123,
+        "value": -0.4555,
         "category": "Bearish"
       },
       "USDJPY": {
@@ -3098,55 +3098,55 @@
         "category": "Bearish"
       },
       "GBPUSD": {
-        "value": -0.0862,
-        "category": "Neutral"
+        "value": -0.1529,
+        "category": "Bearish"
       },
       "AUDUSD": {
-        "value": -0.2466,
+        "value": -0.2378,
         "category": "Bearish"
       },
       "NZDUSD": {
-        "value": 0.4278,
+        "value": 0.1345,
         "category": "Bullish"
       },
       "USDCAD": {
-        "value": -0.0285,
-        "category": "Neutral"
+        "value": 0.1214,
+        "category": "Bullish"
       },
       "USDNOK": {
         "value": 0.8682,
         "category": "Extremely Bullish"
       },
       "USDSEK": {
-        "value": 0.0687,
+        "value": 0.0081,
         "category": "Neutral"
       },
       "XAUUSD": {
-        "value": 0.1245,
+        "value": 0.1412,
         "category": "Bullish"
       },
       "XAGUSD": {
-        "value": 0.0691,
-        "category": "Neutral"
+        "value": 0.1121,
+        "category": "Bullish"
       },
       "SPX": {
-        "value": -0.2798,
+        "value": -0.1653,
         "category": "Bearish"
       },
       "UST2Y": {
-        "value": 0.2826,
-        "category": "Bullish"
+        "value": -0.0568,
+        "category": "Neutral"
       },
       "UST10Y": {
-        "value": -0.4131,
+        "value": -0.4485,
         "category": "Bearish"
       },
       "BIST100": {
-        "value": -0.6423,
+        "value": -0.6699,
         "category": "Extremely Bearish"
       }
     },
-    "veri_sonu": "2026-10-19T15:44:36+00:00",
+    "veri_sonu": "2026-10-19T18:43:00+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": 0.1334,
