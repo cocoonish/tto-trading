@@ -1,0 +1,434 @@
+{
+ "_not": "Elle tutulan olgu tablosu. Her satırın her iddiası, dondurulmuş kaynak metninde (veri/kaynak_metin/) BİREBİR geçen bir alıntıya bağlıdır; dogrula.py alıntıyı kaynağın normalleştirilmiş metninde arar. Uyarı tarihleri ve uyarı metinleri BU tabloda değildir: olcum.py onları elçiliklerin kendi uyarı listelerinden ve uyarıların kendi metninden okur.",
+ "saldiri": [
+  {
+   "bas": "2025-06-22",
+   "bit": "2025-06-22",
+   "ne": "ABD İran'ın üç nükleer tesisini vurdu",
+   "yol": "wiki/en_wikipedia_org_8dd3d64c5f.html.gz",
+   "alinti": "The United States intercepted Iranian attacks and bombed three Iranian nuclear sites on 22 June."
+  },
+  {
+   "bas": "2026-02-28",
+   "bit": "2026-04-07",
+   "ne": "savaş: ABD ve İsrail'in İran'a hava harekâtı, 8 Nisan ateşkesine kadar",
+   "yol": "wiki/en_wikipedia_org_461027d941.html.gz",
+   "alinti": "the war began when the US and Israel conducted hundreds of air strikes on targets across Iran"
+  },
+  {
+   "bas": "2026-04-07",
+   "bit": "2026-04-07",
+   "ne": "ateşkesten önceki son gün: Harg Adası",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "The US said that it conducted strikes against military sites on Kharg Island"
+  },
+  {
+   "bas": "2026-05-07",
+   "bit": "2026-05-07",
+   "ne": "Bender Abbas ve Keşm",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "The US said that it carried out strikes on Iranian military sites in Bandar Abbas and Qeshm Island"
+  },
+  {
+   "bas": "2026-05-25",
+   "bit": "2026-05-25",
+   "ne": "\"meşru müdafaa\" saldırıları",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "The US Central Command reported \"self-defense\" strikes on Iran"
+  },
+  {
+   "bas": "2026-05-27",
+   "bit": "2026-05-27",
+   "ne": "güney kıyısında bir üs",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "US forces conducted another attack at a base on Iran's southern coastline"
+  },
+  {
+   "bas": "2026-06-09",
+   "bit": "2026-06-09",
+   "ne": "Apache düşmesine misilleme",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "CENTCOM subsequently said that it launched retaliatory strikes against Iran."
+  },
+  {
+   "bas": "2026-06-10",
+   "bit": "2026-06-10",
+   "ne": "49 Tomahawk",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "The US military later launched strikes on multiple Iranian targets, firing 49 Tomahawk missiles during the process."
+  },
+  {
+   "bas": "2026-06-26",
+   "bit": "2026-06-26",
+   "ne": "füze ve İHA depoları, kıyı radarları",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "the US hit Iranian missile and drone storage facilities, as well as coastal radar stations"
+  },
+  {
+   "bas": "2026-06-27",
+   "bit": "2026-06-27",
+   "ne": "gözetleme ve hava savunması",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "The US military announced it struck Iranian military surveillance infrastructure"
+  },
+  {
+   "bas": "2026-07-08",
+   "bit": "2026-07-09",
+   "ne": "mutabakatın çöküşü: 80'i aşkın hedef",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "The US Central Command announced that the US struck over 80 Iranian targets"
+  },
+  {
+   "bas": "2026-07-09",
+   "bit": "2026-07-09",
+   "ne": "İran Sağlık Bakanlığı: ABD saldırılarında 14 ölü",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "Iran's Health Ministry said that 14 people were killed and 78 others were injured in American attacks in Iran."
+  },
+  {
+   "bas": "2026-07-11",
+   "bit": "2026-07-23",
+   "ne": "art arda 13 gece",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "no U.S. military strikes against Iran, after 13 consecutive nights of strikes by CENTCOM against the country."
+  },
+  {
+   "bas": "2026-07-23",
+   "bit": "2026-07-23",
+   "ne": "13. gece",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "they have conducted strikes against Iran for a 13th consecutive night"
+  },
+  {
+   "bas": "2026-07-29",
+   "bit": "2026-07-29",
+   "ne": "altı günlük aradan sonra misilleme",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "After six days of pause in strikes, CENTCOM at 8:00pm launched retaliatory strikes against Iran"
+  },
+  {
+   "bas": "2026-08-30",
+   "bit": "2026-08-30",
+   "ne": "Larak Adası'nda iki fırlatıcı",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "US forces stated that they targeted two Iranian launchers on Larak Island"
+  },
+  {
+   "bas": "2026-09-01",
+   "bit": "2026-09-01",
+   "ne": "Devrim Muhafızları hedefleri",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "The US announced that it struck IRGC targets in Iran"
+  }
+ ],
+ "saldiri_kapsam": {
+  "bas": "2025-06-01",
+  "bit": "2026-10-19",
+  "tanim": "ABD'nin İran KARA toprağına (iç suları dahil) hava ya da füze saldırısı. Denizdeki tanker ve tekne saldırıları sayılmaz; tahmin piyasasının çözüm kuralıyla aynı tanım.",
+  "yol": "polymarket/piyasa_4641065.json.gz",
+  "alinti": "“Iran” refers to the terrestrial territory of Iran, including its internal waters. Iran’s maritime territory and airspace are not encompassed."
+ },
+ "iptal": [
+  {
+   "tarih": "2026-08-02",
+   "ne": "en büyük operasyon son anda durduruldu",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "Trump stated that he and Israel had called off the attack after the Iranian regime requested more time for a deal, and that a plan was in place for US forces to carry out the largest US operation since World War II."
+  },
+  {
+   "tarih": "2019-06-20",
+   "ne": "insansız hava aracının düşürülmesine misilleme iptal edildi",
+   "yol": "kaynak/npr_org_5ba9937568.html.gz",
+   "alinti": "President Trump says he called off a Thursday strike on Iran ordered as retaliation for Iran's having shot down a U.S. drone."
+  }
+ ],
+ "tarihsel": [
+  {
+   "id": "1998",
+   "tarih": "1998-08-07",
+   "ad": "Doğu Afrika büyükelçilik bombalamaları",
+   "tur": "olay_sonrasi",
+   "kapsam": "dünya geneli uyarı",
+   "sonra": "ABD 13 gün sonra (20 Ağustos) Afganistan ve Sudan'ı füzeyle vurdu; ardından yeni bir dünya geneli uyarı",
+   "sonraki_abd_saldirisi": "1998-08-20",
+   "kaynaklar": [
+    {
+     "yol": "kaynak/usinfo_org_2dad55b214.html.gz",
+     "alinti": "Department of State Issues Worldwide Caution -- East Africa Bombings"
+    },
+    {
+     "yol": "wiki/en_wikipedia_org_63544c23bd.html.gz",
+     "alinti": "Operation Infinite Reach was the codename for American cruise missile strikes on al-Qaeda bases that were launched concurrently across two continents on 20 August 1998."
+    },
+    {
+     "yol": "kaynak/1997_2001_state_gov_1bacf30abc.html.gz",
+     "alinti": "Worldwide Caution in light of the recent U.S. military strikes against terrorist targets in Afghanistan and Sudan"
+    }
+   ]
+  },
+  {
+   "id": "2003",
+   "tarih": "2003-03-16",
+   "ad": "Irak savaşı arifesi",
+   "tur": "ayrilis",
+   "kapsam": "İsrail, Kuveyt, Suriye, Batı Şeria ve Gazze'den zorunlu ayrılış",
+   "sonra": "Irak'ın işgali dört gün sonra (20 Mart) başladı",
+   "sonraki_abd_saldirisi": "2003-03-20",
+   "kaynaklar": [
+    {
+     "yol": "kaynak/govexec_com_35adf612a5.html.gz",
+     "alinti": "ordered nonemergency personnel and family members of federal employees to evacuate Syria, Kuwait, Israel, the West Bank and Gaza"
+    },
+    {
+     "yol": "wiki/en_wikipedia_org_8c87f8f328.html.gz",
+     "alinti": "The invasion began on 20 March 2003"
+    }
+   ]
+  },
+  {
+   "id": "2013",
+   "tarih": "2013-08-04",
+   "ad": "El Kaide mesajının yakalanması",
+   "tur": "tehdit",
+   "kapsam": "Orta Doğu ve Kuzey Afrika'da 22 büyükelçilik ve konsolosluk kapandı",
+   "sonra": "kapanışların 15'i bir hafta uzatıldı, listeye dört temsilcilik eklendi; tehdit bir örgütten geliyordu, bir devlete saldırı izlemedi",
+   "sonraki_abd_saldirisi": null,
+   "kaynaklar": [
+    {
+     "yol": "kaynak/cnn_com_4f9ba19018.html.gz",
+     "alinti": "led to the closing of 22 embassies and consulates Sunday, August 4, across the Middle East and North Africa"
+    },
+    {
+     "yol": "kaynak/cnn_com_4f9ba19018.html.gz",
+     "alinti": "the State Department said it had extended the closures in 15 of the locations until Saturday, August 10, and added four other posts to the list"
+    },
+    {
+     "yol": "kaynak/cnn_com_e8703ba64d.html.gz",
+     "alinti": "This is not an indication of a new threat stream"
+    }
+   ]
+  },
+  {
+   "id": "2019",
+   "tarih": "2019-05-15",
+   "ad": "İran gerginliği, Irak",
+   "tur": "ayrilis",
+   "kapsam": "Irak'tan acil olmayan personelin zorunlu ayrılışı",
+   "sonra": "ABD bir ay sonra (20 Haziran) İran'a saldırı emri verdi ve saldırıyı başlamadan iptal etti",
+   "sonraki_abd_saldirisi": null,
+   "kaynaklar": [
+    {
+     "yol": "kaynak/abcnews_go_com_8930cabba0.html.gz",
+     "alinti": "State Department orders non-emergency government employees out of Iraq amid tensions with Iran"
+    },
+    {
+     "yol": "kaynak/npr_org_5ba9937568.html.gz",
+     "alinti": "President Trump says he called off a Thursday strike on Iran ordered as retaliation for Iran's having shot down a U.S. drone."
+    }
+   ]
+  },
+  {
+   "id": "2020",
+   "tarih": "2020-01-03",
+   "ad": "Süleymani'nin öldürülmesi",
+   "tur": "olay_sonrasi",
+   "kapsam": "Irak'taki ABD vatandaşlarına: derhal ayrılın",
+   "sonra": "İran beş gün sonra (8 Ocak) Irak'taki Ain el-Esad üssünü balistik füzeyle vurdu",
+   "sonraki_abd_saldirisi": null,
+   "kaynaklar": [
+    {
+     "yol": "kaynak/time_com_bca624cc33.html.gz",
+     "alinti": "The State Department is urging American citizens to leave Iraq immediately, citing danger in the aftermath of a U.S. airstrike which killed Qasem Soleimani"
+    },
+    {
+     "yol": "wiki/en_wikipedia_org_0c4c7c738a.html.gz",
+     "alinti": "On 8 January 2020, Iran's Islamic Revolutionary Guard Corps (IRGC) conducted Operation Martyr Soleimani"
+    }
+   ]
+  },
+  {
+   "id": "2023",
+   "tarih": "2023-10-19",
+   "ad": "Gazze savaşı",
+   "tur": "tehdit",
+   "kapsam": "dünya geneli uyarı",
+   "sonra": "uyarı ABD vatandaşlarına yönelik saldırı riskinin habercisiydi; İran toprağına bir ABD saldırısı izlemedi",
+   "sonraki_abd_saldirisi": null,
+   "kaynaklar": [
+    {
+     "yol": "kaynak/foxnews_com_5cc3ad8645.html.gz",
+     "alinti": "State Department urges 'worldwide caution' for Americans overseas as Israel-Hamas war rages"
+    }
+   ]
+  },
+  {
+   "id": "2024",
+   "tarih": "2024-04-14",
+   "ad": "İran'ın İsrail'e ilk doğrudan saldırısı",
+   "tur": "olay_sonrasi",
+   "kapsam": "Kudüs: personel sığınağa",
+   "sonra": "uyarı saldırının ARDINDAN geldi",
+   "sonraki_abd_saldirisi": null,
+   "kaynaklar": [
+    {
+     "yol": "kaynak/il_usembassy_gov_ba00600caa.html.gz",
+     "alinti": "As a result of incoming UAVs and missiles from Iran and Iranian proxies, the U.S. Embassy has directed all U.S. government"
+    }
+   ]
+  },
+  {
+   "id": "2025a",
+   "tarih": "2025-06-11",
+   "ad": "On İki Gün Savaşı arifesi",
+   "tur": "ayrilis",
+   "kapsam": "Bağdat'tan zorunlu ayrılış, Bahreyn ve Kuveyt'ten izinli ayrılış (Dışişleri); bölgede asker ailelerine gönüllü ayrılış (Pentagon)",
+   "sonra": "İsrail iki gün sonra İran'ı vurdu, ABD on bir gün sonra (22 Haziran) nükleer tesisleri bombaladı; İran Katar'daki ABD üssüne füze attı, 24 Haziran'da ateşkes",
+   "sonraki_abd_saldirisi": "2025-06-22",
+   "kaynaklar": [
+    {
+     "yol": "kaynak/military_com_8053b1a24c.html.gz",
+     "alinti": "The State Department said it has ordered the departure of all nonessential personnel from the U.S. Embassy in Baghdad"
+    },
+    {
+     "yol": "kaynak/military_com_8053b1a24c.html.gz",
+     "alinti": "also is authorizing the departure of nonessential personnel and family members from Bahrain and Kuwait"
+    },
+    {
+     "yol": "kaynak/military_com_8053b1a24c.html.gz",
+     "alinti": "Defense Secretary Pete Hegseth also \"has authorized the voluntary departure of military dependents from locations\" across the region"
+    },
+    {
+     "yol": "wiki/en_wikipedia_org_8dd3d64c5f.html.gz",
+     "alinti": "Iran retaliated by firing missiles at a US base in Qatar. On 24 June, Israel and Iran agreed to a ceasefire under US pressure."
+    }
+   ]
+  },
+  {
+   "id": "2025b",
+   "tarih": "2025-06-22",
+   "ad": "ABD'nin nükleer tesisleri bombalaması",
+   "tur": "olay_sonrasi",
+   "kapsam": "dünya geneli uyarı",
+   "sonra": "uyarı saldırının yapıldığı gün yayımlandı",
+   "sonraki_abd_saldirisi": "2025-06-22",
+   "kaynaklar": [
+    {
+     "yol": "kaynak/state_gov_32cd7968ad.html.gz",
+     "alinti": "On June 22, 2025, the Department of State issued a Worldwide Caution Security Alert advising U.S. citizens overseas to exercise increased caution."
+    }
+   ]
+  },
+  {
+   "id": "2026a",
+   "tarih": "2026-02-23",
+   "ad": "2026 savaşının arifesi",
+   "tur": "ayrilis",
+   "kapsam": "Beyrut'tan zorunlu ayrılış (23 Şubat), İsrail'den izinli ayrılış (27 Şubat)",
+   "sonra": "savaş beş gün sonra (28 Şubat) başladı",
+   "sonraki_abd_saldirisi": "2026-02-28",
+   "kaynaklar": [
+    {
+     "yol": "kaynak/aljazeera_com_86ad11b568.html.gz",
+     "alinti": "The United States has ordered the departure of non-emergency personnel at its embassy in Beirut"
+    },
+    {
+     "yol": "elcilik/il/il_usembassy_gov_107c92f29a.html.gz",
+     "alinti": "On February 27, 2026, the Department of State authorized the departure of non-emergency U.S. government personnel and family members of U.S. government personnel from Mission Israel due to safety risks."
+    },
+    {
+     "yol": "wiki/en_wikipedia_org_461027d941.html.gz",
+     "alinti": "Since 28 February 2026, the United States and Israel have been at war with Iran and its regional allies."
+    }
+   ]
+  },
+  {
+   "id": "2026b",
+   "tarih": "2026-03-02",
+   "ad": "savaşın ilk haftası",
+   "tur": "olay_sonrasi",
+   "kapsam": "bir düzineden fazla ülkeden derhal ayrılın",
+   "sonra": "uyarı savaşın içinde geldi",
+   "sonraki_abd_saldirisi": "2026-03-02",
+   "kaynaklar": [
+    {
+     "yol": "kaynak/aljazeera_com_a4232e20b7.html.gz",
+     "alinti": "The US Department of State has urged all Americans to immediately depart more than a dozen countries in the Middle East, including Saudi Arabia and Qatar, amid escalating US-Israeli strikes against Iran."
+    }
+   ]
+  }
+ ],
+ "baglam": [
+  {
+   "id": "trump_secim",
+   "tarih": "2026-10-09",
+   "yol": "kaynak/aljazeera_com_f96bead888.html.gz",
+   "alinti": "United States President Donald Trump has said the US will not attack Iran before the November 3 midterm elections."
+  },
+  {
+   "id": "rubio",
+   "tarih": "2026-08-25",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "the US is not expected to resume major combat operations against the Iranian regime, with a second US official adding that this is expected to be the policy at least until after the midterm election, when a new military campaign could be considered."
+  },
+  {
+   "id": "pentagon",
+   "tarih": "2026-10-08",
+   "yol": "kaynak/iranwire_com_c4485ff300.html.gz",
+   "alinti": "any prospective operation could commence prior to the U.S. midterm elections, scheduled for November 3, 2026, or even before Israel's elections, set to take place one week earlier"
+  },
+  {
+   "id": "moab",
+   "tarih": "2026-10-15",
+   "yol": "kaynak/cnn_com_0d38f9ff8d.html.gz",
+   "alinti": "should President Donald Trump give the order to resume combat operations either before or after the midterm elections"
+  },
+  {
+   "id": "trump_18ekim",
+   "tarih": "2026-10-18",
+   "yol": "kaynak/jns_org_346812ca20.html.gz",
+   "alinti": "In a Truth Social post endorsing Netanyahu on Sunday, Trump warned that unless Tehran rapidly changes course, \"we will soon finish the job.\""
+  },
+  {
+   "id": "netanyahu",
+   "tarih": "2026-10-18",
+   "yol": "kaynak/gulfnews_com_a7e3e46ee3.html.gz",
+   "alinti": "Netanyahu said Israel was prepared to strike Iran without US support and vowed to bring down Tehran's government"
+  },
+  {
+   "id": "secim_takvim",
+   "tarih": "2026-10-27",
+   "yol": "kaynak/gulfnews_com_a7e3e46ee3.html.gz",
+   "alinti": "with Israel voting on October 27 and the US holding midterm elections on November 3"
+  },
+  {
+   "id": "tanker_baski",
+   "tarih": "2026-10-14",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "Senior Iranian officials publicly admitted to Reuters that their regime had launched new tactical strikes against tankers with the express purpose of stifling international oil flows, maintaining high energy prices, and applying political pressure on Trump ahead of the U.S. midterm elections on 3 November 2026."
+  },
+  {
+   "id": "nadir",
+   "tarih": "2026-10-19",
+   "yol": "kaynak/euronews_com_7aeccee6d3.html.gz",
+   "alinti": "Washington has taken the rare measure to issue a red alert to US citizens in 12 countries across the Middle East"
+  },
+  {
+   "id": "husi_ekim",
+   "tarih": "2026-10-08",
+   "yol": "kaynak/kw_usembassy_gov_d251e255c9.html.gz",
+   "alinti": "Iranian-supported Houthis have engaged in hostilities against Saudi Arabia, including attacks on civilian airports and other critical infrastructure resulting in civilian casualties and severe travel disruptions."
+  },
+  {
+   "id": "eylul_19_uyari",
+   "tarih": "2026-09-19",
+   "yol": "kaynak/republicworld_com_bdf56d43d7.html.gz",
+   "alinti": "The United States on Saturday (local time) urged Americans to reconsider travel to and through the Middle East"
+  },
+  {
+   "id": "caine",
+   "tarih": "2026-08-07",
+   "yol": "wiki/en_wikipedia_org_b90d63d07c.html.gz",
+   "alinti": "Gen. Dan Caine has privately urged Trump advisers to seek an off-ramp from the war, warning that escalation could backfire and that airstrikes alone are unlikely to meet the administration's goals."
+  }
+ ]
+}

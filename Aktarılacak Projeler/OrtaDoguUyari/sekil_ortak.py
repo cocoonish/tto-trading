@@ -35,7 +35,7 @@ except ImportError:                    # pragma: no cover
     go = None
 
 sys.path.insert(0, str(BURASI))
-from olcum import SLUG  # noqa: E402  (tek tanım)
+from ayar import SLUG  # noqa: E402  (tek tanım)
 
 CIKTI = KOK / "site" / "public" / "analiz" / SLUG
 PLOTLY_JS = "/js/plotly-4.0.0.min.js"
