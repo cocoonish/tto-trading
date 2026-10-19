@@ -1,0 +1,178 @@
+---
+title: 'FX Gün İçi Oyun Planı 3: Fiksingler'
+description: "Tokyo fiksingi ve Londra'nın WM/R fiksingi: fiyat fiksinge kadar koşunca fiksingden sonra ne yapıyor? Koşu ne sıklıkla geri veriliyor, ne sıklıkla tersine dönüyor, ay sonu bunu değiştiriyor mu, ve fiksingde koşunun tersine girmek maliyetten sonra ne verdi."
+pubDate: 2026-10-19
+tags: ['fx', 'gun-ici', 'oyun-plani', 'fiksing', 'backtest', 'ders']
+durum: 'aktif'
+kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
+ozet: "Fiksinge koşan fiyat fiksingden sonra koşunun yarısını sık geri verir, ama koşunun başladığı yere nadiren döner. Ay sonunda güçlü koşu daha da az devam eder. Geri vermeyi yakalamaya çalışan tepki ise maliyetten sonra kaybettiriyor. Ders fiksinglerin oyun planını verir."
+seviye: 'orta'
+onkosul: ['fx-oyun-okuma']
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+Fiksing bir kurun resmî olarak "o anda" ölçüldüğü dakikadır. Bazı fon, şirket ve saklama işlemleri o kura bağlanır;
+işlemi üstlenen banka riskini çoğu zaman fiksing çevresinde piyasada kapatır. Bu yüzden fiksinge doğru fiyat bazen bir
+yöne **koşar**, ve fiksing geçtiğinde o koşuyu taşıyan akışın bittiği düşünülür. İşlemcilerin bildiği eski söz
+şudur: "fiksingden sonra koşu geri verilir." Bu ders sözün sayısını verir.
+
+| An | Yerel saat | TSİ | İlk mum | İzlenen süre |
+|---|---:|---:|---:|---:|
+| Tokyo fiksingi | Tokyo 09:55 | 03:55 | 30 dk (fiksinge kadar) | 60 dk |
+| Londra fiksingi (WM/R) | Londra 16:00 | 18:00 (kışın 19:00) | 30 dk (fiksinge kadar) | 60 dk |
+
+Bu derste **ilk mum**, fiksinge giden 30 dakikalık mumdur: koşunun kendisi. Sınıflar aynı kuralla
+kurulur (güçlü koşu, normal koşu, reddedilen koşu, sessiz geçen fiksing) ve plan fiksingden sonraki
+60 dakikayı okur.
+
+## Plan tek cümlede
+
+**Fiksinge koşan fiyat koşunun bir kısmını geri verir ama dönmez; geri vermeyi yakalamaya çalışmak maliyetten sonra
+kaybettirir.** Fiksingin işi koşuyu bitirmektir, tersine çevirmek değil.
+
+## Fiksingden sonra fiyat nereye gidiyor
+
+Fiksingden sonraki ortalama fiyat, koşunun yönünde ve koşunun boyu cinsinden. Sıfır çizgisi fiksing anındaki fiyattır;
+aşağı, koşunun geri verilmesi demektir.
+
+<GrafikEmbed src="/arastirma/fx-oyun-fiksingler/01_patika.html" baslik="Fiksingden sonra ortalama fiyat yolu, koşunun yönünde" no="01" kaynak="Dukascopy" />
+
+Çizgiler fiksingden hemen sonra hafifçe aşağı iner ve orada kalır: ortalamada koşunun küçük bir kısmı geri verilir.
+Büyük bir dönüş ortalamada yok.
+
+## Sınıf sınıf
+
+| Fiksing · koşu | 2018–23 n | yarısını geri verdi | devam etti | tersine döndü | 2024 → n | yarısını geri verdi | devam etti | tersine döndü |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Tokyo fiksingi · güçlü | 970 | %59 | %29 | %20 | 441 | %60 | %36 | %20 |
+| Tokyo fiksingi · normal | 3.411 | %80 | %39 | %42 | 1.648 | %81 | %40 | %44 |
+| Tokyo fiksingi · reddedilen | 1.068 | %84 | %36 | %43 | 495 | %83 | %40 | %48 |
+| Londra fiksingi (WM/R) · güçlü | 963 | %46 | %18 | %9 | 422 | %47 | %21 | %11 |
+| Londra fiksingi (WM/R) · normal | 3.483 | %75 | %23 | %29 | 1.580 | %73 | %30 | %32 |
+| Londra fiksingi (WM/R) · reddedilen | 1.059 | %77 | %26 | %32 | 527 | %75 | %29 | %34 |
+
+### Güçlü koşu
+
+Fiyat fiksinge kadar bir yöne güçlü gitmiş. İki fiksingin toplamında güçlü koşu fiksingden sonraki bir saatte
+%53 yarısını geri verdi (2024 → %54). Ama koşunun başladığı yeri
+kıran yani gerçekten tersine dönen yalnız %14 (2024 → %16).
+Koşunun devam ettiği günler bile dönüşten daha sık: %24 (2024 → %28).
+
+Sayıların söylediği: güçlü bir koşudan sonra fiksing çoğu zaman bir **duraklama** getirir. Fiyat geri çekilir, bir
+süre yatay gider, ve büyük bir hareket ne yukarı ne aşağı gelir. Açılışlarla karşılaştırınca fark açık: açılışta güçlü
+mum yarısından sonra da yol alır; fiksingde koşu yarısına gelince çoğu zaman orada durur. Yarısını geri veren güçlü
+koşuların yalnız %24 kadarı koşunun ucuna geri gitti.
+
+### Normal ve reddedilen koşu
+
+Normal koşu %77, reddedilen koşu %80 yarısını geri verdi.
+Devam ile dönüş burada birbirine yakın: normal koşuda %31 ve
+%35; 2024 → döneminde %35 ve %38.
+Küçük bir koşu küçük bir akıştır; fiksingten sonra fiyat yeniden günün geri kalanının işine döner.
+
+### Sessiz fiksing
+
+Fiksinge giden mum küçükse fiksing anında piyasada ciddi bir akış yoktur. Fiksingden sonra fiyat kırıldığı tarafta
+ne kadar gidiyor:
+
+| An | 2018–23 n | kırılan tarafta 1 mum boyu gitti | 2024 → n | kırılan tarafta 1 mum boyu gitti |
+|---|---:|---:|---:|---:|
+| Tokyo fiksingi | 709 | %46 | 311 | %46 |
+| Londra fiksingi (WM/R) | 636 | %26 | 364 | %27 |
+
+Londra fiksinginde sessiz bir fiksingten sonraki kırılım çoğu zaman bir yere gitmiyor: kırılan tarafta bir mum boyu
+ilerleme %26 (2024 → %27). Londra fiksingi Avrupa masalarının günü kapattığı saate
+denk gelir; sessiz geçen bir fiksingten sonra fiyat çoğu zaman sessiz kalıyor. Tokyo'da pay daha yüksek
+(%46, 2024 → %46); Tokyo fiksinginden sonra Asya günü sürdüğü için
+fark buradan geliyor olabilir, bu derste ölçülmedi.
+
+## Ay sonu
+
+Ayın son Londra iş günü, portföylerin ay boyunca kurdaki değişime göre yeniden dengelendiği gündür ve bu işlemlerin
+bir kısmının WM/R kuruna bağlandığı piyasada yaygın bir öncüldür; öncülün kendisi bu derste ölçülmedi. Ölçülen,
+ay sonu fiksinginden sonraki fiyattır:
+
+<GrafikEmbed src="/arastirma/fx-oyun-fiksingler/02_ay_sonu.html" baslik="Ay sonu ile öbür günler: güçlü koşudan sonra devam ve geri verme" no="02" kaynak="Dukascopy" />
+
+| Fiksing · gün · koşu | 2018–23 n | yarısını geri verdi | devam etti | 2024 → n | yarısını geri verdi | devam etti |
+|---|---:|---:|---:|---:|---:|---:|
+| Londra fiksingi (WM/R) · ay sonu · güçlü | 104 | %34 | %12 | 55 | %49 | %7 |
+| Londra fiksingi (WM/R) · ay sonu · normal | 127 | %76 | %18 | 49 | %71 | %22 |
+| Londra fiksingi (WM/R) · öbür günler · güçlü | 859 | %48 | %19 | 367 | %46 | %23 |
+| Londra fiksingi (WM/R) · öbür günler · normal | 3.356 | %75 | %24 | 1.531 | %73 | %30 |
+| Tokyo fiksingi · ay sonu · güçlü | 56 | %71 | %23 | 43 | %67 | %37 |
+| Tokyo fiksingi · ay sonu · normal | 152 | %82 | %41 | 59 | %90 | %24 |
+| Tokyo fiksingi · öbür günler · güçlü | 914 | %58 | %30 | 398 | %59 | %36 |
+| Tokyo fiksingi · öbür günler · normal | 3.259 | %80 | %39 | 1.589 | %81 | %41 |
+
+Ay sonunda Londra fiksingine güçlü koşan fiyat, fiksingden sonra öbür günlerden daha da az devam ediyor:
+%12 (öbür günler %19); 2024 → döneminde
+%7 (öbür günler %23). Ay sonu koşusu bir haber değil
+bir **akıştır**: fiksing geçince arkasında devam ettirecek bir şey kalmıyor. Ay sonunda geri verme payı ise iki dönemde
+farklı: 2018–2023'te %34, 2024 → döneminde %49. Ay sonu
+olayı yılda on iki kez ve paritede bir kez geldiği için örneklem küçüktür (2024 → döneminde güçlü koşu
+55 olay); "ay sonunda koşu durur" okuması iki dönemde de aynı, "ay sonunda koşu geri
+verilir" okuması değil.
+
+Tokyo fiksinginde ay sonu ayrımı tutarlı değil: 2024 → döneminde normal koşudan sonra tersine dönüş ay sonunda
+%64 (öbür günler %44) ama 2018–2023'te
+%42 ve %42. İki dönemde aynı yöne
+bakmayan bir fark plana girmez.
+
+## Trend
+
+| İlk mum · trend | n | devam etti | tersine döndü | yarısına döndü |
+|---|---:|---:|---:|---:|
+| güçlü · trend yönünde | 926 | %24 | %16 | %54 |
+| güçlü · trende karşı | 730 | %23 | %14 | %53 |
+| güçlü · trend yatay | 277 | %25 | %11 | %48 |
+| normal · trend yönünde | 3.016 | %30 | %37 | %77 |
+| normal · trende karşı | 2.857 | %32 | %34 | %78 |
+| normal · trend yatay | 1.021 | %31 | %34 | %77 |
+| reddedilen · trend yönünde | 928 | %29 | %38 | %81 |
+| reddedilen · trende karşı | 846 | %31 | %38 | %80 |
+| reddedilen · trend yatay | 353 | %35 | %37 | %79 |
+
+Fiksingte de trend bir şey değiştirmiyor: güçlü koşu trend yönündeyken %24, trende
+karşıyken %23 devam etti.
+
+## Bu okumaları işleme çevirmek
+
+"Fiksingden sonra koşu geri verilir" sözünün işlem hâli şudur: fiksing anında koşunun tersine gir, stopu koşunun
+ucunun hemen ötesine koy, hedefi koşunun yarısına koy. Sessiz fiksingte tepki kırılan uçtan girmektir. Sonuç:
+
+| An ailesi · ilk mum | Plan | 2018–23 n | kazanma | net R | 2024 → n | kazanma | net R | %95 aralık | hüküm |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Fiksingler · güçlü | fiksingde koşunun tersine · stop koşunun ucunun 0,1 koşu boyu ötesinde · hedef koşunun yarısı | 1.331 | %42 | −0,18 | 558 | %37 | −0,28 | −0,38 … −0,17 | çalışmıyor |
+| Fiksingler · normal | fiksingde koşunun tersine · stop koşunun ucunun 0,1 koşu boyu ötesinde · hedef koşunun yarısı | 3.400 | %56 | −0,16 | 1.415 | %54 | −0,20 | −0,25 … −0,15 | çalışmıyor |
+| Fiksingler · reddedilen | fiksingde koşunun tersine · stop koşunun ucunun 0,1 koşu boyu ötesinde · hedef koşunun yarısı | 1.345 | %58 | −0,14 | 631 | %56 | −0,18 | −0,25 … −0,12 | çalışmıyor |
+| Fiksingler · küçük | küçük mumun kırılan ucundan · stop öbür ucun 0,1 mum boyu ötesinde · hedef 0,5 R | 1.197 | %53 | −0,21 | 606 | %51 | −0,24 | −0,30 … −0,19 | çalışmıyor |
+
+Dördü de "çalışmıyor". Güçlü koşuda tepkinin kazanma oranı düşük (%37); hedef
+koşunun yarısı olduğu için kazanan işlem riskinin yaklaşık bir katını kazanıyor (ortalama
++1,19 R) ve başa baş için %49 yetiyor, ama o
+oran tutmuyor: işlemlerin %60 kadarı stopta, yani koşu fiksingten sonra
+kendi ucunu bir kez daha aşınca bitti. Normal ve reddedilen
+koşuda kazanma oranı yarının üstünde (%54 ve
+%56), ama başa baş için %67 gerekiyor.
+
+Maliyetin payı burada açılışlardan büyük: fiksingde koşunun tersine girmek bir piyasa emridir, makas ve kayma öder.
+Güçlü koşu tepkisinin maliyetsiz sonucu −0,08 R, maliyet
+0,20 R, net −0,28 R. Yani geri vermenin kendisi
+de maliyetten önce sıfıra yakın: fiyat yarıya gelir ama yarıya gelişi, stop yakın olduğu için, bir kazanca
+dönüşmüyor. Sessiz fiksingte kırılımın maliyetsiz sonucu artı (+0,09 R) ama dar stop
+yüzünden maliyet ondan büyük (0,33 R).
+
+2018–2023'te fiksinglerin hiçbir sınıfında denenen hiçbir tepki maliyetten sonra artıda kalmadı; plan bütün fiksing
+hücrelerinde "izle, işlem açma" der.
+
+## Fiksing için masa kartı
+
+- **Fiksinge koşan fiyat bir akışı taşır; fiksing o akışın sonudur.** Fiksingden sonraki ilk dakikalarda koşunun
+  yönünde yeni bir işlem açmak, akış bittikten sonra ona katılmaktır.
+- **Geri verme beklenir, dönüş beklenmez.** Koşu yarısına kadar geri gelebilir; koşunun başladığı yer çoğu zaman
+  kırılmaz.
+- **Ay sonunda Londra fiksingi koşuyu daha da kesin bitirir.** Ay sonu koşusu fiksingten sonra nadiren sürer.
+- **Sessiz bir Londra fiksingi sessiz bir akşam demektir.** Arkasından gelen kırılım çoğu zaman bir yere gitmez.
+- **Fiksingte koşunun tersine girmek bir maliyet işidir.** Geri vermenin büyüklüğü makas ve kaymayı karşılamıyor.
