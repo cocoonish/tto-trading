@@ -1,6 +1,6 @@
 {
   "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
-  "_son_guncelleme": "2026-10-11",
+  "_son_guncelleme": "2026-10-18",
   "kayitlar": [
     {
       "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
@@ -442,12 +442,13 @@
     {
       "konu": "Uzun uç 19 yılın zirvesinde — fiyatlanan sıkılaşma mı, vade primi mi",
       "acilis": "2026-09-27",
-      "durum": "acik",
+      "durum": "kapandi",
       "soz": "25 Eylül kapanışında ABD on yıllığı %5,184, otuz yıllığı %5,504 — ikisi de 52 haftalık aralığın tepesinde ve otuz yıllık haftanın en olağandışı hareketi (17,3 baz puan, kendi haftalık oynaklığının 2,1 katı). Aynı hafta tahvil oynaklığı ölçüsü %19,05 sıçradı. Satışın iki ayrı okuması var ve ikisi ayrı sonuç verir: piyasa ekim ayında bir faiz artırımı daha fiyatlıyorsa hareket kısa uçtan beslenmeli ve eğri YATAYLAŞMALI; hareket arz ve vade priminden geliyorsa uzun uç kısa uçtan daha çok satılmalı ve eğri DİKLEŞMELİ. Bu hafta ikinci okuma önde: beş yıl–otuz yıl makası 50 baz puana açıldı ve üç ay–on yıl 111 baz puana çıktı. Diyoruz ki satış ağırlıkla vade primi kaynaklıdır; ekim toplantısı bu ayrımı sınayacak, çünkü artırım gelir de uzun uç ONA RAĞMEN yükselmeye devam ederse fiyatlanan şey politika faizi değil borç arzıdır.",
       "ne_bakilacak": "Beş yıl–otuz yıl makasının 50 baz puandan hangi yöne gittiği ve üç ay–on yıl farkının 111 baz puandan genişleyip genişlemediği; 2 Ekim'deki ABD eylül istihdam verisinin ardından uzun ucun kısa uca göre konumu. Makas kapanır ve hareket kısa uca kayarsa kayıt çürür: o hâlde satış vade primi değil politika beklentisidir.",
       "vade": "2026-10-16",
-      "sonuc": "",
-      "isabet": ""
+      "sonuc": "Kısmen tuttu. Ayrımın iki ölçüsü vade günü 16 Ekim'de iki ayrı yön gösterdi: 5 yıl–30 yıl makası 25 Eylül'deki 50 baz puanın üstünde, 54 baz puanda kaldı, yani uzun uç kısa ucun önünde satılmayı sürdürdü; 3 ay–10 yıl farkı ise 111 baz puandan 103 baz puana daraldı, çünkü sıcak eylül enflasyonu bonoyu yukarıda tutarken 10 yıllığı düşürdü. Düşme koşulu — makasın kapanıp hareketin kısa uca kayması — gerçekleşmedi. Vade primi okumasını destekleyen kanıt güçlendi: Hazine'nin uzun vadeli geri alımına kabul edilen tutarın yaklaşık yedi katı teklif geldi ve Çin'in ABD tahvili stoku 18 yılın en düşüğüne indi. Çağrının asıl sınavı ölçülemedi: ekim toplantısı vadeden sonra, 28 Ekim'de; artırıma rağmen uzun ucun yükselip yükselmeyeceği o gün görülecek.",
+      "kapanis": "2026-10-18",
+      "isabet": "kismen"
     },
     {
       "konu": "Benzinde vergi adımı ertelendi, motorinde ertelenmedi — ekim enflasyonunda hangisi görünecek",
