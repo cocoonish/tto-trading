@@ -68,4 +68,10 @@ bh_q = 0.05
 # Çalışmayan bir süzgece "çalışmıyor" denir.
 
 [sapmalar]
-# (boş — ölçümden sonra yazılır)
+# 19.10.2026 — tanım değişikliği YOK. İlk koşuda seçim adımı hiçbir aday seçemedi: havuz Sharpe'ı dört paritenin gün
+# dizilerinin Python tarih nesnelerine çevrilmiş birleşiminden kuruluyordu ve işlem günleriyle hiç eşleşmediği için
+# tanımsız çıktı. Bu bir kod hatasıydı; düzeltme (gün dizisi kendi tarih türüyle birleşir) süzgeçleri, eşikleri, seçim
+# ve hüküm kuralını değiştirmez. Örneklem dışı aday sonuçları ilk koşuda görülmüştü; düzeltmeden sonra birebir aynı
+# çıktı, yalnız seçim sütunu doldu.
+# Uygulama notu: S4'ün "yapısı tanımsız kural" istisnası hiçbir kuralda devreye girmedi (22 kuralın 22'sinde
+# range_atr tanımlı).
