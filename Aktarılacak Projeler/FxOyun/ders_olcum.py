@@ -39,6 +39,8 @@ ORNEK_CIFT, ORNEK_AN, ORNEK_SON = "EURUSD", "londra_acilis", "2023-12-01"   # ö
 #                                                                          (Aralık'ın tatil haftaları ince işlem görür)
 AILE_AD = {"acilis": "Seans açılışları", "fiksing": "Fiksingler", "veri": "ABD verileri", "mb": "Merkez bankası kararları"}
 BASAMAK = {"EURUSD": 5}                   # fiyat = nokta / 10^basamak (örnek gün yalnız EUR/USD)
+ON = __import__("tomllib").loads((Path(__file__).resolve().parent / "onkayit_oyun.toml").read_text(encoding="utf-8"))
+ON_TOHUM, ON_TEKRAR = ON["hukum"]["tohum"], ON["hukum"]["bootstrap"]   # olay günü düzeyinde yeniden örnekleme (ek bilgi)
 ORNEKLER = ["guclu", "reddedilen", "normal", "kucuk"]
 METRIK = ("orta", "devam", "donus", "orta_uc", "kapanis")
 
@@ -56,15 +58,34 @@ def havuz(rows: list[dict]) -> dict:
     return out
 
 
+def sonuc_ayna(d, e: dict) -> dict:
+    """Yön bilgisi yokken beklenen pay: ilk mumdan sonraki yol kapanışa göre AYNALANIR (p' = 2c − p) ve aynı ölçüler
+    (gozlem.sonuc) aynalanmış yolda yeniden hesaplanır. Sürüklenmesiz bir fiyatta yol ile aynası eşit olasıdır; yani
+    gerçek pay ile ayna payının farkı ilk mumun YÖN bilgisidir, ayna payının kendisi mum geometrisinin (kapanışın uca
+    yakınlığı) kendiliğinden ürettiği orandır."""
+    j0, j1, c = e["j0"], e["j1"], e["c"]
+    ayna = type("Ayna", (), {})()                        # yalnız izlenen pencere (tam diziyi her olayda kopyalamaz)
+    ayna.mh, ayna.ml, ayna.mc = 2 * c - d.ml[j0:j1], 2 * c - d.mh[j0:j1], 2 * c - d.mc[j0:j1]
+    return gz.sonuc(ayna, {**e, "j0": 0, "j1": j1 - j0})
+
+
 def tsi_tablosu() -> list[dict]:
     yaz, kis = date(2026, 7, 15), date(2026, 1, 15)
     takv = pd.read_csv(sf.FXG / "veri" / "takvim" / "olaylar.csv", dtype=str)
     out = []
     for an in sf.ANLAR:
         saat = an.saat
+        gecmis = []
         if an.olay:
-            saat = takv[takv["olay"] == an.olay]["yerel_saat"].iloc[-1]     # bugünkü saat (ECB 21.07.2022'den beri 14:15)
-        out.append({"an": an.kimlik, "ad": an.ad, "aile": an.aile, "bolge": z.BOLGE_ADI[an.bolge], "yerel": saat,
+            t = takv[takv["olay"] == an.olay]
+            saat = t["yerel_saat"].iloc[-1]                                 # bugünkü saat (ECB 21.07.2022'den beri 14:15)
+            for sa, g in t.groupby("yerel_saat"):                         # düzenli eski saat (tek seferlik olağanüstü
+                if sa != saat and len(g) >= 3:                              # kararlar sayılmaz)
+                    gun = date.fromisoformat(g["tarih"].max())
+                    gecmis.append({"yerel": sa, "bas": g["tarih"].min(), "bit": g["tarih"].max(), "n": int(len(g)),
+                                   "tsi_yaz": z.tsi_saat(z.yerel_an(yaz, sa, an.bolge)),
+                                   "tsi_kis": z.tsi_saat(z.yerel_an(kis, sa, an.bolge))})
+        out.append({"gecmis": gecmis, "an": an.kimlik, "ad": an.ad, "aile": an.aile, "bolge": z.BOLGE_ADI[an.bolge], "yerel": saat,
                     "tsi_yaz": z.tsi_saat(z.yerel_an(yaz, saat, an.bolge)),
                     "tsi_kis": z.tsi_saat(z.yerel_an(kis, saat, an.bolge)), "tf": an.tf, "pencere": an.pencere})
     return out
@@ -101,6 +122,7 @@ def main() -> int:
     # ── dakika verisinden: patikalar, örnek günler, fiksingde ay sonu
     a = ay.oku()
     patika: dict = {}
+    ayna_t: dict = {}
     ornek: dict = {}
     fiks: dict = {}
     for cift in a.ciftler:
@@ -111,6 +133,11 @@ def main() -> int:
             for e in ev.to_dict("records"):
                 dn = donem_bul(e["t0"])
                 R = e["h"] - e["l"]
+                if e["yon"] != 0 and R > 0:
+                    gercek, ay_ = gz.sonuc(d, e), sonuc_ayna(d, e)
+                    for k_ in (("an", an.kimlik), ("aile", an.aile)):
+                        ayna_t.setdefault((k_[0], k_[1], e["sinif"], dn), []).append(
+                            {m: (bool(gercek[m]), bool(ay_[m])) for m in ("orta", "devam", "donus")})
                 if an.aile == "fiksing":
                     o = gz.sonuc(d, e)
                     if "orta" in o:
@@ -150,6 +177,11 @@ def main() -> int:
                   "ilk": {k: float(e[k]) for k in "ohlc"}, "yon": int(e["yon"]), "uyum": e["uyum"],
                   "tsi": z.tsi_saat(pd.Timestamp(e["t0"], unit="s", tz="UTC").to_pydatetime()),
                   "mumlar": [[int(r.t), float(r.o), float(r.h), float(r.l), float(r.c)] for r in m.itertuples()]}
+    ayna = {}
+    for (duzey, k, s, dn), rows in sorted(ayna_t.items()):
+        ayna.setdefault(duzey, {}).setdefault(k, {}).setdefault(s, {})[dn] = {
+            "n": len(rows), **{m: float(np.mean([r[m][0] for r in rows])) for m in ("orta", "devam", "donus")},
+            **{f"{m}_ayna": float(np.mean([r[m][1] for r in rows])) for m in ("orta", "devam", "donus")}}
     fk = {}
     for (an, dn, grup, s), rows in sorted(fiks.items()):
         g = pd.DataFrame(rows)
@@ -163,7 +195,13 @@ def main() -> int:
             g = isl[(isl["bacak"] == b["bacak"]) & (isl["donem"] == dn)]
             if len(g):
                 k, y = g[g["R"] > 0], g[g["R"] <= 0]
+                gk = g.assign(gun=pd.to_datetime(g["t0"], unit="s").dt.date)
+                gunler = [x["R"].to_numpy() for _, x in gk.groupby(["an", "gun"])]
+                rng = np.random.default_rng(ON_TOHUM)
+                ort = [np.concatenate([gunler[i] for i in rng.integers(0, len(gunler), len(gunler))]).mean()
+                       for _ in range(ON_TEKRAR)]
                 dagilim.setdefault(b["bacak"], {})[dn] = {
+                    "gun_n": len(gunler), "gun_alt": float(np.quantile(ort, 0.025)), "gun_ust": float(np.quantile(ort, 0.975)),
                     "risk_pip_med": float(g["risk_pip"].median()),
                     "kazanc_ort": float(k["R"].mean()) if len(k) else None,
                     "kayip_ort": float(y["R"].mean()) if len(y) else None,
@@ -181,7 +219,7 @@ def main() -> int:
                   "veri_bitis": S["veri_bitis"], "ic": ["2018-01-01", "2023-12-31"], "dis_bas": "2024-01-01",
                   "olay_ic": G["olay"], "adim_dk": ADIM, "ciftler": list(a.ciftler)},
         "an": tsi_tablosu(), "davranis": dav, "aile_davranis": aile_dav, "trend": trend, "kucuk": kucuk,
-        "patika": pat, "ornek": orn, "fiksing_ay_sonu": fk, "bacak": S["bacak"], "dagilim": dagilim, "plan": P, "egri": egri,
+        "patika": pat, "ornek": orn, "fiksing_ay_sonu": fk, "bacak": S["bacak"], "dagilim": dagilim, "ayna": ayna, "plan": P, "egri": egri,
         "sabit": {"tipik_pencere": sf.TIPIK_PENCERE, "tipik_en_az": sf.TIPIK_EN_AZ, "haber_pencere": sf.HABER_PENCERE,
                   "haber_en_az": sf.HABER_EN_AZ, "guclu_aralik": sf.GUCLU_ARALIK, "guclu_govde": sf.GUCLU_GOVDE,
                   "red_govde": sf.RED_GOVDE, "red_fitil": sf.RED_FITIL, "red_aralik": sf.RED_ARALIK,
