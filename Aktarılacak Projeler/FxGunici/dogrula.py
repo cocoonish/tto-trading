@@ -83,7 +83,7 @@ TANIM = {"%95", "%5", "%50", "%30", "%70", "0,0001", "0,01", "0,95"}
 
 #: Ölçüt 12'nin asgari kapsamları (kapının kendi kümesi; sınanan listeler bunları taşımalı).
 OLCUM_KODU_ASGARI = {"ders_olcum.py", "adlar.py", "kosu.py", "motor.py", "strateji.py", "strat_haber.py", "takvim.py",
-                     "metrik.py", "saglamlik.py", "basarisiz.py", "kisa.py"}
+                     "metrik.py", "saglamlik.py", "basarisiz.py", "kisa.py", "suzgec.py", "onkayit_suzgec.toml"}
 SEKIL_KODU_ASGARI = {"Aktarılacak Projeler/FxGunici/sekil.py", "Aktarılacak Projeler/FxGunici/sekil_ortak.py",
                      "Aktarılacak Projeler/FxGunici/adlar.py", "site/tools/plotly_stil.py"}
 

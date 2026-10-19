@@ -105,4 +105,4 @@ ayar, çoğu zaman o geçmişin şansını yakalamış ayardır. {{ O.kisa.topla
 - **Kazanma oranına değil, işlem başına net sonuca bakın.** Kazanma oranı ancak gereken oranla yan yana anlamlıdır.
 - **Stop ve hedef bir avantaj yaratmaz; var olanı paketler.** Önce kuralın maliyetten önce kazandırdığını görmek gerekir.
 
-Sonraki ders: bir kuralı kendiniz denemek isterseniz kontrol listesi.
+Sonraki ders: kurala süzgeç eklemek (günlük EMA20, oynaklık şartı) sonucu değiştiriyor mu.

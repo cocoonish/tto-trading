@@ -1700,6 +1700,43 @@ def kisa_aralik(o: dict) -> None:
         so._yaz(fig, f"kisa-aralik-{ders.removeprefix('fx-gunici-')}.html", yukseklik(bas, 120 + 40 * len(ad)))
 
 
+def kisa_suzgec(o: dict) -> None:
+    """Süzgeç dersi: her kuralın altı süzgeçli sonucunun 2024 → aralığı (en kötü → en iyi), süzgeçsiz sonuç ve
+    2018–2023'e bakarak seçilen süzgeç işaretli; dört parite birlikte, maliyetten sonra."""
+    k = o.get("suzgec")
+    if not k:
+        raise SystemExit("ölçümde süzgeç çalışmasının kaydı yok (suzgec)")
+    sira = [b for L in adlar.KISA_DERS_BIRIM.values() for b in L][::-1]
+    ad = [adlar.BIRIM[b][1] for b in sira]
+    lo, hi, yy, sy, sad = [], [], [], [], []
+    for b in sira:
+        x = k["kural"][b]
+        r = [v["oos"]["beklenti_r"] for v in x["aday"].values()]
+        lo.append(min(r))
+        hi.append(max(r))
+        yy.append(x["yok"]["oos"]["beklenti_r"])
+        s_ = x["secilen"]
+        sy.append((x["yok"] if s_ == "yok" else x["aday"][s_])["oos"]["beklenti_r"])
+        sad.append(adlar.SUZGEC[s_])
+    fig = make_subplots(rows=1, cols=1, subplot_titles=("İşlem başına net sonuç, 2024 → (R)",))
+    for i in range(len(ad)):
+        fig.add_trace(go.Scatter(x=[lo[i], hi[i]], y=[ad[i], ad[i]], mode="lines", line=dict(color="#c9c4ba", width=6),
+                                 showlegend=i == 0, name="altı süzgeç (en kötü → en iyi)", hoverinfo="skip"), 1, 1)
+    fig.add_trace(go.Scatter(x=sy, y=ad, mode="markers", name="2018–2023'e bakarak seçilen süzgeç",
+                             marker=dict(symbol="diamond", size=10, color=MAVI), customdata=sad,
+                             hovertemplate="%{y}: %{x:.2f} R · %{customdata}<extra>seçilen</extra>"), 1, 1)
+    fig.add_trace(go.Scatter(x=yy, y=ad, mode="markers", name="süzgeçsiz", marker=dict(symbol="circle", size=9, color=CLARET),
+                             hovertemplate="%{y}: %{x:.2f} R<extra>süzgeçsiz</extra>"), 1, 1)
+    fig.add_vline(x=0, line=dict(color=MUREKKEP, width=0.9))
+    sol, sag = min(lo + yy + [0.0]), max(hi + yy + [0.0])
+    pay = 0.06 * (sag - sol)
+    fig.update_xaxes(title_text="R / işlem", range=[sol - pay, sag + pay])
+    bas = baslik_koy(fig, "Süzgeçle de sonuç çoğunlukla eksi",
+                     [f"Her satır bir kural; çizgi altı süzgecin {_dis(o)} sonucu, dört parite birlikte, maliyetten sonra",
+                      "Sıfır çizgisinin sağı kârlı"])
+    so._yaz(fig, "kisa-suzgec.html", yukseklik(bas, 120 + 40 * len(ad)))
+
+
 NUMARA = "①②③④⑤"
 
 
@@ -1780,7 +1817,7 @@ def nasil(o: dict) -> None:
         so._yaz(fig, f"nasil-{birim}.html", yukseklik(bas, 430))
 
 
-KISA_SEKILLERI = (kisa_kurallar, kisa_stop_hedef, kisa_aralik, nasil)
+KISA_SEKILLERI = (kisa_kurallar, kisa_stop_hedef, kisa_aralik, kisa_suzgec, nasil)
 
 
 

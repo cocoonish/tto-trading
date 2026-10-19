@@ -103,10 +103,10 @@ export const GRUPLAR: DersGrubu[] = [
     baslik: 'FX gün içi stratejiler — backtest serisi',
     aciklama:
       'Gün içi FX işlem kitaplarının en çok anılan kuralları dört majör paritede, gerçek alış-satış ' +
-      'fiyatıyla ve maliyet düşülerek sınandı. Yedi kısa ders: hangi kural işe yarıyor, her kural adım ' +
+      'fiyatıyla ve maliyet düşülerek sınandı. Sekiz kısa ders: hangi kural işe yarıyor, her kural adım ' +
       'adım grafik üstünde (hangi saatte ne olursa ne yapılır), kurallar tek tek ' +
-      '(ne yapar, ne verdi, stop ve hedef nerede olsaydı ne değişirdi), stop ve hedefin aritmetiği, bir kuralı ' +
-      'denemeden önce neye bakılmalı. ' +
+      '(ne yapar, ne verdi, stop ve hedef nerede olsaydı ne değişirdi), stop ve hedefin aritmetiği, ' +
+      'süzgeçler (EMA20 yönü, oynaklık şartı), bir kuralı denemeden önce neye bakılmalı. ' +
       'Ayrıntılı yöntem notları arşivde.',
     hat: true,
     // Sıra tek tanımdan: Aktarılacak Projeler/FxGunici/adlar.py (DERS_SIRA); dogrula.py ikisini karşılaştırır.
@@ -118,6 +118,7 @@ export const GRUPLAR: DersGrubu[] = [
       'fx-gunici-donus',
       'fx-gunici-akis-haber',
       'fx-gunici-stop-hedef',
+      'fx-gunici-suzgec',
       'fx-gunici-kontrol',
     ],
     etiketler: ['gun-ici'],

@@ -6,7 +6,12 @@ Yeniden koşu yok: süzgeç bir işlemi ya tutar ya atar ("atla" kipi; o gün ye
 giriş anında bilinen bilgiden kurulur. Birincil birim kural başına dört parite birlikte. Seçim (2018–2023 havuz
 Sharpe'ı) ve hüküm (2024 →; ana ön kaydın [hukum] kuralı) ön kayıttaki gibi.
 
-Çıktı: cikti/suzgec/olcum.json. Kullanım: .venv/bin/python suzgec.py
+Çıktı: cikti/suzgec/olcum.json; künyesi (`kunye`) ölçümü üreten kodun ve ölçülen koşu çıktısının özünü taşır. Ders
+ölçümü (kisa.suzgec) künyeyi bugünkü ağaçla kıyaslar ve ayrışırsa düşer: koşu ya da kod değişip süzgeç ölçümü yeniden
+koşulmadıysa ders eski işlemlerin süzgeç sonucunu basmaz.
+
+Kullanım: .venv/bin/python suzgec.py [--gerekirse]
+  --gerekirse   künye bugünkü ağaçla aynıysa yeniden ölçmez (zincir böyle çağırır)
 """
 from __future__ import annotations
 
@@ -36,6 +41,15 @@ IC_BITIS = np.datetime64(OK["girdi"]["ic"][1])
 DIS_BAS = np.datetime64(OK["girdi"]["dis_baslangic"])
 RASTGELE_TEKRAR = int(ks.ONKAYIT["hukum"]["rastgele_tekrar"])
 RASTGELE_ESIK = float(ks.ONKAYIT["hukum"]["rastgele_esik_yuzdelik"])
+#: Ölçümün kendi kodu (koşunun modülleri karsi_olgu.kosu_modulleri ile ayrıca bulunur).
+SUZGEC_KODU = ("suzgec.py", "onkayit_suzgec.toml", "ozellik.py", "saglamlik.py", "metrik.py", "ayar.toml", "onkayit.toml")
+
+
+def kunye(kok: Path = ks.CIKTI) -> dict:
+    """Ölçümü üreten kodun ve ölçülen koşu çıktısının (birimlerin sonuç dosyaları) özü — karşı olgunun tanımıyla."""
+    import karsi_olgu as ko
+    yollar = set(ko.kosu_modulleri()) | {BURASI / ad for ad in SUZGEC_KODU}
+    return {"kod_ozu": ko._oz_dosyalar(yollar), "taban_ozu": ko.taban_ozu(kok)}
 
 
 def ema_onceki(g) -> np.ndarray:
@@ -115,8 +129,16 @@ def main(argv: list[str]) -> int:
     import veri as vr
     from gunluk import baglam_kur
     from takvim import olaylar_oku
+    simdi = kunye()
+    if "--gerekirse" in argv and (CIKTI / "olcum.json").exists():
+        eski = json.loads((CIKTI / "olcum.json").read_text(encoding="utf-8")).get("kunye")
+        if eski == simdi:
+            print("süzgeç ölçümü güncel (kod ve koşu çıktısı aynı); yeniden ölçülmedi")
+            return 0
     a = ay.oku()
     birimler = [x for x in argv if x in ks.BIRIMLER] or list(ks.BIRIMLER)
+    if birimler != list(ks.BIRIMLER):
+        simdi = None                                     # kısmi ölçüm künye taşımaz, derse giremez
     # kural → aday → dönem → [parite parçaları]
     parca = {bi: {s: {"is": [], "oos": []} for s in ADAYLAR} for bi in birimler}
     ters = {bi: {s: [] for s in ADAYLAR} for bi in birimler}       # OOS (r_ayni, r_ters) parite parite
@@ -165,7 +187,7 @@ def main(argv: list[str]) -> int:
     # Dört paritenin işlem günlerinin birleşimi, kendi dtype'ıyla (günlük R serisi bu dizinle kurulur).
     gi = np.unique(np.concatenate(gun_is))
     go = np.unique(np.concatenate(gun_oos))
-    sonuc = {"onkayit": "onkayit_suzgec.toml", "kural": {}}
+    sonuc = {"onkayit": "onkayit_suzgec.toml", "kunye": simdi, "kural": {}}
     for bi in birimler:
         haber = bool(ks.BIRIMLER[bi].get("haber"))
         asg = int(OK["secim"]["asgari_islem_haber" if haber else "asgari_islem"])

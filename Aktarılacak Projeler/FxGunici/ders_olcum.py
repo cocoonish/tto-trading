@@ -1434,7 +1434,7 @@ def karsi_olgu_ozet(kok: Path) -> dict:
 
 
 #: Ölçümün okuduğu ama içe aktarmadığı kod dosyaları (ileri_bakma_kapsami sınamanın kendi dosyasından okur).
-KOD_EK = ("testler/test_strateji.py", "testler/sentetik.py")
+KOD_EK = ("testler/test_strateji.py", "testler/sentetik.py", "onkayit_suzgec.toml")
 
 
 def kod_kunyesi() -> dict:
@@ -1471,6 +1471,24 @@ def haber_sabitleri() -> dict:
     return {"atr_gun": int(gunluk.ATR_GUN), "atr_mum": int(sh.ATR_MUM), "patika_yon_sn": int(sh.PATIKA_YON_SN),
             "fomc_basin_sn": [int(x) for x in sh.FOMC_BASIN_SN], "kova_atr": [float(x) for x in sh.KOVA],
             "kova_adi": list(sh.KOVA_ADI), "ana_tf": int(ha.ANA_TF), "ufuk_dk": [int(x) for x in ha.UFUK]}
+
+
+def _ilk_commit(yol: str) -> dict:
+    """Bir dosyanın depoya ilk girdiği commit ve işleyen saati (UTC)."""
+    c = _git("log", "--diff-filter=A", "--format=%h %cI", "--", yol).strip().splitlines()
+    if not c:
+        raise SystemExit(f"{yol}: depoda ilk commit'i bulunamadı (sığ klon?)")
+    h, t = c[-1].split()
+    return {"commit": h[:8], "zaman": t}
+
+
+def suzgec_zamani() -> dict:
+    """Süzgeç çalışmasının ön kaydı, ölçüm kodundan ÖNCE depoya girmiş olmalı (ön kaydın kanıtı commit saatidir)."""
+    on = _ilk_commit("Aktarılacak Projeler/FxGunici/onkayit_suzgec.toml")
+    ol = _ilk_commit("Aktarılacak Projeler/FxGunici/suzgec.py")
+    if not on["zaman"] < ol["zaman"]:
+        raise SystemExit(f"süzgeç ön kaydı ({on}) ölçüm kodundan ({ol}) sonra commit edilmiş")
+    return {"onkayit": on, "olcum": ol}
 
 
 def commit_zamani(commit: str | None) -> list[dict]:
@@ -1572,6 +1590,9 @@ def kur(kok: Path | None = None) -> dict:
     olcum["basarisiz"] = basarisiz.bolum(kok, olcum, a, _islem_dosyasi)
     # Kısa serinin ölçüleri (betimleyici): stop ve hedef seçiminin kazanma oranına ve net sonuca etkisi (kisa.py).
     olcum["kisa"] = kisa.bolum(kok, birimler)
+    # Süzgeç çalışması (ön kayıt onkayit_suzgec.toml, ölçüm suzgec.py): ders görünüşü ve ön kaydın zaman kanıtı.
+    olcum["suzgec"] = kisa.suzgec(kok, birimler)
+    olcum["suzgec"]["zaman"] = suzgec_zamani()
     tutarlilik(olcum, a)
     # Kod künyesi en sonda: ölçüm sırasında yüklenen her proje modülü listeye girsin.
     olcum["kunye"]["kod"] = kod_kunyesi()

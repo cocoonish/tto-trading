@@ -1,5 +1,9 @@
 {
  "onkayit": "onkayit_suzgec.toml",
+ "kunye": {
+  "kod_ozu": "f55779098b7231905661587c51ed05f7998a493f8f83b76464e92e298c530033",
+  "taban_ozu": "b155811bae0f9d5ab6e0b5c37b323711f20ac49b46647d73e197460808e58fd5"
+ },
  "kural": {
   "orb": {
    "aday": {
@@ -13129,12 +13133,12 @@
    "calismiyor": 21
   },
   "secilen": {
-   "yok": 1,
-   "trend60": 1,
-   "ema20": 2,
-   "ema20_dar": 2,
+   "oynak": 3,
    "ema20_oynak": 13,
-   "oynak": 3
+   "trend60": 1,
+   "ema20_dar": 2,
+   "ema20": 2,
+   "yok": 1
   }
  }
 }

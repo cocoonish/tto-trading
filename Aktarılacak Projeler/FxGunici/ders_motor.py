@@ -269,6 +269,8 @@ def bicimle(v, bicim: str, yol: str = "") -> str:
         return adlar.BIRIM[v][1]
     if bicim == "hukum":
         return adlar.HUKUM[v]
+    if bicim == "suzgec":
+        return adlar.SUZGEC[v]
     if bicim == "deger":
         return adlar.DEGER.get(str(v), str(v))
     if bicim == "param":
@@ -6935,6 +6937,126 @@ def blok_nasil_ornek(u: Uretim, ctx: dict, birim: str) -> str:
             + (" Stopsuz kural: R birimi girişteki oynaklıktır (1 ATR)." if stopsuz else ""))
 
 
+# ─────────────────────────────────────────────────────────────── süzgeç dersi
+def _sz(u: Uretim) -> dict:
+    k = u.O.get("suzgec")
+    if not k:
+        raise SablonHatasi("ölçümde süzgeç çalışmasının kaydı yok (suzgec)")
+    return k
+
+
+def suzgec_kural_sira() -> list[str]:
+    """Kuralların okuma sırası: kısa serinin kural dersleri (adlar.KISA_DERS_BIRIM) sırayla."""
+    return [b for L in adlar.KISA_DERS_BIRIM.values() for b in L]
+
+
+def blok_suzgec_tanim(u: Uretim, ctx: dict) -> str:
+    """Altı süzgecin tanımı (ön kayıt [suzgec]); eşikler ölçümün künyesinden, saatler TSİ karşılığıyla."""
+    e = _sz(u)["esik"]
+    fx = blok_tsi(u, ctx, "", "New York 17:00")
+    tanim = {
+        "ema20": (f"Günlük kapanışların (FX günü New York 17:00'de, {fx} kapanır) {e['ema_gun']} günlük üstel "
+                  "ortalaması, işlem gününden önceki son kapanışa kadar. Alış yalnız giriş fiyatı ortalamanın "
+                  "üstündeyse, satış yalnız altındaysa."),
+        "trend60": ("Girişten önce kapanan son 60 dakikalık mum, 60 dakikalık mumların EMA50'sinin işlem yönündeki "
+                    "tarafında kapanmış."),
+        "oynak": (f"Önceki günlerin ATR'sinin son 252 işlem günündeki yüzdeliği en az {sayi(e['oynak'], 1)}: "
+                  "oynaklık kendi geçmişinin ortasında ya da üstünde."),
+        "dar": ("Kuralın kendi yapısı (kırılan aralık, sinyal mumu, haber öncesi aralık…) ATR'ye göre küçük: aynı "
+                "kural ve paritenin 2018–2023 işlemlerinin medyanından küçük ya da ona eşit."),
+        "ema20_oynak": "EMA20 ve oynaklık şartı birlikte.",
+        "ema20_dar": "EMA20 ve dar yapı şartı birlikte.",
+    }
+    if set(tanim) != set(_sz(u)["ozet"]) or list(tanim) != [s_ for s_ in adlar.SUZGEC if s_ != "yok"]:
+        raise SablonHatasi("suzgec_tanim: süzgeç listesi ölçümle aynı değil")
+    return _tablo(["Süzgeç", "İşlemi ne zaman tutar"], [[bas_buyuk(adlar.SUZGEC[k]), v] for k, v in tanim.items()],
+                  ["l", "l"])
+
+
+def blok_suzgec_kural_tablo(u: Uretim, ctx: dict) -> str:
+    """Kural başına: süzgeçsiz 2024 → sonucu, 2018–2023'e bakarak seçilen süzgeç, seçilenin iki dönemdeki sonucu ve
+    ön kayıtlı hüküm (dört parite birlikte, maliyetten sonra)."""
+    k = _sz(u)
+    sira = suzgec_kural_sira()
+    if set(sira) != set(k["kural"]):
+        raise SablonHatasi("suzgec_kural_tablo: kural listesi ölçümle aynı değil")
+    govde = []
+    for b in sira:
+        x = k["kural"][b]
+        s_ = x["secilen"]
+        if s_ is None:
+            raise SablonHatasi(f"suzgec_kural_tablo: {b} için seçim yok")
+        m = x["yok"] if s_ == "yok" else x["aday"][s_]
+        govde.append([adlar.BIRIM[b][1], _hucre(x["yok"]["oos"]["beklenti_r"], "ra"), adlar.SUZGEC[s_],
+                      _hucre(m["is"]["beklenti_r"], "ra"), _hucre(m["oos"]["beklenti_r"], "ra"),
+                      _hucre(m["oos"]["n"], "n"), adlar.HUKUM[x["secilen_hukum"]]])
+    return _tablo(["Kural", "Süzgeçsiz, 2024 → (R)", "Seçilen süzgeç", "Seçilen, 2018–2023 (R)",
+                   "Seçilen, 2024 → (R)", "İşlem, 2024 →", "Hüküm"], govde, ["l", "r", "l", "r", "r", "r", "l"]) + \
+        ("\n\n_İşlem başına net sonuç (R), dört paritenin işlemleri birlikte, makas ve kayma düşülmüş. Süzgeç, yedi "
+         "adayın (süzgeçsiz dahil) 2018–2023 Sharpe oranı en yüksek olanıdır; hüküm 2024 → döneminden verilir._")
+
+
+def blok_suzgec_gecen(u: Uretim, ctx: dict) -> str:
+    """Seçilen süzgeçle zayıf ya da çalışıyor hükmü alan kurallar, tek tek: 2024 → sonucu, işlem sayısı, %95 aralığının
+    alt ucu, rastgele yön yüzdeliği ve aynı ayarın 2018–2023 sonucu. Hiçbiri yoksa bunu söyler."""
+    k = _sz(u)
+    parca = []
+    for b in suzgec_kural_sira():
+        x = k["kural"][b]
+        h = x["secilen_hukum"]
+        if h not in ("zayif", "calisiyor"):
+            continue
+        s_ = x["secilen"]
+        m = x["yok"] if s_ == "yok" else x["aday"][s_]
+        alt = m["oos"]["ga_alt"]
+        cumle = (f"**{adlar.BIRIM[b][0]}**, {adlar.SUZGEC[s_]} süzgeciyle: 2024 →'de {_hucre(m['oos']['n'], 'n')} "
+                 f"işlemde işlem başına {_hucre(m['oos']['beklenti_r'], 'ra')} R, kazanma oranı "
+                 f"{_hucre(m['oos']['isabet'], 'yz1')}. Hüküm {adlar.HUKUM[h]}")
+        if h == "zayif":
+            neden = []
+            if alt is not None and alt <= 0:
+                neden.append(f"%95 aralığının alt ucu {_hucre(alt, 'ra')} R, yani sonuç sıfırdan ayrılamıyor")
+            if (m.get("rastgele") or 0) < 95:
+                neden.append(f"rastgele yön yüzdeliği {_hucre(m.get('rastgele'), 's1')}, eşiğin altında")
+            cumle += ": " + "; ".join(neden) if neden else ""
+        cumle += "."
+        r_is = m["is"]["beklenti_r"]
+        hepsi = [x["yok"]] + list(x["aday"].values())
+        if r_is is not None and r_is <= 0:
+            cumle += f" Aynı ayar 2018–2023'te {_hucre(r_is, 'ra')} R kaybettiriyordu"
+            if all((v["is"]["beklenti_r"] or 0) <= 0 for v in hepsi):
+                cumle += (f": {len(hepsi)} adayın hepsi kaybettiriyordu ve seçim kuralı Sharpe oranı en az kötü olanı "
+                          f"aldı. Bu süzgeç süzgeçsizin işlemlerinin yalnız "
+                          f"{_hucre(m['is']['n'] / x['yok']['is']['n'], 'yz0')} kadarını tutuyor; işlem azaldıkça "
+                          "günlük sonuç serisi seyrekleşir ve Sharpe oranı sıfıra yaklaşır")
+            cumle += ". 2024 →'deki artı, 2018–2023'te görülmemiş bir sonuçtur."
+        parca.append(cumle)
+    if not parca:
+        return "Seçilen süzgeçle zayıf ya da çalışıyor hükmü alan kural yok."
+    return "\n\n".join(parca)
+
+
+def blok_suzgec_ozet_tablo(u: Uretim, ctx: dict) -> str:
+    """Süzgeç başına: tutulan işlem payı, kazanma oranı ve net R farkının medyanı (süzgeçsize göre, 2024 →) ve sonucu
+    iyileştirdiği kural sayısı iki dönemde."""
+    k = _sz(u)
+    govde = []
+    if set(k["ozet"]) != {s_ for s_ in adlar.SUZGEC if s_ != "yok"}:
+        raise SablonHatasi("suzgec_ozet_tablo: süzgeç listesi ölçümle aynı değil")
+    for s_ in [s_ for s_ in adlar.SUZGEC if s_ != "yok"]:
+        o = k["ozet"][s_]
+        govde.append([bas_buyuk(adlar.SUZGEC[s_]), _hucre(o["tutulan_pay_medyan"], "yz0"),
+                      _hucre(o["isabet_fark_oos_medyan"], "pu"), _hucre(o["fark_oos_medyan"], "ra"),
+                      f"{_hucre(o['is_iyi'], 'n')} · {_hucre(o['oos_iyi'], 'n')} · {_hucre(o['iki_iyi'], 'n')}",
+                      _hucre(o["oos_arti"], "n")])
+    n = len(k["kural"])
+    return _tablo(["Süzgeç", "Tutulan işlem", "Kazanma oranı farkı (puan)", "Net sonuç farkı (R)",
+                   f"Sonucu iyileşen kural: 2018–2023 · 2024 → · ikisinde ({n} kuralda)",
+                   "2024 →'de artıya geçen kural"], govde, ["l", "r", "r", "r", "r", "r"]) + \
+        ("\n\n_Farklar süzgeçsize göre, 2024 → döneminde, kural başına; tabloda kuralların medyanı. Tutulan işlem: "
+         "süzgecin açtığı işlemlerin süzgeçsizin işlemlerine oranı._")
+
+
 BLOKLAR = {
     "nasil_ornek": blok_nasil_ornek,
     "kisa_kart_ozet": blok_kisa_kart_ozet,
@@ -6943,6 +7065,8 @@ BLOKLAR = {
     "kisa_grup_tablo": blok_kisa_grup_tablo, "kisa_esli_tablo": blok_kisa_esli_tablo,
     "kisa_maliyet_stop": blok_kisa_maliyet_stop, "kisa_parite_maliyet": blok_kisa_parite_maliyet,
     "kisa_guc_tablo": blok_kisa_guc_tablo,
+    "suzgec_tanim": blok_suzgec_tanim, "suzgec_kural_tablo": blok_suzgec_kural_tablo,
+    "suzgec_ozet_tablo": blok_suzgec_ozet_tablo, "suzgec_gecen": blok_suzgec_gecen,
     "kaynaklar": blok_kaynaklar,
     "kurallar": blok_kurallar, "neden_yon_cumle": blok_neden_yon_cumle, "neden_rastgele": blok_neden_rastgele,
     "neden_basabas": blok_neden_basabas, "neden_ayrisim": blok_neden_ayrisim, "neden_esik": blok_neden_esik,

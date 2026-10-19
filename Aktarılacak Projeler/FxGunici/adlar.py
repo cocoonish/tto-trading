@@ -46,7 +46,7 @@ DERS_BIRIM = {
 #: Serinin okuma sırası: yayındaki kısa seri (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır;
 #: dogrula.py iki listeyi karşılaştırır).
 DERS_SIRA = ["fx-gunici-sonuc", "fx-gunici-nasil", "fx-gunici-kirilim", "fx-gunici-donus", "fx-gunici-akis-haber",
-             "fx-gunici-stop-hedef", "fx-gunici-kontrol"]
+             "fx-gunici-stop-hedef", "fx-gunici-suzgec", "fx-gunici-kontrol"]
 #: Adım adım dersinin grafik etiketleri (sekil.nasil): kural başına referansın adı (yoksa None) ve sinyal mumunun adı.
 #: Ders metnindeki adım numaraları bu tablodan türeyen sırayla yazılır: referans varsa ①, sinyal ve giriş (aynı
 #: andaysa birlikte) sonra, çıkış en sonda. Sırası ve sayısı tek yerde durur.
@@ -233,6 +233,9 @@ KOVA_OKUMA = ["değil", "NR4", "NR7", "haber günü", "ay sonu", "geçiş haftas
 
 #: Hüküm (onkayit.toml [hukum]).
 HUKUM = {"calisiyor": "çalışıyor", "zayif": "zayıf", "calismiyor": "çalışmıyor", "olculemedi": "ölçülemedi"}
+#: Süzgeç çalışmasının (onkayit_suzgec.toml) adayları ve okur adları; sıra ön kayıttaki liste.
+SUZGEC = {"yok": "süzgeçsiz", "ema20": "günlük EMA20 yönünde", "trend60": "60 dakikalık trend yönünde",
+          "oynak": "oynaklık yüksek", "dar": "dar yapı", "ema20_oynak": "EMA20 + oynaklık", "ema20_dar": "EMA20 + dar yapı"}
 
 #: Koşul değişkenleri (ozellik.py).
 KOSUL = {

@@ -5330,3 +5330,15 @@ sırayı oradan türetir. Örnek gün KAZANAN işlemdir (bütün adımlar, hedef
 2024 → ortalamasını yanında basar: bir uygulama resmi başarı öyküsü gibi okunmamalı. Etiket yerleşimi ölçülerek
 kuruldu: sinyal etiketi kırılım yönünde, referans etiketi karşı uçta, çıkış sinyalin karşı yanında; panelin sol ya da
 sağ üçte birindeki etiket içeri açılır (telefonda kesilmesin).
+
+**KARAR (19.10.2026, kullanıcı) — SÜZGEÇ ÇALIŞMASI: ALTI ÖN KAYITLI SÜZGEÇ, YEDİNCİ KISA DERS.** Kullanıcı: "20 daily
+ema'nın üstündeyse yalnızca long … kırılım için ATR şartı … win rate'i pozitife çekmeye bakalım". Süzgeçler (günlük
+EMA20 yönü, 60 dk trend yönü, oynaklık yüzdeliği ≥ 0,5, dar yapı, ikili bileşimler), seçim (2018–2023 havuz Sharpe'ı)
+ve hüküm kuralı `onkayit_suzgec.toml`da sonuç görülmeden commit edildi (e8598c3c → ölçüm kodu 17faed8f; ders
+ölçümü sırayı `suzgec_zamani` ile sınar). S2–S4'ün tercil kovaları arşiv derslerinde önceden görülmüştü; ön kayıt
+bunu adıyla yazar. Ölçüm `suzgec.py` (yeniden koşu yok, varsayılan işlemleri tutar ya da atar) → `cikti/suzgec/olcum.json`;
+dosya kod ve koşu çıktısının özünü taşır (`kunye`) ve `kisa.suzgec` ayrışırsa düşer — bayat süzgeç ölçümü derse giremez;
+zincirde `suzgec.py --gerekirse` ölçümden önce koşar. Hüküm: seçilen süzgeçle 0 çalışıyor · 1 zayıf (pivot dönüşü +
+60 dk trend: 98 işlem, 2018–2023'te −0,16 R, yani işaret döndü) · 21 çalışmıyor; 132 tekil sınamanın hiçbirinde alt uç
+sıfırın üstünde değil (şans 3,3), BH geçen yok. Oynaklık şartının iyileşmesinin çoğu maliyet payından: brüt fark
++0,011 R, stop 1,21 kat geniş. Ders `fx-gunici-suzgec` (seri 8 derse çıktı; kontrol listesi 8.).

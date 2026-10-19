@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Bütün zincir tek komutla: sınamalar → takvim → takvimin fiyat sınaması → veri denetimi → koşu → karşı olgu →
-ölçüm → şekiller (ev stiliyle) → ders metinleri → kapı.
+süzgeç çalışması → ölçüm → şekiller (ev stiliyle) → ders metinleri → kapı.
 
 Fiyat arşivi ve takvimin ham sayfaları bulutta indirilir (arastirma-veri.yml) ve depoda durur; bu betik ağa çıkmaz.
 Okunan her girdi okunmadan önce SHA-256 özüne karşı sınanır, yani zincir değişmiş bir girdi dosyasıyla koşamaz: arşivin
@@ -59,6 +59,9 @@ ADIMLAR = [
     # Sonuçlardan sonra değişen kuralların etkisi (metodoloji dersi). Kod ve koşu çıktısı kayıttakiyle aynıysa
     # yeniden koşmaz; değiştiyse her kuralı geçici kopyada eski hâline döndürüp koşar (dört paralel süreçle ~25 dk).
     ("karşı olgu", [PY, "karsi_olgu.py"], None),
+    # Süzgeç çalışması (onkayit_suzgec.toml): koşunun varsayılan işlemlerine ön kayıtlı altı süzgeç. Künyesi (kod ve
+    # koşu çıktısı) aynıysa yeniden ölçmez; ölçüm adımı künyeyi sınar, bayat süzgeç ölçümü derse giremez.
+    ("süzgeç", [PY, "suzgec.py", "--gerekirse"], None),
     ("ölçüm", [PY, "ders_olcum.py"], None),
     ("şekiller", [PY, "sekil.py"], None),
     ("ders metinleri", [PY, "ders_yaz.py"], None),

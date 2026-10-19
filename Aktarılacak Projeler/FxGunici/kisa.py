@@ -16,6 +16,10 @@ kayıtlı varsayılanlarındır). Üç soru sorar:
   3. Yüksek kazanma oranı ve "en iyi ayarı seçmek": örneklem dışında kazanma oranı yüksek ayarların net sonucu, ve
      örneklem içinde en iyi çıkan ayarların örneklem dışındaki net sonucu.
   4. Kural kartı (kart): her kuralın stop × hedef tablosu, öbür parametreler varsayılanda, dört parite birlikte.
+
+`suzgec()` ayrı bir çalışmanın dersi okuyan görünüşüdür: ön kayıtlı altı süzgeç (onkayit_suzgec.toml; suzgec.py
+ölçer, cikti/suzgec/olcum.json). Onun hükmü (seçim ve hüküm kuralı) ön kayıtlıdır; buradaki türetmeler (iyileştiren
+kural sayısı, brüt fark, stop genişliği oranı, parite hücreleri) betimlemedir.
 """
 from __future__ import annotations
 
@@ -187,4 +191,88 @@ def bolum(kok: Path, birimler: dict) -> dict:
                   "oos_arti": sum(1 for s in en_iyi if s["oos_r"] > 0)},
         # Figürün noktaları (örneklem dışı kazanma oranı, net R, hedef grubu); dört haneye yuvarlı.
         "nokta": [[round(s["oos_isabet"], 4), round(s["oos_r"], 4), GRUP_SIRA.index(_grup(s))] for s in sat],
+    }
+
+
+#: Süzgeçlerin sırası (ön kayıttaki liste) ve süzgeçsiz aday.
+SUZGEC_SIRA = ("ema20", "trend60", "oynak", "dar", "ema20_oynak", "ema20_dar")
+
+
+def _al(m: dict) -> dict:
+    return {k: m.get(k) for k in ("n", "isabet", "beklenti_r", "brut_r", "ga_alt", "risk_pip")}
+
+
+def suzgec(kok: Path, birimler: dict) -> dict:
+    """Süzgeç çalışmasının ders görünüşü. Ölçüm dosyasının künyesi bugünkü ağaçla (kod ve koşu çıktısı) aynı değilse
+    düşer: koşu ya da süzgeç kodu değişip ölçüm yeniden koşulmadıysa ders eski işlemlerin sonucunu basmaz."""
+    import suzgec as sz
+    yol = kok / "suzgec" / "olcum.json"
+    if not yol.exists():
+        raise SystemExit(f"süzgeç ölçümü yok ({yol}); önce suzgec.py")
+    d = json.loads(yol.read_text(encoding="utf-8"))
+    if d.get("kunye") is None or d["kunye"] != sz.kunye(kok):
+        raise SystemExit("süzgeç ölçümü bugünkü kodla ya da koşu çıktısıyla ölçülmemiş; suzgec.py yeniden koşulmalı")
+    if set(d["kural"]) != set(birimler):
+        raise SystemExit("süzgeç ölçümünün kuralları koşunun kurallarıyla aynı değil")
+    if list(d["ozet"]) != list(SUZGEC_SIRA):
+        raise SystemExit(f"süzgeç listesi ön kayıttakiyle aynı değil: {list(d['ozet'])}")
+    kural = {}
+    for b, v in d["kural"].items():
+        a = v["aday"]
+        sec = v.get("secilen")
+        fil = [s_ for s_ in SUZGEC_SIRA if s_ in a]
+        en = max(fil, key=lambda s_: (a[s_]["oos"]["beklenti_r"], -fil.index(s_)))
+        kural[b] = {"yok": {"is": _al(a["yok"]["is"]), "oos": _al(a["yok"]["oos"])},
+                    "aday": {s_: {"is": _al(a[s_]["is"]), "oos": _al(a[s_]["oos"]), "hukum": a[s_]["hukum"],
+                                  "rastgele": a[s_].get("rastgele_oos")} for s_ in fil},
+                    "secilen": sec,
+                    "secilen_hukum": a[sec]["hukum"] if sec else None,
+                    "oos_en_iyi": en}
+    ozet = {}
+    for s_ in SUZGEC_SIRA:
+        o = dict(d["ozet"][s_])
+        bf = [kural[b]["aday"][s_]["oos"]["brut_r"] - kural[b]["yok"]["oos"]["brut_r"] for b in kural
+              if s_ in kural[b]["aday"]]
+        ro = [kural[b]["aday"][s_]["oos"]["risk_pip"] / kural[b]["yok"]["oos"]["risk_pip"] for b in kural
+              if s_ in kural[b]["aday"] and kural[b]["yok"]["oos"]["risk_pip"]]
+        tut = [kural[b]["aday"][s_]["oos"]["n"] / kural[b]["yok"]["oos"]["n"] for b in kural if s_ in kural[b]["aday"]]
+        o.update({"brut_fark_oos_medyan": _medyan(bf), "risk_orani_oos_medyan": _medyan(ro),
+                  "tutulan_pay_medyan": _medyan(tut)})
+        ozet[s_] = o
+    # Parite hücreleri (bilgi): kural × parite × süzgeç; iki pencerede de en az ASGARI işlem ve iki pencerede de artı.
+    hucre_n = hucre_arti = 0
+    for b, v in d["kural"].items():
+        for c, p in v["parite"].items():
+            for s_ in SUZGEC_SIRA:
+                x = p.get(s_)
+                if not x:
+                    continue
+                hucre_n += 1
+                i, o_ = x["is"], x["oos"]
+                if ((i.get("n") or 0) >= ASGARI and (o_.get("n") or 0) >= ASGARI
+                        and (i.get("beklenti_r") or 0) > 0 and (o_.get("beklenti_r") or 0) > 0):
+                    hucre_arti += 1
+    secili = [b for b in kural if kural[b]["secilen"]]
+    hk = d["secim_ozet"]["hukum"]
+    return {
+        "esik": {"oynak": float(sz.OYNAK), "ema_gun": int(sz.EMA_GUN), "asgari": ASGARI,
+                 "asgari_secim": int(sz.OK["secim"]["asgari_islem"]),
+                 "asgari_secim_haber": int(sz.OK["secim"]["asgari_islem_haber"]),
+                 "bh_q": float(sz.OK["coklu"]["bh_q"])},
+        "kural": kural,
+        "ozet": ozet,
+        "coklu": {**d["coklu"], "bh_n": len(d["coklu"]["bh_gecen"])},
+        "suzgec_n": len(SUZGEC_SIRA), "kural_n": len(kural),
+        "hukum": hk,
+        "secilen_sayim": d["secim_ozet"]["secilen"],
+        "secilen_suzgecli": sum(1 for b in secili if kural[b]["secilen"] != "yok"),
+        "zayif": [b for b in secili if kural[b]["secilen_hukum"] == "zayif"],
+        "ort": {"yok_oos": _ort([kural[b]["yok"]["oos"]["beklenti_r"] for b in kural]),
+                "secilen_oos": _ort([kural[b]["aday"][kural[b]["secilen"]]["oos"]["beklenti_r"]
+                                     if kural[b]["secilen"] != "yok" else kural[b]["yok"]["oos"]["beklenti_r"]
+                                     for b in secili])},
+        "herhangi_oos_arti": sum(1 for b in kural if any(x["oos"]["beklenti_r"] > 0 for x in kural[b]["aday"].values())),
+        "herhangi_iki_arti": sum(1 for b in kural if any(x["oos"]["beklenti_r"] > 0 and x["is"]["beklenti_r"] > 0
+                                                         for x in kural[b]["aday"].values())),
+        "hucre": {"n": hucre_n, "iki_arti": hucre_arti},
     }

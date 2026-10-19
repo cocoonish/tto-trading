@@ -1,5 +1,5 @@
 ---
-title: 'FX Gün İçi Stratejiler 7: Bir Kuralı Denemeden Önce — Kontrol Listesi'
+title: 'FX Gün İçi Stratejiler 8: Bir Kuralı Denemeden Önce — Kontrol Listesi'
 description: "Bir gün içi FX kuralını kendiniz sınamak ya da uygulamak istiyorsanız önce bakılacak altı şey: maliyetinizin pip karşılığı, stopun maliyete oranı, kazanma oranı yerine işlem başına net sonuç, kaç işlemin yeteceği, ayarların önceden yazılması ve ileriye dönük izleme."
 pubDate: 2026-10-19
 tags: ['fx', 'gun-ici', 'backtest', 'strateji', 'ders', 'risk']
