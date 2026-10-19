@@ -265,7 +265,7 @@ değeri yoktur.
 
 **Çoklu sınama.** Bir ızgara onlarca kombinasyon dener; en iyisinin örneklem içi Sharpe'ı şans eseri yüksek
 olabilir. **Deflated Sharpe** (Bailey ve López de Prado, 2014) en iyi kombinasyonun Sharpe'ını, aynı sayıda denemenin şansla
-üreteceği en yüksek Sharpe'a göre düzeltir. Eşik iki biçimde kurulur: yalnız örnekleme gürültüsünden (her deneme
+üreteceği en yüksek Sharpe'a ve günlük getirilerin çarpıklık ve basıklığına göre düzeltir. Eşik iki biçimde kurulur: yalnız örnekleme gürültüsünden (her deneme
 sıfır kenarlı olsaydı) ve denemelerin kendi Sharpe yayılımından (Bailey–López de Prado'nun önerisi); ikisi birlikte
 yazılır. **Yürüyen pencere** her yılı yalnız önceki yılların verisiyle seçip o yılda
 sınar ({{ K.saglamlik.walk_forward_ilk_test_yili | t }} → bugün; seçim şartını sağlayan kombinasyonu olmayan yıl sınanmaz,
@@ -321,7 +321,7 @@ hareketiyle birbirine bağlıdır.
 | Önceden kayıt | Kuralın, ızgaranın ve hüküm ölçütünün sonuç görülmeden yazılıp kayda geçirilmesi. |
 | Rastgele yön sınaması | Aynı giriş dakikası, aynı risk uzaklığı ve aynı çıkış kuralıyla, yönü yazı turayla seçen denemelerin dağılımı. |
 | Ayna işlem | Gerçek işlemle aynı dakikada ters yönde açılan, stopu ve hedefi girişe aynı R uzaklığında duran işlem; rastgele yön sınamasının ters yönlü yarısı. Kaybı yön, zamanlama ve maliyet paylarına ayırır. |
-| Deflated Sharpe | Çok sayıda kombinasyon denenmişken en iyisinin Sharpe'ının şans payından arındırılmış olasılığı; eşik iki biçimde (örnekleme gürültüsü · denemelerin yayılımı). |
+| Deflated Sharpe | Çok sayıda kombinasyon denenmişken en iyisinin Sharpe'ının şans payından ve getirilerin normal olmamasından arındırılmış olasılığı; eşik iki biçimde (örnekleme gürültüsü · denemelerin yayılımı). |
 | Yürüyen pencere | Her yılı yalnız önceki yıllarla seçip o yılda sınamak. |
 | Makas | Ask − bid; işlemin girişte ve çıkışta ödediği gerçek maliyet. |
 | Kayma | Makasın ötesinde kötüleşen dolum; bir varsayımdır, kademelerle ölçülür. |

@@ -158,7 +158,8 @@ ve işlem açılmayan gün sıfırdır (ön kaydın tanımı); Sharpe ×√252 i
 1.581 kombinasyon var.
 
 - **Deflated Sharpe** (Bailey ve López de Prado, 2014): ızgaradan seçilen en iyi kombinasyonun günlük Sharpe'ı, o
-  ızgaranın deneme sayısıyla şansla beklenen en yüksek Sharpe'a karşı sınanır. Beklenen en yüksek Sharpe iki biçimde
+  ızgaranın deneme sayısıyla şansla beklenen en yüksek Sharpe'a karşı sınanır; sınama günlük getirilerin çarpıklık ve
+  basıklığını da hesaba katar. Beklenen en yüksek Sharpe iki biçimde
   kurulur: yalnız örnekleme gürültüsünden (**gürültü eşiği**: her deneme sıfır kenarlı ve öbürlerinden bağımsız
   olsaydı tek bir günlük Sharpe'ın varyansı 1/(T−1), T gün sayısı) ve denemelerin kendi Sharpe'larının yayılımından (**yayılım eşiği**,
   Bailey ve López de Prado'nun önerisi). Seçilen Sharpe'ın eşiği aşma olasılığı %95 ya da üstüyse sınama geçer.
@@ -587,7 +588,7 @@ her koşu aynı işlemleri ve aynı sayıları verir (bootstrap ve rastgele yön
 
 ## Kaynaklar
 
-- Bailey, D. H. ve López de Prado, M. (2014). The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality. _Journal of Portfolio Management_, 40(5), 94–107.
+- Bailey, D. H. ve López de Prado, M. (2014). The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality. _Journal of Portfolio Management_, 40(5), 94–107. (alıntılar yazarlardan birinin sitesindeki yayım öncesi sürümden)
 
 _Yatırım tavsiyesi değildir. Ölçülen her şey geçmişe aittir; geçmiş sonuçlar gelecekteki sonuçların göstergesi
 değildir._

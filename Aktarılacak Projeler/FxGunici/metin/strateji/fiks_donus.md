@@ -10,9 +10,10 @@ sonra geri çekileceğine bahis.
 
 Fiksingde dolması istenen emir fiyata duyarsızdır: bir endeks fonu ay sonu ağırlığını o kurdan ayarlamak zorundadır,
 fiyatın nerede olduğuna bakmaz. Bu tür akış fiyatı geçici olarak iter; akış bittiğinde iten güç de biter.
-İki akademik çalışma bu kuralın dayanağıdır. Evans (2018) 21 paritede on yıllık veride fiksing çevresindeki fiyat
-değişimlerinin olağandışı oynak olduğunu ve ardışık değişimlerin eksi ilintili olduğunu — yani hareketlerin geri
-dönme eğiliminde olduğunu — buldu. Melvin ve Prins (2015) ay sonu fiksinginden önce kurların, uluslararası hisse
+İki akademik çalışma bu kuralın dayanağıdır. Evans (2018) 21 paritenin 2004–2013 verisinde, fiksingin bir dakikalık
+pencereyle hesaplandığı dönemde, fiksing çevresindeki fiyat değişimlerinin olağandışı oynak olduğunu ve ardışık
+değişimlerin eksi ilintili olduğunu — yani hareketlerin geri dönme eğiliminde olduğunu — buldu; anlamlı eksi ilinti
+paritelerin çoğunda ay sonu verisindedir. Bu serinin örneklemi ise tamamen beş dakikalık yeni pencerededir. Melvin ve Prins (2015) ay sonu fiksinginden önce kurların, uluslararası hisse
 portföylerinin kur korumasını yeniden ayarladığı yönde hareket ettiğini ve bu yönün ayın hisse getirilerinden
 tahmin edilebildiğini gösterdi. Dönüş kuralı ilk gözlemin mekanik bir biçimidir; ikinci gözlemin sinyali (ayın
 hisse getirileri) bu derste sınanmıyor. Kuralın yapamadığı şey akışın

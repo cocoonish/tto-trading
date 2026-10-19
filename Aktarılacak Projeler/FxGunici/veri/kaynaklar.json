@@ -1,5 +1,5 @@
 {
- "_aciklama": "Serinin literatür atıflarının doğrulama kaydı (tanım ve kapı: atif.py). durum: dogrulandi · kismen (iddianın bir parçası kaynakta; ders cümlesi yalnız o parçayı kurar) · dogrulanamadi (metinde anılamaz). alinti: kaynağın kendi ifadesi, bulutta dondurulmuş metninde (veri/kaynak/<id>.json) geçmek zorunda. kunye: kaynakçada basılan satır; yılı, cildi, sayısı, sayfaları ve başlığı dondurulmuş künyeyle sınanır.",
+ "_aciklama": "Serinin literatür atıflarının doğrulama kaydı (tanım ve kapı: atif.py). durum: dogrulandi · kismen (iddianın bir parçası kaynakta; ders cümlesi yalnız o parçayı kurar) · dogrulanamadi (metinde anılamaz). alinti: kaynağın kendi ifadesi, bulutta dondurulmuş metninde (veri/kaynak/<id>.json) geçmek zorunda. kunye: kaynakçada basılan satır; yılı, cildi, sayısı, sayfaları ve başlığı dondurulmuş künyeyle sınanır. surum: kaynağın dondurulan metni yayımlanmış sürüm olarak tanımlanamıyorsa (çalışma metni, kabul edilmiş metin, yayım öncesi sürüm, başka bir sürümün özeti ya da dergi başlığı taşımayan üçüncü taraf kopyası) alıntıların geldiği sürüm; kaynakçada künyenin yanında parantez içinde basılır. durum yalnız iddianın kaynakta karşılığı olup olmadığını söyler, sürümü söylemez.",
  "kaynak": [
   {
    "id": "armitage1969",
@@ -29,10 +29,11 @@
    ],
    "kunye": "Bailey, D. H., Borwein, J. M., López de Prado, M. ve Zhu, Q. J. (2014). Pseudo-Mathematics and Financial Charlatanism: The Effects of Backtest Overfitting on Out-of-Sample Performance. _Notices of the American Mathematical Society_, 61(5), 458–471.",
    "durum": "dogrulandi",
-   "iddia": "Görece az sayıda denemeyle örneklem içinde sahte biçimde yüksek performanslı bir strateji bulunur; beş yıllık veride kırk beş bağımsız model ayarı denendiğinde en iyisinin örneklem içi Sharpe'ının beklenen değeri 1, örneklem dışındaki 0'dır.",
+   "iddia": "Görece az sayıda denemeyle örneklem içinde sahte biçimde yüksek performanslı bir strateji bulunur; becerisi olmayan stratejiler arasında, beş yıllık veride kırk beş bağımsız model ayarı denendiğinde en iyisinin örneklem içi Sharpe'ının beklenen değeri 1, örneklem dışındaki 0'dır.",
    "alinti": [
     "it takes a relatively small number of trials to identify an investment strategy with a spuriously high backtested performance",
-    "if only five years of data are available, no more than forty-five independent model configurations should be tried. For that number of trials, the expected maximum SR IS is 1, whereas the expected SR OOS is 0"
+    "if only five years of data are available, no more than forty-five independent model configurations should be tried. For that number of trials, the expected maximum SR IS is 1, whereas the expected SR OOS is 0",
+    "the minimum backtest length (MinBTL) needed to prevent skill-less strategies to be generated with a Sharpe ratio IS of 1"
    ],
    "not": "Tam metin (AMS), s. 2 ve s. 4. Katalog yalnız ilk sayfayı veriyor.",
    "acik": [
@@ -57,7 +58,8 @@
     "two leading sources of performance inflation: Selection bias and non-Normal returns",
     "incorporates information about the unselected trials, such as the number of independent experiments conducted and the variance of the SRs"
    ],
-   "not": "Tam metin (yazarın sitesindeki sürüm) s. 2."
+   "not": "Tam metin (yazarın sitesindeki sürüm) s. 2.",
+   "surum": "alıntılar yazarlardan birinin sitesindeki yayım öncesi sürümden"
   },
   {
    "id": "bllo2014",
@@ -68,10 +70,13 @@
    ],
    "kunye": "Barber, B. M., Lee, Y.-T., Liu, Y.-J. ve Odean, T. (2014). The Cross-Section of Speculator Skill: Evidence from Day Trading. _Journal of Financial Markets_, 18, 1–24.",
    "durum": "dogrulandi",
-   "iddia": "Tayvan'da 1992–2006 arasında gün içi işlem yapanların %1'inden azı ücretlerden sonra öngörülebilir ve güvenilir biçimde kâr etti.",
+   "iddia": "Tayvan'da 1992–2006 arasında, ortalama bir yılda gün içi işlem hacmi yılda 600 bin Tayvan dolarını aşan yaklaşık 277 bin kişinin beşte biri ücretlerden (komisyon ve işlem vergisi) sonra artı anormal getiri elde etti; ertesi yıl da işlem maliyetlerinden sonra güvenilir biçimde artı anormal getiri elde edenler yalnız önceki yılın en kârlı 4 bin gün içi işlemcisiydi, yani bütün gün içi işlemcilerin %1'inden azı.",
    "alinti": [
     "by analyzing day traders in Taiwan from 1992 to 2006",
-    "Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees"
+    "Less than 1% of the day trader population is able to predictably and reliably earn positive abnormal returns net of fees",
+    "in the average year, 277,000 individuals engaged in day trades in excess of $NT 600,000 per year",
+    "about 20% of these day traders earn positive abnormal returns net of fees",
+    "only the 4,000 most profitable day traders (less than 1% of the total population of day traders) from the prior year go on to earn reliably positive abnormal returns net of trading costs in the subsequent year"
    ],
    "not": "Tam metin (yazarın sitesi) s. 1."
   },
@@ -105,7 +110,8 @@
    "alinti": [
     "in a sample that is truncated by survivorship and show that this relationship gives rise to the appearance of predictability"
    ],
-   "not": "Tam metnin ilk sayfası (özet)."
+   "not": "Tam metnin ilk sayfası (özet).",
+   "surum": "alıntı üçüncü taraf bir sitedeki metin sürümünden"
   },
   {
    "id": "cchv2014",
@@ -180,13 +186,17 @@
    ],
    "kunye": "Evans, M. D. D. (2018). Forex Trading and the WMR Fix. _Journal of Banking and Finance_, 87, 233–247.",
    "durum": "dogrulandi",
-   "iddia": "21 paritenin on yıllık tik verisinde fiksingden hemen önceki ve sonraki kur değişimleri olağanüstü oynaktır ve güçlü eksi ardışık ilinti gösterir, özellikle ayın son işlem gününde; düzenleyiciler 2013'ten itibaren dünyanın en büyük bankalarından bazılarının döviz fiksingleri çevresindeki işlemlerini soruşturuyor.",
+   "iddia": "21 paritenin 2004–2013 arası tik verisinde, fiksingin bir dakikalık pencereyle hesaplandığı dönemde, fiksingden hemen önceki ve sonraki kur değişimleri olağanüstü oynaktır ve güçlü eksi ardışık ilinti gösterir, özellikle ayın son işlem gününde; anlamlı eksi ilinti paritelerin çoğunda ay sonu verisindedir. Düzenleyiciler 2013'ten itibaren dünyanın en büyük bankalarından bazılarının döviz fiksingleri çevresindeki işlemlerini soruşturuyor.",
    "alinti": [
     "drawing on a decade of tick-by-tick data for 21 currency pairs",
     "pre- and post-Fix changes in spot rates are extraordinarily volatile and exhibit strong negative serial correlation, particularly on the last trading day of each month",
-    "Since 2013 regulators have been investigating the activities of some of the world's largest banks around the setting of daily benchmarks for forex prices"
+    "Since 2013 regulators have been investigating the activities of some of the world's largest banks around the setting of daily benchmarks for forex prices",
+    "for every year between 2004 and 2013",
+    "The Fix is computed over a one minute window that starts 30 seconds before 4:00 pm",
+    "I find evidence of large statistically significant negative correlations for most currency pairs in end-of-month data over horizons ranging from one to 15 minutes"
    ],
-   "not": "Alıntılar çalışma metni sürümünden (MPRA 58151, Ağustos 2014); künye derginin sürümüdür."
+   "not": "Alıntılar çalışma metni sürümünden (MPRA 58151, Ağustos 2014); künye derginin sürümüdür.",
+   "surum": "alıntılar yazarın MPRA arşivindeki çalışma metninden"
   },
   {
    "id": "evans_lyons2002",
@@ -261,9 +271,10 @@
    ],
    "kunye": "Harvey, C. R., Liu, Y. ve Zhu, H. (2016). … and the Cross-Section of Expected Returns. _Review of Financial Studies_, 29(1), 5–68.",
    "durum": "dogrulandi",
-   "iddia": "Yüzlerce faktörün denendiği bir alanda yeni bir bulgunun t istatistiğinin 3,0'ı aşması önerildi.",
+   "iddia": "Beklenen getirilerin kesitini açıklamaya çalışan yüzlerce makale ve faktörün bulunduğu literatürde yeni bir faktörün t istatistiğinin 3,0'ı aşması önerildi.",
    "alinti": [
-    "A new factor needs to clear a much higher hurdle, with a t-statistic greater than 3.0"
+    "A new factor needs to clear a much higher hurdle, with a t-statistic greater than 3.0",
+    "Hundreds of papers and factors attempt to explain the cross-section of expected returns"
    ],
    "not": "Dergi özeti (OpenAlex); çalışma metni 't-ratio greater than 3.0' der."
   },
@@ -325,12 +336,15 @@
    ],
    "kunye": "Kaminski, K. M. ve Lo, A. W. (2014). When Do Stop-Loss Rules Stop Losses? _Journal of Financial Markets_, 18, 234–254.",
    "durum": "dogrulandi",
-   "iddia": "Getiriler rastgele yürüyüşse (bağımsız ve aynı dağılımlı) bir stop kuralının beklenen getiriye katkısı her zaman eksidir; getirilerde momentum, yani artı ardışık ilinti varsa artı olabilir.",
+   "iddia": "Stop kuralı, birikimli zarar bir eşiğe ulaşınca portföyün maruziyetini azaltan önceden belirlenmiş bir politikadır. Getiriler rastgele yürüyüşse (bağımsız ve aynı dağılımlı) stopun beklenen getiriye katkısı her zaman eksidir, çünkü portföyü zaman zaman daha yüksek getirili varlıktan çıkarır; getirilerde momentum, yani artı ardışık ilinti varsa artı olabilir.",
    "alinti": [
     "If the portfolio follows a random walk (i.e., independently and identically distributed returns) the stopping premium is always negative",
-    "if portfolio returns are characterized by \"momentum\" or positive serial correlation, we show that the stopping premium can be positive"
+    "if portfolio returns are characterized by \"momentum\" or positive serial correlation, we show that the stopping premium can be positive",
+    "predetermined policies that reduce a portfolio's exposure after reaching a certain threshold of cumulative losses",
+    "If returns are unforecastable, stop-loss rules simply force the portfolio out of higher-yielding assets on occasion"
    ],
-   "not": "Tam metin, üçüncü taraf bir sitede barınan sürüm (s. 3–4); künye derginin sürümüdür."
+   "not": "Tam metin, üçüncü taraf bir sitede barınan sürüm (s. 3–4); künye derginin sürümüdür.",
+   "surum": "alıntılar üçüncü taraf bir sitedeki metin sürümünden"
   },
   {
    "id": "kmw2024",
@@ -341,12 +355,15 @@
    ],
    "kunye": "Krohn, I., Mueller, P. ve Whelan, P. (2024). Foreign Exchange Fixings and Returns Around the Clock. _Journal of Finance_, 79(1), 541–578.",
    "durum": "dogrulandi",
-   "iddia": "Dolar fiksinglere giderken değer kazanır, sonra kaybeder; WM/R penceresi 15 Şubat 2015'ten önce bir dakikaydı.",
+   "iddia": "Dolar fiksinglere giderken değer kazanır, sonra kaybeder; bulgu, aracıların fiksinglerde koşulsuz dolar talebine aracılık ederken taşıdığı stok riskine dayanan açıklamayla tutarlıdır. WM/R penceresi 15 Şubat 2015'ten önce bir dakikaydı; sonra fiksingi ortalayan beş dakika oldu (15:57:30–16:02:30).",
    "alinti": [
     "The U.S. dollar appreciates in the run-up to foreign exchange (FX) fixes and depreciates thereafter",
-    "Before 15 February 2015, the length of the window to calculate the fix rate was only a one-minute interval"
+    "Before 15 February 2015, the length of the window to calculate the fix rate was only a one-minute interval",
+    "We present evidence consistent with an inventory risk explanation whereby FX dealers intermediate unconditional demand for U.S. dollars at the fixes",
+    "In a five-minute interval around the fix (i.e., between 15:57:30 and 16:02:30)"
    ],
-   "not": "Özet Crossref'te; pencere bilgisi yazarların kabul edilmiş metni s. 8 (dipnot 4) ve aynı sayfada beş dakikalık pencerenin tanımı (15:57:30–16:02:30)."
+   "not": "Özet Crossref'te; pencere bilgisi yazarların kabul edilmiş metni s. 8 (dipnot 4) ve aynı sayfada beş dakikalık pencerenin tanımı (15:57:30–16:02:30).",
+   "surum": "pencere tanımı yazarların kabul edilmiş metninden"
   },
   {
    "id": "linnainmaa2010",
@@ -405,10 +422,12 @@
    ],
    "kunye": "McLean, R. D. ve Pontiff, J. (2016). Does Academic Research Destroy Stock Return Predictability? _Journal of Finance_, 71(1), 5–32.",
    "durum": "dogrulandi",
-   "iddia": "Kesitsel hisse getirisini öngördüğü yayımlanmış 97 değişkenin portföy getirisi örneklem dışında %26, yayımdan sonra %58 düşük.",
+   "iddia": "Kesitsel hisse getirisini öngördüğü yayımlanmış 97 değişkenin portföy getirisi örneklem dışında %26, yayımdan sonra %58 düşük; yazarlar örneklem dışındaki düşüşü veri madenciliği etkisinin üst sınırı sayar, aradaki 32 puanı (58 − 26) yayımı okuyan işlemlere bağlar.",
    "alinti": [
     "97 variables shown to predict cross-sectional stock returns",
-    "Portfolio returns are 26% lower out-of-sample and 58% lower post-publication"
+    "Portfolio returns are 26% lower out-of-sample and 58% lower post-publication",
+    "The out-of-sample decline is an upper bound estimate of data mining effects",
+    "We estimate a 32% (58%-26%) lower return from publication-informed trading"
    ],
    "not": "Crossref özeti."
   },
@@ -424,12 +443,13 @@
    ],
    "kunye": "Melvin, M. ve Prins, J. (2015). Equity Hedging and Exchange Rates at the London 4 p.m. Fix. _Journal of Financial Markets_, 22, 50–72.",
    "durum": "dogrulandi",
-   "iddia": "Uluslararası hisse portföy yöneticilerinin kur koruma işlemleri Londra 16:00 fiksinginde yoğunlaşır; işlemlerin yönü geçmiş hisse getirilerinden okunur ve hisse piyasasının ay içindeki değer artışı ay sonu fiksinginden önceki kur değer kaybını öngörür.",
+   "iddia": "Londra 16:00 fiksingini, uluslararası hisse portföy yöneticilerinin kur koruma işlemlerinin yoğunlaştığı anları belirlemek için kurumsal bir öncül olarak alır; işlemlerin yönünü geçmiş hisse getirilerinden okur ve hisse piyasasının ay içindeki değer artışının ay sonu fiksinginden önceki kur değer kaybını öngördüğünü gösterir.",
    "alinti": [
     "hedging by international equity portfolio managers affects exchange rates",
     "is used to identify times when hedging trades concentrate",
     "The direction of hedging trades is identified by past equity returns",
-    "equity market appreciation over the month can be used to predict currency depreciation before the end-of-month fix"
+    "equity market appreciation over the month can be used to predict currency depreciation before the end-of-month fix",
+    "A key institutional feature of the foreign exchange market"
    ],
    "not": "IDEAS kayıt sayfası (derginin özeti). Özet akışlar arasında bir büyüklük sıralaması vermez; akış dersinin 'ay sonu en büyük akışı taşır' cümlesi bu yüzden düzeltildi (18.10.2026)."
   },
@@ -441,14 +461,15 @@
     "fx-gunici-neden-basarisiz"
    ],
    "kunye": "Neely, C. J. ve Weller, P. A. (2003). Intraday Technical Trading in the Foreign Exchange Market. _Journal of International Money and Finance_, 22(2), 223–237.",
-   "durum": "kismen",
-   "iddia": "Genetik programla ve optimize edilmiş doğrusal bir tahmin modeliyle seçilen gün içi teknik kurallar, gerçekçi işlem maliyeti ve işlem saatleri hesaba katıldığında örneklem dışında fazla getiri vermez; kurallar verideki şaşırtıcı ölçüde istikrarlı bazı örüntüleri yine de bulur.",
+   "durum": "dogrulandi",
+   "iddia": "Genetik programla ve optimize edilmiş doğrusal bir tahmin modeliyle seçilen gün içi teknik kurallar için, gerçekçi işlem maliyeti ve işlem saatleri hesaba katıldığında, örneklem dışında fazla getiri sağladıklarına dair kanıt çıkmadı; kurallar verideki şaşırtıcı ölçüde istikrarlı bazı örüntüleri yine de buldu.",
    "alinti": [
     "out-of-sample performance of intraday technical trading strategies selected using two methodologies, a genetic program and an optimized linear forecasting model",
     "When realistic transaction costs and trading hours are taken into account, we find no evidence of excess returns to the trading rules derived with either methodology",
     "the trading rules discover some remarkably stable patterns in the data"
    ],
-   "not": "IDEAS kayıt sayfası; özetin başka bir sürümden (aynı başlıklı çalışma metni) alındığını kaydın kendisi yazıyor. Derginin metni dondurulmadı; durum bu yüzden 'kismen'."
+   "not": "IDEAS kayıt sayfası; sayfa özetin aynı çalışmanın başka bir sürümünden alındığını yazıyor (aynı başlıklı çalışma metni). Derginin metni dondurulmadı; kullanılan sürüm kaynakçada künyenin yanında yazılıdır.",
+   "surum": "özet çalışmanın başka bir sürümünden"
   },
   {
    "id": "nwu2009",
@@ -541,11 +562,12 @@
    ],
    "kunye": "Sullivan, R., Timmermann, A. ve White, H. (1999). Data-Snooping, Technical Trading Rule Performance, and the Bootstrap. _Journal of Finance_, 54(5), 1647–1691.",
    "durum": "dogrulandi",
-   "iddia": "Brock, Lakonishok ve LeBaron'un 26 kuralı genişletilmiş bir evrende, Dow Jones'un 100 yıllık günlük verisinde veri madenciliği düzeltmesiyle sınandı: 1897–1986'da bazı kurallar düzeltmeden sonra da kıyası yendi; sonraki on yılda en iyi kuralın kıyası yenmemiş olma olasılığı %12'ye yakındı.",
+   "iddia": "Brock, Lakonishok ve LeBaron'un 26 kuralı genişletilmiş bir evrende, Dow Jones'un 100 yıllık günlük verisinde veri madenciliği düzeltmesiyle sınandı: 1897–1986'da bazı kurallar düzeltmeden sonra da kıyası yendi. Sonraki on yılda (1987–1996) o dönemin en iyi kuralının kıyası yenmemiş olma olasılığı %12'ye yakındı; alışılmış anlamlılık düzeylerinde teknik kuralların o dönemde ekonomik değer taşıdığına dair kanıt zayıftı.",
    "alinti": [
     "expand their universe of 26 trading rules, apply the rules to 100 years of daily data on the Dow Jones Industrial Average",
     "during the 90-year sample period originally investigated by BLL, 1897-1986, certain trading rules did indeed outperform the benchmark, even after adjustment is made for data-snooping",
-    "The probability that the best-performing trading rule did not outperform the benchmark during this period is nearly 12 percent"
+    "The probability that the best-performing trading rule did not outperform the benchmark during this period is nearly 12 percent",
+    "there is scant evidence that technical trading rules were of any economic value during the period 1987-1996"
    ],
    "not": "Sonuç cümleleri tam metnin girişinden (s. 3). Evrenin kural sayısı derste yazılmadı: dondurulmuş metinde geçmiyor."
   },

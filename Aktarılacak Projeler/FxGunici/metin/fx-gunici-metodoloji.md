@@ -154,7 +154,8 @@ ve işlem açılmayan gün sıfırdır (ön kaydın tanımı); Sharpe ×√252 i
 {{ T.kombinasyon | n }} kombinasyon var.
 
 - **Deflated Sharpe** (Bailey ve López de Prado, 2014): ızgaradan seçilen en iyi kombinasyonun günlük Sharpe'ı, o
-  ızgaranın deneme sayısıyla şansla beklenen en yüksek Sharpe'a karşı sınanır. Beklenen en yüksek Sharpe iki biçimde
+  ızgaranın deneme sayısıyla şansla beklenen en yüksek Sharpe'a karşı sınanır; sınama günlük getirilerin çarpıklık ve
+  basıklığını da hesaba katar. Beklenen en yüksek Sharpe iki biçimde
   kurulur: yalnız örnekleme gürültüsünden (**gürültü eşiği**: her deneme sıfır kenarlı ve öbürlerinden bağımsız
   olsaydı tek bir günlük Sharpe'ın varyansı 1/(T−1), T gün sayısı) ve denemelerin kendi Sharpe'larının yayılımından (**yayılım eşiği**,
   Bailey ve López de Prado'nun önerisi). Seçilen Sharpe'ın eşiği aşma olasılığı %95 ya da üstüyse sınama geçer.

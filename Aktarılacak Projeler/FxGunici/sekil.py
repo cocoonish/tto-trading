@@ -1471,13 +1471,23 @@ def neden_ay_sonu(o: dict) -> None:
                                         f"{PARITE.get('GBPUSD', 'GBP/USD')} · yıl yıl net R"))
     y = [s[2] for s in satir][::-1]
     v = {s[2]: a["parite"][s[0]][s[1]]["ay_sonu"] for s in satir}
+
+    def sinirda(k):
+        # aralığın sıfıra yakın ucu (alt ya da üst) işaretini bootstrap tohumuna bağlı taşıyorsa (basarisiz._ay_ozeti)
+        return any(s_.get("sinirda") for s_ in (v[k].get("sinir") or {}).values())
     fig.add_trace(go.Scatter(
         x=[v[k]["net"] for k in y], y=y, mode="markers", name="net (bugünkü tanım: ayın son Londra iş günü)",
-        marker=dict(size=9, color=[MAVI if v[k]["alt"] > 0 else (MUREKKEP if v[k]["net"] > 0 else CLARET) for k in y]),
+        marker=dict(size=[11 if sinirda(k) else 9 for k in y],
+                    symbol=["diamond" if sinirda(k) else "circle" for k in y],
+                    color=[MAVI if v[k]["alt"] > 0 else (MUREKKEP if v[k]["net"] > 0 else CLARET) for k in y]),
         error_x=dict(type="data", symmetric=False, array=[v[k]["ust"] - v[k]["net"] for k in y],
                      arrayminus=[v[k]["net"] - v[k]["alt"] for k in y], color=GRI, thickness=1.2),
         hovertext=[f"{k}: net {_r(v[k]['net'], 3)} R · %95 [{_r(v[k]['alt'], 3)}, {_r(v[k]['ust'], 3)}] · brüt "
-                   f"{_r(v[k]['brut'], 3)} R · {vir(v[k]['n'], 0)} ay sonu" for k in y], hoverinfo="text"), 1, 1)
+                   f"{_r(v[k]['brut'], 3)} R · {vir(v[k]['n'], 0)} ay sonu"
+                   + "".join(f" · {'alt' if uc == 'alt' else 'üst'} uç sınırda (ucun artı çıktığı tohumların payı "
+                             f"%{vir(100 * s_['pozitif_pay'], 1)})"
+                             for uc, s_ in sorted((v[k].get("sinir") or {}).items()) if s_.get("sinirda"))
+                   for k in y], hoverinfo="text"), 1, 1)
     fig.add_trace(go.Scatter(x=[v[k]["brut"] for k in y], y=y, mode="markers", name="brüt (orta fiyattan)",
                              marker=dict(symbol="circle-open", size=9, color=GRI, line=dict(width=1.5, color=GRI)),
                              hoverinfo="skip"), 1, 1)
@@ -1505,6 +1515,8 @@ def neden_ay_sonu(o: dict) -> None:
                      [_kunye(o), "Fiksing momentumu, önceden kayıtlı varsayılan; yalnız ayın son Londra iş günündeki işlemler "
                       "(ayda bir işlem) · aralık: önceden kayıtlı bootstrap",
                       "Mavi: aralığın alt ucu sıfırın üstünde · siyah: net artı, aralık sıfırı kapsıyor · kırmızı: net eksi",
+                      "Elmas: aralığın sıfıra yakın ucu sınırda; işareti bootstrap tohumuna bağlı (renk önceden kayıtlı "
+                      "yordamın ucundan)",
                       f"Çarpı: ay sonunun eski tanımı (ayın son hafta içi günü); iki tanım İngiltere tatiline denk gelen "
                       f"{vir(len(k_.get('ay_sonu_kayan') or []), 0)} ayda ayrışır",
                       f"Alt panel: {so.tarih(k_['baslangic'])}–{so.tarih(k_['bitis'])}; son yıl eksik"])

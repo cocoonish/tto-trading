@@ -284,7 +284,14 @@ def ayrisim(sonuclar: dict, birimler: dict) -> dict:
             kural[b] = {k: _f(np.average(x[k], weights=w)) for k in ("y", "z", "c", "c_makas", "c_kayma", "net", "ayna")}
             kural[b]["n"] = int(w.sum())
             kural[b]["bilesim"] = int(len(x))
-        out[d] = {"bilesim": int(len(A)), "dislanan": sorted(f"{r.kural}:{r.cift}" for r in D[D["ayna"].isna()].itertuples()),
+        dis = D[D["ayna"].isna()]
+        out[d] = {"bilesim": int(len(A)), "dislanan": sorted(f"{r.kural}:{r.cift}" for r in dis.itertuples()),
+                  # aynası kurulamayan bileşimlerin kuralları ve net artı olanları (ortalamaların dışında kalanlar)
+                  "dislanan_kural": sorted(dict.fromkeys(dis["kural"])), "dislanan_n": int(len(dis)),
+                  "dislanan_net_arti": int((dis["net"] > 0).sum()),
+                  # aynası kurulan ve kurulamayan bileşimlerin net artı sayımlarının toplamı: temel senaryonun net
+                  # artı sayımıyla (duyarlilik.temel, bütün bileşimlerden ayrıca sayılır) aynı olmalı
+                  "net_arti_toplam": int((A["net"] > 0).sum()) + int((dis["net"] > 0).sum()),
                   "ort": {k: _f(A[k].mean()) for k in ("y", "z", "c", "c_makas", "c_kayma", "net", "brut",
                                                          "c_pip", "c_makas_pip", "c_kayma_pip")},
                   "medyan": {k: _f(A[k].median()) for k in ("y", "z", "c")},
@@ -297,6 +304,9 @@ def ayrisim(sonuclar: dict, birimler: dict) -> dict:
                                  "kayma0": int((D["kayma0"] > 0).sum()), "yalniz_makas": int((D["makas"] > 0).sum()),
                                  "yalniz_makas_parite": {c: int(((D["cift"] == c) & (D["makas"] > 0)).sum())
                                                          for c in dict.fromkeys(D["cift"])},
+                                 # temel senaryoda (makas + kayma) net artı kalanların paritesi
+                                 "temel_parite": {c: int(((D["cift"] == c) & (D["net"] > 0)).sum())
+                                                  for c in dict.fromkeys(D["cift"])},
                                  "kayma_payi": _f(D["c_kayma"].mean() / D["c"].mean())}}
         if (A["y"] + A["z"] - A["c"] - A["net"]).abs().max() > 1e-12:
             raise ValueError("basarisiz: ayrışım özdeşliği tutmuyor")
@@ -452,8 +462,14 @@ def kenar(t: pd.DataFrame, birimler: dict, sonuclar: dict) -> dict:
     for ad in ("net", "maliyet", "brut"):
         r = stats.spearmanr(hv[f"{ad}_is"], hv[f"{ad}_oos"])
         out["sira_havuz"][ad] = {"rho": _f(r[0]), "p": _f(r[1])}
-    out["sira_bilesim"] = {ad: _f(stats.spearmanr(j[f"{ad}_is"], j[f"{ad}_oos"])[0])
-                           for ad in ("net", "maliyet", "brut", "isabet")}
+    # Bileşim düzeyindeki sıra korelasyonu eğim ve güvenilirlikle aynı örneklemde (örneklem dışında en az AYNA_ASGARI
+    # işlem); bütün bileşimlerdeki değer duyarlılık olarak yanında.
+    sb = {ad: stats.spearmanr(jj[f"{ad}_is"], jj[f"{ad}_oos"]) for ad in ("net", "maliyet", "brut", "isabet")}
+    out["sira_bilesim"] = {ad: _f(r[0]) for ad, r in sb.items()}
+    out["sira_bilesim_p"] = {ad: _f(r[1]) for ad, r in sb.items()}
+    out["sira_bilesim_hepsi"] = {ad: {"rho": _f(r[0]), "p": _f(r[1])}
+                                 for ad in ("net", "maliyet", "brut", "isabet")
+                                 for r in [stats.spearmanr(j[f"{ad}_is"], j[f"{ad}_oos"])]}
     y = t.assign(yil=t["gun"].dt.year).groupby(["kural", "cift", "yil"], sort=False).agg(
         net=("r", "mean"), brut=("r_brut", "mean"))
     y["maliyet"] = y["brut"] - y["net"]
@@ -613,16 +629,19 @@ def sans(t: pd.DataFrame, ts: pd.DataFrame, G: pd.DataFrame, sonuclar: dict, bir
     out["geriye_donuk"] = {"bilesim": int(len(en)), "arti": int((en > 0).sum()), "medyan": _f(en.median()),
                            "satir": int(len(U)), "satir_arti": int((U["oos_beklenti_r"] > 0).sum()),
                            "is_en_iyi_eksi": int((en_is <= 0).sum())}
-    tt = []
-    for b in birimler:
-        hv = birimler[b]["havuz"]["varsayilan"]["tum"]
-        dg = tatil["birim"][b]["diger"]["tum"]
-        tt.append({"kural": b, "dis": 1 - dg["n"] / hv["n"], "fark": dg["r"] - hv["beklenti_r"],
-                   "doner": hv["beklenti_r"] <= 0 < dg["r"]})
-    tt = pd.DataFrame(tt)
-    i = int(tt["fark"].idxmax())
-    out["tatil"] = {"dislanan": _f(tt["dis"].median()), "en_cok": _f(tt.loc[i, "fark"]), "en_cok_kural": tt.loc[i, "kural"],
-                    "medyan": _f(tt["fark"].median()), "donen": int(tt["doner"].sum())}
+    # Yerel tatil süzgeci: bütün dönem (üst düzey alanlar) ve örneklem dışı ayrı ayrı.
+    def tatil_say(d):
+        tt = []
+        for b in birimler:
+            hv = birimler[b]["havuz"]["varsayilan"][d]
+            dg = tatil["birim"][b]["diger"][d]
+            tt.append({"kural": b, "dis": 1 - dg["n"] / hv["n"], "fark": dg["r"] - hv["beklenti_r"],
+                       "doner": hv["beklenti_r"] <= 0 < dg["r"]})
+        tt = pd.DataFrame(tt)
+        i = int(tt["fark"].idxmax())
+        return {"dislanan": _f(tt["dis"].median()), "en_cok": _f(tt.loc[i, "fark"]), "en_cok_kural": tt.loc[i, "kural"],
+                "medyan": _f(tt["fark"].median()), "donen": int(tt["doner"].sum())}
+    out["tatil"] = {**tatil_say("tum"), "oos": tatil_say("oos")}
     return out
 
 
@@ -655,6 +674,10 @@ def esik(t: pd.DataFrame, birimler: dict, sonuclar: dict, kalite: dict) -> dict:
     for d in ("oos", "tum"):
         for k in ("sifir_alti", "alt_arti", "ustu"):
             out["ozet"][d][k + "_n"] = len(out["ozet"][d][k])
+        # Nokta tahmini sıfır ya da altında olan kuralların kaçında aralık sıfırı kapsıyor (brüt sıfırdan ayırt
+        # edilemiyor: maliyetsiz yürütmede ne kenar ne kayıp gösterilebilir).
+        out["ozet"][d]["sifir_alti_kapsar_n"] = sum(1 for b in out["ozet"][d]["sifir_alti"]
+                                                    if out["havuz"][d][b]["alt"] <= 0 <= out["havuz"][d][b]["ust"])
     out["lambda"] = {}
     for d in ("oos", "tum"):
         br = np.array([s["varsayilan_analiz"][d]["brut_r"] for s in sonuclar.values()])
@@ -721,16 +744,22 @@ def haber(haber_cift: dict) -> dict:
 
 # ───────────────────────────────────────────── ay sonu
 def _ay_ozeti(x: pd.DataFrame) -> dict:
+    """Ay sonu alt kümesinin bir penceresi. Aralığın sıfıra yakın ucu (alt ya da üst) için metrik.sinir_bilgisi: büyük
+    tekrarlı kestirim ve tohum duyarlılığı (havuzun ve ay sonu ailesinin sınır notuyla aynı ölçü); uç sıfıra yakın
+    değilse kayıt yoktur. Aralığın kendisi önceden kayıtlı yordamdandır, sınır kaydı onun işaretinin tohuma bağlı olup
+    olmadığını söyler."""
     r = x["r"].to_numpy(np.float64)
     n = len(r)
     if n < 2:
         return {"n": n}
     alt, ust = mk.bootstrap_ort(r)
+    sinir = {uc: s_ for uc, v in (("alt", alt), ("ust", ust)) if (s_ := mk.sinir_bilgisi(r, v, uc))}
     return {"n": n, "net": _f(r.mean()), "alt": _f(alt), "ust": _f(ust), "brut": _f(x["r_brut"].mean()),
             "maliyet": _f((x["r_brut"] - x["r"]).mean()), "net_pip": _f(x["pnl_pip"].mean()),
             "brut_pip": _f(x["brut_pip"].mean()), "maliyet_pip": _f((x["brut_pip"] - x["pnl_pip"]).mean()),
             "R": _f(x["R_pip"].median()), "sd": _f(r.std(ddof=1)), "carpiklik": _f(stats.skew(r)),
-            "basiklik": _f(stats.kurtosis(r)), "isabet": _f((r > 0).mean())}
+            "basiklik": _f(stats.kurtosis(r)), "isabet": _f((r > 0).mean()),
+            "sinir": {uc: {k: (_f(v) if isinstance(v, float) else v) for k, v in s_.items()} for uc, s_ in sinir.items()}}
 
 
 def ay_sonu(kok: Path, sonuclar: dict, islem_yolu, ic_bitis, aile: dict, ciftler: list[str]) -> dict:
@@ -894,7 +923,9 @@ def guc(ay: dict, kenar_: dict, t: pd.DataFrame, birimler: dict) -> dict:
                                          "yil_esik": _f(_n_gerek(v, sd, esik_, iki=True) / 12)} for k, v in sen.items()}}}
     kuc = kenar_["is_anlamli"]["kuculme"]
     out["gbp"]["kuculme"] = {"oran": kuc, "net": _f(g["brut"] * (1 - kuc) - g["maliyet"])}
+    # İlk yıl: %95 aralığının (iki yönlü) sıfırı artı yönde dışlama olasılığı ve tek yönlü %5 sınamanın gücü ayrı.
     out["gbp"]["ilk_yil"] = {"yari_genislik": _f(Z95 * sd / math.sqrt(12)), "guc": _f(_gucu(mu, sd, 12)),
+                             "aralik_disla": _f(stats.norm.cdf(mu * math.sqrt(12) / sd - Z95)),
                              "olu_arti": _f(stats.norm.cdf(-g["maliyet"] * math.sqrt(12) / sd)),
                              "olu_net": _f(-g["maliyet"])}
     mu_h = (g["net"] * g["n"] + j["net"] * j["n"]) / (g["n"] + j["n"])

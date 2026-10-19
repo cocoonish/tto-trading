@@ -27,7 +27,9 @@ Kısa cevap üç parçadır. **Maliyet.** Maliyetten önceki yön ve zamanlama b
 R. Maliyetin {{ O.basarisiz.ayrisim.oos.ort.c_makas | s3 }} R'si verinin ölçülmüş bid/ask makası,
 {{ O.basarisiz.ayrisim.oos.ort.c_kayma | s3 }} R'si modelin varsaydığı kaymadır: dolum başına
 {{ K.temel_kayma_pip | s1 }} pip, haber penceresinde ek {{ K.haber_kayma_pip | s1 }} pip. Sayılar örneklem dışındaki
-(2024 →) {{ O.basarisiz.ayrisim.oos.bilesim | n }} bileşimin ortalamasıdır. **Taşınma.** Bir örneklemden ötekine
+(2024 →) {{ O.basarisiz.ayrisim.oos.bilesim | n }} bileşimin ortalamasıdır: {{! kurallar O.basarisiz.ayrisim.oos.dislanan_kural }}
+kuralının {{ O.basarisiz.ayrisim.oos.dislanan_n | n }} bileşimi dışarıda, çünkü örneklem dışında
+{{ K.uygulama_esik.rastgele | n }} işlemden azı var{{? len(O.basarisiz.ayrisim.oos.dislanan_kural) == 1 }}. **Taşınma.** Bir örneklemden ötekine
 taşınan şey kenar değil, maliyetin büyüklüğüdür: kuralların örneklem içi ve dışı sırası maliyette
 {{ O.basarisiz.kenar.sira_havuz.maliyet.rho | s2 }}, brütte {{ O.basarisiz.kenar.sira_havuz.brut.rho | s2 }}
 korelasyonla taşınıyor. **Şart.** Maliyeti düşürmek gerekli ama yeterli değil, belli bir akışa dayanmak da gerekli ama
@@ -38,22 +40,24 @@ Hükmün kaymaya duyarlılığı aynı yerde söylenmeli, çünkü maliyetin bü
 {{ O.basarisiz.ayrisim.oos.duyarlilik.bilesim | n }} bileşimin yalnız makasla (kayma ve haber kayması sıfır)
 {{ O.basarisiz.ayrisim.oos.duyarlilik.yalniz_makas | n }} tanesi, temel kayma sıfırken (haber kayması yerinde)
 {{ O.basarisiz.ayrisim.oos.duyarlilik.kayma0 | n }} tanesi, temel senaryoda {{ O.basarisiz.ayrisim.oos.duyarlilik.temel | n }}
-tanesi net artı. Ortalama maliyet içinde varsayılan kaymanın payı
-{{ O.basarisiz.ayrisim.oos.duyarlilik.kayma_payi | yz0 }}{{? O.basarisiz.ayrisim.oos.duyarlilik.kayma_payi > 0.5 }}.
+tanesi net artı. Bu {{ O.basarisiz.ayrisim.oos.duyarlilik.bilesim | n }} bileşimde ortalama maliyet içinde varsayılan
+kaymanın payı {{ O.basarisiz.ayrisim.oos.duyarlilik.kayma_payi | yz0 }}{{? O.basarisiz.ayrisim.oos.duyarlilik.kayma_payi > 0.5 }}.
 Kayma hiç olmasaydı da bileşimlerin çoğu eksi kalırdı{{? O.basarisiz.ayrisim.oos.duyarlilik.bilesim == 88 and O.basarisiz.ayrisim.oos.duyarlilik.yalniz_makas < 44 }};
 yine de kaymanın gerçek büyüklüğü bu verinin ölçemediği bir şeydir (metodoloji dersi, "Ölçülmeyenler").
 
 ### Bu dersteki sayıların dört türü
 
-Dersin her sayısı dört türden birindedir ve her tablo türünü yazar.
+Dersin sayıları dört türdendir ve her tablonun notu türünü yazar.
 
 - **Hüküm.** Önceden kayıtlı kuralla, sonuç görülmeden yazılmış ölçütlerle verilen sonuç: "çalışıyor", "zayıf",
   "çalışmıyor". Bu derste yeni hüküm yoktur; hükümler karşılaştırma dersindekilerdir.
 - **Betimleme.** Bu dersin yeni ölçüleri. İlk sonuçların görüldüğü an {{! ilk_sonuc_zaman }}; bu dersin bütün yeni
   sayıları o andan sonra, iki pencere de görülmüşken kuruldu. Hiçbiri bir hükmü değiştirmez. Görülmüş pencerede kurulan bir
   süzgeç, ayrıştırma ya da sıralama örneklem dışı sınama sayılmaz.
-- **Literatür.** Yayımlanmış çalışmaların bulguları, kaynağıyla. Her biri kaynağın kendi metnine karşı doğrulandı;
-  doğrulanamayan derse girmedi.
+- **Literatür.** Yayımlanmış çalışmaların bulguları, kaynağıyla. Her biri kaynağın metnine karşı doğrulandı. Derginin
+  kendi metni ya da özeti açılamadığında kullanılan sürüm (yazarın çalışma metni, kabul edilmiş metin, yayım öncesi
+  sürüm, başka bir sürümün özeti, üçüncü taraf bir sitedeki kopya) kaynakçada künyenin yanında yazılıdır. Doğrulanamayan
+  derse girmedi.
 - **Hipotez.** Ölçülmemiş ama ölçülebilir bir iddia. Adıyla "hipotez" diye yazılır.
 
 Ders üç kısımdır. Önce kuralların neden kaybettiği: beklentinin aritmetiği, kaybın ayrışımı ve ölçek. Sonra neden iyi
@@ -179,10 +183,11 @@ nedir? İsabet bir puan yüksek olsaydı beklenti ne kadar değişirdi?
 
 Kazanç ile kaybın büyüklüklerinin toplamı {{ O.basarisiz.basabas.havuz.oos.asya.toplam | s2 }} R. Başabaş isabeti
 kaybın büyüklüğünün bu toplama oranıdır: {{! hesap carp O.basarisiz.basabas.havuz.oos.asya.kayip -1 s2 }} /
-{{ O.basarisiz.basabas.havuz.oos.asya.toplam | s2 }} = {{ O.basarisiz.basabas.havuz.oos.asya.pstar | yz1 }}.
-Açık {{ O.basarisiz.basabas.havuz.oos.asya.acik | pu }} puan. Beklenti açık ile kazanç–kayıp toplamının çarpımıdır:
-{{! hesap carp O.basarisiz.basabas.havuz.oos.asya.acik O.basarisiz.basabas.havuz.oos.asya.toplam r3 }} R; tablodaki
-ölçülmüş değer {{ O.basarisiz.basabas.havuz.oos.asya.net | r3 }} R (fark yuvarlamadandır).
+{{ O.basarisiz.basabas.havuz.oos.asya.toplam | s2 }} = {{ O.basarisiz.basabas.havuz.oos.asya.pstar | yz1 }}
+(yuvarlanmamış değerlerle). Açık {{ O.basarisiz.basabas.havuz.oos.asya.acik | pu }} puan. Beklenti açık ile
+kazanç–kayıp toplamının çarpımıdır:
+{{! hesap carp O.basarisiz.basabas.havuz.oos.asya.acik O.basarisiz.basabas.havuz.oos.asya.toplam r3 }} R
+(yuvarlanmamış değerlerle); tablodaki ölçülmüş değer {{ O.basarisiz.basabas.havuz.oos.asya.net | r3 }} R.
 
 Bir puanlık isabet beklentiye kazanç–kayıp toplamının yüzde birini ekler:
 {{! hesap bol O.basarisiz.basabas.havuz.oos.asya.toplam 100 s3 }} R. Kuralın açığı kapanmak için
@@ -234,9 +239,13 @@ toplam {{ O.basarisiz.ayrisim.oos.ort.c_pip | s2 }} pip. Medyanlar aynı tabloyu
 {{ O.basarisiz.ayrisim.oos.medyan.c | s3 }} R.
 
 Yön payının maliyetten büyük olduğu bileşim yalnız {{ O.basarisiz.ayrisim.oos.y_c | n }}. Yön ile zamanlama birlikte
-maliyeti {{ O.basarisiz.ayrisim.oos.yz_c | n }} bileşimde aşıyor ve bu sayı örneklem dışında net sonucu artı olan
-bileşimlerin sayısıdır{{? O.basarisiz.ayrisim.oos.yz_c == O.basarisiz.ayrisim.oos.net_arti }}, çünkü $y + z - c$ net
-sonucun kendisidir.
+maliyeti {{ O.basarisiz.ayrisim.oos.yz_c | n }} bileşimde aşıyor ve bu sayı, aynası kurulan
+{{ O.basarisiz.ayrisim.oos.bilesim | n }} bileşim içinde örneklem dışında net sonucu artı olanların
+sayısıdır{{? O.basarisiz.ayrisim.oos.yz_c == O.basarisiz.ayrisim.oos.net_arti }}, çünkü $y + z - c$ net sonucun
+kendisidir. Aynası kurulamayan {{ O.basarisiz.ayrisim.oos.dislanan_n | n }} bileşimin
+{{ O.basarisiz.ayrisim.oos.dislanan_net_arti | n }} tanesi de net artı; dersin başındaki temel senaryonun
+{{ O.basarisiz.ayrisim.oos.duyarlilik.temel | n }} net artı bileşimi bu ikisinin
+toplamıdır{{? O.basarisiz.ayrisim.oos.yz_c == O.basarisiz.ayrisim.oos.net_arti and O.basarisiz.ayrisim.oos.net_arti_toplam == O.basarisiz.ayrisim.oos.duyarlilik.temel }}.
 
 Ayna da kaybediyor. {{ O.basarisiz.ayrisim.oos.bilesim | n }} bileşimin {{ O.basarisiz.ayrisim.oos.ayna_eksi | n }}
 tanesinde aynanın sonucu eksi ve {{ O.basarisiz.ayrisim.oos.birlikte_eksi | n }} tanesinde gerçek işlem ile ayna
@@ -252,10 +261,9 @@ artı olan bir kuralda tersi daha da kötüdür.
 {{! sekil neden-anatomi "Kaybın anatomisi — yön, zamanlama ve maliyet" }}
 
 Tablo kural kural aynı şeyi söylüyor: yön ile zamanlama paylarının toplamı hiçbir kuralda maliyete
-ulaşmıyor{{? O.basarisiz.basabas.ozet.oos.net_alti == O.basarisiz.basabas.ozet.oos.kural }}. {{! neden_yon_cumle }} Fade kuralları
-kısa vadeli geri dönüşe, kırılım kuralları devama bahis girer; fade kurallarının yön payının bu pencerede artı çıkması
-gün içi fiyatın kısa ufukta geri dönme eğilimiyle uyumludur. Ama bu bir betimlemedir, aile hükmü değil: her kuralın yön
-payı kendi tablosunda, kendi aralığıyla okunur ve en büyüğü bile maliyeti karşılamıyor.
+ulaşmıyor{{? O.basarisiz.basabas.ozet.oos.net_alti == O.basarisiz.basabas.ozet.oos.kural }}. {{! neden_yon_cumle }} Bu bir
+betimlemedir, aile hükmü değil: her kuralın yön payı kendi tablosunda, kendi aralığıyla okunur ve en büyüğü bile
+maliyeti karşılamıyor.
 
 İki haber kuralı bu ayrışımın ders kitabı örneğidir. N1 ilk haber mumunun yönünde girer, N2 tersine (yalnız büyük ilk
 hareketlerde ve bir teyit mumundan sonra). Örneklem dışında N1'in yön payı {{ O.basarisiz.ayrisim.oos.kural.n1.y | r3 }} R,
@@ -264,12 +272,8 @@ Bütün dönemde işaretler aynı (N1 {{ O.basarisiz.ayrisim.tum.kural.n1.y | r3
 ve iki pencerede de N2'nin artı yön payı kendi maliyetinin altında kalıyor{{? O.basarisiz.ayrisim.oos.kural.n1.y < 0 and O.basarisiz.ayrisim.oos.kural.n2.y > 0 and O.basarisiz.ayrisim.tum.kural.n1.y < 0 and O.basarisiz.ayrisim.tum.kural.n2.y > 0 and O.basarisiz.ayrisim.oos.kural.n2.y < O.basarisiz.ayrisim.oos.kural.n2.c and O.basarisiz.ayrisim.tum.kural.n2.y < O.basarisiz.ayrisim.tum.kural.n2.c }}.
 Bu pencerede haberin ilk dakikalarının tersine girmek doğru yönü seçmekti, ama o yönün değeri yine maliyete yetmedi.
 
-Yön payının değerli olup olmadığını rastgele yön sınaması da ayrıca söylüyor (karşılaştırma dersi). Örneklem dışında
-{{ T.rastgele_n | n }} bileşimin {{ T.rastgele_ust | n }} tanesinde gerçek işlem rastgele yön dağılımının üst %5'inde;
-hiçbir kenarın olmadığı bir dünyada beklenen yaklaşık {{ T.rastgele_beklenen | n }}. Bütün dönemde bu sayı
-{{ T.rastgele_tum.n | n }} bileşimde {{ T.rastgele_tum.ust | n }} (beklenen {{ T.rastgele_tum.beklenen | s1 }}) ve
-bunların {{ T.rastgele_tum.brut_arti_net_eksi | n }} tanesinde brüt sonuç artı, net sonuç eksi: yön seçiminin değeri
-sıfırdan ayırt edilebildiği yerde bile maliyetten küçük.
+Yön payının değerli olup olmadığını rastgele yön sınaması da ayrıca söylüyor (karşılaştırma dersi).
+{{! neden_rastgele }}
 
 **Alıştırma 2.** Londra ORB'nin örneklem dışı havuzunda (dört paritenin işlemleri, işlem sayısıyla ağırlıklı) net sonuç
 {{ O.basarisiz.ayrisim.oos.kural.orb.net | r3 }} R, aynanın sonucu {{ O.basarisiz.ayrisim.oos.kural.orb.ayna | r3 }} R ve
@@ -310,11 +314,11 @@ Her bileşimin işlemleri kendi içinde riske göre üçe bölündü (dar, orta,
 
 </div>
 
-_Örneklem dışı (2024 →), önceden kayıtlı varsayılanlar; R / işlem, hücre bileşimlerin medyanı. Her bileşimin işlemleri
-riske (stop uzaklığının pip karşılığı) göre sıralanıp üçe bölündü; bileşimde en az
+_Tür: betimleme. Örneklem dışı (2024 →), önceden kayıtlı varsayılanlar; R / işlem, hücre bileşimlerin medyanı. Her
+bileşimin işlemleri riske (stop uzaklığının pip karşılığı) göre sıralanıp üçe bölündü; bileşimde en az
 {{ O.basarisiz.olcek.ucte_bir.oos.asgari | n }} işlem ({{ O.basarisiz.olcek.ucte_bir.oos.bilesim | n }} bileşim). Dilim
 sınırları pencerenin kendi işlemlerinden alındı ve işlem açılırken bilinmez: tablo bir süzgeç değil, maliyetin nerede
-yoğunlaştığının betimlemesidir._
+yoğunlaştığının betimlemesidir. Hücreler medyan olduğu için toplanmaz: Net sütunu Brüt eksi Maliyet değildir._
 
 Net sonuç geniş üçte birde dar üçte birden iyi: {{ O.basarisiz.olcek.ucte_bir.oos.bilesim | n }} bileşimin
 {{ O.basarisiz.olcek.ucte_bir.oos.genis_dar_net | n }} tanesinde. Maliyetin R karşılığı geniş üçte birde hiçbir bileşimde
@@ -351,10 +355,13 @@ hedefli {{ O.basarisiz.olcek.orb_eurusd_hedef.1R.kombinasyon | n }} kombinasyonu
 gün sonunda çıkanların {{ O.basarisiz.olcek.orb_eurusd_hedef.gun_sonu.isabet | yz1 }}; net R sırasıyla
 {{ O.basarisiz.olcek.orb_eurusd_hedef.1R.net | r3 }}, {{ O.basarisiz.olcek.orb_eurusd_hedef.2R.net | r3 }} ve
 {{ O.basarisiz.olcek.orb_eurusd_hedef.gun_sonu.net | r3 }}. Beklentinin aritmetiğindeki teorem ölçülmüş hâliyle: çıkış
-kuralı isabet ile kazanç–kayıp oranını birbirine karşı takas eder, beklentiyi değiştirmez. Stop kurallarının kendisi
-üzerine literatür aynı yöne bakar: getiriler rastgele yürüyüşse bir stop kuralının beklenen getiriye katkısı her zaman
-eksidir, getirilerde süreklilik (momentum) varsa artı olabilir (Kaminski ve Lo, 2014). Bu bölüm bir süzgeç önermez. Geniş stop ya da büyük
-mum maliyetin R içindeki payını küçültür, kuralın kenarını değiştirmez.
+kuralı isabet ile kazanç–kayıp oranını birbirine karşı takas eder ve beklentiyi isabetten çok daha az oynatır. Stop
+kuralları üzerine literatürün sonucu bu teoremle çelişmez, ama koşuluyla okunmalıdır. Kaminski ve Lo (2014) stopu,
+birikimli zarar bir eşiğe ulaşınca portföyün maruziyetini azaltan bir politika olarak tanımlar: getiriler bağımsız ve
+aynı dağılımlıysa stopun beklenen getiriye katkısı her zaman eksidir, çünkü portföyü zaman zaman daha yüksek getirili
+varlıktan çıkarır; getirilerde süreklilik (momentum) varsa artı olabilir. Sürüklenmesiz bir fiyatta vazgeçilen getiri
+sıfırdır ve teoremin söylediği de budur. Bu bölüm bir süzgeç önermez. Geniş stop ya da büyük mum maliyetin R içindeki
+payını küçültür, kuralın kenarını değiştirmez.
 
 ## Kenar var mıydı
 
@@ -395,7 +402,8 @@ pencerede bileşimler arası brüt farkların tamamı örnekleme gürültüsünd
 {{ O.basarisiz.kenar.egim.brut | s2 }} (sağlam bir eğim tahmini olan Theil–Sen ile {{ O.basarisiz.kenar.egim.theil_sen | s2 }},
 aralığı {{ O.basarisiz.kenar.egim.theil_sen_alt | s2 }} / {{ O.basarisiz.kenar.egim.theil_sen_ust | s2 }}; korelasyon
 {{ O.basarisiz.kenar.egim.pearson | s2 }}, p {{ O.basarisiz.kenar.egim.pearson_p | p }}): örneklem içinde bir R'lik brüt
-fark örneklem dışında aşağı yukarı onda bir R'ye iniyor{{? O.basarisiz.kenar.egim.brut > 0.05 and O.basarisiz.kenar.egim.brut < 0.15 }}.
+fark örneklem dışında, iki tahmine göre onda bir ile dörtte bir R arasına iniyor ve Theil–Sen aralığı sıfırı
+kapsıyor{{? O.basarisiz.kenar.egim.brut > 0.05 and O.basarisiz.kenar.egim.brut < 0.15 and O.basarisiz.kenar.egim.theil_sen > 0.2 and O.basarisiz.kenar.egim.theil_sen < 0.35 and O.basarisiz.kenar.egim.theil_sen_alt < 0 }}.
 Bütün bileşimlerde eğim {{ O.basarisiz.kenar.egim.brut_hepsi | s2 }}; farkı dışarıda kalan dört
 bileşim yaratıyor{{? len(O.basarisiz.kenar.dislanan) == 4 }} (örneklem dışında az işlem, büyük sonuç). Aynı ölçü maliyette
 {{ O.basarisiz.kenar.egim.maliyet | s2 }}: maliyet örneklemden örnekleme neredeyse birebir taşınıyor.
@@ -403,9 +411,14 @@ bileşim yaratıyor{{? len(O.basarisiz.kenar.dislanan) == 4 }} (örneklem dış�
 Sıralar aynı şeyi söylüyor. {{ O.basarisiz.kapsam.kural | n }} kuralın örneklem içi ve dışı sırası (Spearman) netle
 {{ O.basarisiz.kenar.sira_havuz.net.rho | s2 }}, maliyetle {{ O.basarisiz.kenar.sira_havuz.maliyet.rho | s2 }}, brütle
 {{ O.basarisiz.kenar.sira_havuz.brut.rho | s2 }} (p {{ O.basarisiz.kenar.sira_havuz.brut.p | p }}) korelasyonla
-taşınıyor. Bileşim düzeyinde netle {{ O.basarisiz.kenar.sira_bilesim.net | s2 }}, maliyetle
-{{ O.basarisiz.kenar.sira_bilesim.maliyet | s2 }}, brütle {{ O.basarisiz.kenar.sira_bilesim.brut | s2 }}, isabetle
-{{ O.basarisiz.kenar.sira_bilesim.isabet | s2 }}. Yıldan yıla ({{ O.basarisiz.kenar.sira_yil.net.cift | n }} ardışık yıl
+taşınıyor. Bileşim düzeyinde (aynı {{ O.basarisiz.kenar.egim.bilesim | n }} bileşim) netle
+{{ O.basarisiz.kenar.sira_bilesim.net | s2 }}, maliyetle {{ O.basarisiz.kenar.sira_bilesim.maliyet | s2 }}, brütle
+{{ O.basarisiz.kenar.sira_bilesim.brut | s2 }} (p {{ O.basarisiz.kenar.sira_bilesim_p.brut | p }}), isabetle
+{{ O.basarisiz.kenar.sira_bilesim.isabet | s2 }}. {% if O.basarisiz.kenar.sira_bilesim_hepsi.brut.p < 0.05 %}Dışarıda kalan
+dört bileşim de katılınca brütle {{ O.basarisiz.kenar.sira_bilesim_hepsi.brut.rho | s2 }} (p
+{{ O.basarisiz.kenar.sira_bilesim_hepsi.brut.p | p }}): bu küçük anlamlılığı, eğimde olduğu gibi, az işlemle büyük sonuç
+veren o dört bileşim yaratıyor{{? len(O.basarisiz.kenar.dislanan) == 4 }}.{% else %}Dışarıda kalan dört bileşim de katılınca brütle
+{{ O.basarisiz.kenar.sira_bilesim_hepsi.brut.rho | s2 }} (p {{ O.basarisiz.kenar.sira_bilesim_hepsi.brut.p | p }}){{? len(O.basarisiz.kenar.dislanan) == 4 }}.{% endif %} Yıldan yıla ({{ O.basarisiz.kenar.sira_yil.net.cift | n }} ardışık yıl
 çiftinin medyanı) netle {{ O.basarisiz.kenar.sira_yil.net.medyan | s2 }}, maliyetle
 {{ O.basarisiz.kenar.sira_yil.maliyet.medyan | s2 }}, brütle {{ O.basarisiz.kenar.sira_yil.brut.medyan | s2 }}. İsabetin
 sırası taşınıyor, çünkü isabeti büyük ölçüde maliyet ve kuralın iskeleti belirler (beklentinin aritmetiği). Kuralların
@@ -534,11 +547,14 @@ o satırın gelecekte ne vereceği hakkında hiçbir şey söylemez.
 Koşul süzgeçleri için aynı soru karşılaştırma dersinde soruldu: örneklem içinde seçilen kovalar
 {{ T.kosul.sinanan | n }} sınamanın {{ T.kosul.tuttu | n }} tanesinde örneklem dışında tuttu, tam tersine seçilen kovalar
 {{ T.kosul.ters_sinanan | n }} sınamanın {{ T.kosul.ters_tuttu | n }} tanesinde; fark şanstan ayırt edilemiyor (McNemar p
-{{ T.kosul.p | p }}){{? not T.kosul.ayirt }}. Yerel tatil günlerini dışlamak da sık önerilen bir süzgeçtir: kuralların
-işlemlerinden medyanda {{ O.basarisiz.sans.tatil.dislanan | yz1 }} payını atar, işlem başına net R'yi medyanda
-{{ O.basarisiz.sans.tatil.medyan | r3 }}, en çok {{ O.basarisiz.sans.tatil.en_cok | r3 }} R
-({{ O.basarisiz.sans.tatil.en_cok_kural | kisa }}) değiştirir ve {% if O.basarisiz.sans.tatil.donen == 0 %}hiçbir kuralı
-eksiden artıya çevirmez{% else %}{{ O.basarisiz.sans.tatil.donen | n }} kuralı eksiden artıya çevirir{% endif %}.
+{{ T.kosul.p | p }}){{? not T.kosul.ayirt }}. Yerel tatil günlerini dışlamak da sık önerilen bir süzgeçtir: örneklem
+dışında kuralların işlemlerinden medyanda {{ O.basarisiz.sans.tatil.oos.dislanan | yz1 }} payını atar, işlem başına net
+R'yi medyanda {{ O.basarisiz.sans.tatil.oos.medyan | r3 }}, en çok {{ O.basarisiz.sans.tatil.oos.en_cok | r3 }} R
+({{ O.basarisiz.sans.tatil.oos.en_cok_kural | kisa }}) değiştirir (bütün dönemde medyanda
+{{ O.basarisiz.sans.tatil.medyan | r3 }}, en çok {{ O.basarisiz.sans.tatil.en_cok | r3 }} R,
+{{ O.basarisiz.sans.tatil.en_cok_kural | kisa }}) ve {% if O.basarisiz.sans.tatil.oos.donen == 0 and O.basarisiz.sans.tatil.donen == 0 %}iki
+pencerede de hiçbir kuralı eksiden artıya çevirmez{% else %}örneklem dışında {{ O.basarisiz.sans.tatil.oos.donen | n }},
+bütün dönemde {{ O.basarisiz.sans.tatil.donen | n }} kuralı eksiden artıya çevirir{% endif %}.
 
 **Aile hata oranı.** {{ O.basarisiz.kapsam.bilesim | n }} bileşim, her biri %5 düzeyde sınanınca, hiçbir kenar yokken
 ortalama {{! hesap carp O.basarisiz.kapsam.bilesim 0.05 s1 }} yanlış alarm verir. Sınamaların bir aile olarak
@@ -546,17 +562,21 @@ düşünülmesi gerekir, ve ailenin büyüklüğü sorulan soruya göre değişi
 
 <div class="sayi-tablo">
 
-| Soru | Ailenin büyüklüğü | %5 düzeyde beklenen yanlış alarm |
+| Soru | Ailenin büyüklüğü | Gürültüde beklenen geçen |
 | :--- | ---: | ---: |
 | Hangi kural–parite bileşimi çalışıyor? | {{ O.basarisiz.kapsam.bilesim | n }} | {{! hesap carp O.basarisiz.kapsam.bilesim 0.05 s1 }} |
 | Izgaranın hangi satırı iyi? | {{ O.basarisiz.olcek.izgara_satir | n }} | {{! hesap carp O.basarisiz.olcek.izgara_satir 0.05 s0 }} |
-| Hangi koşul kovası tutuyor? | {{ T.kosul.sinanan | n }} | {{! hesap carp T.kosul.sinanan 0.05 s0 }} |
+| Hangi koşul kovası tutuyor? | {{ T.kosul.sinanan | n }} | {{ T.kosul.gurultu_beklenen | s0 }} |
 | Ay sonu hangi biçimde çalışıyor? | {{ O.basarisiz.ay_sonu.aile.n | n }} | {{! hesap carp O.basarisiz.ay_sonu.aile.n 0.05 s1 }} |
 
 </div>
 
-_Yanlış alarm: gerçek etkisi sıfır olan bir sınamanın %5 düzeyde anlamlı çıkması. Sınamalar bağımsız sayıldı;
-bağımlılık beklenen sayıyı değiştirmez, dağılımını genişletir._
+_Tür: betimleme (hesap). Gürültüde beklenen geçen: gerçek etkisi sıfır olan sınamaların ölçütü geçme sayısı. Bileşim,
+ızgara ve ay sonu satırlarında ölçüt %5 düzeyli bir sınama sayıldı; ızgaranın satırları hüküm kuralıyla sınanmaz ve
+"net sonucu artı" bir %5 sınaması değildir, satır yalnız ailenin büyüklüğünü gösterir. Koşul satırının ölçütü ("tuttu")
+%5 düzeyli değildir: gürültüde geçme oranını ters seçim ölçer ({{ T.kosul.ters_sinanan | n }} sınamanın
+{{ T.kosul.ters_tuttu | n }} tanesi). Sınamalar bağımsız sayıldı; bağımlılık beklenen sayıyı değiştirmez, dağılımını
+genişletir._
 
 Üç düzeltme yaygındır. **Bonferroni** her sınamayı $\alpha / m$ düzeyinde yapar ve ailede en az bir yanlış alarm
 olasılığını $\alpha$'nın altında tutar. **Holm** aynı güvenceyi daha az kayıpla verir: p değerleri küçükten büyüğe
@@ -567,14 +587,18 @@ Hochberg, 1995). Teknik işlem kurallarında aynı sorun "veri madenciliği" ad�
 model seçimi için birden çok kez kullanıldığında iyi bir sonuç yöntemin değerinden değil şanstan gelebilir, ve bir
 kural evreninin en iyisi evrenin büyüklüğü hesaba katılarak sınanmalıdır (White, 2000). Sullivan, Timmermann ve White
 (1999) Brock, Lakonishok ve LeBaron'un 26 kuralını genişletip Dow Jones'un 100 yıllık günlük verisinde bu yöntemle
-sınadı: 1897–1986'da bazı kurallar veri madenciliği düzeltmesinden sonra da kıyası yendi; sonraki on yılda en iyi
-kuralın kıyası yenmemiş olma olasılığı {{= "%12" }}'ye yakındı. Örneklem içinde düzeltmeyi geçen kural, örneklem
-dışında geçemedi. Yüzlerce adayın denendiği bir alanda yeni bir bulgunun t istatistiğinin {{= "3,0" }}'ı aşması
-önerildi (Harvey, Liu ve Zhu, 2016); seçilmiş en iyi Sharpe'ı deneme sayısına ve getirilerin normal olmamasına göre
-düzelten ölçü deflated Sharpe'tır (Bailey ve López de Prado, 2014). Örneklem içinde parlak görünen bir sonuca az
-sayıda denemeyle ulaşılır: beş yıllık veride kırk beş bağımsız ayar denendiğinde en iyisinin örneklem içi Sharpe'ının
-beklenen değeri 1, örneklem dışındaki 0'dır (Bailey, Borwein, López de Prado ve Zhu, 2014). Bu seri dört savunmanın dördünü de kullandı: sonuç görülmeden yazılmış kurallar, örneklem dışı
-pencere, rastgele yön tabanı ve deflated Sharpe.
+sınadı: 1897–1986'da bazı kurallar veri madenciliği düzeltmesinden sonra da kıyası yendi. Sonraki on yılda
+(1987–1996) evrenin o dönemdeki en iyi kuralı bile düzeltmeden sonra kıyası alışılmış anlamlılık düzeylerinde yenemedi:
+en iyi kuralın kıyası yenmemiş olma olasılığı (düzeltilmiş p değeri) {{= "0,12" }}'ye yakındı. Hisse getirilerinin
+kesitini açıklamak için yüzlerce faktörün denendiği literatürde yeni bir faktörün t istatistiğinin {{= "3,0" }}'ı aşması
+önerildi (Harvey, Liu ve Zhu, 2016); eşik o literatürün deneme sayısından türetildi, başka bir aile için ayrıca
+hesaplanır. Seçilmiş en iyi Sharpe'ı deneme sayısına ve getirilerin normal olmamasına göre düzelten ölçü deflated
+Sharpe'tır (Bailey ve López de Prado, 2014). Becerisi olmayan (gerçek Sharpe'ı sıfır) stratejiler arasında parlak
+görünen bir sonuca az sayıda denemeyle ulaşılır: beş yıllık veride kırk beş bağımsız ayar denendiğinde en iyisinin
+örneklem içi Sharpe'ının beklenen değeri 1, örneklem dışındaki 0'dır (Bailey, Borwein, López de Prado ve Zhu, 2014).
+Bu serinin hükme giren savunmaları üçtür: sonuç görülmeden yazılmış kurallar, örneklem dışı pencere ve rastgele yön
+tabanı. Deflated Sharpe raporlanır, hükme girmez; {{ O.basarisiz.kapsam.bilesim | n }} bileşimlik aileye aile
+düzeltmesi uygulanmadı, şansın beklediği sayı bu yüzden yukarıda ayrıca verildi.
 
 **Alıştırma 4.** Kenarsız tabanda beklenen net artı sayısı {{ O.basarisiz.sans.varsayilan.beklenen | s2 }}, standart
 sapması {{ O.basarisiz.sans.varsayilan.sd | s2 }}; gözlenen {{ O.basarisiz.sans.varsayilan.gozlenen | n }}. Normal
@@ -606,15 +630,16 @@ bir hipotezdir: net artı bileşimlerin sayısı zaten şansın beklediğinden a
 
 **Tuzak payları.** Kaybeden işlemlerin bir kısmı önce lehe gider. Örneklem dışında kaybeden işlemlerin en az
 {{ O.basarisiz.basabas.tuzak.esik.lehine | s1 }} R lehine gitmiş olma payı kuralların medyanında
-{{ O.basarisiz.basabas.tuzak.lehine_medyan | yz0 }}; {{ O.basarisiz.basabas.tuzak.esik.ulasma | r1 }} R'ye ulaşıp zararla
-kapananların payı {{ O.basarisiz.basabas.tuzak.ulasip_zarar_medyan | yz0 }} (Londra ORB'de
-{{ O.basarisiz.basabas.tuzak.kural.orb.lehine | yz0 }} ve {{ O.basarisiz.basabas.tuzak.kural.orb.ulasip_zarar | yz0 }}). Bu
-sayılar "çıkışı biraz farklı yapsaydım kazanırdım" hissini doğurur. Kenarsız bir piyasada aynı paylar şöyledir:
-sürüklenmesiz bir rastgele yürüyüşte, −1 R'de stop ve ufukta çıkışla, ufka kadarki oynaklık
+{{ O.basarisiz.basabas.tuzak.lehine_medyan | yz0 }}; {{ O.basarisiz.basabas.tuzak.esik.ulasma | r1 }} R'ye ulaşan
+işlemlerin zararla kapanma payı {{ O.basarisiz.basabas.tuzak.ulasip_zarar_medyan | yz0 }} (Londra ORB'de sırasıyla
+{{ O.basarisiz.basabas.tuzak.kural.orb.lehine | yz0 }} ve {{ O.basarisiz.basabas.tuzak.kural.orb.ulasip_zarar | yz0 }}).
+İki payın paydası farklıdır: birincisi kaybeden işlemler, ikincisi {{ O.basarisiz.basabas.tuzak.esik.ulasma | r1 }} R'ye
+ulaşan bütün işlemler. Bu sayılar "çıkışı biraz farklı yapsaydım kazanırdım" hissini doğurur. Kenarsız bir piyasada
+aynı paylar şöyledir: sürüklenmesiz bir rastgele yürüyüşte, −1 R'de stop ve ufukta çıkışla, ufka kadarki oynaklık
 {{ O.basarisiz.basabas.tuzak.taban.sigma[0].sigma | n }} ile {{ O.basarisiz.basabas.tuzak.taban.sigma[3].sigma | n }} R
 arasında değişirken kaybedenlerin lehine gitme payı {{ O.basarisiz.basabas.tuzak.taban.sigma[0].lehine | yz0 }} ile
-{{ O.basarisiz.basabas.tuzak.taban.sigma[3].lehine | yz0 }} arasında, ulaşıp zararla kapanma payı
-{{ O.basarisiz.basabas.tuzak.taban.sigma[0].ulasip_zarar | yz0 }} ile
+{{ O.basarisiz.basabas.tuzak.taban.sigma[3].lehine | yz0 }} arasında, {{ O.basarisiz.basabas.tuzak.esik.ulasma | r1 }} R'ye
+ulaşanların zararla kapanma payı {{ O.basarisiz.basabas.tuzak.taban.sigma[0].ulasip_zarar | yz0 }} ile
 {{ O.basarisiz.basabas.tuzak.taban.sigma[3].ulasip_zarar | yz0 }} arasında. Taban kuralların hedef yapısını taşımaz,
 yalnız büyüklüğün mertebesini verir: tuzak payları bir kenarın izi değil, kenarsız bir piyasada da bu büyüklükte
 beklenir. Çıkış kuralının beklentiyi değiştirmediğini söyleyen teorem (beklentinin
@@ -622,45 +647,51 @@ aritmetiği) bu hissin cevabıdır.
 
 **Seçilmiş örnek.** Okura ulaşan geriye dönük sınamalar seçilmiştir: yayımlanan, paylaşılan, pazarlanan sınama iyi
 sonuç verendir. Yalnız ayakta kalanlar incelendiğinde başarının sürdüğü yanılsaması doğabilir (Brown, Goetzmann,
-Ibbotson ve Ross, 1992). Gün içi işlem yapan bireylerin taban oranları da aynı yöndedir: Tayvan'da 1992–2006
-arasında gün içi işlem yapanların {{= "%1" }}'inden azı ücretlerden sonra öngörülebilir ve güvenilir biçimde kâr etti
-(Barber, Lee, Liu ve Odean, 2014); Brezilya'nın hisse senedi vadeli piyasasında 2013–2015 arasında gün içi işleme
-başlayıp {{= "300" }} günden uzun sürenlerin {{= "%97" }}'si para kaybetti (Chague, De-Losso ve Giovannetti, 2019);
-Avrupa Menkul Kıymetler ve Piyasalar Otoritesi, ulusal otoritelerin analizlerine dayanarak perakende CFD hesaplarının
-tipik olarak {{= "%74" }}–{{= "89" }}'unun para kaybettiğini yazdı (ESMA, 2018). Bu dersin kurallarına dair bir şey söylemezler; bir
-geriye dönük sınamanın arka planındaki taban oranını söylerler.
+Ibbotson ve Ross, 1992). Gün içi işlem yapan bireylerin taban oranları da aynı yöndedir. Tayvan'da 1992–2006 arasında,
+ortalama bir yılda gün içi işlem hacmi yılda 600 bin Tayvan dolarını aşan yaklaşık 277 bin kişinin beşte biri
+ücretlerden (komisyon ve işlem vergisi) sonra artı anormal getiri elde etti; ertesi yıl da işlem maliyetlerinden sonra
+güvenilir biçimde artı anormal getiri elde edenler yalnız önceki yılın en kârlı 4 bin gün içi işlemcisiydi, yani bütün
+gün içi işlemcilerin {{= "%1" }}'inden azı (Barber, Lee, Liu ve Odean, 2014); Brezilya'nın hisse senedi vadeli piyasasında 2013–2015 arasında gün içi işleme başlayıp {{= "300" }} günden uzun
+sürenlerin {{= "%97" }}'si para kaybetti (Chague, De-Losso ve Giovannetti, 2019). Kaldıraçlı perakende ürünlerde de
+oran aynı yöndedir: Avrupa Menkul Kıymetler ve Piyasalar Otoritesi, ulusal otoritelerin analizlerine dayanarak
+perakende CFD hesaplarının tipik olarak {{= "%74" }}–{{= "89" }}'unun para kaybettiğini yazdı (ESMA, 2018); bu oran
+hesaplara aittir, gün içi işlemcilere değil. Bu kaynaklar dersin kurallarına dair bir şey söylemez; bir geriye dönük
+sınamanın arka planındaki taban oranını söyler.
 
 ## Sık önerilen kurtarma yolları
 
-Kaybeden bir kural için en sık önerilen yollar şunlardır. Her birinin bu seride ölçülmüş bir karşılığı var. Hepsi
-betimlemedir: iki pencere de görüldükten sonra kuruldu ve hiçbiri ön kayıtta yoktu.
+Kaybeden bir kural için en sık önerilen yollar şunlardır. Çoğunun bu seride ölçülmüş bir karşılığı var; Tür sütunu
+her satırın ne olduğunu söyler.
 
 <div class="sayi-tablo">
 
-| Öneri | Bu seride ölçülen | Bölüm |
-| :--- | :--- | :--- |
-| Parametreleri iyileştirmek | Seçim örneklem dışına {{ O.basarisiz.sans.kazanc.oos.net | r3 }} R taşıdı; brütün katkısı {{ O.basarisiz.sans.kazanc.oos.brut | r3 }} R | Şans, seçim ve süzgeç |
-| Koşul ya da rejim süzgeci | {{ T.kosul.sinanan | n }} sınamada {{ T.kosul.tuttu | n }} tuttu; ters seçimle {{ T.kosul.ters_tuttu | n }} | Şans, seçim ve süzgeç |
-| Kuralı tersine çevirmek | Ayna {{ O.basarisiz.ayrisim.oos.bilesim | n }} bileşimin {{ O.basarisiz.ayrisim.oos.ayna_eksi | n }} tanesinde eksi | Kaybın ayrışımı |
-| Stopu uzatmak, mumu büyütmek | Net R artıyor, işlem başına pip yazı tura | Ölçek |
-| Çıkışı değiştirmek | İsabet oynuyor, beklenti oynamıyor | Ölçek |
-| Yerel tatilleri dışlamak | Hiçbir kural eksiden artıya dönmüyor | Şans, seçim ve süzgeç |
-| Kuralları tek kitapta birleştirmek | Hacim {{ O.basarisiz.esik.netlesme.oos.esit.tasarruf | yz0 }} azalır; başabaş için maliyetin {{ O.basarisiz.esik.netlesme.oos.kitap_gereken | yz0 }} kadarı gitmeli | Yürütme şartı |
-| Pozisyon büyüklüğünü ayarlamak | Eksi beklentide en iyi pay sıfırdır | Aşağıda |
-| En ucuz pariteyi seçmek | Maliyet seçimidir, kenar seçimi değil | Aşağıda |
-| Limit emirle girmek | Ölçülmedi; dolum seçicidir | Yürütme şartı |
-| Daha ucuz yürütme | {{ O.basarisiz.esik.ozet.oos.sifir_alti_n | n }} kural maliyetsiz de kaybediyor | Yürütme şartı |
-| Haberle ilk saniyede girmek | Hareketin büyük kısmı ilk beş dakikada | Kenarın kaynakları |
+| Öneri | Tür | Bu seride ölçülen | Bölüm |
+| :--- | :--- | :--- | :--- |
+| Parametreleri iyileştirmek | Ön kayıt ve betimleme | Seçim örneklem dışına {{ O.basarisiz.sans.kazanc.oos.net | r3 }} R taşıdı; brütün katkısı {{ O.basarisiz.sans.kazanc.oos.brut | r3 }} R | Şans, seçim ve süzgeç |
+| Koşul ya da rejim süzgeci | Ön kayıt ve betimleme | {{ T.kosul.sinanan | n }} sınamada {{ T.kosul.tuttu | n }} tuttu; tam tersine seçilen kovalarla {{ T.kosul.ters_sinanan | n }} sınamada {{ T.kosul.ters_tuttu | n }} | Şans, seçim ve süzgeç |
+| Kuralı tersine çevirmek | Betimleme | Ayna {{ O.basarisiz.ayrisim.oos.bilesim | n }} bileşimin {{ O.basarisiz.ayrisim.oos.ayna_eksi | n }} tanesinde eksi | Kaybın ayrışımı |
+| Stopu uzatmak, mumu büyütmek | Betimleme | Net R artıyor ama ızgara medyanı eksi kalıyor; işlem başına pip yazı tura{{? O.basarisiz.olcek.tf_medyan.oos.60 < 0 }} | Ölçek |
+| Çıkışı değiştirmek | Betimleme | Grubun içinde isabet medyanda {{! hesap carp O.basarisiz.olcek.hedef.oos.isabet_aralik 100 s0 }} puan, beklenti {{ O.basarisiz.olcek.hedef.oos.r_aralik | s2 }} R oynuyor | Ölçek |
+| Yerel tatilleri dışlamak | Betimleme | Hiçbir kural eksiden artıya dönmüyor{{? O.basarisiz.sans.tatil.oos.donen == 0 and O.basarisiz.sans.tatil.donen == 0 }} | Şans, seçim ve süzgeç |
+| Kuralları tek kitapta birleştirmek | Betimleme | Hacim {{ O.basarisiz.esik.netlesme.oos.esit.tasarruf | yz0 }} azalır; başabaş için maliyetin {{ O.basarisiz.esik.netlesme.oos.kitap_gereken | yz0 }} kadarı gitmeli | Yürütme şartı |
+| Pozisyon büyüklüğünü ayarlamak | Türetim | Eksi beklentide en iyi pay sıfırdır | Aşağıda |
+| En ucuz pariteyi seçmek | Betimleme | Yalnız makasla bakılınca maliyet seçimi; kayma eklenince sıralama makası izlemiyor | Aşağıda |
+| Limit emirle girmek | Ölçülmedi | Dolum fiyata bağlıdır ve ters seçime uğrar; net etkinin yönü bilinmiyor | Yürütme şartı |
+| Daha ucuz yürütme | Betimleme | {{ O.basarisiz.esik.ozet.oos.sifir_alti_n | n }} kuralda başabaş maliyeti sıfır ya da altında; aralıklar sıfırı kapsıyor{{? O.basarisiz.esik.ozet.oos.sifir_alti_kapsar_n == O.basarisiz.esik.ozet.oos.sifir_alti_n }} | Yürütme şartı |
+| Haberle ilk saniyede girmek | Ölçülmedi | 1 dakikalık veride haber saniyesinin makası ve kayması yok; ölçülen, hareketin büyük kısmının ilk beş dakikada fiyata girdiği | Kenarın kaynakları |
 
 </div>
 
-_Hepsi görülmüş pencerede kurulan betimlemedir; hiçbiri bir hüküm değildir ve hiçbiri bir kuralı kullanılabilir
-yapmaz. Bölüm sütunu ölçünün bu dersteki yerini gösterir._
+_Tür: ön kayıt, ölçütü sonuç görülmeden yazılmış bir ölçünün sonucu (parametre seçiminin ve koşul doğrulamasının
+ölçütleri; brüt ile maliyet tasarrufu ayrımı ve ters seçim bu dersin ve karşılaştırma dersinin betimlemesidir);
+betimleme, iki pencere de görüldükten sonra kurulan ölçü; türetim, aritmetikten çıkan sonuç; ölçülmedi, bu seride
+ölçülmeyen. Hiçbir satır bir hüküm değildir ve hiçbiri bir kuralı kullanılabilir yapmaz. Bölüm sütunu ölçünün bu
+dersteki yerini gösterir._
 
-Tablonun ortak cevabı kısadır: maliyetten önceki kenar sıfıra yakınsa, kuralın görünüşünü değiştiren bir ayar sonucu
-değiştirmez. Önerilerin çoğu ya isabeti başabaş eğrisi boyunca kaydırır (çıkış, stop), ya maliyetin R içindeki payını
-küçültür (zaman dilimi, seçim), ya da görülmüş pencerede iyi görüneni seçer (süzgeç, parametre). Üçü de brütün kendisini
-artırmaz.
+Tablonun ortak cevabı kısadır: maliyetten önceki kenar sıfıra yakınsa, kuralın görünüşünü değiştiren bir ayar sonucun
+işaretini değiştirmez ve brütü artırmaz. Önerilerin çoğu ya isabeti başabaş eğrisi boyunca kaydırır (çıkış, stop), ya
+maliyetin R içindeki payını küçültür (zaman dilimi, seçim), ya da görülmüş pencerede iyi görüneni seçer (süzgeç,
+parametre). Üçü de brütün kendisini artırmaz.
 
 **Pozisyon büyüklüğü.** İşlem başına getirisi $r$ olan bir kuralda sermayenin $f$ payıyla işlem yapılırsa, sermayenin
 logaritmik büyümesi küçük getiriler için
@@ -684,9 +715,17 @@ dağılımını belirler.
 {{ O.basarisiz.ayrisim.oos.duyarlilik.yalniz_makas_parite.GBPUSD | n }}, AUD/USD
 {{ O.basarisiz.ayrisim.oos.duyarlilik.yalniz_makas_parite.AUDUSD | n }}. Verinin medyan makası aynı sırayla EUR/USD'de
 {{ O.basarisiz.esik.makas.EURUSD | s1 }}, USD/JPY'de {{ O.basarisiz.esik.makas.USDJPY | s1 }}, GBP/USD'de
-{{ O.basarisiz.esik.makas.GBPUSD | s1 }}, AUD/USD'de {{ O.basarisiz.esik.makas.AUDUSD | s1 }} pip. Parite seçimi büyük
-ölçüde maliyet seçimidir: dar makaslı paritede aynı kural daha az kaybeder, ama kayma eklenince orada da
+{{ O.basarisiz.esik.makas.GBPUSD | s1 }}, AUD/USD'de {{ O.basarisiz.esik.makas.AUDUSD | s1 }} pip. Yalnız makasla
+bakılınca parite seçimi bir maliyet seçimidir: dar makaslı paritede aynı kural daha az
 kaybeder{{? O.basarisiz.ayrisim.oos.duyarlilik.yalniz_makas_parite.EURUSD > O.basarisiz.ayrisim.oos.duyarlilik.yalniz_makas_parite.AUDUSD and O.basarisiz.esik.makas.EURUSD < O.basarisiz.esik.makas.AUDUSD }}.
+Kayma da eklenince (temel senaryo) net artı kalan {{ O.basarisiz.ayrisim.oos.duyarlilik.temel | n }} bileşimin
+pariteleri EUR/USD {{ O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.EURUSD | n }}, USD/JPY
+{{ O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.USDJPY | n }}, GBP/USD
+{{ O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.GBPUSD | n }}, AUD/USD
+{{ O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.AUDUSD | n }}: sıralama artık makası
+izlemiyor{{? O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.EURUSD < O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.USDJPY and O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.AUDUSD >= O.basarisiz.ayrisim.oos.duyarlilik.temel_parite.EURUSD and O.basarisiz.esik.makas.EURUSD < O.basarisiz.esik.makas.USDJPY }}
+ve net artıların toplandığı parite kuyruk bölümündeki hipoteze döner. Maliyetin makas kısmı ölçülmüştür, kayma kısmı
+bu verinin ölçemediği bir varsayımdır.
 
 ## Kenarın kaynakları
 
@@ -698,31 +737,35 @@ olmayan bir kural, kenarını şansa borçludur.
 
 | Kaynak | Karşı taraf neden öder | Bu serideki karşılığı | Değerlendirme |
 | :--- | :--- | :--- | :--- |
-| Yürütme | Likidite isteyen, beklemenin bedelini öder | Bütün kurallar likidite alır, makası öder | Ölçülmedi: likidite sağlayan kural yok |
+| Yürütme | Likidite isteyen, aracının üstlendiği stok riskinin karşılığını öder | Bütün kurallar likidite alır, makası öder | Ölçülmedi: likidite sağlayan kural yok |
 | Akış | Fiyattan bağımsız sebeple işlem yapmak zorundadır | Fiksing, gün içi momentum, VWAP | Ölçüldü; çalışan kural yok, tek aday ay sonu |
 | Bilgi | Haberi geç ya da kötü işler | Beş haber kuralı | Ölçüldü; çalışan kural yok |
 | Risk primi | Taşımak istemediği riski devreder | Yok: pozisyonlar gece taşınmaz | Kapsam dışı |
 
 </div>
 
-_Değerlendirme bu serinin ölçtüğü kurallar içindir; bir kaynağın var olup olmadığı hakkında değil, bu kuralların ona
-ulaşıp ulaşmadığı hakkındadır._
+_Tür: kaynak sütunu bu dersin kendi ayrımıdır, dayandığı literatür aşağıda kaynağıyla; değerlendirme sütunu betimlemedir
+ve bu serinin ölçtüğü kurallar içindir: bir kaynağın var olup olmadığı hakkında değil, bu kuralların ona ulaşıp
+ulaşmadığı hakkındadır._
 
 **Yürütme.** Piyasada bilgili işlemciler varsa makas, piyasa yapıcı risk nötr olsa ve beklenen kârı sıfır olsa bile
-artıdır: makas, bilgisiz tarafın bilgiliye kaybettiğinin karşılığıdır (Glosten ve Milgrom, 1985). Likidite sağlayan biri
-makası alır, likidite isteyen öder. Kâr al emirleri yuvarlak sayılarda, zarar durdur emirleri onların hemen ötesinde
+artıdır: makas, bilgisiz tarafın bilgiliye kaybettiğinin karşılığıdır (Glosten ve Milgrom, 1985). Makasın bu kısmı
+likidite sağlayana kenar bırakmaz; aldığını bilgili tarafa geri verir. Likidite sağlamanın kenar olabilecek kısmı
+üstlenilen riskin karşılığıdır: fiksinglerdeki dolar yönlü fiyat örüntüsü, aracıların fiksinglerde koşulsuz dolar
+talebine aracılık ederken taşıdığı stok riskiyle tutarlıdır (Krohn, Mueller ve Whelan, 2024). Kâr al emirleri yuvarlak sayılarda, zarar durdur emirleri onların hemen ötesinde
 kümelenir; bu kümelenme fiyatın destek ve direnç seviyelerinde dönmesini ve seviye geçildikten sonra hızlanmasını
 açıklayabilir (Osler, 2003). Bu serinin bütün kuralları likidite ister: giriş ve piyasa çıkışları makası öder.
 Likidite sağlayan bir kural ölçülmedi.
 
 **Akış.** Bazı katılımcılar fiyattan bağımsız sebeplerle belirli bir anda işlem yapmak zorundadır: fiksing emirleri,
-endeks ve portföy yeniden dengelemesi, yabancı portföylerin kur koruması. Uluslararası hisse portföylerinin kur
-koruma işlemleri Londra fiksinginde yoğunlaşır ve yönleri geçmiş hisse getirilerinden okunur: hisse piyasasının ay
-içindeki değer artışı, ay sonu fiksinginden önceki kur değer kaybını öngörür (Melvin ve Prins, 2015). Fiksingin hemen
-öncesinde ve sonrasında kur değişimleri olağanüstü oynaktır ve güçlü bir eksi ardışık ilinti gösterir, özellikle ayın
-son işlem gününde (Evans, 2018); dolar fiksinglere giderken değer kazanır, sonra kaybeder (Krohn, Mueller ve Whelan,
-2024). Bu serinin akışa dayanan kuralları
-fiksingin iki kuralı (momentum ve dönüş), gün içi momentum ve VWAP geri çekilmesidir.
+endeks ve portföy yeniden dengelemesi, yabancı portföylerin kur koruması. Melvin ve Prins (2015) uluslararası hisse
+portföylerinin kur koruma işlemlerinin Londra fiksinginde yoğunlaştığını kurumsal bir öncül olarak alır, işlemlerin
+yönünü geçmiş hisse getirilerinden okur ve hisse piyasasının ay içindeki değer artışının ay sonu fiksinginden önceki kur
+değer kaybını öngördüğünü gösterir. 2004–2013 verisinde, fiksingin hesaplama penceresinin bir dakika olduğu dönemde,
+fiksingin hemen öncesindeki ve sonrasındaki kur değişimleri olağanüstü oynaktı ve güçlü bir eksi ardışık ilinti
+gösteriyordu, özellikle ayın son işlem gününde (Evans, 2018); dolar fiksinglere giderken değer kazanır, sonra kaybeder
+(Krohn, Mueller ve Whelan, 2024). Bu serinin akışa dayanan kuralları fiksingin iki kuralı (momentum ve dönüş), gün içi
+momentum ve VWAP geri çekilmesidir.
 
 **Bilgi.** Emir akışı kurun belirleyicisidir, çünkü bilgi taşır: emir akışına dayanan bir model Alman markı–dolar
 kurunun günlük değişimlerinde R²'yi {{= "%60" }}'ın üstüne çıkarır (Evans ve Lyons, 2002). Bilgisel olarak tam etkin
@@ -751,15 +794,18 @@ farkı doğmaz.
 Bir kaynağa dayanmak gerekli ama yeterli değil. Serinin akış ve haber kuralları da bir kaynağın adını taşıyordu ve
 kaybetti. Kaynağın varlığı, kuralın o kaynağa maliyetinden ucuza ulaştığını göstermez; ulaşan çok kişiyse kenar
 paylaşılır ve küçülür. Döviz piyasasında genetik programla ve doğrusal bir tahmin modeliyle seçilen gün içi teknik
-kurallar, gerçekçi işlem maliyeti ve işlem saatleri hesaba katıldığında örneklem dışında fazla getiri vermedi; kurallar
-verideki şaşırtıcı ölçüde istikrarlı bazı örüntüleri yine de buldu (Neely ve Weller, 2003). Örüntünün varlığı kenarın
+kurallar için, gerçekçi işlem maliyeti ve işlem saatleri hesaba katıldığında, örneklem dışında fazla getiri
+sağladıklarına dair kanıt çıkmadı; kurallar verideki şaşırtıcı ölçüde istikrarlı bazı örüntüleri yine de buldu (Neely
+ve Weller, 2003). Örüntünün varlığı kenarın
 varlığı değildir. Döviz piyasasında daha önce yayımlanmış teknik kuralların 1970'ler ve 1980'lerdeki fazla getirisi
 gerçekti, ama filtre ve hareketli ortalama kurallarında 1990'ların başında kaybolmuştu (Neely, Weller ve Ulrich,
 2009). Algoritmik işlemin yayılması üçgen arbitraj fırsatlarının sıklığını ve yüksek frekanslı getirilerin
 özilintisini azalttı; daha yavaş işlemcilere daha yüksek ters seçim maliyeti yükleyebilir (Chaboud, Chiquoine,
 Hjalmarsson ve Vega, 2014). Hisse senetlerinde kesitsel getiriyi öngördüğü gösterilmiş 97 değişkenin portföy getirisi
-örneklem dışında {{= "%26" }}, yayımdan sonra {{= "%58" }} daha düşüktü (McLean ve Pontiff, 2016); mekanizma
-farklıdır (yayımı okuyan arbitrajcı), ama sonucun yönü aynıdır.
+örneklem dışında {{= "%26" }}, yayımdan sonra {{= "%58" }} daha düşüktü; yazarlar örneklem dışındaki düşüşü veri
+madenciliği etkisinin üst sınırı sayar, yayımdan sonraki ek {{= "32" }} puanı yayımı okuyan işlemlere bağlar (McLean ve
+Pontiff, 2016). Birinci kısım, bu dersin "Kenar var mıydı" bölümünde ölçülen küçülmenin, yani seçimin aritmetiğinin, hisse
+senetlerindeki karşılığıdır.
 
 Bu seride sınanmamış akış anları da var. Tokyo fiksinginde bankalar kuru, bankalar arası piyasanın Tokyo 09:55'teki
 ({{! tsi "" "Tokyo 09:55" }}) işlemlerine göre ilan eder; fiksingden önceki emir akışı dolar yönüne eğilimlidir ve bu
@@ -789,8 +835,10 @@ brüt sonucun önceden kayıtlı bootstrap aralığının uçlarından gelir.
 
 {{! sekil neden-maliyet-esigi "Bir kural ne kadar maliyet kaldırır — başabaş maliyeti ve ödenen" }}
 
-Örneklem dışında {{ O.basarisiz.esik.ozet.oos.sifir_alti_n | n }} kuralda başabaş maliyeti sıfır ya da altında
-({{! kurallar O.basarisiz.esik.ozet.oos.sifir_alti }}): bu kurallar maliyetsiz bir yürütmeyle de kaybederdi. Öbür
+Örneklem dışında {{ O.basarisiz.esik.ozet.oos.sifir_alti_n | n }} kuralda başabaş maliyetinin nokta tahmini sıfır ya
+da altında ({{! kurallar O.basarisiz.esik.ozet.oos.sifir_alti }}) ve aralıklarının hepsi sıfırı
+kapsıyor{{? O.basarisiz.esik.ozet.oos.sifir_alti_kapsar_n == O.basarisiz.esik.ozet.oos.sifir_alti_n }}: bu kurallarda
+maliyetsiz bir yürütmeyle de bir kenar gösterilemiyor (brütleri sıfırdan ayırt edilemiyor). Öbür
 kuralların hiçbirinde başabaş maliyeti ödenen maliyete ulaşmıyor{{? O.basarisiz.esik.ozet.oos.ustu_n == 0 }}; ödenen
 maliyet kurallar arasında {{ O.basarisiz.esik.ozet.oos.odenen_alt | s2 }} ile {{ O.basarisiz.esik.ozet.oos.odenen_ust | s2 }}
 pip arasında. Aralığın alt ucu sıfırın üstünde kalan kural örneklem dışında {{ O.basarisiz.esik.ozet.oos.alt_arti_n | n }}
@@ -823,8 +871,9 @@ yani maliyetin {{ O.basarisiz.esik.netlesme.oos.kitap_gereken | yz0 }} kadarı o
 **Limit emir.** Limit emir makası ödemek yerine almayı dener. Ama limit emir fiyata bağlıdır: fiyat ona doğru
 geldiğinde dolar ve onu dolduran karşı taraf bilgili olabilir; dolmayan emir ise fiyatın lehte gittiği, kaçırılan bir
 işlem olabilir. Bireysel yatırımcıların işlemlerinden sonraki kötü getirilerin büyük kısmı limit emir kullanmalarıyla
-açıklanabilir, çünkü limit emir fiyata bağlıdır ve ters seçime uğrar (Linnainmaa, 2010). Orta fiyattan ölçülen brüt sonuç, limit emirle yürütülen bir kuralın ulaşabileceği
-sonucun üst sınırıdır, kendisi değil; bu seride limit emir benzetilmedi. Elektronik döviz piyasasında likidite
+açıklanabilir, çünkü limit emir fiyata bağlıdır ve ters seçime uğrar (Linnainmaa, 2010). Limit emirle yürütülen bir
+kuralın sonucu orta fiyattan ölçülen brütten iyi de kötü de olabilir: dolan emir makasın bir kısmını alır, ters seçim
+ve kaçırılan işlemler onu geri verebilir. Bu seride limit emir benzetilmedi; net etkinin yönü ölçülmedi. Elektronik döviz piyasasında likidite
 sağlayıcı, işlem talebini kabul edip etmeyeceğine ve ederse hangi kurdan edeceğine talep ulaştıktan sonra karar
 verebilir ("son bakış"); talep iletilirken fiyat hareket etmiş olabilir (Oomen, 2017). Bu uygulama yürütme maliyetini
 verinin dışından etkiler.
@@ -852,27 +901,42 @@ yürütmeyle bile artı olduğu gösterilemiyor. Başabaş maliyetinin nokta tah
 
 ## Akış şartı: ay sonu fiksingi
 
-Serinin tek adayı fiksing momentumunun ay sonu alt kümesidir. Kural Londra fiksinginden önceki son beş dakikalık mumu
-taşır: Londra 15:50–15:55 mumunun ({{! tsi "" "Londra 15:50–15:55" }}) yönünde 15:55'te girer, 16:00'da çıkar
-({{! tsi "→" "Londra 15:55" "Londra 16:00" }}); stop yoktur, R girişteki ATR(14)'tür. Ay sonu ayın son Londra iş günüdür (ön kaydın tanımı). Ön kayıt bu alt kümeyi
-ayrıca raporlamayı yazdı, ona hüküm kuralı uygulamadı; aşağıdakilerin hepsi betimlemedir.{{? O.birim.fiks_momentum.varsayilan.tf == 5 }}
+Serinin tek adayı fiksing momentumunun ay sonu alt kümesidir. Kural Londra 16:00 fiksingine giden son beş dakikalık
+mumu taşır: Londra 15:50–15:55 mumunun ({{! tsi "" "Londra 15:50–15:55" }}) yönünde 15:55'te girer, 16:00'da çıkar
+({{! tsi "→" "Londra 15:55" "Londra 16:00" }}); stop yoktur, R girişteki ATR(14)'tür. Fiksingin hesaplama penceresi
+16:00'ı ortalayan beş dakikadır (Londra 15:57:30–16:02:30; {{! tsi "" "Londra 15:57:30–16:02:30" }}): işlem pencerenin
+ilk yarısını da taşır ve çıkış pencerenin ortasındadır. Ay sonu ayın son Londra iş günüdür (ön kaydın tanımı). Ön kayıt
+bu alt kümeyi ayrıca raporlamayı yazdı, ona hüküm kuralı uygulamadı; aşağıdakilerin hepsi betimlemedir.{{? O.birim.fiks_momentum.varsayilan.tf == 5 }}
 
 {{! neden_ay_sonu }}
 
 {{! sekil neden-ay-sonu "Ay sonu fiksingi — tek aday, dört paritede" }}
 
-GBP/USD iki ayrık pencerede de net artı ve aralığının alt ucu sıfırın üstünde: 2018–2023'te
-{{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.net | r3 }} R (alt uç {{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.alt | r3 }},
-sınırda){{? O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.alt > 0 and O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.alt < 0.01 }},
-2024 →'de {{ O.basarisiz.ay_sonu.parite.GBPUSD.oos.ay_sonu.net | r3 }} R
+Aralıkların bazı uçları sıfıra çok yakın. Böyle bir ucun işareti bootstrap tohumuna bağlıdır: önceden kayıtlı yordam
+{{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.sinir.alt.tohum_sayisi | n }} farklı tohumla yeniden koşulunca bir
+tohumda artı, öbüründe eksi uç verir. Ders böyle bir ucu "sınırda" diye adlandırır; tohumların artı çıkma payını ve
+{{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.sinir.alt.tekrar | n }} tekrarlı kestirimi de basar. Tabloda ve
+metinde yazan uç önceden kayıtlı yordamın sonucudur; sınır kaydı yalnız işaretinin ne kadar sağlam olduğunu söyler.
+
+GBP/USD iki ayrık pencerede de net artı ve önceden kayıtlı yordamla aralığının alt ucu iki pencerede de sıfırın
+üstünde. 2024 →'de {{ O.basarisiz.ay_sonu.parite.GBPUSD.oos.ay_sonu.net | r3 }} R
 ({{ O.basarisiz.ay_sonu.parite.GBPUSD.oos.ay_sonu.alt | r3 }} / {{ O.basarisiz.ay_sonu.parite.GBPUSD.oos.ay_sonu.ust | r3 }}).
-USD/JPY'de 2024 → aralığının alt ucu sıfırın hemen üstünde
-({{ O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.alt | r3 }}){{? O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.alt > 0 and O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.alt < 0.02 and O.basarisiz.ay_sonu.parite.USDJPY.is.ay_sonu.alt < 0 }},
-2018–2023 aralığı sıfırı kapsıyor. EUR/USD iki pencerede de sıfırı kapsıyor. AUD/USD iki pencerede de eksi ve aralığı
-sıfırın altında, oysa brüt sonucu artı ({{ O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.brut | r3 }} ve
+2018–2023'te {{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.net | r3 }} R, alt uç
+{{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.alt | r3 }} ve sınırda: tohumların artı çıkma payı
+{{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.sinir.alt.pozitif_pay | yz0 }}, büyük tekrarlı kestirim
+{{ O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.sinir.alt.kesin | r3 }}{{? O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.alt > 0 and O.basarisiz.ay_sonu.parite.GBPUSD.oos.ay_sonu.alt > 0 and O.basarisiz.ay_sonu.parite.GBPUSD.is.ay_sonu.sinir.alt.sinirda }}.
+USD/JPY'de 2024 → aralığının alt ucu önceden kayıtlı yordamla sıfırın hemen üstünde
+({{ O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.alt | r3 }}), ama sınırda: tohumların artı çıkma payı
+{{ O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.sinir.alt.pozitif_pay | yz0 }}, büyük tekrarlı kestirim
+{{ O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.sinir.alt.kesin | r3 }}; 2018–2023 aralığı sıfırı
+kapsıyor{{? O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.alt > 0 and O.basarisiz.ay_sonu.parite.USDJPY.oos.ay_sonu.sinir.alt.sinirda and O.basarisiz.ay_sonu.parite.USDJPY.is.ay_sonu.alt < 0 and O.basarisiz.ay_sonu.parite.USDJPY.is.ay_sonu.ust > 0 }}.
+EUR/USD iki pencerede de sıfırı kapsıyor. AUD/USD iki pencerede de eksi: 2024 → aralığı sıfırın altında, 2018–2023'ün
+üst ucu ({{ O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.ust | r3 }}) sınırda (tohumların artı çıkma payı
+{{ O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.sinir.ust.pozitif_pay | yz0 }}). Brüt sonucu ise iki pencerede de artı
+({{ O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.brut | r3 }} ve
 {{ O.basarisiz.ay_sonu.parite.AUDUSD.oos.ay_sonu.brut | r3 }} R): R'nin pip karşılığı küçük
-({{ O.basarisiz.ay_sonu.parite.AUDUSD.tum.ay_sonu.R | s1 }} pip) ve makas geniş, maliyet
-{{ O.basarisiz.ay_sonu.parite.AUDUSD.tum.ay_sonu.maliyet | s3 }} R{{? O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.ust < 0 and O.basarisiz.ay_sonu.parite.AUDUSD.oos.ay_sonu.ust < 0 and O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.brut > 0 and O.basarisiz.ay_sonu.parite.AUDUSD.oos.ay_sonu.brut > 0 and O.basarisiz.ay_sonu.parite.EURUSD.is.ay_sonu.alt < 0 and O.basarisiz.ay_sonu.parite.EURUSD.oos.ay_sonu.alt < 0 }}.
+({{ O.basarisiz.ay_sonu.parite.AUDUSD.tum.ay_sonu.R | s1 }} pip) ve makas geniş, maliyet bütün dönemde
+{{ O.basarisiz.ay_sonu.parite.AUDUSD.tum.ay_sonu.maliyet | s3 }} R{{? O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.ust < 0 and O.basarisiz.ay_sonu.parite.AUDUSD.oos.ay_sonu.ust < 0 and O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.sinir.ust.sinirda and O.basarisiz.ay_sonu.parite.AUDUSD.is.ay_sonu.brut > 0 and O.basarisiz.ay_sonu.parite.AUDUSD.oos.ay_sonu.brut > 0 and O.basarisiz.ay_sonu.parite.EURUSD.is.ay_sonu.alt < 0 and O.basarisiz.ay_sonu.parite.EURUSD.oos.ay_sonu.alt < 0 and O.basarisiz.ay_sonu.parite.EURUSD.is.ay_sonu.ust > 0 and O.basarisiz.ay_sonu.parite.EURUSD.oos.ay_sonu.ust > 0 }}.
 
 Maliyetten önce tablo daha düzgün: dört parite ve iki pencere, {{ O.basarisiz.ay_sonu.brut_hucre | n }} hücrenin
 {% if O.basarisiz.ay_sonu.brut_arti == O.basarisiz.ay_sonu.brut_hucre %}hepsinde{% else %}{{ O.basarisiz.ay_sonu.brut_arti | n }}
@@ -913,6 +977,9 @@ hareket etmeli. Ay sonu net sonuçlarının korelasyonu GBP/USD ile USD/JPY aras
 arasında{{? abs(O.basarisiz.ay_sonu.ilinti_ozet.aday) < 0.05 and O.basarisiz.ay_sonu.ilinti_ozet.obur_min > 0 }}: sonucu en
 güçlü olan GBP/USD ile USD/JPY'nin ay sonu sonuçları arasında bir ilinti görünmüyor. Bu bir çürütme değildir (akım paritelere farklı oranlarda ve
 farklı aylarda dağılabilir), ama ortak bir akımın bu iki paritede aynı anda iz bıraktığı da bu ölçüyle desteklenmiyor.
+Ölçü yalnız ortak bir dolar akımını sınar, aracıların fiksinglerde karşıladığı koşulsuz dolar talebi gibi (Krohn,
+Mueller ve Whelan, 2024). Melvin ve Prins'in mekanizmasında akımın yönü her paritenin kendi hisse piyasasının ay içindeki
+getirisine bağlıdır; o mekanizmada paritelerin birlikte hareket etmesi gerekmez.
 
 {{! ay_sonu_eski_tanim kisa }}
 
@@ -926,7 +993,10 @@ Adayı tehdit eden şeyler adıyla:
 - **Hesaplama penceresi.** Finansal İstikrar Kurulu, WM/R fiksinginin bir dakikalık hesaplama penceresinin
   genişletilmesini önerdi; piyasa görüşlerinin medyanı ana paralar için beş dakikaydı (FSB, 2014). Pencere 15 Şubat
   2015'te beş dakikaya çıktı (Krohn, Mueller ve Whelan, 2024); bu serinin örneklemi tamamen yeni pencerededir ve eski
-  pencereden bir şey öğrenmez.
+  pencereden bir şey öğrenmez. Kenarın kaynakları bölümünde anılan fiksing öncesi eksi ilinti bulgusu (Evans, 2018)
+  ise 2004–2013 verisinden, yani bir dakikalık pencerenin döneminden gelir.
+- **Sinyal.** Kaynağın ay sonu öngörücüsü ayın hisse getirisidir (Melvin ve Prins, 2015); bu kural fiksinge giden
+  mumun yönünü kullanır. Kaynağın sinyali bu seride sınanmadı; kuralın sonucu o mekanizmanın sınaması değildir.
 - **Kapasite.** Fiksing anındaki derinlik ve büyük bir emrin fiyatı itmesi ölçülmedi.
 - **Tek besleme.** Fiyatlar tek bir kaynağın kotasyonudur; fiksing dakikasında başka bir kaynağın makası farklı olabilir.
 - **Çeyrek sonu.** Çeyrek sonları ay sonlarının alt kümesidir ({{ O.basarisiz.ay_sonu.ceyrek_sonu.GBPUSD | n }} gözlem,
@@ -966,7 +1036,7 @@ GBP/USD ay sonu kuralında bütün dönemin ölçüsüyle $\sigma$ = {{ O.basari
 
 </div>
 
-_Tek yönlü {{ O.basarisiz.guc.alfa | yz0 }} düzey, {{ O.basarisiz.guc.hedef | yz0 }} güç; σ ve etki bütün dönemin ay sonu işlemlerinden. Aile düzeltmeli eşik: ailenin
+_Tür: betimleme (hesap). Tek yönlü {{ O.basarisiz.guc.alfa | yz0 }} düzey, {{ O.basarisiz.guc.hedef | yz0 }} güç; σ ve etki bütün dönemin ay sonu işlemlerinden. Aile düzeltmeli eşik: ailenin
 {{ O.basarisiz.ay_sonu.aile.n | n }} biçimi için Bonferroni, iki yönlü. Etkiler görülmüş veriden ölçüldü; güç bu yüzden
 iyimserdir._
 
@@ -978,8 +1048,9 @@ etki {{ O.basarisiz.guc.gbp.kuculme.net | r3 }} R olur{{? O.basarisiz.guc.gbp.ku
 yetmez, çünkü kenar maliyetin altında kalır.
 
 Bir yıllık sonuç neredeyse hiçbir şey söylemez. İlk yılın {{ O.basarisiz.guc.gbp.siklik | n }} işlemiyle %95 aralığının
-yarı genişliği ±{{ O.basarisiz.guc.gbp.ilk_yil.yari_genislik | s2 }} R; gözlenen etki gerçek olsa bile ilk yılın
-sıfırı dışlama olasılığı {{ O.basarisiz.guc.gbp.ilk_yil.guc | s2 }}. Ölü bir kenar (brüt sıfır, net
+yarı genişliği ±{{ O.basarisiz.guc.gbp.ilk_yil.yari_genislik | s2 }} R. Gözlenen etki gerçek olsa bile bu aralığın
+alt ucunun sıfırın üstüne çıkma olasılığı {{ O.basarisiz.guc.gbp.ilk_yil.aralik_disla | s2 }}, tek yönlü {{ O.basarisiz.guc.alfa | yz0 }}
+sınamanın etkiyi sıfırdan ayırma olasılığı {{ O.basarisiz.guc.gbp.ilk_yil.guc | s2 }}. Ölü bir kenar (brüt sıfır, net
 {{ O.basarisiz.guc.gbp.ilk_yil.olu_net | r3 }} R) ilk yıl {{ O.basarisiz.guc.gbp.ilk_yil.olu_arti | s2 }} olasılıkla artı
 görünür.
 
@@ -1033,7 +1104,8 @@ yıl gerekirdi?
 <summary>Çözüm</summary>
 
 n = (({{ O.basarisiz.guc.z_alfa | s3 }} + {{ O.basarisiz.guc.z_guc | s3 }}) × {{ O.basarisiz.guc.gbp.sd | s2 }} /
-{{ O.basarisiz.guc.egri[2].mu | s2 }})² ≈ {{! hesap carp O.basarisiz.guc.egri[2].yil 12 s0 }} işlem; ayda bir işlemle
+{{ O.basarisiz.guc.egri[2].mu | s2 }})² ≈ {{! hesap carp O.basarisiz.guc.egri[2].yil 12 s0 }} işlem (yuvarlanmamış
+değerlerle); ayda bir işlemle
 {{ O.basarisiz.guc.egri[2].yil | s0 }} yıl. Etki yarıya inince gereken işlem dört katına çıkar: güç hesabında etkinin
 karesi paydadadır.
 
@@ -1056,7 +1128,8 @@ yedisi sonuç okunurken, son dördü kullanmadan önce sorulur.
 
 6. Net sonuç brütten ayrı okundu mu; isabet ile başabaş isabeti yan yana mı?
 7. Kayıp yön, zamanlama ve maliyet paylarına ayrıldı mı?
-8. Sonuç pip olarak da iyileşiyor mu, yoksa yalnız R büyüdüğü için mi?
+8. Sonucun birimi pozisyon büyüklüğüyle uyumlu mu: sabit riskle (her işlem 1 R) işlem yapılacaksa R'deki iyileşme
+   paradır; sabit nominalle yapılacaksa sonuç pip olarak da okundu mu?
 9. En iyi bir ve en iyi üç işlem çıkınca sonuç ne oluyor?
 10. Rastgele yön tabanı ve şansın beklediği sayı biliniyor mu?
 11. Seçim örneklem dışına brüt mü taşıdı, maliyet tasarrufu mu?

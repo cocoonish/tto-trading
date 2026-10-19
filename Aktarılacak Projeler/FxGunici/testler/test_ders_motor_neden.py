@@ -69,9 +69,17 @@ def test_yon_cumlesi_aile_sayimi_ve_en_buyuk_pay():
     tum.update({b: _kural(0.01, 0.1) for b in kir})
     m = dm.blok_neden_yon_cumle(_u({"oos": {"kural": oos}, "tum": {"kural": tum}}), {})
     assert m.startswith("2024 → penceresinde yön payı fade dersinin altı kuralının hepsinde artı (bütün dönemde "
-                        "hiçbirinde)")
-    assert "iki kırılım dersinin sekiz kuralının dördünde artı (bütün dönemde hepsinde)" in m
+                        "hiçbirinde), seans kırılımları dersinin dört kuralının ikisinde artı (bütün dönemde hepsinde) "
+                        "ve yapı kırılımları dersinin dört kuralının ikisinde artı (bütün dönemde hepsinde).")
+    assert "ayırmaz" not in m                                # seans kırılımlarının hepsi artı değil: ters bahis yok
     assert "N2 fade (266 işlem): +0,090 R, maliyeti 0,180 R; yön payı maliyetin %50 kadarını karşılıyor." in m
+    # Geri dönüşe (fade) ve devama (seans kırılımları) bahis giren iki aile aynı pencerede birlikte artıysa tablo
+    # yönü ayırmaz ve cümle bunu söyler.
+    oos2 = {**oos, **{b: _kural(0.01, 0.1) for b in adlar.DERS_BIRIM["fx-gunici-seans-kirilimlari"]}}
+    m2 = dm.blok_neden_yon_cumle(_u({"oos": {"kural": oos2}, "tum": {"kural": tum}}), {})
+    assert "seans kırılımları dersinin dört kuralının hepsinde artı" in m2
+    assert ("tablo bu yüzden gün içi fiyatın devam mı geri dönüş mü eğiliminde olduğunu ayırmaz. Yön payının en büyük "
+            "olduğu kural N2 fade") in m2
     with pytest.raises(dm.SablonHatasi):                                    # artı yön payı yoksa cümle kurulmaz
         dm.blok_neden_yon_cumle(_u({"oos": {"kural": {b: _kural(-0.01, 0.1) for b in fade + kir}},
                                     "tum": {"kural": tum}}), {})

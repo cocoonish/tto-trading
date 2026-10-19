@@ -5467,6 +5467,10 @@ def kosul_sayim(O: dict) -> dict:
                     t["b"] += g == "tutmadi" and ts == "tuttu"
     t["p"] = _mcnemar_p(t["a"], t["b"])
     t["ayirt"] = bool(t["a"] > t["b"] and t["p"] < 0.05)
+    # "Tuttu" ölçütü %5 düzeyli bir sınama değildir; gürültüde beklenen geçme oranını ters seçim ölçer (kova farkları
+    # yalnız gürültüyse iki seçimin geçme oranı aynıdır).
+    t["ters_oran"] = t["ters_tuttu"] / t["ters_sinanan"] if t["ters_sinanan"] else None
+    t["gurultu_beklenen"] = t["ters_oran"] * t["sinanan"] if t["ters_oran"] is not None else None
     # Ters yön: örneklem içinde KÖTÜ görünen kovalar örneklem dışında daha sık tutuyor — kova sıralaması dönüyor.
     t["ters_ustun"] = bool(t["b"] > t["a"] and t["p"] < 0.05)
     return t
@@ -5480,8 +5484,9 @@ def toplamlar(O: dict, ON: dict) -> dict:
                         "rastgele_n", "rastgele_ust", "rastgele_ust_her_tohum", "rastgele_ust_bir_tohum",
                         "arti_n", "arti_rastgele_n", "arti_rastgele_alt", "dsr_n",
                         "dsr_ust", "dsr_gurultu_ust", "secilen_sr_arti", "calisiyor")}
-    for b in (O.get("birim") or {}).values():
-        for v in (b.get("cift") or {}).values():
+    oos_ust: list[dict] = []
+    for bid, b in (O.get("birim") or {}).items():
+        for c, v in (b.get("cift") or {}).items():
             va = v.get("varsayilan") or {}
             o = va.get("oos") or {}
             if not o.get("n"):
@@ -5502,6 +5507,10 @@ def toplamlar(O: dict, ON: dict) -> dict:
             if r.get("yuzdelik") is not None and math.isfinite(r["yuzdelik"]):
                 t["rastgele_n"] += 1
                 t["rastgele_ust"] += r["yuzdelik"] >= esik
+                if r["yuzdelik"] >= esik:
+                    # Örneklem dışında eşiği geçen bileşimler adıyla (net ve brüt sonuçlarıyla): yön seçiminin değeri
+                    # ayırt edilebildiği yerde maliyeti karşılıyor mu, istisnasıyla.
+                    oos_ust.append({"birim": bid, "cift": c, "yuzdelik": r["yuzdelik"], "net": net, "brut": brut})
                 # Tohuma göre aralık: sabit tohum listesinin hepsinde ya da en az birinde eşiği geçen bileşim. Tohum
                 # sınaması yalnız yüzdeliği saglamlik.DUYARLILIK_TABAN'ın üstündeki bileşimde koşar; altındaki bileşim
                 # iki sayımda da geçmeyen sayılır.
@@ -5521,6 +5530,13 @@ def toplamlar(O: dict, ON: dict) -> dict:
                 t["dsr_gurultu_ust"] += (d.get("dsr_gurultu") or 0) >= 0.95
                 t["secilen_sr_arti"] += (d.get("sr_yillik") or 0) > 0
     t = {k: int(v) for k, v in t.items()}
+    # Örneklem dışında eşiği geçenler derslerin kural sırasıyla, parite sırası künyenin.
+    sira_b = [x for bl in adlar.DERS_BIRIM.values() for x in bl]
+    sira_c = list((O.get("kunye") or {}).get("ciftler") or [])
+    t["rastgele_oos_liste"] = sorted(oos_ust, key=lambda x: (sira_b.index(x["birim"]) if x["birim"] in sira_b
+                                                             else len(sira_b), x["birim"],
+                                                             sira_c.index(x["cift"]) if x["cift"] in sira_c
+                                                             else len(sira_c)))
     # Izgaradan seçimin kurulduğu bileşimler (seçim örneklem içinde asgari işlem ister; kurulamayan bileşimin seçilen
     # sütunu boştur).
     t["secilen_n"] = int(sum(1 for b in (O.get("birim") or {}).values() for v in (b.get("cift") or {}).values()
@@ -6228,7 +6244,8 @@ def blok_neden_basabas(u: Uretim, ctx: dict, donem: str = "oos") -> str:
     return ('<div class="sayi-tablo">\n\n'
             + _tablo(["Kural", "İşlem", "İsabet", "Başabaş isabeti", "Açık (puan)", "Brüt açık (puan)", "Δp* (puan)",
                       "Δp (puan)"], govde) + "\n\n</div>\n\n"
-            f"_{bas_buyuk(pen)}, önceden kayıtlı varsayılanlar; {_parite_sayisi(u)} paritenin işlemleri birlikte. Başabaş "
+            f"_Tür: betimleme. {bas_buyuk(pen)}, önceden kayıtlı varsayılanlar; {_parite_sayisi(u)} paritenin işlemleri "
+            "birlikte. Başabaş "
             "isabeti p* = |ortalama kayıp| / (ortalama kazanç + |ortalama kayıp|); açık = isabet − p*, işlem başına "
             "beklentinin işaretini taşır. Brüt açık aynı ölçünün orta fiyattan orta fiyata hâli. Δp*: maliyetin başabaş "
             "isabetini yükseltmesi (net p* − brüt p*); Δp: maliyetin isabeti düşürmesi (brüt isabet − net isabet). "
@@ -6247,7 +6264,8 @@ def blok_neden_ayrisim(u: Uretim, ctx: dict, donem: str = "oos") -> str:
     dis = sorted({x.split(":")[0] for x in a.get("dislanan") or []})
     tamamen, kismen = [b for b in dis if b not in k], [b for b in dis if b in k]
     esik = int(u.O["kunye"]["uygulama_esik"]["rastgele"])
-    not_ = (f"_{bas_buyuk(_pencere_ad(u)[donem])}; kural başına paritelerin işlem sayısıyla ağırlıklı ortalaması, R / "
+    not_ = (f"_Tür: betimleme. {bas_buyuk(_pencere_ad(u)[donem])}; kural başına paritelerin işlem sayısıyla ağırlıklı "
+            "ortalaması, R / "
             "işlem. Net = yön payı + zamanlama payı − makas − kayma (makas ve kayma tabloda eksi işaretle). Makas "
             "ölçülmüş bid/ask makasıdır, kayma modelin dolum başına varsaydığı maliyet.")
     if tamamen:
@@ -6276,7 +6294,8 @@ def blok_neden_esik(u: Uretim, ctx: dict) -> str:
     return ('<div class="sayi-tablo">\n\n'
             + _tablo(["Kural", f"İşlem ({pa['oos']})", f"c* ({pa['oos']})", "%95 aralığı", "Ödenen",
                       "c* (bütün dönem)", "%95 aralığı", "Ödenen"], govde)
-            + "\n\n</div>\n\n_Pip, gidiş-dönüş, işlem başına; önceden kayıtlı varsayılanlar, dört paritenin işlemleri "
+            + "\n\n</div>\n\n_Tür: betimleme. Pip, gidiş-dönüş, işlem başına; önceden kayıtlı varsayılanlar, dört "
+            "paritenin işlemleri "
             "birlikte. c* = ortalama brüt R / ortalama (1 / R'nin pip karşılığı): işlem başına sabit bir maliyet c* "
             "olsaydı net R sıfır olurdu (ilk mertebe: işlemler maliyetle değişmez sayılır). Aralık, brüt sonucun önceden "
             "kayıtlı bootstrap aralığının uçlarından. Ödenen: ölçülen makas ve varsayılan kaymanın toplamı."
@@ -6306,9 +6325,10 @@ def blok_neden_ay_sonu(u: Uretim, ctx: dict) -> str:
     return ('<div class="sayi-tablo">\n\n'
             + _tablo(["Parite", "Pencere", "Ay sonu", "İsabet", "Brüt", "Maliyet", "Net", "%95 aralığı",
                       "Net, eski tanımla", "%95 aralığı (eski)"], govde, ["l", "l"] + ["r"] * 8)
-            + "\n\n</div>\n\n_Fiksing momentumu, önceden kayıtlı varsayılan; R / işlem, ayda bir işlem. Bugünkü tanım "
+            + "\n\n</div>\n\n_Tür: betimleme. Fiksing momentumu, önceden kayıtlı varsayılan; R / işlem, ayda bir işlem. "
+            "Bugünkü tanım "
             "(ön kaydın tanımı): ayın son Londra iş günü; eski tanım: ayın son hafta içi günü. Aralık önceden kayıtlı "
-            "bootstrap'tan. Ön kayıt alt kümeye hüküm vermez; tablo betimlemedir._")
+            "bootstrap'tan. Ön kayıt alt kümeye hüküm vermez._")
 
 
 def blok_neden_haber(u: Uretim, ctx: dict) -> str:
@@ -6325,7 +6345,8 @@ def blok_neden_haber(u: Uretim, ctx: dict) -> str:
     return ('<div class="sayi-tablo">\n\n'
             + _tablo(["Olay", "Olay × parite", "Parite", "İlk 5 dk", "5 → 15 dk", "5 → 60 dk", "5 → 60 dk, paritelerin "
                       "aralığı"], govde) + "\n\n</div>\n\n"
-            "_Olay anındaki orta fiyattan, önceki günlerin ATR'sinin yüzdesi; ilk beş dakikanın yönünde artı (yukarı ve "
+            "_Tür: betimleme. Olay anındaki orta fiyattan, önceki günlerin ATR'sinin yüzdesi; ilk beş dakikanın yönünde "
+            "artı (yukarı ve "
             "aşağı kapanan olaylar simetrik birleştirildi: iki kolun farkının yarısı). İlk beş dakikanın hareketi tanımı "
             "gereği artıdır; devam ya da geri dönüş sonraki iki sütundadır. Paritelerin olay sayısıyla ağırlıklı._")
 
@@ -6382,7 +6403,8 @@ def blok_neden_kuyruk(u: Uretim, ctx: dict) -> str:
     return ('<div class="sayi-tablo">\n\n'
             + _tablo(["Kural", "Parite", "İşlem", "Net R", "En iyi işlem çıkınca", "En iyi üç çıkınca", "En iyi işlemin "
                       "günü", "O işlem (R)", "Toplam R içindeki payı"], govde, ["l", "l"] + ["r"] * 7)
-            + f"\n\n</div>\n\n_{_pencere_ad(u)['oos']}, önceden kayıtlı varsayılan, işlem başına net R. Toplam R içindeki "
+            + f"\n\n</div>\n\n_Tür: betimleme. {_pencere_ad(u)['oos']}, önceden kayıtlı varsayılan, işlem başına net R. "
+            "Toplam R içindeki "
             "pay: en iyi işlemin R'si / bileşimin bütün işlemlerinin R toplamı; %100'ün üstündeki pay, öbür işlemlerin "
             "toplamının eksi olduğunu söyler. En iyi değeri birden çok işlem paylaşıyorsa tek bir en iyi işlem yoktur._")
 
@@ -6420,7 +6442,8 @@ def blok_neden_mde(u: Uretim, ctx: dict) -> str:
     govde = [[ad.get(k, k)] + [sayi(m["tablo"][k][str(t)], 2) for t in sure] for k in sira]
     return ('<div class="sayi-tablo">\n\n'
             + _tablo(["İşlem sıklığı"] + [f"{t} yıl" for t in sure], govde) + "\n\n</div>\n\n"
-            f"_R / işlem. İşlem başına standart sapma {sayi(m['sigma'], 2)} R (bütün bileşimlerin örneklem dışı "
+            f"_Tür: betimleme (hesap). R / işlem. İşlem başına standart sapma {sayi(m['sigma'], 2)} R (bütün "
+            "bileşimlerin örneklem dışı "
             "standart sapmasının medyanı); tek yönlü %5 düzey, %80 güç. Bir yıl 250 iş günü, 52 hafta, 12 ay sayıldı._")
 
 
@@ -6490,15 +6513,12 @@ def blok_neden_yon_cumle(u: Uretim, ctx: dict) -> str:
     en büyük olduğu kuralda maliyetin ne kadarını karşıladığı (basarisiz.ayrisim; betimleme, aile hükmü değil)."""
     a = _bs(u)["ayrisim"]
 
-    def say(d, dersler):
+    def say(d, ders):
         k = a[d]["kural"]
-        L = [b for ders in dersler for b in adlar.DERS_BIRIM[ders] if b in k]
+        L = [b for b in adlar.DERS_BIRIM[ders] if b in k]
         return len(L), sum(1 for b in L if k[b]["y"] > 0)
-    fade, kir = ["fx-gunici-fade"], ["fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari"]
-    nf, af = say("oos", fade)
-    nk, ak = say("oos", kir)
-    _, af_t = say("tum", fade)
-    _, ak_t = say("tum", kir)
+    gruplar = (("fx-gunici-fade", "fade dersinin"), ("fx-gunici-seans-kirilimlari", "seans kırılımları dersinin"),
+               ("fx-gunici-yapi-kirilimlari", "yapı kırılımları dersinin"))
     k = a["oos"]["kural"]
     en = max(k, key=lambda b: (k[b]["y"], b))
     if k[en]["y"] <= 0:
@@ -6507,27 +6527,82 @@ def blok_neden_yon_cumle(u: Uretim, ctx: dict) -> str:
     def kac(m, n):
         return "hepsinde" if m == n else ("hiçbirinde" if m == 0 else f"{SAYI_INDE.get(m, tane(m, 'inde'))}")
     pa = _pencere_ad(u)
-    return (f"{pa['oos']} penceresinde yön payı fade dersinin {SAYI_AD.get(nf, sayi(nf, 0))} kuralının {kac(af, nf)} "
-            f"artı (bütün dönemde {kac(af_t, nf)}), iki kırılım dersinin {SAYI_AD.get(nk, sayi(nk, 0))} kuralının "
-            f"{kac(ak, nk)} artı (bütün dönemde {kac(ak_t, nk)}). Yön payının en büyük olduğu kural "
-            f"{adlar.BIRIM[en][1]} ({sayi(k[en]['n'], 0)} işlem): {sayi(k[en]['y'], 3, arti=True)} R, maliyeti "
-            f"{sayi(k[en]['c'], 3)} R; yön payı maliyetin {yuzde(k[en]['y'] / k[en]['c'], 0)} kadarını karşılıyor.")
+    parca = []
+    sayim = {}
+    for ders, ad in gruplar:
+        n_, m_ = say("oos", ders)
+        _, m_t = say("tum", ders)
+        sayim[ders] = (n_, m_)
+        parca.append(f"{ad} {SAYI_AD.get(n_, sayi(n_, 0))} kuralının {kac(m_, n_)} artı (bütün dönemde {kac(m_t, n_)})")
+    cumle = f"{pa['oos']} penceresinde yön payı " + liste_yaz(parca) + "."
+    # Fade (geri dönüşe bahis) ile seans kırılımları (devama bahis) aynı pencerede birlikte artıysa tablo gün içi
+    # fiyatın bir yön eğilimini ayırmaz: iki ters bahis birlikte doğru yönü seçmiş görünür.
+    (nf, af), (ns, as_) = sayim["fx-gunici-fade"], sayim["fx-gunici-seans-kirilimlari"]
+    if af == nf and as_ == ns:
+        cumle += (" Geri dönüşe bahis giren fade kuralları ile devama bahis giren seans kırılımları aynı pencerede "
+                  "birlikte artı yön payı taşıyor; tablo bu yüzden gün içi fiyatın devam mı geri dönüş mü eğiliminde "
+                  "olduğunu ayırmaz.")
+    return (cumle + f" Yön payının en büyük olduğu kural {adlar.BIRIM[en][1]} ({sayi(k[en]['n'], 0)} işlem): "
+            f"{sayi(k[en]['y'], 3, arti=True)} R, maliyeti {sayi(k[en]['c'], 3)} R; yön payı maliyetin "
+            f"{yuzde(k[en]['y'] / k[en]['c'], 0)} kadarını karşılıyor.")
+
+
+def blok_neden_rastgele(u: Uretim, ctx: dict) -> str:
+    """Rastgele yön sınamasının iki penceredeki sayımı ve eşiği geçen bileşimlerin net sonucu (toplamlar:
+    rastgele_oos_liste · rastgele_tum). Genelleme sayıdan kurulur, istisnalar adıyla: yön seçiminin değeri ayırt
+    edilebildiği bileşimde maliyeti karşılıyor mu."""
+    T = ctx["T"]
+    pa = _pencere_ad(u)
+
+    def ad(xs):
+        return liste_yaz([f"{adlar.BIRIM[x['birim']][1]} {PARITE[x['cift']]}" for x in xs])
+
+    def arti(xs):
+        return [x for x in xs if x["net"] is not None and x["net"] > 0]
+
+    def kalan(xs, n):
+        a = arti(xs)
+        if not xs:
+            return ""
+        if not a:
+            return " ve hepsinin net sonucu eksi" if n > 1 else " ve net sonucu eksi"
+        bn = sum(1 for x in xs if x not in a and x["brut"] is not None and x["brut"] > 0)
+        s = (f"; bunların {tane(len(a), 'i')} net artı ({ad(a)})" if len(a) < n else "; hepsi net artı")
+        if bn:
+            s += f", {tane(bn, 'inde')} brüt sonuç artı, net sonuç eksi"
+        return s
+    o = T["rastgele_oos_liste"]
+    if len(o) != T["rastgele_ust"]:
+        raise SablonHatasi("neden_rastgele: örneklem dışı liste sayımla tutmuyor")
+    rt = T["rastgele_tum"]
+    s = (f"Örneklem dışında {sayi(T['rastgele_n'], 0)} bileşimin {tane(T['rastgele_ust'], 'inde')} gerçek işlem rastgele "
+         f"yön dağılımının üst %5'inde; hiçbir kenarın olmadığı bir dünyada beklenen yaklaşık "
+         f"{sayi(T['rastgele_beklenen'], 0)}{kalan(o, len(o))}. Bütün dönemde bu sayı {sayi(rt['n'], 0)} bileşimde "
+         f"{sayi(rt['ust'], 0)} (beklenen {sayi(rt['beklenen'], 1)}){kalan(rt['ust_liste'], rt['ust'])}.")
+    a_o, a_t = arti(o), arti(rt["ust_liste"])
+    eksi = len(o) - len(a_o) + rt["ust"] - len(a_t)
+    if eksi > len(a_o) + len(a_t):
+        s += (" Yön seçiminin değeri sıfırdan ayırt edilebildiği bileşimlerin çoğunda maliyetten küçük; net artı kalan "
+              "istisnaların hükmü karşılaştırma dersindedir.")
+    return s
 
 
 def blok_kaynaklar(u: Uretim, ctx: dict, slug: str) -> str:
     """Bir dersin kaynakçası, atıf kaydından (atif.ders_kaynaklari: kaydın bu dersi andığı ve atfı doğrulanmış
     kayıtlar, künyenin alfabe sırasıyla). Liste metinde elle yazılmaz: künyesi dondurulmuş kaynağa karşı sınanan kayıt
-    tek kaynaktır, metindeki her atfın kaydı olduğunu ve her kaydın metinde anıldığını kapı sorar (dogrula 17)."""
+    tek kaynaktır, metindeki her atfın kaydı olduğunu ve her kaydın metinde anıldığını kapı sorar (dogrula 17).
+    Alıntıları yayımlanmış sürüm olarak tanımlanamayan bir metinden gelen kaydın sürümü (kaydın surum alanı) künyenin
+    yanında basılır: okur dergi metninin doğrulandığını sanmasın."""
     import atif
     k = atif.ders_kaynaklari(slug)
     if not k:
         raise SablonHatasi(f"kaynaklar: {slug} dersini anan doğrulanmış kayıt yok")
-    return "\n".join(f"- {x['kunye']}" for x in k)
+    return "\n".join(f"- {x['kunye']}" + (f" ({x['surum']})" if x.get("surum") else "") for x in k)
 
 
 BLOKLAR = {
     "kaynaklar": blok_kaynaklar,
-    "kurallar": blok_kurallar, "neden_yon_cumle": blok_neden_yon_cumle,
+    "kurallar": blok_kurallar, "neden_yon_cumle": blok_neden_yon_cumle, "neden_rastgele": blok_neden_rastgele,
     "neden_basabas": blok_neden_basabas, "neden_ayrisim": blok_neden_ayrisim, "neden_esik": blok_neden_esik,
     "neden_ay_sonu": blok_neden_ay_sonu, "neden_haber": blok_neden_haber, "neden_mde": blok_neden_mde,
     "neden_kuyruk": blok_neden_kuyruk, "neden_kuyruk_cumle": blok_neden_kuyruk_cumle, "hesap": blok_hesap,

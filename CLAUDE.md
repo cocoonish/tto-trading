@@ -5185,3 +5185,99 @@ kaynağının makası, komisyon, emir gecikmesi, 5 dakikanın altı, dört majö
 pozisyon büyüklüğü ve kuralların birleşimi. Takvimde saati kaynakla doğrulanamayan üç BoE günü
 (11.03 ve 19.03.2020 olağanüstü kararları, 07.05.2020 rapor günü) yazılmadı: haber ölçülerine
 girmezler, fiyattan saat yazılmaz.
+
+**KARAR (17–18.10.2026, kullanıcı) — FX GÜN İÇİ SERİSİNE DOKUZUNCU DERS: "NEDEN BAŞARISIZ OLUYORLAR"; YENİ
+KOŞU, YENİ VERİ VE İLERİYE DÖNÜK DEFTER YOK.** Kullanıcı: "Bir bölüm daha açalım, neden bu sistemler başarısız, nasıl
+başarılı olarak kullanabiliriz gibi." Dört karar ona soruldu: ileriye dönük bir işlem defteri kurulmadı ("Kurmayalım"),
+yeni veri alınmadı (sınamanın gücü yalnız raporlanır ve "bu seride yapılmadı" diye yazılır), limit emir yalnız teoride
+anlatıldı, uzunluk ≈60 dakika (kartın okuma süresi 55 dk). Ders (`site/src/content/arastirma/fx-gunici-neden-basarisiz.mdx`; şablon
+`Aktarılacak Projeler/FxGunici/metin/fx-gunici-neden-basarisiz.md`, ölçüm `basarisiz.py` → `cikti/ders/olcum.json`un
+`basarisiz` bloğu, sekiz figür `neden-*.html`) yeni bir hüküm vermez: hükümler karşılaştırma dersinindir; dersin bütün
+yeni sayıları iki pencere de görüldükten sonra kurulmuş BETİMLEMEDİR ve öyle etiketlenir (sayının dört türü: hüküm ·
+betimleme · literatür · hipotez). Kısa cevap üç parçalı ve ölçülmüş: maliyetten önceki yön ve zamanlama bilgisi
+örneklem dışında işlem başına +0,014 R ve sıfırdan ayırt edilemiyor, ödenen maliyet 0,180 R (0,078 makas · 0,102
+varsayılan kayma); bir örneklemden ötekine taşınan şey kenar değil MALİYETİN BÜYÜKLÜĞÜ (22 kuralın örneklem içi ve dışı
+sırası maliyette 0,95, brütte 0,18 korelasyonla taşınıyor; bileşimler arası brüt farkların güvenilirliği örneklem
+dışında 0,04); ve kullanılabilirlik üç şartın BİRLİKTE sağlanmasıdır — kuralın kaldırabildiği maliyet ödenen maliyetin
+üstünde, kenar bir kaynağa dayanıyor (yürütme · akış · bilgi · risk primi), ve bu görülmemiş veride gücü önceden
+hesaplanmış bir planla gösterilmiş. Serinin tek adayı GBP/USD fiksing momentumunun ay sonu alt kümesidir (iki pencerede
+de aralığın alt ucu sıfırın üstünde, ama alt küme seçimi iki pencere görüldükten sonra yapıldı ve ay sonu tanımına
+duyarlı); o sınama bu seride yapılmadı. Sık önerilen on iki "kurtarma yolunun" (parametre, süzgeç, tersine çevirme,
+stop, çıkış, tatil, birleştirme, pozisyon büyüklüğü, parite, limit emir, ucuz yürütme, ilk saniye) her birinin bu
+serideki ölçülmüş karşılığı tek tabloda; hiçbiri brütün kendisini artırmıyor.
+
+**Kurucu ilke — BİR ATIF, KAYNAĞIN KENDİ METNİNDE GÖRÜLMEDEN YAYIMLANMAZ; KAYNAKÇA ATIFLARDAN BASILIR, ELLE
+TUTULMAZ; ve "KATALOGDA BULAMADIM" İLE "KAYNAK BUNU SÖYLEMİYOR" AYRI HÜKÜMLERDİR.** Dokuzuncu dersin 34 atfı ve
+yayımlanmış sekiz dersin beş kaynağı bulutta donduruldu (`arsiv_kaynak.py` → `veri/kaynak/<id>.json`,
+`arastirma-veri.yml`; arama motoru YOK — yalnız DOI, katalog koordinatı (ISSN, cilt, sayı, ilk sayfa) ve bilinen açık
+adresler; tam metin saklanmaz, künye, özet, ilk sayfa ve aranan ifadelerin ±240 karakterlik çevresi saklanır). Hangi
+cümlenin hangi kaynağa dayandığı ve kaynağın o cümleyi taşıyan kendi ifadesi `veri/kaynaklar.json`da; kapı `atif.py`
+(`dogrula.py` ölçüt 17, sayfa sınavı 26 kendiliğinden koşturur): metindeki her atıf doğrulanmış ve o dersi adıyla anan
+bir kayda karşılık gelir, her alıntı dondurulmuş metinde geçer (boşluksuz karşılaştırma: PDF'in böldüğü sözcük alıntıyı
+düşürmez; 24 harften kısa alıntı hiçbir şeyi kanıtlamaz), künye (yazar sırası, yıl, cilt, sayı, sayfa, başlık) katalogla
+tutar, ve kaynakça listesi kayıttan basılır (`{{! kaynaklar <slug> }}`). Elle tutulan liste bir gün sessizce eskir:
+dersin elle yazılmış listesi, metinden çoktan çıkarılmış Wald (1945) atfını taşımaya devam ediyordu.
+Ölçülenler. (1) BELLEKTEN YAZILMIŞ KÜNYE: Elaut vd.'nin DOI'si başka bir makaleye çözüldü (başlık sınaması reddetti,
+koordinat süzgeci doğrusunu buldu); Grossman–Stiglitz'in DOI'si 404 verdi ve kayıt ancak RePEc tanıtıcısıyla bulundu.
+(2) KAYNAĞIN SÖYLEDİĞİNDEN GÜÇLÜ CÜMLE: ilk taslağın 24 atıflı cümlesinin 20'si dondurulmuş metne karşı okunduktan
+sonra değişti — ör. likiditenin "kriz
+dönemlerinde maliyeti artar" cümlesi özette yok (yerine özetin kendi üç bulgusu), Tokyo fiksingindeki örüntünün "ödeme
+günlerinde" olduğu özette yok (yerine fiksingden önceki dolar yönlü emir akışı; ilan 10:00'da, dayandığı işlemler
+9:55'te), limit emri "çoğu zaman bilgili taraf doldurur" ölçülmemiş bir sıklıktı, "büyük bankalar" kaynakta "dünyanın en
+büyük bankalarından bazıları"ydı, Wald atfı içeriğe dayanmıyordu (kaldırıldı), ve atıfsız "literatür dört kaynak sayar"
+cümlesi dersin kendi ayrımı olarak yeniden yazıldı. Yayımlanmış akış dersi ay sonunu Melvin ve Prins'e (2015) dayanarak
+"portföy yeniden dengelemesinin en büyük akışı taşıdığı gün" diye tanımlıyordu; özet bir büyüklük sıralaması vermez —
+cümle düzeltildi ve tarihli düzeltme notu kondu (18.10.2026; araştırma koleksiyonunun düzeltme alanı yok, not metnin
+içinde `<div class="not">`). (3) KATALOGDA ÖZET YOKSA CÜMLE BAŞLIKLA SINIRLANIR: Grossman–Stiglitz'in kaydında özet yok
+("No abstract is available"), cümle başlığın önermesiyle sınırlandı ve durum "kismen". (4) İKİ KAYNAK ÇELİŞİRSE ÖNCE SINA: Elaut vd.'nin yazar sırası
+Crossref, OpenAlex ve Semantic Scholar'da Elaut–Frömmel–Lampaert, Gent Üniversitesi deposunda Elaut–Lampaert–Frömmel;
+yayımlanmış ders birincisini yazıyordu. Depo sayfasına bakılarak yayımlanmış doğru bir künye "düzeltilmek" üzereydi;
+yayıncının Crossref kaydı izlenir ve çelişki kayda yazılır. (5) KAPININ KENDİ KÖR NOKTASI derlemde ölçüldü:
+ayrıştırıcı yalnız yılla BİTEN parantezi okuyordu, yayımlanmış seans dersindeki "(Melvin ve Prins 2015; akış dersi)"
+hem virgülsüzdü hem görünmezdi; Türkçe ekli anlatı ("Prins'e (2015)") ise yanlış alarm üretirdi. Artık yıl taşıyan her
+parantez okunur, ek adın dışında kalır, virgülü eksik atıf adıyla düşer (ay adıyla başlayan tarih hariç); beş arıza
+enjeksiyonunun beşi de yakalanıyor ve dokuz derslik derlemde yanlış alarm sıfır.
+
+**Kurucu ilke — BİR TARAMA ARACININ "TAŞAN ÖĞE"Sİ GÖRÜNEN TAŞMA OLMAYABİLİR; ölçü görünen kaba bakar.** Dokuzuncu
+dersin sekiz display denkleminin yedisi telefon sütununa sığmıyordu (KaTeX kabı kendi içinde kayıyordu, biri 760
+pikselde de); yan yana duran formül çiftleri `aligned` ile alt alta dizildi ve 353, 390, 760 pikselde taşan denklem
+kalmadı (yayımlanmış sekiz derste zaten yoktu). Tarama aracının kendisi iki yanlış alarm verdi: KaTeX'in erişilebilirlik
+için bastığı gizli MathML katmanı ve "kuyruk gizleme" için 400em genişlikte çizilip kırpılan SVG yolu, sayfa genişliği
+görünüm genişliğine eşitken "taşan öğe" sayıldı. Doğru soru öğenin sınırı değil, öğeyi kırpan ilk atanın görünüme sığıp
+sığmadığıdır; denklemler için ölçü `.katex-display`in `scrollWidth`/`clientWidth` oranıdır.
+
+**Kurucu ilke — BİR ATFIN KOŞULU ATFIN PARÇASIDIR; ve bir kaydın DURUMU ile SÜRÜMÜ ayrı sorulardır.** Dokuzuncu
+dersin donmuş kopyasına karşı koşan kaynak ve sayı mercekleri (36 bulgu, hepsi kaynağa karşı doğrulandı ve uygulandı)
+alıntıların hepsini dondurulmuş metinde buldu — atıf kapısı yeşildi — ve kusurların tamamı CÜMLENİN KAYNAKTAN GÜÇLÜ
+OLDUĞU yerdeydi: kaynağın koşulu düşmüş, kapsamı genişlemişti. Kaminski–Lo'nun "stop her zaman eksi" sonucu
+portföyü daha yüksek getirili varlıktan çıkaran bir politikanın sonucudur; derste "aynı yöne bakar" diye dersin kendi
+teoremine (sürüklenmesiz fiyatta stop beklenti yaratmaz) bağlanıyordu, oysa sıfır ile eksi aynı yön değildir ve
+sürüklenmesiz fiyatta vazgeçilen prim sıfırdır. McLean–Pontiff'in örneklem dışı %26'sı yazarlara göre veri
+madenciliğinin üst sınırıdır, yayımı okuyan işlemlere bağlanan yalnız aradaki 32 puandır. Sullivan–Timmermann–White'ın
+%12'si o dönemin en iyi kuralının düzeltilmiş p değeridir, örneklem içinde geçen kuralın ileriye taşınması değil.
+Harvey–Liu–Zhu'nun t > 3 eşiği hisse kesiti literatürünün deneme sayısından türedi; Bailey vd.'nin "örneklem dışı
+Sharpe 0" sonucu becerisi olmayan stratejiler içindir; Barber vd.'nin %1'i önceki yılın en iyilerinden ertesi yıl da
+kazananların bütün işlemcilere oranıdır ve aynı metin ortalama bir yılda yoğun gün içi işlemcilerin beşte birinin
+kazandığını yazar; ESMA'nın oranı perakende CFD hesaplarınındır, gün içi işlemcilerin değil; Glosten–Milgrom'da makas
+piyasa yapıcıya kenar bırakmaz (beklenen kârı sıfırdır); Melvin–Prins işlemlerin fiksingde yoğunlaştığını göstermez,
+kurumsal bir öncül olarak alır. Atıf kapısı alıntının VARLIĞINI sorar, cümlenin onunla aynı şeyi söyleyip söylemediğini
+soramaz; bu yüzden kaydın `iddia` alanı dersin cümlesiyle aynı koşulu taşır ve koşulu taşıyan ifade alıntılara girer.
+İkinci yarısı kaydın tutarlılığıydı: Neely–Weller başka bir sürümün özetinden alındığı için "kismen" sayılmış, Evans
+(çalışma metni) ve Kaminski–Lo (üçüncü taraf kopyası) aynı gerekçeyle "dogrulandi" kalmıştı — tek ölçüt yoktu ve okur
+kaynakçadaki dergi künyesinden derginin metninin doğrulandığını sanıyordu. Kural ikiye ayrıldı: `durum` yalnız iddianın
+dondurulmuş metinde karşılığı olup olmadığını söyler; `surum` alıntıların yayımlanmış sürüm olarak tanımlanamayan bir
+metinden geldiğini söyler (çalışma metni, kabul edilmiş metin, yayım öncesi sürüm, başka bir sürümün özeti, dergi
+başlığı taşımayan üçüncü taraf kopyası) ve kaynakçada künyenin yanında basılır. Ölçüt kaydın kendisinden uygulandı:
+her alıntının dondurulmuş metnin hangi parçasında (dergi özeti mi, tam metin mi) geçtiği tarandı ve altı kayıt sürüm
+aldı; dergi başlığını taşıyan üçüncü taraf kopyaları (Glosten–Milgrom, White, Holm, Benjamini–Hochberg) derginin
+metnidir ve almadı. Sayı merceğinin bulguları da aynı sınıftandı: "sınırda" bir ucun işareti tohuma bağlıdır ve akış
+dersindeki kural (tohum payı ile büyük tekrarlı kestirim basılır) dokuzuncu derse uygulanmamıştı; iki ayrı paydadan
+ölçülen pay koşut yazılınca okur ikincisini birincinin tabanında okur; bir sağlam tahmin (Theil–Sen) tanıtılıp hüküm
+yalnız EKK'dan kurulursa sağlam tahmin süs olur; ve bir alıştırma yuvarlanmış girdileri gösterip yuvarlanmamış
+değerlerle hesaplıyorsa bunu söylemelidir. Yayımlanmış beş derste aynı sınıftan cümleler düzeltildi (fiksing dönüşü:
+Evans'ın verisi 2004–2013, bir dakikalık pencere, anlamlı eksi ilinti ay sonunda; fiksing momentumu ve NY IB 09:30:
+Melvin–Prins'in öncülü; gün içi momentum: Elaut vd.'nin mekanizması kapanışı olan bir piyasaya aittir; giriş ve
+metodoloji: deflated Sharpe getirilerin normal olmamasını da düzeltir) ve hiçbirinde sayı değişmedi. Kaynağın
+göstermediği bir şeyi "belgelenmiş" diye yazan iki cümle (akış ve seans kırılımları dersleri, Melvin–Prins) tarihli
+düzeltme notu aldı; yalnız niteleme ekleyenler (dönem, mekanizma, ikinci şişirme kaynağı) not almadı, çünkü eski
+cümle yanlış değil eksikti.
