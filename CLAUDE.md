@@ -5186,7 +5186,7 @@ pozisyon büyüklüğü ve kuralların birleşimi. Takvimde saati kaynakla doğr
 (11.03 ve 19.03.2020 olağanüstü kararları, 07.05.2020 rapor günü) yazılmadı: haber ölçülerine
 girmezler, fiyattan saat yazılmaz.
 
-**KARAR (17–18.10.2026, kullanıcı) — FX GÜN İÇİ SERİSİNE DOKUZUNCU DERS: "NEDEN BAŞARISIZ OLUYORLAR"; YENİ
+**KARAR (17–19.10.2026, kullanıcı) — FX GÜN İÇİ SERİSİNE DOKUZUNCU DERS: "NEDEN BAŞARISIZ OLUYORLAR"; YENİ
 KOŞU, YENİ VERİ VE İLERİYE DÖNÜK DEFTER YOK.** Kullanıcı: "Bir bölüm daha açalım, neden bu sistemler başarısız, nasıl
 başarılı olarak kullanabiliriz gibi." Dört karar ona soruldu: ileriye dönük bir işlem defteri kurulmadı ("Kurmayalım"),
 yeni veri alınmadı (sınamanın gücü yalnız raporlanır ve "bu seride yapılmadı" diye yazılır), limit emir yalnız teoride
@@ -5227,7 +5227,7 @@ günlerinde" olduğu özette yok (yerine fiksingden önceki dolar yönlü emir a
 büyük bankalarından bazıları"ydı, Wald atfı içeriğe dayanmıyordu (kaldırıldı), ve atıfsız "literatür dört kaynak sayar"
 cümlesi dersin kendi ayrımı olarak yeniden yazıldı. Yayımlanmış akış dersi ay sonunu Melvin ve Prins'e (2015) dayanarak
 "portföy yeniden dengelemesinin en büyük akışı taşıdığı gün" diye tanımlıyordu; özet bir büyüklük sıralaması vermez —
-cümle düzeltildi ve tarihli düzeltme notu kondu (18.10.2026; araştırma koleksiyonunun düzeltme alanı yok, not metnin
+cümle düzeltildi ve tarihli düzeltme notu kondu (19.10.2026; araştırma koleksiyonunun düzeltme alanı yok, not metnin
 içinde `<div class="not">`). (3) KATALOGDA ÖZET YOKSA CÜMLE BAŞLIKLA SINIRLANIR: Grossman–Stiglitz'in kaydında özet yok
 ("No abstract is available"), cümle başlığın önermesiyle sınırlandı ve durum "kismen". (4) İKİ KAYNAK ÇELİŞİRSE ÖNCE SINA: Elaut vd.'nin yazar sırası
 Crossref, OpenAlex ve Semantic Scholar'da Elaut–Frömmel–Lampaert, Gent Üniversitesi deposunda Elaut–Lampaert–Frömmel;
