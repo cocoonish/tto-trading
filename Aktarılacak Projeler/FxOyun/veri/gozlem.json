@@ -1,0 +1,3201 @@
+{
+ "donem": [
+  "2018-01-01",
+  "2023-12-31"
+ ],
+ "olay": 31516,
+ "an": {
+  "tokyo_acilis": {
+   "ad": "Tokyo açılışı",
+   "aile": "acilis",
+   "tf": 15,
+   "pencere": 180
+  },
+  "londra_acilis": {
+   "ad": "Londra açılışı",
+   "aile": "acilis",
+   "tf": 15,
+   "pencere": 180
+  },
+  "ny_acilis": {
+   "ad": "New York açılışı",
+   "aile": "acilis",
+   "tf": 15,
+   "pencere": 120
+  },
+  "tokyo_fiks": {
+   "ad": "Tokyo fiksingi",
+   "aile": "fiksing",
+   "tf": 30,
+   "pencere": 60
+  },
+  "wmr": {
+   "ad": "Londra fiksingi (WM/R)",
+   "aile": "fiksing",
+   "tf": 30,
+   "pencere": 60
+  },
+  "nfp": {
+   "ad": "Tarım dışı istihdam",
+   "aile": "veri",
+   "tf": 5,
+   "pencere": 120
+  },
+  "cpi": {
+   "ad": "ABD TÜFE",
+   "aile": "veri",
+   "tf": 5,
+   "pencere": 120
+  },
+  "fomc": {
+   "ad": "FOMC kararı",
+   "aile": "mb",
+   "tf": 5,
+   "pencere": 120
+  },
+  "ecb": {
+   "ad": "ECB kararı",
+   "aile": "mb",
+   "tf": 5,
+   "pencere": 120
+  },
+  "boe": {
+   "ad": "BoE kararı",
+   "aile": "mb",
+   "tf": 5,
+   "pencere": 120
+  }
+ },
+ "sinif": [
+  {
+   "an": "boe",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 2,
+   "cift_n": {
+    "GBPUSD": 2
+   },
+   "n_yonlu": 2,
+   "devam": 0.5,
+   "devam_1R": 0.0,
+   "donus": 0.0,
+   "orta": 0.0,
+   "orta_uc": 0.0,
+   "kapanis": 1.0,
+   "mfe_med": 0.602729777764502,
+   "mae_med": 0.04883505585757811
+  },
+  {
+   "an": "boe",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 7,
+   "cift_n": {
+    "GBPUSD": 7
+   },
+   "n_yonlu": 7,
+   "devam": 0.5714285714285714,
+   "devam_1R": 0.14285714285714285,
+   "donus": 0.2857142857142857,
+   "orta": 0.2857142857142857,
+   "orta_uc": 0.0,
+   "kapanis": 0.5714285714285714,
+   "mfe_med": 0.6516419832582099,
+   "mae_med": 0.17133066818960593,
+   "ilk_orta_dk_med": 15.0
+  },
+  {
+   "an": "boe",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 3,
+   "cift_n": {
+    "GBPUSD": 3
+   },
+   "n_yonlu": 3,
+   "devam": 0.6666666666666666,
+   "devam_1R": 0.0,
+   "donus": 0.3333333333333333,
+   "orta": 0.3333333333333333,
+   "orta_uc": 0.0,
+   "kapanis": 0.6666666666666666,
+   "mfe_med": 0.9568773234200744,
+   "mae_med": 0.33582787652011226,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "boe",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 7,
+   "cift_n": {
+    "GBPUSD": 7
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.5714285714285714,
+   "kirilim_1R": 0.14285714285714285
+  },
+  {
+   "an": "boe",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 4,
+   "cift_n": {
+    "GBPUSD": 4
+   },
+   "n_yonlu": 4,
+   "devam": 0.5,
+   "devam_1R": 0.25,
+   "donus": 0.25,
+   "orta": 0.75,
+   "orta_uc": 0.5,
+   "kapanis": 0.75,
+   "mfe_med": 0.8237201594482018,
+   "mae_med": 0.3102648512264672,
+   "ilk_orta_dk_med": 1.0
+  },
+  {
+   "an": "boe",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 8,
+   "cift_n": {
+    "GBPUSD": 8
+   },
+   "n_yonlu": 8,
+   "devam": 0.125,
+   "devam_1R": 0.125,
+   "donus": 0.375,
+   "orta": 1.0,
+   "orta_uc": 0.5,
+   "kapanis": 0.375,
+   "mfe_med": 0.42754483803229026,
+   "mae_med": 0.47926536409422626,
+   "ilk_orta_dk_med": 1.5
+  },
+  {
+   "an": "boe",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 2,
+   "cift_n": {
+    "GBPUSD": 2
+   },
+   "n_yonlu": 2,
+   "devam": 0.0,
+   "devam_1R": 0.0,
+   "donus": 0.5,
+   "orta": 1.0,
+   "orta_uc": 0.0,
+   "kapanis": 0.0,
+   "mfe_med": 0.16952898143840342,
+   "mae_med": 1.7453863389643796,
+   "ilk_orta_dk_med": 21.0
+  },
+  {
+   "an": "boe",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 2,
+   "cift_n": {
+    "GBPUSD": 2
+   },
+   "n_yonlu": 2,
+   "devam": 1.0,
+   "devam_1R": 0.0,
+   "donus": 0.0,
+   "orta": 0.0,
+   "orta_uc": 0.0,
+   "kapanis": 1.0,
+   "mfe_med": 1.0864149924087891,
+   "mae_med": 0.0480472424809754
+  },
+  {
+   "an": "boe",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 3,
+   "cift_n": {
+    "GBPUSD": 3
+   },
+   "n_yonlu": 3,
+   "devam": 0.0,
+   "devam_1R": 0.0,
+   "donus": 0.3333333333333333,
+   "orta": 0.6666666666666666,
+   "orta_uc": 0.3333333333333333,
+   "kapanis": 0.0,
+   "mfe_med": 0.4480069324090121,
+   "mae_med": 0.7982954545454546,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "boe",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 1,
+   "cift_n": {
+    "GBPUSD": 1
+   },
+   "n_yonlu": 1,
+   "devam": 0.0,
+   "devam_1R": 0.0,
+   "donus": 0.0,
+   "orta": 1.0,
+   "orta_uc": 0.0,
+   "kapanis": 0.0,
+   "mfe_med": 0.06227758007117438,
+   "mae_med": 0.43683274021352314,
+   "ilk_orta_dk_med": 13.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 26,
+   "cift_n": {
+    "AUDUSD": 7,
+    "EURUSD": 7,
+    "GBPUSD": 5,
+    "USDJPY": 7
+   },
+   "n_yonlu": 26,
+   "devam": 0.4230769230769231,
+   "devam_1R": 0.15384615384615385,
+   "donus": 0.23076923076923078,
+   "orta": 0.8076923076923077,
+   "orta_uc": 0.46153846153846156,
+   "kapanis": 0.46153846153846156,
+   "mfe_med": 0.5659802805388916,
+   "mae_med": 0.6518929310854776,
+   "ilk_orta_dk_med": 7.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 44,
+   "cift_n": {
+    "AUDUSD": 8,
+    "EURUSD": 12,
+    "GBPUSD": 12,
+    "USDJPY": 12
+   },
+   "n_yonlu": 44,
+   "devam": 0.3181818181818182,
+   "devam_1R": 0.022727272727272728,
+   "donus": 0.22727272727272727,
+   "orta": 0.6590909090909091,
+   "orta_uc": 0.20454545454545456,
+   "kapanis": 0.4772727272727273,
+   "mfe_med": 0.5412586510202146,
+   "mae_med": 0.5530237818624517,
+   "ilk_orta_dk_med": 24.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 16,
+   "cift_n": {
+    "AUDUSD": 8,
+    "EURUSD": 3,
+    "GBPUSD": 3,
+    "USDJPY": 2
+   },
+   "n_yonlu": 16,
+   "devam": 0.5625,
+   "devam_1R": 0.125,
+   "donus": 0.1875,
+   "orta": 0.4375,
+   "orta_uc": 0.25,
+   "kapanis": 0.625,
+   "mfe_med": 0.6501749498685174,
+   "mae_med": 0.3464522915872504,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 49,
+   "cift_n": {
+    "AUDUSD": 13,
+    "EURUSD": 10,
+    "GBPUSD": 11,
+    "USDJPY": 15
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.4489795918367347,
+   "kirilim_1R": 0.5306122448979592
+  },
+  {
+   "an": "cpi",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 38,
+   "cift_n": {
+    "AUDUSD": 10,
+    "EURUSD": 10,
+    "GBPUSD": 7,
+    "USDJPY": 11
+   },
+   "n_yonlu": 38,
+   "devam": 0.4473684210526316,
+   "devam_1R": 0.23684210526315788,
+   "donus": 0.42105263157894735,
+   "orta": 0.7894736842105263,
+   "orta_uc": 0.23684210526315788,
+   "kapanis": 0.47368421052631576,
+   "mfe_med": 1.0017674783974864,
+   "mae_med": 1.0412752285274687,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 45,
+   "cift_n": {
+    "AUDUSD": 12,
+    "EURUSD": 12,
+    "GBPUSD": 15,
+    "USDJPY": 6
+   },
+   "n_yonlu": 45,
+   "devam": 0.37777777777777777,
+   "devam_1R": 0.2,
+   "donus": 0.37777777777777777,
+   "orta": 0.8888888888888888,
+   "orta_uc": 0.4222222222222222,
+   "kapanis": 0.4,
+   "mfe_med": 0.7489539748953975,
+   "mae_med": 0.848719475878499,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 14,
+   "cift_n": {
+    "AUDUSD": 1,
+    "EURUSD": 5,
+    "GBPUSD": 3,
+    "USDJPY": 5
+   },
+   "n_yonlu": 14,
+   "devam": 0.42857142857142855,
+   "devam_1R": 0.14285714285714285,
+   "donus": 0.2857142857142857,
+   "orta": 0.6428571428571429,
+   "orta_uc": 0.35714285714285715,
+   "kapanis": 0.6428571428571429,
+   "mfe_med": 0.7512970630094449,
+   "mae_med": 0.5156357434345058,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 9,
+   "cift_n": {
+    "AUDUSD": 2,
+    "EURUSD": 1,
+    "GBPUSD": 2,
+    "USDJPY": 4
+   },
+   "n_yonlu": 9,
+   "devam": 0.2222222222222222,
+   "devam_1R": 0.0,
+   "donus": 0.4444444444444444,
+   "orta": 0.8888888888888888,
+   "orta_uc": 0.3333333333333333,
+   "kapanis": 0.3333333333333333,
+   "mfe_med": 0.6016949152542372,
+   "mae_med": 0.8016877637130801,
+   "ilk_orta_dk_med": 4.5
+  },
+  {
+   "an": "cpi",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 11,
+   "cift_n": {
+    "AUDUSD": 2,
+    "EURUSD": 4,
+    "GBPUSD": 5
+   },
+   "n_yonlu": 11,
+   "devam": 0.8181818181818182,
+   "devam_1R": 0.45454545454545453,
+   "donus": 0.18181818181818182,
+   "orta": 0.7272727272727273,
+   "orta_uc": 0.36363636363636365,
+   "kapanis": 0.7272727272727273,
+   "mfe_med": 1.5622568093385214,
+   "mae_med": 0.8326530612244898,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 4,
+   "cift_n": {
+    "AUDUSD": 1,
+    "GBPUSD": 1,
+    "USDJPY": 2
+   },
+   "n_yonlu": 4,
+   "devam": 0.25,
+   "devam_1R": 0.25,
+   "donus": 0.75,
+   "orta": 0.75,
+   "orta_uc": 0.25,
+   "kapanis": 0.5,
+   "mfe_med": 0.8778573391836602,
+   "mae_med": 0.8462423613217637,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 4,
+   "cift_n": {
+    "EURUSD": 4
+   },
+   "n_yonlu": 4,
+   "devam": 0.5,
+   "devam_1R": 0.0,
+   "donus": 0.5,
+   "orta": 1.0,
+   "orta_uc": 0.25,
+   "kapanis": 0.25,
+   "mfe_med": 0.5759488514793045,
+   "mae_med": 1.1807663982270216,
+   "ilk_orta_dk_med": 19.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 4,
+   "cift_n": {
+    "EURUSD": 4
+   },
+   "n_yonlu": 4,
+   "devam": 0.5,
+   "devam_1R": 0.25,
+   "donus": 0.25,
+   "orta": 0.75,
+   "orta_uc": 0.5,
+   "kapanis": 0.75,
+   "mfe_med": 0.7101309795161914,
+   "mae_med": 0.5392915724541313,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 1,
+   "cift_n": {
+    "EURUSD": 1
+   },
+   "n_yonlu": 1,
+   "devam": 0.0,
+   "devam_1R": 0.0,
+   "donus": 1.0,
+   "orta": 1.0,
+   "orta_uc": 0.0,
+   "kapanis": 0.0,
+   "mfe_med": 0.0034423407917383822,
+   "mae_med": 4.70223752151463,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 7,
+   "cift_n": {
+    "EURUSD": 7
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.42857142857142855,
+   "kirilim_1R": 0.42857142857142855
+  },
+  {
+   "an": "ecb",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 7,
+   "cift_n": {
+    "EURUSD": 7
+   },
+   "n_yonlu": 7,
+   "devam": 0.7142857142857143,
+   "devam_1R": 0.5714285714285714,
+   "donus": 0.2857142857142857,
+   "orta": 0.7142857142857143,
+   "orta_uc": 0.42857142857142855,
+   "kapanis": 0.7142857142857143,
+   "mfe_med": 1.7358490566037736,
+   "mae_med": 0.5169082125603864,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 9,
+   "cift_n": {
+    "EURUSD": 9
+   },
+   "n_yonlu": 9,
+   "devam": 0.8888888888888888,
+   "devam_1R": 0.5555555555555556,
+   "donus": 0.1111111111111111,
+   "orta": 0.7777777777777778,
+   "orta_uc": 0.5555555555555556,
+   "kapanis": 0.6666666666666666,
+   "mfe_med": 1.6654929577464788,
+   "mae_med": 0.3583916083916084,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 3,
+   "cift_n": {
+    "EURUSD": 3
+   },
+   "n_yonlu": 3,
+   "devam": 0.6666666666666666,
+   "devam_1R": 0.6666666666666666,
+   "donus": 0.3333333333333333,
+   "orta": 1.0,
+   "orta_uc": 0.6666666666666666,
+   "kapanis": 0.6666666666666666,
+   "mfe_med": 1.8477272727272727,
+   "mae_med": 0.7113594040968343,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 2,
+   "cift_n": {
+    "EURUSD": 2
+   },
+   "n_yonlu": 2,
+   "devam": 0.5,
+   "devam_1R": 0.0,
+   "donus": 0.5,
+   "orta": 1.0,
+   "orta_uc": 0.5,
+   "kapanis": 0.5,
+   "mfe_med": 1.0872006728676036,
+   "mae_med": 1.0731083844580778,
+   "ilk_orta_dk_med": 1.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 2,
+   "cift_n": {
+    "EURUSD": 2
+   },
+   "n_yonlu": 2,
+   "devam": 0.5,
+   "devam_1R": 0.5,
+   "donus": 0.5,
+   "orta": 1.0,
+   "orta_uc": 0.5,
+   "kapanis": 0.0,
+   "mfe_med": 1.7050519551544983,
+   "mae_med": 3.5114164615805303,
+   "ilk_orta_dk_med": 2.5
+  },
+  {
+   "an": "ecb",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 1,
+   "cift_n": {
+    "EURUSD": 1
+   },
+   "n_yonlu": 1,
+   "devam": 1.0,
+   "devam_1R": 0.0,
+   "donus": 0.0,
+   "orta": 1.0,
+   "orta_uc": 1.0,
+   "kapanis": 0.0,
+   "mfe_med": 1.4745762711864407,
+   "mae_med": 0.6795069337442219,
+   "ilk_orta_dk_med": 1.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 13,
+   "cift_n": {
+    "AUDUSD": 5,
+    "EURUSD": 2,
+    "GBPUSD": 2,
+    "USDJPY": 4
+   },
+   "n_yonlu": 13,
+   "devam": 0.23076923076923078,
+   "devam_1R": 0.0,
+   "donus": 0.5384615384615384,
+   "orta": 0.8461538461538461,
+   "orta_uc": 0.23076923076923078,
+   "kapanis": 0.15384615384615385,
+   "mfe_med": 0.5407725321888412,
+   "mae_med": 0.9,
+   "ilk_orta_dk_med": 37.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 26,
+   "cift_n": {
+    "AUDUSD": 5,
+    "EURUSD": 5,
+    "GBPUSD": 7,
+    "USDJPY": 9
+   },
+   "n_yonlu": 26,
+   "devam": 0.4230769230769231,
+   "devam_1R": 0.07692307692307693,
+   "donus": 0.2692307692307692,
+   "orta": 0.6153846153846154,
+   "orta_uc": 0.38461538461538464,
+   "kapanis": 0.5769230769230769,
+   "mfe_med": 0.6056394196106705,
+   "mae_med": 0.6313000322046374,
+   "ilk_orta_dk_med": 21.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 5,
+   "cift_n": {
+    "AUDUSD": 2,
+    "EURUSD": 3
+   },
+   "n_yonlu": 5,
+   "devam": 0.6,
+   "devam_1R": 0.0,
+   "donus": 0.4,
+   "orta": 0.4,
+   "orta_uc": 0.0,
+   "kapanis": 0.6,
+   "mfe_med": 0.6344892221180881,
+   "mae_med": 0.13495782567947517,
+   "ilk_orta_dk_med": 33.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 34,
+   "cift_n": {
+    "AUDUSD": 10,
+    "EURUSD": 10,
+    "GBPUSD": 8,
+    "USDJPY": 6
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.4117647058823529,
+   "kirilim_1R": 0.6470588235294118
+  },
+  {
+   "an": "fomc",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 31,
+   "cift_n": {
+    "AUDUSD": 7,
+    "EURUSD": 8,
+    "GBPUSD": 7,
+    "USDJPY": 9
+   },
+   "n_yonlu": 31,
+   "devam": 0.16129032258064516,
+   "devam_1R": 0.06451612903225806,
+   "donus": 0.6451612903225806,
+   "orta": 0.967741935483871,
+   "orta_uc": 0.3225806451612903,
+   "kapanis": 0.5161290322580645,
+   "mfe_med": 0.8661616161616161,
+   "mae_med": 1.124031007751938,
+   "ilk_orta_dk_med": 1.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 23,
+   "cift_n": {
+    "AUDUSD": 4,
+    "EURUSD": 7,
+    "GBPUSD": 7,
+    "USDJPY": 5
+   },
+   "n_yonlu": 23,
+   "devam": 0.43478260869565216,
+   "devam_1R": 0.13043478260869565,
+   "donus": 0.43478260869565216,
+   "orta": 0.8260869565217391,
+   "orta_uc": 0.391304347826087,
+   "kapanis": 0.4782608695652174,
+   "mfe_med": 0.7958579881656804,
+   "mae_med": 0.7662337662337663,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 13,
+   "cift_n": {
+    "AUDUSD": 3,
+    "EURUSD": 2,
+    "GBPUSD": 4,
+    "USDJPY": 4
+   },
+   "n_yonlu": 13,
+   "devam": 0.3076923076923077,
+   "devam_1R": 0.15384615384615385,
+   "donus": 0.46153846153846156,
+   "orta": 1.0,
+   "orta_uc": 0.3076923076923077,
+   "kapanis": 0.6153846153846154,
+   "mfe_med": 0.6546854942233633,
+   "mae_med": 0.6987767584097859,
+   "ilk_orta_dk_med": 7.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 5,
+   "cift_n": {
+    "AUDUSD": 3,
+    "EURUSD": 2
+   },
+   "n_yonlu": 5,
+   "devam": 0.6,
+   "devam_1R": 0.4,
+   "donus": 0.4,
+   "orta": 1.0,
+   "orta_uc": 0.8,
+   "kapanis": 0.8,
+   "mfe_med": 1.287598944591029,
+   "mae_med": 0.48566308243727596,
+   "ilk_orta_dk_med": 17.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 12,
+   "cift_n": {
+    "AUDUSD": 2,
+    "EURUSD": 3,
+    "GBPUSD": 5,
+    "USDJPY": 2
+   },
+   "n_yonlu": 12,
+   "devam": 0.6666666666666666,
+   "devam_1R": 0.4166666666666667,
+   "donus": 0.16666666666666666,
+   "orta": 0.75,
+   "orta_uc": 0.5,
+   "kapanis": 0.75,
+   "mfe_med": 1.1421914656831218,
+   "mae_med": 0.5613763480732981,
+   "ilk_orta_dk_med": 9.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 3,
+   "cift_n": {
+    "GBPUSD": 1,
+    "USDJPY": 2
+   },
+   "n_yonlu": 3,
+   "devam": 1.0,
+   "devam_1R": 0.3333333333333333,
+   "donus": 0.0,
+   "orta": 1.0,
+   "orta_uc": 1.0,
+   "kapanis": 1.0,
+   "mfe_med": 1.1007194244604317,
+   "mae_med": 0.48313090418353577,
+   "ilk_orta_dk_med": 8.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 348,
+   "cift_n": {
+    "AUDUSD": 84,
+    "EURUSD": 81,
+    "GBPUSD": 84,
+    "USDJPY": 99
+   },
+   "n_yonlu": 348,
+   "devam": 0.5545977011494253,
+   "devam_1R": 0.3706896551724138,
+   "donus": 0.3218390804597701,
+   "orta": 0.6954022988505747,
+   "orta_uc": 0.33045977011494254,
+   "kapanis": 0.5632183908045977,
+   "mfe_med": 0.8558566308243727,
+   "mae_med": 0.6390878061839111,
+   "ilk_orta_dk_med": 16.5
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 434,
+   "cift_n": {
+    "AUDUSD": 121,
+    "EURUSD": 107,
+    "GBPUSD": 116,
+    "USDJPY": 90
+   },
+   "n_yonlu": 434,
+   "devam": 0.5230414746543779,
+   "devam_1R": 0.2995391705069124,
+   "donus": 0.4032258064516129,
+   "orta": 0.7580645161290323,
+   "orta_uc": 0.3640552995391705,
+   "kapanis": 0.5,
+   "mfe_med": 0.7549049995350712,
+   "mae_med": 0.7935890029070034,
+   "ilk_orta_dk_med": 13.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 147,
+   "cift_n": {
+    "AUDUSD": 34,
+    "EURUSD": 41,
+    "GBPUSD": 36,
+    "USDJPY": 36
+   },
+   "n_yonlu": 147,
+   "devam": 0.5986394557823129,
+   "devam_1R": 0.3401360544217687,
+   "donus": 0.32653061224489793,
+   "orta": 0.6598639455782312,
+   "orta_uc": 0.2925170068027211,
+   "kapanis": 0.5374149659863946,
+   "mfe_med": 0.9183673469387755,
+   "mae_med": 0.5934065934065934,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 603,
+   "cift_n": {
+    "AUDUSD": 120,
+    "EURUSD": 163,
+    "GBPUSD": 136,
+    "USDJPY": 184
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.3814262023217247,
+   "kirilim_1R": 0.5223880597014925
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 1430,
+   "cift_n": {
+    "AUDUSD": 362,
+    "EURUSD": 355,
+    "GBPUSD": 350,
+    "USDJPY": 363
+   },
+   "n_yonlu": 1430,
+   "devam": 0.5195804195804196,
+   "devam_1R": 0.3741258741258741,
+   "donus": 0.4636363636363636,
+   "orta": 0.872027972027972,
+   "orta_uc": 0.4244755244755245,
+   "kapanis": 0.5048951048951049,
+   "mfe_med": 1.2389106327462494,
+   "mae_med": 1.1144226273959794,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 1592,
+   "cift_n": {
+    "AUDUSD": 419,
+    "EURUSD": 402,
+    "GBPUSD": 399,
+    "USDJPY": 372
+   },
+   "n_yonlu": 1592,
+   "devam": 0.46796482412060303,
+   "devam_1R": 0.31909547738693467,
+   "donus": 0.5163316582914573,
+   "orta": 0.8806532663316583,
+   "orta_uc": 0.38819095477386933,
+   "kapanis": 0.48178391959798994,
+   "mfe_med": 1.114962251201098,
+   "mae_med": 1.2960117790154277,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 527,
+   "cift_n": {
+    "AUDUSD": 126,
+    "EURUSD": 142,
+    "GBPUSD": 132,
+    "USDJPY": 127
+   },
+   "n_yonlu": 523,
+   "devam": 0.48565965583174,
+   "devam_1R": 0.3326959847036329,
+   "donus": 0.497131931166348,
+   "orta": 0.8718929254302104,
+   "orta_uc": 0.40152963671128106,
+   "kapanis": 0.4933078393881453,
+   "mfe_med": 1.1526104417670682,
+   "mae_med": 1.1872,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 485,
+   "cift_n": {
+    "AUDUSD": 123,
+    "EURUSD": 111,
+    "GBPUSD": 125,
+    "USDJPY": 126
+   },
+   "n_yonlu": 485,
+   "devam": 0.49072164948453606,
+   "devam_1R": 0.3525773195876289,
+   "donus": 0.49072164948453606,
+   "orta": 0.8865979381443299,
+   "orta_uc": 0.41237113402061853,
+   "kapanis": 0.4865979381443299,
+   "mfe_med": 1.177304964539007,
+   "mae_med": 1.1587301587301588,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 408,
+   "cift_n": {
+    "AUDUSD": 98,
+    "EURUSD": 92,
+    "GBPUSD": 120,
+    "USDJPY": 98
+   },
+   "n_yonlu": 408,
+   "devam": 0.4632352941176471,
+   "devam_1R": 0.31862745098039214,
+   "donus": 0.5245098039215687,
+   "orta": 0.8872549019607843,
+   "orta_uc": 0.4215686274509804,
+   "kapanis": 0.4485294117647059,
+   "mfe_med": 1.0721492024701957,
+   "mae_med": 1.299223479863122,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 173,
+   "cift_n": {
+    "AUDUSD": 49,
+    "EURUSD": 43,
+    "GBPUSD": 39,
+    "USDJPY": 42
+   },
+   "n_yonlu": 173,
+   "devam": 0.45664739884393063,
+   "devam_1R": 0.31213872832369943,
+   "donus": 0.5317919075144508,
+   "orta": 0.9132947976878613,
+   "orta_uc": 0.3872832369942196,
+   "kapanis": 0.4797687861271676,
+   "mfe_med": 1.1861702127659575,
+   "mae_med": 1.2276785714285714,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 25,
+   "cift_n": {
+    "AUDUSD": 6,
+    "EURUSD": 5,
+    "GBPUSD": 6,
+    "USDJPY": 8
+   },
+   "n_yonlu": 25,
+   "devam": 0.4,
+   "devam_1R": 0.2,
+   "donus": 0.16,
+   "orta": 0.48,
+   "orta_uc": 0.16,
+   "kapanis": 0.56,
+   "mfe_med": 0.4072819644369179,
+   "mae_med": 0.40433001755412523,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 22,
+   "cift_n": {
+    "AUDUSD": 7,
+    "EURUSD": 5,
+    "GBPUSD": 4,
+    "USDJPY": 6
+   },
+   "n_yonlu": 22,
+   "devam": 0.18181818181818182,
+   "devam_1R": 0.0,
+   "donus": 0.2727272727272727,
+   "orta": 0.6818181818181818,
+   "orta_uc": 0.13636363636363635,
+   "kapanis": 0.36363636363636365,
+   "mfe_med": 0.2793284349955799,
+   "mae_med": 0.6272938348847096,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 7,
+   "cift_n": {
+    "EURUSD": 3,
+    "GBPUSD": 3,
+    "USDJPY": 1
+   },
+   "n_yonlu": 7,
+   "devam": 0.42857142857142855,
+   "devam_1R": 0.0,
+   "donus": 0.0,
+   "orta": 0.5714285714285714,
+   "orta_uc": 0.14285714285714285,
+   "kapanis": 0.5714285714285714,
+   "mfe_med": 0.611239414934565,
+   "mae_med": 0.4287454323995128,
+   "ilk_orta_dk_med": 6.5
+  },
+  {
+   "an": "nfp",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 25,
+   "cift_n": {
+    "AUDUSD": 10,
+    "EURUSD": 6,
+    "GBPUSD": 5,
+    "USDJPY": 4
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.4,
+   "kirilim_1R": 0.44
+  },
+  {
+   "an": "nfp",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 64,
+   "cift_n": {
+    "AUDUSD": 13,
+    "EURUSD": 18,
+    "GBPUSD": 16,
+    "USDJPY": 17
+   },
+   "n_yonlu": 64,
+   "devam": 0.328125,
+   "devam_1R": 0.140625,
+   "donus": 0.53125,
+   "orta": 0.875,
+   "orta_uc": 0.328125,
+   "kapanis": 0.59375,
+   "mfe_med": 0.6375596870872702,
+   "mae_med": 0.8993456063962519,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 37,
+   "cift_n": {
+    "AUDUSD": 9,
+    "EURUSD": 9,
+    "GBPUSD": 9,
+    "USDJPY": 10
+   },
+   "n_yonlu": 37,
+   "devam": 0.3783783783783784,
+   "devam_1R": 0.21621621621621623,
+   "donus": 0.4594594594594595,
+   "orta": 0.8378378378378378,
+   "orta_uc": 0.3783783783783784,
+   "kapanis": 0.4594594594594595,
+   "mfe_med": 0.6756756756756757,
+   "mae_med": 0.8044077134986226,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 25,
+   "cift_n": {
+    "AUDUSD": 6,
+    "EURUSD": 5,
+    "GBPUSD": 8,
+    "USDJPY": 6
+   },
+   "n_yonlu": 24,
+   "devam": 0.4166666666666667,
+   "devam_1R": 0.25,
+   "donus": 0.2916666666666667,
+   "orta": 0.8333333333333334,
+   "orta_uc": 0.5416666666666666,
+   "kapanis": 0.5,
+   "mfe_med": 0.6119290573372206,
+   "mae_med": 0.49194925499440867,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 17,
+   "cift_n": {
+    "AUDUSD": 7,
+    "EURUSD": 4,
+    "GBPUSD": 3,
+    "USDJPY": 3
+   },
+   "n_yonlu": 17,
+   "devam": 0.35294117647058826,
+   "devam_1R": 0.17647058823529413,
+   "donus": 0.5294117647058824,
+   "orta": 0.8235294117647058,
+   "orta_uc": 0.35294117647058826,
+   "kapanis": 0.5294117647058824,
+   "mfe_med": 0.7386018237082067,
+   "mae_med": 0.7796852646638054,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 25,
+   "cift_n": {
+    "AUDUSD": 4,
+    "EURUSD": 8,
+    "GBPUSD": 6,
+    "USDJPY": 7
+   },
+   "n_yonlu": 25,
+   "devam": 0.24,
+   "devam_1R": 0.08,
+   "donus": 0.56,
+   "orta": 0.96,
+   "orta_uc": 0.28,
+   "kapanis": 0.28,
+   "mfe_med": 0.5768621236133122,
+   "mae_med": 1.25,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 9,
+   "cift_n": {
+    "AUDUSD": 2,
+    "EURUSD": 1,
+    "GBPUSD": 4,
+    "USDJPY": 2
+   },
+   "n_yonlu": 9,
+   "devam": 0.5555555555555556,
+   "devam_1R": 0.2222222222222222,
+   "donus": 0.4444444444444444,
+   "orta": 0.8888888888888888,
+   "orta_uc": 0.4444444444444444,
+   "kapanis": 0.3333333333333333,
+   "mfe_med": 0.8594594594594595,
+   "mae_med": 0.8763326226012793,
+   "ilk_orta_dk_med": 8.5
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 396,
+   "cift_n": {
+    "AUDUSD": 107,
+    "EURUSD": 89,
+    "GBPUSD": 91,
+    "USDJPY": 109
+   },
+   "n_yonlu": 396,
+   "devam": 0.5454545454545454,
+   "devam_1R": 0.31313131313131315,
+   "donus": 0.3383838383838384,
+   "orta": 0.7348484848484849,
+   "orta_uc": 0.34595959595959597,
+   "kapanis": 0.4823232323232323,
+   "mfe_med": 0.7219363543314413,
+   "mae_med": 0.7055956678700361,
+   "ilk_orta_dk_med": 13.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 383,
+   "cift_n": {
+    "AUDUSD": 115,
+    "EURUSD": 92,
+    "GBPUSD": 106,
+    "USDJPY": 70
+   },
+   "n_yonlu": 383,
+   "devam": 0.5300261096605744,
+   "devam_1R": 0.3342036553524804,
+   "donus": 0.38903394255874674,
+   "orta": 0.7389033942558747,
+   "orta_uc": 0.33159268929503916,
+   "kapanis": 0.48825065274151436,
+   "mfe_med": 0.7806451612903226,
+   "mae_med": 0.9006024096385542,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 141,
+   "cift_n": {
+    "AUDUSD": 31,
+    "EURUSD": 30,
+    "GBPUSD": 38,
+    "USDJPY": 42
+   },
+   "n_yonlu": 141,
+   "devam": 0.524822695035461,
+   "devam_1R": 0.2695035460992908,
+   "donus": 0.3404255319148936,
+   "orta": 0.7375886524822695,
+   "orta_uc": 0.3475177304964539,
+   "kapanis": 0.5673758865248227,
+   "mfe_med": 0.803072625698324,
+   "mae_med": 0.7833622183708839,
+   "ilk_orta_dk_med": 16.5
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 663,
+   "cift_n": {
+    "AUDUSD": 140,
+    "EURUSD": 149,
+    "GBPUSD": 157,
+    "USDJPY": 217
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.39064856711915535,
+   "kirilim_1R": 0.5233785822021116
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 1385,
+   "cift_n": {
+    "AUDUSD": 359,
+    "EURUSD": 337,
+    "GBPUSD": 346,
+    "USDJPY": 343
+   },
+   "n_yonlu": 1385,
+   "devam": 0.49530685920577616,
+   "devam_1R": 0.35306859205776175,
+   "donus": 0.48592057761732854,
+   "orta": 0.8794223826714801,
+   "orta_uc": 0.4216606498194946,
+   "kapanis": 0.4996389891696751,
+   "mfe_med": 1.1851851851851851,
+   "mae_med": 1.1159420289855073,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 1503,
+   "cift_n": {
+    "AUDUSD": 373,
+    "EURUSD": 394,
+    "GBPUSD": 383,
+    "USDJPY": 353
+   },
+   "n_yonlu": 1503,
+   "devam": 0.48769128409846974,
+   "devam_1R": 0.3320026613439787,
+   "donus": 0.49567531603459747,
+   "orta": 0.8908848968729208,
+   "orta_uc": 0.4085163007318696,
+   "kapanis": 0.4703925482368596,
+   "mfe_med": 1.1511627906976745,
+   "mae_med": 1.2846153846153847,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 534,
+   "cift_n": {
+    "AUDUSD": 139,
+    "EURUSD": 145,
+    "GBPUSD": 136,
+    "USDJPY": 114
+   },
+   "n_yonlu": 526,
+   "devam": 0.532319391634981,
+   "devam_1R": 0.3973384030418251,
+   "donus": 0.4429657794676806,
+   "orta": 0.876425855513308,
+   "orta_uc": 0.44106463878326996,
+   "kapanis": 0.5532319391634981,
+   "mfe_med": 1.3630706054625326,
+   "mae_med": 1.1031944444444446,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 470,
+   "cift_n": {
+    "AUDUSD": 110,
+    "EURUSD": 117,
+    "GBPUSD": 127,
+    "USDJPY": 116
+   },
+   "n_yonlu": 470,
+   "devam": 0.5234042553191489,
+   "devam_1R": 0.3829787234042553,
+   "donus": 0.46808510638297873,
+   "orta": 0.8659574468085106,
+   "orta_uc": 0.43829787234042555,
+   "kapanis": 0.5148936170212766,
+   "mfe_med": 1.2438237483924826,
+   "mae_med": 1.0878355190587081,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 492,
+   "cift_n": {
+    "AUDUSD": 124,
+    "EURUSD": 131,
+    "GBPUSD": 112,
+    "USDJPY": 125
+   },
+   "n_yonlu": 492,
+   "devam": 0.48577235772357724,
+   "devam_1R": 0.33739837398373984,
+   "donus": 0.491869918699187,
+   "orta": 0.8882113821138211,
+   "orta_uc": 0.46747967479674796,
+   "kapanis": 0.5264227642276422,
+   "mfe_med": 1.2298873910454227,
+   "mae_med": 1.1547273140342695,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 181,
+   "cift_n": {
+    "AUDUSD": 39,
+    "EURUSD": 53,
+    "GBPUSD": 41,
+    "USDJPY": 48
+   },
+   "n_yonlu": 181,
+   "devam": 0.569060773480663,
+   "devam_1R": 0.4088397790055249,
+   "donus": 0.39226519337016574,
+   "orta": 0.8729281767955801,
+   "orta_uc": 0.4861878453038674,
+   "kapanis": 0.56353591160221,
+   "mfe_med": 1.270440251572327,
+   "mae_med": 1.0522875816993464,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 412,
+   "cift_n": {
+    "AUDUSD": 112,
+    "EURUSD": 103,
+    "GBPUSD": 106,
+    "USDJPY": 91
+   },
+   "n_yonlu": 412,
+   "devam": 0.5145631067961165,
+   "devam_1R": 0.2912621359223301,
+   "donus": 0.4029126213592233,
+   "orta": 0.7888349514563107,
+   "orta_uc": 0.3592233009708738,
+   "kapanis": 0.4563106796116505,
+   "mfe_med": 0.8160989953442783,
+   "mae_med": 0.9010965171774543,
+   "ilk_orta_dk_med": 21.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 392,
+   "cift_n": {
+    "AUDUSD": 94,
+    "EURUSD": 89,
+    "GBPUSD": 104,
+    "USDJPY": 105
+   },
+   "n_yonlu": 392,
+   "devam": 0.5841836734693877,
+   "devam_1R": 0.38010204081632654,
+   "donus": 0.336734693877551,
+   "orta": 0.7372448979591837,
+   "orta_uc": 0.3596938775510204,
+   "kapanis": 0.5357142857142857,
+   "mfe_med": 0.9412945721704984,
+   "mae_med": 0.7382776829316711,
+   "ilk_orta_dk_med": 21.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 148,
+   "cift_n": {
+    "AUDUSD": 31,
+    "EURUSD": 46,
+    "GBPUSD": 31,
+    "USDJPY": 40
+   },
+   "n_yonlu": 148,
+   "devam": 0.5337837837837838,
+   "devam_1R": 0.32432432432432434,
+   "donus": 0.3716216216216216,
+   "orta": 0.7635135135135135,
+   "orta_uc": 0.3783783783783784,
+   "kapanis": 0.5337837837837838,
+   "mfe_med": 0.7802960927960928,
+   "mae_med": 0.8508938961176347,
+   "ilk_orta_dk_med": 17.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 734,
+   "cift_n": {
+    "AUDUSD": 150,
+    "EURUSD": 182,
+    "GBPUSD": 200,
+    "USDJPY": 202
+   },
+   "kirilim_var": 0.9986376021798365,
+   "kirilim_trendle": 0.46521145975443384,
+   "kirilim_1R": 0.5544959128065395
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 1380,
+   "cift_n": {
+    "AUDUSD": 331,
+    "EURUSD": 353,
+    "GBPUSD": 333,
+    "USDJPY": 363
+   },
+   "n_yonlu": 1380,
+   "devam": 0.4811594202898551,
+   "devam_1R": 0.33695652173913043,
+   "donus": 0.5007246376811594,
+   "orta": 0.8768115942028986,
+   "orta_uc": 0.39710144927536234,
+   "kapanis": 0.48985507246376814,
+   "mfe_med": 1.2198191879042943,
+   "mae_med": 1.2820019496177724,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 1528,
+   "cift_n": {
+    "AUDUSD": 406,
+    "EURUSD": 373,
+    "GBPUSD": 379,
+    "USDJPY": 370
+   },
+   "n_yonlu": 1528,
+   "devam": 0.4836387434554974,
+   "devam_1R": 0.3606020942408377,
+   "donus": 0.4980366492146597,
+   "orta": 0.8736910994764397,
+   "orta_uc": 0.40903141361256545,
+   "kapanis": 0.4856020942408377,
+   "mfe_med": 1.3089219729020511,
+   "mae_med": 1.3266911126121779,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 541,
+   "cift_n": {
+    "AUDUSD": 142,
+    "EURUSD": 134,
+    "GBPUSD": 129,
+    "USDJPY": 136
+   },
+   "n_yonlu": 536,
+   "devam": 0.4496268656716418,
+   "devam_1R": 0.28544776119402987,
+   "donus": 0.5298507462686567,
+   "orta": 0.9328358208955224,
+   "orta_uc": 0.416044776119403,
+   "kapanis": 0.47574626865671643,
+   "mfe_med": 1.1752899197145408,
+   "mae_med": 1.380603448275862,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 464,
+   "cift_n": {
+    "AUDUSD": 136,
+    "EURUSD": 113,
+    "GBPUSD": 118,
+    "USDJPY": 97
+   },
+   "n_yonlu": 464,
+   "devam": 0.44612068965517243,
+   "devam_1R": 0.3103448275862069,
+   "donus": 0.540948275862069,
+   "orta": 0.8943965517241379,
+   "orta_uc": 0.4331896551724138,
+   "kapanis": 0.5237068965517241,
+   "mfe_med": 1.1774738860574254,
+   "mae_med": 1.2579246624022744,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 412,
+   "cift_n": {
+    "AUDUSD": 101,
+    "EURUSD": 112,
+    "GBPUSD": 92,
+    "USDJPY": 107
+   },
+   "n_yonlu": 412,
+   "devam": 0.4830097087378641,
+   "devam_1R": 0.38349514563106796,
+   "donus": 0.5,
+   "orta": 0.8737864077669902,
+   "orta_uc": 0.38349514563106796,
+   "kapanis": 0.5266990291262136,
+   "mfe_med": 1.3532178217821782,
+   "mae_med": 1.1887972281801682,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 148,
+   "cift_n": {
+    "AUDUSD": 36,
+    "EURUSD": 35,
+    "GBPUSD": 47,
+    "USDJPY": 30
+   },
+   "n_yonlu": 148,
+   "devam": 0.4594594594594595,
+   "devam_1R": 0.3108108108108108,
+   "donus": 0.5067567567567568,
+   "orta": 0.9121621621621622,
+   "orta_uc": 0.4391891891891892,
+   "kapanis": 0.40540540540540543,
+   "mfe_med": 1.0477443609022556,
+   "mae_med": 1.3441258094357078,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 376,
+   "cift_n": {
+    "AUDUSD": 99,
+    "EURUSD": 97,
+    "GBPUSD": 94,
+    "USDJPY": 86
+   },
+   "n_yonlu": 376,
+   "devam": 0.2712765957446808,
+   "devam_1R": 0.10106382978723404,
+   "donus": 0.18617021276595744,
+   "orta": 0.5904255319148937,
+   "orta_uc": 0.15691489361702127,
+   "kapanis": 0.4175531914893617,
+   "mfe_med": 0.3355102040816327,
+   "mae_med": 0.4726859142607174,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 462,
+   "cift_n": {
+    "AUDUSD": 111,
+    "EURUSD": 132,
+    "GBPUSD": 108,
+    "USDJPY": 111
+   },
+   "n_yonlu": 462,
+   "devam": 0.31385281385281383,
+   "devam_1R": 0.12337662337662338,
+   "donus": 0.21212121212121213,
+   "orta": 0.5930735930735931,
+   "orta_uc": 0.1774891774891775,
+   "kapanis": 0.4588744588744589,
+   "mfe_med": 0.40644070223160755,
+   "mae_med": 0.48717286843254837,
+   "ilk_orta_dk_med": 13.5
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 132,
+   "cift_n": {
+    "AUDUSD": 43,
+    "EURUSD": 27,
+    "GBPUSD": 27,
+    "USDJPY": 35
+   },
+   "n_yonlu": 132,
+   "devam": 0.2878787878787879,
+   "devam_1R": 0.09848484848484848,
+   "donus": 0.16666666666666666,
+   "orta": 0.5606060606060606,
+   "orta_uc": 0.16666666666666666,
+   "kapanis": 0.4015151515151515,
+   "mfe_med": 0.3162349555206698,
+   "mae_med": 0.43565963606286184,
+   "ilk_orta_dk_med": 10.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 709,
+   "cift_n": {
+    "AUDUSD": 180,
+    "EURUSD": 185,
+    "GBPUSD": 169,
+    "USDJPY": 175
+   },
+   "kirilim_var": 0.995768688293371,
+   "kirilim_trendle": 0.4490084985835694,
+   "kirilim_1R": 0.46262341325811
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 1445,
+   "cift_n": {
+    "AUDUSD": 380,
+    "EURUSD": 350,
+    "GBPUSD": 375,
+    "USDJPY": 340
+   },
+   "n_yonlu": 1445,
+   "devam": 0.3889273356401384,
+   "devam_1R": 0.2041522491349481,
+   "donus": 0.41314878892733564,
+   "orta": 0.8034602076124567,
+   "orta_uc": 0.3612456747404844,
+   "kapanis": 0.48304498269896196,
+   "mfe_med": 0.6573033707865169,
+   "mae_med": 0.6808510638297872,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 1471,
+   "cift_n": {
+    "AUDUSD": 351,
+    "EURUSD": 357,
+    "GBPUSD": 364,
+    "USDJPY": 399
+   },
+   "n_yonlu": 1471,
+   "devam": 0.3786539768864718,
+   "devam_1R": 0.2080217539089055,
+   "donus": 0.42556084296397007,
+   "orta": 0.7912984364377974,
+   "orta_uc": 0.32902787219578516,
+   "kapanis": 0.4751869476546567,
+   "mfe_med": 0.6235294117647059,
+   "mae_med": 0.6686390532544378,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 498,
+   "cift_n": {
+    "AUDUSD": 118,
+    "EURUSD": 138,
+    "GBPUSD": 128,
+    "USDJPY": 114
+   },
+   "n_yonlu": 495,
+   "devam": 0.4080808080808081,
+   "devam_1R": 0.21616161616161617,
+   "donus": 0.39595959595959596,
+   "orta": 0.797979797979798,
+   "orta_uc": 0.3616161616161616,
+   "kapanis": 0.4888888888888889,
+   "mfe_med": 0.6374045801526718,
+   "mae_med": 0.6935483870967742,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 440,
+   "cift_n": {
+    "AUDUSD": 106,
+    "EURUSD": 113,
+    "GBPUSD": 119,
+    "USDJPY": 102
+   },
+   "n_yonlu": 440,
+   "devam": 0.34545454545454546,
+   "devam_1R": 0.15454545454545454,
+   "donus": 0.45227272727272727,
+   "orta": 0.8318181818181818,
+   "orta_uc": 0.32272727272727275,
+   "kapanis": 0.45227272727272727,
+   "mfe_med": 0.5906491470379633,
+   "mae_med": 0.6688382193268186,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 434,
+   "cift_n": {
+    "AUDUSD": 111,
+    "EURUSD": 94,
+    "GBPUSD": 108,
+    "USDJPY": 121
+   },
+   "n_yonlu": 434,
+   "devam": 0.35944700460829493,
+   "devam_1R": 0.16820276497695852,
+   "donus": 0.4308755760368664,
+   "orta": 0.8548387096774194,
+   "orta_uc": 0.3824884792626728,
+   "kapanis": 0.45161290322580644,
+   "mfe_med": 0.6025351688858798,
+   "mae_med": 0.6944272445820434,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 194,
+   "cift_n": {
+    "AUDUSD": 41,
+    "EURUSD": 47,
+    "GBPUSD": 48,
+    "USDJPY": 58
+   },
+   "n_yonlu": 194,
+   "devam": 0.4175257731958763,
+   "devam_1R": 0.23195876288659795,
+   "donus": 0.38144329896907214,
+   "orta": 0.7989690721649485,
+   "orta_uc": 0.3556701030927835,
+   "kapanis": 0.4948453608247423,
+   "mfe_med": 0.678466190320282,
+   "mae_med": 0.6152826996137024,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "guclu",
+   "uyum": "karsi",
+   "n": 354,
+   "cift_n": {
+    "AUDUSD": 83,
+    "EURUSD": 96,
+    "GBPUSD": 82,
+    "USDJPY": 93
+   },
+   "n_yonlu": 354,
+   "devam": 0.192090395480226,
+   "devam_1R": 0.03672316384180791,
+   "donus": 0.08192090395480225,
+   "orta": 0.4576271186440678,
+   "orta_uc": 0.07344632768361582,
+   "kapanis": 0.4745762711864407,
+   "mfe_med": 0.28048452159310777,
+   "mae_med": 0.3008117059130829,
+   "ilk_orta_dk_med": 15.5
+  },
+  {
+   "an": "wmr",
+   "sinif": "guclu",
+   "uyum": "trendle",
+   "n": 464,
+   "cift_n": {
+    "AUDUSD": 114,
+    "EURUSD": 94,
+    "GBPUSD": 129,
+    "USDJPY": 127
+   },
+   "n_yonlu": 464,
+   "devam": 0.16810344827586207,
+   "devam_1R": 0.034482758620689655,
+   "donus": 0.10344827586206896,
+   "orta": 0.4870689655172414,
+   "orta_uc": 0.09482758620689655,
+   "kapanis": 0.4245689655172414,
+   "mfe_med": 0.26166399075438784,
+   "mae_med": 0.3771754794368695,
+   "ilk_orta_dk_med": 15.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "guclu",
+   "uyum": "yatay",
+   "n": 145,
+   "cift_n": {
+    "AUDUSD": 37,
+    "EURUSD": 37,
+    "GBPUSD": 36,
+    "USDJPY": 35
+   },
+   "n_yonlu": 145,
+   "devam": 0.2206896551724138,
+   "devam_1R": 0.04827586206896552,
+   "donus": 0.06206896551724138,
+   "orta": 0.4,
+   "orta_uc": 0.04827586206896552,
+   "kapanis": 0.4896551724137931,
+   "mfe_med": 0.34705882352941175,
+   "mae_med": 0.30039525691699603,
+   "ilk_orta_dk_med": 13.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "kucuk",
+   "uyum": "yatay",
+   "n": 636,
+   "cift_n": {
+    "AUDUSD": 142,
+    "EURUSD": 138,
+    "GBPUSD": 162,
+    "USDJPY": 194
+   },
+   "kirilim_var": 0.9748427672955975,
+   "kirilim_trendle": 0.43709677419354837,
+   "kirilim_1R": 0.2610062893081761
+  },
+  {
+   "an": "wmr",
+   "sinif": "normal",
+   "uyum": "karsi",
+   "n": 1412,
+   "cift_n": {
+    "AUDUSD": 333,
+    "EURUSD": 360,
+    "GBPUSD": 358,
+    "USDJPY": 361
+   },
+   "n_yonlu": 1412,
+   "devam": 0.2521246458923513,
+   "devam_1R": 0.08711048158640226,
+   "donus": 0.26416430594900847,
+   "orta": 0.75,
+   "orta_uc": 0.28895184135977336,
+   "kapanis": 0.48512747875354106,
+   "mfe_med": 0.43365017692361063,
+   "mae_med": 0.46604438278016336,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "normal",
+   "uyum": "trendle",
+   "n": 1545,
+   "cift_n": {
+    "AUDUSD": 433,
+    "EURUSD": 383,
+    "GBPUSD": 378,
+    "USDJPY": 351
+   },
+   "n_yonlu": 1545,
+   "devam": 0.22135922330097088,
+   "devam_1R": 0.06019417475728155,
+   "donus": 0.32038834951456313,
+   "orta": 0.7469255663430421,
+   "orta_uc": 0.24919093851132687,
+   "kapanis": 0.4524271844660194,
+   "mfe_med": 0.38392857142857145,
+   "mae_med": 0.5,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "normal",
+   "uyum": "yatay",
+   "n": 530,
+   "cift_n": {
+    "AUDUSD": 127,
+    "EURUSD": 139,
+    "GBPUSD": 123,
+    "USDJPY": 141
+   },
+   "n_yonlu": 526,
+   "devam": 0.22433460076045628,
+   "devam_1R": 0.08745247148288973,
+   "donus": 0.2965779467680608,
+   "orta": 0.747148288973384,
+   "orta_uc": 0.2718631178707224,
+   "kapanis": 0.4866920152091255,
+   "mfe_med": 0.4027598913339788,
+   "mae_med": 0.5033420040238739,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "reddedilen",
+   "uyum": "karsi",
+   "n": 406,
+   "cift_n": {
+    "AUDUSD": 102,
+    "EURUSD": 100,
+    "GBPUSD": 103,
+    "USDJPY": 101
+   },
+   "n_yonlu": 406,
+   "devam": 0.28078817733990147,
+   "devam_1R": 0.08620689655172414,
+   "donus": 0.30049261083743845,
+   "orta": 0.7684729064039408,
+   "orta_uc": 0.2881773399014778,
+   "kapanis": 0.45566502463054187,
+   "mfe_med": 0.40500290571381825,
+   "mae_med": 0.48721914685770107,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "reddedilen",
+   "uyum": "trendle",
+   "n": 494,
+   "cift_n": {
+    "AUDUSD": 127,
+    "EURUSD": 135,
+    "GBPUSD": 126,
+    "USDJPY": 106
+   },
+   "n_yonlu": 494,
+   "devam": 0.23481781376518218,
+   "devam_1R": 0.08906882591093117,
+   "donus": 0.3299595141700405,
+   "orta": 0.7651821862348178,
+   "orta_uc": 0.242914979757085,
+   "kapanis": 0.46153846153846156,
+   "mfe_med": 0.3584288618535194,
+   "mae_med": 0.5341415985690217,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "reddedilen",
+   "uyum": "yatay",
+   "n": 159,
+   "cift_n": {
+    "AUDUSD": 38,
+    "EURUSD": 54,
+    "GBPUSD": 39,
+    "USDJPY": 28
+   },
+   "n_yonlu": 159,
+   "devam": 0.2578616352201258,
+   "devam_1R": 0.06918238993710692,
+   "donus": 0.3522012578616352,
+   "orta": 0.779874213836478,
+   "orta_uc": 0.2389937106918239,
+   "kapanis": 0.4591194968553459,
+   "mfe_med": 0.3695652173913043,
+   "mae_med": 0.532967032967033,
+   "ilk_orta_dk_med": 5.5
+  }
+ ],
+ "sinif_yonsuz_trend": [
+  {
+   "an": "boe",
+   "sinif": "guclu",
+   "n": 12,
+   "cift_n": {
+    "GBPUSD": 12
+   },
+   "n_yonlu": 12,
+   "devam": 0.5833333333333334,
+   "devam_1R": 0.08333333333333333,
+   "donus": 0.25,
+   "orta": 0.25,
+   "orta_uc": 0.0,
+   "kapanis": 0.6666666666666666,
+   "mfe_med": 0.6835972535663492,
+   "mae_med": 0.15933518402659014,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "boe",
+   "sinif": "kucuk",
+   "n": 7,
+   "cift_n": {
+    "GBPUSD": 7
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.5714285714285714,
+   "kirilim_1R": 0.14285714285714285
+  },
+  {
+   "an": "boe",
+   "sinif": "normal",
+   "n": 14,
+   "cift_n": {
+    "GBPUSD": 14
+   },
+   "n_yonlu": 14,
+   "devam": 0.21428571428571427,
+   "devam_1R": 0.14285714285714285,
+   "donus": 0.35714285714285715,
+   "orta": 0.9285714285714286,
+   "orta_uc": 0.42857142857142855,
+   "kapanis": 0.42857142857142855,
+   "mfe_med": 0.4836026408523503,
+   "mae_med": 0.39087801550577017,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "boe",
+   "sinif": "reddedilen",
+   "n": 6,
+   "cift_n": {
+    "GBPUSD": 6
+   },
+   "n_yonlu": 6,
+   "devam": 0.3333333333333333,
+   "devam_1R": 0.0,
+   "donus": 0.16666666666666666,
+   "orta": 0.5,
+   "orta_uc": 0.16666666666666666,
+   "kapanis": 0.3333333333333333,
+   "mfe_med": 0.4619552734334217,
+   "mae_med": 0.4666832678537286,
+   "ilk_orta_dk_med": 7.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "guclu",
+   "n": 86,
+   "cift_n": {
+    "AUDUSD": 23,
+    "EURUSD": 22,
+    "GBPUSD": 20,
+    "USDJPY": 21
+   },
+   "n_yonlu": 86,
+   "devam": 0.3953488372093023,
+   "devam_1R": 0.08139534883720931,
+   "donus": 0.22093023255813954,
+   "orta": 0.6627906976744186,
+   "orta_uc": 0.29069767441860467,
+   "kapanis": 0.5,
+   "mfe_med": 0.5576929502729939,
+   "mae_med": 0.5435458413993965,
+   "ilk_orta_dk_med": 12.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "kucuk",
+   "n": 49,
+   "cift_n": {
+    "AUDUSD": 13,
+    "EURUSD": 10,
+    "GBPUSD": 11,
+    "USDJPY": 15
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.4489795918367347,
+   "kirilim_1R": 0.5306122448979592
+  },
+  {
+   "an": "cpi",
+   "sinif": "normal",
+   "n": 97,
+   "cift_n": {
+    "AUDUSD": 23,
+    "EURUSD": 27,
+    "GBPUSD": 25,
+    "USDJPY": 22
+   },
+   "n_yonlu": 97,
+   "devam": 0.41237113402061853,
+   "devam_1R": 0.20618556701030927,
+   "donus": 0.38144329896907214,
+   "orta": 0.8144329896907216,
+   "orta_uc": 0.3402061855670103,
+   "kapanis": 0.4639175257731959,
+   "mfe_med": 0.8032596041909197,
+   "mae_med": 0.7863777089783281,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "cpi",
+   "sinif": "reddedilen",
+   "n": 24,
+   "cift_n": {
+    "AUDUSD": 5,
+    "EURUSD": 5,
+    "GBPUSD": 8,
+    "USDJPY": 6
+   },
+   "n_yonlu": 24,
+   "devam": 0.5,
+   "devam_1R": 0.25,
+   "donus": 0.375,
+   "orta": 0.7916666666666666,
+   "orta_uc": 0.3333333333333333,
+   "kapanis": 0.5416666666666666,
+   "mfe_med": 0.8882099886054191,
+   "mae_med": 0.817170412468785,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "guclu",
+   "n": 9,
+   "cift_n": {
+    "EURUSD": 9
+   },
+   "n_yonlu": 9,
+   "devam": 0.4444444444444444,
+   "devam_1R": 0.1111111111111111,
+   "donus": 0.4444444444444444,
+   "orta": 0.8888888888888888,
+   "orta_uc": 0.3333333333333333,
+   "kapanis": 0.4444444444444444,
+   "mfe_med": 0.532302092811647,
+   "mae_med": 1.0779109589041096,
+   "ilk_orta_dk_med": 7.5
+  },
+  {
+   "an": "ecb",
+   "sinif": "kucuk",
+   "n": 7,
+   "cift_n": {
+    "EURUSD": 7
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.42857142857142855,
+   "kirilim_1R": 0.42857142857142855
+  },
+  {
+   "an": "ecb",
+   "sinif": "normal",
+   "n": 19,
+   "cift_n": {
+    "EURUSD": 19
+   },
+   "n_yonlu": 19,
+   "devam": 0.7894736842105263,
+   "devam_1R": 0.5789473684210527,
+   "donus": 0.21052631578947367,
+   "orta": 0.7894736842105263,
+   "orta_uc": 0.5263157894736842,
+   "kapanis": 0.6842105263157895,
+   "mfe_med": 1.7358490566037736,
+   "mae_med": 0.5169082125603864,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "ecb",
+   "sinif": "reddedilen",
+   "n": 5,
+   "cift_n": {
+    "EURUSD": 5
+   },
+   "n_yonlu": 5,
+   "devam": 0.6,
+   "devam_1R": 0.2,
+   "donus": 0.4,
+   "orta": 1.0,
+   "orta_uc": 0.6,
+   "kapanis": 0.2,
+   "mfe_med": 1.2147239263803682,
+   "mae_med": 1.3333333333333333,
+   "ilk_orta_dk_med": 1.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "guclu",
+   "n": 44,
+   "cift_n": {
+    "AUDUSD": 12,
+    "EURUSD": 10,
+    "GBPUSD": 9,
+    "USDJPY": 13
+   },
+   "n_yonlu": 44,
+   "devam": 0.38636363636363635,
+   "devam_1R": 0.045454545454545456,
+   "donus": 0.36363636363636365,
+   "orta": 0.6590909090909091,
+   "orta_uc": 0.29545454545454547,
+   "kapanis": 0.45454545454545453,
+   "mfe_med": 0.5511595535882927,
+   "mae_med": 0.6598890014824823,
+   "ilk_orta_dk_med": 32.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "kucuk",
+   "n": 34,
+   "cift_n": {
+    "AUDUSD": 10,
+    "EURUSD": 10,
+    "GBPUSD": 8,
+    "USDJPY": 6
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.4117647058823529,
+   "kirilim_1R": 0.6470588235294118
+  },
+  {
+   "an": "fomc",
+   "sinif": "normal",
+   "n": 67,
+   "cift_n": {
+    "AUDUSD": 14,
+    "EURUSD": 17,
+    "GBPUSD": 18,
+    "USDJPY": 18
+   },
+   "n_yonlu": 67,
+   "devam": 0.2835820895522388,
+   "devam_1R": 0.1044776119402985,
+   "donus": 0.5373134328358209,
+   "orta": 0.9253731343283582,
+   "orta_uc": 0.34328358208955223,
+   "kapanis": 0.5223880597014925,
+   "mfe_med": 0.7958579881656804,
+   "mae_med": 0.8778280542986425,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "fomc",
+   "sinif": "reddedilen",
+   "n": 20,
+   "cift_n": {
+    "AUDUSD": 5,
+    "EURUSD": 5,
+    "GBPUSD": 6,
+    "USDJPY": 4
+   },
+   "n_yonlu": 20,
+   "devam": 0.7,
+   "devam_1R": 0.4,
+   "donus": 0.2,
+   "orta": 0.85,
+   "orta_uc": 0.65,
+   "kapanis": 0.8,
+   "mfe_med": 1.1916121516619977,
+   "mae_med": 0.492831541218638,
+   "ilk_orta_dk_med": 9.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "guclu",
+   "n": 929,
+   "cift_n": {
+    "AUDUSD": 239,
+    "EURUSD": 229,
+    "GBPUSD": 236,
+    "USDJPY": 225
+   },
+   "n_yonlu": 929,
+   "devam": 0.5468245425188375,
+   "devam_1R": 0.3326157158234661,
+   "donus": 0.3606027987082885,
+   "orta": 0.7190527448869752,
+   "orta_uc": 0.3401506996770721,
+   "kapanis": 0.5296017222820237,
+   "mfe_med": 0.8189134808853119,
+   "mae_med": 0.7115987460815048,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "kucuk",
+   "n": 603,
+   "cift_n": {
+    "AUDUSD": 120,
+    "EURUSD": 163,
+    "GBPUSD": 136,
+    "USDJPY": 184
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.3814262023217247,
+   "kirilim_1R": 0.5223880597014925
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "normal",
+   "n": 3549,
+   "cift_n": {
+    "AUDUSD": 907,
+    "EURUSD": 899,
+    "GBPUSD": 881,
+    "USDJPY": 862
+   },
+   "n_yonlu": 3545,
+   "devam": 0.49139633286318757,
+   "devam_1R": 0.34330042313117065,
+   "donus": 0.4922425952045134,
+   "orta": 0.8758815232722144,
+   "orta_uc": 0.40479548660084624,
+   "kapanis": 0.4928067700987306,
+   "mfe_med": 1.1849710982658959,
+   "mae_med": 1.2085561497326203,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "londra_acilis",
+   "sinif": "reddedilen",
+   "n": 1066,
+   "cift_n": {
+    "AUDUSD": 270,
+    "EURUSD": 246,
+    "GBPUSD": 284,
+    "USDJPY": 266
+   },
+   "n_yonlu": 1066,
+   "devam": 0.474671669793621,
+   "devam_1R": 0.3330206378986867,
+   "donus": 0.5103189493433395,
+   "orta": 0.8911819887429644,
+   "orta_uc": 0.41181988742964354,
+   "kapanis": 0.4709193245778612,
+   "mfe_med": 1.1412525012797246,
+   "mae_med": 1.2384920634920635,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "guclu",
+   "n": 54,
+   "cift_n": {
+    "AUDUSD": 13,
+    "EURUSD": 13,
+    "GBPUSD": 13,
+    "USDJPY": 15
+   },
+   "n_yonlu": 54,
+   "devam": 0.3148148148148148,
+   "devam_1R": 0.09259259259259259,
+   "donus": 0.18518518518518517,
+   "orta": 0.5740740740740741,
+   "orta_uc": 0.14814814814814814,
+   "kapanis": 0.48148148148148145,
+   "mfe_med": 0.34125689434322715,
+   "mae_med": 0.42371083831366096,
+   "ilk_orta_dk_med": 6.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "kucuk",
+   "n": 25,
+   "cift_n": {
+    "AUDUSD": 10,
+    "EURUSD": 6,
+    "GBPUSD": 5,
+    "USDJPY": 4
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.4,
+   "kirilim_1R": 0.44
+  },
+  {
+   "an": "nfp",
+   "sinif": "normal",
+   "n": 126,
+   "cift_n": {
+    "AUDUSD": 28,
+    "EURUSD": 32,
+    "GBPUSD": 33,
+    "USDJPY": 33
+   },
+   "n_yonlu": 125,
+   "devam": 0.36,
+   "devam_1R": 0.184,
+   "donus": 0.464,
+   "orta": 0.856,
+   "orta_uc": 0.384,
+   "kapanis": 0.536,
+   "mfe_med": 0.6274509803921569,
+   "mae_med": 0.8044077134986226,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "nfp",
+   "sinif": "reddedilen",
+   "n": 51,
+   "cift_n": {
+    "AUDUSD": 13,
+    "EURUSD": 13,
+    "GBPUSD": 13,
+    "USDJPY": 12
+   },
+   "n_yonlu": 51,
+   "devam": 0.3333333333333333,
+   "devam_1R": 0.13725490196078433,
+   "donus": 0.5294117647058824,
+   "orta": 0.9019607843137255,
+   "orta_uc": 0.3333333333333333,
+   "kapanis": 0.37254901960784315,
+   "mfe_med": 0.6469298245614035,
+   "mae_med": 1.0051020408163265,
+   "ilk_orta_dk_med": 3.5
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "guclu",
+   "n": 920,
+   "cift_n": {
+    "AUDUSD": 253,
+    "EURUSD": 211,
+    "GBPUSD": 235,
+    "USDJPY": 221
+   },
+   "n_yonlu": 920,
+   "devam": 0.5358695652173913,
+   "devam_1R": 0.31521739130434784,
+   "donus": 0.35978260869565215,
+   "orta": 0.7369565217391304,
+   "orta_uc": 0.3402173913043478,
+   "kapanis": 0.49782608695652175,
+   "mfe_med": 0.7719045508274232,
+   "mae_med": 0.7816332622954898,
+   "ilk_orta_dk_med": 14.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "kucuk",
+   "n": 663,
+   "cift_n": {
+    "AUDUSD": 140,
+    "EURUSD": 149,
+    "GBPUSD": 157,
+    "USDJPY": 217
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.39064856711915535,
+   "kirilim_1R": 0.5233785822021116
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "normal",
+   "n": 3422,
+   "cift_n": {
+    "AUDUSD": 871,
+    "EURUSD": 876,
+    "GBPUSD": 865,
+    "USDJPY": 810
+   },
+   "n_yonlu": 3414,
+   "devam": 0.4976567076742824,
+   "devam_1R": 0.3506151142355009,
+   "donus": 0.4835969537199766,
+   "orta": 0.8840070298769771,
+   "orta_uc": 0.4188635032220269,
+   "kapanis": 0.49502050380785,
+   "mfe_med": 1.1856477509498713,
+   "mae_med": 1.188488612836439,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "ny_acilis",
+   "sinif": "reddedilen",
+   "n": 1143,
+   "cift_n": {
+    "AUDUSD": 273,
+    "EURUSD": 301,
+    "GBPUSD": 280,
+    "USDJPY": 289
+   },
+   "n_yonlu": 1143,
+   "devam": 0.5144356955380578,
+   "devam_1R": 0.3674540682414698,
+   "donus": 0.4663167104111986,
+   "orta": 0.8766404199475065,
+   "orta_uc": 0.4584426946631671,
+   "kapanis": 0.5275590551181102,
+   "mfe_med": 1.2466367713004485,
+   "mae_med": 1.0940170940170941,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "guclu",
+   "n": 952,
+   "cift_n": {
+    "AUDUSD": 237,
+    "EURUSD": 238,
+    "GBPUSD": 241,
+    "USDJPY": 236
+   },
+   "n_yonlu": 952,
+   "devam": 0.5462184873949579,
+   "devam_1R": 0.3329831932773109,
+   "donus": 0.3707983193277311,
+   "orta": 0.7636554621848739,
+   "orta_uc": 0.36239495798319327,
+   "kapanis": 0.5010504201680672,
+   "mfe_med": 0.8569604086845466,
+   "mae_med": 0.8355708511225467,
+   "ilk_orta_dk_med": 20.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "kucuk",
+   "n": 734,
+   "cift_n": {
+    "AUDUSD": 150,
+    "EURUSD": 182,
+    "GBPUSD": 200,
+    "USDJPY": 202
+   },
+   "kirilim_var": 0.9986376021798365,
+   "kirilim_trendle": 0.46521145975443384,
+   "kirilim_1R": 0.5544959128065395
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "normal",
+   "n": 3449,
+   "cift_n": {
+    "AUDUSD": 879,
+    "EURUSD": 860,
+    "GBPUSD": 841,
+    "USDJPY": 869
+   },
+   "n_yonlu": 3444,
+   "devam": 0.47735191637630664,
+   "devam_1R": 0.3394308943089431,
+   "donus": 0.5040650406504065,
+   "orta": 0.8841463414634146,
+   "orta_uc": 0.40534262485482,
+   "kapanis": 0.48577235772357724,
+   "mfe_med": 1.2429721441349348,
+   "mae_med": 1.3144310602967197,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "tokyo_acilis",
+   "sinif": "reddedilen",
+   "n": 1024,
+   "cift_n": {
+    "AUDUSD": 273,
+    "EURUSD": 260,
+    "GBPUSD": 257,
+    "USDJPY": 234
+   },
+   "n_yonlu": 1024,
+   "devam": 0.462890625,
+   "devam_1R": 0.33984375,
+   "donus": 0.51953125,
+   "orta": 0.888671875,
+   "orta_uc": 0.4140625,
+   "kapanis": 0.5078125,
+   "mfe_med": 1.235903639806438,
+   "mae_med": 1.2555306762203315,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "guclu",
+   "n": 970,
+   "cift_n": {
+    "AUDUSD": 253,
+    "EURUSD": 256,
+    "GBPUSD": 229,
+    "USDJPY": 232
+   },
+   "n_yonlu": 970,
+   "devam": 0.29381443298969073,
+   "devam_1R": 0.11134020618556702,
+   "donus": 0.1958762886597938,
+   "orta": 0.5876288659793815,
+   "orta_uc": 0.16804123711340208,
+   "kapanis": 0.4350515463917526,
+   "mfe_med": 0.3668926474699469,
+   "mae_med": 0.474771997430957,
+   "ilk_orta_dk_med": 13.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "kucuk",
+   "n": 709,
+   "cift_n": {
+    "AUDUSD": 180,
+    "EURUSD": 185,
+    "GBPUSD": 169,
+    "USDJPY": 175
+   },
+   "kirilim_var": 0.995768688293371,
+   "kirilim_trendle": 0.4490084985835694,
+   "kirilim_1R": 0.46262341325811
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "normal",
+   "n": 3414,
+   "cift_n": {
+    "AUDUSD": 849,
+    "EURUSD": 845,
+    "GBPUSD": 867,
+    "USDJPY": 853
+   },
+   "n_yonlu": 3411,
+   "devam": 0.38727645851656406,
+   "devam_1R": 0.2075637642919965,
+   "donus": 0.4160070360598065,
+   "orta": 0.7974201114042803,
+   "orta_uc": 0.34740545294635006,
+   "kapanis": 0.48050425095279975,
+   "mfe_med": 0.6405693950177936,
+   "mae_med": 0.6787564766839378,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "sinif": "reddedilen",
+   "n": 1068,
+   "cift_n": {
+    "AUDUSD": 258,
+    "EURUSD": 254,
+    "GBPUSD": 275,
+    "USDJPY": 281
+   },
+   "n_yonlu": 1068,
+   "devam": 0.3642322097378277,
+   "devam_1R": 0.17415730337078653,
+   "donus": 0.4307116104868914,
+   "orta": 0.8352059925093633,
+   "orta_uc": 0.3529962546816479,
+   "kapanis": 0.4597378277153558,
+   "mfe_med": 0.610227696901829,
+   "mae_med": 0.6730321062515555,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "guclu",
+   "n": 963,
+   "cift_n": {
+    "AUDUSD": 234,
+    "EURUSD": 227,
+    "GBPUSD": 247,
+    "USDJPY": 255
+   },
+   "n_yonlu": 963,
+   "devam": 0.18483904465212878,
+   "devam_1R": 0.037383177570093455,
+   "donus": 0.0893042575285566,
+   "orta": 0.46313603322949115,
+   "orta_uc": 0.07995846313603323,
+   "kapanis": 0.45275181723779856,
+   "mfe_med": 0.2743445692883895,
+   "mae_med": 0.33706293706293705,
+   "ilk_orta_dk_med": 15.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "kucuk",
+   "n": 636,
+   "cift_n": {
+    "AUDUSD": 142,
+    "EURUSD": 138,
+    "GBPUSD": 162,
+    "USDJPY": 194
+   },
+   "kirilim_var": 0.9748427672955975,
+   "kirilim_trendle": 0.43709677419354837,
+   "kirilim_1R": 0.2610062893081761
+  },
+  {
+   "an": "wmr",
+   "sinif": "normal",
+   "n": 3487,
+   "cift_n": {
+    "AUDUSD": 893,
+    "EURUSD": 882,
+    "GBPUSD": 859,
+    "USDJPY": 853
+   },
+   "n_yonlu": 3483,
+   "devam": 0.23428079242032732,
+   "devam_1R": 0.07522250933103647,
+   "donus": 0.29399942578237154,
+   "orta": 0.7482055699109963,
+   "orta_uc": 0.268733850129199,
+   "kapanis": 0.4708584553545794,
+   "mfe_med": 0.4088050314465409,
+   "mae_med": 0.4882154882154882,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "wmr",
+   "sinif": "reddedilen",
+   "n": 1059,
+   "cift_n": {
+    "AUDUSD": 267,
+    "EURUSD": 289,
+    "GBPUSD": 268,
+    "USDJPY": 235
+   },
+   "n_yonlu": 1059,
+   "devam": 0.2559017941454202,
+   "devam_1R": 0.08498583569405099,
+   "donus": 0.32200188857412654,
+   "orta": 0.7686496694995278,
+   "orta_uc": 0.25967894239848915,
+   "kapanis": 0.45892351274787535,
+   "mfe_med": 0.3706896551724138,
+   "mae_med": 0.5114754098360655,
+   "ilk_orta_dk_med": 5.0
+  }
+ ],
+ "fiksing_ay_sonu": [
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": false,
+   "sinif": "guclu",
+   "n": 914,
+   "cift_n": {
+    "AUDUSD": 240,
+    "EURUSD": 239,
+    "GBPUSD": 215,
+    "USDJPY": 220
+   },
+   "n_yonlu": 914,
+   "devam": 0.2975929978118162,
+   "devam_1R": 0.11597374179431072,
+   "donus": 0.1936542669584245,
+   "orta": 0.5798687089715536,
+   "orta_uc": 0.175054704595186,
+   "kapanis": 0.4474835886214442,
+   "mfe_med": 0.37090566655748447,
+   "mae_med": 0.46359582059123344,
+   "ilk_orta_dk_med": 13.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": false,
+   "sinif": "kucuk",
+   "n": 685,
+   "cift_n": {
+    "AUDUSD": 172,
+    "EURUSD": 182,
+    "GBPUSD": 161,
+    "USDJPY": 170
+   },
+   "kirilim_var": 0.9956204379562044,
+   "kirilim_trendle": 0.44574780058651026,
+   "kirilim_1R": 0.46277372262773725
+  },
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": false,
+   "sinif": "normal",
+   "n": 3262,
+   "cift_n": {
+    "AUDUSD": 813,
+    "EURUSD": 807,
+    "GBPUSD": 831,
+    "USDJPY": 811
+   },
+   "n_yonlu": 3259,
+   "devam": 0.386314820497085,
+   "devam_1R": 0.20681190549248235,
+   "donus": 0.4157717091132249,
+   "orta": 0.7965633629947837,
+   "orta_uc": 0.34826633936790424,
+   "kapanis": 0.47990181037127955,
+   "mfe_med": 0.6368421052631579,
+   "mae_med": 0.6727272727272727,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": false,
+   "sinif": "reddedilen",
+   "n": 1012,
+   "cift_n": {
+    "AUDUSD": 243,
+    "EURUSD": 240,
+    "GBPUSD": 261,
+    "USDJPY": 268
+   },
+   "n_yonlu": 1012,
+   "devam": 0.358695652173913,
+   "devam_1R": 0.17094861660079053,
+   "donus": 0.43478260869565216,
+   "orta": 0.8330039525691699,
+   "orta_uc": 0.34881422924901184,
+   "kapanis": 0.46047430830039526,
+   "mfe_med": 0.6025351688858798,
+   "mae_med": 0.6744572924620923,
+   "ilk_orta_dk_med": 3.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": true,
+   "sinif": "guclu",
+   "n": 56,
+   "cift_n": {
+    "AUDUSD": 13,
+    "EURUSD": 17,
+    "GBPUSD": 14,
+    "USDJPY": 12
+   },
+   "n_yonlu": 56,
+   "devam": 0.23214285714285715,
+   "devam_1R": 0.03571428571428571,
+   "donus": 0.23214285714285715,
+   "orta": 0.7142857142857143,
+   "orta_uc": 0.05357142857142857,
+   "kapanis": 0.23214285714285715,
+   "mfe_med": 0.21419881821341674,
+   "mae_med": 0.6370429892552494,
+   "ilk_orta_dk_med": 15.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": true,
+   "sinif": "kucuk",
+   "n": 24,
+   "cift_n": {
+    "AUDUSD": 8,
+    "EURUSD": 3,
+    "GBPUSD": 8,
+    "USDJPY": 5
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 0.5416666666666666,
+   "kirilim_1R": 0.4583333333333333
+  },
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": true,
+   "sinif": "normal",
+   "n": 152,
+   "cift_n": {
+    "AUDUSD": 36,
+    "EURUSD": 38,
+    "GBPUSD": 36,
+    "USDJPY": 42
+   },
+   "n_yonlu": 152,
+   "devam": 0.40789473684210525,
+   "devam_1R": 0.2236842105263158,
+   "donus": 0.42105263157894735,
+   "orta": 0.8157894736842105,
+   "orta_uc": 0.32894736842105265,
+   "kapanis": 0.4934210526315789,
+   "mfe_med": 0.6876127937103547,
+   "mae_med": 0.73,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "tokyo_fiks",
+   "ay_sonu": true,
+   "sinif": "reddedilen",
+   "n": 56,
+   "cift_n": {
+    "AUDUSD": 15,
+    "EURUSD": 14,
+    "GBPUSD": 14,
+    "USDJPY": 13
+   },
+   "n_yonlu": 56,
+   "devam": 0.4642857142857143,
+   "devam_1R": 0.23214285714285715,
+   "donus": 0.35714285714285715,
+   "orta": 0.875,
+   "orta_uc": 0.42857142857142855,
+   "kapanis": 0.44642857142857145,
+   "mfe_med": 0.7440347505805108,
+   "mae_med": 0.6228269085411942,
+   "ilk_orta_dk_med": 2.0
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": false,
+   "sinif": "guclu",
+   "n": 859,
+   "cift_n": {
+    "AUDUSD": 210,
+    "EURUSD": 199,
+    "GBPUSD": 219,
+    "USDJPY": 231
+   },
+   "n_yonlu": 859,
+   "devam": 0.1920838183934808,
+   "devam_1R": 0.03841676367869616,
+   "donus": 0.09545983701979045,
+   "orta": 0.47846332945285214,
+   "orta_uc": 0.08032596041909197,
+   "kapanis": 0.4458672875436554,
+   "mfe_med": 0.2684931506849315,
+   "mae_med": 0.3485915492957746,
+   "ilk_orta_dk_med": 15.0
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": false,
+   "sinif": "kucuk",
+   "n": 635,
+   "cift_n": {
+    "AUDUSD": 142,
+    "EURUSD": 138,
+    "GBPUSD": 162,
+    "USDJPY": 193
+   },
+   "kirilim_var": 0.9748031496062992,
+   "kirilim_trendle": 0.43618739903069464,
+   "kirilim_1R": 0.2614173228346457
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": false,
+   "sinif": "normal",
+   "n": 3360,
+   "cift_n": {
+    "AUDUSD": 861,
+    "EURUSD": 855,
+    "GBPUSD": 826,
+    "USDJPY": 818
+   },
+   "n_yonlu": 3356,
+   "devam": 0.2362932061978546,
+   "devam_1R": 0.07598331346841478,
+   "donus": 0.2938021454112038,
+   "orta": 0.7479141835518475,
+   "orta_uc": 0.2696662693682956,
+   "kapanis": 0.4725864123957092,
+   "mfe_med": 0.4109991259696274,
+   "mae_med": 0.4891930611355072,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": false,
+   "sinif": "reddedilen",
+   "n": 1003,
+   "cift_n": {
+    "AUDUSD": 251,
+    "EURUSD": 272,
+    "GBPUSD": 257,
+    "USDJPY": 223
+   },
+   "n_yonlu": 1003,
+   "devam": 0.259222333000997,
+   "devam_1R": 0.0847457627118644,
+   "donus": 0.32103688933200397,
+   "orta": 0.7716849451645065,
+   "orta_uc": 0.26021934197407776,
+   "kapanis": 0.45363908275174475,
+   "mfe_med": 0.3676923076923077,
+   "mae_med": 0.5119047619047619,
+   "ilk_orta_dk_med": 5.0
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": true,
+   "sinif": "guclu",
+   "n": 104,
+   "cift_n": {
+    "AUDUSD": 24,
+    "EURUSD": 28,
+    "GBPUSD": 28,
+    "USDJPY": 24
+   },
+   "n_yonlu": 104,
+   "devam": 0.125,
+   "devam_1R": 0.028846153846153848,
+   "donus": 0.038461538461538464,
+   "orta": 0.33653846153846156,
+   "orta_uc": 0.07692307692307693,
+   "kapanis": 0.5096153846153846,
+   "mfe_med": 0.32621771228941476,
+   "mae_med": 0.25355727700622666,
+   "ilk_orta_dk_med": 11.0
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": true,
+   "sinif": "kucuk",
+   "n": 1,
+   "cift_n": {
+    "USDJPY": 1
+   },
+   "kirilim_var": 1.0,
+   "kirilim_trendle": 1.0,
+   "kirilim_1R": 0.0
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": true,
+   "sinif": "normal",
+   "n": 127,
+   "cift_n": {
+    "AUDUSD": 32,
+    "EURUSD": 27,
+    "GBPUSD": 33,
+    "USDJPY": 35
+   },
+   "n_yonlu": 127,
+   "devam": 0.18110236220472442,
+   "devam_1R": 0.05511811023622047,
+   "donus": 0.2992125984251969,
+   "orta": 0.7559055118110236,
+   "orta_uc": 0.2440944881889764,
+   "kapanis": 0.4251968503937008,
+   "mfe_med": 0.3333333333333333,
+   "mae_med": 0.44537815126050423,
+   "ilk_orta_dk_med": 4.0
+  },
+  {
+   "an": "wmr",
+   "ay_sonu": true,
+   "sinif": "reddedilen",
+   "n": 56,
+   "cift_n": {
+    "AUDUSD": 16,
+    "EURUSD": 17,
+    "GBPUSD": 11,
+    "USDJPY": 12
+   },
+   "n_yonlu": 56,
+   "devam": 0.19642857142857142,
+   "devam_1R": 0.08928571428571429,
+   "donus": 0.3392857142857143,
+   "orta": 0.7142857142857143,
+   "orta_uc": 0.25,
+   "kapanis": 0.5535714285714286,
+   "mfe_med": 0.4235159925859037,
+   "mae_med": 0.4851639842929042,
+   "ilk_orta_dk_med": 2.5
+  }
+ ]
+}

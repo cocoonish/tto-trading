@@ -1,0 +1,87 @@
+# FX gün içi OYUN PLANI — ön kayıt.
+#
+# Bu dosya 2024 ve sonrasının verisi hiçbir yoldan açılmadan yazıldı ve git'e girdi. Plan, 2018–2023'ün gözleminden
+# (gozlem.py → veri/gozlem.json) ve aynı dönemde aday tepkilerin maliyet sonrası sonucundan (gelistir.py →
+# veri/gelistir.json) kuruldu. Sınama (sina.py) bu dosyayı ve secim.py'nin çıktısını OKUR, değiştirmez.
+#
+# Bilinen sınır: aynı veriyle (Dukascopy 1 dk, dört majör, 2024 →) daha önce 22 kuralın sonuçları yayımlandı; yani
+# 2024 sonrasının TOPLU davranışı (o kuralların çoğunun maliyet sonrası eksi olduğu) bu plan yazılırken biliniyordu.
+# Bu planın bacaklarının 2024 sonrası sonucu ise hiç ölçülmedi.
+
+[donem]
+ic = ["2018-01-01", "2023-12-31"]
+dis = ["2024-01-01", "2026-10-15"]
+
+[maliyet]
+# kosu.py ile aynı: makas bid/ask'tan; piyasa, stop ve kırılım emirlerinde 0,5 pip kayma; haber penceresinde
+# (olaydan 2 dk önce – 15 dk sonra) +1 pip; limit emirde kayma yok. Planlanan risk 3 pipin altındaysa işlem yok.
+kayma_pip = 0.5
+haber_kayma_pip = 1.0
+en_az_risk_pip = 3.0
+
+[secim]
+# İŞLEM bacağı seçim kuralı (secim.py uygular): an ailesi (açılış · fiksing · veri · merkez bankası) × ilk mum sınıfı
+# hücresinde, aday bacaklardan 2018–2023'te en az 30 işlemi olan ve maliyet sonrası ortalaması sıfırın üstünde
+# olanların EN İYİSİ. Hiçbiri yoksa hücre "izle, işlem yok". Trend ayrımı seçime girmez: gözlemde trend sınıfı ilk
+# mumdan sonraki davranışı belirgin değiştirmedi; trend yalnız okuma bilgisi olarak raporlanır.
+en_az_islem = 30
+duzey = ["aile", "sinif"]
+aday_sayisi_not = "gelistir.py ADAY sözlüğü; her hücrede 5–7 aday"
+
+# REFERANS bacaklar: gözlemin söylediği "içgüdüsel" tepki, kazanma oranı yüksek kurulmuş (yakın hedef). İşlem
+# önerisi değildir; 2024 sonrasında işlem bacaklarıyla birlikte, aynı kodla raporlanır.
+[[referans]]
+aile = "acilis"
+sinif = ["guclu", "normal", "reddedilen"]
+bacak = { tur = "katil", hedef = 0.5, tampon = 0.1, bekle = 60 }
+okuma = "İlk mumu kovalama; yarısına dönmesini bekle, mumun yönünde katıl, yakın hedef (0,5R)."
+
+[[referans]]
+aile = "acilis"
+sinif = ["kucuk"]
+bacak = { tur = "kirilim", hedef = 0.5, tampon = 0.1, bekle = 60 }
+okuma = "Küçük ilk mum karar vermemiştir; kırıldığı tarafa git, yakın hedef."
+
+[[referans]]
+aile = "fiksing"
+sinif = ["guclu", "normal", "reddedilen"]
+bacak = { tur = "fiks_ver", hedef = "orta", tampon = 0.1, bekle = 60 }
+okuma = "Fiksinge kadar koşan fiyat fiksingden sonra koşusunun yarısını geri verir; fiksingde ters yöne gir, hedef koşunun yarısı."
+
+[[referans]]
+aile = "fiksing"
+sinif = ["kucuk"]
+bacak = { tur = "kirilim", hedef = 0.5, tampon = 0.1, bekle = 60 }
+okuma = "Fiksinge sessiz gelinmişse fiksingden sonraki ilk kırılımın yönüne git."
+
+[[referans]]
+aile = "veri"
+sinif = ["guclu", "normal", "reddedilen"]
+bacak = { tur = "katil", hedef = 0.5, tampon = 0.1, bekle = 60 }
+okuma = "Verinin ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+
+[[referans]]
+aile = "veri"
+sinif = ["kucuk"]
+bacak = { tur = "kirilim", hedef = 0.5, tampon = 0.1, bekle = 60 }
+okuma = "Veri ilk dakikalarda fiyatı oynatmadıysa kırıldığı tarafa git."
+
+[[referans]]
+aile = "mb"
+sinif = ["guclu", "normal", "reddedilen"]
+bacak = { tur = "katil", hedef = 0.5, tampon = 0.1, bekle = 60 }
+okuma = "Kararın ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+
+[[referans]]
+aile = "mb"
+sinif = ["kucuk"]
+bacak = { tur = "kirilim", hedef = 0.5, tampon = 0.1, bekle = 60 }
+okuma = "Karar ilk dakikalarda fiyatı oynatmadıysa kırıldığı tarafa git."
+
+[hukum]
+# 2024 sonrası, her işlem bacağı için (dört parite birlikte): ortalama net R'nin %95 bootstrap aralığı (2000 tekrar,
+# tohum 20261019, işlem düzeyinde yeniden örnekleme). Alt uç > 0 → çalışıyor · ortalama > 0, alt uç ≤ 0 → zayıf ·
+# ortalama ≤ 0 → çalışmıyor. İşlem sayısı 20'nin altındaysa hüküm "ölçülemedi" (sonuç yine basılır).
+bootstrap = 2000
+tohum = 20261019
+en_az_islem = 20

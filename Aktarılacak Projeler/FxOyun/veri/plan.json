@@ -1,0 +1,358 @@
+{
+ "onkayit_ozu": "8ebcdb37019e4c8de870b30eecc46693280313facd7a0383760db9993c17d82f",
+ "gelistir_ozu": "dbfe5e78fb90a1d88045167c465914822abdd2480aebb655a350e43e2c52e0af",
+ "islem": [
+  {
+   "aile": "mb",
+   "sinif": "guclu",
+   "bacak": {
+    "tur": "devam",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "ad": "devam:0.5",
+   "aday": 7,
+   "ic": {
+    "n": 65,
+    "kazanma": 0.6923076923076923,
+    "ort_R": 0.023372337768059855,
+    "brut_R": 0.06399130826814882,
+    "risk_pip_med": 57.16999999999971
+   }
+  },
+  {
+   "aile": "mb",
+   "sinif": "normal",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 1.0,
+    "tampon": 0.5,
+    "bekle": 60
+   },
+   "ad": "katil:1.0:t0.5",
+   "aday": 7,
+   "ic": {
+    "n": 84,
+    "kazanma": 0.5,
+    "ort_R": 0.01392632661318537,
+    "brut_R": 0.00726049147170008,
+    "risk_pip_med": 33.375
+   }
+  },
+  {
+   "aile": "mb",
+   "sinif": "reddedilen",
+   "bacak": {
+    "tur": "devam",
+    "hedef": 1.0,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "ad": "devam:1.0",
+   "aday": 7,
+   "ic": {
+    "n": 31,
+    "kazanma": 0.6774193548387096,
+    "ort_R": 0.328661405738205,
+    "brut_R": 0.4155571129273727,
+    "risk_pip_med": 26.06000000000058
+   }
+  },
+  {
+   "aile": "veri",
+   "sinif": "guclu",
+   "bacak": {
+    "tur": "katil",
+    "hedef": "uc",
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "ad": "katil:uc",
+   "aday": 7,
+   "ic": {
+    "n": 70,
+    "kazanma": 0.5857142857142857,
+    "ort_R": 0.05591471195290269,
+    "brut_R": 0.07387128197966432,
+    "risk_pip_med": 24.659999999999126
+   }
+  },
+  {
+   "aile": "veri",
+   "sinif": "kucuk",
+   "bacak": {
+    "tur": "kirilim",
+    "hedef": 1.0,
+    "tampon": 0.5,
+    "bekle": 60
+   },
+   "ad": "kirilim:1.0:t0.5",
+   "aday": 6,
+   "ic": {
+    "n": 70,
+    "kazanma": 0.5,
+    "ort_R": 0.003955406141668938,
+    "brut_R": 0.29251644923453907,
+    "risk_pip_med": 14.7375
+   }
+  }
+ ],
+ "izle": [
+  {
+   "aile": "acilis",
+   "sinif": "guclu",
+   "aday": 7,
+   "en_iyi": "devam:1.0:t0.5",
+   "en_iyi_R": -0.07649981067261852
+  },
+  {
+   "aile": "acilis",
+   "sinif": "kucuk",
+   "aday": 6,
+   "en_iyi": "kirilim:0.5:t1",
+   "en_iyi_R": -0.1411631666787513
+  },
+  {
+   "aile": "acilis",
+   "sinif": "normal",
+   "aday": 7,
+   "en_iyi": "katil:1.0:t0.5",
+   "en_iyi_R": -0.15253301411081469
+  },
+  {
+   "aile": "acilis",
+   "sinif": "reddedilen",
+   "aday": 7,
+   "en_iyi": "devam:1.0:t0.5",
+   "en_iyi_R": -0.12215499722458321
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "guclu",
+   "aday": 6,
+   "en_iyi": "fiks_ver:orta:t0.5",
+   "en_iyi_R": -0.05555969859047148
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "kucuk",
+   "aday": 6,
+   "en_iyi": "kirilim:0.5:t1",
+   "en_iyi_R": -0.11260247878688395
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "normal",
+   "aday": 6,
+   "en_iyi": "fiks_ver:orta:t0.5",
+   "en_iyi_R": -0.10459287578180027
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "reddedilen",
+   "aday": 6,
+   "en_iyi": "fiks_ver:orta:t0.5",
+   "en_iyi_R": -0.09396652188648566
+  },
+  {
+   "aile": "mb",
+   "sinif": "kucuk",
+   "aday": 6,
+   "en_iyi": "kirilim:1.0:t1",
+   "en_iyi_R": -0.06578208457402045
+  },
+  {
+   "aile": "veri",
+   "sinif": "normal",
+   "aday": 7,
+   "en_iyi": "katil:1.0:t0.5",
+   "en_iyi_R": -0.04750982862520859
+  },
+  {
+   "aile": "veri",
+   "sinif": "reddedilen",
+   "aday": 7,
+   "en_iyi": "devam:0.5",
+   "en_iyi_R": -0.12454526101268378
+  }
+ ],
+ "referans": [
+  {
+   "aile": "acilis",
+   "sinif": "guclu",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "İlk mumu kovalama; yarısına dönmesini bekle, mumun yönünde katıl, yakın hedef (0,5R)."
+  },
+  {
+   "aile": "acilis",
+   "sinif": "normal",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "İlk mumu kovalama; yarısına dönmesini bekle, mumun yönünde katıl, yakın hedef (0,5R)."
+  },
+  {
+   "aile": "acilis",
+   "sinif": "reddedilen",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "İlk mumu kovalama; yarısına dönmesini bekle, mumun yönünde katıl, yakın hedef (0,5R)."
+  },
+  {
+   "aile": "acilis",
+   "sinif": "kucuk",
+   "bacak": {
+    "tur": "kirilim",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Küçük ilk mum karar vermemiştir; kırıldığı tarafa git, yakın hedef."
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "guclu",
+   "bacak": {
+    "tur": "fiks_ver",
+    "hedef": "orta",
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Fiksinge kadar koşan fiyat fiksingden sonra koşusunun yarısını geri verir; fiksingde ters yöne gir, hedef koşunun yarısı."
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "normal",
+   "bacak": {
+    "tur": "fiks_ver",
+    "hedef": "orta",
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Fiksinge kadar koşan fiyat fiksingden sonra koşusunun yarısını geri verir; fiksingde ters yöne gir, hedef koşunun yarısı."
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "reddedilen",
+   "bacak": {
+    "tur": "fiks_ver",
+    "hedef": "orta",
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Fiksinge kadar koşan fiyat fiksingden sonra koşusunun yarısını geri verir; fiksingde ters yöne gir, hedef koşunun yarısı."
+  },
+  {
+   "aile": "fiksing",
+   "sinif": "kucuk",
+   "bacak": {
+    "tur": "kirilim",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Fiksinge sessiz gelinmişse fiksingden sonraki ilk kırılımın yönüne git."
+  },
+  {
+   "aile": "veri",
+   "sinif": "guclu",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Verinin ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+  },
+  {
+   "aile": "veri",
+   "sinif": "normal",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Verinin ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+  },
+  {
+   "aile": "veri",
+   "sinif": "reddedilen",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Verinin ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+  },
+  {
+   "aile": "veri",
+   "sinif": "kucuk",
+   "bacak": {
+    "tur": "kirilim",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Veri ilk dakikalarda fiyatı oynatmadıysa kırıldığı tarafa git."
+  },
+  {
+   "aile": "mb",
+   "sinif": "guclu",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Kararın ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+  },
+  {
+   "aile": "mb",
+   "sinif": "normal",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Kararın ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+  },
+  {
+   "aile": "mb",
+   "sinif": "reddedilen",
+   "bacak": {
+    "tur": "katil",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Kararın ilk beş dakikasını kovalama; yarısına dönünce ilk tepkinin yönünde katıl."
+  },
+  {
+   "aile": "mb",
+   "sinif": "kucuk",
+   "bacak": {
+    "tur": "kirilim",
+    "hedef": 0.5,
+    "tampon": 0.1,
+    "bekle": 60
+   },
+   "okuma": "Karar ilk dakikalarda fiyatı oynatmadıysa kırıldığı tarafa git."
+  }
+ ]
+}
