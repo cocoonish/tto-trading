@@ -27,7 +27,7 @@ import pandas as pd
 BURASI = Path(__file__).resolve().parent
 FXG = BURASI.parent / "FxGunici"
 if str(FXG) not in sys.path:
-    sys.path.insert(0, str(FXG))
+    sys.path.append(str(FXG))            # sonda: aynı adlı yerel modülleri gölgelemesin
 import takvim  # noqa: E402
 import veri as vr  # noqa: E402
 import zaman as z  # noqa: E402

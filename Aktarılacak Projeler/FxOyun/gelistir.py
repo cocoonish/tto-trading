@@ -16,7 +16,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-import kosu
+import oyun_sim as kosu
 import sinif as sf
 from gozlem import IC_BITIS
 

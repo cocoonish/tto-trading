@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 import gozlem as gz
-import kosu
+import oyun_sim as kosu
 import sinif as sf
 
 import ayar as ay  # noqa: E402
@@ -112,7 +112,7 @@ def main() -> int:
     out = {"plan_ozu": hashlib.sha256((BURASI / "veri" / "plan.json").read_bytes()).hexdigest(),
            "onkayit_ozu": hashlib.sha256((BURASI / "onkayit_oyun.toml").read_bytes()).hexdigest(),
            "kod_ozu": {p: hashlib.sha256((BURASI / p).read_bytes()).hexdigest()
-                       for p in ("sinif.py", "kosu.py", "gozlem.py", "sina.py")},
+                       for p in ("sinif.py", "oyun_sim.py", "gozlem.py", "sina.py")},
            "veri_bitis": a.bitis.isoformat(), "bacak": sonuc, "davranis": davranis}
     (BURASI / "veri" / "sina.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     with __import__("gzip").open(BURASI / "veri" / "sina_islemler.csv.gz", "wt", encoding="utf-8") as f:
