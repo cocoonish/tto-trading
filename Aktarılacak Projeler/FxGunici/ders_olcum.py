@@ -25,7 +25,8 @@ kaydedilmiş işlem dosyalarından (tatil_betimi; ön kayıt dışı, betimleyic
 TANIMI — ilk sonuçlardan sonra değişen ay sonu tanımının (ayın son hafta içi günü → son Londra iş
 günü) ay sonu ayrımına etkisi, işlem dosyalarından (ay_sonu_eski_tanim; işlemler iki tanımda aynı,
 yalnız bayrak değişir); (7) DOKUZUNCU DERSİN ÖLÇÜLERİ — kuralların neden kaybettiği (basarisiz.py;
-iki pencere de görüldükten sonra kuruldu, hepsi betimleyici). Yedisinin tanımı aşağıda, fonksiyonun
+iki pencere de görüldükten sonra kuruldu, hepsi betimleyici); (8) KISA SERİNİN ÖLÇÜLERİ — stop ve hedef
+seçiminin kazanma oranına ve net sonuca etkisi, eşli kıyasla (kisa.py; betimleyici). Sekizinin tanımı aşağıda, fonksiyonun
 ya da modülün kendisinde. Seçilenin komşuları (komsular) ve ay sonu ailesi (ay_sonu_ailesi)
 ölçüm değil, koşu çıktısının okunuşudur: ızgaranın satırları ve ay sonu ayrımları olduğu gibi.
 
@@ -48,6 +49,7 @@ import pandas as pd
 import adlar
 import ayar as ay
 import basarisiz
+import kisa
 import metrik as mk
 import onkayit_gecmis as og
 import saglamlik as sg
@@ -1568,6 +1570,8 @@ def kur(kok: Path | None = None) -> dict:
     }
     # Dokuzuncu dersin ölçüleri (betimleyici): ölçümün kendi kayıtlarını da okur, en sonda kurulur.
     olcum["basarisiz"] = basarisiz.bolum(kok, olcum, a, _islem_dosyasi)
+    # Kısa serinin ölçüleri (betimleyici): stop ve hedef seçiminin kazanma oranına ve net sonuca etkisi (kisa.py).
+    olcum["kisa"] = kisa.bolum(kok, birimler)
     tutarlilik(olcum, a)
     # Kod künyesi en sonda: ölçüm sırasında yüklenen her proje modülü listeye girsin.
     olcum["kunye"]["kod"] = kod_kunyesi()

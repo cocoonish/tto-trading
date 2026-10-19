@@ -79,11 +79,11 @@ YAYIN_ILK = "ölçüm"
 
 def yayin_yollari() -> list[Path]:
     """Yayın katmanının dosyaları: ölçüm dosyası, figür dizini (sekil.py ve ders_yaz.py'nin ön kayıt kopyası) ve serinin
-    dersleri. Liste ders sırasından (adlar.DERS_SIRA) kurulur; elle tutulan bir ders listesi yeni bir dersi dışarıda bırakırdı."""
+    dersleri. Liste ders sırasından (adlar.TUM_DERSLER) kurulur; elle tutulan bir ders listesi yeni bir dersi dışarıda bırakırdı."""
     import adlar
     icerik = KOK / "site" / "src" / "content" / "arastirma"
     return ([BURASI / "cikti" / "ders" / "olcum.json", KOK / "site" / "public" / "arastirma" / "fx-gunici"]
-            + [icerik / f"{s}.mdx" for s in adlar.DERS_SIRA])
+            + [icerik / f"{s}.mdx" for s in adlar.TUM_DERSLER])
 
 
 class Yedek:

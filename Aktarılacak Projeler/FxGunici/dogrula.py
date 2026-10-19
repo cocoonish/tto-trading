@@ -15,7 +15,8 @@ depodaki ölçüm dosyasıdır (cikti/ders/olcum.json); ağa çıkmaz, duvar saa
      sığmalıdır (ölçü çizim katmanının kendisinden: sekil_ortak.tasan_satirlar).
   3. Sayı envanteri — şablonlardaki her ondalık sayı ve yüzde ya bir yer tutucudan gelir, ya bildirilmiş bir sabittir
      ({{= "…" }}), ya da aşağıdaki tanım listesindedir. Elle yazılmış bir ölçüm şablona giremez.
-  4. Sıra — serinin okuma sırası (adlar.DERS_SIRA) sitedeki ders grubunun sırasıyla aynıdır; ön koşullar seridedir.
+  4. Sıra — serinin okuma sırası (adlar.DERS_SIRA) sitedeki ders grubunun sırasıyla aynıdır; ön koşullar kendi listesindedir
+     (kısa seri · arşiv) ve durum alanı listesine uyar (aktif · arsiv).
   5. Ön kayıt — yayımlanan kopya kaynağın kendisidir.
   6. Künye — ölçüm dosyasının pariteleri, nokta/pip büyüklükleri ve penceresi bugünkü ayarla aynıdır.
   7. Ön kaydın geçmişi — ölçüm dosyasının taşıdığı geçmiş beklenen geçmiştir (onkayit_gecmis.BEKLENEN) ve ön kaydın
@@ -82,7 +83,7 @@ TANIM = {"%95", "%5", "%50", "%30", "%70", "0,0001", "0,01", "0,95"}
 
 #: Ölçüt 12'nin asgari kapsamları (kapının kendi kümesi; sınanan listeler bunları taşımalı).
 OLCUM_KODU_ASGARI = {"ders_olcum.py", "adlar.py", "kosu.py", "motor.py", "strateji.py", "strat_haber.py", "takvim.py",
-                     "metrik.py", "saglamlik.py", "basarisiz.py"}
+                     "metrik.py", "saglamlik.py", "basarisiz.py", "kisa.py"}
 SEKIL_KODU_ASGARI = {"Aktarılacak Projeler/FxGunici/sekil.py", "Aktarılacak Projeler/FxGunici/sekil_ortak.py",
                      "Aktarılacak Projeler/FxGunici/adlar.py", "site/tools/plotly_stil.py"}
 
@@ -715,20 +716,24 @@ def sira_denetimi() -> list[str]:
     ts_sira = re.findall(r"'([^']+)'", m.group(1))
     if ts_sira != adlar.DERS_SIRA:
         hata.append(f"ders sırası ayrışıyor: site {ts_sira} ↔ seri {adlar.DERS_SIRA}")
-    for slug in adlar.DERS_SIRA:
-        sablon = (BURASI / "metin" / f"{slug}.md").read_text(encoding="utf-8")
-        on = re.search(r"\nonkosul:\n((?:\s+- .+\n)+)", sablon)
-        for s in (re.findall(r"- (\S+)", on.group(1)) if on else []):
-            if s not in adlar.DERS_SIRA:
-                hata.append(f"{slug}: ön koşul seride değil: {s}")
-            elif adlar.DERS_SIRA.index(s) >= adlar.DERS_SIRA.index(slug):
-                hata.append(f"{slug}: ön koşul kendisinden sonra geliyor: {s}")
+    for liste, beklenen in ((adlar.DERS_SIRA, "aktif"), (adlar.ARSIV_SIRA, "arsiv")):
+        for slug in liste:
+            sablon = (BURASI / "metin" / f"{slug}.md").read_text(encoding="utf-8")
+            d = re.search(r"^durum:\s*'(\w+)'", sablon, flags=re.M)
+            if not d or d.group(1) != beklenen:
+                hata.append(f"{slug}: durum '{d.group(1) if d else '—'}', beklenen '{beklenen}'")
+            on = re.search(r"\nonkosul:\n((?:\s+- .+\n)+)", sablon)
+            for s in (re.findall(r"- (\S+)", on.group(1)) if on else []):
+                if s not in liste:
+                    hata.append(f"{slug}: ön koşul kendi listesinde değil: {s}")
+                elif liste.index(s) >= liste.index(slug):
+                    hata.append(f"{slug}: ön koşul kendisinden sonra geliyor: {s}")
     return hata
 
 
 def main() -> int:
     hata: list[str] = []
-    var = [s for s in adlar.DERS_SIRA if (dy.ICERIK / f"{s}.mdx").exists()]
+    var = [s for s in adlar.TUM_DERSLER if (dy.ICERIK / f"{s}.mdx").exists()]
     hata += sayi_envanteri()
     hata += tsi_denetimi()
     hata += sira_denetimi()
@@ -742,8 +747,8 @@ def main() -> int:
             return 1
         print("✓ FX gün içi: dersler henüz sitede değil; şablon ve sıra ölçütleri geçti, yeniden üretim sınanmadı")
         return 0
-    if len(var) != len(adlar.DERS_SIRA):
-        hata.append(f"serinin bir kısmı sitede: {len(var)} / {len(adlar.DERS_SIRA)}")
+    if len(var) != len(adlar.TUM_DERSLER):
+        hata.append(f"serinin bir kısmı sitede: {len(var)} / {len(adlar.TUM_DERSLER)}")
     if not dy.OLCUM.exists():
         hata.append(f"ölçüm dosyası yok: {dy.OLCUM.relative_to(dy.KOK)}")
     else:
@@ -794,7 +799,7 @@ def main() -> int:
     if hata:
         print("✗ FX gün içi:\n  " + "\n  ".join(hata))
         return 1
-    print(f"✓ FX gün içi: {len(adlar.DERS_SIRA)} ders ölçümden birebir üretiliyor; figürler, sayılar, sıra, ön kayıt")
+    print(f"✓ FX gün içi: {len(adlar.DERS_SIRA)} ders + {len(adlar.ARSIV_SIRA)} arşiv dersi ölçümden birebir üretiliyor; figürler, sayılar, sıra, ön kayıt")
     return 0
 
 

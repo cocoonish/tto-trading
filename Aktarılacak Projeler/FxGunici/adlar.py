@@ -43,11 +43,16 @@ DERS_BIRIM = {
     "fx-gunici-akis": ["fiks_momentum", "momentum", "vwap_cekilme"],
 }
 
-#: Serinin okuma sırası (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır; dogrula.py iki
-#: listeyi karşılaştırır).
-DERS_SIRA = ["fx-gunici-giris", "fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari", "fx-gunici-fade",
-             "fx-gunici-haber", "fx-gunici-akis", "fx-gunici-karsilastirma", "fx-gunici-metodoloji",
-             "fx-gunici-neden-basarisiz"]
+#: Serinin okuma sırası: yayındaki kısa seri (sitedeki ders grubu `site/src/lib/dersGruplari.ts` aynı sırayı taşır;
+#: dogrula.py iki listeyi karşılaştırır).
+DERS_SIRA = ["fx-gunici-sonuc", "fx-gunici-stop-hedef", "fx-gunici-kontrol"]
+#: Arşivdeki dokuz uzun ders (karar 19.10.2026: kısa seri yerlerini aldı). Sitede `durum: 'arsiv'` taşırlar, listelerde
+#: görünmezler, adresleri açık kalır; ölçümden birebir üretilmeye ve kapıdan geçmeye devam ederler.
+ARSIV_SIRA = ["fx-gunici-giris", "fx-gunici-seans-kirilimlari", "fx-gunici-yapi-kirilimlari", "fx-gunici-fade",
+              "fx-gunici-haber", "fx-gunici-akis", "fx-gunici-karsilastirma", "fx-gunici-metodoloji",
+              "fx-gunici-neden-basarisiz"]
+#: Üretilen bütün dersler (yayındaki seri, sonra arşiv).
+TUM_DERSLER = DERS_SIRA + ARSIV_SIRA
 
 #: Parametrelerin okur adı ve değerlerinin okur yazımı.
 PARAM = {

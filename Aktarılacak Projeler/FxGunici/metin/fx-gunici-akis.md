@@ -3,7 +3,7 @@ title: 'FX Gün İçi Stratejiler 6: Akış — Fiksing Momentumu, Gün İçi Mo
 description: "Fiyata değil akışa bakan üç kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: WM/R 16:00 fiksingine giden dakikalarda itişin yönünde işlem (ay sonu ayrı), Londra'nın ilk saatinin New York öğleden sonrasını öngörüp öngörmediği (Newey–West regresyonuyla) ve gün içi trendde VWAP'a geri çekilmede trend yönünde giriş. Kural, örnek günler, sonuç, maliyet, rastgele yön sınaması, koşullar ve hüküm."
 pubDate: 2026-10-17
 tags: ['fx', 'gun-ici', 'fiksing', 'momentum', 'vwap', 'backtest', 'ders']
-durum: 'aktif'
+durum: 'arsiv'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
 ozet: "Öngörülebilir saatlerde gelen akışın izini süren üç kural: fiksinge giden emirler, günün ilk hareketini öğleden sonra tamamlayan katılımcılar ve trendin ortalama fiyatına dönen alıcılar. İkisi (fiksing momentumu ve VWAP geri çekilmesi) fade dersindeki karşılığıyla yan yana ölçülür. Üçü de hiçbir paritede önceden kayıtlı hüküm kuralının şartlarını sağlamıyor: maliyetten sonra kanıtlanmış bir kenar yok.{{! ay_sonu_istisna }}{{! kural_iddia calisan_yok fiks_momentum momentum vwap_cekilme }}"
 seviye: 'orta'
@@ -11,6 +11,8 @@ onkosul:
   - fx-gunici-giris
   - fx-gunici-fade
 ---
+
+<div class="not gezinme"><span class="etiket">Arşiv</span> Bu ders serinin ayrıntılı yöntem notlarındandır ve arşivdedir. Serinin sade hâli üç kısa derste: [1 · Hangisi işe yarıyor?](/arastirma/fx-gunici-sonuc/) · [2 · Stop ve hedef](/arastirma/fx-gunici-stop-hedef/) · [3 · Kontrol listesi](/arastirma/fx-gunici-kontrol/).</div>
 
 Kırılım ve fade kuralları bir **seviyeye** bakar: bir aralığın ucu, dünün tepesi, bir pivot. Bu dersin üç kuralı
 seviyeye değil **akışa** bakar — belli saatlerde gelen, büyüklüğü ve yönü önceden bilinmese de varlığı bilinen emir

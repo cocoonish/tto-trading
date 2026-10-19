@@ -5281,3 +5281,27 @@ metodoloji: deflated Sharpe getirilerin normal olmamasını da düzeltir) ve hi�
 göstermediği bir şeyi "belgelenmiş" diye yazan iki cümle (akış ve seans kırılımları dersleri, Melvin–Prins) tarihli
 düzeltme notu aldı; yalnız niteleme ekleyenler (dönem, mekanizma, ikinci şişirme kaynağı) not almadı, çünkü eski
 cümle yanlış değil eksikti.
+
+**KARAR (19.10.2026, kullanıcı) — FX GÜN İÇİ SERİSİ ÜÇ KISA DERSE İNDİ; DOKUZ UZUN DERS ARŞİVDE.** Kullanıcı:
+"Çok fazla ayrıntılı ve kalabalık olmuş … daha kolay anlaşılabilecek hale getirelim, stop/TP nasıl seçilirse win rate
+pozitif olabilir bunlara bakalım … daha pratik anlatmamız gerekli". İki seçenek soruldu ve ikisi de seçildi: dokuz ders
+yayından kalkar, yerine kısa seri gelir; sayılar yalnız ana sayılardır (kazanma oranı, işlem başına net R, maliyet;
+güven aralığı ve istatistik terimi en çok bir cümle). Seri `adlar.DERS_SIRA`: `fx-gunici-sonuc` (hangisi işe yarıyor —
+kural başına kazanma oranı ile kâra geçmek için gereken oran yan yana), `fx-gunici-stop-hedef` (gereken oranın hesabı,
+maliyetin stop uzaklığına göre payı, eşli kıyas), `fx-gunici-kontrol` (kendiniz denemeden önce altı madde). Dokuzu
+`adlar.ARSIV_SIRA`'da: `durum: 'arsiv'`, başında yeni seriye bağlanan bir not; ölçümden birebir üretilmeye ve kapıdan
+geçmeye devam eder (`adlar.TUM_DERSLER`), sitede ders listelerinde, ana sayfada ve hakkında sayımında GÖRÜNMEZ
+(`site/src/lib/dersListesi.ts` arşivi listeden süzer, ön koşul başlıkları bütün derslerden okunur), adresleri ve arama
+endeksi kaydı açık kalır. Kapının 4. ölçütü durum alanının listeye uyduğunu ve ön koşulun kendi listesinde olduğunu
+sorar. Arşiv kuralı `arastirma` koleksiyonuna özgüdür; öbür koleksiyonlarda arşiv hâlâ listede sona düşer.
+Kısa serinin bütün yeni sayıları `kisa.py`den (`olcum["kisa"]`) ya da arşiv derslerinin ölçüm bloklarından gelir;
+elle yazılmış sayı yok. "Stop ve hedef nasıl seçilirse kazanma oranı artı olur" sorusunun ölçülmüş cevabı derste
+manşettir: kazanma oranı stop ve hedefle istenen yere çekilir (eşli kıyasta hedef 1R → 2R kazanma oranını ~10 puan
+düşürüyor, net R'yi ~0,01 değiştiriyor), net sonuç çekilmez; stopu yaklaştırmak maliyeti R cinsinden büyütüp sonucu
+kötüleştiriyor; kapanış stopu kazanma oranını yükseltip kaybedenlerin bir kısmını riskin iki katının ötesine taşıyor.
+Ders bunu ızgaranın 5.932 ayarında betimleme olarak verir: hükümler ön kayıtlı varsayılanlarındır ve değişmedi.
+Yazarken iki sınıf ölçülerek kapandı. (1) SAYIYA EK GETİREN CÜMLE ÜRETİCİYE AİT DEĞİLDİR: "%22'i" — ek sayının
+okunuşuna bağlı (yirmi iki → "si") ve sayı ölçümle değişir; cümle sayıyı ekten ayırır ("payı %22"). (2) BİR ŞEKLİN
+BAŞLIĞI GÖRÜNENİ SÖYLEMELİ: "kazanma oranı değişiyor, sonuç değişmiyor" başlığı, sağa doğru hafifçe yükselen bulutun
+üstündeydi (kazanma oranı yüksek ayarlar daha az kaybettiriyor); başlık "sonuç çoğunlukla eksi"ye çekildi ve
+eğimin ölçüsü metne yazıldı. Ekseni kesilen şekil kestiği nokta sayısını alt yazıda söyler.

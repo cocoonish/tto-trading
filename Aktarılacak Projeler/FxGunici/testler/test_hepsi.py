@@ -72,5 +72,5 @@ def test_basarili_zincir_katmani_birakir(tmp_path, monkeypatch):
 def test_yayin_katmani_ders_sirasini_kapsar():
     import adlar
     yollar = {p.name for p in hepsi.yayin_yollari()}
-    assert {f"{s}.mdx" for s in adlar.DERS_SIRA} <= yollar
+    assert {f"{s}.mdx" for s in adlar.TUM_DERSLER} <= yollar
     assert {"olcum.json", "fx-gunici"} <= yollar

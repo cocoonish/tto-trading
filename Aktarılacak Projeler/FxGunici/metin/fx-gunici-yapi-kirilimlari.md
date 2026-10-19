@@ -3,7 +3,7 @@ title: 'FX Gün İçi Stratejiler 3: Yapı Kırılımları — İç Mum, Sıkı�
 description: "Bir fiyat yapısının ya da referans seviyesinin kırılmasına dayanan dört kural, dört majör paritede ve 2018–2026 bid/ask verisiyle: iç mum (inside bar) kırılımı, Bollinger–Keltner sıkışması, önceki günün tepe ve dibinin kırılımı ve klasik (salon) pivotlarının (R1/S1) kırılımı. Kural, örnek günler, örneklem içi ve dışı sonuç, maliyet, rastgele yön sınaması, koşullar, kontrol listesi ve hüküm."
 pubDate: 2026-10-17
 tags: ['fx', 'gun-ici', 'kirilim', 'inside-bar', 'pivot', 'backtest', 'ders']
-durum: 'aktif'
+durum: 'arsiv'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
 ozet: "Seansın saatine değil fiyatın kendi yapısına bakan dört kırılım kuralı: dar bir mumun, sakin bir oynaklık döneminin, dünün uçlarının ve pivot seviyelerinin kırılması. Dördünde de örneklem dışında (2024 →) yön seçimi hiçbir paritede rastgele yönden ayrışmıyor{{! rastgele_tum_istisna icmum sikisma pdhl pivot_kirilim }} ve maliyetten sonra kanıtlanmış bir kenar yok.{{! kural_iddia rastgele_yok icmum sikisma pdhl pivot_kirilim }}{{! kural_iddia calisan_yok icmum sikisma pdhl pivot_kirilim }}"
 seviye: 'orta'
@@ -11,6 +11,8 @@ onkosul:
   - fx-gunici-giris
   - fx-gunici-seans-kirilimlari
 ---
+
+<div class="not gezinme"><span class="etiket">Arşiv</span> Bu ders serinin ayrıntılı yöntem notlarındandır ve arşivdedir. Serinin sade hâli üç kısa derste: [1 · Hangisi işe yarıyor?](/arastirma/fx-gunici-sonuc/) · [2 · Stop ve hedef](/arastirma/fx-gunici-stop-hedef/) · [3 · Kontrol listesi](/arastirma/fx-gunici-kontrol/).</div>
 
 Seans kırılımları saati seçer: Londra açılışı, New York'un sabahı. Bu dersin dört kuralı saati değil **yapıyı**
 seçer. İç mum, bir mumun bir öncekinin içinde kalmasıyla oluşan küçük bir sıkışmadır. Bollinger–Keltner sıkışması aynı

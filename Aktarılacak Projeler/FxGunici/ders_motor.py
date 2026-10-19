@@ -6600,7 +6600,137 @@ def blok_kaynaklar(u: Uretim, ctx: dict, slug: str) -> str:
     return "\n".join(f"- {x['kunye']}" + (f" ({x['surum']})" if x.get("surum") else "") for x in k)
 
 
+# ─────────────────────────────────────────────────────────────── kısa seri (fx-gunici-sonuc · stop-hedef · kontrol)
+def _kisa(u: Uretim) -> dict:
+    k = u.O.get("kisa")
+    if not k:
+        raise SablonHatasi("ölçümde kısa serinin kaydı yok (kisa)")
+    return k
+
+
+def blok_kisa_kural_tablo(u: Uretim, ctx: dict) -> str:
+    """Kural başına sade sonuç: kazanma oranı, kâra geçmek için gereken kazanma oranı, işlem başına net R (dört
+    paritenin işlemleri birlikte, örneklem dışı, maliyetten sonra) ve dört paritedeki hüküm sayımı. Sıra: kazanma
+    oranının gerekene en yakın olduğu kural önce."""
+    h = (((u.O.get("basarisiz") or {}).get("basabas") or {}).get("havuz") or {}).get("oos") or {}
+    if not h:
+        raise SablonHatasi("ölçümde başabaş havuzu yok")
+    sira = sorted(h, key=lambda b: (-(h[b]["isabet"] - h[b]["pstar"]), b))
+    govde, stopsuz = [], False
+    for b in sira:
+        bb = u.O["birim"][b]
+        ss = ((bb.get("varsayilan") or {}).get("stop_turu")) == "yok"
+        stopsuz |= ss
+        govde.append([adlar.BIRIM[b][1] + (" ‡" if ss else ""), _hucre(h[b]["isabet"], "yz1"),
+                      _hucre(h[b]["pstar"], "yz1"), _hucre(h[b]["net"], "ra"), hukum_sayim_yaz(bb)])
+    not_ = ("_2024 → dönemi, dört paritenin işlemleri birlikte, makas ve kayma düşülmüş. \"Gereken\" kazanma oranı, "
+            "kuralın ortalama kazancı ve kaybının boyundan hesaplanır: kayıp / (kazanç + kayıp). Hüküm sütunu dört "
+            "paritenin her biri için ayrı verilen hükmün sayımıdır."
+            + (" ‡ Stopsuz kural: R, girişteki oynaklık (ATR) birimidir." if stopsuz else "") + "_")
+    return _tablo(["Kural", "Kazanma oranı", "Gereken", "İşlem başına (R)", "Dört paritede hüküm"], govde,
+                  ["l", "r", "r", "r", "l"]) + "\n\n" + not_
+
+
+KISA_HEDEF_AD = {"1R": "Yakın hedef (1R)", "2R": "Uzak hedef (2R)", "gun_sonu": "Hedef yok, gün sonunda çık"}
+
+
+def blok_kisa_hedef_ornek(u: Uretim, ctx: dict, birim: str) -> str:
+    """Tek kural, ana parite: öbür bütün ayarlar sabitken yalnız hedef değişince kazanma oranı ve işlem başına R."""
+    c = ana()
+    v = ((((u.O["birim"].get(birim) or {}).get("cift") or {}).get(c) or {}).get("varyant") or {}).get("hedef") or {}
+    if not v:
+        raise SablonHatasi(f"{birim}: {c} için hedef varyantı yok")
+    govde = [[KISA_HEDEF_AD.get(h, h), _hucre((x.get("oos") or {}).get("isabet"), "yz1"),
+              _hucre((x.get("oos") or {}).get("beklenti_r"), "ra"), _hucre((x.get("oos") or {}).get("n"), "n")]
+             for h, x in v.items()]
+    return _tablo(["Hedef", "Kazanma oranı", "İşlem başına (R)", "İşlem"], govde) + \
+        f"\n\n_{adlar.BIRIM[birim][1]}, {PARITE[c]}, 2024 →; stop, saat ve mum aynı, yalnız hedef değişiyor._"
+
+
+KISA_GRUP_AD = {"yakin": "Yakın hedef (1R)", "uzak": "Uzak hedef (2R)", "hedefsiz": "Hedefsiz (gün sonu ya da süre)",
+                "ozel": "Kurala özgü hedef"}
+
+
+def blok_kisa_grup_tablo(u: Uretim, ctx: dict) -> str:
+    k = _kisa(u)
+    govde = [[KISA_GRUP_AD[g], _hucre(k["grup"][g]["n"], "n"), _hucre(k["grup"][g]["isabet"], "yz1"),
+              _hucre(k["grup"][g]["r"], "ra"), _hucre(k["grup"][g]["ikisi_arti"], "n")]
+             for g in k["grup_sira"] if k["grup"].get(g, {}).get("n")]
+    return _tablo(["Hedef türü", "Ayar", "Kazanma oranı", "İşlem başına (R)", "İki dönemde de artı"], govde) + \
+        ("\n\n_Kazanma oranı ve R, 2024 → dönemindeki ayarların medyanı. \"İki dönemde de artı\": hem 2018–2023'te hem "
+         "2024 →'de işlem başına sonucu sıfırın üstünde olan ayar sayısı._")
+
+
+KISA_ESLI_AD = {"hedef": ("Hedefi uzat", "1R → 2R"), "stop_turu": ("Stopu kapanışa çevir", "sert → kapanış"),
+                "stop_yeri": ("Stopu yaklaştır", "karşı uç → orta")}
+
+
+def blok_kisa_esli_tablo(u: Uretim, ctx: dict) -> str:
+    k = _kisa(u)
+    govde = []
+    for param, x in k["esli"].items():
+        if not x.get("n"):
+            continue
+        ad, deg = KISA_ESLI_AD[param]
+        govde.append([f"{ad} ({deg})", _hucre(x["n"], "n"),
+                      f"{_hucre(x['a_isabet'], 'yz1')} → {_hucre(x['b_isabet'], 'yz1')}",
+                      f"{_hucre(x['a_r'], 'ra')} → {_hucre(x['b_r'], 'ra')}", _hucre(x["b_iyi_pay"], "yz0")])
+    return _tablo(["Değişiklik", "Ayar çifti", "Kazanma oranı", "İşlem başına (R)", "Sonucu iyileşen çift"], govde) + \
+        ("\n\n_Her çift aynı kural, aynı parite ve aynı öbür ayarlar; yalnız satırdaki seçim değişiyor. Sayılar 2024 → "
+         "dönemindeki çiftlerin medyanı._")
+
+
+#: Maliyet tablosunun örnek stop uzaklıkları (pip) ve hedefleri (R).
+KISA_STOP_PIP = (5, 10, 15, 20, 30)
+
+
+def blok_kisa_maliyet_stop(u: Uretim, ctx: dict) -> str:
+    """Ölçülen medyan maliyetle (pip, gidiş-dönüş) stop uzaklığına göre maliyetin R içindeki payı ve kâra geçmek için
+    gereken kazanma oranı, 1R ve 2R hedefte. Gereken = (S + c) / ((k + 1)·S): kazanç kS − c, kayıp S + c."""
+    c = float(((u.O["basarisiz"]["basabas"]).get("maliyet_pip") or {})["medyan"])
+    govde = []
+    for s_ in KISA_STOP_PIP:
+        govde.append([f"{s_} pip", _hucre(c / s_, "yz0"), _hucre((s_ + c) / (2 * s_), "yz1"),
+                      _hucre((s_ + c) / (3 * s_), "yz1")])
+    return _tablo(["Stop uzaklığı", "Maliyetin R'deki payı", "Gereken, 1R hedef", "Gereken, 2R hedef"], govde) + \
+        (f"\n\n_Maliyet, serinin işlemlerinde ölçülen medyan gidiş-dönüş maliyeti: {sayi(c, 1)} pip (makas + kayma). "
+         "Maliyetsiz bir dünyada gereken oran 1R hedefte %50, 2R hedefte üçte birdir._")
+
+
+def blok_kisa_parite_maliyet(u: Uretim, ctx: dict) -> str:
+    """Parite başına ölçülen medyan makas ve modelin kayması: bir işlemin gidiş-dönüş maliyeti (pip)."""
+    k = u.O["kunye"]
+    kay = 2 * float(k["temel_kayma_pip"])
+    govde = []
+    for c in PARITE:
+        m = ((((u.O.get("veri") or {}).get("kalite") or {}).get(c) or {}).get("makas") or {}).get("medyan_pip")
+        if m is None:
+            raise SablonHatasi(f"{c}: makas ölçümü yok")
+        govde.append([PARITE[c], _hucre(m, "s1"), _hucre(kay, "s1"), _hucre(m + kay, "s1")])
+    return _tablo(["Parite", "Makas (medyan, pip)", "Kayma (iki dolum, pip)", "Bir işlemin maliyeti (pip)"], govde) + \
+        (f"\n\n_Makas, 2018 → verisinin dakika dakika ölçülen medyanı; kayma modelin varsayımı: dolum başına "
+         f"{sayi(float(k['temel_kayma_pip']), 1)} pip, haber penceresinde ayrıca {sayi(float(k['haber_kayma_pip']), 1)} pip. "
+         "Makas haber anında ve gün dönümünde birkaç katına çıkar; tablodaki sakin saatlerin maliyetidir._")
+
+
+KISA_SIKLIK = {"gunde": "Günde bir işlem", "haftada": "Haftada bir işlem", "ayda": "Ayda bir işlem"}
+
+
+def blok_kisa_guc_tablo(u: Uretim, ctx: dict) -> str:
+    """Kaç yıllık kayıtla ne büyüklükte bir kenar sıfırdan ayırt edilir (tek yönlü %5, %80 güç): basarisiz.guc.mde."""
+    m = u.O["basarisiz"]["guc"]["mde"]
+    yillar = sorted(next(iter(m["tablo"].values())), key=int)
+    govde = [[KISA_SIKLIK.get(s_, s_)] + [_hucre(m["tablo"][s_][y], "s2") for y in yillar] for s_ in KISA_SIKLIK
+             if s_ in m["tablo"]]
+    return _tablo(["Sıklık"] + [f"{y} yıl" for y in yillar], govde) + \
+        (f"\n\n_Hücre: o sıklık ve sürede sıfırdan ayırt edilebilecek en küçük kenar, R / işlem. İşlem sonuçlarının "
+         f"oynaklığı serinin ölçülen değeri ({sayi(float(m['sigma']), 2)} R); %80 olasılıkla, tek yönlü %5 düzeyinde._")
+
 BLOKLAR = {
+    "kisa_kural_tablo": blok_kisa_kural_tablo, "kisa_hedef_ornek": blok_kisa_hedef_ornek,
+    "kisa_grup_tablo": blok_kisa_grup_tablo, "kisa_esli_tablo": blok_kisa_esli_tablo,
+    "kisa_maliyet_stop": blok_kisa_maliyet_stop, "kisa_parite_maliyet": blok_kisa_parite_maliyet,
+    "kisa_guc_tablo": blok_kisa_guc_tablo,
     "kaynaklar": blok_kaynaklar,
     "kurallar": blok_kurallar, "neden_yon_cumle": blok_neden_yon_cumle, "neden_rastgele": blok_neden_rastgele,
     "neden_basabas": blok_neden_basabas, "neden_ayrisim": blok_neden_ayrisim, "neden_esik": blok_neden_esik,

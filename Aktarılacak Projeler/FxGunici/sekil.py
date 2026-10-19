@@ -1575,6 +1575,87 @@ def neden_guc(o: dict) -> None:
 NEDEN_SEKILLERI = (neden_basabas, neden_anatomi, neden_olcek, neden_kenar, neden_sans, neden_maliyet_esigi,
                    neden_ay_sonu, neden_guc)
 
+# ─────────────────────────────────────────────────────── kısa seri (kisa-*.html)
+#: Kısa serinin hedef grupları: okur adı, renk ve işaret (renk tek başına kimlik taşımaz). Sıra ölçümün kendisinden (kisa.grup_sira).
+KISA_GRUP = {"yakin": ("yakın hedef (1R)", MAVI, "circle"), "uzak": ("uzak hedef (2R)", CLARET, "diamond"),
+             "hedefsiz": ("hedefsiz: gün sonu ya da süre dolunca", TURUNCU, "square"),
+             "ozel": ("kurala özgü hedef (VWAP, seviye…)", "#c9c4ba", "circle-open")}
+
+
+def _kisa(o: dict) -> dict:
+    k = o.get("kisa")
+    if not k:
+        raise SystemExit("ölçümde kısa serinin kaydı yok (kisa)")
+    return k
+
+
+def kisa_kurallar(o: dict) -> None:
+    """Kural başına kazanma oranı ve kâra geçmek için gereken kazanma oranı (maliyetten sonra, dört paritenin
+    havuzu, örneklem dışı); aradaki fark kuralın kaybıdır."""
+    h = _bs(o)["basabas"]["havuz"]["oos"]
+    sira = sorted(h, key=lambda b: (h[b]["isabet"] - h[b]["pstar"], b))
+    ad = [_kural_ad(o, b) for b in sira]
+    fig = make_subplots(rows=1, cols=1, subplot_titles=("Kazanma oranı (%)",))
+    for b, a in zip(sira, ad):
+        fig.add_trace(go.Scatter(x=[100 * h[b]["isabet"], 100 * h[b]["pstar"]], y=[a, a], mode="lines",
+                                 line=dict(color="#c9c4ba", width=2), showlegend=False, hoverinfo="skip"), 1, 1)
+    fig.add_trace(go.Scatter(
+        x=[100 * h[b]["pstar"] for b in sira], y=ad, mode="markers", name="kâra geçmek için gereken",
+        marker=dict(symbol="line-ns-open", size=14, color=MUREKKEP, line=dict(width=2, color=MUREKKEP)),
+        hovertext=[f"{a}: gereken kazanma oranı {so.yuzde(100 * h[b]['pstar'], 1)}" for b, a in zip(sira, ad)],
+        hoverinfo="text"), 1, 1)
+    fig.add_trace(go.Scatter(
+        x=[100 * h[b]["isabet"] for b in sira], y=ad, mode="markers", name="gerçekleşen",
+        marker=dict(symbol="circle", size=9, color=[CLARET if h[b]["isabet"] < h[b]["pstar"] else MAVI for b in sira]),
+        hovertext=[f"{a}: kazanma oranı {so.yuzde(100 * h[b]['isabet'], 1)} · gereken {so.yuzde(100 * h[b]['pstar'], 1)}"
+                   f" · işlem başına {_r(h[b]['net'], 2)} R · {vir(h[b]['n'], 0)} işlem" for b, a in zip(sira, ad)],
+        hoverinfo="text"), 1, 1)
+    fig.update_xaxes(title_text="%", ticksuffix="")
+    bas = baslik_koy(fig, "Kazanma oranı ve kâra geçmek için gereken oran",
+                     [f"Dört paritenin işlemleri birlikte, {_dis(o)}, maliyetten sonra (makas + kayma)",
+                      "Gereken oran, ortalama kazanç ve kaybın boyundan: kayıp / (kazanç + kayıp)",
+                      "Daire çizginin solundaysa kural kaybettirir"])
+    so._yaz(fig, "kisa-kurallar.html", yukseklik(bas, 90 + 26 * len(sira)))
+
+
+def kisa_stop_hedef(o: dict) -> None:
+    """Izgaranın bütün ayarları: örneklem dışı kazanma oranı ile işlem başına net R, hedef türüne göre."""
+    k = _kisa(o)
+    sira = k["grup_sira"]
+    fig = make_subplots(rows=1, cols=1, subplot_titles=("İşlem başına net sonuç (R)",))
+    # Kurala özgü hedefler soluk ve en altta, sonra hedefsiz, uzak ve yakın (en kalabalık grup yakın hedefi örtmesin).
+    katman = ("ozel", "hedefsiz", "uzak", "yakin")
+    for gi in sorted(range(len(sira)), key=lambda i: katman.index(sira[i]) if sira[i] in katman else -1):
+        g = sira[gi]
+        ad, renk, isaret = KISA_GRUP[g]
+        x = [100 * p[0] for p in k["nokta"] if p[2] == gi]
+        y = [p[1] for p in k["nokta"] if p[2] == gi]
+        if not x:
+            continue
+        fig.add_trace(go.Scatter(
+            x=x, y=y, mode="markers", name=f"{ad} · {vir(len(x), 0)} ayar",
+            marker=dict(symbol=isaret, size=5 if g != "ozel" else 4, color=renk, opacity=0.55 if g != "ozel" else 0.7,
+                        line=dict(width=0)),
+            hovertemplate="kazanma oranı %{x:.1f}% · net %{y:.2f} R<extra>" + ad + "</extra>"), 1, 1)
+    fig.add_hline(y=0, line=dict(color=MUREKKEP, width=0.9))
+    fig.update_xaxes(title_text="kazanma oranı (%)")
+    # Eksen −1 R'de kesilir: birkaç uç ayar bulutu sıkıştırıyordu; kesilenlerin sayısı alt yazıda.
+    alt = -1.0
+    disarida = sum(1 for p in k["nokta"] if p[1] < alt)
+    fig.update_yaxes(range=[alt, 0.5])
+    t = k["toplam"]
+    bas = baslik_koy(fig, "Kazanma oranı ne olursa olsun, sonuç çoğunlukla eksi",
+                     [f"{vir(t['n'], 0)} ayar: {vir(t['kural'], 0)} kural × dört parite × ön kayıttaki stop, hedef ve "
+                      f"saat seçenekleri; {_dis(o)}, maliyetten sonra",
+                      f"Her nokta bir ayar; iki dönemde de en az {vir(k['asgari'], 0)} işlem. "
+                      f"Sıfırın üstünde (kârlı) {vir(t['oos_arti'], 0)} ayar",
+                      f"Eksen −1 R'de kesildi: altında kalan {vir(disarida, 0)} ayar gösterilmedi"])
+    so._yaz(fig, "kisa-stop-hedef.html", yukseklik(bas, 520))
+
+
+KISA_SEKILLERI = (kisa_kurallar, kisa_stop_hedef)
+
+
 
 def main(argv: list[str]) -> int:
     if go is None:
@@ -1599,7 +1680,7 @@ def main(argv: list[str]) -> int:
         for f in BIRIM_SEKILLERI:
             f(o, b)
     if not argv:
-        for f in (karsilastirma, maliyet, rastgele, veri, haber_patika, haber_fomc) + NEDEN_SEKILLERI:
+        for f in (karsilastirma, maliyet, rastgele, veri, haber_patika, haber_fomc) + NEDEN_SEKILLERI + KISA_SEKILLERI:
             f(o)
     return so.ev_stili(so.YAZILAN)
 

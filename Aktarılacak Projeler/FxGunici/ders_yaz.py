@@ -3,7 +3,7 @@
 """Ders metinleri: metin/<slug>.md şablonlarını ölçüm dosyasıyla MDX'e çevirir ve siteye yazar.
 
 Çıktı:
-  site/src/content/arastirma/<slug>.mdx            serinin dersleri (adlar.DERS_SIRA)
+  site/src/content/arastirma/<slug>.mdx            serinin dersleri (adlar.TUM_DERSLER: kısa seri ve arşiv)
   site/public/arastirma/fx-gunici/onkayit.toml     ön kaydın yayımlanan kopyası (metodoloji dersi bağ verir)
 
 Sayıların hepsi ölçüm dosyasından gelir. Bir şablonda bir iddia tutmazsa, bir yer tutucu ölçülemezse ya da bir
@@ -36,7 +36,7 @@ def uret(olcum_yol: Path = OLCUM) -> dict[str, tuple[str, dm.Uretim]]:
     o = dm.olcum_oku(olcum_yol)
     on = tomllib.loads(ONKAYIT.read_text(encoding="utf-8"))
     cikti = {}
-    for slug in adlar.DERS_SIRA:
+    for slug in adlar.TUM_DERSLER:
         sablon = (BURASI / "metin" / f"{slug}.md").read_text(encoding="utf-8")
         try:
             cikti[slug] = dm.ders_uret(sablon, o, on)
