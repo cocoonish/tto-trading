@@ -3,7 +3,7 @@
  "son_ceyrek": "2026-06-30",
  "son_dis_ceyrek": "2026-06-30",
  "son_hafta": "2026-10-09",
- "son_gun": "2026-10-15",
+ "son_gun": "2026-10-20",
  "esik": {
   "f3_bant": [
    -0.2,
@@ -29,12 +29,12 @@
   "deflator_taban_ay": "2026-08",
   "deflator_taban_endeks": 134.75,
   "tufe_son_ay": "2026-09",
-  "kapsam_farki_24ay": 0.059125758699284485,
+  "kapsam_farki_24ay": 0.05611294013185646,
   "kapsam_esik": 0.35,
   "fisher": {
    "carpimsal_artik_maks_pp": 4.440892098500626e-14,
-   "basit_cikarma_farki_maks_pp": 17.84062949138585,
-   "basit_cikarma_farki_son_pp": 1.5639323822433493,
+   "basit_cikarma_farki_maks_pp": 17.861957299871655,
+   "basit_cikarma_farki_son_pp": 1.5940242963780271,
    "not": "Reel değişim çarpımsal (Fisher) konvansiyonla hesaplanır: (1+nominal)/(1+deflatör) − 1. Basit çıkarma bu depoda yasak."
   }
  },
@@ -248,5 +248,8 @@
  ],
  "kapsam_notu": "Bu hat borç STOKUNU ve BÜTÇEYİ anlatır. İhale tarafı (teklif, karşılama, kesim faizi) Hazine İhraç hattındadır; iki sayfa birbirine referans verir, sayı tekrarlanmaz.",
  "eksik_veri_notu": "Merkezi yönetim borç stokunun SABİT / DEĞİŞKEN / TÜFE'ye endeksli kırılımı ve ORTALAMA VADESİ EVDS'te YOK (675 veri grubu tarandı). Bu üç kalem sayfada uydurma vekille doldurulmaz.",
- "uyarilar": []
+ "uyarilar": [
+  "TAZELİK: Brüt dış borç (üç aylık) son gözlemi 06.2026 (112 gün önce, tolerans 110 gün). Yayın durmuş olabilir.",
+  "TAZELİK: Finansal hesaplar (TCMB, üç aylık) son gözlemi 03.2026 (203 gün önce, tolerans 200 gün). Yayın durmuş olabilir."
+ ]
 }

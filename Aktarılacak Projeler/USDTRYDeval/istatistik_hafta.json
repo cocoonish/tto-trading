@@ -1,5 +1,5 @@
 {
- "hafta_segment": 42,
+ "hafta_segment": 43,
  "hafta_yil": 2026,
  "hafta_son_bas": "12.10.2026",
  "hafta_son_ort": 22.03,
@@ -7,6 +7,6 @@
  "hafta_zirve_bas": "25.05.2026",
  "hafta_zirve_ort": 31.4,
  "_sekil_tarih": {
-  "usdtry_weekly.html": "19.10.2026"
+  "usdtry_weekly.html": "20.10.2026"
  }
 }
