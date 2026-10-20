@@ -11,7 +11,7 @@ mumlar = [[50.0,50.4,49.7,50.2],[50.2,50.5,49.9,50.0],[50.0,50.3,49.7,50.1],[50.
 vurgu = [7]
 eksen = "zaman →  (5 dakikalık mumlar)"
 not = ["Açıklamadan önceki mumlar: bu dersin ölçtüğü her şey ilk mumla başlar; açıklamadan önceki dakikaların davranışı ölçülmedi.",
-       "Dar aralığın hemen dışında bekleyen stop emri: haber mumu onu tetikler ve dolum, emrin seviyesinin ötesinde olabilir. Süresine haber penceresi düşen emri açıklamadan önce çekersin; bu bir disiplin kuralıdır.",
+       "Dar aralığın hemen dışında bekleyen stop emri: haber mumu onu tetikler ve dolum, emrin seviyesinin ötesinde olabilir; süresine pencere düşen emri açıklamadan önce çekersin.",
        "Haber mumu: önce bir ucu süpürüp öbür yöne kapanabilir; mum kapanmadan sınıfı belli değildir."]
 [[sema.cizgi]]
 y = 50.6
@@ -279,9 +279,9 @@ id = "haber-oncesi"
 hukum = "olculmedi"
 durum = "Açıklamaya on dakika kala, ABD verisinden ya da bir merkez bankası kararından önce, açık bir emirle ya da pozisyonla masadasın"
 gorursun = "Mumlar küçülmüş, aralık birkaç dakikadır dar; takvimde saati belli bir açıklama var ve fiyat onu bekliyor."
-yaparsin = "Süresine haber penceresi (açıklamadan iki dakika önce ile on beş dakika sonrası) düşen bekleyen emri açıklamadan önce çekersin; bu bir disiplin kuralıdır, ölçüm sonucu değil. Açık pozisyonun stopunun ilk mumun tipik boyu kadar bir hareketin içinde kalıp kalmadığına bakarsın; açıklamanın saatini TSİ olarak not edersin."
+yaparsin = "Süresine haber penceresi (açıklamadan iki dakika önce – on beş dakika sonra) düşen emri açıklamadan önce çekersin (disiplin kuralı, ölçüm sonucu değil); açık pozisyonun stopunun ilk mumun tipik boyu kadar bir hareketin içinde kalıp kalmadığına bakarsın; açıklamanın saatini TSİ olarak not edersin."
 yapmazsin = "Açıklamadan saniyeler önce yön tahminiyle girmezsin; dar aralığın hemen dışına, haberi yakalamak için stop emri bırakmazsın."
-emir = "Bıraktığın stop emri haber mumunda seviyesinin ötesinde dolabilir; sınamadaki ek kayma bir varsayımdı, haber anındaki makas ve gerçek kayma ölçülmedi, emri çekmenin etkisi de ölçülmedi. Yeni bir işlemin emrini ilk mum kapanmadan koymazsın."
+emir = "Bıraktığın stop emri haber mumunda seviyesinin ötesinde dolabilir; ek kayma sınamada bir varsayımdı, haber anındaki makas ve gerçek kayma ölçülmedi. Yeni bir işlemin emrini ilk mum kapanmadan koymazsın."
 dayanak = "1. ders, Emri nereye koyarsın; 1. ders, İlk mumun dört sınıfı"
 
 [[kart]]
@@ -301,7 +301,7 @@ durum = "5 dakikalık grafikte, Fed, ECB ya da BoE kararından sonra güçlü ya
 gorursun = "Güçlüde tipik boyun belirgin üstünde, ucuna yakın kapanan bir mum; reddedilende bir yönde uzun fitil, küçük gövde. Basın toplantısı henüz başlamamış."
 yaparsin = "İşlem açmadan mumun yönünü ve iki ucunu işaretlersin; basın toplantısını izler, fiyatın mumun öbür ucuna gidip gitmediğine bakar, adayı deftere yazarsın."
 yapmazsin = "Birkaç karar gününden gelen artı sonucu bir kural saymazsın; basın toplantısının karar mumunun yönünde gideceğini varsaymazsın."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen giriş hâlâ haber penceresindedir ve sınamada ek kayma varsayıldı; stop mumun öbür ucunun ötesine gider ve pip cinsinden geniştir; hedef yakınsa başa baş için gereken kazanma oranı da yükselir. Basın toplantısı öbür ucu kırarsa okuma biter."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen giriş hâlâ haber penceresindedir; stop mumun öbür ucunun ötesine gider ve pip cinsinden geniştir; hedef yakınsa başa baş için gereken kazanma oranı da yükselir. Basın toplantısı öbür ucu kırarsa okuma biter."
 dayanak = "4. ders, Merkez bankası kararları; 5. ders, İşlem tepkileri; 1. ders, Kazanma oranı ile net sonuç"
 
 [[kart]]
@@ -311,7 +311,7 @@ durum = "5 dakikalık grafikte, Fed, ECB ya da BoE kararından sonra küçük il
 gorursun = "Tipik boyun çok altında bir mum; fiyat birkaç mumdur karar mumunun aralığında dolaşıyor, basın toplantısı henüz başlamadı."
 yaparsin = "Mumun iki ucunu işaretlersin; basın toplantısının saatini not edersin (Fed TSİ 21:30, ABD kış saatinde 22:30; ECB TSİ 15:45, Avrupa kış saatinde 16:45); hangi ucun önce kırıldığına bakarsın."
 yapmazsin = "Küçük mumu kararın etkisiz kaldığı diye okumazsın; ilk kırılımdan önce bir taraf seçmezsin; iki uca emir bırakmayı \"sıkışma patlar\" diye bir kenar saymazsın."
-emir = "Sınanan biçim iki uca birer kırılım emridir; biri dolunca öbürü iptal olur. Stop öbür ucun mum boyunun onda biri ötesinde, hedef riskin yarısı; bir R hedefli biçimler 2018–2023'te denendi ve artıda kalmadı, 2024 sonrasında sınanmadı. Makas ve kayma bu riskin görünür bir parçasıdır. Emir ilk mum kapandıktan bir saat sonra düşer."
+emir = "Sınanan biçim iki uca birer kırılım emridir, biri dolunca öbürü iptal; stop öbür ucun mum boyunun onda biri ötesinde, hedef riskin yarısı. Bir R hedefli biçimler 2018–2023'te artıda kalmadı, 2024 sonrasında sınanmadı. Emir ilk mum kapandıktan bir saat sonra düşer."
 dayanak = "4. ders, Küçük haber mumu; 5. ders, Maliyet nereye gidiyor; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]

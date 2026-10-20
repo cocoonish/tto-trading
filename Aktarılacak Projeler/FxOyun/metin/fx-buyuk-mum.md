@@ -79,8 +79,8 @@ Dört tür mum dışarıda bırakıldı ve sayıldı:
   ortasından ölçülen aralığı şişirir ({{ SAY.5.devir }} mum).
 - **Eksik veri.** Mumun ya da sonraki 24 mumun dakikalarının beşte birinden fazlası kotasyonsuz ({{ SAY.5.eksik }} mum).
   İzleme penceresi saatle ölçüldüğü için cuma günü piyasa kapanışına yakın mumların penceresi hafta sonuna taşar ve bu
-  kurala takılır. 1 saatlik grafikte etki büyük: pencere bir gün sürdüğü için perşembe akşamından sonraki mumlar ölçüye
-  girmez. Bütün dönemde (2018 → {{ ON.dis_bitis }}) bu kurala takılan 1 saatlik {{ SAYT.60.eksik }} mumun
+  kurala takılır. 1 saatlik grafikte etki büyük: pencere bir gün sürdüğü için perşembe akşamından sonra açılan 1 saatlik
+  mumlar ölçüye girmedi. Bütün dönemde (2018 → {{ ON.dis_bitis }}) bu kurala takılan 1 saatlik {{ SAYT.60.eksik }} mumun
   {{ SAYT.60.eksik_cuma }} tanesi cuma mumuydu; ABD istihdam raporunun (cuma) 1 saatlik mumu hiçbir 1 saatlik ölçüde
   yok. 15 dakikada bu sayılar {{ SAYT.15.eksik }} ve {{ SAYT.15.eksik_cuma }}.
 
@@ -105,12 +105,10 @@ grafikte hep "belliydi" gibi görünür. Ölçülmesi gereken, binlerce büyük 
 
 ### Masada: büyük mumu ekranda tanımak
 
-Bir mumun "büyük" olduğuna gözle karar vermek kolaydır ve yanıltıcıdır. Gözün kıyas noktası ekrandaki öbür mumlardır;
-bu dersin kıyas noktası ise bir önceki mumun ATR'sidir. Masada tanıma üç adımdır. Önce aynı dilimde ATR göstergesini
-açarsın ({{ SB.atr_n }} mum, Wilder yumuşatması) ve değeri büyük mumun **bir önceki** mumunda okursun: büyük mumun
-kendi ATR değeri büyük mumu da içerir ve eşiği kendiliğinden yükseltir. Sonra mumun yüksek ile düşüğünün farkını o
-değerle kıyaslarsın; en az iki katıysa mum bu dersin anlamında büyüktür. En sonda gövdeye bakarsın: gövde aralığın
-beşte birinden kısaysa mumun yönü yoktur ve yön okuması yapılmaz.
+Gözün kıyas noktası ekrandaki öbür mumlardır, bu dersinki bir önceki mumun ATR'sidir. Tanıma üç adımdır: aynı dilimde
+ATR'yi ({{ SB.atr_n }} mum, Wilder yumuşatması) büyük mumun **bir önceki** mumunda okursun, çünkü büyük mumun kendi ATR'si
+onu da içerir ve eşiği yükseltir; mumun aralığının o değerin en az iki katı olup olmadığına bakarsın; gövde aralığın
+beşte birinden kısaysa yön okuması yapmazsın.
 
 {{# sema tanima }}
 
@@ -196,10 +194,10 @@ yarıya dönüş farkıdır.
 
 ### Masada: 5 dakikada kovalamazsın
 
-5 dakikalık büyük mumdan sonraki tek ölçülmüş eğilim hafif bir geri vermedir ve büyüklüğü makastan küçüktür. Kapanışta
-mumun yönünde piyasa emriyle giren işlemci ortalama olarak geri vermenin içine girer ve üstüne makası öder (8. ders, 5
-dakika). Mumun tersine kapanışta giren işlemci geri vermeyi maliyetten önce yakalar, ama maliyetten sonra eksidedir.
-Geri verme bir işlem değil, bir uyarıdır: mumun yönünde gireceksen kapanıştan girmezsin.
+5 dakikalık büyük mumdan sonraki tek ölçülmüş eğilim, makastan küçük bir geri vermedir. Kapanışta mumun yönünde
+piyasa emriyle giren ortalama olarak bu geri vermenin içine girer ve üstüne makası öder; tersine giren onu maliyetten
+önce yakalar, maliyetten sonra eksidedir (8. ders, 5 dakika). Geri verme bir işlem değil, bir uyarıdır: mumun yönünde
+gireceksen kapanıştan girmezsin.
 
 Hangi 5 dakikalık mumda bu uyarı daha güçlü? 7. ders iki yer buldu ve ikisi de iki dönemde aynı yöne bakıyor:
 kapanışı ucuna yakın mum ve Asya seansındaki mum (Asya: New York 17:00 ile Londra 07:00 arası; TSİ iki ülke de yaz
@@ -232,16 +230,14 @@ giriş gerekçesi taşır. Mumu bağlam olarak not edersin (7. ders, 15 dakika).
 
 ### Masada: 1 saatte tersine girmezsin
 
-1 saatlik büyük mumda ortalama yol bir gün boyunca mumun yönündedir: 2018–2023'te aralığıyla, 2024 sonrasında yalnız
-nokta tahmini olarak. Bu küçük devamın masadaki en önemli sonucu bir giriş değil, bir yasaktır: mumun tersine giren
-işlemci bu yolun karşısında durur. 8. ders bunu giriş biçimleriyle ölçtü: stop 2 ATR, hedef 1 R satırında 1 saatte
-tersine giriş biçimleri 2018–2023'te maliyetten önce de eksiydi, 2024 sonrasında maliyetten önce sıfırın çevresinde
-kaldı, maliyetten sonra iki dönemde de eksi (8. ders, 15 dakika ve 1 saat).
+1 saatlik büyük mumda ortalama yol bir gün boyunca mumun yönündedir (2018–2023'te aralığıyla, 2024 sonrasında yalnız
+nokta tahmini olarak) ve bunun masadaki sonucu bir yasaktır: tersine giren bu yolun karşısında durur. 8. ders bunu
+ölçtü: stop 2 ATR, hedef 1 R satırında 1 saatte tersine giriş biçimleri 2018–2023'te maliyetten önce de eksiydi, 2024
+sonrasında maliyetten önce sıfırın çevresinde kaldı, maliyetten sonra iki dönemde de eksi (8. ders, 15 dakika ve 1 saat).
 
-Mumun yönündeki devam ise bir işlem çıkarmıyor: stoplu ve hedefli bir işlemde maliyetten önce işlem başına
-{{ G.60.ic.devam:piyasa:s2:h1.brut }} R. Kapanışı yarısının gerisinde kalan fitilli 1 saatlik mumda ve günlük trend
-yatayken mumun yönü korunmuyor (7. ders, 1 saat); bu iki hâl tersine girmenin gerekçesi değildir, yalnız mumun yönünün
-bağlam olarak okunmadığı yerlerdir.
+Mumun yönündeki devam da işlem çıkarmıyor: maliyetten önce işlem başına {{ G.60.ic.devam:piyasa:s2:h1.brut }} R.
+Kapanışı yarısının gerisinde kalan fitilli 1 saatlik mumda ve günlük trend yatayken mumun yönü korunmuyor (7. ders, 1
+saat); bu, tersine girmenin gerekçesi değildir.
 
 {{# sema bir-saat }}
 
@@ -263,8 +259,7 @@ tersine girişin aleyhine olduğunu söyler.
 
 Yarısına dönüşün medyan süresi: 5 dakikalık grafikte {{ D.5.ic.geri_dk }} dakika, 15 dakikalıkta
 {{ D.15.ic.geri_dk }} dakika, 1 saatlikte {{ D.60.ic.geri_dk }} dakika. Yani yarısına dönenlerin yarısında dönüş ilk
-bir iki mum içinde gelir. Bu, 8. dersteki limit emirlerin neden çoğu zaman dolduğunu açıklar; dolmanın neden iyi haber olmadığını 8. ders
-gösterir.
+bir iki mum içinde gelir; 8. dersteki limit emirlerin çoğu zaman dolması buradandır.
 
 Büyük mumların 5 dakikada {{ D.5.ic.geri_50_uc }} kadarında (ayna {{ D.5.ic.ayna_geri_50_uc }}) fiyat önce yarısına
 dönüp sonra yeniden mumun ucuna gitti; yarısına dönenler içinde bu pay {{ D.5.ic.geri_50_uc_kosul }} (ayna
@@ -335,16 +330,16 @@ penceresinde piyasa ve stop emirlerine ek kayma varsayıldı; haberdeki makas bu
 
 ## Emri nereye koyarsın
 
-Bu bölüm büyük mumdan bağımsız bir gerekçeyle girecek olan içindir; büyük mum o gerekçeyi güçlendirmez, yalnız emrin
-nasıl yazılacağını değiştirir. Emir biçimlerinin, stopun, hedefin, bekleme süresinin ve haber penceresinin genel
-kuralları 8. dersin aynı adlı bölümündedir (8. ders, Emri nereye koyarsın). Bu dersin okumasından eklenecekler:
+Bu bölüm büyük mumdan bağımsız bir gerekçeyle girecek olan içindir. Emir biçimlerinin, stopun, hedefin, bekleme
+süresinin ve haber penceresinin genel kuralları 8. dersin aynı adlı bölümündedir (8. ders, Emri nereye koyarsın); bu
+dersin okumasından eklenecekler:
 
 - **5 dakikada kapanışta mumun yönünde piyasa emri** geri vermenin içine girer ve makası öder. Mumun yönünde gireceksen
   limiti çeyrek ya da yarı geri çekilmeye koyarsın; limit dolarsa, o olaylarda piyasa girişinin çoğunlukla kaybettiğini
   bilirsin (8. ders, Limit neden ucuz görünür: ters seçim).
-- **1 saatte tersine giriş biçimleri** (stop 2 ATR, hedef 1 R) 2018–2023'te maliyetten önce de eksiydi, 2024 sonrasında
-  sıfırın çevresinde kaldı. Mumun yönünde 2018–2023'te en az kaybeden iki biçim onay mumu ve çeyrek geri çekilmeye
-  limitti; 2024 sonrasında sıra değişti ve onay mumu en çok kaybeden biçim oldu (8. ders, 15 dakika ve 1 saat).
+- **1 saatte** tersine girmezsin (yukarıda). Mumun yönünde 2018–2023'te en az kaybeden iki biçim onay mumu ve çeyrek
+  geri çekilmeye limitti; 2024 sonrasında sıra değişti ve onay mumu en çok kaybeden biçim oldu (8. ders, 15 dakika ve
+  1 saat).
 - **Stop** girişten (limitle giriyorsan limitin fiyatından) 2 ATR uzaktadır; bu serinin ölçtüğü stoplar 1 ve 2 ATR.
   Mumun öbür ucunun ötesine konan stop bu seride ölçülmedi: 2–3 ATR'lik mumda o yer girişe 1 ATR kadar yakındır ve
   yakın stopun maliyetini taşır (8. ders, Stop uzaklığı ve maliyet).

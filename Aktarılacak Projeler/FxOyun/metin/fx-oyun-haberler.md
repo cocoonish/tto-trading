@@ -125,11 +125,11 @@ tersine dönen olmadı. Her karar tek tek:
 
 {{# davranis mb }}
 
-Kararın ilk beş dakikası karar metnidir; BoE'de toplantı tutanağı da aynı anda yayımlanır. Fed'de basın toplantısı
-karardan yarım saat sonra başlar (2019'dan beri her kararda; 2018'de yalnız çeyrek sonu toplantılarında), ECB'de
-bugün yarım saat sonra (2022 ortasına kadar üç çeyrek saat sonra), ve izlenen {{ AN.fomc.pencere }} dakika onu da
-içerir. Yani bir karar mumunun "devam etmesi", metnin ve basın toplantısının aynı yöne bakması anlamına gelebilir.
-Basın toplantısının ayrı etkisi bu derste ölçülmedi.
+Kararın ilk beş dakikası karar metnidir (BoE'de toplantı tutanağı da aynı anda gelir). Fed'de basın toplantısı
+karardan yarım saat sonra başlar (2019'dan beri her kararda; 2018'de yalnız çeyrek sonu toplantılarında), ECB'de bugün
+yarım saat sonra (2022 ortasına kadar üç çeyrek saat sonra); izlenen {{ AN.fomc.pencere }} dakika onu da içerir. Bir
+karar mumunun "devam etmesi" bu yüzden metnin ve toplantının aynı yöne bakması olabilir; toplantının ayrı etkisi bu
+derste ölçülmedi.
 
 ### Masada: karar metni ve basın toplantısı
 
@@ -172,9 +172,9 @@ Küçük ilk mum fiyatın oynamadığını söyler, yön söylemez; okuma önce 
 başlangıcından (TSİ 21:30, ABD kış saatinde 22:30) önce bitmiş sayılmaz, çünkü kırılımın metinden mi toplantıdan mı
 geldiği ayrılmadı. Sınanan biçim iki uca birer kırılım emridir (biri dolunca öbürü iptal; stop öbür ucun mum boyunun
 onda biri ötesinde, hedef yarım R) ve "sıkışma patlar" diye bir kenar sayılmaz. ABD verisinde kırılım maliyetten önce
-küçük bir artı, maliyetle iki dönemde de eksiydi (2024 → {{ B.referans.veri.kucuk.dis.brut }} →
-{{ B.referans.veri.kucuk.dis.R }} R). Karar mumunda 2018–2023'te {{ B.referans.mb.kucuk.ic.R }} R, 2024 sonrasında
-{{ B.referans.mb.kucuk.dis.R }} R (zayıf); maliyetin payı {{ B.referans.mb.kucuk.ic.maliyet }} ve
+küçük bir artı, maliyetle iki dönemde de eksiydi (2024 sonrasında maliyetsiz {{ B.referans.veri.kucuk.dis.brut }},
+net {{ B.referans.veri.kucuk.dis.R }} R). Karar mumunda 2018–2023'te {{ B.referans.mb.kucuk.ic.R }} R, 2024 sonrasında
+{{ B.referans.mb.kucuk.dis.R }} R (zayıf); maliyetin payı sırasıyla {{ B.referans.mb.kucuk.ic.maliyet }} ve
 {{ B.referans.mb.kucuk.dis.maliyet }} R (5. ders, Maliyet nereye gidiyor). Bir R hedefli biçimler karar mumunda
 2018–2023'te denendi, hiçbiri maliyetten sonra artıda kalmadı (en iyisi {{ I.mb.kucuk.R }} R).
 
@@ -234,8 +234,8 @@ bölümündedir; haber anına özgü olanlar şunlar.
   haber mumunda ölçülmedi.
 - **İki uca kırılım emri.** Küçük mumun tepkileri böyle kuruldu; biri dolunca öbürü iptal.
 - **Stop ve hedef.** Stop referanslarda öbür ucun mum boyunun onda biri, iki işlem tepkisinde yarısı kadar ötesindedir;
-  riski üç pipin altında kalan işlem açılmadı. Hedef yarım R, bir R ya da mumun kendi ucudur. Onay mumundan sonra giriş
-  haber anında ölçülmedi; büyük mumda onayın bilgisi kaçırılan fiyatın bedelini ancak karşıladı (8. ders, Onay mumu).
+  hedef yarım R, bir R ya da mumun kendi ucudur. Onay mumundan sonra giriş haber anında ölçülmedi (büyük mumda onayın
+  bilgisi kaçırılan fiyatın bedelini ancak karşıladı: 8. ders, Onay mumu).
 - **Ömür.** Emir ilk mum kapandıktan bir saat sonra düşer (ön kayıttaki süre, ölçülerek seçilmedi); dolan pozisyon ne
   hedefe ne stopa ulaşırsa iki saatin sonunda kapanır. Güçlü veri mumunun tepkisinde 2024 sonrasında işlemlerin
   {{ B.islem.veri.guclu.dis.zaman_pay }} kadarı böyle kapandı. Basın toplantısı karar mumunun öbür ucunu kırarsa
@@ -256,23 +256,19 @@ bölümündedir; haber anına özgü olanlar şunlar.
 
 ## Masa kontrol listesi
 
-1. Bugün takvimde hangi açıklama var ve saati TSİ kaçta? ABD verisi TSİ 15:30 (ABD kış saatinde 16:30), Fed TSİ 21:00
-   (ABD kış saatinde 22:00), ECB TSİ 15:15 (Avrupa kış saatinde 16:15), BoE TSİ 14:00 (İngiltere kış saatinde 15:00).
+1. Bugün takvimde hangi açıklama var ve saati TSİ kaçta (dersin başındaki tablo)?
 2. Defterde süresine haber penceresi düşen bir emir var mı? Varsa açıklamadan önce çekiyor muyum? Açık pozisyonun
    stopu o anın ilk mumunun tipik boyu kadar bir hareketin içinde kalıyor mu?
 3. Açıklamadan iki dakika önce ile on beş dakika sonrası arasındaki her piyasa ve stop emrinin seviyesinden kötü
    dolabileceğini hesaba kattım mı?
-4. İlk beş dakikalık mum kapandı mı? ABD verisinde TSİ 15:35 (ABD kış saatinde 16:35), Fed'de TSİ 21:05 (ABD kış
-   saatinde 22:05).
+4. İlk beş dakikalık mum kapandı mı?
 5. Mumun sınıfı ne: güçlü, normal, reddedilen, küçük? Sınıfı o anın tipik boyuna göre mi koydum?
 6. Mumun iki ucu ve yarısı çizili mi?
 7. ABD verisiyse: mumun yönünde sürmesini bir beklenti gibi taşıyor muyum?
-8. Kararsa: basın toplantısı ne zaman? Fed TSİ 21:30 (ABD kış saatinde 22:30), ECB TSİ 15:45 (Avrupa kış saatinde
-   16:45); BoE'de tutanak kararla birlikte gelir.
+8. Kararsa: basın toplantısının saatini TSİ olarak işaretledim mi ("Masada: karar metni ve basın toplantısı")?
 9. Başka bir gerekçeyle giriyorsam: stop mumun öbür ucunun ötesinde mi, risk pip cinsinden ne kadar, makas bu riskin ne
    kadarı?
-10. İlk mumdan bu yana iki saat geçti mi? ABD verisinde TSİ 17:35 (ABD kış saatinde 18:35), Fed'de TSİ 23:05 (ABD kış
-    saatinde ertesi gün 00:05). Geçtiyse haber okuması bitmiştir.
+10. İlk mumdan bu yana iki saat geçti mi? Geçtiyse haber okuması bitmiştir.
 
 ## Grafik okuma alıştırmaları
 
@@ -296,9 +292,9 @@ aralığında. Ne yaparsın, ne yapmazsın?
 <summary>Çözüm</summary>
 
 Beklersin. Basın toplantısı TSİ 21:30'da başlar ve izlenen süre onu içerir; okuma hangi ucun önce kırıldığıyla
-başlar ve kırılımdan önce taraf seçmezsin. Sınanan biçim iki uca birer kırılım emridir; stop öbür ucun mum boyunun onda biri
-ötesinde, hedef yarım R, ve maliyet bu riskin görünür bir parçasıdır. Dayanak: 4. ders,
-"Küçük haber mumu"; 5. ders, "Maliyet nereye gidiyor".
+başlar ve kırılımdan önce taraf seçmezsin. Sınanan biçim iki uca birer kırılım emridir; stop öbür ucun mum boyunun
+onda biri ötesinde, hedef yarım R, ve maliyet bu riskin görünür bir parçasıdır. Dayanak: 4. ders, "Küçük haber mumu";
+5. ders, "Maliyet nereye gidiyor".
 
 </details>
 
