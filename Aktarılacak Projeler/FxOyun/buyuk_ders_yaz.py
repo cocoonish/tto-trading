@@ -23,6 +23,7 @@ import pandas as pd
 BURASI = Path(__file__).resolve().parent
 sys.path.insert(0, str(BURASI))
 import ders_yaz as dy  # noqa: E402
+import masa  # noqa: E402
 from ders_yaz import _tablo, sayi, tam, yuzde  # noqa: E402
 
 METIN = BURASI / "metin"
@@ -408,11 +409,16 @@ YER = dy.YER
 def uret(slug: str, K: dict) -> str:
     ham = (METIN / f"{slug}.md").read_text(encoding="utf-8")
 
+    sayac = [0]
+
     def coz(m: re.Match) -> str:
         if m.group(1) == "#":
             parca = shlex.split(m.group(2))
             if parca[0] == "sekil":
                 return b_sekil(slug, *parca[1:])
+            if parca[0] in masa.BLOKLAR:
+                sayac[0] += parca[0] != "kart"
+                return masa.blok(slug, parca[0], parca[1], f"M{sayac[0]}")
             return BLOK[parca[0]](*parca[1:])
         if m.group(2) not in K:
             raise KeyError(f"{slug}: tanımsız anahtar {m.group(2)!r}")
@@ -428,6 +434,8 @@ def hepsi() -> dict[str, str]:
 
 def main() -> int:
     for s, metin in hepsi().items():
+        if "--uret" in sys.argv:                 # yalnız üret (şablon sınaması), yazma
+            continue
         (CIKTI / f"{s}.mdx").write_text(metin, encoding="utf-8")
         print(f"  ✓ site/src/content/arastirma/{s}.mdx")
     return 0

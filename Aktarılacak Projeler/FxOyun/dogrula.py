@@ -19,6 +19,10 @@ Yalnız standart kütüphane: yayın koşucusunda pandas ve plotly yok. Sorulanl
    karşı adıyla sınanır.
 8. BÜYÜK MUM — serinin 6–9. dersleri (büyük mum) aynı soruları kendi ölçüm, plan ve sınama dosyalarına sorar
    (buyuk_dogrula.py).
+9. MASA — dokuz dersin masa katmanı (masa.py): her şema, karar şeması, kart ve gerçek örnek şablonda tam bir kez
+   çağrılır; şema ve kartta ölçülmüş sayı yazılmaz; her kart ve karar adımı bir dersin bölümüne dayanır; gerçek
+   örnekler 2018–2023'tendir, seçim koşulunu ve rol koşulunu (tipik · ters) kayıtlı ölçüleriyle sağlar ve figürleri
+   örnek dosyasının özünü taşır.
 """
 from __future__ import annotations
 
@@ -261,13 +265,49 @@ def iddialar() -> None:
     dogru(not any(b["hukum"] == "calisiyor" for b in D["bacak"]), "bir tepki 'çalışıyor' hükmü almış; metin hiçbirinin almadığını söylüyor")
 
 
+def masa_katmani() -> None:
+    import masa
+    import masa_ornek as mo
+    ornek = json.loads(mo.CIKTI.read_text(encoding="utf-8")) if mo.CIKTI.exists() else {}
+    ozu = oz(mo.CIKTI) if mo.CIKTI.exists() else ""
+    sinir = "2024-01-01"
+    dogru(mo.SIRA == dy.SERI, "masa_ornek.SIRA serinin sırasını taşımıyor")
+    for slug in dy.SERI:
+        sab = (dy.METIN / f"{slug}.md").read_text(encoding="utf-8")
+        h = masa.denetle(slug, sab)
+        HATA.extend(h)
+        SAY["n"] += 1
+        for o in masa.spek(slug).get("ornek", []):
+            x = ornek.get(slug, {}).get(o["id"])
+            if x is None:
+                HATA.append(f"{slug}: örnek {o['id']} örnek dosyasında yok (masa_ornek.py koşulmalı)")
+                continue
+            for rol in ("tipik", "ters"):
+                e = x[rol]
+                dogru(e["gun"] < sinir and e["izle_son"] < mo_ts(sinir), f"{slug}/{o['id']}: {rol} örneği 2024 sonrasından")
+                dogru(mo.uyar(e["olcu"], o[rol]), f"{slug}/{o['id']}: {rol} örneği rol koşulunu sağlamıyor")
+                dogru(all(e["olay"].get(k) == v for k, v in o.get("kosul", {}).items() if k in e["olay"]),
+                      f"{slug}/{o['id']}: {rol} örneği seçim koşulunu sağlamıyor")
+            yol = so.CIKTI_KOK / slug / f"m_{o['id']}.html"
+            html = yol.read_text(encoding="utf-8") if yol.exists() else ""
+            dogru(f'name="tto-olcum-ozu" content="{ozu}"' in html, f"{slug}/m_{o['id']}: figür yok ya da örnek dosyasından çizilmemiş")
+            m = re.search(r'"title":\{"text":"((?:[^"\\]|\\.)*)"', html)
+            baslik = json.loads(f'"{m.group(1)}"') if m else ""
+            dogru(not so.tasan_satirlar(baslik), f"{slug}/m_{o['id']}: başlık telefonda taşıyor")
+
+
+def mo_ts(gun: str) -> int:
+    from datetime import datetime, timezone
+    return int(datetime.fromisoformat(gun).replace(tzinfo=timezone.utc).timestamp())
+
+
 def buyuk() -> None:
     import buyuk_dogrula
     buyuk_dogrula.kos(dogru, HATA, SAY)
 
 
 def main() -> int:
-    for f in (ozler, secim_ve_hukum, uretim, figurler, seri, iddialar, buyuk):
+    for f in (ozler, secim_ve_hukum, uretim, figurler, seri, iddialar, buyuk, masa_katmani):
         try:
             f()
         except Exception as e:                       # kapının kendisi düşerse de adıyla düşer
@@ -276,7 +316,7 @@ def main() -> int:
         print("✗ FX oyun planı: " + "\n  ".join(HATA))
         return 1
     print(f"✓ FX oyun planı: {SAY['n']} ölçüt geçti (özler, seçim ve hüküm, yeniden üretim, şablon, figürler, seri, iddialar, "
-          "büyük mum)")
+          "büyük mum, masa)")
     return 0
 
 
