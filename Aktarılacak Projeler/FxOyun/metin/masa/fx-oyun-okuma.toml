@@ -213,67 +213,7 @@ i = 8
 y = 56
 n = 4
 
-[[sema]]
-id = "kucuk-kirilim"
-baslik = "Küçük ilk mumun kırılımı: iki emir, bir iptal, dar risk"
-mumlar = [[50.2,50.7,49.9,50.4],[50.4,50.8,50,50.1],[50.1,50.6,49.8,50.3],[50.3,51,49.6,50.5],
-          [50.5,50.9,50.2,50.8],[50.8,51.5,50.7,51.3],[51.3,51.7,51,51.2],[51.2,51.3,50.4,50.6],
-          [50.6,50.9,49.9,50],[50,50.3,49.1,49.3]]
-vurgu = [3]
-yukseklik = 260
-eksen = "zaman →"
-not = ["Küçük ilk mum: iki uç işaretlenir, yön yoktur.",
-       "Üst uç kırıldı, alış stop emri kaymayla doldu; alttaki emir iptal.",
-       "Hedef riskin yarısı kadar; dar mumda makas riskin görünür bir parçası.",
-       "Fiyat döndü, zarar stopu doldu. Tek bir yol; ölçü değil."]
-[[sema.cizgi]]
-y = 51.9
-i0 = 5
-etiket = "hedef: yarım R"
-tur = "hedef"
-[[sema.cizgi]]
-y = 51
-i0 = 3
-etiket = "alış stop emri"
-tur = "uc"
-[[sema.cizgi]]
-y = 49.6
-i0 = 3
-i1 = 5
-etiket = "satış emri iptal"
-tur = "uc"
-[[sema.cizgi]]
-y = 49.2
-i0 = 5
-etiket = "zarar stopu"
-tur = "stop"
-[[sema.isaret]]
-i = 3
-y = 51.5
-n = 1
-[[sema.isaret]]
-i = 5
-y = 50.2
-n = 2
-[[sema.isaret]]
-i = 6
-y = 52.3
-n = 3
-[[sema.isaret]]
-i = 9
-y = 48.7
-n = 4
-
 # ─────────────────────────────────────────────────────────────── kartlar
-[[kart]]
-id = "reddedilen-acilis"
-durum = "15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) uzun fitilli, küçük gövdeli bir ilk mum"
-gorursun = "Fiyat bir yöne gitmiş ve geri itilmiş; fitillerden biri mumun yarısından uzun."
-yaparsin = "Mumu kapanışta sınıflandırır, iki ucu ve yarıyı işaretlersin; fitilin ucunu günün referansı olarak not edersin."
-yapmazsin = "Fitili 'orada satıcı var' diye bir yön işareti saymazsın; reddin yönünde de tersine de yalnız bu mum yüzünden girmezsin."
-emir = "Başka bir gerekçeyle reddin yönünde gireceksen limit yarıya, stop fitilin ucunun biraz ötesine; limit izlenen süre içinde dolmazsa çekilir."
-dayanak = "2. ders, Normal ve reddedilen ilk mum; 1. ders, Kazanma oranı ile net sonuç"
-
 [[kart]]
 id = "guclu-acilis"
 durum = "15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) ucunda kapanan güçlü bir ilk mum"

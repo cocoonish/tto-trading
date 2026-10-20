@@ -196,7 +196,7 @@ trend yatayken {{ T.acilis.guclu.yatay.devam }} devam etti. Trend sayıyı deği
 
 Günlerdir yükselen bir grafikte güçlü bir yukarı açılış "iki teyit" gibi durur. Ölçülen şudur: güçlü mumun devam payı
 trend yönünde, trende karşı ve yatayken birkaç puan içinde aynı. Trend emrin yerini, stopu ya da hedefi değiştirecek
-bir bilgi taşımadı; trend yönünde diye kovalamazsın, karşı diye tersine girmezsin.
+bir bilgi taşımadı.
 
 {{# sema trend-iki-yol }}
 
@@ -236,9 +236,9 @@ verecek olan için, bu dersin ve 8. dersin giriş biçimi sonuçlarını ilk mum
 - **Limit emir** yarıya konur, girişte makas ödemez, çıkışta öder; ama yalnız fiyat geri geldiğinde, yani piyasa
   girişinin kaybettiği günlerde dolar (8. ders, Limit neden ucuz görünür: ters seçim). Normal mumda hemen dolması iyi
   fiyat değil, şeklin sonucudur.
-- **Stop emri** (küçük mumun kırılımı) kayma öder ve fiyatı yürüdüğü yerden alır (8. ders, Ucun kırılması); maliyetin
-  payı normal mumda {{ B.referans.acilis.normal.dis.maliyet }} R, küçük mumun kırılımında
-  {{ B.referans.acilis.kucuk.dis.maliyet }} R'ydi.
+- **Stop emri** (küçük mumun kırılımı) kayma öder ve fiyatı yürüdüğü yerden alır (8. ders, Ucun kırılması). Bu derste
+  maliyetin payı küçük mumun kırılımında {{ B.referans.acilis.kucuk.dis.maliyet }} R, normal mumun limit tepkisinde
+  {{ B.referans.acilis.normal.dis.maliyet }} R'ydi.
 - **Onay mumu** daha kötü fiyattan girer; onayın bilgisi kaçan fiyatı ancak karşılar (8. ders, Onay mumu). Açılışta
   ayrıca ölçülmedi.
 

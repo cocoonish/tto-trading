@@ -249,51 +249,40 @@ yalnız 2024 → sonucudur.
 
 ## Emri nereye koyarsın
 
-Bu bölüm başka bir gerekçeyle işleme giren biri içindir. Haber mumu bir giriş sinyali değildir; ama masada zaten bir
-görüşün varsa emrini haber anına göre koyarsın. Dersin tepkileri dört emir biçiminden üçünü kullandı ve her biri haber
-anında ayrı bir şey öder.
+Bu bölüm başka bir gerekçeyle işleme giren biri içindir: haber mumu bir giriş sinyali değildir, ama masada zaten bir
+görüşün varsa emrini haber anına göre koyarsın. Dersin tepkileri üç emir biçimi kullandı.
 
-- **Piyasa emri, ilk mum kapanınca.** Güçlü ve reddedilen karar mumunun işlem tepkileri böyle kuruldu. Girişte makas ve
-  kayma ödenir. İlk mum açıklamadan beş dakika sonra kapandığı için giriş hâlâ haber penceresinin içindedir ve
-  sınamada {{ ON.haber_kayma_pip }} pip ek kayma öder. Stop mumun öbür ucunun ötesindedir ve geniştir: güçlü karar
-  mumunda ortanca risk {{ B.islem.mb.guclu.dis.risk_pip }} pip.
+- **Piyasa emri, ilk mum kapanınca.** Güçlü ve reddedilen karar mumunun işlem tepkileri böyle kuruldu. Giriş hâlâ haber
+  penceresinin içindedir: makası öder ve sınamada {{ ON.haber_kayma_pip }} pip ek kayma öder. Stop öbür ucun ötesinde ve
+  geniştir; güçlü karar mumunda ortanca risk {{ B.islem.mb.guclu.dis.risk_pip }} pip.
 - **Limit, mumun yarısına.** Yön sınıflarının referans tepkileri böyle kuruldu. Limit girişte makas ve kayma ödemez,
-  çıkışta öder. Dolması da bir bilgidir: mumun yarısına konan limit, fiyat ilk mumun yönünün tersine yarıya kadar geri
-  geldiğinde dolar. 8. ders bunu büyük mumda ölçtü; limitin dolduğu olaylarda aynı anda piyasadan giren çoğunlukla
-  kaybetti. Haber mumunda bu ayrım ayrıca ölçülmedi. ABD verisinde limitin dolması, itişin sürmediği olaylarla birlikte
-  gelir; dolmuş bir limit "geri çekilmede katıldım" demek değildir.
-- **Stop emri, kırılan uca.** Küçük mumun tepkileri böyle kuruldu: iki uca birer kırılım emri, önce tetiklenen geçerli,
-  öbürü iptal. Stop emri kaymayı öder ve fiyatın zaten yürüdüğü yerden alır. Küçük mumda risk küçüktür; aynı makas ve
-  kayma R cinsinden büyür.
-- **Onay mumu.** Haber anında onay mumundan sonra giriş bu seride sınanmadı. 8. ders onu büyük mumda ölçtü: onayı
-  beklemek, fiyatın o mumda zaten yürüdüğü yerden girmektir ve maliyetten önceki sonuç kapanışta piyasa girişinden
-  belirgin farklı değildi.
+  çıkışta öder, ve yalnız fiyat ilk mumun yönünün tersine yarıya geri geldiğinde dolar. 8. ders büyük mumda limitin
+  dolduğu olaylarda piyasa girişinin çoğunlukla kaybettiğini ölçtü; haber mumunda bu ayrım ölçülmedi. ABD verisinde
+  dolmuş bir limit, itişin sürmediğinin işaretidir.
+- **Stop emri, kırılan uca.** Küçük mumun tepkileri böyle kuruldu: iki uca birer kırılım emri, önce tetiklenen geçerli.
+  Stop emri kaymayı öder ve fiyatın zaten yürüdüğü yerden alır; küçük riskte aynı maliyet R cinsinden büyür.
 
-**Stop.** Bütün tepkilerde stop ilk mumun öbür ucunun ötesindedir: referans tepkilerde mum boyunun onda biri kadar,
-iki işlem tepkisinde mum boyunun yarısı kadar. Stopu mumun içine çekmek bu derste denenmedi; 8. ders büyük mumda stop
-yaklaştıkça maliyetin R cinsinden büyüdüğünü ölçtü. Planlanan risk üç pipin altındaysa sınama işlem açmadı.
+Onay mumundan sonra giriş haber anında bu seride sınanmadı; 8. ders onu büyük mumda ölçtü ve maliyetten önceki sonucu
+kapanışta piyasa girişinden belirgin farklı bulmadı. **Stop** bütün tepkilerde ilk mumun öbür ucunun ötesindedir
+(referans tepkilerde mum boyunun onda biri, iki işlem tepkisinde yarısı kadar); stopu mumun içine çekmek denenmedi ve
+riski üç pipin altında kalan işlem açılmadı. **Hedef** riskin yarısı, riskin kendisi ya da mumun kendi ucudur; hedef
+yaklaştıkça kazanma oranı da başa baş için gereken oran da yükselir.
 
-**Hedef.** Hedef üç biçimde yazıldı: riskin yarısı, riskin kendisi ya da mumun kendi ucu. Hedef yaklaştıkça kazanma
-oranı yükselir, başa baş için gereken oran da onunla birlikte yükselir (1. ders, "Kazanma oranı ile net sonuç"). Güçlü
-karar mumunun yarım R hedefli tepkisinde 2024 sonrasında hiçbir işlem stopta bitmedi; bu {{ B.islem.mb.guclu.dis.gun_n }}
-karar gününün sonucudur, bir kural değil.
-
-**Emrin iptali ve masadan kalkmak.** Sınanan tepkilerde limit ve kırılım emirleri izlemenin ilk saatinde geçerliydi;
-dolmayan emir iptal edildi. Dolan pozisyon ne hedefe ne stopa ulaşırsa izlenen iki saatin sonunda kapandı. Güçlü veri
-mumunun tepkisinde 2024 sonrasında işlemlerin {{ B.islem.veri.guclu.dis.zaman_pay }} kadarı böyle kapandı. Emri çekmenin
-iki sebebi daha vardır. Basın toplantısı karar mumunun öbür ucunu kırarsa karar mumunun okuması biter. ABD verisinde
-limit ilk saatte dolmadıysa fiyat mumun yönünde gitmiştir; bu, kovalamak için bir gerekçe değildir.
+**Emrin iptali ve masadan kalkmak.** Sınanan tepkilerde limit ve kırılım emirleri izlemenin ilk saatinde geçerliydi,
+dolmayan emir iptal edildi; dolan pozisyon ne hedefe ne stopa ulaşırsa iki saatin sonunda kapandı. Güçlü veri mumunun
+tepkisinde 2024 sonrasında işlemlerin {{ B.islem.veri.guclu.dis.zaman_pay }} kadarı böyle kapandı. Basın toplantısı karar
+mumunun öbür ucunu kırarsa da emir çekilir: karar mumunun okuması bitmiştir. Limit ilk saatte dolmadıysa fiyat yarıya
+hiç gelmemiştir; bu, kovalamak için bir gerekçe değildir.
 
 {{# sema emir-yerleri }}
 
 {{# kart iki-saat }}
 
-**Haber penceresinde ne değişir.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında üç şey birden
-değişir. Makas gerçek fiyatlardan ödenir ve büyüklüğü bu derste ayrıca ölçülmedi. Piyasa ve stop emirleri sınamada ek
-kayma öder; bu bir varsayımdır. İlk mum açılış ve fiksinglerdekinden büyüktür, yani stop öbür ucun ötesine
-konduğunda risk pip cinsinden geniştir. Küçük haber mumu bunun tersidir: risk dardır ve maliyet o dar riskin büyük bir
-parçası olur. Pencerenin dışında kalan emirler yalnız olağan kaymayı öder; ilk mumdan sonra on dakika daha beklemek
-pencereden çıkmak demektir, ama bunun sonuca etkisi ayrıca ölçülmedi.
+**Haber penceresinde ne değişir.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında makas gerçek
+fiyatlardan ödenir (büyüklüğü ayrıca ölçülmedi), piyasa ve stop emirleri varsayılan bir ek kayma öder, ve ilk mum
+büyük olduğu için öbür ucun ötesindeki stop pip cinsinden geniştir. Küçük haber mumu bunun tersidir: risk dardır ve
+maliyet onun büyük bir parçası olur. İlk mumdan sonra on dakika daha beklemek pencereden çıkmak demektir; bunun sonuca
+etkisi ölçülmedi.
 
 ## Sık yapılan hatalar
 
@@ -337,71 +326,66 @@ pencereden çıkmak demektir, ama bunun sonuca etkisi ayrıca ölçülmedi.
 
 ## Grafik okuma alıştırmaları
 
-**1.** Tarım dışı istihdam açıklandı. EUR/USD'de ilk beş dakikalık mum yukarı; boyu tipik boya yakın, kapanışı mumun
-ortasına yakın, fitilleri iki yanda da kısa değil. Sonraki iki mum mumun ucunun hemen altında, hafifçe yukarı. Ne
-yaparsın, ne yapmazsın?
+**1.** Tarım dışı istihdam açıklandı. EUR/USD'de ilk beş dakikalık mum yukarı; boyu tipik boya yakın, kapanışı
+ortasına yakın. Sonraki iki mum ucun hemen altında, hafifçe yukarı. Ne yaparsın, ne yapmazsın?
 
 <details>
 <summary>Çözüm</summary>
 
-Mum normal sınıftadır ("ABD verisinin normal ilk mumu" şeması). İki ucu ve yarısını işaretlersin. Mumun yönünde
-kalmazsın: normal veri mumunun itişi iki dönemde de şanstan seyrek sürdü. Mumun tersine de girmezsin: o tepki önceden
-yazılmadı ve sınanmadı. Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun ötesine gider;
-limitin dolması itişin sürmediğini söyler. Dayanak: 4. ders, "ABD verileri"; 5. ders, "Referans tepkiler".
+Mum normaldir ("ABD verisinin normal ilk mumu" şeması). İki ucu ve yarısını işaretlersin. Mumun yönünde kalmazsın:
+normal veri mumunun itişi iki dönemde de şanstan seyrek sürdü. Tersine de girmezsin: o tepki sınanmadı. Başka bir
+gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun ötesine; limitin dolması itişin sürmediğini söyler.
+Dayanak: 4. ders, "ABD verileri"; 5. ders, "Referans tepkiler".
 
 </details>
 
-**2.** ABD yaz saatinde Fed kararı TSİ 21:00'de açıklandı. İlk mum küçük; karar metni fiyatı oynatmadı. TSİ 21:20'de
-fiyat hâlâ mumun aralığında. Ne yaparsın, ne yapmazsın?
+**2.** ABD yaz saatinde Fed kararı TSİ 21:00'de açıklandı; ilk mum küçük. TSİ 21:20'de fiyat hâlâ mumun
+aralığında. Ne yaparsın, ne yapmazsın?
 
 <details>
 <summary>Çözüm</summary>
 
-Beklersin. Basın toplantısı TSİ 21:30'da başlar ve izlenen süre onu içerir; küçük mumun okuması hangi ucun önce
-kırıldığıyla başlar. Fed kararında kırılan taraf iki dönemde de çoğu zaman bir mum boyu yol aldı. Kırılımdan önce
-taraf seçmezsin. Kırılan uçtan gireceksen stop öbür ucun ötesine gider ve risk küçüktür; makas ve kayma o riskin büyük
-bir parçası olur, riski üç pipin altında kalan bir kırılımda sınama işlem açmadı. Dayanak: 4. ders, "Küçük haber
-mumu"; 5. ders, "Maliyet nereye gidiyor".
+Beklersin. Basın toplantısı TSİ 21:30'da başlar ve izlenen süre onu içerir; okuma hangi ucun önce kırıldığıyla
+başlar ve kırılımdan önce taraf seçmezsin. Kırılan uçtan gireceksen stop öbür ucun ötesine gider; risk küçüktür ve makas
+ile kayma onun büyük bir parçası olur. Dayanak: 4. ders, "Küçük haber mumu"; 5. ders, "Maliyet nereye gidiyor".
 
 </details>
 
-**3.** TÜFE açıklamasına beş dakika var. Son yarım saattir aralık dar. Dar aralığın iki pip üstüne bir alış stop
-emri, iki pip altına bir satış stop emri bırakmayı düşünüyorsun ("Açıklamadan önce" şeması). Ne yaparsın?
+**3.** TÜFE açıklamasına beş dakika var ve aralık dar. Aralığın iki pip üstüne bir alış, iki pip altına bir satış
+stop emri bırakmayı düşünüyorsun ("Açıklamadan önce" şeması). Ne yaparsın?
 
 <details>
 <summary>Çözüm</summary>
 
-Bırakmazsın. Emirlerden biri, mum iki yöne de giderse ikisi birden, haber mumunun ilk dakikasında tetiklenir; dolum
-seviyenin ötesinde olabilir (sınama bu dakikalara ek kayma koydu, gerçek kayma ölçülmedi). Mum önce bir ucu süpürüp
-öbür yöne kapanabilir; ilk mum kapanmadan sınıfı belli değildir. Bu dersin ölçtüğü her tepki ilk mum kapandıktan
-sonra başlar. Dayanak: 1. ders, "İlk mumun dört sınıfı"; 1. ders, "Kazanma oranı ile net sonuç".
+Bırakmazsın. Emirlerden biri, mum iki yöne de giderse ikisi birden, haber mumunun ilk dakikasında tetiklenir ve dolum
+seviyenin ötesinde olabilir (sınamadaki ek kayma bir varsayımdı, gerçek kayma ölçülmedi). Mum bir ucu süpürüp öbür yöne
+kapanabilir; dersin her tepkisi ilk mum kapandıktan sonra başlar. Dayanak: 1. ders, "İlk mumun dört sınıfı"; 1. ders,
+"Kazanma oranı ile net sonuç".
 
 </details>
 
-**4.** ECB kararından sonra güçlü bir aşağı mum geldi; yarım saat sonra basın toplantısı başlıyor. Biri "karar mumunun
-yönü 2024 sonrasında sürdü, kısa gir, hedef yarım R" diyor. Ne yaparsın, ne yapmazsın?
+**4.** ECB kararından sonra güçlü bir aşağı mum geldi; yarım saat sonra basın toplantısı başlıyor. Biri bunun,
+karar mumunun yönünde yarım R hedefli tepkinin tam örneği olduğunu söylüyor. Ne yaparsın, ne yapmazsın?
 
 <details>
 <summary>Çözüm</summary>
 
 Bunu bir kural saymazsın. Güçlü karar mumu 2018–2023'te aynayla aynıydı; 2024 sonrasındaki artı sonuç birkaç karar
-gününe dayanıyor ve "ölçülemedi" hükmü taşıyor. ECB'nin güçlü mumunun kendi olay sayısı bir okuma kurmaya bile
-yetmiyor. Başka bir gerekçeyle girersen stop mumun öbür ucunun ötesine gider ve geniştir; basın toplantısı öbür ucu
-kırarsa karar mumunun okuması biter. Dayanak: 4. ders, "Merkez bankası kararları"; 4. ders, "Bu okumaları işleme
-çevirmek".
+gününe dayanıyor ve "ölçülemedi" hükmü taşıyor; ECB'nin kendi güçlü mumları bir okuma kurmaya bile yetmiyor. Başka bir
+gerekçeyle girersen stop öbür ucun ötesinde ve geniştir; toplantı öbür ucu kırarsa okuma biter. Dayanak: 4. ders,
+"Merkez bankası kararları"; 4. ders, "Bu okumaları işleme çevirmek".
 
 </details>
 
-**5.** ABD ve İngiltere yaz saatindeyken, tarım dışı istihdamdan iki buçuk saat sonra, TSİ 18:00'de fiyat ilk mumun
-ucunun çok ötesinde. Bu, mumun yönünde girmek için bir gerekçe mi?
+**5.** ABD ve İngiltere yaz saatindeyken, tarım dışı istihdamdan iki buçuk saat sonra (TSİ 18:00) fiyat ilk
+mumun ucunun çok ötesinde. Bu, mumun yönünde girmek için bir gerekçe mi?
 
 <details>
 <summary>Çözüm</summary>
 
-Değil. Ölçü iki saatte biter; bu dersin o saatten sonrası için söyleyecek bir şeyi yoktur ve ilk mumun yönü artık bir
-gerekçe değildir. Üstelik TSİ 18:00 Londra fiksingidir (Londra 16:00): okuma artık o anındır ve 3. dersin konusudur.
-Haberle açılmış bir emir hâlâ defterdeyse çekersin. Dayanak: 1. ders, "İncelenen on an"; 4. ders, "Bu okumaları işleme
-çevirmek".
+Değil. Ölçü iki saatte biter ve bu dersin o saatten sonrası için söyleyecek bir şeyi yoktur. TSİ 18:00 üstelik
+Londra fiksingidir (Londra 16:00); okuma artık o anındır ve 3. dersin konusudur. Haberle açılmış bir emir hâlâ
+defterdeyse çekersin. Dayanak: 1. ders, "İncelenen on an"; 4. ders, "Bu okumaları işleme çevirmek".
 
 </details>
 

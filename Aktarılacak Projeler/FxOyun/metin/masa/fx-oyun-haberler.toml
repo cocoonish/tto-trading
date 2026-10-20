@@ -283,9 +283,9 @@ dayanak = "1. ders, İncelenen on an"
 id = "haber-oncesi"
 durum = "Açıklamaya on dakika kala, ABD verisinden ya da bir merkez bankası kararından önce, açık bir emirle ya da pozisyonla masadasın"
 gorursun = "Mumlar küçülmüş, aralık birkaç dakikadır dar; takvimde saati belli bir açıklama var ve fiyat onu bekliyor."
-yaparsin = "Defterdeki emirleri tek tek gözden geçirirsin; açık pozisyonun stopunun, o anın ilk mumunun tipik boyu kadar bir hareketin içinde kalıp kalmadığına bakarsın; açıklamanın saatini TSİ olarak not edersin."
+yaparsin = "Defterdeki emirleri gözden geçirirsin; açık pozisyonun stopunun, ilk mumun tipik boyu kadar bir hareketin içinde kalıp kalmadığına bakarsın; açıklamanın saatini TSİ olarak not edersin."
 yapmazsin = "Açıklamadan saniyeler önce yön tahminiyle girmezsin; dar aralığın hemen dışına, haberi yakalamak için stop emri bırakmazsın."
-emir = "Haberden önce bıraktığın bir stop emri haber mumunda seviyesinin ötesinde dolabilir: sınama bu dakikalara ek kayma koydu ve bu bir varsayımdı, gerçek kayma ölçülmedi. Yeni bir işlem için emri ilk mum kapanmadan koymazsın."
+emir = "Bıraktığın stop emri haber mumunda seviyesinin ötesinde dolabilir (sınamadaki ek kayma bir varsayımdı, gerçek kayma ölçülmedi). Yeni bir işlemin emrini ilk mum kapanmadan koymazsın."
 dayanak = "1. ders, Kazanma oranı ile net sonuç; 1. ders, İlk mumun dört sınıfı; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]
@@ -301,9 +301,9 @@ dayanak = "4. ders, ABD verileri; 5. ders, Referans tepkiler; 8. ders, Limit ned
 id = "veri-guclu"
 durum = "5 dakikalık grafikte, ABD verisinden sonra güçlü ilk mum"
 gorursun = "Boyu tipik boyun belirgin üstünde, kapanışı mumun ucunda; ilk bakışta verinin yönü belli olmuş gibi durur."
-yaparsin = "Mumun ucunu, yarısını ve öbür ucunu işaretlersin; güçlü mum ucuna yakın kapandığı için devam eşiğinin zaten yakın olduğunu, yön rastgele olsaydı da devamın aynı sıklıkta görüneceğini hatırlarsın."
+yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; güçlü mum ucuna yakın kapandığı için devam eşiğinin zaten yakın olduğunu, yön rastgele olsaydı da devamın aynı sıklıkta görüneceğini hatırlarsın."
 yapmazsin = "Kapanışta mumun yönünde kovalamazsın; mumun ucunda kapanmasını bir yön bilgisi saymazsın."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit mumun yarısına, stop öbür ucun ötesine, hedef mumun kendi ucu; 2024 sonrasında bu tepkinin işlemlerinin çoğu ne hedefe ne stopa ulaşıp sürenin sonunda kapandı."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun ötesine, hedef mumun kendi ucu; 2024 sonrasında bu tepkinin işlemlerinin çoğu ne hedefe ne stopa ulaşıp sürenin sonunda kapandı."
 dayanak = "4. ders, ABD verileri; 1. ders, Şans ne verirdi: yolun aynası; 4. ders, Bu okumaları işleme çevirmek"
 
 [[kart]]
@@ -312,7 +312,7 @@ durum = "5 dakikalık grafikte, Fed, ECB ya da BoE kararından sonra güçlü ya
 gorursun = "Güçlüde tipik boyun belirgin üstünde, ucuna yakın kapanan bir mum; reddedilende bir yönde uzun fitil, küçük gövde. Basın toplantısı henüz başlamamış."
 yaparsin = "Mumun yönünü ve iki ucunu işaretlersin; basın toplantısı boyunca fiyatın mumun öbür ucuna gidip gitmediğine bakarsın; sonucu izlenecek bir aday olarak kaydedersin."
 yapmazsin = "Birkaç karar gününden gelen artı sonucu bir kural saymazsın; basın toplantısının karar mumunun yönünde gideceğini varsaymazsın."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen stop mumun öbür ucunun ötesine gider ve pip cinsinden geniştir; hedef yakınsa kazanma oranı yüksek görünür ama başa baş oranı da yükselir. Basın toplantısı mumun öbür ucunu kırarsa okuma biter."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen stop mumun öbür ucunun ötesine gider ve pip cinsinden geniştir; hedef yakınsa başa baş için gereken kazanma oranı da yükselir. Basın toplantısı öbür ucu kırarsa okuma biter."
 dayanak = "4. ders, Merkez bankası kararları; 5. ders, İşlem tepkileri; 1. ders, Kazanma oranı ile net sonuç"
 
 [[kart]]
@@ -321,7 +321,7 @@ durum = "5 dakikalık grafikte, Fed, ECB ya da BoE kararından sonra küçük il
 gorursun = "Tipik boyun çok altında bir mum; fiyat birkaç mumdur karar mumunun aralığında dolaşıyor, basın toplantısı henüz başlamadı."
 yaparsin = "Mumun iki ucunu işaretlersin; basın toplantısının saatini not edersin (Fed TSİ 21:30, ABD kış saatinde 22:30; ECB TSİ 15:45, Avrupa kış saatinde 16:45); hangi ucun önce kırıldığına bakarsın."
 yapmazsin = "Küçük mumu kararın etkisiz kaldığı diye okumazsın; ilk kırılımdan önce bir taraf seçmezsin."
-emir = "Kırılan uçtan gireceksen stop öbür ucun ötesine, hedef bir R; küçük mum küçük risk demektir ve makas ile kayma o riskin büyük bir parçası olur. Riski üç pipin altında kalan bir kırılım sınamada işlem açmadı."
+emir = "Kırılan uçtan gireceksen stop öbür ucun ötesine, hedef bir R; küçük mum küçük risk demektir ve makas ile kayma o riskin büyük bir parçası olur."
 dayanak = "4. ders, Küçük haber mumu; 5. ders, Maliyet nereye gidiyor; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]

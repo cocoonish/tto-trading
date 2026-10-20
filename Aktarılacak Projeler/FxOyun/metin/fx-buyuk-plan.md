@@ -171,31 +171,23 @@ değil. Aralığın alt ucu sıfırın üstündeyse
 
 ## Kendi seçim kuralını yazarken: tuzaklar
 
-Bu dersin asıl öğrettiği şey bir seçim kuralının nasıl yanıldığıdır. Kendi geçmiş verine bakıp kendi kuralını yazarken
-aynı tuzaklar seni bekler; her birinin bu derste ölçülmüş bir karşılığı var.
+Bu dersin asıl öğrettiği, bir seçim kuralının nasıl yanıldığıdır. Kendi kuralını yazarken aynı tuzaklar seni bekler:
 
-1. **Aday sayısını saymamak.** Kural {{ plan.aday }} adayı taradı ve en iyisinin 2018–2023 sonucu bu yüzden şişti
-   (9. ders, Seçim kuralı). Kendi taramanda denediğin her süzgeç, her stop ve her hedef bir adaydır; deneyip
-   beğenmediğin ve not etmediğin adaylar da sayıya girer.
-2. **İki yarıyı ikinci bir sınav sanmak.** Seçilen üç girişin üçü de 2018–2020 ve 2021–2023 yarılarının ikisinde de
-   artıydı ve 2024 sonrasında tutmadı (9. ders, Seçilen girişler). İki yarı aynı verinin parçasıdır; seçim o veriyle
-   yapıldıktan sonra yarılar bağımsız bir kanıt olmaz, yalnız en kaba şansı eler.
-3. **Küçük alt kümeye güvenmek.** Seçilenlerin üçü de süzgeçliydi ve ikisi haber mumundandı. Olay ne kadar azsa
-   ortalaması şansla o kadar kolay şişer (9. ders, Seçilen girişler).
-4. **Maliyetten önceki sonuçla seçmek.** Kural maliyetten sonraki sonuçla seçti. Maliyetten önce sıfırın biraz
-   üstünde kalan girişler var ve hepsi maliyetten sonra eksi (9. ders, Referans girişler; 8. ders, Kısaca).
-5. **Görülmüş veriyi görülmemiş saymak.** Bu plan yazılırken 2024 sonrasının toplu davranışı serinin önceki
-   derslerinden biliniyordu (9. ders, Seçim kuralı). Kendi kuralında "örneklem dışı" dediğin dönemi daha önce başka bir
-   soruyla görmüşsen, bunu yazarsın.
-6. **Kuralı sonuçtan sonra değiştirmek.** Stop emirli dolumun sayılışı 2024 sınamasından sonra değişti; seçim yeni
-   kuralla yeniden uygulandı ve ne değiştiği yazıldı (9. ders, Seçim kuralı). Bir kuralı sonradan değiştiriyorsan
-   seçimi iki kuralla yan yana koşturur ve farkı kaydedersin.
-7. **Olayları bağımsız saymak.** Dolar haberinde dört paritede aynı anda büyük mum çıkar; işlemleri tek tek örneklemek
-   aralığı olduğundan dar gösterir (9. ders, Hüküm kuralı). Hükmü gün ya da hafta düzeyinde, ve sonucu görmeden
-   önce yazarsın.
-8. **Kıyas noktası koşturmamak.** Referans girişler seçimden bağımsızdır ve seçimin şişirmediği tek kıyas noktasıdır
-   (9. ders, Referans girişler). Kendi seçtiğin girişin yanına aynı dilimin en düz tepkisini koymadan bir sonuç
-   okumazsın.
+1. **Aday sayısını saymamak.** Kural {{ plan.aday }} adayı taradı ve en iyisinin 2018–2023 sonucu bu yüzden şişti.
+   Denediğin her süzgeç, stop ve hedef bir adaydır; not etmediklerin de (9. ders, Seçim kuralı).
+2. **İki yarıyı ikinci bir sınav sanmak.** Seçilen üç girişin üçü de iki yarıda artıydı ve tutmadı. Seçim o veriyle
+   yapıldıktan sonra yarılar bağımsız bir kanıt olmaz (9. ders, Seçilen girişler).
+3. **Küçük alt kümeye güvenmek.** Olay ne kadar azsa ortalaması şansla o kadar kolay şişer; seçilenlerin ikisi haber
+   mumundandı (9. ders, Seçilen girişler).
+4. **Maliyetten önceki sonuçla seçmek.** Maliyetten önce sıfırın biraz üstünde kalan girişlerin hepsi maliyetten sonra
+   eksi (9. ders, Referans girişler).
+5. **Görülmüş dönemi görülmemiş saymak ya da kuralı sonuçtan sonra değiştirmek.** 2024 sonrasının toplu davranışı bu
+   plan yazılırken biliniyordu; stop emirli dolumun sayılışı sınamadan sonra değişti ve seçim yeni kuralla yeniden
+   uygulandı. İkisini de yazarsın (9. ders, Seçim kuralı).
+6. **Olayları bağımsız saymak.** Dolar haberinde dört paritede aynı anda büyük mum çıkar; hükmü gün ya da hafta
+   düzeyinde ve sonucu görmeden yazarsın (9. ders, Hüküm kuralı).
+7. **Kıyas noktası koşturmamak.** Seçimin şişirmediği tek kıyas, aynı dilimin en düz tepkisidir (9. ders, Referans
+   girişler).
 
 ## Büyük mum için oyun planı
 
@@ -319,150 +311,120 @@ gösterdiği şey limitin hangi günde dolduğudur.
 
 ## Emri nereye koyarsın
 
-Bu bölüm mumdan bağımsız bir gerekçeyle işleme girecek biri içindir: bir seviye, daha büyük dilimde bir plan, bir haber
-görüşü. Büyük mum o gerekçeyi ne doğrular ne çürütür; yalnız emrin biçimini, yerini ve zamanını değiştirir. Aşağıdakilerin
-hiçbiri bir kenar değildir: 8. dersin ölçtüğü giriş biçimlerinin hepsi maliyetten sonra eksi (8. ders, Kısaca).
+Bu bölüm mumdan bağımsız bir gerekçeyle (bir seviye, daha büyük dilimde bir plan, bir haber görüşü) işleme girecek biri
+içindir. Büyük mum o gerekçeyi ne doğrular ne çürütür; yalnız emrin biçimini, yerini ve zamanını değiştirir. Aşağıdakilerin
+hiçbiri bir kenar değildir: ölçülen giriş biçimlerinin hepsi maliyetten sonra eksi (8. ders, Kısaca).
 
-- **Giriş emri.** Piyasa emri makası ve kaymayı girişte ve çıkışta öder; 5 dakikada bu, maliyetten önceki sonucun kat
-  kat üstündedir (8. ders, 5 dakika). Limit emir girişte makas ve kayma ödemez, çıkışta öder, ve yalnız fiyat aleyhine
-  yürüdüğünde dolar (8. ders, Limit neden ucuz görünür: ters seçim). Ucun kırılmasına konan stop emri kaymayı öder ve
-  fiyatın zaten yürüdüğü yerden alır (8. ders, Ucun kırılması). Onay mumu işlem sayısını azaltır ve girişi kötüleştirir;
-  taşıdığı bilgi kaçırılan fiyatı ancak karşılar (8. ders, Onay mumu). Aynı gerekçeyle girecek biri için en ucuz biçim
-  çoğu zaman limittir, ama limitin dolması okumanın lehine değil aleyhine bir işarettir.
-- **Limitin yeri.** Mumun yönünde gireceksen sığ ({{ Y.25 }}) ya da yarı geri çekilme. Limit derinleştikçe daha seyrek
-  dolar, ve dolduğu olaylarda aynı anda piyasadan girmiş bir işlem daha sık kaybeder (8. ders, Limit neden ucuz görünür:
-  ters seçim). Tersine gireceksen mumun ucu ya da ucun yarım ATR ötesi; ikisi de geri vermenin olmadığı olaylarda dolar.
+- **Giriş emri.** Piyasa emri makası ve kaymayı girişte de çıkışta da öder (8. ders, 5 dakika). Limit girişte ödemez,
+  çıkışta öder, ve yalnız fiyat aleyhine yürüdüğünde dolar (8. ders, Limit neden ucuz görünür: ters seçim). Ucun
+  kırılmasına stop emri kaymayı öder ve fiyatın zaten yürüdüğü yerden alır (8. ders, Ucun kırılması). Onay mumu işlem
+  sayısını azaltır, girişi kötüleştirir (8. ders, Onay mumu). En ucuzu çoğu zaman limittir; dolması ise okumanın
+  aleyhine bir işarettir.
+- **Limitin yeri.** Mumun yönünde sığ ({{ Y.25 }}) ya da yarı geri çekilme; limit derinleştikçe daha seyrek dolar ve
+  dolduğu olaylarda daha sık kaybeder (8. ders, Limit neden ucuz görünür: ters seçim). Tersine mumun ucu ya da ucun yarım
+  ATR ötesi; ikisi de geri vermenin olmadığı olaylarda dolar.
 - **Stop.** Girişten iki ATR öte. 5 dakikada bir ATR'lik stop maliyeti R cinsinden büyütür ve olayların bir kısmında
-  planlanan riski üç pipin altına indirir (8. ders, Stop uzaklığı ve maliyet). Stopu mumun öbür ucuna koymak bu derste
-  ölçülmedi; ölçülen stoplar girişten ATR katıyla kondu.
-- **Hedef.** Bir ya da iki R. Hedefi değiştirmek hiçbir dilimde maliyetten sonra kenar yaratmadı; 1 saatte hedefi iki R
-  olan geri çekilme limitlerinin artısı sıfırdan ayırt edilemeyecek kadar küçük (8. ders, 15 dakika ve 1 saat). Ne
-  stop ne hedef görülürse ölçülen işlem 24 mumun sonunda kapandı.
+  planlanan riski üç pipin altına indirir (8. ders, Stop uzaklığı ve maliyet). Stopu mumun öbür ucuna koymak ölçülmedi.
+- **Hedef.** Bir ya da iki R; hedefi değiştirmek hiçbir dilimde maliyetten sonra kenar yaratmadı (8. ders, 15 dakika ve
+  1 saat). Ne stop ne hedef görülürse ölçülen işlem 24 mumun sonunda kapandı.
 - **İptal.** Ölçülen limit ve stop emirleri altı mum bekledi, dolmayan iptal edildi (8. ders, On bir giriş biçimi).
-  Dolmayan bir mumun yönündeki limit çoğu zaman kaçan iyi işlemdir; bunu bilerek çekersin, peşinden kovalamazsın.
-- **Haber penceresi.** Takvimdeki büyük haberin mumunda okuma yok (7. ders, Fade mi, devam mı: okuma tablosu). Ölçüm,
-  haberin iki dakika öncesinden on beş dakika sonrasına kadar stop ve piyasa emirlerine ek kayma varsaydı; gerçek kayma
-  ölçülmedi (8. ders, Ölçülmeyenler). Limit kendi fiyatından tam dolmuş sayıldı; kısmi dolum ve kuyruk sırası da
-  ölçülmedi. Bekleyen bir emrin süresine bir haber saati giriyorsa emri haberden önce gözden geçirirsin; bunun etkisi bu
-  derste ölçülmedi.
-- **Cuma, devir ve açılış.** 1 saatlik grafikte perşembe akşamından sonra açılan mumun 24 mumluk penceresi hafta sonuna
-  taşar ve bu mumlar ölçüye girmedi; FX gününün devrine değen mum (New York 16:50–17:10; TSİ ABD yaz saatinde
-  23:50–00:10, kış saatinde 00:50–01:10) ve hafta başı yeniden açılışın ilk saati de girmedi (6. ders, Büyük mum nasıl
-  tanımlandı). Bu durumlarda plan bir şey söylemez.
+  Dolmayan limitin peşinden kovalamazsın; kaçan işlem çoğu zaman iyi olanıdır.
+- **Haber penceresi.** Haber mumunda okuma yok (7. ders, Fade mi, devam mı: okuma tablosu). Ölçüm, haberin iki dakika
+  öncesinden on beş dakika sonrasına kadar stop ve piyasa emirlerine ek kayma varsaydı; gerçek kayma, kısmi dolum ve
+  kuyruk sırası ölçülmedi (8. ders, Ölçülmeyenler). Süresine bir haber saati giren bekleyen emri haberden önce gözden
+  geçirirsin; bunun etkisi bu derste ölçülmedi.
+- **Cuma, devir, açılış.** 1 saatlik grafikte perşembe akşamından sonra açılan mum, FX gününün devrine değen mum (New
+  York 16:50–17:10; TSİ ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10) ve hafta başı yeniden açılışın ilk saati
+  ölçüye girmedi (6. ders, Büyük mum nasıl tanımlandı). Bu durumlarda plan bir şey söylemez.
 
 ## Sık yapılan hatalar
 
-- **Seçilen girişler tablosunu bir işlem listesi gibi okumak.** 2018–2023 sütunu seçimin kendisidir, 2024 sütunu onun
-  sınavı; üç girişin üçü de tutmadı (9. ders, Seçilen girişler).
-- **Limitin dolmasını onay saymak.** Mumun yönündeki limit, fiyat mumu geri aldığında dolar; dolduğu olaylarda piyasa
-  girişi çoğunlukla kaybeder (8. ders, Limit neden ucuz görünür: ters seçim).
-- **Mumun ucuna tersine limiti daha iyi bir fiyat sanmak.** O limit geri vermenin olmadığı olaylarda dolar ve 5
-  dakikadaki küçük tersine kenarı yok eder (8. ders, 5 dakika; 9. ders, Büyük mum için oyun planı).
-- **5 dakikada stopu bir ATR'ye çekip pozisyonu büyütmek.** Aynı makas daha kısa bir mesafeye bölünür; kayıp R
-  cinsinden büyür (8. ders, Stop uzaklığı ve maliyet).
-- **1 saatte "çok uzadı" diye tersine girmek.** 1 saatlik büyük mum ortalamada bir gün boyunca kendi yönünde biraz
-  daha gider, ve tersine referans girişler iki dönemde de eksi (6. ders, Dilim dilim okuma; 9. ders, Referans girişler).
-- **Haber mumunu okumak.** Olay az, sonrası dağınık; seçimin buradan çıkan iki girişi görülmemiş dönemde söndü (7. ders,
-  Fade mi, devam mı: okuma tablosu; 9. ders, Seçilen girişler).
-- **Maliyetten önceki sonuca bakıp kenar görmek.** Maliyetten önce sıfırın biraz üstünde kalan girişlerin hepsi
-  maliyetten sonra eksi (9. ders, Referans girişler).
-- **Büyüklüğü güvenilirlik sanmak.** "5 ATR'lik mum artık döner" okuması iki dönemde aynı yöne bakmıyor (6. ders,
-  Büyüklük değişince; 7. ders, 5 dakika).
+- **Seçilen girişler tablosunu işlem listesi gibi okumak.** 2018–2023 sütunu seçimin kendisi, 2024 sütunu sınavı; üçü
+  de tutmadı (9. ders, Seçilen girişler).
+- **Limitin dolmasını onay saymak.** Dolduğu olaylarda piyasa girişi çoğunlukla kaybeder (8. ders, Limit neden ucuz
+  görünür: ters seçim).
+- **Mumun ucuna tersine limiti daha iyi fiyat sanmak.** 5 dakikadaki küçük tersine kenarı yok eder (8. ders, 5 dakika).
+- **5 dakikada stopu bir ATR'ye çekip pozisyonu büyütmek.** Aynı makas daha kısa mesafeye bölünür (8. ders, Stop
+  uzaklığı ve maliyet).
+- **1 saatte "çok uzadı" diye tersine girmek.** Ortalama yol mumun yönünde; tersine referanslar iki dönemde de eksi
+  (6. ders, Dilim dilim okuma; 9. ders, Referans girişler).
+- **Haber mumunu okumak.** Olay az, sonrası dağınık; buradan seçilen iki giriş görülmemiş dönemde söndü (7. ders, Fade
+  mi, devam mı: okuma tablosu).
+- **Büyüklüğü güvenilirlik sanmak.** "5 ATR'lik mum döner" okuması iki dönemde aynı yöne bakmıyor (6. ders, Büyüklük
+  değişince).
 
 ## Masa kontrol listesi
 
 Büyük bir mum kapandığında sırayla:
 
 1. Dilim 5 dakika, 15 dakika ya da 1 saat mi? Değilse bu seri bir şey ölçmedi.
-2. Mum kümenin ilk büyük mumu mu, yoksa önceki üç mumdan biri de büyük mü? İkinciyse aynı olayın devamıdır.
+2. Mum kümenin ilk büyük mumu mu? Önceki üç mumdan biri de büyükse aynı olayın devamıdır.
 3. Mum FX gününün devrine (New York 16:50–17:10; TSİ ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10) ya da
-   hafta başı yeniden açılışın ilk saatine mi değiyor? Öyleyse ölçüye girmedi.
-4. Mumun başlangıcından iki dakika önce ile sonu arasında takvimde büyük bir haber var mı? ABD istihdam ve enflasyon
-   verisi New York 08:30 (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30), FOMC kararı New York 14:00 (TSİ ABD yaz
-   saatinde 21:00, kış saatinde 22:00), ECB kararı Frankfurt 14:15 (TSİ Avrupa yaz saatinde 15:15, kış saatinde 16:15),
-   BoE kararı Londra 12:00 (TSİ İngiltere yaz saatinde 14:00, kış saatinde 15:00). Varsa masadan kalkarsın.
-5. Dilim 1 saatse aklındaki işlem mumun tersine mi? Öyleyse plana yazmazsın. Mum perşembe akşamından sonra mı açıldı?
-   Penceresi hafta sonuna taşar ve ölçülmedi.
-6. Dilim 5 dakikaysa kapanış mumun uç çeyreğinde mi, mum Asya seansında mı (Londra 07:00'den önce; TSİ İngiltere yaz
-   saatinde 09:00'dan, kış saatinde 10:00'dan önce), önceki 4–24 mumda başka büyük mum var mı? Bunlar geri vermenin
-   belirgin olduğu durumlardır; kovalamazsın.
-7. Mumdan bağımsız bir gerekçen var mı? Yoksa masadan kalkarsın.
-8. Gerekçen varsa emir piyasa mı limit mi; limit dolarsa okumanın zayıfladığını not ettin mi; stop girişten iki ATR
-   öte mi; planlanan risk üç pipin üstünde mi?
-9. Emir altı mum içinde dolmadı mı? Çekersin. Bekleme süresine bir haber saati giriyor mu? Emri haberden önce gözden
-   geçirirsin.
+   hafta başı açılışın ilk saatine mi değiyor? Öyleyse ölçüye girmedi.
+4. Takvimde büyük bir haber mumun içine düşüyor mu? ABD istihdam ve enflasyon New York 08:30 (TSİ ABD yaz saatinde
+   15:30, kış saatinde 16:30), FOMC New York 14:00 (TSİ ABD yaz saatinde 21:00, kış saatinde 22:00), ECB Frankfurt
+   14:15 (TSİ Avrupa yaz saatinde 15:15, kış saatinde 16:15), BoE Londra 12:00 (TSİ İngiltere yaz saatinde 14:00, kış
+   saatinde 15:00). Varsa kalkarsın.
+5. Dilim 1 saatse aklındaki işlem mumun tersine mi? Plana yazmazsın. Mum perşembe akşamından sonra mı açıldı?
+   Ölçülmedi.
+6. Dilim 5 dakikaysa kapanış uç çeyrekte mi, seans Asya mı (Londra 07:00'den önce; TSİ İngiltere yaz saatinde
+   09:00'dan, kış saatinde 10:00'dan önce), önceki 4–24 mumda başka büyük mum var mı? Kovalamazsın.
+7. Mumdan bağımsız bir gerekçen var mı? Yoksa kalkarsın.
+8. Varsa: limit mi, stop girişten iki ATR öte mi, planlanan risk üç pipin üstünde mi, limit dolarsa ne düşüneceğini not
+   ettin mi?
+9. Emir altı mum içinde dolmadıysa çekersin; süresine haber saati giriyorsa haberden önce gözden geçirirsin.
 
 ## Grafik okuma alıştırmaları
 
-**1.** 5 dakikalık EUR/USD grafiğinde, Londra 08:30'da (TSİ İngiltere yaz saatinde 10:30, kış saatinde 11:30) başlayan
+**1.** 5 dakikalık EUR/USD grafiğinde Londra 08:30'da (TSİ İngiltere yaz saatinde 10:30, kış saatinde 11:30) başlayan
 yukarı yönlü, üç ATR'lik bir büyük mum ucunda kapandı; takvimde haber yok. Daha büyük dilimdeki bir destek yüzünden
 zaten alıcı olmayı düşünüyorsun. Ne yaparsın, ne yapmazsın?
 
 <details>
 <summary>Çözüm</summary>
 
-Kapanışta piyasa emriyle kovalamazsın (9. ders, Büyük mum için oyun planı, madde 2). Gerekçen duruyorsa alış limitini
-sığ geri çekilmeye ya da mumun yarısına koyarsın, stopu girişten iki ATR öteye; limit altı mum içinde dolmazsa çekersin
-(8. ders, On bir giriş biçimi). Limit dolarsa bunun okumanın zayıfladığı an olduğunu bilirsin (8. ders, Limit neden ucuz
-görünür: ters seçim). Büyük mum senin gerekçeni güçlendirmez: 5 dakikada yön seçecek bir bilgi taşımıyor, yalnız hafif
-bir geri verme taşıyor (6. ders, Dilim dilim okuma).
+Kapanışta kovalamazsın (9. ders, Büyük mum için oyun planı, madde 2). Gerekçen duruyorsa alış limitini sığ geri
+çekilmeye ya da yarıya, stopu girişten iki ATR öteye koyarsın; altı mum içinde dolmazsa çekersin (8. ders, On bir giriş
+biçimi). Dolarsa okumanın zayıfladığını bilirsin (8. ders, Limit neden ucuz görünür: ters seçim). Büyük mum gerekçeni
+güçlendirmez: 5 dakikada yön bilgisi değil, hafif bir geri verme taşır (6. ders, Dilim dilim okuma).
 
 </details>
 
-**2.** 1 saatlik GBP/USD grafiğinde, örtüşme seansında New York 09:00'da (TSİ ABD yaz saatinde 16:00, kış saatinde
-17:00) başlayan aşağı yönlü, dört ATR'lik bir mum günün yeni dibini yaptı ve ucunda kapandı. Masadaki biri "bu kadar
-düştü, ucun yarım ATR altına alış limiti koyalım" diyor. Ne yaparsın, ne yapmazsın?
+**2.** 1 saatlik GBP/USD grafiğinde New York 09:00'da (TSİ ABD yaz saatinde 16:00, kış saatinde 17:00) başlayan aşağı
+yönlü, dört ATR'lik bir mum günün yeni dibini yaptı ve ucunda kapandı. Masadaki biri "ucun yarım ATR altına alış limiti
+koyalım" diyor. Ne yaparsın?
 
 <details>
 <summary>Çözüm</summary>
 
-Uzamayı almazsın. 1 saatlik büyük mumun ortalama yolu mumun yönündedir (6. ders, Dilim dilim okuma) ve "ucun yarım ATR
-ötesine limit" referans girişi 1 saatte iki dönemde de maliyetten sonra eksi (9. ders, Referans girişler). Mumun dört ATR
-olması bir dönüş işareti değildir (6. ders, Büyüklük değişince). Mumun yönünde bir gerekçen varsa sığ geri çekilmeye
-limit ya da onay mumu kullanırsın; ama ölçülen hiçbir biçim maliyetten sonra artıda değildir (8. ders, 15 dakika ve 1
-saat).
+Uzamayı almazsın: 1 saatlik büyük mumun ortalama yolu mumun yönündedir (6. ders, Dilim dilim okuma) ve "ucun yarım ATR
+ötesine limit" referansı 1 saatte iki dönemde de maliyetten sonra eksi (9. ders, Referans girişler). Dört ATR olması da
+bir dönüş işareti değildir (6. ders, Büyüklük değişince).
 
 </details>
 
 **3.** 5 dakikalık USD/JPY grafiğinde ABD enflasyon verisinin mumu (New York 08:30; TSİ ABD yaz saatinde 15:30, kış
-saatinde 16:30) yukarı yönlü ve ucunda kapandı. 2018–2023 tablosu bu durum için "mumun ucuna tersine limit" girişini
-seçmişti. Ne yaparsın?
+saatinde 16:30) yukarı yönlü ve ucunda kapandı. 2018–2023 tablosu bu durum için "mumun ucuna tersine limit"i seçmişti.
+Ne yaparsın?
 
 <details>
 <summary>Çözüm</summary>
 
 Masadan kalkarsın: karar şemasının ikinci sorusu seni orada durdurur. Haber mumunda okuma yok (7. ders, Fade mi, devam
-mı: okuma tablosu), ve o seçilen giriş 2024 sonrasında maliyetten sonra eksi kaldı (9. ders, Seçilen girişler).
-Tablonun satırını işlem planına kopyalamazsın; haber penceresinde bekleyen başka emrin varsa onu haberden önce gözden
-geçirirsin.
+mı: okuma tablosu) ve o giriş 2024 sonrasında maliyetten sonra eksi kaldı (9. ders, Seçilen girişler). Tablonun satırını
+plana kopyalamazsın.
 
 </details>
 
-**4.** Yarıya alış limiti şemasındaki durumdasın: limit ② noktasında doldu, fiyat bir mum daha düştü ve stopa
-yaklaşıyor. Aklına iki şey geliyor: stopu yaklaştırıp kaybı küçültmek ya da ortalamayı düşürmek için daha aşağıya ikinci
-bir alış limiti koymak. Ne yaparsın?
+**4.** Yarıya alış limiti şemasındasın: limit ② noktasında doldu, fiyat bir mum daha düştü ve stopa yaklaşıyor. Stopu
+yaklaştırmak ya da daha aşağıya ikinci bir alış limiti koymak aklından geçiyor. Ne yaparsın?
 
 <details>
 <summary>Çözüm</summary>
 
-İkisini de yapmazsın. Ölçülen emirlerde stop sabitti; iz süren stop ve pozisyona ekleme bu seride ölçülmedi
-(9. ders, Ölçülmeyenler). Ölçülen şey, limitin dolduğu olaylarda piyasa girişinin çoğunlukla kaybettiğidir (8. ders,
-Limit neden ucuz görünür: ters seçim); ikinci bir limit aynı ters seçimin ikinci kez yaşanmasıdır. Emri kurarken yazdığın
-stop ve hedef ne ise işlem odur.
-
-</details>
-
-**5.** Kendi taramanda 15 dakikalık grafikte Asya seansı süzgeciyle yüz yirmi aday (emir biçimi, stop, hedef) denedin.
-En iyisi 2018–2023'te iki yarıda da artı. Bunu bir kural olarak kullanmadan önce ne yaparsın?
-
-<details>
-<summary>Çözüm</summary>
-
-Önce aday sayısını yazarsın ve en iyinin şişkinliğini bilirsin (9. ders, Seçim kuralı); iki yarıda artı olmanın ikinci
-bir sınav olmadığını hatırlarsın (9. ders, Seçilen girişler). Yanına aynı dilimin düz referans girişini koyarsın
-(9. ders, Referans girişler), hüküm kuralını sonucu görmeden yazarsın ve görülmemiş bir dönemde sınarsın (9. ders,
-Hüküm kuralı). Asya seansı 15 dakikada iki dönemde tutan bir okumadır, ama bir okuma kenar değildir (7. ders,
-15 dakika).
+İkisini de yapmazsın. Ölçülen emirlerde stop sabitti; iz süren stop ve pozisyona ekleme bu seride ölçülmedi (9. ders,
+Ölçülmeyenler). Ölçülen şey, limitin dolduğu olaylarda piyasa girişinin çoğunlukla kaybettiğidir; ikinci limit aynı ters
+seçimin ikinci kez yaşanmasıdır (8. ders, Limit neden ucuz görünür: ters seçim).
 
 </details>
 

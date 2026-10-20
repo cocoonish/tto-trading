@@ -132,15 +132,15 @@ i0 = 8
 tur = "hedef"
 [[sema.isaret]]
 i = 7
-y = 55.0
+y = 51.75
 n = 1
 [[sema.isaret]]
 i = 8
 y = 51.3
 n = 2
 [[sema.isaret]]
-i = 10
-y = 54.8
+i = 9
+y = 54.4
 n = 3
 
 [[sema]]

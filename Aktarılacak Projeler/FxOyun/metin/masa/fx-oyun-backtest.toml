@@ -377,5 +377,5 @@ kaynak = "an"
 cift = "GBPUSD"
 an = "wmr"
 kosul = { sinif = "normal", ay_sonu = false }
-tipik = { orta = true, devam = false }
-ters = { orta = false, devam = true }
+tipik = { orta = true, devam = false, kapanis = false }
+ters = { orta = false, devam = true, kapanis = true }

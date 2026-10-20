@@ -298,11 +298,10 @@ kapandıktan sonra altı mum bekledi ve dolmazsa çekildi (8. ders, On bir giri�
 pencereyle anlatılır. Pencere bitince masadan kalkarsın. Dolmayan limiti fiyatın peşinden kaydırmak kovalamanın yavaş
 hâlidir.
 
-Bekleyişin ikinci yüzü daha önemli: limitin dolması iyi haber değildir. 8. ders aynı olaylarda iki soruyu birlikte
-sordu (limit doldu mu, aynı anda piyasadan girilseydi kazanır mıydı) ve limitin dolduğu olaylarda piyasa girişinin
-çoğunlukla kaybettiğini buldu (8. ders, Limit neden ucuz görünür: ters seçim). Bunun büyük kısmı geometridir: limit,
-fiyat mumun hareketini geri aldığında dolar. Yarıyı bekleyen işlemci daha iyi bir fiyat alır, ama o fiyatla aldığı şey
-çoğu zaman zayıflamış bir harekettir.
+Bekleyişin ikinci yüzü daha önemli: limitin dolması iyi haber değildir. Limitin dolduğu olaylarda aynı anda piyasadan
+girilen işlem çoğunlukla kaybederdi (8. ders, Limit neden ucuz görünür: ters seçim); bunun büyük kısmı geometridir, çünkü
+limit fiyat mumun hareketini geri aldığında dolar. Yarıyı bekleyen işlemci daha iyi bir fiyat alır, ama o fiyatla
+aldığı şey çoğu zaman zayıflamış bir harekettir.
 
 {{# sema bekleme }}
 
@@ -487,19 +486,7 @@ saat); bu bir bağlamdır, giriş değil.
 
 </details>
 
-**3.** 5 dakikalık USD/JPY grafiğinde New York 16:55'te (TSİ ABD yaz saatinde 23:55, kış saatinde 00:55) uzun
-fitilli, gövdesi kısa bir mum çıkıyor; aralığı ATR'nin beş katı. Ne yaparsın, ne yapmazsın?
-
-<details>
-<summary>Çözüm</summary>
-
-İki eleme birden: mum devir penceresinde ve gövdesi aralığına göre kısa. Bu dersin olayı değildir; aralığın bir
-kısmı kotasyonun ve makasın hareketidir (6. ders, Büyük mum nasıl tanımlandı). Ucuna ya da yarısına emir koymazsın ve
-bu mumdan bir okuma çıkarmazsın.
-
-</details>
-
-**4.** 15 dakikalık EUR/USD grafiğinde ABD enflasyon verisinin mumu (New York 08:30; TSİ ABD yaz saatinde 15:30, kış
+**3.** 15 dakikalık EUR/USD grafiğinde ABD enflasyon verisinin mumu (New York 08:30; TSİ ABD yaz saatinde 15:30, kış
 saatinde 16:30) aşağı yönlü ve ucunda kapandı; aralığı ATR'nin altı katı. Masadaki biri "bu kadar büyük haber mumu
 döner" diyor. Ne yaparsın, ne yapmazsın?
 
@@ -513,7 +500,7 @@ olması bunu değiştirmez.
 
 </details>
 
-**5.** 5 dakikalık grafikte yarıya koyduğun limit üçüncü mumda doldu (Şekil M8'deki ② gibi); fiyat sonra yarıdan dönüp
+**4.** 5 dakikalık grafikte yarıya koyduğun limit üçüncü mumda doldu (Şekil M8'deki ② gibi); fiyat sonra yarıdan dönüp
 mumun ucuna doğru gidiyor ve pozisyonu büyütmeyi düşünüyorsun. Ne yaparsın, ne yapmazsın?
 
 <details>
