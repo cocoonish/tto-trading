@@ -71,6 +71,17 @@ giren olay sayısı 5 dakikada {{ D.5.ic.n }}, 15 dakikada {{ D.15.ic.n }}, 1 sa
 
 {{# sekil 01_ornek "Üç dilimde birer büyük mum" }}
 
+Şekildeki üç mumu sayıyla okumak tanımı somutlaştırır. 5 dakikalık mum ({{ O.5.gun }}, başlangıcı
+TSİ {{ O.5.saat }}) {{ O.5.yon }} yönlüydü: aralığı {{ O.5.R_pip }} pip, kendisinden önceki 5 dakikalık ATR {{ O.5.A_pip }} pip,
+oran {{ O.5.kat }}. Sonraki 24 mumda fiyat mumun yarısına {{ O.5.geri50 }}, mumun ucunu {{ O.5.uc }} ve 24 mumun
+sonunda mumun yönünde {{ O.5.net24 }} ATR'deydi. 15 dakikalık mum ({{ O.15.gun }}, başlangıcı TSİ {{ O.15.saat }}, {{ O.15.yon }})
+{{ O.15.R_pip }} pip, ATR {{ O.15.A_pip }} pip; sonrasında yarısına {{ O.15.geri50 }}, ucunu {{ O.15.uc }}, 24 mum sonra
+{{ O.15.net24 }} ATR. 1 saatlik mum ({{ O.60.gun }}, başlangıcı TSİ {{ O.60.saat }}, {{ O.60.yon }}) {{ O.60.R_pip }} pip, ATR
+{{ O.60.A_pip }} pip; sonrasında yarısına {{ O.60.geri50 }}, ucunu {{ O.60.uc }}, bir gün sonra {{ O.60.net24 }} ATR.
+
+Üç örnek üç farklı hikâye anlatır ve bu dersin konusu tam olarak budur: tek bir büyük mumun ardından ne olacağı
+grafikte hep "belliydi" gibi görünür. Ölçülmesi gereken, binlerce büyük mumun ortalamasıdır.
+
 ## Ne ölçüldü
 
 Büyük mum kapandıktan sonra fiyat 24 mum boyunca izlendi: 5 dakikalık grafikte iki saat, 15 dakikalıkta altı saat,

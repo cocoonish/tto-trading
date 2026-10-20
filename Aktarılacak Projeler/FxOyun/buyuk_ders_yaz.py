@@ -52,6 +52,7 @@ EMIR_AD = {"piyasa": "kapanışta piyasa", "limit_0.25": "%25 geri çekilmeye li
            "limit_uc": "mumun ucuna limit", "limit_ote": "ucun yarım ATR ötesine limit"}
 EMIR_AD_TERS = {"stop": "mumun yarısının kırılmasına stop"}
 YON_AD = {"devam": "mumun yönünde", "ters": "mumun tersine"}
+ORNEK_PIP_NOKTA = 10          # örnek mumlar EUR/USD (buyuk_ders_olcum.ORNEK_CIFT); bir pip on nokta
 
 
 def deger_ad(f: str, v: str) -> str:
@@ -208,10 +209,27 @@ def anahtarlar() -> dict[str, str]:
     K["ON.hukum_en_az"] = tam(ON["hukum"]["en_az_islem"])
     K["ON.bootstrap"] = tam(ON["hukum"]["bootstrap"])
     K["ON.dis_bitis"] = tarih(ON["donem"]["dis"][1])
+    from datetime import datetime, timedelta, timezone
+    tsi = timezone(timedelta(hours=3))
     for tf in TF:
         o = D["ornek"][tf]
         K[f"O.{tf}.gun"] = tarih(o["gun"])
         K[f"O.{tf}.kat"] = sayi(o["kat"], 1)
+        nokta = ORNEK_PIP_NOKTA
+        K[f"O.{tf}.R_pip"] = sayi((o["h"] - o["l"]) / nokta, 1)
+        K[f"O.{tf}.A_pip"] = sayi(o["A"] / nokta, 1)
+        K[f"O.{tf}.saat"] = datetime.fromtimestamp(o["bt"], tsi).strftime("%H:%M")
+        K[f"O.{tf}.yon"] = "yukarı" if o["yon"] > 0 else "aşağı"
+        m = o["mumlar"]
+        i = next(k for k, x in enumerate(m) if x[0] == o["bt"])
+        sonra = m[i + 1:i + 1 + 24]
+        y, orta = o["yon"], (o["h"] + o["l"]) / 2
+        lo, hi = min(x[3] for x in sonra), max(x[2] for x in sonra)
+        K[f"O.{tf}.geri50"] = "döndü" if (lo <= orta if y > 0 else hi >= orta) else "dönmedi"
+        K[f"O.{tf}.uc"] = "aştı" if (hi > o["h"] if y > 0 else lo < o["l"]) else "aşmadı"
+        K[f"O.{tf}.net24"] = a(y * (sonra[-1][4] - o["c"]) / o["A"])
+        kc = ((o["c"] - o["l"]) if y > 0 else (o["h"] - o["c"])) / (o["h"] - o["l"])
+        K[f"O.{tf}.kapanis"] = "ucuna yakın" if kc >= 0.75 else ("ortasında" if kc >= 0.5 else "yarısının gerisinde")
     return K
 
 

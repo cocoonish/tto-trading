@@ -201,7 +201,21 @@ def iddialar(D: dict, dogru) -> None:
     ilk2 = sorted(g60, key=lambda g: -g60[g]["ort_R"])[:2]
     dogru(set(ilk2) == {"devam:onayli:s2:h1", "devam:limit_0.25:s2:h1"}, f"1 sa sıfıra en yakın iki biçim metindeki değil: {ilk2}")
     dogru(abs(g5["devam:onayli:s2:h1"]["brut_R"] - g5["devam:piyasa:s2:h1"]["brut_R"]) < 0.02, "5 dk onay ile piyasa maliyetsiz farklı")
-    # ders 9
+    # ders 9 · "Masada": örnek mumların sonucu metindeki hükümlerle (5 dk: yarıya döndü, sonra artı bitti;
+    # 1 sa: yarıya dönmedi, bir gün sonra makastan küçük artı)
+    def ornek(tf):
+        o = D["ornek"][tf]
+        m = o["mumlar"]
+        i = next(k for k, x in enumerate(m) if x[0] == o["bt"])
+        s = m[i + 1:i + 25]
+        orta = (o["h"] + o["l"]) / 2
+        y = o["yon"]
+        return (min(x[3] for x in s) <= orta if y > 0 else max(x[2] for x in s) >= orta), y * (s[-1][4] - o["c"]) / o["A"]
+    g5, n5 = ornek("5")
+    g60, n60 = ornek("60")
+    dogru(g5 and n5 > 0, "örnek 5 dk mum: 'yarıya döndü, uyarı yanıldı' hükmü tutmuyor")
+    dogru((not g60) and 0 < n60 * D["ornek"]["60"]["A"] / 10 < V["60"]["ic"]["makas_once_pip_med"] + 1,
+          "örnek 1 sa mum: 'yarıya dönmedi, maliyetini çıkaramazdı' hükmü tutmuyor")
     B = D["bacak"]
     dogru(all(b["hukum"] == "calismiyor" for b in B), "büyük mum: bütün girişler 'çalışmıyor' değil")
     dogru(all(b["dis"]["ort_R"] <= 0 for b in B), "büyük mum: 2024 → artı bir giriş var")

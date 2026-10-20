@@ -118,6 +118,28 @@ aynı anda olur; işlemleri tek tek örneklemek aralığı olduğundan dar göst
 7. **Haber mumunda okuma yok.** Takvimdeki büyük haberin mumu az ve dağılımı çok geniş; ne fade ne devam ölçülebiliyor
    (7. ders). Seçimin iki girişi buradan çıktı ve 2024 sonrasında tutmadı.
 
+## Masada: üç örnek
+
+6. dersin Şekil 01'indeki üç EUR/USD mumunu bu planla okumak, planın ne yaptığını ve ne yapmadığını gösterir.
+
+**5 dakikalık mum** ({{ O.5.gun }}, başlangıcı TSİ {{ O.5.saat }}, {{ O.5.yon }}, {{ O.5.kat }} ATR) kapanışı
+aralığının {{ O.5.kapanis }} kaldı. Plan burada kovalamamayı söyler (madde 2): mumun yönünde girilecekse geri çekilme
+beklenir. Fiyat mumun yarısına {{ O.5.geri50 }}; o noktada yarıya konan alış limiti dolardı ve plan bunun bir
+uyarı olduğunu söyler (madde 3). Bu örnekte uyarı yanıldı: fiyat sonra mumun ucunu {{ O.5.uc }} ve 24 mum sonra mumun
+yönünde {{ O.5.net24 }} ATR'deydi. Tek bir olay ortalamayı ne doğrular ne yanlışlar.
+
+**15 dakikalık mum** ({{ O.15.gun }}, başlangıcı TSİ {{ O.15.saat }}, {{ O.15.yon }}) için plan bir şey söylemez: 15
+dakikada ölçülen hiçbir ayrım iki dönemde tutmadı. Fiyat yarısına {{ O.15.geri50 }}, ucunu {{ O.15.uc }} ve 24 mum sonra
+{{ O.15.net24 }} ATR'deydi.
+
+**1 saatlik mum** ({{ O.60.gun }}, başlangıcı TSİ {{ O.60.saat }}, {{ O.60.yon }}) kapanışı aralığının
+{{ O.60.kapanis }} kaldı. Plan burada tersine girmemeyi söyler (madde 5). Fiyat mumun yarısına {{ O.60.geri50 }}, ucunu
+{{ O.60.uc }} ve bir gün sonra mumun yönünde {{ O.60.net24 }} ATR'deydi: tersine giren bir işlemci zarar ederdi, mumun
+yönünde giren ise bir günün sonunda maliyetini çıkaramazdı.
+
+Üç örneğin hiçbiri planı sınamaz; plan binlerce olayın ortalamasına dayanır ve 2024 sonrasındaki sınaması yukarıdaki
+tablolardır. Örneklerin işi, planın masada bir işlem kuralı değil bir okuma sırası olduğunu göstermek.
+
 ## Bu sonuç nasıl okunmalı
 
 Bu serinin önceki derslerinde de görülen tablo burada da tekrarlandı: davranış gerçek, kenar maliyetten küçük. Büyük
