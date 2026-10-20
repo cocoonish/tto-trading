@@ -237,7 +237,7 @@ id = "kosu-sonrasi"
 hukum = "eksi"
 durum = "1 saatlik grafikte, önceki 12 mumda mumun yönünde en az iki ATR yürümüş bir piyasada gelen büyük mum"
 gorursun = "Gün içinde zaten uzun bir koşu var; büyük mum koşunun en uzun mumu ve ucuna yakın kapanıyor. Grafik sığ bir geri çekilmeden katılmayı çağırıyor gibi görünür."
-yaparsin = "Bunun seçimin 1 saatte bulduğu en iyi girişin durumu olduğunu ve 2024 sonrasında maliyetten önce de eksi kaldığını hatırlarsın; durumu bir uyarı olarak not edersin."
+yaparsin = "Bunun seçimin 1 saatteki en iyi girişinin durumu olduğunu ve 2024 sonrasında maliyetten önce de eksi kaldığını hatırlarsın; durumu bir uyarı olarak not edersin."
 yapmazsin = "Sığ geri çekilmeye limit koyup bunu sınanmış bir giriş saymazsın; iki yarıda artı çıkması görülmemiş dönemde tutacağını göstermedi."
 emir = "Başka bir gerekçeyle mumun yönünde gireceksen çeyrek ya da yarı geri çekilmeye limit, stop limitin fiyatından iki ATR öte, hedef bir ya da iki R. Limit dolduysa dolumun fiyatın mumu geri aldığı olaylarda geldiğini bilirsin."
 dayanak = "9. ders, Seçilen girişler; 7. ders, 1 saat; 8. ders, Limit neden ucuz görünür: ters seçim"
@@ -249,7 +249,7 @@ durum = "5 dakikalık grafikte, haber saati dışında, ucunda kapanan büyük m
 gorursun = "Kapanışı mumun uç çeyreğinde uzun bir mum; kapanış anında fiyat ilerlemeyi sürdürüyor ve işlem kaçıyormuş gibi görünüyor."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; mumun yönündeki işlemi kapanıştan değil bir geri çekilmeden kurarsın."
 yapmazsin = "Kapanışta piyasa emriyle kovalamazsın; limit dolduğunda okumanın güçlendiğini düşünmezsin; stopu bir ATR'ye çekmezsin."
-emir = "Limit mumun çeyrek ya da yarı geri çekilmesine, stop limitin fiyatından iki ATR öte, hedef bir ya da iki R. Limit altı mum içinde dolmazsa çekersin; ölçülen emirler de altı mum bekledi. Süreye seans geçişi ya da haber penceresi düşüyorsa emri önceden çekmek ölçülmemiş ek bir kuraldır."
+emir = "Limit mumun çeyrek ya da yarı geri çekilmesine, stop limitin fiyatından iki ATR öte, hedef bir ya da iki R. Limit altı mum içinde dolmazsa çekersin (ölçülen emirler de altı mum bekledi); süreye seans geçişi ya da haber penceresi düşüyorsa önceden çekmek ölçülmemiş ek bir kuraldır."
 dayanak = "9. ders, Büyük mum için oyun planı (madde 2); 8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, On bir giriş biçimi"
 
 [[kart]]
@@ -279,7 +279,7 @@ durum = "Herhangi bir dilimde ABD istihdam ya da enflasyon verisinin (New York 0
 gorursun = "Haberin saatinde başlayan, çevresindeki mumların kat kat üstünde bir mum; grafikte günün en okunaklı yeri gibi görünür."
 yaparsin = "Mumu ve iki ucunu işaretler, masadan kalkarsın: sonraki yolun ortalaması bir yön söyleyemeyecek kadar dağınık. Haberin içeriği bu seride ölçülmedi."
 yapmazsin = "Ucuna tersine limit koymazsın; seçimin üç girişinden ikisi buradan çıktı ve 2024 sonrasında tutmadı. Kovalamazsın da."
-emir = "Bekleyen bir emrin süresine haberin penceresi (açıklamadan iki dakika önce – on beş dakika sonra) düşüyorsa emri açıklamadan önce çekersin; bu bir disiplin kuralıdır, etkisi ölçülmedi. Ölçüm o pencerede piyasa ve stop emirlerine bir pip ek kayma varsaydı; haber anındaki makas ölçülmedi."
+emir = "Bekleyen bir emrin süresine haberin penceresi (açıklamadan iki dakika önce – on beş dakika sonra) düşüyorsa emri açıklamadan önce çekersin; bu bir disiplin kuralıdır, etkisi ölçülmedi. Ölçüm o pencerede piyasa ve stop emirlerine bir pip ek kayma varsaydı, haber anındaki makası ölçmedi."
 dayanak = "7. ders, Fade mi, devam mı: okuma tablosu; 9. ders, Seçilen girişler; 8. ders, Ölçülmeyenler"
 
 # ─────────────────────────────────────────── gerçek örnekler (yalnız 2018–2023)

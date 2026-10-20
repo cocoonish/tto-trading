@@ -36,8 +36,8 @@ KART_NOTU = {
     "az": ("Bu bir okuma kuralıdır, kenar değil: bu durumda 2024 sonrasında artı sonuç ölçüldü, ama az sayıda "
            "olaya dayanıyor ve hüküm \"çalışıyor\" değil. Kural, masadaysan neyi yapmayacağını ve emri nereye "
            "koyacağını söyler."),
-    "olculmedi": ("Bu bir okuma kuralıdır, kenar değil: bu durum bu seride ölçülmedi; kart, maliyet kurallarından ve "
-                  "tanımlardan türetilmiş bir masa uygulamasıdır, bir bulgu değil."),
+    "olculmedi": ("Bu bir okuma kuralıdır, kenar değil: kartın tarif ettiği işlem bu seride ölçülmedi; kart, maliyet "
+                  "kurallarından ve tanımlardan türetilmiş bir masa uygulamasıdır, bir bulgu değil."),
 }
 DAIRE = "①②③④⑤⑥⑦⑧⑨"
 DAYANAK = re.compile(r"\b[1-9]\. ders\b")

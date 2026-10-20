@@ -26,7 +26,7 @@ dayanak = "7. ders, 5 dakika"
 [[karar.adim]]
 soru = "Dilim 5 ya da 15 dakika ve mum Asya seansında mı başladı?"
 cikis = "evet"
-sonuc = "Kovalamazsın; yarıya dönüş aynadan sık"
+sonuc = "5 dakikada kovalamazsın; 15 dakikada yarıya dönüş sık, yön yok"
 tur = "bekle"
 dayanak = "7. ders, 5 dakika; 7. ders, 15 dakika"
 [[karar.adim]]
@@ -66,8 +66,8 @@ i0 = 6
 etiket = "kovalama bölgesi"
 tur = "yasak"
 [[sema.isaret]]
-i = 4
-y = 57.0
+i = 5
+y = 58.9
 n = 1
 [[sema.isaret]]
 i = 8
@@ -89,18 +89,18 @@ yukseklik = 270
 eksen = "zaman →  (5 dakikalık mumlar)"
 not = ["Önceki büyük mum: ikinci mumdan dört ile yirmi dört mum önce. Hemen önceki üç mum kümenin devamı sayılır, süzgece girmez.",
        "İkinci büyük mum: piyasa kısa sürede iki kez büyük mum verdi. Bu süzgeçte 24 mum sonraki yol iki dönemde de mumun tersindeydi.",
-       "Mumun yarısı: geri verme buraya kadar uzanabilir. Kümenin bir haberin ya da bir akışın sonu olup olmadığı bu derste ölçülmedi."]
+       "Mumun yarısı: geri çekilme buraya kadar uzanabilir. Kümenin bir haberin ya da bir akışın sonu olup olmadığı bu derste ölçülmedi."]
 [[sema.cizgi]]
 y = 58.45
 i0 = 6
 etiket = "mumun yarısı"
 tur = "seviye"
 [[sema.yol]]
-noktalar = [[7, 60.2], [10, 57.6], [11, 56.2]]
-etiket = "geri verme"
+noktalar = [[7, 60.2], [9.5, 57.6], [10.8, 56.2]]
+etiket = "geri çekilme"
 tur = "olasi"
 [[sema.yol]]
-noktalar = [[7, 61.4], [9, 63.0], [11, 64.5]]
+noktalar = [[7, 61.4], [9, 63.0], [10.8, 64.5]]
 etiket = "sürerse"
 tur = "ters"
 [[sema.isaret]]
@@ -112,8 +112,8 @@ i = 6
 y = 62.6
 n = 2
 [[sema.isaret]]
-i = 9
-y = 56.6
+i = 7
+y = 58.45
 n = 3
 
 [[sema]]
@@ -139,12 +139,12 @@ i0 = 6
 etiket = "tersine giriş yok"
 tur = "yasak"
 [[sema.yol]]
-noktalar = [[7, 58.8], [8, 60.4], [9, 61.6]]
+noktalar = [[7, 58.8], [7.4, 60.4], [7.8, 61.6]]
 etiket = "devam"
 tur = "olasi"
 [[sema.yol]]
-noktalar = [[7, 58.8], [8, 56.4], [9, 53.6]]
-etiket = "geri verme"
+noktalar = [[7, 58.8], [7.4, 56.4], [7.8, 53.6]]
+etiket = "geri çekilme"
 tur = "ters"
 [[sema.isaret]]
 i = 5
@@ -163,7 +163,7 @@ n = 3
 id = "haber-kalk"
 baslik = "Haber mumu: süzgeç okuması yok, masadan kalkış"
 mumlar = [[50,50.4,49.7,50.1],[50.1,50.5,49.8,50.3],[50.3,50.6,49.9,50.2],[50.2,50.5,49.9,50.4],
-          [50.4,58.0,47.8,56.6],[56.6,58.6,53.4,54.2],[54.2,57.8,53.6,57.2]]
+          [50.4,59.0,46.4,56.6],[56.6,58.6,53.4,54.2],[54.2,57.8,53.6,57.2]]
 vurgu = [4]
 yukseklik = 260
 eksen = "zaman →  (haber saati büyük mumun içinde)"
@@ -174,23 +174,23 @@ not = ["Takvimdeki büyük bir haberin mumu: haberin saati mumun başlangıcınd
 y1 = 51.6
 y2 = 61.0
 i0 = 5
-etiket = "masadan kalk"
+etiket = "masadan kalkarsın"
 tur = "kalk"
 [[sema.yol]]
-noktalar = [[6, 57.2], [7, 61.6]]
+noktalar = [[6, 57.2], [6.8, 61.6]]
 etiket = "bir yol"
 tur = "olasi"
 [[sema.yol]]
-noktalar = [[6, 57.2], [7, 51.0]]
+noktalar = [[6, 57.2], [6.8, 51.0]]
 etiket = "öbür yol"
 tur = "ters"
 [[sema.isaret]]
 i = 4
-y = 59.0
+y = 60.4
 n = 1
 [[sema.isaret]]
-i = 5
-y = 52.4
+i = 4
+y = 45.8
 n = 2
 [[sema.isaret]]
 i = 6
@@ -214,11 +214,11 @@ i0 = 4
 etiket = "mumun yarısı"
 tur = "seviye"
 [[sema.yol]]
-noktalar = [[6, 60.0], [7, 57.4], [8, 53.8]]
+noktalar = [[6, 60.0], [6.4, 57.4], [6.8, 53.8]]
 etiket = "döner"
 tur = "olasi"
 [[sema.yol]]
-noktalar = [[6, 60.0], [7, 62.6], [8, 64.8]]
+noktalar = [[6, 60.0], [6.4, 62.6], [6.8, 64.8]]
 etiket = "sürer"
 tur = "ters"
 [[sema.isaret]]

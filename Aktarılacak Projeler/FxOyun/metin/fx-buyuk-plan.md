@@ -57,16 +57,15 @@ Kural, 2018–2023 ızgarası görüldükten sonra ve 2024 sonrasının fiyatlar
 3. Uygunların içinden maliyetten sonra ortalaması en yüksek olan seçilir. Uygun aday yoksa o dilim ve yön için "işlem
    yok".
 
-Kural toplam {{ plan.aday }} adayı taradı. Bu sayı önemli: bu kadar adayın içinden en iyisini seçmek, en iyisinin
-2018–2023'teki sonucunu şansla şişirir. 2024 → dönemi o şişkinliği ölçer.
+Kural toplam {{ plan.aday }} adayı taradı: bu kadar adayın en iyisini seçmek, onun 2018–2023 sonucunu şansla
+şişirir; 2024 → dönemi o şişkinliği ölçer.
 
-Stop emirli girişlerde dolum dakikasının nasıl sayılacağı 2024 sınamasından sonra değişti (8. ders, Ölçülmeyenler).
-Seçim yeni kuralla yeniden uygulandığında seçilen üç giriş ve referanslar aynı kaldı; değişen tek şey, kuralın "işlem
-yok" dediği 15 dakika tersine hücresinin en iyi adayı oldu. 2024 → sonuçlarının hiçbiri değişmedi.
+Stop emirli girişlerde dolum dakikasının sayılışı 2024 sınamasından sonra değişti (8. ders, Ölçülmeyenler). Seçim yeni
+kuralla yeniden uygulandı: seçilen üç giriş, referanslar ve 2024 → sonuçları aynı kaldı; değişen tek şey, "işlem yok"
+denen 15 dakika tersine hücresinin en iyi adayı oldu.
 
-Seçimin bir sınırı var: aynı veriyle (dört majör, 2024 →) bu seride daha önce başka kuralların sonuçları
-yayımlandı; 2024 sonrasının toplu davranışı bu plan yazılırken biliniyordu. Büyük mumdan sonraki davranışın ve bu
-girişlerin 2024 sonrası sonucu ise ölçülmemişti.
+Seçimin bir sınırı var: 2024 sonrasının toplu davranışı bu seride başka kurallardan biliniyordu; büyük mumdan sonraki
+davranışın ve bu girişlerin 2024 sonrası sonucu ise ölçülmemişti.
 
 ## Seçilen girişler
 
@@ -128,17 +127,17 @@ Referanslar en sık duyulan dört cümlenin ölçülmüş karşılığıdır; d�
 
 {{# sema dort-tepki }}
 
-Önce maliyetten önceki sonucun işaretine bakarsın: mumun o dilimde taşıdığı küçük bilgiyi söyler (5 dakikada tersine
-taraf, 1 saatte mumun yönü; 6. ders, Dilim dilim okuma). Sonra maliyetten sonrakine: on iki satırın on ikisinde eksi
-(9. ders, Referans girişler).
+Maliyetten önceki işaret mumun o dilimdeki küçük bilgisini söyler (5 dakikada tersine taraf, 1 saatte mumun yönü;
+6. ders, Dilim dilim okuma); maliyetten sonrası on iki satırın on ikisinde eksi.
 
 ## Hüküm kuralı
 
 Hüküm 2024 → dönemi için ön kaydın kuralıyla verildi: dört parite birlikte, ortalama net R'nin {{ Y.95 }} aralığı,
-{{ ON.bootstrap }} tekrarlı ve **işlem günü düzeyinde** yeniden örneklemeyle. Büyük mumlar dolar haberinde dört paritede
-aynı anda olur; işlemleri tek tek örneklemek aralığı olduğundan dar gösterirdi. 1 saatlik işlemler ertesi güne
+{{ ON.bootstrap }} tekrarlı ve **işlem günü düzeyinde** yeniden örneklemeyle, çünkü büyük mumlar dolar haberinde dört
+paritede aynı anda olur. 1 saatlik işlemler ertesi güne
 taşabildiği için tablolardaki ikinci aralık hafta düzeyindedir (FX haftası hafta sonu boşluğuyla biter); hükmü
-değiştirmez. Aralığın alt ucu sıfırın üstündeyse "çalışıyor", ortalama artı ama alt uç sıfırın altındaysa "zayıf", ortalama sıfır ya da eksiyse "çalışmıyor";
+değiştirmez. Aralığın alt ucu sıfırın üstündeyse "çalışıyor", ortalama artı ama alt uç sıfırın altındaysa "zayıf",
+ortalama sıfır ya da eksiyse "çalışmıyor";
 {{ ON.hukum_en_az }} işlemin altında "ölçülemedi". Sonuç: {{ hukum_calismiyor }} çalışmıyor, {{ hukum_zayif }} zayıf,
 {{ hukum_calisiyor }} çalışıyor, {{ hukum_olculemedi }} ölçülemedi.
 
@@ -146,17 +145,15 @@ değiştirmez. Aralığın alt ucu sıfırın üstündeyse "çalışıyor", orta
 
 Bu dersin asıl öğrettiği, bir seçim kuralının nasıl yanıldığıdır:
 
-1. **Aday sayısını saymamak.** Kural {{ plan.aday }} adayı taradı ve en iyisinin 2018–2023 sonucu bu yüzden şişti.
-   Denediğin her süzgeç, stop ve hedef bir adaydır; not etmediklerin de (9. ders, Seçim kuralı).
-2. **İki yarıyı ikinci bir sınav sanmak.** Seçilen üç girişin üçü de iki yarıda artıydı ve tutmadı. Seçim o veriyle
+1. **Aday sayısını saymamak.** Denediğin her süzgeç, stop ve hedef bir adaydır, not etmediklerin de (9. ders, Seçim
+   kuralı).
+2. **İki yarıyı ikinci bir sınav sanmak.** Seçilen üç girişin üçü de iki yarıda artıydı ve tutmadı; seçim o veriyle
    yapıldıktan sonra yarılar bağımsız bir kanıt olmaz (9. ders, Seçilen girişler).
-3. **Küçük alt kümeye güvenmek.** Olay ne kadar azsa ortalaması şansla o kadar kolay şişer; seçilenlerin ikisi haber
-   mumundandı (9. ders, Seçilen girişler).
+3. **Küçük alt kümeye güvenmek.** Olay azaldıkça ortalama şansla kolay şişer (9. ders, Seçilen girişler).
 4. **Maliyetten önceki sonuçla seçmek.** Maliyetten önce sıfırın biraz üstünde kalan girişlerin hepsi maliyetten sonra
    eksi (9. ders, Referans girişler).
-5. **Görülmüş dönemi görülmemiş saymak ya da kuralı sonuçtan sonra değiştirmek.** 2024 sonrasının toplu davranışı bu
-   plan yazılırken biliniyordu; stop emirli dolumun sayılışı sınamadan sonra değişti ve seçim yeni kuralla yeniden
-   uygulandı. İkisini de yazarsın (9. ders, Seçim kuralı).
+5. **Görülmüş dönemi görülmemiş saymak ya da kuralı sonuçtan sonra değiştirmek.** İkisi de bu planda oldu ve ikisi de
+   yazıldı (9. ders, Seçim kuralı).
 6. **Olayları bağımsız saymak.** Dolar haberinde dört paritede aynı anda büyük mum çıkar; hükmü gün ya da hafta
    düzeyinde ve sonucu görmeden yazarsın (9. ders, Hüküm kuralı).
 7. **Kıyas noktası koşturmamak.** Seçimin şişirmediği tek kıyas, aynı dilimin en düz tepkisidir (9. ders, Referans
