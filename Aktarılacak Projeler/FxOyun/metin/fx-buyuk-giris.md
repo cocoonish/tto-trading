@@ -290,61 +290,58 @@ değildir.
 
 Bu bölüm, büyük mumdan bağımsız bir gerekçeyle (bir seviye, bir haber okuması, başka bir dilimdeki bir yapı) işleme
 girecek olan içindir: büyük mum o kararı vermez, yalnız emrin nasıl yazılacağını değiştirir. Büyük mum serisinin (6–9.
-dersler) emir kuralları burada durur; hiçbiri bir kenar vaadi değildir, her biri bir maliyetin ya da bir seçimin nereden
-geldiğini söyler.
+dersler) emir kuralları burada durur; hiçbiri bir kenar vaadi değildir.
 
 ### Giriş emri
 
 - **Piyasa emri** her olayda girer, makası ve kaymayı girişte de çıkışta da öder; maliyetsiz sonucu büyük mumun kendi
   okumasını taşır (8. ders, Kısaca). 5 dakikada bu emri, maliyetin stopa oranını yazmadan vermezsin.
 - **Limit emir** girişte makas ve kayma ödemez, çıkışta öder; yeri hangi olayları seçtiğini belirler, bedeli kazanacak
-  olayları kaçırmasıdır (8. ders, Limit neden ucuz görünür: ters seçim). Kapanışın zaten gerisinde kalan bir seviyeye
-  konmaz. 5 dakikada mumun yönünde gireceksen limiti mumun çeyrek ya da yarı geri çekilmesine koyarsın; "yarıyı bekle"
-  tek başına bir kural değildir: çeyrek limit daha sık dolar, yarı limit daha derin bir geri çekilmeyi bekler ve ikisi
-  de maliyetten sonra eksidir (8. ders, 5 dakika). Dolum bir uyarıdır.
+  olayları kaçırmasıdır (8. ders, Limit neden ucuz görünür: ters seçim). Kapanışın zaten gerisindeki seviyeye konmaz.
+  5 dakikada mumun yönünde gireceksen limit çeyrek ya da yarı geri çekilmeye konur; "yarıyı bekle" tek başına kural
+  değildir: ikisi de ölçüldü, çeyrek daha sık dolar ve ikisi de maliyetten sonra eksidir (8. ders, 5 dakika). Dolum bir
+  uyarıdır.
 - **Stop emriyle giriş** yalnız fiyat seviyeyi geçtiğinde dolar ve kaymayı orada öder; maliyetten önce sıfır
   çevresinde (8. ders, Ucun kırılması).
 - **Onay mumundan sonra piyasa** olayların bir kısmında işlem açmaz, açtığında daha ileriden açar (8. ders, Onay mumu).
 
 ### Stop
 
-Stop girişten 2 ATR uzaktadır; limitle giriyorsan limitin fiyatından. Bu seride ölçülen stoplar 1 ve 2 ATR'dir; 1 ATR'de
-maliyetin payı büyür: 5 dakikada işlem başına {{ G.5.ic.devam:piyasa:s1:h1.maliyet }} R, 2 ATR'de
-{{ G.5.ic.devam:piyasa:s2:h1.maliyet }} R (8. ders, Stop uzaklığı ve maliyet). Mumun öbür ucunun ötesine konan stop bu
-seride ölçülmedi: 2–3 ATR'lik bir mumda o yer yarıdaki limite bir ile bir buçuk ATR uzaklıktadır, yani yakın stopun
-maliyetini taşır; mumun tersine kapanışta girerken mumun ucu girişin hemen yanındadır. 2 ATR'lik stop büyük bir mumda
-mumun içinde de kalabilir; ölçülen budur. Risk {{ ON.en_az_risk_pip }} pipin altında kalan olaylarda işlem hiç
-açılmadı; masada da aynı sınırı sorarsın. Fikri 2 ATR'lik bir stopla taşıyamıyorsan bir üst dilimde kurmak maliyetin
-payını küçültür; fikrin kendisini değiştirmez.
+Stop girişten 2 ATR uzaktadır; limitle giriyorsan limitin fiyatından. Ölçülen stoplar 1 ve 2 ATR'dir ve 1 ATR'de
+maliyetin payı büyür (8. ders, Stop uzaklığı ve maliyet). Mumun öbür ucunun ötesine konan stop bu seride ölçülmedi:
+2–3 ATR'lik bir mumda o yer yarıdaki limite bir ile bir buçuk ATR uzaklıktadır ve yakın stopun maliyetini taşır; mumun
+tersine kapanışta girerken mumun ucu girişin hemen yanındadır. 2 ATR'lik stop büyük bir mumda mumun içinde de
+kalabilir. Risk {{ ON.en_az_risk_pip }} pipin altındaysa işlem açılmadı; masada da aynı sınırı sorarsın. Fikri 2 ATR'lik
+stopla taşıyamıyorsan bir üst dilimde kurmak maliyetin payını küçültür, fikrin kendisini değiştirmez.
 
 ### Hedef
 
-Hedef planlanan riskin katıdır: 1 R ya da 2 R. Hedef uzaklaştıkça ona daha az işlem ulaşır, ulaşan daha çok kazanır;
-bu derste ikisinin dengesi 5 ve 15 dakikada hiçbir biçimi maliyetten sonra artıya çevirmedi (8. ders, 15 dakika ve
-1 saat). Ne stop ne hedef görülürse pozisyon 24 mumun sonunda kapanır; emri yazarken o kapanışın saatini de yazarsın.
-1 saatte bu pencere bir günü kapsar; perşembe akşamından sonra açılan 1 saatlik mumların penceresi hafta sonuna
-taştığı için bu mumlar ölçüye girmedi (6. ders, Büyük mum nasıl tanımlandı).
+Hedef planlanan riskin katıdır: 1 R ya da 2 R. Uzak hedefe daha az işlem ulaşır, ulaşan daha çok kazanır; 5 ve 15
+dakikada bu denge hiçbir biçimi maliyetten sonra artıya çevirmedi (8. ders, 15 dakika ve 1 saat). Ne stop ne hedef
+görülürse pozisyon 24 mumun sonunda kapanır; emri yazarken o saati de yazarsın. 1 saatte bu pencere bir gündür;
+perşembe akşamından sonra açılan 1 saatlik mumların penceresi hafta sonuna taştığı için bu mumlar ölçüye girmedi
+(6. ders, Büyük mum nasıl tanımlandı).
 
 ### Bekleme süresi ve iptal
 
-Limit ve stop emri büyük mum kapandıktan sonra {{ SB.bekle }} mum bekler, dolmazsa iptal edilir; ölçülen emir budur ve
-süre mumla sayıldığı için dilimle uzar. Süreye seans geçişi düşüyorsa (Londra açılışı Londra 07:00, TSİ İngiltere yaz
-saatinde 09:00, kış saatinde 10:00) emri geçişten önce çekmek bu seride ölçülmemiş bir ek kuraldır; haber penceresi için
-aşağıdaki kural geçerlidir. Emri süre dolmadan şu iki durumda da çekersin, çünkü ikisinde de emrin ölçülen hâli artık
-yoktur (masa uygulaması; ölçülmedi): fiyat yeni bir uç yapar ve limiti peşinden taşımak istersen (taşınan limit başka
-bir emirdir); emrin dayandığı gerekçe o sürede geçersiz olursa. Farklı bekleme süreleri bu derste ölçülmedi.
+Limit ve stop emri büyük mum kapandıktan sonra {{ SB.bekle }} mum bekler, dolmazsa iptal edilir; ölçülen emir budur,
+süre mumla sayıldığı için dilimle uzar. Süreye seans geçişi (Londra açılışı Londra 07:00; TSİ İngiltere yaz saatinde
+09:00, kış saatinde 10:00) ya da haber penceresi düşüyorsa emri önceden çekmek ölçülmemiş bir ek kuraldır; haber için
+aşağıdaki disiplin geçerlidir. Masada emri iki durumda daha çekersin (masa uygulaması; ölçülmedi): limiti yeni ucun
+peşinden taşımak istersen (taşınan limit başka bir emirdir) ve emrin gerekçesi o sürede geçersiz olursa. Farklı bekleme
+süreleri ölçülmedi.
 
 ### Haber penceresinde
 
 Bekleyen bir emrin süresine takvimdeki büyük bir haberin penceresi (açıklamadan iki dakika önce – on beş dakika sonra)
 düşüyorsa emri açıklamadan önce çekersin. Bu bir disiplin kuralıdır, ölçüm sonucu değil: o pencerede piyasa ve stop
-emirlerine {{ ON.haber_kayma_pip }} pip ek kayma varsayıldı, haber anındaki makas ve gerçek kayma ölçülmedi, limit emir
-o pencerede de kaymasız sayıldı ve emri çekmenin sonuca etkisi bu seride ölçülmedi. Saatler: ABD istihdam ve enflasyon
-verisi New York 08:30 (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30), FOMC kararı New York 14:00 (TSİ ABD yaz
-saatinde 21:00, kış saatinde 22:00), ECB kararı Frankfurt 14:15 (TSİ Avrupa yaz saatinde 15:15, kış saatinde 16:15),
-BoE kararı Londra 12:00 (TSİ İngiltere yaz saatinde 14:00, kış saatinde 15:00). Haberin kendi mumu ayrıca okundu ve bir
-okuma çıkarmadı: az sayıdadır ve sonraki yolu bir yön söyleyemeyecek kadar dağınıktır (7. ders, Haber mumu). Haber
-olmayan bir mumun bekleyen emrine sonradan haber düşmesi ayrıca ölçülmedi.
+emirlerine {{ ON.haber_kayma_pip }} pip ek kayma varsayıldı, limit kaymasız sayıldı; haber anındaki makas, gerçek kayma
+ve emri çekmenin sonuca etkisi ölçülmedi. Saatler: ABD istihdam ve enflasyon verisi New York 08:30 (TSİ ABD yaz saatinde
+15:30, kış saatinde 16:30), FOMC kararı New York 14:00 (TSİ ABD yaz saatinde 21:00, kış saatinde 22:00), ECB kararı
+Frankfurt 14:15 (TSİ Avrupa yaz saatinde 15:15, kış saatinde 16:15), BoE kararı Londra 12:00 (TSİ İngiltere yaz
+saatinde 14:00, kış saatinde 15:00). Haberin kendi mumu ayrıca okundu ve okuma çıkarmadı: az sayıdadır ve sonraki yolu
+bir yön söyleyemeyecek kadar dağınıktır (7. ders, Haber mumu); bu, bekleyen bir emre sonradan düşen haberin ölçüsü
+değildir.
 
 ## Sık yapılan hatalar
 
