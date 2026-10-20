@@ -143,8 +143,9 @@ kaybedeni oldu ({{ G.60.dis.devam:onayli:s2:h1.R }} R), en az kaybeden yarıya l
 Izgaranın öbür hücrelerinde (iki stop, iki hedef) sıfıra en yakın yer 1 saatte, hedefi 2 R olan geri çekilme
 limitleri: mumun {{ Y.25 }} geri çekilmesine limit 2018–2023'te {{ G.60.ic.devam:limit_0.25:s2:h2.R }} R, 2024
 sonrasında {{ G.60.dis.devam:limit_0.25:s2:h2.R }} R; yarısına limit {{ G.60.ic.devam:limit_0.5:s2:h2.R }} ve
-{{ G.60.dis.devam:limit_0.5:s2:h2.R }} R. Izgarada maliyetten sonra artıya geçen hücreler yalnız bu ikisidir ve yalnız
-2024 sonrasında; büyüklükleri sıfırdan ayırt edilemeyecek kadar küçük. Aynı emir biçiminin stopu 1 ATR'lik, koşu
+{{ G.60.dis.devam:limit_0.5:s2:h2.R }} R. Izgarada maliyetten sonra sıfırın üstüne çıkan hücreler yalnız bu ikisidir:
+2018–2023'te sıfırda ya da altında, 2024 sonrasında az farkla artı; büyüklükleri sıfırdan ayırt edilemeyecek kadar
+küçük. Aynı emir biçiminin stopu 1 ATR'lik, koşu
 süzgeçli bir hâli 9. dersin planına seçildi ve 2024 sonrasında tutmadı (9. ders, Seçilen girişler).
 
 ### Masada: dilim büyüyünce
@@ -249,8 +250,8 @@ işlem açmamak demek (5 dakikada mumun yönündeki onay {{ G.5.ic.devam:onayli:
 {{ D.5.ic.n }} olaydı ve kapanışta piyasa girişi {{ G.5.ic.devam:piyasa:s2:h1.n }} işlem açtı) ve gelen onaydan sonraki girişin maliyetten önceki sonucu kapanışta piyasa
 girişinden belirgin farklı değil ({{ G.5.ic.devam:onayli:s2:h1.brut }} ve {{ G.5.ic.devam:piyasa:s2:h1.brut }} R).
 Onay bir mumu bekler, ama fiyat o mumda zaten yürümüş olur: giriş daha kötü bir fiyattan yapılır, ve onayın taşıdığı
-bilgi kaçırılan fiyatın bedelini ancak karşılıyor. 1 saatte 2018–2023'te en az kaybeden biçim onay mumu oldu; 2024
-sonrasında mumun yönündeki biçimlerin en çok kaybedeniydi.
+bilgi kaçırılan fiyatın bedelini ancak karşılıyor. 1 saatte, stop 2 ATR ve hedef 1 R satırında, 2018–2023'te en az
+kaybeden biçim onay mumu oldu; 2024 sonrasında mumun yönündeki biçimlerin en çok kaybedeniydi.
 
 ### Masada: onayı beklerken
 

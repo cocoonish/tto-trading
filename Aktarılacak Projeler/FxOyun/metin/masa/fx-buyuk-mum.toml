@@ -67,7 +67,7 @@ n = 3
 
 [[sema]]
 id = "kovalama"
-baslik = "Ucunda kapanan 5 dakikalık büyük mum: kovalama değil, yarıyı bekle"
+baslik = "Ucunda kapanan 5 dakikalık büyük mum: kovalamazsın, geri çekilmeyi beklersin"
 mumlar = [[50,51,49,50.5],[50.5,51.5,49.8,51],[51,51.6,50.2,50.6],[50.6,51.2,49.9,51],[51,52,50.6,51.6],
           [51.6,64,51.2,63.4],[63.4,64.2,60.5,61],[61,61.8,57.2,58],[58,60.4,57.6,60]]
 vurgu = [5]
@@ -83,8 +83,8 @@ tur = "seviye"
 [[sema.cizgi]]
 y = 50.6
 i0 = 5
-etiket = "öbür uç: stop"
-tur = "stop"
+etiket = "öbür uç"
+tur = "seviye"
 [[sema.bolge]]
 y1 = 62
 y2 = 64.5
@@ -114,7 +114,7 @@ vurgu = [5]
 eksen = "zaman → (bir mum, bir saat)"
 not = ["Ucuna yakın kapanan 1 saatlik büyük mum, takvimde haber yok.",
        "Mumun yarısı: 1 saatte fiyat buraya aynadan ne daha sık ne daha seyrek döner. Bekleme noktası değil, yalnız bir işaret.",
-       "Sonraki saatler: ortalama yol bir gün boyunca mumun yönünde küçük bir parça daha. Mumun ucundaki tersine giriş bu yolun karşısında durur."]
+       "Sonraki saatler: ortalama yol mumun yönünde küçük bir parça daha gider. Mumun ucundaki tersine giriş bu yolun karşısında durur."]
 [[sema.cizgi]]
 y = 54.55
 i0 = 5
@@ -141,31 +141,31 @@ n = 3
 
 [[sema]]
 id = "bekleme"
-baslik = "Yarıyı beklemek: limit, altı mumluk pencere, iptal"
+baslik = "Geri çekilmeyi beklemek: limit, altı mumluk bekleme, iptal"
 mumlar = [[50,50.7,49.7,50.4],[50.4,51,50.1,50.8],[50.8,51.2,50.4,50.6],[50.6,51.3,50.4,51],
           [51,58.8,50.8,58.4],[58.4,58.9,56.6,57],[57,57.5,55.4,55.9],[55.9,56.6,54.6,56.2],
           [56.2,57.1,55.8,56.8],[56.8,57.4,56.1,57.1],[57.1,57.9,56.7,57.6],[57.6,58.3,57.2,58]]
 vurgu = [4]
 eksen = "zaman →"
-not = ["Büyük mum kapandı: limit mumun yarısında, stop mumun öbür ucunun ötesinde.",
+not = ["Büyük mum kapandı: limit geri çekilmede (burada mumun yarısında), stop limitin fiyatından 2 ATR uzakta.",
        "Fiyat yarıya dokundu, limit doldu. Dolum, fiyatın mumun hareketini geri aldığı anda olur; bu bir iyi haber değil.",
-       "Altı mumluk pencere bitti: dolmamış bir limit burada çekilir ve masadan kalkılır."]
+       "Altı mumluk bekleme süresi bitti: dolmamış bir limit burada çekilir."]
 [[sema.cizgi]]
 y = 54.8
 i0 = 4
 etiket = "limit: yarı"
 tur = "limit"
 [[sema.cizgi]]
-y = 50.3
+y = 53
 i0 = 4
-etiket = "stop: öbür uç"
+etiket = "stop: limitten 2 ATR"
 tur = "stop"
 [[sema.bolge]]
 y1 = 55.2
 y2 = 59
 i0 = 5
 i1 = 10
-etiket = "altı mum bekle"
+etiket = "altı mumluk bekleme"
 tur = "bekle"
 [[sema.isaret]]
 i = 4
@@ -190,13 +190,13 @@ son = "15 dakika kalır: zayıf bir geri verme, 24 mumda yön yok. Hiçbir dilim
 [[karar.adim]]
 soru = "Mum takvimdeki büyük bir haberin mumu mu?"
 cikis = "evet"
-sonuc = "Okuma yok: masadan kalk"
+sonuc = "Okuma yok (7. ders ayrı ölçtü): masadan kalkarsın"
 tur = "kalk"
 dayanak = "7. ders, Fade mi, devam mı: okuma tablosu"
 [[karar.adim]]
 soru = "Mum devirde, hafta açılışında ya da bir kümenin devamı mı?"
 cikis = "evet"
-sonuc = "Bu dersin olayı değil: okuma yok"
+sonuc = "Ölçüye girmedi: bu dersin okuması uygulanmaz"
 tur = "kalk"
 dayanak = "6. ders, Büyük mum nasıl tanımlandı"
 [[karar.adim]]
@@ -208,13 +208,13 @@ dayanak = "6. ders, Büyük mum nasıl tanımlandı"
 [[karar.adim]]
 soru = "Dilim 5 dakika mı?"
 cikis = "evet"
-sonuc = "Kovalama; girmen gerekiyorsa yarıyı bekle"
+sonuc = "Kovalamazsın; mumun yönünde gireceksen limit çeyrek ya da yarı geri çekilmeye"
 tur = "bekle"
 dayanak = "6. ders, Dilim dilim okuma"
 [[karar.adim]]
 soru = "Dilim 1 saat mi?"
 cikis = "evet"
-sonuc = "Mumun tersine girme"
+sonuc = "Mumun tersine girmezsin"
 tur = "yapma"
 dayanak = "6. ders, Dilim dilim okuma"
 

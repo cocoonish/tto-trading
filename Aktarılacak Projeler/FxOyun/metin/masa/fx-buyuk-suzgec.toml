@@ -272,7 +272,7 @@ durum = "1 saatlik grafikte, günlük trendin yönünde (bir önceki günün kap
 gorursun = "Birkaç gündür aynı yöne giden bir piyasada uzun gövdeli bir saatlik mum."
 yaparsin = "Trendin yönünü bir önceki günün kapanışından okursun; mumun yarısını işaretlersin; seansı not edersin."
 yapmazsin = "Mumun tersine girmezsin. Trendle aynı yönde diye hedefi uzatmazsın: trend ayrımı yalnız 2018–2023'te görüldü, 2024 sonrasında trende karşı mum da aynı yolu aldı."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit çeyrek ya da yarı geri çekilmeye; stop limitin fiyatından iki ATR, hedef bir ya da iki R. Onay mumu 2024 sonrasında en çok kaybeden biçimdi. Perşembe akşamından sonra açılan 1 saatlik mumlar ölçüye girmedi; pencereleri hafta sonuna taşar."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit çeyrek ya da yarı geri çekilmeye; stop limitin fiyatından iki ATR, hedef bir ya da iki R. Onay mumundan sonra giriş 2024 sonrasında, stop iki ATR ile, mumun yönündeki en çok kaybeden biçimdi. Perşembe akşamından sonra açılan 1 saatlik mumlar ölçüye girmedi; pencereleri hafta sonuna taşar."
 dayanak = "7. ders, 1 saat; 8. ders, 15 dakika ve 1 saat; 6. ders, Büyük mum nasıl tanımlandı"
 
 [[kart]]

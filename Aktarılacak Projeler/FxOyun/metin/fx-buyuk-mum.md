@@ -468,8 +468,8 @@ Sonraki ders bu küçük bilginin nerede yoğunlaştığına bakar: hangi seanst
 tersine girmek (fade) daha haklı, hangisinde mumun yönü.
 
 Seride üç sözcük tek anlamda kullanılır. **Geri çekilme**, fiyatın mumun ucundan mumun boyunun belli bir oranı kadar
-geri gelmesidir (bir ölçü). **Geri verme**, ortalama yolun mumun tersine olmasıdır (bir eğilim). **Fade**, mumun tersine
-işleme girmektir (bir karar).
+geri gelmesidir; tek olayda görülür. **Geri verme**, geri çekilmenin şansın vereceğinden sık olması ya da ortalama yolun
+mumun tersine olmasıdır; binlerce olayda ölçülür. **Fade**, mumun tersine işleme girmektir (bir karar).
 
 ## Ölçülmeyenler
 
@@ -478,3 +478,4 @@ işleme girmektir (bir karar).
 - **Mumun içi.** Büyük mumun dakikalarının sırası (önce yükselip mi düştü) ölçüye girmedi; yalnız açılış, kapanış ve uçlar.
 - **Haberin içeriği.** Takvimdeki büyük haberler (ABD istihdam ve enflasyon verisi, Fed, ECB ve BoE kararları) yalnız
   "var/yok" olarak işaretlendi; beklentiye göre sürpriz ölçülmedi.
+- **Mumun ucuna göre stop.** Ölçülen stoplar girişten 1 ve 2 ATR; mumun öbür ucunun ötesine konan stop ölçülmedi.
