@@ -1,5 +1,5 @@
 {
- "zaman": "2026-10-19T05:09:38",
+ "zaman": "2026-10-20T04:20:26",
  "veri": [
   {
    "tarih": "2026-10-20",
@@ -224,6 +224,20 @@
    "onceki": "",
    "not_": "",
    "resmi_ad": "Haftalık Para ve Banka İstatistikleri "
+  },
+  {
+   "tarih": "2026-11-10",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TÜİK: Sanayi üretimi (Eylül 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "",
+   "resmi_ad": "Sanayi Üretim Endeksi"
   }
  ]
 }
