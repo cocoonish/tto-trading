@@ -4,35 +4,35 @@
 [[karar]]
 id = "ilk-mum"
 baslik = "Anın ilk mumu kapandı: masada beş soru"
-son = "Geriye ABD verisi kalır: ilk mumun yönü şanstan seyrek sürdü. Bu bir okumadır, sınanmış bir tepki değil."
+son = "Geriye ABD verisi kalır: normal ve reddedilen veri mumunun yönü şanstan seyrek sürdü, güçlü veri mumunun devamı aynayla aynı. Bu bir okumadır, sınanmış bir tepki değil."
 [[karar.adim]]
 soru = "İlk mum henüz kapanmadı mı?"
 cikis = "evet"
-sonuc = "Bekle: sınıf ancak kapanışta belli olur"
+sonuc = "Beklersin: sınıf ancak kapanışta belli olur"
 tur = "bekle"
 dayanak = "1. ders, İlk mumun dört sınıfı"
 [[karar.adim]]
 soru = "An bir merkez bankası kararı mı?"
 cikis = "evet"
-sonuc = "Olay az, hüküm yok: okuma kurmadan kalk"
-tur = "kalk"
+sonuc = "Olay az, hüküm yok: işlem açmadan basın toplantısını izler, adayı deftere yazarsın"
+tur = "bekle"
 dayanak = "4. ders, Merkez bankası kararları"
-[[karar.adim]]
-soru = "An bir açılış mı?"
-cikis = "evet"
-sonuc = "Yön okuma; iki ucu ve yarıyı işaretle"
-tur = "yapma"
-dayanak = "1. ders, Şans ne verirdi: yolun aynası; 2. ders, Sınıf sınıf, şansın payıyla"
 [[karar.adim]]
 soru = "İlk mum küçük mü?"
 cikis = "evet"
-sonuc = "Kırılım sinyal değil: kırılan tarafı izle"
+sonuc = "Kırılım sinyal değil: kırılan tarafı izlersin, işlem açmazsın"
 tur = "bekle"
-dayanak = "3. ders, Sessiz fiksing; 4. ders, Küçük haber mumu"
+dayanak = "2. ders, Küçük ilk mum; 3. ders, Sessiz fiksing; 4. ders, Küçük haber mumu"
+[[karar.adim]]
+soru = "An bir açılış mı?"
+cikis = "evet"
+sonuc = "Yön okumazsın; iki ucu ve yarıyı işaretlersin"
+tur = "yapma"
+dayanak = "1. ders, Şans ne verirdi: yolun aynası; 2. ders, Sınıf sınıf, şansın payıyla"
 [[karar.adim]]
 soru = "An bir fiksing mi?"
 cikis = "evet"
-sonuc = "Geri verme beklenir; koşuyu kovalama"
+sonuc = "Geri verme beklenir; koşuyu kovalamazsın"
 tur = "yapma"
 dayanak = "3. ders, Sınıf sınıf, şansın payıyla"
 
@@ -115,8 +115,8 @@ i = 5
 y = 51.0
 n = 3
 [[sema.isaret]]
-i = 2
-y = 53.8
+i = 6
+y = 60.0
 n = 4
 
 [[sema]]
@@ -152,8 +152,8 @@ tur = "seviye"
 noktalar = [[3, 53.6], [4, 54.6], [5, 55.8], [6, 54.8], [7, 53.7], [8, 52.5], [9, 50.6]]
 tur = "ters"
 [[sema.isaret]]
-i = 2
-y = 51.5
+i = 3
+y = 54.8
 n = 1
 [[sema.isaret]]
 i = 5
@@ -221,17 +221,17 @@ durum = "15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İng
 gorursun = "Fiyat bir yöne gitmiş ve geri itilmiş; fitillerden biri mumun yarısından uzun."
 yaparsin = "Mumu kapanışta sınıflandırır, iki ucu ve yarıyı işaretlersin; fitilin ucunu günün referansı olarak not edersin."
 yapmazsin = "Fitili 'orada satıcı var' diye bir yön işareti saymazsın; reddin yönünde de tersine de yalnız bu mum yüzünden girmezsin."
-emir = "Başka bir gerekçeyle reddin yönünde gireceksen limit yarıya, stop fitilin ucunun biraz ötesine; limit izlenen süre içinde dolmazsa çekilir."
+emir = "Başka bir gerekçeyle reddin yönünde gireceksen limit yarıya, stop fitilin ucunun mum boyunun onda biri ötesine; limit ilk mum kapandıktan 60 dakika sonra düşer, dolan pozisyon izlenen sürenin sonunda kapanır."
 dayanak = "2. ders, Normal ve reddedilen ilk mum; 1. ders, Kazanma oranı ile net sonuç"
 
 [[kart]]
 id = "guclu-acilis"
 hukum = "eksi"
 durum = "15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) ucunda kapanan güçlü bir ilk mum"
-gorursun = "Gövdesi mumu dolduran, ucunda kapanan büyük bir mum; sonraki mumlarda fiyat çoğu zaman bir süre aynı yöne gider."
+gorursun = "Gövdesi mumu dolduran, ucunda kapanan büyük bir mum. Ekran 'yön belli oldu' der; fiyat çoğu gün yarısına da döner ve devam payı aynadakiyle aynıdır."
 yaparsin = "İki ucu, yarıyı ve devam eşiğini işaretlersin; iki eşiğin kapanışa uzaklığına bakarsın."
 yapmazsin = "Devamı yön bilgisi saymazsın: yönsüz bir fiyat da bu şekilden aynı sıklıkta devam ederdi. Kapanışta kovalamazsın."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun biraz ötesine; yarım R'lik hedef kapanışın altında kalabilir. Fiyat limit dolmadan devam ederse emri taşımazsın."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun mum boyunun onda biri ötesine; yarım R'lik hedef kapanışın altında kalabilir. Limit ilk mum kapandıktan 60 dakika sonra düşer; fiyat limit dolmadan devam ederse emri taşımazsın."
 dayanak = "1. ders, Şans ne verirdi: yolun aynası; 2. ders, Güçlü ilk mum"
 
 [[kart]]
@@ -241,7 +241,7 @@ durum = "5 dakikalık grafikte, Londra fiksinginde (WM/R, Londra 16:00; TSİ İn
 gorursun = "Fiksingden önceki yarım saatte fiyat tek yöne gitmiş; fiksing dakikası koşunun ucuna yakın."
 yaparsin = "Koşunun başını, ucunu ve yarısını işaretlersin; sonraki saatte bir geri çekilme beklersin. Ayın son Londra iş günüyse ayrıca not edersin."
 yapmazsin = "Koşunun yönünde yeni işlem açmazsın: sürme payı şansın altında. Geri vermeyi de koşunun tersine piyasa emriyle kenar sanmazsın."
-emir = "Başka bir gerekçeyle koşunun tersine gireceksen giriş fiksing anında piyasa emridir, makas ve kayma öder; stop koşunun ucunun ötesinde, hedef yarısında. Stop yakın, maliyet riskin büyük bir parçası."
+emir = "Başka bir gerekçeyle koşunun tersine gireceksen giriş fiksing anında piyasa emridir, makas ve kayma öder; stop koşunun ucunun koşu boyunun onda biri ötesinde, hedef koşunun yarısında. Stopu daraltmak riski küçültmez, maliyeti R cinsinden büyütür."
 dayanak = "1. ders, Şans ne verirdi: yolun aynası; 3. ders, Ay sonu; 3. ders, Bu okumaları işleme çevirmek"
 
 [[kart]]
@@ -250,8 +250,8 @@ hukum = "eksi"
 durum = "15 dakikalık grafikte, Tokyo açılışında (Tokyo 09:00, TSİ 03:00) tipik boyun belirgin altında kalan küçük bir ilk mum"
 gorursun = "Dar bir mum; sonraki mumlarda fiyat uçlardan birini kırar."
 yaparsin = "İki ucu işaretler, hangisinin önce kırıldığını ve fiyatın bir mum boyu daha gidip gitmediğini izlersin."
-yapmazsin = "Kırılımı 'sıkışma patladı' diye işaret saymazsın; dar mumun dar stopunu ucuz sanmazsın."
-emir = "Başka bir gerekçeyle kırılımda gireceksen iki uca birer stop emri, biri dolunca öbürü iptal; zarar stopu öbür ucun biraz ötesinde, hedef riskin yarısı kadar."
+yapmazsin = "Kırılımı 'sıkışma patlar' diye kenar saymazsın: kırılım maliyetten önce sıfıra yakın, sonra eksi. Dar mumun dar stopunu ucuz sanmazsın."
+emir = "Başka bir gerekçeyle kırılımda gireceksen sınanan biçim iki uca birer stop (kırılım) emridir; biri dolunca öbürü iptal olur. Zarar stopu öbür ucun mum boyunun onda biri ötesinde, hedef yarım R; emir ilk mum kapandıktan 60 dakika sonra düşer."
 dayanak = "2. ders, Küçük ilk mum; 2. ders, Bu okumaları işleme çevirmek; 8. ders, Stop uzaklığı ve maliyet"
 
 # ─────────────────────────────────────────────────────────────── gerçek örnekler
@@ -270,7 +270,7 @@ ters = { donus = true, kapanis = false }
 [[ornek]]
 id = "wmr-guclu"
 baslik = "Londra fiksingine güçlü koşu: iki gün, iki son"
-tipik_ad = "Yarısını geri verdi"
+tipik_ad = "Yarısına geri çekildi"
 ters_ad = "Koşu sürdü"
 kaynak = "an"
 cift = "GBPUSD"

@@ -13,8 +13,8 @@ onkosul: ['fx-oyun-okuma']
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 import Diyagram from '../../components/Diyagram.astro';
 
-Fiksing bir kurun resmî olarak ölçüldüğü kısa penceredir; Londra'daki WM/R kuru 16:00 çevresindeki beş dakikadan
-hesaplanır. Bazı fon, şirket ve saklama işlemleri o kura bağlanır; işlemi üstlenen banka riskini çoğu zaman fiksing
+Fiksing bir kurun resmî olarak ölçüldüğü kısa penceredir; Londra'daki WM/R kuru Londra 16:00 (TSİ 18:00, İngiltere
+kış saatinde 19:00) çevresindeki beş dakikadan hesaplanır. Bazı fon, şirket ve saklama işlemleri o kura bağlanır; işlemi üstlenen banka riskini çoğu zaman fiksing
 çevresinde piyasada kapatır. Bu yüzden fiksinge doğru fiyat bazen bir yöne **koşar**, ve fiksing geçtiğinde o koşuyu
 taşıyan akışın bittiği düşünülür. İşlemcilerin bildiği eski söz şudur: "fiksingden sonra koşu geri verilir." Bu ders
 sözün sayısını verir. Akışın kendisi bu verinin içinde görünmez; ölçülen yalnız fiyattır.
@@ -83,29 +83,26 @@ izleniyor, iki sayı aynı süreyi ölçmüyor.)
 
 ### Masada: fiksinge güçlü koşu
 
-Grafikte güçlü koşu, fiksinge giden yarım saatin beş dakikalık mumlarının aynı yöne dizilmesidir; sınıfı veren tek tek
-mumlar değil, yarım saatin toplamıdır. Masada önce üç seviye çizilir: koşunun başladığı yer, yarısı ve ucu.
+Grafikte güçlü koşu, fiksinge giden yarım saatin toplamda bir yöne belirgin gitmesidir; tek tek mumların aynı yöne
+dizilmesi gerekmez, sınıfı yarım saatin toplamı verir. Masada önce üç seviye çizilir: koşunun başladığı yer, yarısı ve
+ucu.
 
 {{# sema kosu-guclu }}
 
-Yarıya geri çekilme beklenir ve çoğu zaman erken gelir (ortanca süre Londra'da {{ A.ic.wmr.guclu.orta_dk }}, Tokyo'da
-{{ A.ic.tokyo_fiks.guclu.orta_dk }} dakika). Başa dönüş beklenmez: koşunun öbür ucunun kırılması şansla aynı sıklıkta.
-Yarıya gelen fiyatın ucuna yeniden gitmesi de seyrek. Fiksingden sonraki saatin en olası görüntüsü, fiyatın koşunun
-ucu ile başı arasında durmasıdır.
-
-Bu durumda yapmazsın: fiksingden hemen sonra koşunun ucunu aşan ilk mumun arkasından girmezsin, hedefi koşunun
-başladığı yere koymazsın, yarıya gelen fiyatı yeni bir yönün başlangıcı diye okumazsın.
+Güçlü koşuların yaklaşık yarısı ({{ D.ic.fiksing.guclu.orta }}) yarıya geri çekilir; başa dönüş şanstan sık değildir.
+Saatin en olası görüntüsü fiyatın koşunun ucu ile başı arasında durmasıdır.
 
 {{# kart guclu-kosu }}
 
 {{# ornek wmr-guclu }}
 
-İki gün fiksinge kadar birbirinin aynısıdır: gölgeli mumlar (①) aynı yöne dizilir ve fiksingdeki fiyat koşunun ucuna
-yakındır. Üstteki günde fiyat fiksingden sonra koşunun yarısına (②) iner, ilk dokunuş ③'te görülür ve ④'e kadar
-koşunun başladığı yere varmaz. Alttaki günde ilk mumlar üstteki kadar kararsızdır, ama fiyat yarıya hiç gelmez,
-koşunun ucunu aşar ve pencere boyunca yarının koşu tarafında kalır; ③ bu yüzden yoktur. Fiksing anında iki günü
-ayıran bir şey grafikte yoktur; üstteki gün ancak sonu bilindiği için "belli" görünür. İki gün kuralı ne doğrular ne
-yanlışlar: kural birinci türün daha sık geldiğini söyler.
+İki koşu (①) aynı sınıftadır ama biçimleri ayrılır: üstteki günde (26 Mayıs 2023) aşağı koşunun çoğu ilk çeyrek
+saatte gelir ve fiyat fiksinge kadar dibin biraz üstünde yatay kalır; alttaki günde (25 Temmuz 2023) yükseliş son
+yirmi beş dakikada gelir ve fiksingdeki fiyat tepenin hemen altındadır. Üstteki günde fiyat fiksingden sonra kırk
+dakika dip ile yarı (②) arasında oyalanır, dibi yeniden kırmaz, yarıya ancak TSİ 18:52'de dokunur (③) ve ④'te yarının
+hemen ötesinde biter. Alttaki günde fiyat ilk mumda tepeyi aşar, kısa bir geri çekilmede yarıya inmez (③ yok) ve TSİ
+18:25'ten sonra yükselerek ④'te ucun koşu boyunun yarısından fazla ötesindedir. Biçim farkı bu derste ayrı bir okuma
+olarak ölçülmedi; tek bir çift gün kuralı ne doğrular ne yanlışlar.
 
 ### Normal ve reddedilen koşu
 
@@ -120,23 +117,19 @@ durur. Masada fark edilecek ilk şey, fiksingdeki fiyatın koşunun yarısına n
 
 {{# sema kosu-normal }}
 
-Yarı yakın olduğu için geri verme hızlıdır, ama yakınlığın kendisi bir şey söylemez: yön bilgisi olmayan bir yolda da
-fiyat yakın bir seviyeye sık dokunur ve gerçek payın aynadan farkı burada güçlü koşudakinden küçüktür. Reddedilen
-koşunun uzun fitili "piyasa o seviyeyi reddetti" diye okunmaya elverişlidir; ölçülen davranış ise normal koşununkine
-yakın.
-
-Bu durumda yapmazsın: yarıya dokunuşu bir giriş sinyali saymazsın, yüksek kazanma oranlı bir tepkiyi kârlı sanmazsın,
-reddedilen fitili normal koşudan güçlü bir okuma gibi işlemezsin.
+Yarı yakın olduğu için geri çekilme hızlıdır, ama yön bilgisi olmayan bir yolda da sık olur; reddedilen koşunun uzun
+fitili de normal koşudan farklı bir davranış vermedi.
 
 {{# kart normal-kosu }}
 
 {{# ornek tokyo-normal }}
 
-İki günün yarım saati (①) birbirine benzer: koşu var ama düzenli değil, ve fiksingdeki fiyat koşunun yarısından (②)
-çok uzakta değil. Üstteki günde fiyat fiksingden sonra yarıya dokunur (③) ve ④'e kadar ne ucuna geri gider ne öbür
-ucunu kırar. Alttaki günde fiyat yarıya hiç dokunmaz, koşunun ucunu aşar ve geri gelmez. Fiksing anında masadaki tek
-bilgi yarının yakınlığıdır ve o bilgi iki gün için de aynıdır; üstteki gün ancak sonradan bir okuma gibi görünür. İki
-gün kuralı ne doğrular ne yanlışlar: normal koşuda yarıya dönüş zaten sık olan bir harekettir.
+İki aşağı koşu (①) aynı sınıftadır ve iki günde de fiksingdeki fiyat yarıya (②) çok yakındır, ama üstteki koşu
+(8 Eylül 2023) alttakinin (20 Kasım 2023) birkaç katıdır: dibini uzun bir fitille yapıp fiksinge kadar yarıya geri
+gelmiştir, alttaki dar ve düzensizdir. Üstteki günde fiyat fiksingden sonraki beş dakikada yarıya dokunur (③), TSİ
+04:25'te koşunun başına neredeyse varır ve ④'te yarının belirgin ötesindedir. Alttaki günde fiyat ilk mumda koşunun
+dibini kırar, yarıya hiç dokunmaz (③ yok) ve ④'te dibin iki koşu boyundan fazla altındadır. Normal koşuda yarıya dönüş
+zaten sık olan bir harekettir.
 
 ### Sessiz fiksing
 
@@ -156,13 +149,6 @@ Sessiz bir fiksingin grafiği boştur ve boşluk bir şey yapma isteği doğurur
 kırılınca kırılım "akış şimdi geldi" diye okunur.
 
 {{# sema sessiz-kirilim }}
-
-Londra'da bu okuma çoğu zaman yanlıştır. Tokyo'da ilerleme payı daha yüksek, ama kırılan uçtan giren tepki iki
-fiksingin toplamında maliyetten sonra eksi kaldı. Dar aralık maliyeti de büyütür: stop öbür kenarın ötesinde ve
-yakındır, aynı makas yakın bir stopun daha büyük bir parçasıdır.
-
-Bu durumda yapmazsın: Londra'da sessiz bir fiksingden sonraki kırılımı kovalamazsın, Tokyo'nun yüksek payını "orada
-kırılım işler" diye okumazsın.
 
 {{# kart sessiz }}
 
@@ -197,13 +183,6 @@ fiksingi Londra 16:00'da, TSİ 18:00'de (İngiltere kış saatinde 19:00'da) gel
 
 {{# sema ay-sonu }}
 
-İki dönemde aynı tutan tek okuma, ay sonunda güçlü koşunun fiksingden sonra öbür günlerden de seyrek sürmesidir. Geri
-vermenin ay sonunda daha sık olduğu bir dönemde görüldü, öbüründe görülmedi; şemadaki ③ bu yüzden bir beklenti değil,
-açık bir sorudur.
-
-Bu durumda yapmazsın: fiksingden sonraki uzamayı ay sonu akışının devamı sayıp pozisyona eklemezsin, ay sonunda geri
-vermeye daha çok güvenmezsin, Tokyo fiksinginin ay sonu farkını okumaya katmazsın.
-
 {{# kart ay-sonu }}
 
 ## Trend
@@ -220,9 +199,9 @@ karşıyken {{ T.fiksing.guclu.karsi.devam }} sürdü.
 
 ## Bu okumaları işleme çevirmek
 
-"Fiksingden sonra koşu geri verilir" sözünün işlem hâli şudur: fiksing anında koşunun tersine gir, stopu koşunun
-ucunun {{ ref_tampon }} koşu boyu ötesine koy, hedefi koşunun yarısına koy. Sessiz fiksingde tepki kırılan uçtan
-girmektir. 2024 → dönemindeki sonuç:
+"Fiksingden sonra koşu geri verilir" sözünün sınanan işlem hâli şudur: fiksing anında koşunun tersine piyasa emriyle
+girilir, stop koşunun ucunun {{ ref_tampon }} koşu boyu ötesine, hedef koşunun yarısına konur. Sessiz fiksingde tepki
+aralığın iki kenarına birer stop emridir; biri dolunca öbürü iptal olur. 2024 → dönemindeki sonuç:
 
 {{# kisa referans fiksing }}
 
@@ -250,53 +229,34 @@ nereden geldiğini gösterir.
 
 {{# sema ters-giris }}
 
-Giriş piyasa emridir ve makas ile kaymayı fiksing anında öder. Stop koşunun ucunun {{ ref_tampon }} koşu boyu
-ötesindedir; güçlü koşuda fiyat fiksingden sonra ucunu çoğu zaman bu kadar aşar. Hedef koşunun yarısıdır; fiyat oraya
-sık gelir, ama stopu gördükten sonra geldiğinde işlem çoktan kapanmıştır. Normal koşuda tablo tersine döner: hedef
-yakın, stop uzak, kazanma oranı yüksek, başa baş için gereken oran ondan da yüksek.
-
-Bu durumda yapmazsın: maliyetsiz sonucun artı olmasını işlem sayısıyla büyüyecek bir kenar sanmazsın, çünkü maliyet her
-işlemde yeniden ödenir; stopu ucun hemen ötesine sıkıştırıp riski küçültmezsin, çünkü aynı makas R cinsinden büyür.
+Güçlü koşuda stop sık gelir ve kazanma oranı düşüktür. Normal koşuda tablo tersine döner: hedef yakın, stop uzak,
+kazanma oranı yüksek, başa baş için gereken oran ondan da yüksek.
 
 {{# kart ters-giris }}
 
 ## Emri nereye koyarsın
 
-Bu bölüm fiksingi bir işlem gerekçesi saymaz; başka bir gerekçeyle fiksing penceresinde emir verecek biri için dersin
-ölçtüğü davranışın emrin yeri hakkında ne söylediğini yazar. Pencere Tokyo'da Tokyo 09:25–10:55 (TSİ 03:25–04:55),
-Londra'da Londra 15:30–17:00'dir (TSİ 17:30–19:00, İngiltere kış saatinde 18:30–20:00).
+Emrin genel kuralları 1. derstedir (1. ders, Emri nereye koyarsın); fiksinge özgü olanlar şunlar. Pencere Tokyo
+09:25–10:55 (TSİ 03:25–04:55), Londra 15:30–17:00'dir (TSİ 17:30–19:00, İngiltere kış saatinde 18:30–20:00).
 
-- **Giriş.** Piyasa emri girişte makas ve kayma öder; limit girişte ödemez, çıkışta öder (8. ders, Limit neden ucuz
-  görünür: ters seçim). Limit yalnız fiyat ona geldiğinde dolar: koşunun yarısına konan bir limit geri vermenin olduğu
-  günlerde dolar, koşunun sürdüğü günlerde boşta kalır. 8. ders bunu büyük mumda ölçtü; fiksing için ölçülmedi, ama
-  geometri aynıdır. Koşunun ucunun kırılmasına stop emriyle girmek, şanstan seyrek süren uzamayı kaymayla almaktır
-  (3. ders, Sınıf sınıf, şansın payıyla; 8. ders, Ucun kırılması).
-- **Stop.** Koşunun tersindeysen stop ucun ötesindedir, güçlü koşuda o mesafe kısadır ve fiksingden sonraki ilk uzama
-  onu sık alır (3. ders, Bu okumaları işleme çevirmek). Koşunun yönündeysen stopun yarı ile uç arasındaysa geri verme
-  onu sık görür; başın ötesindeyse fiksing davranışı ona şanstan sık gelmez (3. ders, Sınıf sınıf, şansın payıyla).
-  Stopu yaklaştırmak aynı makası R cinsinden büyütür; normal koşunun tersine giren tepkide ortanca risk zaten
-  {{ B.referans.fiksing.normal.dis.risk_pip }} pip (8. ders, Stop uzaklığı ve maliyet).
-- **Hedef.** Geri vermeyi bekleyen hedef koşunun yarısıdır, başladığı yer değil. Koşunun yönündeki hedef fiksingden
-  sonraki uzamaya, ay sonunda hiç dayanmaz (3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Ay sonu).
-- **İptal.** Ölçüm fiksingden sonraki {{ AN.wmr.pencere }} dakikayı okur; pencere dolunca fiksinge bağlı bir emrin
-  dayanağı kalmaz. Pencerenin ikinci yarısının ayrı davranışı bu derste ölçülmedi.
-- **Haber.** Serinin takvimindeki büyük haberlerin hiçbiri fiksing pencerelerine denk gelmez; ölçümün haber anlarına
-  eklediği ek kayma burada yoktur (1. ders, Kazanma oranı ile net sonuç). WM/R'nin beş dakikasında (Londra 16:00
-  çevresi, TSİ 18:00, İngiltere kış saatinde 19:00) makasın davranışı bu derste ölçülmedi.
+- **Giriş.** Koşunun tersine sınanan giriş fiksing anında piyasa emridir; makas ve kaymayı o anda öder. Koşunun ucuna
+  ya da yarısına konan limit fiksing için ölçülmedi. Sessiz fiksingde sınanan biçim iki kenara birer stop emridir;
+  biri dolunca öbürü iptal olur (3. ders, Sessiz fiksing).
+- **Stop.** Koşunun ucunun {{ ref_tampon }} koşu boyu ötesinde. Stopu daraltmak riski küçültmez, maliyeti R cinsinden
+  büyütür; daha geniş stop da 2018–2023'te artıda kalmadı (3. ders, Bu okumaları işleme çevirmek). Koşunun yönündeysen
+  yarı ile uç arasındaki stopu geri verme sık görür.
+- **Hedef.** Koşunun yarısı, başladığı yer değil. Koşunun yönündeki hedef uzamaya az dayanır, ay sonunda daha da az
+  ({{ F.wmr.ic.ay_sonu.guclu.devam }} ve {{ F.wmr.dis.ay_sonu.guclu.devam }}; öbür günlerde
+  {{ F.wmr.ic.diger.guclu.devam }} ve {{ F.wmr.dis.diger.guclu.devam }}; 3. ders, Ay sonu).
+- **Süre.** Bekleyen emir fiksing anından {{ AN.wmr.pencere }} dakika sonra düşer (ön kayıttaki süre, ölçülerek
+  seçilmedi); dolan pozisyon ne hedefe ne stopa varırsa izlenen sürenin sonunda, yani aynı anda kapanır.
+- **Haber.** Takvimdeki büyük haberler fiksing pencerelerine düşmez; WM/R'nin beş dakikasında makasın davranışı bu
+  derste ölçülmedi.
 
 ## Sık yapılan hatalar
 
-- **Fiksingden sonra koşuyu kovalamak.** Sürme payı iki dönemde de aynanın altında, ay sonunda Londra'da daha da
-  altında. Dayanak: 3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Ay sonu.
 - **Hedefi koşunun başladığı yere koymak.** Geri verme şanstan sık, tam dönüş değil. Dayanak: 3. ders, Sınıf sınıf,
   şansın payıyla.
-- **Geri vermeyi işlem saymak.** Maliyetsiz sonuç küçük, makas ve kayma ondan büyük. Dayanak: 3. ders, Bu okumaları
-  işleme çevirmek; 5. ders, Maliyet nereye gidiyor.
-- **Yüksek kazanma oranını kâr sanmak.** Normal koşunun tersine giren tepki işlemlerin yarısından çoğunu kazandı, ama
-  başa baş daha yüksek bir oran istiyordu. Dayanak: 1. ders, Kazanma oranı ile net sonuç.
-- **Stopu koşunun ucuna yapıştırmak.** Güçlü koşuda fiyat fiksingden sonra ucunu biraz aşar; tersine giren işlemlerin
-  çoğu bu yüzden stopta bitti. Dayanak: 3. ders, Bu okumaları işleme çevirmek; 8. ders, Stop uzaklığı ve maliyet.
-- **Sessiz Londra fiksinginden sonraki kırılımı akış sanmak.** Dayanak: 3. ders, Sessiz fiksing.
 - **Ay sonunda geri vermeye daha çok güvenmek.** O fark iki dönemde ters yöne baktı. Dayanak: 3. ders, Ay sonu.
 - **Fiksing okumasını trende göre değiştirmek.** Dayanak: 3. ders, Trend.
 
@@ -312,7 +272,8 @@ Londra'da Londra 15:30–17:00'dir (TSİ 17:30–19:00, İngiltere kış saatind
 7. Geri vermeyi işlemek mi istiyorsun? Maliyetin geri vermeden büyük olduğunu biliyorsun.
 8. Başka bir gerekçeyle pozisyondaysan stopun ve emrin koşunun üç seviyesine göre nerede?
 9. Fiksingden sonraki bir saat (Tokyo 09:55–10:55, TSİ 03:55–04:55; Londra 16:00–17:00, TSİ 18:00–19:00, İngiltere
-   kış saatinde 19:00–20:00) dolunca fiksinge bağlı emirleri çektin mi?
+   kış saatinde 19:00–20:00) dolunca dolmayan emir düşer, hedefe ya da stopa varmayan pozisyon kapanır; ikisini de
+   yaptın mı?
 
 ## Grafik okuma alıştırmaları
 
@@ -351,16 +312,16 @@ koşunun ucuna limit mi; stop ve hedef nerede, emir ne zaman çekilir?
 
 Piyasa emri makas ve kaymayı fiksing anında öder. Ucuna konan limit girişte ödemez ama yalnız fiyat koşunun yönünde
 yeniden yürürse dolar; büyük mumda bu tür tersine limit maliyetten önce kapanışta piyasa emrinden kötü çıktı (8. ders,
-Limit neden ucuz görünür: ters seçim; fiksing için ölçülmedi). Stop ucun ötesinde, hedef yarıdadır (3. ders, Bu
-okumaları işleme çevirmek). Fiksingden bir saat sonra, Tokyo 10:55'te (TSİ 04:55), dolmamış emrin fiksing dayanağı
-kalmaz.
+Limit neden ucuz görünür: ters seçim; fiksing için ölçülmedi). Stop koşunun ucunun {{ ref_tampon }} koşu boyu
+ötesinde, hedef yarıdadır (3. ders, Bu okumaları işleme çevirmek). Dolmayan limit fiksingden bir saat sonra, Tokyo
+10:55'te (TSİ 04:55) düşer; dolan pozisyon hedefe ya da stopa varmazsa aynı anda kapanır.
 
 </details>
 
 ## Fiksing için masa kartı
 
 - **Fiksinge koşan fiyattan sonra bir geri çekilme beklenir.** Koşunun yarısına kadar geri gelmesi şanstan sıktır;
-  güçlü koşuda ortanca süre çeyrek saat, normal koşuda birkaç dakika.
+  yarıya dönenlerde ortanca süre güçlü koşuda çeyrek saat, normal koşuda birkaç dakika.
 - **Geri verme beklenir, dönüş beklenmez.** Koşunun başladığı yer şanstan sık kırılmaz.
 - **Fiksingden sonra koşunun yönünde yeni işlem açmak, sürmeyen bir hareketi kovalamaktır.** Koşunun sürme payı
   şansın altında; ay sonunda Londra'da daha da altında.

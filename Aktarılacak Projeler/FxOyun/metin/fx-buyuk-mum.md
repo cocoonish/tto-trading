@@ -45,18 +45,12 @@ kadar) aynı kurallarla sonradan ölçüldü ve her tabloda yan yana durur.
 
 ## Bu dersi masada nasıl kullanırsın
 
-Bu ders bir giriş kuralı vermez. Büyük bir mum kapandığında masada hangi soruları hangi sırayla soracağını verir. Sıra
-önemlidir, çünkü ilk sorular mumun bu dersin ölçtüğü olaylardan biri olup olmadığını sorar. Takvimdeki büyük bir haberin
-mumu, FX gününün devri, haftanın açılışı ya da bir kümenin ikinci mumu bu dersin sayılarına girmedi. Onlara bu dersin
-okumasını uygulamak, ölçülmemiş bir durumu ölçülmüş gibi okumaktır. Mum bu elemelerden geçtikten sonra dilim sorulur ve
-dilimin cevabı bir "yapma" listesidir: 5 dakikada kovalamazsın, 1 saatte tersine girmezsin, 15 dakikada ikisi de
-belirgin değildir. Şemanın hiçbir dalı "gir" demez; kartların altındaki not bunun sebebini her seferinde yineler.
+Bu ders bir giriş kuralı vermez; büyük mum kapandığında soruların sırasını verir. İlk sorular mumun bu dersin olayı
+olup olmadığını sorar: FX gününün devri, haftanın açılışı ve kümenin ikinci mumu ölçüye girmedi. Takvimdeki büyük
+haberin mumu sayıların içinde ama küçük bir parçası (aşağıda); 7. ders onu ayrı ölçtü ve okuma çıkarmadı. Sonra dilim
+sorulur ve cevabı bir "yapma" listesidir; şemanın hiçbir dalı "gir" demez.
 
 {{# karar akis }}
-
-Haber mumunun "okuma yok" sonucu 7. dersin okuma tablosundan gelir: takvimdeki büyük haberin mumunda olay az ve 24 mum
-sonraki yolun aralığı sıfırın iki yanına geniş açılıyor. Devir, açılış, küme ve kararsız mum elemesi bu dersin
-tanımıdır (hemen aşağıda); dilimlerin dalları "Dilim dilim okuma" bölümünden gelir.
 
 ## Büyük mum nasıl tanımlandı
 
@@ -90,6 +84,9 @@ Dört tür mum dışarıda bırakıldı ve sayıldı:
   {{ SAYT.60.eksik_cuma }} tanesi cuma mumuydu; ABD istihdam raporunun (cuma) 1 saatlik mumu hiçbir 1 saatlik ölçüde
   yok. 15 dakikada bu sayılar {{ SAYT.15.eksik }} ve {{ SAYT.15.eksik_cuma }}.
 
+Takvimdeki büyük haberin mumu dışarıda bırakılmadı: 2018–2023'ün {{ D.5.ic.n }} 5 dakikalık olayından
+{{ S.5.haber.haber.ic.n }} tanesi haber mumudur. 7. ders onu ayrı ölçer.
+
 Her şey {{ pariteler }} paritelerinde ve alış ile satışın ortasından (orta fiyat) ölçüldü. 2018–2023'te yön ölçülerine
 giren olay sayısı 5 dakikada {{ D.5.ic.n }}, 15 dakikada {{ D.15.ic.n }}, 1 saatte {{ D.60.ic.n }}.
 
@@ -117,17 +114,7 @@ beşte birinden kısaysa mumun yönü yoktur ve yön okuması yapılmaz.
 
 {{# sema tanima }}
 
-Şemadaki üç mumun üçü de ekranda "büyük" görünür; yalnız biri bu dersin olayıdır. Kararsız mum (②) iki yana da fitil
-bırakır ve bir yön söylemez. Kümenin ikinci mumu (③) ilk mumun hikâyesinin devamıdır: ilk mumdan sonra ne olduğu
-sorusunun bir parçası, yeni bir sorunun başlangıcı değil. Bu dersin bütün sayıları ①'in türünden mumlarla kuruldu.
-
-Saat de tanımanın parçasıdır. FX gününün devrine (New York 16:50–17:10; TSİ ABD yaz saatinde 23:50–00:10, kış
-saatinde 00:50–01:10) değen mum ve haftanın ya da bir tatilin ardından piyasanın yeniden açıldığı ilk saatteki mum bu
-dersin dışındadır. O ilk saatte göstergenin ATR'si hafta sonu boşluğunu da sayar, bu dersin ATR'si saymaz; mumlar
-zaten dışarıda olduğu için fark masada bir şey değiştirmez.
-
-Bu durumda yapmazsın: ATR'yi büyük mumun kendisinde okuyup "iki katı değilmiş" demezsin; kararsız bir mumu yönü
-varmış gibi okumazsın; kümenin ikinci ya da üçüncü mumunu yeni bir olay sayıp okumayı baştan kurmazsın.
+Devir penceresine ve hafta açılışının ilk saatine değen mum da dersin dışındadır.
 
 ## Ne ölçüldü
 
@@ -171,17 +158,12 @@ Yarı kapanışa yakındır; fiyatın oraya uğraması için bir yön gerekmez, 
 
 {{# sema yari-geometri }}
 
-Şemadaki iki yol da yarıya uğrar. Soluk mumlar doğrudan iner; kesikli yol önce mumun yönünde bir parça daha gider,
-sonra o da yarıya düşer. Ekranda ikisi de "geri verdi" diye okunur. 5 dakikalık büyük mumların {{ D.5.ic.geri_0.5 }}
-kadarında fiyat yarıya döndü; yönü olmayan bir yol {{ D.5.ic.ayna_geri_0.5 }} verirdi. Masadaki işlemcinin gördüğü
-dönüşlerin neredeyse hepsi, bir yön bilgisi olmasa da göreceği dönüşlerdir.
+Yarıya dönüş 5 dakikada {{ D.5.ic.geri_0.5 }}, yönsüz bir yolda {{ D.5.ic.ayna_geri_0.5 }}: gördüğün dönüşlerin
+neredeyse hepsi, bir yön bilgisi olmasa da göreceğin dönüşlerdir.
 
 {{# kart yari-dokunus }}
 
-Bu durumda yapmazsın: yarıya dokunuşu tersine girmenin onayı saymazsın. Yarıdan yeniden uca gidişi "geri çekilmede
-katıl" okumasının kanıtı saymazsın; bu dersin "Yarısına dönen fiyat ne kadar sürede dönüyor" bölümü onun da şansla
-beklenen kadar sık olduğunu gösteriyor. Ve yarıya dönen olayları sayıp "okumam tutuyor" diye bir defter tutmazsın: o
-defterin şansla tutturacağı oran zaten aynanın payıdır.
+Yarıya dönen olayları sayıp tutulan bir defterin şansla tutturacağı oran zaten aynanın payıdır.
 
 ## Dilim dilim okuma
 
@@ -207,7 +189,8 @@ dönüş aynadan seyrek değil, sık da değil ({{ D.60.ic.geri_0.5_fark }} puan
 ortalama {{ D.60.ic.net_24 }} ATR ({{ Y.95 }} aralık {{ D.60.ic.net_24_alt }} … {{ D.60.ic.net_24_ust }}) ve 2024 → döneminde
 {{ D.60.dis.net_24 }} ATR yol aldı (aralık {{ D.60.dis.net_24_alt }} … {{ D.60.dis.net_24_ust }}). 2018–2023'te aralık
 sıfırın üstünde, 2024 sonrasında nokta tahmini aynı yönde ama aralık sıfırı kapsıyor; yön payı da iki dönemde yazı
-turadan ayırt edilemiyor. İki dönemde de aralığıyla tutan ölçü 5 dakikadaki geri vermedir.
+turadan ayırt edilemiyor. İki dönemde de aralığıyla tutan ölçüler 5 dakikadaki geri verme ve 15 dakikadaki küçük
+yarıya dönüş farkıdır.
 
 {{# sekil 03_geri "Geri çekilme şanstan sık mı" }}
 
@@ -219,43 +202,41 @@ dakika). Mumun tersine kapanışta giren işlemci geri vermeyi maliyetten önce 
 Geri verme bir işlem değil, bir uyarıdır: mumun yönünde gireceksen kapanıştan girmezsin.
 
 Hangi 5 dakikalık mumda bu uyarı daha güçlü? 7. ders iki yer buldu ve ikisi de iki dönemde aynı yöne bakıyor:
-kapanışı ucuna yakın mum ve Asya seansındaki mum (Asya: Londra 07:00'den önce; TSİ İngiltere yaz saatinde 09:00'dan,
-kış saatinde 10:00'dan önce). Londra seansında (Londra 07:00 ile New York 08:00 arası; TSİ iki ülke de yaz saatindeyken
+kapanışı ucuna yakın mum ve Asya seansındaki mum (Asya: New York 17:00 ile Londra 07:00 arası; TSİ iki ülke de yaz
+saatindeyken 00:00–09:00, ikisi de kış saatindeyken 01:00–10:00). Londra seansında (Londra 07:00 ile New York 08:00 arası; TSİ iki ülke de yaz saatindeyken
 09:00–15:00, ikisi de kış saatindeyken 10:00–16:00) aynı eğilim yarı yarıya küçük (7. ders, 5 dakika).
 
 {{# sema kovalama }}
 
 {{# kart bes-dk-uc }}
 
+Gerçek grafiklerde numaralar sabittir: ① olay mumu, ② mumun yarısı, ③ fiyatın yarıya ilk dokunduğu an, ④ izleme
+penceresinin sonu. Şemalarda ise numaralar şemanın altındaki maddelere bağlıdır.
+
 {{# ornek uc-kapanis }}
 
-Üstteki ve alttaki günde ① mumu neredeyse aynı görünür: ikisi de Londra seansında, takvimde haber yokken, ucunda
-kapanmış 5 dakikalık bir büyük mum. İlk bir iki mum da çoğu zaman ayırt edici değildir; iki günde de fiyat kapanışın
-biraz ötesinde ya da biraz gerisinde dalgalanır. Üstteki günde fiyat ② kesikli çizgisine iner, ③ yarıya ilk dokunduğu
-mumu işaretler ve fiyat ④'te mumun tersinde biter. Alttaki günde yarıya hiç dokunulmaz, ③ işareti yoktur ve fiyat ④'te
-kapanışın belirgin ötesindedir. İki gün arasındaki fark ancak ③'ün gelip gelmediği belli olunca görünür, yani kararın
-verilmesi gereken anda değil, sonradan. Tek bir çift gün kuralı ne doğrular ne yanlışlar: üstteki gün kovalamamanın
-haklı çıktığı gündür, alttaki gün yarıyı bekleyen limitin kaçtığı gündür ve ikisi de ortalamanın içinde vardır.
+İki gün de EUR/USD'de, Londra seansında, takvimde haber yokken gelen aşağı yönlü 5 dakikalık büyük mumdur; ikisi de
+uzun gövdeli ve dibine yakın kapanır. Üstteki günde (24 Kasım 2023, mum TSİ 15:40'ta başlar) fiyat önce mumun yönünde
+bir buçuk mum boyundan fazla daha iner (TSİ 16:30), sonra döner: yarıya ancak kapanıştan bir saat sonra, TSİ 16:47'de
+dokunur (③), TSİ 17:15'te mumun tepesini kırar ve ④'te (TSİ 17:45) tepenin de üstündedir. Alttaki günde (13 Kasım
+2023, mum TSİ 15:00'te başlar) fiyat yarıya hiç dönmez, ③ yoktur; kapanıştan sonraki ikinci mumda mumun dibini kırar ve
+④'te (TSİ 17:05) dibin belirgin altındadır. Tek bir çift gün kuralı ne doğrular ne yanlışlar. İki günde de kapanışta
+mumun yönünde giren işlem (stop 2 ATR, hedef 1 R) hedefini ilk saat içinde görürdü; üstteki günde yarıya konan limit
+altı mumluk bekleme süresinde dolmazdı. Kovalamama kuralının dayanağı bu iki günün sonucu değil, binlerce olayın
+ortalaması ve kapanışta ödenen makastır; ortalamanın içinde kovalayanın kazandığı günler de vardır.
 
 ### Masada: 15 dakikada okuma zayıf
 
-15 dakikalık büyük mumda iki dönemde de tutan tek şey yarısına dönüşün aynadan biraz sık olmasıdır. ±1 ATR payı
-2018–2023'te yazı turadan ayırt edilemiyor ve 24 mum sonraki yol iki dönemde de sıfırdan ayırt edilemiyor. Masada bunun
-anlamı şudur: 15 dakikalık büyük mum ne kovalama ne tersine giriş için bir gerekçe taşır. 7. ders tek istisnayı Asya
-seansında buldu (iki ölçüde iki dönemde aynı yön), ama 24 mum sonraki yolun işareti orada da dönemden döneme değişiyor
-(7. ders, 15 dakika). 15 dakikalık büyük mumu bir bağlam olarak not edersin ("piyasa bu saatte hızlandı") ve kararı
-başka bir gerekçeye bırakırsın.
-
-Bu durumda yapmazsın: 15 dakikalık büyük mumu 5 dakikalığın geri vermesiyle ya da 1 saatliğin devamıyla okumazsın. İki
-dilimin arasındadır ve ikisinin de okumasını taşımaz.
+15 dakikalık büyük mumda iki dönemde tutan tek şey yarıya dönüşün aynadan biraz sık olmasıdır; ne kovalama ne tersine
+giriş gerekçesi taşır. Mumu bağlam olarak not edersin (7. ders, 15 dakika).
 
 ### Masada: 1 saatte tersine girmezsin
 
 1 saatlik büyük mumda ortalama yol bir gün boyunca mumun yönündedir: 2018–2023'te aralığıyla, 2024 sonrasında yalnız
 nokta tahmini olarak. Bu küçük devamın masadaki en önemli sonucu bir giriş değil, bir yasaktır: mumun tersine giren
-işlemci bu yolun karşısında durur. 8. ders bunu giriş biçimleriyle ölçtü ve 1 saatte tersine giriş biçimlerinin hepsi
-maliyetten önce de eksi çıktı (8. ders, 15 dakika ve 1 saat). "Fazla gitti" hissinin en güçlü olduğu dilim, o hissin
-en pahalı olduğu dilimdir.
+işlemci bu yolun karşısında durur. 8. ders bunu giriş biçimleriyle ölçtü: stop 2 ATR, hedef 1 R satırında 1 saatte
+tersine giriş biçimleri 2018–2023'te maliyetten önce de eksiydi, 2024 sonrasında maliyetten önce sıfırın çevresinde
+kaldı, maliyetten sonra iki dönemde de eksi (8. ders, 15 dakika ve 1 saat).
 
 Mumun yönündeki devam ise bir işlem çıkarmıyor: stoplu ve hedefli bir işlemde maliyetten önce işlem başına
 {{ G.60.ic.devam:piyasa:s2:h1.brut }} R. Kapanışı yarısının gerisinde kalan fitilli 1 saatlik mumda ve günlük trend
@@ -268,14 +249,15 @@ bağlam olarak okunmadığı yerlerdir.
 
 {{# ornek saat-uc }}
 
-Üstteki ve alttaki günde ① aynı türden bir mumdur: haber olmayan bir saatte, ucunda kapanmış 1 saatlik büyük mum.
-Sonraki iki üç saat iki günde de benzer başlar; fiyat kapanışın çevresinde bir süre oyalanır ve grafik iki günde de
-"hareket bitti mi" sorusunu sorar. Üstteki günde fiyat ② çizgisine hiç inmez, ③ işareti yoktur ve fiyat ④'te mumun
-yönünde, kapanışın belirgin ötesindedir. Alttaki günde fiyat ③'te yarıya dokunur, oradan mumun öbür ucuna kadar döner ve
-④'te mumun tersindedir. Alttaki gün "tersine girmeliydim" dedirtir; ama o gün, ① kapandığı anda üstteki günden ayırt
-edilemiyordu. Tek bir çift gün kuralı ne doğrular ne yanlışlar: 1 saatteki devam bir ortalamadır ve tam dönüşler o
-ortalamanın içindedir. Tersine girmeme kuralı tam dönüşün olmayacağını söylemez; ortalama yolun tersine girişin
-aleyhine olduğunu söyler.
+İki gün de GBP/USD'de, takvimde haber yokken dibine yakın kapanan aşağı yönlü 1 saatlik büyük mumdur. Üstteki günde
+(24 Ekim 2023, mum TSİ 10:00–11:00, Londra seansı) fiyat ilk saatte mumun dibini kırar, yarıya hiç dönmez (③ yok) ve
+ertesi güne kadar inmeye devam eder; ④'te (25 Ekim, TSİ 11:00) kapanışın yaklaşık dört mum boyu altındadır. Alttaki
+günde (22 Kasım 2023, mum TSİ 16:00–17:00, Londra–New York örtüşmesi) fiyat da önce mumun yönünde gider ve sonraki iki
+saatte dibin bir buçuk mum boyundan fazla altına iner; sonra gece boyunca toparlanır, yarıya ancak ertesi gün TSİ
+11:30'da döner (③), hemen ardından mumun tepesini de kırar ve ④'te (23 Kasım, TSİ 17:00) mumun içinde, yarının
+üstündedir. Alttaki gün geriye bakınca "tersine girmeliydim" dedirtir; oysa kapanışta tersine giren, 1 ATR'lik de
+2 ATR'lik de stopunu ilk saatte görürdü. Tersine girmeme kuralı tam dönüşün olmayacağını söylemez; ortalama yolun
+tersine girişin aleyhine olduğunu söyler.
 
 ## Yarısına dönen fiyat ne kadar sürede dönüyor
 
@@ -290,26 +272,17 @@ dönüp sonra yeniden mumun ucuna gitti; yarısına dönenler içinde bu pay {{ 
 dönenler içinde {{ D.60.ic.geri_50_uc_kosul }} (ayna {{ D.60.ic.ayna_geri_50_uc_kosul }}). Geri çekilip yeniden uca gitmek
 ("geri çekilmede katıl" okuması) şansla beklenen kadar sık.
 
-### Masada: yarıyı nerede ve ne kadar beklersin
+### Masada: geri çekilmeyi ne kadar beklersin
 
-Yarıya dönüş çoğu zaman hemen gelir; masada bunun anlamı bekleyişin bir sınırı olmasıdır. Mumun yarısına konan bir
-limitin dolması ilk bir iki mumda yoğunlaşır, sonra seyrekleşir. 8. dersin ölçtüğü limit ve stop emirleri büyük mum
-kapandıktan sonra altı mum bekledi ve dolmazsa çekildi (8. ders, On bir giriş biçimi); bu dersteki emir yerleri de o
-pencereyle anlatılır. Pencere bitince masadan kalkarsın. Dolmayan limiti fiyatın peşinden kaydırmak kovalamanın yavaş
-hâlidir.
-
-Bekleyişin ikinci yüzü daha önemli: limitin dolması iyi haber değildir. Limitin dolduğu olaylarda aynı anda piyasadan
-girilen işlem çoğunlukla kaybederdi (8. ders, Limit neden ucuz görünür: ters seçim); bunun büyük kısmı geometridir, çünkü
-limit fiyat mumun hareketini geri aldığında dolar. Yarıyı bekleyen işlemci daha iyi bir fiyat alır, ama o fiyatla
-aldığı şey çoğu zaman zayıflamış bir harekettir.
+Ölçülen limit ve stop emirleri büyük mum kapandıktan sonra {{ SB.bekle }} mum bekledi, dolmazsa çekildi (8. ders, On
+bir giriş biçimi). Süre bitince emri çekersin; dolmayan limiti fiyatın peşinden kaydırmak kovalamanın yavaş hâlidir.
+Dolum iyi haber değildir: limitin dolduğu olaylarda aynı anda piyasadan girilen işlem çoğunlukla kaybederdi ve bunun
+büyük kısmı geometridir, çünkü limit fiyat mumun hareketini geri aldığında dolar (8. ders, Limit neden ucuz görünür:
+ters seçim).
 
 {{# sema bekleme }}
 
 {{# kart yari-bekleme }}
-
-Bu durumda yapmazsın: limiti yarının hemen önüne çekip "dolsun" diye beklemezsin; dolan limiti büyütmezsin; pencere
-bittikten sonra aynı mum için yeni bir limit kurmazsın. Pencereden sonra kurulan emir bu serinin ölçtüğü girişlerin
-hiçbirine karşılık gelmez; sonucu bu derste ölçülmedi.
 
 ## Büyüklük değişince
 
@@ -323,14 +296,9 @@ etkisi yok. 5 ATR'lik bir mumun 2 ATR'lik bir mumdan daha güvenilir bir dönü�
 
 ### Masada: büyüklük okumayı değiştirmez
 
-Masada mumun boyu en çok dikkat çeken şeydir ve en az bilgi taşıyan şeylerden biridir. Kovalar iki dönemde aynı yöne
-bakmıyor: 5 dakikalık 4–5 ATR'lik mum 2018–2023'te belirgin geri verdi, 2024 sonrasında vermedi (7. ders, 5 dakika).
-Bu yüzden 5 ATR'lik bir mumu 2 ATR'lik bir mumdan farklı okumazsın; ikisine de aynı soruları aynı sırayla sorarsın.
-
-Boyun masada değiştirdiği tek şey riskin ölçüsüdür. Stopu mumun öbür ucuna koyan biri için 5 ATR'lik mumda risk
-birkaç ATR'dir ve aynı tutarı riske etmek için pozisyon küçülür (pozisyon büyüklüğü bu derste ölçülmedi). Stopu
-kısaltmak için mumun içine çekmek ise 8. dersin ölçtüğü ters yöne gider: yakın stopta aynı makas daha büyük bir R olur
-(8. ders, Stop uzaklığı ve maliyet).
+Kovalar iki dönemde aynı yöne bakmıyor (5 dakikalık 4–5 ATR'lik mum 2018–2023'te belirgin geri verdi, 2024 sonrasında
+vermedi; 7. ders, 5 dakika); 5 ATR'lik mumu 2 ATR'likten farklı okumazsın. Stop girişten 2 ATR uzakta kaldığı için
+mumun boyu stopu da değiştirmez; stopu mumun öbür ucuna koymak ve pozisyon büyüklüğü bu seride ölçülmedi.
 
 {{# kart cok-buyuk }}
 
@@ -359,15 +327,9 @@ işlemde makas ve kaymayı karşılamıyor.
 
 ### Masada: makas penceresi
 
-Bu bölümün masadaki sonucu bir yanılgıyı kaldırmaktır. Sıradan bir büyük mumun kapanışında makas açılmıyor; yani
-"makas kapansın diye birkaç dakika beklerim" bir gerekçe değildir, beklenen şey zaten olmuyor. Girişi pahalı yapan şey
-hareketin küçük olmasıdır, makasın genişlemesi değil.
-
-Makasın gerçekten açıldığı pencereler var ve hiçbiri bu dersin olaylarından değil: FX gününün devri, haftanın ya da
-bir tatilin ardından yeniden açılışın ilk saati (ikisi yukarıda, tanımın masa bölümünde) ve takvimdeki büyük haberler
-(saatleri aşağıdaki kontrol listesinde). 8. ders haberlerin iki dakika öncesinden on beş dakika sonrasına kadar piyasa
-ve stop emirlerinin kayma varsayımını artırarak ölçtü; hızlı piyasadaki gerçek kaymanın büyüklüğü ölçülmedi (8. ders,
-Ölçülmeyenler).
+Sıradan büyük mumun kapanışında makas açılmıyor; "makas kapansın diye beklerim" bir gerekçe değildir, girişi pahalı
+yapan hareketin küçüklüğüdür. FX gününün devri ve hafta açılışı bu dersin dışındadır. Takvimdeki büyük haberin
+penceresinde piyasa ve stop emirlerine ek kayma varsayıldı; haberdeki makas bu seride ölçülmedi (8. ders, Ölçülmeyenler).
 
 {{# kart makas-devir }}
 

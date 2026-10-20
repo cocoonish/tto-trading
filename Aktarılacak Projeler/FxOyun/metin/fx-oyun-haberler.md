@@ -14,35 +14,33 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
 import Diyagram from '../../components/Diyagram.astro';
 
 Bir veri ya da karar açıklandığında fiyat birkaç dakika içinde yeni bilgiyi fiyatlamaya çalışır. İlk mum bu yüzden
-haber anlarında açılışlardan ve fiksinglerden çok daha büyüktür ve çok daha seyrek gelir: bir açılış her iş günü gelir,
-bir istihdam verisi ayda bir, bir merkez bankası kararı yılda sekiz kez. Bu ders iki aileyi ayrı okur: **ABD verileri**
-(tarım dışı istihdam ve tüketici fiyatları) ve **merkez bankası kararları** (Fed, ECB, BoE).
+haber anlarında genellikle açılışlardan ve fiksinglerden büyüktür (2024 sonrasında yarıya limitli tepkinin ortanca riski
+ABD verisinin normal mumunda {{ B.referans.veri.normal.dis.risk_pip }} pip, açılışın normal mumunda
+{{ B.referans.acilis.normal.dis.risk_pip }} pip) ve çok daha seyrek gelir: bir açılış her iş günü gelir, bir istihdam
+verisi ayda bir, bir merkez bankası kararı yılda sekiz kez. Bu ders iki aileyi ayrı okur: **ABD verileri** (tarım dışı
+istihdam ve tüketici fiyatları) ve **merkez bankası kararları** (Fed, ECB, BoE).
 
 {{# an_tablo veri mb }}
 
 Saatler resmî yayım takviminden alınır, tahmin edilmez. Burada **ilk mum** açıklamadan sonraki ilk {{ AN.nfp.tf }}
-dakikadır. Tipik boy o anın son {{ S.haber_pencere }} olayından ölçülür. Haber anında makas açılır ve emirler kayar;
-maliyet bu yüzden açıklamadan iki dakika önce ile on beş dakika sonrası arasında ek {{ ON.haber_kayma_pip }} pip
-kayma içerir.
+dakikadır. Tipik boy o anın son {{ S.haber_pencere }} olayından ölçülür. Sınamada açıklamadan iki dakika önce ile on
+beş dakika sonrası arasında piyasa, stop ve kırılım emirlerine ek {{ ON.haber_kayma_pip }} pip kayma varsayıldı; makas
+gerçek alış-satış fiyatlarından ödendi, haber anındaki büyüklüğü ayrıca ölçülmedi.
 
 ## Plan tek cümlede
 
-**Haber mumu tek başına bir yön sinyali değildir.** ABD verisinin ilk mumu şanstan seyrek sürüyor. Merkez bankası
-kararlarında güçlü ya da reddedilen ilk mumun yönünde kalmak 2024 sonrasında artıda kaldı, ama bu sonuç birkaç karar
-gününe dayanıyor; bir hüküm değil, izlenecek bir aday.
+**Haber mumu tek başına bir yön sinyali değildir.** ABD verisinin normal ve reddedilen ilk mumu şanstan seyrek
+sürüyor. Merkez bankası kararlarında güçlü ya da reddedilen ilk mumun yönünde kalmak 2024 sonrasında artıda kaldı, ama
+bu sonuç birkaç karar gününe dayanıyor; bir hüküm değil, izlenecek bir aday.
 
 ## Bu dersi masada nasıl kullanırsın
 
 Bu ders haber anında bir yön vermez; masada üç şey söyler: açıklamadan önce defterde ne bırakılmaz, ilk beş dakikalık
-mum nasıl okunur, ne zaman beklenir ve ne zaman masadan kalkılır. Açıklamadan önceki dakikalar ölçülmedi; dersin bütün
-sayıları ilk mumla, yani açıklamadan sonraki ilk {{ AN.nfp.tf }} dakikayla başlar ve iki saatlik izlemeyle biter.
-Aşağıdaki şema bu sırayı beş soruya çevirir: bir soru seni durdurursa sağdaki sonuç geçerlidir, durdurmazsa bir alttaki
-soruya inilir.
+mum nasıl okunur, ne zaman beklenir ve ne zaman masadan kalkılır. Dersin bütün sayıları ilk mumla başlar ve iki saatlik
+izlemeyle biter. Aşağıdaki şema bu sırayı beş soruya çevirir: bir soru seni durdurursa sağdaki sonuç geçerlidir,
+durdurmazsa bir alttaki soruya inilir.
 
 {{# karar haber-akis }}
-
-Şema bir okuma sırasıdır, işlem kuralı değil. Son sorudaki iki saat ölçünün kendi sınırıdır: bu ders o pencerenin
-ötesinde fiyatın ne yaptığını ölçmedi.
 
 ## Haberden sonra fiyat nereye gidiyor
 
@@ -55,20 +53,15 @@ belirgin oynatabilir. Şekil bir yön söylemek için değil, iki dönemin birbi
 
 ### Masada: açıklamadan önceki dakikalar
 
-Bu dersin sayılarının hiçbiri açıklamadan önceki dakikaları ölçmedi; buradaki kurallar sınamanın maliyet kurallarından
-ve ilk mumun tanımından gelir. Maliyet: sınamada her işlem gerçek alış-satış fiyatlarından doldu, piyasa, stop ve
-kırılım emirleri ayrıca açıklamadan iki dakika önce ile on beş dakika sonrası arasında {{ ON.haber_kayma_pip }} pip daha
-kötü doldu. Bu ek kayma bir varsayımdır; gerçek kayma ve haber anındaki makasın büyüklüğü ayrıca ölçülmedi. İkisinin
-birlikte ne yaptığı ölçüldü: küçük veri mumunun kırılımı maliyetsiz artıda, maliyetle eksideydi. Tanım: ilk mumun
-sınıfı boyundan ve gövdesinin yerinden çıkar, mum kapanmadan ikisi de belli değildir; bir ucu süpürüp öbür yöne kapanan
-mum (reddedilen) ilk saniyelerde güçlü bir mum gibi görünebilir.
+Açıklamadan önceki dakikalar ölçülmedi; buradaki kurallar sınamanın maliyet kurallarından ve ilk mumun tanımından
+gelir. Süresine haber penceresi düşen bekleyen bir emri açıklamadan önce çekersin. Bu bir disiplin kuralıdır, ölçüm
+sonucu değil: penceredeki ek kayma bir varsayımdı, haber anındaki makas ve gerçek kayma ölçülmedi, emri çekmenin
+sonuca etkisi de ölçülmedi. Mumun sınıfı kapanışta verilir: bir ucu süpürüp öbür yöne kapanan mum (reddedilen) ilk
+saniyelerde güçlü bir mum gibi görünebilir.
 
 {{# sema dar-aralik }}
 
 {{# kart haber-oncesi }}
-
-Bu durumda yapmazsın: açıklamadan önce yön tahminiyle girmezsin; dar aralığın kırılımına haberden önce stop emri
-bırakmazsın; açık bir pozisyonun stopunu haber mumunun içinde kalacak kadar yakında unutmazsın.
 
 ## ABD verileri
 
@@ -96,9 +89,7 @@ da olabilir.
 Tarım dışı istihdam ve TÜFE New York 08:30'da (TSİ 15:30, ABD kış saatinde 16:30) gelir; ilk mum New York 08:35'te
 (TSİ 15:35, ABD kış saatinde 16:35) kapanır. Masadaki okuma o kapanışla başlar ve üç adımdır.
 
-1. **Sınıfı koyarsın.** Mumun boyu o anın tipik boyuyla kıyaslanır (son {{ S.haber_pencere }} olayın ortancası):
-   büyük ve gövdesi uzunsa güçlü, bir yönde uzun fitilli ve küçük gövdeliyse reddedilen, çok küçükse küçük, kalan her
-   mum normal.
+1. **Sınıfı koyarsın,** o anın son {{ S.haber_pencere }} olayının tipik boyuna göre (1. ders, İlk mumun dört sınıfı).
 2. **Üç seviye çizersin:** mumun iki ucu ve yarısı. Sonraki iki saatin okuması bu üç çizginin karşısında yapılır.
 3. **Neyi beklemeyeceğini söylersin.** Normal ve reddedilen veri mumunun yönünde sürmesini beklemezsin: iki dönemde de
    şanstan seyrek sürdü. Güçlü veri mumunda devam payı aynayla aynı; mumun ucunda kapanması yön bilgisi değildir.
@@ -110,20 +101,18 @@ Tarım dışı istihdam ve TÜFE New York 08:30'da (TSİ 15:30, ABD kış saatin
 
 {{# kart veri-normal }}
 
-Bu durumda yapmazsın: mumun ucunun ötesinde mumun yönünde kovalamazsın; "sürmüyor, öyleyse dönecek" diye tersine
-girmezsin, çünkü sürmemek dönmek değildir ve o tepki sınanmadı.
-
-Aşağıdaki iki gün bir kuralla seçildi: EUR/USD'de tarım dışı istihdamın normal ilk mumuna uyan olaylardan, biri dersin
-ölçtüğü eğilimle biten, öbürü ters giden en son olay.
+Aşağıdaki iki gün bir kuralla seçildi: EUR/USD'de tarım dışı istihdamın normal ilk mumuna uyan olaylardan, biri
+yarıya dönüp itişi sürdürmeyen, öbürü itişi sürdüren en son olay.
 
 {{# ornek nfp-normal }}
 
-Üstteki günde ① verinin ilk mumu normal sınıfa düşer, ② mumun yarısıdır, ③ fiyatın oraya ilk döndüğü mumdur, ④
-izleme penceresinin sonudur ve orada itiş sürmemiştir. Alttaki günde ① aynı sınıftandır ve kapandığı anda üstteki günden ayırt
-edilemez; ayrım sonraki mumlarda doğar: fiyat mumun ucunu yarım mum boyu aşar ve okuma "sürdü" diye kapanır. İki günün
-farkının sebebi ölçülmedi; grafikte "belli" görünmesi sonradan bakmanın sonucudur. Tek bir gün kuralı ne doğrular ne
-yanlışlar: üstteki gün ölçülen eğilimin bir örneğidir, alttaki gün okumanın neden bir yön tahmini değil, bir sıklık
-olduğunu gösterir.
+Üstteki gün 1 Eylül 2023'tür. ① verinin yukarı ilk mumudur (TSİ 15:30–15:35), normal sınıftadır ve ucuna yakın
+kapanır. Fiyat ucu bir pipten az aşar, yedi dakika sonra ② yarıya geri çekilir (③, TSİ 15:42), TSİ 16:30'da mumun
+ucuna kadar yeniden çıkar ama onu aşamaz; TSİ 17:00'de öbür ucu kırar ve ④'te (TSİ 17:35) mumun dibinin belirgin
+altındadır: ilk mumun yükselişi tamamen geri alınmıştır. Alttaki gün 3 Kasım 2023'tür. ① aynı sınıftan, aşağı yukarı
+aynı boyda ve yine ucuna yakın kapanmış bir yukarı mumdur; kapandığı anda üstteki günden ayırt edilemez. Fiyat yarıya
+hiç dönmez, kapanıştan sonraki ilk mumda ucu aşar, TSİ 17:00'de ucun neredeyse bir mum boyu ötesine gider ve ④'te ucun
+biraz ötesinde biter. Tek bir gün kuralı ne doğrular ne yanlışlar; okuma bir yön tahmini değil, bir sıklıktır.
 
 ## Merkez bankası kararları
 
@@ -146,35 +135,31 @@ Basın toplantısının ayrı etkisi bu derste ölçülmedi.
 
 ### Masada: karar metni ve basın toplantısı
 
-Bir karar masada iki dalga olarak gelir. İlk {{ AN.nfp.tf }} dakikalık mum karar metninin fiyatıdır; ikinci dalga basın
-toplantısıdır: Fed'de New York 14:30 (TSİ 21:30, ABD kış saatinde 22:30), ECB'de bugün Frankfurt 14:45 (TSİ 15:45,
-Avrupa kış saatinde 16:45). BoE'de tutanak kararla birlikte gelir, yani ilk mum ikisini birden taşır. Ölçülen devam ve
-dönüş payları Fed'de ve ECB'de iki dalganın toplamıdır; karar mumu kapandığında kararın okuması bitmemiştir.
-
-Normal karar mumu çoğu zaman yarısına döner, ama yönü rastgele bir yol da aynı sıklıkta dönerdi; yarıya dönüş burada
-bir şey söylemez. Reddedilen karar mumu iki dönemde de şanstan sık sürdü, güçlü karar mumu 2024 sonrasında birkaç karar
-gününde sürdü; ikisinde de olay az. Masada bunları aday olarak izlersin: mumun yönünü, iki ucunu ve toplantının saatini
-işaretler, toplantı boyunca fiyatın öbür uca gidip gitmediğine bakarsın. Öbür uç kırılırsa karar mumunun okuması biter.
+İlk {{ AN.nfp.tf }} dakikalık mum karar metninin fiyatıdır; ikinci dalga basın toplantısıdır: Fed New York 14:30 (TSİ
+21:30, ABD kış saatinde 22:30), ECB Frankfurt 14:45 (TSİ 15:45, Avrupa kış saatinde 16:45); BoE'de tutanak kararla
+gelir. Ölçülen paylar Fed'de ve ECB'de iki dalganın toplamıdır, yani karar mumu kapandığında kararın okuması
+bitmemiştir. Normal karar mumu çoğu zaman yarısına döner, ama yönü rastgele bir yol da aynı sıklıkta dönerdi. Reddedilen
+karar mumu iki dönemde de şanstan sık sürdü, güçlü karar mumu 2024 sonrasında birkaç karar gününde sürdü; ikisinde de
+olay az. Masada işlem açmazsın: mumun iki ucunu ve toplantının saatini işaretler, toplantıyı izler ve adayı deftere
+yazarsın. Öbür uç kırılırsa karar mumunun okuması biter.
 
 {{# sema iki-dalga }}
 
 {{# kart karar-guclu }}
 
-Bu durumda yapmazsın: karar mumunun kapanışını kararın son fiyatı saymazsın; toplantı başlamadan metinden çıkardığın
-yorumu pozisyona çevirmezsin; birkaç karar gününün artı sonucunu kural saymazsın.
-
-Aşağıdaki iki gün de kuralla seçildi: EUR/USD'de Fed kararının normal ilk mumu; biri ölçülen eğilimle (öbür ucun
-kırılması) biten, öbürü ters giden en son olay.
+Aşağıdaki iki gün de kuralla seçildi: EUR/USD'de Fed kararının normal ilk mumu; biri öbür ucu kırarak, öbürü mumun
+yönünde sürerek biten en son olay.
 
 {{# ornek fomc-normal }}
 
-Üstteki günde ① kararın ilk mumu normal sınıftadır, ② mumun yarısı, ③ fiyatın oraya ilk döndüğü mumdur. Basın
-toplantısı (2019'dan beri her kararda) karar mumundan altı mum sonra başlar. Üstteki günde fiyat pencerenin içinde öbür
-ucu kırar ve ④ pencerenin sonunda ilk mumun yönü geri alınmıştır; bu kırılımın toplantıya mı başka bir şeye mi bağlı
-olduğu grafikten okunamaz. Alttaki günde ① yine normal bir mumdur ve karar mumu kapandığında iki gün aynı görünür; fark
-ilk mumdan sonra doğar: fiyat mumun ucunu yarım mum boyu aşar. Hangi günün hangisi olacağı karar mumunun kapanışında
-belli değildi. Tek bir karar kuralı ne doğrular ne yanlışlar; üstteki gün ikinci dalganın ilkini geri alabileceğini,
-alttaki gün aynı yöne itebileceğini gösterir.
+Üstteki gün 3 Mayıs 2023'tür. ① kararın yukarı ilk mumudur (TSİ 21:00–21:05); uzun bir üst fitili vardır ve yarısının
+hemen üstünde kapanır, bu yüzden fiyat ② yarıya hemen sonraki mumda dokunur (③). Öbür uç basın toplantısının ilk
+mumunda (TSİ 21:30) kırılır; fiyat pencerenin geri kalanında o ucun çevresinde dolaşır ve ④'te (TSİ 23:05) mumun alt
+yarısında, açılışının biraz üstündedir: yükselişin çoğu geri alınmıştır. Alttaki gün 20 Mart 2019'dur. ① yine normal
+sınıftadır ama biçimi farklıdır: gövdesi neredeyse mumun tamamıdır ve ucunda kapanır. Fiyat yarıya hiç dönmez,
+kapanıştan sonraki ilk mumda ucu aşar, basın toplantısı başladıktan sonra (TSİ 21:30) ucun üç çeyrek mum boyu kadar
+ötesine gider ve ④'te ucun yaklaşık yarım mum boyu ötesindedir. İki mumun biçim farkı sınıfın içinde ölçülmedi; tek bir
+karar günü hangi biçimin hangi sonu verdiğini söylemez.
 
 ## Küçük haber mumu
 
@@ -189,22 +174,21 @@ izlenen sürenin içinde. ABD verisinde ise küçük ilk mum 2024 → döneminde
 
 ### Masada: fiyatı oynatmayan açıklama
 
-Küçük ilk mum, açıklamanın fiyatı oynatmadığını söyler; yön söylemez. Okuma, iki ucun hangisinin önce kırıldığıyla
-başlar. Fed kararında kırılan taraf iki dönemde de çoğu zaman bir mum boyu yol aldı; kırılımın metinden mi toplantıdan
-mı geldiği ayrılmadı, bu yüzden Fed'in küçük mumunda okuma toplantının başlangıcından (TSİ 21:30, ABD kış saatinde
-22:30) önce bitmiş sayılmaz. ABD verisinin küçük mumu 2024 sonrasında daha az ilerledi; ECB ve BoE'de olay az.
-
-Küçük mumun tuzağı riskin kendisidir. Kırılan uçtan girip stopu öbür ucun ötesine koyan işlemin riski mumun boyu
-kadardır; makas ve kayma mumun boyundan bağımsız olduğu için bu küçük riskin görünür bir parçası olur. Riski üç pipin
-altında kalan işlem sınamada açılmadı; açılanlarda küçük veri mumunun kırılımı maliyetsiz artıyken maliyetle eksiye
-döndü.
+Küçük ilk mum fiyatın oynamadığını söyler, yön söylemez; okuma önce kırılan uçla başlar. Fed'de kırılımın metinden mi
+toplantıdan mı geldiği ayrılmadı, bu yüzden okuma toplantının başlangıcından (TSİ 21:30, ABD kış saatinde 22:30) önce
+bitmiş sayılmaz. Sınanan biçim iki uca birer kırılım emridir: biri dolunca öbürü iptal olur, stop öbür ucun mum boyunun
+onda biri ötesindedir, hedef yarım R. Bunu "sıkışma patlar" diye bir kenar saymazsın. ABD verisinin küçük mumunda
+kırılım maliyetten önce küçük bir artı, maliyetle iki dönemde de eksiydi (2018–2023'te
+{{ B.referans.veri.kucuk.ic.brut }} → {{ B.referans.veri.kucuk.ic.R }} R, 2024 → {{ B.referans.veri.kucuk.dis.brut }} →
+{{ B.referans.veri.kucuk.dis.R }} R). Karar mumunda 2018–2023'te eksi ({{ B.referans.mb.kucuk.ic.R }} R), 2024
+sonrasında artı ama zayıf ({{ B.referans.mb.kucuk.dis.R }} R); maliyetin payı {{ B.referans.mb.kucuk.ic.maliyet }} ve
+{{ B.referans.mb.kucuk.dis.maliyet }} R (5. ders, Maliyet nereye gidiyor). Bir R hedefli biçimler karar mumunda
+2018–2023'te denendi ve hiçbiri maliyetten sonra artıda kalmadı (en iyisi {{ I.mb.kucuk.R }} R); 2024 sonrasında
+sınanmadı.
 
 {{# sema kucuk-karar }}
 
 {{# kart karar-kucuk }}
-
-Bu durumda yapmazsın: küçük karar mumunu "piyasa kararı umursamadı" diye okumazsın; iki uçtan biri kırılmadan taraf
-seçmezsin; dar bir stopu, makası hesaba katmadan "riskim küçük" diye kurmazsın.
 
 ## Trend
 
@@ -242,69 +226,54 @@ yalnız 2024 → sonucudur.
   sürenin sonunda kapandı: verinin ilk mumundan sonraki itişin sürmemesi burada da görünüyor.
 - **Küçük veri mumu, kırılımda, bir R hedef.** 2018–2023'te işlem başına {{ B.islem.veri.kucuk.ic.R3 }} R ile
   seçildi; 2024 → döneminde {{ B.islem.veri.kucuk.dis.n }} işlemde net {{ B.islem.veri.kucuk.dis.R }} R, hüküm
-  "{{ B.islem.veri.kucuk.hukum }}". Maliyetsiz sonucu artı ({{ B.islem.veri.kucuk.dis.brut }} R); haber anının makası
-  ve kayması onu eksiye çeviriyor.
+  "{{ B.islem.veri.kucuk.hukum }}". Maliyetsiz sonucu artı ({{ B.islem.veri.kucuk.dis.brut }} R); makas ve
+  varsayılan ek kayma onu eksiye çeviriyor.
 
 ## Emri nereye koyarsın
 
-Bu bölüm başka bir gerekçeyle işleme giren biri içindir: haber mumu bir giriş sinyali değildir, ama masada zaten bir
-görüşün varsa emrini haber anına göre koyarsın. Dersin tepkileri üç emir biçimi kullandı.
+Emrin genel kuralları (giriş türleri, emrin ömrü, haber penceresinde bekleyen emir) 1. dersin "Emri nereye koyarsın"
+bölümündedir; burada yalnız haber anına özgü olanlar var. Haber mumu bir giriş sinyali değildir; bu bölüm başka bir
+gerekçeyle girecek olan içindir.
 
 - **Piyasa emri, ilk mum kapanınca.** Güçlü ve reddedilen karar mumunun işlem tepkileri böyle kuruldu. Giriş hâlâ haber
-  penceresinin içindedir: makası öder ve sınamada {{ ON.haber_kayma_pip }} pip ek kayma öder. Stop öbür ucun ötesinde ve
-  geniştir; güçlü karar mumunda ortanca risk {{ B.islem.mb.guclu.dis.risk_pip }} pip.
-- **Limit, mumun yarısına.** Yön sınıflarının referans tepkileri böyle kuruldu. Limit girişte makas ve kayma ödemez,
-  çıkışta öder, ve yalnız fiyat ilk mumun yönünün tersine yarıya geri geldiğinde dolar. 8. ders büyük mumda limitin
-  dolduğu olaylarda piyasa girişinin çoğunlukla kaybettiğini ölçtü; haber mumunda bu ayrım ölçülmedi. Dolmuş bir limit,
-  itişin en azından yarıya kadar geri alındığını söyler.
-- **Stop emri, kırılan uca.** Küçük mumun tepkileri böyle kuruldu: iki uca birer kırılım emri, önce tetiklenen geçerli.
-  Stop emri kaymayı öder ve fiyatın zaten yürüdüğü yerden alır; küçük riskte aynı maliyet R cinsinden büyür.
+  penceresinin içindedir: makası ve sınamada varsayılan {{ ON.haber_kayma_pip }} pip ek kaymayı öder. Stop öbür ucun
+  ötesinde ve geniştir; güçlü karar mumunda ortanca risk {{ B.islem.mb.guclu.dis.risk_pip }} pip.
+- **Limit, mumun yarısına.** Yön sınıflarının referans tepkileri böyle kuruldu. Limit yalnız fiyat yarıya geri
+  geldiğinde dolar; dolum, mumun yönündeki itişin yarısının geri alındığını söyler. Büyük mumda bu olaylarda piyasa
+  girişi çoğunlukla kaybetti (8. ders, Limit neden ucuz görünür: ters seçim); haber mumunda bu ayrım ölçülmedi.
+- **Stop emri, kırılan uca.** Küçük mumun tepkileri iki uca birer kırılım emriyle kuruldu; biri dolunca öbürü iptal.
 
-Onay mumundan sonra giriş haber anında bu seride sınanmadı; 8. ders onu büyük mumda ölçtü ve maliyetten önceki sonucu
-kapanışta piyasa girişinden belirgin farklı bulmadı. **Stop** bütün tepkilerde ilk mumun öbür ucunun ötesindedir
-(referans tepkilerde mum boyunun onda biri, iki işlem tepkisinde yarısı kadar); stopu mumun içine çekmek denenmedi ve
-riski üç pipin altında kalan işlem açılmadı. **Hedef** riskin yarısı, riskin kendisi ya da mumun kendi ucudur; hedef
-yaklaştıkça kazanma oranı da başa baş için gereken oran da yükselir.
+**Stop** referans tepkilerde öbür ucun mum boyunun onda biri, iki işlem tepkisinde yarısı kadar ötesindedir; mumun
+içine konan stop denenmedi ve riski üç pipin altında kalan işlem açılmadı. **Hedef** yarım R, bir R ya da mumun kendi
+ucudur. Onay mumundan sonra giriş haber anında ölçülmedi; büyük mumda onayın bilgisi kaçırılan fiyatın bedelini ancak
+karşıladı (8. ders, Onay mumu).
 
-**Emrin iptali ve masadan kalkmak.** Sınanan tepkilerde limit ve kırılım emirleri izlemenin ilk saatinde geçerliydi,
-dolmayan emir iptal edildi; dolan pozisyon ne hedefe ne stopa ulaşırsa iki saatin sonunda kapandı. Güçlü veri mumunun
-tepkisinde 2024 sonrasında işlemlerin {{ B.islem.veri.guclu.dis.zaman_pay }} kadarı böyle kapandı. Basın toplantısı karar
-mumunun öbür ucunu kırarsa da emir çekilir: karar mumunun okuması bitmiştir. Limit ilk saatte dolmadıysa fiyat yarıya
-hiç gelmemiştir; bu, kovalamak için bir gerekçe değildir.
+**Emrin ömrü.** Limit ve kırılım emri ilk mum kapandıktan bir saat sonra düşer (ön kayıttaki süre, ölçülerek
+seçilmedi); dolan pozisyon ne hedefe ne stopa ulaşırsa iki saatlik izlemenin sonunda kapanır. Güçlü veri mumunun
+tepkisinde 2024 sonrasında işlemlerin {{ B.islem.veri.guclu.dis.zaman_pay }} kadarı böyle kapandı. Basın toplantısı
+karar mumunun öbür ucunu kırarsa bekleyen emri çekersin, çünkü karar mumunun okuması bitmiştir (masa uygulaması;
+ölçülmedi). Limit bir saatte dolmadıysa fiyat yarıya hiç gelmemiştir; bu kovalamak için bir gerekçe değildir. İlk mumdan
+sonra on dakika daha beklemek ek kayma penceresinden çıkmaktır; bunun sonuca etkisi ölçülmedi.
 
 {{# sema emir-yerleri }}
 
 {{# kart iki-saat }}
 
-**Haber penceresinde ne değişir.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında piyasa ve stop
-emirleri varsayılan bir ek kayma öder, makas gerçek fiyatlardan ödenir (büyüklüğü ayrıca ölçülmedi) ve büyük ilk mum
-öbür ucun ötesindeki stopu pip cinsinden genişletir. İlk mumdan sonra on dakika daha beklemek pencereden çıkmaktır;
-bunun sonuca etkisi ölçülmedi.
-
 ## Sık yapılan hatalar
 
-- **Veri mumunu kovalamak.** Normal ve reddedilen veri mumunun yönü iki dönemde de şanstan seyrek sürdü. Dayanak:
-  4. ders, "ABD verileri".
-- **Güçlü mumun ucunda kapanmasını yön bilgisi saymak.** Güçlü mumun devam payı aynayla aynı; yakın devam eşiği mumun
-  şeklinden gelir. Dayanak: 1. ders, "Şans ne verirdi: yolun aynası"; 4. ders, "ABD verileri".
 - **"Sürmüyorsa döner" diye tersine girmek.** Ters yönde bir tepki önceden yazılmadı ve sınanmadı; sürmemek ile dönmek
   ayrı ölçülerdir. Dayanak: 4. ders, "ABD verileri".
 - **Karar mumunu son söz saymak.** Basın toplantısı izlenen sürenin içindedir; ölçülen devam ve dönüş payları iki
   dalganın toplamıdır. Dayanak: 4. ders, "Merkez bankası kararları"; 5. ders, "Günün haritası".
 - **Birkaç karar gününü kural saymak.** Güçlü karar mumunun artı sonucu {{ B.islem.mb.guclu.dis.gun_n }} karar gününe
   dayanıyor; {{ ON.hukum_en_az }} işlemin altında hüküm kurulmaz. Dayanak: 4. ders, "Bu okumaları işleme çevirmek".
-- **Küçük mumda dar stopu ucuz sanmak.** Küçük risk aynı makas ve kaymayı R cinsinden büyütür; küçük veri mumunun
-  kırılımı maliyetsiz artıyken maliyetle eksiye döndü. Dayanak: 4. ders, "Bu okumaları işleme çevirmek"; 8. ders,
-  "Stop uzaklığı ve maliyet".
-- **Kazanma oranına bakıp işlemi iyi sanmak.** Yarım R hedefle kazanma oranı yüksek kurulur; başa baş için gereken oran
-  da yükselir. Dayanak: 1. ders, "Kazanma oranı ile net sonuç"; 5. ders, "Referans tepkiler".
 
 ## Masa kontrol listesi
 
 1. Bugün takvimde hangi açıklama var ve saati TSİ kaçta? ABD verisi TSİ 15:30 (ABD kış saatinde 16:30), Fed TSİ 21:00
    (ABD kış saatinde 22:00), ECB TSİ 15:15 (Avrupa kış saatinde 16:15), BoE TSİ 14:00 (İngiltere kış saatinde 15:00).
-2. Defterde açıklamadan önce bırakılmış bir emir ya da stop var mı; o anın ilk mumunun tipik boyu kadar bir hareketin
-   içinde kalıyor mu?
+2. Defterde süresine haber penceresi düşen bir emir var mı? Varsa açıklamadan önce çekiyor muyum? Açık pozisyonun
+   stopu o anın ilk mumunun tipik boyu kadar bir hareketin içinde kalıyor mu?
 3. Açıklamadan iki dakika önce ile on beş dakika sonrası arasındaki her piyasa ve stop emrinin seviyesinden kötü
    dolabileceğini hesaba kattım mı?
 4. İlk beş dakikalık mum kapandı mı? ABD verisinde TSİ 15:35 (ABD kış saatinde 16:35), Fed'de TSİ 21:05 (ABD kış
@@ -327,7 +296,7 @@ ortasına yakın. Sonraki iki mum ucun hemen altında, hafifçe yukarı. Ne yapa
 <details>
 <summary>Çözüm</summary>
 
-Mum normaldir ("ABD verisinin normal ilk mumu" şeması). İki ucu ve yarısını işaretlersin. Mumun yönünde kalmazsın:
+Mum normaldir ({{# atif sema veri-normal }}). İki ucu ve yarısını işaretlersin. Mumun yönünde kalmazsın:
 normal veri mumunun itişi iki dönemde de şanstan seyrek sürdü. Tersine de girmezsin: o tepki sınanmadı. Başka bir
 gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun ötesine; limitin dolması itişin yarıya kadar geri
 alındığını söyler. Dayanak: 4. ders, "ABD verileri"; 5. ders, "Referans tepkiler".
@@ -341,8 +310,10 @@ aralığında. Ne yaparsın, ne yapmazsın?
 <summary>Çözüm</summary>
 
 Beklersin. Basın toplantısı TSİ 21:30'da başlar ve izlenen süre onu içerir; okuma hangi ucun önce kırıldığıyla
-başlar ve kırılımdan önce taraf seçmezsin. Kırılan uçtan gireceksen stop öbür ucun ötesine gider; risk küçüktür ve makas
-ile kayma onun büyük bir parçası olur. Dayanak: 4. ders, "Küçük haber mumu"; 5. ders, "Maliyet nereye gidiyor".
+başlar ve kırılımdan önce taraf seçmezsin. Sınanan biçim iki uca birer kırılım emridir: stop öbür ucun mum boyunun onda
+biri ötesinde, hedef yarım R. Makas ve kayma bu riskin görünür bir parçasıdır: maliyetin payı 2018–2023'te
+{{ B.referans.mb.kucuk.ic.maliyet }} R, 2024 sonrasında {{ B.referans.mb.kucuk.dis.maliyet }} R'ydi. Dayanak: 4. ders,
+"Küçük haber mumu"; 5. ders, "Maliyet nereye gidiyor".
 
 </details>
 
@@ -353,9 +324,10 @@ karar mumunun yönünde yarım R hedefli tepkinin tam örneği olduğunu söylü
 <summary>Çözüm</summary>
 
 Bunu bir kural saymazsın. Güçlü karar mumu 2018–2023'te aynayla aynıydı; 2024 sonrasındaki artı sonuç birkaç karar
-gününe dayanıyor ve "ölçülemedi" hükmü taşıyor; ECB'nin kendi güçlü mumları bir okuma kurmaya bile yetmiyor. Başka bir
-gerekçeyle girersen stop öbür ucun ötesinde ve geniştir; toplantı öbür ucu kırarsa okuma biter. Dayanak: 4. ders,
-"Merkez bankası kararları"; 4. ders, "Bu okumaları işleme çevirmek".
+gününe dayanıyor ve "ölçülemedi" hükmü taşıyor; ECB'nin kendi güçlü mumları bir okuma kurmaya bile yetmiyor. İşlem
+açmadan toplantıyı izler, sonucu adayın satırı olarak deftere yazarsın. Başka bir gerekçeyle girersen stop öbür ucun
+ötesinde ve geniştir; toplantı öbür ucu kırarsa okuma biter. Dayanak: 4. ders, "Merkez bankası kararları"; 4. ders, "Bu
+okumaları işleme çevirmek".
 
 </details>
 
@@ -366,19 +338,21 @@ mumun ucunun çok ötesinde. Bu, mumun yönünde girmek için bir gerekçe mi?
 <summary>Çözüm</summary>
 
 Değil. Ölçü iki saatte biter ve bu dersin o saatten sonrası için söyleyecek bir şeyi yoktur. TSİ 18:00 üstelik
-Londra fiksingidir (Londra 16:00); okuma artık o anındır ve 3. dersin konusudur. Haberle açılmış bir emir hâlâ
-defterdeyse çekersin. Dayanak: 1. ders, "İncelenen on an"; 4. ders, "Bu okumaları işleme çevirmek".
+Londra fiksingidir (Londra 16:00); okuma artık o anındır ve 3. dersin konusudur. Haberle açılmış pozisyon hâlâ açıksa
+kapatırsın; bekleyen emir bir saat önce zaten düşmüştür. Dayanak: 1. ders, "İncelenen on an"; 4. ders, "Bu okumaları
+işleme çevirmek".
 
 </details>
 
 ## Haber anları için masa kartı
 
 - **Haber mumu yeni bilginin ilk fiyatıdır, son fiyatı değil.** Yarısına dönüş haberde de sıktır.
-- **ABD verisinin ilk beş dakikasının yönü sonraki iki saatte şanstan seyrek sürer.** Veri mumunun yönüne dayanan bir
-  okuma iki dönemde de zayıf; 2024 sonrasında daha da zayıf.
+- **ABD verisinin normal ve reddedilen ilk mumunun yönü sonraki iki saatte şanstan seyrek sürer.** Güçlü veri mumunun
+  devamı aynayla aynıdır; 2024 sonrasında veri mumunun yönüne dayanan okuma daha da zayıf.
 - **Karar metni fiyatı oynatmadıysa hareket sonra gelebilir.** Fed'de küçük ilk mumdan sonra kırılım iki dönemde de
   çoğu zaman yol aldı; üç bankanın küçük karar mumu kırılımı bir işleme çevrildiğinde ise iki dönem ayrı işaret verdi.
 - **Merkez bankası kararlarındaki üç işlem tepkisi 2024 sonrasında artıda kaldı.** Hiçbirinin karar günü sayısı bir
   hüküm kurmaya yetmiyor. Bir sonraki dönemde, bugünkü kuralla, değiştirilmeden sınanmadan bir kural sayılmaz.
-- **Haber anının maliyeti farklıdır.** Makas açılır, kayma artar; dar stoplu bir haber işlemi maliyete en çok
-  dayanan işlemdir.
+- **Haber anının maliyeti bir varsayımla hesaplandı.** Pencerede piyasa ve stop emirlerine ek kayma varsayıldı; haber
+  anındaki makas ve gerçek kayma ölçülmedi. Süresine bu pencere düşen emri açıklamadan önce çekersin: bu bir disiplin
+  kuralıdır, ölçüm sonucu değil.

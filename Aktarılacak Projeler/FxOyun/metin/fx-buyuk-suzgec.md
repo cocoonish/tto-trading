@@ -41,19 +41,13 @@ olmasa da bunların birkaçı tek bir dönemde "anlamlı" görünür; ikinci dö
 
 ## Bu dersi masada nasıl kullanırsın
 
-Süzgeçlerin hepsi büyük mum kapandığı anda bilinir, yani masada mum kapanır kapanmaz sorulabilir. Sorulma sırası
-önemlidir, çünkü bazı cevaplar okumayı tamamen kapatır (haber mumu), bazıları dilime göre yönünü değiştirir (5 dakikada
-hafif geri verme, 1 saatte hafif devam). Aşağıdaki merdiven bu sırayı yazar. Her basamak dersin bir bulgusuna dayanır
-ve her basamağın sonucu bir işlem değil, bir yasaktır ya da bir bekleme: nerede kovalanmaz, nerede tersine girilmez,
-nerede masadan kalkılır. Okumanın kuralı dersin kendi kuralıdır: iki dönemde aynı yöne bakan bir fark okuma sayılır,
-tek dönemde görülen bir fark yalnız uyarıdır, hiç ayırmayan süzgeç okunmaz.
+Süzgeçler kapanışta bilinir. Sıra önemlidir: haber okumayı kapatır, dilim yönü değiştirir. İki dönemde aynı yöne bakan
+fark okumadır, tek dönemde görülen uyarıdır, hiç ayırmayan süzgeç okunmaz.
 
 {{# karar sira }}
 
-Merdivende "evet" dalı seni durdurur, "hayır" dalı bir sonraki soruya indirir. Sıranın bir mantığı var: önce okumayı
-kapatan soru (haber), sonra yönü belirleyen soru (dilim), sonra yalnız 5 ve 15 dakikada iki dönemde tutan süzgeçler
-(kapanışın yeri, seans, kümelenme), en sonda da hikâyesi güçlü ama ayırmayan süzgeçler. Merdivenin en altına
-inen bir mumun kalan okuması 6. dersin ortalamasıdır ve o ortalama da maliyetin altındadır (6. ders, Dilim dilim okuma).
+Merdivenin en altına inen bir mumun kalan okuması 6. dersin ortalamasıdır ve o ortalama da maliyetin altındadır
+(6. ders, Dilim dilim okuma).
 
 ## Dokuz süzgeç
 
@@ -64,8 +58,8 @@ Her süzgeç büyük mum kapandığı anda bilinir; hiçbiri mumdan sonraki fiya
   geri kalanında ("ortada") ya da yarısının gerisinde ("geri verilmiş", uzun fitil).
 - **Seans.** Mumun başladığı saat, Londra ve New York saatiyle tanımlı; TSİ karşılıkları İngiltere ve ABD yaz
   saatindeyken verildi, ikisi kış saatindeyken bir saat sonradır; Mart'taki ve Ekim–Kasım'daki ara haftalarda iki
-  ülkenin saati ayrıştığı için sınırlardan biri bir saat kayar. **Asya**: Londra 07:00'den önce (TSİ 09:00'dan önce;
-  New York 17:00'den, yani TSİ 00:00'dan sonraki saatler dahil). **Londra**: Londra 07:00 – New York 08:00 (TSİ 09:00–15:00). **Örtüşme**:
+  ülkenin saati ayrıştığı için sınırlardan biri bir saat kayar. **Asya**: New York 17:00 ile Londra 07:00 arası (TSİ
+  00:00–09:00). **Londra**: Londra 07:00 – New York 08:00 (TSİ 09:00–15:00). **Örtüşme**:
   New York 08:00 – Londra 16:30 (TSİ 15:00–18:30). **New York öğleden sonra**: Londra 16:30 – New York 17:00 (TSİ
   18:30–00:00).
 - **Takvimdeki büyük haber.** ABD istihdam ve enflasyon verisi, Fed, ECB ve BoE kararı; olayın saati mumun başlangıcından
@@ -100,8 +94,8 @@ tekrarlıyor.)
 
 **Kapanış ucundaysa geri verme.** Kapanışı ucuna yakın büyük mum yarısına aynadan sık dönüyor. Olası bir açıklama
 (bu derste ölçülmedi): ucunda kapanan mum, alıcının ya da satıcının son dakikaya kadar bastırdığı mumdur ve son
-dakikadaki baskı çoğu zaman geçicidir. Ama "geri verme" burada mumun yarısına kadar geri çekilmedir; mumun öbür ucuna
-dönüş değil. Fitili uzun, kapanışı yarısının gerisinde kalan mumda yarısına dönüş ölçüsü anlamsızdır: kapanış zaten
+dakikadaki baskı çoğu zaman geçicidir. Ama ölçülen şey mumun yarısına kadar geri çekilmenin aynadan sık gelmesidir;
+mumun öbür ucuna dönüş değil. Fitili uzun, kapanışı yarısının gerisinde kalan mumda yarısına dönüş ölçüsü anlamsızdır: kapanış zaten
 yarının gerisinde olduğu için gerçek yol da ayna da yarıya "dönmüş" sayılır. O mumun 24 mum sonraki yolu iki dönemde de
 eksi ({{ S.5.kapanis.geri.ic.net }} · {{ S.5.kapanis.geri.dis.net }} ATR), yani hafif geri verme orada da sürüyor.
 
@@ -120,51 +114,34 @@ vermedi. "Mum ne kadar büyükse dönüş o kadar yakın" okuması bu veride yok
 
 ### Masada: Asya'da ve ucunda kapanan mum
 
-5 dakikanın iki dönemde tutan iki süzgeci ekranda aynı resmi verir: dar, sakin mumların arasından çıkan uzun gövdeli
-bir mum, kapanışı aralığının en uç çeyreğinde. Asya seansı Londra 07:00'den öncedir (TSİ İngiltere yaz saatinde
-09:00'dan, kış saatinde 10:00'dan önce) ve New York 17:00'den sonraki saatleri de kapsar (TSİ ABD yaz saatinde 00:00,
-kış saatinde 01:00). Bu resimde okuma şudur: mumun yarısına dönüş aynadan biraz sık gelir, yani kapanışta mumun
-yönünde kovalayan biri, yön bilgisi olmayan bir yola göre biraz daha sık geri çekilmenin içine girer. Okumanın
-söylemediği şey de aynı derecede önemli: yarıya dönüş mumun öbür ucuna dönüş değildir, ve 24 mum sonraki ortalama yol
-ATR'nin onda birkaçıdır.
+İki süzgeç ekranda aynı resmi verir: dar mumların arasından çıkan, uç çeyrekte kapanan uzun gövdeli mum. Kovalayan
+biri biraz daha sık geri çekilmenin içine girer; yarıya dönüş öbür uca dönüş değildir ve 24 mum sonraki yol ATR'nin
+onda birkaçıdır.
 
 {{# sema asya-uc }}
 
 {{# kart asya-uc }}
 
-Bu durumda yapmazsın: kapanışta mumun yönünde piyasa emriyle kovalamazsın; mumun tersine yalnız "Asya'da geri verir"
-diye girmezsin, çünkü tersine girmenin maliyetten önceki küçük artısı maliyetten sonra eksidir (8. ders, 5 dakika);
-iki süzgeç birlikte geldi diye okumayı iki kat güçlü saymazsın, çünkü iki süzgecin birlikte ne verdiği bu derste
-ölçülmedi (Ölçülmeyenler). Londra açılışıyla (Londra 07:00; TSİ İngiltere yaz saatinde 09:00, kış saatinde 10:00)
-seans değişir ve Londra'daki aynı okuma yarı yarıya küçüktür; Asya'da kurulan bir okumayı Londra'ya taşımazsın.
-
 {{# ornek asya-uc }}
 
-Üstteki günde ① Asya'da ucunda kapanan büyük mum, ② onun yarısı: fiyat birkaç mum içinde ③'te yarıya dokundu ve ④'e
-kadar mumun tersinde kaldı. Alttaki günde ① ve ② masada aynı görünüyordu: mum ucunda kapandı, öncesi sakindi, takvimde
-haber yoktu, kartın "Ne görürsün" satırına iki gün de birebir uyar. Ama alttaki günde fiyat yarıya hiç gelmedi (③
-işareti bu yüzden yok) ve ④'te mumun yönünde uzaktaydı. Üstteki günde mumun yönünde yarıya konan limit dolardı ve o
-işlem kaybederdi; alttaki günde limit dolmazdı ve en iyi hareket kaçardı. 8. dersin ters seçimi tek bir çiftte böyle
-görünür. İki günün farkı ancak sonraki mumlarda belli olur; sonradan bakınca "belli" görünmesi, kararın o anda
-verildiği bilgiyle ilgisizdir. Tek bir örnek kuralı ne doğrular ne yanlışlar: okuma binlerce mumun ortalamasıdır ve
-o ortalama aynadan yalnız birkaç puan uzaktadır (7. ders, 5 dakika).
+İkisi de Asya'da, takvimde haber yokken ucunda kapanmış aşağı yönlü 5 dakikalık büyük mumdur. Üstteki ① TSİ 08:00'de
+(Londra 05:00) başladı; öncesinde fiyat bir saattir aşağı iniyordu ve mum 2–3 ATR kovasında. Fiyat dört mum boyunca
+mumun ucunun ötesine indi, TSİ 08:26'da ② yarıya döndü (③), yeniden ucun ötesine indi ve TSİ 09:45'te mumun öbür ucunu
+kırdı; ④'te öbür ucun ötesinde, mumun tersindeydi. Yarıya konan satış limiti TSİ 08:25 mumunda doldu; fiyat sonra
+yeniden ucun ötesine indiği için stopu 2 ATR olan işlem 1 R hedefini TSİ 08:40'ta gördü, 2 R hedefini görmedi ve TSİ
+09:45'te stopa gitti. Alttaki ① TSİ 02:00'de (Londra 23:00, önceki gün) dar mumların arasından çıktı ve 4–5 ATR
+kovasında. Fiyat ilk iki mumda yarıya yaklaşıp döndü, yarıya hiç gelmedi (③ yok) ve ④'te mumun yönünde, ucunun mum
+boyunun birkaç katı ötesindeydi. Çeyrek geri çekilmeye konan satış limiti ilk mumda doldu ve 1 R ile 2 R hedeflerini gördü; yarıya
+konan limit hiç dolmadı ve hareketin tamamı kaçtı. Limitin derinliği hangi olayların işlem olacağını seçer; tek gün
+kuralı ne doğrular ne yanlışlar (8. ders, Limit neden ucuz görünür: ters seçim).
 
 ### Masada: arka arkaya büyük mum
 
-Kümelenme süzgeci ekranda iki büyük mum olarak görünür: biri dört ile yirmi dört mum önce (5 dakikada yaklaşık yirmi
-dakika ile iki saat), öbürü şimdi. Sezgi çoğu zaman ikinci mumu "ikinci itiş" diye okur ve devamını bekler. Bu
-veride iki dönemde de tersi görüldü: önceki 4–24 mumda başka büyük mum olan piyasada 24 mum sonraki ortalama yol
-mumun tersinde ve aralığı sıfırın altında. Bu ölçülen bir eğilimdir, ama nedeni (bir haberin ya da bir akışın sonu
-mu) bu derste ölçülmedi.
+Sezgi ikinci büyük mumu "ikinci itiş" diye okur; bu veride iki dönemde de tersi görüldü, nedeni ölçülmedi.
 
 {{# sema kume }}
 
 {{# kart kume }}
-
-Bu durumda yapmazsın: ikinci mumu kovalamazsın; "iki büyük mum geldi, akış bitti" diye tersine de girmezsin, çünkü
-24 mumdaki eksi yol yine ATR'nin onda birkaçıdır ve maliyetten küçüktür (6. ders, Makas büyük mumda açılıyor mu); ilk mumun
-neden geldiğini bilmeden ikinci muma okuma kurmazsın, ilk mum takvimdeki bir haberse ikinci mum da haber penceresinin
-içinde olabilir (bkz. Haber mumu).
 
 ## 15 dakika
 
@@ -179,23 +156,19 @@ dönemde ya kayboluyor ya da aralık sıfırı rahatça kapsıyor.
 
 ### Masada: 15 dakikada süzgeç az şey söyler
 
-15 dakikalık grafik masada çoğu zaman en "okunaklı" görünen dilimdir: mumlar 5 dakikadakinden düzgün, 1 saattekinden
-sık. Bu ders o okunaklılığın bir okuma vermediğini söylüyor. 15 dakikada okuma çıkan tek süzgeç Asya seansı;
-tablodaki büyük sayılar (3–4 ATR kovası gibi) öbür dönemde ya kayboluyor ya da aralıkları sıfırı kapsıyor.
-Asya'da bile okuma yalnız yarıya dönüşün ve ±1 ATR payının yönüdür; 24 mum sonraki yolun işareti dönemden döneme
-değişiyor.
+15 dakika en okunaklı dilim gibi görünür, ama okuma çıkan tek süzgeç Asya'dır ve orada da 24 mum sonraki yolun işareti
+değişir.
 
 {{# kart on-bes }}
-
-Bu durumda yapmazsın: büyüklük kovasına bakıp yön okumazsın; 5 dakikada tutan "kapanış ucunda" okumasını 15 dakikaya
-taşımazsın, çünkü bu ders 15 dakikada o süzgeçten bir okuma çıkarmadı (15 dakika); Asya'daki 15 dakikalık mumda yarıya dönüşü bir
-yön sinyali saymazsın, çünkü 24 mumun sonunda fiyatın nerede olduğunu söylemiyor.
 
 ## 1 saat
 
 {{# suzgec 60 trend kapanis kosu seans gun_ucu }}
 
-1 saatte ortalama yol zaten mumun yönünde ve süzgeçlerin çoğu bunu değiştirmiyor. İki okuma dikkat çekiyor.
+1 saatte ortalama yol mumun yönünde: 2018–2023'te aralığıyla ({{ D.60.ic.net_24 }} ATR, {{ Y.95 }} aralık
+{{ D.60.ic.net_24_alt }} … {{ D.60.ic.net_24_ust }}), 2024 sonrasında yalnız nokta tahmini olarak
+({{ D.60.dis.net_24 }}; {{ D.60.dis.net_24_alt }} … {{ D.60.dis.net_24_ust }}). Süzgeçlerin çoğu bunu değiştirmiyor; üç
+okuma dikkat çekiyor.
 
 **Trendin yönündeki büyük mum: yalnız bir dönemde.** Günlük trendle aynı yöndeki 1 saatlik büyük mum 2018–2023'te 24
 saatte ortalama {{ S.60.trend.trendle.ic.net }} ATR yol aldı ({{ Y.95 }} aralık {{ S.60.trend.trendle.ic.net_alt }} …
@@ -205,48 +178,40 @@ dönemde de kayboluyor ({{ S.60.trend.yatay.ic.net }} · {{ S.60.trend.yatay.dis
 
 **Londra seansı.** Londra seansında başlayan 1 saatlik büyük mum iki dönemde de mumun yönünde gitti
 ({{ S.60.seans.londra.ic.net }} · {{ S.60.seans.londra.dis.net }} ATR). 2018–2023'te aralık sıfıra değiyor
-({{ S.60.seans.londra.ic.net_alt }} … {{ S.60.seans.londra.ic.net_ust }}), 2024 sonrasında sıfırın üstünde. Trend
-okuması gibi bu da tek bir dönemde aralığıyla tutuyor; yetmiş sekiz hücrenin içinden birkaçının tek dönemde böyle
-görünmesi beklenen şeydir.
+({{ S.60.seans.londra.ic.net_alt }} … {{ S.60.seans.londra.ic.net_ust }}), 2024 sonrasında sıfırın üstünde. Günün
+yeni ucunu yapmayan büyük mum aynı durumda: iki dönemde artı ({{ S.60.gun_ucu.hayir.ic.net }} ·
+{{ S.60.gun_ucu.hayir.dis.net }} ATR), aralığı yalnız 2024 sonrasında sıfırın üstünde. Trend okuması gibi bunlar da tek
+bir dönemde aralığıyla tutuyor; yetmiş sekiz hücrenin içinden birkaçının tek dönemde böyle görünmesi beklenen şeydir.
 
 **Fitili uzun büyük mum.** Kapanışı yarısının gerisinde kalan 1 saatlik büyük mum 24 saatte eksi kaldı
 ({{ S.60.kapanis.geri.ic.net }}; 2024 → {{ S.60.kapanis.geri.dis.net }}), öbür kapanışlarda artı. Olay az ve aralıklar
 geniş, ama işaret iki dönemde aynı.
 
-9. dersin seçtiği 1 saatlik girişin dayandığı süzgeç "mumdan önceki 12 mum"dur; tablodaki satırları, o süzgecin
-24 mumluk yolu kendi başına ayırmadığını gösteriyor.
+9. dersin seçtiği iki 1 saatlik girişten birinin dayandığı süzgeç "mumdan önceki 12 mum"dur; tablodaki satırları, o
+süzgecin 24 mumluk yolu kendi başına ayırmadığını gösteriyor.
 
 {{# sekil 02_yarisi "Fiyat önce hangi yöne gidiyor" }}
 
 ### Masada: trendin yönündeki saatlik mum
 
-1 saatlik grafikte masaya en sık gelen hikâye şudur: birkaç gündür aynı yöne giden bir piyasada trendin yönünde büyük
-bir saatlik mum, ve "trend yönünde, devam eder" okuması. Bu derste o okuma 2018–2023'te görüldü ve 2024 sonrasında
-kayboldu: iki dönemden yalnız birinde tutan bir fark, okuma kuralına göre bir uyarıdır. Asıl iki dönemde tutan şey
-daha düz: 1 saatte büyük mumun tersine girmenin dayanağı yok, ortalama yol mumun yönünde (6. ders, Dilim dilim okuma).
-Günlük trend süzgeci grafiğe değil bir önceki günün kapanışına bakar: kapanış EMA20'nin üstünde ve ortalama beş günde
-yükselmişse yukarı. Ekrandaki son birkaç saatlik mumun yönü bu süzgeç değildir.
+"Trend yönünde, devam eder" okuması yalnız 2018–2023'te görüldü, yani bir uyarıdır. İki dönemde tutan şey daha düz: 1
+saatte tersine girmenin dayanağı yok, ama mumun yönündeki ortalama yol da 2024 sonrasında yalnız nokta tahminidir; o
+da bir uyarıdır, okuma kuralı değil (6. ders, Dilim dilim okuma). Süzgeç ekrandaki mumlara değil bir önceki günün
+kapanışına ve EMA20'ye bakar.
 
 {{# sema saat-trend }}
 
 {{# kart saat-trend }}
 
-Bu durumda yapmazsın: trendin yönünde diye hedefi uzatmazsın; trende karşı büyük mumu "tuzak" sayıp tersine girmezsin,
-çünkü 1 saatte trende karşı büyük mum da iki dönemde mumun yönünde gitti; fitili uzun, kapanışı yarısının gerisinde
-kalan saatlik mumu mumun yönündeki bir devam diye okumazsın, çünkü o mumun 24 saatlik yolu iki dönemde de eksi (olay
-az, aralık geniş). Londra seansındaki saatlik mumun devamı da iki dönemde artı ama aralığı yalnız 2024 sonrasında
-sıfırın üstünde: bir uyarıdır, kural değil.
-
 {{# ornek saat-trend }}
 
-Üstteki günde ① günlük trendin yönünde 1 saatlik büyük mum, ② yarısı: fiyat yarıya dönmedi (③ işareti yok) ve ④'te,
-bir gün sonra, mumun yönünde uzaktaydı. Bu, trend okumasının anlattığı hikâyenin ta kendisi. Alttaki gün masada
-aynıydı: trend aynı yöndeydi, mum aynı biçimde kapandı, takvimde haber yoktu; fiyat ③'te yarıya döndü ve ④'te mumun
-tersindeydi. İki gün de 2018–2023'ten, yani trend ayrımının görüldüğü dönemden; o dönemde bile iki son da sıradandı.
-Mum kapandığında hangisinin geleceğini söyleyen bir işaret yoktu; sonradan bakınca üstteki gün "trendin gücü",
-alttaki gün "yorgun trend" diye kolayca anlatılır. Üstteki gün trend okumasını doğrulamaz, alttaki onu yanlışlamaz;
-ikisi birlikte, tek dönemde tutan bir okumanın neden kural olmadığını gösterir: her okuma için hikâyesi hazır bir gün
-bulunur (7. ders, 1 saat).
+İkisi de günlük trendin yönünde, takvimde haber yokken ucunda kapanmış 1 saatlik büyük mumdur ve ikisi de önceki birkaç
+saatin hareketini tersine çevirdi. Üstteki ① aşağı yönlü ve Londra seansında başladı (TSİ 11:00, Londra 09:00): fiyat
+yarıya hiç dönmedi (③ yok) ve ertesi gün TSİ 12:00'deki ④'te mumun yönünde, ucunun mum boyunun birkaç katı
+ötesindeydi. Alttaki ① yukarı yönlü ve örtüşme seansında başladı (TSİ 16:00, New York 08:00): fiyat bir saat daha mumun
+yönünde yükseldi, sonra geriledi, TSİ 21:00 mumunda ② yarıya döndü (③) ve aynı mumda öbür ucu kırdı; ertesi gün TSİ
+17:00'deki ④'te öbür ucun hemen üstünde, yarının gerisindeydi. İki gün de trend ayrımının görüldüğü 2018–2023
+döneminden; tek gün kuralı ne doğrular ne yanlışlar.
 
 ## Haber mumu
 
@@ -260,22 +225,12 @@ başına bir yön sinyali değildir (4. ders, Plan tek cümlede).
 
 ### Masada: masadan kalkış
 
-Haber mumunda masadan kalkmak bir işlem kararı değil, bir okuma kararıdır: bu dersin süzgeçleri o mumda bir şey
-söylemiyor. Kalkış mum kapanınca değil, haber saatinden önce başlar. Bugünkü saatleriyle: ABD istihdam ve TÜFE New
-York 08:30 (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30), Fed kararı New York 14:00 (TSİ ABD yaz saatinde 21:00,
-kış saatinde 22:00), ECB kararı Frankfurt 14:15 (TSİ Avrupa yaz saatinde 15:15, kış saatinde 16:15), BoE kararı
-Londra 12:00 (TSİ İngiltere yaz saatinde 14:00, kış saatinde 15:00). Süzgeç olayın saati mumun başlangıcından iki
-dakika önce ile mumun sonu arasındaysa mumu haber mumu sayar; 1 saatlik grafikte bu, haber saatini içeren bütün
-saatlik mumdur.
+Kalkış haber saatinden önce başlar (masa uygulaması; ölçülmedi; saatler: Masa kontrol listesi, madde 2); 1 saatte
+haber saatini içeren bütün saatlik mum haber mumudur.
 
 {{# sema haber-kalk }}
 
 {{# kart haber }}
-
-Bu durumda yapmazsın: haber mumunun kapanış yerine, seansına ya da büyüklüğüne bakıp okuma kurmazsın; ilk dakikaların
-sert hareketini kovalamazsın, uzun fitili "reddedildi" diye tersine de okumazsın; haber saatinden önce bekleyen bir
-limiti ya da stop emrini haber penceresine taşımazsın. Haber mumundan sonra gelen ikinci bir büyük mumda kümelenme
-okumasına da yaslanmazsın: önceki büyük mum bir haber mumuyken ikinci mumun ne yaptığı bu derste ayrıca ölçülmedi.
 
 ## Fade mi, devam mı: okuma tablosu
 
@@ -298,119 +253,56 @@ okumalardan seçilen girişlerin 2024 sonrasında ne verdiğini gösterir.
 
 ### Masada: fade mi, bekle mi — süzgece göre okunuş
 
-Fade, mumun tersine işleme girmektir (6. ders, Bu sonuç nasıl okunmalı). Bu dersin hiçbir okuması fade'i bir karar
-olarak desteklemiyor: geri verme okumaları kovalamamayı ve beklemeyi söyler, tersine girmenin 5 dakikadaki küçük
-artısı ise maliyetten sonra eksidir (8. ders, 5 dakika). Masadaki asıl seçim "fade mi devam mı" değil, "kovalar mıyım,
-beklerim mi, kalkar mıyım"dır. Tablonun satırları bu üç cevaba şöyle dağılır.
-
-**İki dönemde tutan okumalar (okuma kuralı):**
-
-- **5 dakika, kapanış ucunda.** Kovalamazsın; mumun yönünde gireceksen geri çekilmeyi beklersin. Tersine girmezsin:
-  geri çekilme mumun yarısına kadardır, öbür ucuna değil (7. ders, 5 dakika).
-- **5 dakika, Asya seansı.** Aynı okuma, daha belirgin. Londra açılışıyla küçülür; okumayı seans geçişinin ötesine
-  taşımazsın (7. ders, 5 dakika).
-- **5 dakika, önceki 4–24 mumda başka büyük mum.** İkinci mumu kovalamazsın; ikinci mum devamın işareti değil
-  (7. ders, 5 dakika).
-- **5 dakika ve 1 saat, kapanış geri verilmiş.** Mumun yönüne yaslanmazsın; 1 saatte olay az ve aralık geniş
-  (7. ders, 5 dakika; 7. ders, 1 saat).
-- **15 dakika, Asya seansı.** Kovalamazsın; ama 24 mumda işaret kararsız, yani beklemek bir yön söylemez
-  (7. ders, 15 dakika).
-
-**Tek dönemde tutan okumalar (uyarıyla):**
-
-- **1 saat, bütün büyük mumlar.** Ortalama yol mumun yönünde: 2018–2023'te aralığıyla, 2024 sonrasında yalnız nokta
-  tahmini olarak (6. ders, Dilim dilim okuma). Uyarı olarak okunur: tersine girmezsin, ama mumun yönünü de bir kenar
-  sanmazsın.
-- **1 saat, günlük trendin yönünde.** Biraz daha yol yalnız 2018–2023'te; 2024 sonrasında trende karşı mum da aynı
-  yolu aldı. Trend diye hedefi uzatmazsın (7. ders, 1 saat).
-- **1 saat, Londra seansı.** İki dönemde artı, ama aralık yalnız 2024 sonrasında sıfırın üstünde (7. ders, 1 saat).
-
-**Okuma yok:** büyüklük kovaları (dönemden döneme yön değiştiriyor), günlük oynaklık, 15 dakikada Asya dışındaki
-süzgeçler, 1 saatte mumdan önceki koşu ve takvimdeki haber mumu (7. ders, Kısaca; 7. ders, Haber mumu).
+Fade, mumun tersine girmektir (6. ders, Bu sonuç nasıl okunmalı). Bu dersin hiçbir okuması fade'i desteklemiyor;
+tersine girmenin 5 dakikadaki küçük artısı maliyetten sonra eksidir (8. ders, 5 dakika). Masadaki asıl seçim "kovalar
+mıyım, beklerim mi, kalkar mıyım"dır. Tablonun "iki dönemde aynı yönde" satırları kovalamamayı söyler (15 dakikada
+Asya'da yalnız yarıya dönüşün sıklığını, yön değil); "yalnız 2018–2023'te" ve "aralık yalnız 2024 sonrasında"
+satırları uyarıdır; "ayrım yok" ve "ölçülemiyor" satırları kalkmayı söyler. 1 saatte bütün büyük mumlar için de aynı
+uyarı geçerli: tersine girmezsin, mumun yönünü de kenar sanmazsın.
 
 ## İyi hikâyesi olan süzgeç: masadaki tuzak
 
-Masada bir süzgeç seçmenin en kolay yolu hikâyesine bakmaktır, ve en sık yapılan hata da budur. Üç hikâye her masada
-anlatılır. "Beş ATR'lik mum aşırıdır, döner": büyüklük kovaları iki dönemde aynı yöne bakmıyor, 4–5 ATR'lik mum
-2018–2023'te belirgin geri verdi, 2024 sonrasında vermedi (7. ders, 5 dakika; 6. ders, Büyüklük değişince). "Trende
-karşı büyük mum tuzaktır": 1 saatte trende karşı büyük mum iki dönemde de mumun yönünde gitti (7. ders, 1 saat).
-"Günün yeni ucunu yapan mum tükenmiştir, döner": 1 saatte günün yeni ucunu yapan büyük mum iki dönemde de ortalama
-mumun yönünde gitti; "döner" hikâyesi tabloda görünmüyor (7. ders, 1 saat).
+Üç hikâye sık anlatılır ve üçü de tutmadı: "beş ATR'lik mum döner" (büyüklük kovaları iki dönemde aynı yöne bakmıyor),
+"trende karşı büyük mum tuzaktır" ve "günün yeni ucunu yapan mum tükenmiştir" (1 saatte ikisi de iki dönemde mumun
+yönünde gitti) (7. ders, 5 dakika; 7. ders, 1 saat).
 
 {{# sema asiri }}
 
-Hikâyenin tuzağı şudur: üç gözlemden kurulmuş her örüntünün bir açıklaması bulunur, ve açıklama ne kadar iyiyse onu
-sınamadan kabul etme eğilimi o kadar güçlüdür. Bu derste yetmiş sekiz hücre var; hiçbir şey olmasa da birkaçı tek bir
-dönemde "anlamlı" görünür ve her birine bir hikâye yazılabilir. Hikâyeyi kurala çeviren tek şey ikinci dönemdir. Masada
-bunun pratik karşılığı basit: bir süzgeç sana bir şey söylüyorsa önce "bu iki dönemde tuttu mu" diye sorarsın; cevap
-hayırsa hikâye ne kadar ikna edici olursa olsun okuma yoktur. Tutan okumaların sıkıcı olması (kapanışın yeri, Asya
-seansı, kümelenme) bir kusur değil, sınanmış olmanın görüntüsüdür.
+Yetmiş sekiz hücrede birkaçının tek dönemde anlamlı görünmesi şanstan beklenir; hikâyeyi kurala çeviren tek şey ikinci
+dönemdir.
 
 ## Emri nereye koyarsın
 
-Bu bölüm bu derse bir giriş kuralı eklemez. Başka bir gerekçeyle (kendi okuman, bir seviye, bir haber) büyük mumdan
-sonra işleme gireceksen, süzgecin söylediği şey emrin biçimini ve yerini değiştirir, işlemin beklenen sonucunu
-değiştirmez. Aşağıdakilerin hepsi 8. dersin ölçtüğü giriş biçimlerine dayanır.
+Emir biçimlerinin ölçülmüş sonuçları 8. dersin aynı adlı bölümündedir (8. ders, Emri nereye koyarsın); süzgeç emrin
+biçimini ve yerini değiştirir, beklenen sonucunu değiştirmez. Bu dersin ekledikleri:
 
-**Giriş emri.**
-
-- **Kapanışta piyasa emri.** Mumun yönünde en pahalı biçimdir: makası ve kaymayı girişte de, çıkışta da öder
-  (8. ders, 5 dakika). 5 dakikada ucunda kapanan ya da Asya'daki büyük mumda bu emirle girmezsin.
-- **Geri çekilmeye limit** (mumun ucundan mumun boyunun dörtte biri, yarısı ya da daha derini). Girişte makas ve kayma
-  ödemez, çıkışta öder. Ama limit, fiyat piyasa girişinin aleyhine yürüdüğünde dolar: dolduğu olaylarda aynı anda
-  piyasadan girilseydi işlemlerin çoğu kaybederdi (8. ders, Limit neden ucuz görünür: ters seçim). Bu dersin tutan
-  süzgeçleri tam da geri çekilmenin sık geldiği yerleri gösterir; oralarda limit sık dolar ve dolması iyi haber
-  değildir. Limit maliyeti düşürür, kenar yaratmaz.
-- **Ucun kırılmasına stop emri.** Mumun yönündeki momentum girişidir; kaymayı öder ve fiyatın zaten yürüdüğü yerden
-  alır, maliyetten sonra eksidir (8. ders, Ucun kırılması).
-- **Onay mumu.** Onay gelmeyen olaylarda emir hiç açılmaz, gelenlerde fiyat bir mum kötüleşmiş olur; onayın taşıdığı
-  bilgi kaçırılan fiyatın bedelini ancak karşılıyor (8. ders, Onay mumu).
-- **Tersine giriş.** Mumun ucuna konan tersine limit, 5 dakikadaki küçük geri verme kenarını yok eder, çünkü fiyatın
-  uca geri döndüğü olaylar tam da geri vermenin olmadığı olaylardır (8. ders, Limit neden ucuz görünür: ters seçim).
-  1 saatte tersine girmezsin (9. ders, Büyük mum için oyun planı).
-
-**Stop.** 8. ders stopu girişten bir ya da iki ATR uzağa koyar. Bir ATR'de makas ve kayma R'nin daha büyük bir kısmını
-yer ve riski çok küçük kalan olayların bir kısmında işlem hiç açılmaz; stopu iki ATR'ye taşımak maliyeti küçültür ama
-kenar yaratmaz (8. ders, Stop uzaklığı ve maliyet). Mumun öbür ucunun ötesine konan stop bu derste ayrı bir seçenek
-olarak ölçülmedi. Asya'da ATR'nin dar olmasının aynı makası R cinsinden büyütüp büyütmediği de bu derste ayrıca
-ölçülmedi.
-
-**Hedef.** 8. dersin hedefleri riskin bir ya da iki katıdır. Trend ya da Londra okumasına dayanarak hedefi uzatmazsın;
-ikisi de tek dönemde tutan okumalardır. 1 saatte hedefi iki R olan geri çekilme limitleri ızgaranın sıfıra en yakın
-hücreleridir, ama büyüklükleri sıfırdan ayırt edilemeyecek kadar küçük (8. ders, 15 dakika ve 1 saat).
-
-**Emrin iptali.** 8. dersin limit ve stop emirleri büyük mum kapandıktan sonra altı mum bekler, dolmazsa iptal edilir;
-bu bir seçim değil, ölçümün kuralıdır. Bekleme süresinde seans değişiyorsa (Asya'dan Londra'ya geçiş Londra 07:00, TSİ
-İngiltere yaz saatinde 09:00, kış saatinde 10:00) emrin dayandığı okuma da değişir: Asya'daki geri verme Londra'da
-yarı yarıya küçük (7. ders, 5 dakika). Bu yüzden seans geçişinde bekleyen emri çekersin; çekmenin sonucu bu derste
-ölçülmedi, gerekçesi okumanın kendisinin seansla değişmesidir.
-
-**Haber penceresinde.** 8. dersin maliyet varsayımı takvimdeki büyük bir haberin iki dakika öncesinden on beş dakika
-sonrasına kadar piyasa ve stop emirlerine ek kayma ekler (8. dersin giriş paragrafı). Bekleyen bir limit ya da stop
-emri o pencerede dolabilir ve dolduğu mum bir haber mumudur, yani bu dersin okuması o anda kalkar. Haber saati bekleme
-süresinin içine düşüyorsa emri saatten önce çekersin (bu derste ölçülmedi). Pozisyondaysan dar stop haber penceresinde
-maliyete en çok dayanan stoptur (4. ders, Haber anları için masa kartı).
+- **Giriş.** 5 dakikada ucunda kapanan ya da Asya'daki büyük mumda kapanışta piyasa emriyle girmezsin; mumun yönünde
+  gireceksen limit çeyrek ya da yarı geri çekilmeye konur. Tutan süzgeçler geri çekilmenin sık geldiği yerleri
+  gösterir; oralarda limit sık dolar ve dolması iyi haber değildir (8. ders, Limit neden ucuz görünür: ters seçim). 1
+  saatte tersine giriş biçimleri 2018–2023'te maliyetten önce de eksiydi, 2024 sonrasında maliyetten önce sıfır çevresinde kaldı
+  (8. ders, 15 dakika ve 1 saat).
+- **Stop.** Girişten (limitle giriyorsan limitin fiyatından) 2 ATR uzaktadır; ölçülen stoplar 1 ve 2 ATR. Mumun öbür
+  ucunun ötesine konan stop bu seride ölçülmedi; 2–3 ATR'lik mumda o yer girişe 1 ATR kadar yakındır ve yakın stopun
+  maliyetini taşır (8. ders, Stop uzaklığı ve maliyet). Asya'da dar ATR'nin aynı makası R cinsinden büyütüp büyütmediği
+  ölçülmedi.
+- **Hedef.** 1 ya da 2 R. Hedefi trend ya da Londra okumasına dayanarak uzatmazsın. 1 saatte hedefi 2 R olan geri
+  çekilme limitleri ızgaranın sıfıra en yakın hücreleridir (2018–2023'te {{ G.60.ic.devam:limit_0.25:s2:h2.R }} ve
+  {{ G.60.ic.devam:limit_0.5:s2:h2.R }} R, 2024 sonrasında {{ G.60.dis.devam:limit_0.25:s2:h2.R }} ve
+  {{ G.60.dis.devam:limit_0.5:s2:h2.R }} R); büyüklükleri sıfırdan ayırt edilemez (8. ders, 15 dakika ve 1 saat).
+- **Emrin ömrü.** Emir altı mum bekler, dolmazsa çekilir. Bu süreye seans geçişi (Londra 07:00; TSİ İngiltere yaz
+  saatinde 09:00, kış saatinde 10:00) ya da takvimdeki büyük bir haberin penceresi (açıklamadan iki dakika önce – on beş
+  dakika sonra) düşüyorsa emri o andan önce çekersin. Bu ölçülmemiş bir ek kuraldır, bir disiplin kuralı: Asya'daki
+  okuma Londra'da yarı yarıya küçüktür; haber penceresinde piyasa ve stop emirlerine {{ ON.haber_kayma_pip }} pip ek
+  kayma varsayıldı (8. dersin açılış paragrafı, maliyet varsayımı), haber anındaki makas ve emri çekmenin etkisi
+  ölçülmedi.
 
 ## Sık yapılan hatalar
 
-- **İyi hikâyesi olan süzgeci ölçmeden kural yapmak.** "Beş ATR'lik mum döner" gibi bir hikâyenin mekanizması
-  anlatılabilir, ama büyüklük kovaları dönemden döneme yön değiştiriyor (7. ders, 5 dakika; 6. ders, Büyüklük
-  değişince).
-- **Tek dönemde tutan okumayı kural saymak.** 1 saatte trendin yönündeki büyük mumun fazladan yolu yalnız 2018–2023'te
-  görüldü; 2024 sonrasında trende karşı mum da aynı yolu aldı (7. ders, 1 saat).
-- **Geri vermeyi tersine işlem sanmak.** Ölçülen geri verme mumun yarısına kadardır; tersine girmenin küçük artısı
-  maliyetten sonra eksi (7. ders, 5 dakika; 8. ders, 5 dakika).
 - **Süzgeçleri üst üste yığmak.** "Asya, ucunda kapanış ve kümelenme birlikte geldiyse daha güçlüdür" ölçülmedi; iki
   süzgeçli bileşimler bu derste yok ve küçük alt kümeler şansın en kolay şişirdiği yerdir (7. ders, Ölçülmeyenler;
   9. ders, Seçilen girişler).
-- **Haber mumunda süzgeç aramak.** Haber mumu az ve dağılımı geniş; 9. dersin buradan seçtiği iki giriş 2024 sonrasında
-  tutmadı (7. ders, Haber mumu; 9. ders, Seçilen girişler).
-- **Limitin dolmasını okumanın teyidi saymak.** Limit, fiyat piyasa girişinin aleyhine yürüdüğünde dolar; dolmasının
-  büyük kısmı geometridir, teyit değil (8. ders, Limit neden ucuz görünür: ters seçim).
 - **5 dakikanın okumasını 1 saate taşımak.** 5 dakikada hafif geri verme, 1 saatte hafif devam var; 1 saatte Asya'nın
   işareti dönemden döneme değişiyor (6. ders, Dilim dilim okuma; 7. ders, 1 saat).
-- **Stopu yaklaştırmak.** Bir ATR'lik stopla makas ve kayma R'nin önemli bir kısmını yer (8. ders, Stop uzaklığı ve
-  maliyet).
 
 ## Masa kontrol listesi
 
@@ -424,18 +316,17 @@ Büyük mum kapandığında masada sırayla sorulan sorular. Bir "evet" seni dur
    saatinde 15:00). Evetse masadan kalkarsın (7. ders, Haber mumu).
 3. **Dilim hangisi?** 1 saatse tersine girmezsin (6. ders, Dilim dilim okuma).
 4. **Kapanış nerede?** Aralığın son çeyreğinde mi, ortasında mı, yarısının gerisinde mi (7. ders, 5 dakika)?
-5. **Mum hangi seansta başladı?** Asya: Londra 07:00'den önce (TSİ İngiltere yaz saatinde 09:00'dan, kış saatinde
-   10:00'dan önce) ya da New York 17:00'den sonra (TSİ ABD yaz saatinde 00:00'dan, kış saatinde 01:00'den sonra).
-   Londra: Londra 07:00 ile New York 08:00 arası (TSİ ikisi yaz saatindeyken 09:00–15:00, ikisi kış saatindeyken 10:00–16:00). 5 ya da 15 dakikada Asya'ysa
-   kovalamazsın (7. ders, 5 dakika; 7. ders, 15 dakika).
+5. **Mum Asya seansında mı başladı?** Asya: New York 17:00 ile Londra 07:00 arası (TSİ ikisi yaz saatindeyken
+   00:00–09:00, ikisi kış saatindeyken 01:00–10:00). 5 dakikada Asya'ysa kovalamazsın; 15 dakikada yarıya dönüş
+   aynadan sık, 24 mumda yön yok (7. ders, 5 dakika; 7. ders, 15 dakika).
 6. **Önceki 4–24 mumda başka büyük mum var mı?** 5 dakikada yaklaşık yirmi dakika ile iki saat geriye bakarsın; varsa
    ikinci mumu kovalamazsın (7. ders, 5 dakika).
 7. **Okuman iki dönemde tutan bir süzgece mi dayanıyor?** Büyüklük ya da oynaklıksa okuma yok; 1 saatte trend ya da
    Londra ise yalnız uyarı (7. ders, Fade mi, devam mı: okuma tablosu).
-8. **Gireceksen emir yazılı mı?** Emrin türü, stopun girişten uzaklığı (bir ATR'ye yaklaştırmadan), hedef ve emrin
-   iptal anı (8. ders, Stop uzaklığı ve maliyet).
-9. **Emrin bekleme süresinde bir haber saati ya da seans geçişi var mı?** Varsa emri o andan önce çekersin
-   (bu derste ölçülmedi).
+8. **Gireceksen emir yazılı mı?** Emrin türü, stopun girişten uzaklığı (2 ATR; bir ATR'ye yaklaştırmadan), hedef ve
+   emrin iptal anı (altı mum) (8. ders, Stop uzaklığı ve maliyet).
+9. **Emrin altı mumluk süresine bir haber penceresi ya da seans geçişi düşüyor mu?** Düşüyorsa emri o andan önce
+   çekersin; disiplin kuralıdır, etkisi ölçülmedi (7. ders, Emri nereye koyarsın).
 
 ## Grafik okuma alıştırmaları
 
@@ -447,10 +338,11 @@ kapanış aralığın en üst çeyreğinde (Asya şemasındaki gibi). Ne yapars�
 <summary>Çözüm</summary>
 
 Mum Asya seansında ve ucunda kapandı: 5 dakikanın iki dönemde tutan iki okuması birden. Okuma şudur: kovalamazsın.
-Mumun yönünde başka bir gerekçeyle gireceksen geri çekilmeye limit koyarsın ve limit dolarsa geri vermenin başladığı
-olayda olduğunu bilirsin. Tersine girmezsin, çünkü ölçülen geri verme yarıya kadardır ve tersine girişin küçük artısı
-maliyetten sonra eksidir. İki süzgecin birlikte gelmesi okumayı güçlendirmez; bileşim ölçülmedi. Londra açılışıyla
-(Londra 07:00; TSİ İngiltere yaz saatinde 09:00, kış saatinde 10:00) okuma küçülür; bekleyen emri o saatten önce çekersin (7. ders, 5 dakika; 8. ders,
+Mumun yönünde başka bir gerekçeyle gireceksen limiti çeyrek ya da yarı geri çekilmeye koyarsın; limit dolarsa fiyatın
+geri çekildiği olaydasın ve bu olaylarda piyasa girişi çoğunlukla kaybederdi. Tersine girmezsin, çünkü ölçülen geri
+çekilme yarıya kadardır ve tersine girişin küçük artısı maliyetten sonra eksidir. İki süzgecin birlikte gelmesi
+okumayı güçlendirmez; bileşim ölçülmedi. Emir altı mum (yarım saat) bekler ve Londra açılışından (Londra 07:00; TSİ
+İngiltere yaz saatinde 09:00, kış saatinde 10:00) çok önce düşer; dolmazsa çekersin (7. ders, 5 dakika; 8. ders,
 Limit neden ucuz görünür: ters seçim).
 
 </details>
@@ -480,7 +372,8 @@ istihdam verisinin mumu. Aralığı önceki ATR'nin altı katı, kapanışı ucu
 İlk soru haberdir ve cevabı evet: masadan kalkarsın. Kapanışın yeri, seans ve büyüklük bu mumda okunmaz; "kapanış
 ucunda" okumasının haber mumunda da geçerli olup olmadığı bu derste ayrıca ölçülmedi, çünkü iki süzgecin birlikte
 ne verdiği yok. Haber mumu az ve dağılımı geniş; 9. dersin haber mumundan seçtiği iki giriş 2024 sonrasında tutmadı.
-Bekleyen bir emrin varsa saatten önce çekmiş olman gerekirdi (7. ders, Haber mumu; 9. ders, Seçilen girişler).
+Süresine bu pencere düşen bekleyen bir emrin varsa onu açıklamadan önce çekersin; bu bir disiplin kuralıdır, etkisi
+ölçülmedi (7. ders, Haber mumu; 9. ders, Seçilen girişler).
 
 </details>
 

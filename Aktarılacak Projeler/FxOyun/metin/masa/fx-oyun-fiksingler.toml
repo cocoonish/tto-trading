@@ -8,33 +8,33 @@ son = "Kalan okuma: fiksingden sonra koşunun bir kısmı geri verilir, başlad�
 [[karar.adim]]
 soru = "Fiksinge giden yarım saat sessiz mi (küçük mum)?"
 cikis = "evet"
-sonuc = "Kırılımı kovalama; sessiz fiksing işlem vermez"
+sonuc = "Kırılımı kovalamazsın: sessiz fiksing işlem vermez"
 tur = "yapma"
 dayanak = "3. ders, Sessiz fiksing"
 [[karar.adim]]
 soru = "Fiksing geçti; koşunun yönünde yeni bir işlem mi düşünüyorsun?"
 cikis = "evet"
-sonuc = "Kovalama: koşu şanstan seyrek sürer"
+sonuc = "Kovalamazsın: koşu şanstan seyrek sürer"
 tur = "yapma"
 dayanak = "3. ders, Sınıf sınıf, şansın payıyla"
 [[karar.adim]]
 soru = "Bugün ayın son Londra iş günü ve fiksing WM/R mi?"
 cikis = "evet"
-sonuc = "Koşu daha da az sürer; geri vermeye de güvenme"
+sonuc = "Koşu daha da az sürer; geri vermeye de güvenmezsin"
 tur = "yapma"
 dayanak = "3. ders, Ay sonu"
 [[karar.adim]]
 soru = "Geri vermeyi işlemek için koşunun tersine mi gireceksin?"
 cikis = "evet"
-sonuc = "İşlem değil: geri verme maliyetin altında kalır"
+sonuc = "İşlem açmazsın: geri verme maliyetin altında kalır"
 tur = "kalk"
 dayanak = "3. ders, Bu okumaları işleme çevirmek"
 [[karar.adim]]
 soru = "Başka gerekçeyle pozisyondasın; stop koşunun ucuna yakın mı?"
 cikis = "evet"
-sonuc = "İlk uzama stopu alabilir: yerini yeniden düşün"
+sonuc = "İlk uzama stopu sık alır: yerini yeniden düşünürsün"
 tur = "bekle"
-dayanak = "3. ders, Bu okumaları işleme çevirmek; 8. ders, Stop uzaklığı ve maliyet"
+dayanak = "3. ders, Bu okumaları işleme çevirmek"
 
 # ─────────────────────────────────────────────────────────────── şemalar
 [[sema]]
@@ -50,7 +50,7 @@ soluk = [0, 1]
 yukseklik = 270
 eksen = "beş dakikalık mumlar, zaman →"
 not = ["Fiksing anı: koşunun son beş dakikası. Fiksinge giden yarım saatin altı mumu birlikte tek bir ilk mumdur; sınıfı güçlü, çünkü aralığı o fiksingin tipik koşusundan belirgin büyük ve gövdesi dolu.",
-       "Koşunun yarısı. Fiksingden sonra fiyat buraya şansın vereceğinden sık gelir; güçlü koşuda bu çoğu zaman fiksingden sonraki ilk çeyrek saatte olur.",
+       "Koşunun yarısı. Fiksingden sonra fiyat buraya şansın vereceğinden sık gelir; yarıya dönen güçlü koşuların yaklaşık yarısında bu ilk çeyrek saat içinde olur.",
        "Koşunun başladığı yer. Fiyat buraya şanstan sık dönmez; hedefi buraya koymazsın."]
 [[sema.cizgi]]
 y = 58.0
@@ -155,7 +155,7 @@ soluk = [0, 1]
 yukseklik = 260
 eksen = "beş dakikalık mumlar, zaman →"
 not = ["Fiksinge giden yarım saat dar: altı mumun toplam aralığı o fiksingin tipik koşusundan belirgin küçük. Sınıfı küçük; fiksing anında piyasada ciddi bir akış görünmez.",
-       "Fiksingden sonra üst kenar kırıldı. Londra'da kırılan tarafta bir mum boyu daha gitme payı düşük; Tokyo'da daha yüksek, ama iki fiksingde de kırılımdan girmek maliyetten sonra eksi kaldı.",
+       "Fiksingden sonra üst kenar kırıldı. Londra'da kırılan tarafta bir mum boyu daha gitme payı düşük; Tokyo'da daha yüksek, ama iki fiksingin toplamında iki kenara konan stop emirleriyle kırılımdan girmek maliyetten önce sıfıra yakın, sonra eksi kaldı.",
        "Fiyat aralığın içine döndü. Kırılımın yönünde giren burada ne hedefte ne stopta; stop aralığın öbür kenarının ötesindedir ve aralık dar olduğu için yakındır."]
 [[sema.cizgi]]
 y = 52.2
@@ -205,7 +205,7 @@ yukseklik = 270
 eksen = "beş dakikalık mumlar, zaman →"
 not = ["Ayın son Londra iş günü, WM/R'ye güçlü bir aşağı koşu. Mumun kendisi öbür günlerin güçlü koşusundan ayırt edilemez; fark takvimdedir.",
        "Koşunun yönünde sürme: ay sonunda fiksingden sonra bu bölge iki dönemde de öbür günlerden seyrek görüldü. Kovalanmaz.",
-       "Yarıya geri verme. Ay sonunda daha sık olduğu iki dönemde tutmadı; ne buna ne de koşunun sürmesine güvenirsin."]
+       "Yarıya geri çekilme. Ay sonunda daha sık olması iki dönemde aynı yöne bakmadı; ne buna ne de koşunun sürmesine güvenirsin."]
 [[sema.cizgi]]
 y = 58.1
 i0 = 2
@@ -237,7 +237,7 @@ y = 49.3
 n = 2
 [[sema.isaret]]
 i = 12
-y = 55.0
+y = 54.25
 n = 3
 
 [[sema]]
@@ -246,13 +246,13 @@ baslik = "Fiksingde koşunun tersine: giriş, stop ve hedefin yeri"
 mumlar = [[50.0,50.4,49.6,50.0],
           [50.0,51.4,49.8,51.2],[51.2,52.6,51.0,52.4],[52.4,53.6,52.2,53.4],[53.4,54.8,53.2,54.6],
           [54.6,56.0,54.4,55.8],[55.8,57.6,55.6,56.6],
-          [56.6,58.6,56.4,58.4],[58.4,58.8,56.6,56.8],[56.8,57.0,55.0,55.2],[55.2,55.6,53.8,54.2]]
+          [56.6,58.6,56.4,58.4],[58.4,58.8,56.6,56.8],[56.8,57.0,55.0,55.2],[55.2,55.6,53.4,54.2]]
 vurgu = [1, 2, 3, 4, 5, 6]
 soluk = [0]
 yukseklik = 300
 eksen = "beş dakikalık mumlar, zaman →"
 not = ["Fiksing anı: koşunun tersine piyasa emri. Giriş makası ve kaymayı öder; gri bant o bedelin yeridir.",
-       "Stop koşunun ucunun hemen ötesinde. Güçlü koşuda işlemlerin çoğu burada bitti: koşu fiksingden sonra ucunu biraz aşınca.",
+       "Stop koşunun ucunun, koşu boyunun onda biri ötesinde. Güçlü koşuda işlemlerin yarısından fazlası burada bitti: koşu fiksingden sonra ucunu bu kadar aşınca.",
        "Hedef koşunun yarısı. Fiyat oraya sonradan gelse bile stopta biten işlem geri dönmez."]
 [[sema.cizgi]]
 y = 58.4
@@ -290,7 +290,7 @@ y = 59.1
 n = 2
 [[sema.isaret]]
 i = 10
-y = 53.1
+y = 52.8
 n = 3
 
 # ─────────────────────────────────────────────────────────────── kartlar
@@ -298,10 +298,10 @@ n = 3
 id = "guclu-kosu"
 hukum = "eksi"
 durum = "Londra fiksingi (WM/R), fiksinge giden yarım saatte güçlü bir koşu: Londra 15:30–16:00, TSİ 17:30–18:00 (İngiltere kış saatinde 18:30–19:00)"
-gorursun = "Altı beş dakikalık mum aynı yöne gidiyor; yarım saatin toplam aralığı o fiksingin tipik koşusundan belirgin büyük, fiksingdeki fiyat koşunun ucuna yakın."
-yaparsin = "Koşunun başladığı yeri, yarısını ve ucunu işaretlersin; fiksingden sonraki ilk çeyrek saatte fiyatın yarıya gelip gelmediğine bakarsın."
+gorursun = "Fiksinge giden altı beş dakikalık mumun toplamı bir yöne belirgin gidiyor (tek tek mumların aynı yöne dizilmesi gerekmez); yarım saatin toplam aralığı o fiksingin tipik koşusundan belirgin büyük, fiksingdeki fiyat koşunun ucuna yakın."
+yaparsin = "Koşunun başladığı yeri, yarısını ve ucunu işaretlersin; fiksingden sonraki saatte fiyatın yarıya gelip gelmediğine bakarsın."
 yapmazsin = "Fiksingden sonra koşunun yönünde kovalamazsın; hedefi koşunun başladığı yere koymazsın; geri vermeyi bir işlem sinyali saymazsın."
-emir = "Koşunun yönünde pozisyondaysan stopun yarı ile uç arasındaysa geri verme onu sık görür. Koşunun tersine gireceksen stop ucun ötesinde, hedef yarıdadır; ilk uzama stopu alabilir."
+emir = "Koşunun yönünde pozisyondaysan stopun yarı ile uç arasındaysa geri verme onu sık görür. Koşunun tersine gireceksen stop koşunun ucunun, koşu boyunun onda biri ötesinde, hedef yarıdadır; fiksingden sonraki ilk uzama o stopu sık alır."
 dayanak = "3. ders, Güçlü koşu; 3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Bu okumaları işleme çevirmek"
 
 [[kart]]
@@ -311,7 +311,7 @@ durum = "Tokyo ya da Londra fiksingi, fiksinge giden yarım saatte normal ya da 
 gorursun = "Koşu var ama gövdesi dolu değil ya da uzun bir fitil taşıyor; fiksingdeki fiyat çoğu zaman koşunun yarısına yakın."
 yaparsin = "Yarının fiksingdeki fiyata ne kadar yakın olduğunu görürsün: geri verme çoğu zaman fiksingden birkaç dakika sonra olur ve yarı yakın olduğu için şansın da sık vereceği bir harekettir."
 yapmazsin = "Yarıya dokunuşu bir okuma ya da giriş sinyali saymazsın; yüksek kazanma oranını görüp koşunun tersine girmezsin."
-emir = "Koşunun tersine gireceksen hedef (yarı) yakın, stop (ucun ötesi) uzaktır: kazanan küçük kazanır, kaybeden tam bir R kaybeder ve başa baş için gereken oran ölçülen kazanma oranının üstünde kaldı."
+emir = "Koşunun tersine gireceksen hedef (yarı) yakın, stop (ucun ötesi) uzaktır: kazanan küçük kazanır, kaybeden bir R'den biraz fazla kaybeder ve başa baş için gereken oran ölçülen kazanma oranının üstünde kaldı."
 dayanak = "3. ders, Normal ve reddedilen koşu; 1. ders, Kazanma oranı ile net sonuç; 3. ders, Bu okumaları işleme çevirmek"
 
 [[kart]]
@@ -321,7 +321,7 @@ durum = "Londra fiksingi, fiksinge giden yarım saat dar (sessiz fiksing); fiksi
 gorursun = "Altı mumluk dar bir aralık ve fiksingden sonra kenarın dışında kapanan bir mum."
 yaparsin = "Kırılan kenarı ve onun bir mum boyu ötesini işaretlersin; kırılımın oraya gidip gitmediğini izlersin."
 yapmazsin = "Kırılımı kovalamazsın; Tokyo'daki daha yüksek ilerleme payını Londra'ya taşımazsın."
-emir = "Başka bir gerekçeyle kırılım yönünde gireceksen stop aralığın öbür kenarının ötesindedir ve aralık dar olduğu için yakındır: makas ve kayma riskin görünür bir parçası olur."
+emir = "Sınanan biçim aralığın iki kenarına birer stop emridir; biri dolunca öbürü iptal olur ve sonucu maliyetten önce sıfıra yakın, sonra eksi kaldı. Başka bir gerekçeyle kırılım yönünde gireceksen stop aralığın öbür kenarının ötesindedir ve aralık dar olduğu için yakındır: makas ve kayma riskin görünür bir parçası olur."
 dayanak = "3. ders, Sessiz fiksing; 5. ders, Referans tepkiler; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]
@@ -340,8 +340,8 @@ hukum = "eksi"
 durum = "Fiksing anı (Tokyo 09:55, TSİ 03:55; Londra 16:00, TSİ 18:00, İngiltere kış saatinde 19:00) ve koşunun tersine girmeyi düşünüyorsun"
 gorursun = "Koşu bitmiş görünüyor, fiyat koşunun ucunda; fiyatın şimdi geri vereceği duygusu güçlü."
 yaparsin = "Koşunun yarısını ve ucunu işaretler, giriş ile stop arasındaki mesafeyi pip olarak sayarsın; mesafe birkaç pipse makasın onun içindeki payını görürsün."
-yapmazsin = "Geri vermenin şanstan sık olmasını kenar saymazsın; stopu koşunun ucuna yapıştırmazsın."
-emir = "Piyasa emri girişte makas ve kayma öder; koşunun ucuna limit girişte ödemez ama yalnız fiyat koşunun yönünde yeniden yürürse dolar (fiksing için ölçülmedi). Stop ucun ötesinde, hedef yarıda; fiksingden sonraki saat dolunca emrin dayanağı kalmaz."
+yapmazsin = "Geri vermenin şanstan sık olmasını kenar saymazsın; stopu daraltınca riskin küçüldüğünü sanmazsın: aynı makas R cinsinden büyür."
+emir = "Piyasa emri girişte makas ve kayma öder; koşunun ucuna limit girişte ödemez ama yalnız fiyat koşunun yönünde yeniden yürürse dolar (fiksing için ölçülmedi). Stop koşunun ucunun, koşu boyunun onda biri ötesinde, hedef yarıda. Dolmayan limit fiksingden bir saat sonra düşer; dolan pozisyon ne hedefe ne stopa varırsa aynı saatin sonunda kapanır."
 dayanak = "3. ders, Bu okumaları işleme çevirmek; 8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet"
 
 # ─────────────────────────────────────────────────────────────── gerçek örnekler
@@ -354,7 +354,7 @@ kosul = { sinif = "guclu", ay_sonu = false }
 tipik = { orta = true, devam = false, donus = false }
 ters = { devam = true, orta = false }
 baslik = "Londra fiksingine güçlü koşu: iki gün, iki son"
-tipik_ad = "Yarısını geri verdi"
+tipik_ad = "Pencerenin sonunda yarıya döndü"
 ters_ad = "Koşu sürdü"
 
 [[ornek]]
@@ -366,5 +366,5 @@ kosul = { sinif = "normal" }
 tipik = { orta = true, orta_uc = false, donus = false }
 ters = { orta = false, devam = true }
 baslik = "Tokyo fiksingine normal koşu: yarı yakın, iki son"
-tipik_ad = "Hemen geri verdi"
-ters_ad = "Geri vermeden sürdü"
+tipik_ad = "Hemen yarıya döndü"
+ters_ad = "Yarıya dokunmadan sürdü"

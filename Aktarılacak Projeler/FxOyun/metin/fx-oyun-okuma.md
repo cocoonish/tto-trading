@@ -17,11 +17,10 @@ Londra'da kur fiksingleri yapılır; ayın belirli günlerinde ABD istihdam ve e
 merkez bankaları karar açıklar. Bu anların her birinde fiyat kısa bir süre içinde bir şey söyler. O ilk söz, yani **ilk
 mum**, çoğu işlemcinin günün geri kalanını okuduğu yerdir.
 
-Bu seri o anları anlatır. Bir kural listesi değildir: "fiyat şu seviyeyi kırarsa al" demez. Her anın ilk mumunu bir
-sınıfa koyar, o sınıftan sonra fiyatın genelde ne yaptığını gösterir ve bunun üstüne bir **oyun planı** yazar: bu
-anda ne beklenir, ne beklenmez, nerede sabırlı olunur, nerede masadan kalkılır. Plan 2018–2023 verisinden yazıldı;
-planın tepkileri 2024 sonrası veride hiç koşturulmadan kaydedildi ve sonra 2024 → döneminde, gerçek alış-satış
-fiyatları ve maliyetle sınandı.
+Bu seri o anları anlatır; bir kural listesi değildir. Her anın ilk mumunu bir sınıfa koyar, fiyatın o sınıftan sonra
+genelde ne yaptığını gösterir ve üstüne bir **oyun planı** yazar: ne beklenir, ne beklenmez, nerede sabırlı olunur.
+Plan 2018–2023 verisinden yazıldı; tepkileri 2024 sonrası veride hiç koşturulmadan kaydedildi ve sonra 2024 →
+döneminde, gerçek alış-satış fiyatları ve maliyetle sınandı.
 
 ## Kısaca
 
@@ -33,32 +32,26 @@ fiyatları ve maliyetle sınandı.
 - **Fiksingde gerçek bir davranış var.** Fiksinge güçlü koşan fiyat koşunun yarısını {{ Y.ic.fiksing.guclu.orta }}
   geri verdi; şansla beklenen {{ Y.ic.fiksing.guclu.orta_ayna }}. Koşunun sürme payı ise şansın altında
   ({{ Y.ic.fiksing.guclu.devam }} ve {{ Y.ic.fiksing.guclu.devam_ayna }}). İki fark 2024 → döneminde de aynı yönde.
-- **ABD verisinden sonra ilk mum şanstan az sürüyor.** Normal bir veri mumunun devam payı 2018–2023'te
+- **ABD verisinden sonra normal ilk mum şanstan az sürüyor.** Normal bir veri mumunun devam payı 2018–2023'te
   {{ Y.ic.veri.normal.devam }} (şansla {{ Y.ic.veri.normal.devam_ayna }}), 2024 → döneminde
-  {{ Y.dis.veri.normal.devam }} ({{ Y.dis.veri.normal.devam_ayna }}). Bu bir okuma; bu yönde bir tepki önceden
-  yazılmadığı için sınanmadı.
+  {{ Y.dis.veri.normal.devam }} ({{ Y.dis.veri.normal.devam_ayna }}); güçlü veri mumunun devamı aynayla aynı. Bu
+  bir okuma; bu yönde bir tepki önceden yazılmadığı için sınanmadı.
 - **Merkez bankası kararlarında olay az.** Planın artı sonuç veren tek tepkileri burada, ama işlem sayıları bir hüküm
   kurmaya yetmiyor.
 - **Yüksek kazanma oranı kurmak kolay, kâr etmek değil.** Açılışta ilk mumun yarısına limitle girip yarım R hedefleyen
   tepkiler 2024 → döneminde işlemlerin {{ B.referans.acilis.normal.dis.kazanma }}–{{ B.referans.acilis.guclu.dis.kazanma }}
   kadarını kazandı; başa baş için {{ B.referans.acilis.guclu.dis.basabas }} gerekiyordu.
 
-Bu sonuç ilk bakışta kafa karıştırır: işlemlerin çoğu kazanıyorsa nasıl kaybedilir? Cevap aşağıda, "Kazanma oranı
-ile net sonuç" başlığında.
-
 ## Bu dersi masada nasıl kullanırsın
 
 Bu ders bir işlem kuralı vermez; masadaki ilk dakikaları düzenler. Bir an geldiğinde, örneğin Londra açıldığında
-(Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00), ilk mum kapanana kadar beklersin. Sonra mumu
-dört sınıftan birine koyarsın ve tek bir soru sorarsın: bu mumdan sonra gördüğüm şey, yönü olmayan bir fiyatta da aynı
-sıklıkta görülür müydü? Cevap çoğu anda "evet"tir. O zaman yapılacak iş işlem değil, işaretlemedir: iki uç, yarı ve
-günün bir sonraki anının saati. Aşağıdaki şema bu sırayı beş soruya indirir; her sorunun dayanağı serinin bir
-dersinde ölçülmüş bir sonuçtur ve hiçbir dal bir işlem önermez.
+(Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00), ilk mum kapanana kadar beklersin, mumu dört
+sınıftan birine koyarsın ve tek soru sorarsın: bu mumdan sonra gördüğüm şey yönü olmayan bir fiyatta da aynı sıklıkta
+görülür müydü? Cevap çoğu anda "evet"tir; o zaman iş işlem değil işaretlemedir: iki uç, yarı ve günün bir sonraki
+anının saati. Şema bu sırayı beş soruya indirir; her sorunun dayanağı serinin bir dersindedir ve hiçbir dal işlem
+önermez.
 
 {{# karar ilk-mum }}
-
-Son kutu bilerek dar yazıldı: ABD verisinden sonra ilk mumun yönü şanstan seyrek sürdü, ama bu yönde bir tepki önceden
-yazılmadığı için sınanmadı. Veri mumunun yönüne güvenmezsin, tersine girmeyi de bir kural saymazsın.
 
 ## İncelenen on an
 
@@ -97,25 +90,14 @@ Aynı açılışın dört sınıftan dört örneği (EUR/USD, Londra açılış�
 
 ### Masada: mumu sınıflandırmak
 
-Sınıf bir kapanış ölçüsüdür: on beş dakikalık bir açılış mumu onuncu dakikada güçlü görünüp reddedilen olarak
-kapanabilir. Masada sırayla üç şeye bakarsın: mumun boyu, gövdenin boya oranı, en uzun fitilin boya oranı.
-
-Boyu neyle kıyasladığın sınıfın kendisidir. Kıyas ekrandaki önceki mumlar değil, aynı anın geçmiş günlerdeki ilk
-mumlarıdır; Asya seansının sakin mumlarıyla kıyaslanınca neredeyse her Londra açılış mumu güçlü görünür. Pratikte her
-an için bir defter tutarsın: o anın son olaylarındaki ilk mum boyları ve ortancası. Defter bu dersin tanımıyla aynıysa
-(son {{ S.tipik_pencere }} olay; veri ve kararlarda son {{ S.haber_pencere }}) okuduğun sınıf da bu dersin sınıfıdır;
+Sınıf kapanışta verilir; on beş dakikalık mum onuncu dakikada güçlü görünüp reddedilen olarak kapanabilir. Masada
+sırayla mumun boyuna, gövdenin ve en uzun fitilin boya oranına bakarsın. Boy ekrandaki komşu mumlarla değil, aynı
+anın geçmiş ilk mumlarıyla kıyaslanır (son {{ S.tipik_pencere }} olay; veri ve kararlarda son {{ S.haber_pencere }});
 başka bir defterle okunan sınıf bu derste ölçülmedi.
 
 {{# sema siniflar }}
 
-Şemadaki dört mum aynı anın dört ayrı gününden. Birinciyi güçlü yapan yalnız boyu değil, gövdenin mumu doldurmasıdır.
-Üçüncüde yön sezgiye terstir: mum yukarı uzanmış ama yönü aşağıdır. Dördüncüde yön sorulmaz; iki ucu işaretleyip
-hangisinin önce kırıldığını beklersin.
-
 {{# kart reddedilen-acilis }}
-
-Bu durumda yapmazsın: mum kapanmadan sınıf vermezsin; boyu ekrandaki komşu mumlarla kıyaslamazsın; uzun bir fitile,
-sayılar desteklemediği hâlde "orada satıcı var" anlamı yüklemezsin (2. ders, Normal ve reddedilen ilk mum).
 
 ## Trend
 
@@ -124,18 +106,17 @@ ortalamaya göre yeridir: kapanış ortalamanın üstünde ve ortalama son {{ S.
 ikisi de tersi ise aşağı, başka her durumda yatay. İlk mumun yönü trendle aynıysa mum **trend yönünde**, tersse
 **trende karşı** sayılır.
 
-Açılış ve fiksing derslerinde trend ayrımı bir tabloyla verilir ve sayıları değiştirmiyor. Haber anlarında olay sayısı
-böyle bir ayrım için yetmiyor. Plan trendi bir okuma bilgisi olarak taşır, karar ölçütü yapmaz.
-
-Masada trendi bir satır not olarak yazarsın, bir süzgeç olarak kullanmazsın. Trend yönündeki güçlü bir açılış mumu
-trende karşı olanından daha sık devam etmedi (2. ders, Trend bir şey değiştiriyor mu; 3. ders, Trend). "Trendle aynı
-yönde, öyleyse bu kez sürer" cümlesi bu derslerin ölçtüğü bir şey değildir.
+Haber anlarında olay sayısı böyle bir ayrım için yetmiyor. Masada trendi bir satır not olarak yazarsın, süzgeç olarak
+kullanmazsın. Trend yönündeki güçlü bir açılış mumu
+trende karşı olanından daha sık devam etmedi (2. ders, Trend bir şey değiştiriyor mu); fiksinge güçlü koşunun sürme
+payı da trendle değişmedi (3. ders, Trend). "Trendle aynı yönde, öyleyse bu kez sürer" cümlesi bu derslerin ölçtüğü
+bir şey değildir.
 
 ## İlk mumdan sonra ne olabilir
 
 İlk mum kapandıktan sonra izlenen süre içinde dört şeye bakılır. Hepsi ilk mumun **boyu** cinsinden ölçülür:
 
-- **Yarısına döndü.** Fiyat mumun orta noktasına geri geldi. (Fiksingde: koşunun yarısını geri verdi.)
+- **Yarısına döndü.** Fiyat mumun orta noktasına geri geldi. (Fiksingde: fiyat koşunun yarısına geri çekildi.)
 - **Devam etti.** Fiyat, mumun öbür ucunu görmeden, kendi ucunu yarım mum boyu aştı.
 - **Tersine döndü.** Fiyat, kendi ucunu yarım mum boyu aşmadan, mumun öbür ucunu kırdı.
 - **Geri çekilip devam etti.** Fiyat önce yarısına döndü, sonra öbür uca gitmeden kendi ucuna ulaştı.
@@ -172,22 +153,27 @@ kapanışa uzaklığı mumun şeklinden gelir.
 
 {{# sema ayna-esik }}
 
-Devam eşiği kapanıştan kısa bir yol, dönüş eşiği neredeyse bir mum boyu uzakta; yazı tura atan bir fiyat da yakın
-eşiğe önce varır. Güçlü açılış mumunda devamın dönüşten sık çıkması bu yüzden aynada da aynen çıkar
-({{ Y.ic.acilis.guclu.devam_ayna }} ve {{ Y.ic.acilis.guclu.donus_ayna }}). Masada sayıyı değil mesafeyi okursun.
+Güçlü açılış mumunda devamın dönüşten sık çıkması bu yüzden aynada da aynen çıkar
+({{ Y.ic.acilis.guclu.devam_ayna }} ve {{ Y.ic.acilis.guclu.donus_ayna }}); masada sayıyı değil mesafeyi okursun.
 
 {{# sema ayna-yol }}
 
-Tek bir günde iki yol farklı biter ve bu bir şey kanıtlamaz; ayna binlerce olayda iki payı yan yana koymak içindir.
 Gözle sorulan aynanın yararı, "bu sefer farklı" duygusunun çoğu zaman mumun şeklinden geldiğini fark ettirmesidir.
+
+Gerçek grafiklerde numaralar her derste aynıdır: ① olay mumu (fiksingde koşu), ② mumun ya da koşunun yarısı, ③ fiyatın
+yarıya ilk dokunduğu mum, ④ izleme penceresinin sonu; şemalarda ise numaralar şemanın altındaki maddelere bağlıdır.
 
 {{# ornek londra-guclu }}
 
-Üstteki günde ① güçlü bir açılış mumudur ve fiyat öbür ucu görmeden kendi ucunu yarım mum boyu aşmıştır; ③ varsa ②
-yarıya da dokunmuştur. Alttaki günde ① aynı sınıftan bir mumdur; fiyat ③ önce yarıya dönmüş, sonra öbür ucu kırmıştır.
-④ iki günde de izleme penceresinin sonudur. İlk on beş dakikaya bakan biri iki günü ayıramazdı: iki mum da ucuna yakın
-kapanmış. Fark sonraki saatlerde çıkar ve geriye bakınca biri "açıkça devam", öbürü "açıkça tuzak" görünür. İki gün
-ne devamı ne dönüşü kanıtlar; ölçü, binlerce günde iki sonucun aynadaki paylarla aynı sıklıkta geldiğini söyler.
+Üstteki günde (28.09.2023, TSİ 10:00) ① ucunda kapanan güçlü bir yukarı açılış mumudur. Fiyat sonraki saatte geri
+çekilir ama yarıya inmez, bu yüzden ③ yoktur; TSİ 11:15'te kendi ucunu yarım mum boyu aşar ve ④'te ucunun bir buçuk
+mum boyundan fazla ötesindedir. Alttaki günde (17.11.2023, TSİ 11:00) ① aynı sınıftan bir aşağı mumdur, ama ucunda
+değil yarısının hemen ötesinde kapanmıştır. Yarı kapanışa bu kadar yakın olduğu için ③ iki dakika sonra gelir: bu,
+aynanın ölçtüğü geometrinin kendisidir. Fiyat TSİ 11:30'da öbür ucu kırar, sonraki üç saat boyunca yükselir ve ④'te mumun
+tepesinin iki mum boyundan fazla üstündedir. Kapanışta iki ekranı ayıran şey kapanışın mumun içindeki yeridir; bu
+yer sınıfın ölçütü değildir ve ayrıca ölçülmedi. Geriye bakınca biri "açıkça devam", öbürü "açıkça
+tuzak" görünür. İki gün ne devamı ne dönüşü kanıtlar; tek gün bir kuralı ne doğrular ne yanlışlar. Ölçü binlerce
+günden gelir: güçlü açılış mumunda iki sonuç aynadaki paylarla aynı sıklıkta gelir.
 
 Fiksingde ayna başka bir şey söyler: güçlü koşunun yarısını geri vermesi aynadakinden sık
 ({{ Y.ic.fiksing.guclu.orta }} ve {{ Y.ic.fiksing.guclu.orta_ayna }}), sürmesi seyrek. Fiksingden sonra koşunun
@@ -198,15 +184,18 @@ Bu okumaları işleme çevirmek).
 
 {{# ornek wmr-guclu }}
 
-Üstteki günde ① fiksinge giden güçlü koşudur ve fiyat fiksingden sonra ② koşunun yarısına döner; ③ o dokunuşun
-mumudur. Alttaki günde ① aynı sınıftan bir koşudur, ama fiyat koşunun yönünde yarım koşu boyu daha ilerler. Fiksinge
-bakan biri iki koşuyu ayıramazdı; hangisinin "geri verme günü" olduğu ancak ④ pencerenin sonunda belli olur. Biri
-okumayı doğrulamaz, öbürü yanlışlamaz: geri verme payı aynadakinden yalnız biraz yüksek ve iki sonuç da sık görülür.
+Üstteki günde (15.11.2023, fiksing TSİ 19:00) ① fiksinge giden yarım saatlik yukarı koşudur ve ucuna yakın biter.
+Fiyat fiksingden sonraki çeyrek saatte biraz daha yükselir ama yarım koşu boyuna varmaz; TSİ 19:30'dan sonra geri
+çekilir, ③ fiksingden kırk bir dakika sonra koşunun yarısına dokunur ve ④'te fiyat yarının hemen altındadır; koşunun
+başı görülmez. Alttaki günde (27.07.2023, fiksing TSİ 18:00) ① aynı sınıftan, yine ucuna yakın biten bir yukarı
+koşudur; fiyat fiksingden sonraki ilk beş dakikada yarım koşu boyunu aşar, yarıya hiç dönmez ve ④'te ucun koşu
+boyunun dörtte üçünden fazla üstündedir. Fiksing anında iki koşu ayırt edilemez; geri verme payı aynadakinden yalnız
+biraz yüksek.
 
-ABD verisinde ayna üçüncü bir şey gösterir: normal veri mumunun devam payı iki dönemde de aynadakinin altında (4. ders,
-ABD verileri). Bu bir uyarıdır, işaret değil. Bölümün masadaki karşılığı üç cümledir: güçlü açılış mumunun devamını yön
-saymazsın; fiksingden sonra koşuyu kovalamazsın, geri vermeyi de işleme çevirmezsin; veri mumunun yönünü sürecek bir
-hareket saymazsın.
+ABD verisinde ayna üçüncü bir şey gösterir: normal ve reddedilen veri mumunun devam payı iki dönemde de aynadakinin
+altında, güçlü veri mumununki aynayla aynı (4. ders, ABD verileri). Bu bir uyarıdır, işaret değil. Masada: güçlü
+açılış mumunun devamını yön saymazsın; fiksingden sonra koşuyu kovalamazsın, geri vermeyi de kenar saymazsın; veri
+mumunun yönünü sürecek bir hareket saymazsın.
 
 ## Kazanma oranı ile net sonuç
 
@@ -227,61 +216,61 @@ stopla kapandı ve yarım R'lik kazançlar bunu karşılamadı. Sonuç işlem ba
 Net sonuç maliyetten sonradır. Her işlem gerçek alış-satış farkını (makas) öder: alış emri satış fiyatından, satış
 emri alış fiyatından dolar, stop ve hedef de çıkış tarafının fiyatından sorulur. Piyasa, stop ve kırılım emirleri
 ayrıca {{ ON.kayma_pip }} pip kayma öder; veri ve karar anında (açıklamadan iki dakika önce ile on beş dakika sonrası
-arası) ek {{ ON.haber_kayma_pip }} pip. Limit emir kendi fiyatından dolar, kayma ödemez. Riski {{ ON.en_az_risk_pip }}
+arası) ek {{ ON.haber_kayma_pip }} pip. Kayma sınamanın varsayımıdır; gerçek kayma ve haber anındaki makasın
+büyüklüğü ölçülmedi. Limit emir kendi fiyatından dolar, kayma ödemez. Riski {{ ON.en_az_risk_pip }}
 pipten küçük işlem açılmaz. Her tepkinin bir de **maliyetsiz** sonucu var: aynı kurallar orta fiyatla, makas ve kayma
 olmadan. İkisinin farkı maliyetin payıdır.
 
 ### Masada: yarım R hedefin hesabı
 
-Masada bir tepkiyi değerlendirmenin ilk adımı kazanma oranı değil, başa baş oranıdır: kayıp bir R, kazanç yarım R ise
-üç işlemin ikisi. Maliyet bu sayıyı yukarı iter, çünkü kazanan biraz az kazanır, kaybeden biraz fazla kaybeder; 2024 →
-döneminde güçlü açılış mumunda başa baş {{ B.referans.acilis.guclu.dis.basabas }} oldu. Gerçekleşen kazanma oranı
-({{ B.referans.acilis.guclu.dis.kazanma }}) bunun altında kaldıkça yüksek görünmesi bir şey değiştirmez.
+Bir tepkinin ilk sorusu kazanma oranı değil başa baş oranıdır. Yarıya limitli girişte maliyet kazancı küçültmez:
+giriş makas ödemez, hedef çıkış tarafının fiyatından sorulur ve dolduğunda tam yarım R getirir. Kaybı büyütür: stopta
+makas ve kayma ödenir. Başa baş bu yüzden üçte ikinin üstüne çıkar ({{ B.referans.acilis.guclu.dis.basabas }}) ve
+gerçekleşen kazanma oranı onun altında kalır.
 
 {{# sema yarim-r }}
 
 Şemadaki hedef kapanışın altında duruyor: yarıya konan limit ile yarım R'lik hedef, mumun zaten gittiği yolun bir
-kısmını geri almayı hedefler. Limit tanımı gereği fiyat piyasa girişinin aleyhine yürüdüğünde dolar (8. ders, Limit
-neden ucuz görünür: ters seçim); dolduğu an mumun yönündeki okumanın bir kısmı zaten geri alınmıştır.
+kısmını geri almayı hedefler.
 
 {{# kart guclu-acilis }}
-
-Bu durumda yapmazsın: kazanma oranına bakıp tepkiyi iyi saymazsın; başa baş oranını maliyetsiz hesaplamazsın (1. ders,
-Kazanma oranı ile net sonuç).
 
 ## Emri nereye koyarsın
 
 Bu ders işlem önermez. Başka bir gerekçeyle (kendi modelin, bir akış bilgisi) ilk mumdan sonra işleme gireceksen,
-ilk mum emrin geometrisini, bu derste ölçülen maliyet kuralları da bedelini verir.
+ilk mum emrin geometrisini, bu derste ölçülen maliyet kuralları da bedelini verir. Bu bölüm oyun derslerinin (1–5)
+ortak emir kurallarıdır; öbür dersler yalnız kendi anına özgü olanı ekler.
 
 - **Giriş.** Piyasa emri hemen dolar, makası ve {{ ON.kayma_pip }} pip kaymayı öder. Yarıya limit girişte makas ve
-  kayma ödemez, çıkışta öder ve yalnız fiyat aleyhine yürüdüğünde dolar (8. ders, Limit neden ucuz görünür: ters
-  seçim). Kırılan uca stop emri fiyatın zaten yürüdüğü yerden alır, kayma öder (8. ders, Ucun kırılması). Onay mumu
-  beklemek, kaçırılan fiyatın bedelini ancak karşıladı (8. ders, Onay mumu).
-- **Stop.** Bu serinin tepkilerinde stop öbür ucun biraz ötesindedir; mumun içine konan stop ölçülmedi. Açılış mumu
-  küçüktür, stop da; aynı makas küçük stopta daha büyük bir R olur (8. ders, Stop uzaklığı ve maliyet).
-- **Hedef.** Yarım R hedef kazanma oranını da başa baş eşiğini de yükseltir. Açılışlarda daha uzak hedefler de
-  denendi; hiçbiri maliyetten sonra artıda kalmadı (2. ders, Bu okumaları işleme çevirmek).
-- **İptal.** Limit izlenen sürenin sonuna kadar dolmazsa çekilir. Fiyat dolmadan devam eşiğine giderse emri
-  taşımazsın; o başka bir emirdir ve ölçülmedi.
-- **Haber penceresi.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında her piyasa ve stop emri ek
-  {{ ON.haber_kayma_pip }} pip kayma öder ve makas açılır (1. ders, Kazanma oranı ile net sonuç; 4. ders, Haber
-  anları için masa kartı). Bekleyen bir emir bu pencereye taşınıyorsa maliyeti değişmiştir.
+  kayma ödemez, çıkışta öder; yalnız fiyat yarıya geri geldiğinde dolar, yani dolum mumun yönündeki hareketin
+  yarısının geri alındığını söyler. Kırılan uca stop emri fiyatı yürüdüğü yerden alır ve kayma öder.
+- **Büyük mumun ölçüleri.** Limit dolumunun piyasa girişinin kaybettiği olayları seçmesi (ters seçim) ve onay mumunun
+  bilgisinin kaçırılan fiyatın bedelini ancak karşılaması 8. dersin büyük mum ölçüleridir (8. ders, Limit neden ucuz
+  görünür: ters seçim; 8. ders, Onay mumu). Anların ilk mumu için ikisi de ölçülmedi; onay mumundan sonra giriş bu
+  anlarda sınanmadı.
+- **Stop.** Sınanan tepkilerde stop öbür ucun mum boyunun onda biri ötesindedir; fiksingde koşunun ucunun koşu boyunun
+  onda biri ötesinde. Mumun içine konan stop ölçülmedi. Açılış mumu küçüktür, stop da: maliyetin payı normal mumun
+  limit tepkisinde {{ B.referans.acilis.normal.dis.maliyet }} R, küçük mumun kırılımında
+  {{ B.referans.acilis.kucuk.dis.maliyet }} R (2. ders, Bu okumaları işleme çevirmek). Stopu daraltmak riski
+  küçültmez, aynı makası daha büyük bir R yapar.
+- **Hedef.** Yarım R hedef kazanma oranını da başa baş eşiğini de yükseltir. Açılışlarda daha uzak hedefler
+  2018–2023'te denendi ve hiçbiri maliyetten sonra artıda kalmadı; 2024 sonrasında sınanmadı (2. ders, Bu okumaları
+  işleme çevirmek).
+- **Emrin ömrü.** Limit ve kırılım emri ilk mum kapandıktan (fiksingde fiksing anından) 60 dakika sonra düşer. Süre
+  ön kayıtta yazılıydı, ölçülerek seçilmedi; başka bir süre sınanmadı. Dolan pozisyon ne hedefe ne stopa ulaşırsa
+  izlenen sürenin sonunda kapanır. Fiyat limit dolmadan devam eşiğine giderse emri taşımazsın; taşınan emir başka bir
+  emirdir ve ölçülmedi.
+- **Haber penceresi.** Bekleyen bir emrin süresine takvimdeki büyük bir haberin penceresi (açıklamadan iki dakika önce
+  – on beş dakika sonra) düşüyorsa emri açıklamadan önce çekersin. Bu bir disiplin kuralıdır, ölçüm sonucu değil:
+  sınamada o pencerede piyasa ve stop emirlerine {{ ON.haber_kayma_pip }} pip ek kayma varsayıldı, haber anındaki makas
+  ölçülmedi ve emri çekmenin sonuca etkisi bu seride ölçülmedi (1. ders, Kazanma oranı ile net sonuç).
 
 {{# kart kucuk-mum }}
 
 ## Sık yapılan hatalar
 
-- **Mumu kapanmadan sınıflandırmak.** Sınıf kapanışın ölçüsüdür; onuncu dakikadaki güçlü mum reddedilen olarak
-  kapanabilir (1. ders, İlk mumun dört sınıfı).
-- **Boyu ekrandaki komşu mumlarla kıyaslamak.** Tipik boy aynı anın geçmiş olaylarından gelir (1. ders, İlk mumun dört
-  sınıfı).
 - **Devam payını yön sanmak.** Güçlü mum ucuna yakın kapanır, devam eşiği yakındır; aynada da aynı pay çıkar (1. ders,
   Şans ne verirdi: yolun aynası; 2. ders, Güçlü ilk mum).
-- **Yarısına dönüşü alım ya da satım sebebi saymak.** Normal mum ortasına yakın kapanır, yarı bir adım ötededir;
-  dönüş payı aynadakiyle aynı (2. ders, Normal ve reddedilen ilk mum).
-- **Fiksingdeki geri vermeyi bir kenar sanmak.** Geri verme şanstan sık, ama koşunun tersine girmek maliyetten sonra
-  çalışmadı (3. ders, Bu okumaları işleme çevirmek).
 - **Kazanma oranına bakıp kâr beklemek.** Yarım R hedefte başa baş maliyetle üçte ikinin üstündedir; açılışın referans tepkileri
   işlemlerin yarısından çoğunu kazanıp kaybettirdi (1. ders, Kazanma oranı ile net sonuç).
 
@@ -290,14 +279,15 @@ ilk mum emrin geometrisini, bu derste ölçülen maliyet kuralları da bedelini 
 1. Hangi an ve TSİ kaçta? Tokyo açılışı 03:00, Tokyo fiksingi 03:55, Londra açılışı 10:00 (İngiltere kış saatinde
    11:00), ABD verisi 15:30 ve New York açılışı 16:30 (ABD kış saatinde 16:30 ve 17:30), Londra fiksingi 18:00
    (İngiltere kış saatinde 19:00).
-2. Yakında bir veri ya da karar var mı? Varsa açıklamadan iki dakika önce ile on beş dakika sonrası arasında maliyet
-   değişir.
+2. Bekleyen emrin süresine bir veri ya da karar penceresi (açıklamadan iki dakika önce – on beş dakika sonra) düşüyor
+   mu? Düşüyorsa emri açıklamadan önce çekersin.
 3. İlk mum kapandı mı? Kapanmadıysa sınıf yok.
 4. Boy, aynı anın geçmiş ilk mumlarının ortancasına göre ne kadar; gövde ve en uzun fitil boyun ne kadarı? Sınıf hangisi?
 5. İki uç, yarı ve kendi ucunun yarım mum ötesi işaretli mi?
 6. Gördüğüm şey aynada da aynı sıklıkta görülür müydü?
 7. Fiksingse: koşu güçlü mü, ayın son Londra iş günü mü? Geri verme beklenir, koşunun sürmesi beklenmez.
-8. Başka bir gerekçeyle girersem: başa baş oranı ne, maliyet riskin ne kadarı, limit ne zaman çekilir?
+8. Başka bir gerekçeyle girersem: başa baş oranı ne, maliyet riskin ne kadarı? Emir ilk mum kapandıktan 60 dakika
+   sonra düşer.
 
 ## Grafik okuma alıştırmaları
 
@@ -315,7 +305,7 @@ işaretlersin (1. ders, İlk mumun dört sınıfı; 2. ders, Normal ve reddedile
 </details>
 
 **2.** Londra fiksingi (Londra 16:00; TSİ İngiltere yaz saatinde 18:00, kış saatinde 19:00). Fiyat fiksinge güçlü
-yukarı koşmuş; fiksingden sonraki on dakikada koşunun üçte birini geri vermiş. Ne beklersin, ne yapmazsın?
+yukarı koşmuş; fiksingden sonraki on dakikada koşunun üçte biri kadar geri çekilmiş. Ne beklersin, ne yapmazsın?
 
 <details>
 <summary>Çözüm</summary>
@@ -333,10 +323,10 @@ mum normal ve aşağı; makas açılmış. Elinde dar bir stopla mumun tersine g
 <details>
 <summary>Çözüm</summary>
 
-Veri mumunun yönünün şanstan seyrek sürmesi iki dönemde görülen bir okumadır; bu yönde tepki önceden yazılmadığı için
-sınanmadı ve kural değildir. Başka bir gerekçeyle girersen haber penceresinde ek kayma ve açık makas ödersin, dar stop
-bu maliyeti R cinsinden büyütür (1. ders, Kısaca; 1. ders, Kazanma oranı ile net sonuç; 8. ders, Stop uzaklığı ve
-maliyet).
+Normal veri mumunun yönünün şanstan seyrek sürmesi iki dönemde görülen bir okumadır; bu yönde tepki önceden
+yazılmadığı için sınanmadı ve kural değildir. Başka bir gerekçeyle girersen giriş hâlâ haber penceresindedir: ekranda
+gördüğün makası girişte ödersin, sınama da bu pencerede {{ ON.haber_kayma_pip }} pip ek kayma varsaydı (haber anındaki
+makas ölçülmedi). Dar stop aynı maliyeti R cinsinden büyütür (1. ders, Kısaca; 1. ders, Emri nereye koyarsın).
 
 </details>
 
@@ -364,9 +354,9 @@ ders, Bu okumaları işleme çevirmek).
   {{ ON.bootstrap }} tekrar) tamamen sıfırın üstündeyse **çalışıyor**, ortalama artı ama aralık sıfırı kapsıyorsa
   **zayıf**, ortalama eksiyse **çalışmıyor**. {{ ON.hukum_en_az }} işlemin altında hüküm **ölçülemedi**dir; sonuç
   yine yazılır.
-- **Bilinen sınırlar.** Referans tepkilerin 2018–2023 sonucu plan yazılırken biliniyordu. Bu verinin 2024 sonrası
-  dönemiyle daha önce yirmi iki gün içi kural sınanmış ve yayımlanmıştı; o kuralların çoğunun maliyetten sonra eksi
-  kaldığı biliniyordu. Bu planın kendi tepkilerinin 2024 sonrası sonucu ise hiç ölçülmemişti. Yolun aynası ölçüsü
+- **Bilinen sınırlar.** Referans tepkilerin 2018–2023 sonucu plan yazılırken biliniyordu. Aynı verinin 2024 sonrası
+  dönemiyle daha önce yirmi iki gün içi kural sınanıp yayımlanmıştı ve çoğu maliyetten sonra eksi kalmıştı; bu planın
+  kendi tepkilerinin 2024 sonrası sonucu ise hiç ölçülmemişti. Yolun aynası ölçüsü
   iki dönem de görüldükten sonra eklendi; bir betimlemedir, hüküm değildir.
 
 Veri: Dukascopy bir dakikalık alış ve satış fiyatları, 2018 başından {{ veri_bitis }} tarihine kadar.

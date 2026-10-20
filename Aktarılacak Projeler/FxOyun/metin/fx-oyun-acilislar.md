@@ -13,10 +13,9 @@ onkosul: ['fx-oyun-okuma']
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 import Diyagram from '../../components/Diyagram.astro';
 
-Açılış bir seansın ilk sözüdür. Tokyo'da gece birikmiş emirler, Londra'da günün en büyük likiditesinin gelişi, New
-York'ta hisse piyasasıyla birlikte ABD'nin masaya oturması. Üçünde de ilk {{ AN.londra_acilis.tf }} dakika günün ilk
-aralığını çizer ve işlemcilerin çoğu o aralığa göre plan yapar. Bu ders o aralıktan sonra fiyatın genelde ne yaptığını
-ve bunun ne kadarının bir şey söylediğini anlatır.
+Açılış bir seansın ilk sözüdür: Tokyo'da gece birikmiş emirler, Londra'da günün en büyük likiditesi, New York'ta
+hisse piyasasıyla birlikte ABD. Üçünde de ilk {{ AN.londra_acilis.tf }} dakika günün ilk aralığını çizer; bu ders o
+aralıktan sonra fiyatın ne yaptığını ve bunun ne kadarının bir şey söylediğini anlatır.
 
 {{# an_tablo acilis }}
 
@@ -28,9 +27,9 @@ ilk referanslarını işaretleme anıdır.
 
 ## Bu dersi masada nasıl kullanırsın
 
-Bu ders masada bir işlem listesi değil, bir yasak listesidir. Açılıştan önce saati ve takvimi bilirsin; ilk mum
-kapanınca sınıfına bakarsın; sınıf neyi bekleyeceğini ve neyi yapmayacağını söyler. Hiçbir adım "şimdi gir" demez,
-çünkü sınanan tepkilerin hiçbiri maliyetten sonra artıda kalmadı (aşağıda, "Bu okumaları işleme çevirmek").
+Bu ders masada bir işlem listesi değil, bir yasak listesidir: ilk mum kapanınca sınıfına bakarsın, sınıf neyi
+bekleyeceğini ve neyi yapmayacağını söyler. Hiçbir adım "şimdi gir" demez; sınanan tepkilerin hiçbiri maliyetten sonra
+artıda kalmadı (Bu okumaları işleme çevirmek).
 
 {{# karar acilis-akis }}
 
@@ -44,8 +43,8 @@ Türkiye yıl boyunca aynı saatte kalır, İngiltere ve ABD yaz saatine geçer:
 - **New York 09:30:** TSİ ABD yaz saatinde 16:30, kış saatinde 17:30. İlk mum 16:45'te (kışın 17:45'te) kapanır,
   pencere 18:45'te (kışın 19:45'te) biter.
 
-ABD yaz saatine İngiltere'den iki üç hafta önce geçer, sonbaharda bir hafta sonra çıkar. O haftalarda Londra açılışı
-TSİ 11:00'de, New York açılışı TSİ 16:30'dadır: saat her ülkenin kendi kuralıyla okunur.
+ABD yaz saatine İngiltere'den iki üç hafta önce geçer, sonbaharda bir hafta sonra çıkar; o haftalarda Londra açılışı
+TSİ 11:00'de, New York açılışı TSİ 16:30'dadır.
 
 ### Açılıştan önce neye bakılır
 
@@ -64,8 +63,8 @@ yukarı, mumun yönüne devam demektir.
 
 {{# sekil 01_patika "Açılıştan sonra ortalama fiyat yolu, ilk mumun yönünde" }}
 
-Çizgilerin hepsi sıfıra yakın dolaşıyor. Güçlü bir açılış mumundan sonra bile ortalama fiyat mumun yönünde yol
-almıyor: devam ettiği günlerle döndüğü günler ortalamada birbirini götürüyor.
+Çizgilerin hepsi sıfıra yakın dolaşıyor: güçlü bir açılış mumundan sonra bile devam ettiği günlerle döndüğü günler
+ortalamada birbirini götürüyor.
 
 ## Sınıf sınıf, şansın payıyla
 
@@ -93,34 +92,25 @@ Güçlü mum yarısına dönmeyi genelde biraz zaman alarak yapar. Yarısına d�
 {{ A.ic.londra_acilis.guclu.orta_dk }}, Tokyo'da {{ A.ic.tokyo_acilis.guclu.orta_dk }}, New York'ta
 {{ A.ic.ny_acilis.guclu.orta_dk }} dakika.
 
-Oyun planı şöyle okur:
-
-- Güçlü mumun yönü bir işlem gerekçesi değildir. Kovalamak da, yarısına gelince katılmak da maliyetten sonra
-  kaybettirdi (aşağıda).
-- Güçlü mumun iki ucu günün ilk referanslarıdır. Gün içinde fiyat bu uçlara geldiğinde ne yaptığı bu derste
-  ölçülmedi.
+Oyun planında güçlü mumun yönü bir işlem gerekçesi değildir: kovalamak (2018–2023'te) da, yarısına gelince katılmak
+(iki dönemde) da maliyetten sonra kaybettirdi (aşağıda). İki ucu günün ilk referanslarıdır; fiyat gün içinde oraya
+geldiğinde ne yaptığı bu derste ölçülmedi.
 
 ### Masada: güçlü ilk mum
 
-Güçlü mum ekranın en ikna edici görüntüsüdür ve iki tuzağı vardır: devam payı mumun geometrisinden gelir (ucuna yakın
-kapanan mumun kendi ucu yakındır), ve yarıya dönüş normal mumdan yavaştır, yani ilk birkaç mumda dönmemesi bir şey
-söylemez.
+Güçlü mum ekranın en ikna edici görüntüsüdür: devam payı geometriden gelir, yarıya dönüş normal mumdan yavaştır.
 
 {{# sema guclu-kovalama }}
 
 {{# kart guclu-mum }}
 
-Bu durumda yapmazsın: kapanışın ardından piyasa emriyle kovalamazsın (2018–2023'te bu sınıfın en iyi tepkisiydi ve
-yine eksi kaldı: işlem başına {{ I.acilis.guclu.R }} R); uzadı diye mumun tersine de girmezsin, dönüş payı aynadakiyle
-aynı.
-
 {{# ornek guclu-londra }}
 
-İki günün ilk mumları birbirine çok benziyor: ① ikisinde de uzun, ucuna yakın kapanan bir açılış mumu. Üstteki günde
-fiyat ② yarıya geri iniyor, ③ ilk dokunuşu gösteriyor ve ④ pencerenin sonunda fiyat kapanışın gerisinde. Alttaki günde
-③ yok: fiyat yarıya hiç dönmeden mumun yönünde bir mum boyu daha yol alıyor. İlk mumun kapandığı dakikada iki ekran
-arasında okunacak bir fark yoktu; ayrım ancak saatler sonra, ③ gelince ya da gelmeyince görünür. Tek bir gün kuralı ne
-doğrular ne yanlışlar; kural, iki günü birlikte taşıyan binlerce olayın sayısıdır.
+Üstteki gün 21 Eylül, alttaki 14 Ağustos 2023; Londra açılışı ikisinde de TSİ 10:00'dadır (İngiltere yaz saati).
+① iki günde de güçlü bir ilk mumdur; üstteki aşağı, alttaki yukarı. Üstteki günde fiyat TSİ 10:18'de ② yarıya geri çıkar
+(③), TSİ 10:30'daki mumda öbür ucu kırar ve ④'te mumun tepesinin hemen üstünde, yani tamamen tersindedir. Alttaki günde ③
+yoktur: fiyat TSİ 11:05'te ucunu bir mum boyu aşar, öğleden sonra kapanış seviyesine kadar geri çekilir ama yarıya inmez
+ve ④'te tepenin üstündedir. Mum kapandığında hangi günün hangisi olacağı ayırt edilemezdi; tek bir gün kuralı ne doğrular ne yanlışlar.
 
 ### Normal ve reddedilen ilk mum
 
@@ -136,29 +126,26 @@ bile, açılıştan sonraki saatlere taşımıyor.
 
 ### Masada: normal ve reddedilen ilk mum
 
-Normal mumda en sık görülen şey en anlamlı şey sanılır: fiyat birkaç dakikada yarıya döner ve bu bir "geri test" gibi
-görünür. Oysa kapanış zaten yarıya yakındır; dokunuş şeklin sonucudur ve ardından fiyat iki uca eşit sıklıkta gider.
+Normal mumda yarıya dokunuş bir "geri test" gibi görünür; oysa kapanış zaten yarıya yakındır ve ardından fiyat iki uca
+eşit sıklıkta gider.
 
 {{# sema normal-yari }}
 
-Reddedilen mumda tuzak bir hikâyedir: uzun fitil "orada satıcı var" diye okunur. Ölçülen ise reddin yönünde devam ile
-fitilin ucunun kırılmasının hemen hemen eşit sıklıkta olduğudur. Fitilin ucu bir referanstır; fiyat gün içinde oraya
-döndüğünde ne yaptığı bu derste ölçülmedi.
+Reddedilen mumda tuzak "orada satıcı var" hikâyesidir: fitilin ucu reddin yönündeki devam kadar sık kırılır; stop oraya
+konur, ama orası duvar değildir.
 
 {{# sema reddedilen-iki-yol }}
 
 {{# kart reddedilen-mum }}
 
-Bu durumda yapmazsın: yarıya dokunuşu giriş sinyali saymazsın; fitili duvar sayıp işlemi reddin yönüne, stopu fitilin
-hemen ötesine kurmazsın, çünkü fitilin ucu reddin yönündeki devam kadar sık kırılır.
-
 {{# ornek reddedilen-ny }}
 
-İki gün de ① aynı biçimde başlıyor: küçük gövdeli, bir yanında uzun fitil taşıyan bir ilk mum. Üstteki günde fiyat
-reddin yönünde yarım mum boyu ilerliyor, alttaki günde önce fitilin ucu kırılıyor. ③ işareti, varsa, ② yarıya ilk
-dokunuşu gösterir ve hangi yolun geleceğini söylemez; ④ iki günün ne kadar ayrıldığını gösterir. Karar anında ①
-dışında bakılacak bir şey yoktu ve ① iki günde aynı şeyi söylüyordu. Bu derste iki son hemen hemen eşit sıklıktadır;
-panellerin sırası bir eğilim değildir, ve tek bir örnek "satıcı vardı" okumasını ne doğrular ne yanlışlar.
+Üstteki gün 7 Kasım, alttaki 17 Kasım 2023; New York açılışı ikisinde de TSİ 17:30'dadır (ABD kış saati). Üstteki ①
+küçük gövdeli, altında uzun fitilli bir mumdur ve reddin yönü yukarıdır. Alttaki ① neredeyse gövdesizdir, iki yanında
+uzun fitil vardır; üst fitil biraz uzun olduğu için reddin yönü aşağı sayılır. İki günde de ③ kapanıştan sonraki ilk
+dakikadadır (TSİ 17:45). Üstteki günde fiyat TSİ 17:55'teki mumda tepeyi aşar ve ④'te reddin yönünde, tepenin belirgin
+üstündedir. Alttaki günde TSİ 18:05'te fitilin ucu kırılır ve fiyat ④'te ucun hemen altında, mumun üst yarısında biter.
+Bu derste iki son hemen hemen eşit sıklıktadır.
 
 ### Küçük ilk mum
 
@@ -172,8 +159,8 @@ Bu payın tek başına bir anlamı yok; anlamı tepkinin sonucundadır, o da aş
 
 ### Masada: küçük ilk mum
 
-Sessiz açılışta bir uç kırılınca "sıkışma patladı" diye atlamak doğaldır. Ama mum küçük olduğu için stop da küçüktür ve
-aynı makas küçük bir riskin büyük bir parçasıdır: kırılım maliyetten önce sıfıra yakın, sonra eksi.
+Sessiz açılışta kırılan uca "sıkışma patladı" diye atlamak doğaldır; mum küçük olduğu için stop da küçüktür ve aynı
+makas küçük bir riskin görünür bir parçasıdır.
 
 {{# sema kucuk-kirilim }}
 
@@ -194,9 +181,8 @@ trend yatayken {{ T.acilis.guclu.yatay.devam }} devam etti. Trend sayıyı deği
 
 ### Masada: trend
 
-Günlerdir yükselen bir grafikte güçlü bir yukarı açılış "iki teyit" gibi durur. Ölçülen şudur: güçlü mumun devam payı
-trend yönünde, trende karşı ve yatayken birkaç puan içinde aynı. Trend emrin yerini, stopu ya da hedefi değiştirecek
-bir bilgi taşımadı.
+Günlerdir yükselen bir grafikte güçlü bir yukarı açılış "iki teyit" gibi durur; oysa trend devam ve dönüş sıklığını
+değiştirmedi, ve trende göre stop ya da hedef değiştirmek bu derste sınanmadı.
 
 {{# sema trend-iki-yol }}
 
@@ -204,9 +190,9 @@ bir bilgi taşımadı.
 
 ## Bu okumaları işleme çevirmek
 
-Her sınıf için akla ilk gelen tepki sınandı. Yön sınıflarında: mumun yarısına limit emirle mumun yönünde gir, stopu
-öbür ucun {{ ref_tampon }} mum boyu ötesine koy, yarım R hedefle. Küçük mumda: kırılan uçtan gir, stopu öbür ucun
-{{ ref_tampon }} mum boyu ötesine koy, yarım R hedefle. 2024 → dönemindeki sonuç:
+Her sınıf için akla ilk gelen tepki sınandı. Yön sınıflarında: mumun yarısına konan limitle mumun yönünde giriş, stop
+öbür ucun {{ ref_tampon }} mum boyu ötesinde, hedef yarım R. Küçük mumda: iki uca birer kırılım emri (biri dolunca öbürü
+iptal), stop öbür ucun {{ ref_tampon }} mum boyu ötesinde, hedef yarım R. 2024 → dönemindeki sonuç:
 
 {{# kisa referans acilis }}
 
@@ -214,8 +200,8 @@ Kazanma oranları yüksek, dördü de "çalışmıyor". İki şey birlikte kaybe
 
 - **Maliyetten önce kenar yok.** Aynı kurallar orta fiyatla, makas ve kayma olmadan sınandığında da sonuç sıfıra yakın
   ya da eksi: güçlü mumda {{ B.referans.acilis.guclu.dis.brut }} R, normal mumda {{ B.referans.acilis.normal.dis.brut }} R,
-  küçük mumun kırılımında {{ B.referans.acilis.kucuk.dis.brut }} R. Limit emir yalnız fiyat geri geldiğinde dolar, ve
-  geri gelen günlerden sonrası yazı turadır.
+  küçük mumun kırılımında {{ B.referans.acilis.kucuk.dis.brut }} R. Limit yalnız fiyat yarıya geri geldiğinde dolar, ve
+  dolumdan sonra mumun yönü bir avantaj taşımadı.
 - **Maliyet sıfırı eksiye çeviriyor.** Açılış mumu küçüktür, stop da küçüktür (ortanca risk normal mumda
   {{ B.referans.acilis.normal.dis.risk_pip }}, küçük mumda {{ B.referans.acilis.kucuk.dis.risk_pip }} pip). Makas bu
   stopun görünür bir parçasıdır: normal mumda maliyetin payı {{ B.referans.acilis.normal.dis.maliyet }} R, küçük mumun
@@ -229,54 +215,39 @@ yok, ve kovalamak 2024 sonrasında sınanmadı. Plan bu hücrelerde "izle, işle
 
 ## Emri nereye koyarsın
 
-Bu bölüm işlem önermez. Başka bir gerekçeyle (günlük bir görüş, bir pozisyonun kapatılması) açılış penceresinde emir
-verecek olan için, bu dersin ve 8. dersin giriş biçimi sonuçlarını ilk mumdan sonraki duruma uygular.
+Bu bölüm işlem önermez; emrin genel kuralları 1. derstedir (1. ders, Emri nereye koyarsın). Açılışa özgü olanlar:
 
-- **Piyasa emri** makası ve kaymayı öder; güçlü mumun kapanışında kovalamanın kendisidir.
-- **Limit emir** yarıya konur, girişte makas ödemez, çıkışta öder; ama yalnız fiyat geri geldiğinde, yani piyasa
-  girişinin kaybettiği günlerde dolar (8. ders, Limit neden ucuz görünür: ters seçim). Normal mumda hemen dolması iyi
-  fiyat değil, şeklin sonucudur.
-- **Stop emri** (küçük mumun kırılımı) kayma öder ve fiyatı yürüdüğü yerden alır (8. ders, Ucun kırılması). Bu derste
-  maliyetin payı küçük mumun kırılımında {{ B.referans.acilis.kucuk.dis.maliyet }} R, normal mumun limit tepkisinde
-  {{ B.referans.acilis.normal.dis.maliyet }} R'ydi.
-- **Onay mumu** daha kötü fiyattan girer; onayın bilgisi kaçan fiyatı ancak karşılar (8. ders, Onay mumu). Açılışta
-  ayrıca ölçülmedi.
-
-**Stop** öbür ucun {{ ref_tampon }} mum boyu ötesindeydi: birkaç pip, makas onun görünür bir parçası. Daha yakını
-maliyeti R cinsinden büyütür (8. ders, Stop uzaklığı ve maliyet), daha genişi 2018–2023'te artıda kalmadı. **Hedef**
-yarım R kazanma oranını yükseltir, net sonucu değil (1. ders, Kazanma oranı ile net sonuç). **İptal:** emir ilk mumun
-kapanışından bir saat sonra düşer (TSİ Tokyo 04:15, Londra 11:15 · kışın 12:15, New York 17:45 · kışın 18:45), pozisyon
-pencerenin sonunda kapanır; pencereden sonrası için ölçülmüş dayanak yok. **Haber penceresi:** açılış pencerelerine
-serinin ölçtüğü veri ve karar anları düşmez, sınanan tepkiler haber kayması ödemedi; fiksing ya da veri penceredeyse
-emri öncesinde çekmek bir tercihtir, bu derste ölçülmedi.
+- **Stop** öbür ucun {{ ref_tampon }} mum boyu ötesindedir ve birkaç piptir; makas bu riskin görünür bir parçasıdır
+  (Bu okumaları işleme çevirmek). Daha geniş stop 2018–2023'te de artıda kalmadı.
+- **Limit** normal mumda yarıda hemen dolar; bu iyi fiyat değil, şeklin sonucudur. Büyük mumda ölçülen ters seçim
+  (8. ders, Limit neden ucuz görünür: ters seçim) ve onay mumundan sonraki giriş (8. ders, Onay mumu) açılışta
+  ölçülmedi.
+- **Süre.** Limit ve kırılım emri ilk mum kapandıktan 60 dakika sonra düşer (ön kayıttaki süre, ölçülerek seçilmedi):
+  TSİ Tokyo 04:15; Londra 11:15 (İngiltere kış saatinde 12:15); New York 17:45 (ABD kış saatinde 18:45). Dolan pozisyon
+  ne hedefe ne stopa ulaşırsa pencerenin sonunda kapanır (saatler: Açılış saatleri TSİ'de).
+- **Pencere.** Serinin ölçtüğü veri ve karar anları açılış pencerelerine düşmez; Tokyo fiksingi Tokyo emrinin süresine,
+  Londra fiksingi çoğu hafta New York penceresinin son saatine düşer (saatler: Açılıştan önce neye bakılır). Emrin
+  süresine takvimdeki büyük bir haberin penceresi düşüyorsa emri açıklamadan önce çekersin; bu bir disiplin kuralıdır,
+  etkisi ölçülmedi.
 
 ## Sık yapılan hatalar
 
-- **Güçlü mumu kapanışta kovalamak:** devam görüntüsü şekilden gelir ve tepki maliyetten sonra eksi kaldı (2. ders,
-  Güçlü ilk mum).
-- **Yarıya dokunuşu dönüş sanmak:** normal mumda dokunuş aynada da aynı sıklıktadır (2. ders, Normal ve reddedilen ilk
-  mum).
-- **Fitili satıcı kanıtı saymak:** reddin yönünde devam ile fitilin kırılması hemen hemen eşit (aynı bölüm).
-- **Sessiz açılışın kırılımına atlamak:** maliyet küçük stopun büyük parçasıdır (2. ders, Küçük ilk mum; 8. ders, Ucun
-  kırılması).
-- **Trendi teyit saymak:** trend devam payını değiştirmiyor (2. ders, Trend bir şey değiştiriyor mu).
 - **Yüksek kazanma oranını kenar sanmak:** oran yarının üstünde, başa baş için gerekenin altında (2. ders, Bu okumaları
   işleme çevirmek).
-- **Açılışı yanlış ülkenin saatiyle beklemek:** İngiltere ve ABD yaz saatine farklı haftalarda geçer (bu dersin saat
-  listesi).
+- **Açılışı yanlış ülkenin saatiyle beklemek:** İngiltere ve ABD yaz saatine farklı haftalarda geçer (2. ders, Açılış
+  saatleri TSİ'de).
 
 ## Masa kontrol listesi
 
-1. Hangi açılış, TSİ kaçta? Tokyo 03:00; Londra 10:00 (İngiltere kış saatinde 11:00); New York 16:30 (ABD kış saatinde
-   17:30). Bu hafta bir ülke saat değiştirdi mi?
+1. Hangi açılış, TSİ kaçta (saatler: Açılış saatleri TSİ'de)? Bu hafta bir ülke saat değiştirdi mi?
 2. New York açılışıysa TSİ 15:30'da (ABD kış saatinde 16:30) ABD verisi var mı?
-3. Pencerede fiksing var mı: Tokyo'da TSİ 03:55, New York'ta TSİ 18:00 (İngiltere kış saatinde 19:00)?
+3. Pencerede fiksing var mı: Tokyo'da TSİ 03:55, New York'ta TSİ 18:00 (İngiltere kış saatinde 19:00)? Emrin süresine
+   takvimdeki bir haber düşüyorsa emri açıklamadan önce çekerim.
 4. Bugünkü ilk mum bu açılışın tipik boyundan belirgin uzun mu, kısa mı?
-5. İlk mum kapandı mı (TSİ Tokyo 03:15; Londra 10:15, kışın 11:15; New York 16:45, kışın 17:45)?
+5. İlk mum kapandı mı (saatler: Açılış saatleri TSİ'de)?
 6. Sınıfı ne; iki ucu ve yarıyı işaretledim mi?
 7. Kovalamak, fitile göre girmek ya da kırılıma atlamak aklımdan geçiyor mu? Hangi ölçüm buna izin veriyor?
-8. Pencere bitti mi (TSİ Tokyo 06:15; Londra 13:15, kışın 14:15; New York 18:45, kışın 19:45)? Bittiyse masadan
-   kalkarım.
+8. Pencere bitti mi (saatler: Açılış saatleri TSİ'de)? Bittiyse masadan kalkarım (masa uygulaması; ölçülmedi).
 
 ## Grafik okuma alıştırmaları
 
@@ -287,7 +258,7 @@ açılıyor; ekranda herkes "kırıldı" diyor. Ne yaparsın, ne yapmazsın?
 <summary>Çözüm</summary>
 
 Uçları ve yarıyı işaretlersin, kovalamazsın: devam görüntüsü şekilden gelir ve kapanışta mumun yönünde girmek bu
-sınıfın en iyi tepkisiyken bile maliyetten sonra eksi kaldı (2. ders, Güçlü ilk mum).
+sınıfın en iyi tepkisiyken bile 2018–2023'te maliyetten sonra eksi kaldı (2. ders, Bu okumaları işleme çevirmek).
 
 </details>
 
@@ -317,9 +288,9 @@ fiksingi o hafta TSİ 19:00'dadır ve pencerenin dışında kalır (bu dersin sa
 ## Açılış için masa kartı
 
 - **İlk {{ AN.londra_acilis.tf }} dakika bir aralık çizer.** Üst ve alt ucu günün ilk referanslarıdır.
-- **Normal mumda yarısına dönüş birkaç dakika içinde beklenir.** Bu, mumun şeklinin sonucudur; ne alış ne satış
-  sebebidir.
+- **Normal mumda yarısına dönüş birkaç dakika içinde beklenir.** Şeklin sonucudur; ne alış ne satış sebebidir.
 - **Güçlü mumun "devam ediyor" görüntüsü yanıltıcıdır.** Yön rastgele olsaydı da aynı oranda devam ederdi.
-- **Fitile ve trende anlam yükleme.** İkisi de sayılarda görünmüyor.
-- **Sessiz açılışın kırılımı bir sinyal değildir.** Kırılımın yönüne girmek maliyetten önce de kazandırmadı.
+- **Fitile ve trende anlam yüklemezsin.** İkisi de sayılarda görünmüyor.
+- **Sessiz açılışın kırılımı bir sinyal değildir.** Kırılımın yönüne girmek maliyetten önce sıfıra yakın, sonra eksi
+  kaldı.
 - **Açılışta masada kalmanın sebebi işlem değil, referanstır.** Plan bu anda işlem önermiyor.
