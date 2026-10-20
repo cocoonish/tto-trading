@@ -277,6 +277,8 @@ ikisinin de dolduğu bir yolda iki zararı birden taşırsın ve bu bileşim bu 
 
 ## 5 dakika
 
+<div class="sayi-tablo">
+
 | Yön · emir | 2018–23 işlem | dolum | kazanma | maliyetsiz R | net R | 2024 → işlem | dolum | kazanma | maliyetsiz R | net R |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | mumun yönünde · %25 geri çekilmeye limit | 30.276 | %83 | %43 | −0,07 | −0,19 | 12.390 | %81 | %41 | −0,09 | −0,22 |
@@ -290,6 +292,8 @@ ikisinin de dolduğu bir yolda iki zararı birden taşırsın ve bu bileşim bu 
 | mumun tersine · onay mumundan sonra piyasa | 27.477 | %100 | %43 | 0,00 | −0,26 | 11.016 | %100 | %44 | +0,03 | −0,24 |
 | mumun tersine · kapanışta piyasa | 50.638 | %100 | %45 | +0,04 | −0,22 | 21.054 | %100 | %44 | +0,03 | −0,23 |
 | mumun tersine · mumun yarısının kırılmasına stop | 34.786 | %73 | %44 | +0,02 | −0,23 | 14.279 | %72 | %45 | +0,04 | −0,23 |
+
+</div>
 
 Tablonun okunuşu: önce **maliyetsiz R** sütunu, yani aynı kuralın alış-satış ortasından, makassız ve kaymasız sonucu.
 Bütün biçimler sıfırın birkaç yüzde R yakınında. Tersine piyasa girişinin artı olması 6. dersin geri verme okumasıyla
@@ -331,6 +335,8 @@ satır da eksidir. Limitin daha az kaybettirmesini de limitin kazandırması diy
 
 **15 dakika**
 
+<div class="sayi-tablo">
+
 | Yön · emir | 2018–23 işlem | dolum | kazanma | maliyetsiz R | net R | 2024 → işlem | dolum | kazanma | maliyetsiz R | net R |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | mumun yönünde · %25 geri çekilmeye limit | 11.709 | %85 | %47 | −0,02 | −0,08 | 5.044 | %85 | %45 | −0,05 | −0,12 |
@@ -345,7 +351,11 @@ satır da eksidir. Limitin daha az kaybettirmesini de limitin kazandırması diy
 | mumun tersine · kapanışta piyasa | 19.778 | %100 | %47 | 0,00 | −0,13 | 8.485 | %100 | %47 | +0,02 | −0,12 |
 | mumun tersine · mumun yarısının kırılmasına stop | 13.309 | %72 | %46 | +0,01 | −0,13 | 5.747 | %72 | %47 | +0,01 | −0,13 |
 
+</div>
+
 **1 saat**
+
+<div class="sayi-tablo">
 
 | Yön · emir | 2018–23 işlem | dolum | kazanma | maliyetsiz R | net R | 2024 → işlem | dolum | kazanma | maliyetsiz R | net R |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -360,6 +370,8 @@ satır da eksidir. Limitin daha az kaybettirmesini de limitin kazandırması diy
 | mumun tersine · onay mumundan sonra piyasa | 2.624 | %100 | %47 | −0,02 | −0,09 | 1.090 | %100 | %49 | +0,01 | −0,04 |
 | mumun tersine · kapanışta piyasa | 5.070 | %100 | %47 | −0,02 | −0,08 | 2.168 | %100 | %48 | −0,01 | −0,07 |
 | mumun tersine · mumun yarısının kırılmasına stop | 3.191 | %66 | %48 | −0,01 | −0,07 | 1.349 | %67 | %47 | −0,02 | −0,10 |
+
+</div>
 
 Dilim büyüdükçe iki şey değişiyor. Maliyet R cinsinden küçülüyor, çünkü ATR büyüyor ve aynı makas daha büyük bir
 mesafenin parçası oluyor. Ve yön değişiyor: 2018–2023'te 1 saatte mumun yönündeki girişlerin çoğu maliyetten önce artı
@@ -415,6 +427,8 @@ ederse limit dolmaz ve en iyi işlem kaçar.
 Bunu ölçmek için her olayda iki soru birlikte soruldu: limit doldu mu, ve aynı anda piyasadan girilseydi (aynı stop ve
 hedefle) işlem kazanır mıydı?
 
+<div class="sayi-tablo">
+
 | Dilim · emir | 2018–23 limit doldu | doldu · piyasa girişi kazandı | dolmadı · piyasa girişi kazandı | 2024 → limit doldu | doldu · piyasa girişi kazandı | dolmadı · piyasa girişi kazandı |
 |---|---:|---:|---:|---:|---:|---:|
 | 5 dakika · mumun yönünde · %25 geri çekilmeye limit | %83 | %32 | %87 | %81 | %31 | %86 |
@@ -432,6 +446,8 @@ hedefle) işlem kazanır mıydı?
 | 5 dakika · mumun tersine · ucun yarım ATR ötesine limit | %57 | %22 | %76 | %59 | %23 | %76 |
 | 15 dakika · mumun tersine · ucun yarım ATR ötesine limit | %62 | %26 | %81 | %62 | %26 | %82 |
 | 1 saat · mumun tersine · ucun yarım ATR ötesine limit | %61 | %27 | %78 | %60 | %26 | %79 |
+
+</div>
 
 Limitin dolduğu olaylarda piyasa girişi çoğunlukla kaybediyor; dolmadığı olaylarda çoğunlukla kazanıyor. Fark büyük ve
 iki dönemde aynı. Farkın büyük kısmı geometridir: limit, fiyat piyasa girişinin aleyhine mumun yarısı kadar yürüdüğünde

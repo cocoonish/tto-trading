@@ -236,7 +236,9 @@ def _tablo(bas: list[str], satirlar: list[list[str]], sol: list[int] | None = No
     sol = [0] if sol is None else sol
     out = ["| " + " | ".join(bas) + " |", "|" + "|".join("---" if i in sol else "---:" for i in range(len(bas))) + "|"]
     out += ["| " + " | ".join(s) + " |" for s in satirlar]
-    return "\n".join(out)
+    # Kaydırmayı kap taşır: kapsız bir Markdown tablosu geniş ekranda yeniden tablo olur ve sütundan
+    # genişse sayfanın kendisini yana kaydırır (12 sütunlu plan tablosu 760–899 pikselde).
+    return '<div class="sayi-tablo">\n\n' + "\n".join(out) + "\n\n</div>"
 
 
 KIS_SAATI = {"Londra": "İngiltere", "New York": "ABD", "Frankfurt": "Avrupa"}
