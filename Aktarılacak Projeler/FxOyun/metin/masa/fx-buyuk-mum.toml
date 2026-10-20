@@ -1,0 +1,303 @@
+# 6. ders — masa katmanı
+
+# ───────────────────────────────────────────── şemalar
+
+[[sema]]
+id = "tanima"
+baslik = "Ekranda büyük mum: hangisi olay, hangisi değil"
+mumlar = [[50,50.8,49.6,50.4],[50.4,51,50,50.7],[50.7,51.2,50.2,50.4],[50.4,50.9,49.9,50.6],[50.6,51.1,50.3,50.9],
+          [50.9,53.4,48.6,51.1],[51.1,51.6,50.6,51.3],[51.3,51.8,50.9,51.2],[51.2,51.7,50.8,51.5],
+          [51.5,56.2,51.3,55.9],[55.9,56.4,55,55.4],[55.4,55.6,51.6,52]]
+vurgu = [9]
+soluk = [5, 11]
+eksen = "zaman →"
+not = ["Olay: aralığı kendisinden önceki mumun ATR'sinin en az iki katı, gövdesi belirgin. Mum kapandığı anda büyük olduğu bilinir; sonrasına bakılmaz.",
+       "Aralığı büyük ama gövdesi aralığının beşte birinden küçük: kararsız mum. Yönü yok, yön okumasına girmez.",
+       "Olaydan sonraki üç mum içinde gelen ikinci büyük mum yeni bir olay değil, kümenin devamı: aynı hareketin bir parçası."]
+[[sema.isaret]]
+i = 9
+y = 57
+n = 1
+[[sema.isaret]]
+i = 5
+y = 54.2
+n = 2
+[[sema.isaret]]
+i = 11
+y = 50.8
+n = 3
+
+[[sema]]
+id = "yari-geometri"
+baslik = "Yarıya dönüş: kısa bir mesafe, yönsüz bir yol da geçer"
+mumlar = [[50,50.8,49.6,50.3],[50.3,51,50,50.8],[50.8,51.2,50.3,50.5],[50.5,51,50.1,50.9],
+          [50.9,60.4,50.6,60],[60,60.5,58.6,59],[59,59.4,57.4,57.8],[57.8,58.2,55.2,55.8],
+          [55.8,57,55.4,56.6],[56.6,57.3,56,56.9]]
+vurgu = [4]
+soluk = [6, 7, 8, 9]
+eksen = "zaman →"
+not = ["Ucuna yakın kapanan büyük mum: kapanış aralığın en üst çeyreğinde.",
+       "Mumun yarısı: kapanıştan, mumun boyunun yarısından biraz az uzakta. Soluk mumlar doğrudan inen bir yolu gösterir; fiyat oraya birkaç mumda varır.",
+       "Kesikli yol önce mumun yönünde bir parça daha gider, sonra o da yarıya uğrar. Yönü olmayan bir yol da yarıyı sık geçer; bu yüzden yarıya dönüşün sıklığı tek başına bir şey söylemez, gerçek yol ile aynası arasındaki fark yalnız birkaç puan."]
+[[sema.cizgi]]
+y = 55.5
+i0 = 4
+etiket = "mumun yarısı"
+tur = "seviye"
+[[sema.cizgi]]
+y = 60
+i0 = 4
+etiket = "kapanış"
+tur = "uc"
+[[sema.yol]]
+noktalar = [[5, 59], [6, 61.4], [7, 60.2], [8, 57.2], [9, 54.8]]
+tur = "ters"
+[[sema.isaret]]
+i = 4
+y = 61.3
+n = 1
+[[sema.isaret]]
+i = 2
+y = 55.5
+n = 2
+[[sema.isaret]]
+i = 6
+y = 62.4
+n = 3
+
+[[sema]]
+id = "kovalama"
+baslik = "Ucunda kapanan 5 dakikalık büyük mum: kovalama değil, yarıyı bekle"
+mumlar = [[50,51,49,50.5],[50.5,51.5,49.8,51],[51,51.6,50.2,50.6],[50.6,51.2,49.9,51],[51,52,50.6,51.6],
+          [51.6,64,51.2,63.4],[63.4,64.2,60.5,61],[61,61.8,57.2,58],[58,60.4,57.6,60]]
+vurgu = [5]
+eksen = "zaman →"
+not = ["Ucunda kapanan büyük mum: aralığı önceki ortalama aralığın en az iki katı, kapanış en uca yakın çeyrekte.",
+       "Mumun yarısı: fiyat buraya çoğu zaman döner, ama yön bilgisi olmayan bir yolda da neredeyse aynı sıklıkta dönerdi.",
+       "Kovalama bölgesi: kapanışın hemen ötesi. Mumun yönünde piyasa emri tam burada, maliyetin en büyük olduğu yerde girer."]
+[[sema.cizgi]]
+y = 57.6
+i0 = 5
+etiket = "mumun yarısı"
+tur = "seviye"
+[[sema.cizgi]]
+y = 50.6
+i0 = 5
+etiket = "öbür uç: stop"
+tur = "stop"
+[[sema.bolge]]
+y1 = 62
+y2 = 64.5
+i0 = 6
+etiket = "kovalama bölgesi"
+tur = "yasak"
+[[sema.isaret]]
+i = 5
+y = 65.6
+n = 1
+[[sema.isaret]]
+i = 7
+y = 55.8
+n = 2
+[[sema.isaret]]
+i = 8
+y = 63.2
+n = 3
+
+[[sema]]
+id = "bir-saat"
+baslik = "1 saatlik büyük mum: tersine girilmeyen bölge"
+mumlar = [[50,50.9,49.5,50.6],[50.6,51.3,50.2,51],[51,51.4,50.4,50.7],[50.7,51.5,50.5,51.2],[51.2,51.8,50.9,51.5],
+          [51.5,57.8,51.3,57.4],[57.4,58.3,56.2,56.6],[56.6,57.2,55.6,56.9],[56.9,58.4,56.5,58.1],
+          [58.1,59.1,57.6,58.8]]
+vurgu = [5]
+eksen = "zaman → (bir mum, bir saat)"
+not = ["Ucuna yakın kapanan 1 saatlik büyük mum, takvimde haber yok.",
+       "Mumun yarısı: 1 saatte fiyat buraya aynadan ne daha sık ne daha seyrek döner. Bekleme noktası değil, yalnız bir işaret.",
+       "Sonraki saatler: ortalama yol bir gün boyunca mumun yönünde küçük bir parça daha. Mumun ucundaki tersine giriş bu yolun karşısında durur."]
+[[sema.cizgi]]
+y = 54.55
+i0 = 5
+etiket = "mumun yarısı"
+tur = "seviye"
+[[sema.bolge]]
+y1 = 57.4
+y2 = 59.6
+i0 = 6
+etiket = "tersine giriş yok"
+tur = "yasak"
+[[sema.isaret]]
+i = 5
+y = 58.7
+n = 1
+[[sema.isaret]]
+i = 7
+y = 53.8
+n = 2
+[[sema.isaret]]
+i = 9
+y = 60.4
+n = 3
+
+[[sema]]
+id = "bekleme"
+baslik = "Yarıyı beklemek: limit, altı mumluk pencere, iptal"
+mumlar = [[50,50.7,49.7,50.4],[50.4,51,50.1,50.8],[50.8,51.2,50.4,50.6],[50.6,51.3,50.4,51],
+          [51,58.8,50.8,58.4],[58.4,58.9,56.6,57],[57,57.5,55.4,55.9],[55.9,56.6,54.6,56.2],
+          [56.2,57.1,55.8,56.8],[56.8,57.4,56.1,57.1],[57.1,57.9,56.7,57.6],[57.6,58.3,57.2,58]]
+vurgu = [4]
+eksen = "zaman →"
+not = ["Büyük mum kapandı: limit mumun yarısında, stop mumun öbür ucunun ötesinde.",
+       "Fiyat yarıya dokundu, limit doldu. Dolum, fiyatın mumun hareketini geri aldığı anda olur; bu bir iyi haber değil.",
+       "Altı mumluk pencere bitti: dolmamış bir limit burada çekilir ve masadan kalkılır."]
+[[sema.cizgi]]
+y = 54.8
+i0 = 4
+etiket = "limit: yarı"
+tur = "limit"
+[[sema.cizgi]]
+y = 50.3
+i0 = 4
+etiket = "stop: öbür uç"
+tur = "stop"
+[[sema.bolge]]
+y1 = 55.2
+y2 = 59
+i0 = 5
+i1 = 10
+etiket = "altı mum bekle"
+tur = "bekle"
+[[sema.isaret]]
+i = 4
+y = 59.8
+n = 1
+[[sema.isaret]]
+i = 7
+y = 53.8
+n = 2
+[[sema.isaret]]
+i = 11
+y = 59.2
+n = 3
+
+
+# ───────────────────────────────────────────── karar şeması
+
+[[karar]]
+id = "akis"
+baslik = "Büyük mum kapandı: masada sırayla beş soru"
+son = "15 dakika kalır: zayıf bir geri verme, 24 mumda yön yok. Hiçbir dilimde okuma maliyetten sonra bir işlem değil."
+[[karar.adim]]
+soru = "Mum takvimdeki büyük bir haberin mumu mu?"
+cikis = "evet"
+sonuc = "Okuma yok: masadan kalk"
+tur = "kalk"
+dayanak = "7. ders, Fade mi, devam mı: okuma tablosu"
+[[karar.adim]]
+soru = "Mum devirde, hafta açılışında ya da bir kümenin devamı mı?"
+cikis = "evet"
+sonuc = "Bu dersin olayı değil: okuma yok"
+tur = "kalk"
+dayanak = "6. ders, Büyük mum nasıl tanımlandı"
+[[karar.adim]]
+soru = "Gövde aralığın beşte birinden küçük mü (kararsız mum)?"
+cikis = "evet"
+sonuc = "Yön yok: yön okuması yapılmaz"
+tur = "kalk"
+dayanak = "6. ders, Büyük mum nasıl tanımlandı"
+[[karar.adim]]
+soru = "Dilim 5 dakika mı?"
+cikis = "evet"
+sonuc = "Kovalama; girmen gerekiyorsa yarıyı bekle"
+tur = "bekle"
+dayanak = "6. ders, Dilim dilim okuma"
+[[karar.adim]]
+soru = "Dilim 1 saat mi?"
+cikis = "evet"
+sonuc = "Mumun tersine girme"
+tur = "yapma"
+dayanak = "6. ders, Dilim dilim okuma"
+
+
+# ───────────────────────────────────────────── senaryo kartları
+
+[[kart]]
+id = "yari-dokunus"
+durum = "Herhangi bir dilimde, büyük mumdan sonra fiyat mumun yarısına geri geldi"
+gorursun = "Büyük mumdan sonraki bir iki mumda fiyat mumun ortasına iniyor (aşağı mumda çıkıyor). Grafik 'dönüş başladı' der."
+yaparsin = "Dokunuşu bir olgu olarak not edersin, bir işaret olarak değil: yönü olmayan bir yol da yarıya neredeyse aynı sıklıkta uğrardı. Asıl soru fiyatın yarıya dönüp dönmediği değil, aynadan ne kadar sık döndüğüdür ve o fark birkaç puan."
+yapmazsin = "Yarıya dokunuşu tersine bir işlemin onayı saymazsın; 'okuma tuttu' diye kaydetmezsin. Fiyatın yarıdan yeniden uca gitmesini de devamın onayı saymazsın: o da şansla beklenen kadar sık."
+emir = "Başka bir gerekçeyle mumun tersine gireceksen girişi yarıya göre değil kendi gerekçenin seviyesine göre kurarsın; stop büyük mumun ucunun ötesinde. Yarının kırılmasına stop emriyle tersine girmenin maliyetten önceki sonucu da sıfırın yakınında: kırılma kendi başına bir gerekçe değil."
+dayanak = "6. ders, Ayna: şansın vereceği pay; 6. ders, Yarısına dönen fiyat ne kadar sürede dönüyor; 8. ders, 5 dakika"
+
+[[kart]]
+id = "bes-dk-uc"
+durum = "5 dakikalık grafikte, Londra ya da Asya seansında, ucunda kapanan bir büyük mum"
+gorursun = "Gövdesi uzun, kapanışı mumun en uç çeyreğinde bir mum; önceki on mumun hiçbiri onun yarısı kadar değil."
+yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; sonraki bir iki mumda fiyatın yarıya dönüp dönmediğine bakarsın. Mum Asya seansındaysa bu dilimdeki geri vermenin en belirgin olduğu yerde olduğunu bilirsin; Londra'da aynı eğilim yarı yarıya küçük."
+yapmazsin = "Kapanışta mumun yönünde piyasa emriyle kovalamazsın; mumun tersine de yalnız uzadı diye girmezsin: geri vermenin büyüklüğü makastan küçük."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit mumun yarısına, stop mumun öbür ucunun ötesine; limit altı mum içinde dolmadıysa çekersin. Limit dolduysa mumun yönündeki okumanın zayıfladığını bilirsin."
+dayanak = "6. ders, Dilim dilim okuma; 7. ders, 5 dakika; 8. ders, Limit neden ucuz görünür: ters seçim"
+
+[[kart]]
+id = "bir-saat-uc"
+durum = "1 saatlik grafikte, takvimde haber yokken ucuna yakın kapanan bir büyük mum"
+gorursun = "Bir saatlik mum önceki saatlerin birkaç katı, kapanış mumun en uç çeyreğinde. Grafik 'fazla gitti, geri gelir' der."
+yaparsin = "Mumun yönünü günün bağlamı olarak not edersin: ortalama yol bir gün boyunca mumun yönünde küçük bir parça daha. Mumun yarısını işaretlersin ama ona dönüşü beklemezsin: 1 saatte yarıya dönüş aynadan sık değil."
+yapmazsin = "Mumun tersine girmezsin: 1 saatte tersine giriş biçimlerinin hepsi maliyetten önce de eksi. Mumun yönünde de 'devam ediyor' diye işlemi büyütmezsin: devamın büyüklüğü stoplu ve hedefli bir işlemde maliyeti karşılamıyor."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen en az kaybeden iki biçim onay mumundan sonra piyasa ve mumun çeyrek geri çekilmesine limit; stop girişten iki ATR uzakta, hedef riskin bir katı. Kapanışı yarısının gerisinde kalan fitilli mumda mumun yönü korunmuyor; o mumda bu emri koymazsın."
+dayanak = "6. ders, Dilim dilim okuma; 7. ders, 1 saat; 8. ders, 15 dakika ve 1 saat"
+
+[[kart]]
+id = "yari-bekleme"
+durum = "5 ya da 15 dakikalık grafikte, büyük mumun yarısında bekleyen bir limit emri"
+gorursun = "Limit mumun ortasında. Fiyat ya bir iki mum içinde gelir ya da gelmeden uzaklaşır."
+yaparsin = "Emri altı mumluk bir pencereyle sınırlarsın: yarıya dönenlerin yarısı ilk bir iki mum içinde döner, sonra gelen dönüş seyrekleşir. Pencere biterse emri çekersin. Limitin dolduğu anı, fiyatın mumun hareketini geri aldığı an olarak okursun."
+yapmazsin = "Dolmayan limiti fiyatın peşinden kaydırmazsın: o, kovalamanın yavaş hâlidir. Dolan limiti 'iyi fiyat aldım, okuma doğru' diye büyütmezsin: limitin dolduğu olaylarda aynı anda piyasadan girilen işlem çoğunlukla kaybederdi."
+emir = "Limit yarıda, stop büyük mumun öbür ucunun ötesinde. Stopu yarının hemen arkasına çekmezsin: yakın stop aynı makası daha büyük bir R yapar. Hedef riskin bir katı; pencere içinde dolmayan emir iptal."
+dayanak = "6. ders, Yarısına dönen fiyat ne kadar sürede dönüyor; 8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet"
+
+[[kart]]
+id = "cok-buyuk"
+durum = "Herhangi bir dilimde, aralığı önceki ATR'nin beş katını aşan bir mum"
+gorursun = "Ekranın büyük kısmını kaplayan tek bir mum. Grafik 'aşırı, döner' ya da 'çok güçlü, sürer' der."
+yaparsin = "Önce takvime bakarsın: mum büyük bir haberin mumuysa okuma yok. Değilse mumu iki ATR'lik bir büyük mumla aynı okursun: kovalar büyüdükçe iki dönemde aynı yöne bakan bir büyüklük etkisi yok."
+yapmazsin = "'Aşırı' diye tersine girmezsin; 'çok güçlü' diye kovalamazsın. Beş ATR'lik mum ne daha güvenilir bir dönüş ne daha güvenilir bir devam işareti; o kovada olay az ve sayılar oynak."
+emir = "Başka bir gerekçeyle gireceksen stopu mumun öbür ucuna koymak riski birkaç ATR yapar ve pozisyonu o riske göre küçültürsün (pozisyon büyüklüğü bu derste ölçülmedi). Stopu yaklaştırmak için mumun içine koyarsan aynı makas daha büyük bir R olur."
+dayanak = "6. ders, Büyüklük değişince; 7. ders, Fade mi, devam mı: okuma tablosu; 8. ders, Stop uzaklığı ve maliyet"
+
+[[kart]]
+id = "makas-devir"
+durum = "Büyük mum FX gününün devrinde, haftanın açılışında ya da takvimdeki büyük bir haberin dakikasında"
+gorursun = "New York 17:00 civarında fitili uzun, gövdesi küçük bir mum; hafta açılışından sonraki seyrek kotasyonlu bir sıçrama; ya da haberin saatinde tek mumluk bir patlama."
+yaparsin = "Saatine bakarsın. Devir penceresinde (New York 16:50–17:10; TSİ ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10) ve hafta açılışından sonraki ilk saatte aralık kotasyonun hareketidir; bu dersin olayı sayılmaz. Haber dakikasındaysa okuma yok."
+yapmazsin = "Bu mumların hiçbirini bu dersin okumasıyla okumazsın; devir mumunun ucuna ya da yarısına emir koymazsın."
+emir = "Başka bir gerekçeyle bu pencerelerde emir vereceksen makasın ve kaymanın büyüdüğünü hesaba katarsın: haberin iki dakika öncesinden on beş dakika sonrasına kadar kayma varsayımı artırılarak ölçüldü. Sıradan bir büyük mumun kapanışında ise makas açılmıyor; orada maliyeti makas değil hareketin küçüklüğü belirler."
+dayanak = "6. ders, Büyük mum nasıl tanımlandı; 6. ders, Makas büyük mumda açılıyor mu; 7. ders, Fade mi, devam mı: okuma tablosu; 8. ders, girişteki maliyet varsayımı"
+
+
+# ───────────────────────────────────────────── gerçek örnekler
+
+[[ornek]]
+id = "uc-kapanis"
+kaynak = "buyuk"
+tf = 5
+cift = "EURUSD"
+kosul = { kapanis = "uc", haber = "haber_yok", seans = "londra" }
+tipik = { "geri_0.5" = true, net_24_max = -0.5 }
+ters = { "geri_0.5" = false, net_24_min = 1.0 }
+baslik = "Ucunda kapanan 5 dakikalık büyük mum: iki gün, iki son"
+tipik_ad = "Yarısına döndü"
+ters_ad = "Hiç geri vermedi"
+
+[[ornek]]
+id = "saat-uc"
+kaynak = "buyuk"
+tf = 60
+cift = "GBPUSD"
+kosul = { kapanis = "uc", haber = "haber_yok" }
+tipik = { "geri_0.5" = false, net_24_min = 1.0 }
+ters = { "geri_1.0" = true, net_24_max = -1.0 }
+baslik = "Ucunda kapanan 1 saatlik büyük mum: iki gün, iki son"
+tipik_ad = "Yarıya dönmeden sürdü"
+ters_ad = "Öbür ucuna kadar döndü"

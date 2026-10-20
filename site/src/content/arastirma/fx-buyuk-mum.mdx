@@ -11,6 +11,7 @@ onkosul: ['fx-oyun-okuma']
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
+import Diyagram from '../../components/Diyagram.astro';
 
 Grafikte bir mum öbürlerinden belirgin uzun çıktığında iki refleks yarışır. Biri "momentum geldi, mumun yönüne bin"
 der; öbürü "fazla gitti, geri gelecek, tersine gir" der. Bu ders ve sonraki üçü o iki refleksi ölçer. Önce büyük mumdan
@@ -240,6 +241,106 @@ tersine girmek (fade) daha haklı, hangisinde mumun yönü.
 Seride üç sözcük tek anlamda kullanılır. **Geri çekilme**, fiyatın mumun ucundan mumun boyunun belli bir oranı kadar
 geri gelmesidir (bir ölçü). **Geri verme**, ortalama yolun mumun tersine olmasıdır (bir eğilim). **Fade**, mumun tersine
 işleme girmektir (bir karar).
+
+## Masada (deneme)
+
+<Diyagram no="M1" baslik="Ucunda kapanan büyük mum: kovalama değil, yarıyı bekle" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 250" class="mum-sema" role="img" aria-label="Ucunda kapanan büyük mum: kovalama değil, yarıyı bekle">
+<defs><marker id="ok-kovalama" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<rect x="160.7" y="25.5" width="75.3" height="30.8" class="ms-bolge ms-yasak" />
+<text x="244" y="44.9" class="ms-etiket ms-yasak-yazi">kovalama bölgesi</text>
+<line x1="135.6" x2="236.0" y1="110.5" y2="110.5" class="ms-cizgi ms-seviye" />
+<text x="244" y="114.5" class="ms-etiket ms-seviye-yazi">mumun yarısı</text>
+<line x1="22.6" x2="22.6" y1="191.9" y2="216.5" class="ms-fitil ms-artis" />
+<rect x="14.8" y="198.0" width="15.6" height="6.2" class="ms-govde ms-artis" />
+<line x1="47.7" x2="47.7" y1="185.7" y2="206.7" class="ms-fitil ms-artis" />
+<rect x="39.9" y="191.9" width="15.6" height="6.2" class="ms-govde ms-artis" />
+<line x1="72.8" x2="72.8" y1="184.5" y2="201.7" class="ms-fitil ms-azalis" />
+<rect x="65.0" y="191.9" width="15.6" height="4.9" class="ms-govde ms-azalis" />
+<line x1="97.9" x2="97.9" y1="189.4" y2="205.4" class="ms-fitil ms-artis" />
+<rect x="90.1" y="191.9" width="15.6" height="4.9" class="ms-govde ms-artis" />
+<line x1="123.0" x2="123.0" y1="179.6" y2="196.8" class="ms-fitil ms-artis" />
+<rect x="115.2" y="184.5" width="15.6" height="7.4" class="ms-govde ms-artis" />
+<line x1="148.1" x2="148.1" y1="31.6" y2="189.4" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="140.3" y="39.0" width="15.6" height="145.5" class="ms-govde ms-artis ms-vurgu" />
+<line x1="173.2" x2="173.2" y1="29.2" y2="74.8" class="ms-fitil ms-azalis" />
+<rect x="165.4" y="39.0" width="15.6" height="29.6" class="ms-govde ms-azalis" />
+<line x1="198.3" x2="198.3" y1="58.7" y2="115.5" class="ms-fitil ms-azalis" />
+<rect x="190.5" y="68.6" width="15.6" height="37.0" class="ms-govde ms-azalis" />
+<line x1="223.4" x2="223.4" y1="76.0" y2="110.5" class="ms-fitil ms-artis" />
+<rect x="215.7" y="80.9" width="15.6" height="24.7" class="ms-govde ms-artis" />
+<circle cx="148.1" cy="11.9" r="8" class="ms-isaret" />
+<text x="148.1" y="15.5" class="ms-isaret-yazi">1</text>
+<circle cx="198.3" cy="132.7" r="8" class="ms-isaret" />
+<text x="198.3" y="136.3" class="ms-isaret-yazi">2</text>
+<text x="10" y="244" class="ms-eksen">zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Ucunda kapanan büyük mum: aralığı önceki ortalama aralığın en az iki katı, kapanış en uca yakın çeyrekte.
+- ② Mumun yarısı: fiyat buraya çoğu zaman döner, ama yön bilgisi olmayan bir yolda da neredeyse aynı sıklıkta dönerdi.
+
+
+<Diyagram no="M2" baslik="Büyük mum kapandı: masada ilk üç soru" kaynak="Karar şeması — dayanak: 6. ders, Ayna; 6. ders, Dilim dilim okuma; 7. ders, Haber mumu" azami={480}>
+<svg viewBox="0 0 360 302" class="karar-sema" role="img" aria-label="Büyük mum kapandı: masada ilk üç soru">
+<defs><marker id="ko-akis" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ks-ok-ucu" /></marker></defs>
+<rect x="4" y="10" width="184" height="48" rx="3" class="ks-soru" />
+<text x="14" y="27" class="ks-yazi">Mum takvimdeki büyük bir</text>
+<text x="14" y="42" class="ks-yazi">haberin mumu mu?</text>
+<line x1="188" x2="220" y1="34.0" y2="34.0" class="ks-ok" marker-end="url(#ko-akis)" />
+<text x="193" y="29.0" class="ks-dal">evet</text>
+<rect x="222" y="10" width="134" height="48" rx="3" class="ks-sonuc ks-kalk" />
+<text x="230" y="26" class="ks-yazi-kucuk">Okuma yok: masadan</text>
+<text x="230" y="40" class="ks-yazi-kucuk">kalk</text>
+<line x1="40" x2="40" y1="58" y2="82" class="ks-ok" marker-end="url(#ko-akis)" />
+<text x="46" y="74" class="ks-dal">hayır</text>
+<rect x="4" y="84" width="184" height="60" rx="3" class="ks-soru" />
+<text x="14" y="101" class="ks-yazi">Dilim 5 dakika ve kapanış</text>
+<text x="14" y="116" class="ks-yazi">mumun ucunda mı?</text>
+<line x1="188" x2="220" y1="114.0" y2="114.0" class="ks-ok" marker-end="url(#ko-akis)" />
+<text x="193" y="109.0" class="ks-dal">evet</text>
+<rect x="222" y="84" width="134" height="60" rx="3" class="ks-sonuc ks-bekle" />
+<text x="230" y="100" class="ks-yazi-kucuk">Kovalama; girmen</text>
+<text x="230" y="114" class="ks-yazi-kucuk">gerekiyorsa yarıyı</text>
+<text x="230" y="128" class="ks-yazi-kucuk">bekle</text>
+<line x1="40" x2="40" y1="144" y2="168" class="ks-ok" marker-end="url(#ko-akis)" />
+<text x="46" y="160" class="ks-dal">hayır</text>
+<rect x="4" y="170" width="184" height="33" rx="3" class="ks-soru" />
+<text x="14" y="187" class="ks-yazi">Dilim 1 saat mi?</text>
+<line x1="188" x2="220" y1="186.5" y2="186.5" class="ks-ok" marker-end="url(#ko-akis)" />
+<text x="193" y="181.5" class="ks-dal">evet</text>
+<rect x="222" y="170" width="134" height="33" rx="3" class="ks-sonuc ks-yapma" />
+<text x="230" y="186" class="ks-yazi-kucuk">Mumun tersine girme</text>
+<line x1="40" x2="40" y1="203" y2="227" class="ks-ok" marker-end="url(#ko-akis)" />
+<text x="46" y="219" class="ks-dal">hayır</text>
+<rect x="4" y="229" width="352" height="63" rx="3" class="ks-son" />
+<text x="14" y="246" class="ks-yazi">Kalan durumda okuma şudur: 5 dakikada hafif</text>
+<text x="14" y="261" class="ks-yazi">geri verme, 1 saatte hafif devam. İkisi de</text>
+<text x="14" y="276" class="ks-yazi">maliyetten sonra işlem değil.</text>
+</svg>
+</Diyagram>
+
+
+<div class="senaryo" id="kart-bes-dk-uc">
+<p class="senaryo-durum"><span class="etiket">Durum</span> 5 dakikalık grafikte, Londra seansında, ucunda kapanan bir büyük mum</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Gövdesi uzun, kapanışı mumun en uç çeyreğinde bir mum; önceki on mumun hiçbiri onun yarısı kadar değil.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Mumun yarısını ve iki ucunu işaretlersin; sonraki mumlarda fiyatın yarıya dönüp dönmediğine bakarsın.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Kapanışta mumun yönünde piyasa emriyle kovalamazsın; mumun tersine de yalnız uzadı diye girmezsin.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Başka bir gerekçeyle mumun yönünde gireceksen limit mumun yarısına, stop mumun öbür ucunun ötesine; limit dolduysa mumun yönündeki okumanın zayıfladığını bilirsin.</dd>
+<dt>Dayanak</dt>
+<dd>6. ders, Ayna; 8. ders, Limit neden ucuz görünür</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+<GrafikEmbed src="/arastirma/fx-buyuk-mum/m_uc-kapanis.html" baslik="Ucunda kapanan 5 dakikalık büyük mum: iki gün, iki son" no="M3" kaynak="Dukascopy" />
+
 
 ## Ölçülmeyenler
 

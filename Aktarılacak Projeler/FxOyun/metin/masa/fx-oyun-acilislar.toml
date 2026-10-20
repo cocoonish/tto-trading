@@ -1,0 +1,308 @@
+# 2. ders (Açılışlar) — masa katmanı
+
+# ─────────────────────────────────────────────── karar şeması
+[[karar]]
+id = "acilis-akis"
+baslik = "Açılış mumu kapanırken: masada sırayla beş soru"
+son = "Kalan normal mumda fiyat birkaç dakikada yarıya döner; bu şeklin sonucudur. Uçları işaretle, işlem açmadan izle."
+[[karar.adim]]
+soru = "New York açılışı ve bugün bir ABD verisi günü mü?"
+cikis = "evet"
+sonuc = "Önce veri anını oku; o gün ayrı ölçülmedi"
+tur = "bekle"
+dayanak = "4. ders, ABD verileri"
+[[karar.adim]]
+soru = "İlk 15 dakikalık mum henüz kapanmadı mı?"
+cikis = "evet"
+sonuc = "Bekle: aralık daha çizilmedi"
+tur = "bekle"
+dayanak = "1. ders, İlk mumun dört sınıfı"
+[[karar.adim]]
+soru = "Mum güçlü mü: uzun ve ucuna yakın kapanmış mı?"
+cikis = "evet"
+sonuc = "Kovalama; iki ucu ve yarıyı işaretle"
+tur = "yapma"
+dayanak = "2. ders, Güçlü ilk mum"
+[[karar.adim]]
+soru = "Mum reddedilen mi: küçük gövde, tek yanda uzun fitil?"
+cikis = "evet"
+sonuc = "Fitile yön yükleme; uçları işaretle"
+tur = "yapma"
+dayanak = "2. ders, Normal ve reddedilen ilk mum"
+[[karar.adim]]
+soru = "Mum küçük mü ve uçlardan biri kırıldı mı?"
+cikis = "evet"
+sonuc = "Kırılımı sinyal sayma; masadan kalk"
+tur = "kalk"
+dayanak = "2. ders, Küçük ilk mum"
+
+# ─────────────────────────────────────────────── şemalar
+[[sema]]
+id = "guclu-kovalama"
+baslik = "Güçlü açılış mumu: uçları işaretle, kapanışı kovalama"
+mumlar = [[50,50.6,49.6,50.2],[50.2,50.8,49.9,50.5],[50.5,50.9,50.0,50.3],[50.3,50.7,49.8,50.1],
+          [50.1,50.6,49.7,50.4],[50.4,50.8,50.1,50.6],[50.6,58,50.2,57.4],[57.4,58.6,56.2,56.8],
+          [56.8,57.2,54.6,55.2],[55.2,56.4,53.8,56.0]]
+vurgu = [6]
+yukseklik = 260
+eksen = "zaman →  ·  her mum 15 dakika"
+not = ["Güçlü ilk mum: tipik boyundan belirgin uzun, ucuna yakın kapanmış. Yönü bir işlem gerekçesi değildir.",
+       "Mumun yarısı: güçlü mum çoğu gün buraya döner, biraz zaman alarak; yön rastgele olsaydı da aynı sıklıkta.",
+       "Kovalama bölgesi: mumun yönünde buradan girmek maliyetten sonra eksi kaldı."]
+[[sema.cizgi]]
+y = 58
+i0 = 6
+tur = "uc"
+[[sema.cizgi]]
+y = 50.2
+i0 = 6
+etiket = "alt uç"
+tur = "uc"
+[[sema.cizgi]]
+y = 54.1
+i0 = 6
+etiket = "mumun yarısı"
+tur = "seviye"
+[[sema.bolge]]
+y1 = 57.0
+y2 = 59.6
+i0 = 7
+etiket = "kovalama bölgesi"
+tur = "yasak"
+[[sema.isaret]]
+i = 6
+y = 59.3
+n = 1
+[[sema.isaret]]
+i = 7
+y = 54.1
+n = 2
+[[sema.isaret]]
+i = 8
+y = 58.3
+n = 3
+
+[[sema]]
+id = "normal-yari"
+baslik = "Normal açılış mumu: yarı, kapanışın hemen yanında"
+mumlar = [[50,50.5,49.6,50.1],[50.1,50.6,49.7,50.4],[50.4,50.7,49.9,50.0],[50.0,50.5,49.6,50.3],
+          [50.3,50.6,49.9,50.2],[50.2,53.6,49.4,51.9],[51.9,52.4,51.2,51.4],[51.4,52.2,50.8,51.9],
+          [51.9,52.6,51.3,52.0],[52.0,52.5,51.1,51.6]]
+vurgu = [5]
+yukseklik = 250
+eksen = "zaman →  ·  her mum 15 dakika"
+not = ["Normal ilk mum: sıradan boyda, kapanışı ortaya yakın. Açılışların çoğu böyledir.",
+       "Fiyat birkaç dakikada yarıya dokunur: kapanış zaten yarıya yakındır, aynada da aynı sıklıkta olur.",
+       "Sonra fiyat iki uca eşit sıklıkta gider: dokunuş bir yön söylemez."]
+[[sema.cizgi]]
+y = 53.6
+i0 = 5
+etiket = "üst uç"
+tur = "uc"
+[[sema.cizgi]]
+y = 49.4
+i0 = 5
+etiket = "alt uç"
+tur = "uc"
+[[sema.cizgi]]
+y = 51.5
+i0 = 5
+etiket = "mumun yarısı"
+tur = "seviye"
+[[sema.isaret]]
+i = 5
+y = 54.3
+n = 1
+[[sema.isaret]]
+i = 6
+y = 53.0
+n = 2
+[[sema.isaret]]
+i = 9
+y = 53.1
+n = 3
+
+[[sema]]
+id = "reddedilen-iki-yol"
+baslik = "Reddedilen açılış mumu: fitil bir referanstır, yön değil"
+mumlar = [[50.2,50.7,49.8,50.4],[50.4,50.9,50.0,50.1],[50.1,50.6,49.7,50.3],[50.3,50.8,49.9,50.6],
+          [50.6,50.9,50.1,50.3],[50.3,55.0,49.8,50.9],[50.9,52.6,50.4,51.6],[51.6,52.0,50.9,51.3]]
+vurgu = [5]
+yukseklik = 260
+eksen = "zaman →  ·  her mum 15 dakika"
+not = ["Reddedilen ilk mum: küçük gövde, üstte uzun fitil; reddin yönü aşağı.",
+       "A reddin yönünde devam, B fitilin ucunun kırılması: bu derste hemen hemen aynı sıklıkta.",
+       "Yarıya dönüş sıktır ama aynada da öyle. Fitilin ucu duvar değil, referanstır."]
+[[sema.cizgi]]
+y = 55.0
+i0 = 5
+etiket = "fitilin ucu"
+tur = "uc"
+[[sema.cizgi]]
+y = 49.8
+i0 = 5
+etiket = "alt uç"
+tur = "uc"
+[[sema.cizgi]]
+y = 52.4
+i0 = 5
+etiket = "mumun yarısı"
+tur = "seviye"
+[[sema.yol]]
+noktalar = [[7, 51.3], [7.8, 47.6]]
+etiket = "A"
+tur = "olasi"
+[[sema.yol]]
+noktalar = [[7, 51.3], [7.8, 56.8]]
+etiket = "B"
+tur = "ters"
+[[sema.isaret]]
+i = 5
+y = 55.8
+n = 1
+[[sema.isaret]]
+i = 6
+y = 54.0
+n = 2
+[[sema.isaret]]
+i = 4
+y = 52.4
+n = 3
+
+[[sema]]
+id = "kucuk-kirilim"
+baslik = "Küçük açılış mumu: kırılım emri, yakın stop, geri gelen fiyat"
+mumlar = [[50.0,50.5,49.7,50.3],[50.3,50.6,49.9,50.0],[50.0,50.4,49.6,50.2],[50.2,50.6,49.9,50.1],
+          [50.1,50.4,49.9,50.2],[50.2,50.6,50.1,50.5],[50.5,50.62,50.2,50.3],[50.3,50.4,49.8,49.9],
+          [49.9,50.2,49.7,50.0]]
+vurgu = [4]
+yukseklik = 250
+eksen = "zaman →  ·  her mum 15 dakika"
+not = ["Küçük ilk mum: tipik boyun belirgin altında. Tipik boy önceki mumlardan değil, geçmiş açılışların ilk mumlarından ölçülür.",
+       "Kırılım emri dolar; stop öbür ucun hemen ötesinde, hedef yarım R. Risk birkaç pip, makas onun görünür bir parçası.",
+       "Fiyat geri gelip stopu alır. Kırılım maliyetten önce sıfıra yakın, sonra eksi kaldı."]
+[[sema.cizgi]]
+y = 50.4
+i0 = 4
+etiket = "kırılım emri"
+tur = "uc"
+[[sema.cizgi]]
+y = 49.9
+i0 = 4
+tur = "uc"
+[[sema.cizgi]]
+y = 49.85
+i0 = 4
+etiket = "stop"
+tur = "stop"
+[[sema.cizgi]]
+y = 50.675
+i0 = 4
+etiket = "yarım R hedef"
+tur = "hedef"
+[[sema.isaret]]
+i = 4
+y = 50.75
+n = 1
+[[sema.isaret]]
+i = 5
+y = 50.95
+n = 2
+[[sema.isaret]]
+i = 7
+y = 49.55
+n = 3
+
+[[sema]]
+id = "trend-iki-yol"
+baslik = "Trend yönünde güçlü açılış mumu: iki yol, trend yokmuş gibi"
+mumlar = [[48.0,48.8,47.7,48.5],[48.5,49.2,48.2,49.0],[49.0,49.6,48.6,49.3],[49.3,50.1,49.0,49.9],
+          [49.9,50.5,49.5,50.2],[50.2,50.9,49.9,50.6],[50.6,54.2,50.4,53.9],[53.9,54.4,53.0,53.4]]
+vurgu = [6]
+yukseklik = 260
+eksen = "zaman →  ·  her mum 15 dakika"
+not = ["Trend yönünde güçlü ilk mum. Önceki mumlar yalnız trendi anımsatır; trend günlük kapanışların yirmi günlük ortalamasından ölçülür.",
+       "A devam, B dönüş. İkisinin sıklığı trend yönünde, trende karşı ve yatayken hemen hemen aynı."]
+[[sema.cizgi]]
+y = 52.3
+i0 = 6
+etiket = "mumun yarısı"
+tur = "seviye"
+[[sema.yol]]
+noktalar = [[7, 53.4], [7.8, 55.8]]
+etiket = "A"
+tur = "olasi"
+[[sema.yol]]
+noktalar = [[7, 53.4], [7.8, 50.0]]
+etiket = "B"
+tur = "ters"
+[[sema.isaret]]
+i = 6
+y = 54.9
+n = 1
+[[sema.isaret]]
+i = 4
+y = 52.3
+n = 2
+
+# ─────────────────────────────────────────────── kartlar
+[[kart]]
+id = "guclu-mum"
+durum = "Londra açılışı (Londra 08:00, TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00): ilk mum güçlü"
+gorursun = "Tipik boyundan belirgin uzun, gövdesi mumu dolduran ve ucuna yakın kapanan bir mum; ekran 'yön belli oldu' der."
+yaparsin = "İki ucu ve yarıyı günün ilk referansları olarak işaretlersin; yarıya dönüşün biraz zaman aldığını bilirsin."
+yapmazsin = "Kapanışta piyasa emriyle kovalamazsın; yarıya gelince 'ucuzladı' diye katılmazsın; uzadı diye tersine girmezsin."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun biraz ötesine; limit dolarsa fiyatın geri geldiği günlerdesin ve sonrası yazı turadır. Bir saatte dolmazsa çekersin."
+dayanak = "2. ders, Güçlü ilk mum; 2. ders, Bu okumaları işleme çevirmek; 8. ders, Limit neden ucuz görünür: ters seçim"
+
+[[kart]]
+id = "reddedilen-mum"
+durum = "New York açılışı (New York 09:30, TSİ ABD yaz saatinde 16:30, kış saatinde 17:30): ilk mum reddedilen"
+gorursun = "Küçük gövde, bir yanda uzun fitil: fiyat bir yöne gitmiş, karşı tarafı bulmuş ve geri itilmiş."
+yaparsin = "Fitilin ucunu, öbür ucu ve yarıyı işaretlersin; fitilin ucunu duvar değil referans sayarsın."
+yapmazsin = "'Orada satıcı var' diye reddin yönüne, fitile yakın diye tersine girmezsin: iki yol hemen hemen eşit sıklıkta."
+emir = "Başka bir gerekçeyle reddin yönünde gireceksen limit yarıya, stop fitilin ucunun ötesine; fitilin ucu kırılırsa okuma biter ve stop seni zaten dışarı alır."
+dayanak = "2. ders, Normal ve reddedilen ilk mum; 1. ders, Şans ne verirdi: yolun aynası"
+
+[[kart]]
+id = "kucuk-mum"
+durum = "Tokyo açılışı (Tokyo 09:00, TSİ 03:00, yaz ve kış aynı): ilk mum küçük"
+gorursun = "Tipik boyundan belirgin kısa, iki ucu birbirine yakın bir mum; sonra uçlardan biri kırılır."
+yaparsin = "İki ucu işaretler, hangisinin önce kırıldığını not edersin; kırılımı bir sinyal saymazsın."
+yapmazsin = "Kırılan uca stop emriyle atlamazsın; 'sıkışma patlar' diye iki uca birden emir bırakmazsın; stopu mumun içine çekmezsin."
+emir = "Başka bir gerekçeyle kırılım yönünde gireceksen stop emri kayma öder, stop öbür ucun hemen ötesinde birkaç pip uzaktadır ve makas bu riskin büyük bir parçasıdır; daha yakın stop maliyeti R cinsinden büyütür."
+dayanak = "2. ders, Küçük ilk mum; 8. ders, Ucun kırılması; 8. ders, Stop uzaklığı ve maliyet"
+
+[[kart]]
+id = "trend-guclu"
+durum = "Günlük trend yukarıyken Londra ya da New York açılışında yukarı yönlü güçlü ilk mum"
+gorursun = "Günlerdir yükselen bir grafikte açılış da yukarı ve güçlü: iki işaret aynı yönü gösteriyor gibi."
+yaparsin = "Trendi okuma bilgisi olarak not eder, uçları ve yarıyı trend yokmuş gibi işaretlersin."
+yapmazsin = "Trend yönünde diye kovalamaz, stopu daraltmaz, hedefi uzatmazsın; trende karşı mumu da 'zayıf' saymazsın."
+emir = "Emir, stop ve hedef trend yokmuş gibi kurulur: trend devam ve dönüş sıklığını değiştirmedi."
+dayanak = "2. ders, Trend bir şey değiştiriyor mu; 1. ders, Trend"
+
+# ─────────────────────────────────────────────── gerçek örnekler
+[[ornek]]
+id = "guclu-londra"
+baslik = "Londra açılışında güçlü ilk mum: iki gün, iki son"
+tipik_ad = "Yarısına döndü"
+ters_ad = "Geri vermeden yürüdü"
+kaynak = "an"
+cift = "EURUSD"
+an = "londra_acilis"
+kosul = { sinif = "guclu" }
+tipik = { orta = true, kapanis = false }
+ters = { orta = false, devam_1R = true }
+
+[[ornek]]
+id = "reddedilen-ny"
+baslik = "New York açılışında reddedilen ilk mum: iki gün, iki son"
+tipik_ad = "Reddin yönünde gitti"
+ters_ad = "Fitilin ucunu kırdı"
+kaynak = "an"
+cift = "GBPUSD"
+an = "ny_acilis"
+kosul = { sinif = "reddedilen" }
+tipik = { devam = true }
+ters = { donus = true }

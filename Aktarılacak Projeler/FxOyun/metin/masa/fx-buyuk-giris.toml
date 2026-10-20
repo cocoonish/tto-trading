@@ -1,0 +1,380 @@
+# 8. ders — masa katmanı: emir yerleşimi (piyasa · limit · stop · onay), stop, hedef, bekleme ve iptal.
+# Şemalar ideal hâllerdir; fiyat birimi soyuttur. Bütün şemalarda büyük mum yukarı yönlüdür ve ATR dört birim
+# varsayılır (büyük mumun boyu üç ATR). Aşağı mumda her şey aynalanır.
+
+# ─────────────────────────────────────────────────────────────── şemalar
+
+[[sema]]
+id = "yonunde-emirler"
+baslik = "Mumun yönünde dört emir: grafikte nerede dururlar"
+mumlar = [[50.2,50.9,49.6,50.6],[50.6,51.1,50,50.3],[50.3,50.8,49.7,50.5],[50.5,51.2,50.1,50.9],[50.9,51.3,50.2,50.4],
+          [50.4,62,50,61.6],[61.6,61.9,58.6,59],[59,59.4,56.8,57.2],[57.2,57.6,55.4,55.9],[55.9,58.4,55.6,58],
+          [58,60.8,57.7,60.4],[60.4,63.2,60.1,62.9]]
+vurgu = [5]
+soluk = [6, 7, 8, 9, 10, 11]
+yukseklik = 320
+eksen = "zaman → · soluk mumlar: olası bir yol"
+not = ["Büyük mum kapanır. Kapanışta piyasa emri sonraki dakikanın açılışında, kapanışa yakın bir fiyattan dolar; girişte makası ve kaymayı öder.",
+       "Çeyrek limit: ucundan mumun boyunun dörtte biri geri. En kolay dolan limittir; fiyatın biraz geri geldiği olayların neredeyse hepsinde dolar.",
+       "Yarı limit: mumun yarısı. Dolduğunda fiyat mumun hareketinin yarısını geri almıştır.",
+       "Derin limit: yarının biraz gerisi, mumun boyunun beşte üçünden biraz fazlası. En seyrek dolan limittir; bu yolda dolmadı.",
+       "Uca stop emri: ucun bir fiyat adımı ötesi. Fiyat yeni bir uç yaparsa dolar; kaymayı öder ve fiyatın zaten yürüdüğü yerden alır."]
+[[sema.cizgi]]
+y = 61.6
+i0 = 5
+etiket = "kapanış: piyasa"
+tur = "seviye"
+[[sema.cizgi]]
+y = 62.6
+i0 = 5
+etiket = "uca stop emri"
+tur = "uc"
+[[sema.cizgi]]
+y = 59
+i0 = 5
+etiket = "çeyrek limit"
+tur = "limit"
+[[sema.cizgi]]
+y = 56
+i0 = 5
+etiket = "yarı limit"
+tur = "limit"
+[[sema.cizgi]]
+y = 54.56
+i0 = 5
+etiket = "derin limit"
+tur = "limit"
+[[sema.isaret]]
+i = 5
+y = 48.8
+n = 1
+[[sema.isaret]]
+i = 6
+y = 59
+n = 2
+[[sema.isaret]]
+i = 8
+y = 56
+n = 3
+[[sema.isaret]]
+i = 10
+y = 54.56
+n = 4
+[[sema.isaret]]
+i = 11
+y = 62.6
+n = 5
+
+
+[[sema]]
+id = "tersine-emirler"
+baslik = "Mumun tersine üç emir: uç, uzama, yarının kırılması"
+mumlar = [[50.2,50.9,49.6,50.6],[50.6,51.1,50,50.3],[50.3,50.8,49.7,50.5],[50.5,51.2,50.1,50.9],[50.9,51.3,50.2,50.4],
+          [50.4,62,50,61.6],[61.6,62.8,61.2,62.5],[62.5,64.4,62.2,63.6],[63.6,63.9,60.2,60.5],[60.5,60.9,57.6,57.9],
+          [57.9,58.2,55.5,55.8],[55.8,56.5,54.6,55]]
+vurgu = [5]
+soluk = [6, 7, 8, 9, 10, 11]
+yukseklik = 300
+eksen = "zaman → · soluk mumlar: olası bir yol"
+not = ["Büyük mum kapanır. Kapanışta tersine piyasa emri, mumun kapanışından mumun tersine girer.",
+       "Uca limit: fiyat mumun ucuna geri gelirse oradan tersine. Fiyatın ucuna geri döndüğü olaylar, geri vermenin olmadığı olaylardır.",
+       "Uzama limiti: ucun yarım ATR ötesi. Uzamaya karşı girilir; emir ancak fiyat mumun ucunu aşarsa dolar.",
+       "Yarıya stop emri: fiyat mumun yarısını kırarsa tersine. Geri verme başlamıştır, ama giriş hareketin yarısı geri alındıktan sonra yapılır."]
+[[sema.cizgi]]
+y = 64
+i0 = 5
+etiket = "uzama limiti"
+tur = "limit"
+[[sema.cizgi]]
+y = 62
+i0 = 5
+etiket = "uca limit"
+tur = "limit"
+[[sema.cizgi]]
+y = 56
+i0 = 5
+etiket = "yarıya stop emri"
+tur = "uc"
+[[sema.isaret]]
+i = 5
+y = 48.8
+n = 1
+[[sema.isaret]]
+i = 6
+y = 62
+n = 2
+[[sema.isaret]]
+i = 7
+y = 64
+n = 3
+[[sema.isaret]]
+i = 10
+y = 56
+n = 4
+
+
+[[sema]]
+id = "ters-secim"
+baslik = "Yarıya alış limiti: dolduğu gün ve kaçtığı gün"
+mumlar = [[50.2,50.9,49.6,50.6],[50.6,51.1,50,50.3],[50.3,50.8,49.7,50.5],[50.5,51.2,50.1,50.4],[50.4,62,50,61.6],
+          [61.6,62,59.4,59.8],[59.8,60.2,57.2,57.6],[57.6,57.9,55.4,55.8],[55.8,56.4,53,53.4],[53.4,54,51,51.4],
+          [51.4,52,49,49.4],[49.4,49.8,47.4,47.8]]
+vurgu = [4]
+soluk = [5, 6, 7, 8, 9, 10, 11]
+yukseklik = 320
+eksen = "zaman → · soluk mumlar: A günü · kesikli ok: B günü"
+not = ["Büyük mum kapanır. Mumun yarısına alış limiti konur; stop limitin 2 ATR altında, hedef 1 R üstünde.",
+       "A günü: fiyat geri verir ve limit yarıda dolar. Dolum, mumun hareketinin yarısının geri alındığı andır.",
+       "A günü sürer: fiyat mumun dibini de geçer ve stop görülür. Limitin dolduğu olaylarda aynı anda piyasadan girilen işlem de çoğunlukla kaybederdi.",
+       "B günü: fiyat geri gelmeden yürür, limit hiç dolmaz. Hedefe giden hareket emirsiz geçer; limitin dolmadığı olaylarda piyasa girişi çoğunlukla kazanırdı."]
+[[sema.cizgi]]
+y = 64
+i0 = 7
+etiket = "hedef 1R"
+tur = "hedef"
+[[sema.cizgi]]
+y = 56
+i0 = 4
+etiket = "yarı limit"
+tur = "limit"
+[[sema.cizgi]]
+y = 48
+i0 = 7
+etiket = "stop 2 ATR"
+tur = "stop"
+[[sema.yol]]
+noktalar = [[4, 61.6], [6, 63.2], [8, 64.6], [10, 66.2]]
+etiket = "B"
+tur = "olasi"
+[[sema.isaret]]
+i = 4
+y = 48.6
+n = 1
+[[sema.isaret]]
+i = 7
+y = 56
+n = 2
+[[sema.isaret]]
+i = 11
+y = 48
+n = 3
+[[sema.isaret]]
+i = 8
+y = 66
+n = 4
+
+
+[[sema]]
+id = "stop-uzaklik"
+baslik = "Aynı makas, iki stop: yakın stop maliyeti büyütür"
+mumlar = [[50.2,50.9,49.6,50.6],[50.6,51.1,50,50.3],[50.3,50.8,49.7,50.5],[50.5,51.2,50.1,50.4],[50.4,62,50,61.6],
+          [61.6,62,58,58.4],[58.4,58.8,55.6,56.2],[56.2,57.4,54.8,57],[57,58.2,56.5,57.8]]
+vurgu = [4]
+yukseklik = 300
+eksen = "zaman →"
+not = ["Giriş: yarıya konan limit dolar. Çıkışta ödenecek makas ve kayma pip cinsinden sabittir; bant onun payını gösterir ve iki stopta da aynı genişliktedir.",
+       "Yakın stop (1 ATR): risk küçük, aynı makas riskin daha büyük bir parçası. 5 dakikada ATR birkaç pip olduğu için olayların önemli bir kısmında risk işlem açılamayacak kadar küçük kalır.",
+       "Uzak stop (2 ATR): pip cinsinden aynı maliyet iki kat büyük bir riske bölünür. Kenar değişmez; yalnız maliyetin R içindeki payı küçülür."]
+[[sema.cizgi]]
+y = 64
+i0 = 6
+etiket = "1R, uzak stop"
+tur = "hedef"
+[[sema.cizgi]]
+y = 60
+i0 = 6
+etiket = "1R, yakın stop"
+tur = "hedef"
+[[sema.cizgi]]
+y = 52
+i0 = 6
+etiket = "stop 1 ATR"
+tur = "stop"
+[[sema.cizgi]]
+y = 48
+i0 = 6
+etiket = "stop 2 ATR"
+tur = "stop"
+[[sema.bolge]]
+y1 = 55.6
+y2 = 56.4
+i0 = 6
+etiket = "giriş ve makas"
+tur = "kalk"
+[[sema.isaret]]
+i = 6
+y = 54.6
+n = 1
+[[sema.isaret]]
+i = 8
+y = 52
+n = 2
+[[sema.isaret]]
+i = 8
+y = 48
+n = 3
+
+
+[[sema]]
+id = "onay"
+baslik = "Onay mumu: bilgi gelir, fiyat da gider"
+mumlar = [[50.2,50.9,49.6,50.6],[50.6,51.1,50,50.3],[50.3,50.8,49.7,50.5],[50.5,51.2,50.1,50.9],[50.9,51.3,50.2,50.4],
+          [50.4,62,50,61.6],[61.6,63.8,61.2,63.4],[63.4,63.8,61.8,62.2],[62.2,62.6,60.8,61.2],[61.2,62.4,60.9,62]]
+vurgu = [5, 6]
+soluk = [7, 8, 9]
+yukseklik = 300
+eksen = "zaman → · soluk mumlar: olası bir yol"
+not = ["Büyük mum kapanır. Kapanışta giren, mumun kapanışından girer; stopu 2 ATR aşağıdadır.",
+       "Onay mumu, büyük mumun kapanışının ötesinde kapanır. Onaylı giriş onun kapanışından, yani daha yukarıdan yapılır; aynı uzaklıktaki stop da o kadar yukarı taşınır.",
+       "Sonraki mumlar onay mumunun kazandırdığını geri verebilir. Onayın taşıdığı bilgi, kaçırılan fiyatın bedelini ancak karşılar."]
+[[sema.cizgi]]
+y = 63.4
+i0 = 6
+etiket = "onay girişi"
+tur = "seviye"
+[[sema.cizgi]]
+y = 61.6
+i0 = 5
+etiket = "kapanış girişi"
+tur = "seviye"
+[[sema.cizgi]]
+y = 55.4
+i0 = 6
+etiket = "onay stopu"
+tur = "stop"
+[[sema.cizgi]]
+y = 53.6
+i0 = 5
+etiket = "kapanış stopu"
+tur = "stop"
+[[sema.isaret]]
+i = 5
+y = 48.8
+n = 1
+[[sema.isaret]]
+i = 6
+y = 64.8
+n = 2
+[[sema.isaret]]
+i = 8
+y = 59.8
+n = 3
+
+# ─────────────────────────────────────────────────────────────── karar şeması
+
+[[karar]]
+id = "emir-akis"
+baslik = "Büyük mumdan sonra emir: masada beş soru"
+son = "Kalan durumda emir bir maliyet seçimidir: limit girişte makas ödemez, ama yalnız fiyat aleyhine yürüdüğünde dolar."
+[[karar.adim]]
+soru = "Takvimde büyük bir haber emrin bekleme süresine düşüyor mu?"
+cikis = "evet"
+sonuc = "Emir yok: haber mumunda okuma yok"
+tur = "kalk"
+dayanak = "9. ders, Büyük mum için oyun planı"
+[[karar.adim]]
+soru = "Girişin tek gerekçesi büyük mumun kendisi mi?"
+cikis = "evet"
+sonuc = "Emir yok: giriş biçimi kenar yaratmaz"
+tur = "kalk"
+dayanak = "8. ders, 5 dakika"
+[[karar.adim]]
+soru = "Dilim 5 dakika ve stop girişten 1 ATR mi?"
+cikis = "evet"
+sonuc = "Stop 2 ATR ya da bir üst dilim"
+tur = "bekle"
+dayanak = "8. ders, Stop uzaklığı ve maliyet"
+[[karar.adim]]
+soru = "Mumun yönünde, kapanışta piyasa emri mi düşünüyorsun?"
+cikis = "evet"
+sonuc = "Kapanışta girilmez: limit yarıya ya da hiç"
+tur = "bekle"
+dayanak = "8. ders, Limit neden ucuz görünür"
+[[karar.adim]]
+soru = "Dilim 1 saat ve mumun tersine mi gireceksin?"
+cikis = "evet"
+sonuc = "Tersine girilmez"
+tur = "yapma"
+dayanak = "8. ders, 15 dakika ve 1 saat"
+
+# ─────────────────────────────────────────────────────────────── kartlar
+
+[[kart]]
+id = "bes-dk-kapanis"
+durum = "5 dakikalık grafikte, takvimde haber olmayan bir saatte, ucunda kapanan büyük mumdan hemen sonra mumun yönünde girmeyi düşünüyorsun."
+gorursun = "Mum kapandı ve fiyat hâlâ ucun yakınında; sonraki mumun açılışı kapanışa yapışık. Ekranda kaçmakta olan bir hareket görürsün."
+yaparsin = "Mumun iki ucunu ve yarısını işaretlersin. Kapanışta piyasa emrinin ödeyeceği makası ve kaymayı, stopun pip cinsinden uzaklığının yanına yazarsın."
+yapmazsin = "Kapanışta piyasa emriyle kovalamazsın: 5 dakikada bu biçim maliyeti girişte de çıkışta da öder ve maliyetten önce de artı değildir. Uca stop emriyle de kovalamazsın; o da kaymayı öder."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen emir limittir: mumun çeyreğine ya da yarısına; stop girişten 2 ATR öteye, hedef 1 R. Bekleme süresi dolmadan fiyat yeni bir uç yaparsa limiti fiyatın peşinden taşımazsın; süre dolunca emri iptal edersin."
+dayanak = "8. ders, 5 dakika; 8. ders, Limit neden ucuz görünür"
+
+[[kart]]
+id = "saat-tersine"
+durum = "1 saatlik grafikte büyük bir mum kapandı ve hareket sana aşırı uzamış görünüyor."
+gorursun = "Mum önceki mumların birkaç katı, kapanış uca yakın; günlük grafikte de mum göze batıyor ve geri dönmesi gerekiyormuş gibi duruyor."
+yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; bir günlük izleme penceresi boyunca fiyatın mumun yönünde kalıp kalmadığına bakarsın."
+yapmazsin = "Mumun tersine girmezsin: 2018–2023'te 1 saatte tersine girişlerin hepsi maliyetten önce de eksiydi; mumun ucuna ya da ucun yarım ATR ötesine konan tersine limit de dahil."
+emir = "Mumun yönünde başka bir gerekçen varsa emir geri çekilmeye limit (çeyrek ya da yarı) ya da onay mumundan sonra piyasa; stop girişten 2 ATR. Hedefi 2 R'ye taşımak 1 saatlik geri çekilme limitlerinde yalnız sıfırdan ayırt edilemeyen bir sonuç verdi; bunu bir kenar saymazsın."
+dayanak = "8. ders, 15 dakika ve 1 saat; 6. ders, Dilim dilim okuma"
+
+[[kart]]
+id = "yariya-limit"
+durum = "Büyük mumdan sonra mumun yönünde, mumun yarısına bir limit koydun ve emir doldu."
+gorursun = "Fiyat mumun hareketinin yarısını geri aldı. Dolum mumu çoğu zaman mumun tersine kapanmış bir mumdur; ekranda ucuz bir fiyat gibi görünür."
+yaparsin = "Dolumu bir onay değil bir uyarı sayarsın: limit, aynı anda piyasadan girilen işlemin çoğunlukla kaybettiği olaylarda dolar. Stopu ve hedefi emri koyarken yazdığın yerde bırakırsın."
+yapmazsin = "Limitin dolmasını iyi haber saymazsın; dolum oranının yüksek olmasını da limitin seçici olduğuna yormazsın. Dolum fiyatı ucuz göründü diye stopu uzaklaştırmazsın."
+emir = "Limit mumun yarısında; stop limitin 2 ATR ötesinde, hedef 1 R. Emir büyük mum kapandıktan sonra sınırlı sayıda mum bekler, dolmazsa iptal edilir ve kovalanmaz. Takvimde büyük bir haber bekleme süresinin içine düşüyorsa emri bekletmezsin: haber mumunda okuma yok."
+dayanak = "8. ders, Limit neden ucuz görünür; 9. ders, Büyük mum için oyun planı"
+
+[[kart]]
+id = "stop-1atr"
+durum = "5 dakikalık grafikte büyük mumdan sonra stopu girişten bir ATR'ye, mumun ucunun hemen ötesine koymayı düşünüyorsun."
+gorursun = "Stop grafikte makul görünür, çünkü mumun ucuna yakındır. Pip olarak ise birkaç piptir ve tek bir makas onun görünür bir parçasıdır."
+yaparsin = "Riski pip olarak yazar, makasla ve kaymayla yan yana koyarsın. Bu derste planlanan risk belirli bir pip sınırının altındaysa işlem hiç açılmadı; aynı sınırı masada da sorarsın."
+yapmazsin = "Stopu yaklaştırarak kaybı küçülttüğünü düşünmezsin: pip olarak küçülen kayıp, R cinsinden büyüyen maliyetle gelir ve kenar değişmez."
+emir = "Başka bir gerekçeyle gireceksen stopu girişten 2 ATR'ye koyarsın ya da aynı fikri bir üst dilimde, 15 dakika ya da 1 saatte kurarsın. Uzak stopla aynı pip kaybını korumak için pozisyonu küçültmek bu derste ölçülmedi."
+dayanak = "8. ders, Stop uzaklığı ve maliyet"
+
+[[kart]]
+id = "onay"
+durum = "Büyük mumdan sonra bir mum daha görmek için onay bekliyorsun."
+gorursun = "Sonraki mum büyük mumun kapanışının ötesinde kapanır ya da kapanmaz. Kapanırsa fiyat bir mum daha yürümüş, giriş fiyatı büyük mumun kapanışından uzaklaşmıştır."
+yaparsin = "Onay gelirse girişin daha ileriden olacağını ve stopun da o kadar taşınacağını hesaba katarsın. Onay gelmezse işlem yoktur ve bunu bir kayıp saymazsın."
+yapmazsin = "Onay mumunu bir kenar saymazsın: 5 dakikada onaylı girişin maliyetten önceki sonucu kapanışta piyasa girişinden belirgin farklı değil. Onay gelmedi diye mumun tersine de girmezsin; tersine onaylı giriş de maliyetten sonra eksi."
+emir = "Onaylı giriş, onay mumunun kapanışında piyasa emridir; stop girişten 2 ATR, hedef 1 R. Onay olaylarda bir kısmında gelir; gelmediği olayda emir yoktur, bekleyen bir emir de bırakılmaz."
+dayanak = "8. ders, Onay mumu"
+
+[[kart]]
+id = "uc-stop"
+durum = "Büyük mumun ucunun ötesine, fiyat yeni bir uç yaparsa girmek için stop emri koymayı düşünüyorsun."
+gorursun = "Fiyat ucun hemen yanında dolaşıyor; uç kırıldığı an hareket hızlanıyormuş gibi görünür."
+yaparsin = "Emrin dolacağı yerin kayma ödeyeceği yer olduğunu bilirsin. Dolum, fiyatın zaten yürüdüğü yerden olur; giriş fiyatını kapanışla değil ucun ötesiyle yazarsın."
+yapmazsin = "Ucun kırılmasını momentumun kanıtı saymazsın: 5 dakikada uca stop emri maliyetten önce sıfır çevresinde, maliyetten sonra eksi. Emir bekleme süresinde dolmadıysa süre bitince fiyatı kovalamazsın."
+emir = "Emir ucun bir fiyat adımı ötesinde; stop girişten 2 ATR, hedef 1 R; büyük mum kapandıktan sonra sınırlı sayıda mum bekler, dolmazsa iptal edilir. Takvimde büyük bir haber bekleme süresinin içindeyse emri açık bırakmazsın: haber mumunda okuma yok."
+dayanak = "8. ders, Ucun kırılması; 9. ders, Büyük mum için oyun planı"
+
+# ─────────────────────────────────────────────────────────────── gerçek örnekler
+
+[[ornek]]
+id = "yariya-limit"
+baslik = "Yarıya konan limit: dolup stop olduğu gün, dolmayıp kaçtığı gün"
+tipik_ad = "Limit doldu, stop görüldü"
+ters_ad = "Limit dolmadı, fiyat kaçtı"
+kaynak = "buyuk"
+cift = "EURUSD"
+tf = 5
+kosul = { kova = "2-3", kapanis = "uc", haber = "haber_yok", seans = "londra" }
+tipik = { "geri_0.5" = true, "geri_0.5_dk_max" = 30, mae_min = 3.5, mfe_max = 0.4 }
+ters = { "geri_0.5" = false, uc_asma = true, net_24_min = 1.0 }
+
+[[ornek]]
+id = "uc-stop"
+baslik = "Ucun kırılması: kırılıp geri döndüğü gün, kırılıp sürdüğü gün"
+tipik_ad = "Uç kırıldı, geri verdi"
+ters_ad = "Uç kırıldı, sürdü"
+kaynak = "buyuk"
+cift = "GBPUSD"
+tf = 15
+kosul = { kova = "2-3", kapanis = "uc", haber = "haber_yok" }
+tipik = { uc_asma = true, "geri_0.5" = true, mfe_max = 1.5, net_24_max = -1.0 }
+ters = { uc_asma = true, "geri_0.25" = false, net_24_min = 1.5 }
