@@ -312,6 +312,7 @@ dayanak = "5. ders, Maliyet nereye gidiyor"
 
 [[kart]]
 id = "yuksek-kazanma"
+hukum = "eksi"
 durum = "Açılışta güçlü ilk mumdan sonra yarıya limit ve yarım R hedefle işlemlerin çoğunu kazanan bir kurulum"
 gorursun = "Sık ve küçük kazançlar, seyrek ama her biri tam bir stop olan kayıplar; grafikte arka arkaya kazanan günler."
 yaparsin = "Kazanma oranının yanına başa baş oranını yazarsın; ikisini maliyetten sonra, aynı işlemlerden hesaplarsın."
@@ -321,6 +322,7 @@ dayanak = "5. ders, Kazanma oranı ve net sonuç; 1. ders, Kazanma oranı ile ne
 
 [[kart]]
 id = "kucuk-stop"
+hukum = "eksi"
 durum = "Sessiz bir açılışta ya da sessiz bir fiksingte küçük ilk mumun bir ucu kırılıyor"
 gorursun = "Dar bir ilk mum; makas ekranda mumun boyuna göre geniş görünür."
 yaparsin = "Makası planlanan riske bölersin; bölüm işlemin R cinsinden maliyetidir. Sonucu orta fiyattan da yazarsın."
@@ -330,6 +332,7 @@ dayanak = "5. ders, Maliyet nereye gidiyor; 8. ders, Stop uzaklığı ve maliyet
 
 [[kart]]
 id = "karar-aday"
+hukum = "az"
 durum = "FOMC kararında (New York 14:00, TSİ 21:00; ABD kış saatinde 22:00) ilk beş dakika güçlü bir mumla kapanıyor"
 gorursun = "Ucuna yakın kapanan büyük bir mum, dört paritede aynı yönde; makas ilk dakikalarda açık."
 yaparsin = "Adayın satırını olay kimliğiyle deftere yazarsın; sayaç karar günü sayar."
@@ -339,6 +342,7 @@ dayanak = "5. ders, İşlem tepkileri; 4. ders, Merkez bankası kararları"
 
 [[kart]]
 id = "fiksing-izle"
+hukum = "eksi"
 durum = "Londra fiksingine (Londra 16:00, TSİ 18:00; İngiltere kış saatinde 19:00) belirgin bir koşu geliyor"
 gorursun = "Fiksinge kadar aynı yöne akan bir fiyat; fiksing dakikasında koşunun ucu."
 yaparsin = "Ucu ve yarıyı işaretler, fiksingden sonraki bir saatte yarıya dönüşe bakarsın; ay sonunda koşu daha da az sürer."

@@ -248,6 +248,7 @@ n = 2
 # ─────────────────────────────────────────────── kartlar
 [[kart]]
 id = "guclu-mum"
+hukum = "eksi"
 durum = "Londra açılışı (Londra 08:00, TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00): ilk mum güçlü"
 gorursun = "Tipik boyundan belirgin uzun, gövdesi mumu dolduran ve ucuna yakın kapanan bir mum; ekran 'yön belli oldu' der."
 yaparsin = "İki ucu ve yarıyı günün ilk referansları olarak işaretlersin; yarıya dönüşün biraz zaman aldığını bilirsin."
@@ -257,6 +258,7 @@ dayanak = "2. ders, Güçlü ilk mum; 2. ders, Bu okumaları işleme çevirmek; 
 
 [[kart]]
 id = "reddedilen-mum"
+hukum = "eksi"
 durum = "New York açılışı (New York 09:30, TSİ ABD yaz saatinde 16:30, kış saatinde 17:30): ilk mum reddedilen"
 gorursun = "Küçük gövde, bir yanda uzun fitil: fiyat bir yöne gitmiş, karşı tarafı bulmuş ve geri itilmiş."
 yaparsin = "Fitilin ucunu, öbür ucu ve yarıyı işaretlersin; fitilin ucunu duvar değil referans sayarsın."
@@ -266,6 +268,7 @@ dayanak = "2. ders, Normal ve reddedilen ilk mum; 1. ders, Şans ne verirdi: yol
 
 [[kart]]
 id = "kucuk-mum"
+hukum = "eksi"
 durum = "Tokyo açılışı (Tokyo 09:00, TSİ 03:00, yaz ve kış aynı): ilk mum küçük"
 gorursun = "Tipik boyundan belirgin kısa, iki ucu birbirine yakın bir mum; sonra uçlardan biri kırılır."
 yaparsin = "İki ucu işaretler, hangisinin önce kırıldığını not edersin; kırılımı bir sinyal saymazsın."
@@ -275,6 +278,7 @@ dayanak = "2. ders, Küçük ilk mum; 8. ders, Ucun kırılması; 8. ders, Stop 
 
 [[kart]]
 id = "trend-guclu"
+hukum = "eksi"
 durum = "Günlük trend yukarıyken Londra ya da New York açılışında yukarı yönlü güçlü ilk mum"
 gorursun = "Günlerdir yükselen bir grafikte açılış da yukarı ve güçlü: iki işaret aynı yönü gösteriyor gibi."
 yaparsin = "Trendi okuma bilgisi olarak not eder, uçları ve yarıyı trend yokmuş gibi işaretlersin."

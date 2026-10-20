@@ -281,6 +281,7 @@ dayanak = "1. ders, İncelenen on an"
 
 [[kart]]
 id = "haber-oncesi"
+hukum = "olculmedi"
 durum = "Açıklamaya on dakika kala, ABD verisinden ya da bir merkez bankası kararından önce, açık bir emirle ya da pozisyonla masadasın"
 gorursun = "Mumlar küçülmüş, aralık birkaç dakikadır dar; takvimde saati belli bir açıklama var ve fiyat onu bekliyor."
 yaparsin = "Defterdeki emirleri gözden geçirirsin; açık pozisyonun stopunun, ilk mumun tipik boyu kadar bir hareketin içinde kalıp kalmadığına bakarsın; açıklamanın saatini TSİ olarak not edersin."
@@ -290,6 +291,7 @@ dayanak = "1. ders, Kazanma oranı ile net sonuç; 1. ders, İlk mumun dört sı
 
 [[kart]]
 id = "veri-normal"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, tarım dışı istihdam ya da TÜFE açıklamasından sonra normal ya da reddedilen ilk mum"
 gorursun = "Boyu tipik boya yakın bir mum; kapanışı ucunda değil, ortasına yakın. Reddedilen mumda bir yönde uzun bir fitil ve küçük bir gövde."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; sonraki iki saatte fiyatın yarıya ve öbür uca gidip gitmediğine bakarsın."
@@ -299,6 +301,7 @@ dayanak = "4. ders, ABD verileri; 5. ders, Referans tepkiler; 8. ders, Limit ned
 
 [[kart]]
 id = "karar-guclu"
+hukum = "az"
 durum = "5 dakikalık grafikte, Fed, ECB ya da BoE kararından sonra güçlü ya da reddedilen ilk mum"
 gorursun = "Güçlüde tipik boyun belirgin üstünde, ucuna yakın kapanan bir mum; reddedilende bir yönde uzun fitil, küçük gövde. Basın toplantısı henüz başlamamış."
 yaparsin = "Mumun yönünü ve iki ucunu işaretlersin; basın toplantısı boyunca fiyatın mumun öbür ucuna gidip gitmediğine bakarsın; sonucu izlenecek bir aday olarak kaydedersin."
@@ -308,6 +311,7 @@ dayanak = "4. ders, Merkez bankası kararları; 5. ders, İşlem tepkileri; 1. d
 
 [[kart]]
 id = "karar-kucuk"
+hukum = "az"
 durum = "5 dakikalık grafikte, Fed, ECB ya da BoE kararından sonra küçük ilk mum (karar metni fiyatı oynatmadı)"
 gorursun = "Tipik boyun çok altında bir mum; fiyat birkaç mumdur karar mumunun aralığında dolaşıyor, basın toplantısı henüz başlamadı."
 yaparsin = "Mumun iki ucunu işaretlersin; basın toplantısının saatini not edersin (Fed TSİ 21:30, ABD kış saatinde 22:30; ECB TSİ 15:45, Avrupa kış saatinde 16:45); hangi ucun önce kırıldığına bakarsın."
@@ -317,6 +321,7 @@ dayanak = "4. ders, Küçük haber mumu; 5. ders, Maliyet nereye gidiyor; 8. der
 
 [[kart]]
 id = "iki-saat"
+hukum = "olculmedi"
 durum = "Açıklamadan iki saat sonra: ilk mumdan sonraki izleme penceresi doldu"
 gorursun = "Fiyat ilk mumun aralığına dönmüş ya da ondan uzaklaşmış; ABD verisinde bu sürenin içinde New York açılışı da geçmiş."
 yaparsin = "Haber okumasını kapatırsın; bundan sonrasına günün öbür anlarının okumasıyla bakarsın."

@@ -28,8 +28,17 @@ from pathlib import Path
 BURASI = Path(__file__).resolve().parent
 MASA = BURASI / "metin" / "masa"
 SEMA_KAYNAK = "Şema — gerçek veri değil"
-KART_NOTU = ("Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. "
-             "Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.")
+# Kartın altındaki not, kartın durumunun ölçümde ne bulduğunu söyler; tek bir sabit not, ölçülmemiş ya da artı
+# ölçülmüş bir durumda "ölçüm artı bulmadı" diye yanlış konuşuyordu. Her kart hükmünü adıyla seçer (zorunlu).
+KART_NOTU = {
+    "eksi": ("Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. "
+             "Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler."),
+    "az": ("Bu bir okuma kuralıdır, kenar değil: bu durumda 2024 sonrasında artı sonuç ölçüldü, ama az sayıda "
+           "olaya dayanıyor ve hüküm \"çalışıyor\" değil. Kural, masadaysan neyi yapmayacağını ve emri nereye "
+           "koyacağını söyler."),
+    "olculmedi": ("Bu bir okuma kuralıdır, kenar değil: bu durum bu seride ölçülmedi; kart, maliyet kurallarından ve "
+                  "tanımlardan türetilmiş bir masa uygulamasıdır, bir bulgu değil."),
+}
 DAIRE = "①②③④⑤⑥⑦⑧⑨"
 DAYANAK = re.compile(r"\b[1-9]\. ders\b")
 OLCULMUS = re.compile(r"\d[.,]\d|%\s?\d|\d\s?%")          # şemada ölçülmüş sayı izi (ondalık, yüzde)
@@ -218,7 +227,7 @@ def kart_blok(slug: str, kimlik: str) -> str:
         if s.get(alan):
             sat.append(f"<dt>{ad}</dt>")
             sat.append(f"<dd>{_e(s[alan])}</dd>")
-    sat += ["</dl>", f'<p class="senaryo-not">{_e(KART_NOTU)}</p>', "</div>"]
+    sat += ["</dl>", f'<p class="senaryo-not">{_e(KART_NOTU[s["hukum"]])}</p>', "</div>"]
     return "\n".join(sat) + "\n"
 
 
@@ -296,6 +305,8 @@ def denetle(slug: str, metin: str) -> list[str]:
         for alan, _ in [("durum", "")] + KART_ALAN:
             if s.get(alan) and OLCULMUS.search(s[alan]):
                 h.append(f"{slug}: kart {s['id']}: elle yazılmış ölçülmüş sayı izi ({alan}: {s[alan]!r})")
+        if s.get("hukum") not in KART_NOTU:
+            h.append(f"{slug}: kart {s['id']}: hukum {s.get('hukum')!r} — {sorted(KART_NOTU)} biri yazılmalı")
         for alan in ("durum", "gorursun", "yaparsin", "yapmazsin", "dayanak"):
             if not s.get(alan):
                 h.append(f"{slug}: kart {s['id']}: {alan} boş")

@@ -237,6 +237,7 @@ n = 3
 # ─────────────────────────────────────────────── kartlar
 [[kart]]
 id = "asya-uc"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, Asya seansında (Londra 07:00'den önce; TSİ İngiltere yaz saatinde 09:00'dan, kış saatinde 10:00'dan önce), ucunda kapanan ve takvimde haberi olmayan bir büyük mum"
 gorursun = "Dar, sakin mumların arasından çıkan uzun gövdeli bir mum; kapanışı aralığının son çeyreğinde, fitili kapanış tarafında kısa."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; seansı ve kapanışın yerini not edersin; sonraki mumlarda fiyatın yarıya doğru gelip gelmediğine bakarsın."
@@ -246,6 +247,7 @@ dayanak = "7. ders, 5 dakika; 8. ders, Limit neden ucuz görünür: ters seçim"
 
 [[kart]]
 id = "kume"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, son iki saat içinde ikinci kez gelen büyük mum (önceki 4–24 mumda başka bir büyük mum var)"
 gorursun = "Bir büyük mum, arada birkaç dar mum, sonra aynı ya da ters yönde ikinci bir büyük mum."
 yaparsin = "İlk mumun saatini ve takvimi kontrol edersin; ikinci mumun yarısını işaretler, fiyatın oraya doğru gelişini izlersin."
@@ -255,6 +257,7 @@ dayanak = "7. ders, 5 dakika; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]
 id = "on-bes"
+hukum = "eksi"
 durum = "15 dakikalık grafikte, Asya dışında bir seansta büyük mum"
 gorursun = "Londra ya da örtüşme seansında uzun gövdeli bir 15 dakikalık mum; kapanış nerede olursa olsun."
 yaparsin = "Mumu işaretler, seansı not edersin. Asya dışındaysa bu dersin süzgeçlerinden bir okuma beklemezsin."
@@ -264,6 +267,7 @@ dayanak = "7. ders, 15 dakika; 8. ders, 15 dakika ve 1 saat"
 
 [[kart]]
 id = "saat-trend"
+hukum = "eksi"
 durum = "1 saatlik grafikte, günlük trendin yönünde (bir önceki günün kapanışı EMA20'nin trend tarafında) büyük mum"
 gorursun = "Birkaç gündür aynı yöne giden bir piyasada uzun gövdeli bir saatlik mum."
 yaparsin = "Trendin yönünü bir önceki günün kapanışından okursun; mumun yarısını işaretlersin; seansı not edersin."
@@ -273,6 +277,7 @@ dayanak = "7. ders, 1 saat; 8. ders, 15 dakika ve 1 saat; 9. ders, Ölçülmeyen
 
 [[kart]]
 id = "haber"
+hukum = "eksi"
 durum = "Herhangi bir dilimde, takvimdeki büyük bir haberin (ABD istihdam ya da TÜFE, Fed, ECB, BoE kararı) saati mumun içine düşen büyük mum"
 gorursun = "Haberden önce dar mumlar, sonra iki yana uzun fitilli, çok geniş bir mum; sonraki mumlar da geniş."
 yaparsin = "Takvimi önceden bilirsin; haber saatinden önce bekleyen emirlerini gözden geçirirsin. Mum kapandığında masadan kalkarsın."

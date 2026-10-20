@@ -234,6 +234,7 @@ n = 3
 # ─────────────────────────────────────────── kartlar
 [[kart]]
 id = "kosu-sonrasi"
+hukum = "eksi"
 durum = "1 saatlik grafikte, önceki 12 mumda mumun yönünde en az iki ATR yürümüş bir piyasada gelen büyük mum"
 gorursun = "Gün içinde zaten uzun bir koşu var; büyük mum koşunun en uzun mumu ve ucuna yakın kapanıyor. Grafik sığ bir geri çekilmeden katılmayı çağırıyor gibi görünür."
 yaparsin = "Bunun seçimin 1 saatte bulduğu en iyi girişin durumu olduğunu ve 2024 sonrasında maliyetten önce de eksi kaldığını hatırlarsın; durumu bir uyarı olarak not edersin."
@@ -243,6 +244,7 @@ dayanak = "9. ders, Seçilen girişler; 7. ders, 1 saat; 8. ders, Limit neden uc
 
 [[kart]]
 id = "bes-dk-kovalama"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, haber saati dışında, ucunda kapanan büyük mum; aklında mumun yönünde bir işlem var"
 gorursun = "Kapanışı mumun uç çeyreğinde uzun bir mum; kapanış anında fiyat ilerlemeyi sürdürüyor ve işlem kaçıyormuş gibi görünüyor."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; mumun yönündeki işlemi kapanıştan değil bir geri çekilmeden kurarsın."
@@ -252,6 +254,7 @@ dayanak = "9. ders, Büyük mum için oyun planı (madde 2); 8. ders, Limit nede
 
 [[kart]]
 id = "bes-dk-tersine"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, haber saati dışında, ucunda kapanan büyük mum; mumun tersine girmeyi düşünüyorsun"
 gorursun = "Mum uzamış görünüyor; sonraki mumda fiyat ucun biraz gerisine çekiliyor, sonra yeniden uca doğru tırmanıyor."
 yaparsin = "Tersine okumanın tek kaynağının hafif geri verme olduğunu bilirsin: kenar kapanışta tersine girene maliyetten önce kalır, maliyetten sonra kalmaz."
@@ -261,6 +264,7 @@ dayanak = "9. ders, Büyük mum için oyun planı (madde 3); 8. ders, 5 dakika; 
 
 [[kart]]
 id = "saat-tersine"
+hukum = "eksi"
 durum = "1 saatlik grafikte, Londra ya da örtüşme seansında, günün yeni ucunu yapan uzun bir büyük mum"
 gorursun = "Mum önceki saatlerin hepsinden uzun; ilk izlenim bu kadar gitti, artık döner."
 yaparsin = "1 saatlik büyük mumun bir gün boyunca kendi yönünde hafifçe sürmeye eğilimli olduğunu hatırlarsın ve mumun yönüne ters bir işlemi plana yazmazsın."
@@ -270,6 +274,7 @@ dayanak = "6. ders, Dilim dilim okuma; 7. ders, 1 saat; 9. ders, Büyük mum iç
 
 [[kart]]
 id = "haber-mumu"
+hukum = "eksi"
 durum = "Herhangi bir dilimde ABD istihdam ya da enflasyon verisinin (New York 08:30; TSİ ABD yaz saatinde 15:30, kış saatinde 16:30) ya da Fed, ECB, BoE kararının mumu"
 gorursun = "Haberin saatinde başlayan, çevresindeki mumların kat kat üstünde bir mum; grafikte günün en okunaklı yeri gibi görünür."
 yaparsin = "Mumu ve iki ucunu işaretler, masadan kalkarsın: sonraki yolun ortalaması bir yön söyleyemeyecek kadar dağınık. Haberin içeriği bu seride ölçülmedi."

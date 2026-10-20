@@ -296,6 +296,7 @@ n = 3
 # ─────────────────────────────────────────────────────────────── kartlar
 [[kart]]
 id = "guclu-kosu"
+hukum = "eksi"
 durum = "Londra fiksingi (WM/R), fiksinge giden yarım saatte güçlü bir koşu: Londra 15:30–16:00, TSİ 17:30–18:00 (İngiltere kış saatinde 18:30–19:00)"
 gorursun = "Altı beş dakikalık mum aynı yöne gidiyor; yarım saatin toplam aralığı o fiksingin tipik koşusundan belirgin büyük, fiksingdeki fiyat koşunun ucuna yakın."
 yaparsin = "Koşunun başladığı yeri, yarısını ve ucunu işaretlersin; fiksingden sonraki ilk çeyrek saatte fiyatın yarıya gelip gelmediğine bakarsın."
@@ -305,6 +306,7 @@ dayanak = "3. ders, Güçlü koşu; 3. ders, Sınıf sınıf, şansın payıyla;
 
 [[kart]]
 id = "normal-kosu"
+hukum = "eksi"
 durum = "Tokyo ya da Londra fiksingi, fiksinge giden yarım saatte normal ya da reddedilen bir koşu"
 gorursun = "Koşu var ama gövdesi dolu değil ya da uzun bir fitil taşıyor; fiksingdeki fiyat çoğu zaman koşunun yarısına yakın."
 yaparsin = "Yarının fiksingdeki fiyata ne kadar yakın olduğunu görürsün: geri verme çoğu zaman fiksingden birkaç dakika sonra olur ve yarı yakın olduğu için şansın da sık vereceği bir harekettir."
@@ -314,6 +316,7 @@ dayanak = "3. ders, Normal ve reddedilen koşu; 1. ders, Kazanma oranı ile net 
 
 [[kart]]
 id = "sessiz"
+hukum = "eksi"
 durum = "Londra fiksingi, fiksinge giden yarım saat dar (sessiz fiksing); fiksingden sonra aralığın bir kenarı kırılıyor"
 gorursun = "Altı mumluk dar bir aralık ve fiksingden sonra kenarın dışında kapanan bir mum."
 yaparsin = "Kırılan kenarı ve onun bir mum boyu ötesini işaretlersin; kırılımın oraya gidip gitmediğini izlersin."
@@ -323,6 +326,7 @@ dayanak = "3. ders, Sessiz fiksing; 5. ders, Referans tepkiler; 8. ders, Stop uz
 
 [[kart]]
 id = "ay-sonu"
+hukum = "olculmedi"
 durum = "Ayın son Londra iş günü, Londra fiksingi (Londra 16:00, TSİ 18:00, İngiltere kış saatinde 19:00), fiksinge güçlü bir koşu"
 gorursun = "Öbür günlerin güçlü koşusundan farkı grafikte görünmez; fark takvimdedir."
 yaparsin = "Günü takvimde işaretlersin; fiksingden sonraki saatte koşunun yeni bir uç yapıp yapmadığına bakarsın."
@@ -332,6 +336,7 @@ dayanak = "3. ders, Ay sonu"
 
 [[kart]]
 id = "ters-giris"
+hukum = "eksi"
 durum = "Fiksing anı (Tokyo 09:55, TSİ 03:55; Londra 16:00, TSİ 18:00, İngiltere kış saatinde 19:00) ve koşunun tersine girmeyi düşünüyorsun"
 gorursun = "Koşu bitmiş görünüyor, fiyat koşunun ucunda; fiyatın şimdi geri vereceği duygusu güçlü."
 yaparsin = "Koşunun yarısını ve ucunu işaretler, giriş ile stop arasındaki mesafeyi pip olarak sayarsın; mesafe birkaç pipse makasın onun içindeki payını görürsün."

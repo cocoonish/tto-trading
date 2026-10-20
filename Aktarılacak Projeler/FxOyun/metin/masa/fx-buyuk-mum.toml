@@ -223,6 +223,7 @@ dayanak = "6. ders, Dilim dilim okuma"
 
 [[kart]]
 id = "yari-dokunus"
+hukum = "eksi"
 durum = "Herhangi bir dilimde, büyük mumdan sonra fiyat mumun yarısına geri geldi"
 gorursun = "Büyük mumdan sonraki bir iki mumda fiyat mumun ortasına iniyor (aşağı mumda çıkıyor). Grafik 'dönüş başladı' der."
 yaparsin = "Dokunuşu bir olgu olarak not edersin, bir işaret olarak değil: yönü olmayan bir yol da yarıya neredeyse aynı sıklıkta uğrardı; gerçek ile ayna arasındaki fark birkaç puan."
@@ -232,6 +233,7 @@ dayanak = "6. ders, Ayna: şansın vereceği pay; 6. ders, Yarısına dönen fiy
 
 [[kart]]
 id = "bes-dk-uc"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, Londra ya da Asya seansında, ucunda kapanan bir büyük mum"
 gorursun = "Gövdesi uzun, kapanışı mumun en uç çeyreğinde bir mum; önceki on mumun hiçbiri onun yarısı kadar değil."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; sonraki bir iki mumda fiyatın yarıya dönüp dönmediğine bakarsın. Mum Asya seansındaysa bu dilimdeki geri vermenin en belirgin olduğu yerde olduğunu bilirsin; Londra'da aynı eğilim yarı yarıya küçük."
@@ -241,6 +243,7 @@ dayanak = "6. ders, Dilim dilim okuma; 7. ders, 5 dakika; 8. ders, Limit neden u
 
 [[kart]]
 id = "bir-saat-uc"
+hukum = "eksi"
 durum = "1 saatlik grafikte, takvimde haber yokken ucuna yakın kapanan bir büyük mum"
 gorursun = "Bir saatlik mum önceki saatlerin birkaç katı, kapanış mumun en uç çeyreğinde. Grafik 'fazla gitti, geri gelir' der."
 yaparsin = "Mumun yönünü günün bağlamı olarak not edersin: ortalama yol bir gün boyunca mumun yönünde küçük bir parça daha. Mumun yarısını işaretlersin ama ona dönüşü beklemezsin: 1 saatte yarıya dönüş aynadan sık değil."
@@ -250,6 +253,7 @@ dayanak = "6. ders, Dilim dilim okuma; 7. ders, 1 saat; 8. ders, 15 dakika ve 1 
 
 [[kart]]
 id = "yari-bekleme"
+hukum = "eksi"
 durum = "5 ya da 15 dakikalık grafikte, büyük mumun yarısında bekleyen bir limit emri"
 gorursun = "Limit mumun ortasında. Fiyat ya bir iki mum içinde gelir ya da gelmeden uzaklaşır."
 yaparsin = "Emri altı mumluk bir pencereyle sınırlarsın: yarıya dönenlerin yarısı ilk bir iki mum içinde döner, sonra gelen dönüş seyrekleşir. Pencere biterse emri çekersin. Limitin dolduğu anı, fiyatın mumun hareketini geri aldığı an olarak okursun."
@@ -259,6 +263,7 @@ dayanak = "6. ders, Yarısına dönen fiyat ne kadar sürede dönüyor; 8. ders,
 
 [[kart]]
 id = "cok-buyuk"
+hukum = "eksi"
 durum = "Herhangi bir dilimde, aralığı önceki ATR'nin beş katını aşan bir mum"
 gorursun = "Ekranın büyük kısmını kaplayan tek bir mum. Grafik 'aşırı, döner' ya da 'çok güçlü, sürer' der."
 yaparsin = "Önce takvime bakarsın: mum büyük bir haberin mumuysa okuma yok. Değilse mumu iki ATR'lik bir büyük mumla aynı okursun: kovalar büyüdükçe iki dönemde aynı yöne bakan bir büyüklük etkisi yok."
@@ -268,6 +273,7 @@ dayanak = "6. ders, Büyüklük değişince; 7. ders, Fade mi, devam mı: okuma 
 
 [[kart]]
 id = "makas-devir"
+hukum = "eksi"
 durum = "Büyük mum FX gününün devrinde, haftanın açılışında ya da takvimdeki büyük bir haberin dakikasında"
 gorursun = "New York 17:00 civarında (TSİ ABD yaz saatinde 00:00, kış saatinde 01:00) fitili uzun, gövdesi küçük bir mum; hafta açılışından sonraki seyrek kotasyonlu bir sıçrama; ya da haberin saatinde tek mumluk bir patlama."
 yaparsin = "Saatine bakarsın. Devir penceresinde (New York 16:50–17:10; TSİ ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10) ve hafta açılışından sonraki ilk saatte aralık kotasyonun hareketidir, haber dakikasında okuma yok; üçü de bu dersin olayı değil."

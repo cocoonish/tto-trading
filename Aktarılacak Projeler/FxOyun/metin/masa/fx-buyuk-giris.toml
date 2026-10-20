@@ -301,6 +301,7 @@ dayanak = "8. ders, 15 dakika ve 1 saat"
 
 [[kart]]
 id = "bes-dk-kapanis"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, takvimde haber olmayan bir saatte, ucunda kapanan büyük mumdan hemen sonra mumun yönünde girmeyi düşünüyorsun."
 gorursun = "Mum kapandı, fiyat hâlâ ucun yakınında ve sonraki mumun açılışı kapanışa yapışık: kaçmakta olan bir hareket."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; kapanışta piyasa emrinin ödeyeceği makası ve kaymayı stopun pip uzaklığının yanına yazarsın."
@@ -310,6 +311,7 @@ dayanak = "8. ders, 5 dakika; 8. ders, Limit neden ucuz görünür"
 
 [[kart]]
 id = "saat-tersine"
+hukum = "eksi"
 durum = "1 saatlik grafikte büyük bir mum kapandı ve hareket sana aşırı uzamış görünüyor."
 gorursun = "Mum önceki mumların birkaç katı, kapanış uca yakın; günlük grafikte de göze batıyor ve dönmesi gerekiyormuş gibi duruyor."
 yaparsin = "Mumun uçlarını ve yarısını işaretler, bir günlük izleme penceresi boyunca fiyatın mumun yönünde kalıp kalmadığına bakarsın."
@@ -319,6 +321,7 @@ dayanak = "8. ders, 15 dakika ve 1 saat; 6. ders, Dilim dilim okuma"
 
 [[kart]]
 id = "yariya-limit"
+hukum = "eksi"
 durum = "Büyük mumdan sonra mumun yönünde, mumun yarısına bir limit koydun ve emir doldu."
 gorursun = "Fiyat hareketin yarısını geri aldı; dolum mumu çoğu zaman mumun tersine kapanmış bir mumdur ve ekranda ucuz bir fiyat gibi görünür."
 yaparsin = "Dolumu bir uyarı sayarsın: limit, aynı anda piyasadan girilen işlemin çoğunlukla kaybettiği olaylarda dolar. Stopu ve hedefi baştan yazdığın yerde bırakırsın."
@@ -328,6 +331,7 @@ dayanak = "8. ders, Limit neden ucuz görünür; 9. ders, Büyük mum için oyun
 
 [[kart]]
 id = "stop-1atr"
+hukum = "eksi"
 durum = "5 dakikalık grafikte büyük mumdan sonra stopu girişten bir ATR'ye, mumun ucunun hemen ötesine koymayı düşünüyorsun."
 gorursun = "Stop grafikte makul görünür, çünkü mumun ucuna yakındır; pip olarak ise birkaç piptir ve tek bir makas onun görünür bir parçasıdır."
 yaparsin = "Riski pip olarak yazar, makasla ve kaymayla yan yana koyarsın. Bu derste risk belirli bir pip sınırının altındaysa işlem hiç açılmadı; masada da aynı sınırı sorarsın."
@@ -337,6 +341,7 @@ dayanak = "8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]
 id = "onay"
+hukum = "eksi"
 durum = "Büyük mumdan sonra bir mum daha görmek için onay bekliyorsun."
 gorursun = "Sonraki mum büyük mumun kapanışının ötesinde kapanır ya da kapanmaz; kapanırsa fiyat bir mum daha yürümüştür."
 yaparsin = "Onay gelirse girişin daha ileriden olacağını ve stopun da o kadar taşınacağını hesaba katarsın; gelmezse işlem yoktur ve bunu kayıp saymazsın."
@@ -346,6 +351,7 @@ dayanak = "8. ders, Onay mumu"
 
 [[kart]]
 id = "uc-stop"
+hukum = "eksi"
 durum = "Büyük mumun ucunun ötesine, fiyat yeni bir uç yaparsa girmek için stop emri koymayı düşünüyorsun."
 gorursun = "Fiyat ucun yanında dolaşıyor; uç kırıldığı an hareket hızlanıyormuş gibi görünür."
 yaparsin = "Emrin dolacağı yerin kayma ödeyeceği yer olduğunu bilir, giriş fiyatını kapanışla değil ucun ötesiyle yazarsın."

@@ -216,6 +216,7 @@ n = 4
 # ─────────────────────────────────────────────────────────────── kartlar
 [[kart]]
 id = "reddedilen-acilis"
+hukum = "eksi"
 durum = "15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) uzun fitilli, küçük gövdeli bir ilk mum"
 gorursun = "Fiyat bir yöne gitmiş ve geri itilmiş; fitillerden biri mumun yarısından uzun."
 yaparsin = "Mumu kapanışta sınıflandırır, iki ucu ve yarıyı işaretlersin; fitilin ucunu günün referansı olarak not edersin."
@@ -225,6 +226,7 @@ dayanak = "2. ders, Normal ve reddedilen ilk mum; 1. ders, Kazanma oranı ile ne
 
 [[kart]]
 id = "guclu-acilis"
+hukum = "eksi"
 durum = "15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) ucunda kapanan güçlü bir ilk mum"
 gorursun = "Gövdesi mumu dolduran, ucunda kapanan büyük bir mum; sonraki mumlarda fiyat çoğu zaman bir süre aynı yöne gider."
 yaparsin = "İki ucu, yarıyı ve devam eşiğini işaretlersin; iki eşiğin kapanışa uzaklığına bakarsın."
@@ -234,6 +236,7 @@ dayanak = "1. ders, Şans ne verirdi: yolun aynası; 2. ders, Güçlü ilk mum"
 
 [[kart]]
 id = "fiksing-kosu"
+hukum = "eksi"
 durum = "5 dakikalık grafikte, Londra fiksinginde (WM/R, Londra 16:00; TSİ İngiltere yaz saatinde 18:00, kış saatinde 19:00) fiksinge güçlü koşan bir fiyat"
 gorursun = "Fiksingden önceki yarım saatte fiyat tek yöne gitmiş; fiksing dakikası koşunun ucuna yakın."
 yaparsin = "Koşunun başını, ucunu ve yarısını işaretlersin; sonraki saatte bir geri çekilme beklersin. Ayın son Londra iş günüyse ayrıca not edersin."
@@ -243,6 +246,7 @@ dayanak = "1. ders, Şans ne verirdi: yolun aynası; 3. ders, Ay sonu; 3. ders, 
 
 [[kart]]
 id = "kucuk-mum"
+hukum = "eksi"
 durum = "15 dakikalık grafikte, Tokyo açılışında (Tokyo 09:00, TSİ 03:00) tipik boyun belirgin altında kalan küçük bir ilk mum"
 gorursun = "Dar bir mum; sonraki mumlarda fiyat uçlardan birini kırar."
 yaparsin = "İki ucu işaretler, hangisinin önce kırıldığını ve fiyatın bir mum boyu daha gidip gitmediğini izlersin."
