@@ -48,9 +48,9 @@ def oz(p: Path) -> str:
 def olay_isci(cift: str) -> dict:
     a = ay.oku()
     d = vr.oku(cift, a)
-    satir, yollar, ornek = [], {}, {}
+    satir, yollar, ornek, sayim = [], {}, {}, {}
     for tf in bm.DILIMLER:
-        ev, _ = bm.olaylar(d, tf, cift)
+        ev, sayim[tf] = bm.olaylar(d, tf, cift)
         Y = []
         for e in ev.to_dict("records"):
             dn = "dis" if e["bt"] >= DIS_BAS else "ic"
@@ -62,9 +62,12 @@ def olay_isci(cift: str) -> dict:
             mk = bm.makas(d, e)
             satir.append({"cift": cift, "tf": tf, "gun": e["gun"], "donem": dn, "bt": e["bt"],
                           **{f: e[f] for f in bm.SUZGECLER}, **g, **{f"ayna_{k}": v for k, v in y.items()}, **mk,
-                          "A_pip": e["A"] / e["pip"], "R_pip": (e["h"] - e["l"]) / e["pip"]})
-            cl = d.mc[e["j0"]:e["j1"]]
-            idx = np.minimum(np.arange(1, bm.IZLE + 1) * tf, len(cl)) - 1
+                          "A_pip": e["A"] / e["pip"], "R_pip": (e["h"] - e["l"]) / e["pip"],
+                          "net24_pip": g["net_24"] * e["A"] / e["pip"], "tek_kat": e["tek_kat"],
+                          "makas_ici_max": e["makas_ici_max"]})
+            cl, tt = d.mc[e["j0"]:e["j1"]], d.t[e["j0"]:e["j1"]]
+            t0 = e["bt"] + tf * 60
+            idx = np.maximum(np.searchsorted(tt, t0 + np.arange(1, bm.IZLE + 1) * tf * 60, side="left") - 1, 0)
             Y.append(np.r_[0.0, e["yon"] * (cl[idx] - e["c"]) / e["A"]])
         yollar[tf] = np.array(Y)
         if cift == ORNEK_CIFT:
@@ -81,13 +84,13 @@ def olay_isci(cift: str) -> dict:
                              "h": float(e["h"]), "l": float(e["l"]), "c": float(e["c"]), "A": float(e["A"]),
                              "mumlar": [[int(m.bt[k]), float(m.o[k]), float(m.h[k]), float(m.l[k]), float(m.c[k]),
                                          float(A[k - 1]) if k else None] for k in range(pen.start, pen.stop)]}
-    return {"satir": satir, "yol": yollar, "ornek": ornek}
+    return {"satir": satir, "yol": yollar, "ornek": ornek, "sayim": sayim}
 
 
 def _ort_aralik(g: pd.DataFrame, m: str, rng) -> dict:
     v = g[m].astype(float).to_numpy()
     ok = ~np.isnan(v)
-    alt, ust = gun_bootstrap(g["gun"].to_numpy()[ok], v[ok], rng, TEKRAR)
+    alt, ust = gun_bootstrap(g["hafta"].to_numpy()[ok], v[ok], rng, TEKRAR)
     return {"ort": float(v[ok].mean()) if ok.any() else None, "alt": alt, "ust": ust, "n": int(ok.sum())}
 
 
@@ -99,6 +102,7 @@ def davranis(g: pd.DataFrame, rng, tam: bool = True) -> dict:
         r[m] = float(g[m].astype(float).mean())
         r[f"ayna_{m}"] = float(g[f"ayna_{m}"].astype(float).mean())
     r["net_24"] = _ort_aralik(g, "net_24", rng)
+    r["net24_pip_ort"] = float(g["net24_pip"].mean())
     fark = g.assign(_f=g["geri_0.5"].astype(float) - g["ayna_geri_0.5"].astype(float))
     r["geri_0.5_fark"] = _ort_aralik(fark, "_f", rng)
     r["sim_1.0_ci"] = _ort_aralik(g, "sim_1.0", rng)
@@ -123,6 +127,10 @@ def main() -> int:
         parca = list(ex.map(olay_isci, a.ciftler))
         izgara = list(ex.map(bg.kos_cift, a.ciftler, [a.bitis] * len(a.ciftler), [None] * len(a.ciftler)))
     df = pd.DataFrame([s for p in parca for s in p["satir"]])
+    # Betimleyici aralıklar HAFTA düzeyinde yeniden örneklenir: 1 saatlik yol 24 saat sürer ve ertesi günün
+    # olaylarıyla örtüşür; FX haftası hafta sonu boşluğuyla biter, bloklar arasında örtüşme kalmaz. (2024 →
+    # hükmü ön kayıttaki gün düzeyinde aralıkla verilir; buradaki aralıklar bilgi.)
+    df["hafta"] = pd.to_datetime(df["gun"]).dt.to_period("W-SUN").astype(str)
     rng = np.random.default_rng(TOHUM)
     out = {"kunye": {}, "olay": {}, "davranis": {}, "suzgec": {}, "kova_haber": {}, "yol": {}, "izgara": {},
            "ters_secim": {}, "ornek": {}}
@@ -133,16 +141,25 @@ def main() -> int:
             g = df[(df["tf"] == tf) & (df["donem"] == dn)]
             out["olay"][k][dn] = {"n": int(len(g)), "kova": {v: int((g["kova"] == v).sum()) for v in bm.SUZGECLER["kova"]}}
             out["davranis"][k][dn] = davranis(g, rng)
+        # makas sınaması: bid ve ask serilerinin kendi aralığının küçüğü de eşiği geçen mumlar
+        out.setdefault("tek", {})[k] = {}
+        for dn in ("ic", "dis"):
+            g = df[(df["tf"] == tf) & (df["donem"] == dn)]
+            t = g[g["tek_kat"] >= bm.ESIK]
+            ta = t[t["seans"] == "asya"]
+            out["tek"][k][dn] = {"pay": float(len(t) / len(g)) if len(g) else None,
+                                 "makas_ici_kat_med": float((g["makas_ici_max"] / g["makas_once"]).median()),
+                                 "tum": davranis(t, rng, False), "asya": davranis(ta, rng, False)}
         for f, vals in bm.SUZGECLER.items():
             out["suzgec"][k][f] = {v: {dn: davranis(df[(df["tf"] == tf) & (df["donem"] == dn) & (df[f] == v)], rng, False)
                                        for dn in ("ic", "dis")} for v in vals}
         # mumdan sonraki ortalama yol (A), dönem ayrı
         Y = np.vstack([p["yol"][tf] for p in parca if len(p["yol"][tf])])
         bt = df[df["tf"] == tf]["bt"].to_numpy()
-        gun = df[df["tf"] == tf]["gun"].to_numpy()
+        hafta = df[df["tf"] == tf]["hafta"].to_numpy()
         assert len(Y) == len(bt)
         for dn, m in (("ic", bt < DIS_BAS), ("dis", bt >= DIS_BAS)):
-            yy, gg = Y[m], gun[m]
+            yy, gg = Y[m], hafta[m]
             nokta = []
             for h in range(bm.IZLE + 1):
                 alt, ust = (gun_bootstrap(gg, yy[:, h], rng, TEKRAR) if h else (0.0, 0.0))
@@ -167,9 +184,23 @@ def main() -> int:
                                  for x in ("buyuk", "kume", "yeniden_acilis", "devir", "eksik", "olay")}
                        for tf in bm.DILIMLER}
     out["kararsiz_ic"] = Gz["kararsiz"]
+    out["sayim_tum"] = {str(tf): {x: sum(p["sayim"][tf][x] for p in parca) for x in parca[0]["sayim"][tf]}
+                        for tf in bm.DILIMLER}
     out["plan"] = json.loads((VERI / "buyuk_plan.json").read_text(encoding="utf-8"))
     S = json.loads((VERI / "buyuk_sina.json").read_text(encoding="utf-8"))
     out["bacak"], out["sina_davranis"] = S["bacak"], S["davranis"]
+    # 2024 → bacaklarının hafta düzeyinde aralığı (bilgi; hüküm ön kayıttaki gün düzeyinde aralıkla)
+    out["bacak_hafta"] = {}
+    iz["hafta"] = pd.to_datetime(iz["gun"].astype(str)).dt.to_period("W-SUN").astype(str)
+    for b in out["bacak"]:
+        g = iz[(iz["tf"] == b["tf"]) & (iz["giris"] == b["giris"]) & iz["doldu"]]
+        if b.get("suzgec"):
+            g = g[g[b["suzgec"]].astype(str) == b["deger"]]
+        r = g["R"].to_numpy(float)
+        alt, ust = gun_bootstrap(g["hafta"].to_numpy(), r, rng, TEKRAR)
+        assert len(r) == b["dis"]["n"] and abs(r.mean() - b["dis"]["ort_R"]) < 1e-9, f"{b['bacak']}: ızgara ≠ sınama"
+        out["bacak_hafta"][b["bacak"]] = {"n": int(len(r)), "ort": float(r.mean()) if len(r) else None,
+                                          "alt": alt, "ust": ust}
     out["kunye"] = {
         "ciftler": a.ciftler, "veri_bitis": a.bitis.isoformat(), "donem": ON["donem"],
         "girdi": {p: oz(VERI / p) for p in ("buyuk_gozlem.json", "buyuk_gelistir.json", "buyuk_plan.json",

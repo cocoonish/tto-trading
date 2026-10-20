@@ -164,7 +164,9 @@ def olaylar(d: vr.Dakika, tf: int, cift: str) -> tuple[pd.DataFrame, dict]:
     gun_s = pd.Series(m.gun)
     gun_h = pd.Series(m.h).groupby(gun_s).cummax().groupby(gun_s).shift(1).to_numpy()
     gun_l = pd.Series(m.l).groupby(gun_s).cummin().groupby(gun_s).shift(1).to_numpy()
-    sayim = {"buyuk": 0, "kume": 0, "yeniden_acilis": 0, "devir": 0, "eksik": 0, "olay": 0}
+    sayim = {"buyuk": 0, "kume": 0, "yeniden_acilis": 0, "devir": 0, "eksik": 0, "eksik_cuma": 0, "eksik_haber": 0,
+             "olay": 0}
+    ny_gun = pd.to_datetime(m.bt, unit="s", utc=True).tz_convert(z.NEWYORK).dayofweek.to_numpy()
     satir = []
     adim = tf * 60
     for i in np.flatnonzero(buyuk & ~np.isnan(A_once)):
@@ -182,7 +184,12 @@ def olaylar(d: vr.Dakika, tf: int, cift: str) -> tuple[pd.DataFrame, dict]:
         j0 = int(np.searchsorted(d.t, izle_bas))
         j1 = int(np.searchsorted(d.t, izle_bas + IZLE * adim))
         if not tam[i] or j1 - j0 < DOLULUK * IZLE * tf:
+            # Pencere SAAT olarak ölçülür: cuma New York öğleden sonrasının mumlarında (1 saatlikte perşembe
+            # akşamından sonra) pencere hafta sonuna taşar ve doluluk tutmaz — bu mumlar ölçüye girmez, sayılır.
             sayim["eksik"] += 1
+            sayim["eksik_cuma"] += int(ny_gun[i] == 4)
+            hk = np.searchsorted(hab_sn, m.bt[i] - 120)
+            sayim["eksik_haber"] += int(hk < len(hab_sn) and hab_sn[hk] < m.bt[i] + adim)
             continue
         o, h, l, c, a = m.o[i], m.h[i], m.l[i], m.c[i], A_once[i]
         R = h - l
@@ -207,12 +214,19 @@ def olaylar(d: vr.Dakika, tf: int, cift: str) -> tuple[pd.DataFrame, dict]:
             gun_ucu = "evet" if (h > gun_h[i] if y > 0 else l < gun_l[i]) else "hayir"
         hk = np.searchsorted(hab_sn, m.bt[i] - 120)
         haber = "haber" if hk < len(hab_sn) and hab_sn[hk] < m.bt[i] + adim else "haber_yok"
+        # Tek taraflı aralık: orta fiyatın yükseği/düşüğü bid ve ask uçlarının ortalamasıdır; mum içinde makas
+        # açılırsa orta fiyatın aralığı genişler. Bid ve ask serilerinin KENDİ aralıklarının küçüğü de eşiği
+        # geçiyorsa büyüklük makastan gelmiyor. (Ölçü; tanım değil — olay kümesini değiştirmez.)
+        sl = slice(int(m.i0[i]), int(m.i1[i]) + 1)
+        tek = min(d.bh[sl].max() - d.bl[sl].min(), d.ah[sl].max() - d.al[sl].min())
+        mk_ici = max(float((d.ao[sl] - d.bo[sl]).max()), float((d.ac[sl] - d.bc[sl]).max())) / d.pip
         satir.append({
             "cift": cift, "tf": tf, "bt": int(m.bt[i]), "gun": str(gun), "o": o, "h": h, "l": l, "c": c, "A": a,
             "kat": float(kat[i]), "kova": _kova(kat[i]), "yon": y, "kc": float(kc), "kapanis": kapanis,
             "seans": str(seans[i]), "haber": haber, "trend": trend, "trend_uyum": sf.uyum(y, trend),
             "kosu": kosu, "gun_ucu": gun_ucu, "oynaklik": oynaklik, "ardisik": "evet" if ardisik[i] else "hayir",
-            "i_son": int(m.i1[i]), "j0": j0, "j1": j1, "pip": d.pip,
+            "i_son": int(m.i1[i]), "j0": j0, "j1": j1, "pip": d.pip, "tek_kat": float(tek / a),
+            "makas_ici_max": mk_ici,
         })
     sayim["olay"] = len(satir)
     df = pd.DataFrame(satir)
@@ -227,8 +241,11 @@ def _ilk(m: np.ndarray) -> int:
     return int(np.argmax(m)) if m.any() else 10 ** 9
 
 
-def yol(hi: np.ndarray, lo: np.ndarray, cl: np.ndarray, e: dict, tf: int) -> dict:
-    """Mumdan sonraki yolun ölçüleri (orta fiyat). `hi, lo, cl` izleme penceresinin dakikaları."""
+def yol(hi: np.ndarray, lo: np.ndarray, cl: np.ndarray, e: dict, tf: int, tt: np.ndarray | None = None) -> dict:
+    """Mumdan sonraki yolun ölçüleri (orta fiyat). `hi, lo, cl` izleme penceresinin dakikaları, `tt` onların
+    zamanı (epoch sn). Zaman verilirse ufuklar ve süreler SAATTEN okunur: eksik dakika olan pencerede dizin
+    sayısı saati vermez."""
+    t0 = e["bt"] + tf * 60
     c, A, R, y = e["c"], e["A"], e["h"] - e["l"], e["yon"]
     uc, ters = (e["h"], e["l"]) if y > 0 else (e["l"], e["h"])
     out = {}
@@ -245,7 +262,10 @@ def yol(hi: np.ndarray, lo: np.ndarray, cl: np.ndarray, e: dict, tf: int) -> dic
         dok = (lo <= sev) if y > 0 else (hi >= sev)
         t = _ilk(dok)
         out[f"geri_{f}"] = t < 10 ** 9
-        out[f"geri_{f}_dk"] = (t + 1) if t < 10 ** 9 else np.nan
+        if t >= 10 ** 9:
+            out[f"geri_{f}_dk"] = np.nan
+        else:
+            out[f"geri_{f}_dk"] = (int(tt[t] - t0) // 60 + 1) if tt is not None else (t + 1)
     # yarıya dönüp yeniden uca
     t50 = _ilk((lo <= uc - y * 0.5 * R) if y > 0 else (hi >= uc - y * 0.5 * R))
     if t50 < 10 ** 9:
@@ -261,7 +281,10 @@ def yol(hi: np.ndarray, lo: np.ndarray, cl: np.ndarray, e: dict, tf: int) -> dic
     out["mfe"] = float(ileri.max() / A)
     out["mae"] = float(geri.max() / A)
     for H in UFUKLAR:
-        n = min(len(cl), H * tf) - 1
+        if tt is not None:
+            n = max(int(np.searchsorted(tt, t0 + H * tf * 60, side="left")) - 1, 0)
+        else:
+            n = min(len(cl), H * tf) - 1
         out[f"net_{H}"] = float(y * (cl[n] - c) / A)
     return out
 
@@ -270,8 +293,8 @@ def olc(d: vr.Dakika, e: dict) -> tuple[dict, dict]:
     """(gerçek yol, kapanışa göre AYNALANMIŞ yol: p' = 2c − p). Ayna, yön bilgisi yokken mum geometrisinin
     kendiliğinden ürettiği oranı verir; gerçek − ayna farkı mumun yön bilgisidir."""
     j0, j1, c = e["j0"], e["j1"], e["c"]
-    hi, lo, cl = d.mh[j0:j1], d.ml[j0:j1], d.mc[j0:j1]
-    return yol(hi, lo, cl, e, e["tf"]), yol(2 * c - lo, 2 * c - hi, 2 * c - cl, e, e["tf"])
+    hi, lo, cl, tt = d.mh[j0:j1], d.ml[j0:j1], d.mc[j0:j1], d.t[j0:j1]
+    return yol(hi, lo, cl, e, e["tf"], tt), yol(2 * c - lo, 2 * c - hi, 2 * c - cl, e, e["tf"], tt)
 
 
 def makas(d: vr.Dakika, e: dict) -> dict:

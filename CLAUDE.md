@@ -5352,7 +5352,8 @@ biraz daha instinctive". Dört seçim ona soruldu: tek seri, eski dersler arşiv
 verisi + merkez bankası, ve "2018–2023'ten yaz, 2024 → sına". Proje `Aktarılacak Projeler/FxOyun/` (FxGunici'nin veri
 ve takvim katmanını okur, motorunu kullanmaz): on an × dört ilk mum sınıfı (güçlü · normal · reddedilen · küçük; tipik
 boy o anın kendi GEÇMİŞ olaylarının ortancası) × günlük EMA20 trendi. Gözlem (`gozlem.py`) ayar dosyasının bitişi
-31.12.2023'e çekilerek yüklenir, 2024 dosyaları hiç açılmaz (assert); plan ve sınama betiği ön kayıtla birlikte 2024
+31.12.2023'e çekilerek yüklenir; 2024 sonrasının fiyatları okunurken ilk adımda kesilir ve hiçbir hesaba girmez (arşiv
+okuyucusu yıl dosyalarının özünü yine sınar; son dakika assert ile sınanır); plan ve sınama betiği ön kayıtla birlikte 2024
 koşmadan commit edildi (4cf2dc43). Ders sayıları yalnız `veri/ders.json`dan; şablonda elle yazılmış ondalık ya da
 yüzde kapıda ENGEL. Hüküm: tepkilerin hiçbiri "çalışıyor" almadı. Sık anlarda (açılış, fiksing) yakın hedefli
 tepkiler işlemlerin yarısından çoğunu kazanıp maliyetten sonra −0,10 … −0,28 R kaldı, ve okumaların hangisinin bilgi
@@ -5386,4 +5387,35 @@ bu artefakttan doğdu; doğrusu bütün bacaklar orta fiyatla, kaymasız ve ayn�
 Net R değişmedi, maliyetsiz sayı küçüldü ve kırılımın kenarı sıfıra indi. (7) BİR SEÇİM GÜVENCESİ METİNDE ADIYLA DURUR:
 2018–2023'te seçilen tepkinin 2024 → sonucu seçimin kendisini ölçer, sonradan bakılan en iyi hücre seçilemezdi; ders
 ikisini ayrı yazıyor ve gün kümeli aralığı bilgi olarak veriyor (hüküm önceden kayıtlı işlem düzeyindeki aralıktır).
+
+**KARAR (20.10.2026, kullanıcı) ve Kurucu ilke — FX GÜN İÇİ SERİSİNE DÖRT BÜYÜK MUM DERSİ (6–9); BİR DOLUM KURALI
+DAKİKANIN İÇİNİ BİLMİYORSA DOLUMDAN ÖNCEKİ FİYATI KULLANAMAZ; ve BİR ÖRNEKLEME BİRİMİ ÖLÇÜNÜN SÜRESİNDEN KISA
+OLAMAZ.** Kullanıcı: "2-3-4-5 atr mumlardan sonra ne olmuş, hangi filtrelerle ne görüyoruz, fade mi … limit market
+nasıl girmek lazım". Seçimler ona soruldu: 5 dk + 15 dk + 1 sa, aynı dilimin ATR(14)'ü, dört ders, mevcut serinin
+devamı. Tanım, süzgeçler, giriş ızgarası (44 hücre × 3 dilim) ve seçim kuralı `onkayit_buyuk.toml`da 2024 açılmadan
+(dacae3a8); hüküm 2024 → (0b4a9ca9): on beş girişin hepsi çalışmıyor. Kod `Aktarılacak Projeler/FxOyun/buyuk_*.py`,
+kapı `buyuk_dogrula.py` (FxOyun `dogrula.py` adımı, sayfa sınavı 26 kendiliğinden koşturur).
+Donmuş kopyaya karşı iki mercek (sayı/iddia · yöntem/ileriye bakma) 36 bulgu verdi; dördü kayda değer.
+(1) STOP EMRİYLE GİRİŞ: dolum dakikasının bütün aralığı koruyucu stopa karşı soruluyor ve çıkış o dakikanın
+AÇILIŞINDAN yazılıyordu — yani dolumdan ÖNCEKİ fiyatla. Sentetik veride −1,30 R'lik tek dakikalık kayıp üretti.
+Kural: o dakikada stop yalnız dakika stopun ötesinde KAPANDIYSA sayılır, çıkış stop seviyesinden (`buyuk_sim.simule`,
+sınama `test_stop_girisi_…`). 24 stop hücresi değişti (5 dk s1'de −0,45 → −0,33 R), seçim ve 2024 → hükmü birebir aynı
+kaldı (seçilen ve referans girişlerin hiçbiri stop emirli değil); kural 2024 sınamasından sonra konduğu için 8. ve 9.
+derste adıyla duruyor. Limit girişte aynı soru doğmaz: dolumdan önceki kısım limitin öbür yanındadır.
+(2) GÜN DÜZEYİNDE BOOTSTRAP 1 SAATLİK YOLU BAĞIMSIZ SAYIYORDU: 24 saatlik yol ertesi günün olaylarıyla örtüşür.
+Betimleyici aralıklar hafta düzeyine geçti (FX haftası hafta sonu boşluğuyla biter); 2024 → hükmü ön kayıttaki gün
+düzeyinde kaldı ve hafta aralığı yanına basılıyor (bacaklarda neredeyse aynı). Bedeli bir hüküm: 5 dakikanın 24 mum
+sonraki yolu 2024 sonrasında artık sıfırı kapsıyor (yarısına dönüş ve ±1 ATR payı iki dönemde de tutuyor).
+(3) PENCERE SAATLE ÖLÇÜLÜR VE HAFTA SONUNA TAŞAR: %80 doluluk kuralı 1 saatlik grafikte perşembe akşamından sonraki
+mumları düşürüyor (1.824 dışlamanın 1.683'ü cuma), yani ABD istihdam raporunun 1 saatlik mumu hiçbir ölçüde yok;
+tanım değişmedi, sayısıyla yazıldı. (4) HÜKÜMLER SAYIDAN GÜÇLÜYDÜ: "15 dakikada hiçbir şey" (yarısına dönüş iki
+dönemde aralığıyla aynadan sık), "1 saatteki devam iki dönemde" (2024'te yalnız nokta tahmini), "limit makas ödemez"
+(girişte ödemez, çıkışta öder), "maliyetten sonra hepsi eksi" (yalnız ortak satırda; 1 saatte hedefi 2 R olan geri
+çekilme limitleri artı ve küçük), ve 9. dersin "kural sonucu görülmeden yazıldı" cümlesi (2018–2023 görülerek, 2024
+açılmadan). Geometrik bir sonuç ("limit, piyasa girişinin kaybettiği olaylarda dolar") seçim etkisi diye yazılmaz.
+Ölçü kapsamı da genişledi: tek taraflı (alış ve satış) aralıkla da 2 ATR'yi geçen mumlarda geri verme aynı (mum içi
+makas sınaması; 5 dk olayların %95'i), ufuklar ve süreler saatten (eksik dakika dizini kaydırmasın), pip ortalaması
+olay başına, "günde kaç" bütün işlem günlerine bölünür. Arıza enjeksiyonu: kapının altı yeni ölçütü altısında da düştü.
+AÇIK: mum içi makasın en geniş anı dakika açılış/kapanışından vekildir; 2024 sonrası arşiv dosyaları okuyucu özünü
+sınarken belleğe girer (sonuçlara girmez).
 

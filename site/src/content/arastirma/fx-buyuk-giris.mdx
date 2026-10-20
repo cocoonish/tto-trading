@@ -5,7 +5,7 @@ pubDate: 2026-10-20
 tags: ['fx', 'gun-ici', 'oyun-plani', 'buyuk-mum', 'emir', 'limit', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Giriş biçimi sonucu değiştirir ama kenar yaratmaz. Maliyetten önce bütün biçimler sıfır çevresinde; maliyetten sonra hepsi eksi. Limit emir makası ve kaymayı ödemediği için en az kaybeden biçim, ama maliyetten önce piyasa emrinden kötü: limit, fiyat aleyhine yürüdüğünde dolar ve kazanacak işlemi kaçırır. Stopu yaklaştırmak maliyeti R cinsinden büyütür."
+ozet: "Giriş biçimi sonucu değiştirir ama kenar yaratmaz. Maliyetten önce bütün biçimler sıfır çevresinde; stop 2 ATR ve hedef 1 R ile maliyetten sonra hepsi eksi. Limit girişte makası ve kaymayı ödemediği için 5 ve 15 dakikada en az kaybeden biçim, ama maliyetten önce piyasa emrinden kötü: limit, fiyat aleyhine yürüdüğünde dolar ve kazanacak işlemi kaçırır. Stopu yaklaştırmak maliyeti R cinsinden büyütür."
 seviye: 'orta'
 onkosul: ['fx-buyuk-mum', 'fx-buyuk-suzgec']
 ---
@@ -21,22 +21,28 @@ emirleri 0,5 pip kötü dolar; takvimdeki büyük bir haberin iki dakika öncesi
 kadar buna 1,0 pip daha eklenir. Limit emir kendi fiyatına kaymasız dolar. Aynı dakikada hem stop
 hem hedef görülürse stop sayılır; dolum dakikasında hedef sayılmaz. Planlanan risk 3,0 pipin
 altındaysa işlem açılmaz. Tablolar 2018–2023'ün ve 2024 sonrasının sonucunu yan yana verir. Girişlerin 2024 sonrası
-ızgarası planın seçiminde kullanılmadı (seçim 9. dersin konusu ve yalnız 2018–2023'ten yapıldı); burada betimleme
-olarak duruyor.
+sonucu planın seçiminde kullanılmadı (seçim 9. dersin konusu ve yalnız 2018–2023'ten yapıldı); burada betimleme olarak
+duruyor.
+
+İki ölçü bütün ders boyunca aynı anlamda kullanılır. **R**, planlanan risktir: girişten stopa olan mesafe; işlemin
+sonucu bu mesafenin katı olarak yazılır. **Maliyetsiz R** (maliyetten önce), aynı kuralın alış ile satışın ortasından,
+makassız ve kaymasız sonucudur; **net R** (maliyetten sonra) aynı işlemlerin gerçek alış-satış fiyatlarıyla sonucudur.
+Aradaki fark maliyettir. Aşağıdaki üç tablonun bütün satırları stop 2 ATR, hedef 1 R ile hesaplandı.
 
 ## Kısaca
 
 - **Maliyetten önce kenar yok.** 5 dakikada mumun yönünde kapanışta piyasadan giren, stop 2 ATR ve hedef 1 R ile, işlem
   başına −0,04 R; tersine giren +0,04 R aldı. 6. dersteki
-  hafif geri verme burada da görünüyor, büyüklüğü işlem başına birkaç yüzde R.
-- **Maliyetten sonra her biçim eksi.** Aynı iki giriş maliyetten sonra −0,29 ve
+  hafif geri verme burada da görünüyor, büyüklüğü R'nin yüzde birkaçı.
+- **Maliyetten sonra her biçim eksi** (stop 2 ATR, hedef 1 R). Aynı iki giriş maliyetten sonra −0,29 ve
   −0,22 R. Maliyet (makas ve kayma) işlem başına 0,26 R.
-- **Limit en az kaybeden, ama kenarı yok.** Mumun yarısına limitle giren 5 dakikada maliyetten sonra
-  −0,17 R aldı; maliyetten önce −0,06 R, yani piyasa
-  emrinden kötü.
-- **Limit, kaybedecek işlemde dolar.** 5 dakikada mumun yarısına konan limitin dolduğu olaylarda aynı anda piyasadan
-  girilseydi işlemlerin %23 kadarı kazanırdı; dolmadığı olaylarda
-  %78.
+- **Limit en az kaybeden, ama kenarı yok.** Limit girişte makası ve kaymayı ödemez, çıkışta öder. Mumun yarısına
+  limitle giren 5 dakikada maliyetten sonra −0,17 R aldı; maliyetten önce
+  −0,06 R, yani piyasa emrinden kötü.
+- **Limit, piyasa girişinin kaybettiği olaylarda dolar.** 5 dakikada mumun yarısına konan limitin dolduğu olaylarda
+  aynı anda piyasadan girilseydi işlemlerin %23 kadarı kazanırdı; dolmadığı
+  olaylarda %78. Bunun büyük kısmı geometridir: limit, fiyat piyasa
+  girişinin aleyhine yürüdüğünde dolar.
 - **Stop yakınsa maliyet büyür.** 5 dakikada stop 1 ATR'de maliyet işlem başına
   0,35 R, 2 ATR'de 0,26 R, 1 saatte 2 ATR'de
   0,06 R.
@@ -48,7 +54,7 @@ Mumun **yönünde**:
 - **Kapanışta piyasa.** Mum kapanınca, sonraki dakikanın açılışında piyasa emri.
 - **Geri çekilmeye limit.** Mumun ucundan mumun boyunun %25, %50 ya da %62 kadarı geri çekilen
   seviyeye limit. Mum zaten o kadar geri vermişse (kapanış o seviyenin gerisindeyse) emir konmaz.
-- **Ucun kırılmasına stop.** Mumun ucunun bir nokta ötesine stop emri: fiyat yeni bir uç yaparsa girilir.
+- **Ucun kırılmasına stop.** Mumun ucunun bir fiyat adımı (pipin onda biri) ötesine stop emri: fiyat yeni bir uç yaparsa girilir.
 - **Onay mumundan sonra piyasa.** Sonraki mum, kapanışı büyük mumun kapanışının ötesinde kapanırsa onun kapanışında
   piyasa emri. Onay gelmezse işlem yok.
 
@@ -63,8 +69,7 @@ Mumun **tersine**:
 
 Limit ve stop emirleri büyük mum kapandıktan sonra 6 mum boyunca bekler, dolmazsa iptal edilir. Her biçim
 iki stop (girişten 1 ya da 2 ATR) ve iki hedefle (riskin 1 ya da 2 katı) koşturuldu; ne stop ne hedef görülürse pozisyon
-24 mumun sonunda kapanır. R, planlanan risk demektir: girişten stopa olan mesafe. 2 ATR'lik stop ve 1 R'lik hedef, yani
-girişten 2 ATR uzaktaki hedef, tabloların ortak satırıdır.
+24 mumun sonunda kapanır.
 
 ## 5 dakika
 
@@ -75,21 +80,25 @@ girişten 2 ATR uzaktaki hedef, tabloların ortak satırıdır.
 | mumun yönünde · %62 geri çekilmeye limit | 28.040 | %57 | %43 | −0,06 | −0,18 | 11.546 | %56 | %42 | −0,07 | −0,20 |
 | mumun yönünde · onay mumundan sonra piyasa | 22.751 | %100 | %42 | −0,03 | −0,27 | 9.865 | %100 | %41 | −0,04 | −0,29 |
 | mumun yönünde · kapanışta piyasa | 50.638 | %100 | %41 | −0,04 | −0,29 | 21.054 | %100 | %41 | −0,03 | −0,30 |
-| mumun yönünde · ucun kırılmasına stop | 41.540 | %82 | %43 | 0,00 | −0,28 | 17.575 | %83 | %42 | −0,01 | −0,30 |
+| mumun yönünde · ucun kırılmasına stop | 41.540 | %82 | %43 | +0,01 | −0,26 | 17.575 | %83 | %43 | 0,00 | −0,28 |
 | mumun tersine · ucun yarım ATR ötesine limit | 29.111 | %57 | %44 | −0,06 | −0,17 | 12.360 | %59 | %44 | −0,05 | −0,17 |
 | mumun tersine · mumun ucuna limit | 35.271 | %73 | %44 | −0,05 | −0,16 | 15.001 | %75 | %44 | −0,04 | −0,16 |
 | mumun tersine · onay mumundan sonra piyasa | 27.477 | %100 | %43 | 0,00 | −0,26 | 11.016 | %100 | %44 | +0,03 | −0,24 |
 | mumun tersine · kapanışta piyasa | 50.638 | %100 | %45 | +0,04 | −0,22 | 21.054 | %100 | %44 | +0,03 | −0,23 |
-| mumun tersine · mumun yarısının kırılmasına stop | 34.786 | %73 | %43 | +0,01 | −0,25 | 14.279 | %72 | %44 | +0,02 | −0,26 |
+| mumun tersine · mumun yarısının kırılmasına stop | 34.786 | %73 | %44 | +0,02 | −0,23 | 14.279 | %72 | %45 | +0,04 | −0,23 |
 
 Tablonun okunuşu: önce **maliyetsiz R** sütunu, yani aynı kuralın alış-satış ortasından, makassız ve kaymasız sonucu.
-Bütün biçimler bir yüzde R'nin birkaç katı içinde sıfırın çevresinde. Tersine piyasa girişinin artı olması 6. dersin
-geri verme okumasıyla tutarlı. Sonra **net R**: aynı işlemler gerçek fiyatlarla. Fark maliyettir ve 5 dakikada
-maliyetsiz sonuçların hepsinden kat kat büyük.
+Bütün biçimler sıfırın birkaç yüzde R yakınında. Tersine piyasa girişinin artı olması 6. dersin geri verme okumasıyla
+tutarlı. Sonra **net R**: aynı işlemler gerçek fiyatlarla. Fark maliyettir: piyasa ve stop emirlerinde maliyetsiz
+sonucun kat kat üstünde, limitlerde iki katı civarında. 5 dakikada mumun %25 geri çekilmesine limitin maliyeti
+işlem başına 0,12 R, kapanışta piyasa girişininki
+0,26 R.
 
 <GrafikEmbed src="/arastirma/fx-buyuk-giris/01_izgara.html" baslik="On bir giriş biçimi, maliyetten önce ve sonra" no="01" kaynak="Dukascopy" />
 
 ## 15 dakika ve 1 saat
+
+**15 dakika**
 
 | Yön · emir | 2018–23 işlem | dolum | kazanma | maliyetsiz R | net R | 2024 → işlem | dolum | kazanma | maliyetsiz R | net R |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -98,12 +107,14 @@ maliyetsiz sonuçların hepsinden kat kat büyük.
 | mumun yönünde · %62 geri çekilmeye limit | 11.496 | %59 | %47 | −0,03 | −0,09 | 4.961 | %60 | %46 | −0,04 | −0,11 |
 | mumun yönünde · onay mumundan sonra piyasa | 9.274 | %100 | %46 | 0,00 | −0,13 | 3.988 | %100 | %46 | 0,00 | −0,14 |
 | mumun yönünde · kapanışta piyasa | 19.778 | %100 | %46 | 0,00 | −0,13 | 8.485 | %100 | %45 | −0,02 | −0,16 |
-| mumun yönünde · ucun kırılmasına stop | 16.067 | %81 | %47 | +0,01 | −0,12 | 6.984 | %82 | %45 | −0,03 | −0,18 |
+| mumun yönünde · ucun kırılmasına stop | 16.067 | %81 | %47 | +0,02 | −0,11 | 6.984 | %82 | %45 | −0,02 | −0,17 |
 | mumun tersine · ucun yarım ATR ötesine limit | 12.277 | %62 | %48 | −0,01 | −0,07 | 5.246 | %62 | %47 | −0,01 | −0,08 |
 | mumun tersine · mumun ucuna limit | 14.978 | %77 | %46 | −0,04 | −0,10 | 6.489 | %78 | %48 | 0,00 | −0,07 |
 | mumun tersine · onay mumundan sonra piyasa | 10.430 | %100 | %46 | 0,00 | −0,13 | 4.459 | %100 | %47 | +0,01 | −0,13 |
 | mumun tersine · kapanışta piyasa | 19.778 | %100 | %47 | 0,00 | −0,13 | 8.485 | %100 | %47 | +0,02 | −0,12 |
-| mumun tersine · mumun yarısının kırılmasına stop | 13.309 | %72 | %46 | 0,00 | −0,14 | 5.747 | %72 | %46 | 0,00 | −0,15 |
+| mumun tersine · mumun yarısının kırılmasına stop | 13.309 | %72 | %46 | +0,01 | −0,13 | 5.747 | %72 | %47 | +0,01 | −0,13 |
+
+**1 saat**
 
 | Yön · emir | 2018–23 işlem | dolum | kazanma | maliyetsiz R | net R | 2024 → işlem | dolum | kazanma | maliyetsiz R | net R |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -112,32 +123,39 @@ maliyetsiz sonuçların hepsinden kat kat büyük.
 | mumun yönünde · %62 geri çekilmeye limit | 2.761 | %55 | %49 | −0,01 | −0,04 | 1.147 | %54 | %48 | −0,01 | −0,05 |
 | mumun yönünde · onay mumundan sonra piyasa | 2.442 | %100 | %51 | +0,05 | 0,00 | 1.075 | %100 | %48 | 0,00 | −0,07 |
 | mumun yönünde · kapanışta piyasa | 5.070 | %100 | %50 | +0,02 | −0,03 | 2.168 | %100 | %49 | +0,01 | −0,06 |
-| mumun yönünde · ucun kırılmasına stop | 4.024 | %79 | %51 | +0,05 | −0,02 | 1.737 | %80 | %48 | 0,00 | −0,06 |
+| mumun yönünde · ucun kırılmasına stop | 4.024 | %79 | %51 | +0,05 | −0,02 | 1.737 | %80 | %48 | +0,01 | −0,05 |
 | mumun tersine · ucun yarım ATR ötesine limit | 3.095 | %61 | %47 | −0,05 | −0,08 | 1.290 | %60 | %47 | −0,04 | −0,07 |
 | mumun tersine · mumun ucuna limit | 3.897 | %77 | %46 | −0,06 | −0,08 | 1.689 | %78 | %48 | −0,02 | −0,05 |
 | mumun tersine · onay mumundan sonra piyasa | 2.624 | %100 | %47 | −0,02 | −0,09 | 1.090 | %100 | %49 | +0,01 | −0,04 |
 | mumun tersine · kapanışta piyasa | 5.070 | %100 | %47 | −0,02 | −0,08 | 2.168 | %100 | %48 | −0,01 | −0,07 |
-| mumun tersine · mumun yarısının kırılmasına stop | 3.191 | %66 | %48 | −0,01 | −0,07 | 1.349 | %67 | %46 | −0,03 | −0,11 |
+| mumun tersine · mumun yarısının kırılmasına stop | 3.191 | %66 | %48 | −0,01 | −0,07 | 1.349 | %67 | %47 | −0,02 | −0,10 |
 
 Dilim büyüdükçe iki şey değişiyor. Maliyet R cinsinden küçülüyor, çünkü ATR büyüyor ve aynı makas daha büyük bir
-mesafenin parçası oluyor. Ve yön değişiyor: 1 saatte mumun yönündeki girişlerin çoğu maliyetten
-önce artı (+0,02 R, onay mumuyla +0,05 R), tersine
-girişlerin hepsi eksi. Yine de maliyetten sonra 1 saatte de hiçbir biçim artıda değil. 2018–2023'te sıfıra en yakın iki
+mesafenin parçası oluyor. Ve yön değişiyor: 2018–2023'te 1 saatte mumun yönündeki girişlerin çoğu maliyetten önce artı
+(+0,02 R, onay mumuyla +0,05 R), tersine girişlerin
+hepsi eksi. Yine de bu satırda maliyetten sonra 1 saatte de hiçbir biçim artıda değil. 2018–2023'te sıfıra en yakın iki
 biçim onay mumu (0,00 R) ve mumun %25 geri çekilmesine limit
 (−0,01 R); 2024 sonrasında ikisi −0,07 ve
 −0,04 R.
 
+Izgaranın öbür hücrelerinde (iki stop, iki hedef) maliyetten sonra sıfırın üstüne çıkan tek yer 1 saatte, hedefi 2 R
+olan geri çekilme limitleri: mumun %25 geri çekilmesine limit 2018–2023'te
+0,00 R, 2024 sonrasında +0,02 R; yarısına limit
+−0,02 ve +0,03 R. Büyüklükler sıfırdan ayırt
+edilemeyecek kadar küçük; bu hücrenin süzgeçli hâli 9. dersin planında sınandı.
+
 ## Limit neden ucuz görünür: ters seçim
 
-Limit emir üç şeyi birden yapar. Makas ödemez (fiyat sana gelir), kayma ödemez, ve **yalnız fiyat aleyhine yürüdüğünde
-dolar.** Üçüncüsü ilk ikisini dengeler. Yukarı bir büyük mumdan sonra yarıya konan alış limiti, fiyat mumun yarısına
+Limit emir üç şeyi birden yapar. Girişte makas ödemez (fiyat sana gelir), girişte kayma ödemez, ve **yalnız fiyat
+aleyhine yürüdüğünde dolar.** Çıkışta (stopta ya da süre dolunca) makas ve kayma yine ödenir. Üçüncüsü ilk ikisini
+dengeler. Yukarı bir büyük mumdan sonra yarıya konan alış limiti, fiyat mumun yarısına
 indiğinde dolar; yani tam da büyük mumun hareketinin geri alındığı olaylarda. Fiyat hiç geri gelmeden yükselmeye devam
 ederse limit dolmaz ve en iyi işlem kaçar.
 
 Bunu ölçmek için her olayda iki soru birlikte soruldu: limit doldu mu, ve aynı anda piyasadan girilseydi (aynı stop ve
 hedefle) işlem kazanır mıydı?
 
-| Dilim · emir | 2018–23 doldu | dolduğunda piyasa girişi kazandı | dolmadığında kazandı | 2024 → doldu | dolduğunda kazandı | dolmadığında kazandı |
+| Dilim · emir | 2018–23 limit doldu | doldu · piyasa girişi kazandı | dolmadı · piyasa girişi kazandı | 2024 → limit doldu | doldu · piyasa girişi kazandı | dolmadı · piyasa girişi kazandı |
 |---|---:|---:|---:|---:|---:|---:|
 | 5 dakika · mumun yönünde · %25 geri çekilmeye limit | %83 | %32 | %87 | %81 | %31 | %86 |
 | 15 dakika · mumun yönünde · %25 geri çekilmeye limit | %85 | %39 | %91 | %85 | %36 | %92 |
@@ -156,16 +174,18 @@ hedefle) işlem kazanır mıydı?
 | 1 saat · mumun tersine · ucun yarım ATR ötesine limit | %61 | %27 | %78 | %60 | %26 | %79 |
 
 Limitin dolduğu olaylarda piyasa girişi çoğunlukla kaybediyor; dolmadığı olaylarda çoğunlukla kazanıyor. Fark büyük ve
-iki dönemde aynı. Bu bir maliyet değil, **seçim**: limit, kaybeden olayları seçen bir süzgeçtir. Limitin net sonucu
-yine de piyasa emrinden iyi çıkıyor, çünkü daha iyi bir fiyattan giriyor ve makas ödemiyor. Ama maliyetten önce piyasa
-emrinden kötü: 5 dakikada mumun yönünde, yarıya limit −0,06 R, piyasa
-−0,04 R. Mumun tersine aynı tablo daha da belirgin: kapanışta piyasa maliyetten önce
+iki dönemde aynı. Farkın büyük kısmı geometridir: limit, fiyat piyasa girişinin aleyhine mumun yarısı kadar yürüdüğünde
+dolar, ve yön bilgisi taşımayan bir yolda da piyasa girişi o olaylarda çoğunlukla kaybederdi. Tablo limitin iyi ya da
+kötü bir süzgeç olduğunu söylemez; limitin dolmasının hangi olaylarla birlikte geldiğini gösterir. Limitin net sonucu
+5 dakikada piyasa emrinden iyi çıkıyor, çünkü daha iyi bir fiyattan giriyor ve girişte makas ödemiyor. Ama maliyetten
+önce piyasa emrinden kötü: 5 dakikada mumun yönünde, yarıya limit −0,06 R, piyasa
+−0,04 R. Mumun tersine aynı durum daha da belirgin: kapanışta piyasa maliyetten önce
 +0,04 R, mumun ucuna limit −0,05 R. Limit, 5 dakikadaki
 küçük geri verme kenarını yok ediyor, çünkü fiyatın ucuna geri döndüğü olaylar tam da geri vermenin olmadığı olaylar.
 
 <GrafikEmbed src="/arastirma/fx-buyuk-giris/02_ters_secim.html" baslik="Limit doldu mu, dolmadı mı" no="02" kaynak="Dukascopy" />
 
-Pratik ders: "geri çekilmeyi bekle, limitle gir" tavsiyesi maliyeti düşürür, kenarı düşürmez. Limitin dolum oranı
+Pratik ders: "geri çekilmeyi bekle, limitle gir" tavsiyesi maliyeti düşürür, kenar yaratmaz. Limitin dolum oranı
 yüksekse (5 dakikada %25 geri çekilmeye limit %83 doluyor) bu iyi haber
 değildir: emir, fiyatın kolayca geri geldiği olayların neredeyse tamamında doluyor demektir.
 
@@ -178,31 +198,33 @@ bir R olur.
 
 5 dakikalık bir ATR'nin medyanı 3,1 pip. Stop 1 ATR'deyse planlanan risk birkaç pip ve tek bir makas
 bunun önemli bir parçası: 5 dakikada kapanışta piyasa girişinin maliyeti işlem başına 0,35
-R. Stopu 2 ATR'ye taşımak maliyeti 0,26 R'ye, 1 saatlik grafiğe geçmek
+R. Üstelik 1 ATR'de 5 dakikalık olayların %43 kadarında risk 3,0 pipin altında
+kaldı ve işlem hiç açılmadı (kalanların medyan riski 4,5 pip); yani 1 ATR'lik
+maliyet yalnız ATR'si büyük olan olayların maliyeti, gerçek fark daha da büyük. Stopu 2 ATR'ye taşımak maliyeti 0,26 R'ye, 1 saatlik grafiğe geçmek
 0,06 R'ye indiriyor. Ama hiçbiri kenar yaratmıyor; yalnız kaybı küçültüyor.
 
 ## Onay mumu
 
 "Onayı bekle" en sık verilen tavsiyelerden biridir. Ölçüm şunu söylüyor: onay mumu beklemek, olayların bir kısmında hiç
 işlem açmamak demek (5 dakikada mumun yönündeki onay 22.751 olayda geldi; büyük mum
-50.638 olaydı) ve gelen onaydan sonraki girişin maliyetten önceki sonucu kapanışta piyasa
+54.501 olaydı ve kapanışta piyasa girişi 50.638 işlem açtı) ve gelen onaydan sonraki girişin maliyetten önceki sonucu kapanışta piyasa
 girişinden belirgin farklı değil (−0,03 ve −0,04 R).
-Onay bir mumu bekler, ama fiyat o mumda zaten yürümüş olur: giriş daha kötü bir fiyattan yapılır ve onay mumunun
-taşıdığı bilgi bu fark kadardır.
+Onay bir mumu bekler, ama fiyat o mumda zaten yürümüş olur: giriş daha kötü bir fiyattan yapılır, ve onayın taşıdığı
+bilgi kaçırılan fiyatın bedelini ancak karşılıyor. 1 saatte 2018–2023'te en az kaybeden biçim onay mumu oldu.
 
 ## Ucun kırılması
 
 Mumun ucunun kırılmasına konan stop emri, mumun yönündeki "momentum" girişidir. 5 dakikada emirlerin
-%82 kadarı doldu, maliyetten önce 0,00 R, maliyetten
-sonra −0,28 R. Stop emri kaymayı öder ve fiyatın zaten yürüdüğü yerden alır. 1 saatte
-maliyetten önce +0,05 R; 2024 sonrasında 0,00 R.
+%82 kadarı doldu, maliyetten önce +0,01 R, maliyetten
+sonra −0,26 R. Stop emri kaymayı öder ve fiyatın zaten yürüdüğü yerden alır. 1 saatte
+maliyetten önce +0,05 R; 2024 sonrasında +0,01 R.
 
 ## Bu sonuç nasıl okunmalı
 
 Giriş biçimi üç şeyi değiştirir: kaç işlem açıldığını, işlemin hangi fiyattan açıldığını ve ne kadar maliyet ödendiğini.
-Yön bilgisini değiştirmez; o, mumun kendisinden gelir ve 6. ders onun küçük olduğunu gösterdi. En az kaybeden biçim
-(limit) maliyeti en az ödeyen biçimdir, en çok bilgiyi kullanan biçim değil. "Hangi emirle girmeliyim" sorusunun
-dürüst cevabı: kenar yoksa maliyeti en az ödeyen emirle, ve kenar yoksa hiç girmemek o emirden de ucuzdur.
+Yön bilgisini değiştirmez; o, mumun kendisinden gelir ve 6. ders onun küçük olduğunu gösterdi. 5 ve 15 dakikada en az
+kaybeden biçim (limit) maliyeti en az ödeyen biçimdir, en çok bilgiyi kullanan biçim değil. "Hangi emirle girmeliyim"
+sorusunun dürüst cevabı: kenar yoksa en ucuz emir bile kaybettirir; hiç girmemek ondan da ucuzdur.
 
 ## Ölçülmeyenler
 
@@ -211,3 +233,8 @@ dürüst cevabı: kenar yoksa maliyeti en az ödeyen emirle, ve kenar yoksa hiç
 - **Komisyon.** Yalnız makas ve kayma; komisyon eklenmedi.
 - **Değişken kayma.** Kayma sabit bir varsayımdır (haber penceresinde artan); hızlı piyasadaki gerçek kayma ölçülmedi.
 - **Dinamik çıkış.** Stop ve hedef sabit; iz süren stop, kısmi kâr alma ölçülmedi.
+- **Stop emriyle girişin dolum dakikası.** Dakika verisinde stop emrinin dolduğu dakikanın içindeki sıra görünmez: fiyat
+  önce koruyucu stopa uğrayıp sonra girişi tetiklemiş olabilir. Bu derste o dakikada koruyucu stop yalnız dakika stopun
+  ötesinde kapandıysa sayıldı ve çıkış stop seviyesinden yazıldı; dakikanın içindeki gerçek sıra ölçülmedi. Bu kural
+  2024 sınamasından sonra konuldu; değiştirdiği yalnız stop emirli hücrelerin sonucudur, seçilen ve sınanan girişlerin
+  hiçbiri stop emirli değil.

@@ -104,3 +104,19 @@ def test_piyasa_kayma_ve_haber_kaymasi():
 def test_en_az_risk():
     d = dakikalar([(1090, 1091, 1089, 1090)] * 40)
     assert bs.simule(d, olay(d, A=2.0), bs.Giris("devam", "piyasa", 1.0, 1.0), BOS) is None
+
+
+def test_stop_girisi_dolum_dakikasinda_dolumdan_onceki_fiyatla_stop_yazilmaz():
+    # Boğa mumu (1000–1100, kapanış 1090, orta 1050), A = 30. "Tersine stop" satışı ortada (1050); koruyucu stop
+    # 1050 + 30 = 1080 kapanışın altında. Dakika 3 1088'den 1049'a iner ve 1050'de kapanır: önce stop bölgesindeydi,
+    # sonra satış tetiklendi; dolumdan sonra 1080'e hiç dönülmedi → stop sayılmaz.
+    d = dakikalar([(1090, 1092, 1088, 1090)] * 3 + [(1088, 1089, 1049, 1050)] + [(1050, 1052, 1048, 1050)] * 40)
+    e = olay(d, A=30.0)
+    x = bs.simule(d, e, bs.Giris("ters", "stop", 1.0, 1.0), BOS, kayma_pip=0, haber_kayma_pip=0)
+    assert x["giris_dk"] == int(d.t[3]) and x["neden"] == "zaman"
+    assert x["R"] > -1.0
+    # Dolum dakikası stopun ötesinde kapanırsa (dolumdan sonra stopa dönülmüş) stop o dakikada, stop seviyesinden.
+    d2 = dakikalar([(1090, 1092, 1088, 1090)] * 3 + [(1060, 1090, 1049, 1085)] + [(1085,) * 4] * 40)
+    x2 = bs.simule(d2, e, bs.Giris("ters", "stop", 1.0, 1.0), BOS, kayma_pip=0, haber_kayma_pip=0)
+    assert x2["neden"] == "stop" and x2["cikis_dk"] == x2["giris_dk"]
+    assert abs(x2["R"] + 1.0) < 1e-9                    # giriş 1050, çıkış 1080: tam −1 R

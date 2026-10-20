@@ -177,11 +177,21 @@ def simule(d, e: dict, g: Giris, haber_sn: np.ndarray, kayma_pip: float = KAYMA_
     hedef_m = hedef_m.copy()
     if len(hedef_m):
         hedef_m[0] = False
+    stop_emri = em["tur"] == "stop"
+    if stop_emri and len(stop_m):
+        # Stop emriyle girişte dolum dakikasının dolumdan ÖNCEKİ kısmı koruyucu stopun tarafında olabilir (fiyat önce
+        # stopa iner, sonra girişi tetikler). O dakikada koruyucu stop yalnız dakika stopun ötesinde KAPANDIYSA sayılır
+        # (dolumdan sonra stopa dönülmüş demektir) ve çıkış stop seviyesinden yazılır, dakikanın açılışından değil.
+        stop_m = stop_m.copy()
+        stop_m[0] = bool(cl[0] <= stop) if s > 0 else bool(cl[0] >= stop)
     ks, kh = _ilk(stop_m), _ilk(hedef_m)
     if ks >= 0 and (kh < 0 or ks <= kh):
         k = ks
         ek = kay + (hk if _haber(int(t[i + k]), haber_sn) else 0.0)
-        cikis = (min(stop, op[k]) - ek) if s > 0 else (max(stop, op[k]) + ek)
+        if stop_emri and k == 0:
+            cikis = (stop - ek) if s > 0 else (stop + ek)
+        else:
+            cikis = (min(stop, op[k]) - ek) if s > 0 else (max(stop, op[k]) + ek)
         neden = "stop"
     elif kh >= 0:
         k = kh

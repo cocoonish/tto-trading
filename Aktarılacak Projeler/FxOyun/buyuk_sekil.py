@@ -123,7 +123,7 @@ def mum_02():
     _bitir(fig, "fx-buyuk-mum", "02_yol",
            "Şekil 02 — Ortalama yol: 5 dakikada hafif geri, 1 saatte hafif ileri",
            ["Büyük mumun kapanışından sonra ortalama fiyat, mumun yönünde ve olayın ATR'si cinsinden. Düz çizgi "
-            "2018–2023 (gölge: işlem günü düzeyinde %95 aralık), noktalı 2024 →. Maliyet yok.", KAYNAK], 500)
+            "2018–2023 (gölge: hafta düzeyinde %95 aralık), noktalı 2024 →. Maliyet yok.", KAYNAK], 500)
 
 
 def mum_03():
@@ -183,7 +183,7 @@ def suzgec_01():
     fig.update_yaxes(autorange="reversed", tickfont=dict(size=10))
     _bitir(fig, "fx-buyuk-suzgec", "01_net",
            "Şekil 01 — Süzgeçler 24 mum sonrasını çoğu zaman ayırmıyor",
-           ["Her süzgeç değerinde büyük mumdan 24 mum sonra ortalama hareket (mumun yönünde, ATR), işlem günü düzeyinde "
+           ["Her süzgeç değerinde büyük mumdan 24 mum sonra ortalama hareket (mumun yönünde, ATR), hafta düzeyinde "
             "%95 aralıkla. Gri 2018–2023, bordo 2024 →. Sağı mumun yönünde, solu tersine. Maliyet yok.", KAYNAK],
            22 * len(satir) + 140)
 
@@ -263,9 +263,10 @@ def giris_02():
         fig.update_xaxes(range=[0, 100], dtick=25, ticksuffix="", tickprefix="%", row=1, col=c)
     fig.update_yaxes(autorange="reversed", tickfont=dict(size=10))
     _bitir(fig, "fx-buyuk-giris", "02_ters_secim",
-           "Şekil 02 — Limit, kaybedecek işlemde dolar, kazanacak işlemi kaçırır",
-           ["Aynı olayda, limit emir koyulsaydı dolduğu ve dolmadığı durumlar ayrı ayrı: aynı anda piyasadan, aynı "
-            "stop (2 ATR) ve hedefle (1 R) girilseydi kazanma oranı. Gri 2018–2023, bordo 2024 →.", KAYNAK],
+           "Şekil 02 — Limit, piyasa girişinin kaybettiği olaylarda dolar",
+           ["Aynı olayda, limit emir konsaydı dolduğu ve dolmadığı durumlar ayrı ayrı: aynı anda piyasadan, aynı "
+            "stop (2 ATR) ve hedefle (1 R) girilseydi kazanma oranı. Farkın büyük kısmı geometridir: limit, fiyat "
+            "piyasa girişinin aleyhine yürüdüğünde dolar. Gri 2018–2023, bordo 2024 →.", KAYNAK],
            32 * len(satir) + 160)
 
 

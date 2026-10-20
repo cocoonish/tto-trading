@@ -31,7 +31,12 @@ def main() -> int:
             uygun = [r for r in rs if r["n"] >= k["en_az_islem"] and r["ort_R"] > 0
                      and (r.get("y1_R") or 0) > 0 and (r.get("y2_R") or 0) > 0]
             if not uygun:
-                en = max((r for r in rs if r["n"] >= k["en_az_islem"]), key=lambda r: r["ort_R"])
+                en = max((r for r in rs if r["n"] >= k["en_az_islem"]), key=lambda r: r["ort_R"], default=None)
+                if en is None:
+                    yok.append({"tf": tf, "yon": yon, "aday": len(rs), "en_iyi": None, "en_iyi_suzgec": None,
+                                "en_iyi_deger": None, "en_iyi_R": None, "en_iyi_y1": None, "en_iyi_y2": None,
+                                "en_iyi_n": 0})
+                    continue
                 yok.append({"tf": tf, "yon": yon, "aday": len(rs), "en_iyi": en["giris"], "en_iyi_suzgec": en["suzgec"],
                             "en_iyi_deger": en["deger"], "en_iyi_R": en["ort_R"], "en_iyi_y1": en.get("y1_R"),
                             "en_iyi_y2": en.get("y2_R"), "en_iyi_n": en["n"]})

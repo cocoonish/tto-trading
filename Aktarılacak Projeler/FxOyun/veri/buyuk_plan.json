@@ -1,6 +1,6 @@
 {
  "onkayit_ozu": "125105a57321300d854c663156ce5b4e260b63f3a547d417901721289783bb68",
- "gelistir_ozu": "993bdef025dd617a1b4a3165f0dea45510fbaeed9d142e09e8b99fc62afa8998",
+ "gelistir_ozu": "0796b8175b3f07185c9af86edd84255dd294907c52a38ef1d2669d8b5bb81c86",
  "aday_toplam": 3564,
  "aday": {
   "5_devam": 648,
@@ -98,13 +98,13 @@
    "tf": 15,
    "yon": "ters",
    "aday": 540,
-   "en_iyi": "ters:limit_ote:s2:h2",
+   "en_iyi": "ters:stop:s2:h2",
    "en_iyi_suzgec": "haber",
    "en_iyi_deger": "haber",
-   "en_iyi_R": 0.018754168804726672,
-   "en_iyi_y1": 0.17240623024179244,
-   "en_iyi_y2": -0.1099813421290312,
-   "en_iyi_n": 340
+   "en_iyi_R": 0.047275796126177015,
+   "en_iyi_y1": 0.11386754924168692,
+   "en_iyi_y2": -0.013596419911927194,
+   "en_iyi_n": 312
   }
  ],
  "referans": [

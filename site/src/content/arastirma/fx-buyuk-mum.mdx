@@ -5,7 +5,7 @@ pubDate: 2026-10-20
 tags: ['fx', 'gun-ici', 'oyun-plani', 'buyuk-mum', 'atr', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "Büyük bir mumdan sonra fiyatın çoğu zaman mumun yarısına döndüğü doğru, ama bunun büyük kısmı mumun kendi şeklinden gelir. Şansın payı düşülünce kalan şu: 5 dakikada hafif bir geri verme, 15 dakikada hiçbir şey, 1 saatte hafif bir devam. Üçü de iki dönemde aynı yönde, üçü de makastan küçük."
+ozet: "Büyük bir mumdan sonra fiyatın çoğu zaman mumun yarısına döndüğü doğru, ama bunun büyük kısmı mumun kendi şeklinden gelir. Şansın payı düşülünce kalan şu: 5 dakikada hafif bir geri verme (iki dönemde de), 15 dakikada daha zayıf bir geri verme, 1 saatte hafif bir devam (2024 sonrasında yalnız nokta tahmini olarak). 5 dakikadaki makastan küçük; 1 saatteki makastan büyük ama stoplu ve hedefli bir işlemde maliyeti karşılamıyor."
 seviye: 'orta'
 onkosul: ['fx-oyun-okuma']
 ---
@@ -19,33 +19,35 @@ nasıl yapılacağını (8. ders) ve en sonda 2018–2023 verisinden yazılıp 2
 (9. ders).
 
 Seri önceki derslerdeki gibi iki dönemli çalışır. Bütün okumalar 2018–2023 verisinden yapıldı; giriş planı o dönemden
-yazılıp 2024 ve sonrasının verisi hiç açılmadan kaydedildi. 2024 → döneminin sayıları (15.10.2026 tarihine
-kadar) aynı kodla sonradan ölçüldü ve her tabloda yan yana durur.
+yazılıp 2024 ve sonrasının fiyatları hiçbir hesaba girmeden kaydedildi. 2024 → döneminin sayıları (15.10.2026 tarihine
+kadar) aynı kurallarla sonradan ölçüldü ve her tabloda yan yana durur.
 
 ## Kısaca
 
 - **Büyük mum sık.** Aralığı önceki ATR'nin en az iki katı olan mum 5 dakikalık grafikte bir parite için günde ortalama
-  8,7 kez görüldü (kümenin devamı ve dışarıda bırakılanlar sayılmadan). Yani "büyük mum" nadir bir olay
+  8,7 kez görüldü (kümenin devamı, kararsız mumlar ve öbür dışarıda bırakılanlar sayılmadan). Yani "büyük mum" nadir bir olay
   değil, günün sıradan bir parçası.
 - **Mumun yarısına dönüş çok sık, ama çoğu şekilden.** 5 dakikalık büyük mumların %85 kadarında fiyat
   sonraki 24 mum içinde mumun yarısına geri geldi. Fiyatın yönü rastgele olsaydı da %82
   gelecekti: büyük mum çoğu zaman ucuna yakın kapanır ve yarısı kapanıştan kısa bir mesafededir. Farkın kendisi
-  (+4 puan) küçük ama iki dönemde de aynı yönde.
-- **Hangi yöne önce 1 ATR?** Kapanıştan bir ATR yukarı ve bir ATR aşağıdaki iki seviyeden önce mumun yönündeki
-  görüldü: 5 dakikada %46,9, 15 dakikada %49,5, 1 saatte %51,4. Yazı turada bu pay
-  %50 olurdu. 5 dakikada hafif bir dönüş eğilimi var, 1 saatte hafif bir devam.
+  (+3 puan) küçük ama iki dönemde de aynı yönde.
+- **Hangi yöne önce 1 ATR?** Kapanışın 1 ATR yukarısı ile 1 ATR aşağısı arasında önce mumun yönündeki seviyenin
+  görülme payı: 5 dakikada %46,9, 15 dakikada %49,5, 1 saatte %51,4. Yazı
+  turada bu pay %50 olurdu. 5 dakikada hafif bir dönüş eğilimi var; 1 saatlik pay yazı turadan ayırt edilemiyor.
 - **Ortalama yol küçük.** 24 mum sonra fiyat mumun yönünde ortalama 5 dakikada −0,08 ATR, 1 saatte
-  +0,15 ATR yol aldı. 5 dakikada bu −0,24 pip ediyor; tipik makas tek başına bundan
-  büyük.
-- **Makas büyük mumda açılmıyor.** Büyük mumun kapanış dakikasında makas, mumdan önceki bir saatin 1,03
-  katıydı; iki katını aştığı mum %2.
+  +0,15 ATR yol aldı. 5 dakikada bu −0,21 pip ediyor ve tipik makas tek başına bundan
+  büyük. 1 saatte +1,75 pip ve makastan büyük, ama stoplu ve hedefli bir işlemde maliyetten önce
+  işlem başına +0,02 R'ye iniyor (8. ders).
+- **Makas büyük mumun kapanışında açılmıyor.** Büyük mumun kapanış dakikasında makas, mumdan önceki bir saatin
+  1,03 katıydı; iki katını aştığı mum %2. Mumun içinde açılan makas da
+  sonucu taşımıyor: aşağıda.
 
 ## Büyük mum nasıl tanımlandı
 
 **ATR** (ortalama gerçek aralık) bir mumun "olağan" boyunun ölçüsüdür. Her mumun **gerçek aralığı** yüksek ile düşüğün
 farkıdır; mum bir önceki kapanıştan boşlukla açıldıysa o boşluk da aralığa eklenir. ATR(14) bu gerçek
-aralıkların son 14 mum üzerinden yumuşatılmış ortalamasıdır (Wilder ortalaması; TradingView'deki `ta.atr`
-ile aynı tanım). Hafta sonu ya da tatil sonrası ilk mumda önceki kapanış uzakta kaldığı için boşluk sayılmaz.
+aralıkların son 14 mum üzerinden yumuşatılmış ortalamasıdır (Wilder ortalaması; TradingView'deki ATR
+göstergesiyle aynı yumuşatma). Tek fark: önceki mum bitişik değilse (hafta sonu, tatil ya da eksik mum) boşluk sayılmaz.
 
 Bir mum, aralığı (yüksek − düşük) **kendisinden önceki** mumun ATR'sinin en az 2 katıysa büyük sayıldı. Ölçü
 yalnız geçmişten kurulur: mum kapandığı anda büyük olup olmadığı bilinir, sonrasına bakılmaz. Her dilim kendi ATR'siyle
@@ -59,12 +61,18 @@ Dört tür mum dışarıda bırakıldı ve sayıldı:
 
 - **Kümenin devamı.** Önceki 3 mumdan biri de büyükse mum sayılmadı; yalnız kümenin **ilk** büyük mumu
   olaydır. Arka arkaya gelen üç büyük mum aynı haberin üç parçasıdır ve ayrı ayrı sayılırsa aynı olay üç kez
-  ölçülürdü. 5 dakikada 88.251 büyük mumun 26.520 kadarı böyle çıktı.
+  ölçülürdü. 5 dakikalık grafikte 88.251 büyük mumdan 26.520 tanesi böyle çıktı.
 - **Yeniden açılış.** Altı saatten uzun bir boşluktan (hafta sonu, tatil) sonraki ilk 60 dakika. O dakikalarda kotasyon
   seyrek ve geniştir; aralık fiyatın değil kotasyonun hareketidir (810 mum).
-- **Devir.** New York saatiyle 16:50–17:10 (TSİ, ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10). FX gününün
-  devrinde makas sıçrar ve alış-satış ortasından ölçülen aralığı şişirir (2.348 mum).
+- **Devir.** New York saatiyle 16:50–17:10 aralığına değen mum (TSİ, ABD yaz saatinde 23:50–00:10, kış saatinde
+  00:50–01:10; 1 saatlik grafikte New York 16:00 ve 17:00 mumları). FX gününün devrinde makas sıçrar ve alış-satış
+  ortasından ölçülen aralığı şişirir (2.348 mum).
 - **Eksik veri.** Mumun ya da sonraki 24 mumun dakikalarının beşte birinden fazlası kotasyonsuz (561 mum).
+  İzleme penceresi saatle ölçüldüğü için cuma günü piyasa kapanışına yakın mumların penceresi hafta sonuna taşar ve bu
+  kurala takılır. 1 saatlik grafikte etki büyük: pencere bir gün sürdüğü için perşembe akşamından sonraki mumlar ölçüye
+  girmez. Bütün dönemde (2018 → 15.10.2026) bu kurala takılan 1 saatlik 1.824 mumun
+  1.683 tanesi cuma mumuydu; ABD istihdam raporunun (cuma) 1 saatlik mumu hiçbir 1 saatlik ölçüde
+  yok. 15 dakikada bu sayılar 258 ve 202.
 
 Her şey EUR/USD, GBP/USD, USD/JPY ve AUD/USD paritelerinde ve alış ile satışın ortasından (orta fiyat) ölçüldü. 2018–2023'te yön ölçülerine
 giren olay sayısı 5 dakikada 54.501, 15 dakikada 19.784, 1 saatte 5.070.
@@ -85,7 +93,7 @@ grafikte hep "belliydi" gibi görünür. Ölçülmesi gereken, binlerce büyük 
 ## Ne ölçüldü
 
 Büyük mum kapandıktan sonra fiyat 24 mum boyunca izlendi: 5 dakikalık grafikte iki saat, 15 dakikalıkta altı saat,
-1 saatlikte bir gün. Birim, olayın ATR'sidir (A). Ölçüler:
+1 saatlikte bir gün. Birim, olayın ATR'sidir. Ölçüler:
 
 - **±1 ATR'den hangisi önce.** Kapanışın bir ATR mumun yönünde ve bir ATR tersindeki iki seviye. Hangisi önce görüldü?
   Bu ölçü simetriktir: yön bilgisi olmayan bir fiyatta iki seviye eşit olasıdır ve beklenen pay %50. Aynı dakikada
@@ -110,49 +118,60 @@ orandır.
 
 | Dilim · dönem | olay | +1 ATR önce mumun yönünde | yarısına döndü (gerçek · ayna) | öbür ucuna döndü (gerçek · ayna) | 6 mum sonra, ATR | 24 mum sonra, ATR (%95 aralık) |
 |---|---:|---:|---:|---:|---:|---:|
-| 5 dakika · 2018–23 | 54.501 | %46,9 | %85 · %82 | %62 · %59 | −0,09 | −0,08 (−0,13 … −0,02) |
+| 5 dakika · 2018–23 | 54.501 | %46,9 | %85 · %82 | %62 · %59 | −0,10 | −0,08 (−0,13 … −0,03) |
 | 5 dakika · 2024 → | 22.828 | %48,3 | %85 · %82 | %62 · %59 | −0,03 | −0,07 (−0,17 … +0,02) |
-| 15 dakika · 2018–23 | 19.784 | %49,5 | %84 · %83 | %60 · %59 | −0,03 | −0,06 (−0,14 … +0,02) |
+| 15 dakika · 2018–23 | 19.784 | %49,5 | %84 · %83 | %60 · %59 | −0,03 | −0,06 (−0,13 … +0,02) |
 | 15 dakika · 2024 → | 8.488 | %48,7 | %84 · %81 | %59 · %57 | +0,01 | −0,02 (−0,16 … +0,12) |
-| 1 saat · 2018–23 | 5.070 | %51,4 | %81 · %83 | %55 · %58 | +0,05 | +0,15 (+0,02 … +0,28) |
+| 1 saat · 2018–23 | 5.070 | %51,4 | %81 · %83 | %55 · %58 | +0,05 | +0,15 (+0,03 … +0,28) |
 | 1 saat · 2024 → | 2.168 | %50,6 | %81 · %82 | %54 · %57 | +0,14 | +0,18 (−0,07 … +0,43) |
 
-Tablonun ikinci sütununda ayna yoktur, çünkü o ölçü simetriktir: aynası tam tersidir ve beklenen pay %50. Öbür
+«+1 ATR önce» sütununda ayna yoktur, çünkü o ölçü simetriktir: aynası tam tersidir ve beklenen pay %50. Öbür
 iki geri çekilme sütununda iki sayı yan yanadır: önce gerçek, sonra ayna. Son sütun 24 mum sonraki ortalama hareket ve
-işlem günü düzeyinde %95 aralığıdır (aynı gün dört paritede büyük mum çıkabilir, bunlar birbirinden bağımsız sayılmaz).
+hafta düzeyinde yeniden örneklenmiş %95 aralığıdır: aynı gün dört paritede büyük mum çıkabilir ve 1 saatlik
+yol ertesi güne taşar; bunlar birbirinden bağımsız sayılmaz.
 
 <GrafikEmbed src="/arastirma/fx-buyuk-mum/02_yol.html" baslik="Büyük mumdan sonra ortalama yol" no="02" kaynak="Dukascopy" />
 
 ## Dilim dilim okuma
 
 **5 dakika: hafif geri verme.** Fiyat ±1 ATR'den önce mumun tersindekini daha sık gördü (%53,1;
-2024 → %51,7). Mumun yarısına dönüş aynadan +4 puan sık
+2024 → %51,7). Mumun yarısına dönüş aynadan +3 puan sık
 (2024 → +3 puan). 24 mum sonra ortalama −0,08 ATR (2024 → −0,07).
-Üç ölçü de aynı yöne bakıyor ve iki dönemde de tutuyor. Ama büyüklüğe dikkat: 5 dakikalık bir ATR'nin medyanı
-3,1 pip ve 24 mumluk ortalama geri verme −0,24 pip. Aynı paritelerde makasın medyanı
+Üç ölçü de aynı yöne bakıyor. ±1 ATR payı ve yarısına dönüş iki dönemde de aralığıyla tutuyor; 24 mum sonraki yolun
+aralığı 2018–2023'te sıfırın altında (−0,13 … −0,03), 2024 sonrasında sıfırı
+kapsıyor (−0,17 … +0,02). Ama büyüklüğe dikkat: 5 dakikalık bir ATR'nin medyanı
+3,1 pip; 24 mumluk ortalama hareket −0,21 pip. Aynı paritelerde makasın medyanı
 0,8 pip.
 
-**15 dakika: hiçbir şey.** ±1 ATR payı %49,5 (2024 → %48,7), yarısına dönüşte gerçek
-ile ayna arasındaki fark +1 puan (2024 → +3), 24 mum sonra
-−0,06 ATR. 15 dakikalık büyük mum, 5 dakikalığın geri verme eğilimi ile 1 saatliğin devam eğilimi
-arasında bir yerde duruyor.
+**15 dakika: zayıf bir geri verme.** Yarısına dönüş aynadan +1,1 puan sık (aralık
++0,2 … +1,9); 2024 → +2,9 puan (aralık
++1,5 … +4,5). ±1 ATR payı %49,5 (2024 →
+%48,7), 24 mum sonra −0,06 ATR (2024 → −0,02). 24 mum sonraki yol iki
+dönemde de sıfırdan ayırt edilemiyor; ±1 ATR payı 2018–2023'te yazı turadan ayırt edilemiyor, 2024 sonrasında
+aralığın üst ucu %50 sınırında (%47,4 … %50,0). 15 dakikalık büyük mum, 5 dakikalığın geri verme eğilimi ile 1 saatliğin devam eğilimi
+arasında, geri verme tarafına yakın duruyor.
 
 **1 saat: hafif devam.** ±1 ATR'den önce mumun yönündeki %51,4 (2024 → %50,6). Yarısına
-dönüş aynadan seyrek değil, sık da değil (−1 puan). 24 mum (bir gün) sonra fiyat mumun yönünde
-ortalama +0,15 ATR (%95 aralık +0,02 … +0,28) ve 2024 → döneminde
-+0,18 ATR yol aldı. Bu ölçülerin en güçlüsü; yine de yön payı bir yazı turadan birkaç puan uzakta.
+dönüş aynadan seyrek değil, sık da değil (−2 puan). 24 mum (bir gün) sonra fiyat mumun yönünde
+ortalama +0,15 ATR (%95 aralık +0,03 … +0,28) ve 2024 → döneminde
++0,18 ATR yol aldı (aralık −0,07 … +0,43). 2018–2023'te aralık
+sıfırın üstünde, 2024 sonrasında nokta tahmini aynı yönde ama aralık sıfırı kapsıyor; yön payı da iki dönemde yazı
+turadan ayırt edilemiyor. İki dönemde de aralığıyla tutan ölçü 5 dakikadaki geri vermedir.
 
 <GrafikEmbed src="/arastirma/fx-buyuk-mum/03_geri.html" baslik="Geri çekilme şanstan sık mı" no="03" kaynak="Dukascopy" />
 
 ## Yarısına dönen fiyat ne kadar sürede dönüyor
 
-Yarısına dönen olaylarda bu dönüş 5 dakikada medyan 6 dakikada, 15 dakikada 15
-dakikada, 1 saatte 54 dakikada geldi. Yani yarısına dönüş çoğu zaman bir iki mum içinde olur. Bu,
-8. dersteki limit emirlerin neden çoğu zaman dolduğunu ve neden dolmalarının iyi haber olmadığını açıklar.
+Yarısına dönüşün medyan süresi: 5 dakikalık grafikte 6 dakika, 15 dakikalıkta
+15 dakika, 1 saatlikte 54 dakika. Yani yarısına dönenlerin yarısında dönüş ilk
+bir iki mum içinde gelir. Bu, 8. dersteki limit emirlerin neden çoğu zaman dolduğunu açıklar; dolmanın neden iyi haber olmadığını 8. ders
+gösterir.
 
-Yarısına dönen fiyatın sonra yeniden mumun ucuna gitme payı 5 dakikada %40 (ayna
-%38), 1 saatte %39 (ayna %39). Geri çekilip
-yeniden uca gitmek ("geri çekilmede katıl" okuması) şansla beklenen kadar sık.
+Büyük mumların 5 dakikada %40 kadarında (ayna %38) fiyat önce yarısına
+dönüp sonra yeniden mumun ucuna gitti; yarısına dönenler içinde bu pay %47 (ayna
+%47). 1 saatte %39 (ayna %39), yarısına
+dönenler içinde %49 (ayna %47). Geri çekilip yeniden uca gitmek
+("geri çekilmede katıl" okuması) şansla beklenen kadar sık.
 
 ## Büyüklük değişince
 
@@ -179,7 +198,7 @@ etkisi yok. 5 ATR'lik bir mumun 2 ATR'lik bir mumdan daha güvenilir bir dönü�
 
 ## Makas büyük mumda açılıyor mu
 
-Büyük mumun kendisi de büyük mum anında işlem yapmak da makas açısından pahalı sanılır. Ölçüldü: mumun kapanış
+Büyük mum anında işlem yapmanın makas yüzünden pahalı olduğu sık söylenir. Ölçüldü: mumun kapanış
 dakikasındaki makas mumdan önceki 60 dakikanın medyan makasıyla, sonraki dakikaların açılışındaki makas da aynı tabanla
 kıyaslandı.
 
@@ -192,19 +211,35 @@ kıyaslandı.
 | 1 saat · 2018–23 | 0,7 | 1,03 | %2 | 0,97 | 0,96 | %1 |
 | 1 saat · 2024 → | 0,6 | 1,11 | %5 | 1,04 | 1,00 | %3 |
 
-Büyük mumların çoğunda makas açılmıyor. İki katını aşan mumlar azınlıkta ve 7. derste görüleceği gibi bunlar çoğunlukla
-takvimdeki haberlerin mumları. Yani büyük mumdan sonra girişin pahalı olmasının sebebi makasın açılması değil,
-hareketin kendisinin küçük olması: ortalama geri verme ya da devam makastan küçük.
+Büyük mumların çoğunda kapanış dakikasında makas açılmıyor; iki katını aşan mumlar azınlıkta.
+
+Makasın mumun **içinde** açılması ayrı bir sorudur. Orta fiyatın yükseği, alış ve satış yükseklerinin ortalamasıdır;
+mum içinde makas bir an açılırsa orta fiyatın aralığı şişer ve mum, fiyat o kadar gitmediği hâlde "büyük" görünür.
+5 dakikalık büyük mumların içinde makasın en geniş anı, mumdan önceki saatin medyan makasının medyanda
+1,2 katıydı. Sınamak için yalnız alış ve yalnız satış fiyatıyla ölçülen iki aralığın küçüğü de
+2 ATR'yi geçen mumlar ayrıca ölçüldü; 5 dakikada olayların %95 kadarı (2024 → %94). O
+mumlarda yarısına dönüş aynadan +3,5 puan sık (aralık +2,9 …
++4,0; 2024 → +3,0 puan) ve 24 mum sonra ortalama
+−0,08 ATR (2024 → −0,08): geri verme makasın yarattığı bir görüntü değil.
+
+Yani büyük mumdan sonra girişin pahalı olmasının sebebi makasın açılması değil, hareketin kendisinin küçük olması:
+5 dakikada ortalama geri verme makastan küçük, 1 saatte ortalama devam makastan büyük ama stop ve hedefle kurulan bir
+işlemde makas ve kaymayı karşılamıyor.
 
 ## Bu sonuç nasıl okunmalı
 
-Büyük mum bir **bilgi** taşıyor, ama çok az. 5 dakikada bir parça geri verme, 1 saatte bir parça devam. İkisi de iki
-dönemde aynı yönde görüldüğü için tesadüf değil; ikisi de maliyetten küçük olduğu için tek başına işlem değil. Büyük
+Büyük mum bir **bilgi** taşıyor, ama çok az. 5 dakikada bir parça geri verme, 1 saatte bir parça devam. 5 dakikadaki
+iki dönemde de aralığıyla tutuyor; 1 saatteki 2018–2023'te aralığıyla, 2024 sonrasında yalnız nokta tahminiyle aynı
+yönde. İkisi de bir işlemin maliyetini karşılamadığı için tek başına işlem değil (8. ders). Büyük
 mumdan sonra yarısına dönüşü bekleyen bir işlemci haklı çıkar, ama aynı haklılık yönü bilmeyen birine de düşerdi.
 Ayna bunu ölçer.
 
-Sonraki ders bu küçük bilginin nerede yoğunlaştığına bakar: hangi seansta, hangi kapanışta, hangi trendde fade daha
-haklı, hangisinde mumun yönü.
+Sonraki ders bu küçük bilginin nerede yoğunlaştığına bakar: hangi seansta, hangi kapanışta, hangi trendde mumun
+tersine girmek (fade) daha haklı, hangisinde mumun yönü.
+
+Seride üç sözcük tek anlamda kullanılır. **Geri çekilme**, fiyatın mumun ucundan mumun boyunun belli bir oranı kadar
+geri gelmesidir (bir ölçü). **Geri verme**, ortalama yolun mumun tersine olmasıdır (bir eğilim). **Fade**, mumun tersine
+işleme girmektir (bir karar).
 
 ## Ölçülmeyenler
 

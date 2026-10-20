@@ -17,6 +17,9 @@ import sys
 import tomllib
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
+
 BURASI = Path(__file__).resolve().parent
 sys.path.insert(0, str(BURASI))
 import ders_yaz as dy  # noqa: E402
@@ -81,8 +84,22 @@ def puan(x: float) -> str:
     return sayi(x * 100, 0, arti=True)
 
 
+def puan1(x: float) -> str:
+    """Aralık uçları için tek ondalık: tam sayıya yuvarlanan bir uç (+0,2 → "0") sıfırı kapsıyormuş gibi okunur."""
+    return sayi(x * 100, 1, arti=True)
+
+
 def tarih(iso: str) -> str:
     return ".".join(reversed(iso[:10].split("-")))
+
+
+def is_gunu(dn: str) -> int:
+    """Dönemin hafta içi gün sayısı (iki ucu dahil): "günde kaç büyük mum" bütün işlem günlerine bölünür,
+    yalnız büyük mum görülen günlere değil."""
+    bas, bit = D["kunye"]["donem"][dn]
+    if dn == "dis":
+        bit = min(bit, D["kunye"]["veri_bitis"])
+    return int(np.busday_count(bas, (pd.Timestamp(bit) + pd.Timedelta(days=1)).date().isoformat()))
 
 
 def bacak_kisa(b: dict) -> str:
@@ -104,16 +121,21 @@ def anahtarlar() -> dict[str, str]:
             for m in OR:
                 K[f"{p}.{m}"] = yuzde(v[m], 1 if m.startswith("sim") else 0)
                 K[f"{p}.ayna_{m}"] = yuzde(v[f"ayna_{m}"])
-                K[f"{p}.{m}_fark"] = puan(v[m] - v[f"ayna_{m}"])
+                # fark, okurun gördüğü yuvarlanmış iki paydan: "%85 · %82" yanında "+3 puan" okunmalı
+                K[f"{p}.{m}_fark"] = sayi(round(v[m] * 100) - round(v[f"ayna_{m}"] * 100), 0, arti=True)
             K[f"{p}.sim_1.0_ters"] = yuzde(1 - v["sim_1.0"], 1)
+            K[f"{p}.geri_fark1"] = puan1(v["geri_0.5_fark"]["ort"])
             for H in (1, 3, 6, 12, 24):
                 K[f"{p}.net_{H}"] = a(v[f"net_{H}_ort"])
             for x in ("alt", "ust"):
                 K[f"{p}.net_24_{x}"] = a(v["net_24"][x])
-                K[f"{p}.geri_fark_{x}"] = puan(v["geri_0.5_fark"][x])
+                K[f"{p}.geri_fark_{x}"] = puan1(v["geri_0.5_fark"][x])
                 K[f"{p}.sim_{x}"] = yuzde(v["sim_1.0_ci"][x], 1)
-            K[f"{p}.net24_pip"] = sayi(v["net_24"]["ort"] * v["A_pip_med"], 2, arti=True)
-            K[f"{p}.gunde"] = sayi(v["n"] / v["gun_n"] / len(D["kunye"]["ciftler"]), 1)
+            K[f"{p}.net24_pip"] = sayi(v["net24_pip_ort"], 2, arti=True)
+            K[f"{p}.gunde"] = sayi(v["n"] / is_gunu(dn) / len(D["kunye"]["ciftler"]), 1)
+            # yarısına dönenler içinde yeniden uca gidenlerin payı (koşullu)
+            K[f"{p}.geri_50_uc_kosul"] = yuzde(v["geri_50_uc"] / v["geri_0.5"])
+            K[f"{p}.ayna_geri_50_uc_kosul"] = yuzde(v["ayna_geri_50_uc"] / v["ayna_geri_0.5"])
             K[f"{p}.mfe"] = sayi(v["mfe_med"], 1)
             K[f"{p}.mae"] = sayi(v["mae_med"], 1)
             K[f"{p}.geri_dk"] = tam(round(v["geri_0.5_dk_med"]))
@@ -130,6 +152,24 @@ def anahtarlar() -> dict[str, str]:
         s = D["sayim_ic"][tf]
         for x, n in s.items():
             K[f"SAY.{tf}.{x}"] = tam(n)
+        for x, n in D["sayim_tum"][tf].items():
+            K[f"SAYT.{tf}.{x}"] = tam(n)
+        for dn in ("ic", "dis"):
+            t = D["tek"][tf][dn]
+            K[f"TEK.{tf}.{dn}.pay"] = yuzde(t["pay"])
+            K[f"TEK.{tf}.{dn}.makas_ici_kat"] = sayi(t["makas_ici_kat_med"], 1)
+            for alt_k in ("tum", "asya"):
+                x, q = t[alt_k], f"TEK.{tf}.{dn}.{alt_k}"
+                if not x["n"]:
+                    continue
+                K[f"{q}.n"] = tam(x["n"])
+                K[f"{q}.sim"] = yuzde(x["sim_1.0"], 1)
+                K[f"{q}.sim_alt"], K[f"{q}.sim_ust"] = yuzde(x["sim_1.0_ci"]["alt"], 1), yuzde(x["sim_1.0_ci"]["ust"], 1)
+                K[f"{q}.net"] = a(x["net_24"]["ort"])
+                K[f"{q}.net_alt"], K[f"{q}.net_ust"] = a(x["net_24"]["alt"]), a(x["net_24"]["ust"])
+                K[f"{q}.geri_fark"] = puan1(x["geri_0.5_fark"]["ort"])
+                K[f"{q}.geri_fark_alt"] = puan1(x["geri_0.5_fark"]["alt"])
+                K[f"{q}.geri_fark_ust"] = puan1(x["geri_0.5_fark"]["ust"])
         K[f"SAY.{tf}.kararsiz"] = tam(D["kararsiz_ic"][tf])
         for f, vals in D["suzgec"][tf].items():
             for v, dd in vals.items():
@@ -180,8 +220,13 @@ def anahtarlar() -> dict[str, str]:
                 K[f"{p}.{dn}.gun_n"] = tam(o["gun_n"])
             if o.get("alt") is not None:
                 K[f"{p}.{dn}.alt"], K[f"{p}.{dn}.ust"] = r(o["alt"]), r(o["ust"])
+        h = D["bacak_hafta"][b["bacak"]]
+        if h["alt"] is not None:
+            K[f"{p}.dis.hafta_alt"], K[f"{p}.dis.hafta_ust"] = r(h["alt"]), r(h["ust"])
     for x in (0.25, 0.5, 0.62, 0.95, 0.2):
         K[f"Y.{int(round(x * 100))}"] = yuzde(x)
+    u = {x["giris"]: x for x in D["izgara"]["5"]["ic"]}
+    K["G.5.taban_pay"] = yuzde(1 - u["devam:piyasa:s1:h1"]["uygun"] / u["devam:piyasa:s2:h1"]["uygun"])
     P = D["plan"]
     K["plan.aday"] = tam(P["aday_toplam"])
     K["plan.islem_sayi"] = tam(len(P["islem"]))
@@ -197,6 +242,9 @@ def anahtarlar() -> dict[str, str]:
     say = {h: sum(1 for b in D["bacak"] if b["hukum"] == h) for h in HUKUM_AD}
     for h, n in say.items():
         K[f"hukum_{h}"] = tam(n)
+    toplam = len(D["bacak"])
+    K["hukum_cumle"] = (f"{tam(toplam)} girişin hepsi çalışmıyor" if say["calismiyor"] == toplam
+                        else f"{tam(toplam)} girişten çalışmayanların sayısı {tam(say['calismiyor'])}")
     ku = D["kunye"]
     K["pariteler"] = dy.pariteler(ku["ciftler"])
     K["parite_sayi"] = dy.SAYI_AD[len(ku["ciftler"])]
@@ -314,8 +362,9 @@ def b_ters_secim(stop: str = "s2", hedef: str = "h1") -> str:
                     yuzde(x["piyasa_kazanma_dolan"]), yuzde(x["piyasa_kazanma_kacan"]),
                     yuzde(o["dolan_n"] / (o["dolan_n"] + o["kacan_n"])),
                     yuzde(o["piyasa_kazanma_dolan"]), yuzde(o["piyasa_kazanma_kacan"])])
-    return _tablo(["Dilim · emir", "2018–23 doldu", "dolduğunda piyasa girişi kazandı", "dolmadığında kazandı",
-                   "2024 → doldu", "dolduğunda kazandı", "dolmadığında kazandı"], sat)
+    return _tablo(["Dilim · emir", "2018–23 limit doldu", "doldu · piyasa girişi kazandı",
+                   "dolmadı · piyasa girişi kazandı", "2024 → limit doldu", "doldu · piyasa girişi kazandı",
+                   "dolmadı · piyasa girişi kazandı"], sat)
 
 
 def b_bacaklar(rol: str) -> str:
@@ -326,11 +375,13 @@ def b_bacaklar(rol: str) -> str:
         i, o = b["ic"], b["dis"]
         suz = f" · {SUZ_AD[b['suzgec']].lower()}: {deger_ad(b['suzgec'], b['deger'])}" if b["suzgec"] else ""
         aralik = f"{r(o['alt'])} … {r(o['ust'])}" if o.get("alt") is not None else "—"
+        h = D["bacak_hafta"][b["bacak"]]
+        hafta = f"{r(h['alt'])} … {r(h['ust'])}" if h["alt"] is not None else "—"
         sat.append([f"{TF_AD[str(b['tf'])]}{suz}", giris_ad(b["giris"]), tam(i["n"]), yuzde(i["kazanma"]), r(i["ort_R"]),
                     tam(o["n"]), yuzde(o["kazanma"]) if o["n"] else "—", r(o["ort_R"]) if o["n"] else "—",
-                    r(o["brut_R"]) if o.get("brut_R") is not None else "—", aralik, HUKUM_AD[b["hukum"]]])
+                    r(o["brut_R"]) if o.get("brut_R") is not None else "—", aralik, hafta, HUKUM_AD[b["hukum"]]])
     return _tablo(["Dilim · süzgeç", "Giriş", "2018–23 n", "kazanma", "net R", "2024 → n", "kazanma", "net R",
-                   "maliyetsiz R", "%95 aralık", "hüküm"], sat, sol=[0, 1, 10])
+                   "2024 → maliyetsiz R", "2024 → %95 aralık (gün)", "aralık (hafta)", "hüküm"], sat, sol=[0, 1, 11])
 
 
 def b_yok() -> str:

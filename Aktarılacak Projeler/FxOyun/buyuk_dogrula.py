@@ -21,7 +21,9 @@ import hashlib
 import json
 import re
 import tomllib
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 BURASI = Path(__file__).resolve().parent
 VERI = BURASI / "veri"
@@ -146,11 +148,32 @@ def iddialar(D: dict, dogru) -> None:
             dogru(v["makas_mum_kat_ort"] < 1.15 and v["makas_mum_iki_kat"] < 0.06, f"{dn} {tf}: makas büyük mumda açılmıyor değil")
             dogru(v["geri_0.5_dk_med"] <= 2 * int(tf), f"{dn} {tf}: yarısına dönüş 'bir iki mum içinde' değil")
     dogru(V["60"]["ic"]["net_24"]["alt"] > 0, "1 sa 2018–2023 net_24 aralığı sıfırı kapsıyor")
+    dogru(V["60"]["dis"]["net_24"]["alt"] < 0 < V["60"]["dis"]["net_24"]["ust"], "1 sa 2024 → net_24 aralığı metindeki gibi sıfırı kapsamıyor")
+    dogru(V["5"]["ic"]["net_24"]["ust"] < 0 and V["5"]["dis"]["net_24"]["alt"] < 0 < V["5"]["dis"]["net_24"]["ust"],
+          "5 dk net_24 aralıkları metindeki gibi değil (2018–23 sıfırın altında, 2024 → sıfırı kapsıyor)")
+    for dn in iki:
+        dogru(V["5"][dn]["sim_1.0_ci"]["ust"] < 0.5 and V["5"][dn]["geri_0.5_fark"]["alt"] > 0,
+              f"{dn}: 5 dk ±1 ATR payı / yarısına dönüş aralığıyla tutmuyor")
+        dogru(V["15"][dn]["geri_0.5_fark"]["alt"] > 0, f"{dn}: 15 dk geri verme aralığı sıfırın üstünde değil")
+        dogru(V["15"][dn]["net_24"]["alt"] < 0 < V["15"][dn]["net_24"]["ust"], f"{dn}: 15 dk 24 mum yolu sıfırdan ayrışıyor")
+        dogru(V["60"][dn]["sim_1.0_ci"]["alt"] < 0.5 < V["60"][dn]["sim_1.0_ci"]["ust"], f"{dn}: 1 sa ±1 ATR payı yazı turadan ayrışıyor")
+        dogru(V["5"][dn]["net24_pip_ort"] < 0 and abs(V["5"][dn]["net24_pip_ort"]) < V["5"][dn]["makas_once_pip_med"]
+              < V["60"][dn]["net24_pip_ort"], f"{dn}: pip karşılaştırması (5 dk makastan küçük, 1 sa büyük) tutmuyor")
+    dogru(V["15"]["ic"]["sim_1.0_ci"]["alt"] < 0.5 < V["15"]["ic"]["sim_1.0_ci"]["ust"]
+          and abs(V["15"]["dis"]["sim_1.0_ci"]["ust"] - 0.5) < 0.005, "15 dk ±1 ATR aralıkları metindeki gibi değil")
+    T = D["tek"]
+    for dn in iki:
+        dogru(T["5"][dn]["pay"] > 0.9 and T["5"][dn]["tum"]["geri_0.5_fark"]["alt"] > 0 and T["5"][dn]["tum"]["net_24"]["ort"] < 0,
+              f"{dn}: tek taraflı aralıkla 5 dk geri verme sürmüyor")
+    S0 = D["sayim_tum"]
+    dogru(S0["60"]["eksik_cuma"] > 0.8 * S0["60"]["eksik"], "1 sa eksik veri dışlamasının çoğu cuma değil")
     dogru(abs(V["5"]["ic"]["net_24"]["ort"] * V["5"]["ic"]["A_pip_med"]) < V["5"]["ic"]["makas_once_pip_med"],
           "5 dk ortalama geri verme pip cinsinden makastan küçük değil")
     for tf in ("5", "60"):
         v = V[tf]["ic"]
         dogru(abs(v["geri_50_uc"] - v["ayna_geri_50_uc"]) < 0.03, f"{tf}: geri çekilip uca dönüş şansla beklenen kadar değil")
+        dogru(abs(v["geri_50_uc"] / v["geri_0.5"] - v["ayna_geri_50_uc"] / v["ayna_geri_0.5"]) < 0.03,
+              f"{tf}: yarısına dönenler içinde uca dönüş şansla beklenen kadar değil")
     # ders 7
     s5 = S["5"]
     for dn in iki:
@@ -158,6 +181,12 @@ def iddialar(D: dict, dogru) -> None:
               f"{dn}: 5 dk kapanış ucunda geri verme / geri verilmişte fark yok değil")
         dogru(s5["seans"]["asya"][dn]["sim_1.0"] < s5["seans"]["londra"][dn]["sim_1.0"] and fark(s5["seans"]["asya"][dn]) > 0.04,
               f"{dn}: 5 dk Asya geri verme okuması tutmuyor")
+        dogru(0 < fark(s5["seans"]["londra"][dn]) < 0.6 * fark(s5["seans"]["asya"][dn]), f"{dn}: 5 dk Londra 'yarı yarıya küçük' değil")
+        dogru(s5["kapanis"]["geri"][dn]["net_24"]["ort"] < 0, f"{dn}: 5 dk geri verilmiş mumun 24 mum yolu eksi değil")
+        a15 = S["15"]["seans"]["asya"][dn]
+        dogru(a15["sim_1.0_ci"]["ust"] < 0.5 and a15["geri_0.5_fark"]["alt"] > 0, f"{dn}: 15 dk Asya okuması tutmuyor")
+        l60 = S["60"]["seans"]["londra"][dn]
+        dogru(l60["net_24"]["ort"] > 0, f"{dn}: 1 sa Londra seansı artı değil")
         dogru(s5["ardisik"]["evet"][dn]["net_24"]["ust"] < 0 and abs(s5["ardisik"]["hayir"][dn]["net_24"]["ort"]) < 0.03,
               f"{dn}: 5 dk ardışık büyük mum okuması tutmuyor")
         s60 = S["60"]
@@ -171,6 +200,12 @@ def iddialar(D: dict, dogru) -> None:
     t60 = S["60"]["trend"]
     dogru(t60["trendle"]["ic"]["net_24"]["alt"] > 0 and t60["yatay"]["ic"]["net_24"]["ort"] < 0 < t60["karsi"]["dis"]["net_24"]["ort"],
           "1 sa trend okuması metindeki gibi değil")
+    dogru(abs(t60["trendle"]["dis"]["net_24"]["ort"] - t60["karsi"]["dis"]["net_24"]["ort"]) < 0.1
+          and t60["yatay"]["dis"]["net_24"]["ort"] < 0, "1 sa 2024 → trend ayrımı 'iki taraf aynı yerde' değil")
+    l = S["60"]["seans"]["londra"]
+    dogru(l["ic"]["net_24"]["alt"] < 0 < l["dis"]["net_24"]["alt"], "1 sa Londra aralıkları metindeki gibi değil")
+    for v in ("sakin",):
+        dogru(all(S["5"]["kosu"][v][dn]["net_24"]["ust"] < 0 for dn in iki), "5 dk sakin geçmiş hücresi metindeki gibi değil")
     dogru(s5["haber"]["haber"]["ic"]["n"] < 1000, "5 dk haber mumu 'çok az' değil")
     dogru(sum(len(v) for v in S["5"].values()) * 3 == 78, "süzgeç hücre sayısı metindeki yetmiş sekiz değil")
     # ders 8
@@ -184,6 +219,21 @@ def iddialar(D: dict, dogru) -> None:
     dogru(g5["ters:piyasa:s2:h1"]["brut_R"] > 0, "5 dk tersine piyasa maliyetsiz artı değil")
     dogru(g5["devam:piyasa:s2:h1"]["maliyet_R"] > 2 * max(abs(x["brut_R"]) for g, x in g5.items() if g.endswith(":s2:h1")),
           "5 dk maliyet maliyetsiz sonuçlardan kat kat büyük değil")
+    for g, x in g5.items():
+        if g.endswith(":s2:h1") and ":limit_" in g:
+            dogru(1.4 < x["maliyet_R"] / abs(x["brut_R"]) < 2.6, f"5 dk {g}: limit maliyeti 'iki katı civarında' değil")
+    # maliyetten sonra artı hücreler: yalnız 1 saatte, hedefi 2 R olan geri çekilme limitleri
+    for tf in ("5", "15", "60"):
+        for dn in iki:
+            art = {g for g, x in I[tf][dn].items() if x["n"] and x["ort_R"] > 0}
+            dogru(art <= ({"devam:limit_0.25:s2:h2", "devam:limit_0.5:s2:h2"} if tf == "60" else set()),
+                  f"{tf} {dn}: maliyetten sonra artı hücreler metindeki gibi değil: {sorted(art)}")
+        if tf in ("5", "15"):
+            for dn in iki:
+                hs = {g: x for g, x in I[tf][dn].items() if g.endswith(":s2:h1") and x["n"]}
+                dogru(":limit_" in max(hs, key=lambda g: hs[g]["ort_R"]), f"{tf} {dn}: en az kaybeden biçim limit değil")
+    h60 = {g: x for g, x in I["60"]["ic"].items() if g.endswith(":s2:h1") and x["n"]}
+    dogru(max(h60, key=lambda g: h60[g]["ort_R"]) == "devam:onayli:s2:h1", "1 sa 2018–23 en az kaybeden onay mumu değil")
     for dn in iki:
         x = I["5"][dn]
         dogru(x["devam:limit_0.5:s2:h1"]["ort_R"] > x["devam:piyasa:s2:h1"]["ort_R"]
@@ -211,6 +261,8 @@ def iddialar(D: dict, dogru) -> None:
         orta = (o["h"] + o["l"]) / 2
         y = o["yon"]
         return (min(x[3] for x in s) <= orta if y > 0 else max(x[2] for x in s) >= orta), y * (s[-1][4] - o["c"]) / o["A"]
+    t15 = datetime.fromtimestamp(D["ornek"]["15"]["bt"], ZoneInfo("Europe/London"))
+    dogru(t15.hour >= 7, "örnek 15 dk mum Asya seansında (metin 'Asya seansında değil' diyor)")
     g5, n5 = ornek("5")
     g60, n60 = ornek("60")
     dogru(g5 and n5 > 0, "örnek 5 dk mum: 'yarıya döndü, uyarı yanıldı' hükmü tutmuyor")

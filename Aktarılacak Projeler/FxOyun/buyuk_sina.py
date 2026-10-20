@@ -22,7 +22,7 @@ import pandas as pd
 
 import buyuk_mum as bm
 import buyuk_sim as bs
-from buyuk_gelistir import haber_sn
+from buyuk_gelistir import YARILAR, haber_sn
 
 import ayar as ay  # noqa: E402
 import veri as vr  # noqa: E402
@@ -47,6 +47,12 @@ def sabit_denetimi() -> None:
         "acilis_pay": (t["acilis_pay_dk"] * 60, bm.ACILIS_PAY_SN),
         "kayma": (m["kayma_pip"], bs.KAYMA_PIP), "haber_kayma": (m["haber_kayma_pip"], bs.HABER_KAYMA_PIP),
         "en_az_risk": (m["en_az_risk_pip"], bs.EN_AZ_RISK_PIP), "bekle": (m["bekle_mum"], bs.BEKLE),
+        # ön kaydın METNİNDE duran ya da plan commit'inin kodunda sabitlenen değerler (toml'de ayrı alanı yok)
+        "haber_pencere": ((-2 * 60, 15 * 60), tuple(bs.HABER_PENCERE)),
+        "limit_ote_a": (0.5, bs.LIMIT_OTE_A), "tick": (1.0, bs.TICK),
+        "kosu": ((12, 2.0), (bm.KOSU_MUM, bm.KOSU_ESIK)), "ardisik_mum": (24, bm.ARDISIK_MUM),
+        "yarilar": ([tuple(y) for y in ON["secim"]["yarilar"]], [tuple(y) for y in YARILAR.values()]),
+        "dis_bitis": (ON["donem"]["dis"][1], ay.oku().bitis.isoformat()),
     }
     ayri = {k: v for k, v in beklenen.items() if v[0] != v[1]}
     if ayri:

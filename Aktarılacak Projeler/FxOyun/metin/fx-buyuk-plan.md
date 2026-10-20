@@ -5,7 +5,7 @@ pubDate: 2026-10-20
 tags: ['fx', 'gun-ici', 'oyun-plani', 'buyuk-mum', 'backtest', 'ders']
 durum: 'aktif'
 kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
-ozet: "2018–2023'ün en iyi üç büyük mum girişi 2024 sonrasında tutmadı; on iki referans girişin hiçbiri de artıda değil. Davranışın kendisi iki dönemde aynı kaldı, ama her girişte maliyetten küçük. Büyük mum bir işlem sinyali değil, bir okuma: nerede kovalanmaz, nerede limitin dolması kötü haberdir, nerede masadan kalkılır."
+ozet: "2018–2023'ün en iyi üç büyük mum girişi 2024 sonrasında tutmadı; on iki referans girişin hiçbiri de artıda değil. 5 dakikadaki geri verme 2024 sonrasında da görüldü, 1 saatteki devam yalnız nokta tahmini olarak; ikisi de her girişte maliyetten küçük. Büyük mum bir işlem sinyali değil, bir okuma: nerede kovalanmaz, nerede limitin dolması kötü haberdir, nerede masadan kalkılır."
 seviye: 'orta'
 onkosul: ['fx-buyuk-mum', 'fx-buyuk-suzgec', 'fx-buyuk-giris']
 ---
@@ -13,11 +13,14 @@ onkosul: ['fx-buyuk-mum', 'fx-buyuk-suzgec', 'fx-buyuk-giris']
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
 Önceki üç ders büyük mumu okudu, süzdü ve girişin biçimini ölçtü. Bu ders o çalışmanın sınavıdır. 2018–2023'ün sonucu
-görülerek bir seçim kuralı yazıldı, kural o dönemin tablosuna uygulandı ve seçilen girişler 2024 ve sonrasının verisi
-hiç açılmadan bir ön kayıt dosyasıyla birlikte kaydedildi. Sonra aynı kod 2024 → döneminde ({{ ON.dis_bitis }} tarihine
-kadar) koştu. Bu dersin her sayısı o koşudan.
+görülerek bir seçim kuralı yazıldı, kural o dönemin tablosuna uygulandı ve seçilen girişler, 2024 ve sonrasının
+fiyatları hiçbir hesaba girmeden, ön kayıtla birlikte kaydedildi. Sonra aynı kurallar 2024 → döneminde
+({{ ON.dis_bitis }} tarihine kadar) koşturuldu. Bu dersin 2024 → sayılarının hepsi o sınamadan.
 
 ## Kısaca
+
+Kısa cevap: 5 dakikada büyük mumu kovalama, 1 saatte tersine girme. İki eğilim de 2018–2023'te ölçülebiliyor, 5
+dakikadaki 2024 sonrasında da; ikisi de maliyetten sonra işlem çıkarmıyor. Limit maliyeti düşürür, kenar yaratmaz.
 
 - **Seçilen üç girişin üçü de tutmadı.** 2018–2023'te iki yarıda da artı olan en iyi girişler 2024 sonrasında eksi ya da
   sıfırdaydı. En iyisi (1 saatte, aynı yönde koşudan sonraki büyük mumda mumun {{ Y.25 }} geri çekilmesine limit) 2018–2023'te
@@ -25,14 +28,14 @@ kadar) koştu. Bu dersin her sayısı o koşudan.
   {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.R }} R.
 - **On iki referans girişin hiçbiri artıda değil.** Büyük mumdan sonra "mumun yönünde gir", "yarısına limitle katıl",
   "tersine gir", "uzamayı sat" girişleri her dilimde maliyetten sonra eksi.
-- **Hüküm: {{ plan.bacak_sayi }} girişin {{ hukum_calismiyor }} kadarı çalışmıyor.** Hiçbiri "zayıf" ya da "çalışıyor"
-  almadı.
-- **Davranış sürdü, kenar sürmedi.** 5 dakikadaki hafif geri verme ve 1 saatteki hafif devam 2024 sonrasında da
-  görüldü (6. ders). Ama her girişte maliyetten küçük.
+- **Hüküm: {{ hukum_cumle }}.** Hiçbiri "zayıf" ya da "çalışıyor" almadı.
+- **Davranış kısmen sürdü, kenar sürmedi.** 5 dakikadaki hafif geri verme 2024 sonrasında da aralığıyla görüldü;
+  1 saatteki devam 2024 sonrasında yalnız nokta tahmini olarak sürdü ({{ D.60.dis.net_24 }} ATR, aralık
+  {{ D.60.dis.net_24_alt }} … {{ D.60.dis.net_24_ust }}). İkisi de her girişte maliyetten küçük (6. ders).
 
 ## Seçim kuralı
 
-Kural ön kayıt dosyasında ve sonucu görülmeden yazıldı:
+Kural, 2018–2023 ızgarası görüldükten sonra ve 2024 sonrasının fiyatları hiçbir hesaba girmeden ön kayda yazıldı:
 
 1. Her dilim (5 dakika, 15 dakika, 1 saat) ve her yön (mumun yönünde, tersine) için aday girişler: 8. dersin ızgarasının
    bütün hücreleri (emir biçimi × stop × hedef), süzgeçsiz ya da 7. dersin süzgeçlerinden **tek bir** değerle.
@@ -44,7 +47,11 @@ Kural ön kayıt dosyasında ve sonucu görülmeden yazıldı:
 Kural toplam {{ plan.aday }} adayı taradı. Bu sayı önemli: bu kadar adayın içinden en iyisini seçmek, en iyisinin
 2018–2023'teki sonucunu şansla şişirir. 2024 → dönemi o şişkinliği ölçer.
 
-Seçimin bir sınırı da kayda geçsin: aynı veriyle (dört majör, 2024 →) bu seride daha önce başka kuralların sonuçları
+Stop emirli girişlerde dolum dakikasının nasıl sayılacağı 2024 sınamasından sonra değişti (8. dersin "Ölçülmeyenler"i).
+Seçim yeni kuralla yeniden uygulandığında seçilen üç giriş ve referanslar aynı kaldı; değişen tek şey, kuralın "işlem
+yok" dediği 15 dakika tersine hücresinin en iyi adayı oldu. 2024 → sonuçlarının hiçbiri değişmedi.
+
+Seçimin bir sınırı var: aynı veriyle (dört majör, 2024 →) bu seride daha önce başka kuralların sonuçları
 yayımlandı; 2024 sonrasının toplu davranışı bu plan yazılırken biliniyordu. Büyük mumdan sonraki davranışın ve bu
 girişlerin 2024 sonrası sonucu ise ölçülmemişti.
 
@@ -52,10 +59,10 @@ girişlerin 2024 sonrası sonucu ise ölçülmemişti.
 
 {{# bacaklar islem }}
 
-Altı dilim × yön hücresinin {{ plan.islem_sayi }} kadarında kurala uyan bir aday çıktı, {{ plan.yok_sayi }} kadarında
+Altı dilim × yön hücresinden {{ plan.islem_sayi }} hücrede kurala uyan bir aday çıktı, {{ plan.yok_sayi }} hücrede
 çıkmadı. Seçilenlerin üçü de bir süzgeç taşıyor: ikisi takvimdeki haber mumu, biri aynı yönde koşudan sonraki büyük mum.
-Bu bir rastlantı değil: süzgeç, aday sayısını yirmi kat büyütür ve en iyi adayın küçük bir alt kümeden çıkma olasılığı
-yükselir. Küçük alt küme, şansın en kolay şişirdiği yerdir.
+Bu bir rastlantı değil: süzgeçli adaylar süzgeçsizlerin kat kat fazlasıdır ve en iyi adayın küçük bir alt kümeden çıkma
+olasılığı yükselir. Küçük alt küme, şansın en kolay şişirdiği yerdir.
 
 - **5 dakika, haber mumunu ucundan tersine.** 2018–2023'te {{ B.islem.5.ters:limit_uc:s2:h2.haber=haber.ic.n }} işlem,
   iki yarıda {{ P.5.ters.y1 }} ve {{ P.5.ters.y2 }} R. 2024 sonrasında {{ B.islem.5.ters:limit_uc:s2:h2.haber=haber.dis.n }}
@@ -64,9 +71,10 @@ yükselir. Küçük alt küme, şansın en kolay şişirdiği yerdir.
 - **1 saat, aynı yönde koşudan sonraki büyük mumda {{ Y.25 }} geri çekilmeye limit.** 2018–2023'te iki yarıda
   {{ P.60.devam.y1 }} ve {{ P.60.devam.y2 }} R. 2024 sonrasında {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.n }}
   işlem, {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.R }} R ({{ Y.95 }} aralık
-  {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.alt }} … {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.ust }}):
-  aralığın tamamı sıfırın altında. Maliyetten önce de eksi ({{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.brut }} R):
-  2018–2023'teki sonuç bir kenar değil, o dönemin şansıydı.
+  {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.alt }} … {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.ust }};
+  hafta düzeyinde {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.hafta_alt }} …
+  {{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.hafta_ust }}). Maliyetten önce de eksi
+  ({{ B.islem.60.devam:limit_0.25:s1:h2.kosu=ayni.dis.brut }} R): 2018–2023'teki sonuç görülmemiş dönemde tekrarlanmadı.
 - **1 saat, haber mumunu ucundan tersine.** 2018–2023'te {{ B.islem.60.ters:limit_uc:s1:h2.haber=haber.ic.R }} R (en küçük
   artı), 2024 sonrasında {{ B.islem.60.ters:limit_uc:s1:h2.haber=haber.dis.R }} R.
 
@@ -81,7 +89,7 @@ hâlidir ve seçimden bağımsızdır; 2018–2023'teki sonuçları da bu yüzde
 
 {{# bacaklar referans }}
 
-Referansların on ikisi de 2024 sonrasında maliyetten sonra eksi. Maliyetten önce 5 dakikada tersine piyasa girişi
+Referansların hepsi 2024 sonrasında maliyetten sonra eksi. Maliyetten önce 5 dakikada tersine piyasa girişi
 ({{ B.referans.5.ters:piyasa:s2:h1.dis.brut }} R) ve 1 saatte mumun yönündeki girişler sıfırın biraz üstünde: 6. dersin
 okumaları burada da görünüyor, ama yine maliyetin altında.
 
@@ -93,7 +101,10 @@ okumaları burada da görünüyor, ama yine maliyetin altında.
 
 Hüküm 2024 → dönemi için ön kaydın kuralıyla verildi: dört parite birlikte, ortalama net R'nin {{ Y.95 }} aralığı,
 {{ ON.bootstrap }} tekrarlı ve **işlem günü düzeyinde** yeniden örneklemeyle. Büyük mumlar dolar haberinde dört paritede
-aynı anda olur; işlemleri tek tek örneklemek aralığı olduğundan dar gösterirdi. Aralığın alt ucu sıfırın üstündeyse
+aynı anda olur; işlemleri tek tek örneklemek aralığı olduğundan dar gösterirdi. 1 saatlik işlemler ertesi güne
+taşabildiği için gün düzeyindeki aralık da bir miktar dar kalabilir; tablolardaki ikinci aralık hafta düzeyinde yeniden
+örneklenmiştir (FX haftası hafta sonu boşluğuyla biter). Hükmü değiştirmez: hiçbir girişin ortalaması sıfırın üstünde
+değil. Aralığın alt ucu sıfırın üstündeyse
 "çalışıyor", ortalama artı ama alt uç sıfırın altındaysa "zayıf", ortalama sıfır ya da eksiyse "çalışmıyor";
 {{ ON.hukum_en_az }} işlemin altında "ölçülemedi". Sonuç: {{ hukum_calismiyor }} çalışmıyor, {{ hukum_zayif }} zayıf,
 {{ hukum_calisiyor }} çalışıyor, {{ hukum_olculemedi }} ölçülemedi.
@@ -104,19 +115,18 @@ aynı anda olur; işlemleri tek tek örneklemek aralığı olduğundan dar göst
 
 1. **Büyük mumu tek başına bir sinyal sayma.** Hangi dilimde olursa olsun, büyük mumdan sonra fiyatın önce hangi yöne 1
    ATR gideceği bir yazı turadan birkaç puan uzakta (6. ders).
-2. **5 dakikada kovalama.** Ucunda kapanan büyük mum, özellikle Asya'da ve arka arkaya büyük mumların geldiği piyasada,
-   yarısını şanstan biraz sık geri verir (7. ders). Mumun yönünde giriş yapacaksan kapanıştan değil, geri çekilmeden yap;
-   ama bunun bir kenar değil, daha az kötü bir fiyat olduğunu bil.
-3. **Limitin dolması iyi haber değildir.** Yarıya konan limit, fiyatın gerçekten geri verdiği olaylarda dolar ve o
-   olaylarda mumun yönündeki işlem çoğunlukla kaybeder (8. ders). Limit dolduysa mumun yönündeki okuma zayıflamıştır.
-4. **5 dakikada tersine girmenin küçük kenarını limit yok eder.** Geri verme kenarı kapanışta tersine piyasadan girene
+2. **5 dakikada kovalama; limitin dolmasını da iyi haber sayma.** Ucunda kapanan büyük mum, özellikle Asya'da, yarısını
+   aynasından biraz sık geri verir (6. ve 7. ders). Mumun yönünde giriş yapacaksan kapanıştan değil geri çekilmeden yap,
+   ama bunun bir kenar değil daha az kötü bir fiyat olduğunu bil: yarıya konan limit fiyatın geri verdiği olaylarda
+   dolar ve o olaylarda mumun yönündeki işlem çoğunlukla kaybeder (8. ders).
+3. **5 dakikada tersine girmenin küçük kenarını limit yok eder.** Geri verme kenarı kapanışta tersine piyasadan girene
    maliyetten önce kalır; mumun ucuna limitle bekleyene kalmaz (8. ders).
-5. **1 saatte mumun yönüne saygı göster, özellikle günlük trendle aynı yöndeyse.** 1 saatlik büyük mum ortalama bir gün
-   boyunca mumun yönünde bir parça daha gider (6. ve 7. ders). Bu bir giriş değil, bir "tersine girme" uyarısıdır.
-6. **Stopu yaklaştırma.** 5 dakikada 1 ATR'lik stopla makas ve kayma işlem başına R'nin önemli bir kısmını yer
+4. **1 saatte tersine girme.** 1 saatlik büyük mum ortalama bir gün boyunca mumun yönünde bir parça daha gider; 2018–2023'te
+   aralığıyla, 2024 sonrasında yalnız nokta tahmini olarak (6. ders). Bu bir giriş değil, bir "tersine girme" uyarısıdır.
+5. **Stopu yaklaştırma.** 5 dakikada 1 ATR'lik stopla makas ve kayma işlem başına R'nin önemli bir kısmını yer
    (8. ders).
-7. **Haber mumunda okuma yok.** Takvimdeki büyük haberin mumu az ve dağılımı çok geniş; ne fade ne devam ölçülebiliyor
-   (7. ders). Seçimin iki girişi buradan çıktı ve 2024 sonrasında tutmadı.
+6. **Haber mumunda okuma yok.** Takvimdeki büyük haberin mumu az ve 24 mum sonraki yolu, ortalaması bir yön
+   söyleyemeyecek kadar dağınık (7. ders). Seçimin iki girişi buradan çıktı ve 2024 sonrasında tutmadı.
 
 ## Masada: üç örnek
 
@@ -125,15 +135,16 @@ aynı anda olur; işlemleri tek tek örneklemek aralığı olduğundan dar göst
 **5 dakikalık mum** ({{ O.5.gun }}, başlangıcı TSİ {{ O.5.saat }}, {{ O.5.yon }}, {{ O.5.kat }} ATR) kapanışı
 aralığının {{ O.5.kapanis }} kaldı. Plan burada kovalamamayı söyler (madde 2): mumun yönünde girilecekse geri çekilme
 beklenir. Fiyat mumun yarısına {{ O.5.geri50 }}; o noktada yarıya konan alış limiti dolardı ve plan bunun bir
-uyarı olduğunu söyler (madde 3). Bu örnekte uyarı yanıldı: fiyat sonra mumun ucunu {{ O.5.uc }} ve 24 mum sonra mumun
+uyarı olduğunu söyler (yine madde 2). Bu örnekte uyarı yanıldı: fiyat sonra mumun ucunu {{ O.5.uc }} ve 24 mum sonra mumun
 yönünde {{ O.5.net24 }} ATR'deydi. Tek bir olay ortalamayı ne doğrular ne yanlışlar.
 
-**15 dakikalık mum** ({{ O.15.gun }}, başlangıcı TSİ {{ O.15.saat }}, {{ O.15.yon }}) için plan bir şey söylemez: 15
-dakikada ölçülen hiçbir ayrım iki dönemde tutmadı. Fiyat yarısına {{ O.15.geri50 }}, ucunu {{ O.15.uc }} ve 24 mum sonra
+**15 dakikalık mum** ({{ O.15.gun }}, başlangıcı TSİ {{ O.15.saat }}, {{ O.15.yon }}) için plan zayıf bir geri verme
+beklentisinden fazlasını söylemez: 15 dakikada iki dönemde tutan tek süzgeç Asya seansı (7. ders) ve bu mum Asya
+seansında değil. Fiyat yarısına {{ O.15.geri50 }}, ucunu {{ O.15.uc }} ve 24 mum sonra
 {{ O.15.net24 }} ATR'deydi.
 
 **1 saatlik mum** ({{ O.60.gun }}, başlangıcı TSİ {{ O.60.saat }}, {{ O.60.yon }}) kapanışı aralığının
-{{ O.60.kapanis }} kaldı. Plan burada tersine girmemeyi söyler (madde 5). Fiyat mumun yarısına {{ O.60.geri50 }}, ucunu
+{{ O.60.kapanis }} kaldı. Plan burada tersine girmemeyi söyler (madde 4). Fiyat mumun yarısına {{ O.60.geri50 }}, ucunu
 {{ O.60.uc }} ve bir gün sonra mumun yönünde {{ O.60.net24 }} ATR'deydi: tersine giren bir işlemci zarar ederdi, mumun
 yönünde giren ise bir günün sonunda maliyetini çıkaramazdı.
 
@@ -143,8 +154,10 @@ tablolardır. Örneklerin işi, planın masada bir işlem kuralı değil bir oku
 ## Bu sonuç nasıl okunmalı
 
 Bu serinin önceki derslerinde de görülen tablo burada da tekrarlandı: davranış gerçek, kenar maliyetten küçük. Büyük
-mumdan sonra fiyatın yaptığı şey rastgele değil; 5 dakikada biraz geri verir, 1 saatte biraz devam eder ve bu iki
-dönemde aynıdır. Ama "biraz" 5 dakikada bir pipin altında, makas ise bir pipe yakın. Seçim kuralının bulduğu artı
+mumdan sonra fiyatın yaptığı şey tamamen rastgele değil: 5 dakikada biraz geri verir (iki dönemde de), 1 saatte biraz
+devam eder (2018–2023'te aralığıyla, 2024 sonrasında yalnız nokta tahmini olarak). Ama "biraz" 5 dakikada bir pipin
+altında, makas ise bir pipe yakın; 1 saatte iki pip kadar ve makastan büyük, ama stoplu ve hedefli bir işlemde
+maliyetten önce ancak sıfırın biraz üstünde kalıyor. Seçim kuralının bulduğu artı
 girişler, binlerce adayın içinden şansın en kolay şişirdiği küçük alt kümelerden çıktı ve görülmemiş dönemde söndü.
 
 ## Ölçülmeyenler
@@ -153,3 +166,5 @@ girişler, binlerce adayın içinden şansın en kolay şişirdiği küçük alt
 - **Dinamik çıkış, kısmi kâr, iz süren stop** ölçülmedi.
 - **Komisyon ve kısmi dolum** yok; limit dolumu tablodakinden kötü olabilir.
 - **Dört majör dışı pariteler ve 1 saatten büyük dilimler** ölçülmedi.
+- **Cuma öğleden sonrasının 1 saatlik mumları.** 24 mumluk pencere hafta sonuna taştığı için ölçüye girmedi (6. ders);
+  ABD istihdam raporunun 1 saatlik mumu bu yüzden hiçbir 1 saatlik ölçüde yok.

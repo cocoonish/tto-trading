@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 """Büyük mum gözlemi — YALNIZ 2018–2023 (giriş planı bu dosyanın çıktısından yazılır, 2024 → sınanır).
 
-Veri ayar dosyasının bitiş tarihi 31.12.2023'e çekilerek yüklenir; 2024 ve sonrasının dosyaları hiç açılmaz ve her
-paritenin son dakikası ayrıca o tarihe karşı sınanır. Tanım ve ölçüler `buyuk_mum.py`de.
+Veri ayar dosyasının bitiş tarihi 31.12.2023'e çekilerek yüklenir: arşiv okuyucusu bütün yıl dosyalarının özünü
+sınar ve satırları okur, yükleyici 2024 ve sonrasını İLK adımda keser — o fiyatlar hiçbir hesaba girmez; her paritenin
+son dakikası ayrıca o tarihe karşı sınanır (assert). Tanım ve ölçüler `buyuk_mum.py`de.
 
 Çıktı: veri/buyuk_gozlem.json (dilim × süzgeç × değer özetleri) ve veri/_yerel/buyuk_olaylar.csv.gz (olay başına
 süzgeçler, gerçek ve ayna yol ölçüleri, makas; git dışı, aynı komutla yeniden üretilir).
