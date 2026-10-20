@@ -17,8 +17,7 @@ import sys
 import tomllib
 from pathlib import Path
 
-import numpy as np
-import pandas as pd
+from datetime import date, timedelta
 
 BURASI = Path(__file__).resolve().parent
 sys.path.insert(0, str(BURASI))
@@ -100,7 +99,13 @@ def is_gunu(dn: str) -> int:
     bas, bit = D["kunye"]["donem"][dn]
     if dn == "dis":
         bit = min(bit, D["kunye"]["veri_bitis"])
-    return int(np.busday_count(bas, (pd.Timestamp(bit) + pd.Timedelta(days=1)).date().isoformat()))
+    # Standart kütüphaneyle: yayın kapısı (sayfa sınavı 26) bu modülü numpy/pandas kurulu olmayan koşucuda içe aktarır.
+    g, son = date.fromisoformat(bas[:10]), date.fromisoformat(bit[:10])
+    n = 0
+    while g <= son:
+        n += g.weekday() < 5
+        g += timedelta(days=1)
+    return n
 
 
 def bacak_kisa(b: dict) -> str:

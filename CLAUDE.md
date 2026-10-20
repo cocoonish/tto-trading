@@ -5448,3 +5448,7 @@ sarılı değildi ve 12 sütunlu plan tablosu 760–899 pikselde sayfayı yana k
 de şartnamenin kendisini düzeltti: "küçük karar mumunda bir R hedef sınanmadı" yanlıştı (2018–2023'te denendi).
 AÇIK: seri istenenden (≈2) uzun; daha fazla kısaltma ölçüm cümlelerine dokunur. Örnek grafiklerin 1 saatlik ekseni
 ertesi güne geçişi göstermiyor.
+İlk yayın koşusu sayfa sınavı 26'da düştü: `buyuk_ders_yaz.py` tepeden numpy istiyordu ve yayın koşucusunda
+numpy yok — yerel kapı geçmişti. Tek kullanım (iş günü sayımı) standart kütüphaneye çevrildi, ders çıktısı birebir
+aynı; `testler/test_kapi_bagimlilik.py` kapıyı numpy/pandas/plotly ENGELLİ alt süreçte koşturur (arıza
+enjeksiyonunda düşüyor). Indikator'da 21.09'da ölçülen sınıfın eşi.
