@@ -53,6 +53,34 @@ def pencere(o: dict, e: dict, sf) -> tuple[int, int, int]:
     return bas, bas + an.tf * 60, an.tf
 
 
+def aralik(bas: int, cizim_tf: int, izle_son: int) -> tuple[int, int]:
+    """Örneğin grafikte görünen saat aralığı: olay mumundan ONCE_MUM mum önce başlar, izlemenin sonunda biter.
+    Tekillik bu aralıkla sorulur, mumun kimliğiyle değil: aynı hareket bir derste anın ilk mumu, öbüründe onun
+    içindeki büyük mum olarak iki ayrı mum kimliğiyle basılabiliyordu (EUR/USD 20.11.2023 · GBP/USD 30.11.2023)."""
+    return bas - ONCE_MUM * cizim_tf * 60, izle_son
+
+
+def ayrilmis() -> list[tuple[int, int]]:
+    """Ana derslerin kendi örnek günleri (oyun planı ve büyük mum dersleri): masa örnekleri onlarla örtüşmez.
+    Kayıtlar çifti taşımadığı için örtüşme yalnız saatle sorulur; tutucu yöndedir."""
+    out = []
+    for ad, tf in (("ders.json", 5), ("buyuk_ders.json", None)):
+        yol = VERI / ad
+        if not yol.exists():
+            continue
+        o = json.loads(yol.read_text(encoding="utf-8")).get("ornek", {})
+        for k, x in o.items():
+            m = x.get("mumlar") or []
+            if m:
+                adim = (tf or int(k)) * 60
+                out.append((int(m[0][0]), int(m[-1][0]) + adim))
+    return out
+
+
+def ortusur(a: tuple[int, int], b: tuple[int, int]) -> bool:
+    return a[0] < b[1] and b[0] < a[1]
+
+
 def uyar(olcu: dict, kosul: dict) -> bool:
     """Koşul sözlüğü: alan = değer (eşitlik), alan_min / alan_max (sınır)."""
     for k, v in kosul.items():
@@ -84,7 +112,7 @@ def sec() -> dict:
     a = dataclasses.replace(ay.oku(), bitis=IC_BITIS)
     son = int(pd.Timestamp(SON, tz="UTC").timestamp())
     cikti: dict = {}
-    kullanilan: set[tuple[str, int, int]] = set()
+    kullanilan: list[tuple[str, tuple[int, int]]] = [("*", a) for a in ayrilmis()]
     for cift in sorted({o["cift"] for _, o in istek}):
         d = vr.oku(cift, a)
         assert int(d.t[-1]) < int(pd.Timestamp("2024-01-01", tz="UTC").timestamp()), "2024 sonrası veri örneğe girdi"
@@ -108,7 +136,12 @@ def sec() -> dict:
             secilen = {}
             for e in reversed(ev.to_dict("records")):
                 t = e["bt"] if o["kaynak"] == "buyuk" else e["t0"]
-                if t >= son or e["yon"] == 0 or (cift, *pencere(o, e, sf)[:2]) in kullanilan or not uyar(e, o.get("kosul", {})):
+                if t >= son or e["yon"] == 0 or not uyar(e, o.get("kosul", {})):
+                    continue
+                ar = aralik(pencere(o, e, sf)[0], cizim_tf, int(d.t[e["j1"] - 1]) + 60)
+                if any(c in (cift, "*") and ortusur(ar, b) for c, b in kullanilan) or \
+                        any(ortusur(ar, aralik(pencere(o, x, sf)[0], cizim_tf, int(d.t[x["j1"] - 1]) + 60))
+                            for x, _ in secilen.values()):
                     continue
                 if o["kaynak"] == "buyuk":
                     olcu, _ = bm.olc(d, e)
@@ -124,8 +157,8 @@ def sec() -> dict:
             kayit = {}
             for rol, (e, olcu) in secilen.items():
                 bas, mum_son, tf = pencere(o, e, sf)
-                kullanilan.add((cift, bas, mum_son))
                 izle_son = int(d.t[e["j1"] - 1]) + 60
+                kullanilan.append((cift, aralik(bas, cizim_tf, izle_son)))
                 i = int(np.searchsorted(M.bt, bas))
                 j = int(np.searchsorted(M.bt, izle_son))
                 pen = range(max(0, i - ONCE_MUM), min(len(M.bt), j))

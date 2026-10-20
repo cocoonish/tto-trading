@@ -292,7 +292,7 @@ kaynak = "buyuk"
 cift = "USDJPY"
 tf = 5
 kosul = { kapanis = "uc", haber = "haber_yok", seans = "asya" }
-tipik = { "geri_0.5" = true, net_24_max = -0.5 }
+tipik = { "geri_0.5" = true, geri_50_uc = false, net_24_max = -0.5 }
 ters = { "geri_0.5" = false, net_24_min = 1.0 }
 
 [[ornek]]

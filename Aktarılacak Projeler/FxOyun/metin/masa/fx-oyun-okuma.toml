@@ -265,7 +265,7 @@ cift = "EURUSD"
 an = "londra_acilis"
 kosul = { sinif = "guclu" }
 tipik = { devam = true }
-ters = { donus = true }
+ters = { donus = true, kapanis = false }
 
 [[ornek]]
 id = "wmr-guclu"

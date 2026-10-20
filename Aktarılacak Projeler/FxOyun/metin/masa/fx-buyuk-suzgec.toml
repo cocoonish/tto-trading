@@ -306,6 +306,6 @@ ters_ad = "Geri verdi"
 kaynak = "buyuk"
 cift = "EURUSD"
 tf = 60
-kosul = { trend = "trendle", haber = "haber_yok" }
+kosul = { trend = "trendle", haber = "haber_yok", kapanis = "uc" }
 tipik = { "geri_0.5" = false, net_24_min = 1.0 }
 ters = { "geri_0.5" = true, net_24_max = -1.0 }

@@ -350,7 +350,7 @@ id = "wmr-guclu"
 kaynak = "an"
 an = "wmr"
 cift = "GBPUSD"
-kosul = { sinif = "guclu" }
+kosul = { sinif = "guclu", ay_sonu = false }
 tipik = { orta = true, devam = false, donus = false }
 ters = { devam = true, orta = false }
 baslik = "Londra fiksingine güçlü koşu: iki gün, iki son"

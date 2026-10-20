@@ -309,4 +309,4 @@ cift = "GBPUSD"
 an = "ny_acilis"
 kosul = { sinif = "reddedilen" }
 tipik = { devam = true }
-ters = { donus = true }
+ters = { donus = true, kapanis = false }

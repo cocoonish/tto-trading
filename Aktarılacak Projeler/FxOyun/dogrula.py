@@ -272,13 +272,17 @@ def masa_katmani() -> None:
     ozu = oz(mo.CIKTI) if mo.CIKTI.exists() else ""
     sinir = "2024-01-01"
     dogru(mo.SIRA == dy.SERI, "masa_ornek.SIRA serinin sırasını taşımıyor")
-    gorulen: dict[tuple, str] = {}
+    # Tekillik grafikte görünen saat aralığıyla sorulur: aynı hareket iki ayrı mum kimliğiyle (anın ilk mumu ·
+    # onun içindeki büyük mum) iki derste basılabiliyordu. Ana derslerin kendi örnek günleri de ayrılmıştır.
+    gorulen: list[tuple[str, tuple[int, int], str]] = [("*", a, "ana dersin örneği") for a in mo.ayrilmis()]
     for slug, kayitlar in ornek.items():
         for kim, x in kayitlar.items():
             for rol in ("tipik", "ters"):
-                anahtar = (x["cift"], x[rol]["bas"], x[rol]["mum_son"])
-                dogru(anahtar not in gorulen, f"{slug}/{kim}: {rol} olayı {gorulen.get(anahtar)} örneğinde de gösteriliyor")
-                gorulen.setdefault(anahtar, f"{slug}/{kim}/{rol}")
+                e = x[rol]
+                ar = mo.aralik(e["bas"], e["cizim_tf"], e["izle_son"])
+                cak = [ad for c, b, ad in gorulen if c in (x["cift"], "*") and mo.ortusur(ar, b)]
+                dogru(not cak, f"{slug}/{kim}: {rol} olayının penceresi {cak[:1]} ile örtüşüyor")
+                gorulen.append((x["cift"], ar, f"{slug}/{kim}/{rol}"))
     for slug in dy.SERI:
         sab = (dy.METIN / f"{slug}.md").read_text(encoding="utf-8")
         h = masa.denetle(slug, sab)
