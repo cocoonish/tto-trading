@@ -198,19 +198,18 @@ uzatmak bu derste ölçülmemiş bir emirdir.
 {{# kart yariya-limit }}
 
 Aşağıdaki iki gün aynı kuralla seçildi: 5 dakikalık EUR/USD'de, Londra seansında, takvimde büyük haber olmayan bir
-saatte, ucunda kapanan, boyu iki ile üç ATR arasında yukarı yönlü bir büyük mum. Gerçek grafiklerde numaralar sabittir:
-① olay mumu, ② mumun yarısı, ③ fiyatın yarıya ilk dokunduğu mum, ④ izleme penceresinin sonu.
+saatte, ucunda kapanan, boyu iki ile üç ATR arasında bir büyük mum. Gerçek grafiklerde ① olay mumu, ② mumun yarısı, ③
+yarıya ilk dokunuş, ④ izleme penceresinin sonudur.
 
 {{# ornek yariya-limit }}
 
-Üstteki günde ① TSİ 11:10'da kapanır ve fiyat sonraki ilk dakikada ② yarıya iner; ③ kapanıştan sonraki ilk mumdur ve
-yarıya konan limit orada dolar. Aynı beş dakikalık mumun içinde fiyat büyük mumun dibini de kırar ve limitin 2 ATR
-altındaki stopu görür; kapanışta piyasadan giren de aynı mumda stopa giderdi. İşlem hedefine hiç yaklaşmaz ve ④'te fiyat
-mumun dibinin belirgin altındadır. Alttaki günde ① TSİ 11:00'da kapanır ve ③ yoktur: ilk mumda fiyat yarıya bir fiyat
-adımından az kala döner ve mumun ucunu aşar; yarıdaki limit dolmaz, çeyrek geri çekilmeye konmuş bir limit ise ilk
-dakikada dolardı. Fiyat sonra mumun yönünde yürür; kapanışta piyasadan giren 1 R hedefini ikinci mumda görürdü ve ④'te
-fiyat kapanışın belirgin ötesindedir. Biri dolan limitin kötü gittiği, öbürü dolmayan limitin kaçırdığı olaydır; ölçü
-ikisinin binlerce örneğinin oranıdır.
+Üstteki günde ① TSİ 11:10'da kapanır; fiyat sonraki ilk dakikada ② yarıya iner ve limit ③'te, kapanıştan sonraki ilk
+mumda dolar. Aynı mumun içinde fiyat büyük mumun dibini de kırar ve limitin 2 ATR altındaki stopu görür; kapanışta
+piyasadan giren de aynı mumda stopa giderdi. ④'te fiyat mumun dibinin belirgin altındadır. Alttaki günde ① TSİ 11:00'da
+kapanır ve ③ yoktur: ilk mumda fiyat yarıya bir fiyat adımından az kala döner ve ucu aşar. Yarıdaki limit dolmaz,
+çeyrek geri çekilmeye konmuş bir limit ilk dakikada dolardı; kapanışta piyasadan giren 1 R hedefini ikinci mumda görürdü
+ve ④'te fiyat kapanışın belirgin ötesindedir. Biri dolan limitin kötü gittiği, öbürü dolmayan limitin kaçırdığı
+olaydır; tek gün kuralı ne doğrular ne yanlışlar.
 
 ## Stop uzaklığı ve maliyet
 
@@ -228,10 +227,9 @@ maliyet yalnız ATR'si büyük olan olayların maliyeti, gerçek fark daha da b�
 
 ### Masada: stop nereye
 
-Grafikte en "mantıklı" görünen stop mumun öbür ucunun hemen ötesidir. Bu seride o yer ölçülmedi: ölçülen stop girişten
-1 ya da 2 ATR uzaktır ve sonucu belirleyen yerin anlamı değil pip cinsinden uzaklığıdır. 2–3 ATR'lik bir mumda yarıdaki
-limitten öbür uca mesafe bir ile bir buçuk ATR'dir; yani öbür ucun ötesi yakın stopa yakın bir yerdir. Şema aynı girişe
-konmuş iki stopu ve onların 1 R hedeflerini gösterir.
+Grafikte en "mantıklı" görünen stop mumun öbür ucunun ötesidir; bu seride o yer ölçülmedi. Ölçülen stop girişten 1 ya
+da 2 ATR uzaktır ve sonucu belirleyen yerin anlamı değil pip uzaklığıdır (kural: Emri nereye koyarsın, Stop). Şema aynı
+girişe konmuş iki stopu ve 1 R hedeflerini gösterir.
 
 {{# sema stop-uzaklik }}
 
@@ -249,8 +247,8 @@ kaybeden biçim onay mumu oldu; 2024 sonrasında mumun yönündeki biçimlerin e
 
 ### Masada: onayı beklerken
 
-Onay mumu güven verir: büyük mumdan sonra bir mum daha aynı yöne kapanmıştır. Şema bu güvenin bedelini gösterir: giriş
-onay mumunun kapanışından, yani daha ileriden yapılır ve stop da aynı mesafe kadar taşınır.
+Onay mumu güven verir; şema bedelini gösterir: giriş onay mumunun kapanışından, yani daha ileriden yapılır ve stop da
+aynı mesafe kadar taşınır.
 
 {{# sema onay }}
 
@@ -268,9 +266,8 @@ maliyetten önce {{ G.60.ic.devam:stop:s2:h1.brut }} R; 2024 sonrasında {{ G.60
 
 ### Masada: uca stop emri
 
-Ucun kırılmasına konan stop emri ekranda en "canlı" giriştir: fiyat ucu geçtiği anda hareket hızlanıyormuş gibi
-görünür ve emir tam o anda dolar. Dolduğu yer fiyatın zaten yürüdüğü yerdir ve kayma orada ödenir;
-{{# atif sema yonunde-emirler }}'deki ⑤ bu emirdir.
+Uca stop emri ekranda en "canlı" giriştir: fiyat ucu geçtiği anda hareket hızlanıyormuş gibi görünür ve emir tam o
+anda, fiyatın zaten yürüdüğü yerde, kaymayı ödeyerek dolar; {{# atif sema yonunde-emirler }}'deki ⑤ bu emirdir.
 
 {{# kart uc-stop }}
 
@@ -280,15 +277,14 @@ kapanan, boyu iki ile üç ATR arasında bir büyük mum; iki günde de uç bekl
 {{# ornek uc-stop }}
 
 Üstteki gün aşağı yönlü bir mumdur (TSİ 16:30, Londra–New York örtüşmesi). Fiyat kapanıştan birkaç dakika sonra önce
-② yarıya döner (③), sonra yeniden iner ve kapanıştan sonraki dördüncü mumda dibi kırar: uca konan satış stop emri orada
-dolar. Fiyat bir mum daha ilerler, ama TSİ 18:00 mumunda geri döner, girişin 2 ATR üstündeki stopu görür ve aynı mumda
-büyük mumun tepesini de aşar; ④'te fiyat tepenin belirgin üstündedir. Alttaki gün yukarı yönlü, tepesinde kapanmış bir
-mumdur (TSİ 12:30, Londra seansı): uç ilk mumda kırılır, fiyat mumun boyunun dörtte biri kadar bile geri gelmez ve uçtan
-giren işlem 1 R hedefini ikinci mumda görüp kapanır. Fiyatın asıl yürüyüşü sonra, ABD istihdam raporuyla (New York
-08:30, TSİ ABD yaz saatinde 15:30) gelir: emrin bekleme süresinin dışında, izleme penceresinin içinde; ④'te fiyat
-kapanışın çok ötesindedir. Emrin dolup dolmadığını figürde ① ile kırılma arasındaki mumları sayarak okursun: emir
-{{ SB.bekle }} mum açıktır ve süre dolduktan sonraki bir kırılma bu dersin emri için işlem değildir. Tek bir kırılma ne
-momentumu kanıtlar ne çürütür.
+② yarıya döner (③), sonra yeniden iner ve dördüncü mumda dibi kırar: satış stop emri orada dolar. Fiyat bir mum daha
+ilerler, TSİ 18:00 mumunda döner, girişin 2 ATR üstündeki stopu görür ve aynı mumda büyük mumun tepesini aşar; ④'te
+tepenin belirgin üstündedir. Alttaki gün yukarı yönlü, tepesinde kapanmış bir mumdur (TSİ 12:30, Londra seansı): uç ilk
+mumda kırılır, fiyat mumun dörtte biri kadar bile geri gelmez ve uçtan giren işlem 1 R hedefini ikinci mumda görür.
+Asıl yürüyüş sonra, ABD istihdam raporuyla (New York 08:30, TSİ ABD yaz saatinde 15:30) gelir: bekleme süresinin
+dışında, izleme penceresinin içinde; ④'te fiyat kapanışın çok ötesindedir. Emrin dolup dolmadığını ① ile kırılma
+arasındaki mumları sayarak okursun: emir {{ SB.bekle }} mum açıktır, sonraki bir kırılma bu dersin emri için işlem
+değildir.
 
 ## Emri nereye koyarsın
 

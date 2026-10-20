@@ -228,7 +228,7 @@ durum = "Herhangi bir dilimde, büyük mumdan sonra fiyat mumun yarısına geri 
 gorursun = "Büyük mumdan sonraki bir iki mumda fiyat mumun ortasına iniyor (aşağı mumda çıkıyor). Grafik 'dönüş başladı' der."
 yaparsin = "Dokunuşu bir olgu olarak not edersin, bir işaret olarak değil: yönü olmayan bir yol da yarıya neredeyse aynı sıklıkta uğrardı; gerçek ile ayna arasındaki fark birkaç puan."
 yapmazsin = "Yarıya dokunuşu tersine bir işlemin onayı saymazsın; 'okuma tuttu' diye kaydetmezsin. Fiyatın yarıdan yeniden uca gitmesini de devamın onayı saymazsın: o da şansla beklenen kadar sık."
-emir = "Başka bir gerekçeyle mumun tersine gireceksen girişi yarıya göre değil kendi gerekçenin seviyesine göre kurarsın; stop girişten 2 ATR uzakta. Stopu büyük mumun ucuna koymak bu seride ölçülmedi: kapanış uca yakın olduğu için o yer girişe çok yakındır ve maliyeti R cinsinden büyütür. Yarının kırılmasına stop emriyle tersine girmek maliyetten önce küçük bir artı, maliyetten sonra eksi: kırılma kendi başına bir gerekçe değil."
+emir = "Başka bir gerekçeyle mumun tersine gireceksen girişi yarıya göre değil kendi gerekçenin seviyesine göre kurarsın; stop girişten 2 ATR uzakta. Stopu büyük mumun ucuna koymak bu seride ölçülmedi; kapanış uca yakın olduğu için o yer girişe çok yakındır. Yarının kırılmasına stop emriyle tersine girmek maliyetten önce küçük bir artı, maliyetten sonra eksi: kırılma kendi başına bir gerekçe değil."
 dayanak = "6. ders, Ayna: şansın vereceği pay; 6. ders, Yarısına dönen fiyat ne kadar sürede dönüyor; 8. ders, 5 dakika; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]
@@ -256,7 +256,7 @@ id = "yari-bekleme"
 hukum = "eksi"
 durum = "5 ya da 15 dakikalık grafikte, büyük mumun geri çekilmesinde (çeyreğinde ya da yarısında) bekleyen bir limit emri"
 gorursun = "Limit mumun içinde. Fiyat ya bir iki mum içinde gelir ya da gelmeden uzaklaşır."
-yaparsin = "Emri altı mumluk bekleme süresiyle sınırlarsın: yarıya dönenlerin yarısı ilk bir iki mum içinde döner. Süre biterse emri çekersin. Süreye takvimdeki büyük bir haberin penceresi düşüyorsa emri açıklamadan önce çekersin; bu bir disiplin kuralıdır, çekmenin etkisi ölçülmedi. Seans geçişinde önce çekmek de ölçülmemiş bir ek kuraldır. Limitin dolduğu anı, fiyatın mumun hareketini geri aldığı an olarak okursun."
+yaparsin = "Emri altı mumluk bekleme süresiyle sınırlarsın: yarıya dönenlerin yarısı ilk bir iki mum içinde döner. Süreye takvimdeki büyük bir haberin penceresi düşüyorsa emri açıklamadan önce çekersin (disiplin kuralı; etkisi ölçülmedi); seans geçişinde önce çekmek de ölçülmemiş bir ek kuraldır. Limitin dolduğu anı, fiyatın mumun hareketini geri aldığı an olarak okursun."
 yapmazsin = "Dolmayan limiti fiyatın peşinden kaydırmazsın: o, kovalamanın yavaş hâlidir. Dolan limiti 'iyi fiyat aldım, okuma doğru' diye büyütmezsin: limitin dolduğu olaylarda aynı anda piyasadan girilen işlem çoğunlukla kaybederdi."
 emir = "Limit geri çekilmede, stop limitin fiyatından 2 ATR uzakta, hedef riskin bir katı; altı mum içinde dolmayan emir iptal. Stopu 1 ATR'ye yaklaştırmak aynı makası daha büyük bir R yapar; stopu mumun öbür ucuna koymak bu seride ölçülmedi."
 dayanak = "6. ders, Yarısına dönen fiyat ne kadar sürede dönüyor; 8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet"
@@ -268,7 +268,7 @@ durum = "Herhangi bir dilimde, aralığı önceki ATR'nin beş katını aşan bi
 gorursun = "Ekranın büyük kısmını kaplayan tek bir mum. Grafik 'aşırı, döner' ya da 'çok güçlü, sürer' der."
 yaparsin = "Önce takvime bakarsın: mum büyük bir haberin mumuysa okuma yok. Değilse mumu iki ATR'lik bir büyük mumla aynı okursun: kovalar büyüdükçe iki dönemde aynı yöne bakan bir büyüklük etkisi yok."
 yapmazsin = "'Aşırı' diye tersine girmezsin; 'çok güçlü' diye kovalamazsın. Beş ATR'lik mum ne daha güvenilir bir dönüş ne daha güvenilir bir devam işareti; o kovada olay az ve sayılar oynak."
-emir = "Başka bir gerekçeyle gireceksen stop girişten 2 ATR uzaktadır; mumun boyu stopu değiştirmez. Stopu mumun öbür ucuna koymak bu seride ölçülmedi; beş ATR'lik mumda o yer riski birkaç ATR yapar ve pozisyon büyüklüğü de ölçülmedi. Stopu 1 ATR'ye yaklaştırmak aynı makası daha büyük bir R yapar."
+emir = "Başka bir gerekçeyle gireceksen stop girişten 2 ATR uzaktadır; mumun boyu stopu değiştirmez. Stopu mumun öbür ucuna koymak (beş ATR'lik mumda riski birkaç ATR yapar) ve pozisyon büyüklüğü bu seride ölçülmedi; stopu 1 ATR'ye yaklaştırmak aynı makası daha büyük bir R yapar."
 dayanak = "6. ders, Büyüklük değişince; 7. ders, Fade mi, devam mı: okuma tablosu; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]
@@ -278,7 +278,7 @@ durum = "Büyük mum FX gününün devrinde ya da haftanın açılışında"
 gorursun = "New York 17:00 civarında (TSİ ABD yaz saatinde 00:00, kış saatinde 01:00) fitili uzun, gövdesi küçük bir mum; ya da hafta açılışından sonraki seyrek kotasyonlu bir sıçrama."
 yaparsin = "Saatine bakarsın. Devir penceresinde (New York 16:50–17:10; TSİ ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10) ve hafta açılışından sonraki ilk saatte aralık kotasyonun hareketidir; ikisi de bu dersin ölçüsüne girmedi."
 yapmazsin = "Bu mumları bu dersin okumasıyla okumazsın; devir mumunun ucuna ya da yarısına emir koymazsın."
-emir = "Başka bir gerekçeyle bu pencerelerde emir vereceksen devirde makasın sıçradığını hesaba katarsın. Bekleyen bir emrin süresine takvimdeki büyük bir haberin penceresi (açıklamadan iki dakika önce – on beş dakika sonra) düşüyorsa emri açıklamadan önce çekersin; bu bir disiplin kuralıdır: o pencerede piyasa ve stop emirlerine ek kayma varsayıldı, haberdeki makas ölçülmedi. Sıradan bir büyük mumun kapanışında ise makas açılmıyor; orada maliyeti hareketin küçüklüğü belirler."
+emir = "Başka bir gerekçeyle bu pencerelerde emir vereceksen devirde makasın sıçradığını hesaba katarsın. Bekleyen emrin süresine takvimdeki büyük bir haberin penceresi (açıklamadan iki dakika önce – on beş dakika sonra) düşüyorsa emri açıklamadan önce çekersin; bu bir disiplin kuralıdır: o pencerede ek kayma varsayıldı, haberdeki makas ölçülmedi. Sıradan büyük mumun kapanışında makas açılmıyor."
 dayanak = "6. ders, Büyük mum nasıl tanımlandı; 6. ders, Makas büyük mumda açılıyor mu; 8. ders, Emri nereye koyarsın; 8. ders, Ölçülmeyenler"
 
 
