@@ -272,6 +272,13 @@ def masa_katmani() -> None:
     ozu = oz(mo.CIKTI) if mo.CIKTI.exists() else ""
     sinir = "2024-01-01"
     dogru(mo.SIRA == dy.SERI, "masa_ornek.SIRA serinin sırasını taşımıyor")
+    gorulen: dict[tuple, str] = {}
+    for slug, kayitlar in ornek.items():
+        for kim, x in kayitlar.items():
+            for rol in ("tipik", "ters"):
+                anahtar = (x["cift"], x[rol]["bas"], x[rol]["mum_son"])
+                dogru(anahtar not in gorulen, f"{slug}/{kim}: {rol} olayı {gorulen.get(anahtar)} örneğinde de gösteriliyor")
+                gorulen.setdefault(anahtar, f"{slug}/{kim}/{rol}")
     for slug in dy.SERI:
         sab = (dy.METIN / f"{slug}.md").read_text(encoding="utf-8")
         h = masa.denetle(slug, sab)

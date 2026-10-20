@@ -383,8 +383,10 @@ def uret(slug: str, K: dict) -> str:
             parca = shlex.split(m.group(2))
             if parca[0] == "sekil":
                 return b_sekil(slug, *parca[1:])
+            if parca[0] == "atif":
+                return masa.atif(ham, parca[1], parca[2])
             if parca[0] in masa.BLOKLAR:
-                sayac[0] += parca[0] != "kart"
+                sayac[0] += parca[0] in masa.NUMARALI
                 return masa.blok(slug, parca[0], parca[1], f"M{sayac[0]}")
             return BLOK[parca[0]](*parca[1:])
         if m.group(2) not in K:

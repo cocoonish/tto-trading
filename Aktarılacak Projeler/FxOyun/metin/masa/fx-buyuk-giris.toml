@@ -304,7 +304,7 @@ id = "bes-dk-kapanis"
 durum = "5 dakikalık grafikte, takvimde haber olmayan bir saatte, ucunda kapanan büyük mumdan hemen sonra mumun yönünde girmeyi düşünüyorsun."
 gorursun = "Mum kapandı, fiyat hâlâ ucun yakınında ve sonraki mumun açılışı kapanışa yapışık: kaçmakta olan bir hareket."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; kapanışta piyasa emrinin ödeyeceği makası ve kaymayı stopun pip uzaklığının yanına yazarsın."
-yapmazsin = "Kapanışta piyasa emriyle ya da uca stop emriyle kovalamazsın: 5 dakikada ikisi de maliyeti girişte ve çıkışta öder, maliyetten önce de artı değildir."
+yapmazsin = "Kapanışta piyasa emriyle ya da uca stop emriyle kovalamazsın: 5 dakikada ikisi de maliyeti girişte ve çıkışta öder, maliyetten önce de sıfır çevresindedir."
 emir = "Başka bir gerekçen varsa emir limittir (mumun çeyreği ya da yarısı); stop girişten 2 ATR, hedef 1 R. Fiyat yeni bir uç yaparsa limiti peşinden taşımazsın; bekleme süresi dolunca iptal edersin."
 dayanak = "8. ders, 5 dakika; 8. ders, Limit neden ucuz görünür"
 

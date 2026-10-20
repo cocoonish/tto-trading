@@ -457,7 +457,7 @@ Büyük bir mum kapandığında sırayla:
 ## Grafik okuma alıştırmaları
 
 **1.** 5 dakikalık EUR/USD grafiği, saat Londra 03:40 (TSİ İngiltere yaz saatinde 05:40, kış saatinde 06:40), takvimde
-haber yok. Şekil M4'teki gibi, ucunda kapanan yukarı yönlü bir büyük mum; aralığı önceki mumun ATR'sinin üç katı. Kısa
+haber yok. {{# atif sema kovalama }}'teki gibi, ucunda kapanan yukarı yönlü bir büyük mum; aralığı önceki mumun ATR'sinin üç katı. Kısa
 vadeli bir alış gerekçen zaten var. Ne yaparsın, ne yapmazsın?
 
 <details>
@@ -472,7 +472,7 @@ vermenin büyüklüğü makastan küçük (6. ders, Dilim dilim okuma).
 </details>
 
 **2.** 1 saatlik GBP/USD grafiği, Londra 09:00'da başlayan bir mum (TSİ İngiltere yaz saatinde 11:00, kış saatinde
-12:00), takvimde haber yok, ucunda kapandı, aralığı ATR'nin dört katı. Şekil M6'daki gibi grafik "uzamış" görünüyor ve
+12:00), takvimde haber yok, ucunda kapandı, aralığı ATR'nin dört katı. {{# atif sema bir-saat }}'daki gibi grafik "uzamış" görünüyor ve
 tersine bir işlem düşünüyorsun. Ne yaparsın, ne yapmazsın?
 
 <details>
@@ -500,7 +500,7 @@ olması bunu değiştirmez.
 
 </details>
 
-**4.** 5 dakikalık grafikte yarıya koyduğun limit üçüncü mumda doldu (Şekil M8'deki ② gibi); fiyat sonra yarıdan dönüp
+**4.** 5 dakikalık grafikte yarıya koyduğun limit üçüncü mumda doldu ({{# atif sema bekleme }}'deki ② gibi); fiyat sonra yarıdan dönüp
 mumun ucuna doğru gidiyor ve pozisyonu büyütmeyi düşünüyorsun. Ne yaparsın, ne yapmazsın?
 
 <details>

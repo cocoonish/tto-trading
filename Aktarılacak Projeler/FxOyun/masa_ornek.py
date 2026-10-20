@@ -8,6 +8,9 @@ tutmadığı günün grafikte birbirine ne kadar benzediğini görmelidir.
 
 Seçim kuralı mekaniktir ve tektir: koşula ve sonuca uyan olaylardan `SON` tarihinden önceki EN SON olay.
 Kimse "güzel bir grafik" seçmez; koşul `metin/masa/<slug>.toml`daki `[[ornek]]` kaydında yazılıdır.
+Bir olay (parite + olay mumunun saati) serinin tamamında BİR kez gösterilir: aynı iki gün iki derste ters rollerle
+basılırsa okur aynı grafiği iki ayrı dersin kanıtı sanar. Öncelik derslerin sırasıdır (`SIRA`); sonraki ders bir
+sonraki uyan olaya iner.
 Veri 31.12.2023'te kesilerek yüklenir (`gozlem.py` ile aynı yol): 2024 sonrasının fiyatları örneklere giremez.
 
   python3 masa_ornek.py          # seçim (veri ister) → veri/masa_ornek.json, ardından çizim
@@ -38,6 +41,16 @@ ONCE_MUM = 20
 TSI = timezone(timedelta(hours=3))
 SIRA = ["fx-oyun-okuma", "fx-oyun-acilislar", "fx-oyun-fiksingler", "fx-oyun-haberler", "fx-oyun-backtest",
         "fx-buyuk-mum", "fx-buyuk-suzgec", "fx-buyuk-giris", "fx-buyuk-plan"]
+
+
+def pencere(o: dict, e: dict, sf) -> tuple[int, int, int]:
+    """Olay mumunun (başlangıç, bitiş, dilim) saati: kimliği budur. Bir anın ilk mumu ile bir büyük mum aynı mum
+    olabilir (Londra fiksingi ile 15 dakikalık bir büyük mum), o yüzden tekillik olay türüne değil muma bakar."""
+    if o["kaynak"] == "buyuk":
+        return int(e["bt"]), int(e["bt"]) + int(o["tf"]) * 60, int(o["tf"])
+    an = sf.AN[o["an"]]
+    bas = int(e["t0"]) - (an.tf * 60 if an.aile == "fiksing" else 0)
+    return bas, bas + an.tf * 60, an.tf
 
 
 def uyar(olcu: dict, kosul: dict) -> bool:
@@ -71,6 +84,7 @@ def sec() -> dict:
     a = dataclasses.replace(ay.oku(), bitis=IC_BITIS)
     son = int(pd.Timestamp(SON, tz="UTC").timestamp())
     cikti: dict = {}
+    kullanilan: set[tuple[str, int, int]] = set()
     for cift in sorted({o["cift"] for _, o in istek}):
         d = vr.oku(cift, a)
         assert int(d.t[-1]) < int(pd.Timestamp("2024-01-01", tz="UTC").timestamp()), "2024 sonrası veri örneğe girdi"
@@ -94,7 +108,7 @@ def sec() -> dict:
             secilen = {}
             for e in reversed(ev.to_dict("records")):
                 t = e["bt"] if o["kaynak"] == "buyuk" else e["t0"]
-                if t >= son or e["yon"] == 0 or not uyar(e, o.get("kosul", {})):
+                if t >= son or e["yon"] == 0 or (cift, *pencere(o, e, sf)[:2]) in kullanilan or not uyar(e, o.get("kosul", {})):
                     continue
                 if o["kaynak"] == "buyuk":
                     olcu, _ = bm.olc(d, e)
@@ -109,12 +123,8 @@ def sec() -> dict:
                 raise SystemExit(f"{slug} {o['id']}: koşula uyan {'/'.join(r for r in ('tipik', 'ters') if r not in secilen)} olayı yok")
             kayit = {}
             for rol, (e, olcu) in secilen.items():
-                if o["kaynak"] == "buyuk":
-                    bas, mum_son, tf = int(e["bt"]), int(e["bt"]) + int(o["tf"]) * 60, int(o["tf"])
-                else:
-                    an = sf.AN[o["an"]]
-                    bas = int(e["t0"]) - (an.tf * 60 if an.aile == "fiksing" else 0)
-                    mum_son, tf = bas + an.tf * 60, an.tf
+                bas, mum_son, tf = pencere(o, e, sf)
+                kullanilan.add((cift, bas, mum_son))
                 izle_son = int(d.t[e["j1"] - 1]) + 60
                 i = int(np.searchsorted(M.bt, bas))
                 j = int(np.searchsorted(M.bt, izle_son))

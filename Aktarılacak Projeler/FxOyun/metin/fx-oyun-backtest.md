@@ -34,19 +34,17 @@ durur. Hüküm yalnız 2024 → döneminden verilir ({{ ON.dis_bitis }} tarihine
 
 ## Bu dersi masada nasıl kullanırsın
 
-Bu ders planın sınav kâğıdıdır ve masada da öyle kullanılır. Önceki dört ders ilk mumdan sonra fiyatın genelde ne
-yaptığını söyledi; bu ders o okumaların hiçbirinin maliyetten sonra bir işlem olmadığını söylüyor. Masadaki karşılığı:
-okumalar ekranda kalır, emir defteri boş kalır. Aralığı, yarıyı, koşunun bittiği yeri işaretlersin; bunları bir
-işlemin sebebi saymazsın. Başka bir gerekçeyle masadaysan ders üç şey söyler: emrin o anda hangi maliyeti ödeyeceği,
-hangi kurulumun yalnız kazanma oranı yüksek olduğu için kâr gibi göründüğü, ve bir kuralı ne zaman kural
-sayabileceğin. Merdiven, bir kuralı masaya getirmeden önce sorulacak beş soruyu sırayla verir.
+Bu ders planın sınav kâğıdıdır ve masada da öyle kullanılır: okumalar ekranda kalır, emir defteri boş kalır.
+Aralığı, yarıyı, koşunun bittiği yeri işaretlersin; bunları bir işlemin sebebi saymazsın. Başka bir gerekçeyle
+masadaysan ders üç şey söyler: emrin o anda hangi maliyeti ödeyeceği, hangi kurulumun yalnız kazanma oranı yüksek
+olduğu için kâr gibi göründüğü, ve bir kuralı ne zaman kural sayabileceğin. Merdiven, bir kuralı masaya getirmeden
+önce sorulacak beş soruyu sırayla verir.
 
 {{# karar sinav }}
 
-İlk iki soru sonuca bakmadan cevaplanır, son üçü sayıya bakar; sonuçtan sonra yazılmış bir kural ilk soruda düşer.
-Bu dersin tepkileri ilk iki sorudan geçer: plan 2024 sonrası sınanmadan kaydedildi. Açılış ve fiksing tepkileri
-dördüncü soruda durur. Merkez bankası satırlarından işlemi az olanlar üçüncü soruda durur; eşiği geçenler merdivenin
-sonuna "zayıf" hükmüyle, aday olarak varır.
+Bu dersin tepkileri ilk iki sorudan geçer, çünkü plan 2024 sonrası sınanmadan kaydedildi. Açılış ve fiksing
+tepkileri dördüncü soruda durur; merkez bankası satırlarından işlemi az olanlar üçüncüde, eşiği geçenler merdivenin
+sonuna "zayıf" hükmüyle aday olarak varır.
 
 ## Tepki nedir, nasıl seçildi
 
@@ -86,15 +84,14 @@ ama başa baş oranı da onunla birlikte yükselir.
 
 ### Masada: kazanma oranının yanına başa baş oranı
 
-Bu bulgunun ekrandaki görüntüsü sıradan bir açılıştır: güçlü ilk mum ucuna yakın kapanır, fiyat yarıya döner, limit
-dolar ve çoğu gün kısa süre sonra yarım R'lik hedef gelir. Gün gün izleyen için bu bir başarı serisidir. Şema aynı
-dolumdan çıkan iki yolu yan yana koyar.
+Ekranda sıradan bir açılış görürsün: güçlü ilk mum ucuna yakın kapanır, fiyat yarıya döner, limit dolar ve çoğu gün
+yarım R'lik hedef gelir. Şema aynı dolumdan çıkan iki yolu yan yana koyar.
 
 {{# sema yarim-r }}
 
-Kazanma oranı her zaman başa baş oranıyla birlikte okunur: ortalama kayıp, ortalama kazanç ile ortalama kaybın
-toplamına bölünür. Yarım R kazanıp bir R kaybeden kurulum maliyetsiz bile üç işlemden ikisini kazanmak zorundadır;
-maliyet kazancı küçültür, kaybı büyütür. Güçlü açılış mumunda kazanma oranı
+Kazanma oranı başa baş oranıyla birlikte okunur: ortalama kayıp, ortalama kazanç ile ortalama kaybın toplamına
+bölünür. Yarım R kazanıp bir R kaybeden kurulum maliyetsiz bile üç işlemden ikisini kazanmalıdır; maliyet kazancı
+küçültür, kaybı büyütür. Güçlü açılış mumunda kazanma oranı
 {{ B.referans.acilis.guclu.dis.kazanma }}, gereken {{ B.referans.acilis.guclu.dis.basabas }} (5. ders, Kazanma oranı
 ve net sonuç).
 
@@ -105,12 +102,11 @@ yükselir; birkaç günlük kazanç serisini kenarın kanıtı saymazsın.
 
 {{# ornek acilis-yari }}
 
-İki gün ③ işaretine kadar birbirinin aynısıdır: ① Londra açılışının ucuna yakın kapanan ilk mumu, ② mumun yarısı,
-③ fiyatın yarıya dokunduğu ve limitin dolduğu an. Ayrım dolumdan sonra başlar. Üstteki günde fiyat yarıdan mumun kendi
-ucuna yürür ve yarım R'lik hedef yolda kalır; alttaki günde yarıdan devam eder, mumun öbür ucunu kırar ve ④ işaretinde
-(izleme penceresinin sonu) mumun yönünün tersindedir. Dolum anında iki günü ayıran bir işaret ekranda yoktur, çünkü
-açılış mumu yön bilgisi taşımıyor (1. ders, Şans ne verirdi: yolun aynası); karar ancak sonradan "belli" görünür.
-Tek bir gün kuralı ne doğrular ne yanlışlar; aritmetiğin neden binlerce işlemle okunduğunu gösterir.
+İki gün ③ işaretine kadar aynıdır: ① ucuna yakın kapanan Londra açılış mumu, ② yarısı, ③ fiyatın yarıya dokunup
+limitin dolduğu an. Üstteki günde fiyat yarıdan mumun kendi ucuna yürür ve yarım R'lik hedef yolda kalır; alttaki
+günde öbür ucu kırar ve ④ işaretinde (izleme penceresinin sonu) mumun yönünün tersindedir. Dolum anında iki günü
+ayıran bir işaret yoktur, çünkü açılış mumu yön bilgisi taşımıyor (1. ders, Şans ne verirdi: yolun aynası); karar
+ancak sonradan "belli" görünür. Tek bir gün kuralı ne doğrular ne yanlışlar.
 
 ## Referans tepkiler
 
@@ -141,16 +137,16 @@ Her tepkinin maliyetsiz (aynı kurallar orta fiyatla, makas ve kayma olmadan) ve
 
 ### Masada: maliyeti ekranda görmek
 
-Maliyet grafikte bir mum olarak görünmez; dolum fiyatı ile orta fiyat arasındaki farkta durur. Onu görmek için emir
-anındaki makası ve planlanan riski (girişten stopa) pip olarak okur, birini ötekine bölersin: bölüm işlemin R
-cinsinden maliyetidir. Piyasa ve stop emirleri bunun üstüne kayma öder; açıklamadan iki dakika önce ile on beş dakika
-sonrası arasında kayma daha büyüktür (1. ders, Kazanma oranı ile net sonuç).
+Maliyet grafikte mum olarak görünmez, dolum fiyatı ile orta fiyatın farkında durur. Emir anındaki makası ve
+planlanan riski (girişten stopa) pip olarak okur, birini ötekine bölersin: bölüm işlemin R cinsinden maliyetidir.
+Piyasa ve stop emirleri bunun üstüne kayma öder; açıklamadan iki dakika önce ile on beş dakika sonrası arasında kayma
+daha büyüktür (1. ders, Kazanma oranı ile net sonuç).
 
 {{# sema makas-stop }}
 
-Masada bunu görmenin yolu her işlemin yanına ikinci bir sonuç yazmaktır: aynı işlem, alış ile satışın ortasından, makas
-ve kayma olmadan. İki sonucun farkı ödediğin maliyettir. Maliyetsiz sonuç sıfırın çevresinde dolaşıyorsa kenar yoktur
-ve emri ucuzlatmak onu yaratmaz (8. ders, Bu sonuç nasıl okunmalı).
+Her işlemin yanına ikinci bir sonuç yazarsın: aynı işlem, alış ile satışın ortasından, makassız ve kaymasız. Fark
+ödediğin maliyettir; maliyetsiz sonuç sıfırın çevresindeyse kenar yoktur ve emri ucuzlatmak onu yaratmaz (8. ders, Bu
+sonuç nasıl okunmalı).
 
 {{# kart kucuk-stop }}
 
@@ -179,8 +175,8 @@ bunu kenar saymazsın, uzak stop payı küçültür ama yön bilgisini değişti
 
 ### Masada: birkaç karar gününe dayanan bir aday
 
-Merkez bankası satırları dersin en dikkat çekici ve masada en kolay yanlış okunan satırlarıdır. Ekranda büyük bir
-karar mumu görürsün: ilk beş dakika ucuna yakın kapanır ve dört paritede birden aynı yöne bakar.
+Merkez bankası satırları masada en kolay yanlış okunan satırlardır. Ekranda büyük bir karar mumu görürsün: ilk beş
+dakika ucuna yakın kapanır, dört paritede birden aynı yöne bakar.
 
 {{# sema karar-mumu }}
 
@@ -205,9 +201,8 @@ Açılış ve fiksinglerin bütün hücreleri burada. Plan bu anlarda okumayı s
 
 ### Masada: "izle" satırında masada ne kalır
 
-"İzle, işlem açma" bir boşluk değildir; masadaki işi değiştirir. İşlemin yerine referansları işaretlemek, olanı
-deftere yazmak ve başka bir gerekçeyle açılmış bir pozisyonun o andan nasıl etkileneceğini bilmek kalır. Fiksing en
-açık örnektir: davranış gerçek, işlem değil.
+"İzle, işlem açma" boşluk değildir: işlemin yerine işaretlemek, deftere yazmak ve açık bir pozisyonun o andan nasıl
+etkileneceğini bilmek kalır. Fiksing en açık örnektir: davranış gerçek, işlem değil.
 
 {{# sema fiksing-geri }}
 
@@ -218,13 +213,12 @@ Maliyet nereye gidiyor); "izle" satırının bir gün işleme döneceğini umup 
 
 {{# ornek wmr-kosu }}
 
-İki günde de ① Londra fiksingine giden otuz dakikalık koşudur ve fiksinge kadar ekranda birbirine benzer; ② koşunun
-yarısıdır. Üstteki günde fiyat fiksingden sonra koşuyu geri verir, ③ işaretinde yarıya dokunur ve ④ işaretinde
-(izleme penceresinin sonu) fiksingdeki seviyenin gerisindedir. Alttaki günde fiksing koşunun sonu değildir: kısa bir
-duraklamadan sonra fiyat koşunun yönünde yürür, yarıya gelmez, ③ hiç oluşmaz ve ④ işaretinde fiksingdeki seviyenin
-ötesindedir. Emrin konabileceği tek anda, fiksingde, iki gün ayırt edilemez. Geri verme şanstan sık geldiği için
-üstteki gün daha sık görülür (3. ders, Sınıf sınıf, şansın payıyla), ama sıklık farkı maliyeti karşılamaz. İki gün
-kuralı ne doğrular ne yanlışlar; fiksingin bir sinyal değil bir an olduğunu gösterir.
+İki günde de ① Londra fiksingine giden otuz dakikalık koşudur ve fiksinge kadar birbirine benzer; ② koşunun
+yarısıdır. Üstteki günde fiyat koşuyu geri verir, ③ işaretinde yarıya dokunur ve ④ işaretinde (izleme penceresinin
+sonu) fiksingdeki seviyenin gerisindedir. Alttaki günde fiyat koşunun yönünde yürümeye devam eder, ③ hiç oluşmaz ve
+④ işaretinde fiksingdeki seviyenin ötesindedir. Emrin konabileceği tek anda, fiksingde, iki gün ayırt edilemez. Geri
+verme şanstan sık geldiği için üstteki gün daha sık görülür (3. ders, Sınıf sınıf, şansın payıyla), ama sıklık farkı
+maliyeti karşılamaz; tek bir gün kuralı ne doğrular ne yanlışlar.
 
 ## Günün haritası
 
@@ -274,8 +268,6 @@ işaretlemek, beklemek ve yazmaktan oluşur; masadan kalkmak günün meşru bir 
 - **TSİ 00:00 (ABD kış saatinde 01:00) — New York kapanışı (New York 17:00).** Soru: günün satırları dolu mu? Dolmayan
   limitleri ve "izle" satırlarında alınmayan işlemleri de yazarsın; defter kapanır.
 
-{{# kart haber-acik }}
-
 ## Bir kuralı sınanmadan kullanmamak
 
 Bu dersin yöntemi masada bir kurala uygulanabilecek dürüst yöntemdir ve sırası değişmez (1. ders, Bu planın dürüstlük
@@ -290,14 +282,12 @@ kuralları; 5. ders, Tepki nedir, nasıl seçildi).
 5. **Hükmü önceden yazılmış kuralla verirsin:** {{ ON.hukum_en_az }} işlemin altında hüküm yok; aralık tümüyle sıfırın
    üstündeyse "çalışıyor", ortalama artı ama aralık sıfırı kapsıyorsa "zayıf", ortalama eksiyse "çalışmıyor".
 
-Bedeli zamandır: yılda birkaç kez gelen bir an hüküm eşiğine yıllar sonra varır. Merkez bankası adaylarının bugün
-"ölçülemedi" ya da "zayıf" kalmasının sebebi budur; beklemenin sonunda sonuç eksi de çıkabilir.
+Bedeli zamandır: yılda birkaç kez gelen bir an hüküm eşiğine yıllar sonra varır ve sonuç eksi de çıkabilir.
 
 ## Emri nereye koyarsın
 
-Bu bölüm başka bir gerekçeyle bu anlardan birinde işleme girecek biri içindir. Planın tepkileri burada bir emir
-haritasıdır; hiçbiri maliyetten sonra kazandırmadı ve aşağıdaki satırlar bunu değiştirmez (8. ders, Limit neden ucuz
-görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet).
+Başka bir gerekçeyle bu anlardan birinde işleme girecek biri için planın tepkileri bir emir haritasıdır; hiçbiri
+maliyetten sonra kazandırmadı (8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet).
 
 - **Güçlü, normal ve reddedilen ilk mumda limit.** Limit mumun yarısına, mumun yönünde; stop öbür ucun mum boyunun
   onda biri kadar ötesinde; hedef yarım R. Limit girişte makas ve kayma ödemez, çıkışta öder, ve yalnız fiyat aleyhine
@@ -311,8 +301,8 @@ görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet).
   önceki sonucu kapanıştaki girişten belirgin farklı çıkmadı (8. ders, Onay mumu).
 - **Haber penceresinde.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında makas açılır ve stop emri
   genişleyen makasla dolar: stopun yeri değişmez, dolduğu fiyat değişir (4. ders, Haber anları için masa kartı).
-- **İptal.** Emir anın izlenen süresi bitince ya da ömrüne bir açıklama düşünce çekilir. Dolmayan limit kaçan bir
-  kazanç değil, deftere yazılacak bir satırdır.
+- **İptal.** Emir anın izlenen süresi bitince ya da ömrüne bir açıklama düşünce çekilir; dolmayan limit deftere
+  yazılır.
 
 ## Kendi defterini tutmak
 
@@ -353,7 +343,8 @@ sayfada durur, yoksa kuralın sonucu senin seçimlerinle karışır.
 1. Saatler yaz mı kış mı? Londra açılışı TSİ {{ AN.londra_acilis.tsi_yaz }} mi {{ AN.londra_acilis.tsi_kis }} mi; New
    York açılışı TSİ {{ AN.ny_acilis.tsi_yaz }} mi {{ AN.ny_acilis.tsi_kis }} mi?
 2. Takvimde açıklama var mı (BoE TSİ {{ AN.boe.tsi_yaz }}, ECB TSİ {{ AN.ecb.tsi_yaz }}, ABD verisi TSİ
-   {{ AN.nfp.tsi_yaz }}, FOMC TSİ {{ AN.fomc.tsi_yaz }}; kış saatinde birer saat geç) ve penceresinde emrim var mı?
+   {{ AN.nfp.tsi_yaz }}, FOMC TSİ {{ AN.fomc.tsi_yaz }}; İngiltere, Avrupa ve ABD kış saatinde birer saat
+   geç) ve penceresinde emrim var mı?
 3. Bugün ayın son Londra iş günü mü (Londra fiksingi TSİ {{ AN.wmr.tsi_yaz }}, İngiltere kış saatinde
    {{ AN.wmr.tsi_kis }})?
 4. Bu anın satırı "izle, işlem açma" mı?
@@ -400,19 +391,6 @@ birkaç pip daha yürüdü. Ne yaparsın, ne yapmazsın?
 Kovalamazsın: ay sonunda güçlü koşu fiksingden sonra öbür günlerden de az sürer (3. ders, Ay sonu). Tersine de
 girmezsin: geri vermenin maliyetsiz kenarı maliyetten küçüktür ve plan burada "izle" der (5. ders, Maliyet nereye
 gidiyor). Ucu ve yarıyı işaretler, fiksingden sonraki bir saati yazarsın.
-
-</details>
-
-**4.** Sessiz bir New York açılışında (New York 09:30, TSİ {{ AN.ny_acilis.tsi_yaz }}; ABD kış saatinde
-{{ AN.ny_acilis.tsi_kis }}) küçük ilk mumun üst ucu kırıldı; makas ekranda açık ("Aynı makas, iki stop" şeması).
-Kırılıma stop emriyle girmeyi düşünüyorsun.
-
-<details>
-<summary>Çözüm</summary>
-
-Makası riske bölersin: küçük stopta pay büyüktür ve stop emri kayma da öder. Açılışta küçük mumun kırılımının
-maliyetsiz sonucu sıfıra yakındır (5. ders, Maliyet nereye gidiyor) ve sessiz açılışın kırılımı sinyal değildir (2.
-ders, Küçük ilk mum). Girmezsin; stopu uzaklaştırmak payı küçültür, kenar yaratmaz (8. ders, Stop uzaklığı ve maliyet).
 
 </details>
 

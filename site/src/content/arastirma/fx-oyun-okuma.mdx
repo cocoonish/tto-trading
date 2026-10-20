@@ -10,6 +10,7 @@ seviye: 'giris'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
+import Diyagram from '../../components/Diyagram.astro';
 
 Bir gün içi işlemcinin günü saatlere değil anlara bölünür. Tokyo açılır, Londra açılır, New York açılır; Tokyo ve
 Londra'da kur fiksingleri yapılır; ayın belirli günlerinde ABD istihdam ve enflasyon verisi gelir; altı haftada bir
@@ -44,6 +45,77 @@ fiyatları ve maliyetle sınandı.
 
 Bu sonuç ilk bakışta kafa karıştırır: işlemlerin çoğu kazanıyorsa nasıl kaybedilir? Cevap aşağıda, "Kazanma oranı
 ile net sonuç" başlığında.
+
+## Bu dersi masada nasıl kullanırsın
+
+Bu ders bir işlem kuralı vermez; masadaki ilk dakikaları düzenler. Bir an geldiğinde, örneğin Londra açıldığında
+(Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00), ilk mum kapanana kadar beklersin. Sonra mumu
+dört sınıftan birine koyarsın ve tek bir soru sorarsın: bu mumdan sonra gördüğüm şey, yönü olmayan bir fiyatta da aynı
+sıklıkta görülür müydü? Cevap çoğu anda "evet"tir. O zaman yapılacak iş işlem değil, işaretlemedir: iki uç, yarı ve
+günün bir sonraki anının saati. Aşağıdaki şema bu sırayı beş soruya indirir; her sorunun dayanağı serinin bir
+dersinde ölçülmüş bir sonuçtur ve hiçbir dal bir işlem önermez.
+
+<Diyagram no="M1" baslik="Anın ilk mumu kapandı: masada beş soru" kaynak="Karar şeması — dayanak: 1. ders, İlk mumun dört sınıfı; 1. ders, Şans ne verirdi: yolun aynası; 2. ders, Sınıf sınıf, şansın payıyla; 3. ders, Sessiz fiksing; 4. ders, Küçük haber mumu; 3. ders, Sınıf sınıf, şansın payıyla; 4. ders, Merkez bankası kararları" azami={480}>
+<svg viewBox="0 0 360 461" class="karar-sema" role="img" aria-label="Anın ilk mumu kapandı: masada beş soru">
+<defs><marker id="ko-ilkmum" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ks-ok-ucu" /></marker></defs>
+<rect x="4" y="10" width="184" height="48" rx="3" class="ks-soru" />
+<text x="14" y="27" class="ks-yazi">İlk mum henüz kapanmadı</text>
+<text x="14" y="42" class="ks-yazi">mı?</text>
+<line x1="188" x2="220" y1="34.0" y2="34.0" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="193" y="29.0" class="ks-dal">evet</text>
+<rect x="222" y="10" width="134" height="48" rx="3" class="ks-sonuc ks-bekle" />
+<text x="230" y="26" class="ks-yazi-kucuk">Bekle: sınıf ancak</text>
+<text x="230" y="40" class="ks-yazi-kucuk">kapanışta belli olur</text>
+<line x1="40" x2="40" y1="58" y2="82" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="46" y="74" class="ks-dal">hayır</text>
+<rect x="4" y="84" width="184" height="48" rx="3" class="ks-soru" />
+<text x="14" y="101" class="ks-yazi">An bir merkez bankası</text>
+<text x="14" y="116" class="ks-yazi">kararı mı?</text>
+<line x1="188" x2="220" y1="108.0" y2="108.0" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="193" y="103.0" class="ks-dal">evet</text>
+<rect x="222" y="84" width="134" height="48" rx="3" class="ks-sonuc ks-kalk" />
+<text x="230" y="100" class="ks-yazi-kucuk">Olay az, hüküm yok:</text>
+<text x="230" y="114" class="ks-yazi-kucuk">okuma kurmadan kalk</text>
+<line x1="40" x2="40" y1="132" y2="156" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="46" y="148" class="ks-dal">hayır</text>
+<rect x="4" y="158" width="184" height="46" rx="3" class="ks-soru" />
+<text x="14" y="175" class="ks-yazi">An bir açılış mı?</text>
+<line x1="188" x2="220" y1="181.0" y2="181.0" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="193" y="176.0" class="ks-dal">evet</text>
+<rect x="222" y="158" width="134" height="46" rx="3" class="ks-sonuc ks-yapma" />
+<text x="230" y="174" class="ks-yazi-kucuk">Yön okuma; iki ucu</text>
+<text x="230" y="188" class="ks-yazi-kucuk">ve yarıyı işaretle</text>
+<line x1="40" x2="40" y1="204" y2="228" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="46" y="220" class="ks-dal">hayır</text>
+<rect x="4" y="230" width="184" height="60" rx="3" class="ks-soru" />
+<text x="14" y="247" class="ks-yazi">İlk mum küçük mü?</text>
+<line x1="188" x2="220" y1="260.0" y2="260.0" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="193" y="255.0" class="ks-dal">evet</text>
+<rect x="222" y="230" width="134" height="60" rx="3" class="ks-sonuc ks-bekle" />
+<text x="230" y="246" class="ks-yazi-kucuk">Kırılım sinyal</text>
+<text x="230" y="260" class="ks-yazi-kucuk">değil: kırılan</text>
+<text x="230" y="274" class="ks-yazi-kucuk">tarafı izle</text>
+<line x1="40" x2="40" y1="290" y2="314" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="46" y="306" class="ks-dal">hayır</text>
+<rect x="4" y="316" width="184" height="46" rx="3" class="ks-soru" />
+<text x="14" y="333" class="ks-yazi">An bir fiksing mi?</text>
+<line x1="188" x2="220" y1="339.0" y2="339.0" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="193" y="334.0" class="ks-dal">evet</text>
+<rect x="222" y="316" width="134" height="46" rx="3" class="ks-sonuc ks-yapma" />
+<text x="230" y="332" class="ks-yazi-kucuk">Geri verme beklenir;</text>
+<text x="230" y="346" class="ks-yazi-kucuk">koşuyu kovalama</text>
+<line x1="40" x2="40" y1="362" y2="386" class="ks-ok" marker-end="url(#ko-ilkmum)" />
+<text x="46" y="378" class="ks-dal">hayır</text>
+<rect x="4" y="388" width="352" height="63" rx="3" class="ks-son" />
+<text x="14" y="405" class="ks-yazi">Geriye ABD verisi kalır: ilk mumun yönü</text>
+<text x="14" y="420" class="ks-yazi">şanstan seyrek sürdü. Bu bir okumadır,</text>
+<text x="14" y="435" class="ks-yazi">sınanmış bir tepki değil.</text>
+</svg>
+</Diyagram>
+
+
+Son kutu bilerek dar yazıldı: ABD verisinden sonra ilk mumun yönü şanstan seyrek sürdü, ama bu yönde bir tepki önceden
+yazılmadığı için sınanmadı. Veri mumunun yönüne güvenmezsin, tersine girmeyi de bir kural saymazsın.
 
 ## İncelenen on an
 
@@ -93,6 +165,79 @@ Aynı açılışın dört sınıftan dört örneği (EUR/USD, Londra açılış�
 
 Şekildeki kesikli çizgi ilk mumun **yarısıdır** (orta noktası). Bu seride en çok bakılan seviye odur.
 
+### Masada: mumu sınıflandırmak
+
+Sınıf bir kapanış ölçüsüdür: on beş dakikalık bir açılış mumu onuncu dakikada güçlü görünüp reddedilen olarak
+kapanabilir. Masada sırayla üç şeye bakarsın: mumun boyu, gövdenin boya oranı, en uzun fitilin boya oranı.
+
+Boyu neyle kıyasladığın sınıfın kendisidir. Kıyas ekrandaki önceki mumlar değil, aynı anın geçmiş günlerdeki ilk
+mumlarıdır; Asya seansının sakin mumlarıyla kıyaslanınca neredeyse her Londra açılış mumu güçlü görünür. Pratikte her
+an için bir defter tutarsın: o anın son olaylarındaki ilk mum boyları ve ortancası. Defter bu dersin tanımıyla aynıysa
+(son 60 olay; veri ve kararlarda son 24) okuduğun sınıf da bu dersin sınıfıdır;
+başka bir defterle okunan sınıf bu derste ölçülmedi.
+
+<Diyagram no="M2" baslik="Dört sınıf, aynı an: masada boyu, gövdeyi ve fitili okumak" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 240" class="mum-sema" role="img" aria-label="Dört sınıf, aynı an: masada boyu, gövdeyi ve fitili okumak">
+<defs><marker id="ok-siniflar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<line x1="24.1" x2="24.1" y1="157.8" y2="182.5" class="ms-fitil ms-artis ms-soluk" />
+<rect x="15.4" y="167.7" width="17.5" height="4.9" class="ms-govde ms-artis ms-soluk" />
+<line x1="52.4" x2="52.4" y1="24.9" y2="177.5" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="43.6" y="34.8" width="17.5" height="132.9" class="ms-govde ms-artis ms-vurgu" />
+<line x1="80.6" x2="80.6" y1="160.3" y2="184.9" class="ms-fitil ms-azalis ms-soluk" />
+<rect x="71.9" y="172.6" width="17.5" height="4.9" class="ms-govde ms-azalis ms-soluk" />
+<line x1="108.9" x2="108.9" y1="98.8" y2="207.1" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="100.1" y="133.2" width="17.5" height="44.3" class="ms-govde ms-artis ms-vurgu" />
+<line x1="137.1" x2="137.1" y1="162.8" y2="182.5" class="ms-fitil ms-artis ms-soluk" />
+<rect x="128.4" y="170.2" width="17.5" height="2.5" class="ms-govde ms-artis ms-soluk" />
+<line x1="165.4" x2="165.4" y1="37.2" y2="182.5" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="156.6" y="157.8" width="17.5" height="12.3" class="ms-govde ms-artis ms-vurgu" />
+<line x1="193.6" x2="193.6" y1="162.8" y2="180.0" class="ms-fitil ms-artis ms-soluk" />
+<rect x="184.9" y="167.7" width="17.5" height="4.9" class="ms-govde ms-artis ms-soluk" />
+<line x1="221.9" x2="221.9" y1="148.0" y2="182.5" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="213.1" y="160.3" width="17.5" height="7.4" class="ms-govde ms-artis ms-vurgu" />
+<circle cx="52.4" cy="204.6" r="8" class="ms-isaret" />
+<text x="52.4" y="208.2" class="ms-isaret-yazi">1</text>
+<circle cx="108.9" cy="69.2" r="8" class="ms-isaret" />
+<text x="108.9" y="72.8" class="ms-isaret-yazi">2</text>
+<circle cx="165.4" cy="207.1" r="8" class="ms-isaret" />
+<text x="165.4" y="210.7" class="ms-isaret-yazi">3</text>
+<circle cx="221.9" cy="118.5" r="8" class="ms-isaret" />
+<text x="221.9" y="122.1" class="ms-isaret-yazi">4</text>
+<text x="10" y="234" class="ms-eksen">dört ayrı gün, aynı an; soluk mum açılıştan önce</text>
+</svg>
+</Diyagram>
+
+- ① Güçlü: tipik boydan belirgin büyük, gövde mumu dolduruyor, kapanış uca yakın.
+- ② Normal: tipik boya yakın; kapanış ortaya yakın, yarı hemen dibinde.
+- ③ Reddedilen: uzun fitil, küçük gövde. Yukarı uzanmış ama yönü aşağı: reddin yönü.
+- ④ Küçük: tipik boyun belirgin altında; yön yok, önce kırılan uca bakılır.
+
+
+Şemadaki dört mum aynı anın dört ayrı gününden. Birinciyi güçlü yapan yalnız boyu değil, gövdenin mumu doldurmasıdır.
+Üçüncüde yön sezgiye terstir: mum yukarı uzanmış ama yönü aşağıdır. Dördüncüde yön sorulmaz; iki ucu işaretleyip
+hangisinin önce kırıldığını beklersin.
+
+<div class="senaryo" id="kart-reddedilen-acilis">
+<p class="senaryo-durum"><span class="etiket">Durum</span> 15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) uzun fitilli, küçük gövdeli bir ilk mum</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Fiyat bir yöne gitmiş ve geri itilmiş; fitillerden biri mumun yarısından uzun.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Mumu kapanışta sınıflandırır, iki ucu ve yarıyı işaretlersin; fitilin ucunu günün referansı olarak not edersin.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Fitili &#x27;orada satıcı var&#x27; diye bir yön işareti saymazsın; reddin yönünde de tersine de yalnız bu mum yüzünden girmezsin.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Başka bir gerekçeyle reddin yönünde gireceksen limit yarıya, stop fitilin ucunun biraz ötesine; limit izlenen süre içinde dolmazsa çekilir.</dd>
+<dt>Dayanak</dt>
+<dd>2. ders, Normal ve reddedilen ilk mum; 1. ders, Kazanma oranı ile net sonuç</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+Bu durumda yapmazsın: mum kapanmadan sınıf vermezsin; boyu ekrandaki komşu mumlarla kıyaslamazsın; uzun bir fitile,
+sayılar desteklemediği hâlde "orada satıcı var" anlamı yüklemezsin (2. ders, Normal ve reddedilen ilk mum).
+
 ## Trend
 
 Her ilk mum bir de günlük trendle karşılaştırılır. Trend, bir önceki günün kapanışının 20 günlük üssel
@@ -102,6 +247,10 @@ ikisi de tersi ise aşağı, başka her durumda yatay. İlk mumun yönü trendle
 
 Açılış ve fiksing derslerinde trend ayrımı bir tabloyla verilir ve sayıları değiştirmiyor. Haber anlarında olay sayısı
 böyle bir ayrım için yetmiyor. Plan trendi bir okuma bilgisi olarak taşır, karar ölçütü yapmaz.
+
+Masada trendi bir satır not olarak yazarsın, bir süzgeç olarak kullanmazsın. Trend yönündeki güçlü bir açılış mumu
+trende karşı olanından daha sık devam etmedi (2. ders, Trend bir şey değiştiriyor mu; 3. ders, Trend). "Trendle aynı
+yönde, öyleyse bu kez sürer" cümlesi bu derslerin ölçtüğü bir şey değildir.
 
 ## İlk mumdan sonra ne olabilir
 
@@ -136,6 +285,155 @@ kendi tablosuyla verilir.
 şeklinin sonucudur. Fiksinglerde koşunun yarısını geri verme payı iki dönemde de şansın üstünde, sürme payı altında.
 ABD verisinin normal ve reddedilen mumunda devam payı iki dönemde de şansın altında.
 
+### Masada: aynayı kendi gözünle sormak
+
+"Bak, devam etti" ya da "bak, yarısına döndü" dediğin her an aynı cümleyi aynalanmış yol için de kurarsın: fiyat tam
+tersine aynı adımları atsaydı, aynı şeyi görür müydün? Güçlü bir mumda cevap çoğu zaman evettir, çünkü eşiklerin
+kapanışa uzaklığı mumun şeklinden gelir.
+
+<Diyagram no="M3" baslik="Güçlü mumun geometrisi: devam eşiği yakın, dönüş eşiği uzak" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 260" class="mum-sema" role="img" aria-label="Güçlü mumun geometrisi: devam eşiği yakın, dönüş eşiği uzak">
+<defs><marker id="ok-aynaesik" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<line x1="106.9" x2="236.0" y1="26.0" y2="26.0" class="ms-cizgi ms-hedef" />
+<text x="244" y="30.0" class="ms-etiket ms-hedef-yazi">devam eşiği</text>
+<line x1="106.9" x2="236.0" y1="92.7" y2="92.7" class="ms-cizgi ms-uc" />
+<text x="244" y="96.7" class="ms-etiket ms-uc-yazi">kendi ucu</text>
+<line x1="106.9" x2="236.0" y1="159.3" y2="159.3" class="ms-cizgi ms-seviye" />
+<text x="244" y="163.3" class="ms-etiket ms-seviye-yazi">mumun yarısı</text>
+<line x1="106.9" x2="236.0" y1="226.0" y2="226.0" class="ms-cizgi ms-uc" />
+<text x="244" y="230.0" class="ms-etiket ms-uc-yazi">öbür uç: dönüş</text>
+<line x1="26.1" x2="26.1" y1="207.0" y2="226.0" class="ms-fitil ms-artis" />
+<rect x="16.1" y="213.3" width="20.0" height="6.3" class="ms-govde ms-artis" />
+<line x1="58.4" x2="58.4" y1="203.8" y2="219.7" class="ms-fitil ms-azalis" />
+<rect x="48.4" y="213.3" width="20.0" height="3.2" class="ms-govde ms-azalis" />
+<line x1="90.7" x2="90.7" y1="208.5" y2="224.4" class="ms-fitil ms-azalis" />
+<rect x="80.7" y="216.5" width="20.0" height="3.2" class="ms-govde ms-azalis" />
+<line x1="123.0" x2="123.0" y1="92.7" y2="226.0" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="113.0" y="99.0" width="20.0" height="120.6" class="ms-govde ms-artis ms-vurgu" />
+<line x1="155.3" x2="155.3" y1="89.5" y2="111.7" class="ms-fitil ms-azalis ms-soluk" />
+<rect x="145.3" y="99.0" width="20.0" height="6.3" class="ms-govde ms-azalis ms-soluk" />
+<line x1="187.6" x2="187.6" y1="94.3" y2="114.9" class="ms-fitil ms-artis ms-soluk" />
+<rect x="177.6" y="100.6" width="20.0" height="4.8" class="ms-govde ms-artis ms-soluk" />
+<line x1="219.9" x2="219.9" y1="86.3" y2="108.5" class="ms-fitil ms-artis ms-soluk" />
+<rect x="209.8" y="95.8" width="20.0" height="4.8" class="ms-govde ms-artis ms-soluk" />
+<circle cx="123.0" cy="67.3" r="8" class="ms-isaret" />
+<text x="123.0" y="70.9" class="ms-isaret-yazi">1</text>
+<circle cx="187.6" cy="45.0" r="8" class="ms-isaret" />
+<text x="187.6" y="48.6" class="ms-isaret-yazi">2</text>
+<circle cx="187.6" cy="203.8" r="8" class="ms-isaret" />
+<text x="187.6" y="207.4" class="ms-isaret-yazi">3</text>
+<circle cx="90.7" cy="159.3" r="8" class="ms-isaret" />
+<text x="90.7" y="162.9" class="ms-isaret-yazi">4</text>
+<text x="10" y="254" class="ms-eksen">zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Güçlü mum ucuna yakın kapandı; yol bu kapanıştan başlar.
+- ② Devam eşiği, kendi ucunun yarım mum ötesi: kısa bir yol.
+- ③ Dönüş eşiği öbür uç: neredeyse bir mum boyu uzakta.
+- ④ Yönsüz bir fiyat da yakın eşiği uzak eşikten sık görür; devam payı tek başına yön söylemez.
+
+
+Devam eşiği kapanıştan kısa bir yol, dönüş eşiği neredeyse bir mum boyu uzakta; yazı tura atan bir fiyat da yakın
+eşiğe önce varır. Güçlü açılış mumunda devamın dönüşten sık çıkması bu yüzden aynada da aynen çıkar
+(%53 ve %37). Masada sayıyı değil mesafeyi okursun.
+
+<Diyagram no="M4" baslik="Yolun aynası: aynı adımlar, ters yön" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 270" class="mum-sema" role="img" aria-label="Yolun aynası: aynı adımlar, ters yön">
+<defs><marker id="ok-aynayol" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<line x1="77.8" x2="236.0" y1="34.0" y2="34.0" class="ms-cizgi ms-hedef" />
+<text x="244" y="38.0" class="ms-etiket ms-hedef-yazi">devam eşiği</text>
+<line x1="77.8" x2="236.0" y1="111.1" y2="111.1" class="ms-cizgi ms-seviye" />
+<text x="244" y="115.1" class="ms-etiket ms-seviye-yazi">kapanış: ayna</text>
+<line x1="77.8" x2="236.0" y1="168.3" y2="168.3" class="ms-cizgi ms-seviye" />
+<text x="244" y="172.3" class="ms-etiket ms-seviye-yazi">mumun yarısı</text>
+<line x1="21.3" x2="21.3" y1="190.7" y2="220.5" class="ms-fitil ms-artis" />
+<rect x="14.3" y="200.6" width="14.0" height="9.9" class="ms-govde ms-artis" />
+<line x1="43.9" x2="43.9" y1="185.7" y2="210.6" class="ms-fitil ms-azalis" />
+<rect x="36.9" y="200.6" width="14.0" height="5.0" class="ms-govde ms-azalis" />
+<line x1="66.5" x2="66.5" y1="195.7" y2="228.0" class="ms-fitil ms-azalis" />
+<rect x="59.5" y="205.6" width="14.0" height="19.9" class="ms-govde ms-azalis" />
+<line x1="89.1" x2="89.1" y1="101.2" y2="235.5" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="82.1" y="111.1" width="14.0" height="114.4" class="ms-govde ms-artis ms-vurgu" />
+<line x1="111.7" x2="111.7" y1="96.2" y2="140.9" class="ms-fitil ms-azalis ms-soluk" />
+<rect x="104.7" y="111.1" width="14.0" height="24.9" class="ms-govde ms-azalis ms-soluk" />
+<line x1="134.3" x2="134.3" y1="128.5" y2="175.8" class="ms-fitil ms-azalis ms-soluk" />
+<rect x="127.3" y="136.0" width="14.0" height="29.8" class="ms-govde ms-azalis ms-soluk" />
+<line x1="156.9" x2="156.9" y1="136.0" y2="173.3" class="ms-fitil ms-artis ms-soluk" />
+<rect x="149.9" y="140.9" width="14.0" height="24.9" class="ms-govde ms-artis ms-soluk" />
+<line x1="179.5" x2="179.5" y1="106.1" y2="145.9" class="ms-fitil ms-artis ms-soluk" />
+<rect x="172.5" y="113.6" width="14.0" height="27.4" class="ms-govde ms-artis ms-soluk" />
+<line x1="202.1" x2="202.1" y1="76.3" y2="121.1" class="ms-fitil ms-artis ms-soluk" />
+<rect x="195.1" y="83.7" width="14.0" height="29.8" class="ms-govde ms-artis ms-soluk" />
+<line x1="224.7" x2="224.7" y1="26.5" y2="88.7" class="ms-fitil ms-artis ms-soluk" />
+<rect x="217.7" y="36.5" width="14.0" height="47.3" class="ms-govde ms-artis ms-soluk" />
+<polyline points="89.1,111.1 111.7,86.2 134.3,56.4 156.9,81.3 179.5,108.6 202.1,138.5 224.7,185.7" class="ms-yol ms-yol-ters" marker-end="url(#ok-aynayol)" />
+<circle cx="66.5" cy="163.3" r="8" class="ms-isaret" />
+<text x="66.5" y="166.9" class="ms-isaret-yazi">1</text>
+<circle cx="134.3" cy="195.7" r="8" class="ms-isaret" />
+<text x="134.3" y="199.3" class="ms-isaret-yazi">2</text>
+<circle cx="156.9" cy="53.9" r="8" class="ms-isaret" />
+<text x="156.9" y="57.5" class="ms-isaret-yazi">3</text>
+<circle cx="179.5" cy="195.7" r="8" class="ms-isaret" />
+<text x="179.5" y="199.3" class="ms-isaret-yazi">4</text>
+<text x="10" y="264" class="ms-eksen">zaman →</text>
+</svg>
+</Diyagram>
+
+- ① İlk mum kapandı; kapanış aynanın eksenidir.
+- ② Gerçek yol (soluk mumlar) önce yarıya döndü, sonra devam eşiğini geçti.
+- ③ Aynası (kesikli ok) aynı adımları ters yönde atar ve devam eşiğine varmaz.
+- ④ Binlerce olayda iki yolun payı aynıysa ilk mum yön söylemiyordur.
+
+
+Tek bir günde iki yol farklı biter ve bu bir şey kanıtlamaz; ayna binlerce olayda iki payı yan yana koymak içindir.
+Gözle sorulan aynanın yararı, "bu sefer farklı" duygusunun çoğu zaman mumun şeklinden geldiğini fark ettirmesidir.
+
+<GrafikEmbed src="/arastirma/fx-oyun-okuma/m_londra-guclu.html" baslik="Londra açılışında güçlü ilk mum: iki gün, iki son" no="M5" kaynak="Dukascopy" />
+
+
+Üstteki günde ① güçlü bir açılış mumudur ve fiyat öbür ucu görmeden kendi ucunu yarım mum boyu aşmıştır; ③ varsa ②
+yarıya da dokunmuştur. Alttaki günde ① aynı sınıftan bir mumdur; fiyat ③ önce yarıya dönmüş, sonra öbür ucu kırmıştır.
+④ iki günde de izleme penceresinin sonudur. İlk on beş dakikaya bakan biri iki günü ayıramazdı: iki mum da ucuna yakın
+kapanmış. Fark sonraki saatlerde çıkar ve geriye bakınca biri "açıkça devam", öbürü "açıkça tuzak" görünür. İki gün
+ne devamı ne dönüşü kanıtlar; ölçü, binlerce günde iki sonucun aynadaki paylarla aynı sıklıkta geldiğini söyler.
+
+Fiksingde ayna başka bir şey söyler: güçlü koşunun yarısını geri vermesi aynadakinden sık
+(%53 ve %45), sürmesi seyrek. Fiksingden sonra koşunun
+yönünde yeni bir hareket beklemezsin; ama koşunun tersine girmek kenar değildir, fark maliyetin altında kaldı (3. ders,
+Bu okumaları işleme çevirmek).
+
+<div class="senaryo" id="kart-fiksing-kosu">
+<p class="senaryo-durum"><span class="etiket">Durum</span> 5 dakikalık grafikte, Londra fiksinginde (WM/R, Londra 16:00; TSİ İngiltere yaz saatinde 18:00, kış saatinde 19:00) fiksinge güçlü koşan bir fiyat</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Fiksingden önceki yarım saatte fiyat tek yöne gitmiş; fiksing dakikası koşunun ucuna yakın.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Koşunun başını, ucunu ve yarısını işaretlersin; sonraki saatte bir geri çekilme beklersin. Ayın son Londra iş günüyse ayrıca not edersin.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Koşunun yönünde yeni işlem açmazsın: sürme payı şansın altında. Geri vermeyi de koşunun tersine piyasa emriyle kenar sanmazsın.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Başka bir gerekçeyle koşunun tersine gireceksen giriş fiksing anında piyasa emridir, makas ve kayma öder; stop koşunun ucunun ötesinde, hedef yarısında. Stop yakın, maliyet riskin büyük bir parçası.</dd>
+<dt>Dayanak</dt>
+<dd>1. ders, Şans ne verirdi: yolun aynası; 3. ders, Ay sonu; 3. ders, Bu okumaları işleme çevirmek</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+<GrafikEmbed src="/arastirma/fx-oyun-okuma/m_wmr-guclu.html" baslik="Londra fiksingine güçlü koşu: iki gün, iki son" no="M6" kaynak="Dukascopy" />
+
+
+Üstteki günde ① fiksinge giden güçlü koşudur ve fiyat fiksingden sonra ② koşunun yarısına döner; ③ o dokunuşun
+mumudur. Alttaki günde ① aynı sınıftan bir koşudur, ama fiyat koşunun yönünde yarım koşu boyu daha ilerler. Fiksinge
+bakan biri iki koşuyu ayıramazdı; hangisinin "geri verme günü" olduğu ancak ④ pencerenin sonunda belli olur. Biri
+okumayı doğrulamaz, öbürü yanlışlamaz: geri verme payı aynadakinden yalnız biraz yüksek ve iki sonuç da sık görülür.
+
+ABD verisinde ayna üçüncü bir şey gösterir: normal veri mumunun devam payı iki dönemde de aynadakinin altında (4. ders,
+ABD verileri). Bu bir uyarıdır, işaret değil. Bölümün masadaki karşılığı üç cümledir: güçlü açılış mumunun devamını yön
+saymazsın; fiksingden sonra koşuyu kovalamazsın, geri vermeyi de işleme çevirmezsin; veri mumunun yönünü sürecek bir
+hareket saymazsın.
+
 ## Kazanma oranı ile net sonuç
 
 Planın her okuması bir **tepkiye** çevrilip sınandı: ilk mumun yarısına limitle mumun yönünde girmek, küçük mumun
@@ -158,6 +456,204 @@ ayrıca 0,5 pip kayma öder; veri ve karar anında (açıklamadan iki dakika ön
 arası) ek 1,0 pip. Limit emir kendi fiyatından dolar, kayma ödemez. Riski 3,0
 pipten küçük işlem açılmaz. Her tepkinin bir de **maliyetsiz** sonucu var: aynı kurallar orta fiyatla, makas ve kayma
 olmadan. İkisinin farkı maliyetin payıdır.
+
+### Masada: yarım R hedefin hesabı
+
+Masada bir tepkiyi değerlendirmenin ilk adımı kazanma oranı değil, başa baş oranıdır: kayıp bir R, kazanç yarım R ise
+üç işlemin ikisi. Maliyet bu sayıyı yukarı iter, çünkü kazanan biraz az kazanır, kaybeden biraz fazla kaybeder; 2024 →
+döneminde güçlü açılış mumunda başa baş %68 oldu. Gerçekleşen kazanma oranı
+(%61) bunun altında kaldıkça yüksek görünmesi bir şey değiştirmez.
+
+<Diyagram no="M7" baslik="Yarıya limit, yarım R hedef: kazanma oranı neden yüksek çıkar" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 260" class="mum-sema" role="img" aria-label="Yarıya limit, yarım R hedef: kazanma oranı neden yüksek çıkar">
+<defs><marker id="ok-yarimr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<line x1="145.6" x2="236.0" y1="67.4" y2="67.4" class="ms-cizgi ms-hedef" />
+<text x="244" y="71.4" class="ms-etiket ms-hedef-yazi">hedef: yarım R</text>
+<line x1="77.8" x2="236.0" y1="120.3" y2="120.3" class="ms-cizgi ms-limit" />
+<text x="244" y="124.3" class="ms-etiket ms-limit-yazi">limit: yarı</text>
+<line x1="77.8" x2="236.0" y1="226.0" y2="226.0" class="ms-cizgi ms-stop" />
+<text x="244" y="230.0" class="ms-etiket ms-stop-yazi">stop</text>
+<line x1="21.3" x2="21.3" y1="186.0" y2="214.6" class="ms-fitil ms-artis" />
+<rect x="14.3" y="194.6" width="14.0" height="8.6" class="ms-govde ms-artis" />
+<line x1="43.9" x2="43.9" y1="180.3" y2="206.0" class="ms-fitil ms-azalis" />
+<rect x="36.9" y="194.6" width="14.0" height="5.7" class="ms-govde ms-azalis" />
+<line x1="66.5" x2="66.5" y1="188.9" y2="211.7" class="ms-fitil ms-artis" />
+<rect x="59.5" y="197.4" width="14.0" height="2.9" class="ms-govde ms-artis" />
+<line x1="89.1" x2="89.1" y1="31.7" y2="208.9" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="82.1" y="43.1" width="14.0" height="154.3" class="ms-govde ms-artis ms-vurgu" />
+<line x1="111.7" x2="111.7" y1="26.0" y2="77.4" class="ms-fitil ms-azalis" />
+<rect x="104.7" y="43.1" width="14.0" height="28.6" class="ms-govde ms-azalis" />
+<line x1="134.3" x2="134.3" y1="63.1" y2="111.7" class="ms-fitil ms-azalis" />
+<rect x="127.3" y="71.7" width="14.0" height="34.3" class="ms-govde ms-azalis" />
+<line x1="156.9" x2="156.9" y1="100.3" y2="126.0" class="ms-fitil ms-azalis" />
+<rect x="149.9" y="106.0" width="14.0" height="8.6" class="ms-govde ms-azalis" />
+<line x1="179.5" x2="179.5" y1="88.9" y2="120.3" class="ms-fitil ms-artis" />
+<rect x="172.5" y="94.6" width="14.0" height="20.0" class="ms-govde ms-artis" />
+<line x1="202.1" x2="202.1" y1="57.4" y2="100.3" class="ms-fitil ms-artis" />
+<rect x="195.1" y="63.1" width="14.0" height="31.4" class="ms-govde ms-artis" />
+<line x1="224.7" x2="224.7" y1="54.6" y2="80.3" class="ms-fitil ms-azalis" />
+<rect x="217.7" y="63.1" width="14.0" height="11.4" class="ms-govde ms-azalis" />
+<circle cx="66.5" cy="103.1" r="8" class="ms-isaret" />
+<text x="66.5" y="106.7" class="ms-isaret-yazi">1</text>
+<circle cx="156.9" cy="148.9" r="8" class="ms-isaret" />
+<text x="156.9" y="152.5" class="ms-isaret-yazi">2</text>
+<circle cx="134.3" cy="188.9" r="8" class="ms-isaret" />
+<text x="134.3" y="192.5" class="ms-isaret-yazi">3</text>
+<circle cx="202.1" cy="31.7" r="8" class="ms-isaret" />
+<text x="202.1" y="35.3" class="ms-isaret-yazi">4</text>
+<text x="10" y="254" class="ms-eksen">zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Güçlü ilk mum kapandı; limit mumun yarısında bekler.
+- ② Fiyat yarıya döndü, limit doldu: giriş makas ödemez, çıkış öder.
+- ③ Stop öbür ucun biraz ötesinde; yarı ile stop arası bir R.
+- ④ Hedef riskin yarısı uzakta, burada kapanışın bile altında. Başa baş için üç işlemin ikisi kazanmalı.
+
+
+Şemadaki hedef kapanışın altında duruyor: yarıya konan limit ile yarım R'lik hedef, mumun zaten gittiği yolun bir
+kısmını geri almayı hedefler. Limit tanımı gereği fiyat piyasa girişinin aleyhine yürüdüğünde dolar (8. ders, Limit
+neden ucuz görünür: ters seçim); dolduğu an mumun yönündeki okumanın bir kısmı zaten geri alınmıştır.
+
+<div class="senaryo" id="kart-guclu-acilis">
+<p class="senaryo-durum"><span class="etiket">Durum</span> 15 dakikalık grafikte, Londra açılışında (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00) ucunda kapanan güçlü bir ilk mum</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Gövdesi mumu dolduran, ucunda kapanan büyük bir mum; sonraki mumlarda fiyat çoğu zaman bir süre aynı yöne gider.</dd>
+<dt>Ne yaparsın</dt>
+<dd>İki ucu, yarıyı ve devam eşiğini işaretlersin; iki eşiğin kapanışa uzaklığına bakarsın.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Devamı yön bilgisi saymazsın: yönsüz bir fiyat da bu şekilden aynı sıklıkta devam ederdi. Kapanışta kovalamazsın.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun biraz ötesine; yarım R&#x27;lik hedef kapanışın altında kalabilir. Fiyat limit dolmadan devam ederse emri taşımazsın.</dd>
+<dt>Dayanak</dt>
+<dd>1. ders, Şans ne verirdi: yolun aynası; 2. ders, Güçlü ilk mum</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+Bu durumda yapmazsın: kazanma oranına bakıp tepkiyi iyi saymazsın; başa baş oranını maliyetsiz hesaplamazsın (1. ders,
+Kazanma oranı ile net sonuç).
+
+## Emri nereye koyarsın
+
+Bu ders işlem önermez. Başka bir gerekçeyle (kendi modelin, bir akış bilgisi) ilk mumdan sonra işleme gireceksen,
+ilk mum emrin geometrisini, bu derste ölçülen maliyet kuralları da bedelini verir.
+
+- **Giriş.** Piyasa emri hemen dolar, makası ve 0,5 pip kaymayı öder. Yarıya limit girişte makas ve
+  kayma ödemez, çıkışta öder ve yalnız fiyat aleyhine yürüdüğünde dolar (8. ders, Limit neden ucuz görünür: ters
+  seçim). Kırılan uca stop emri fiyatın zaten yürüdüğü yerden alır, kayma öder (8. ders, Ucun kırılması). Onay mumu
+  beklemek, kaçırılan fiyatın bedelini ancak karşıladı (8. ders, Onay mumu).
+- **Stop.** Bu serinin tepkilerinde stop öbür ucun biraz ötesindedir; mumun içine konan stop ölçülmedi. Açılış mumu
+  küçüktür, stop da; aynı makas küçük stopta daha büyük bir R olur (8. ders, Stop uzaklığı ve maliyet).
+- **Hedef.** Yarım R hedef kazanma oranını da başa baş eşiğini de yükseltir. Açılışlarda daha uzak hedefler de
+  denendi; hiçbiri maliyetten sonra artıda kalmadı (2. ders, Bu okumaları işleme çevirmek).
+- **İptal.** Limit izlenen sürenin sonuna kadar dolmazsa çekilir. Fiyat dolmadan devam eşiğine giderse emri
+  taşımazsın; o başka bir emirdir ve ölçülmedi.
+- **Haber penceresi.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında her piyasa ve stop emri ek
+  1,0 pip kayma öder ve makas açılır (1. ders, Kazanma oranı ile net sonuç; 4. ders, Haber
+  anları için masa kartı). Bekleyen bir emir bu pencereye taşınıyorsa maliyeti değişmiştir.
+
+<div class="senaryo" id="kart-kucuk-mum">
+<p class="senaryo-durum"><span class="etiket">Durum</span> 15 dakikalık grafikte, Tokyo açılışında (Tokyo 09:00, TSİ 03:00) tipik boyun belirgin altında kalan küçük bir ilk mum</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Dar bir mum; sonraki mumlarda fiyat uçlardan birini kırar.</dd>
+<dt>Ne yaparsın</dt>
+<dd>İki ucu işaretler, hangisinin önce kırıldığını ve fiyatın bir mum boyu daha gidip gitmediğini izlersin.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Kırılımı &#x27;sıkışma patladı&#x27; diye işaret saymazsın; dar mumun dar stopunu ucuz sanmazsın.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Başka bir gerekçeyle kırılımda gireceksen iki uca birer stop emri, biri dolunca öbürü iptal; zarar stopu öbür ucun biraz ötesinde, hedef riskin yarısı kadar.</dd>
+<dt>Dayanak</dt>
+<dd>2. ders, Küçük ilk mum; 2. ders, Bu okumaları işleme çevirmek; 8. ders, Stop uzaklığı ve maliyet</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+## Sık yapılan hatalar
+
+- **Mumu kapanmadan sınıflandırmak.** Sınıf kapanışın ölçüsüdür; onuncu dakikadaki güçlü mum reddedilen olarak
+  kapanabilir (1. ders, İlk mumun dört sınıfı).
+- **Boyu ekrandaki komşu mumlarla kıyaslamak.** Tipik boy aynı anın geçmiş olaylarından gelir (1. ders, İlk mumun dört
+  sınıfı).
+- **Devam payını yön sanmak.** Güçlü mum ucuna yakın kapanır, devam eşiği yakındır; aynada da aynı pay çıkar (1. ders,
+  Şans ne verirdi: yolun aynası; 2. ders, Güçlü ilk mum).
+- **Yarısına dönüşü alım ya da satım sebebi saymak.** Normal mum ortasına yakın kapanır, yarı bir adım ötededir;
+  dönüş payı aynadakiyle aynı (2. ders, Normal ve reddedilen ilk mum).
+- **Fiksingdeki geri vermeyi bir kenar sanmak.** Geri verme şanstan sık, ama koşunun tersine girmek maliyetten sonra
+  çalışmadı (3. ders, Bu okumaları işleme çevirmek).
+- **Kazanma oranına bakıp kâr beklemek.** Yarım R hedefte başa baş maliyetle üçte ikinin üstündedir; açılışın referans tepkileri
+  işlemlerin yarısından çoğunu kazanıp kaybettirdi (1. ders, Kazanma oranı ile net sonuç).
+
+## Masa kontrol listesi
+
+1. Hangi an ve TSİ kaçta? Tokyo açılışı 03:00, Tokyo fiksingi 03:55, Londra açılışı 10:00 (İngiltere kış saatinde
+   11:00), ABD verisi 15:30 ve New York açılışı 16:30 (ABD kış saatinde 16:30 ve 17:30), Londra fiksingi 18:00
+   (İngiltere kış saatinde 19:00).
+2. Yakında bir veri ya da karar var mı? Varsa açıklamadan iki dakika önce ile on beş dakika sonrası arasında maliyet
+   değişir.
+3. İlk mum kapandı mı? Kapanmadıysa sınıf yok.
+4. Boy, aynı anın geçmiş ilk mumlarının ortancasına göre ne kadar; gövde ve en uzun fitil boyun ne kadarı? Sınıf hangisi?
+5. İki uç, yarı ve kendi ucunun yarım mum ötesi işaretli mi?
+6. Gördüğüm şey aynada da aynı sıklıkta görülür müydü?
+7. Fiksingse: koşu güçlü mü, ayın son Londra iş günü mü? Geri verme beklenir, koşunun sürmesi beklenmez.
+8. Başka bir gerekçeyle girersem: başa baş oranı ne, maliyet riskin ne kadarı, limit ne zaman çekilir?
+
+## Grafik okuma alıştırmaları
+
+**1.** Londra açılışı (Londra 08:00; TSİ İngiltere yaz saatinde 10:00, kış saatinde 11:00). İlk mum onuncu dakikada
+uzun bir gövdeyle yukarıda; on beşinci dakikada geri itilmiş, üst fitili uzun, gövdesi küçük kapanıyor. Onuncu
+dakikada mumu "güçlü" diye not etmiştin. Ne yaparsın, ne yapmazsın?
+
+<details>
+<summary>Çözüm</summary>
+
+Sınıf kapanışta verilir: mum reddedilen olarak kapandı ve yönü aşağıdır (Şekil M2'nin üçüncü mumu). Onuncu dakikadaki
+not geçersizdir. Reddedilen açılış mumunda devam ile dönüş aynadakiyle aynı; yön okuması kurmazsın, iki ucu ve yarıyı
+işaretlersin (1. ders, İlk mumun dört sınıfı; 2. ders, Normal ve reddedilen ilk mum).
+
+</details>
+
+**2.** Londra fiksingi (Londra 16:00; TSİ İngiltere yaz saatinde 18:00, kış saatinde 19:00). Fiyat fiksinge güçlü
+yukarı koşmuş; fiksingden sonraki on dakikada koşunun üçte birini geri vermiş. Ne beklersin, ne yapmazsın?
+
+<details>
+<summary>Çözüm</summary>
+
+Güçlü koşunun yarısını geri verme payı şanstan sık, sürme payı seyrek; üçte birlik bir geri çekilmeden sonraki koşullu
+pay ise bu derste ölçülmedi. Koşunun yönünde yeni işlem açmazsın, geri vermeye koşunun tersine katılmayı da kenar
+saymazsın: fark maliyetin altında kaldı (1. ders, Şans ne verirdi: yolun aynası; 3. ders, Bu okumaları işleme
+çevirmek).
+
+</details>
+
+**3.** Tarım dışı istihdam verisi (New York 08:30; TSİ ABD yaz saatinde 15:30, kış saatinde 16:30). İlk beş dakikalık
+mum normal ve aşağı; makas açılmış. Elinde dar bir stopla mumun tersine girme fikri var. Ne yaparsın?
+
+<details>
+<summary>Çözüm</summary>
+
+Veri mumunun yönünün şanstan seyrek sürmesi iki dönemde görülen bir okumadır; bu yönde tepki önceden yazılmadığı için
+sınanmadı ve kural değildir. Başka bir gerekçeyle girersen haber penceresinde ek kayma ve açık makas ödersin, dar stop
+bu maliyeti R cinsinden büyütür (1. ders, Kısaca; 1. ders, Kazanma oranı ile net sonuç; 8. ders, Stop uzaklığı ve
+maliyet).
+
+</details>
+
+**4.** New York açılışı (New York 09:30; TSİ ABD yaz saatinde 16:30, kış saatinde 17:30). İlk mum küçük; yirmi dakika
+sonra fiyat üst ucu kırıyor. Ne yaparsın, ne yapmazsın?
+
+<details>
+<summary>Çözüm</summary>
+
+Küçük açılış mumunun kırılımı bir sinyal değildir: kırılan tarafta bir mum boyu ilerleme yazı turaya yakın, kırılıma
+girmek maliyetten önce sıfıra yakın, sonra eksi. Kırılan tarafı izlersin, kovalamazsın (2. ders, Küçük ilk mum; 2.
+ders, Bu okumaları işleme çevirmek).
+
+</details>
 
 ## Bu planın dürüstlük kuralları
 

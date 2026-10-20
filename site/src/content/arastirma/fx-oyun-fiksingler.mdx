@@ -11,6 +11,7 @@ onkosul: ['fx-oyun-okuma']
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
+import Diyagram from '../../components/Diyagram.astro';
 
 Fiksing bir kurun resmî olarak ölçüldüğü kısa penceredir; Londra'daki WM/R kuru 16:00 çevresindeki beş dakikadan
 hesaplanır. Bazı fon, şirket ve saklama işlemleri o kura bağlanır; işlemi üstlenen banka riskini çoğu zaman fiksing
@@ -33,6 +34,83 @@ izlenen sürenin içindedir.
 **Fiksinge koşan fiyat koşunun bir kısmını şansın vereceğinden sık geri verir ve koşu şanstan seyrek sürer; ama fark
 küçüktür ve fiksingde koşunun tersine girmenin maliyeti onu yer.** Fiksing, serinin içinde fiyatın kendi şeklinin
 ötesinde bir şey söylediği tek sık andır.
+
+## Bu dersi masada nasıl kullanırsın
+
+Fiksing bir kurulum değil, bir saattir. Ders o saatte fiyatın ne yapma eğiliminde olduğunu söyler, ve masada bunun
+üç kullanımı var: neyi yapmayacağın (fiksingden sonra koşuyu kovalamazsın), başka bir gerekçeyle pozisyondaysan stopu ve
+hedefi koşunun hangi seviyesine göre koyacağın, ve geri vermenin kendisini işlemeye kalktığında neden vazgeçtiğin
+(geri verme gerçek ama makas ve kaymadan küçük). Merdiven, fiksinge yarım saat kala sorulacakları sırayla dizer: Tokyo
+09:25–09:55 (TSİ 03:25–03:55) ya da Londra 15:30–16:00 (TSİ 17:30–18:00, İngiltere kış saatinde 18:30–19:00). Bir
+soru seni sağa gönderdiyse aşağıya inmezsin.
+
+<Diyagram no="M1" baslik="Fiksinge yarım saat kaldı: masada sorulacaklar" kaynak="Karar şeması — dayanak: 3. ders, Ay sonu; 3. ders, Bu okumaları işleme çevirmek; 3. ders, Bu okumaları işleme çevirmek; 8. ders, Stop uzaklığı ve maliyet; 3. ders, Sessiz fiksing; 3. ders, Sınıf sınıf, şansın payıyla" azami={480}>
+<svg viewBox="0 0 360 522" class="karar-sema" role="img" aria-label="Fiksinge yarım saat kaldı: masada sorulacaklar">
+<defs><marker id="ko-fiksingakis" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ks-ok-ucu" /></marker></defs>
+<rect x="4" y="10" width="184" height="60" rx="3" class="ks-soru" />
+<text x="14" y="27" class="ks-yazi">Fiksinge giden yarım saat</text>
+<text x="14" y="42" class="ks-yazi">sessiz mi (küçük mum)?</text>
+<line x1="188" x2="220" y1="40.0" y2="40.0" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="193" y="35.0" class="ks-dal">evet</text>
+<rect x="222" y="10" width="134" height="60" rx="3" class="ks-sonuc ks-yapma" />
+<text x="230" y="26" class="ks-yazi-kucuk">Kırılımı kovalama;</text>
+<text x="230" y="40" class="ks-yazi-kucuk">sessiz fiksing işlem</text>
+<text x="230" y="54" class="ks-yazi-kucuk">vermez</text>
+<line x1="40" x2="40" y1="70" y2="94" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="46" y="86" class="ks-dal">hayır</text>
+<rect x="4" y="96" width="184" height="63" rx="3" class="ks-soru" />
+<text x="14" y="113" class="ks-yazi">Fiksing geçti; koşunun</text>
+<text x="14" y="128" class="ks-yazi">yönünde yeni bir işlem mi</text>
+<text x="14" y="143" class="ks-yazi">düşünüyorsun?</text>
+<line x1="188" x2="220" y1="127.5" y2="127.5" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="193" y="122.5" class="ks-dal">evet</text>
+<rect x="222" y="96" width="134" height="63" rx="3" class="ks-sonuc ks-yapma" />
+<text x="230" y="112" class="ks-yazi-kucuk">Kovalama: koşu</text>
+<text x="230" y="126" class="ks-yazi-kucuk">şanstan seyrek sürer</text>
+<line x1="40" x2="40" y1="159" y2="183" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="46" y="175" class="ks-dal">hayır</text>
+<rect x="4" y="185" width="184" height="60" rx="3" class="ks-soru" />
+<text x="14" y="202" class="ks-yazi">Bugün ayın son Londra iş</text>
+<text x="14" y="217" class="ks-yazi">günü ve fiksing WM/R mi?</text>
+<line x1="188" x2="220" y1="215.0" y2="215.0" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="193" y="210.0" class="ks-dal">evet</text>
+<rect x="222" y="185" width="134" height="60" rx="3" class="ks-sonuc ks-yapma" />
+<text x="230" y="201" class="ks-yazi-kucuk">Koşu daha da az</text>
+<text x="230" y="215" class="ks-yazi-kucuk">sürer; geri vermeye</text>
+<text x="230" y="229" class="ks-yazi-kucuk">de güvenme</text>
+<line x1="40" x2="40" y1="245" y2="269" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="46" y="261" class="ks-dal">hayır</text>
+<rect x="4" y="271" width="184" height="63" rx="3" class="ks-soru" />
+<text x="14" y="288" class="ks-yazi">Geri vermeyi işlemek için</text>
+<text x="14" y="303" class="ks-yazi">koşunun tersine mi</text>
+<text x="14" y="318" class="ks-yazi">gireceksin?</text>
+<line x1="188" x2="220" y1="302.5" y2="302.5" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="193" y="297.5" class="ks-dal">evet</text>
+<rect x="222" y="271" width="134" height="63" rx="3" class="ks-sonuc ks-kalk" />
+<text x="230" y="287" class="ks-yazi-kucuk">İşlem değil: geri</text>
+<text x="230" y="301" class="ks-yazi-kucuk">verme maliyetin</text>
+<text x="230" y="315" class="ks-yazi-kucuk">altında kalır</text>
+<line x1="40" x2="40" y1="334" y2="358" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="46" y="350" class="ks-dal">hayır</text>
+<rect x="4" y="360" width="184" height="63" rx="3" class="ks-soru" />
+<text x="14" y="377" class="ks-yazi">Başka gerekçeyle</text>
+<text x="14" y="392" class="ks-yazi">pozisyondasın; stop</text>
+<text x="14" y="407" class="ks-yazi">koşunun ucuna yakın mı?</text>
+<line x1="188" x2="220" y1="391.5" y2="391.5" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="193" y="386.5" class="ks-dal">evet</text>
+<rect x="222" y="360" width="134" height="63" rx="3" class="ks-sonuc ks-bekle" />
+<text x="230" y="376" class="ks-yazi-kucuk">İlk uzama stopu</text>
+<text x="230" y="390" class="ks-yazi-kucuk">alabilir: yerini</text>
+<text x="230" y="404" class="ks-yazi-kucuk">yeniden düşün</text>
+<line x1="40" x2="40" y1="423" y2="447" class="ks-ok" marker-end="url(#ko-fiksingakis)" />
+<text x="46" y="439" class="ks-dal">hayır</text>
+<rect x="4" y="449" width="352" height="63" rx="3" class="ks-son" />
+<text x="14" y="466" class="ks-yazi">Kalan okuma: fiksingden sonra koşunun bir</text>
+<text x="14" y="481" class="ks-yazi">kısmı geri verilir, başladığı yere şanstan</text>
+<text x="14" y="496" class="ks-yazi">sık dönmez. Bu bir beklentidir, işlem değil.</text>
+</svg>
+</Diyagram>
+
 
 ## Fiksingden sonra fiyat nereye gidiyor
 
@@ -86,11 +164,197 @@ koşuların yalnız %24 kadarı koşunun ucuna geri gitti. Fiyat geri çekilince
 orada kalıyor. (Açılışta aynı oran %47; ama açılış iki üç saat, fiksing bir saat
 izleniyor, iki sayı aynı süreyi ölçmüyor.)
 
+### Masada: fiksinge güçlü koşu
+
+Grafikte güçlü koşu, fiksinge giden yarım saatin beş dakikalık mumlarının aynı yöne dizilmesidir; sınıfı veren tek tek
+mumlar değil, yarım saatin toplamıdır. Masada önce üç seviye çizilir: koşunun başladığı yer, yarısı ve ucu.
+
+<Diyagram no="M2" baslik="Fiksinge güçlü koşu: yarıya geri çekilme beklenir, başa dönüş beklenmez" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 270" class="mum-sema" role="img" aria-label="Fiksinge güçlü koşu: yarıya geri çekilme beklenir, başa dönüş beklenmez">
+<defs><marker id="ok-kosuguclu" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<rect x="149.1" y="26.5" width="86.9" height="38.7" class="ms-bolge ms-yasak" />
+<text x="244" y="49.9" class="ms-etiket ms-yasak-yazi">kovalama bölgesi</text>
+<line x1="44.8" x2="236.0" y1="73.0" y2="73.0" class="ms-cizgi ms-uc" />
+<text x="244" y="77.0" class="ms-etiket ms-uc-yazi">koşunun ucu</text>
+<line x1="44.8" x2="236.0" y1="152.3" y2="152.3" class="ms-cizgi ms-seviye" />
+<text x="244" y="156.3" class="ms-etiket ms-seviye-yazi">koşunun yarısı</text>
+<line x1="44.8" x2="236.0" y1="231.6" y2="231.6" class="ms-cizgi ms-uc" />
+<text x="244" y="235.6" class="ms-etiket ms-uc-yazi">koşunun başı</text>
+<line x1="18.7" x2="18.7" y1="216.1" y2="235.5" class="ms-fitil ms-artis ms-soluk" />
+<rect x="13.3" y="223.9" width="10.8" height="3.9" class="ms-govde ms-artis ms-soluk" />
+<line x1="36.1" x2="36.1" y1="212.3" y2="231.6" class="ms-fitil ms-azalis ms-soluk" />
+<rect x="30.7" y="223.9" width="10.8" height="3.9" class="ms-govde ms-azalis ms-soluk" />
+<line x1="53.5" x2="53.5" y1="200.6" y2="231.6" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="48.1" y="204.5" width="10.8" height="23.2" class="ms-govde ms-artis ms-vurgu" />
+<line x1="70.8" x2="70.8" y1="177.4" y2="208.4" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="65.5" y="181.3" width="10.8" height="23.2" class="ms-govde ms-artis ms-vurgu" />
+<line x1="88.2" x2="88.2" y1="162.0" y2="189.0" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="82.8" y="165.8" width="10.8" height="15.5" class="ms-govde ms-artis ms-vurgu" />
+<line x1="105.6" x2="105.6" y1="134.9" y2="169.7" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="100.2" y="138.7" width="10.8" height="27.1" class="ms-govde ms-artis ms-vurgu" />
+<line x1="123.0" x2="123.0" y1="107.8" y2="142.6" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="117.6" y="111.7" width="10.8" height="27.1" class="ms-govde ms-artis ms-vurgu" />
+<line x1="140.4" x2="140.4" y1="73.0" y2="115.5" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="135.0" y="76.8" width="10.8" height="34.8" class="ms-govde ms-artis ms-vurgu" />
+<line x1="157.8" x2="157.8" y1="69.1" y2="103.9" class="ms-fitil ms-azalis" />
+<rect x="152.4" y="76.8" width="10.8" height="23.2" class="ms-govde ms-azalis" />
+<line x1="175.2" x2="175.2" y1="92.3" y2="131.0" class="ms-fitil ms-azalis" />
+<rect x="169.8" y="100.0" width="10.8" height="27.1" class="ms-govde ms-azalis" />
+<line x1="192.5" x2="192.5" y1="119.4" y2="158.1" class="ms-fitil ms-azalis" />
+<rect x="187.1" y="127.1" width="10.8" height="23.2" class="ms-govde ms-azalis" />
+<line x1="209.9" x2="209.9" y1="127.1" y2="154.2" class="ms-fitil ms-artis" />
+<rect x="204.5" y="134.9" width="10.8" height="15.5" class="ms-govde ms-artis" />
+<line x1="227.3" x2="227.3" y1="123.3" y2="146.5" class="ms-fitil ms-azalis" />
+<rect x="221.9" y="134.9" width="10.8" height="3.9" class="ms-govde ms-azalis" />
+<circle cx="140.4" cy="53.6" r="8" class="ms-isaret" />
+<text x="140.4" y="57.2" class="ms-isaret-yazi">1</text>
+<circle cx="192.5" cy="173.6" r="8" class="ms-isaret" />
+<text x="192.5" y="177.2" class="ms-isaret-yazi">2</text>
+<circle cx="53.5" cy="247.1" r="8" class="ms-isaret" />
+<text x="53.5" y="250.7" class="ms-isaret-yazi">3</text>
+<text x="10" y="264" class="ms-eksen">beş dakikalık mumlar, zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Fiksing anı: koşunun son beş dakikası. Fiksinge giden yarım saatin altı mumu birlikte tek bir ilk mumdur; sınıfı güçlü, çünkü aralığı o fiksingin tipik koşusundan belirgin büyük ve gövdesi dolu.
+- ② Koşunun yarısı. Fiksingden sonra fiyat buraya şansın vereceğinden sık gelir; güçlü koşuda bu çoğu zaman fiksingden sonraki ilk çeyrek saatte olur.
+- ③ Koşunun başladığı yer. Fiyat buraya şanstan sık dönmez; hedefi buraya koymazsın.
+
+
+Yarıya geri çekilme beklenir ve çoğu zaman erken gelir (ortanca süre Londra'da 15, Tokyo'da
+13 dakika). Başa dönüş beklenmez: koşunun öbür ucunun kırılması şansla aynı sıklıkta.
+Yarıya gelen fiyatın ucuna yeniden gitmesi de seyrek. Fiksingden sonraki saatin en olası görüntüsü, fiyatın koşunun
+ucu ile başı arasında durmasıdır.
+
+Bu durumda yapmazsın: fiksingden hemen sonra koşunun ucunu aşan ilk mumun arkasından girmezsin, hedefi koşunun
+başladığı yere koymazsın, yarıya gelen fiyatı yeni bir yönün başlangıcı diye okumazsın.
+
+<div class="senaryo" id="kart-guclu-kosu">
+<p class="senaryo-durum"><span class="etiket">Durum</span> Londra fiksingi (WM/R), fiksinge giden yarım saatte güçlü bir koşu: Londra 15:30–16:00, TSİ 17:30–18:00 (İngiltere kış saatinde 18:30–19:00)</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Altı beş dakikalık mum aynı yöne gidiyor; yarım saatin toplam aralığı o fiksingin tipik koşusundan belirgin büyük, fiksingdeki fiyat koşunun ucuna yakın.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Koşunun başladığı yeri, yarısını ve ucunu işaretlersin; fiksingden sonraki ilk çeyrek saatte fiyatın yarıya gelip gelmediğine bakarsın.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Fiksingden sonra koşunun yönünde kovalamazsın; hedefi koşunun başladığı yere koymazsın; geri vermeyi bir işlem sinyali saymazsın.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Koşunun yönünde pozisyondaysan stopun yarı ile uç arasındaysa geri verme onu sık görür. Koşunun tersine gireceksen stop ucun ötesinde, hedef yarıdadır; ilk uzama stopu alabilir.</dd>
+<dt>Dayanak</dt>
+<dd>3. ders, Güçlü koşu; 3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Bu okumaları işleme çevirmek</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+<GrafikEmbed src="/arastirma/fx-oyun-fiksingler/m_wmr-guclu.html" baslik="Londra fiksingine güçlü koşu: iki gün, iki son" no="M3" kaynak="Dukascopy" />
+
+
+İki gün fiksinge kadar birbirinin aynısıdır: gölgeli mumlar (①) aynı yöne dizilir ve fiksingdeki fiyat koşunun ucuna
+yakındır. Üstteki günde fiyat fiksingden sonra koşunun yarısına (②) iner, ilk dokunuş ③'te görülür ve ④'e kadar
+koşunun başladığı yere varmaz. Alttaki günde ilk mumlar üstteki kadar kararsızdır, ama fiyat yarıya hiç gelmez,
+koşunun ucunu aşar ve pencere boyunca yarının koşu tarafında kalır; ③ bu yüzden yoktur. Fiksing anında iki günü
+ayıran bir şey grafikte yoktur; üstteki gün ancak sonu bilindiği için "belli" görünür. İki gün kuralı ne doğrular ne
+yanlışlar: kural birinci türün daha sık geldiğini söyler.
+
 ### Normal ve reddedilen koşu
 
 Normal koşu %77, reddedilen koşu %80 yarısını geri verdi;
 aynada %71 ve %73. Geri verme çoğu zaman hemen olur:
 ortanca süre 4 dakika. Fark burada da aynı yönde ama güçlü koşudakinden küçük.
+
+### Masada: normal ve reddedilen koşu
+
+Normal ya da reddedilen koşuda yarım saat bir yöne gitmiştir ama gövde dolu değildir, ya da bir uçta uzun bir fitil
+durur. Masada fark edilecek ilk şey, fiksingdeki fiyatın koşunun yarısına ne kadar yakın olduğudur.
+
+<Diyagram no="M4" baslik="Normal koşu: yarı kapanışa yakın, geri verme hızlı, kazanç küçük" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 270" class="mum-sema" role="img" aria-label="Normal koşu: yarı kapanışa yakın, geri verme hızlı, kazanç küçük">
+<defs><marker id="ok-kosunormal" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<rect x="160.7" y="104.9" width="75.3" height="21.8" class="ms-bolge ms-hedef" />
+<line x1="141.8" x2="236.0" y1="26.5" y2="26.5" class="ms-cizgi ms-stop" />
+<text x="244" y="30.5" class="ms-etiket ms-stop-yazi">stop</text>
+<line x1="47.7" x2="236.0" y1="43.9" y2="43.9" class="ms-cizgi ms-uc" />
+<text x="244" y="47.9" class="ms-etiket ms-uc-yazi">koşunun ucu</text>
+<line x1="141.8" x2="236.0" y1="104.9" y2="104.9" class="ms-cizgi ms-seviye" />
+<text x="244" y="108.9" class="ms-etiket ms-seviye-yazi">fiksing fiyatı</text>
+<line x1="47.7" x2="236.0" y1="126.6" y2="126.6" class="ms-cizgi ms-seviye" />
+<text x="244" y="130.6" class="ms-etiket ms-seviye-yazi">koşunun yarısı</text>
+<line x1="47.7" x2="236.0" y1="209.3" y2="209.3" class="ms-cizgi ms-uc" />
+<text x="244" y="213.3" class="ms-etiket ms-uc-yazi">koşunun başı</text>
+<line x1="19.4" x2="19.4" y1="191.9" y2="235.5" class="ms-fitil ms-artis ms-soluk" />
+<rect x="13.6" y="209.3" width="11.7" height="8.7" class="ms-govde ms-artis ms-soluk" />
+<line x1="38.2" x2="38.2" y1="183.2" y2="226.8" class="ms-fitil ms-artis ms-soluk" />
+<rect x="32.4" y="200.6" width="11.7" height="8.7" class="ms-govde ms-artis ms-soluk" />
+<line x1="57.1" x2="57.1" y1="148.4" y2="209.3" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="51.2" y="157.1" width="11.7" height="43.5" class="ms-govde ms-artis ms-vurgu" />
+<line x1="75.9" x2="75.9" y1="96.2" y2="174.5" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="70.1" y="122.3" width="11.7" height="34.8" class="ms-govde ms-artis ms-vurgu" />
+<line x1="94.8" x2="94.8" y1="61.4" y2="139.7" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="88.9" y="70.1" width="11.7" height="52.2" class="ms-govde ms-artis ms-vurgu" />
+<line x1="113.6" x2="113.6" y1="43.9" y2="104.9" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="107.7" y="70.1" width="11.7" height="26.1" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="132.4" x2="132.4" y1="70.1" y2="122.3" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="126.6" y="78.8" width="11.7" height="17.4" class="ms-govde ms-artis ms-vurgu" />
+<line x1="151.2" x2="151.2" y1="61.4" y2="113.6" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="145.4" y="78.8" width="11.7" height="26.1" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="170.1" x2="170.1" y1="91.8" y2="135.4" class="ms-fitil ms-azalis" />
+<rect x="164.2" y="104.9" width="11.7" height="26.1" class="ms-govde ms-azalis" />
+<line x1="188.9" x2="188.9" y1="100.5" y2="139.7" class="ms-fitil ms-artis" />
+<rect x="183.1" y="109.2" width="11.7" height="21.8" class="ms-govde ms-artis" />
+<line x1="207.8" x2="207.8" y1="87.5" y2="122.3" class="ms-fitil ms-artis" />
+<rect x="201.9" y="96.2" width="11.7" height="13.1" class="ms-govde ms-artis" />
+<line x1="226.6" x2="226.6" y1="78.8" y2="113.6" class="ms-fitil ms-azalis" />
+<rect x="220.7" y="96.2" width="11.7" height="8.7" class="ms-govde ms-azalis" />
+<circle cx="151.2" cy="141.9" r="8" class="ms-isaret" />
+<text x="151.2" y="145.5" class="ms-isaret-yazi">1</text>
+<circle cx="170.1" cy="161.5" r="8" class="ms-isaret" />
+<text x="170.1" y="165.1" class="ms-isaret-yazi">2</text>
+<circle cx="188.9" cy="26.5" r="8" class="ms-isaret" />
+<text x="188.9" y="30.1" class="ms-isaret-yazi">3</text>
+<text x="10" y="264" class="ms-eksen">beş dakikalık mumlar, zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Fiksing anı. Koşu normal sınıfta: aralığı tipik koşudan çok büyük değil ya da gövdesi dolu değil, ve fiksingdeki fiyat koşunun yarısına yakın.
+- ② Yarıya dokunuş çoğu zaman fiksingden birkaç dakika sonra gelir. Yarı kapanışa yakın olduğu için bu dokunuş aynada da sık görülür; gerçek pay ondan yalnız biraz yüksek.
+- ③ Koşunun tersine giren için stop koşunun ucunun ötesinde. Hedef (gölgeli bant) yakın, stop uzak: kazanma oranı yüksek görünür, kazanan işlem küçük kazanır.
+
+
+Yarı yakın olduğu için geri verme hızlıdır, ama yakınlığın kendisi bir şey söylemez: yön bilgisi olmayan bir yolda da
+fiyat yakın bir seviyeye sık dokunur ve gerçek payın aynadan farkı burada güçlü koşudakinden küçüktür. Reddedilen
+koşunun uzun fitili "piyasa o seviyeyi reddetti" diye okunmaya elverişlidir; ölçülen davranış ise normal koşununkine
+yakın.
+
+Bu durumda yapmazsın: yarıya dokunuşu bir giriş sinyali saymazsın, yüksek kazanma oranlı bir tepkiyi kârlı sanmazsın,
+reddedilen fitili normal koşudan güçlü bir okuma gibi işlemezsin.
+
+<div class="senaryo" id="kart-normal-kosu">
+<p class="senaryo-durum"><span class="etiket">Durum</span> Tokyo ya da Londra fiksingi, fiksinge giden yarım saatte normal ya da reddedilen bir koşu</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Koşu var ama gövdesi dolu değil ya da uzun bir fitil taşıyor; fiksingdeki fiyat çoğu zaman koşunun yarısına yakın.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Yarının fiksingdeki fiyata ne kadar yakın olduğunu görürsün: geri verme çoğu zaman fiksingden birkaç dakika sonra olur ve yarı yakın olduğu için şansın da sık vereceği bir harekettir.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Yarıya dokunuşu bir okuma ya da giriş sinyali saymazsın; yüksek kazanma oranını görüp koşunun tersine girmezsin.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Koşunun tersine gireceksen hedef (yarı) yakın, stop (ucun ötesi) uzaktır: kazanan küçük kazanır, kaybeden tam bir R kaybeder ve başa baş için gereken oran ölçülen kazanma oranının üstünde kaldı.</dd>
+<dt>Dayanak</dt>
+<dd>3. ders, Normal ve reddedilen koşu; 1. ders, Kazanma oranı ile net sonuç; 3. ders, Bu okumaları işleme çevirmek</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+<GrafikEmbed src="/arastirma/fx-oyun-fiksingler/m_tokyo-normal.html" baslik="Tokyo fiksingine normal koşu: yarı yakın, iki son" no="M5" kaynak="Dukascopy" />
+
+
+İki günün yarım saati (①) birbirine benzer: koşu var ama düzenli değil, ve fiksingdeki fiyat koşunun yarısından (②)
+çok uzakta değil. Üstteki günde fiyat fiksingden sonra yarıya dokunur (③) ve ④'e kadar ne ucuna geri gider ne öbür
+ucunu kırar. Alttaki günde fiyat yarıya hiç dokunmaz, koşunun ucunu aşar ve geri gelmez. Fiksing anında masadaki tek
+bilgi yarının yakınlığıdır ve o bilgi iki gün için de aynıdır; üstteki gün ancak sonradan bir okuma gibi görünür. İki
+gün kuralı ne doğrular ne yanlışlar: normal koşuda yarıya dönüş zaten sık olan bir harekettir.
 
 ### Sessiz fiksing
 
@@ -106,6 +370,86 @@ Londra fiksinginde sessiz bir fiksingden sonraki kırılım çoğu zaman bir yer
 ilerleme %26 (2024 → %27). Tokyo'da pay daha yüksek
 (%46, 2024 → %46). Londra fiksingi Avrupa masalarının günü kapattığı
 saate, Tokyo fiksingi ise Asya gününün ortasına denk gelir; fark buradan geliyor olabilir, bu derste ölçülmedi.
+
+### Masada: sessiz fiksing
+
+Sessiz bir fiksingin grafiği boştur ve boşluk bir şey yapma isteği doğurur: fiksingden sonra dar aralığın bir kenarı
+kırılınca kırılım "akış şimdi geldi" diye okunur.
+
+<Diyagram no="M6" baslik="Sessiz Londra fiksingi: kenarın kırılması çoğu zaman bir yere gitmez" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 260" class="mum-sema" role="img" aria-label="Sessiz Londra fiksingi: kenarın kırılması çoğu zaman bir yere gitmez">
+<defs><marker id="ok-sessizkirilim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<rect x="160.7" y="48.7" width="75.3" height="54.5" class="ms-bolge ms-yasak" />
+<text x="244" y="80.0" class="ms-etiket ms-yasak-yazi">kovalama bölgesi</text>
+<line x1="160.7" x2="236.0" y1="26.0" y2="26.0" class="ms-cizgi ms-hedef" />
+<text x="244" y="30.0" class="ms-etiket ms-hedef-yazi">bir mum boyu</text>
+<line x1="47.7" x2="236.0" y1="116.9" y2="116.9" class="ms-cizgi ms-uc" />
+<text x="244" y="120.9" class="ms-etiket ms-uc-yazi">üst kenar</text>
+<line x1="47.7" x2="236.0" y1="207.8" y2="207.8" class="ms-cizgi ms-uc" />
+<text x="244" y="211.8" class="ms-etiket ms-uc-yazi">alt kenar</text>
+<line x1="19.4" x2="19.4" y1="135.1" y2="226.0" class="ms-fitil ms-artis ms-soluk" />
+<rect x="13.6" y="171.5" width="11.7" height="18.2" class="ms-govde ms-artis ms-soluk" />
+<line x1="38.2" x2="38.2" y1="135.1" y2="207.8" class="ms-fitil ms-azalis ms-soluk" />
+<rect x="32.4" y="171.5" width="11.7" height="9.1" class="ms-govde ms-azalis ms-soluk" />
+<line x1="57.1" x2="57.1" y1="144.2" y2="207.8" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="51.2" y="162.4" width="11.7" height="18.2" class="ms-govde ms-artis ms-vurgu" />
+<line x1="75.9" x2="75.9" y1="126.0" y2="189.6" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="70.1" y="162.4" width="11.7" height="9.1" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="94.8" x2="94.8" y1="144.2" y2="198.7" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="88.9" y="153.3" width="11.7" height="18.2" class="ms-govde ms-artis ms-vurgu" />
+<line x1="113.6" x2="113.6" y1="116.9" y2="180.5" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="107.7" y="153.3" width="11.7" height="18.2" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="132.4" x2="132.4" y1="144.2" y2="207.8" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="126.6" y="171.5" width="11.7" height="18.2" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="151.2" x2="151.2" y1="153.3" y2="207.8" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="145.4" y="162.4" width="11.7" height="27.3" class="ms-govde ms-artis ms-vurgu" />
+<line x1="170.1" x2="170.1" y1="71.5" y2="171.5" class="ms-fitil ms-artis" />
+<rect x="164.2" y="80.5" width="11.7" height="81.8" class="ms-govde ms-artis" />
+<line x1="188.9" x2="188.9" y1="62.4" y2="135.1" class="ms-fitil ms-azalis" />
+<rect x="183.1" y="80.5" width="11.7" height="45.5" class="ms-govde ms-azalis" />
+<line x1="207.8" x2="207.8" y1="107.8" y2="171.5" class="ms-fitil ms-azalis" />
+<rect x="201.9" y="126.0" width="11.7" height="36.4" class="ms-govde ms-azalis" />
+<line x1="226.6" x2="226.6" y1="135.1" y2="198.7" class="ms-fitil ms-azalis" />
+<rect x="220.7" y="162.4" width="11.7" height="18.2" class="ms-govde ms-azalis" />
+<circle cx="94.8" cy="239.6" r="8" class="ms-isaret" />
+<text x="94.8" y="243.2" class="ms-isaret-yazi">1</text>
+<circle cx="170.1" cy="39.6" r="8" class="ms-isaret" />
+<text x="170.1" y="43.2" class="ms-isaret-yazi">2</text>
+<circle cx="226.6" cy="230.5" r="8" class="ms-isaret" />
+<text x="226.6" y="234.1" class="ms-isaret-yazi">3</text>
+<text x="10" y="254" class="ms-eksen">beş dakikalık mumlar, zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Fiksinge giden yarım saat dar: altı mumun toplam aralığı o fiksingin tipik koşusundan belirgin küçük. Sınıfı küçük; fiksing anında piyasada ciddi bir akış görünmez.
+- ② Fiksingden sonra üst kenar kırıldı. Londra'da kırılan tarafta bir mum boyu daha gitme payı düşük; Tokyo'da daha yüksek, ama iki fiksingde de kırılımdan girmek maliyetten sonra eksi kaldı.
+- ③ Fiyat aralığın içine döndü. Kırılımın yönünde giren burada ne hedefte ne stopta; stop aralığın öbür kenarının ötesindedir ve aralık dar olduğu için yakındır.
+
+
+Londra'da bu okuma çoğu zaman yanlıştır. Tokyo'da ilerleme payı daha yüksek, ama kırılan uçtan giren tepki iki
+fiksingin toplamında maliyetten sonra eksi kaldı. Dar aralık maliyeti de büyütür: stop öbür kenarın ötesinde ve
+yakındır, aynı makas yakın bir stopun daha büyük bir parçasıdır.
+
+Bu durumda yapmazsın: Londra'da sessiz bir fiksingden sonraki kırılımı kovalamazsın, Tokyo'nun yüksek payını "orada
+kırılım işler" diye okumazsın.
+
+<div class="senaryo" id="kart-sessiz">
+<p class="senaryo-durum"><span class="etiket">Durum</span> Londra fiksingi, fiksinge giden yarım saat dar (sessiz fiksing); fiksingden sonra aralığın bir kenarı kırılıyor</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Altı mumluk dar bir aralık ve fiksingden sonra kenarın dışında kapanan bir mum.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Kırılan kenarı ve onun bir mum boyu ötesini işaretlersin; kırılımın oraya gidip gitmediğini izlersin.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Kırılımı kovalamazsın; Tokyo&#x27;daki daha yüksek ilerleme payını Londra&#x27;ya taşımazsın.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Başka bir gerekçeyle kırılım yönünde gireceksen stop aralığın öbür kenarının ötesindedir ve aralık dar olduğu için yakındır: makas ve kayma riskin görünür bir parçası olur.</dd>
+<dt>Dayanak</dt>
+<dd>3. ders, Sessiz fiksing; 5. ders, Referans tepkiler; 8. ders, Stop uzaklığı ve maliyet</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
 
 ## Ay sonu
 
@@ -139,6 +483,88 @@ Tokyo fiksinginde ay sonu ayrımı tutarlı değil. 2024 → döneminde normal k
 %64 (öbür günler %44), ama 2018–2023'te
 %42 ve %42. İki dönemde aynı yöne bakmayan
 bir fark okumaya girmez.
+
+### Masada: ay sonu günü
+
+Ay sonunun grafikte bir izi yoktur; fark takvimdedir ve masaya önceden yazılır. Ayın son Londra iş günü Londra
+fiksingi Londra 16:00'da, TSİ 18:00'de (İngiltere kış saatinde 19:00'da) gelir.
+
+<Diyagram no="M7" baslik="Ay sonu Londra fiksingi: koşu fiksingte biter gibi" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 270" class="mum-sema" role="img" aria-label="Ay sonu Londra fiksingi: koşu fiksingte biter gibi">
+<defs><marker id="ok-aysonu" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<rect x="149.1" y="205.6" width="86.9" height="29.8" class="ms-bolge ms-yasak" />
+<text x="244" y="224.5" class="ms-etiket ms-yasak-yazi">kovalama bölgesi</text>
+<line x1="44.8" x2="236.0" y1="32.9" y2="32.9" class="ms-cizgi ms-uc" />
+<text x="244" y="36.9" class="ms-etiket ms-uc-yazi">koşunun başı</text>
+<line x1="44.8" x2="236.0" y1="115.0" y2="115.0" class="ms-cizgi ms-seviye" />
+<text x="244" y="119.0" class="ms-etiket ms-seviye-yazi">koşunun yarısı</text>
+<line x1="44.8" x2="236.0" y1="197.1" y2="197.1" class="ms-cizgi ms-uc" />
+<text x="244" y="201.1" class="ms-etiket ms-uc-yazi">koşunun ucu</text>
+<line x1="18.7" x2="18.7" y1="26.5" y2="43.6" class="ms-fitil ms-azalis ms-soluk" />
+<rect x="13.3" y="35.1" width="10.8" height="4.3" class="ms-govde ms-azalis ms-soluk" />
+<line x1="36.1" x2="36.1" y1="30.8" y2="47.9" class="ms-fitil ms-artis ms-soluk" />
+<rect x="30.7" y="37.2" width="10.8" height="2.1" class="ms-govde ms-artis ms-soluk" />
+<line x1="53.5" x2="53.5" y1="32.9" y2="64.9" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="48.1" y="37.2" width="10.8" height="23.5" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="70.8" x2="70.8" y1="56.4" y2="90.5" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="65.5" y="60.6" width="10.8" height="25.6" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="88.2" x2="88.2" y1="82.0" y2="116.1" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="82.8" y="86.2" width="10.8" height="25.6" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="105.6" x2="105.6" y1="107.5" y2="141.7" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="100.2" y="111.8" width="10.8" height="25.6" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="123.0" x2="123.0" y1="133.1" y2="167.2" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="117.6" y="137.4" width="10.8" height="25.6" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="140.4" x2="140.4" y1="158.7" y2="197.1" class="ms-fitil ms-azalis ms-vurgu" />
+<rect x="135.0" y="163.0" width="10.8" height="29.8" class="ms-govde ms-azalis ms-vurgu" />
+<line x1="157.8" x2="157.8" y1="167.2" y2="195.0" class="ms-fitil ms-artis" />
+<rect x="152.4" y="171.5" width="10.8" height="21.3" class="ms-govde ms-artis" />
+<line x1="175.2" x2="175.2" y1="154.5" y2="180.0" class="ms-fitil ms-artis" />
+<rect x="169.8" y="158.7" width="10.8" height="12.8" class="ms-govde ms-artis" />
+<line x1="192.5" x2="192.5" y1="150.2" y2="171.5" class="ms-fitil ms-azalis" />
+<rect x="187.1" y="158.7" width="10.8" height="8.5" class="ms-govde ms-azalis" />
+<line x1="209.9" x2="209.9" y1="145.9" y2="171.5" class="ms-fitil ms-artis" />
+<rect x="204.5" y="150.2" width="10.8" height="17.1" class="ms-govde ms-artis" />
+<line x1="227.3" x2="227.3" y1="141.7" y2="163.0" class="ms-fitil ms-azalis" />
+<rect x="221.9" y="150.2" width="10.8" height="4.3" class="ms-govde ms-azalis" />
+<circle cx="140.4" cy="214.1" r="8" class="ms-isaret" />
+<text x="140.4" y="217.7" class="ms-isaret-yazi">1</text>
+<circle cx="192.5" cy="220.5" r="8" class="ms-isaret" />
+<text x="192.5" y="224.1" class="ms-isaret-yazi">2</text>
+<circle cx="227.3" cy="99.0" r="8" class="ms-isaret" />
+<text x="227.3" y="102.6" class="ms-isaret-yazi">3</text>
+<text x="10" y="264" class="ms-eksen">beş dakikalık mumlar, zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Ayın son Londra iş günü, WM/R'ye güçlü bir aşağı koşu. Mumun kendisi öbür günlerin güçlü koşusundan ayırt edilemez; fark takvimdedir.
+- ② Koşunun yönünde sürme: ay sonunda fiksingden sonra bu bölge iki dönemde de öbür günlerden seyrek görüldü. Kovalanmaz.
+- ③ Yarıya geri verme. Ay sonunda daha sık olduğu iki dönemde tutmadı; ne buna ne de koşunun sürmesine güvenirsin.
+
+
+İki dönemde aynı tutan tek okuma, ay sonunda güçlü koşunun fiksingden sonra öbür günlerden de seyrek sürmesidir. Geri
+vermenin ay sonunda daha sık olduğu bir dönemde görüldü, öbüründe görülmedi; şemadaki ③ bu yüzden bir beklenti değil,
+açık bir sorudur.
+
+Bu durumda yapmazsın: fiksingden sonraki uzamayı ay sonu akışının devamı sayıp pozisyona eklemezsin, ay sonunda geri
+vermeye daha çok güvenmezsin, Tokyo fiksinginin ay sonu farkını okumaya katmazsın.
+
+<div class="senaryo" id="kart-ay-sonu">
+<p class="senaryo-durum"><span class="etiket">Durum</span> Ayın son Londra iş günü, Londra fiksingi (Londra 16:00, TSİ 18:00, İngiltere kış saatinde 19:00), fiksinge güçlü bir koşu</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Öbür günlerin güçlü koşusundan farkı grafikte görünmez; fark takvimdedir.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Günü takvimde işaretlersin; fiksingden sonraki saatte koşunun yeni bir uç yapıp yapmadığına bakarsın.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Koşunun sürmesine güvenmezsin; ay sonunda geri vermenin daha sık olacağına da güvenmezsin; Tokyo fiksinginin ay sonunu okumaya katmazsın.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Koşunun yönündeysen fiksingden sonraki uzamayı hedef saymazsın. Tersine girişte öbür günlerin emir kuralı geçerlidir; ay sonunda tersine girişin sonucu bu derste ayrıca ölçülmedi.</dd>
+<dt>Dayanak</dt>
+<dd>3. ders, Ay sonu</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
 
 ## Trend
 
@@ -191,6 +617,183 @@ stopta bitti: koşu fiksingden sonra ucunu 0,1 koşu boyu aşınca stopa geldi.
 
 2018–2023'te fiksinglerin hiçbir sınıfında denenen tepkilerin (daha geniş stop, daha yakın ya da uzak hedef) hiçbiri
 maliyetten sonra artıda kalmadı; plan bütün fiksing hücrelerinde "izle, işlem açma" der.
+
+### Masada: koşunun tersine girmek
+
+Geri vermenin en düz işlemi fiksing anında koşunun tersine girmektir. Şema bu işlemin üç seviyesini ve maliyetin
+nereden geldiğini gösterir.
+
+<Diyagram no="M8" baslik="Fiksingde koşunun tersine: giriş, stop ve hedefin yeri" kaynak="Şema — gerçek veri değil" azami={480}>
+<svg viewBox="0 0 360 300" class="mum-sema" role="img" aria-label="Fiksingde koşunun tersine: giriş, stop ve hedefin yeri">
+<defs><marker id="ok-tersgiris" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
+<rect x="133.3" y="75.5" width="41.1" height="9.0" class="ms-bolge ms-kalk" />
+<line x1="133.3" x2="236.0" y1="38.4" y2="38.4" class="ms-cizgi ms-stop" />
+<text x="244" y="42.4" class="ms-etiket ms-stop-yazi">stop</text>
+<line x1="30.5" x2="236.0" y1="58.9" y2="58.9" class="ms-cizgi ms-uc" />
+<text x="244" y="62.9" class="ms-etiket ms-uc-yazi">koşunun ucu</text>
+<line x1="133.3" x2="236.0" y1="84.5" y2="84.5" class="ms-cizgi ms-seviye" />
+<text x="244" y="88.5" class="ms-etiket ms-seviye-yazi">giriş</text>
+<line x1="133.3" x2="236.0" y1="158.8" y2="158.8" class="ms-cizgi ms-hedef" />
+<text x="244" y="162.8" class="ms-etiket ms-hedef-yazi">hedef: yarı</text>
+<line x1="20.3" x2="20.3" y1="243.4" y2="263.9" class="ms-fitil ms-artis ms-soluk" />
+<rect x="13.9" y="253.6" width="12.7" height="1.2" class="ms-govde ms-artis ms-soluk" />
+<line x1="40.8" x2="40.8" y1="217.7" y2="258.7" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="34.4" y="222.9" width="12.7" height="30.7" class="ms-govde ms-artis ms-vurgu" />
+<line x1="61.4" x2="61.4" y1="187.0" y2="228.0" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="55.0" y="192.1" width="12.7" height="30.7" class="ms-govde ms-artis ms-vurgu" />
+<line x1="81.9" x2="81.9" y1="161.4" y2="197.2" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="75.5" y="166.5" width="12.7" height="25.6" class="ms-govde ms-artis ms-vurgu" />
+<line x1="102.5" x2="102.5" y1="130.6" y2="171.6" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="96.1" y="135.8" width="12.7" height="30.7" class="ms-govde ms-artis ms-vurgu" />
+<line x1="123.0" x2="123.0" y1="99.9" y2="140.9" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="116.6" y="105.0" width="12.7" height="30.7" class="ms-govde ms-artis ms-vurgu" />
+<line x1="143.5" x2="143.5" y1="58.9" y2="110.1" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="137.2" y="84.5" width="12.7" height="20.5" class="ms-govde ms-artis ms-vurgu" />
+<line x1="164.1" x2="164.1" y1="33.3" y2="89.6" class="ms-fitil ms-artis" />
+<rect x="157.7" y="38.4" width="12.7" height="46.1" class="ms-govde ms-artis" />
+<line x1="184.6" x2="184.6" y1="28.1" y2="84.5" class="ms-fitil ms-azalis" />
+<rect x="178.3" y="38.4" width="12.7" height="41.0" class="ms-govde ms-azalis" />
+<line x1="205.2" x2="205.2" y1="74.3" y2="125.5" class="ms-fitil ms-azalis" />
+<rect x="198.8" y="79.4" width="12.7" height="41.0" class="ms-govde ms-azalis" />
+<line x1="225.7" x2="225.7" y1="110.1" y2="156.2" class="ms-fitil ms-azalis" />
+<rect x="219.4" y="120.4" width="12.7" height="25.6" class="ms-govde ms-azalis" />
+<circle cx="143.5" cy="125.5" r="8" class="ms-isaret" />
+<text x="143.5" y="129.1" class="ms-isaret-yazi">1</text>
+<circle cx="164.1" cy="20.5" r="8" class="ms-isaret" />
+<text x="164.1" y="24.1" class="ms-isaret-yazi">2</text>
+<circle cx="225.7" cy="174.2" r="8" class="ms-isaret" />
+<text x="225.7" y="177.8" class="ms-isaret-yazi">3</text>
+<text x="10" y="294" class="ms-eksen">beş dakikalık mumlar, zaman →</text>
+</svg>
+</Diyagram>
+
+- ① Fiksing anı: koşunun tersine piyasa emri. Giriş makası ve kaymayı öder; gri bant o bedelin yeridir.
+- ② Stop koşunun ucunun hemen ötesinde. Güçlü koşuda işlemlerin çoğu burada bitti: koşu fiksingden sonra ucunu biraz aşınca.
+- ③ Hedef koşunun yarısı. Fiyat oraya sonradan gelse bile stopta biten işlem geri dönmez.
+
+
+Giriş piyasa emridir ve makas ile kaymayı fiksing anında öder. Stop koşunun ucunun 0,1 koşu boyu
+ötesindedir; güçlü koşuda fiyat fiksingden sonra ucunu çoğu zaman bu kadar aşar. Hedef koşunun yarısıdır; fiyat oraya
+sık gelir, ama stopu gördükten sonra geldiğinde işlem çoktan kapanmıştır. Normal koşuda tablo tersine döner: hedef
+yakın, stop uzak, kazanma oranı yüksek, başa baş için gereken oran ondan da yüksek.
+
+Bu durumda yapmazsın: maliyetsiz sonucun artı olmasını işlem sayısıyla büyüyecek bir kenar sanmazsın, çünkü maliyet her
+işlemde yeniden ödenir; stopu ucun hemen ötesine sıkıştırıp riski küçültmezsin, çünkü aynı makas R cinsinden büyür.
+
+<div class="senaryo" id="kart-ters-giris">
+<p class="senaryo-durum"><span class="etiket">Durum</span> Fiksing anı (Tokyo 09:55, TSİ 03:55; Londra 16:00, TSİ 18:00, İngiltere kış saatinde 19:00) ve koşunun tersine girmeyi düşünüyorsun</p>
+<dl>
+<dt>Ne görürsün</dt>
+<dd>Koşu bitmiş görünüyor, fiyat koşunun ucunda; fiyatın şimdi geri vereceği duygusu güçlü.</dd>
+<dt>Ne yaparsın</dt>
+<dd>Koşunun yarısını ve ucunu işaretler, giriş ile stop arasındaki mesafeyi pip olarak sayarsın; mesafe birkaç pipse makasın onun içindeki payını görürsün.</dd>
+<dt>Ne yapmazsın</dt>
+<dd>Geri vermenin şanstan sık olmasını kenar saymazsın; stopu koşunun ucuna yapıştırmazsın.</dd>
+<dt>Emir, stop, hedef</dt>
+<dd>Piyasa emri girişte makas ve kayma öder; koşunun ucuna limit girişte ödemez ama yalnız fiyat koşunun yönünde yeniden yürürse dolar (fiksing için ölçülmedi). Stop ucun ötesinde, hedef yarıda; fiksingden sonraki saat dolunca emrin dayanağı kalmaz.</dd>
+<dt>Dayanak</dt>
+<dd>3. ders, Bu okumaları işleme çevirmek; 8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet</dd>
+</dl>
+<p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
+</div>
+
+
+## Emri nereye koyarsın
+
+Bu bölüm fiksingi bir işlem gerekçesi saymaz; başka bir gerekçeyle fiksing penceresinde emir verecek biri için dersin
+ölçtüğü davranışın emrin yeri hakkında ne söylediğini yazar. Pencere Tokyo'da Tokyo 09:25–10:55 (TSİ 03:25–04:55),
+Londra'da Londra 15:30–17:00'dir (TSİ 17:30–19:00, İngiltere kış saatinde 18:30–20:00).
+
+- **Giriş.** Piyasa emri girişte makas ve kayma öder; limit girişte ödemez, çıkışta öder (8. ders, Limit neden ucuz
+  görünür: ters seçim). Limit yalnız fiyat ona geldiğinde dolar: koşunun yarısına konan bir limit geri vermenin olduğu
+  günlerde dolar, koşunun sürdüğü günlerde boşta kalır. 8. ders bunu büyük mumda ölçtü; fiksing için ölçülmedi, ama
+  geometri aynıdır. Koşunun ucunun kırılmasına stop emriyle girmek, şanstan seyrek süren uzamayı kaymayla almaktır
+  (3. ders, Sınıf sınıf, şansın payıyla; 8. ders, Ucun kırılması).
+- **Stop.** Koşunun tersindeysen stop ucun ötesindedir, güçlü koşuda o mesafe kısadır ve fiksingden sonraki ilk uzama
+  onu sık alır (3. ders, Bu okumaları işleme çevirmek). Koşunun yönündeysen stopun yarı ile uç arasındaysa geri verme
+  onu sık görür; başın ötesindeyse fiksing davranışı ona şanstan sık gelmez (3. ders, Sınıf sınıf, şansın payıyla).
+  Stopu yaklaştırmak aynı makası R cinsinden büyütür; normal koşunun tersine giren tepkide ortanca risk zaten
+  6 pip (8. ders, Stop uzaklığı ve maliyet).
+- **Hedef.** Geri vermeyi bekleyen hedef koşunun yarısıdır, başladığı yer değil. Koşunun yönündeki hedef fiksingden
+  sonraki uzamaya, ay sonunda hiç dayanmaz (3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Ay sonu).
+- **İptal.** Ölçüm fiksingden sonraki 60 dakikayı okur; pencere dolunca fiksinge bağlı bir emrin
+  dayanağı kalmaz. Pencerenin ikinci yarısının ayrı davranışı bu derste ölçülmedi.
+- **Haber.** Serinin takvimindeki büyük haberlerin hiçbiri fiksing pencerelerine denk gelmez; ölçümün haber anlarına
+  eklediği ek kayma burada yoktur (1. ders, Kazanma oranı ile net sonuç). WM/R'nin beş dakikasında (Londra 16:00
+  çevresi, TSİ 18:00, İngiltere kış saatinde 19:00) makasın davranışı bu derste ölçülmedi.
+
+## Sık yapılan hatalar
+
+- **Fiksingden sonra koşuyu kovalamak.** Sürme payı iki dönemde de aynanın altında, ay sonunda Londra'da daha da
+  altında. Dayanak: 3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Ay sonu.
+- **Hedefi koşunun başladığı yere koymak.** Geri verme şanstan sık, tam dönüş değil. Dayanak: 3. ders, Sınıf sınıf,
+  şansın payıyla.
+- **Geri vermeyi işlem saymak.** Maliyetsiz sonuç küçük, makas ve kayma ondan büyük. Dayanak: 3. ders, Bu okumaları
+  işleme çevirmek; 5. ders, Maliyet nereye gidiyor.
+- **Yüksek kazanma oranını kâr sanmak.** Normal koşunun tersine giren tepki işlemlerin yarısından çoğunu kazandı, ama
+  başa baş daha yüksek bir oran istiyordu. Dayanak: 1. ders, Kazanma oranı ile net sonuç.
+- **Stopu koşunun ucuna yapıştırmak.** Güçlü koşuda fiyat fiksingden sonra ucunu biraz aşar; tersine giren işlemlerin
+  çoğu bu yüzden stopta bitti. Dayanak: 3. ders, Bu okumaları işleme çevirmek; 8. ders, Stop uzaklığı ve maliyet.
+- **Sessiz Londra fiksinginden sonraki kırılımı akış sanmak.** Dayanak: 3. ders, Sessiz fiksing.
+- **Ay sonunda geri vermeye daha çok güvenmek.** O fark iki dönemde ters yöne baktı. Dayanak: 3. ders, Ay sonu.
+- **Fiksing okumasını trende göre değiştirmek.** Dayanak: 3. ders, Trend.
+
+## Masa kontrol listesi
+
+1. Hangi fiksing: Tokyo 09:55 (TSİ 03:55) mı, Londra 16:00 (TSİ 18:00, İngiltere kış saatinde 19:00) mı?
+2. Bugün ayın son Londra iş günü mü?
+3. Fiksinge giden yarım saat (Tokyo 09:25–09:55, TSİ 03:25–03:55; Londra 15:30–16:00, TSİ 17:30–18:00, İngiltere kış
+   saatinde 18:30–19:00) hangi sınıfta: güçlü, normal, reddedilen ya da sessiz?
+4. Koşunun başladığı yeri, yarısını ve ucunu işaretledin mi?
+5. Fiksingdeki fiyat yarıya ne kadar yakın? Yakınsa yarıya dokunuş bir şey söylemeyecek.
+6. Koşunun yönünde yeni bir işlem mi düşünüyorsun? Öyleyse durursun.
+7. Geri vermeyi işlemek mi istiyorsun? Maliyetin geri vermeden büyük olduğunu biliyorsun.
+8. Başka bir gerekçeyle pozisyondaysan stopun ve emrin koşunun üç seviyesine göre nerede?
+9. Fiksingden sonraki bir saat (Tokyo 09:55–10:55, TSİ 03:55–04:55; Londra 16:00–17:00, TSİ 18:00–19:00, İngiltere
+   kış saatinde 19:00–20:00) dolunca fiksinge bağlı emirleri çektin mi?
+
+## Grafik okuma alıştırmaları
+
+**1.** Londra fiksingi, İngiltere yaz saati. TSİ 17:30 ile 18:00 arasında fiyat altı mumla aynı yöne gitti ve
+fiksingdeki fiyat koşunun ucuna yakın (Şekil M2'deki gibi). TSİ 18:05'te biten mum koşunun ucunu aşarak kapanıyor. Ne
+yaparsın, ne yapmazsın?
+
+<details>
+<summary>Çözüm</summary>
+
+Kovalamazsın: koşunun sürme payı şansın altında ve bu ilk uzama tam da seyrek süren harekettir (3. ders, Sınıf sınıf,
+şansın payıyla). Tersine de bu mumla girmezsin: ucu aşan mum, tersine girenin stopunun alındığı yerdir (3. ders, Bu
+okumaları işleme çevirmek). Üç seviyeyi işaretleyip fiyatın yarıya gelip gelmediğine bakarsın; gelmezse kural
+yanlışlanmış olmaz.
+
+</details>
+
+**2.** Tokyo fiksingi. TSİ 03:25 ile 03:55 arasındaki koşunun gövdesi dolu değil ve fiksingdeki fiyat yarıya çok yakın
+(Şekil M4'teki gibi). Masadaki biri yarıya dönüşün neredeyse kesin olduğunu, tersine girip yarıyı hedeflemenin kolay
+bir işlem olduğunu söylüyor. Ne yaparsın, ne yapmazsın?
+
+<details>
+<summary>Çözüm</summary>
+
+Yarıya dönüş sık olur, ama yarı yakın olduğu için aynada da sık olur (3. ders, Normal ve reddedilen koşu). Hedef yakın,
+stop uzak: işlemlerin yarısından çoğu kazanır, kazanan küçük kazanır ve başa baş için gereken oran ölçülen kazanma oranının
+üstünde kalır (1. ders, Kazanma oranı ile net sonuç; 3. ders, Bu okumaları işleme çevirmek). Girmezsin, yalnız izlersin.
+
+</details>
+
+**3.** Tokyo fiksingi, TSİ 03:55. Başka bir gerekçeyle güçlü koşunun tersine girmek istiyorsun (Şekil M8). Piyasa emri mi,
+koşunun ucuna limit mi; stop ve hedef nerede, emir ne zaman çekilir?
+
+<details>
+<summary>Çözüm</summary>
+
+Piyasa emri makas ve kaymayı fiksing anında öder. Ucuna konan limit girişte ödemez ama yalnız fiyat koşunun yönünde
+yeniden yürürse dolar; büyük mumda bu tür tersine limit maliyetten önce kapanışta piyasa emrinden kötü çıktı (8. ders,
+Limit neden ucuz görünür: ters seçim; fiksing için ölçülmedi). Stop ucun ötesinde, hedef yarıdadır (3. ders, Bu
+okumaları işleme çevirmek). Fiksingden bir saat sonra, Tokyo 10:55'te (TSİ 04:55), dolmamış emrin fiksing dayanağı
+kalmaz.
+
+</details>
 
 ## Fiksing için masa kartı
 

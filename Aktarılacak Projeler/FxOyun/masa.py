@@ -224,6 +224,27 @@ def kart_blok(slug: str, kimlik: str) -> str:
 
 # ─────────────────────────────────────────────────────────────── şablon blokları
 BLOKLAR = ("sema", "karar", "kart", "ornek")
+NUMARALI = ("sema", "karar", "ornek")      # kart numara almaz
+ATIF_ELLE = re.compile(r"Şekil\s+M\d")
+
+
+def numaralar(metin: str) -> dict[tuple[str, str], str]:
+    """Şablondaki masa bloklarının numarası, şablondaki sırasıyla (M1, M2…).
+    Metindeki atıf `{{# atif <tür> <kimlik> }}` buradan çözülür: blokların sırası
+    değişirse elle yazılmış "Şekil M3" sessizce başka bir şekli gösterirdi."""
+    no, n = {}, 0
+    for tur, kimlik in re.findall(r"\{\{#\s*(" + "|".join(BLOKLAR) + r")\s+([\w-]+)", metin):
+        if tur in NUMARALI:
+            n += 1
+            no[(tur, kimlik)] = f"M{n}"
+    return no
+
+
+def atif(metin: str, tur: str, kimlik: str) -> str:
+    no = numaralar(metin)
+    if (tur, kimlik) not in no:
+        raise KeyError(f"atıf: {tur} {kimlik!r} şablonda numaralı bir blok değil")
+    return f"Şekil {no[(tur, kimlik)]}"
 
 
 def blok(slug: str, tur: str, kimlik: str, no: str) -> str:
@@ -243,6 +264,12 @@ def denetle(slug: str, metin: str) -> list[str]:
     h = []
     S = spek(slug)
     kul = {t: re.findall(r"\{\{#\s*" + t + r"\s+([\w-]+)", metin) for t in BLOKLAR}
+    for m in ATIF_ELLE.finditer(metin):
+        h.append(f"{slug}: elle yazılmış şekil atfı {m.group(0)!r}; {{{{# atif <tür> <kimlik> }}}} kullan")
+    no = numaralar(metin)
+    for tur, kimlik in re.findall(r"\{\{#\s*atif\s+(\w+)\s+([\w-]+)", metin):
+        if (tur, kimlik) not in no:
+            h.append(f"{slug}: atıf {tur} {kimlik!r} numaralı bir blokla eşleşmiyor")
     for tur in BLOKLAR:
         tanimli = [x["id"] for x in S.get(tur, [])]
         if len(tanimli) != len(set(tanimli)):

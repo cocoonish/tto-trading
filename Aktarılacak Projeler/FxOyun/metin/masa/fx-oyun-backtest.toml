@@ -182,9 +182,9 @@ mumlar = [[100,101.2,99.6,100.9],[100.9,101.8,100.5,101.5],[101.5,101.7,100.9,10
 vurgu = [7, 12]
 yukseklik = 290
 eksen = "TSİ, gün boyu →"
-not = ["Tokyo açılışı ve fiksingi (TSİ 03:00 ve 03:55): işaretle, işlem yok.",
-       "Londra açılışı (TSİ 10:00; İngiltere kış saatinde 11:00): sınıfı yaz, plan izler.",
-       "Haber penceresi (TSİ 14:00 · 15:15 · 15:30; kış saatinde birer saat geç): makas açılır.",
+not = ["Tokyo açılışı ve fiksingi (TSİ 03:00 ve 03:55): işaretlenir, işlem yok.",
+       "Londra açılışı (TSİ 10:00; İngiltere kış saatinde 11:00): sınıf yazılır, plan izler.",
+       "BoE, ECB, ABD verisi (TSİ 14:00 · 15:15 · 15:30; İngiltere, Avrupa ve ABD kış saatinde birer saat geç): haber penceresinde makas açılır.",
        "New York açılışı (TSİ 16:30; ABD kış saatinde 17:30): kırılım sinyal değil.",
        "Londra fiksingi (TSİ 18:00; İngiltere kış saatinde 19:00): koşu kovalanmaz.",
        "FOMC kararı (TSİ 21:00; ABD kış saatinde 22:00): aday deftere yazılır.",

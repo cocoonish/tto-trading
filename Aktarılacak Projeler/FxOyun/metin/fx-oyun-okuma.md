@@ -112,6 +112,8 @@ başka bir defterle okunan sınıf bu derste ölçülmedi.
 Üçüncüde yön sezgiye terstir: mum yukarı uzanmış ama yönü aşağıdır. Dördüncüde yön sorulmaz; iki ucu işaretleyip
 hangisinin önce kırıldığını beklersin.
 
+{{# kart reddedilen-acilis }}
+
 Bu durumda yapmazsın: mum kapanmadan sınıf vermezsin; boyu ekrandaki komşu mumlarla kıyaslamazsın; uzun bir fitile,
 sayılar desteklemediği hâlde "orada satıcı var" anlamı yüklemezsin (2. ders, Normal ve reddedilen ilk mum).
 
@@ -179,8 +181,6 @@ eşiğe önce varır. Güçlü açılış mumunda devamın dönüşten sık çı
 Tek bir günde iki yol farklı biter ve bu bir şey kanıtlamaz; ayna binlerce olayda iki payı yan yana koymak içindir.
 Gözle sorulan aynanın yararı, "bu sefer farklı" duygusunun çoğu zaman mumun şeklinden geldiğini fark ettirmesidir.
 
-{{# kart guclu-acilis }}
-
 {{# ornek londra-guclu }}
 
 Üstteki günde ① güçlü bir açılış mumudur ve fiyat öbür ucu görmeden kendi ucunu yarım mum boyu aşmıştır; ③ varsa ②
@@ -244,6 +244,8 @@ döneminde güçlü açılış mumunda başa baş {{ B.referans.acilis.guclu.dis
 kısmını geri almayı hedefler. Limit tanımı gereği fiyat piyasa girişinin aleyhine yürüdüğünde dolar (8. ders, Limit
 neden ucuz görünür: ters seçim); dolduğu an mumun yönündeki okumanın bir kısmı zaten geri alınmıştır.
 
+{{# kart guclu-acilis }}
+
 Bu durumda yapmazsın: kazanma oranına bakıp tepkiyi iyi saymazsın; başa baş oranını maliyetsiz hesaplamazsın (1. ders,
 Kazanma oranı ile net sonuç).
 
@@ -280,7 +282,7 @@ ilk mum emrin geometrisini, bu derste ölçülen maliyet kuralları da bedelini 
   dönüş payı aynadakiyle aynı (2. ders, Normal ve reddedilen ilk mum).
 - **Fiksingdeki geri vermeyi bir kenar sanmak.** Geri verme şanstan sık, ama koşunun tersine girmek maliyetten sonra
   çalışmadı (3. ders, Bu okumaları işleme çevirmek).
-- **Kazanma oranına bakıp kâr beklemek.** Yarım R hedefte başa baş üçte ikinin üstündedir; açılışın referans tepkileri
+- **Kazanma oranına bakıp kâr beklemek.** Yarım R hedefte başa baş maliyetle üçte ikinin üstündedir; açılışın referans tepkileri
   işlemlerin yarısından çoğunu kazanıp kaybettirdi (1. ders, Kazanma oranı ile net sonuç).
 
 ## Masa kontrol listesi
@@ -306,7 +308,7 @@ dakikada mumu "güçlü" diye not etmiştin. Ne yaparsın, ne yapmazsın?
 <details>
 <summary>Çözüm</summary>
 
-Sınıf kapanışta verilir: mum reddedilen olarak kapandı ve yönü aşağıdır (Şekil M2'nin üçüncü mumu). Onuncu dakikadaki
+Sınıf kapanışta verilir: mum reddedilen olarak kapandı ve yönü aşağıdır ({{# atif sema siniflar }}'nin üçüncü mumu). Onuncu dakikadaki
 not geçersizdir. Reddedilen açılış mumunda devam ile dönüş aynadakiyle aynı; yön okuması kurmazsın, iki ucu ve yarıyı
 işaretlersin (1. ders, İlk mumun dört sınıfı; 2. ders, Normal ve reddedilen ilk mum).
 

@@ -317,7 +317,7 @@ Londra'da Londra 15:30–17:00'dir (TSİ 17:30–19:00, İngiltere kış saatind
 ## Grafik okuma alıştırmaları
 
 **1.** Londra fiksingi, İngiltere yaz saati. TSİ 17:30 ile 18:00 arasında fiyat altı mumla aynı yöne gitti ve
-fiksingdeki fiyat koşunun ucuna yakın (Şekil M2'deki gibi). TSİ 18:05'te biten mum koşunun ucunu aşarak kapanıyor. Ne
+fiksingdeki fiyat koşunun ucuna yakın ({{# atif sema kosu-guclu }}'deki gibi). TSİ 18:05'te biten mum koşunun ucunu aşarak kapanıyor. Ne
 yaparsın, ne yapmazsın?
 
 <details>
@@ -331,7 +331,7 @@ yanlışlanmış olmaz.
 </details>
 
 **2.** Tokyo fiksingi. TSİ 03:25 ile 03:55 arasındaki koşunun gövdesi dolu değil ve fiksingdeki fiyat yarıya çok yakın
-(Şekil M4'teki gibi). Masadaki biri yarıya dönüşün neredeyse kesin olduğunu, tersine girip yarıyı hedeflemenin kolay
+({{# atif sema kosu-normal }}'teki gibi). Masadaki biri yarıya dönüşün neredeyse kesin olduğunu, tersine girip yarıyı hedeflemenin kolay
 bir işlem olduğunu söylüyor. Ne yaparsın, ne yapmazsın?
 
 <details>
@@ -343,7 +343,7 @@ stop uzak: işlemlerin yarısından çoğu kazanır, kazanan küçük kazanır v
 
 </details>
 
-**3.** Tokyo fiksingi, TSİ 03:55. Başka bir gerekçeyle güçlü koşunun tersine girmek istiyorsun (Şekil M8). Piyasa emri mi,
+**3.** Tokyo fiksingi, TSİ 03:55. Başka bir gerekçeyle güçlü koşunun tersine girmek istiyorsun ({{# atif sema ters-giris }}). Piyasa emri mi,
 koşunun ucuna limit mi; stop ve hedef nerede, emir ne zaman çekilir?
 
 <details>
