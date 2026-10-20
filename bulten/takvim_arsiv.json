@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-19",
+ "_son_guncelleme": "2026-10-20",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1321,6 +1321,46 @@
    "beklenti": "model: 31,3 mlr TL gerçekleşme, teklif/karşılama 1,56",
    "beklenti_sayi": null,
    "gorulme": "2026-10-19"
+  },
+  "2026-11-10|ABD TÜFE (Ekim)": {
+   "tarih": "2026-11-10",
+   "olay": "ABD TÜFE (Ekim)",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-20"
+  },
+  "2026-11-10|Hazine: 5 yıl (1820 gün) kira sertifikası doğrudan satışı": {
+   "tarih": "2026-11-10",
+   "olay": "Hazine: 5 yıl (1820 gün) kira sertifikası doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-20"
+  },
+  "2026-11-10|Hazine: 8 yıl (2877 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-11-10",
+   "olay": "Hazine: 8 yıl (2877 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 21,9 mlr TL gerçekleşme, teklif/karşılama 1,87",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-20"
+  },
+  "2026-11-10|TÜİK: Sanayi üretimi (Eylül 2026)": {
+   "tarih": "2026-11-10",
+   "olay": "TÜİK: Sanayi üretimi (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-20"
   }
  }
 }

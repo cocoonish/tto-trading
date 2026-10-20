@@ -1,0 +1,29 @@
+# bulten:2026-10-20 · 2026-10-20T04:28:52+00:00 · https://x.com/i/status/2112400629272629736
+
+Sabah Notu — 20 Ekim 2026
+SPK başkanının istifası satışı sınai hisselere yığdı; bankalar ve TL tahvili PPK indirimine tutundu
+
+· BIST 100 pazartesi %2,49 düşüşle 11.430 puana indi. Kayıp sınai endekste toplandı: endeks %3,52 (−1,9σ) düştü, bankacılık ise %0,28 yükseldi.
+· SPK Başkanı Mahmut Sütcü sağlık gerekçesiyle istifa etti. Bloomberg HT haberi TSİ 17:29'da, kapanıştan yarım saat önce verdi; Birgün'e göre düşüş ardından derinleşti.
+· Dolar bazlı Türkiye ETF'i %2,06 düşerken gelişen ülke hisseleri %0,73 yükseldi. MSCI 15 Ekim'de Türkiye endekslerinde pay artışlarını ve yeni eklemeleri dondurmuş, Haziran 2027'ye kadar ilerleme olmazsa piyasa sınıfını yeniden değerlendireceğini duyurmuştu.
+· TL eğrisinin ön ucu indirimi fiyatlamayı sürdürdü: 3 aylık spot getiri 53 bp düşüşle %36,08'e indi ve TLREF'in 69 bp altına geçti. Dolar/TL %0,05 artışla 49,55'te; bir aylık devalüasyon hızı %20,2.
+· Avrupa hisseleri %1,1 ile %1,6 arasında düştü (−1,5σ); Fransa'da hafta sonundaki ayaklanmaların ardından devlet tahvili satıldı. New York'ta Nasdaq 100 %1,17 toparlandı, VIX %7,75 düşüşle 18,44'e indi.
+· Son işlem gününe giren kasım WTI %2,22 yükseldi; WSJ'ye göre aralık WTI %0,5 düşüşle 98,54 dolarda, Brent %0,3 düşüşle 109,55 dolarda kapandı.
+
+Bugün TSİ 17:30 · eylül bütçe finansmanı, borç stoku ve konsolide kamu dengesi. Açığın iç borçlanmayla kapatıldığı görülürse 2–5 yıllık bölgenin primi kalıcılaşır; nakit tamponu kullanıldıysa orta vade PPK'ya kadar sakin kalır.
+
+Tez: Pazartesinin satışı bir faiz şoku değil, bir yönetişim şokuydu ve faturayı bankalar değil banka dışı şirketler ödedi. Bankacılık endeksinin sınai endekse oranı 11 seansta %13 açıldı; aynı sürede TL tahvili PPK'dan önceki indirim fiyatlamasını bozmadı. Piyasa riski ülkeye değil şirket seçimine yazıyor.
+
+Gündem
+Türkiye: Düzenleme ve kadrolar. SPK kapanıştan sonra, Peker GYO'nun yönetim kontrolünü devralan Tera Yatırım Holding'in zorunlu pay alım teklifi yükümlülüğünü yerine getirmemesi üzerine karar aldı (Bloomberg HT). Strateji ve Bütçe Başkan Yardımcısı Kutluhan Taşkın Hazine ve Maliye Bakan Yardımcılığına atandı (Resmî Gazete).
+Küresel: ABD faizi. 10 yıllık getiri 3,8 bp yükselişle %5,14'e, 30 yıllık %5,47'ye çıktı; 2s10s 39 bp. Reuters'a göre Fed yöneticileri yapay zekâ yatırım dalgasını enflasyon riskine ekliyor; karar 28 Ekim'de.
+Emtia: Ham petrol. Rusya'ya yönelik yaptırım ve vergilerin askıya alınması fiyatı aşağı çekiyor; Dışişleri Bakanı Rubio muafiyet için 60 güne kadar süren bir inceleme çizdi.
+
+Neye bakılacak
+· SPK'ya atama gecikir ya da fon soruşturması genişler → banka dışı hisselerde satış sürer; izlenecek: Türkiye ETF'inin 30 doların altında kapanması.
+
+Pano: Net rezerv (günlük tahmin) 53,3 mlr USD (−0,3; 16 Eki) · Brüt rezervde altın payı %63,2 (+0,5 puan; 16 Eki) · TLREF %36,77 (−0,03 puan; 19 Eki) · DİBS gösterge getirisi (2 yıl) %39,61 (+0,07 puan; 19 Eki) · DİBS 5 yıllık getiri %36,10 (−0,48 puan; 19 Eki) · 2 yıllık başabaş enflasyon %30,45 (+0,07 puan; 19 Eki)
+
+Beklenen: Çarşamba 10:00 · kapasite kullanımı ve reel kesim güveni. Ekimde imalat güveni düşerse sınai hisselerdeki kayıp talep tarafına da bağlanır; güven tutunursa kayıp yönetişim ve maliyet kanalıyla sınırlı kalır. Perşembe · tüketici güveni (10:00), PPK (14:00), menkul kıymet ve para-banka verileri (14:30). 100 baz puanlık adım ön ucun fiyatlamasını doğrular ve bankaların göreli primini korur; daha küçük bir adım 3 aylık getiriyi politika faizine doğru yukarı çeker. Menkul kıymet verisi 16 Ekim haftasını kapsar. Önümüzdeki hafta. Fed 28 Ekim 21:00'de, ECB 29 Ekim 16:15'te karar açıklıyor; PPK özeti 30 Ekim'de.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
