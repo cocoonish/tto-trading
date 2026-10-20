@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""FX GÜN İÇİ OYUN PLANI — beş dersin kapısı (sayfa sınavı 26 kendiliğinden koşturur).
+"""FX GÜN İÇİ OYUN PLANI — dokuz dersin kapısı (sayfa sınavı 26 kendiliğinden koşturur).
 
 Yalnız standart kütüphane: yayın koşucusunda pandas ve plotly yok. Sorulanlar:
 
@@ -17,6 +17,8 @@ Yalnız standart kütüphane: yayın koşucusunda pandas ve plotly yok. Sorulanl
    kendisinden önce.
 7. İDDİALAR — metnin sayıya dayanan nitel hükümleri (devam dönüşten sık, yarı yarıya, iki dönem aynı yönde …) ölçüme
    karşı adıyla sınanır.
+8. BÜYÜK MUM — serinin 6–9. dersleri (büyük mum) aynı soruları kendi ölçüm, plan ve sınama dosyalarına sorar
+   (buyuk_dogrula.py).
 """
 from __future__ import annotations
 
@@ -158,15 +160,15 @@ def figurler() -> None:
 def seri() -> None:
     ts = GRUP_TS.read_text(encoding="utf-8")
     m = re.search(r"id:\s*'fx-gunici'.*?slugSirasi:\s*\[(.*?)\]", ts, flags=re.S)
-    dogru(bool(m) and re.findall(r"'([^']+)'", m.group(1)) == dy.SIRA,
-          "sitedeki 'fx-gunici' ders grubu bu serinin sırasını taşımıyor")
-    for slug in dy.SIRA:
+    dogru(bool(m) and re.findall(r"'([^']+)'", m.group(1)) == dy.SERI,
+          "sitedeki 'fx-gunici' ders grubu bu serinin sırasını (ders_yaz.SERI) taşımıyor")
+    for slug in dy.SERI:
         sab = (dy.METIN / f"{slug}.md").read_text(encoding="utf-8")
         d = re.search(r"^durum:\s*'(\w+)'", sab, flags=re.M)
         dogru(bool(d) and d.group(1) == "aktif", f"{slug}: durum aktif değil")
         on = re.search(r"^onkosul:\s*\[(.*?)\]", sab, flags=re.M)
         for o in (re.findall(r"'([^']+)'", on.group(1)) if on else []):
-            dogru(o in dy.SIRA and dy.SIRA.index(o) < dy.SIRA.index(slug), f"{slug}: ön koşul {o} seride önce değil")
+            dogru(o in dy.SERI and dy.SERI.index(o) < dy.SERI.index(slug), f"{slug}: ön koşul {o} seride önce değil")
 
 
 # ─────────────────────────────────────────────────────────────── 7 · iddialar
@@ -259,8 +261,13 @@ def iddialar() -> None:
     dogru(not any(b["hukum"] == "calisiyor" for b in D["bacak"]), "bir tepki 'çalışıyor' hükmü almış; metin hiçbirinin almadığını söylüyor")
 
 
+def buyuk() -> None:
+    import buyuk_dogrula
+    buyuk_dogrula.kos(dogru, HATA, SAY)
+
+
 def main() -> int:
-    for f in (ozler, secim_ve_hukum, uretim, figurler, seri, iddialar):
+    for f in (ozler, secim_ve_hukum, uretim, figurler, seri, iddialar, buyuk):
         try:
             f()
         except Exception as e:                       # kapının kendisi düşerse de adıyla düşer
@@ -268,7 +275,8 @@ def main() -> int:
     if HATA:
         print("✗ FX oyun planı: " + "\n  ".join(HATA))
         return 1
-    print(f"✓ FX oyun planı: {SAY['n']} ölçüt geçti (özler, seçim ve hüküm, yeniden üretim, şablon, figürler, seri, iddialar)")
+    print(f"✓ FX oyun planı: {SAY['n']} ölçüt geçti (özler, seçim ve hüküm, yeniden üretim, şablon, figürler, seri, iddialar, "
+          "büyük mum)")
     return 0
 
 

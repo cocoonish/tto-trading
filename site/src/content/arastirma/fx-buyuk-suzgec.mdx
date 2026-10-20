@@ -1,0 +1,189 @@
+---
+title: 'FX Gün İçi Oyun Planı 7: Büyük Mum — Süzgeçler: Ne Zaman Tersine, Ne Zaman Mumun Yönünde'
+description: "Büyük mumdan sonra fade mi etmeli, mumun yönünde mi kalmalı? Kapanışın yeri, seans, takvimdeki haber, günlük trend, önceki koşu, günün ucu, oynaklık ve yakın geçmişteki büyük mumlar: dokuz süzgeç, üç dilim, iki dönem. Hangi süzgeç gerçekten ayırıyor, hangisi yalnız iyi bir hikâye anlatıyor."
+pubDate: 2026-10-20
+tags: ['fx', 'gun-ici', 'oyun-plani', 'buyuk-mum', 'suzgec', 'ders']
+durum: 'aktif'
+kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
+ozet: "Dokuz süzgeçten çoğu büyük mumdan sonraki yolu ayırmıyor. İki dönemde aynı yöne bakan okumalar az ve küçük: 5 dakikada ucunda kapanan ve Asya seansındaki büyük mum geri vermeye daha yatkın, arka arkaya büyük mum gelen piyasada geri verme belirgin; 1 saatte günlük trendin yönündeki büyük mum biraz daha uzağa gidiyor. Hiçbiri maliyeti karşılayacak büyüklükte değil."
+seviye: 'orta'
+onkosul: ['fx-buyuk-mum']
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+Önceki ders büyük mumdan sonra fiyatın ortalama davranışını ölçtü: 5 dakikada hafif bir geri verme, 15 dakikada hiçbir
+şey, 1 saatte hafif bir devam. Ortalama, farklı koşulların karışımıdır. İşlemcinin asıl sorusu şudur: **hangi büyük
+mumda** tersine girmek, hangisinde mumun yönünde kalmak daha haklı? Bu ders o soruyu dokuz süzgeçle sorar.
+
+Süzgeçlerin listesi ve tanımları, her biri 2018–2023'ün sonucu görülmeden koda yazıldı ve hiçbiri sonuca göre
+değiştirilmedi. Her süzgeç için iki dönem yan yana durur. Bir süzgeçten okuma çıkarmanın kuralı basittir: **fark iki
+dönemde de aynı yöne bakmalı.** Dokuz süzgeç, yirmi altı değer ve üç dilim yetmiş sekiz hücre eder. Hiçbir şey
+olmasa da bunların birkaçı tek bir dönemde "anlamlı" görünür; ikinci dönem o şansı eler.
+
+## Kısaca
+
+- **Süzgeçlerin çoğu ayırmıyor.** Seansa, trende, oynaklığa ya da büyüklüğe göre ayrılan büyük mumların 24 mum
+  sonraki ortalama yolu çoğu hücrede birbirinin aralığı içinde kalıyor (Şekil 01).
+- **5 dakikada geri verme iki yerde yoğunlaşıyor.** Ucunda kapanan mumda yarısına dönüş aynadan
+  +4 puan sık (2024 → +4); fitili uzun, geri verilmiş
+  mumda fark yok (0). Asya seansındaki büyük mumda ±1 ATR'den önce mumun yönündeki
+  %44,0 (2024 → %46,4); Londra seansında %48,5.
+- **Arka arkaya büyük mum, 5 dakikada geri verme işareti.** Önceki 4–24 mumda (5 dakikada yaklaşık iki saat) başka
+  büyük mum olan piyasada 24 mum
+  sonra ortalama −0,13 ATR (2024 → −0,12); olmayanda
+  0,00 (−0,02).
+- **1 saatte trendin yönündeki büyük mum biraz daha ileri gidiyor.** Günlük trendle aynı yöndeki 1 saatlik büyük mum
+  24 mum sonra ortalama +0,32 ATR (2024 → +0,24); trende karşı
+  olanda +0,06 (+0,22). Fark küçük ve aralıklar geniş.
+- **Haber mumu ayrı bir hayvan.** Takvimdeki büyük bir haberin mumu çok az (5 dakikada 2018–2023'te
+  501 olay) ve aralıkları her yöne açık; ortalamalar bir iki olaya bağlı.
+
+## Dokuz süzgeç
+
+Her süzgeç büyük mum kapandığı anda bilinir; hiçbiri mumdan sonraki fiyatı kullanmaz.
+
+- **Büyüklük.** Mumun aralığı önceki ATR'nin kaç katı: 2–3, 3–4, 4–5, 5 ve üstü.
+- **Kapanışın yeri.** Kapanış mumun yönündeki ucuna ne kadar yakın: aralığın son çeyreğinde ("uca yakın"), son yarısının
+  geri kalanında ("ortada") ya da yarısının gerisinde ("geri verilmiş", uzun fitil).
+- **Seans.** Mumun başladığı saat, Londra ve New York saatiyle tanımlı; TSİ karşılıkları İngiltere ve ABD yaz
+  saatindeyken verildi, ikisi kış saatindeyken bir saat sonradır. **Asya**: Londra 07:00'den önce (TSİ 09:00'dan önce;
+  New York 17:00'den sonraki saatler dahil). **Londra**: Londra 07:00 – New York 08:00 (TSİ 09:00–15:00). **Örtüşme**:
+  New York 08:00 – Londra 16:30 (TSİ 15:00–18:30). **New York öğleden sonra**: Londra 16:30 – New York 17:00 (TSİ
+  18:30–00:00).
+- **Takvimdeki büyük haber.** ABD istihdam ve enflasyon verisi, Fed, ECB ve BoE kararı; olayın saati mumun başlangıcından
+  iki dakika önce ile mumun sonu arasındaysa "var".
+- **Günlük trend.** Bir önceki günün kapanışı günlük 20 günlük üstel ortalamanın (EMA20) üstünde ve ortalama beş günde
+  yükselmişse yukarı, tersi aşağı, öbür hâller yatay. Mumun yönü trendle aynıysa "trend yönünde".
+- **Mumdan önceki 12 mum.** Büyük mumdan önceki 12 mumda fiyat mumun yönünde en az 2 ATR yürümüşse "aynı yönde koşu",
+  tersine 2 ATR yürümüşse "ters yönde koşu", öbür hâller "sakin".
+- **Günün yeni ucu.** Mum, FX gününün (New York 17:00'den başlayan gün) o ana kadarki ucunu aştı mı.
+- **Günlük oynaklık.** Son 20 günün ortalama günlük aralığının, son 250 güne göre yüzdelik sırası: alt üçte bir düşük,
+  üst üçte bir yüksek.
+- **Yakın geçmişte başka büyük mum.** Önceki 4–24 mumda başka bir büyük mum var mı (önceki üç mum zaten kümenin
+  devamı sayılıp dışarıda bırakıldı).
+
+Her hücrede üç ölçü var: ±1 ATR'den önce mumun yönündeki görülme payı (yazı turada %50), mumun yarısına dönüşün
+aynadan farkı (puan) ve 24 mum sonraki ortalama yol (ATR, mumun yönünde).
+
+<GrafikEmbed src="/arastirma/fx-buyuk-suzgec/01_net.html" baslik="Süzgeçler 24 mum sonrasını ayırıyor mu" no="01" kaynak="Dukascopy" />
+
+## 5 dakika
+
+| Süzgeç · değer | 2018–23 olay | +1 ATR önce mumun yönünde | yarısına dönüş − ayna, puan | 24 mum, ATR | 2024 → olay | +1 ATR önce mumun yönünde | yarısına dönüş − ayna, puan | 24 mum, ATR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Kapanışın yeri · uca yakın (≥ %75) | 39.260 | %46,0 | +4 | −0,09 | 16.504 | %48,3 | +4 | −0,11 |
+| Kapanışın yeri · ortada (%50–75) | 11.947 | %48,9 | +2 | 0,00 | 4.920 | %48,1 | +2 | +0,05 |
+| Kapanışın yeri · geri verilmiş (< %50) | 3.294 | %50,2 | 0 | −0,22 | 1.404 | %49,7 | 0 | −0,10 |
+| Seans · Asya | 9.906 | %44,0 | +5 | −0,11 | 4.302 | %46,4 | +5 | −0,12 |
+| Seans · Londra | 15.906 | %48,5 | +2 | +0,02 | 6.209 | %49,0 | +2 | +0,02 |
+| Seans · Londra–New York örtüşmesi | 24.160 | %47,5 | +3 | −0,09 | 10.465 | %48,5 | +3 | −0,11 |
+| Seans · New York öğleden sonra | 4.529 | %44,8 | +8 | −0,22 | 1.852 | %49,7 | +1 | −0,07 |
+| Önceki 4–24 mumda başka büyük mum · evet | 33.170 | %47,1 | +4 | −0,13 | 13.283 | %48,2 | +4 | −0,12 |
+| Önceki 4–24 mumda başka büyük mum · hayır | 21.331 | %46,7 | +3 | 0,00 | 9.545 | %48,5 | +2 | −0,02 |
+| Büyüklük · 2–3 ATR | 43.213 | %47,1 | +3 | −0,06 | 18.111 | %48,3 | +3 | −0,10 |
+| Büyüklük · 3–4 ATR | 7.091 | %46,5 | +4 | −0,07 | 2.787 | %47,6 | +3 | −0,04 |
+| Büyüklük · 4–5 ATR | 2.072 | %43,6 | +7 | −0,31 | 851 | %47,4 | +3 | +0,26 |
+| Büyüklük · 5 ATR ve üstü | 2.125 | %48,6 | 0 | −0,18 | 1.079 | %50,5 | 0 | −0,06 |
+
+5 dakikada üç okuma iki dönemde de tutuyor.
+
+**Kapanış ucundaysa geri verme.** Kapanışı ucuna yakın büyük mum yarısına aynadan sık dönüyor; kapanışı ortada ya da
+fitili uzun olan mumda fark kayboluyor. Bunun bir mekanizması var: ucunda kapanan mum, alıcının ya da satıcının son
+dakikaya kadar bastırdığı mumdur ve son dakikadaki baskı çoğu zaman geçicidir. Ama "geri verme" burada mumun
+yarısına kadar geri çekilmedir; mumun öbür ucuna dönüş değil.
+
+**Asya'da geri verme, Londra'da değil.** Asya seansında ±1 ATR'den önce tersindeki seviye daha sık görülüyor ve yarısına
+dönüş aynadan belirgin sık. Asya'da likidite inceldir; ince piyasadaki büyük mum, kalın piyasadakinden daha kolay geri
+verilir. Londra seansında aynı ölçüler yazı turaya yakın.
+
+**Kümelenme geri vermeyi büyütüyor.** Önceki 4–24 mumda başka büyük mum varsa 24 mum sonraki ortalama yol iki dönemde de
+eksi ve aralığı sıfırın altında. Arka arkaya gelen büyük mumlar çoğu zaman bir haberin ya da bir akışın sonudur.
+
+Büyüklük kovaları iki dönemde aynı yöne bakmıyor: 4–5 ATR'lik mum 2018–2023'te belirgin geri verdi, 2024 sonrasında
+vermedi. "Mum ne kadar büyükse dönüş o kadar yakın" okuması bu veride yok.
+
+## 15 dakika
+
+| Süzgeç · değer | 2018–23 olay | +1 ATR önce mumun yönünde | yarısına dönüş − ayna, puan | 24 mum, ATR | 2024 → olay | +1 ATR önce mumun yönünde | yarısına dönüş − ayna, puan | 24 mum, ATR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Kapanışın yeri · uca yakın (≥ %75) | 13.797 | %49,0 | +1 | −0,02 | 5.961 | %47,8 | +4 | −0,02 |
+| Kapanışın yeri · ortada (%50–75) | 4.779 | %50,5 | +2 | −0,18 | 1.975 | %49,6 | +1 | −0,05 |
+| Kapanışın yeri · geri verilmiş (< %50) | 1.208 | %51,3 | 0 | −0,04 | 552 | %54,9 | 0 | +0,11 |
+| Seans · Asya | 1.972 | %46,3 | +5 | −0,35 | 941 | %45,9 | +4 | +0,30 |
+| Seans · Londra | 7.384 | %49,5 | +1 | 0,00 | 2.908 | %49,2 | +3 | −0,04 |
+| Seans · Londra–New York örtüşmesi | 9.492 | %50,2 | +1 | −0,03 | 4.200 | %49,4 | +3 | −0,07 |
+| Seans · New York öğleden sonra | 936 | %49,3 | +3 | −0,17 | 439 | %43,7 | +5 | −0,08 |
+| Günlük trend (EMA20) · trend yönünde | 7.981 | %49,5 | +1 | −0,08 | 3.506 | %48,8 | +3 | −0,06 |
+| Günlük trend (EMA20) · trende karşı | 8.615 | %49,7 | +1 | −0,02 | 3.774 | %49,0 | +3 | −0,04 |
+| Günlük trend (EMA20) · yatay | 3.188 | %48,8 | +1 | −0,10 | 1.208 | %47,3 | +2 | +0,15 |
+| Büyüklük · 2–3 ATR | 15.391 | %49,3 | +1 | 0,00 | 6.451 | %49,2 | +2 | +0,03 |
+| Büyüklük · 3–4 ATR | 2.660 | %49,1 | +2 | −0,38 | 1.144 | %45,6 | +7 | −0,11 |
+| Büyüklük · 4–5 ATR | 818 | %51,5 | −1 | −0,05 | 344 | %48,5 | −2 | −0,01 |
+| Büyüklük · 5 ATR ve üstü | 915 | %52,7 | −2 | −0,02 | 549 | %49,2 | +8 | −0,37 |
+
+15 dakikada iki dönemde de tutan bir ayrım yok. Tek tek hücrelerde büyük sayılar var (3–4 ATR'lik mum 2018–2023'te
+−0,38 ATR geri verdi, 2024 sonrasında −0,11), ama aynı işaret öbür dönemde
+ya kayboluyor ya da aralık sıfırı rahatça kapsıyor.
+
+## 1 saat
+
+| Süzgeç · değer | 2018–23 olay | +1 ATR önce mumun yönünde | yarısına dönüş − ayna, puan | 24 mum, ATR | 2024 → olay | +1 ATR önce mumun yönünde | yarısına dönüş − ayna, puan | 24 mum, ATR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Günlük trend (EMA20) · trend yönünde | 2.072 | %52,1 | −3 | +0,32 | 849 | %51,4 | 0 | +0,24 |
+| Günlük trend (EMA20) · trende karşı | 2.205 | %50,3 | 0 | +0,06 | 991 | %50,3 | −1 | +0,22 |
+| Günlük trend (EMA20) · yatay | 793 | %52,7 | 0 | −0,03 | 328 | %49,1 | +2 | −0,09 |
+| Kapanışın yeri · uca yakın (≥ %75) | 3.533 | %51,2 | −1 | +0,13 | 1.478 | %49,7 | +1 | +0,22 |
+| Kapanışın yeri · ortada (%50–75) | 1.266 | %52,5 | −1 | +0,28 | 543 | %52,5 | −3 | +0,25 |
+| Kapanışın yeri · geri verilmiş (< %50) | 271 | %49,1 | 0 | −0,13 | 147 | %52,4 | 0 | −0,41 |
+| Seans · Asya | 185 | %53,0 | −3 | +0,11 | 116 | %46,6 | 0 | −0,27 |
+| Seans · Londra | 1.984 | %50,7 | −2 | +0,20 | 663 | %51,0 | −1 | +0,60 |
+| Seans · Londra–New York örtüşmesi | 2.579 | %52,8 | −1 | +0,19 | 1.220 | %50,8 | +2 | −0,08 |
+| Seans · New York öğleden sonra | 322 | %43,6 | +3 | −0,40 | 169 | %49,7 | −11 | +0,82 |
+| Mum günün yeni ucunu yaptı · evet | 3.932 | %51,4 | −1 | +0,14 | 1.716 | %49,9 | +1 | +0,11 |
+| Mum günün yeni ucunu yaptı · hayır | 1.138 | %51,5 | 0 | +0,18 | 452 | %53,0 | −3 | +0,46 |
+
+1 saatte ortalama yol zaten mumun yönünde ve süzgeçlerin çoğu bunu değiştirmiyor. İki okuma dikkat çekiyor.
+
+**Trendin yönündeki büyük mum.** Günlük trendle aynı yöndeki 1 saatlik büyük mum 24 saatte ortalama
++0,32 ATR yol aldı (%95 aralık +0,08 …
++0,55); 2024 → döneminde +0,24 ATR. Trendin yatay olduğu
+günlerde devam kayboluyor (−0,03). Trende karşı mumda 2024 sonrasında da artı bir değer var,
+yani ayrım kesin değil.
+
+**Fitili uzun büyük mum.** Kapanışı yarısının gerisinde kalan 1 saatlik büyük mum 24 saatte eksi kaldı
+(−0,13; 2024 → −0,41), öbür kapanışlarda artı. Olay az ve aralıklar
+geniş, ama işaret iki dönemde aynı.
+
+<GrafikEmbed src="/arastirma/fx-buyuk-suzgec/02_yarisi.html" baslik="Fiyat önce hangi yöne gidiyor" no="02" kaynak="Dukascopy" />
+
+## Fade mi, devam mı: okuma tablosu
+
+| Durum | Okuma | Ne kadar güvenilir |
+|---|---|---|
+| 5 dakika, kapanış ucunda | Mumun yarısına dönüş şanstan biraz sık. Kovalamak yerine geri çekilmeyi beklemek mantıklı, ama geri çekilme bir tersine işlem sinyali değil. | İki dönemde aynı yönde; birkaç puan. |
+| 5 dakika, Asya seansı | Geri verme eğilimi en belirgin burada. | İki dönemde aynı yönde. |
+| 5 dakika, önceki 4–24 mumda başka büyük mum | 24 mumda ortalama geri verme. | İki dönemde aynı yönde, aralık sıfırın altında. |
+| 5 dakika, kapanış geri verilmiş (uzun fitil) | Ne fade ne devam: fitil zaten geri vermeyi göstermiş. | Fark yok. |
+| 15 dakika, her koşul | Ayrım yok. | — |
+| 1 saat, günlük trendle aynı yönde | Mumun yönünde biraz daha yol. | İki dönemde artı; aralıklar geniş. |
+| 1 saat, kapanış geri verilmiş | Mumun yönü korunmuyor. | İki dönemde eksi; olay az. |
+| Takvimdeki büyük haberin mumu | Okuma yok: olay az, dağılım çok geniş. | Ölçülemiyor. |
+
+Bu tablonun hiçbir satırı bir işlem kuralı değildir. 6. dersin sonucu burada da geçerli: en belirgin okumaların büyüklüğü
+24 mumda birkaç onda bir ATR, yani 5 dakikada bir pipin altında. 8. ders bu büyüklüğün girişin maliyetiyle nasıl
+karşılaştığını, 9. ders de bu okumalardan seçilen girişlerin 2024 sonrasında ne verdiğini gösterir.
+
+## Bu sonuç nasıl okunmalı
+
+Süzgeçler hakkında en sık yapılan hata, iyi bir hikâyesi olan bir ayrımı ölçmeden kabul etmektir. "5 ATR'lik mum
+aşırıdır", "trende karşı büyük mum tuzaktır", "Londra açılışındaki büyük mum gerçek paradır" cümlelerinin hepsinin bir
+mekanizması anlatılabilir. Bu veride üçü de iki dönemde tutmadı. Tutan okumalar daha sıkıcı: kapanışın yeri, seansın
+likiditesi, kümelenme ve günlük trend. Hepsi küçük.
+
+## Ölçülmeyenler
+
+- **İkili süzgeçler.** İki süzgecin birlikte uygulandığı bileşimler (ör. Asya ve kapanış ucunda) bu derste yok. Hücre
+  sayısı yirmi kat büyür ve bir dönemde "anlamlı" görünen bileşim sayısı da onunla büyür.
+- **Pariteye göre ayrım.** Tablolar dört paritenin toplamıdır.
+- **Haberin içeriği.** Haber mumu yalnız "var/yok"; beklentiye göre sürpriz ölçülmedi.

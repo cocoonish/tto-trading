@@ -27,6 +27,9 @@ ON = tomllib.loads((BURASI / "onkayit_oyun.toml").read_text(encoding="utf-8"))
 
 #: Serinin okuma sırası (sitedeki ders grubu aynı sırayı taşır; kapı ikisini kıyaslar).
 SIRA = ["fx-oyun-okuma", "fx-oyun-acilislar", "fx-oyun-fiksingler", "fx-oyun-haberler", "fx-oyun-backtest"]
+#: Büyük mum dersleri (serinin 6–9. dersleri; buyuk_ders_yaz.py üretir) ve bütün seri.
+BUYUK_SIRA = ["fx-buyuk-mum", "fx-buyuk-suzgec", "fx-buyuk-giris", "fx-buyuk-plan"]
+SERI = SIRA + BUYUK_SIRA
 #: Her dersin figürleri (dosya adı öneki = şekil numarası).
 SEKIL = {
     "fx-oyun-okuma": ["01_siniflar", "02_yarisi"],

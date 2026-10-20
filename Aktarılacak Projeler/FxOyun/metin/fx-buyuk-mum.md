@@ -1,0 +1,177 @@
+---
+title: 'FX Gün İçi Oyun Planı 6: Büyük Mum — 2, 3, 4, 5 ATR''den Sonra Ne Oluyor'
+description: "Aralığı önceki ATR'nin en az iki katı olan bir 5 dakikalık, 15 dakikalık ya da 1 saatlik mumdan sonra fiyat genelde ne yapıyor: devam mı, geri çekilme mi, tam dönüş mü? 2018–2023'ün {{ D.5.ic.n }} + {{ D.15.ic.n }} + {{ D.60.ic.n }} büyük mumu, şansın vereceği payla kıyaslı ve 2024 sonrasında yeniden ölçülmüş."
+pubDate: 2026-10-20
+tags: ['fx', 'gun-ici', 'oyun-plani', 'buyuk-mum', 'atr', 'ders']
+durum: 'aktif'
+kaynak: 'Dukascopy 1 dakikalık bid/ask (2018–2026) · önceden kayıt'
+ozet: "Büyük bir mumdan sonra fiyatın çoğu zaman mumun yarısına döndüğü doğru, ama bunun büyük kısmı mumun kendi şeklinden gelir. Şansın payı düşülünce kalan şu: 5 dakikada hafif bir geri verme, 15 dakikada hiçbir şey, 1 saatte hafif bir devam. Üçü de iki dönemde aynı yönde, üçü de makastan küçük."
+seviye: 'orta'
+onkosul: ['fx-oyun-okuma']
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+Grafikte bir mum öbürlerinden belirgin uzun çıktığında iki refleks yarışır. Biri "momentum geldi, mumun yönüne bin"
+der; öbürü "fazla gitti, geri gelecek, tersine gir" der. Bu ders ve sonraki üçü o iki refleksi ölçer. Önce büyük mumdan
+sonra fiyatın ne yaptığını (bu ders), sonra hangi koşulda hangi refleksin daha haklı çıktığını (7. ders), sonra girişin
+nasıl yapılacağını (8. ders) ve en sonda 2018–2023 verisinden yazılıp 2024 sonrasında sınanan bir oyun planını
+(9. ders).
+
+Seri önceki derslerdeki gibi iki dönemli çalışır. Bütün okumalar 2018–2023 verisinden yapıldı; giriş planı o dönemden
+yazılıp 2024 ve sonrasının verisi hiç açılmadan kaydedildi. 2024 → döneminin sayıları ({{ ON.dis_bitis }} tarihine
+kadar) aynı kodla sonradan ölçüldü ve her tabloda yan yana durur.
+
+## Kısaca
+
+- **Büyük mum sık.** Aralığı önceki ATR'nin en az iki katı olan mum 5 dakikalık grafikte bir parite için günde ortalama
+  {{ D.5.ic.gunde }} kez görüldü (kümenin devamı ve dışarıda bırakılanlar sayılmadan). Yani "büyük mum" nadir bir olay
+  değil, günün sıradan bir parçası.
+- **Mumun yarısına dönüş çok sık, ama çoğu şekilden.** 5 dakikalık büyük mumların {{ D.5.ic.geri_0.5 }} kadarında fiyat
+  sonraki 24 mum içinde mumun yarısına geri geldi. Fiyatın yönü rastgele olsaydı da {{ D.5.ic.ayna_geri_0.5 }}
+  gelecekti: büyük mum çoğu zaman ucuna yakın kapanır ve yarısı kapanıştan kısa bir mesafededir. Farkın kendisi
+  ({{ D.5.ic.geri_0.5_fark }} puan) küçük ama iki dönemde de aynı yönde.
+- **Hangi yöne önce 1 ATR?** Kapanıştan bir ATR yukarı ve bir ATR aşağıdaki iki seviyeden önce mumun yönündeki
+  görüldü: 5 dakikada {{ D.5.ic.sim_1.0 }}, 15 dakikada {{ D.15.ic.sim_1.0 }}, 1 saatte {{ D.60.ic.sim_1.0 }}. Yazı turada bu pay
+  {{ Y.50 }} olurdu. 5 dakikada hafif bir dönüş eğilimi var, 1 saatte hafif bir devam.
+- **Ortalama yol küçük.** 24 mum sonra fiyat mumun yönünde ortalama 5 dakikada {{ D.5.ic.net_24 }} ATR, 1 saatte
+  {{ D.60.ic.net_24 }} ATR yol aldı. 5 dakikada bu {{ D.5.ic.net24_pip }} pip ediyor; tipik makas tek başına bundan
+  büyük.
+- **Makas büyük mumda açılmıyor.** Büyük mumun kapanış dakikasında makas, mumdan önceki bir saatin {{ D.5.ic.makas_mum_kat }}
+  katıydı; iki katını aştığı mum {{ D.5.ic.makas_mum_iki }}.
+
+## Büyük mum nasıl tanımlandı
+
+**ATR** (ortalama gerçek aralık) bir mumun "olağan" boyunun ölçüsüdür. Her mumun **gerçek aralığı** yüksek ile düşüğün
+farkıdır; mum bir önceki kapanıştan boşlukla açıldıysa o boşluk da aralığa eklenir. ATR({{ SB.atr_n }}) bu gerçek
+aralıkların son {{ SB.atr_n }} mum üzerinden yumuşatılmış ortalamasıdır (Wilder ortalaması; TradingView'deki `ta.atr`
+ile aynı tanım). Hafta sonu ya da tatil sonrası ilk mumda önceki kapanış uzakta kaldığı için boşluk sayılmaz.
+
+Bir mum, aralığı (yüksek − düşük) **kendisinden önceki** mumun ATR'sinin en az {{ SB.esik }} katıysa büyük sayıldı. Ölçü
+yalnız geçmişten kurulur: mum kapandığı anda büyük olup olmadığı bilinir, sonrasına bakılmaz. Her dilim kendi ATR'siyle
+ölçüldü; 5 dakikalık mum 5 dakikalık ATR ile, 1 saatlik mum 1 saatlik ATR ile. Büyüklük dört kovaya ayrıldı: 2–3,
+3–4, 4–5 ve 5 ATR ve üstü.
+
+**Yön** mumun kapanış eksi açılışıdır. Gövdesi aralığının beşte birinden küçük mum (uzun fitilli, kararsız mum) yön
+ölçülerine girmedi; 5 dakikada {{ SAY.5.kararsiz }} böyle mum vardı.
+
+Dört tür mum dışarıda bırakıldı ve sayıldı:
+
+- **Kümenin devamı.** Önceki {{ SB.kume_once }} mumdan biri de büyükse mum sayılmadı; yalnız kümenin **ilk** büyük mumu
+  olaydır. Arka arkaya gelen üç büyük mum aynı haberin üç parçasıdır ve ayrı ayrı sayılırsa aynı olay üç kez
+  ölçülürdü. 5 dakikada {{ SAY.5.buyuk }} büyük mumun {{ SAY.5.kume }} kadarı böyle çıktı.
+- **Yeniden açılış.** Altı saatten uzun bir boşluktan (hafta sonu, tatil) sonraki ilk 60 dakika. O dakikalarda kotasyon
+  seyrek ve geniştir; aralık fiyatın değil kotasyonun hareketidir ({{ SAY.5.yeniden_acilis }} mum).
+- **Devir.** New York saatiyle 16:50–17:10 (TSİ, ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10). FX gününün
+  devrinde makas sıçrar ve alış-satış ortasından ölçülen aralığı şişirir ({{ SAY.5.devir }} mum).
+- **Eksik veri.** Mumun ya da sonraki 24 mumun dakikalarının beşte birinden fazlası kotasyonsuz ({{ SAY.5.eksik }} mum).
+
+Her şey {{ pariteler }} paritelerinde ve alış ile satışın ortasından (orta fiyat) ölçüldü. 2018–2023'te yön ölçülerine
+giren olay sayısı 5 dakikada {{ D.5.ic.n }}, 15 dakikada {{ D.15.ic.n }}, 1 saatte {{ D.60.ic.n }}.
+
+{{# sekil 01_ornek "Üç dilimde birer büyük mum" }}
+
+## Ne ölçüldü
+
+Büyük mum kapandıktan sonra fiyat 24 mum boyunca izlendi: 5 dakikalık grafikte iki saat, 15 dakikalıkta altı saat,
+1 saatlikte bir gün. Birim, olayın ATR'sidir (A). Ölçüler:
+
+- **±1 ATR'den hangisi önce.** Kapanışın bir ATR mumun yönünde ve bir ATR tersindeki iki seviye. Hangisi önce görüldü?
+  Bu ölçü simetriktir: yön bilgisi olmayan bir fiyatta iki seviye eşit olasıdır ve beklenen pay {{ Y.50 }}. Aynı dakikada
+  ikisi birden görülen ya da hiçbiri görülmeyen olay bu ölçüye girmedi.
+- **Geri çekilme.** Fiyat mumun ucundan mumun boyunun {{ Y.25 }}, {{ Y.50 }} ve {{ Y.62 }} kadarı geri geldi mi; mumun öbür ucuna
+  kadar döndü mü.
+- **Mumun ucunu aştı mı.** Fiyat 24 mum içinde mumun kendi ucunun ötesine geçti mi.
+- **Net hareket.** 6 ve 24 mum sonra fiyat, kapanıştan mumun yönünde kaç ATR yol aldı.
+
+## Ayna: şansın vereceği pay
+
+Bu dersin ana fikri şudur: büyük bir mumdan sonra "fiyat genelde yarısına döner" cümlesi doğrudur ve neredeyse hiçbir
+şey söylemez. Sebep mumun şekli. Büyük mum çoğu zaman ucuna yakın kapanır; mumun yarısı kapanıştan, mumun boyunun
+yarısından biraz az bir mesafededir ve fiyat her yöne biraz dalgalandığı için o mesafeyi yön bilgisi olmadan da sık
+geçer.
+
+Şansın payını ölçmek için önceki derslerdeki **ayna** kullanıldı. Her olayda mumdan sonraki gerçek yol, mumun kapanışına
+göre ters çevrildi: kapanıştan on pip yukarı giden bir dakika, aynada on pip aşağı gider. Aynı ölçüler aynalanmış yolda
+yeniden hesaplandı. Aynanın oynaklığı ve mum geometrisi gerçek yolla birebir aynıdır, yalnız yön tersine dönmüştür.
+Yani **gerçek pay eksi ayna payı mumun yön bilgisidir**; ayna payının kendisi geometrinin kendiliğinden ürettiği
+orandır.
+
+{{# davranis }}
+
+Tablonun ikinci sütununda ayna yoktur, çünkü o ölçü simetriktir: aynası tam tersidir ve beklenen pay {{ Y.50 }}. Öbür
+iki geri çekilme sütununda iki sayı yan yanadır: önce gerçek, sonra ayna. Son sütun 24 mum sonraki ortalama hareket ve
+işlem günü düzeyinde {{ Y.95 }} aralığıdır (aynı gün dört paritede büyük mum çıkabilir, bunlar birbirinden bağımsız sayılmaz).
+
+{{# sekil 02_yol "Büyük mumdan sonra ortalama yol" }}
+
+## Dilim dilim okuma
+
+**5 dakika: hafif geri verme.** Fiyat ±1 ATR'den önce mumun tersindekini daha sık gördü ({{ D.5.ic.sim_1.0_ters }};
+2024 → {{ D.5.dis.sim_1.0_ters }}). Mumun yarısına dönüş aynadan {{ D.5.ic.geri_0.5_fark }} puan sık
+(2024 → {{ D.5.dis.geri_0.5_fark }} puan). 24 mum sonra ortalama {{ D.5.ic.net_24 }} ATR (2024 → {{ D.5.dis.net_24 }}).
+Üç ölçü de aynı yöne bakıyor ve iki dönemde de tutuyor. Ama büyüklüğe dikkat: 5 dakikalık bir ATR'nin medyanı
+{{ D.5.ic.A_pip }} pip ve 24 mumluk ortalama geri verme {{ D.5.ic.net24_pip }} pip. Aynı paritelerde makasın medyanı
+{{ D.5.ic.makas_once }} pip.
+
+**15 dakika: hiçbir şey.** ±1 ATR payı {{ D.15.ic.sim_1.0 }} (2024 → {{ D.15.dis.sim_1.0 }}), yarısına dönüşte gerçek
+ile ayna arasındaki fark {{ D.15.ic.geri_0.5_fark }} puan (2024 → {{ D.15.dis.geri_0.5_fark }}), 24 mum sonra
+{{ D.15.ic.net_24 }} ATR. 15 dakikalık büyük mum, 5 dakikalığın geri verme eğilimi ile 1 saatliğin devam eğilimi
+arasında bir yerde duruyor.
+
+**1 saat: hafif devam.** ±1 ATR'den önce mumun yönündeki {{ D.60.ic.sim_1.0 }} (2024 → {{ D.60.dis.sim_1.0 }}). Yarısına
+dönüş aynadan seyrek değil, sık da değil ({{ D.60.ic.geri_0.5_fark }} puan). 24 mum (bir gün) sonra fiyat mumun yönünde
+ortalama {{ D.60.ic.net_24 }} ATR ({{ Y.95 }} aralık {{ D.60.ic.net_24_alt }} … {{ D.60.ic.net_24_ust }}) ve 2024 → döneminde
+{{ D.60.dis.net_24 }} ATR yol aldı. Bu ölçülerin en güçlüsü; yine de yön payı bir yazı turadan birkaç puan uzakta.
+
+{{# sekil 03_geri "Geri çekilme şanstan sık mı" }}
+
+## Yarısına dönen fiyat ne kadar sürede dönüyor
+
+Yarısına dönen olaylarda bu dönüş 5 dakikada medyan {{ D.5.ic.geri_dk }} dakikada, 15 dakikada {{ D.15.ic.geri_dk }}
+dakikada, 1 saatte {{ D.60.ic.geri_dk }} dakikada geldi. Yani yarısına dönüş çoğu zaman bir iki mum içinde olur. Bu,
+8. dersteki limit emirlerin neden çoğu zaman dolduğunu ve neden dolmalarının iyi haber olmadığını açıklar.
+
+Yarısına dönen fiyatın sonra yeniden mumun ucuna gitme payı 5 dakikada {{ D.5.ic.geri_50_uc }} (ayna
+{{ D.5.ic.ayna_geri_50_uc }}), 1 saatte {{ D.60.ic.geri_50_uc }} (ayna {{ D.60.ic.ayna_geri_50_uc }}). Geri çekilip
+yeniden uca gitmek ("geri çekilmede katıl" okuması) şansla beklenen kadar sık.
+
+## Büyüklük değişince
+
+Mum büyüdükçe davranışın değiştiği sık söylenir: "5 ATR'lik mum artık aşırıdır, döner". Kovalar:
+
+{{# kova }}
+
+Kovalar büyüdükçe olay sayısı hızla düşer: 5 dakikada 2–3 ATR'lik mumlar olayların {{ D.5.ic.kova_2-3_pay }} kadarı, 5
+ATR ve üstü {{ D.5.ic.kova_5+_pay }}. Küçük kovalarda tek tek sayılar oynak; iki dönemde aynı yöne bakan bir büyüklük
+etkisi yok. 5 ATR'lik bir mumun 2 ATR'lik bir mumdan daha güvenilir bir dönüş işareti olduğunu bu veri göstermiyor.
+
+## Makas büyük mumda açılıyor mu
+
+Büyük mumun kendisi de büyük mum anında işlem yapmak da makas açısından pahalı sanılır. Ölçüldü: mumun kapanış
+dakikasındaki makas mumdan önceki 60 dakikanın medyan makasıyla, sonraki dakikaların açılışındaki makas da aynı tabanla
+kıyaslandı.
+
+{{# makas }}
+
+Büyük mumların çoğunda makas açılmıyor. İki katını aşan mumlar azınlıkta ve 7. derste görüleceği gibi bunlar çoğunlukla
+takvimdeki haberlerin mumları. Yani büyük mumdan sonra girişin pahalı olmasının sebebi makasın açılması değil,
+hareketin kendisinin küçük olması: ortalama geri verme ya da devam makastan küçük.
+
+## Bu sonuç nasıl okunmalı
+
+Büyük mum bir **bilgi** taşıyor, ama çok az. 5 dakikada bir parça geri verme, 1 saatte bir parça devam. İkisi de iki
+dönemde aynı yönde görüldüğü için tesadüf değil; ikisi de maliyetten küçük olduğu için tek başına işlem değil. Büyük
+mumdan sonra yarısına dönüşü bekleyen bir işlemci haklı çıkar, ama aynı haklılık yönü bilmeyen birine de düşerdi.
+Ayna bunu ölçer.
+
+Sonraki ders bu küçük bilginin nerede yoğunlaştığına bakar: hangi seansta, hangi kapanışta, hangi trendde fade daha
+haklı, hangisinde mumun yönü.
+
+## Ölçülmeyenler
+
+- **Gerçek işlem hacmi.** Dukascopy hacmi bir likidite vekilidir, piyasanın tamamının hacmi değil.
+- **Dört majör dışı pariteler, hisse, emtia.** Ölçüm yalnız {{ pariteler }} için.
+- **Mumun içi.** Büyük mumun dakikalarının sırası (önce yükselip mi düştü) ölçüye girmedi; yalnız açılış, kapanış ve uçlar.
+- **Haberin içeriği.** Takvimdeki büyük haberler (ABD istihdam ve enflasyon verisi, Fed, ECB ve BoE kararları) yalnız
+  "var/yok" olarak işaretlendi; beklentiye göre sürpriz ölçülmedi.
