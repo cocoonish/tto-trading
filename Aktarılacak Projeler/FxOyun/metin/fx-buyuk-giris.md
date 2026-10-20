@@ -143,8 +143,8 @@ limitleri: mumun {{ Y.25 }} geri çekilmesine limit 2018–2023'te {{ G.60.ic.de
 sonrasında {{ G.60.dis.devam:limit_0.25:s2:h2.R }} R; yarısına limit {{ G.60.ic.devam:limit_0.5:s2:h2.R }} ve
 {{ G.60.dis.devam:limit_0.5:s2:h2.R }} R. Izgarada maliyetten sonra sıfırın üstüne çıkan hücreler yalnız bu ikisidir:
 2018–2023'te sıfırda ya da altında, 2024 sonrasında az farkla artı; büyüklükleri sıfırdan ayırt edilemeyecek kadar
-küçük. Aynı emir biçiminin stopu 1 ATR'lik, koşu
-süzgeçli bir hâli 9. dersin planına seçildi ve 2024 sonrasında tutmadı (9. ders, Seçilen girişler).
+küçük. Aynı emir biçiminin stopu 1 ATR'lik, koşu süzgeçli bir hâli 9. dersin planına seçildi ve 2024 sonrasında
+tutmadı (9. ders, Seçilen girişler).
 
 ### Masada: dilim büyüyünce
 
@@ -155,11 +155,10 @@ maliyetsiz sonucunda görünür (6. ders, Dilim dilim okuma); ikisi de kenar de�
 
 ## Limit neden ucuz görünür: ters seçim
 
-Limit emir üç şeyi birden yapar. Girişte makas ödemez (fiyat sana gelir), girişte kayma ödemez, ve **yalnız fiyat
-aleyhine yürüdüğünde dolar.** Çıkışta (stopta ya da süre dolunca) makas ve kayma yine ödenir. Üçüncüsü ilk ikisini
-dengeler. Yukarı bir büyük mumdan sonra yarıya konan alış limiti, fiyat mumun yarısına
-indiğinde dolar; yani tam da büyük mumun hareketinin geri alındığı olaylarda. Fiyat hiç geri gelmeden yükselmeye devam
-ederse limit dolmaz ve en iyi işlem kaçar.
+Limit emir üç şeyi birden yapar: girişte makas ödemez (fiyat sana gelir), girişte kayma ödemez ve **yalnız fiyat
+aleyhine yürüdüğünde dolar.** Çıkışta makas ve kayma yine ödenir. Üçüncüsü ilk ikisini dengeler: yukarı bir büyük
+mumdan sonra yarıya konan alış limiti tam da hareketin geri alındığı olaylarda dolar; fiyat geri gelmeden yükselirse
+limit dolmaz ve en iyi işlem kaçar.
 
 Bunu ölçmek için her olayda iki soru birlikte soruldu: limit doldu mu, ve aynı anda piyasadan girilseydi (aynı stop ve
 hedefle) işlem kazanır mıydı?
@@ -228,7 +227,7 @@ maliyet yalnız ATR'si büyük olan olayların maliyeti, gerçek fark daha da b�
 ### Masada: stop nereye
 
 Grafikte en "mantıklı" görünen stop mumun öbür ucunun ötesidir; bu seride o yer ölçülmedi. Ölçülen stop girişten 1 ya
-da 2 ATR uzaktır ve sonucu belirleyen yerin anlamı değil pip uzaklığıdır (kural: Emri nereye koyarsın, Stop). Şema aynı
+da 2 ATR uzaktır ve sonucu belirleyen yerin anlamı değil pip uzaklığıdır (8. ders, Emri nereye koyarsın). Şema aynı
 girişe konmuş iki stopu ve 1 R hedeflerini gösterir.
 
 {{# sema stop-uzaklik }}
@@ -357,9 +356,9 @@ değildir.
 
 Büyük mum kapandıktan sonra, emir vermeden önce sırayla:
 
-1. Hangi seanstayım? Asya New York 17:00 ile Londra 07:00 arası (TSİ ikisi yaz saatindeyken 00:00–09:00), Londra seansı
-   Londra 07:00 ile New York 08:00 arası (TSİ ikisi yaz saatindeyken 09:00–15:00), örtüşme New York 08:00 ile Londra
-   16:30 arası (TSİ ikisi yaz saatindeyken 15:00–18:30); ikisi kış saatindeyken TSİ karşılıkları bir saat sonra.
+1. Hangi seanstayım? Asya New York 17:00 – Londra 07:00, Londra seansı Londra 07:00 – New York 08:00, örtüşme New York
+   08:00 – Londra 16:30; TSİ ikisi yaz saatindeyken 00:00–09:00, 09:00–15:00 ve 15:00–18:30, ikisi kış saatindeyken
+   birer saat sonra.
 2. Emrin bekleme süresine ({{ SB.bekle }} mum) ABD verisinin, FOMC'nin, ECB'nin ya da BoE'nin penceresi düşüyor mu
    (saatler TSİ karşılıklarıyla: Emri nereye koyarsın, Haber penceresinde)? Düşüyorsa emri açıklamadan önce çekersin
    (disiplin kuralı; ölçülmedi).

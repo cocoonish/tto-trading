@@ -5419,3 +5419,32 @@ olay başına, "günde kaç" bütün işlem günlerine bölünür. Arıza enjeks
 AÇIK: mum içi makasın en geniş anı dakika açılış/kapanışından vekildir; 2024 sonrası arşiv dosyaları okuyucu özünü
 sınarken belleğe girer (sonuçlara girmez).
 
+
+**KARAR (20.10.2026, kullanıcı) ve Kurucu ilke — FX GÜN İÇİ SERİSİNİN DOKUZ DERSİNE MASA KATMANI; BİR KARTIN
+NOTU KARTIN HÜKMÜNÜ SÖYLER; ve BİR ÖRNEĞİN TEKİLLİĞİ GRAFİKTE GÖRÜNEN ARALIKLA SORULUR.** Kullanıcı: "iki katına
+çıkaralım … veri olarak değil, nasıl kullanılması gerektiği, hangi durumlarda yapmamız gerektiği mum grafikleriyle ve
+şemalarla anlatılsın". Seçimler ona soruldu: okuma + uygulama (her kart "bu bir kenar değil" der), şema + gerçek örnek,
+büyük mum dersleri genişletmeyle birlikte, ≈2 kat. Ölçüm katmanı DOKUNULMADI; hükümler değişmedi. Katman
+`Aktarılacak Projeler/FxOyun/masa.py` (şema SVG'si, karar merdiveni, senaryo kartı, `{{# sema|karar|kart|ornek id }}`
+blokları, `{{# atif <tür> <kimlik> }}` — elle "Şekil M3" ENGEL) ve `masa_ornek.py` (gerçek örnek: aralık 2023'ten önceki,
+koşula uyan en son olay; veri 2023 sonunda kesilir), tanımlar `metin/masa/<slug>.toml`, kapı `dogrula.py` (masa ölçütü).
+Seri 2,5 kata çıktı, inceleme sonrası kısaltmayla ≈2,3 kat (bölüm tekrarları, "Bu durumda yapmazsın" paragrafları,
+derse özgü olmayan emir kuralları ASIL metne — oyun derslerinde 1. ders, büyük mumda 8. ders "Emri nereye koyarsın" —
+gönderme yapar).
+Donmuş kopyaya (ee931ce1) karşı dört mercek (dayanak 1–5 · dayanak 6–9 · gerçek örnekler ve şemalar · tutarlılık ve
+kısaltma) 60'ı aşkın bulgu verdi, dokuz düzeltici ders başına uyguladı. Üç sınıf kayda değer. (1) TEK SABİT NOT YANLIŞ
+KONUŞUR: her kartın altına "ölçüm bu durumda artı bulmadı" basılıyordu; merkez bankası kartlarında artı ölçülmüştü,
+haber öncesi ve ay sonu kartlarında ise durum hiç ölçülmemişti. Kart artık hükmünü ZORUNLU taşır (`hukum` = eksi · az ·
+olculmedi) ve not ondan basılır. (2) BİR UYGULAMA ÖNERİSİ ÖLÇÜLEN KURALDAN AYRIŞAMAZ: büyük mumda stop "mumun öbür
+ucuna" yazılmıştı, oysa ölçülen stoplar girişten 1 ve 2 ATR'dir (2–3 ATR'lik mumda öbür uç girişe ~1 ATR yakındır);
+oyun derslerinde emrin ömrü "izlenen süre" yazılmıştı, sınanan emir 60 dakika geçerliydi. Tek ifade şartnamede, dersler
+oradan. Haber penceresinde emri çekmek bir DİSİPLİN kuralıdır, ölçüm değil (1 pip ek kayma varsayımdır, haber anındaki
+makas ölçülmedi). (3) ÖRNEK TEKİLLİĞİ MUMUN KİMLİĞİYLE SORULAMAZ: aynı hareket bir derste anın ilk mumu, öbüründe onun
+içindeki büyük mum olarak iki ayrı kimlikle basılıyordu. Tekillik artık grafikte görünen saat aralığıyla (olaydan 20
+mum önce → izlemenin sonu) ve ana derslerin kendi örnek günleriyle birlikte sorulur (`masa_ornek.aralik` · `ayrilmis`);
+örnek koşulları ölçülen olguyla sıkılaştı (ters gün gerçekten ters bitsin, ay sonu ayrı dursun). Okuma paragrafları
+mumlardan yeniden yazıldı, koşullu "③ varsa" kalmadı. Yan bulgu: FxOyun'un üretilen Markdown tabloları kaydırma kabına
+sarılı değildi ve 12 sütunlu plan tablosu 760–899 pikselde sayfayı yana kaydırıyordu (`ders_yaz._tablo`). İnceleme bir
+de şartnamenin kendisini düzeltti: "küçük karar mumunda bir R hedef sınanmadı" yanlıştı (2018–2023'te denendi).
+AÇIK: seri istenenden (≈2) uzun; daha fazla kısaltma ölçüm cümlelerine dokunur. Örnek grafiklerin 1 saatlik ekseni
+ertesi güne geçişi göstermiyor.

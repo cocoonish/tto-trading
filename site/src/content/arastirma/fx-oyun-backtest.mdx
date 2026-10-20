@@ -41,7 +41,7 @@ olduğu için kâr gibi göründüğü, ve bir kuralı ne zaman kural sayabilece
 önce sorulacak beş soruyu sırayla verir.
 
 <Diyagram no="M1" baslik="Bir kuralı masaya getirmeden önce: beş soru" kaynak="Karar şeması — dayanak: 1. ders, Bu planın dürüstlük kuralları; 5. ders, Kazanma oranı ve net sonuç; 5. ders, Maliyet nereye gidiyor; 5. ders, Tepki nedir, nasıl seçildi; 5. ders, İşlem tepkileri" azami={480}>
-<svg viewBox="0 0 360 510" class="karar-sema" role="img" aria-label="Bir kuralı masaya getirmeden önce: beş soru">
+<svg viewBox="0 0 360 498" class="karar-sema" role="img" aria-label="Bir kuralı masaya getirmeden önce: beş soru">
 <defs><marker id="ko-sinav" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ks-ok-ucu" /></marker></defs>
 <rect x="4" y="10" width="184" height="63" rx="3" class="ks-soru" />
 <text x="14" y="27" class="ks-yazi">Kural ve hüküm eşiği</text>
@@ -50,8 +50,9 @@ olduğu için kâr gibi göründüğü, ve bir kuralı ne zaman kural sayabilece
 <line x1="188" x2="220" y1="41.5" y2="41.5" class="ks-ok" marker-end="url(#ko-sinav)" />
 <text x="193" y="36.5" class="ks-dal">hayır</text>
 <rect x="222" y="10" width="134" height="63" rx="3" class="ks-sonuc ks-bekle" />
-<text x="230" y="26" class="ks-yazi-kucuk">Kural yok: önce yaz,</text>
-<text x="230" y="40" class="ks-yazi-kucuk">sonra say</text>
+<text x="230" y="26" class="ks-yazi-kucuk">Kural yok: önce</text>
+<text x="230" y="40" class="ks-yazi-kucuk">yazarsın, sonra</text>
+<text x="230" y="54" class="ks-yazi-kucuk">sayarsın</text>
 <line x1="40" x2="40" y1="73" y2="97" class="ks-ok" marker-end="url(#ko-sinav)" />
 <text x="46" y="89" class="ks-dal">evet</text>
 <rect x="4" y="99" width="184" height="63" rx="3" class="ks-soru" />
@@ -73,7 +74,8 @@ olduğu için kâr gibi göründüğü, ve bir kuralı ne zaman kural sayabilece
 <text x="193" y="214.5" class="ks-dal">evet</text>
 <rect x="222" y="188" width="134" height="63" rx="3" class="ks-sonuc ks-bekle" />
 <text x="230" y="204" class="ks-yazi-kucuk">Ölçülemedi: deftere</text>
-<text x="230" y="218" class="ks-yazi-kucuk">yaz, riskle kurma</text>
+<text x="230" y="218" class="ks-yazi-kucuk">yazarsın, riskle</text>
+<text x="230" y="232" class="ks-yazi-kucuk">kurmazsın</text>
 <line x1="40" x2="40" y1="251" y2="275" class="ks-ok" marker-end="url(#ko-sinav)" />
 <text x="46" y="267" class="ks-dal">hayır</text>
 <rect x="4" y="277" width="184" height="48" rx="3" class="ks-soru" />
@@ -83,31 +85,26 @@ olduğu için kâr gibi göründüğü, ve bir kuralı ne zaman kural sayabilece
 <text x="193" y="296.0" class="ks-dal">evet</text>
 <rect x="222" y="277" width="134" height="48" rx="3" class="ks-sonuc ks-yapma" />
 <text x="230" y="293" class="ks-yazi-kucuk">Yüksek oran kâr</text>
-<text x="230" y="307" class="ks-yazi-kucuk">değildir: kurma</text>
+<text x="230" y="307" class="ks-yazi-kucuk">değildir: kurmazsın</text>
 <line x1="40" x2="40" y1="325" y2="349" class="ks-ok" marker-end="url(#ko-sinav)" />
 <text x="46" y="341" class="ks-dal">hayır</text>
-<rect x="4" y="351" width="184" height="60" rx="3" class="ks-soru" />
+<rect x="4" y="351" width="184" height="48" rx="3" class="ks-soru" />
 <text x="14" y="368" class="ks-yazi">Maliyetsiz sonuç ödenen</text>
 <text x="14" y="383" class="ks-yazi">maliyetten küçük mü?</text>
-<line x1="188" x2="220" y1="381.0" y2="381.0" class="ks-ok" marker-end="url(#ko-sinav)" />
-<text x="193" y="376.0" class="ks-dal">evet</text>
-<rect x="222" y="351" width="134" height="60" rx="3" class="ks-sonuc ks-kalk" />
+<line x1="188" x2="220" y1="375.0" y2="375.0" class="ks-ok" marker-end="url(#ko-sinav)" />
+<text x="193" y="370.0" class="ks-dal">evet</text>
+<rect x="222" y="351" width="134" height="48" rx="3" class="ks-sonuc ks-yapma" />
 <text x="230" y="367" class="ks-yazi-kucuk">Kenar maliyete</text>
-<text x="230" y="381" class="ks-yazi-kucuk">gidiyor: masadan</text>
-<text x="230" y="395" class="ks-yazi-kucuk">kalk</text>
-<line x1="40" x2="40" y1="411" y2="435" class="ks-ok" marker-end="url(#ko-sinav)" />
-<text x="46" y="427" class="ks-dal">hayır</text>
-<rect x="4" y="437" width="352" height="63" rx="3" class="ks-son" />
-<text x="14" y="454" class="ks-yazi">Hiçbir soru seni durdurmadıysa kural yine</text>
-<text x="14" y="469" class="ks-yazi">bir adaydır: değiştirilmeden bir sonraki</text>
-<text x="14" y="484" class="ks-yazi">dönemde sınanana kadar.</text>
+<text x="230" y="381" class="ks-yazi-kucuk">gidiyor: kurmazsın</text>
+<line x1="40" x2="40" y1="399" y2="423" class="ks-ok" marker-end="url(#ko-sinav)" />
+<text x="46" y="415" class="ks-dal">hayır</text>
+<rect x="4" y="425" width="352" height="63" rx="3" class="ks-son" />
+<text x="14" y="442" class="ks-yazi">Hiçbir soru seni durdurmadıysa kural yine</text>
+<text x="14" y="457" class="ks-yazi">bir adaydır: değiştirilmeden bir sonraki</text>
+<text x="14" y="472" class="ks-yazi">dönemde sınanana kadar.</text>
 </svg>
 </Diyagram>
 
-
-Bu dersin tepkileri ilk iki sorudan geçer, çünkü plan 2024 sonrası sınanmadan kaydedildi. Açılış ve fiksing
-tepkileri dördüncü soruda durur; merkez bankası satırlarından işlemi az olanlar üçüncüde, eşiği geçenler merdivenin
-sonuna "zayıf" hükmüyle aday olarak varır.
 
 ## Tepki nedir, nasıl seçildi
 
@@ -135,8 +132,8 @@ Her tepkinin 2024 → dönemindeki kazanma oranı ve işlem başına net sonucu 
 altında. Açılışta kazanma oranları yarının üstünde ama yarım R'lik kazanç kaybı karşılamıyor. Fiksingde güçlü koşunun
 tersine giren tepki işlemlerin yalnız %37 kadarını kazandı; kazananı ortalama
 +1,19 R getirdi, başa baş için %49 yetiyordu,
-o oran da tutmadı. Sağ üstteki küçük noktalar merkez bankası kararları: hem kazanma oranı hem net sonuç yüksek, ama her
-biri en çok 51 işlem. O kümede iki ölçünün birlikte yükselmesi birkaç iyi kararın ikisini birden yukarı
+o oran da tutmadı. Sağ üstteki küçük noktalar merkez bankası kararları: çoğunda kazanma oranı yüksek, net sonuç sıfırın
+çevresinde ya da üstünde, ama her biri en çok 51 işlem. O kümede iki ölçünün birlikte yükselmesi birkaç iyi kararın ikisini birden yukarı
 itmesi olabilir; ayrılmadı.
 
 Aritmetik açılışta en açık hâlindedir. Güçlü ilk mumun yarısına limitle girip yarım R hedefleyen tepkide kazanan işlem
@@ -153,54 +150,48 @@ yarım R'lik hedef gelir. Şema aynı dolumdan çıkan iki yolu yan yana koyar.
 <Diyagram no="M2" baslik="Güçlü açılış mumu: aynı dolum, iki yol" kaynak="Şema — gerçek veri değil" azami={480}>
 <svg viewBox="0 0 360 250" class="mum-sema" role="img" aria-label="Güçlü açılış mumu: aynı dolum, iki yol">
 <defs><marker id="ok-yarimr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
-<line x1="100.4" x2="236.0" y1="112.5" y2="112.5" class="ms-cizgi ms-limit" />
-<text x="244" y="116.5" class="ms-etiket ms-limit-yazi">limit: yarısı</text>
-<line x1="100.4" x2="236.0" y1="216.5" y2="216.5" class="ms-cizgi ms-stop" />
-<text x="244" y="220.5" class="ms-etiket ms-stop-yazi">stop</text>
-<line x1="145.6" x2="236.0" y1="60.5" y2="60.5" class="ms-cizgi ms-hedef" />
-<text x="244" y="64.5" class="ms-etiket ms-hedef-yazi">hedef: yarım R</text>
-<line x1="21.3" x2="21.3" y1="186.8" y2="208.0" class="ms-fitil ms-artis" />
-<rect x="14.3" y="195.3" width="14.0" height="4.2" class="ms-govde ms-artis" />
-<line x1="43.9" x2="43.9" y1="184.7" y2="203.8" class="ms-fitil ms-artis" />
-<rect x="36.9" y="191.1" width="14.0" height="4.2" class="ms-govde ms-artis" />
-<line x1="66.5" x2="66.5" y1="182.6" y2="201.7" class="ms-fitil ms-azalis" />
-<rect x="59.5" y="191.1" width="14.0" height="6.4" class="ms-govde ms-azalis" />
-<line x1="89.1" x2="89.1" y1="188.9" y2="205.9" class="ms-fitil ms-artis" />
-<rect x="82.1" y="193.2" width="14.0" height="4.2" class="ms-govde ms-artis" />
-<line x1="111.7" x2="111.7" y1="25.5" y2="199.6" class="ms-fitil ms-artis ms-vurgu" />
-<rect x="104.7" y="34.0" width="14.0" height="159.2" class="ms-govde ms-artis ms-vurgu" />
-<line x1="134.3" x2="134.3" y1="27.6" y2="67.9" class="ms-fitil ms-azalis" />
-<rect x="127.3" y="34.0" width="14.0" height="25.5" class="ms-govde ms-azalis" />
-<line x1="156.9" x2="156.9" y1="50.9" y2="116.8" class="ms-fitil ms-azalis" />
-<rect x="149.9" y="59.4" width="14.0" height="44.6" class="ms-govde ms-azalis" />
-<line x1="179.5" x2="179.5" y1="80.7" y2="110.4" class="ms-fitil ms-artis" />
-<rect x="172.5" y="84.9" width="14.0" height="19.1" class="ms-govde ms-artis" />
-<line x1="202.1" x2="202.1" y1="55.2" y2="91.3" class="ms-fitil ms-artis" />
-<rect x="195.1" y="59.4" width="14.0" height="25.5" class="ms-govde ms-artis" />
-<line x1="224.7" x2="224.7" y1="46.7" y2="72.2" class="ms-fitil ms-artis" />
-<rect x="217.7" y="53.1" width="14.0" height="6.4" class="ms-govde ms-artis" />
-<polyline points="156.9,112.5 179.5,148.6 202.1,195.3" class="ms-yol ms-yol-ters" marker-end="url(#ok-yarimr)" />
-<text x="208.1" y="199.3" class="ms-etiket ms-yol-yazi">ters yol</text>
-<circle cx="111.7" cy="8.5" r="8" class="ms-isaret" />
-<text x="111.7" y="12.1" class="ms-isaret-yazi">1</text>
-<circle cx="156.9" cy="133.7" r="8" class="ms-isaret" />
-<text x="156.9" y="137.3" class="ms-isaret-yazi">2</text>
-<circle cx="202.1" cy="38.2" r="8" class="ms-isaret" />
-<text x="202.1" y="41.8" class="ms-isaret-yazi">3</text>
+<line x1="100.4" x2="236.0" y1="108.8" y2="108.8" class="ms-cizgi ms-limit" />
+<text x="244" y="112.8" class="ms-etiket ms-limit-yazi">limit: yarısı</text>
+<line x1="100.4" x2="236.0" y1="208.4" y2="208.4" class="ms-cizgi ms-stop" />
+<text x="244" y="212.4" class="ms-etiket ms-stop-yazi">stop</text>
+<line x1="145.6" x2="236.0" y1="59.0" y2="59.0" class="ms-cizgi ms-hedef" />
+<text x="244" y="63.0" class="ms-etiket ms-hedef-yazi">hedef: yarım R</text>
+<line x1="21.3" x2="21.3" y1="179.9" y2="200.3" class="ms-fitil ms-artis" />
+<rect x="14.3" y="188.1" width="14.0" height="4.1" class="ms-govde ms-artis" />
+<line x1="43.9" x2="43.9" y1="177.9" y2="196.2" class="ms-fitil ms-artis" />
+<rect x="36.9" y="184.0" width="14.0" height="4.1" class="ms-govde ms-artis" />
+<line x1="66.5" x2="66.5" y1="175.9" y2="194.2" class="ms-fitil ms-azalis" />
+<rect x="59.5" y="184.0" width="14.0" height="6.1" class="ms-govde ms-azalis" />
+<line x1="89.1" x2="89.1" y1="182.0" y2="198.2" class="ms-fitil ms-artis" />
+<rect x="82.1" y="186.0" width="14.0" height="4.1" class="ms-govde ms-artis" />
+<line x1="111.7" x2="111.7" y1="25.5" y2="192.1" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="104.7" y="33.6" width="14.0" height="152.5" class="ms-govde ms-artis ms-vurgu" />
+<line x1="134.3" x2="134.3" y1="27.5" y2="66.1" class="ms-fitil ms-azalis" />
+<rect x="127.3" y="33.6" width="14.0" height="24.4" class="ms-govde ms-azalis" />
+<line x1="156.9" x2="156.9" y1="49.9" y2="112.9" class="ms-fitil ms-azalis" />
+<rect x="149.9" y="58.0" width="14.0" height="42.7" class="ms-govde ms-azalis" />
+<line x1="179.5" x2="179.5" y1="78.3" y2="106.8" class="ms-fitil ms-artis" />
+<rect x="172.5" y="82.4" width="14.0" height="18.3" class="ms-govde ms-artis" />
+<line x1="202.1" x2="202.1" y1="53.9" y2="88.5" class="ms-fitil ms-artis" />
+<rect x="195.1" y="58.0" width="14.0" height="24.4" class="ms-govde ms-artis" />
+<line x1="224.7" x2="224.7" y1="45.8" y2="70.2" class="ms-fitil ms-artis" />
+<rect x="217.7" y="51.9" width="14.0" height="6.1" class="ms-govde ms-artis" />
+<polyline points="156.9,108.8 179.5,143.4 202.1,216.5" class="ms-yol ms-yol-ters" marker-end="url(#ok-yarimr)" />
+<text x="208.1" y="220.5" class="ms-etiket ms-yol-yazi">ters yol</text>
+<circle cx="111.7" cy="9.2" r="8" class="ms-isaret" />
+<text x="111.7" y="12.8" class="ms-isaret-yazi">1</text>
+<circle cx="156.9" cy="129.1" r="8" class="ms-isaret" />
+<text x="156.9" y="132.7" class="ms-isaret-yazi">2</text>
+<circle cx="202.1" cy="37.7" r="8" class="ms-isaret" />
+<text x="202.1" y="41.3" class="ms-isaret-yazi">3</text>
 <text x="10" y="244" class="ms-eksen">zaman →</text>
 </svg>
 </Diyagram>
 
-- ① Güçlü açılış mumu ucuna yakın kapanır. Planın referans emri mumun yarısına konan bir limittir; stop öbür ucun biraz ötesindedir.
+- ① Güçlü açılış mumu ucuna yakın kapanır. Planın referans emri mumun yarısına konan bir limittir; stop öbür ucun mum boyunun onda biri ötesindedir.
 - ② Limit, fiyat yarıya döndüğünde dolar. Buradan iki yol çıkar ve ikisi de aynı dolumla başlar.
 - ③ Hedef girişten riskin yarısı kadar uzaktadır: kazanan gün yarım R getirir, kesikli ters yolun günü bir R götürür. Maliyetsiz bile üç işlemden ikisi kazanmalıdır.
 
-
-Kazanma oranı başa baş oranıyla birlikte okunur: ortalama kayıp, ortalama kazanç ile ortalama kaybın toplamına
-bölünür. Yarım R kazanıp bir R kaybeden kurulum maliyetsiz bile üç işlemden ikisini kazanmalıdır; maliyet kazancı
-küçültür, kaybı büyütür. Güçlü açılış mumunda kazanma oranı
-%61, gereken %68 (5. ders, Kazanma oranı
-ve net sonuç).
 
 <div class="senaryo" id="kart-yuksek-kazanma">
 <p class="senaryo-durum"><span class="etiket">Durum</span> Açılışta güçlü ilk mumdan sonra yarıya limit ve yarım R hedefle işlemlerin çoğunu kazanan bir kurulum</p>
@@ -210,9 +201,9 @@ ve net sonuç).
 <dt>Ne yaparsın</dt>
 <dd>Kazanma oranının yanına başa baş oranını yazarsın; ikisini maliyetten sonra, aynı işlemlerden hesaplarsın.</dd>
 <dt>Ne yapmazsın</dt>
-<dd>Kazanma oranı yüksek diye kurulumu kenar saymazsın; kaybeden günün stopunu genişletmezsin.</dd>
+<dd>Kazanma oranı yüksek ya da hedef yakın diye kurulumu kenar saymazsın; kaybeden günün stopunu genişletmezsin.</dd>
 <dt>Emir, stop, hedef</dt>
-<dd>Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun biraz ötesine; hedef yaklaştıkça gereken kazanma oranı da yükselir.</dd>
+<dd>Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun mum boyunun onda biri ötesine, emrin ömrü bir saat; hedef yaklaştıkça gereken kazanma oranı da yükselir.</dd>
 <dt>Dayanak</dt>
 <dd>5. ders, Kazanma oranı ve net sonuç; 1. ders, Kazanma oranı ile net sonuç</dd>
 </dl>
@@ -220,17 +211,15 @@ ve net sonuç).
 </div>
 
 
-Bu durumda yapmazsın: hedefi yaklaştırıp kazanma oranını yükseltmeyi iyileştirme saymazsın, başa baş oranı da onunla
-yükselir; birkaç günlük kazanç serisini kenarın kanıtı saymazsın.
-
 <GrafikEmbed src="/arastirma/fx-oyun-backtest/m_acilis-yari.html" baslik="Londra açılışında güçlü ilk mum: limit iki gün de doldu" no="M3" kaynak="Dukascopy" />
 
 
-İki gün ③ işaretine kadar aynıdır: ① ucuna yakın kapanan Londra açılış mumu, ② yarısı, ③ fiyatın yarıya dokunup
-limitin dolduğu an. Üstteki günde fiyat yarıdan mumun kendi ucuna yürür ve yarım R'lik hedef yolda kalır; alttaki
-günde öbür ucu kırar ve ④ işaretinde (izleme penceresinin sonu) mumun yönünün tersindedir. Dolum anında iki günü
-ayıran bir işaret yoktur, çünkü açılış mumu yön bilgisi taşımıyor (1. ders, Şans ne verirdi: yolun aynası); karar
-ancak sonradan "belli" görünür. Tek bir gün kuralı ne doğrular ne yanlışlar.
+İki gün dolum anına kadar benzerdir: ① ucuna yakın kapanan güçlü bir Londra açılış mumu (üstteki aşağı, alttaki
+yukarı), ② yarısı. İkisinde de fiyat önce mumun ucunu birkaç pip aşar, sonra yarıya döner ve limit dolar (③; TSİ
+10:31 ve 10:40). Üstteki günde yarım R'lik hedef TSİ 10:50 mumunda gelir, fiyat 11:05'te mumun dibini aşar ve ④'te
+(izleme penceresinin sonu, TSİ 13:15) dibin mum boyunun bir buçuk katı altındadır. Alttaki günde dolumdan on dakika
+sonra öbür uç ve stop birlikte kırılır (TSİ 10:50); ④'te fiyat mumun tersindedir. Dolum anında iki günü ayıran işaret
+yoktur (1. ders, Şans ne verirdi: yolun aynası).
 
 ## Referans tepkiler
 
@@ -284,54 +273,55 @@ Her tepkinin maliyetsiz (aynı kurallar orta fiyatla, makas ve kayma olmadan) ve
 
 Maliyet grafikte mum olarak görünmez, dolum fiyatı ile orta fiyatın farkında durur. Emir anındaki makası ve
 planlanan riski (girişten stopa) pip olarak okur, birini ötekine bölersin: bölüm işlemin R cinsinden maliyetidir.
-Piyasa ve stop emirleri bunun üstüne kayma öder; açıklamadan iki dakika önce ile on beş dakika sonrası arasında kayma
-daha büyüktür (1. ders, Kazanma oranı ile net sonuç).
+Piyasa ve stop emirleri bunun üstüne kayma öder; sınamada açıklamadan iki dakika önce ile on beş dakika sonrası
+arasında bu emirlere ek 1,0 pip kayma varsayıldı, haber anındaki makas ayrıca ölçülmedi (1. ders,
+Kazanma oranı ile net sonuç).
 
 <Diyagram no="M4" baslik="Aynı makas, iki stop: maliyet R cinsinden stopa bölünür" kaynak="Şema — gerçek veri değil" azami={480}>
 <svg viewBox="0 0 360 260" class="mum-sema" role="img" aria-label="Aynı makas, iki stop: maliyet R cinsinden stopa bölünür">
 <defs><marker id="ok-makasstop" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="ms-ok-ucu" /></marker></defs>
-<rect x="100.4" y="192.0" width="45.2" height="8.0" class="ms-bolge ms-yasak" />
-<text x="244" y="200.0" class="ms-etiket ms-yasak-yazi">makas ve kayma</text>
-<rect x="213.4" y="30.0" width="22.6" height="8.0" class="ms-bolge ms-yasak" />
-<text x="244" y="38.0" class="ms-etiket ms-yasak-yazi">aynı makas</text>
-<line x1="77.8" x2="145.6" y1="226.0" y2="226.0" class="ms-cizgi ms-stop" />
-<text x="244" y="230.0" class="ms-etiket ms-stop-yazi">stop</text>
-<line x1="190.8" x2="236.0" y1="216.0" y2="216.0" class="ms-cizgi ms-stop" />
-<line x1="21.3" x2="21.3" y1="210.0" y2="224.0" class="ms-fitil ms-artis" />
-<rect x="14.3" y="216.0" width="14.0" height="2.0" class="ms-govde ms-artis" />
-<line x1="43.9" x2="43.9" y1="208.0" y2="222.0" class="ms-fitil ms-artis" />
-<rect x="36.9" y="214.0" width="14.0" height="2.0" class="ms-govde ms-artis" />
-<line x1="66.5" x2="66.5" y1="208.0" y2="220.0" class="ms-fitil ms-azalis" />
-<rect x="59.5" y="214.0" width="14.0" height="4.0" class="ms-govde ms-azalis" />
-<line x1="89.1" x2="89.1" y1="200.0" y2="224.0" class="ms-fitil ms-artis ms-vurgu" />
-<rect x="82.1" y="202.0" width="14.0" height="16.0" class="ms-govde ms-artis ms-vurgu" />
-<line x1="111.7" x2="111.7" y1="186.0" y2="206.0" class="ms-fitil ms-artis" />
-<rect x="104.7" y="190.0" width="14.0" height="12.0" class="ms-govde ms-artis" />
-<line x1="134.3" x2="134.3" y1="182.0" y2="200.0" class="ms-fitil ms-azalis" />
-<rect x="127.3" y="190.0" width="14.0" height="4.0" class="ms-govde ms-azalis" />
-<line x1="156.9" x2="156.9" y1="188.0" y2="202.0" class="ms-fitil ms-azalis" />
-<rect x="149.9" y="194.0" width="14.0" height="4.0" class="ms-govde ms-azalis" />
-<line x1="179.5" x2="179.5" y1="192.0" y2="204.0" class="ms-fitil ms-artis" />
-<rect x="172.5" y="196.0" width="14.0" height="2.0" class="ms-govde ms-artis" />
-<line x1="202.1" x2="202.1" y1="28.0" y2="200.0" class="ms-fitil ms-artis ms-vurgu" />
-<rect x="195.1" y="38.0" width="14.0" height="158.0" class="ms-govde ms-artis ms-vurgu" />
-<line x1="224.7" x2="224.7" y1="26.0" y2="70.0" class="ms-fitil ms-azalis" />
-<rect x="217.7" y="38.0" width="14.0" height="22.0" class="ms-govde ms-azalis" />
-<circle cx="89.1" cy="180.0" r="8" class="ms-isaret" />
-<text x="89.1" y="183.6" class="ms-isaret-yazi">1</text>
-<circle cx="202.1" cy="10.0" r="8" class="ms-isaret" />
-<text x="202.1" y="13.6" class="ms-isaret-yazi">2</text>
+<rect x="100.4" y="203.8" width="45.2" height="8.1" class="ms-bolge ms-yasak" />
+<text x="244" y="211.8" class="ms-etiket ms-yasak-yazi">makas ve kayma</text>
+<rect x="213.4" y="30.0" width="22.6" height="8.1" class="ms-bolge ms-yasak" />
+<text x="244" y="38.1" class="ms-etiket ms-yasak-yazi">aynı makas</text>
+<line x1="77.8" x2="145.6" y1="224.0" y2="224.0" class="ms-cizgi ms-stop" />
+<text x="244" y="228.0" class="ms-etiket ms-stop-yazi">stop</text>
+<line x1="190.8" x2="236.0" y1="217.9" y2="217.9" class="ms-cizgi ms-stop" />
+<line x1="21.3" x2="21.3" y1="211.9" y2="226.0" class="ms-fitil ms-artis" />
+<rect x="14.3" y="217.9" width="14.0" height="2.0" class="ms-govde ms-artis" />
+<line x1="43.9" x2="43.9" y1="209.8" y2="224.0" class="ms-fitil ms-artis" />
+<rect x="36.9" y="215.9" width="14.0" height="2.0" class="ms-govde ms-artis" />
+<line x1="66.5" x2="66.5" y1="209.8" y2="222.0" class="ms-fitil ms-azalis" />
+<rect x="59.5" y="215.9" width="14.0" height="4.0" class="ms-govde ms-azalis" />
+<line x1="89.1" x2="89.1" y1="211.9" y2="222.0" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="82.1" y="213.9" width="14.0" height="6.1" class="ms-govde ms-artis ms-vurgu" />
+<line x1="111.7" x2="111.7" y1="187.6" y2="215.9" class="ms-fitil ms-artis" />
+<rect x="104.7" y="191.7" width="14.0" height="22.2" class="ms-govde ms-artis" />
+<line x1="134.3" x2="134.3" y1="183.6" y2="201.8" class="ms-fitil ms-azalis" />
+<rect x="127.3" y="191.7" width="14.0" height="4.0" class="ms-govde ms-azalis" />
+<line x1="156.9" x2="156.9" y1="189.6" y2="203.8" class="ms-fitil ms-azalis" />
+<rect x="149.9" y="195.7" width="14.0" height="4.0" class="ms-govde ms-azalis" />
+<line x1="179.5" x2="179.5" y1="193.7" y2="205.8" class="ms-fitil ms-artis" />
+<rect x="172.5" y="197.7" width="14.0" height="2.0" class="ms-govde ms-artis" />
+<line x1="202.1" x2="202.1" y1="28.0" y2="201.8" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="195.1" y="38.1" width="14.0" height="159.6" class="ms-govde ms-artis ms-vurgu" />
+<line x1="224.7" x2="224.7" y1="26.0" y2="70.4" class="ms-fitil ms-azalis" />
+<rect x="217.7" y="38.1" width="14.0" height="22.2" class="ms-govde ms-azalis" />
+<circle cx="89.1" cy="203.8" r="8" class="ms-isaret" />
+<text x="89.1" y="207.4" class="ms-isaret-yazi">1</text>
+<circle cx="202.1" cy="9.8" r="8" class="ms-isaret" />
+<text x="202.1" y="13.4" class="ms-isaret-yazi">2</text>
 <text x="10" y="254" class="ms-eksen">zaman →</text>
 </svg>
 </Diyagram>
 
-- ① Küçük ilk mum: kırılan uçtan giriş, stop öbür ucun biraz ötesinde. Gölgeli bant makas ve kaymadır ve riskin görünür bir parçasıdır.
+- ① Küçük ilk mum: iki uca birer stop emri, biri dolunca öbürü iptal; burada üst uç kırıldı, koruyucu stop öbür ucun biraz ötesinde. Gölgeli bant makas ve kaymadır ve riskin görünür bir parçasıdır.
 - ② Geniş stoplu büyük mum: aynı makas riskin küçük bir parçasıdır. Maliyet stop uzaklığına bölünür; uzak stop payı küçültür, kenar yaratmaz.
 
 
 Her işlemin yanına ikinci bir sonuç yazarsın: aynı işlem, alış ile satışın ortasından, makassız ve kaymasız. Fark
-ödediğin maliyettir; maliyetsiz sonuç sıfırın çevresindeyse kenar yoktur ve emri ucuzlatmak onu yaratmaz (8. ders, Bu
-sonuç nasıl okunmalı).
+ödediğin maliyettir; maliyetsiz sonuç sıfırın çevresindeyse kenar yoktur ve emri ucuzlatmak onu yaratmaz (büyük mumda
+ölçüldü: 8. ders, Bu sonuç nasıl okunmalı).
 
 <div class="senaryo" id="kart-kucuk-stop">
 <p class="senaryo-durum"><span class="etiket">Durum</span> Sessiz bir açılışta ya da sessiz bir fiksingte küçük ilk mumun bir ucu kırılıyor</p>
@@ -341,18 +331,15 @@ sonuç nasıl okunmalı).
 <dt>Ne yaparsın</dt>
 <dd>Makası planlanan riske bölersin; bölüm işlemin R cinsinden maliyetidir. Sonucu orta fiyattan da yazarsın.</dd>
 <dt>Ne yapmazsın</dt>
-<dd>Kırılıma girip maliyeti birkaç pip diye geçmezsin.</dd>
+<dd>Maliyeti birkaç pip diye geçmezsin; &quot;sıkışma patlar&quot; diye kırılımı kenar saymazsın: maliyetten önce sıfıra yakın, sonra eksi.</dd>
 <dt>Emir, stop, hedef</dt>
-<dd>Başka bir gerekçeyle gireceksen stop emri kırılan uca, koruyucu stop öbür ucun biraz ötesine; stop emri kayma da öder. Bir açıklama yaklaşıyorsa emri pencereden önce çekersin.</dd>
+<dd>Başka bir gerekçeyle gireceksen sınanan biçim iki uca birer stop emridir, biri dolunca öbürü iptal; koruyucu stop öbür ucun mum boyunun onda biri ötesinde. Süresine bir açıklamanın penceresi düşüyorsa emri açıklamadan önce çekersin (disiplin kuralı; ölçülmedi).</dd>
 <dt>Dayanak</dt>
 <dd>5. ders, Maliyet nereye gidiyor; 8. ders, Stop uzaklığı ve maliyet; 8. ders, Ucun kırılması</dd>
 </dl>
 <p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: ölçüm bu durumda maliyetten sonra artı bir işlem bulmadı. Kural, başka bir gerekçeyle masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
 </div>
 
-
-Bu durumda yapmazsın: maliyeti "birkaç pip" diye riskten ayrı okumazsın; stopu maliyet küçülsün diye uzaklaştırıp
-bunu kenar saymazsın, uzak stop payı küçültür ama yön bilgisini değiştirmez (8. ders, Stop uzaklığı ve maliyet).
 
 ## İşlem tepkileri
 
@@ -428,36 +415,28 @@ dakika ucuna yakın kapanır, dört paritede birden aynı yöne bakar.
 </svg>
 </Diyagram>
 
-- ① Güçlü karar mumu ucuna yakın kapanır. Adayın emri kapanışta mumun yönündedir; stop öbür ucun ötesindedir ve uzaktır.
+- ① Güçlü karar mumu ucuna yakın kapanır. Adayın emri kapanışta mumun yönündedir; stop öbür ucun mum boyunun onda biri ötesindedir ve mum büyük olduğu için uzaktır.
 - ② Hedef yarım R. Bu aday görülmemiş dönemde artıda kaldı ama birkaç karar gününe dayanıyor; hüküm kurulmadı.
-- ③ Haber penceresi: makas açılır, piyasa emri ek kayma öder. Aynı karar dört paritede tek bir olaydır.
+- ③ Haber penceresi: sınamada piyasa emrine ek kayma varsayıldı, makasın büyüklüğü ölçülmedi. Aynı karar dört paritede tek bir olaydır.
 
-
-Bu satırı kural değil aday olarak tutarsın: işlemler 7 karar gününe düşüyor ve hüküm
-kuralı 20 işlemin altında hüküm kurmaz. Aynı kararın dört paritedeki işlemi tek bir olayın dört
-kopyasıdır; sayacı karar günü olarak tutarsın (5. ders, İşlem tepkileri).
 
 <div class="senaryo" id="kart-karar-aday">
 <p class="senaryo-durum"><span class="etiket">Durum</span> FOMC kararında (New York 14:00, TSİ 21:00; ABD kış saatinde 22:00) ilk beş dakika güçlü bir mumla kapanıyor</p>
 <dl>
 <dt>Ne görürsün</dt>
-<dd>Ucuna yakın kapanan büyük bir mum, dört paritede aynı yönde; makas ilk dakikalarda açık.</dd>
+<dd>Ucuna yakın kapanan büyük bir mum, dört paritede aynı yönde; mum açıklamanın haber penceresinin içinde kapanır.</dd>
 <dt>Ne yaparsın</dt>
-<dd>Adayın satırını olay kimliğiyle deftere yazarsın; sayaç karar günü sayar.</dd>
+<dd>İşlem açmadan basın toplantısını izler, adayın satırını olay kimliğiyle deftere yazarsın; sayaç karar günü sayar.</dd>
 <dt>Ne yapmazsın</dt>
-<dd>Adayı sınanmış bir kural sayıp riskle kurmazsın; dört paritenin işlemini dört bağımsız sonuç saymazsın.</dd>
+<dd>Adayı kural sayıp riskle kurmazsın; dört paritenin işlemini dört bağımsız sonuç saymazsın; kararı beklerken adayın stopunu, hedefini ya da giriş anını değiştirmezsin.</dd>
 <dt>Emir, stop, hedef</dt>
-<dd>Başka bir gerekçeyle gireceksen emir kapanışta mumun yönünde piyasa emridir; stop öbür ucun ötesinde ve uzak, kayma büyük.</dd>
+<dd>Başka bir gerekçeyle gireceksen kapanışta mumun yönünde piyasa emri, stop öbür ucun mum boyunun onda biri ötesinde (mum büyük, stop uzak), hedef yarım R; haber penceresindeki ek kayma bir varsayımdır, makas ölçülmedi.</dd>
 <dt>Dayanak</dt>
 <dd>5. ders, İşlem tepkileri; 4. ders, Merkez bankası kararları</dd>
 </dl>
 <p class="senaryo-not">Bu bir okuma kuralıdır, kenar değil: bu durumda 2024 sonrasında artı sonuç ölçüldü, ama az sayıda olaya dayanıyor ve hüküm &quot;çalışıyor&quot; değil. Kural, masadaysan neyi yapmayacağını ve emri nereye koyacağını söyler.</p>
 </div>
 
-
-Bu durumda yapmazsın: bir sonraki kararı beklerken adayın stopunu, hedefini ya da giriş anını değiştirmezsin; ilk
-mumu basın toplantısının da söylediği şey saymazsın, çünkü toplantının ayrı etkisi ölçülmedi (4. ders, Merkez bankası
-kararları).
 
 ## İzle, işlem açma
 
@@ -497,16 +476,16 @@ etkileneceğini bilmek kalır. Fiksing en açık örnektir: davranış gerçek, 
 <line x1="112.7" x2="236.0" y1="144.3" y2="144.3" class="ms-cizgi ms-seviye" />
 <text x="244" y="148.3" class="ms-etiket ms-seviye-yazi">koşunun yarısı</text>
 <line x1="112.7" x2="153.8" y1="72.1" y2="72.1" class="ms-cizgi ms-uc" />
-<line x1="20.3" x2="20.3" y1="197.9" y2="216.5" class="ms-fitil ms-artis" />
-<rect x="13.9" y="200.2" width="12.7" height="11.7" class="ms-govde ms-artis" />
-<line x1="40.8" x2="40.8" y1="174.6" y2="204.9" class="ms-fitil ms-artis" />
-<rect x="34.4" y="179.3" width="12.7" height="21.0" class="ms-govde ms-artis" />
-<line x1="61.4" x2="61.4" y1="153.6" y2="183.9" class="ms-fitil ms-artis" />
-<rect x="55.0" y="158.3" width="12.7" height="21.0" class="ms-govde ms-artis" />
-<line x1="81.9" x2="81.9" y1="128.0" y2="162.9" class="ms-fitil ms-artis" />
-<rect x="75.5" y="132.7" width="12.7" height="25.6" class="ms-govde ms-artis" />
-<line x1="102.5" x2="102.5" y1="100.0" y2="137.3" class="ms-fitil ms-artis" />
-<rect x="96.1" y="104.7" width="12.7" height="28.0" class="ms-govde ms-artis" />
+<line x1="20.3" x2="20.3" y1="197.9" y2="216.5" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="13.9" y="200.2" width="12.7" height="11.7" class="ms-govde ms-artis ms-vurgu" />
+<line x1="40.8" x2="40.8" y1="174.6" y2="204.9" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="34.4" y="179.3" width="12.7" height="21.0" class="ms-govde ms-artis ms-vurgu" />
+<line x1="61.4" x2="61.4" y1="153.6" y2="183.9" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="55.0" y="158.3" width="12.7" height="21.0" class="ms-govde ms-artis ms-vurgu" />
+<line x1="81.9" x2="81.9" y1="128.0" y2="162.9" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="75.5" y="132.7" width="12.7" height="25.6" class="ms-govde ms-artis ms-vurgu" />
+<line x1="102.5" x2="102.5" y1="100.0" y2="137.3" class="ms-fitil ms-artis ms-vurgu" />
+<rect x="96.1" y="104.7" width="12.7" height="28.0" class="ms-govde ms-artis ms-vurgu" />
 <line x1="123.0" x2="123.0" y1="72.1" y2="109.3" class="ms-fitil ms-artis ms-vurgu" />
 <rect x="116.6" y="76.7" width="12.7" height="28.0" class="ms-govde ms-artis ms-vurgu" />
 <line x1="143.5" x2="143.5" y1="74.4" y2="109.3" class="ms-fitil ms-azalis" />
@@ -539,9 +518,9 @@ etkileneceğini bilmek kalır. Fiksing en açık örnektir: davranış gerçek, 
 <dt>Ne yaparsın</dt>
 <dd>Ucu ve yarıyı işaretler, fiksingden sonraki bir saatte yarıya dönüşe bakarsın; ay sonunda koşu daha da az sürer.</dd>
 <dt>Ne yapmazsın</dt>
-<dd>Fiksingden sonra koşunun yönünde girmezsin; geri vermeyi piyasa emriyle koşunun tersine işlemezsin.</dd>
+<dd>Fiksingden sonra koşunun yönünde girmezsin; geri vermeyi piyasa emriyle tersine işlemezsin; &quot;izle&quot; satırı işleme dönsün diye kuralı ayarlamazsın.</dd>
 <dt>Emir, stop, hedef</dt>
-<dd>Koşunun yönünde açık pozisyonun varsa fiksingden sonraki sürmeye dayanmazsın. Tersine gireceksen emir piyasa emridir, stop koşunun ucunun ötesinde, hedef yarısı; maliyet geri vermeden büyüktür.</dd>
+<dd>Koşunun yönünde açık pozisyonun varsa fiksingden sonraki sürmeye dayanmazsın. Tersine gireceksen fiksingde piyasa emri, stop koşunun ucunun koşu boyunun onda biri ötesinde, hedef koşunun yarısı; maliyet geri vermeden büyüktür ve stopu daraltmak onu R cinsinden büyütür.</dd>
 <dt>Dayanak</dt>
 <dd>3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Ay sonu; 5. ders, İzle, işlem açma</dd>
 </dl>
@@ -549,18 +528,14 @@ etkileneceğini bilmek kalır. Fiksing en açık örnektir: davranış gerçek, 
 </div>
 
 
-Bu durumda yapmazsın: geri vermeyi maliyetini bilmeden işlemezsin, küçük kenar makas ve kaymadan küçüktür (5. ders,
-Maliyet nereye gidiyor); "izle" satırının bir gün işleme döneceğini umup kuralı her gün yeniden ayarlamazsın.
-
-<GrafikEmbed src="/arastirma/fx-oyun-backtest/m_wmr-kosu.html" baslik="Londra fiksingine normal koşu: biri geri verdi, biri sürdü" no="M7" kaynak="Dukascopy" />
+<GrafikEmbed src="/arastirma/fx-oyun-backtest/m_wmr-kosu.html" baslik="Londra fiksingine normal koşu: biri geri çekildi, biri sürdü" no="M7" kaynak="Dukascopy" />
 
 
-İki günde de ① Londra fiksingine giden otuz dakikalık koşudur ve fiksinge kadar birbirine benzer; ② koşunun
-yarısıdır. Üstteki günde fiyat koşuyu geri verir, ③ işaretinde yarıya dokunur ve ④ işaretinde (izleme penceresinin
-sonu) fiksingdeki seviyenin gerisindedir. Alttaki günde fiyat koşunun yönünde yürümeye devam eder, ③ hiç oluşmaz ve
-④ işaretinde fiksingdeki seviyenin ötesindedir. Emrin konabileceği tek anda, fiksingde, iki gün ayırt edilemez. Geri
-verme şanstan sık geldiği için üstteki gün daha sık görülür (3. ders, Sınıf sınıf, şansın payıyla), ama sıklık farkı
-maliyeti karşılamaz; tek bir gün kuralı ne doğrular ne yanlışlar.
+İki günde de ① Londra fiksingine (Londra 16:00; TSİ İngiltere kış saatinde 19:00) giden, ucuna yakın kapanan normal
+bir koşu, ② yarısı. Üstteki günde fiyat dokuz dakika sonra yarıya dokunur (③), ucu bir daha aşamaz ve koşunun başına
+doğru iner; ④'te (izleme penceresinin sonu, TSİ 20:00) koşunun çoğu geri alınmıştır. Alttaki günde fiyat ilk beş
+dakikada ucu aşar, yarıya hiç inmez ve ④'te ucun neredeyse bir koşu boyu ötesindedir. Fiksingde iki gün ayırt
+edilemez; üstteki tür daha sık gelir (3. ders, Sınıf sınıf, şansın payıyla), ama sıklık farkı maliyeti karşılamaz.
 
 ## Günün haritası
 
@@ -574,16 +549,16 @@ saatinde.
 | 10:00 (11:00) | Londra açılışı | Normal mumda birkaç dakika içinde yarısına dönüş | Yarıya dönüşü bir giriş sinyali saymak |
 | 14:00 (15:00) | BoE kararı | Tutanak kararla birlikte gelir; olay az | İlk mumdan hüküm kurmak |
 | 15:15 (16:15) | ECB kararı | Basın toplantısı yarım saat sonra | İlk mumu son söz saymak |
-| 15:30 (16:30) | ABD verisi | İlk mumun itişi şanstan seyrek sürer | Veri mumunun yönünde kalmak |
+| 15:30 (16:30) | ABD verisi | Normal ve reddedilen mumun itişi şanstan seyrek sürer | Veri mumunun yönünde kalmak |
 | 16:30 (17:30) | New York açılışı | Açılışlardaki gibi: aralık, yön değil | Sessiz açılışın kırılımına girmek |
 | 18:00 (19:00) | Londra fiksingi | Koşunun bir kısmı geri verilir; ay sonunda koşu daha da az sürer | Fiksingden sonra koşuyu kovalamak; geri vermeyi maliyetle işlemek |
 | 21:00 (22:00) | FOMC kararı | Güçlü ya da reddedilen mumun yönü 2024 sonrasında sürdü; birkaç karar günü | Sınanmamış bir adayı kural saymak |
 
 ### Masada: Tokyo'dan New York kapanışına bir işlem günü
 
-Tablo günün okumalarını verir; masada aynı gün saat saat yaşanır. Planın hiçbir anı işlem önermediği için gün
-işaretlemek, beklemek ve yazmaktan oluşur; masadan kalkmak günün meşru bir parçasıdır (5. ders, İzle, işlem açma).
-Şemada sütunların genişliği süreyi değil sırayı gösterir.
+Tablo günün okumalarını verir; masada aynı gün saat saat yaşanır. Açılış ve fiksinglerde plan işlem önermez; haber
+anlarındaki 5 işlem tepkisinin hiçbiri 2024 sonrasında "çalışıyor" hükmü almadı. Gün bu yüzden
+çoğunlukla işaretlemek, beklemek ve yazmaktan oluşur. Şemada sütunların genişliği süreyi değil sırayı gösterir.
 
 <Diyagram no="M8" baslik="Bir işlem günü: izlenen anlar, haber pencereleri, masadan kalkılan saatler" kaynak="Şema — gerçek veri değil" azami={480}>
 <svg viewBox="0 0 360 290" class="mum-sema" role="img" aria-label="Bir işlem günü: izlenen anlar, haber pencereleri, masadan kalkılan saatler">
@@ -646,71 +621,48 @@ işaretlemek, beklemek ve yazmaktan oluşur; masadan kalkmak günün meşru bir 
 
 - ① Tokyo açılışı ve fiksingi (TSİ 03:00 ve 03:55): işaretlenir, işlem yok.
 - ② Londra açılışı (TSİ 10:00; İngiltere kış saatinde 11:00): sınıf yazılır, plan izler.
-- ③ BoE, ECB, ABD verisi (TSİ 14:00 · 15:15 · 15:30; İngiltere, Avrupa ve ABD kış saatinde birer saat geç): haber penceresinde makas açılır.
+- ③ BoE, ECB, ABD verisi (TSİ 14:00 · 15:15 · 15:30; İngiltere, Avrupa ve ABD kış saatinde birer saat geç): penceresine düşen bekleyen emri açıklamadan önce çekersin.
 - ④ New York açılışı (TSİ 16:30; ABD kış saatinde 17:30): kırılım sinyal değil.
 - ⑤ Londra fiksingi (TSİ 18:00; İngiltere kış saatinde 19:00): koşu kovalanmaz.
-- ⑥ FOMC kararı (TSİ 21:00; ABD kış saatinde 22:00): aday deftere yazılır.
+- ⑥ FOMC kararı (TSİ 21:00; ABD kış saatinde 22:00): işlem açmadan basın toplantısını izler, adayı deftere yazarsın.
 - ⑦ New York kapanışı (TSİ 00:00; ABD kış saatinde 01:00): defter kapanır.
 
 
-- **TSİ 03:00 — Tokyo açılışı (Tokyo 09:00).** Soru: ilk 15 dakikanın
-  aralığı nerede? Uçları işaretlersin, güçlü mumu kovalamazsın (2. ders, Güçlü ilk mum).
-- **TSİ 03:55 — Tokyo fiksingi (Tokyo 09:55).** Soru: fiksinge koşu var mı? Varsa ucunu ve
-  yarısını işaretlersin; fiksingden sonraki bir saat dolunca masadan kalkarsın (1. ders, İncelenen on an).
-- **TSİ 10:00 (İngiltere kış saatinde 11:00) — Londra açılışı
-  (Londra 08:00).** Soru: ilk mum hangi sınıfta? Sınıfı sonucu görmeden deftere yazarsın; normal mumda yarıya dönüş
-  bir sinyal değildir (2. ders, Normal ve reddedilen ilk mum). İzlenen üç saat bitince, öğleden sonra açıklama yoksa
-  masadan kalkarsın.
-- **TSİ 14:00, 15:15, 15:30 (İngiltere, Avrupa ve ABD kış saatinde birer
-  saat geç) — BoE (Londra 12:00), ECB (Frankfurt 14:15), ABD verileri (New York 08:30).** Soru: açıklamanın
-  penceresinde açık emrim var mı? Emirleri pencereden önce gözden geçirirsin; verinin ilk beş dakikasının yönünü
-  sonraki iki saatin yönü saymazsın (4. ders, ABD verileri).
-- **TSİ 16:30 (ABD kış saatinde 17:30) — New York açılışı (New York
-  09:30).** Soru: açılış sessiz mi? Sessiz açılışın kırılımına girmezsin (2. ders, Küçük ilk mum).
-- **TSİ 18:00 (İngiltere kış saatinde 19:00) — Londra fiksingi (Londra 16:00).** Soru:
-  ayın son Londra iş günü mü? Ay sonunda güçlü koşu fiksingden sonra öbür günlerden de az sürer (3. ders, Ay sonu).
-  Fiksingden sonraki bir saat dolunca, karar günü değilse günün masası biter.
-- **TSİ 21:00 (ABD kış saatinde 22:00) — FOMC kararı (New York 14:00), yalnız karar
-  günlerinde.** Soru: ilk mum hangi sınıfta? Adayın satırını deftere yazarsın, adayı kural saymazsın (5. ders, İşlem
-  tepkileri).
-- **TSİ 00:00 (ABD kış saatinde 01:00) — New York kapanışı (New York 17:00).** Soru: günün satırları dolu mu? Dolmayan
-  limitleri ve "izle" satırlarında alınmayan işlemleri de yazarsın; defter kapanır.
+Anların okuması yukarıdaki tablodadır. Şemadaki masadan kalkma saatleri ölçü pencerelerinin sonudur (masa
+uygulaması; ölçülmedi): Tokyo fiksinginden bir saat sonra (TSİ 04:55), Londra açılışının üç saati bitince, öğleden
+sonra açıklama yoksa (TSİ 13:15; İngiltere kış saatinde 14:15), Londra fiksinginden bir saat sonra, karar günü
+değilse (TSİ 19:00; İngiltere kış saatinde 20:00). Bekleyen bir emrin süresine takvimdeki bir açıklamanın penceresi
+(iki dakika önce – on beş dakika sonra) düşüyorsa emri açıklamadan önce çekersin; bu bir disiplin kuralıdır, ölçüm
+sonucu değil. FOMC günlerinde işlem açmadan basın toplantısını izler, adayı deftere yazarsın (4. ders, Merkez
+bankası kararları). New York kapanışında (New York 17:00; TSİ 00:00, ABD kış saatinde 01:00) dolmayan limitleri ve
+"izle" satırlarında alınmayan işlemleri de yazarsın; defter kapanır.
 
 ## Bir kuralı sınanmadan kullanmamak
 
 Bu dersin yöntemi masada bir kurala uygulanabilecek dürüst yöntemdir ve sırası değişmez (1. ders, Bu planın dürüstlük
 kuralları; 5. ders, Tepki nedir, nasıl seçildi).
 
-1. **Kuralı sonuçtan önce yazarsın:** an, ilk mum sınıfı, emir türü, giriş, stop, hedef, süre ve hüküm eşiği. Sonradan
-   doldurulan bir alan kuralı sınanmamış yapar.
-2. **Bulunduğu dönemin sonucunu kanıt saymazsın.** Bu derste her işlem tepkisi 2018–2023'te artıda olduğu için
-   seçildi; o artı seçimin kendisidir.
-3. **Görülmemiş dönemde kuralı değiştirmezsin.** Değişen stop ya da hedef yeni bir kuraldır; sayaç sıfırdan başlar.
-4. **Sayacı olay olarak tutarsın.** Aynı kararın dört paritedeki işlemi tek bir olaydır (5. ders, İşlem tepkileri).
+1. **Kuralı sonuçtan önce yazarsın:** an, ilk mum sınıfı, emir türü, giriş, stop, hedef, süre ve hüküm eşiği.
+2. **Bulunduğu dönemin sonucunu kanıt saymazsın:** işlem tepkileri 2018–2023'te artıda oldukları için seçildi.
+3. **Görülmemiş dönemde kuralı değiştirmezsin:** değişen stop ya da hedef yeni bir kuraldır, sayaç sıfırdan başlar.
+4. **Sayacı olay olarak tutarsın:** aynı kararın dört paritedeki işlemi tek bir olaydır.
 5. **Hükmü önceden yazılmış kuralla verirsin:** 20 işlemin altında hüküm yok; aralık tümüyle sıfırın
-   üstündeyse "çalışıyor", ortalama artı ama aralık sıfırı kapsıyorsa "zayıf", ortalama eksiyse "çalışmıyor".
+   üstündeyse "çalışıyor", ortalama artı ama aralık sıfırı kapsıyorsa "zayıf", eksiyse "çalışmıyor".
 
 Bedeli zamandır: yılda birkaç kez gelen bir an hüküm eşiğine yıllar sonra varır ve sonuç eksi de çıkabilir.
 
 ## Emri nereye koyarsın
 
-Başka bir gerekçeyle bu anlardan birinde işleme girecek biri için planın tepkileri bir emir haritasıdır; hiçbiri
-maliyetten sonra kazandırmadı (8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet).
+Emrin genel kuralları 1. derstedir (1. ders, Emri nereye koyarsın). Sınanan emir biçimleri iki tepki tablosunun
+Tepki sütunundadır ve hiçbiri 2024 sonrasında "çalışıyor" hükmü almadı: açılış ve fiksingde hepsi eksi, merkez
+bankasının artı satırları birkaç karar gününe dayanıyor. Bu derse özgü olanlar:
 
-- **Güçlü, normal ve reddedilen ilk mumda limit.** Limit mumun yarısına, mumun yönünde; stop öbür ucun mum boyunun
-  onda biri kadar ötesinde; hedef yarım R. Limit girişte makas ve kayma ödemez, çıkışta öder, ve yalnız fiyat aleyhine
-  yürüdüğünde dolar: dolduysa mumun yönündeki okumanın o gün zayıfladığını bilirsin.
-- **Küçük ilk mumda stop emri.** Kırılan uca konan stop emri kaymayı da öder ve fiyatın zaten yürüdüğü yerden alır (8.
-  ders, Ucun kırılması); koruyucu stop yakın olduğu için maliyetin R'deki payı büyüktür.
-- **Fiksingde ve karar mumunda piyasa emri.** Fiksingde koşunun tersine, stop koşunun ucunun ötesinde, hedef koşunun
-  yarısı; karar mumunda kapanışta mumun yönünde, stop öbür ucun ötesinde ve uzak. İkisi de makası ve kaymayı girişte
-  öder. Geri vermeyi limitle almak bu derste ölçülmedi.
-- **Onay beklemek.** Bir mum daha beklemek girişi daha kötü bir fiyata taşır; onaydan sonraki girişin maliyetten
-  önceki sonucu kapanıştaki girişten belirgin farklı çıkmadı (8. ders, Onay mumu).
-- **Haber penceresinde.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında makas açılır ve stop emri
-  genişleyen makasla dolar: stopun yeri değişmez, dolduğu fiyat değişir (4. ders, Haber anları için masa kartı).
-- **İptal.** Emir anın izlenen süresi bitince ya da ömrüne bir açıklama düşünce çekilir; dolmayan limit deftere
-  yazılır.
+- **Ömür.** Limit ve kırılım emri ilk mum kapandıktan (fiksingde fiksing anından) 60 dakika sonra düşer (ön kayıttaki
+  süre, ölçülerek seçilmedi); dolan pozisyon hedefe ya da stopa ulaşmazsa izlenen sürenin sonunda kapanır.
+- **Piyasa emri.** Fiksingde ve karar mumunda giriş piyasa emridir, maliyeti girişte öder; geri vermeyi limitle almak
+  ölçülmedi.
+- **Limitin dolması.** Limit yalnız fiyat yarıya geri gelince dolar; açılışta dolumdan sonrası maliyetten önce de
+  sıfıra yakındır (2. ders, Bu okumaları işleme çevirmek). Dolmayan limit de deftere yazılır.
 
 ## Kendi defterini tutmak
 
@@ -733,28 +685,17 @@ sayfada durur, yoksa kuralın sonucu senin seçimlerinle karışır.
 
 ## Sık yapılan hatalar
 
-- **Kazanma oranını tek başına okumak.** Yakın hedef kazanma oranıyla birlikte başa baş oranını da yükseltir.
-  Dayanak: 5. ders, Kazanma oranı ve net sonuç.
-- **Kuralın bulunduğu dönemin sonucunu kanıt saymak.** Seçim artıyı şart koştuğu için o artı seçimin tanımıdır.
-  Dayanak: 5. ders, Tepki nedir, nasıl seçildi.
-- **Davranışı kâr sanmak.** Fiksingde geri verme şanstan sıktır ama maliyetsiz kenarı maliyetten küçüktür. Dayanak: 5.
-  ders, Maliyet nereye gidiyor; 3. ders, Sınıf sınıf, şansın payıyla.
 - **İşlem saymak, olay saymamak.** Bir kararın dört paritedeki işlemi birlikte hareket eder ve aralığı olduğundan dar
   gösterir. Dayanak: 5. ders, İşlem tepkileri.
-- **Limitin dolum oranını iyi haber saymak.** Limit fiyat aleyhine yürüdüğünde dolar. Dayanak: 8. ders, Limit neden
-  ucuz görünür: ters seçim.
 - **Kuralı ara sonuca göre ayarlamak.** Her ayar görülmemiş dönemi biraz daha örneklem içine çevirir. Dayanak: 1. ders,
   Bu planın dürüstlük kuralları.
 
 ## Masa kontrol listesi
 
-1. Saatler yaz mı kış mı? Londra açılışı TSİ 10:00 mi 11:00 mi; New
-   York açılışı TSİ 16:30 mi 17:30 mi?
-2. Takvimde açıklama var mı (BoE TSİ 14:00, ECB TSİ 15:15, ABD verisi TSİ
-   15:30, FOMC TSİ 21:00; İngiltere, Avrupa ve ABD kış saatinde birer saat
-   geç) ve penceresinde emrim var mı?
-3. Bugün ayın son Londra iş günü mü (Londra fiksingi TSİ 18:00, İngiltere kış saatinde
-   19:00)?
+1. Saatler yaz mı kış mı (TSİ saatleri: Günün haritası)?
+2. Takvimde açıklama var mı ve penceresi bekleyen bir emrimin süresine düşüyor mu? Düşüyorsa emri açıklamadan önce
+   çekerim.
+3. Bugün ayın son Londra iş günü mü?
 4. Bu anın satırı "izle, işlem açma" mı?
 5. Kural sonuçtan önce yazıldı mı ve bu dönemde değişmedi mi?
 6. İlk mumun sınıfını sonucu görmeden yazdım mı?
@@ -817,6 +758,7 @@ gidiyor). Ucu ve yarıyı işaretler, fiksingden sonraki bir saati yazarsın.
 
 - Gerçek sürpriz: veri ve kararlarda beklentiye göre sapma ölçülmedi; ilk mum sapmanın vekilidir.
 - Basın toplantısının karar metninden ayrı etkisi.
+- Haber anındaki gerçek makas ve bekleyen emri açıklamadan önce çekmenin etkisi.
 - Gün içi dokunuşların sırası dakikadan kısa sürelerde (aynı dakikada stop ve hedef görülürse stop sayıldı).
 - Piyasa derinliği, kısmi dolum, komisyon ve emir gecikmesi.
 - EUR/USD, GBP/USD, USD/JPY ve AUD/USD dışındaki pariteler ve beş dakikadan kısa ilk mumlar.
