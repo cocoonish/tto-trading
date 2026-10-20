@@ -5452,3 +5452,11 @@ ertesi güne geçişi göstermiyor.
 numpy yok — yerel kapı geçmişti. Tek kullanım (iş günü sayımı) standart kütüphaneye çevrildi, ders çıktısı birebir
 aynı; `testler/test_kapi_bagimlilik.py` kapıyı numpy/pandas/plotly ENGELLİ alt süreçte koşturur (arıza
 enjeksiyonunda düşüyor). Indikator'da 21.09'da ölçülen sınıfın eşi.
+Tablolar (20.10.2026, kullanıcı: "tablolar anlaşılmıyor"): başlık hücreleri kırılmıyordu (`th` de nowrap'tı), sekiz
+sütunlu bir tablonun başlığı tek başına sütundan genişti, tablo sağdan kesiliyor ve satır adı sütunu en uzun sözcüğe
+sıkışıp sözcük sözcük diziliyordu; dönem her yaprak başlıkta, ölçünün adı ve grubu birleşik satır adındaydı. Başlık
+artık kırılır (site geneli, değer hücresi yine kırılmaz). FxOyun'un on yedi tablo üreticisi `ders_yaz.tablo`dan ham
+HTML basar: iki katlı başlık ("2018–23" · "2024 →", gerçek · ayna), tablo genişliğinde grup satırı ("5 dakika",
+"Tokyo açılışı"), satır adı yalnız grubun içindeki fark. 41 tablonun 36'sı 1280 pikselde sütuna sığıyor (önce 17'si
+taşıyordu); kalan beşi on–on iki sütunlu ve kendi kabında kayıyor. Hücre metni MDX'e girdiği için `<`, `>`, `{`, `}`
+kaçırılır; HTML bloğunda boş satır yok.

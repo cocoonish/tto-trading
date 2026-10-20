@@ -23,7 +23,7 @@ BURASI = Path(__file__).resolve().parent
 sys.path.insert(0, str(BURASI))
 import ders_yaz as dy  # noqa: E402
 import masa  # noqa: E402
-from ders_yaz import _tablo, sayi, tam, yuzde  # noqa: E402
+from ders_yaz import DONEM, grupla, sayi, tablo, tam, yuzde  # noqa: E402
 
 METIN = BURASI / "metin"
 CIKTI = dy.CIKTI
@@ -289,71 +289,81 @@ def anahtarlar() -> dict[str, str]:
 
 # ─────────────────────────────────────────────────────────────── bloklar
 def b_davranis() -> str:
-    sat = []
+    g = []
     for tf in TF:
-        for dn in ("ic", "dis"):
+        sat = []
+        for dad, dn in DONEM:
             v = D["davranis"][tf][dn]
-            sat.append([f"{TF_AD[tf]} · {DONEM_AD[dn]}", tam(v["n"]), yuzde(v["sim_1.0"], 1),
-                        f"{yuzde(v['geri_0.5'])} · {yuzde(v['ayna_geri_0.5'])}",
-                        f"{yuzde(v['geri_1.0'])} · {yuzde(v['ayna_geri_1.0'])}",
-                        a(v["net_6_ort"]), f"{a(v['net_24']['ort'])} ({a(v['net_24']['alt'])} … {a(v['net_24']['ust'])})"])
-    return _tablo(["Dilim · dönem", "olay", "+1 ATR önce mumun yönünde", "yarısına döndü (gerçek · ayna)",
-                   "öbür ucuna döndü (gerçek · ayna)", "6 mum sonra, ATR", "24 mum sonra, ATR (%95 aralık)"], sat)
+            sat.append([dad, tam(v["n"]), yuzde(v["sim_1.0"], 1),
+                        yuzde(v["geri_0.5"]), yuzde(v["ayna_geri_0.5"]),
+                        yuzde(v["geri_1.0"]), yuzde(v["ayna_geri_1.0"]),
+                        a(v["net_6_ort"]), a(v["net_24"]["ort"]), f"{a(v['net_24']['alt'])} … {a(v['net_24']['ust'])}"])
+        g.append((TF_AD[tf], sat))
+    return tablo(["Dönem", "olay", "+1 ATR'ye önce mumun yönünde", "gerçek", "ayna", "gerçek", "ayna",
+                  "6 mum sonra", "24 mum sonra", "24 mum, %95 aralık"], g,
+                 ust=[("", 3), ("yarısına döndü", 2), ("öbür ucuna döndü", 2), ("mumun yönünde net hareket, ATR", 3)])
 
 
 def b_kova() -> str:
-    sat = []
+    g = []
     for tf in TF:
+        sat = []
         for kv in ("2-3", "3-4", "4-5", "5+"):
             i, o = D["suzgec"][tf]["kova"][kv]["ic"], D["suzgec"][tf]["kova"][kv]["dis"]
-            sat.append([f"{TF_AD[tf]} · {DEGER_AD[kv]}", tam(i["n"]), yuzde(i["sim_1.0"], 1), a(i["net_24"]["ort"]),
+            sat.append([DEGER_AD[kv], tam(i["n"]), yuzde(i["sim_1.0"], 1), a(i["net_24"]["ort"]),
                         tam(o["n"]), yuzde(o["sim_1.0"], 1), a(o["net_24"]["ort"])])
-    return _tablo(["Dilim · büyüklük", "2018–23 olay", "+1 ATR önce mumun yönünde", "24 mum sonra, ATR",
-                   "2024 → olay", "+1 ATR önce mumun yönünde", "24 mum sonra, ATR"], sat)
+        g.append((TF_AD[tf], sat))
+    return tablo(["Büyüklük"] + ["olay", "+1 ATR'ye önce mumun yönünde", "24 mum sonra, ATR"] * 2, g,
+                 ust=[("", 1), ("2018–23", 3), ("2024 →", 3)])
 
 
 def b_makas() -> str:
-    sat = []
+    g = []
     for tf in TF:
-        for dn in ("ic", "dis"):
+        sat = []
+        for dad, dn in DONEM:
             v = D["davranis"][tf][dn]
-            sat.append([f"{TF_AD[tf]} · {DONEM_AD[dn]}", sayi(v["makas_once_pip_med"], 1), sayi(v["makas_mum_kat_ort"], 2),
+            sat.append([dad, sayi(v["makas_once_pip_med"], 1), sayi(v["makas_mum_kat_ort"], 2),
                         yuzde(v["makas_mum_iki_kat"]), sayi(v["makas_1_kat_ort"], 2), sayi(v["makas_5_kat_ort"], 2),
                         yuzde(v["makas_5_iki_kat"])])
-    return _tablo(["Dilim · dönem", "önceki 60 dk makas, medyan pip", "mum kapanışında, kat", "iki katını aştı",
-                   "1 dk sonra, kat", "5 dk sonra, kat", "5 dk sonra iki katını aştı"], sat)
+        g.append((TF_AD[tf], sat))
+    return tablo(["Dönem", "önceki 60 dk medyanı, pip", "kat", "iki katını aştı", "1 dk sonra, kat", "5 dk sonra, kat",
+                  "5 dk sonra iki katını aştı"], g,
+                 ust=[("", 2), ("mum kapanırken", 2), ("kapanıştan sonra", 3)])
 
 
 def b_suzgec(tf: str, *suz: str) -> str:
-    sat = []
+    g = []
     for f in suz or D["suzgec"][tf]:
+        sat = []
         for v, dd in D["suzgec"][tf][f].items():
             i, o = dd["ic"], dd["dis"]
             if not i["n"]:
                 continue
             hucre = lambda x: [tam(x["n"]), yuzde(x["sim_1.0"], 1), puan(x["geri_0.5"] - x["ayna_geri_0.5"]),
                                a(x["net_24"]["ort"])] if x["n"] else ["0", "—", "—", "—"]
-            sat.append([f"{SUZ_AD[f]} · {deger_ad(f, v)}"] + hucre(i) + hucre(o))
-    return _tablo(["Süzgeç · değer", "2018–23 olay", "+1 ATR önce mumun yönünde", "yarısına dönüş − ayna, puan",
-                   "24 mum, ATR", "2024 → olay", "+1 ATR önce mumun yönünde", "yarısına dönüş − ayna, puan",
-                   "24 mum, ATR"], sat)
+            sat.append([deger_ad(f, v)] + hucre(i) + hucre(o))
+        g.append((SUZ_AD[f], sat))
+    return tablo(["Değer"] + ["olay", "+1 ATR'ye önce mumun yönünde", "yarısına dönüş − ayna, puan",
+                              "24 mum sonra, ATR"] * 2, g,
+                 ust=[("", 1), ("2018–23", 4), ("2024 →", 4)])
 
 
 def b_izgara(tf: str, stop: str = "s2", hedef: str = "h1") -> str:
     ic = {x["giris"]: x for x in D["izgara"][tf]["ic"]}
     dis = {x["giris"]: x for x in D["izgara"][tf]["dis"]}
     sat = []
-    for g in sorted(ic, key=lambda g: (g.split(":")[0] != "devam", g)):
-        y, e, s, h = g.split(":")
+    for gi in sorted(ic, key=lambda gi: (gi.split(":")[0] != "devam", gi)):
+        y, e, s, h = gi.split(":")
         if s != stop or h != hedef:
             continue
-        i, o = ic[g], dis.get(g, {"n": 0})
+        i, o = ic[gi], dis.get(gi, {"n": 0})
         hucre = lambda x: [tam(x["n"]), yuzde(x["dolum"]) if x.get("dolum") is not None else "—",
                            yuzde(x["kazanma"]), r(x["brut_R"]) if x.get("brut_R") is not None else "—",
                            r(x["ort_R"])] if x["n"] else ["0", "—", "—", "—", "—"]
-        sat.append([f"{YON_AD[y]} · {emir_ad(y, e)}"] + hucre(i) + hucre(o))
-    return _tablo(["Yön · emir", "2018–23 işlem", "dolum", "kazanma", "maliyetsiz R", "net R",
-                   "2024 → işlem", "dolum", "kazanma", "maliyetsiz R", "net R"], sat)
+        sat.append((YON_AD[y].capitalize(), [emir_ad(y, e)] + hucre(i) + hucre(o)))
+    return tablo(["Emir"] + ["işlem", "dolum", "kazanma", "maliyetsiz R", "net R"] * 2, grupla(sat),
+                 ust=[("", 1), ("2018–23", 5), ("2024 →", 5)])
 
 
 def b_ters_secim(stop: str = "s2", hedef: str = "h1") -> str:
@@ -363,14 +373,14 @@ def b_ters_secim(stop: str = "s2", hedef: str = "h1") -> str:
         if s != stop or h != hedef:
             continue
         o = next(z for z in D["ters_secim"]["dis"] if z["tf"] == x["tf"] and z["giris"] == x["giris"])
-        sat.append([f"{TF_AD[str(x['tf'])]} · {YON_AD[y]} · {emir_ad(y, e)}",
+        sat.append((f"{YON_AD[y].capitalize()}, {emir_ad(y, e)}", [TF_AD[str(x["tf"])],
                     yuzde(x["dolan_n"] / (x["dolan_n"] + x["kacan_n"])),
                     yuzde(x["piyasa_kazanma_dolan"]), yuzde(x["piyasa_kazanma_kacan"]),
                     yuzde(o["dolan_n"] / (o["dolan_n"] + o["kacan_n"])),
-                    yuzde(o["piyasa_kazanma_dolan"]), yuzde(o["piyasa_kazanma_kacan"])])
-    return _tablo(["Dilim · emir", "2018–23 limit doldu", "doldu · piyasa girişi kazandı",
-                   "dolmadı · piyasa girişi kazandı", "2024 → limit doldu", "doldu · piyasa girişi kazandı",
-                   "dolmadı · piyasa girişi kazandı"], sat)
+                    yuzde(o["piyasa_kazanma_dolan"]), yuzde(o["piyasa_kazanma_kacan"])]))
+    return tablo(["Dilim"] + ["limit doldu", "dolanlarda piyasa girişi kazandı",
+                              "dolmayanlarda piyasa girişi kazandı"] * 2, grupla(sat),
+                 ust=[("", 1), ("2018–23", 3), ("2024 →", 3)])
 
 
 def b_bacaklar(rol: str) -> str:
@@ -379,15 +389,16 @@ def b_bacaklar(rol: str) -> str:
         if b["rol"] != rol:
             continue
         i, o = b["ic"], b["dis"]
-        suz = f" · {SUZ_AD[b['suzgec']].lower()}: {deger_ad(b['suzgec'], b['deger'])}" if b["suzgec"] else ""
+        suz = f"{SUZ_AD[b['suzgec']].lower()}: {deger_ad(b['suzgec'], b['deger'])}" if b["suzgec"] else "süzgeçsiz"
         aralik = f"{r(o['alt'])} … {r(o['ust'])}" if o.get("alt") is not None else "—"
         h = D["bacak_hafta"][b["bacak"]]
         hafta = f"{r(h['alt'])} … {r(h['ust'])}" if h["alt"] is not None else "—"
-        sat.append([f"{TF_AD[str(b['tf'])]}{suz}", giris_ad(b["giris"]), tam(i["n"]), yuzde(i["kazanma"]), r(i["ort_R"]),
+        sat.append((TF_AD[str(b["tf"])], [suz, giris_ad(b["giris"]), tam(i["n"]), yuzde(i["kazanma"]), r(i["ort_R"]),
                     tam(o["n"]), yuzde(o["kazanma"]) if o["n"] else "—", r(o["ort_R"]) if o["n"] else "—",
-                    r(o["brut_R"]) if o.get("brut_R") is not None else "—", aralik, hafta, HUKUM_AD[b["hukum"]]])
-    return _tablo(["Dilim · süzgeç", "Giriş", "2018–23 n", "kazanma", "net R", "2024 → n", "kazanma", "net R",
-                   "2024 → maliyetsiz R", "2024 → %95 aralık (gün)", "aralık (hafta)", "hüküm"], sat, sol=[0, 1, 11])
+                    r(o["brut_R"]) if o.get("brut_R") is not None else "—", aralik, hafta, HUKUM_AD[b["hukum"]]]))
+    return tablo(["Süzgeç", "Giriş", "işlem", "kazanma", "net R", "işlem", "kazanma", "net R", "maliyetsiz R",
+                  "%95 aralık (gün)", "%95 aralık (hafta)", "hüküm"], grupla(sat),
+                 ust=[("", 2), ("2018–23", 3), ("2024 →", 7)], metin=[1, 11])
 
 
 def b_yok() -> str:
@@ -397,9 +408,10 @@ def b_yok() -> str:
             if x["en_iyi_suzgec"] else "süzgeçsiz"
         y1 = r(x["en_iyi_y1"]) if x["en_iyi_y1"] is not None else "—"
         y2 = r(x["en_iyi_y2"]) if x["en_iyi_y2"] is not None else "—"
-        sat.append([f"{TF_AD[str(x['tf'])]} · {YON_AD[x['yon']]}", tam(x["aday"]), giris_ad(x["en_iyi"]), suz,
-                    tam(x["en_iyi_n"]), r(x["en_iyi_R"]), f"{y1} · {y2}"])
-    return _tablo(["Dilim · yön", "aday", "en iyi aday", "süzgeç", "işlem", "net R", "iki yarı"], sat, sol=[0, 2, 3])
+        sat.append((TF_AD[str(x["tf"])], [YON_AD[x["yon"]], tam(x["aday"]), giris_ad(x["en_iyi"]), suz,
+                    tam(x["en_iyi_n"]), r(x["en_iyi_R"]), f"{y1} · {y2}"]))
+    return tablo(["Yön", "aday", "en iyi aday", "süzgeç", "işlem", "net R", "iki yarı"], grupla(sat),
+                 ust=[("", 2), ("en iyi adayın 2018–23 sonucu", 5)], metin=[2, 3])
 
 
 def b_sekil(slug: str, ad: str, *baslik: str) -> str:
