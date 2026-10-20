@@ -38,8 +38,8 @@ Kısa cevap: 5 dakikada büyük mumu kovalamazsın, 1 saatte tersine girmezsin. 
 ## Bu dersi masada nasıl kullanırsın
 
 Tablolar işlem listesi değildir; on beş girişin hepsi çalışmıyor. Masada kullanılan, arkalarındaki sıradır. Büyük mum
-6. dersin tanımıyla okunur: aralığı kendinden önceki mumun ATR'sinin en az iki katı olan ve kümenin ilk büyük mumu olan
-mum (6. ders, Büyük mum nasıl tanımlandı). Şema sırayı verir: dilim, takvimdeki haber, kapanışın yeri, seans.
+6. dersin tanımıyla okunur (6. ders, Büyük mum nasıl tanımlandı). Şema sırayı verir: dilim, takvimdeki haber, kapanışın
+yeri, seans.
 
 {{# karar plan-akis }}
 
@@ -225,8 +225,7 @@ limit orada dolardı ve plan bunu bir uyarı sayar. Bu örnekte uyarı yanıldı
 mum sonra mumun yönünde {{ O.5.net24 }} ATR'deydi.
 
 **15 dakikalık mum** ({{ O.15.gun }}, başlangıcı TSİ {{ O.15.saat }}, {{ O.15.yon }}) için plan zayıf bir geri verme
-beklentisinden fazlasını söylemez: 15 dakikada Asya seansında yarıya dönüş aynadan sık, 24 mumda yön yok (7. ders, 15
-dakika), ve bu mum Asya seansında değil. Fiyat yarısına {{ O.15.geri50 }}, ucunu {{ O.15.uc }} ve 24 mum sonra
+beklentisinden fazlasını söylemez (7. ders, 15 dakika). Fiyat yarısına {{ O.15.geri50 }}, ucunu {{ O.15.uc }} ve 24 mum sonra
 {{ O.15.net24 }} ATR'deydi.
 
 **1 saatlik mum** ({{ O.60.gun }}, başlangıcı TSİ {{ O.60.saat }}, {{ O.60.yon }}) kapanışı aralığının
@@ -237,9 +236,9 @@ yönünde giren ise bir günün sonunda maliyetini çıkaramazdı.
 Örneklerin hiçbiri planı sınamaz, sınaması yukarıdaki tablolardır; gösterdikleri, planın bir işlem kuralı değil bir
 okuma sırası olduğudur.
 
-Yukarıdaki üç mum bir şeklin içinden alınmıştı. Aşağıdaki iki çift ise kuralla seçildi: koşula uyan olaylardan 1 Aralık
-2023'ten önceki, serinin başka bir yerinde gösterilmemiş en son olay; biri dersin ölçtüğü eğilimle biten tipik gün, öbürü
-ters giden gün. Kimse "güzel bir grafik" seçmedi; tarihleri ve fiyatları figür gösterir. Gerçek grafiklerde ① olay mumu,
+Aşağıdaki iki çift ise kuralla seçildi: koşula uyan olaylardan 1 Aralık 2023'ten önceki, serinin başka bir yerinde
+gösterilmemiş en son olay; biri dersin ölçtüğü eğilimle biten tipik gün, öbürü ters giden gün. Tarihleri ve fiyatları
+figür gösterir. Gerçek grafiklerde ① olay mumu,
 ② mumun yarısı, ③ fiyatın yarıya ilk dokunduğu an, ④ izleme penceresinin sonudur.
 
 {{# ornek plan-asya-5dk }}

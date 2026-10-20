@@ -238,11 +238,11 @@ n = 3
 [[kart]]
 id = "asya-uc"
 hukum = "eksi"
-durum = "5 dakikalık grafikte, Asya seansında (Londra 07:00'den önce; TSİ İngiltere yaz saatinde 09:00'dan, kış saatinde 10:00'dan önce), ucunda kapanan ve takvimde haberi olmayan bir büyük mum"
-gorursun = "Dar, sakin mumların arasından çıkan uzun gövdeli bir mum; kapanışı aralığının son çeyreğinde, fitili kapanış tarafında kısa."
+durum = "5 dakikalık grafikte, Asya seansında (New York 17:00 ile Londra 07:00 arası; TSİ ikisi yaz saatindeyken 00:00–09:00, ikisi kış saatindeyken 01:00–10:00), ucunda kapanan ve takvimde haberi olmayan bir büyük mum"
+gorursun = "Çoğu zaman dar mumların arasından çıkan uzun gövdeli bir mum; kapanışı aralığının son çeyreğinde, fitili kapanış tarafında kısa."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; seansı ve kapanışın yerini not edersin; sonraki mumlarda fiyatın yarıya doğru gelip gelmediğine bakarsın."
 yapmazsin = "Kapanışta mumun yönünde piyasa emriyle kovalamazsın. Geri verme eğilimini bir tersine giriş sinyali saymazsın: ölçülen şey yarıya geri çekilmedir, öbür uca dönüş değil."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit geri çekilmeye (mumun boyunun dörtte biri ya da yarısı), stop girişten iki ATR, hedef bir ya da iki R. Limit dolarsa geri vermenin başladığı olaydasın; Londra açılışına kadar dolmayan emri çekersin (bu derste ölçülmedi)."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit çeyrek ya da yarı geri çekilmeye, stop limitin fiyatından iki ATR, hedef bir ya da iki R. Limit dolarsa fiyatın geri çekildiği olaydasın; bu olaylarda piyasa girişi çoğunlukla kaybederdi. Emir altı mum bekler, dolmazsa çekersin; bu süreye Londra açılışı (TSİ İngiltere yaz saatinde 09:00, kış saatinde 10:00) düşüyorsa emri açılıştan önce çekersin: ölçülmemiş ek kural."
 dayanak = "7. ders, 5 dakika; 8. ders, Limit neden ucuz görünür: ters seçim"
 
 [[kart]]
@@ -252,7 +252,7 @@ durum = "5 dakikalık grafikte, son iki saat içinde ikinci kez gelen büyük mu
 gorursun = "Bir büyük mum, arada birkaç dar mum, sonra aynı ya da ters yönde ikinci bir büyük mum."
 yaparsin = "İlk mumun saatini ve takvimi kontrol edersin; ikinci mumun yarısını işaretler, fiyatın oraya doğru gelişini izlersin."
 yapmazsin = "İkinci mumu kovalamazsın; 'ikinci itiş daha güçlüdür' diye hedefi uzatmazsın. Kümenin bir akışın sonu olduğunu varsayıp tersine de girmezsin: bu ayrıca ölçülmedi."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit geri çekilmeye, stop girişten iki ATR. Stopu bir ATR'ye yaklaştırmazsın; yakın stop maliyeti R cinsinden büyütür."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit çeyrek ya da yarı geri çekilmeye, stop limitin fiyatından iki ATR, emir altı mum bekler. Stopu bir ATR'ye yaklaştırmazsın; yakın stop maliyeti R cinsinden büyütür."
 dayanak = "7. ders, 5 dakika; 8. ders, Stop uzaklığı ve maliyet"
 
 [[kart]]
@@ -260,7 +260,7 @@ id = "on-bes"
 hukum = "eksi"
 durum = "15 dakikalık grafikte, Asya dışında bir seansta büyük mum"
 gorursun = "Londra ya da örtüşme seansında uzun gövdeli bir 15 dakikalık mum; kapanış nerede olursa olsun."
-yaparsin = "Mumu işaretler, seansı not edersin. Asya dışındaysa bu dersin süzgeçlerinden bir okuma beklemezsin."
+yaparsin = "Mumu işaretler, seansı not edersin. Asya dışındaysa bu dersin süzgeçlerinden bir okuma beklemezsin; Asya'da da yalnız yarıya dönüşün biraz sık geldiğini bilirsin, yön değil."
 yapmazsin = "Büyüklük kovasına bakıp yön okumazsın: 15 dakikadaki büyük sayıların işareti öbür dönemde kayboluyor ya da aralık sıfırı rahatça kapsıyor."
 emir = "Başka bir gerekçeyle gireceksen 15 dakikada da geri çekilmeye limit maliyeti düşürür, kenar yaratmaz; stop girişten iki ATR."
 dayanak = "7. ders, 15 dakika; 8. ders, 15 dakika ve 1 saat"
@@ -272,17 +272,17 @@ durum = "1 saatlik grafikte, günlük trendin yönünde (bir önceki günün kap
 gorursun = "Birkaç gündür aynı yöne giden bir piyasada uzun gövdeli bir saatlik mum."
 yaparsin = "Trendin yönünü bir önceki günün kapanışından okursun; mumun yarısını işaretlersin; seansı not edersin."
 yapmazsin = "Mumun tersine girmezsin. Trendle aynı yönde diye hedefi uzatmazsın: trend ayrımı yalnız 2018–2023'te görüldü, 2024 sonrasında trende karşı mum da aynı yolu aldı."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit geri çekilmeye ya da onay mumundan sonra; stop girişten iki ATR, hedef bir ya da iki R. Cuma öğleden sonrasında pencere hafta sonuna taşar; bu mumlar ölçüye girmedi."
-dayanak = "7. ders, 1 saat; 8. ders, 15 dakika ve 1 saat; 9. ders, Ölçülmeyenler"
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit çeyrek ya da yarı geri çekilmeye; stop limitin fiyatından iki ATR, hedef bir ya da iki R. Onay mumu 2024 sonrasında en çok kaybeden biçimdi. Perşembe akşamından sonra açılan 1 saatlik mumlar ölçüye girmedi; pencereleri hafta sonuna taşar."
+dayanak = "7. ders, 1 saat; 8. ders, 15 dakika ve 1 saat; 6. ders, Büyük mum nasıl tanımlandı"
 
 [[kart]]
 id = "haber"
 hukum = "eksi"
 durum = "Herhangi bir dilimde, takvimdeki büyük bir haberin (ABD istihdam ya da TÜFE, Fed, ECB, BoE kararı) saati mumun içine düşen büyük mum"
 gorursun = "Haberden önce dar mumlar, sonra iki yana uzun fitilli, çok geniş bir mum; sonraki mumlar da geniş."
-yaparsin = "Takvimi önceden bilirsin; haber saatinden önce bekleyen emirlerini gözden geçirirsin. Mum kapandığında masadan kalkarsın."
+yaparsin = "Takvimi önceden bilirsin; süresine haber penceresi (açıklamadan iki dakika önce – on beş dakika sonra) düşen bekleyen emri açıklamadan önce çekersin. Mum kapandığında masadan kalkarsın."
 yapmazsin = "Kapanışın yerine, seansa ya da büyüklüğe bakıp bu mumda okuma kurmazsın; haber mumunda bu süzgeçlerin birlikte ne verdiği ölçülmedi."
-emir = "Başka bir gerekçeyle pozisyondaysan haber penceresinde piyasa ve stop emirleri ek kayma öder; dar stop maliyete en çok dayanan stoptur. Yeni giriş için bekleyen emri haber saatinden önce çekersin (bu derste ölçülmedi)."
+emir = "Emri açıklamadan önce çekmek bir disiplin kuralıdır, ölçüm sonucu değil: bu pencerede piyasa ve stop emirlerine ek kayma varsayıldı, haber anındaki makas ve emri çekmenin etkisi ölçülmedi. Başka bir gerekçeyle pozisyondaysan dar stop bu ek kaymayı R cinsinden en çok büyüten stoptur."
 dayanak = "7. ders, Haber mumu; 9. ders, Seçilen girişler; 4. ders, Haber anları için masa kartı"
 
 # ─────────────────────────────────────────────── gerçek örnekler
@@ -290,7 +290,7 @@ dayanak = "7. ders, Haber mumu; 9. ders, Seçilen girişler; 4. ders, Haber anla
 id = "asya-uc"
 baslik = "Asya'da ucunda kapanan 5 dakikalık büyük mum: iki gün, iki son"
 tipik_ad = "Yarısına döndü"
-ters_ad = "Hiç geri vermedi"
+ters_ad = "Yarısına dönmedi"
 kaynak = "buyuk"
 cift = "USDJPY"
 tf = 5
@@ -302,7 +302,7 @@ ters = { "geri_0.5" = false, net_24_min = 1.0 }
 id = "saat-trend"
 baslik = "Trendin yönündeki 1 saatlik büyük mum: iki gün, iki son"
 tipik_ad = "Mumun yönünde sürdü"
-ters_ad = "Geri verdi"
+ters_ad = "Yarısına döndü, öbür ucu kırdı"
 kaynak = "buyuk"
 cift = "EURUSD"
 tf = 60
