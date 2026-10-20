@@ -1,0 +1,196 @@
+{
+ "onkayit_ozu": "125105a57321300d854c663156ce5b4e260b63f3a547d417901721289783bb68",
+ "gelistir_ozu": "993bdef025dd617a1b4a3165f0dea45510fbaeed9d142e09e8b99fc62afa8998",
+ "aday_toplam": 3564,
+ "aday": {
+  "5_devam": 648,
+  "5_ters": 540,
+  "15_devam": 648,
+  "15_ters": 540,
+  "60_devam": 648,
+  "60_ters": 540
+ },
+ "islem": [
+  {
+   "tf": 5,
+   "yon": "ters",
+   "giris": "ters:limit_uc:s2:h2",
+   "suzgec": "haber",
+   "deger": "haber",
+   "aday": 540,
+   "uygun": 2,
+   "ic": {
+    "n": 333,
+    "dolum": 0.6837782340862423,
+    "kazanma": 0.4084084084084084,
+    "ort_R": 0.07373163672969367,
+    "brut_R": 0.2001418748050823,
+    "y1_R": 0.10439202195756972,
+    "y2_R": 0.05384792155716019,
+    "risk_pip_med": 9.265899887449219
+   }
+  },
+  {
+   "tf": 60,
+   "yon": "devam",
+   "giris": "devam:limit_0.25:s1:h2",
+   "suzgec": "kosu",
+   "deger": "ayni",
+   "aday": 648,
+   "uygun": 40,
+   "ic": {
+    "n": 442,
+    "dolum": 0.858252427184466,
+    "kazanma": 0.38461538461538464,
+    "ort_R": 0.12706438391619135,
+    "brut_R": 0.1902004342590422,
+    "y1_R": 0.06421675265138793,
+    "y2_R": 0.18878470340942874,
+    "risk_pip_med": 13.268186095334668
+   }
+  },
+  {
+   "tf": 60,
+   "yon": "ters",
+   "giris": "ters:limit_uc:s1:h2",
+   "suzgec": "haber",
+   "deger": "haber",
+   "aday": 540,
+   "uygun": 2,
+   "ic": {
+    "n": 232,
+    "dolum": 0.7272727272727273,
+    "kazanma": 0.34913793103448276,
+    "ort_R": 0.02011236228006125,
+    "brut_R": 0.1249461960182437,
+    "y1_R": 0.023500069762694087,
+    "y2_R": 0.018525714471739587,
+    "risk_pip_med": 13.252382009358534
+   }
+  }
+ ],
+ "islem_yok": [
+  {
+   "tf": 5,
+   "yon": "devam",
+   "aday": 648,
+   "en_iyi": "devam:limit_0.25:s2:h1",
+   "en_iyi_suzgec": "seans",
+   "en_iyi_deger": "londra",
+   "en_iyi_R": -0.13003892409227363,
+   "en_iyi_y1": -0.14443471974882452,
+   "en_iyi_y2": -0.11521872770925323,
+   "en_iyi_n": 9500
+  },
+  {
+   "tf": 15,
+   "yon": "devam",
+   "aday": 648,
+   "en_iyi": "devam:limit_0.25:s2:h2",
+   "en_iyi_suzgec": "kova",
+   "en_iyi_deger": "4-5",
+   "en_iyi_R": -0.027910254635680407,
+   "en_iyi_y1": -0.019567747097148692,
+   "en_iyi_y2": -0.03795531473309614,
+   "en_iyi_n": 432
+  },
+  {
+   "tf": 15,
+   "yon": "ters",
+   "aday": 540,
+   "en_iyi": "ters:limit_ote:s2:h2",
+   "en_iyi_suzgec": "haber",
+   "en_iyi_deger": "haber",
+   "en_iyi_R": 0.018754168804726672,
+   "en_iyi_y1": 0.17240623024179244,
+   "en_iyi_y2": -0.1099813421290312,
+   "en_iyi_n": 340
+  }
+ ],
+ "referans": [
+  {
+   "tf": 5,
+   "giris": "devam:piyasa:s2:h1",
+   "okuma": "Mumun yönünde, kapanışta piyasadan gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 5,
+   "giris": "devam:limit_0.5:s2:h1",
+   "okuma": "Mumun yarısına geri çekilmeyi bekle, mumun yönünde limitle gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 5,
+   "giris": "ters:piyasa:s2:h1",
+   "okuma": "Mumun tersine, kapanışta piyasadan gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 5,
+   "giris": "ters:limit_ote:s2:h1",
+   "okuma": "Mumun ucunun yarım ATR ötesine limit koy, uzamayı tersine sat/al.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 15,
+   "giris": "devam:piyasa:s2:h1",
+   "okuma": "Mumun yönünde, kapanışta piyasadan gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 15,
+   "giris": "devam:limit_0.5:s2:h1",
+   "okuma": "Mumun yarısına geri çekilmeyi bekle, mumun yönünde limitle gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 15,
+   "giris": "ters:piyasa:s2:h1",
+   "okuma": "Mumun tersine, kapanışta piyasadan gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 15,
+   "giris": "ters:limit_ote:s2:h1",
+   "okuma": "Mumun ucunun yarım ATR ötesine limit koy, uzamayı tersine sat/al.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 60,
+   "giris": "devam:piyasa:s2:h1",
+   "okuma": "Mumun yönünde, kapanışta piyasadan gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 60,
+   "giris": "devam:limit_0.5:s2:h1",
+   "okuma": "Mumun yarısına geri çekilmeyi bekle, mumun yönünde limitle gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 60,
+   "giris": "ters:piyasa:s2:h1",
+   "okuma": "Mumun tersine, kapanışta piyasadan gir.",
+   "suzgec": null,
+   "deger": null
+  },
+  {
+   "tf": 60,
+   "giris": "ters:limit_ote:s2:h1",
+   "okuma": "Mumun ucunun yarım ATR ötesine limit koy, uzamayı tersine sat/al.",
+   "suzgec": null,
+   "deger": null
+  }
+ ]
+}

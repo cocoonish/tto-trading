@@ -1,0 +1,79 @@
+# Büyük mum (2–5+ ATR) — ön kayıt.
+#
+# Bu dosya 2024 ve sonrasının verisi hiçbir yoldan açılmadan yazıldı ve git'e girdi. Tanım ve ölçüler
+# buyuk_mum.py'de, giriş biçimleri buyuk_sim.py'de; 2018–2023 gözlemi buyuk_gozlem.py → veri/buyuk_gozlem.json,
+# giriş ızgarasının 2018–2023 sonucu buyuk_gelistir.py → veri/buyuk_gelistir.json. Seçim kuralı aşağıda ve
+# buyuk_secim.py onu uygulayıp veri/buyuk_plan.json'u yazar. Sınama (buyuk_sina.py) bu dosyayı ve planı OKUR,
+# değiştirmez; başlarken aşağıdaki [tanim] ve [maliyet] sabitlerini kodla kıyaslar ve ayrışırsa koşmaz.
+#
+# Bilinen sınırlar:
+# - Aynı veriyle (Dukascopy 1 dk, dört majör, 2024 →) daha önce 22 kuralın ve bir oyun planının sonuçları
+#   yayımlandı; yani 2024 sonrasının TOPLU davranışı (o kuralların çoğunun maliyet sonrası eksi olduğu) bu plan
+#   yazılırken biliniyordu. Büyük mumdan sonraki davranışın ve aşağıdaki girişlerin 2024 sonrası sonucu ise hiç
+#   ölçülmedi.
+# - Seçim kuralı 2018–2023 ızgara sonucu GÖRÜLDÜKTEN sonra yazıldı (örneklem içi bilgi kullanıldı; örneklem dışı
+#   hiç kullanılmadı). Seçimin taradığı aday sayısı plan dosyasına yazılır.
+
+[donem]
+ic = ["2018-01-01", "2023-12-31"]
+dis = ["2024-01-01", "2026-10-15"]
+
+[tanim]
+dilimler = [5, 15, 60]
+atr_n = 14
+esik = 2.0
+kume_once = 3
+kararsiz_govde = 0.20
+izle_mum = 24
+doluluk = 0.80
+devir = ["16:50", "17:10"]           # New York
+acilis_bosluk_saat = 6
+acilis_pay_dk = 60
+
+[maliyet]
+# Alış ask'tan, satış bid'den; piyasa ve stop emrinde 0,5 pip kayma, takvimdeki olayın 2 dk öncesi – 15 dk sonrası
+# penceresinde +1 pip; limit kaymasız. Planlanan risk 3 pipin altındaysa işlem yok. Emir bekleme 6 mum.
+kayma_pip = 0.5
+haber_kayma_pip = 1.0
+en_az_risk_pip = 3.0
+bekle_mum = 6
+
+[secim]
+# İŞLEM girişleri (buyuk_secim.py uygular). Her dilim × yön (devam · ters) için adaylar: ızgaranın bütün hücreleri
+# (emir biçimi × stop × hedef), süzgeçsiz ya da TEK bir süzgeç değeriyle. Uygun aday: 2018–2023'te en az 200
+# işlem, maliyet sonrası ortalaması sıfırın üstünde VE iki yarının (2018–2020 · 2021–2023) ikisinde de sıfırın
+# üstünde. Uygunların içinden maliyet sonrası ortalaması en yüksek olan seçilir; uygun aday yoksa o dilim × yön
+# "işlem yok". İki süzgeçli bileşimler aday değildir (aday sayısı onlarla yirmi kat büyür).
+en_az_islem = 200
+yarilar = [[2018, 2020], [2021, 2023]]
+
+# REFERANS girişler: dersin sorduğu dört soruya verilen "ilk akla gelen" cevap; seçimden bağımsız, her dilimde
+# aynı. İşlem önerisi değildir; 2024 sonrasında işlem girişleriyle birlikte, aynı kodla raporlanır.
+[[referans]]
+giris = "devam:piyasa:s2:h1"
+okuma = "Mumun yönünde, kapanışta piyasadan gir."
+[[referans]]
+giris = "devam:limit_0.5:s2:h1"
+okuma = "Mumun yarısına geri çekilmeyi bekle, mumun yönünde limitle gir."
+[[referans]]
+giris = "ters:piyasa:s2:h1"
+okuma = "Mumun tersine, kapanışta piyasadan gir."
+[[referans]]
+giris = "ters:limit_ote:s2:h1"
+okuma = "Mumun ucunun yarım ATR ötesine limit koy, uzamayı tersine sat/al."
+
+[hukum]
+# 2024 sonrası, her giriş için (dört parite birlikte): ortalama net R'nin %95 bootstrap aralığı, İŞLEM GÜNÜ
+# düzeyinde yeniden örnekleme (aynı günün bütün işlemleri birlikte çekilir: büyük mumlar dolar haberinde dört
+# paritede aynı anda olur ve işlem düzeyinde örnekleme aralığı daraltır). 2000 tekrar, tohum 20261020.
+# Alt uç > 0 → çalışıyor · ortalama > 0, alt uç ≤ 0 → zayıf · ortalama ≤ 0 → çalışmıyor. İşlem sayısı 20'nin
+# altındaysa "ölçülemedi" (sonuç yine basılır).
+bootstrap = 2000
+tohum = 20261020
+en_az_islem = 20
+
+[davranis]
+# Gözlemin betimleyici ölçüleri 2024 sonrasında aynı kodla yeniden ölçülür (bir giriş bir davranışa dayanıyorsa önce
+# o davranışın sürüp sürmediği sorulur): her dilimde ±1 ATR'den hangisinin önce görüldüğü, mumun yarısına dönüş
+# (gerçek − ayna) ve 24 mum sonraki net hareket (ATR). Aralıklar aynı gün düzeyinde bootstrapla. Hüküm değil, bilgi.
+olculer = ["sim_1.0", "geri_0.5", "net_24"]
