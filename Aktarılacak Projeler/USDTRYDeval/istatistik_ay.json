@@ -1,7 +1,7 @@
 {
  "ay_onceki_ad": "Ağustos 2026",
  "ay_onceki_ort": 21.8,
- "ay_onceki_egim": 0.0,
+ "ay_onceki_egim": -0.0,
  "ay_son_ad": "Eylül 2026",
  "ay_son_ort": 21.5,
  "ay_son_egim": -1.0,
@@ -10,6 +10,6 @@
  "ay_dip_ad": "Aralık 2025",
  "ay_dip_ort": 12.5,
  "_sekil_tarih": {
-  "usdtry_monthly.html": "19.10.2026"
+  "usdtry_monthly.html": "20.10.2026"
  }
 }

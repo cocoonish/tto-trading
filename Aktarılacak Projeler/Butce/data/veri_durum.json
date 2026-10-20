@@ -1,10 +1,10 @@
 {
- "kosum": "2026-10-15 14:08",
+ "kosum": "2026-10-20 17:27",
  "son_ay": "2026-08-01",
  "son_ceyrek": "2026-06-30",
  "son_dis_ceyrek": "2026-06-30",
  "son_hafta": "2026-10-09",
- "son_gun": "2026-10-15",
+ "son_gun": "2026-10-20",
  "birim": {
   "bie_kbmgel": {
    "kod_kalibi": "^TP\\.KB\\.GEL",
@@ -135,10 +135,10 @@
  },
  "kimlik": {
   "GID001 = GID002 + GID152": {
-   "n": 248,
+   "n": 249,
    "maks_bagil_sapma": 0.0,
    "esik": 1e-06,
-   "maks_mutlak_sapma": 0.010000109672546387,
+   "maks_mutlak_sapma": 0.010000228881835938,
    "mutlak_esik": 2.0,
    "gecti": true,
    "durdurucu": true,
@@ -262,18 +262,18 @@
  "gecikme": {
   "aylik": {
    "son": "2026-09-01",
-   "gecikme_gun": 44
+   "gecikme_gun": 49
   },
   "ceyreklik": {
    "son": "2026-06-30",
-   "gecikme_gun": 107
+   "gecikme_gun": 112
   },
   "haftalik": {
    "son": "2026-10-09",
-   "gecikme_gun": 6
+   "gecikme_gun": 11
   },
   "gunluk": {
-   "son": "2026-10-15",
+   "son": "2026-10-20",
    "gecikme_gun": 0
   }
  },
@@ -291,9 +291,12 @@
    23
   ],
   "gunluk": [
-   5230,
+   5233,
    2
   ]
  },
- "uyarilar": []
+ "uyarilar": [
+  "TAZELİK: Brüt dış borç (üç aylık) son gözlemi 06.2026 (112 gün önce, tolerans 110 gün). Yayın durmuş olabilir.",
+  "TAZELİK: Finansal hesaplar (TCMB, üç aylık) son gözlemi 03.2026 (203 gün önce, tolerans 200 gün). Yayın durmuş olabilir."
+ ]
 }
