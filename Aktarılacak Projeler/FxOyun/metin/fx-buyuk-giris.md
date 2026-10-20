@@ -50,20 +50,18 @@ Aradaki fark maliyettir. Aşağıdaki üç tablonun bütün satırları stop 2 A
 
 ## Bu dersi masada nasıl kullanırsın
 
-Bu ders sana bir giriş kuralı vermez; hiçbir giriş biçimi maliyetten sonra kenar bulmadı. Verdiği şey bir emir
-disiplinidir: büyük bir mumdan sonra başka bir gerekçeyle işleme girmeye karar verdiysen, emrin türü, yeri, bekleme
-süresi, stopu ve hedefi sonucu nasıl değiştirir. Masada sırası şöyledir. Önce takvime bakarsın: emir bekleyecekse
-bekleyeceği süre büyük bir haberin penceresine düşüyor mu. Sonra kendi gerekçene: büyük mumun dışında bir sebebin var mı,
-yoksa yalnız mumun boyuna mı tepki veriyorsun. Sonra stopun uzaklığına ve dilime. En sonda emrin türüne. Aşağıdaki şema
-bu sırayı tek sayfada toplar; her adımın dayanağı bu serinin bir dersindeki ölçümdür. Şemadan çıkan cevap "emir yok"
-değilse, bundan sonraki bölümler o emrin grafikte nereye konacağını ve dolduğunda ne anlattığını gösterir.
+Bu ders bir giriş kuralı vermez; hiçbir giriş biçimi maliyetten sonra kenar bulmadı. Verdiği şey bir emir
+disiplinidir: büyük bir mumdan sonra başka bir gerekçeyle işleme gireceksen, emrin türü, yeri, bekleme süresi, stopu ve
+hedefi sonucu nasıl değiştirir. Masada sıra şöyledir: önce takvim (emrin bekleyeceği süre büyük bir haberin penceresine
+düşüyor mu), sonra gerekçe (büyük mumun dışında bir sebep var mı), sonra stopun uzaklığı ve dilim, en sonda emrin türü.
+Şema bu sırayı tek sayfada toplar; cevap "emir yok" değilse, sonraki bölümler emrin nereye konacağını ve dolduğunda ne
+anlattığını gösterir.
 
 {{# karar emir-akis }}
 
-Şemanın son kutusu bir maliyet seçimini anlatır, bir kenarı değil. Limit girişte makas ödemez, ama yalnız fiyat
-aleyhine yürüdüğünde dolar; piyasa emri her olayda girer, girişte de çıkışta da öder. Hangisinin daha az kaybettirdiği
-dilime ve emrin yerine göre değişir; stop 2 ATR ve hedef 1 R ile hiçbiri maliyetten sonra artıya geçmez, ızgaranın
-artıda kalan tek köşesi de (1 saatte hedefi 2 R olan geri çekilme limitleri) sıfırdan ayırt edilemiyor.
+Şemanın son kutusu bir maliyet seçimidir, bir kenar değil: stop 2 ATR ve hedef 1 R ile hiçbir biçim maliyetten sonra
+artıya geçmez, ızgaranın artıda kalan tek köşesi de (1 saatte hedefi 2 R olan geri çekilme limitleri) sıfırdan ayırt
+edilemiyor.
 
 ## On bir giriş biçimi
 
@@ -106,12 +104,9 @@ emirler aynı mantığı ters yönden taşır:
 
 {{# sema tersine-emirler }}
 
-Bu iki şemada yapmayacağın üç şey var. Kapanış zaten bir limitin gerisindeyse, yani mum o kadarını kendi içinde geri
-vermişse, o limiti koymazsın; bu derste o emir hiç konmadı ve geri çekilmeyi bekleyen limit, gerçekleşmiş geri çekilmeye
-konmaz. Mumun yönünde ve tersine iki emri aynı anda bırakmazsın; ikisinin de dolduğu bir yolda iki zararı birden
-taşırsın ve bu bileşim bu derste ölçülmedi. Ve emri bekleme süresi dolduktan sonra fiyatın peşinden taşımazsın: bu
-derste her emir büyük mum kapandıktan sonra {{ SB.bekle }} mum bekledi, dolmazsa iptal edildi; peşinden taşınan bir emir
-artık bu dersin ölçtüğü emir değildir.
+Bu şemalarda yapmayacağın iki şey var. Kapanış zaten bir limitin gerisindeyse, yani mum o kadarını kendi içinde geri
+vermişse, o limiti koymazsın; bu derste o emir hiç konmadı. Mumun yönünde ve tersine iki emri aynı anda bırakmazsın;
+ikisinin de dolduğu bir yolda iki zararı birden taşırsın ve bu bileşim bu derste ölçülmedi.
 
 ## 5 dakika
 
@@ -128,17 +123,14 @@ işlem başına {{ G.5.ic.devam:limit_0.25:s2:h1.maliyet }} R, kapanışta piyas
 
 ### Masada: 5 dakikada emir bir maliyet seçimidir
 
-5 dakikalık grafikte büyük mumun ekrandaki görüntüsü en çok aldatan görüntüdür: mum birkaç dakika içinde kapanır, fiyat
-ucun yanında titrer ve kaçan bir hareket izlenimi verir. Tablonun maliyetsiz sütunu bu izlenimin yanında ne olduğunu
-söyler: bütün biçimler sıfırın çevresinde. Net sütun da girişin biçiminin neyi değiştirdiğini: kaç kez makas ve kayma
-ödediğini. Bu dilimde emrin türü bir yön kararı değil, bir maliyet kararıdır.
+5 dakikalık grafikte büyük mum kaçan bir hareket izlenimi verir: mum birkaç dakikada kapanır, fiyat ucun yanında
+titrer. Tablonun maliyetsiz sütunu bu izlenimin karşılığını verir (bütün biçimler sıfırın çevresinde), net sütun da
+emrin türünün neyi değiştirdiğini: kaç kez makas ve kayma ödendiğini. Bu dilimde emrin türü bir maliyet kararıdır.
 
 {{# kart bes-dk-kapanis }}
 
-Bu dilimde yapmayacağın şeyler tablonun kendisinden çıkar. Kapanışta piyasa emriyle mumun yönünde girmezsin; piyasa ve stop
-emirleri maliyeti en çok ödeyen satırlardır ve kapanışta piyasa girişi maliyetten önce de artı değildir. Mumun tersine kapanışta piyasa girişinin maliyetsiz
-sütundaki küçük artısını da bir kenar saymazsın: maliyetten sonra o satır da eksidir. Ve limitin daha az kaybettirmesini
-limitin kazandırması diye okumazsın (8. ders, 5 dakika).
+Mumun tersine kapanışta piyasa girişinin maliyetsiz sütundaki küçük artısını bir kenar saymazsın: maliyetten sonra o
+satır da eksidir. Limitin daha az kaybettirmesini de limitin kazandırması diye okumazsın (8. ders, 5 dakika).
 
 ## 15 dakika ve 1 saat
 
@@ -174,10 +166,8 @@ değildir: maliyetten sonra stop 2 ATR, hedef 1 R satırında hiçbir biçim art
 
 {{# kart saat-tersine }}
 
-1 saatte yapmayacağın şey tek cümledir: uzamış görünen mumu satmazsın, uca ya da ucun ötesine tersine limit koymazsın.
-15 dakikada ise dilim iki ucun arasında durur; ne 5 dakikanın maliyet sorununu bütünüyle bırakır ne 1 saatin devamını
-taşır. 15 dakikalık bir mumdan sonra girmeyi düşünüyorsan, okuma sırası 5 dakikanınkiyle aynıdır: önce takvim, sonra
-gerekçe, sonra stop, en son emir.
+15 dakika iki ucun arasında durur: ne 5 dakikanın maliyet sorununu bütünüyle bırakır ne 1 saatin devamını taşır.
+Okuma sırası 5 dakikanınkiyle aynıdır: önce takvim, sonra gerekçe, sonra stop, en son emir.
 
 ## Limit neden ucuz görünür: ters seçim
 
@@ -210,17 +200,15 @@ değildir: emir, fiyatın kolayca geri geldiği olayların neredeyse tamamında 
 
 ### Masada: limitin dolması ne anlatır
 
-Bu bölümün masadaki karşılığı tek bir alışkanlıktır: limit dolduğunda bunu bir onay değil bir uyarı olarak okumak.
-Dolum, fiyatın senin yönünün aleyhine mumun yarısı kadar yürüdüğünü söyler. Dolmayan limit ise fiyatın o kadar geri
-gelmeden yürüdüğünü söyler; o olaylarda piyasadan girilen işlem çoğunlukla kazanırdı, ama limit bekleyen için o işlem
-hiç yoktu. Şema aynı limitin iki ayrı günde ne yaşadığını yan yana koyar.
+Bu bölümün masadaki karşılığı tek bir alışkanlıktır: limitin dolmasını bir onay değil bir uyarı olarak okumak. Dolum,
+fiyatın senin yönünün aleyhine mumun yarısı kadar yürüdüğünü söyler; dolmayan limit, fiyatın geri gelmeden yürüdüğünü.
+Şema aynı limitin iki ayrı günde ne yaşadığını yan yana koyar.
 
 {{# sema ters-secim }}
 
-İki günün ortak noktası şudur: büyük mumun kapandığı anda ikisi aynı görünür. Ayrışma ancak sonraki mumlarda başlar ve
-o noktada limit ya çoktan dolmuştur ya da fiyat çoktan gitmiştir. Bunun geometri olduğunu, yani yön bilgisi taşımayan
-bir yolda da aynı ayrışmanın görüleceğini unutmazsın: limitin dolduğu olayların kötü gitmesi limitin bir şey bildiğini
-göstermez, limitin nerede durduğunu gösterir (8. ders, Limit neden ucuz görünür). Yarısına dönen
+Büyük mum kapandığı anda iki gün aynı görünür; ayrışma sonraki mumlarda başlar ve o noktada limit ya çoktan dolmuştur
+ya da fiyat çoktan gitmiştir. Bu ayrışma geometridir: limitin dolduğu olayların kötü gitmesi limitin bir şey bildiğini
+değil, nerede durduğunu gösterir (8. ders, Limit neden ucuz görünür). Yarısına dönen
 büyük mumların yarısında dönüş ilk bir iki mum içinde geldi (6. ders, Yarısına dönen fiyat ne kadar sürede dönüyor);
 yani dolum çoğu zaman erken gelir. "Biraz daha beklesem dolardı" diye limiti uzatmak, bekleme süresinin bu derste
 ölçülmemiş bir uzantısıdır.
@@ -233,13 +221,13 @@ fiyat sonra stopu gördü; alttaki günde fiyat yarıya hiç dönmedi ve mumun y
 
 {{# ornek yariya-limit }}
 
-Üstteki günde ① büyük mum kapanır, sonraki mumlarda fiyat ② ile gösterilen yarıya iner ve ③ o ilk dokunuşun mumudur:
-limit orada dolar. Ardından fiyat mumun öbür ucunu da geçer ve yarıdan alınan işlemin stopunu görür; o işlem hedefine
-hiç yaklaşmaz, ④ izleme penceresinin sonudur. Alttaki günde ① aynı tipte bir mumdur, ② aynı yerde durur, ama ③ yoktur: fiyat yarıya hiç
-dokunmaz ve ④'te mumun yönünde, kapanışın belirgin ötesindedir. İki günün ilk birkaç mumu birbirine benzer; hangisinin
-hangi güne döneceği ancak fiyat yarıya inip inmediğinde, yani limitin kaderi belli olduğunda görünür. Grafik o andan
-sonra bakıldığında "belliydi" der. Bu iki gün kuralı ne doğrular ne yanlışlar: biri dolan limitin kötü gittiği, öbürü
-dolmayan limitin kaçırdığı olaydır ve ölçü ikisinin binlerce örneğinin oranıdır.
+Üstteki günde ① büyük mum kapanır, fiyat ② ile gösterilen yarıya iner ve ③ o ilk dokunuşun mumudur: limit orada dolar.
+Ardından fiyat mumun öbür ucunu da geçer ve yarıdan alınan işlemin stopunu görür; işlem hedefine hiç yaklaşmaz. Alttaki
+günde ① aynı tipte bir mumdur, ② aynı yerde durur, ama ③ yoktur: fiyat yarıya hiç dokunmaz ve ④'te, izleme penceresinin
+sonunda, kapanışın belirgin ötesindedir. İki günün ilk birkaç mumu birbirine benzer; hangisinin hangi güne döneceği ancak
+limitin kaderi belli olduğunda görünür ve grafik ancak o andan sonra "belliydi" der. Bu iki gün kuralı ne doğrular ne
+yanlışlar: biri dolan limitin kötü gittiği, öbürü dolmayan limitin kaçırdığı olaydır; ölçü ikisinin binlerce örneğinin
+oranıdır.
 
 ## Stop uzaklığı ve maliyet
 
@@ -257,24 +245,19 @@ maliyet yalnız ATR'si büyük olan olayların maliyeti, gerçek fark daha da b�
 
 ### Masada: stop nereye
 
-Stopun yeri grafikte çoğu zaman "mantıklı" bir yerdir: mumun ucunun hemen ötesi, son dibin altı. Ama sonucu belirleyen
-şey o yerin grafikteki anlamı değil, pip cinsinden uzaklığıdır. Makas ve kayma her işlemde aynı pip kadar ödenir; risk
-küçüldükçe aynı pip R'nin daha büyük bir parçası olur. Şema aynı girişe konmuş iki stopu ve onların 1 R hedeflerini
-yan yana gösterir.
+Stopun yeri grafikte çoğu zaman "mantıklı" bir yerdir: mumun ucunun hemen ötesi, son dibin altı. Sonucu belirleyen ise
+o yerin anlamı değil pip cinsinden uzaklığıdır. Şema aynı girişe konmuş iki stopu ve onların 1 R hedeflerini gösterir.
 
 {{# sema stop-uzaklik }}
 
-Şemada iki şey birlikte görünür. Yakın stopun hedefi de yakındır: 1 R, stopun uzaklığı kadardır. Ve bant, yani çıkışta
-ödenecek maliyet, iki stopta da aynı genişliktedir; yakın stopta onun riske oranı iki katıdır. 5 dakikada bu oran o
-kadar büyür ki olayların önemli bir kısmında planlanan risk işlem açılamayacak kadar küçük kalır: bu derste o olaylar
-hiç işleme girmedi, yani 1 ATR'lik satırın maliyeti zaten seçilmiş, ATR'si büyük olayların maliyetidir.
+Yakın stopun hedefi de yakındır, ve bant, yani ödenecek maliyet, iki stopta aynı genişliktedir: yakın stopta onun riske
+oranı iki katıdır.
 
 {{# kart stop-1atr }}
 
-Stop konusunda yapmayacağın şeyler: stopu dolumdan sonra uzaklaştırmazsın (bu, ölçülen işlemi bu derste ölçülmemiş
-başka bir işleme çevirir); ve stopu yaklaştırıp hedefi 2 R'ye taşıyarak "oran
-düzeldi" demezsin. Hedefi 2 R'ye taşımak 5 ve 15 dakikada hiçbir biçimi maliyetten sonra artıya çevirmedi (8. ders,
-15 dakika ve 1 saat).
+Stopu dolumdan sonra uzaklaştırmazsın (bu, ölçülen işlemi bu derste ölçülmemiş başka bir işleme çevirir); stopu
+yaklaştırıp hedefi 2 R'ye taşıyarak "oran düzeldi" de demezsin: hedefi 2 R'ye taşımak 5 ve 15 dakikada hiçbir biçimi
+maliyetten sonra artıya çevirmedi (8. ders, 15 dakika ve 1 saat).
 
 ## Onay mumu
 
@@ -287,18 +270,16 @@ bilgi kaçırılan fiyatın bedelini ancak karşılıyor. 1 saatte 2018–2023't
 
 ### Masada: onayı beklerken
 
-Onay mumunun ekrandaki görüntüsü güven verir: büyük mumdan sonra bir mum daha aynı yöne kapanmıştır. Şema bu güvenin
-bedelini gösterir. Onaylı giriş büyük mumun kapanışından değil onay mumunun kapanışından yapılır; stop aynı ATR
-uzaklığında durduğu için o da aynı mesafe kadar taşınır. Risk R cinsinden aynı kalır, giriş fiyatı ise daha ileridedir.
+Onay mumu güven verir: büyük mumdan sonra bir mum daha aynı yöne kapanmıştır. Şema bu güvenin bedelini gösterir: giriş
+onay mumunun kapanışından, yani daha ileriden yapılır ve stop da aynı mesafe kadar taşınır.
 
 {{# sema onay }}
 
 {{# kart onay }}
 
-Onay beklerken yapmayacağın iki şey var. Onay mumunu beklerken aynı anda kapanışta bir piyasa emri de vermezsin; iki
-giriş aynı görüşün iki kopyasıdır ve bu bileşim bu derste ölçülmedi. Onay gelmediğinde de "demek ki dönüyor" diye
-mumun tersine geçmezsin: mumun tersindeki onaylı giriş de maliyetten sonra eksi, ve gelmeyen onay yalnız işlem olmadığını
-söyler. 1 saatte onayın en az kaybeden biçim olması, 2024 sonrasında tekrarlanmadı (8. ders, 15 dakika ve 1 saat).
+Onayı beklerken aynı anda kapanışta bir piyasa emri de vermezsin; iki giriş aynı görüşün iki kopyasıdır ve bu bileşim
+bu derste ölçülmedi. 1 saatte onayın 2018–2023'te en az kaybeden biçim olması da 2024 sonrasında tekrarlanmadı (8. ders,
+15 dakika ve 1 saat).
 
 ## Ucun kırılması
 
@@ -310,9 +291,8 @@ maliyetten önce {{ G.60.ic.devam:stop:s2:h1.brut }} R; 2024 sonrasında {{ G.60
 ### Masada: uca stop emri
 
 Ucun kırılmasına konan stop emri ekranda en "canlı" giriştir: fiyat ucu geçtiği anda hareket hızlanıyormuş gibi
-görünür ve emir tam o anda dolar. Ama dolduğu yer, fiyatın zaten yürüdüğü yerdir ve stop emri kaymayı orada öder.
-Şemadaki ⑤ işareti bu emri gösterir (yukarıda, mumun yönündeki dört emrin şeması); dolum, olası yolun en sonunda,
-fiyat ucun ötesine geçtiğinde gelir.
+görünür ve emir tam o anda dolar. Dolduğu yer fiyatın zaten yürüdüğü yerdir ve kayma orada ödenir; mumun yönündeki
+dört emrin şemasında ⑤ işareti bu emirdir.
 
 {{# kart uc-stop }}
 
@@ -322,168 +302,148 @@ hiç geri çekilmeden yürüdü.
 
 {{# ornek uc-stop }}
 
-Üstteki günde ① büyük mum kapanır ve fiyat sonraki mumlarda ucun ötesine geçer; uca konan stop emri o an dolar, bekleme
-süresi ({{ SB.bekle }} mum) dolmadan kırılmışsa. Sonra fiyat geri döner, ② ile gösterilen yarıya iner (③ o ilk dokunuş)
-ve ④'te ucun kırıldığı yerin belirgin gerisindedir: ucun kırılmasından giren işlem hedefine ulaşmadan fiyat geri
-dönmüştür. Alttaki günde ① aynı tipte bir mumdur, uç
-yine kırılır, ama fiyat mumun boyunun dörtte biri kadar bile geri gelmez ve ④'te mumun yönünde belirgin ilerdedir; bu
-günde ③ yoktur. Kırılma anında iki gün aynı görünür: ikisinde de fiyat ucu geçmiştir ve ikisinde de hareket hızlanıyor
-gibidir. Ayrım kırılmadan sonraki mumlarda gelir. Uç ne zaman kırılırsa kırılsın, emrin açık olduğu süre ① ile kırılma
-arasındaki mumlar sayılarak figürde okunur; bekleme süresi dolduktan sonraki bir kırılma bu dersin emri için işlem
-değildir. Tek bir kırılma ne momentumu kanıtlar ne çürütür; ölçü, uca stop emrinin 5 ve 15 dakikada maliyetten
-önce sıfır çevresinde olmasıdır.
+Üstteki günde ① büyük mum kapanır ve fiyat sonraki mumlarda ucun ötesine geçer. Sonra geri döner, ② ile gösterilen
+yarıya iner (③ o ilk dokunuş) ve ④'te ucun kırıldığı yerin belirgin gerisindedir: uçtan giren işlem hedefine ulaşmadan
+fiyat dönmüştür. Alttaki günde uç yine kırılır, ama fiyat mumun boyunun dörtte biri kadar bile geri gelmez, ③ yoktur ve
+④'te fiyat mumun yönünde belirgin ilerdedir. Kırılma anında iki gün aynı görünür; ayrım kırılmadan sonraki mumlarda
+gelir. Emrin dolup dolmadığını figürde ① ile kırılma arasındaki mumları sayarak okursun: emir {{ SB.bekle }} mum açıktır
+ve süre dolduktan sonraki bir kırılma bu dersin emri için işlem değildir. Tek bir kırılma ne momentumu kanıtlar ne
+çürütür; ölçü, uca stop emrinin 5 ve 15 dakikada maliyetten önce sıfır çevresinde olmasıdır.
 
 ## Emri nereye koyarsın
 
 Bu bölüm, büyük mumdan bağımsız bir gerekçeyle işleme girmeye karar vermiş biri içindir: bir seviye, bir haber okuması,
 başka bir dilimdeki bir yapı. Büyük mum o kararı vermez; yalnız emrin nasıl yazılacağını değiştirir. Aşağıdakilerin
-hiçbiri bir kenar vaadi değildir. Her biri, ölçülen bir maliyetin ya da ölçülen bir seçimin nereden geldiğini söyler.
+hiçbiri bir kenar vaadi değildir; her biri ölçülen bir maliyetin ya da bir seçimin nereden geldiğini söyler.
 
 ### Giriş emri
 
-- **Piyasa emri** her olayda girer ve makası ile kaymayı hem girişte hem çıkışta öder. Seçtiği bir olay kümesi yoktur;
-  bu yüzden maliyetsiz sonucu büyük mumun kendi okumasını taşır: 6. dersteki hafif geri verme burada da görünür
-  (8. ders, Kısaca). Gerekçen fiyatın hemen
-  yürümesini istiyorsa ve 5 dakikalık grafikteysen, ödediğin maliyetin stopuna oranını yazmadan bu emri vermezsin.
-- **Limit emir** girişte makas ve kayma ödemez, çıkışta öder. Yeri, hangi olayları seçtiğini belirler: çeyrek limit
-  neredeyse her olayda, yarı limit hareketin yarısı geri alındığında, derin limit hareketin çoğu geri alındığında dolar.
-  Limitin bedeli, kazanacak olayları kaçırmasıdır (8. ders, Limit neden ucuz görünür). Limiti, büyük mumun kapanışının
-  zaten gerisinde kalan bir seviyeye koymazsın.
-- **Stop emriyle giriş** (ucun kırılması, ya da tersine yarının kırılması) yalnız fiyat o seviyeyi geçtiğinde dolar ve
-  kaymayı orada öder. Momentumu yakalamak için konur; bu derste maliyetten önce sıfır çevresinde kaldı (8. ders, Ucun
-  kırılması).
-- **Onay mumundan sonra piyasa** olayların bir kısmında hiç işlem açmaz, açtığında daha ileriden açar. Onayın bilgisi
-  kaçırılan fiyatı ancak karşılar (8. ders, Onay mumu).
+- **Piyasa emri** her olayda girer, makası ve kaymayı girişte de çıkışta da öder. Bir olay kümesi seçmez; maliyetsiz
+  sonucu büyük mumun kendi okumasını taşır (8. ders, Kısaca). 5 dakikalık grafikte bu emri, maliyetin stopa oranını
+  yazmadan vermezsin.
+- **Limit emir** girişte makas ve kayma ödemez, çıkışta öder. Yeri hangi olayları seçtiğini belirler; bedeli, kazanacak
+  olayları kaçırmasıdır (8. ders, Limit neden ucuz görünür). Kapanışın zaten gerisinde kalan bir seviyeye konmaz.
+- **Stop emriyle giriş** yalnız fiyat seviyeyi geçtiğinde dolar ve kaymayı orada öder; bu derste maliyetten önce sıfır
+  çevresinde kaldı (8. ders, Ucun kırılması).
+- **Onay mumundan sonra piyasa** olayların bir kısmında hiç işlem açmaz, açtığında daha ileriden açar (8. ders, Onay
+  mumu).
 
 ### Stop
 
-Stop girişten ATR cinsinden ölçülür; bu derste 1 ya da 2 ATR. Grafikteki "mantıklı" yer ne olursa olsun, sorulacak
-soru stopun pip uzaklığının makasa oranıdır. 5 dakikada 1 ATR'lik stopla maliyet işlem başına
+Stop girişten ATR cinsinden ölçülür, limitle girdiysen limitin fiyatından; bu derste 1 ya da 2 ATR. Sorulacak soru
+stopun pip uzaklığının makasa oranıdır. 5 dakikada 1 ATR'lik stopla maliyet işlem başına
 {{ G.5.ic.devam:piyasa:s1:h1.maliyet }} R, 2 ATR'de {{ G.5.ic.devam:piyasa:s2:h1.maliyet }} R oldu; risk
-{{ ON.en_az_risk_pip }} pipin altında kalan olaylarda bu derste işlem hiç açılmadı ve masada da aynı sınırı sorarsın
-(8. ders, Stop uzaklığı ve maliyet). Aynı fikri 2 ATR'lik bir stopla 5 dakikada taşıyamıyorsan, bir üst dilimde kurmak
-maliyetin payını küçültür; fikrin kendisini değiştirmez. Limitle girdiysen stop limitin fiyatından ölçülür, mumun
-kapanışından değil.
+{{ ON.en_az_risk_pip }} pipin altında kalan olaylarda bu derste işlem hiç açılmadı, masada da aynı sınırı sorarsın
+(8. ders, Stop uzaklığı ve maliyet). Fikri 2 ATR'lik bir stopla taşıyamıyorsan bir üst dilimde kurmak maliyetin payını
+küçültür; fikrin kendisini değiştirmez.
 
 ### Hedef
 
-Hedef planlanan riskin katıdır: 1 R ya da 2 R. Hedefi uzaklaştırmak kazanma oranını düşürür, kazanan işlemin
-büyüklüğünü artırır; bu derste ikisinin dengesi maliyetten sonra 5 ve 15 dakikada hiçbir biçimi artıya çevirmedi. Tek
-istisna 1 saatte, hedefi 2 R olan geri çekilme limitleridir ve büyüklüğü sıfırdan ayırt edilemiyor (8. ders, 15 dakika
-ve 1 saat). Ne stop ne hedef görülürse pozisyon 24 mumun sonunda kapanır; bu süre dilime göre iki saat, altı saat ya da
-bir gündür ve emri yazarken o kapanışın saatini de yazarsın.
+Hedef planlanan riskin katıdır: 1 R ya da 2 R. Hedef uzaklaştıkça ona daha az işlem ulaşır, ulaşan daha çok kazanır;
+bu derste ikisinin dengesi 5 ve 15 dakikada hiçbir biçimi maliyetten sonra artıya çevirmedi (8. ders, 15 dakika ve
+1 saat). Ne stop ne hedef görülürse pozisyon 24 mumun sonunda kapanır; emri yazarken o kapanışın saatini de yazarsın.
 
 ### Bekleme süresi ve iptal
 
-Bu derste limit ve stop emirleri büyük mum kapandıktan sonra {{ SB.bekle }} mum bekledi; süre mumla sayıldığı için
-dilimle birlikte uzar, 1 saatlik grafikte aynı sayıda mum 5 dakikalığın on iki katı süredir. Dolmayan emir iptal edildi. Masada üç durumda emri süre
-dolmadan da çekersin, çünkü üçünde de emrin bu derste ölçülen hâli artık yoktur: bekleme süresinin içine takvimde büyük
-bir haber girerse; mumun yönündeki bir limit beklenirken fiyat yeni bir uç yapar ve sen limiti yukarı taşımak
-istersen (taşınan limit başka bir emirdir); ve emrin dayandığı gerekçe o sürede geçersiz olursa. Farklı bekleme süreleri
-bu derste ölçülmedi.
+Bu derste limit ve stop emirleri büyük mum kapandıktan sonra {{ SB.bekle }} mum bekledi ve dolmazsa iptal edildi; süre
+mumla sayıldığı için dilimle uzar. Masada emri süre dolmadan da üç durumda çekersin, çünkü üçünde de emrin ölçülen hâli
+artık yoktur: bekleme süresine takvimde büyük bir haber girerse; fiyat yeni bir uç yapar ve limiti peşinden taşımak
+istersen (taşınan limit başka bir emirdir); emrin dayandığı gerekçe o sürede geçersiz olursa. Farklı bekleme süreleri bu
+derste ölçülmedi.
 
 ### Haber penceresinde
 
-Bu derste takvimdeki büyük bir haberin iki dakika öncesinden on beş dakika sonrasına kadar piyasa ve stop emirleri
-{{ ON.haber_kayma_pip }} pip daha kötü doldu; bu bir varsayımdır, hızlı piyasadaki gerçek kayma ölçülmedi. Limit emir
-bu pencerede de kaymasız sayıldı; gerçek bir defterde bunun doğru olduğu ölçülmedi. Saatler: ABD istihdam ve enflasyon
+Takvimdeki büyük bir haberin iki dakika öncesinden on beş dakika sonrasına kadar piyasa ve stop emirleri bu derste
+{{ ON.haber_kayma_pip }} pip daha kötü doldu; bu bir varsayımdır, hızlı piyasadaki gerçek kayma ölçülmedi. Limit emir bu
+pencerede de kaymasız sayıldı ve gerçek bir defterde bunun doğruluğu ölçülmedi. Saatler: ABD istihdam ve enflasyon
 verisi New York 08:30 (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30), FOMC kararı New York 14:00 (TSİ ABD yaz
 saatinde 21:00, kış saatinde 22:00), ECB kararı Frankfurt 14:15 (TSİ Avrupa yaz saatinde 15:15, kış saatinde 16:15),
 BoE kararı Londra 12:00 (TSİ İngiltere yaz saatinde 14:00, kış saatinde 15:00). Haber mumunun kendisi bir okuma
-taşımaz: az sayıdadır ve sonraki yolu bir yön söyleyemeyecek kadar dağınıktır (7. ders, Kısaca; 9. ders, Büyük
-mum için oyun planı). Bu yüzden masadaki kural sadedir: büyük mumdan sonra bekleyen bir emrin süresi haber penceresine
-düşüyorsa emri bırakmazsın.
+taşımaz: az sayıdadır ve sonraki yolu bir yön söyleyemeyecek kadar dağınıktır (7. ders, Kısaca; 9. ders, Büyük mum için
+oyun planı). Kural sadedir: bekleyen bir emrin süresi haber penceresine düşüyorsa emri bırakmazsın.
 
 ## Sık yapılan hatalar
 
 1. **"Limit doldu, demek ki doğru yerden aldım."** Dolum, fiyatın aleyhine mumun yarısı kadar yürüdüğünü söyler; o
-   olaylarda aynı anda piyasadan giren işlem çoğunlukla kaybederdi. Dolum bir uyarıdır (8. ders, Limit neden ucuz
-   görünür).
-2. **"Limitin dolum oranı yüksek, demek ki limit iyi çalışıyor."** Çeyrek limitin neredeyse her olayda dolması, fiyatın
-   kolayca geri geldiği olayların neredeyse tamamını işleme çevirdiği anlamına gelir; seçici değildir (8. ders, Limit
-   neden ucuz görünür).
-3. **"Limit dolmadı, fiyat kaçıyor, piyasadan girerim."** Dolmayan limitin kaçırdığı kazanç, kapanışta piyasa girişinin
-   kazancıdır ve o fiyat bekleme süresi içinde geride kalmıştır. Geç bir piyasa girişi bu derste ölçülmedi; kapanıştaki
-   piyasa girişinin kendisi maliyetten sonra eksidir (8. ders, 5 dakika).
-4. **"Stopu yakın koyarsam kaybım küçük olur."** Pip olarak küçülen kayıp, R cinsinden büyüyen maliyetle gelir; 5
-   dakikada 1 ATR'lik stopla maliyet 2 ATR'dekinden belirgin büyük (8. ders, Stop uzaklığı ve maliyet).
-5. **"Onay mumunu beklersem güvenli girerim."** Onaylı giriş daha ileriden girer ve maliyetten önce kapanıştaki piyasa
-   girişinden belirgin farklı değildir (8. ders, Onay mumu).
-6. **"Uç kırıldı, momentum başladı."** Uca stop emri kaymayı fiyatın zaten yürüdüğü yerde öder ve maliyetten önce sıfır
-   çevresindedir (8. ders, Ucun kırılması).
-7. **"Mum çok uzadı, uçtan satarım."** 5 dakikadaki küçük geri verme kenarını uca konan tersine limit yok eder, çünkü
-   fiyatın uca geri döndüğü olaylar geri vermenin olmadığı olaylardır; 1 saatte tersine girişler 2018–2023'te maliyetten
-   önce de eksidir (8. ders, Limit neden ucuz görünür; 8. ders, 15 dakika ve 1 saat).
-8. **"Hedefi 2 R yaparsam oran düzelir."** Hedefi uzaklaştırmak 5 ve 15 dakikada hiçbir biçimi maliyetten sonra artıya
-   çevirmedi (8. ders, 15 dakika ve 1 saat).
+   olaylarda aynı anda piyasadan giren işlem çoğunlukla kaybederdi (8. ders, Limit neden ucuz görünür).
+2. **"Limitin dolum oranı yüksek, limit iyi çalışıyor."** Çeyrek limit fiyatın kolayca geri geldiği olayların neredeyse
+   hepsinde dolar; seçici değildir (8. ders, Limit neden ucuz görünür).
+3. **"Limit dolmadı, fiyat kaçıyor, piyasadan girerim."** Kaçırılan kazanç kapanıştaki piyasa girişinindir ve o fiyat
+   geride kalmıştır. Geç piyasa girişi bu derste ölçülmedi; kapanıştaki giriş de maliyetten sonra eksidir (8. ders,
+   5 dakika).
+4. **"Stopu yakın koyarsam kaybım küçük olur."** Pip olarak küçülen kayıp, R cinsinden büyüyen maliyetle gelir (8. ders,
+   Stop uzaklığı ve maliyet).
+5. **"Onay ya da ucun kırılması güvenli giriştir."** İkisi de daha ileriden girer; onaylı giriş maliyetten önce kapanış
+   girişinden belirgin farklı değil, uca stop emri sıfır çevresinde (8. ders, Onay mumu; 8. ders, Ucun kırılması).
+6. **"Mum çok uzadı, uçtan satarım."** Uca konan tersine limit 5 dakikadaki küçük geri verme kenarını yok eder; 1 saatte
+   tersine girişler 2018–2023'te maliyetten önce de eksidir (8. ders, Limit neden ucuz görünür; 8. ders, 15 dakika ve
+   1 saat).
+7. **"Hedefi 2 R yaparsam oran düzelir."** 5 ve 15 dakikada hiçbir biçimi maliyetten sonra artıya çevirmedi (8. ders,
+   15 dakika ve 1 saat).
 
 ## Masa kontrol listesi
 
 Büyük mum kapandıktan sonra, emir vermeden önce sırayla:
 
-1. Saat kaç ve hangi seanstayım? Asya Londra 07:00'den önce (TSİ İngiltere yaz saatinde 09:00'dan önce, kış saatinde
-   10:00'dan önce), Londra seansı Londra 07:00 ile New York 08:00 arası (TSİ ikisi yaz saatindeyken 09:00–15:00),
-   örtüşme New York 08:00 ile Londra 16:30 arası (TSİ ikisi yaz saatindeyken 15:00–18:30); ikisi kış saatindeyken TSİ
-   karşılıkları bir saat sonradır.
-2. Emrin bekleme süresi ({{ SB.bekle }} mum) takvimdeki büyük bir haberin penceresine düşüyor mu? ABD verisi New York
-   08:30 (TSİ ABD yaz saatinde 15:30, kış saatinde 16:30), FOMC New York 14:00 (TSİ ABD yaz saatinde 21:00, kış saatinde
-   22:00). Düşüyorsa emir yok.
+1. Hangi seanstayım? Asya Londra 07:00'den önce (TSİ İngiltere yaz saatinde 09:00'dan, kış saatinde 10:00'dan önce),
+   Londra seansı Londra 07:00 ile New York 08:00 arası (TSİ ikisi yaz saatindeyken 09:00–15:00), örtüşme New York
+   08:00 ile Londra 16:30 arası (TSİ ikisi yaz saatindeyken 15:00–18:30); kış saatinde TSİ karşılıkları bir saat sonra.
+2. Emrin bekleme süresi ({{ SB.bekle }} mum) büyük bir haberin penceresine düşüyor mu? ABD verisi New York 08:30 (TSİ
+   ABD yaz saatinde 15:30, kış saatinde 16:30), FOMC New York 14:00 (TSİ ABD yaz saatinde 21:00, kış saatinde 22:00).
+   Düşüyorsa emir yok.
 3. FX gününün devrine yakın mıyım? New York 16:50–17:10 (TSİ ABD yaz saatinde 23:50–00:10, kış saatinde 00:50–01:10)
    makas sıçrar; o mumlar bu serinin ölçülerine girmedi.
 4. Büyük mumun dışında bir gerekçem var mı? Yoksa emir yok.
-5. Mumun iki ucunu ve yarısını işaretledim mi? Kapanış hangi seviyenin gerisinde?
-6. Dilim kaç, ATR kaç pip? Stop 1 ATR mi 2 ATR mi, ve planlanan risk makasın kaç katı?
-7. Emrin türü ne: piyasa, limit, stop, onay? Hangi olay kümesini seçiyor ve hangi maliyeti ödüyor?
-8. Limit dolarsa bunun ne anlattığını yazdım mı? Dolmazsa fiyatı kovalamayacağımı?
+5. Mumun iki ucunu ve yarısını işaretledim mi; kapanış hangi seviyenin gerisinde?
+6. Dilim kaç, ATR kaç pip; stop 1 ATR mi 2 ATR mi ve risk makasın kaç katı?
+7. Emrin türü hangi olay kümesini seçiyor, hangi maliyeti ödüyor?
+8. Limit dolarsa ne düşüneceğimi, dolmazsa kovalamayacağımı yazdım mı?
 9. Hedef 1 R mi 2 R mi; ne stop ne hedef görülürse pozisyon hangi saatte kapanır?
-10. Emri hangi koşulda süre dolmadan çekerim: haber, taşınmak istenen limit, geçersizleşen gerekçe?
 
 ## Grafik okuma alıştırmaları
 
-**Alıştırma 1.** 5 dakikalık EUR/USD grafiğinde, Londra 08:40'ta (TSİ İngiltere yaz saatinde 10:40) yukarı yönlü, boyu
-üç ATR kadar bir mum ucunda kapanıyor. Takvimde o saatlerde bir haber yok. Masadaki bir arkadaşın "kaçıyor" deyip
-kapanışta piyasadan alıyor. Senin başka bir gerekçen yok. Ne yaparsın, ne yapmazsın?
+**Alıştırma 1.** 5 dakikalık EUR/USD'de Londra 08:40'ta (TSİ İngiltere yaz saatinde 10:40) yukarı yönlü, boyu üç ATR
+kadar bir mum ucunda kapanıyor; takvimde haber yok. Masadaki biri "kaçıyor" deyip kapanışta piyasadan alıyor. Senin
+başka bir gerekçen yok. Ne yaparsın, ne yapmazsın?
 
 <details>
 <summary>Çözüm</summary>
 
 Emir vermezsin: tek gerekçe büyük mumun kendisi ve hiçbir giriş biçimi bunu maliyetten sonra artıya çevirmedi (8. ders,
-5 dakika). Mumun iki ucunu ve yarısını işaretleyip izlersin. Başka bir gerekçen olsaydı bile kapanışta piyasa emri
-vermezdin; 5 dakikada piyasa ve stop emirleri maliyeti en çok ödeyen satırlardır. Arkadaşının işlemi bir kenar değil,
-bu dersin en pahalı satırlarından biridir.
+5 dakika). Mumun uçlarını ve yarısını işaretleyip izlersin. Gerekçen olsaydı bile kapanışta piyasa emri vermezdin; 5
+dakikada piyasa ve stop emirleri maliyeti en çok ödeyen satırlardır.
 
 </details>
 
 **Alıştırma 2.** Başka bir gerekçeyle 5 dakikalık yukarı bir büyük mumdan sonra yarıya alış limiti koydun. Üçüncü mumda
-limit doldu; dolum mumu uzun ve kırmızı. Ekranda ucuz bir fiyattan almış gibisin ve aklından ikinci bir limitle
-ortalamayı düşürmek geçiyor. Ne yaparsın, ne yapmazsın? (Yarıya alış limiti şemasındaki A gününe bak.)
+limit doldu; dolum mumu uzun ve kırmızı. Ucuzdan almış gibisin ve ikinci bir limitle ortalamayı düşürmek aklından
+geçiyor. Ne yaparsın, ne yapmazsın? (Yarıya alış limiti şemasındaki A gününe bak.)
 
 <details>
 <summary>Çözüm</summary>
 
-Stopu ve hedefi emri koyarken yazdığın yerde bırakırsın. Dolumu bir uyarı olarak okursun: limitin dolduğu olaylarda
-aynı anda piyasadan giren işlem çoğunlukla kaybederdi (8. ders, Limit neden ucuz görünür). İkinci bir limitle pozisyonu
-büyütmezsin; bu bileşim bu derste ölçülmedi ve dolum zaten fiyatın aleyhine yürüdüğünün işaretidir. Stopu da "fiyat
-ucuzladı" diye uzaklaştırmazsın.
+Stopu ve hedefi baştan yazdığın yerde bırakırsın ve dolumu bir uyarı olarak okursun: limitin dolduğu olaylarda aynı
+anda piyasadan giren işlem çoğunlukla kaybederdi (8. ders, Limit neden ucuz görünür). İkinci limitle pozisyonu
+büyütmezsin; bu bileşim bu derste ölçülmedi. Stopu da "fiyat ucuzladı" diye uzaklaştırmazsın.
 
 </details>
 
-**Alıştırma 3.** 1 saatlik GBP/USD grafiğinde New York 10:00'da (TSİ ABD yaz saatinde 17:00) başlayan aşağı yönlü büyük
-bir mum, önceki mumların birkaç katı boyunda kapanıyor. Günlük grafikte de göze batıyor. "Fazla gitti, ucuna limit
-koyup alırım" diye düşünüyorsun. Ne yaparsın, ne yapmazsın?
+**Alıştırma 3.** 1 saatlik GBP/USD'de New York 10:00'da (TSİ ABD yaz saatinde 17:00) başlayan aşağı yönlü büyük bir mum
+önceki mumların birkaç katı boyunda kapanıyor. "Fazla gitti, ucuna limit koyup alırım" diye düşünüyorsun. Ne yaparsın,
+ne yapmazsın?
 
 <details>
 <summary>Çözüm</summary>
 
-Mumun tersine girmezsin: 1 saatte tersine girişler 2018–2023'te maliyetten önce de eksiydi, uca ve ucun yarım ATR
-ötesine konan tersine limitler dahil (8. ders, 15 dakika ve 1 saat; 6. ders, Dilim dilim okuma). Mumun yönünde başka
-bir gerekçen varsa çeyrek ya da yarı geri çekilmeye limit ya da onay mumundan sonra piyasa emri, stop 2 ATR; bunların da
-maliyetten sonra stop 2 ATR, hedef 1 R satırında artıda olmadığını bilirsin.
+Mumun tersine girmezsin: 1 saatte tersine girişler 2018–2023'te maliyetten önce de eksiydi, uca konan limit dahil
+(8. ders, 15 dakika ve 1 saat; 6. ders, Dilim dilim okuma). Mumun yönünde başka bir gerekçen varsa çeyrek ya da yarı
+geri çekilmeye limit ya da onay mumundan sonra piyasa, stop 2 ATR; bunların da stop 2 ATR, hedef 1 R satırında
+maliyetten sonra artıda olmadığını bilirsin.
 
 </details>
 
-**Alıştırma 4.** 5 dakikalık USD/JPY'de New York 08:20'de (TSİ ABD yaz saatinde 15:20) yukarı bir büyük mum kapanıyor.
-Takvimde New York 08:30'da (TSİ ABD yaz saatinde 15:30) ABD istihdam raporu var. Başka bir gerekçeyle ucun kırılmasına stop emri
+**Alıştırma 4.** 5 dakikalık USD/JPY'de New York 08:20'de (TSİ ABD yaz saatinde 15:20) yukarı bir büyük mum kapanıyor;
+New York 08:30'da (TSİ ABD yaz saatinde 15:30) ABD istihdam raporu var. Başka bir gerekçeyle ucun kırılmasına stop emri
 koymayı düşünüyorsun. Ne yaparsın, ne yapmazsın?
 
 <details>
@@ -491,22 +451,8 @@ koymayı düşünüyorsun. Ne yaparsın, ne yapmazsın?
 
 Emri bırakmazsın: {{ SB.bekle }} mumluk bekleme süresi haber penceresine düşüyor. O pencerede stop emri bu derste
 {{ ON.haber_kayma_pip }} pip daha kötü dolduruldu ve gerçek kayma ölçülmedi; haber mumunun kendisi de bir yön okuması
-taşımıyor (7. ders, Kısaca; 9. ders, Büyük mum için oyun planı). Uca stop emri haber dışında da maliyetten önce
-sıfır çevresindeydi (8. ders, Ucun kırılması).
-
-</details>
-
-**Alıştırma 5.** 5 dakikalık AUD/USD'de ATR birkaç pip. Bir büyük mumdan sonra stopu mumun ucunun hemen ötesine,
-girişten bir ATR'ye koymak istiyorsun; grafikte çok makul görünüyor. Ne yaparsın, ne yapmazsın? (Aynı makas, iki stop
-şemasına bak.)
-
-<details>
-<summary>Çözüm</summary>
-
-Riski pip olarak yazar, makasla yan yana koyarsın. Bu derste risk {{ ON.en_az_risk_pip }} pipin altında kalan olayda
-işlem açılmadı; 5 dakikada 1 ATR'de olayların {{ G.5.taban_pay }} kadarı bu yüzden işlem dışı kaldı. Kalan olaylarda da
-maliyet 1 ATR'de 2 ATR'dekinden belirgin büyük (8. ders, Stop uzaklığı ve maliyet). Stopu 2 ATR'ye koyarsın ya da aynı
-fikri 15 dakika veya 1 saatte kurarsın. Hedefi 2 R yaparak yakın stopu "telafi etmezsin".
+taşımıyor (7. ders, Kısaca; 9. ders, Büyük mum için oyun planı). Uca stop emri haber dışında da maliyetten önce sıfır
+çevresindeydi (8. ders, Ucun kırılması).
 
 </details>
 

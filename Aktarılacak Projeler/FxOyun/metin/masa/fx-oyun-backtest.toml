@@ -182,13 +182,13 @@ mumlar = [[100,101.2,99.6,100.9],[100.9,101.8,100.5,101.5],[101.5,101.7,100.9,10
 vurgu = [7, 12]
 yukseklik = 290
 eksen = "TSİ, gün boyu →"
-not = ["Tokyo açılışı (Tokyo 09:00, TSİ 03:00) ve Tokyo fiksingi (TSİ 03:55): aralığı ve koşuyu işaretlersin; işlem yok.",
-       "Londra açılışı (Londra 08:00, TSİ 10:00; İngiltere kış saatinde 11:00): ilk mumun sınıfı ve aralığı; plan izler.",
-       "Haber penceresi: BoE (TSİ 14:00), ECB (TSİ 15:15), ABD verisi (TSİ 15:30); İngiltere, Avrupa ve ABD kış saatinde birer saat geç. Makas açılır.",
-       "New York açılışı (New York 09:30, TSİ 16:30; ABD kış saatinde 17:30): sessiz açılışın kırılımı bir sinyal değildir.",
-       "Londra fiksingi (Londra 16:00, TSİ 18:00; İngiltere kış saatinde 19:00): geri verme beklenir, koşu kovalanmaz; ay sonu ayrı okunur.",
-       "FOMC kararı, yalnız karar günlerinde (New York 14:00, TSİ 21:00; ABD kış saatinde 22:00): aday deftere yazılır, kural sayılmaz.",
-       "New York kapanışı (New York 17:00, TSİ 00:00; ABD kış saatinde 01:00): defter kapanır, dolmayan emirler de yazılır."]
+not = ["Tokyo açılışı ve fiksingi (TSİ 03:00 ve 03:55): işaretle, işlem yok.",
+       "Londra açılışı (TSİ 10:00; İngiltere kış saatinde 11:00): sınıfı yaz, plan izler.",
+       "Haber penceresi (TSİ 14:00 · 15:15 · 15:30; kış saatinde birer saat geç): makas açılır.",
+       "New York açılışı (TSİ 16:30; ABD kış saatinde 17:30): kırılım sinyal değil.",
+       "Londra fiksingi (TSİ 18:00; İngiltere kış saatinde 19:00): koşu kovalanmaz.",
+       "FOMC kararı (TSİ 21:00; ABD kış saatinde 22:00): aday deftere yazılır.",
+       "New York kapanışı (TSİ 00:00; ABD kış saatinde 01:00): defter kapanır."]
 [[sema.bolge]]
 y1 = 98.4
 y2 = 106.4
@@ -313,48 +313,38 @@ dayanak = "5. ders, Maliyet nereye gidiyor"
 [[kart]]
 id = "yuksek-kazanma"
 durum = "Açılışta güçlü ilk mumdan sonra yarıya limit ve yarım R hedefle işlemlerin çoğunu kazanan bir kurulum"
-gorursun = "Kazanan işlemler sık ve küçük, çoğu kısa sürede hedefe varır; kaybedenler seyrek ama her biri tam bir stop. Grafikte arka arkaya kazanan günler görünür."
-yaparsin = "Kazanma oranının yanına başa baş oranını yazarsın: ortalama kayıp, ortalama kazanç ile ortalama kaybın toplamına bölünür. İkisini maliyetten sonra, aynı işlemlerden hesaplarsın."
-yapmazsin = "Kazanma oranı yüksek diye kurulumu bir kenar saymazsın; hedefi yaklaştırıp oranı yükseltmeyi iyileştirme saymazsın; kaybeden günün stopunu genişletmezsin."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit mumun yarısına, stop öbür ucun mum boyunun onda biri kadar ötesine; hedefi yaklaştırdıkça gereken kazanma oranının da yükseldiğini bilirsin."
+gorursun = "Sık ve küçük kazançlar, seyrek ama her biri tam bir stop olan kayıplar; grafikte arka arkaya kazanan günler."
+yaparsin = "Kazanma oranının yanına başa baş oranını yazarsın; ikisini maliyetten sonra, aynı işlemlerden hesaplarsın."
+yapmazsin = "Kazanma oranı yüksek diye kurulumu kenar saymazsın; kaybeden günün stopunu genişletmezsin."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun biraz ötesine; hedef yaklaştıkça gereken kazanma oranı da yükselir."
 dayanak = "5. ders, Kazanma oranı ve net sonuç; 1. ders, Kazanma oranı ile net sonuç"
 
 [[kart]]
 id = "kucuk-stop"
 durum = "Sessiz bir açılışta ya da sessiz bir fiksingte küçük ilk mumun bir ucu kırılıyor"
-gorursun = "Dar bir ilk mum ve kırılan uçta biraz yer değiştiren bir fiyat; makas ekranda mumun boyuna göre geniş görünür."
-yaparsin = "Emir anındaki makası ve planlanan riski pip olarak okur, birini ötekine bölersin; bölüm işlemin R cinsinden maliyetidir. Sonucu orta fiyattan da yazarsın."
-yapmazsin = "Kırılıma stop emriyle girip maliyeti birkaç pip diye geçmezsin; stopu maliyet küçülsün diye uzaklaştırıp bunu bir kenar saymazsın."
-emir = "Başka bir gerekçeyle kırılımda gireceksen stop emri kırılan uca, koruyucu stop öbür ucun biraz ötesine; stop emri kaymayı da öder. Takvimde bir açıklama yaklaşıyorsa emri pencereden önce çekersin."
+gorursun = "Dar bir ilk mum; makas ekranda mumun boyuna göre geniş görünür."
+yaparsin = "Makası planlanan riske bölersin; bölüm işlemin R cinsinden maliyetidir. Sonucu orta fiyattan da yazarsın."
+yapmazsin = "Kırılıma girip maliyeti birkaç pip diye geçmezsin."
+emir = "Başka bir gerekçeyle gireceksen stop emri kırılan uca, koruyucu stop öbür ucun biraz ötesine; stop emri kayma da öder. Bir açıklama yaklaşıyorsa emri pencereden önce çekersin."
 dayanak = "5. ders, Maliyet nereye gidiyor; 8. ders, Stop uzaklığı ve maliyet; 8. ders, Ucun kırılması"
 
 [[kart]]
 id = "karar-aday"
 durum = "FOMC kararında (New York 14:00, TSİ 21:00; ABD kış saatinde 22:00) ilk beş dakika güçlü bir mumla kapanıyor"
-gorursun = "Ucuna yakın kapanan büyük bir mum, dört paritede birden aynı yönde; makas kararın ilk dakikalarında açık."
-yaparsin = "Mumu sınıflar, adayın satırını deftere yazarsın: olay kimliği, giriş, stop, hedef. Sayacı karar günü olarak artırırsın, işlem olarak değil."
-yapmazsin = "Adayı sınanmış bir kural sayıp riskle kurmazsın; dört paritenin işlemini dört bağımsız sonuç saymazsın; kuralı bu karara bakarak değiştirmezsin."
-emir = "Başka bir gerekçeyle gireceksen adayın emri kapanışta mumun yönünde bir piyasa emridir; stop mumun öbür ucunun ötesinde ve uzaktır, kayma haber penceresinde büyüktür."
+gorursun = "Ucuna yakın kapanan büyük bir mum, dört paritede aynı yönde; makas ilk dakikalarda açık."
+yaparsin = "Adayın satırını olay kimliğiyle deftere yazarsın; sayaç karar günü sayar."
+yapmazsin = "Adayı sınanmış bir kural sayıp riskle kurmazsın; dört paritenin işlemini dört bağımsız sonuç saymazsın."
+emir = "Başka bir gerekçeyle gireceksen emir kapanışta mumun yönünde piyasa emridir; stop öbür ucun ötesinde ve uzak, kayma büyük."
 dayanak = "5. ders, İşlem tepkileri; 4. ders, Merkez bankası kararları"
 
 [[kart]]
 id = "fiksing-izle"
 durum = "Londra fiksingine (Londra 16:00, TSİ 18:00; İngiltere kış saatinde 19:00) belirgin bir koşu geliyor"
-gorursun = "Fiksinge kadar aynı yöne akan bir fiyat; fiksing dakikasında koşunun ucu, ardından bir duraklama."
-yaparsin = "Koşunun ucunu ve yarısını işaretlersin; fiksingden sonraki bir saatte fiyatın yarıya dönüp dönmediğine bakarsın. Ayın son Londra iş günüyse koşunun daha da az sürdüğünü bilirsin."
+gorursun = "Fiksinge kadar aynı yöne akan bir fiyat; fiksing dakikasında koşunun ucu."
+yaparsin = "Ucu ve yarıyı işaretler, fiksingden sonraki bir saatte yarıya dönüşe bakarsın; ay sonunda koşu daha da az sürer."
 yapmazsin = "Fiksingden sonra koşunun yönünde girmezsin; geri vermeyi piyasa emriyle koşunun tersine işlemezsin."
-emir = "Koşunun yönünde başka bir gerekçeyle açık pozisyonun varsa fiksingden sonraki sürmeye dayanmazsın. Koşunun tersine gireceksen emir piyasa emridir, stop koşunun ucunun ötesinde, hedef koşunun yarısı; maliyet geri vermeden büyüktür."
+emir = "Koşunun yönünde açık pozisyonun varsa fiksingden sonraki sürmeye dayanmazsın. Tersine gireceksen emir piyasa emridir, stop koşunun ucunun ötesinde, hedef yarısı; maliyet geri vermeden büyüktür."
 dayanak = "3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Ay sonu; 5. ders, İzle, işlem açma"
-
-[[kart]]
-id = "haber-acik"
-durum = "Başka bir gerekçeyle açık bir pozisyonun var ve ABD verisine (New York 08:30, TSİ 15:30; ABD kış saatinde 16:30) dakikalar kaldı"
-gorursun = "Açıklamadan önce daralan bir fiyat; açıklama dakikasında açılan makas ve ilk beş dakikada büyük bir mum."
-yaparsin = "Stopunu ve hedefini açıklamanın penceresinden önce gözden geçirirsin; stopun pencerede genişleyen makasla ve ek kaymayla dolacağını bilirsin."
-yapmazsin = "Veri mumunun yönüne yeni pozisyon eklemezsin; ilk beş dakikanın yönünü sonraki iki saatin yönü saymazsın."
-emir = "Açıklamadan iki dakika önce ile on beş dakika sonrası arasında yeni emir koymazsın; açık limitleri bilerek bırakır ya da pencereden önce çekersin."
-dayanak = "4. ders, ABD verileri; 4. ders, Haber anları için masa kartı"
-
 
 [[ornek]]
 id = "acilis-yari"

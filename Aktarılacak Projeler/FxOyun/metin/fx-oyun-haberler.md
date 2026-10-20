@@ -100,17 +100,15 @@ Tarım dışı istihdam ve TÜFE New York 08:30'da (TSİ 15:30, ABD kış saatin
    büyük ve gövdesi uzunsa güçlü, bir yönde uzun fitilli ve küçük gövdeliyse reddedilen, çok küçükse küçük, kalan her
    mum normal.
 2. **Üç seviye çizersin:** mumun iki ucu ve yarısı. Sonraki iki saatin okuması bu üç çizginin karşısında yapılır.
-3. **Neyi beklemeyeceğini söylersin.** Normal ve reddedilen veri mumunun yönde sürmesini beklemezsin: iki dönemde de
+3. **Neyi beklemeyeceğini söylersin.** Normal ve reddedilen veri mumunun yönünde sürmesini beklemezsin: iki dönemde de
    şanstan seyrek sürdü. Güçlü veri mumunda devam payı aynayla aynı; mumun ucunda kapanması yön bilgisi değildir.
 
-İzleme New York 10:35'te (TSİ 17:35, ABD kış saatinde 18:35) biter; arada New York açılışı (TSİ 16:30, ABD kış
-saatinde 17:30) geçer ve bu ders ikisini ayırmadı.
+İzleme New York 10:35'te (TSİ 17:35, ABD kış saatinde 18:35) biter; arada New York açılışı (New York 09:30, TSİ
+16:30, ABD kış saatinde 17:30) geçer ve bu ders ikisini ayırmadı.
 
 {{# sema veri-normal }}
 
 {{# kart veri-normal }}
-
-{{# kart veri-guclu }}
 
 Bu durumda yapmazsın: mumun ucunun ötesinde mumun yönünde kovalamazsın; "sürmüyor, öyleyse dönecek" diye tersine
 girmezsin, çünkü sürmemek dönmek değildir ve o tepki sınanmadı.
@@ -120,8 +118,8 @@ Aşağıdaki iki gün bir kuralla seçildi: EUR/USD'de tarım dışı istihdamı
 
 {{# ornek nfp-normal }}
 
-Üstteki günde ① verinin ilk mumu normal sınıfa düşer, ② mumun yarısıdır, ③ fiyatın oraya ilk döndüğü mumdur ve ④
-pencerenin sonunda itiş sürmemiştir. Alttaki günde ① aynı sınıftandır ve kapandığı anda üstteki günden ayırt
+Üstteki günde ① verinin ilk mumu normal sınıfa düşer, ② mumun yarısıdır, ③ fiyatın oraya ilk döndüğü mumdur, ④
+izleme penceresinin sonudur ve orada itiş sürmemiştir. Alttaki günde ① aynı sınıftandır ve kapandığı anda üstteki günden ayırt
 edilemez; ayrım sonraki mumlarda doğar: fiyat mumun ucunu yarım mum boyu aşar ve okuma "sürdü" diye kapanır. İki günün
 farkının sebebi ölçülmedi; grafikte "belli" görünmesi sonradan bakmanın sonucudur. Tek bir gün kuralı ne doğrular ne
 yanlışlar: üstteki gün ölçülen eğilimin bir örneğidir, alttaki gün okumanın neden bir yön tahmini değil, bir sıklık
@@ -257,8 +255,8 @@ görüşün varsa emrini haber anına göre koyarsın. Dersin tepkileri üç emi
   geniştir; güçlü karar mumunda ortanca risk {{ B.islem.mb.guclu.dis.risk_pip }} pip.
 - **Limit, mumun yarısına.** Yön sınıflarının referans tepkileri böyle kuruldu. Limit girişte makas ve kayma ödemez,
   çıkışta öder, ve yalnız fiyat ilk mumun yönünün tersine yarıya geri geldiğinde dolar. 8. ders büyük mumda limitin
-  dolduğu olaylarda piyasa girişinin çoğunlukla kaybettiğini ölçtü; haber mumunda bu ayrım ölçülmedi. ABD verisinde
-  dolmuş bir limit, itişin sürmediğinin işaretidir.
+  dolduğu olaylarda piyasa girişinin çoğunlukla kaybettiğini ölçtü; haber mumunda bu ayrım ölçülmedi. Dolmuş bir limit,
+  itişin en azından yarıya kadar geri alındığını söyler.
 - **Stop emri, kırılan uca.** Küçük mumun tepkileri böyle kuruldu: iki uca birer kırılım emri, önce tetiklenen geçerli.
   Stop emri kaymayı öder ve fiyatın zaten yürüdüğü yerden alır; küçük riskte aynı maliyet R cinsinden büyür.
 
@@ -278,16 +276,13 @@ hiç gelmemiştir; bu, kovalamak için bir gerekçe değildir.
 
 {{# kart iki-saat }}
 
-**Haber penceresinde ne değişir.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında makas gerçek
-fiyatlardan ödenir (büyüklüğü ayrıca ölçülmedi), piyasa ve stop emirleri varsayılan bir ek kayma öder, ve ilk mum
-büyük olduğu için öbür ucun ötesindeki stop pip cinsinden geniştir. Küçük haber mumu bunun tersidir: risk dardır ve
-maliyet onun büyük bir parçası olur. İlk mumdan sonra on dakika daha beklemek pencereden çıkmak demektir; bunun sonuca
-etkisi ölçülmedi.
+**Haber penceresinde ne değişir.** Açıklamadan iki dakika önce ile on beş dakika sonrası arasında piyasa ve stop
+emirleri varsayılan bir ek kayma öder, makas gerçek fiyatlardan ödenir (büyüklüğü ayrıca ölçülmedi) ve büyük ilk mum
+öbür ucun ötesindeki stopu pip cinsinden genişletir. İlk mumdan sonra on dakika daha beklemek pencereden çıkmaktır;
+bunun sonuca etkisi ölçülmedi.
 
 ## Sık yapılan hatalar
 
-- **Haberden önce yön tahminiyle girmek.** Bu dersin ölçümü ilk mumla başlar; açıklamadan önceki dakikalar için hiçbir
-  sayı yok, ve yön ilk mumla da gelmiyor. Dayanak: 4. ders, "ABD verileri".
 - **Veri mumunu kovalamak.** Normal ve reddedilen veri mumunun yönü iki dönemde de şanstan seyrek sürdü. Dayanak:
   4. ders, "ABD verileri".
 - **Güçlü mumun ucunda kapanmasını yön bilgisi saymak.** Güçlü mumun devam payı aynayla aynı; yakın devam eşiği mumun
@@ -334,8 +329,8 @@ ortasına yakın. Sonraki iki mum ucun hemen altında, hafifçe yukarı. Ne yapa
 
 Mum normaldir ("ABD verisinin normal ilk mumu" şeması). İki ucu ve yarısını işaretlersin. Mumun yönünde kalmazsın:
 normal veri mumunun itişi iki dönemde de şanstan seyrek sürdü. Tersine de girmezsin: o tepki sınanmadı. Başka bir
-gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun ötesine; limitin dolması itişin sürmediğini söyler.
-Dayanak: 4. ders, "ABD verileri"; 5. ders, "Referans tepkiler".
+gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun ötesine; limitin dolması itişin yarıya kadar geri
+alındığını söyler. Dayanak: 4. ders, "ABD verileri"; 5. ders, "Referans tepkiler".
 
 </details>
 
@@ -351,20 +346,7 @@ ile kayma onun büyük bir parçası olur. Dayanak: 4. ders, "Küçük haber mum
 
 </details>
 
-**3.** TÜFE açıklamasına beş dakika var ve aralık dar. Aralığın iki pip üstüne bir alış, iki pip altına bir satış
-stop emri bırakmayı düşünüyorsun ("Açıklamadan önce" şeması). Ne yaparsın?
-
-<details>
-<summary>Çözüm</summary>
-
-Bırakmazsın. Emirlerden biri, mum iki yöne de giderse ikisi birden, haber mumunun ilk dakikasında tetiklenir ve dolum
-seviyenin ötesinde olabilir (sınamadaki ek kayma bir varsayımdı, gerçek kayma ölçülmedi). Mum bir ucu süpürüp öbür yöne
-kapanabilir; dersin her tepkisi ilk mum kapandıktan sonra başlar. Dayanak: 1. ders, "İlk mumun dört sınıfı"; 1. ders,
-"Kazanma oranı ile net sonuç".
-
-</details>
-
-**4.** ECB kararından sonra güçlü bir aşağı mum geldi; yarım saat sonra basın toplantısı başlıyor. Biri bunun,
+**3.** ECB kararından sonra güçlü bir aşağı mum geldi; yarım saat sonra basın toplantısı başlıyor. Biri bunun,
 karar mumunun yönünde yarım R hedefli tepkinin tam örneği olduğunu söylüyor. Ne yaparsın, ne yapmazsın?
 
 <details>
@@ -377,7 +359,7 @@ gerekçeyle girersen stop öbür ucun ötesinde ve geniştir; toplantı öbür u
 
 </details>
 
-**5.** ABD ve İngiltere yaz saatindeyken, tarım dışı istihdamdan iki buçuk saat sonra (TSİ 18:00) fiyat ilk
+**4.** ABD ve İngiltere yaz saatindeyken, tarım dışı istihdamdan iki buçuk saat sonra (TSİ 18:00) fiyat ilk
 mumun ucunun çok ötesinde. Bu, mumun yönünde girmek için bir gerekçe mi?
 
 <details>

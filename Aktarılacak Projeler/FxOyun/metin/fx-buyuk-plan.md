@@ -102,29 +102,23 @@ Kuralın "işlem yok" dediği hücreler ve o hücrelerin en iyi adayı:
 
 ### Masada: seçilen ama tutmayan girişler
 
-Üç giriş tutmadı, ama masada bir şey öğretir: hangi görüntüye güvenmeyeceğini. İkisi takvimdeki haber mumundan çıktı,
-yani 7. dersin "okuma yok" dediği yerden (7. ders, Fade mi, devam mı: okuma tablosu). Seçim kuralı okumayı bilmez; en
-yüksek ortalamayı arar, ve en yüksek ortalama çoğu zaman olayı az, dağılımı geniş yerde şansla çıkar. 5 dakikalık haber
-girişi 2024 sonrasında maliyetten önce sıfıra yakın kaldı
-({{ B.islem.5.ters:limit_uc:s2:h2.haber=haber.dis.brut }} R): geri vermenin izi orada da çok küçük, ve haber
-penceresindeki maliyet onu siliyor. Şema bu girişin masadaki görüntüsüdür.
+Üç giriş tutmadı, ama masada hangi görüntüye güvenmeyeceğini öğretir. İkisi haber mumundan, yani 7. dersin "okuma
+yok" dediği yerden çıktı (7. ders, Fade mi, devam mı: okuma tablosu): seçim kuralı okumayı bilmez, en yüksek ortalamayı
+arar, ve o ortalama çoğu zaman olayı az, dağılımı geniş yerde şansla çıkar. 5 dakikalık haber girişi 2024 sonrasında
+maliyetten önce sıfıra yakın kaldı ({{ B.islem.5.ters:limit_uc:s2:h2.haber=haber.dis.brut }} R) ve maliyet onu sildi.
 
 {{# sema uc-limit }}
 
-Şemanın öğrettiği şey dolumun zamanlamasıdır. Mumun ucuna konan tersine limit, fiyat uca geri geldiğinde dolar; fiyatın
-uca geri gelmesi ise o olayda geri vermenin olmadığı anlamına gelir. İlk mumdaki küçük geri verme gerçek olsa da limit
-onu yakalamaz, çünkü emir o mumda dolmaz (8. ders, Limit neden ucuz görünür: ters seçim).
+Şemanın öğrettiği dolumun zamanlamasıdır: uca konan tersine limit fiyat uca geri geldiğinde, yani o olayda geri verme
+yokken dolar; ilk mumdaki küçük geri vermeyi yakalamaz (8. ders, Limit neden ucuz görünür: ters seçim).
 
-1 saatlik giriş ikinci dersi verir: küçük alt küme. Koşu süzgeci 7. dersin tablosunda 24 mumluk yolu kendi başına
-ayırmıyordu (7. ders, 1 saat); ızgaranın tek bir hücresiyle birleşince 2018–2023'te iki yarıda artı göründü ve 2024
-sonrasında maliyetten önce de eksi kaldı. Ayrı ayrı bir şey söylemeyen iki parçanın birlikte iyi görünmesi, binlerce
-adayın içinde en kolay ortaya çıkan şeydir.
+1 saatlik giriş küçük alt kümenin dersini verir. Koşu süzgeci 24 mumluk yolu kendi başına ayırmıyordu (7. ders, 1
+saat); ızgaranın tek bir hücresiyle birleşince iki yarıda artı göründü, 2024 sonrasında maliyetten önce de eksi kaldı.
 
 {{# kart kosu-sonrasi }}
 
-Bu durumlarda yapmazsın: "Seçilen girişler" tablosundaki bir satırı işlem planına kopyalamazsın, çünkü 2018–2023 sütunu
-seçimin kendisidir ve 2024 sütunu onun sınavıdır; haber mumunun ucuna tersine limit koyup bunu sınanmış bir giriş
-saymazsın; bir süzgecin tek başına ayırmadığı bir durumu, bir stop ve hedefle birleşti diye kural saymazsın.
+Bu durumlarda yapmazsın: tablonun bir satırını işlem planına kopyalamazsın; tek başına ayırmayan bir süzgeci, bir stop
+ve hedefle birleşti diye kural saymazsın.
 
 ## Referans girişler
 
@@ -143,19 +137,17 @@ okumaları burada da görünüyor, ama yine maliyetin altında.
 
 ### Masada: dört düz tepki
 
-Referansların masadaki değeri, büyük mumdan sonra en sık duyulan dört cümlenin ölçülmüş karşılığı olmalarıdır: "mumun
-yönünde gir", "yarısına limitle katıl", "tersine gir", "uzamayı sat". Dördü de aynı mumun üstüne üç çizgiyle konur.
+Referanslar büyük mumdan sonra en sık duyulan dört cümlenin ölçülmüş karşılığıdır: "mumun yönünde gir", "yarısına
+limitle katıl", "tersine gir", "uzamayı sat". Dördü aynı mumun üstüne üç çizgiyle konur.
 
 {{# sema dort-tepki }}
 
-Okunuşu iki adımlıdır. Önce maliyetten önceki sonuca bakarsın: işareti, mumun o dilimde taşıdığı küçük bilgiyi söyler (5
-dakikada tersine taraf, 1 saatte mumun yönü; 6. ders, Dilim dilim okuma). Sonra maliyetten sonrakine: on iki satırın on
-ikisinde eksi (9. ders, Referans girişler). Aradaki fark girişin biçimine bağlıdır; piyasa emri ikisini de girişte öder,
-limit girişte ödemez ama yalnız fiyat aleyhine yürüdüğünde dolar (8. ders, Limit neden ucuz görünür: ters seçim).
+Önce maliyetten önceki sonucun işaretine bakarsın: mumun o dilimde taşıdığı küçük bilgiyi söyler (5 dakikada tersine
+taraf, 1 saatte mumun yönü; 6. ders, Dilim dilim okuma). Sonra maliyetten sonrakine: on iki satırın on ikisinde eksi
+(9. ders, Referans girişler).
 
-Bu durumda yapmazsın: en az kaybeden referansı kazanan sanmazsın; 1 saatte maliyetten önce sıfırın biraz üstünde kalan
-mumun yönündeki girişleri "çalışıyor" diye okumazsın; ve bir referansı kendi süzgecinle "iyileştirip" yeniden
-kullanmazsın, çünkü o andan sonra o referans değil bir adaydır ve seçimin bütün şişkinliğini taşır.
+Bu durumda yapmazsın: en az kaybedeni kazanan sanmazsın; bir referansı kendi süzgecinle "iyileştirip" kullanmazsın,
+çünkü o andan sonra referans değil bir adaydır ve seçimin bütün şişkinliğini taşır.
 
 ## Hüküm kuralı
 
@@ -218,9 +210,7 @@ turadan ayırt edilemiyor (6. ders, Dilim dilim okuma).
 
 {{# sema iki-yol }}
 
-Bu durumda yapmazsın: mum kapandı diye yön seçmezsin; mumun büyüklüğünü yönün gücü sanmazsın, çünkü 5 ATR'lik bir mumun
-2 ATR'lik bir mumdan güvenilir bir dönüş ya da devam işareti olduğunu bu veri göstermiyor (6. ders, Büyüklük
-değişince).
+Bu durumda yapmazsın: mum kapandı diye yön seçmezsin; büyüklüğü yönün gücü sanmazsın (6. ders, Büyüklük değişince).
 
 **Madde 2, 5 dakikada kovalama; limitin dolması iyi haber değil.** Ucunda kapanan 5 dakikalık mum yarısını aynasından
 biraz sık geri verir; geri verme Asya seansında (Londra 07:00'den önce başlayan mum; TSİ İngiltere yaz saatinde
@@ -244,16 +234,14 @@ diye kurulan ters işlemi plana yazdırmamaktır.
 
 {{# kart saat-tersine }}
 
-**Madde 5, stopu yaklaştırma.** Makas ve kayma pip cinsinden aynıdır; R cinsinden stopun uzaklığına bölünür. 5
-dakikalık bir ATR birkaç pip olduğu için bir ATR'lik stopta maliyet planlanan riskin büyük bir parçasıdır, ve
-olayların bir kısmında risk ölçülen emirlerin alt sınırı olan üç pipin altına düşer (8. ders, Stop uzaklığı ve
-maliyet).
+**Madde 5, stopu yaklaştırma.** Makas ve kayma pip cinsinden aynıdır, R cinsinden stopun uzaklığına bölünür; 5
+dakikalık bir ATR birkaç pip olduğu için bir ATR'lik stopta maliyet riskin büyük bir parçasıdır (8. ders, Stop uzaklığı
+ve maliyet).
 
 {{# sema stop-makas }}
 
-Bu durumda yapmazsın: stopu yaklaştırıp aynı riskle pozisyonu büyütmezsin; bu, maliyeti büyütür ve kenar yaratmaz.
-Dilimi büyütmek (1 saat) maliyeti R cinsinden küçültür, ama orada da hiçbir giriş maliyetten sonra artıda değil
-(8. ders, 15 dakika ve 1 saat).
+Bu durumda yapmazsın: stopu yaklaştırıp pozisyonu büyütmezsin. Dilimi büyütmek maliyeti R cinsinden küçültür, ama 1
+saatte de hiçbir giriş maliyetten sonra artıda değil (8. ders, 15 dakika ve 1 saat).
 
 **Madde 6, haber mumunda okuma yok.** Takvimdeki büyük haberin mumu grafiğin en okunaklı yeri gibi görünür ve tam
 tersidir: olay az, sonrası dağınık, ve ölçümün kayma varsayımı o pencerede daha büyük (7. ders, Fade mi, devam mı: okuma tablosu; 8. ders, Ölçülmeyenler).
@@ -289,25 +277,23 @@ grafik" seçmedi; tarihleri ve fiyatları figür gösterir.
 
 {{# ornek plan-asya-5dk }}
 
-İki gün kapandığı anda birbirinden ayırt edilemez: ikisinde de ① Asya seansında, takvimde haber yokken ucunda kapanan
-bir 5 dakikalık büyük mum var. Üstteki günde fiyat ② mumun yarısına geri geldi, ③ yarıya ilk dokunduğu mum işaretli,
-ve ④ iki saatlik pencerenin sonunda mumun tersinde kapandı: dersin ölçtüğü geri vermenin kendisi. Alttaki günde fiyat
-② yarıya hiç inmedi, ③ işareti yok, ve ④ pencere mumun yönünde, en az bir ATR ileride bitti. Kararın sonradan "belli"
-görünmesinin sebebi, iki günü ayıran tek şeyin mum kapandıktan sonra gelmesidir: yarıya dokunulup dokunulmadığı. O
-dokunuş, yarıya konan alış limitinin dolduğu andır; ve dolduğu gün mumun yönündeki işlem kaybeden taraftadır, dolmadığı
-gün kaçan işlem kazanandır (8. ders, Limit neden ucuz görünür: ters seçim). Tek bir çift Asya'daki geri vermeyi ne
-doğrular ne yanlışlar: iki gün de o ortalamanın içinde vardır.
+İki gün kapandığı anda ayırt edilemez: ikisinde de ① Asya seansında, takvimde haber yokken ucunda kapanan bir 5
+dakikalık büyük mum var. Üstteki günde fiyat ② mumun yarısına döndü, ③ ilk dokunuş işaretli, ve ④ iki saatlik
+pencerenin sonunda mumun tersindeydi: ölçülen geri vermenin kendisi. Alttaki günde fiyat yarıya hiç dönmedi, ③ yok, ve
+④ pencere mumun yönünde, en az bir ATR ileride bitti. Karar sonradan "belli" görünür, çünkü iki günü ayıran tek şey mum
+kapandıktan sonra gelir: yarıya dokunulup dokunulmadığı. O dokunuş yarıya konan limitin dolduğu andır; dolduğu gün mumun
+yönündeki işlem kaybeden taraftadır, dolmadığı gün kaçan işlem kazanandır (8. ders, Limit neden ucuz görünür: ters
+seçim). Tek bir çift Asya'daki geri vermeyi ne doğrular ne yanlışlar.
 
 {{# ornek plan-saat-kosu }}
 
-Bu çift seçimin 1 saatlik girişinin durumundan: önceki on iki mumda mumun yönünde en az iki ATR yürümüş bir piyasada,
-haber olmadan gelen 1 saatlik büyük mum. Üstteki günde ① mumdan sonra fiyat sığ geri çekilme seviyesine bile gelmedi;
-② yarı uzakta kaldı, ③ işareti yok, ve ④ bir gün sonra fiyat mumun yönündeydi. Seçimin girişi bu günde hiç işlem
-açmazdı: limit dolmadı ve kaçan işlem kazanandı. Alttaki günde fiyat geri çekildi, ③ yarıya dokundu, mumun öbür ucuna
-kadar döndü ve ④ pencere mumun tersinde bitti. Limit bekleme süresi içinde dolduysa işlem stopa giderdi, çünkü mumun
-öbür ucu sığ geri çekilme seviyesinden bir ATR'den uzaktır. Kapanış anında iki gün aynıdır; aynı koşu, aynı mum, aynı
-"koşu sürüyor" izlenimi. Bu çift seçilen girişin neden tutmadığını göstermez, onu iki dönemin tabloları gösterir; tek
-gösterdiği şey limitin hangi günde dolduğudur.
+Bu çift seçimin 1 saatlik girişinin durumundandır: önceki on iki mumda mumun yönünde en az iki ATR yürümüş bir
+piyasada, haber olmadan gelen büyük mum. Kapanış anında iki gün aynıdır: aynı koşu, aynı "sürüyor" izlenimi. Üstteki
+günde ① mumdan sonra fiyat sığ geri çekilme seviyesine bile gelmedi, ② yarı uzakta kaldı, ③ yok, ve ④ bir gün sonra
+fiyat mumun yönündeydi: limit dolmadı, kaçan işlem kazanandı. Alttaki günde fiyat ③ yarıya dokundu, mumun öbür ucuna
+kadar döndü ve ④ mumun tersinde bitti; limit bekleme süresinde dolduysa işlem stopa giderdi, çünkü öbür uç sığ geri
+çekilme seviyesinden bir ATR'den uzaktır. Bu çift girişin neden tutmadığını göstermez, onu iki dönemin tabloları
+gösterir; gösterdiği, limitin hangi günde dolduğudur.
 
 ## Emri nereye koyarsın
 

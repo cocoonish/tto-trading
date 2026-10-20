@@ -294,17 +294,8 @@ durum = "5 dakikalık grafikte, tarım dışı istihdam ya da TÜFE açıklamas�
 gorursun = "Boyu tipik boya yakın bir mum; kapanışı ucunda değil, ortasına yakın. Reddedilen mumda bir yönde uzun bir fitil ve küçük bir gövde."
 yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; sonraki iki saatte fiyatın yarıya ve öbür uca gidip gitmediğine bakarsın."
 yapmazsin = "Mumun yönünde kalmazsın: bu itiş iki dönemde de şanstan seyrek sürdü. Mumun tersine de girmezsin: o tepki önceden yazılmadı ve sınanmadı."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit mumun yarısına, stop öbür ucun ötesine; limit dolarsa itişin sürmediğini bilirsin. Limit izlemenin ilk saatinde dolmazsa emri çekersin."
+emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit mumun yarısına, stop öbür ucun ötesine; limit dolarsa itişin yarıya kadar geri alındığını bilirsin. Limit izlemenin ilk saatinde dolmazsa emri çekersin."
 dayanak = "4. ders, ABD verileri; 5. ders, Referans tepkiler; 8. ders, Limit neden ucuz görünür: ters seçim"
-
-[[kart]]
-id = "veri-guclu"
-durum = "5 dakikalık grafikte, ABD verisinden sonra güçlü ilk mum"
-gorursun = "Boyu tipik boyun belirgin üstünde, kapanışı mumun ucunda; ilk bakışta verinin yönü belli olmuş gibi durur."
-yaparsin = "Mumun iki ucunu ve yarısını işaretlersin; güçlü mum ucuna yakın kapandığı için devam eşiğinin zaten yakın olduğunu, yön rastgele olsaydı da devamın aynı sıklıkta görüneceğini hatırlarsın."
-yapmazsin = "Kapanışta mumun yönünde kovalamazsın; mumun ucunda kapanmasını bir yön bilgisi saymazsın."
-emir = "Başka bir gerekçeyle mumun yönünde gireceksen limit yarıya, stop öbür ucun ötesine, hedef mumun kendi ucu; 2024 sonrasında bu tepkinin işlemlerinin çoğu ne hedefe ne stopa ulaşıp sürenin sonunda kapandı."
-dayanak = "4. ders, ABD verileri; 1. ders, Şans ne verirdi: yolun aynası; 4. ders, Bu okumaları işleme çevirmek"
 
 [[kart]]
 id = "karar-guclu"

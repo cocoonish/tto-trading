@@ -300,7 +300,7 @@ durum = "Londra fiksingi (WM/R), fiksinge giden yarım saatte güçlü bir koşu
 gorursun = "Altı beş dakikalık mum aynı yöne gidiyor; yarım saatin toplam aralığı o fiksingin tipik koşusundan belirgin büyük, fiksingdeki fiyat koşunun ucuna yakın."
 yaparsin = "Koşunun başladığı yeri, yarısını ve ucunu işaretlersin; fiksingden sonraki ilk çeyrek saatte fiyatın yarıya gelip gelmediğine bakarsın."
 yapmazsin = "Fiksingden sonra koşunun yönünde kovalamazsın; hedefi koşunun başladığı yere koymazsın; geri vermeyi bir işlem sinyali saymazsın."
-emir = "Başka bir gerekçeyle koşunun yönünde pozisyondaysan fiksingden sonraki saatin koşuyu sürdüreceğine güvenmezsin; stopun koşunun yarısındaysa geri verme onu sık görür. Koşunun tersine gireceksen stop koşunun ucunun ötesinde, hedef koşunun yarısıdır ve fiksingden sonraki ilk uzama stopu alabilir."
+emir = "Koşunun yönünde pozisyondaysan stopun yarı ile uç arasındaysa geri verme onu sık görür. Koşunun tersine gireceksen stop ucun ötesinde, hedef yarıdadır; ilk uzama stopu alabilir."
 dayanak = "3. ders, Güçlü koşu; 3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Bu okumaları işleme çevirmek"
 
 [[kart]]
@@ -309,7 +309,7 @@ durum = "Tokyo ya da Londra fiksingi, fiksinge giden yarım saatte normal ya da 
 gorursun = "Koşu var ama gövdesi dolu değil ya da uzun bir fitil taşıyor; fiksingdeki fiyat çoğu zaman koşunun yarısına yakın."
 yaparsin = "Yarının fiksingdeki fiyata ne kadar yakın olduğunu görürsün: geri verme çoğu zaman fiksingden birkaç dakika sonra olur ve yarı yakın olduğu için şansın da sık vereceği bir harekettir."
 yapmazsin = "Yarıya dokunuşu bir okuma ya da giriş sinyali saymazsın; yüksek kazanma oranını görüp koşunun tersine girmezsin."
-emir = "Koşunun tersine gireceksen hedef (yarı) yakın, stop (koşunun ucunun ötesi) uzaktır: kazanan işlem küçük kazanır, kaybeden tam bir R kaybeder. Bu yapıda başa baş için gereken kazanma oranı ölçülen kazanma oranının üstünde kaldı."
+emir = "Koşunun tersine gireceksen hedef (yarı) yakın, stop (ucun ötesi) uzaktır: kazanan küçük kazanır, kaybeden tam bir R kaybeder ve başa baş için gereken oran ölçülen kazanma oranının üstünde kaldı."
 dayanak = "3. ders, Normal ve reddedilen koşu; 1. ders, Kazanma oranı ile net sonuç; 3. ders, Bu okumaları işleme çevirmek"
 
 [[kart]]
@@ -327,7 +327,7 @@ durum = "Ayın son Londra iş günü, Londra fiksingi (Londra 16:00, TSİ 18:00,
 gorursun = "Öbür günlerin güçlü koşusundan farkı grafikte görünmez; fark takvimdedir."
 yaparsin = "Günü takvimde işaretlersin; fiksingden sonraki saatte koşunun yeni bir uç yapıp yapmadığına bakarsın."
 yapmazsin = "Koşunun sürmesine güvenmezsin; ay sonunda geri vermenin daha sık olacağına da güvenmezsin; Tokyo fiksinginin ay sonunu okumaya katmazsın."
-emir = "Başka bir gerekçeyle koşunun yönündeysen fiksingden sonraki uzamayı hedef saymazsın. Koşunun tersine gireceksen öbür günlerin emir kuralı aynen geçerlidir; ay sonunda tersine girişin sonucu bu derste ayrıca ölçülmedi."
+emir = "Koşunun yönündeysen fiksingden sonraki uzamayı hedef saymazsın. Tersine girişte öbür günlerin emir kuralı geçerlidir; ay sonunda tersine girişin sonucu bu derste ayrıca ölçülmedi."
 dayanak = "3. ders, Ay sonu"
 
 [[kart]]
@@ -336,7 +336,7 @@ durum = "Fiksing anı (Tokyo 09:55, TSİ 03:55; Londra 16:00, TSİ 18:00, İngil
 gorursun = "Koşu bitmiş görünüyor, fiyat koşunun ucunda; fiyatın şimdi geri vereceği duygusu güçlü."
 yaparsin = "Koşunun yarısını ve ucunu işaretler, giriş ile stop arasındaki mesafeyi pip olarak sayarsın; mesafe birkaç pipse makasın onun içindeki payını görürsün."
 yapmazsin = "Geri vermenin şanstan sık olmasını kenar saymazsın; stopu koşunun ucuna yapıştırmazsın."
-emir = "Piyasa emri girişte makas ve kayma öder. Koşunun ucuna konan limit girişte makas ödemez, ama ancak fiyat koşunun yönünde yeniden yürürse dolar; bu fiksing için ölçülmedi. Stop ucun ötesinde, hedef yarıdadır; fiksingden sonraki saat dolunca emrin dayanağı kalmaz."
+emir = "Piyasa emri girişte makas ve kayma öder; koşunun ucuna limit girişte ödemez ama yalnız fiyat koşunun yönünde yeniden yürürse dolar (fiksing için ölçülmedi). Stop ucun ötesinde, hedef yarıda; fiksingden sonraki saat dolunca emrin dayanağı kalmaz."
 dayanak = "3. ders, Bu okumaları işleme çevirmek; 8. ders, Limit neden ucuz görünür: ters seçim; 8. ders, Stop uzaklığı ve maliyet"
 
 # ─────────────────────────────────────────────────────────────── gerçek örnekler

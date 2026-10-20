@@ -104,8 +104,8 @@ başladığı yere koymazsın, yarıya gelen fiyatı yeni bir yönün başlangı
 yakındır. Üstteki günde fiyat fiksingden sonra koşunun yarısına (②) iner, ilk dokunuş ③'te görülür ve ④'e kadar
 koşunun başladığı yere varmaz. Alttaki günde ilk mumlar üstteki kadar kararsızdır, ama fiyat yarıya hiç gelmez,
 koşunun ucunu aşar ve pencere boyunca yarının koşu tarafında kalır; ③ bu yüzden yoktur. Fiksing anında iki günü
-ayıracak bir şey grafikte yoktur; üstteki gün ancak sonu bilindiği için "belli" görünür. İki gün kuralı ne doğrular ne
-yanlışlar: kural birinci türün daha sık geldiğini söyler, ikincinin gelmeyeceğini değil.
+ayıran bir şey grafikte yoktur; üstteki gün ancak sonu bilindiği için "belli" görünür. İki gün kuralı ne doğrular ne
+yanlışlar: kural birinci türün daha sık geldiğini söyler.
 
 ### Normal ve reddedilen koşu
 
@@ -135,9 +135,8 @@ reddedilen fitili normal koşudan güçlü bir okuma gibi işlemezsin.
 İki günün yarım saati (①) birbirine benzer: koşu var ama düzenli değil, ve fiksingdeki fiyat koşunun yarısından (②)
 çok uzakta değil. Üstteki günde fiyat fiksingden sonra yarıya dokunur (③) ve ④'e kadar ne ucuna geri gider ne öbür
 ucunu kırar. Alttaki günde fiyat yarıya hiç dokunmaz, koşunun ucunu aşar ve geri gelmez. Fiksing anında masadaki tek
-bilgi yarının yakınlığıdır ve o bilgi iki gün için de aynıdır; üstteki günün okuması ancak sonradan okuma gibi
-görünür. İki gün kuralı ne doğrular ne yanlışlar: normal koşuda yarıya dönüş zaten sık olan bir harekettir, ölçünün
-yakaladığı bu sıklığın şanstan yalnız biraz yüksek olmasıdır.
+bilgi yarının yakınlığıdır ve o bilgi iki gün için de aynıdır; üstteki gün ancak sonradan bir okuma gibi görünür. İki
+gün kuralı ne doğrular ne yanlışlar: normal koşuda yarıya dönüş zaten sık olan bir harekettir.
 
 ### Sessiz fiksing
 
@@ -281,10 +280,9 @@ Londra'da Londra 15:30–17:00'dir (TSİ 17:30–19:00, İngiltere kış saatind
   sonraki uzamaya, ay sonunda hiç dayanmaz (3. ders, Sınıf sınıf, şansın payıyla; 3. ders, Ay sonu).
 - **İptal.** Ölçüm fiksingden sonraki {{ AN.wmr.pencere }} dakikayı okur; pencere dolunca fiksinge bağlı bir emrin
   dayanağı kalmaz. Pencerenin ikinci yarısının ayrı davranışı bu derste ölçülmedi.
-- **Haber.** Serinin takvimindeki büyük haberlerin (ABD istihdam ve enflasyon verisi, Fed, ECB ve BoE kararları)
-  hiçbiri fiksing pencerelerine denk gelmez, yani ölçümün haber anlarına eklediği ek kayma burada yoktur (1. ders,
-  Kazanma oranı ile net sonuç). Takvim dışı yerel veriler ve WM/R'nin beş dakikasında (Londra 16:00 çevresi, TSİ
-  18:00, İngiltere kış saatinde 19:00) makasın davranışı bu derste ölçülmedi.
+- **Haber.** Serinin takvimindeki büyük haberlerin hiçbiri fiksing pencerelerine denk gelmez; ölçümün haber anlarına
+  eklediği ek kayma burada yoktur (1. ders, Kazanma oranı ile net sonuç). WM/R'nin beş dakikasında (Londra 16:00
+  çevresi, TSİ 18:00, İngiltere kış saatinde 19:00) makasın davranışı bu derste ölçülmedi.
 
 ## Sık yapılan hatalar
 
@@ -340,25 +338,12 @@ bir işlem olduğunu söylüyor. Ne yaparsın, ne yapmazsın?
 <summary>Çözüm</summary>
 
 Yarıya dönüş sık olur, ama yarı yakın olduğu için aynada da sık olur (3. ders, Normal ve reddedilen koşu). Hedef yakın,
-stop uzak: işlemlerin çoğu kazanır, kazanan küçük kazanır ve başa baş için gereken oran ölçülen kazanma oranının
+stop uzak: işlemlerin yarısından çoğu kazanır, kazanan küçük kazanır ve başa baş için gereken oran ölçülen kazanma oranının
 üstünde kalır (1. ders, Kazanma oranı ile net sonuç; 3. ders, Bu okumaları işleme çevirmek). Girmezsin, yalnız izlersin.
 
 </details>
 
-**3.** Ayın son Londra iş günü, İngiltere kış saati. TSİ 18:30 ile 19:00 arasında güçlü bir aşağı koşu var (Şekil M7).
-Başka bir gerekçeyle aşağı yönlü bir pozisyon taşıyorsun ve hedefin koşunun ucunun epey altında. Ne yaparsın, ne
-yapmazsın?
-
-<details>
-<summary>Çözüm</summary>
-
-Hedefini fiksingden sonraki uzamaya bağlamazsın: ay sonunda koşunun sürmesi öbür günlerden de seyrek, iki dönemde de
-(3. ders, Ay sonu). Geri vermenin daha sık olacağını da varsaymazsın. Stopun yarı ile uç arasındaysa geri verme onu sıradan
-bir günde de sık görür; bunu fiksingden önce bilirsin (3. ders, Sınıf sınıf, şansın payıyla).
-
-</details>
-
-**4.** Tokyo fiksingi, TSİ 03:55. Başka bir gerekçeyle güçlü koşunun tersine girmek istiyorsun (Şekil M8). Piyasa emri mi,
+**3.** Tokyo fiksingi, TSİ 03:55. Başka bir gerekçeyle güçlü koşunun tersine girmek istiyorsun (Şekil M8). Piyasa emri mi,
 koşunun ucuna limit mi; stop ve hedef nerede, emir ne zaman çekilir?
 
 <details>
