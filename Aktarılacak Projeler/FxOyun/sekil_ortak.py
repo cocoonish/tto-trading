@@ -204,11 +204,12 @@ def tasan_satirlar(baslik: str) -> list[str]:
     return tasan
 
 
-def olcum_ozu() -> str:
-    return hashlib.sha256(OLCUM.read_bytes()).hexdigest()
+def olcum_ozu(olcum: Path | None = None) -> str:
+    return hashlib.sha256((olcum or OLCUM).read_bytes()).hexdigest()
 
 
-def _yaz(fig, slug: str, ad: str, yukseklik: int = 500, ust: int = 96, lejant_y: float = -0.16) -> None:
+def _yaz(fig, slug: str, ad: str, yukseklik: int = 500, ust: int = 96, lejant_y: float = -0.16,
+         olcum: Path | None = None) -> None:
     """Analiz figürleri ev stili betiğinden (site/tools/plotly_stil.py) GEÇMEZ: o betik başlıklı her
     figürün üst boşluğunu 92 piksele çeker ve yalnız en üstte panel başlığı varsa büyütür — tek
     panelli figürde sarılmış çok satırlı başlık çizim alanına biner. Üst boşluk burada başlığın
@@ -227,7 +228,7 @@ def _yaz(fig, slug: str, ad: str, yukseklik: int = 500, ust: int = 96, lejant_y:
     CIKTI.mkdir(parents=True, exist_ok=True)
     html = fig.to_html(include_plotlyjs=PLOTLY_JS, full_html=True,
                        config={"displayModeBar": False, "responsive": True})
-    html = html.replace("<head>", f'<head><meta name="tto-olcum-ozu" content="{olcum_ozu()}">', 1)
+    html = html.replace("<head>", f'<head><meta name="tto-olcum-ozu" content="{olcum_ozu(olcum)}">', 1)
     # Tarayıcının 8 piksellik gövde boşluğu sıfırlanır: yoksa belge figürün ilan ettiği yükseklikten
     # 8 piksel uzun olur, gömme çerçevesinin içinde kaydırma doğar ve çizim 352 yerine 336 piksele iner.
     html = html.replace("<style>html, body {height: 100%;}</style>",
