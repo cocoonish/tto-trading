@@ -1,0 +1,12 @@
+{
+ "aciklama": "Bayat hat alarmının mükerrerlik kaydı: hat|sürüm anahtarı bir kez bildirilir. gecikme.yml yeni alarmda bu dosyayı commit eder; bulten/bayatlik.py okur.",
+ "kayitlar": {
+  "enflasyon|09.2026": {
+   "hat": "enflasyon",
+   "ad": "Enflasyon panosu",
+   "surum": "09.2026",
+   "deneme": 4,
+   "ilk_bildirim": "2026-10-21T05:11:50"
+  }
+ }
+}
