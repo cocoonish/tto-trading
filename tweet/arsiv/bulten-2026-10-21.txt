@@ -1,0 +1,30 @@
+# bulten:2026-10-21 · 2026-10-21T06:28:00+00:00 · https://x.com/i/status/2112792997540618722
+
+Sabah Notu — 21 Ekim 2026
+BIST pazartesi kaybını tek seansta geri aldı; TL eğrisinde ön uç indirime inerken 5 yıllık 44 bp sıçradı
+
+· BIST 100 salı %3,22 (1,8σ) yükselişle 11.798'e çıktı ve pazartesinin %2,49'luk kaybının tamamını geri aldı. Yükselişi Aselsan (%6,36), Sabancı Holding (%4,27) ve THY (%2,82) taşıdı (CNBC-e); bankacılık %1,83 ile geride kaldı.
+· Resmî Gazete'nin 20 Ekim sayısı SPK Başkanı Mahmut Sütcü'yü ve KGK Başkanı İbrahim Ömer Gönül'ü görevden aldı; SPK'ya yeni atama yapılmadı. SPK akşam saatlerinde Alnus, Bulls ve Pusula Yatırım'ın faaliyetlerini 21 Ekim 00:01'den itibaren geçici olarak durdurdu.
+· TL eğrisi iki yöne çalıştı: 3 aylık spot getiri 21 bp düşüşle %35,87'ye indi, 5 yıllık 44 bp yükselişle %36,54'e çıktı. 2 yıllık %39,80'de neredeyse kımıldamadı.
+· TCMB'nin ekim Piyasa Katılımcıları Anketi'nde 12 ay sonrası TÜFE beklentisi %23,70'ten %23,89'a çıktı, 12 ay sonrası politika faizi beklentisi %29,22'den %29,01'e indi.
+· New York'ta Dow Jones %1,02, Russell 2000 %1,65 yükseldi (ikisi de 1,7σ), Nasdaq 100 %0,13 geriledi. ABD 30 yıllık getiri 4,7 bp düşüşle %5,425'e indi; Reuters anketinde 100 ekonomistin 94'ü Fed'in ekimde beklemesini, 100'ü aralıkta artırmasını öngörüyor.
+· Dolar bütün majörlere karşı geriledi; GBP/USD %0,57 (1,5σ) ile 1,3381'e çıktı. Brent %0,69 düşüşle 108,79 dolarda kapandı.
+
+Bugün TSİ 10:00 · ekim kapasite kullanımı ve reel kesim güveni. Güven ve kapasite düşerse sınai hisselerdeki haftalık kayıp talep tarafına da bağlanır; tutunursa kayıp yönetişim ve maliyet kanalıyla sınırlı kalır.
+
+Tez: Salı günü hisse piyasası pazartesinin yönetişim şokunu sildi, tahvil piyasası ise sildirmedi. Kısa uç perşembe için indirimi daha derin fiyatlarken uzun uç prim istedi; eğri aynı gün iki ayrı kanaldan dikleşti.
+
+Gündem
+Türkiye: Fonlama ve TL faizi. TLREF %36,82 ile politika faizinin 18 bp altında. TCMB'nin piyasadan net borçlanması bir günde 180 milyar TL azalarak 1,03 trilyon TL'ye indi; fazla likidite hâlâ büyük ve gecelik faizi koridorun alt yarısında tutuyor.
+Küresel: ABD faizi ve Fed. Konut verisi zayıf geldi: bekleyen konut satışları eylülde %7,3 düştü (beklenti −%0,5), konut başlangıçları yıllıklandırılmış 1,221 milyona indi (beklenti 1,305 milyon; investingLive).
+Emtia: Petrol. Katar ve Pakistan arabuluculuğundaki İran önerisi salı gününün sürücüsüydü: haberlere göre öneri Katar bankalarında dondurulan İran fonlarının 6 milyar dolarlık faizinin serbest bırakılmasını ve Uluslararası Atom Enerjisi Ajansı'na habersiz denetim izni verilmesini içeriyor (Investing).
+
+Neye bakılacak
+· PPK 50 bp'de kalır → kısa uç TLREF'e doğru yükselir, bankaların göreli primi aşınır; izlenecek: 3 aylık getirinin TLREF'in üstüne çıkması.
+· İran önerisi çöker → Brent ve uzun uç TL getirisi birlikte yükselir; izlenecek: 5 yıllık DİBS getirisinin %37'nin üstünde kapanması.
+
+Pano: USD/TRY 49,57 (+%0,04; 20 Eki, İstanbul 18:00) · 1 aylık yıllıklandırılmış deval. hızı %21,9 (+1,7 puan; 20 Eki) · Net rezerv (günlük tahmin) 51,7 mlr USD (−1,6; 19 Eki) · 2 yıllık başabaş enflasyon %30,47 (+0,02 puan; 20 Eki)
+
+Beklenen: Bugün 09:00 · İngiltere eylül TÜFE'si. Sterlin salının en güçlü G10 parasıydı; yüksek bir rakam bu primi BoE beklentisine bağlar, düşük bir rakam onu siler. Perşembe · tüketici güveni (10:00), PPK (14:00), menkul kıymet ve para-banka verileri (14:30). 100 bp ön ucun fiyatlamasını doğrular; 50 bp 3 aylık getiriyi TLREF'e doğru iter, 200 bp uzun ucun primini büyütme riski taşır. Menkul kıymet verisi 16 Ekim haftasını kapsar ve SPK başkanlığındaki değişikliği görmez. Önümüzdeki hafta. 27 Ekim'de eylül işgücü, 28 Ekim 21:00'de Fed kararı, 29 Ekim 16:15'te ECB kararı; PPK özeti 30 Ekim'de.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
