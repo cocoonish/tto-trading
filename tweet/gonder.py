@@ -325,6 +325,23 @@ def _gonder_zincir(zincir: list[str], erisim: str, ust: str | None = None) -> li
     return idler
 
 
+def _alan_adsiz(zincir: list[str], anahtar: str) -> list[str]:
+    """Otomatik gönderide çıplak alan adını kaynak adına indirir (tweet/denetim.alan_adsiz).
+
+    Yazı katmanı kaynağı "(Investing.com)" diye yazınca link yasağı günün
+    gönderisini kapıda durduruyordu (21.10.2026). Dönüşüm sessiz değildir: her
+    çeviri koşu kaydına uyarı olarak düşer, yazarın bir sonraki sayıda kaynağı
+    adıyla yazması için."""
+    cikti = []
+    for metin in zincir:
+        yeni, donusen = denetim_m.alan_adsiz(metin)
+        for eski, ad in donusen:
+            print(f"::warning::{anahtar}: alan adı kaynak adına çevrildi — '{eski}' → '{ad}' "
+                  "(X'te bağlantıya dönerdi; kaynağı adıyla yazmak yeter)")
+        cikti.append(yeni)
+    return cikti
+
+
 def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]],
                   tam: bool = False) -> tuple[list, list]:
     """Kalite kapısı ÖĞE BAŞINA: kirli öğe düşer ve loga yazılır, temiz öğeler
@@ -417,7 +434,7 @@ def main() -> int:
     if a.tur in ("bulten", "hepsi"):
         b = uret.yazilmis_bulten(tarih)
         if b and f"bulten:{tarih}" not in defter:
-            z = uret.bulten_zinciri(b)
+            z = _alan_adsiz(uret.bulten_zinciri(b), f"bulten:{tarih}")
             is_listesi.append((f"bulten:{tarih}", z, list(uret.DUSEN)))
     # Teknik kanalı 01.10.2026'da kapandı (yayın 27.09.2026 sayısıyla sona erdi);
     # defterdeki teknik:<gün> kayıtları tarihçe olarak duruyor.
@@ -437,7 +454,7 @@ def main() -> int:
                 if gecikme:
                     print(f"::warning::{anahtar}: yayın günü {gun - dt.timedelta(days=1)}, "
                           "bir gün gecikmeyle gönderiliyor.")
-                z = analiz_m.analiz_zinciri(an)
+                z = _alan_adsiz(analiz_m.analiz_zinciri(an), anahtar)
                 for u in analiz_m.UYARILAR:
                     print(f"::warning::{u}")
                 analiz_m.UYARILAR.clear()

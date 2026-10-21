@@ -1265,6 +1265,57 @@ def _k11_tiklanir_ve_gorsel():
     assert s.returncode != 0 and "görsel gönderilmez" in (s.stdout + s.stderr), (s.returncode, s.stderr[-200:])
 
 
+def _n1_alan_adi_kaynak_adi():
+    """N1 (21.10.2026): yazı katmanının '(Investing.com)' kaynak notu otomatik
+    gönderiyi kapıda durdurdu. Gönderim katmanı çıplak alan adını ADINA indirir;
+    adres, www., kısaltıcı ve X adresi çevrilmez (kapı onları yine durdurur);
+    yazarın kendi metni çevrilmez; kapının kendisi gevşemez."""
+    import denetim as dn
+    import gonder
+    cevir = {
+        "içeriyor (Investing.com).": "içeriyor (Investing).",
+        "Haber BloombergHT.com'a göre geldi.": "Haber BloombergHT'a göre geldi.",
+        "Takvim home.treasury.gov üzerinden duyuruldu.": "Takvim treasury üzerinden duyuruldu.",
+        "Ajans aa.com.tr aktardı.": "Ajans aa aktardı.",
+        "RBA ihtimali %50’yi aştı - Investing.com Türkiye": "RBA ihtimali %50’yi aştı - Investing Türkiye",
+    }
+    for eski, yeni in cevir.items():
+        assert dn.link_var(eski), f"kapı bu parçayı zaten görmüyormuş (sınama boş): {eski!r}"
+        olan, kayit = dn.alan_adsiz(eski)
+        assert olan == yeni, f"{eski!r} → {olan!r} (beklenen {yeni!r})"
+        assert kayit and not dn.link_var(olan), (eski, olan, kayit)
+    # Adres sayılanlar ÇEVRİLMEZ: kapı onları durdurmaya devam eder.
+    for adres in ("Ayrıntı https://www.tcmb.gov.tr/a sayfasında.", "Kaynak: www.tcmb.gov.tr.",
+                  "Bkz. x.com/TCMB_Duyuru.", "Bağ t.co/abc ile.", "Bkz. [duyuru](https://a.b).",
+                  "Dosya kur.de/x adresinde."):
+        olan, kayit = dn.alan_adsiz(adres)
+        assert olan == adres and not kayit, f"adres çevrildi: {adres!r} → {olan!r}"
+        assert dn.link_var(olan), f"kapı adresi kaçırdı: {adres!r}"
+    # Alan adı olmayan metin birebir aynı kalır (cümle sonu 'TCMB.de' dahil).
+    for duz in ("Brent 108,79 dolarda kapandı.", "TCMB.de bir cümle sonu değil.", "S&P 500 %0,4 arttı.",
+                "Endeks 11.798'e çıktı; oran %1,5."):
+        assert dn.alan_adsiz(duz) == (duz, []), (duz, dn.alan_adsiz(duz))
+    # Kapı GEVŞEMEDİ: yazarın kendi metnindeki alan adı hâlâ ENGEL.
+    assert any(x.startswith("link") for x in _k_engel(f"{_K_GOVDE}\n\nKaynak Investing.com.\n\n{_K_NOT}")), \
+        "kapı çıplak alan adını artık engellemiyor"
+    # Otomatik gönderinin TAMAMI: emtia bölümündeki kaynak notu gönderiyi düşürmez.
+    b = _gunluk_fikstur()
+    b["gundem"]["emtia"] = ("<p><strong>Petrol.</strong> Öneri İran fonlarının serbest bırakılmasını "
+                            "içeriyor (Investing.com). Brent %0,69 geriledi.</p>")
+    ham = uret.bulten_zinciri(b)
+    assert any("Investing.com" in t for t in ham), "fikstür alan adını gönderiye sokmuyor (sınama boş)"
+    z = gonder._alan_adsiz(ham, "bulten:sinama")
+    assert not any(x.startswith("link") for x in _k_engel("\n".join(z))), "dönüşümden sonra link engeli kaldı"
+    assert any("(Investing)" in t for t in z), z
+    # Dönüşüm YALNIZ otomatik kanallarda: bülten ve analiz; düzeltme yanıtı ve özel gönderi yazarın metnidir.
+    kaynak = (Path(__file__).resolve().parent / "gonder.py").read_text(encoding="utf-8")
+    for iz in ("_alan_adsiz(uret.bulten_zinciri(", "_alan_adsiz(analiz_m.analiz_zinciri("):
+        assert iz in kaynak, f"gonder.py bu kanalda dönüşümü uygulamıyor: {iz}"
+    assert kaynak.count("_alan_adsiz(") == 3, "dönüşüm beklenmeyen bir kanala da konmuş (tanım + 2 çağrı)"
+    oz = (Path(__file__).resolve().parent / "ozel.py").read_text(encoding="utf-8")
+    assert "alan_adsiz" not in oz, "özel gönderi yazarın metnidir; çevrilmez, kapı yazarı uyarır"
+
+
 class _SahteYanit:
     def __init__(self, kod: int, veri: dict):
         self.status_code, self._v, self.text = kod, veri, json.dumps(veri)
@@ -2694,6 +2745,7 @@ def main() -> int:
     sina("K2 bülten gönderisinin ilk 280 karakteri ölçüm taşır (UYARI; analizde sorulmaz)", _k2_ilk280)
     sina("K9 kalın harf ENGEL · tavsiye/okur dili/site izi NFKC'de · ters işaret ve işaretsiz oran UYARI", _k9_bicim_ve_nfkc)
     sina("K11 hashtag/cashtag/@ ENGEL ('107,63 $' geçer) · görsel yolu kapalı (--resim, medya alanı, betik, PNG, iş akışı)", _k11_tiklanir_ve_gorsel)
+    sina("N1 çıplak alan adı otomatik gönderide adına iner ('Investing.com' → 'Investing'); adres çevrilmez, kapı gevşemez", _n1_alan_adi_kaynak_adi)
     sina("K5 düzeltme yanıtı: açık tetik · alt dize eşleşmez · kimliksiz düşer · tek gönderi · kısa geçer · doğru kimliğe yanıt", _k5_duzeltme_yaniti)
     sina("K12 etkileşim: okuma hatası gönderimi düşürmez · haftalık sınır · yaş bandı · ayrı git add · cron yok", _k12_etkilesim_olcumu)
     sina("İ kapi#2 sıra sayısı + özel ad cümle sonu değil ('yılın 7. PPK'); ondalık/saat/rakam bölünür", _i1_sira_sayisi_ozel_ad)

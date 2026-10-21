@@ -460,7 +460,10 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    diğeri", "haber akışına göre" yazılmaz (üslup ölçütü Y17 niteleyiciyi ve
    çekimi de yakalar). Gönderi gündem satırında, bölümün ilk paragrafında kaynağı
    adıyla anan cümleyi bütçe içinde öncelikli seçer — linksiz bir gönderide güveni kaynağın adı
-   taşır.
+   taşır. Kaynak ADIYLA yazılır, alan adıyla değil: "(Investing)", "(Bloomberg HT)";
+   "(Investing.com)" değil. Alan adı X'te bağlantıya döner ve link yasağı gönderiyi
+   durdurur; gönderim katmanı çıplak alan adını adına indirir ve bunu uyarı olarak
+   kaydeder (21.10.2026), ama doğru yazım yazarın işidir.
 10. **Geçmiş çağrılar** söz defterinde durur. Günlük sayıda düzyazıda sayı
     başına en çok bir atıf, "(20.09 notu)" biçiminde; haftalık sayıda atıf
     YALNIZ karne bölümündedir ve hesabı verilen (kapanan ya da vadesi geçen)

@@ -201,6 +201,59 @@ def link_var(metin: str) -> str | None:
     return None
 
 
+# ÇIPLAK ALAN ADI → KAYNAK ADI (21.10.2026). Yazı katmanı kaynağı zaman zaman
+# alan adıyla yazıyor ("… habersiz denetim izni verilmesini içeriyor
+# (Investing.com)."): sitede düz metindir, X'te ise bağlantıya döner ve yukarıdaki
+# yasak gönderiyi kapıda durdurur. 21.10'un sabah gönderisi tam böyle hiç
+# çıkmadı. Aynı yazım yazı katmanında 24.08, 09.10, 11.10 ve 21.10'da geçmiş;
+# ilk üçü bütçe yüzünden gönderiye girmediği için kimse fark etmemişti.
+# Gönderim katmanı (gonder.py, otomatik bülten ve analiz gönderisi) metni kapıdan
+# geçirmeden önce çıplak alan adını ADINA indirir: "Investing.com" → "Investing",
+# "home.treasury.gov" → "treasury". Cümle düşmez, kaynak atfı kalır, sayı
+# değişmez. Yalnız ÇIPLAK alan adı çevrilir; açık adres, www., markdown bağı,
+# kısaltıcı ve X adresi çevrilmez — bir adresin adı yoktur, onları kapı durdurur.
+# Tanım LINK'in kendisidir: dönüşüm yalnız kapının zaten ENGEL saydığı parçaya
+# dokunabilir, kapıdan geçen bir metni değiştiremez. Yazarın kendi yazdığı metin
+# (özel gönderi, düzeltme yanıtı) çevrilmez: orada kapı yazarı uyarır.
+_KISALTICI = re.compile(r"(?i)(?:t\.co|x\.com|twitter\.com|bit\.ly|youtu\.be)\b")
+
+
+def alan_adi_ad(parca: str) -> str | None:
+    """Çıplak alan adının okunur adı ('Investing.com' → 'Investing'); adresse None."""
+    p = (parca or "").strip()
+    if (not p or "/" in p or p.startswith("[") or re.match(r"(?i)https?:|www\.", p)
+            or _KISALTICI.fullmatch(p)):
+        return None
+    etiketler = p.split(".")
+    tld = {t.lower() for t in _TLD_LISTE}
+    while len(etiketler) > 1 and etiketler[-1].lower() in tld:
+        etiketler.pop()
+    ad = etiketler[-1] if etiketler else ""
+    return ad or None
+
+
+def alan_adsiz(metin: str) -> tuple[str, list[tuple[str, str]]]:
+    """Metindeki çıplak alan adlarını adlarına indirir: (yeni metin, [(eski, yeni)]).
+
+    `link_var` ile aynı kalıbı aynı muafiyetle kullanır ('TCMB.de' cümle sonudur,
+    dokunulmaz). Metin NFKC'ye çevrilmeden işlenir: gönderilen metnin öbür
+    karakterleri değişmemeli; nokta benzeriyle yazılmış bir alan adı ('x．com')
+    çevrilmez ve kapıda yine yakalanır."""
+    donusen: list[tuple[str, str]] = []
+
+    def _degistir(m: re.Match) -> str:
+        parca = m.group(0)
+        if re.fullmatch(r"[A-Z0-9]{3,}\.[a-z]{2}", parca):
+            return parca
+        ad = alan_adi_ad(parca)
+        if not ad:
+            return parca
+        donusen.append((parca, ad))
+        return ad
+
+    return LINK.sub(_degistir, metin or ""), donusen
+
+
 def zayif_link(metin: str) -> str | None:
     """Tek etiket + iki harfli ülke kodu ('kur.de'): uyarı, engel değil."""
     m = ZAYIF_LINK.search(_normalize(metin))
