@@ -126,6 +126,8 @@ def _cek(url: str, deneme: int = 3):
                 return json.loads(r.read().decode("utf-8"))
         except Exception as ex:
             son_hata = ex
+            if getattr(ex, "tto_kesici", False):
+                break  # ortak devre kesici açık: kaynak bu koşuda düşmüş, beklemek boşuna
             if i < deneme - 1:
                 time.sleep(1.5 * (i + 1))
     raise RuntimeError(f"EVDS isteği düştü: {son_hata}") from son_hata

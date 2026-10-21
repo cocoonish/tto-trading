@@ -58,6 +58,16 @@ for _akis in (sys.stdout, sys.stderr):
 # Hat KENDİ .venv'iyle koşsa da geçerli — PYTHONPATH yorumlayıcıdan bağımsız.
 # (2026-08-27: tcmb istemcisi timeout'suz istek atıyor, EVDS 21 dk astı.)
 _ORTAK = str(KOK / "ortak")
+# KOŞU BOYU DEVRE KESİCİ (21.10.2026). Kesicinin durumu süreç başına yaşıyordu;
+# EVDS düştüğü sabah her hat aynı ölümü kendi zaman aşımlarını baştan ödeyerek
+# öğrendi ve 40 dakikalık tazeleme adımı kesildi. Bu koşunun bütün hatları aynı
+# durum dosyasını paylaşır (bkz. ortak/sitecustomize.py, madde 5). Bulutta
+# veri.yml dosyayı iş düzeyinde verir — adımlar arasında da paylaşılsın diye;
+# burada yalnız verilmemişse kurulur.
+if not os.environ.get("TTO_HTTP_KESICI_DOSYA"):
+    import tempfile as _tf
+    os.environ["TTO_HTTP_KESICI_DOSYA"] = str(
+        Path(_tf.gettempdir()) / f"tto-http-kesici-{os.getpid()}.json")
 _COCUK_ENV = {
     **os.environ,
     "PYTHONIOENCODING": "utf-8",
@@ -1948,6 +1958,8 @@ def main():
     atlanan_adlar: set[str] = set()      # --gerekli'nin bilinçle atladığı hatlar
     yenile_hatlar: set[str] = set()      # yeniden denenen hatlar (önbellek atlanır)
     sayilan_hatlar: set[str] = set()     # sürüm sayacına giren hatlar (yayım tetikli koşu)
+    tetik_anlari: dict[str, list] = {}   # sayılan hattın (saat, yayım anı) çiftleri — erken koşu kuralı
+    hat_baslangic: dict[str, object] = {}  # hattın koşusunun BAŞLANGICI (TSİ) — erken koşu kuralı
 
     # Resmî yayım takvimi süzgeci: kaynağı son tazelemeden bu yana yayımlanmamış
     # hattı koşturmak, aynı veriyi ikinci kez indirmektir. 2026-08-25 bulut
@@ -1994,6 +2006,10 @@ def main():
         # tarifsiz (türev) hat sayılmaz — kaynağın yayımladığı bilinmeyen bir
         # koşuda "veri gelmedi" saymak yanlış alarmdır (bkz. tazeleme.durum_yaz).
         sayilan_hatlar = {k.hat for k in _kararlar if k.kossun and getattr(k, "sayilir", False)}
+        # ERKEN KOŞU YAYIMI TÜKETİR (bkz. tazeleme.durum_yaz): sayılan koşunun
+        # tetikleri hangi saati, hangi anda ilerletiyor.
+        tetik_anlari = {k.hat: list(getattr(k, "tetik_anlari", []) or [])
+                        for k in _kararlar if k.hat in sayilan_hatlar}
         atlanan = [h for h in secilen if h.ad not in gerek]
         atlanan_adlar = {h.ad for h in atlanan}
         secilen = [h for h in secilen if h.ad in gerek]
@@ -2081,6 +2097,13 @@ def main():
             # sonra yazılmış önbelleği TAZE sayar — "koşulsuz tazele" hattın
             # her adımında değil, hat başına bir kez indirir.
             _COCUK_ENV[_KOSU_BASLANGIC] = str(time.time())
+            # Takvimin saatiyle (TSİ): erken koşu kuralı ilerleme anını yayım
+            # anıyla kıyaslar ve yayım anları TSİ yazılır.
+            if _tz0 is not None:
+                try:
+                    hat_baslangic[h.ad] = _tz0._simdi()
+                except Exception:                              # noqa: BLE001
+                    pass
             try:
                 ok, mesaj, sn = kos(h, tam, a.gunluk, gerileme_kabul=a.gerileme_kabul)
             finally:
@@ -2113,7 +2136,8 @@ def main():
         if _tz is not None:
             basarili = [h.ad for h, ok, _, _ in sonuc if ok]
             if basarili:
-                _tz.durum_yaz(basarili, sayilan=sayilan_hatlar, onceki=onceki_surum)
+                _tz.durum_yaz(basarili, sayilan=sayilan_hatlar, onceki=onceki_surum,
+                              tetik_anlari=tetik_anlari, baslangic=hat_baslangic)
                 print(f"\n  Tazeleme damgası güncellendi: {' '.join(basarili)}")
 
     print(f"\n{'═'*64}\n  ÖZET\n{'═'*64}")

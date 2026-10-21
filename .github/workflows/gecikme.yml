@@ -200,7 +200,7 @@ jobs:
       # `site/**` yollarını dinliyor) ve kendini de tetiklemez: GitHub kendi
       # GITHUB_TOKEN'ıyla atılan push'larda yeni iş akışı başlatmaz.
       - name: Alarm kaydını işle
-        if: steps.olcum.outputs.yeni == '1' || steps.bayat.outputs.yeni == '1'
+        if: steps.olcum.outputs.yeni == '1' || steps.bayat.outputs.bayat_yeni == '1'
         env:
           GUN: ${{ steps.olcum.outputs.gun }}
         run: |
@@ -244,8 +244,15 @@ jobs:
       # "zamanında" olsa bile bayat bir hat haber vermeye değer. Yalnız YENİ
       # bulguda: kayıtlı (aynı sürümde daha önce bildirilmiş) hat yeniden
       # öttürmez.
+      #
+      # ÇIKTI ADI ARACIN YAZDIĞI ADDIR (21.10.2026). 08.09'dan beri buradaki üç
+      # koşul `steps.bayat.outputs.yeni` soruyordu; bayatlik.py `bayat_yeni`
+      # yazıyor. Tanımsız çıktı boş dizgedir: alarm adımı HİÇ koşmadı, "Sessiz
+      # geçiş" her uyanmada "yeni bayat hat alarmı yok" bastı ve iş akışı yeşil
+      # bitti — ölçü vardı, tüketicisi yoktu. Kapı bulten/duman.py'de: bir iş
+      # akışının okuduğu her adım çıktısı, o adımın yazdığı adlardan biridir.
       - name: Bayat hat alarmı
-        if: steps.bayat.outputs.yeni == '1'
+        if: steps.bayat.outputs.bayat_yeni == '1'
         env:
           BAYAT: ${{ steps.bayat.outputs.bayat_ozet }}
         run: |
@@ -253,7 +260,7 @@ jobs:
           exit 1
 
       - name: Sessiz geçiş
-        if: steps.olcum.outputs.yeni != '1' && steps.bayat.outputs.yeni != '1'
+        if: steps.olcum.outputs.yeni != '1' && steps.bayat.outputs.bayat_yeni != '1'
         env:
           OZET: ${{ steps.olcum.outputs.ozet }}
           BAYAT_N: ${{ steps.bayat.outputs.bayat_alarm }}

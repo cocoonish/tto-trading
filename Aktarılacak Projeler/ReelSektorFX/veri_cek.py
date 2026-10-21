@@ -70,6 +70,8 @@ def _cek(url: str, deneme: int = 3):
                 time.sleep(1.5 * (i + 1))
         except Exception as ex:                                   # noqa: BLE001
             son = ex
+            if getattr(ex, "tto_kesici", False):
+                break  # ortak devre kesici açık: kaynak bu koşuda düşmüş, beklemek boşuna
             if i < deneme - 1:
                 time.sleep(1.5 * (i + 1))
     raise RuntimeError(f"EVDS isteği düştü: {son}") from son

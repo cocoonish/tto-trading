@@ -167,6 +167,12 @@ jobs:
       # 2026-08-27: tcmb istemcisi isteği timeout'suz atıyor (kwargs sorgu dizesine
       # gidiyor, requests'e değil) ve EVDS hattı 21 dakika asılı kaldı.
       PYTHONPATH: ${{ github.workspace }}/ortak
+      # KOŞU BOYU DEVRE KESİCİ (21.10.2026): işin BÜTÜN adımları (takvim tanısı,
+      # tazeleme, türev, Hazine) aynı kesici durumunu paylaşır. O sabah EVDS ve
+      # TÜİK yanıt vermedi ve her hat aynı ölümü kendi zaman aşımlarını baştan
+      # ödeyerek öğrendi; 40 dakikalık tazeleme adımı kesildi. Koşucu her işte
+      # yenidir, yani dosya bir önceki koşunun kararını taşımaz.
+      TTO_HTTP_KESICI_DOSYA: /tmp/tto-http-kesici.json
     steps:
       - uses: actions/checkout@v4
 
@@ -186,6 +192,22 @@ jobs:
             Research/marj/data
           key: veri-${{ github.run_id }}
           restore-keys: veri-
+
+      # Ulusal yayım takviminin son kopyası (yayımlanmış + PLANLI kayıtlar).
+      # Depoya girmiyor ve koşucu her işte yenidir; taşınmadığı sürece TÜİK
+      # ucunun düştüğü sabah bütün hatlar kör koşuyordu (21.10.2026, bkz.
+      # bulten/tazeleme.py "TAKVİM YEDEĞİ"). AYRI adım ve ayrı anahtar: önbellek
+      # sürümü yol listesinden türetilir, yukarıdaki listeye bir yol eklemek
+      # birikmiş veri önbelleğini geçersiz kılar ve ilk koşu soğuk başlardı.
+      # GERİ YÜKLEME ile KAYIT AYRI: actions/cache'in kendi kayıt adımı yalnız
+      # iş YEŞİL bittiğinde koşar (`post-if: success()`), oysa bu kopya tam da
+      # kırmızı biten günlerin yedeğidir. Kayıt işin sonunda, `if: always()`.
+      - name: Takvim önbelleği
+        uses: actions/cache/restore@v4
+        with:
+          path: bulten/onbellek/yayim_*.json
+          key: takvim-${{ github.run_id }}
+          restore-keys: takvim-
 
       # ÖNBELLEK DEPOYU EZMEZ.
       #
@@ -477,6 +499,19 @@ jobs:
             fi
             git checkout -- "Aktarılacak Projeler/hazineihrac" "site/public/projeler/hazine-ihrac" || true
           fi
+
+      # Takvim kopyasının KAYDI (geri yüklemesi yukarıda, "Takvim önbelleği").
+      # Takvimi okuyan son adımdan SONRA ve `if: always()`: kopya en çok
+      # tazelemenin düştüğü sabah gerekir ve o sabah iş kırmızı biter. Anahtar
+      # deneme numarasını taşır — yeniden koşturulan bir koşu aynı anahtara
+      # yazamaz. Kopya yoksa (uç hiç yanıt vermedi, geri yüklenen de yok) eylem
+      # uyarı verir, adımı düşürmez.
+      - name: Takvim önbelleğini kaydet
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: bulten/onbellek/yayim_*.json
+          key: takvim-${{ github.run_id }}-${{ github.run_attempt }}
 
       # NABIZ: bu iş akışının koştuğunun kaydı. tazeleme_durumu.json yalnız
       # BAŞARIYLA TAZELENEN hattın damgasını tutar; sakin bir günde hiçbir hat

@@ -5460,3 +5460,62 @@ HTML basar: iki katlı başlık ("2018–23" · "2024 →", gerçek · ayna), ta
 "Tokyo açılışı"), satır adı yalnız grubun içindeki fark. 41 tablonun 36'sı 1280 pikselde sütuna sığıyor (önce 17'si
 taşıyordu); kalan beşi on–on iki sütunlu ve kendi kabında kayıyor. Hücre metni MDX'e girdiği için `<`, `>`, `{`, `}`
 kaçırılır; HTML bloğunda boş satır yok.
+
+**Kurucu ilke — BİR KAYNAĞIN DÜŞTÜĞÜNÜ HER HAT AYRI AYRI ÖĞRENMEMELİDİR; BİR YEDEK, KIRMIZI GÜNDE
+KAYDEDİLMİYORSA YEDEK DEĞİLDİR; ve OKUNAN BİR ÇIKTI ADI, YAZILAN ADDIR.** 21.10.2026 sabahı bülten sitede
+08:25 TSİ'de çıktı (söz 08:11). Gecikme alarmı doğru çaldı (05:11 UTC, darboğaz ölçüm), veri tazeleme kırmızı bitti,
+X gönderisi kapıda kaldı. Kökler bağımsızdı ve üçü o sabahtan, ikisi daha eskiydi.
+
+(1) TAKVİM. TÜİK ucu yanıt vermedi; koşucuda kopya yoktu (`yayim_*.json` depoya girmez, koşucu her işte yeni), on
+sekiz hattın on sekizi kör koştu. Hatların ölçülmüş süre medyanlarının toplamı 37,3 dk (en kötü 55,5), tazeleme
+adımının sınırı 40: takvim ucunun tek başına düşmesi, kaynaklar sağlamken bile adımı kesmeye yetiyordu. Uç artık
+PLANLI kayıtları da (`yayindaOlmayanlarList`, saatiyle) önbelleğe yazar; düştüğünde bayat liste + saati geçmiş planlı
+kayıtlar kullanılır (yedi günden eski kopya kullanılmaz), planlı kayıttan doğan tetik sayaca girmez. Kopya iş akışında
+taşınır ve İKİ ayrıntı ölçülerek kondu: ayrı adım ve ayrı anahtar (önbellek sürümü yol listesinden türer, veri
+önbelleğine yol eklemek birikmiş önbelleği geçersiz kılardı); geri yükleme ile kayıt ayrı ve kayıt `if: always()`,
+çünkü `actions/cache`in birleşik adımı yalnız yeşil işte kaydeder (`post-if: success()`, belgeden doğrulandı) — oysa
+kopya tam da kırmızı günün yedeğidir.
+
+(2) DEVRE KESİCİ. EVDS de asıldı ve kesici süreç başına yaşıyordu, yalnız requests'i görüyordu: her hat aynı ölümü
+kendi zaman aşımlarını baştan ödeyerek öğrendi; on hat EVDS'e urllib `_cek` ile gidiyor (seri başına 3 × 90 sn) ve
+kesici onları hiç görmüyordu. Kredi 1.200 sn tavanına çarptı, adım 40. dakikada kesildi. Kesici artık koşu boyu
+paylaşılan bir durum dosyasında (`TTO_HTTP_KESICI_DOSYA`; veri.yml iş düzeyinde verir, guncelle.py yoksa kurar),
+urllib'i de kapsar (yalnız paylaşım kipinde; araştırma arşivi betikleri dokunulmadan kalır), açık süre dolunca tek
+yoklama yapar ve başarısız yoklamada süreyi ikiye katlar (azami 900 sn); bir HTTP hata kodu kaynağın ayakta olduğunu
+söyler ve kesiciyi kapatır. Kesici istisnası `tto_kesici` taşır ve on hattın `_cek` döngüsü onu görünce beklemeden
+çıkar. Ölçüldü: asılı bir yerel sunucuya karşı 20 serilik çekim 210,2 sn'den 8,5 sn'ye indi.
+
+(3) X. Yazı katmanı "(Investing.com)" yazdı; bağ kapısı çıplak alan adını bağ sayar ve sayması doğrudur. Kapı
+gevşetilmedi: otomatik kanallarda (bülten, analiz) çıplak alan adı kaynak adına iner (`tweet/denetim.alan_adsiz`,
+LINK tanımının kendisi); özel gönderi ve düzeltme yanıtı yazarın metnidir, çevrilmez. Kural rehberde (YAZIM.md 9).
+
+(4) BAYAT HAT ALARMI 08.09'DAN BERİ ÖLÜYDÜ. gecikme.yml'in üç koşulu `steps.bayat.outputs.yeni` soruyordu;
+bayatlik.py `bayat_yeni` yazıyor. Tanımsız çıktı boş dizgedir: alarm adımı hiç koşmadı, "Sessiz geçiş" her uyanmada
+sağlık bastı. Duman sınaması yanlış adı KİLİTLİYORDU, üstelik aynı maddede aracın `bayat_yeni` yazdığını da
+doğruluyordu. Bu sabahki kayıt yalnız gecikme alarmının sırtında commit edildi. Genel kapı (`_is_akisi_cikti_adlari`):
+bütün iş akışlarında okunan her `steps.X.outputs.Y`, o adımın yazdığı adlardan biri olmalı. Ad iki yoldan yazılır,
+ikisi de kaynaktan okunur: echo satırı, ya da `--cikti` ile çağrılan aracın kendi kaynağı. 13 iş akışında 15 okuma
+var; HEAD'deki gecikme.yml'e karşı düşüyor.
+
+(5) ENFLASYON SAHTE 4/4 — ERKEN KOŞU YAYIMI TÜKETİR. 05.10'da Eylül TÜFE'si tetiğin 90 dakikalık bekleme süresi
+dolmadan zorla çekildi ve sürüm ilerledi. Tetik saati gelince yayım "son koşumdan sonra hazır oldu" diye yine
+ateşledi; tetikli koşu ve üç yeniden deneme "veri gelmedi" sayıldı. Enflasyon güncelken on beş gün 4/4'te durdu
+(bugünkü bayat kaydı budur). Kural: sayılan koşunun her tetiği için o tetiğin ilerlettiği SAAT, yayımdan sonra
+BAŞLAMIŞ TEMİZ bir koşuda zaten ilerlediyse sayaç artmaz. Tetik yine ateşlenir ve hat yine koşar, yani tazelik kaybı
+yok. İki koruma bilerek kondu:
+- Saat başına: fonlama ve bütçe üç saatli; haftalık yan saatin ilerlemesi aylık ana saatin yayımını tüketmez.
+- Temiz koşu: sayaç sıfırken. Değilse hat önceki bir yayımı geriden yakalıyor olabilir.
+
+Defter `saat_deger` · `saat_ani` taşır; tohumlama onları korur. Canlı sayaç elle sıfırlanmadı: 03.11 TÜFE'siyle
+kendiliğinden sıfırlanır ve kayıtlı alarm yeniden ötmez.
+
+Arıza enjeksiyonu: kesici 6/6, takvim 7/7, önbellek ayrımı 6/6, alarm adı ve erken koşu 8/8, gönderi 3/3.
+
+AÇIK, adıyla:
+- Kaynak gerçekten düştüğünde önbellek yedeği olmayan hatlar (tcmb net rezerv, reer'in bayat Excel kapısı, yabancı)
+  yine düşer; veri.yml her koşuda kırmızı biter ve e-posta gönderir. Bunun uyarıya mı inmesi gerektiği kullanıcı
+  kararı; kalıcılığı bayatlık ölçüsü zaten yakalıyor.
+- Takvim kopyası birleştirmeden sonraki ilk başarılı uç yanıtına kadar boştur.
+- Erken koşu kuralının kör noktası: hat önceki yayımı SAYILMAYAN bir koşuda geriden yakalarsa (kör koşu üst üste ve
+  kaynak gecikmesi), yeni yayımın yeniden denemesi açılmayabilir.
+- GitHub cron'ları o sabah da ateşlenmedi; zinciri yine rutin sürükledi.

@@ -391,6 +391,78 @@ def butce_bulgulari(metin: str, is_adi: str = "tazele") -> list[str]:
     return bulgular
 
 
+def adim_ciktilari(metin: str, kok: Path) -> "dict[str, set[str] | None]":
+    """İş akışındaki kimlikli adımların YAZDIĞI çıktı adları.
+
+    Ad iki yoldan yazılır ve ikisi de kaynaktan okunur, elle tutulmaz:
+    `echo "AD=…" >> "$GITHUB_OUTPUT"` satırları ve `--cikti "$GITHUB_OUTPUT"`
+    ile çağrılan aracın KENDİ kaynağındaki `write(f"AD=…")` yazımları. `uses:`
+    adımı None döner: çıktılarını eylem tanımlar, burada ölçülmez."""
+    satirlar = metin.splitlines()
+    bloklar: list[list[str]] = []
+    i = 0
+    while i < len(satirlar):
+        m = re.match(r"^(\s*)steps:\s*$", satirlar[i])
+        i += 1
+        if not m:
+            continue
+        taban = len(m.group(1))
+        simdiki: list[str] | None = None
+        while i < len(satirlar):
+            s = satirlar[i]
+            if s.strip() and not s.lstrip().startswith("#"):
+                g = len(s) - len(s.lstrip())
+                if g <= taban:
+                    break
+                if g == taban + 2 and s.lstrip().startswith("- "):
+                    simdiki = [s]
+                    bloklar.append(simdiki)
+                    i += 1
+                    continue
+            if simdiki is not None:
+                simdiki.append(s)
+            i += 1
+    cikti: dict[str, set[str] | None] = {}
+    for blok in bloklar:
+        govde = "\n".join(blok)
+        m = re.search(r"^\s*(?:- )?id:\s*([A-Za-z0-9_-]+)\s*$", govde, re.M)
+        if not m:
+            continue
+        if re.search(r"^\s*(?:- )?uses:\s*\S", govde, re.M):
+            cikti[m.group(1)] = None
+            continue
+        adlar = set(re.findall(
+            r"""echo\s+["']?([A-Za-z0-9_-]+)=[^\n]*>>\s*["']?\$GITHUB_OUTPUT""", govde))
+        if re.search(r"""--cikti\s+["']?\$GITHUB_OUTPUT""", govde):
+            for betik in re.findall(r"""python3?\s+(?:-[A-Za-z]+\s+)*([^\s"']+\.py)""", govde):
+                p = kok / betik
+                if p.exists():
+                    adlar |= set(re.findall(r"""write\(\s*f?["']([A-Za-z0-9_-]+)=""",
+                                            p.read_text(encoding="utf-8")))
+        cikti[m.group(1)] = adlar
+    return cikti
+
+
+def cikti_bulgulari(metin: str, kok: Path, ad: str = "") -> tuple[int, list[str]]:
+    """(okunan çıktı sayısı, kusurlar). Kusur: okunan bir `steps.X.outputs.Y`
+    adının o adımca yazılmaması — tanımsız çıktı boş dizgedir, koşul sessizce
+    yanlış okunur ve iş akışı YEŞİL biter (gecikme.yml, 08.09–21.10.2026).
+    Tam satır yorumlar taranmaz: kusuru anlatan açıklama kusur değildir."""
+    yazilan = adim_ciktilari(metin, kok)
+    kod = "\n".join(s for s in metin.splitlines() if not s.lstrip().startswith("#"))
+    okunan = re.findall(r"steps\.([A-Za-z0-9_-]+)\.outputs\.([A-Za-z0-9_-]+)", kod)
+    bulgu: list[str] = []
+    for adim, cikti_adi in okunan:
+        if adim not in yazilan:
+            bulgu.append(f"{ad}: steps.{adim}.outputs.{cikti_adi} okunuyor ama "
+                         f"'{adim}' kimlikli bir adım yok")
+        elif yazilan[adim] is not None and cikti_adi not in yazilan[adim]:
+            bulgu.append(f"{ad}: steps.{adim}.outputs.{cikti_adi} okunuyor, adım "
+                         f"yalnız {sorted(yazilan[adim]) or 'hiçbir ad'} yazıyor — "
+                         f"koşul boş dizgeyle değerlendirilir")
+    return len(okunan), sorted(set(bulgu))
+
+
 # İZLEMSİZ HATLAR — her biri GEREKÇESİYLE. Bir hattın ölçüm cümlesi
 # üretememesi meşru olabilir, ama SESSİZCE olamaz: gerekçe yazılmazsa bir
 # sonraki oturum unutulmuş bir hat ile bilinçli bir muafiyeti ayırt edemez.
@@ -2629,6 +2701,165 @@ def main() -> int:
             tazeleme._yayimlar, tazeleme._defter = gercek_y, gercek_d
     sina("tazeleme: eli boş dönen koşu tetiği tüketmez", _eli_bos_kosu)
 
+    # TAKVİM YEDEĞİ (21.10.2026). TÜİK ucu düştüğü sabah bulutta önbellek yoktu
+    # ve on sekiz hattın hepsi kör koştu (toplam süre adım sınırını aşar). Madde
+    # GERÇEK `_yayimlar`ı sahte uç ve sahte önbellekle koşturur: uç ayaktayken
+    # planlı kayıtlar da saklanır ama tetik üretmez; uç düşünce bayat liste +
+    # saati geçmiş planlı kayıt kullanılır, gelecektekiler kullanılmaz; çok eski
+    # kopya kör koşuya döner; planlı kayıttan doğan tetik sayaca GİRMEZ, gerçek
+    # yayımdan doğan girer.
+    def _takvim_yedegi():
+        gercek = (tazeleme._getir, tazeleme._onbellekten, tazeleme._onbellege_yaz,
+                  tazeleme._defter, tazeleme._ihale_gunleri, tazeleme._strateji_anlari)
+        simdi = tazeleme._simdi()
+        an = lambda saat: (simdi + dt.timedelta(hours=saat)).strftime("%Y-%m-%dT%H:%M:%S")
+        yayinda = [{"adi": "Ödemeler Dengesi", "sorumluKisaAd": "TCMB", "gTarih": an(-30)}]
+        planli = [{"adi": "Haftalık Para ve Banka İstatistikleri", "sorumluKisaAd": "TCMB", "gTarih": an(-5)},
+                  {"adi": "Aylık Para ve Banka İstatistikleri", "sorumluKisaAd": "TCMB", "gTarih": an(+50)}]
+        depo: dict = {}
+        uc = {"ayakta": True}
+
+        def _getir(url, zaman_asimi=25):
+            return json.dumps({"yayindaOlanlarList": yayinda,
+                               "yayindaOlmayanlarList": planli}) if uc["ayakta"] else None
+
+        def _yaz(ad, veri):
+            depo[ad] = (veri, dt.datetime.now().isoformat(timespec="seconds"))
+
+        try:
+            tazeleme._getir = _getir
+            tazeleme._onbellekten = lambda ad: depo.get(ad, (None, None))
+            tazeleme._onbellege_yaz = _yaz
+            tazeleme._ihale_gunleri = lambda: []
+            tazeleme._strateji_anlari = lambda s: []
+            yil = (simdi.year,)
+            # (1) Uç ayakta: yalnız yayımlanmış kayıt döner; planlı liste saklanır.
+            k, ok = tazeleme._yayimlar(yil)
+            assert ok and [x["adi"] for x in k] == ["Ödemeler Dengesi"], k
+            assert f"yayim_plan_{simdi.year}" in depo and len(depo[f"yayim_plan_{simdi.year}"][0]) == 2, depo
+            assert tazeleme.SON_TAKVIM["kaynak"] == "canlı", tazeleme.SON_TAKVIM
+            # (2) Uç düştü, kopya bir günlük: bayat liste + saati GEÇMİŞ planlı kayıt.
+            uc["ayakta"] = False
+            gun_once = (dt.datetime.now() - dt.timedelta(days=1)).isoformat(timespec="seconds")
+            for ad in list(depo):
+                depo[ad] = (depo[ad][0], gun_once)
+            k, ok = tazeleme._yayimlar(yil)
+            adlar = sorted(x["adi"] for x in k)
+            assert ok, "yedek varken takvim sağlam sayılmadı (kör koşu)"
+            assert adlar == ["Haftalık Para ve Banka İstatistikleri", "Ödemeler Dengesi"], adlar
+            assert all(x.get("planli") for x in k if x["adi"].startswith("Haftalık")), k
+            assert tazeleme.SON_TAKVIM["kaynak"] == "yedek" and tazeleme.SON_TAKVIM["planli"] == 1, \
+                tazeleme.SON_TAKVIM
+            # (3) Planlı kayıttan doğan tetik hattı koşturur ama SAYACA girmez.
+            tazeleme._defter = lambda: {"son_kosum": {"kredi": an(-48)}, "son_surum": {}, "deneme": {}}
+            kr = tazeleme.kararlar(["kredi"], simdi=simdi)[0]
+            assert kr.kossun and not kr.sayilir and "yedek" in kr.sebep, (kr.kossun, kr.sayilir, kr.sebep)
+            assert "TAKVİM ALINAMADI" not in kr.sebep, kr.sebep
+            # (4) Aynı yayım GERÇEKTEN yayımlanmışsa (canlı uç) tetik sayaca girer.
+            uc["ayakta"] = True
+            yayinda.append(dict(planli[0]))
+            depo.clear()
+            kr = tazeleme.kararlar(["kredi"], simdi=simdi)[0]
+            assert kr.kossun and kr.sayilir and "yedek" not in kr.sebep, (kr.kossun, kr.sayilir, kr.sebep)
+            # (5) Kopya YEDEK_AZAMI_GUN'den eski ya da hiç yok: kör koşu (eski güvenli davranış).
+            uc["ayakta"] = False
+            eski = (dt.datetime.now() - dt.timedelta(days=tazeleme.YEDEK_AZAMI_GUN + 1)).isoformat()
+            for ad in list(depo):
+                depo[ad] = (depo[ad][0], eski)
+            k, ok = tazeleme._yayimlar(yil)
+            assert not ok and not k, f"eski kopya kullanıldı: {len(k)} kayıt"
+            depo.clear()
+            assert tazeleme._yayimlar(yil) == ([], False)
+            kr = tazeleme.kararlar(["kredi"], simdi=simdi)[0]
+            assert kr.kossun and "TAKVİM ALINAMADI" in kr.sebep, kr.sebep
+        finally:
+            (tazeleme._getir, tazeleme._onbellekten, tazeleme._onbellege_yaz,
+             tazeleme._defter, tazeleme._ihale_gunleri, tazeleme._strateji_anlari) = gercek
+    sina("tazeleme: takvim ucu düşünce yedek (bayat liste + saati geçmiş planlı kayıt); planlı tetik sayılmaz, eski kopya kör koşar", _takvim_yedegi)
+
+    # Takvim önbelleği bulutta koşular arasında TAŞINIR: depoya girmiyor ve
+    # koşucu her işte yeni; taşınmazsa yedek dalı bulutta hiç çalışmaz.
+    def _takvim_onbellegi_tasinir():
+        # Yorum satırları ayıklanır: yolun adı açıklamada da geçiyor ve ilk
+        # yazımda sınama onu bulup önbellekten çıkarılmış yolu "var" saydı.
+        yml = "\n".join(l for l in (BURASI.parent / ".github" / "workflows" / "veri.yml")
+                        .read_text(encoding="utf-8").splitlines() if not l.lstrip().startswith("#"))
+        veri_blok = yml.split("name: Veri önbelleği", 1)[1].split("- name:", 1)[0]
+        assert "bulten/onbellek" not in veri_blok, \
+            "takvim yolu veri önbelleğinin listesine girmiş: önbellek sürümü yol listesinden türer, birikmiş veri önbelleği geçersiz kalır"
+        # Adımlar sırasıyla: ad → gövde. Geri yükleme takvimi okuyan ilk
+        # adımdan ÖNCE, kayıt okuyan son adımdan SONRA ve `if: always()`:
+        # birleşik `actions/cache` yalnız iş yeşil bittiğinde kaydeder
+        # (`post-if: success()`), oysa kopya kırmızı günün yedeğidir.
+        is_govde = yml.split("\n  tazele:", 1)[1]
+        adimlar = [(p.split("\n", 1)[0].strip(), p) for p in re.split(r"\n\s*- name: ", is_govde)[1:]]
+        sira = [ad for ad, _ in adimlar]
+        yol = "bulten/onbellek/yayim_*.json"
+        birlesik = [ad for ad, g in adimlar if "uses: actions/cache@" in g and yol in g]
+        assert not birlesik, (f"takvim önbelleği birleşik actions/cache ile taşınıyor ({birlesik}): "
+                              "kayıt yalnız yeşil işte koşar, kopya kırmızı günde kaybolur")
+        geri = [i for i, (ad, g) in enumerate(adimlar)
+                if "uses: actions/cache/restore@" in g and yol in g and "restore-keys: takvim-" in g]
+        kayit = [i for i, (ad, g) in enumerate(adimlar)
+                 if "uses: actions/cache/save@" in g and yol in g and "key: takvim-" in g]
+        assert geri, "takvim önbelleği veri.yml'de geri yüklenmiyor (actions/cache/restore, restore-keys: takvim-)"
+        assert kayit, "takvim önbelleği veri.yml'de kaydedilmiyor (actions/cache/save, key: takvim-)"
+        assert "if: always()" in adimlar[kayit[0]][1], "takvim kaydı `if: always()` taşımıyor: kırmızı işte kaydedilmez"
+        ilk_okur = sira.index("Tazeleme takvimi ne diyor (tanı — koşuyu durdurmaz)")
+        son_okur = max(i for i, ad in enumerate(sira) if ad.startswith("Hazine ihaleleri"))
+        assert geri[0] < ilk_okur, "takvim önbelleği, takvimi okuyan ilk adımdan sonra geri yükleniyor"
+        assert kayit[0] > son_okur, "takvim önbelleği, takvimi okuyan son adımdan önce kaydediliyor"
+        gi = (BURASI.parent / ".gitignore").read_text(encoding="utf-8")
+        assert "bulten/onbellek/yayim_*.json" in gi, "takvim önbelleği depoya girebilir (gitignore)"
+        assert "TTO_HTTP_KESICI_DOSYA" in yml.split("tazele:", 1)[1].split("steps:", 1)[0], \
+            "veri.yml tazele işi paylaşılan kesici dosyasını vermiyor"
+    sina("veri.yml: takvim önbelleği koşular arasında taşınır, kesici iş boyu paylaşılır", _takvim_onbellegi_tasinir)
+
+    # OKUNAN ÇIKTI YAZILMIŞ OLMALI (21.10.2026). gecikme.yml'in bayat hat
+    # alarmı 08.09'dan beri `steps.bayat.outputs.yeni` soruyordu; araç
+    # `bayat_yeni` yazıyor. Tanımsız çıktı boş dizgedir: alarm adımı hiç
+    # koşmadı, "Sessiz geçiş" her uyanmada sağlık bastı ve iş akışı yeşil
+    # bitti. Kapsam SÖZLEŞMEDEN: bütün iş akışları, adın yazıldığı iki yol
+    # (echo ve aracın kendi kaynağı) — elle tutulan ad listesi yok.
+    def _is_akisi_cikti_adlari():
+        kok = BURASI.parent
+        akislar = sorted((kok / ".github" / "workflows").glob("*.yml"))
+        assert len(akislar) >= 5, f"yalnız {len(akislar)} iş akışı bulundu — kapsam kaymış"
+        toplam, bulgu = 0, []
+        for yol in akislar:
+            n, b = cikti_bulgulari(yol.read_text(encoding="utf-8"), kok, yol.name)
+            toplam += n
+            bulgu += b
+        # "Bulgu yok" ile "hiçbir şey görmedim" aynı görünür: okunan çıktı
+        # sayısı ayrıştırıcının gerçekten baktığını gösterir.
+        assert toplam >= 10, f"yalnız {toplam} çıktı okuması bulundu — ayrıştırıcı kör"
+        assert not bulgu, "iş akışı tanımsız adım çıktısı okuyor:\n    " + "\n    ".join(bulgu)
+
+        # Regresyon: 08.09'un hâli DÜŞMELİ, doğrusu geçmeli; echo yolu, eylem
+        # adımı ve olmayan kimlik ayrı ayrı.
+        kalip = ("jobs:\n  olc:\n    runs-on: ubuntu-latest\n    steps:\n"
+                 "      - name: Bayat hat var mı\n        id: bayat\n        run: |\n"
+                 "          python3 -u bulten/bayatlik.py \\\n"
+                 "            --cikti \"$GITHUB_OUTPUT\"\n"
+                 "      - name: Anahtar\n        id: token\n        run: |\n"
+                 "          echo \"var=evet\" >> \"$GITHUB_OUTPUT\"\n"
+                 "      - name: Önbellek\n        id: onb\n        uses: actions/cache/restore@v4\n"
+                 "      - name: Alarm\n        if: %s\n        run: exit 1\n")
+        for kosul, dusmeli in (("steps.bayat.outputs.yeni == '1'", True),
+                               ("steps.bayat.outputs.bayat_yeni == '1'", False),
+                               ("steps.token.outputs.var == 'evet'", False),
+                               ("steps.token.outputs.vars == 'evet'", True),
+                               ("steps.onb.outputs.cache-hit == 'true'", False),
+                               ("steps.yok.outputs.x == '1'", True)):
+            n, b = cikti_bulgulari(kalip % kosul, kok, "fikstür")
+            assert n == 1, (kosul, n)
+            assert bool(b) == dusmeli, f"{kosul}: {'düşmeliydi' if dusmeli else 'geçmeliydi'} — {b}"
+        # Kusuru anlatan YORUM kusur değildir.
+        n, b = cikti_bulgulari((kalip % "steps.bayat.outputs.bayat_yeni == '1'")
+                               + "      # eskiden steps.bayat.outputs.yeni soruluyordu\n", kok, "fikstür")
+        assert n == 1 and not b, (n, b)
+    sina("iş akışları: okunan her adım çıktısı o adımca yazılıyor (bayat hat alarmı 08.09–21.10 ölüydü)", _is_akisi_cikti_adlari)
+
     # SÜRÜM ÖLÇÜSÜ HATTIN ANA SAATİDİR. Bütün tarih alanlarından kurulan bir
     # imza, kredide günlük bacak her iş günü ilerlediği için hep değişir ve
     # yeniden deneme yazıldığı arıza için HİÇ ateşlenmez. Ölçüt o gerilemeyi
@@ -2765,6 +2996,134 @@ def main() -> int:
             "guncelle sayılan kümesini durum_yaz'a geçirmiyor — sayaç hiç artmaz ya da hep artar"
         assert 'getattr(k, "sayilir", False)' in kaynak, "guncelle Karar.sayilir'i okumuyor"
     sina("tazeleme: sürüm sayacı yalnız yayım tetikli koşuda artar", _sayac_sozlesmesi)
+
+    # ERKEN KOŞU YAYIMI TÜKETİR (21.10.2026). 05.10'da Eylül TÜFE'si 10:00'da
+    # yayımlandı ve tetiğin 90 dakikalık bekleme süresi dolmadan zorla çekildi;
+    # tetik saati gelince aynı yayım yine "tüketilmemiş" sayıldı ve bir tetikli
+    # koşu + üç yeniden deneme "veri gelmedi" diye sayıldı: Enflasyon 15 gün
+    # güncelken 4/4'te durdu. Sınama o günün takvimini birebir kurar; üç kontrol
+    # kuralın BİLEREK dışarıda bıraktığı hâlleri ayrı ayrı sorar.
+    def _erken_kosu():
+        import json as _json, tempfile as _tf, inspect as _insp
+        from pathlib import Path as _P
+        gercek = (tazeleme._yayimlar, tazeleme._defter, tazeleme.DURUM,
+                  tazeleme.hat_surumu, tazeleme.hat_saatleri)
+        tufe = [{"adi": "Tüketici Fiyat Endeksi, Eylül 2026", "kurum": "TÜİK", "an": "2026-10-05T10:00:00"},
+                {"adi": "Yurt İçi Üretici Fiyat Endeksi, Eylül 2026", "kurum": "TÜİK", "an": "2026-10-05T10:00:00"}]
+        borc = [{"adi": "Merkezi Yönetim Borç Stoku", "kurum": "HMB", "an": "2026-10-20T10:00:00"}]
+        saat: dict = {}
+        G = lambda *a: dt.datetime(2026, 10, *a)                       # noqa: E731
+
+        def defter(**ek):
+            tmp.write_text(_json.dumps({"son_kosum": {}, "son_surum": {}, "deneme": {}, **ek}),
+                           encoding="utf-8")
+
+        def oku():
+            return _json.loads(tmp.read_text(encoding="utf-8"))
+        try:
+            tmp = _P(_tf.mkdtemp()) / "durum.json"
+            tazeleme.DURUM = tmp
+            tazeleme._defter = gercek[1]
+            tazeleme.hat_saatleri = lambda h: dict(saat.get(h, {}))
+            tazeleme.hat_surumu = lambda h: " · ".join(saat.get(h, {}).values())
+            tazeleme._yayimlar = lambda y: (tufe, True)
+
+            # (a) 05.10: zorla koşu 10:45'te başlar, 08.2026 → 09.2026 (temiz).
+            saat["enflasyon"] = {"_tarih": "08.2026"}
+            defter(son_kosum={"enflasyon": "2026-09-09T14:38:09"},
+                   son_surum={"enflasyon": "08.2026"}, deneme={"enflasyon": 0},
+                   saat_deger={"enflasyon": {"_tarih": "08.2026"}})
+            saat["enflasyon"] = {"_tarih": "09.2026"}
+            tazeleme.durum_yaz(["enflasyon"], G(5, 11, 15), sayilan=set(),
+                               baslangic={"enflasyon": G(5, 10, 45)})
+            d = oku()
+            assert d["saat_ani"]["enflasyon"]["_tarih"] == "2026-10-05T10:45:00", d
+            # Tetik saati gelir (10:00 + 90 dk): yayım yine ateşler ve SAYILIR.
+            k = tazeleme.kararlar(["enflasyon"], simdi=G(5, 12, 0))[0]
+            assert k.kossun and k.sayilir and k.tetik_anlari == [("", "2026-10-05T10:00:00")], k
+            tazeleme.durum_yaz(["enflasyon"], G(5, 12, 1), sayilan={"enflasyon"},
+                               tetik_anlari={"enflasyon": k.tetik_anlari},
+                               baslangic={"enflasyon": G(5, 11, 50)})
+            assert oku()["deneme"]["enflasyon"] == 0, \
+                f"erken koşunun aldığı yayım 'veri gelmedi' sayıldı (05.10 arızası): {oku()}"
+            k = tazeleme.kararlar(["enflasyon"], simdi=G(5, 14, 30))[0]
+            assert not k.kossun, f"tüketilmiş yayım için yeniden deneme açıldı: {k}"
+
+            # (b) KONTROL — ilerleme yayımdan ÖNCE başlayan koşuda: yayımın
+            # verisi o koşuya giremezdi; tetikli koşu sayılır.
+            saat["enflasyon"] = {"_tarih": "08.2026"}
+            defter(son_kosum={"enflasyon": "2026-09-09T14:38:09"},
+                   son_surum={"enflasyon": "08.2026"}, deneme={"enflasyon": 0},
+                   saat_deger={"enflasyon": {"_tarih": "08.2026"}})
+            saat["enflasyon"] = {"_tarih": "09.2026"}
+            tazeleme.durum_yaz(["enflasyon"], G(5, 10, 5), sayilan=set(),
+                               baslangic={"enflasyon": G(5, 9, 30)})
+            k = tazeleme.kararlar(["enflasyon"], simdi=G(5, 12, 0))[0]
+            tazeleme.durum_yaz(["enflasyon"], G(5, 12, 1), sayilan={"enflasyon"},
+                               tetik_anlari={"enflasyon": k.tetik_anlari},
+                               baslangic={"enflasyon": G(5, 11, 50)})
+            assert oku()["deneme"]["enflasyon"] == 1, \
+                f"yayımdan önce başlayan koşunun ilerlemesi yayımı tüketti: {oku()}"
+
+            # (c) KONTROL — temiz olmayan ilerleme: sayaç 2 iken gelen ilerleme
+            # önceki bir yayımın geriden yakalanması olabilir; anı kaydedilmez.
+            saat["enflasyon"] = {"_tarih": "08.2026"}
+            defter(son_kosum={"enflasyon": "2026-10-04T14:00:00"},
+                   son_surum={"enflasyon": "08.2026"}, deneme={"enflasyon": 2},
+                   saat_deger={"enflasyon": {"_tarih": "08.2026"}})
+            saat["enflasyon"] = {"_tarih": "09.2026"}
+            tazeleme.durum_yaz(["enflasyon"], G(5, 11, 15), sayilan=set(),
+                               baslangic={"enflasyon": G(5, 10, 45)})
+            assert "enflasyon" not in oku().get("saat_ani", {}), \
+                f"temiz olmayan ilerlemenin anı kaydedildi: {oku()}"
+            tazeleme.durum_yaz(["enflasyon"], G(5, 12, 1), sayilan={"enflasyon"},
+                               tetik_anlari={"enflasyon": [("", "2026-10-05T10:00:00")]},
+                               baslangic={"enflasyon": G(5, 11, 50)})
+            assert oku()["deneme"]["enflasyon"] == 1, oku()
+
+            # (d) KONTROL — saat başına: bütçede haftalık yan saatin (_tarih2)
+            # yayımdan sonra ilerlemesi, aylık ana saatin (HMB borç stoku)
+            # yayımını TÜKETMEZ.
+            tazeleme._yayimlar = lambda y: (borc, True)
+            saat["butce"] = {"_tarih": "08.2026", "_tarih2": "09.10.2026", "akim_tarih": "09.2026"}
+            defter(son_kosum={"butce": "2026-10-19T20:00:00"},
+                   son_surum={"butce": tazeleme.hat_surumu("butce")}, deneme={"butce": 0},
+                   saat_deger={"butce": dict(saat["butce"])})
+            saat["butce"] = {**saat["butce"], "_tarih2": "16.10.2026"}
+            tazeleme.durum_yaz(["butce"], G(20, 10, 40), sayilan=set(),
+                               baslangic={"butce": G(20, 10, 30)})
+            assert oku()["saat_ani"]["butce"] == {"_tarih2": "2026-10-20T10:30:00"}, oku()
+            k = tazeleme.kararlar(["butce"], simdi=G(20, 11, 30))[0]
+            assert k.sayilir and k.tetik_anlari == [("", "2026-10-20T10:00:00")], k
+            tazeleme.durum_yaz(["butce"], G(20, 11, 31), sayilan={"butce"},
+                               tetik_anlari={"butce": k.tetik_anlari},
+                               baslangic={"butce": G(20, 11, 20)})
+            assert oku()["deneme"]["butce"] == 1, \
+                f"yan saatin ilerlemesi ana saatin yayımını tüketti: {oku()}"
+
+            # (e) Tohumlama erken koşu kaydını silmez.
+            defter(son_surum={}, deneme={}, saat_ani={"butce": {"_tarih2": "2026-10-20T10:30:00"}},
+                   saat_deger={"butce": dict(saat["butce"])})
+            saat["kredi"] = {"_tarih": "09.10.2026"}
+            assert tazeleme.tabani_tohumla(["kredi"]) == ["kredi"]
+            assert oku()["saat_ani"] == {"butce": {"_tarih2": "2026-10-20T10:30:00"}}, \
+                f"tohumlama saat kaydını sildi: {oku()}"
+        finally:
+            (tazeleme._yayimlar, tazeleme._defter, tazeleme.DURUM,
+             tazeleme.hat_surumu, tazeleme.hat_saatleri) = gercek
+        # TÜKETİCİ: guncelle tetik anlarını ve hat başlangıcını geçiriyor mu.
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        kaynak = _insp.getsource(g)
+        assert "tetik_anlari=tetik_anlari, baslangic=hat_baslangic" in kaynak, \
+            "guncelle erken koşu kuralının girdilerini durum_yaz'a geçirmiyor"
+        assert 'getattr(k, "tetik_anlari"' in kaynak and "hat_baslangic[h.ad] = _tz0._simdi()" in kaynak, \
+            "guncelle tetik anlarını ya da hat başlangıcını ölçmüyor"
+        # hat_surumu, hat_saatleri'nin birleşik yazımıdır (iki okuma ayrışmaz).
+        for h in ("butce", "kredi", "enflasyon"):
+            assert tazeleme.hat_surumu(h) == " · ".join(tazeleme.hat_saatleri(h).values()), h
+    sina("tazeleme: erken koşu yayımı tüketir — saat başına, temiz koşuda (Enflasyon 05.10 sahte 4/4)", _erken_kosu)
 
     # SOĞUK BAŞLANGIÇ (09.09.2026). Defterde tabanı olmayan hat ilk sayılan
     # koşusunda eli boş dönerse, koşu sonrası sürüm tabana yazılıp "ilerledi"
@@ -3571,11 +3930,17 @@ def main() -> int:
         kayit_adim = yml[i_kayit:i_alarm]
         assert "git add bulten/bayatlik_alarm_kaydi.json" in kayit_adim, \
             "bayat mükerrerlik kaydı commit edilmiyor — her uyanmada yeniden öter"
-        assert "steps.bayat.outputs.yeni == '1'" in kayit_adim, \
+        # Koşulun okuduğu ad, aracın YAZDIĞI addır ve ikisi burada TEK sabite
+        # bağlanır. 08.09–21.10 arası bu madde `steps.bayat.outputs.yeni`
+        # arıyordu — araç `bayat_yeni` yazarken: sınama kusuru KİLİTLİYORDU ve
+        # alarm adımı hiç koşmadı. (Genel kapı: `_is_akisi_cikti_adlari`.)
+        yeni_adi = "bayat_yeni"
+        assert f"{yeni_adi}=" in satirlar, f"bayatlik.py '{yeni_adi}' yazmıyor: {satirlar}"
+        assert f"steps.bayat.outputs.{yeni_adi} == '1'" in kayit_adim, \
             "kayıt adımı bayat alarmında çalışmıyor"
         alarm_adim = yml[i_alarm:]
-        assert "if: steps.bayat.outputs.yeni == '1'" in alarm_adim, \
-            "bayat alarmı 'yeni' değil başka bir çıktıya bağlı — kayıtlı alarm yeniden öter"
+        assert f"if: steps.bayat.outputs.{yeni_adi} == '1'" in alarm_adim, \
+            f"bayat alarmı '{yeni_adi}' değil başka bir çıktıya bağlı — alarm hiç çalmaz ya da kayıtlı alarm yeniden öter"
 
         # (3) TÜKETİCİ: denetim ölçüsünü `kossun` süzgecinin ÖNÜNDE okumalı.
         kaynak = inspect.getsource(denetim.Denetim.tazeleme_atlandi)
@@ -4068,11 +4433,14 @@ def main() -> int:
                 raise _hx.ReadTimeout("sahte zaman aşımı")
             return _Yanit()
 
-        eski_env = {k: _os.environ.get(k) for k in ("TTO_HTTP_DENEME", "TTO_HTTP_KESICI_ESIK", "TTO_HTTP_KESICI_SN")}
+        eski_env = {k: _os.environ.get(k) for k in ("TTO_HTTP_DENEME", "TTO_HTTP_KESICI_ESIK", "TTO_HTTP_KESICI_SN",
+                                                    "TTO_HTTP_KESICI_DOSYA")}
         try:
             _os.environ["TTO_HTTP_DENEME"] = "1"          # sınama hızlı bitsin (bekleme yok)
             _os.environ["TTO_HTTP_KESICI_ESIK"] = "2"
             _os.environ["TTO_HTTP_KESICI_SN"] = "0.3"
+            # Koşunun paylaşılan kesici dosyası (veri.yml iş ortamı) sahte düşüşlerle kirlenmesin.
+            _os.environ.pop("TTO_HTTP_KESICI_DOSYA", None)
             requests.sessions.Session.request = _sahte
             if onceden:
                 del requests.sessions.Session._tto_emniyet
@@ -4115,6 +4483,190 @@ def main() -> int:
                 try: del requests.sessions.Session._tto_emniyet
                 except AttributeError: pass
     sina("ortak: devre kesici — yanıt vermeyen ana bilgisayara ikinci düşmeden sonra istek denenmez", _devre_kesici)
+
+    # KOŞU BOYU PAYLAŞIM VE URLLIB (21.10.2026). EVDS ve TÜİK yanıt vermediği
+    # sabah her hat aynı ölümü kendi zaman aşımlarını baştan ödeyerek öğrendi
+    # (Kredi seri başına 3 × 90 sn) ve 40 dakikalık tazeleme adımı kesildi: kesici
+    # süreç başına yaşıyordu ve yalnız `requests`'i sarıyordu, EVDS'i okuyan on hat
+    # ise urllib kullanıyor. Madde kesicinin KENDİSİNİ koşturur (sahte istekle,
+    # ağsız) ve paylaşımı gerçek bir ALT SÜREÇLE sorar — süreç içi bir sahte
+    # paylaşımı kanıtlamaz.
+    def _kesici_paylasim_urllib():
+        import importlib.util, os as _os, socket, subprocess as _sp, tempfile as _tf
+        import time as _t, urllib.error, urllib.request
+        import requests
+        yol = BURASI.parent / "ortak" / "sitecustomize.py"
+        od = urllib.request.OpenerDirector
+        asil_open, asil_req = od.open, requests.sessions.Session.request
+        bayrak_od = getattr(od, "_tto_emniyet", False)
+        bayrak_rq = getattr(requests.sessions.Session, "_tto_emniyet", False)
+        anahtar = ("TTO_HTTP_DENEME", "TTO_HTTP_KESICI_ESIK", "TTO_HTTP_KESICI_SN",
+                   "TTO_HTTP_KESICI_AZAMI_SN", "TTO_HTTP_KESICI_DOSYA", "TTO_HTTP_OKUMA")
+        eski_env = {k: _os.environ.get(k) for k in anahtar}
+        gorulen: dict = {"n": 0, "timeout": []}
+        kip = {"hal": "dus"}
+
+        class _Yanit:
+            status = 200
+
+            def read(self):
+                return b"{}"
+
+        def _sahte_open(self, fullurl, data=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
+            gorulen["n"] += 1
+            gorulen["timeout"].append(timeout)
+            if kip["hal"] == "dus":
+                raise urllib.error.URLError(TimeoutError("sahte el sıkışma zaman aşımı"))
+            if kip["hal"] == "http":
+                raise urllib.error.HTTPError(str(fullurl), 503, "sahte", {}, None)
+            return _Yanit()
+
+        dizin = Path(_tf.mkdtemp(prefix="tto-kesici-"))
+        dosya = dizin / "kesici.json"
+        try:
+            _os.environ.update({"TTO_HTTP_DENEME": "1", "TTO_HTTP_KESICI_ESIK": "2",
+                                "TTO_HTTP_KESICI_SN": "0.3", "TTO_HTTP_KESICI_AZAMI_SN": "5",
+                                "TTO_HTTP_KESICI_DOSYA": str(dosya), "TTO_HTTP_OKUMA": "42"})
+            od.open = _sahte_open
+            if bayrak_od:
+                del od._tto_emniyet
+            spec = importlib.util.spec_from_file_location("_tto_kesici_urllib", yol)
+            m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+            assert getattr(od, "_tto_emniyet", False), "urllib emniyeti kurulmadı"
+            # Zaman aşımı verilmemişse varsayılan takılır; verilmişse dokunulmaz.
+            kip["hal"] = "ok"
+            urllib.request.urlopen("http://evds.sinama/z")
+            assert gorulen["timeout"][-1] == 42.0, gorulen["timeout"]
+            urllib.request.urlopen("http://evds.sinama/z", timeout=7)
+            assert gorulen["timeout"][-1] == 7, gorulen["timeout"]
+            # İki tam düşüş kesiciyi açar; üçüncü istek DENENMEZ ve tto_kesici taşır.
+            kip["hal"] = "dus"; n0 = gorulen["n"]
+            for _ in range(2):
+                try:
+                    urllib.request.urlopen("http://evds.sinama/a"); raise AssertionError("düşmedi")
+                except urllib.error.URLError as e:
+                    assert not getattr(e, "tto_kesici", False), "gerçek düşüş kesici istisnası sanıldı"
+            assert gorulen["n"] == n0 + 2, gorulen
+            try:
+                urllib.request.urlopen("http://evds.sinama/b"); raise AssertionError("kesici açılmadı")
+            except urllib.error.URLError as e:
+                assert getattr(e, "tto_kesici", False) and "devre kesici" in str(e), repr(e)
+            assert gorulen["n"] == n0 + 2, f"kesici açıkken istek denendi: {gorulen}"
+            # PAYLAŞIM: başka bir SÜREÇ aynı dosyayı görür ve hiç denemeden düşer.
+            # Alt sürecin açılışı 0,3 sn'den uzun sürer; bu yüzden ayrı bir ana
+            # bilgisayar, bu süreçteki kesicinin AÇTIĞI kayıt ve uzun bir süre.
+            for _ in range(2):
+                try:
+                    urllib.request.urlopen("http://uzun.sinama/a")
+                except urllib.error.URLError:
+                    pass
+            k_uzun = json.loads(dosya.read_text(encoding="utf-8"))["uzun.sinama"]
+            assert k_uzun.get("acilis") is not None, f"iki düşüş dosyaya açık kesici yazmadı: {k_uzun}"
+            m._Kesici().yaz("uzun.sinama", {**k_uzun, "sure": 60.0})
+            ortam = {**_os.environ, "PYTHONPATH": str(BURASI.parent / "ortak")}
+            kod = ("import urllib.request, urllib.error, sys\n"
+                   "try:\n    urllib.request.urlopen('http://uzun.sinama/c')\n"
+                   "except urllib.error.URLError as e:\n"
+                   "    print('KESICI' if getattr(e, 'tto_kesici', False) else 'BASKA', e); sys.exit(0)\n"
+                   "print('ACIK GECTI')\n")
+            s = _sp.run([sys.executable, "-c", kod], env=ortam, capture_output=True, text=True, timeout=60)
+            assert s.stdout.startswith("KESICI"), f"alt süreç kesiciyi görmedi: {s.stdout!r} {s.stderr[-300:]!r}"
+            # Süre dolunca TEK yoklama; yoklama da düşerse süre İKİYE katlanır.
+            _t.sleep(0.35)
+            n1 = gorulen["n"]
+            try:
+                urllib.request.urlopen("http://evds.sinama/d")
+            except urllib.error.URLError:
+                pass
+            assert gorulen["n"] == n1 + 1, f"yoklama yapılmadı ya da tekrarlandı: {gorulen}"
+            kayit = json.loads(dosya.read_text(encoding="utf-8"))["evds.sinama"]
+            assert abs(float(kayit["sure"]) - 0.6) < 1e-9, f"süre katlanmadı: {kayit}"
+            # HTTP hatası sunucunun yanıtıdır: kesiciyi BESLEMEZ, sıfırlar.
+            _t.sleep(0.65); kip["hal"] = "http"
+            try:
+                urllib.request.urlopen("http://evds.sinama/e")
+            except urllib.error.HTTPError:
+                pass
+            assert "evds.sinama" not in json.loads(dosya.read_text(encoding="utf-8")), \
+                "HTTP yanıtı kesiciyi sıfırlamadı"
+            # Yerel ana bilgisayar paylaşılmaz (sınamaların sahte sunucuları birbirini kesmez).
+            kip["hal"] = "dus"
+            for _ in range(2):
+                try:
+                    urllib.request.urlopen("http://127.0.0.1:9/x")
+                except urllib.error.URLError:
+                    pass
+            assert "127.0.0.1:9" not in json.loads(dosya.read_text(encoding="utf-8") or "{}"), \
+                "yerel ana bilgisayar paylaşılan dosyaya yazıldı"
+            # requests yolu da AYNI dosyayı kullanır ve istisnası tto_kesici taşır.
+            yeni = m._Kesici()
+            yeni.basarisiz("api.sinama", False); yeni.basarisiz("api.sinama", False)
+            hal, _k, _ = m._Kesici().karar("api.sinama")
+            assert hal == "acik", f"yeni bir kesici örneği dosyadaki durumu görmedi: {hal}"
+            # KAPSAM: paylaşım dosyası yoksa (araştırma arşivleri) urllib kesicisi
+            # devrede DEĞİL — uyuyan yeniden deneme döngüleri boşa harcanmasın —
+            # ama varsayılan zaman aşımı yine takılır.
+            _os.environ.pop("TTO_HTTP_KESICI_DOSYA", None)
+            kip["hal"] = "dus"; n2 = gorulen["n"]
+            for _ in range(3):
+                try:
+                    urllib.request.urlopen("http://arsiv.sinama/x")
+                except urllib.error.URLError as e:
+                    assert not getattr(e, "tto_kesici", False), "paylaşımsız kipte urllib kesicisi açıldı"
+            assert gorulen["n"] == n2 + 3 and gorulen["timeout"][-1] == 42.0, gorulen
+        finally:
+            od.open = asil_open
+            requests.sessions.Session.request = asil_req
+            if bayrak_od:
+                od._tto_emniyet = True
+            else:
+                try: del od._tto_emniyet
+                except AttributeError: pass
+            if bayrak_rq:
+                requests.sessions.Session._tto_emniyet = True
+            for k, v in eski_env.items():
+                if v is None: _os.environ.pop(k, None)
+                else: _os.environ[k] = v
+            import shutil as _sh; _sh.rmtree(dizin, ignore_errors=True)
+    sina("ortak: kesici koşu boyu paylaşılır (alt süreç görür), urllib'i de kapsar, yoklama düştükçe süre katlanır, HTTP yanıtı sıfırlar", _kesici_paylasim_urllib)
+
+    # Hatların urllib yeniden deneme döngüleri kesicinin istisnasını TANIR: açık
+    # kesicide her seri 1,5 + 3 sn uyuyordu (Kredi'de ~130 seri). Kapsam bir
+    # listeden değil KAYNAKTAN türetilir: üretim kodunda `urlopen` çağıran ve
+    # uyuyan her döngünün işlevi `tto_kesici`yi sormalı. Keşif ve arşiv betikleri
+    # (kesif*, arsiv*) günlük yolda koşmaz, dışarıda.
+    def _hat_donguleri_kesiciyi_tanir():
+        import ast as _ast
+        kok = BURASI.parent
+        eksik, bulunan = [], []
+        dosyalar = list((kok / "Aktarılacak Projeler").rglob("*.py")) + list((kok / "Research").rglob("*.py"))
+        for p in dosyalar:
+            if any(x in p.parts for x in (".venv", "venv", "site-packages", "__pycache__", "node_modules")):
+                continue
+            if p.name.startswith(("kesif", "arsiv", "duman", "test")):
+                continue
+            metin = p.read_text(encoding="utf-8", errors="replace")
+            if "urlopen(" not in metin:
+                continue
+            try:
+                agac = _ast.parse(metin)
+            except SyntaxError:
+                continue
+            for f in _ast.walk(agac):
+                if not isinstance(f, (_ast.FunctionDef, _ast.AsyncFunctionDef)):
+                    continue
+                for d in _ast.walk(f):
+                    if isinstance(d, (_ast.For, _ast.While)):
+                        dk = _ast.get_source_segment(metin, d) or ""
+                        if "urlopen(" in dk and "sleep(" in dk:
+                            ad = f"{p.relative_to(kok)}:{f.name}"
+                            bulunan.append(ad)
+                            if "tto_kesici" not in (_ast.get_source_segment(metin, f) or ""):
+                                eksik.append(ad)
+                            break
+        assert len(bulunan) >= 9, f"kapsam daraldı, tarama kör olabilir: {bulunan}"
+        assert not eksik, f"kesiciyi tanımayan yeniden deneme döngüsü: {eksik}"
+    sina("hatlar: urllib yeniden deneme döngüleri açık kesicide beklemeden çıkar (kapsam kaynaktan)", _hat_donguleri_kesiciyi_tanir)
 
     # ── denetim: son bülten üzerinde bütün ölçütler
     b = son_bulten()

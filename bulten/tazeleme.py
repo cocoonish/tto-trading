@@ -249,19 +249,56 @@ KOR_KOSU = "TAKVİM ALINAMADI"
 
 # ── ulusal takvimden yayımlanmış kayıtlar ────────────────────────────────────
 
+# TAKVİM YEDEĞİ (21.10.2026). O sabah TÜİK ucu yanıt vermedi ve on sekiz hattın
+# hepsi KÖR koşuya girdi: takvim okunamayınca her hat "gerekli" sayılıyor.
+# Hatların ölçülmüş süreleri toplamı medyanda 37, en kötü hâlde 55 dakika;
+# tazeleme adımının sınırı 40. Yani takvim ucunun tek başına düşmesi, kaynaklar
+# sağlamken bile adımı kesmeye yetiyordu — o sabah EVDS de asıldı ve adım 40.
+# dakikada kesildi. Bulutta önbellek de yoktu (yayim_*.json depoya girmiyor,
+# koşucu her işte yenidir), yani "bayat önbellekle devam" dalı hiç çalışmıyordu.
+# İki parça birlikte gider: (1) ucun yanıtındaki PLANLI kayıtlar
+# (`yayindaOlmayanlarList`, saatiyle) de önbelleğe yazılır; uç düşünce bayat
+# yayımlanmış liste + saati geçmiş planlı kayıtlar kullanılır — ulusal takvim
+# yayım saatini önceden ilan eder, bayat kopya bu yüzden eksik değildir.
+# (2) veri.yml önbelleği koşular arasında taşır. Planlı kayıttan doğan tetik
+# sürüm sayacına GİRMEZ (yayımın gerçekleştiği doğrulanmadı; ertelenmiş bir
+# yayım dört boş denemeden sonra sahte "kaynak yayımladı, veri gelmedi" alarmı
+# üretirdi). YEDEK_AZAMI_GUN'den eski kopya kullanılmaz: takvim revize edilmiş
+# olabilir, o zaman kör koşu doğru cevaptır.
+YEDEK_AZAMI_GUN = 7
+# Son `_yayimlar` çağrısının takvimi nereden okuduğu: "canlı" · "önbellek" (taze)
+# · "yedek" (uç düştü) · "yok". CLI ve karar gerekçesi okur; imza değişmez
+# (sınamalar `_yayimlar`ı tek argümanlı sahteyle değiştiriyor).
+SON_TAKVIM: dict = {"kaynak": "", "zaman": "", "planli": 0}
+PLANLI_ETIKET = " · planlı"
+
+
+def _ham_kayit(x: dict) -> dict:
+    return {"adi": (x.get("adi") or "").strip(),
+            "kurum": (x.get("sorumluKisaAd") or "").strip(),
+            "an": x.get("gTarih") or ""}
+
+
 def _yayimlar(yillar: tuple[int, ...]) -> tuple[list[dict], bool]:
     """Ulusal takvimin YAYIMLANMIŞ kayıtları (adı, kurumu, yayım anı).
 
     takvim.tuik() ileriye bakar; burada geriye bakmak gerekiyor: "son
-    tazelemeden bu yana ne yayımlandı?" sorusunun cevabı geçmişte.
+    tazelemeden bu yana ne yayımlandı?" sorusunun cevabı geçmişte. Uç düşerse
+    yedek: bayat yayımlanmış liste + saati geçmiş planlı kayıtlar (`planli`
+    işaretiyle; bkz. TAKVİM YEDEĞİ).
     """
     cikti: list[dict] = []
+    kaynaklar: list[str] = []
+    planli_sayi = 0
+    en_eski = ""
     for yil in yillar:
         ad = f"yayim_{yil}"
+        plan_ad = f"yayim_plan_{yil}"
         # _onbellekten (veri, yazım anı) çifti döndürür. Yayımlanmış liste her
         # iş günü büyüdüğü için süresiz önbellek yanlış cevap verir: dün çekilmiş
         # liste bugünün 14:30 yayımını içermez ve hat sonsuza dek atlanır.
         ham, yazim = _onbellekten(ad)
+        plan, _ = _onbellekten(plan_ad)
         taze = False
         if ham and yazim:
             try:
@@ -269,21 +306,51 @@ def _yayimlar(yillar: tuple[int, ...]) -> tuple[list[dict], bool]:
                         ) < dt.timedelta(hours=ONBELLEK_SAAT)
             except ValueError:
                 taze = False
+        alindi = taze
         if not taze:
             metin = _getir(TUIK_UC.format(yil=yil), TAKVIM_ZAMAN_ASIMI)
             if metin:
                 try:
-                    kayitlar = json.loads(metin).get("yayindaOlanlarList", [])
+                    d = json.loads(metin)
+                    kayitlar = d.get("yayindaOlanlarList", [])
+                    planlilar = d.get("yayindaOlmayanlarList", []) or []
                 except (ValueError, AttributeError):
-                    kayitlar = []
+                    kayitlar, planlilar = [], []
                 if kayitlar:
-                    ham = [{"adi": (x.get("adi") or "").strip(),
-                            "kurum": (x.get("sorumluKisaAd") or "").strip(),
-                            "an": x.get("gTarih") or ""} for x in kayitlar]
+                    ham = [_ham_kayit(x) for x in kayitlar]
                     _onbellege_yaz(ad, ham)
-        # Kaynak düşerse bayat önbellekle devam edilir; emniyet ağı zaten
-        # takvimsiz kalan hattı en_gec gününde koşturur.
-        cikti += [k for k in (ham or []) if isinstance(k, dict)]
+                    plan = [_ham_kayit(x) for x in planlilar if isinstance(x, dict)]
+                    _onbellege_yaz(plan_ad, plan)
+                    alindi = True
+                    kaynaklar.append("canlı")
+        else:
+            kaynaklar.append("önbellek")
+        if alindi:
+            cikti += [k for k in (ham or []) if isinstance(k, dict)]
+            continue
+        # YEDEK: uç düştü. Kopya yoksa ya da çok eskiyse bu yıl için kayıt yok —
+        # takvim sağlam sayılmaz, hat kör koşar (eski ve güvenli davranış).
+        try:
+            yas = dt.datetime.now() - dt.datetime.fromisoformat(yazim) if yazim else None
+        except ValueError:
+            yas = None
+        if not ham or yas is None or yas > dt.timedelta(days=YEDEK_AZAMI_GUN):
+            continue
+        simdi = _simdi()
+        gecmis_plan = []
+        for k in plan or []:
+            an = _an(k.get("an", "")) if isinstance(k, dict) else None
+            if an is not None and an <= simdi:
+                gecmis_plan.append({**k, "planli": True})
+        cikti += [k for k in ham if isinstance(k, dict)] + gecmis_plan
+        planli_sayi += len(gecmis_plan)
+        kaynaklar.append("yedek")
+        en_eski = min(en_eski, yazim) if en_eski else yazim
+    SON_TAKVIM.update({
+        "kaynak": ("yedek" if "yedek" in kaynaklar else
+                   "canlı" if "canlı" in kaynaklar else
+                   "önbellek" if kaynaklar else "yok"),
+        "zaman": en_eski, "planli": planli_sayi})
     # İkinci değer: takvim GERÇEKTEN alındı mı. Boş liste ile "kaynak düştü"
     # ayrımı şart — ayrılmazsa TÜİK ucu bir gün düştüğünde on üç hattın hepsi
     # "yeni yayım yok" gerekçesiyle atlanır ve koşu çıkış kodu 0 ile başarılı
@@ -506,28 +573,38 @@ def hat_surumu(hat: str) -> str:
     alanın donması bu ölçüye görünmez. O ayrı bir denetimin işi ve zaten var —
     `RITIM_ALAN` o alanları tek tek izliyor ve bültende "veri gecikti" olayını
     üretiyor."""
+    return " · ".join(hat_saatleri(hat).values())
+
+
+def hat_saatleri(hat: str) -> dict[str, str]:
+    """Hattın izlenen saatleri ADIYLA, sırasıyla: {saat anahtarı: değer}.
+
+    `hat_surumu` bunun birleşik yazımıdır; iki ayrı okuma bir gün sessizce
+    ayrışırdı. Ana saat okunamazsa boş döner (ölçü yok); bugün olmayan yan saat
+    sözlüğe girmez. Saat başına okuma ERKEN KOŞU kuralının girdisidir (bkz.
+    `durum_yaz`): bir yayımın tüketilip tüketilmediği, o yayımın ilerlettiği
+    SAATE bakılarak sorulur, birleşik imzaya değil."""
     import sys
     try:
         sys.path.insert(0, str(KOK))
         import guncelle                                        # noqa: E402
         h = next((x for x in guncelle.HATLAR if x.ad == hat), None)
         if h is None:
-            return ""
+            return {}
         d = guncelle._ozet_tarih(h)
         if not d:
-            return ""
-        saatler = izlenen_saatler(hat, tuple(h.tarih_anahtarlari or ()))
-        parcalar = []
-        for i, a in enumerate(saatler):
+            return {}
+        cikti: dict[str, str] = {}
+        for i, a in enumerate(izlenen_saatler(hat, tuple(h.tarih_anahtarlari or ()))):
             deger = str(d.get(a, "")).strip()
             if deger in ("", "None"):
                 if i == 0:
-                    return ""                 # ana saat okunamadı: ölçü yok
+                    return {}                 # ana saat okunamadı: ölçü yok
                 continue                      # yan saat bugün yoksa imzaya girmez
-            parcalar.append(deger)
-        return " · ".join(parcalar)
+            cikti[a] = deger
+        return cikti
     except Exception:                                          # noqa: BLE001
-        return ""
+        return {}
 
 
 def tabani_tohumla(hatlar: "list[str] | None" = None) -> list[str]:
@@ -551,8 +628,11 @@ def tabani_tohumla(hatlar: "list[str] | None" = None) -> list[str]:
         yazilan.append(h)
     if yazilan:
         d = dict(defter.get("son_kosum", {}) or {})
+        # Öbür alanlar (saat_deger · saat_ani) OLDUĞU GİBİ korunur: tohumlama
+        # yalnız tabanı yazar, erken koşu kuralının kaydını silmez.
         DURUM.write_text(
-            json.dumps({"aciklama": defter.get("aciklama", ""),
+            json.dumps({**defter,
+                        "aciklama": defter.get("aciklama", ""),
                         "son_kosum": dict(sorted(d.items())),
                         "son_surum": dict(sorted(s.items())),
                         "deneme": dict(sorted(n.items()))},
@@ -560,9 +640,28 @@ def tabani_tohumla(hatlar: "list[str] | None" = None) -> list[str]:
     return yazilan
 
 
+def _onceden_alindi(saatler: dict[str, str], ani: dict[str, str],
+                    tetikler: "list[tuple[str, str]]") -> bool:
+    """Sayılan koşunun BÜTÜN tetikleri tüketilmiş mi: her tetiğin ilerlettiği
+    saat (ek kaynakta ilan edilen alan, öbürlerinde ana saat), o yayımın
+    anından SONRA başlamış temiz bir koşuda zaten ilerlemiş mi. Tetik ya da
+    saat kaydı yoksa False — eski davranış (sayaç artar)."""
+    if not tetikler or not saatler:
+        return False
+    ana = next(iter(saatler))
+    for alan, an_metin in tetikler:
+        ilerleme = _an(ani.get(alan or ana, ""))
+        yayim = _an(an_metin)
+        if ilerleme is None or yayim is None or ilerleme < yayim:
+            return False
+    return True
+
+
 def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None,
               sayilan: "set[str] | frozenset[str]" = frozenset(),
-              onceki: "dict[str, str] | None" = None):
+              onceki: "dict[str, str] | None" = None,
+              tetik_anlari: "dict[str, list[tuple[str, str]]] | None" = None,
+              baslangic: "dict[str, dt.datetime] | None" = None):
     """Başarıyla koşan hatların damgasını güncelle (başarısızlar dokunulmaz).
 
     `onceki`: hat KOŞMADAN ÖNCE okunmuş sürümleri (guncelle.py ölçer). SOĞUK
@@ -590,22 +689,58 @@ def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None,
         SİLİNİR — saati üst hattan gelir, ölçü ona uygulanamaz;
       · sürüm değiştiyse sayaç sıfırlanır (kim koşturmuş olsun);
       · sürüm değişmediyse sayaç yalnız SAYILAN koşuda artar; emniyet ağı,
-        elle koşu, ölü kalıp ya da kör koşu sayacı olduğu yerde bırakır."""
+        elle koşu, ölü kalıp ya da kör koşu sayacı olduğu yerde bırakır.
+
+    ERKEN KOŞU YAYIMI TÜKETİR (21.10.2026). 05.10'da Eylül TÜFE'si 10:00'da
+    yayımlandı ve veri, tetiğin 90 dakikalık bekleme süresi dolmadan zorla
+    çekildi; sürüm 08.2026 → 09.2026 ilerledi. Tetik saati gelince yayım
+    "son koşumdan sonra hazır oldu" diye yine ateşlendi, hat koştu, yeni bir
+    şey bulamadı ve sayıldı; üç yeniden deneme de sayıldı ve sayaç 4/4'te
+    takıldı — Enflasyon on beş gün boyunca güncelken "kaynak yayımladı, veri
+    gelmedi" hâlinde durdu. Kural: sayılan koşunun her tetiği için o tetiğin
+    ilerlettiği SAAT (`tetik_anlari`: ek kaynakta ilan edilen alan, öbürlerinde
+    ana saat), o yayımın anından sonra BAŞLAMIŞ (`baslangic`) ve TEMİZ bir
+    koşuda zaten ilerlediyse sayaç artmaz. Tetik yine ateşlenir ve hat yine
+    koşar — tazelik kaybı yok; değişen yalnız ölçü. İki koruma bilerek:
+      · saat başına: fonlama ve bütçe üç saatli; haftalık yan saatin ilerlemesi
+        aylık ana saatin yayımını tüketmez (birleşik imzaya bakılsaydı tüketirdi
+        ve ana saatin gerçek gecikmesi yeniden denemesiz kalırdı);
+      · temiz koşu: ilerleme, sayaç SIFIRKEN olmalı. Sayaç sıfır değilse hat
+        önceki bir yayımı geriden yakalıyor olabilir; o ilerlemenin anı
+        kaydedilmez, yoksa yeni yayımın verisi gelmediği hâlde "alındı" sayılırdı.
+    Saat değerleri (`saat_deger`) ve ilerleme anları (`saat_ani`) defterde
+    durur; kaydı olmayan saat (ilk koşu, eski defter) eski davranışa düşer."""
     simdi = simdi or _simdi()
     defter = _defter()
     d = dict(defter.get("son_kosum", {}) or {})
     s = dict(defter.get("son_surum", {}) or {})
     n = dict(defter.get("deneme", {}) or {})
+    sd = {h: dict(v) for h, v in (defter.get("saat_deger", {}) or {}).items() if isinstance(v, dict)}
+    sa = {h: dict(v) for h, v in (defter.get("saat_ani", {}) or {}).items() if isinstance(v, dict)}
     for h in hatlar:
         d[h] = simdi.isoformat(timespec="seconds")
         if h not in TETIK:
-            s.pop(h, None); n.pop(h, None)
+            s.pop(h, None); n.pop(h, None); sd.pop(h, None); sa.pop(h, None)
             continue
         yeni_surum = hat_surumu(h)
         if not yeni_surum:
             # Sürüm okunamadı: sayacı ne artır ne sıfırla. Ölçülemeyen bir şeye
             # göre karar vermek, ölçülmüş gibi davranmaktır.
             continue
+        # SAAT BAŞINA İLERLEME ANI. Değer değiştiyse ve koşu temizse (sayaç 0)
+        # ilerleme anı koşunun BAŞLANGICIDIR; temiz değilse an bilinmiyor sayılır.
+        saatler = hat_saatleri(h)
+        temiz = int(n.get(h, 0) or 0) == 0
+        bas = (baslangic or {}).get(h)
+        eski = sd.get(h, {})
+        for anahtar, deger in saatler.items():
+            if anahtar in eski and eski[anahtar] != deger:
+                if temiz and bas is not None:
+                    sa.setdefault(h, {})[anahtar] = bas.isoformat(timespec="seconds")
+                else:
+                    sa.get(h, {}).pop(anahtar, None)
+        if saatler:
+            sd[h] = dict(saatler)
         # Kıyas noktası: defterdeki taban; yoksa koşu öncesi ölçülmüş sürüm.
         taban = s.get(h) or (onceki or {}).get(h) or ""
         if yeni_surum != taban:
@@ -613,18 +748,28 @@ def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None,
             n[h] = 0
         elif h in sayilan:
             s[h] = yeni_surum
-            n[h] = int(n.get(h, 0)) + 1
+            if _onceden_alindi(saatler, sa.get(h, {}), (tetik_anlari or {}).get(h, [])):
+                # Yayım bu koşudan ÖNCE, kendi saatini ilerleten temiz bir
+                # koşuyla alınmıştı: "veri gelmedi" değil.
+                n.setdefault(h, 0)
+            else:
+                n[h] = int(n.get(h, 0)) + 1
         else:
             s[h] = yeni_surum
             n.setdefault(h, 0)
+    sa = {h: v for h, v in sa.items() if v}
     DURUM.write_text(
         json.dumps({"aciklama": "Her veri hattının en son başarıyla tazelendiği an, "
                                 "o koşuda görülen veri sürümü ve sürümü ilerletmeden "
                                 "biten ardışık koşu sayısı. tazeleme.py bunu okuyup "
-                                "hangi hattın koşacağına karar verir.",
+                                "hangi hattın koşacağına karar verir. saat_deger/"
+                                "saat_ani: izlenen her saatin son değeri ve temiz "
+                                "bir koşuda ilerlediği an (erken koşu kuralı).",
                     "son_kosum": dict(sorted(d.items())),
                     "son_surum": dict(sorted(s.items())),
-                    "deneme": dict(sorted(n.items()))},
+                    "deneme": dict(sorted(n.items())),
+                    "saat_deger": dict(sorted(sd.items())),
+                    "saat_ani": dict(sorted(sa.items()))},
                    ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -645,6 +790,10 @@ class Karar:
     # kaynağın yayımladığı bilinmeyen bir koşuda (emniyet ağı, elle, tarifi
     # yok, ölü kalıp, kör koşu) artması yanlış alarmdır (bkz. durum_yaz).
     sayilir: bool = False
+    # Sayılan tetiklerin (ilerlettiği saat, yayım anı) çiftleri; saat "" ise
+    # hattın ana saati. durum_yaz ERKEN KOŞU kuralı için okur: yayım kendi
+    # saatini ilerleten daha önceki temiz bir koşuyla alındıysa sayaç artmaz.
+    tetik_anlari: list = field(default_factory=list)
 
 
 def kararlar(hatlar: list[str] | None = None,
@@ -687,6 +836,7 @@ def kararlar(hatlar: list[str] | None = None,
             continue
 
         tetikleyen: list[str] = []
+        anlar: list[tuple[str, str]] = []
         for kalip, kurum, _alan in t.ek_kaynaklar:
             for k in yayim:
                 if kurum and k["kurum"] not in kurum:
@@ -697,7 +847,8 @@ def kararlar(hatlar: list[str] | None = None,
                 if an is None:
                     continue
                 if son < an + dt.timedelta(minutes=t.gecikme_dk) <= simdi:
-                    tetikleyen.append(f"{k['adi']} — {an:%d.%m %H:%M}")
+                    tetikleyen.append(f"{k['adi']} — {an:%d.%m %H:%M}" + (PLANLI_ETIKET if k.get("planli") else ""))
+                    anlar.append((_alan, an.isoformat(timespec="seconds")))
         if t.kalip:
             # Kalıp takvimde HİÇ eşleşmiyorsa (kaynak seri adını değiştirmiş
             # olabilir) hat sessizce emniyet ağına düşer ve ayda birkaç koşuya
@@ -731,11 +882,13 @@ def kararlar(hatlar: list[str] | None = None,
                 # 14:30'da duyurulan seriyi 14:31'de çekmek eski veriyi getirir.
                 hazir = an + dt.timedelta(minutes=t.gecikme_dk)
                 if son < hazir <= simdi:
-                    tetikleyen.append(f"{k['adi']} — {an:%d.%m %H:%M}")
+                    tetikleyen.append(f"{k['adi']} — {an:%d.%m %H:%M}" + (PLANLI_ETIKET if k.get("planli") else ""))
+                    anlar.append(("", an.isoformat(timespec="seconds")))
         if t.strateji:
             for ad_, an in _strateji_anlari(simdi):
                 if son < an <= simdi:
                     tetikleyen.append(ad_)
+                    anlar.append(("", an.isoformat(timespec="seconds")))
         if t.ihale:
             for g in ihaleler:
                 # İhale günü ve ertesi gün (sonuç/ödeme) tazeleme gerektirir.
@@ -744,11 +897,18 @@ def kararlar(hatlar: list[str] | None = None,
                     if son < an <= simdi:
                         tetikleyen.append(f"Hazine ihalesi {g:%d.%m}"
                                           + (" (sonuç günü)" if kayma else ""))
+                        anlar.append(("", an.isoformat(timespec="seconds")))
 
         tetikleyen = sorted(set(tetikleyen))
         if tetikleyen:
-            cikti.append(Karar(ad, True, f"{len(tetikleyen)} yeni yayım", tetikleyen,
-                               sayilir=True))
+            # Yalnız takvim yedeğinin PLANLI kayıtlarından doğan tetik sürüm
+            # sayacına girmez: yayımın gerçekleştiği doğrulanmadı (bkz. TAKVİM YEDEĞİ).
+            yalniz_plan = all(x.endswith(PLANLI_ETIKET) for x in tetikleyen)
+            cikti.append(Karar(ad, True, f"{len(tetikleyen)} yeni yayım"
+                               + (" (takvim yedekten; yayım saati ilan edilen takvimden)"
+                                  if yalniz_plan else ""),
+                               tetikleyen, sayilir=not yalniz_plan,
+                               tetik_anlari=sorted(set(anlar))))
             continue
 
         # YENİDEN DENEME. Buraya gelmek "son koşumdan bu yana yeni yayım yok"
@@ -838,7 +998,12 @@ def olu_kaliplar(yillar: tuple[int, ...] | None = None) -> list[tuple[str, str]]
 
 def rapor(hatlar: list[str] | None = None, simdi: dt.datetime | None = None) -> str:
     satir = []
-    for k in kararlar(hatlar, simdi):
+    karar_listesi = kararlar(hatlar, simdi)
+    if SON_TAKVIM.get("kaynak") == "yedek":
+        satir.append(f"  ! takvim ucu yanıt vermedi — YEDEK kullanılıyor: {SON_TAKVIM.get('zaman', '')[:16]} "
+                     f"kopyası + saati geçmiş {SON_TAKVIM.get('planli', 0)} planlı kayıt "
+                     "(planlı kayıttan doğan tetik sürüm sayacına girmez)")
+    for k in karar_listesi:
         isaret = "▶" if k.kossun else "·"
         satir.append(f"  {isaret} {k.hat:10s} {k.sebep}")
         for t in k.tetikleyen[:4]:

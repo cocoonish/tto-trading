@@ -104,6 +104,8 @@ def _cek(url: str, deneme: int = 3):
                 return json.loads(r.read().decode("utf-8"))
         except Exception as ex:
             son = ex
+            if getattr(ex, "tto_kesici", False):
+                break  # ortak devre kesici açık: kaynak bu koşuda düşmüş, beklemek boşuna
     raise RuntimeError(f"EVDS düştü: {url[:110]} — {son}")
 
 
