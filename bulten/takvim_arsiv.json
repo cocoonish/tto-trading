@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-10-20",
+ "_son_guncelleme": "2026-10-22",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -1361,6 +1361,46 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-10-20"
+  },
+  "2026-11-12|TCMB Enflasyon Raporu (2026-IV)": {
+   "tarih": "2026-11-12",
+   "olay": "TCMB Enflasyon Raporu (2026-IV)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-22"
+  },
+  "2026-11-12|TCMB: Haftalık para-banka (45. Hafta 2026)": {
+   "tarih": "2026-11-12",
+   "olay": "TCMB: Haftalık para-banka (45. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-22"
+  },
+  "2026-11-12|TCMB: IRFCL rezerv (Ekim 2026)": {
+   "tarih": "2026-11-12",
+   "olay": "TCMB: IRFCL rezerv (Ekim 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-22"
+  },
+  "2026-11-12|TCMB: Menkul kıymet ist. (45. Hafta 2026)": {
+   "tarih": "2026-11-12",
+   "olay": "TCMB: Menkul kıymet ist. (45. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-22"
   }
  }
 }

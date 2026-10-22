@@ -1,34 +1,6 @@
 {
- "zaman": "2026-10-21T05:13:19",
+ "zaman": "2026-10-22T04:20:01",
  "veri": [
-  {
-   "tarih": "2026-10-21",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TCMB: Kapasite kullanımı (Ekim 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": "İmalat Sanayi Kapasite Kullanım Oranı"
-  },
-  {
-   "tarih": "2026-10-21",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TCMB: Reel kesim güveni (Ekim 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": "İktisadi Yönelim İstatistikleri ve Reel Kesim Güven Endeksi"
-  },
   {
    "tarih": "2026-10-22",
    "saat": "10:00",
@@ -196,6 +168,48 @@
    "onceki": "",
    "not_": "",
    "resmi_ad": "Sanayi Üretim Endeksi"
+  },
+  {
+   "tarih": "2026-11-12",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Menkul kıymet ist. (45. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "",
+   "resmi_ad": " Menkul Kıymet İstatistikleri"
+  },
+  {
+   "tarih": "2026-11-12",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Haftalık para-banka (45. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "",
+   "resmi_ad": "Haftalık Para ve Banka İstatistikleri "
+  },
+  {
+   "tarih": "2026-11-12",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: IRFCL rezerv (Ekim 2026)",
+   "onem": 1,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "",
+   "resmi_ad": "Uluslararası Rezervler ve Döviz Likiditesi"
   }
  ]
 }
