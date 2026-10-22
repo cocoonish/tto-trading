@@ -1,10 +1,10 @@
 {
- "kosum": "2026-10-20 17:27",
- "son_ay": "2026-08-01",
+ "kosum": "2026-10-22 14:38",
+ "son_ay": "2026-09-01",
  "son_ceyrek": "2026-06-30",
  "son_dis_ceyrek": "2026-06-30",
- "son_hafta": "2026-10-09",
- "son_gun": "2026-10-20",
+ "son_hafta": "2026-10-16",
+ "son_gun": "2026-10-22",
  "birim": {
   "bie_kbmgel": {
    "kod_kalibi": "^TP\\.KB\\.GEL",
@@ -145,7 +145,7 @@
    "aciklama": "Gider ağacının kökü bozulmuş; kalem eşlemesi yanlış."
   },
   "GEN41 = GEN42 + GEN45": {
-   "n": 248,
+   "n": 249,
    "maks_bagil_sapma": 0.0,
    "esik": 1e-06,
    "maks_mutlak_sapma": 1.0,
@@ -155,7 +155,7 @@
    "aciklama": "Finansman tablosunun kökü bozulmuş."
   },
   "GEN42 = GEN43 + GEN44": {
-   "n": 248,
+   "n": 249,
    "maks_bagil_sapma": 0.0,
    "esik": 1e-06,
    "maks_mutlak_sapma": 1.0,
@@ -165,7 +165,7 @@
    "aciklama": "Dış borçlanma bacağı bozulmuş."
   },
   "GEN40 = −GEN39": {
-   "n": 248,
+   "n": 249,
    "maks_bagil_sapma": 0.0,
    "esik": 1e-06,
    "maks_mutlak_sapma": 0.0,
@@ -175,7 +175,7 @@
    "aciklama": "Nakit denge ↔ finansman özdeşliği tutmuyor."
   },
   "DİBS S.1 + S.2 = toplam": {
-   "n": 318,
+   "n": 319,
    "maks_bagil_sapma": 2.2083745504223773e-16,
    "esik": 1e-06,
    "maks_mutlak_sapma": 1.862645149230957e-09,
@@ -185,17 +185,17 @@
    "aciklama": "Sahiplik kırılımı toplamı tutmuyor."
   },
   "DİBSVADE ≡ DİBSPİYDEĞ": {
-   "n": 318,
+   "n": 319,
    "maks_fark_mn_tl": 0.03000000026077032,
-   "piyasa_yazili_oran": 1.219607131174637,
+   "piyasa_yazili_oran": 1.216457980216635,
    "gecti": true,
    "durdurucu": false,
    "aciklama": "Vade tablosu PİYASA değeri; yazılı değere oranı 1.22×. Paylar kendi toplamına bölünür."
   },
   "Birim mertebesi: iç borç ≈ DİBS": {
-   "ic_borc_trl_tl": 9.545365736,
-   "dibs_yazili_trl_tl": 10.11509375,
-   "bagil_fark": 0.05632454113438137,
+   "ic_borc_trl_tl": 9.701334704,
+   "dibs_yazili_trl_tl": 10.11872756,
+   "bagil_fark": 0.04124953987791715,
    "esik": 0.2,
    "gecti": true,
    "durdurucu": true,
@@ -212,49 +212,49 @@
  "yapisal_sifir": {
   "ic_konsolide": {
    "durum": "yapısal sıfır",
-   "son_tarih": "2026-08-01",
+   "son_tarih": "2026-09-01",
    "son_deger": 0.0,
    "sifir_gozlem_son24": 24
   },
   "ic_bono_nakit": {
    "durum": "yapısal sıfır",
-   "son_tarih": "2026-08-01",
+   "son_tarih": "2026-09-01",
    "son_deger": 0.0,
    "sifir_gozlem_son24": 24
   },
   "ic_bono_nkdisi": {
    "durum": "yapısal sıfır",
-   "son_tarih": "2026-08-01",
+   "son_tarih": "2026-09-01",
    "son_deger": 0.0,
    "sifir_gozlem_son24": 24
   },
   "ic_avans": {
    "durum": "yapısal sıfır",
-   "son_tarih": "2026-08-01",
+   "son_tarih": "2026-09-01",
    "son_deger": 0.0,
    "sifir_gozlem_son24": 24
   },
   "tahvil_tl_odeme": {
    "durum": "dolu",
-   "son_tarih": "2026-08-01",
-   "son_deger": -270732580.0,
+   "son_tarih": "2026-09-01",
+   "son_deger": -56569837.0,
    "sifir_gozlem_son24": 5
   },
   "ozellestirme": {
    "durum": "dolu",
-   "son_tarih": "2026-08-01",
+   "son_tarih": "2026-09-01",
    "son_deger": 0.0,
    "sifir_gozlem_son24": 23
   },
   "bono_dov_satis": {
    "durum": "yapısal sıfır",
-   "son_tarih": "2026-08-01",
+   "son_tarih": "2026-09-01",
    "son_deger": 0.0,
    "sifir_gozlem_son24": 24
   },
   "bono_dov_odeme": {
    "durum": "yapısal sıfır",
-   "son_tarih": "2026-08-01",
+   "son_tarih": "2026-09-01",
    "son_deger": 0.0,
    "sifir_gozlem_son24": 24
   }
@@ -262,18 +262,18 @@
  "gecikme": {
   "aylik": {
    "son": "2026-09-01",
-   "gecikme_gun": 49
+   "gecikme_gun": 51
   },
   "ceyreklik": {
    "son": "2026-06-30",
-   "gecikme_gun": 112
+   "gecikme_gun": 114
   },
   "haftalik": {
-   "son": "2026-10-09",
-   "gecikme_gun": 11
+   "son": "2026-10-16",
+   "gecikme_gun": 6
   },
   "gunluk": {
-   "son": "2026-10-20",
+   "son": "2026-10-22",
    "gecikme_gun": 0
   }
  },
@@ -287,16 +287,15 @@
    17
   ],
   "haftalik": [
-   318,
+   319,
    23
   ],
   "gunluk": [
-   5233,
+   5235,
    2
   ]
  },
  "uyarilar": [
-  "TAZELİK: Brüt dış borç (üç aylık) son gözlemi 06.2026 (112 gün önce, tolerans 110 gün). Yayın durmuş olabilir.",
-  "TAZELİK: Finansal hesaplar (TCMB, üç aylık) son gözlemi 03.2026 (203 gün önce, tolerans 200 gün). Yayın durmuş olabilir."
+  "TAZELİK: Brüt dış borç (üç aylık) son gözlemi 06.2026 (114 gün önce, tolerans 110 gün). Yayın durmuş olabilir."
  ]
 }
