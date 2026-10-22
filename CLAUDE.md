@@ -5519,3 +5519,27 @@ AÇIK, adıyla:
 - Erken koşu kuralının kör noktası: hat önceki yayımı SAYILMAYAN bir koşuda geriden yakalarsa (kör koşu üst üste ve
   kaynak gecikmesi), yeni yayımın yeniden denemesi açılmayabilir.
 - GitHub cron'ları o sabah da ateşlenmedi; zinciri yine rutin sürükledi.
+
+**Kurucu ilke — BİR KIYASIN İKİ TARAFI AYNI KONVANSİYONDA YAZILMADIKÇA FARKLARI BİR ÖLÇÜM DEĞİLDİR.**
+22.10.2026 PPK kararı yazısı (`Aktarılacak Projeler/PpkKarar/`, kapı `dogrula.py` → sayfa sınavı 26) ön ucu
+okurken eğriyi politika faiziyle aynı dile çevirdi ve dört yayımlanmış analizin hükmünü düşürdü. DİBS spot ve
+ileri getirileri yıllık bileşiktir (ACT/365), politika faizi basit bir haftalık repo oranıdır: %37 bir yıl
+çevrildiğinde %44,58 eder ve 7,58 puanlık fark hükmün yönünü değiştirebilecek büyüklüktedir. 10 Eylül yazısı
+"1 yıllık DİBS %39,07 ile politika faizinin 207 bp üstünde, eğri bir yıla yayılan indirim döngüsü
+fiyatlamıyor" demişti; aynı dilde 1 yıllık düğümün haftalık repo karşılığı %33,08'di (politika faizinin 392 bp,
+bileşiğe çevrilmiş politika faizinin 552 bp altında) ve kısa uç saf beklenti olsaydı Ekim sonrası %27,17
+gerekirdi — anket %36,13 bekliyordu, yani eğrinin ön ucu bir faiz beklentisi olarak okunamıyor. Doğru hüküm
+"eğri indirim fiyatlamıyor" değil "eğriden bir patika okunamıyor"du. Aynı karışıklık 31.08, 06.09, 10.09 ve
+17.09 yazılarında vardı; dördü 22.10 tarihli düzeltme kaydı aldı (eski/yeni sayı, `updatedDate`), sayıları
+PpkKarar ölçümünün donmuş eğrisinden (`eylul_egri.json`) gelir ve `dogrula.py` §7 kayıtları, düzeltilen
+paragraflardaki eski ifadelerin yokluğunu ve yenilerinin varlığını sınar. Sınırı adıyla yazılı: düzeltilmiş
+paragrafların bütün sayıları envantere girmiyor (paragraf düzeyinde envanter bu yazılarda gürültülüydü).
+Bültenlerde kusur daha yaygındı: 30 Ağustos–20 Ekim arasında 19 sayıda 34 cümle aynı kıyası dilini yazmadan
+kurdu (söz defterinin 18.10 bozulma ölçütleri dahil). Kural `bulten/YAZIM.md` 13'te; araç sigortası denetimin
+`egri_dili` UYARI'sı: yalnız yazarın alanları, dili yazan cümle ("bileşiğe çevrilmiş", "haftalık repo
+karşılığı"), TLREF kıyası (TLREF de basittir), dış merkez bankası bağlamı ve ölçülen katman sorulmaz;
+yayımlanmış sayıda dili anan bir düzeltme kaydı uyarıyı bilgiye indirir. Kalıbın hassasiyeti ölçüldü: "ön uç",
+"kısa uç", "gösterge" gibi geniş terimlerle aynı tarihçe 34 cümlenin 7'sinde yanlış alarm verdi (TLREF ve Fed
+kıyasları), dar terimlerle 34 cümlenin 34'ü gerçek karışma. Ölçülen katman zaten doğruydu: 2 yıllık taşıma TLREF'i
+bileşiğe çevirerek kuruluyor. AÇIK: geçmiş bültenlerin cümleleri ve söz defterindeki karışık ölçütler bu commit'te
+düzeltilmedi (kullanıcı kararı).

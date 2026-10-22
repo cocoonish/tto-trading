@@ -28,6 +28,11 @@ Yarın tazelenen bir pano bu kapıyı düşürmez; düşürebilecek tek şey yaz
 6. HÜKÜM — sayıyı doğru yazıp hükmü yanlış kuran cümleler: "altısı da indirim", "bütün
    düğümler altında", "en yakını 2 yıllık", "aralığın tam ortasında", "aralığın tamamının
    üstünde", "beşin dördü". Her biri ölçüm dosyasından hesaplanır, metinden değil.
+7. DÜZELTME — 31 Ağustos, 6, 10 ve 17 Eylül yazılarında bugün tarihli düzeltme kaydı var
+   mı; kaydın yeni değeri o yazının kendi veri gününün ölçümünde karşılık buluyor mu; eski
+   hüküm gövdeden çıktı mı, düzeltilmiş ölçüm gövdede duruyor mu. Düzeltilmiş paragrafların
+   BÜTÜN sayıları ayrıca sorulmaz: o paragraflar yazının kendi, düzeltilmeyen sayılarını da
+   taşır (tablo satırları, rakam şeridinin öbür kalemleri) ve envanter onları gürültüye boğar.
 
 Koşum:  python3 dogrula.py
 """
@@ -340,6 +345,70 @@ def hukumler(o: dict, govde: str) -> None:
         hatalar.append("hüküm cümlesi metinde yok: 'yaklaşık iki katı'")
 
 
+# ─────────────────────────────────────────────── 7 · Eylül yazılarının düzeltmesi
+# Bu yazının Bölüm 3'ü dört eski yazının eğri karşılaştırmasının konvansiyon farkını hesaba
+# katmadığını söylüyor; o yazılara aynı gün tarihli düzeltme kaydı ve düzeltilmiş metin girdi.
+# Kapı üç şeyi sorar: kayıt var mı (ve sayfanın güncelleme günü bugün mü), kaydın yeni değeri
+# o yazının KENDİ veri gününün ölçümünde karşılık buluyor mu (`olcum.duzeltme_olcumu`), ve
+# eski hüküm gövdeden gerçekten çıktı mı — çıkmadıysa sayfa iki zıt hükmü yan yana taşır.
+DUZELTILEN = {
+    "borclanma-programi-vade-2026-08-31": {
+        "veri": "e0828",
+        "yok": ["290 bp üstünde", "~290 baz puan üstünde", "indirim fiyatlamıyor", "ancak iki yıl sonrasına koyuyor"],
+        "var": ["e0828_ima_1y", "e0828_patika_getirisi", "e0828_ima_fwd_1y1y", "e0828_ima_fwd_2y1y",
+                "e0828_ima_fwd_2y3y"]},
+    "ovp-2026-09-06": {
+        "veri": "e0904",
+        "yok": ["Kısa uç politika faizinin üstünde"],
+        "var": ["e0904_ima_1y", "e0904_ima_2y", "e0904_ima_5y"]},
+    "ppk-karari-2026-09-10": {
+        "veri": "e0910",
+        "yok": ["+207 bp", "indirim fiyatlamıyor", "piyasa henüz fiyatlamıyor", "politika faizine göre şöyle",
+                "bileşiklendirme sözleşmelerindeki fark", "politika faizinden daha yüksek"],
+        "var": [f"e0910_{t}_{v}" for t in ("ima", "bilesik_fark") for v in
+                ("3a", "6a", "1y", "2y", "3y", "5y", "7y", "fwd_1y1y")]
+               + ["e0910_ima_3a_ekim_sonrasi", "e0910_anket_ekim", "e0910_reel_repo_bilesik"]},
+    "ppk-ozeti-2026-09-17": {
+        "veri": "e0916",
+        "yok": ["615 baz puan", "konvansiyon seçiminden gelmiyor", "Anket ile eğri uyuşmuyor"],
+        "var": ["e0916_patika_getirisi", "e0916_ima_3a", "e0916_ima_3a_ekim_sonrasi", "e0916_anket_ekim"]},
+}
+ORTAK = ("politika_onceki", "politika_bilesik_onceki", "konvansiyon_farki")
+KAYIT = re.compile(r"^  - tarih: '([^']*)'\n    alan: '((?:[^']|'')*)'\n    eski: '((?:[^']|'')*)'\n"
+                   r"    yeni: '((?:[^']|'')*)'\n    sebep: '((?:[^']|'')*)'$", re.M)
+
+
+def duzeltmeler(o: dict, govde_yeni: str) -> None:
+    for slug, k in DUZELTILEN.items():
+        m = (KOK / "site/src/content/analiz" / f"{slug}.mdx").read_text(encoding="utf-8")
+        _, on, govde = m.split("---", 2)
+        sayac["hukum"] += 1
+        if not re.search(rf"^updatedDate: {CIPA}\s*$", on, re.M):
+            hatalar.append(f"düzeltilen yazının güncelleme günü {CIPA} değil: {slug}")
+        bugun = [r for r in KAYIT.findall(on) if r[0] == CIPA]
+        if not bugun:
+            hatalar.append(f"düzeltilen yazıda {CIPA} tarihli düzeltme kaydı yok: {slug}")
+        izin = Izin({"degerler": {a: v for a, v in o["degerler"].items()
+                                  if a.startswith(k["veri"] + "_") or a in ORTAK}})
+        for r in bugun:
+            for ad, metin in (("yeni", r[3]), ("sebep", r[4])):
+                metin = _norm(metin.replace("''", "'"))
+                envanter(f"düzeltme kaydı · {slug} · {ad}", metin, izin)
+                bicim(f"düzeltme kaydı · {slug} · {ad}", metin)
+        duz = _norm(govde)
+        for x in k["yok"]:
+            sayac["hukum"] += 1
+            if x in duz:
+                hatalar.append(f"düzeltilen hüküm gövdede hâlâ duruyor · {slug}: {x!r}")
+        for a in k["var"]:
+            sayac["hukum"] += 1
+            if o["degerler"][a]["metin"] not in duz:
+                hatalar.append(f"düzeltilmiş ölçüm gövdede yok · {slug}: {a} = {o['degerler'][a]['metin']}")
+    sayac["hukum"] += 1
+    if not re.search(r"31\s+Ağustos,\s+6,\s+10\s+ve\s+17\s+Eylül\s+yazılarımızdaki\s.{0,160}düzeltme\s+notu", govde_yeni, re.S):
+        hatalar.append("Bölüm 3, dört yazının düzeltme notunu adıyla anmıyor")
+
+
 def main() -> int:
     o = arsiv()
     if not MDX.exists():
@@ -360,6 +429,7 @@ def main() -> int:
         alintilar(metin, kaynak)
     blok_alintilar(govde, kaynak)
     hukumler(o, duz)
+    duzeltmeler(o, duz)
     for k in ("politika_yeni", "politika_onceki", "anket_ilk", "ima_3a", "anket_yol_3a"):
         if o["degerler"][k]["metin"] not in alan["description"]:
             hatalar.append(f"açıklama manşet sayısını taşımıyor ({k}): {o['degerler'][k]['metin']}")

@@ -1891,6 +1891,56 @@ class Denetim:
         else:
             self._ok("yazıda büyük harfle vurgu yok")
 
+    # Eğri ile politika faizinin DİL belirtilmeden kıyası (YAZIM.md kural 13).
+    # DİBS spot ve ileri getirileri yıllık bileşik, politika faizi basit haftalık
+    # repo: %36'lık politika faizi bileşikte %43,16'dır ve "1 yıllık getiri
+    # politika faizinin üstünde, eğri indirim fiyatlamıyor" cümlesi bu farkı
+    # indirim beklentisinin yokluğu sanır. 22.10.2026'da ölçüldü: 30 Ağustos–20
+    # Ekim arasında 19 sayıda 34 cümle; aynı kıyas dört analiz yazısına da
+    # geçmişti. Eğri terimi DAR: "ön uç", "kısa uç", "gösterge" TLREF'i de
+    # anlatır ve TLREF ile politika faizi aynı dildedir — geniş kalıp aynı
+    # tarihçede 34 cümlenin 7'sinde yanlış alarm verdi. Dış merkez bankası
+    # bağlamı sorulmaz.
+    EGRI_SAYI = r"(?:[0-9]+|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)"
+    EGRI_TERIM = (r"(?:\bDİBS\b|\bforward\b|\bileri (?:faiz|oran)|\b" + EGRI_SAYI +
+                  r" (?:aylık|yıllık) (?:DİBS |spot |gösterge |TL |tahvil )?"
+                  r"(?:getiri|spot|gösterge|tahvil|nokta|DİBS|faiz)|getiri eğrisi|TL eğrisi|\beğri\b)")
+    EGRI_POLITIKA = re.compile(EGRI_TERIM + r"[^.;!?]{0,120}?politika faiz\w*[^.;!?]{0,50}?"
+                               r"(?:üst|alt|üzer|aşağı|yukarı|\bbp\b|baz puan|puan)", re.I)
+    EGRI_DIL = re.compile(r"bileşi|repo karşılığ|aynı dil", re.I)
+    EGRI_DIS = re.compile(r"\b(?:Fed|FOMC|ECB|AMB|BoE|BoJ|ABD|Avrupa Merkez|İngiltere|Japonya)\b")
+
+    def egri_dili(self):
+        """Eğri politika faiziyle DİLİ yazılmadan kıyaslanmış mı — UYARI.
+
+        Kapsam yazarın alanlarıdır (`yazi_alanlari`); ölçülen katmanın taşıma
+        ölçüsü bileşikle kurulur ve düzeltme kaydı eski cümleyi taşır, ikisi de
+        sorulmaz. Cümle dilini söylüyorsa ("bileşiğe çevrilmiş politika faizi",
+        "haftalık repo karşılığı") kıyas meşrudur. Yayımlanmış sayıda metin
+        değişmez: kaydında dili anan bir düzeltme varsa uyarı kapanır ve bilgi
+        satırına iner (ihale_iddiasi ile aynı kural)."""
+        import uslup as _u
+        bulunan = []
+        for ad, t in self.yazi_alanlari().items():
+            for c in _u._cumleler(t):
+                if self.EGRI_POLITIKA.search(c) and not self.EGRI_DIL.search(c) \
+                        and not self.EGRI_DIS.search(c):
+                    bulunan.append((ad, c))
+        if not bulunan:
+            self._ok("eğri–politika faizi kıyasları dilini yazıyor")
+            return
+        kapali = any(self.EGRI_DIL.search(" ".join(str((d or {}).get(k) or "") for k in ("alan", "yeni", "sebep")))
+                     for d in (self.b.get("duzeltmeler") or []) if isinstance(d, dict))
+        ornek = " · ".join(f"{ad}: {c[:90]!r}" for ad, c in bulunan[:2])
+        if kapali:
+            self.bilgi.append(f"{len(bulunan)} cümlede eğri–politika faizi kıyası dilsiz; "
+                              f"sayının düzeltme kaydı konvansiyonu anıyor: {ornek}")
+            return
+        self.uyari.append(
+            f"{len(bulunan)} cümlede eğri politika faiziyle dili yazılmadan kıyaslanmış (DİBS getirisi "
+            "yıllık bileşik, politika faizi basit haftalık repo; bileşiğe çevrilmiş politika faizini "
+            f"ya da haftalık repo karşılığını yazın — YAZIM.md kural 13): {ornek}")
+
     def duzeltme(self):
         """Düzeltme kaydı biçimce tam mı; ve 'yayımlanan sayı değişti' uyarısı
         varsa yazan taraf hesabını vermiş mi.
@@ -2568,7 +2618,7 @@ class Denetim:
         self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
         self.yerlesmemis(); self.doviz_kapanisi(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
         self.revizyon(); self.duzeltme()
-        self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset(); self.risk_kalibi(); self.takvim_kalibi()
+        self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.egri_dili(); self.manset(); self.risk_kalibi(); self.takvim_kalibi()
         self.olagandisilik_penceresi(); self.uslup(); self.fikirler()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")

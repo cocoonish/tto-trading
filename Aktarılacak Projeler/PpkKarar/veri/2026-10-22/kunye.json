@@ -68,6 +68,10 @@
   "takvim.json": {
    "kaynak": "bulten/takvim_elle.json (TCMB kayıtları, 22.10.2026–31.01.2027)",
    "sha256": "a3ab809c154065a259ffb33e1deea2db83a18ee5cd1b80822c062713948eb0a2"
+  },
+  "eylul_egri.json": {
+   "kaynak": "Aktarılacak Projeler/DIBS/data/metrik.csv (dört günün satırı)",
+   "sha256": "54a1202eeddc864b75b0e83bdd27cf22680781b5c2037659537f3612e908764d"
   }
  }
 }

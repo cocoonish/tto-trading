@@ -19,6 +19,9 @@ dosyasını okur; yarın tazelenen bir pano bu yazının kapısını düşürmez
                           beklentisi (EVDS, bulut keşif koşusu; veri/kesif/ altında künyesiyle)
   takvim.json             TCMB toplantı ve yayım günleri (bulten/takvim_elle.json, kaynak
                           "TCMB 2026 Para Politikası metni, Ek 2")
+  eylul_egri.json         DİBS hattının metrik tablosundan dört günün satırı (28.08, 04.09,
+                          10.09, 16.09): 31 Ağustos, 6, 10 ve 17 Eylül yazılarının eğri
+                          karşılaştırmasına yazılan düzeltmenin girdisi
 
 CANLI KAYNAK BİR KEZ DONDURULUR. Pano özetleri, fonlama tablosu ve takvim her veri
 koşusunda değişir; donmuş kopyası varsa betik onu YENİDEN YAZMAZ (`--yeniden` ile
@@ -58,7 +61,12 @@ ENF = KOK / "site/public/projeler/enflasyon/ozet.json"
 FONLAMA = KOK / "Aktarılacak Projeler/Fonlama/data/metrik.csv"
 KESIF = BURASI / "veri" / "kesif" / "pka_toplanti_2026-10-22.json"
 TAKVIM = KOK / "bulten" / "takvim_elle.json"
-CANLI = ("dibs_ozet.json", "enflasyon_ozet.json", "fonlama.csv", "takvim.json")
+DIBS_METRIK = KOK / "Aktarılacak Projeler/DIBS/data/metrik.csv"
+CANLI = ("dibs_ozet.json", "enflasyon_ozet.json", "fonlama.csv", "takvim.json", "eylul_egri.json")
+# Düzeltilen yazıların veri günü (yazının kullandığı kapanış) → kısa ad. 22 Ekim için bir
+# sonraki toplantı ve o toplantı için beklentiyi taşıyan anket ayı (ankette "ikinci toplantı").
+DUZELTILEN = {"2026-08-28": "e0828", "2026-09-04": "e0904", "2026-09-10": "e0910", "2026-09-16": "e0916"}
+EKIM_ANKETI = {"e0910": "2026-8", "e0916": "2026-9"}
 
 BUGUN_NO, ONCEKI_NO = 45, 38          # 2026-45 (22.10) · 2026-38 (10.09)
 OCAK_NO = 1                           # 2026-01 (22.01): bir önceki İNDİRİM metni
@@ -219,6 +227,15 @@ def dondur(yeniden: bool = False) -> dict:
 
     canli("fonlama.csv", str(FONLAMA.relative_to(KOK)) + " (2026, altı sütun)", fonlama_csv)
     canli("takvim.json", str(TAKVIM.relative_to(KOK)) + " (TCMB kayıtları, 22.10.2026–31.01.2027)", _takvim_kesiti)
+
+    def eylul_egri() -> bytes:
+        M = pd.read_csv(DIBS_METRIK, index_col=0, parse_dates=True)
+        sut = ["n3a", "n6a", "n1y", "n2y", "n3y", "n5y", "n7y", "f_1y1y", "f_2y1y", "f_2y3y",
+               "be_1y", "r1y", "r2y", "politika"]
+        return json.dumps({g: {k: float(M.loc[g, k]) for k in sut} for g in DUZELTILEN},
+                          ensure_ascii=False, indent=1).encode("utf-8")
+
+    canli("eylul_egri.json", str(DIBS_METRIK.relative_to(KOK)) + " (dört günün satırı)", eylul_egri)
     (VERI / "kunye.json").write_text(json.dumps({"cipa": CIPA, "dosyalar": kunye}, ensure_ascii=False, indent=1),
                                      encoding="utf-8")
     return kunye
@@ -498,6 +515,55 @@ def enflasyon_olcumu(e: dict) -> dict:
     return {"donem": e["_tarih"], "sa_yontem": e.get("sa_yontem")}
 
 
+def duzeltme_olcumu(rows: dict, pka: dict) -> dict:
+    """31 Ağustos, 6, 10 ve 17 Eylül yazılarının eğri–politika faizi karşılaştırması, AYNI dilde.
+
+    O yazılar yıllık bileşik DİBS getirisini basit ilan edilen politika faiziyle doğrudan
+    kıyaslıyordu. Burada her düğüm haftalık repo karşılığına çevrilir, politika faizi de
+    bileşiğe; anketin patikası (o yazının kendi tanımıyla) haftalık repoyla bir yıl çevrilir.
+    Kısa uç sınaması `anket_olcumu` ile aynı kuraldır: 3 aylık düğüm saf beklenti olsaydı,
+    faiz bir sonraki karara (22 Ekim, ertesi gün geçerli) kadar %37,0'de kalırsa kalan
+    günlerde ne olması gerekirdi."""
+    from datetime import timedelta
+    satirlar = [s.split(";") for s in pka["csv"].strip().splitlines()]
+    bas, govde = satirlar[0], satirlar[1:]
+    anket = {r[0]: dict(zip(bas[1:], r[1:])) for r in govde}
+    P = D["politika_onceki"]["deger"]
+    PB = D["politika_bilesik_onceki"]["deger"]
+    adlar = {"n3a": "3a", "n6a": "6a", "n1y": "1y", "n2y": "2y", "n3y": "3y", "n5y": "5y", "n7y": "7y",
+             "f_1y1y": "fwd_1y1y", "f_2y1y": "fwd_2y1y", "f_2y3y": "fwd_2y3y"}
+    for gun, k in DUZELTILEN.items():
+        r = rows[gun]
+        if abs(r["politika"] - P) > 1e-9:
+            raise SystemExit(f"{gun}: politika faizi {r['politika']} — düzeltme %{P} varsayıyor")
+        for sut, ad in adlar.items():
+            y = koy(f"{k}_spot_{ad}", r[sut], 2, "%")
+            h = koy(f"{k}_ima_{ad}", haftalik_esdeger(y), 2, "%")
+            koy(f"{k}_bilesik_fark_{ad}", (y - PB) * 100, 0, "bp", arti=True)
+            koy(f"{k}_ima_fark_{ad}", (h - P) * 100, 0, "bp", arti=True)
+    # 10.09 ve 16.09: kısa uç beklenti olamaz (22 Ekim kararı ertesi gün geçerli)
+    gecerli = date(2026, 10, 23)
+    for k, ay in EKIM_ANKETI.items():
+        t0 = date.fromisoformat(next(g for g, kk in DUZELTILEN.items() if kk == k))
+        n0 = (gecerli - t0).days
+        x = (91 * D[f"{k}_ima_3a"]["deger"] - n0 * P) / (91 - n0)
+        koy(f"{k}_ima_3a_ekim_sonrasi", x, 2, "%")
+        koy(f"{k}_anket_ekim", float(anket[ay]["ikinci_toplanti"]), 2, "%")
+    # 10.09: eğrinin reel getirisi ile bir yıl çevrilen reponun reel getirisi (aynı başabaşla)
+    r = rows["2026-09-10"]
+    koy("e0910_reel_dibs_1y", r["r1y"], 2, "%")
+    koy("e0910_reel_dibs_2y", r["r2y"], 2, "%")
+    koy("e0910_basabas_1y", r["be_1y"], 2, "%")
+    koy("e0910_reel_repo_bilesik", ((1 + PB / 100) / (1 + r["be_1y"] / 100) - 1) * 100, 2, "%")
+    # 28.08 ve 16.09: o yazıların anket patikası (bugünden 12 ayda doğrusal), haftalık repoyla
+    for k, ay in (("e0828", "2026-8"), ("e0916", "2026-9")):
+        son = koy(f"{k}_pka_faiz_12a", float(anket[ay]["faiz_12a"]), 2, "%")
+        g = koy(f"{k}_patika_getirisi", patika_getirisi(P, son), 2, "%")
+        koy(f"{k}_spot_eksi_patika_bp", (D[f"{k}_spot_1y"]["deger"] - g) * 100, 0, "bp", arti=True)
+    return {"gunler": DUZELTILEN, "ekim_karari_gecerli": gecerli.isoformat(),
+            "ekim_anketi": EKIM_ANKETI, "patika": "bugünden 12 ayda doğrusal (o yazıların kendi tanımı)"}
+
+
 def main() -> int:
     dondur(yeniden="--yeniden" in sys.argv)
     bugun = json.loads(_oku(f"ppk_2026-{BUGUN_NO:02d}-TR.json"))
@@ -520,6 +586,7 @@ def main() -> int:
         "enflasyon": enflasyon_olcumu(e),
     }
     yapi["anket"] = anket_olcumu(pka, takvim, d)
+    yapi["duzeltme"] = duzeltme_olcumu(json.loads(_oku("eylul_egri.json")), pka)
     koy("tufe_yillik", d["tufe_yillik"], 2, "%")
     koy("sabit_toplanti", sum(1 for k in ks if k["tarih"] > son_indirim["tarih"] and k["degisim"] == 0), 0)
     kunye = json.loads((VERI / "kunye.json").read_text(encoding="utf-8"))

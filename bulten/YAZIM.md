@@ -480,6 +480,20 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
     metnini taşır (bkz. "İşlem fikirleri (biçim 3)").
 12. **Sayılar rakamla** ("52 haftalık", "17 Eylül"); vurgu büyük harfle değil
     `<strong>` ile, paragraf başına en çok bir.
+13. **Eğri ile politika faizi aynı dilde.** DİBS spot ve ileri getirileri yıllık
+    bileşiktir; politika faizi basit bir haftalık repo oranıdır, anketin
+    politika faizi beklentisi de öyle. Aradaki konvansiyon farkı bugünkü
+    seviyede 7 puanı aşar (%36 politika faizi yıllık bileşikte %43,16): "1
+    yıllık getiri politika faizinin üstünde, eğri indirim fiyatlamıyor" cümlesi
+    bu farkı indirim beklentisinin yokluğu sanır. Kıyas ya bileşiğe çevrilmiş
+    politika faiziyle ya da eğrinin haftalık repo karşılığıyla kurulur ve
+    hangisi olduğu cümlede yazılır ("haftalık repo karşılığı %33,08, politika
+    faizinin 392 bp altında"). Çevirme: bileşik = (1 + r·7/365)^(365/7) − 1;
+    haftalık karşılık = ((1 + y)^(7/365) − 1)·365/7. TLREF de basittir ve
+    politika faiziyle doğrudan kıyaslanır (gecelik ile haftalık bileşiklenme
+    farkı yaklaşık 0,1 puan). Denetim (`egri_dili`) dili yazılmadan kurulan
+    kıyası UYARI olarak listeler; 22.10.2026'da ölçüldü, 30 Ağustos–20 Ekim
+    arasında 19 sayıda 34 cümle.
 
 ---
 

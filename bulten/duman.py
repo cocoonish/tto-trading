@@ -7504,6 +7504,46 @@ def main() -> int:
     sina("haftalık takvim: gün satırı iki yönlü sonuç taşımıyorsa UYARI (tek tanım gönderi üreticisinde)",
          _takvim_kalibi)
 
+    # ── eğri ile politika faizi aynı dilde mi (UYARI, YAZIM.md kural 13, 22.10.2026)
+    def _egri_dili():
+        """DİBS getirisi yıllık bileşik, politika faizi basit haftalık repo; dili
+        yazılmadan kurulan kıyas UYARI. Dili yazan cümle, TLREF kıyası, dış merkez
+        bankası ve ölçülen katmanın alanı sorulmaz; dili anan düzeltme kaydı
+        yayımlanmış sayıda uyarıyı bilgiye indirir; ölçüt kos() listesinde."""
+        import denetim as _den
+        karisik = ("1 yıllık DİBS %39,20 ile hâlâ politika faizinin üstünde, yani indirim "
+                   "fiyatlamıyor. Kur sakin kaldı.")
+        dilli = ("1 yıllık DİBS %39,20; bileşiğe çevrilmiş politika faizinin (%43,16) 396 bp altında. "
+                 "İleri faizin haftalık repo karşılığı politika faizinin 210 bp altında.")
+        tlref = "Ön uçta gecelik referans faiz %36,90 ile politika faizinin 0,10 puan altında."
+        dis = "ABD'de 2 yıllık getiri Fed'in politika faizinin 40 bp altında kapandı."
+        def olc(b):
+            d = _den.Denetim({"tarih": "2026-10-12", "surum": 3, **b})
+            d.egri_dili()
+            return ([u for u in d.uyari if "dili yazılmadan" in u],
+                    [x for x in d.bilgi if "dilsiz" in x])
+        u, _ = olc({"gundem": {"turkiye": f"<p>{karisik}</p>"}})
+        assert len(u) == 1 and u[0].startswith("1 cümlede") and "gundem.turkiye" in u[0], u
+        for ad, metin in (("dilini yazan", dilli), ("TLREF", tlref), ("dış merkez bankası", dis)):
+            u, _ = olc({"gundem": {"turkiye": f"<p>{metin}</p>"}, "yorum": f"<p>{metin}</p>"})
+            assert not u, f"{ad} cümlesi uyarıldı: {u}"
+        # Kapsam yazarın alanları: ölçülen katmanın olay kovası sorulmaz.
+        u, _ = olc({"notlar": [{"metin": karisik}], "one_cikanlar": [{"metin": karisik}]})
+        assert not u, f"ölçülen katmanın alanı soruldu: {u}"
+        # Fikrin gerekçesi yazarındır: sorulur.
+        u, _ = olc({"fikirler": [{"gerekce": karisik}]})
+        assert u, "işlem fikrinin gerekçesi sorulmadı"
+        # Yayımlanmış sayıda dili anan düzeltme kaydı uyarıyı bilgiye indirir.
+        kayit = {"alan": "Türkiye", "eski": "politika faizinin üstünde", "sebep": "DİBS getirisi bileşik"}
+        u, bilgi = olc({"gundem": {"turkiye": karisik}, "duzeltmeler": [kayit]})
+        assert not u and len(bilgi) == 1, f"düzeltme kaydı uyarıyı kapatmadı: {u} · {bilgi}"
+        u, _ = olc({"gundem": {"turkiye": karisik}, "duzeltmeler": [{"alan": "x", "eski": "a", "yeni": "b"}]})
+        assert u, "dili anmayan düzeltme kaydı uyarıyı kapattı"
+        assert "self.egri_dili()" in inspect.getsource(_den.Denetim.kos), \
+            "eğri dili ölçütü kos() listesinde değil — yazılmış ama koşmayan ölçüt"
+    sina("eğri–politika faizi kıyası dilini yazıyor mu (UYARI; TLREF, dış, ölçülen katman sorulmaz)",
+         _egri_dili)
+
     for ad in gecen:
         print(f"  ✓ {ad}")
     for ad, hata in dusen:

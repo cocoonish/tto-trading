@@ -17,9 +17,10 @@
   "dibs_ozet.json": "e24917cb1015470c98cc5db5b030e40ca9db665a4a198309029a88841ef59481",
   "enflasyon_ozet.json": "4315990aeed9c12dbe9ccf93fd622216a53518dc9dbabd0865126742b5121e9a",
   "fonlama.csv": "848b7564306735f4c00ca4666f1bb7dcee0ab0530efc0d4727c511301ea7d350",
-  "takvim.json": "a3ab809c154065a259ffb33e1deea2db83a18ee5cd1b80822c062713948eb0a2"
+  "takvim.json": "a3ab809c154065a259ffb33e1deea2db83a18ee5cd1b80822c062713948eb0a2",
+  "eylul_egri.json": "54a1202eeddc864b75b0e83bdd27cf22680781b5c2037659537f3612e908764d"
  },
- "olcum_py_oz": "bc7588c68a64f2100752cc744723937585a392026ec98cdda61a957a9be23b3e",
+ "olcum_py_oz": "bdc62bcf6a44ac62bc515fb9a677e066b43d5d1f27ead457f37acf7ae6ed0d35",
  "degerler": {
   "politika_onceki": {
    "deger": 37.0,
@@ -1541,6 +1542,1398 @@
    "metin": "%24,14",
    "not": ""
   },
+  "e0828_spot_3a": {
+   "deger": 38.202932,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,20",
+   "not": ""
+  },
+  "e0828_ima_3a": {
+   "deger": 32.455886350218115,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,46",
+   "not": ""
+  },
+  "e0828_bilesik_fark_3a": {
+   "deger": -638.1497401248275,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−638 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_3a": {
+   "deger": -454.41136497818843,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−454 bp",
+   "not": ""
+  },
+  "e0828_spot_6a": {
+   "deger": 37.801,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,80",
+   "not": ""
+  },
+  "e0828_ima_6a": {
+   "deger": 32.162830537385254,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,16",
+   "not": ""
+  },
+  "e0828_bilesik_fark_6a": {
+   "deger": -678.342940124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−678 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_6a": {
+   "deger": -483.7169462614746,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−484 bp",
+   "not": ""
+  },
+  "e0828_spot_1y": {
+   "deger": 39.87931,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,88",
+   "not": ""
+  },
+  "e0828_ima_1y": {
+   "deger": 33.66921657422398,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,67",
+   "not": ""
+  },
+  "e0828_bilesik_fark_1y": {
+   "deger": -470.51194012482756,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−471 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_1y": {
+   "deger": -333.0783425776019,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−333 bp",
+   "not": ""
+  },
+  "e0828_spot_2y": {
+   "deger": 39.972627,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,97",
+   "not": ""
+  },
+  "e0828_ima_2y": {
+   "deger": 33.73633789790541,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,74",
+   "not": ""
+  },
+  "e0828_bilesik_fark_2y": {
+   "deger": -461.1802401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−461 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_2y": {
+   "deger": -326.36621020945927,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−326 bp",
+   "not": ""
+  },
+  "e0828_spot_3y": {
+   "deger": 38.304889,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,30",
+   "not": ""
+  },
+  "e0828_ima_3y": {
+   "deger": 32.530092101507734,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,53",
+   "not": ""
+  },
+  "e0828_bilesik_fark_3y": {
+   "deger": -627.9540401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−628 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_3y": {
+   "deger": -446.99078984922664,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−447 bp",
+   "not": ""
+  },
+  "e0828_spot_5y": {
+   "deger": 34.673589,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,67",
+   "not": ""
+  },
+  "e0828_ima_5y": {
+   "deger": 29.85351639051962,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,85",
+   "not": ""
+  },
+  "e0828_bilesik_fark_5y": {
+   "deger": -991.0840401248272,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−991 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_5y": {
+   "deger": -714.6483609480381,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−715 bp",
+   "not": ""
+  },
+  "e0828_spot_7y": {
+   "deger": 31.922407,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,92",
+   "not": ""
+  },
+  "e0828_ima_7y": {
+   "deger": 27.778103311912695,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,78",
+   "not": ""
+  },
+  "e0828_bilesik_fark_7y": {
+   "deger": -1266.2022401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.266 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_7y": {
+   "deger": -922.1896688087305,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−922 bp",
+   "not": ""
+  },
+  "e0828_spot_fwd_1y1y": {
+   "deger": 40.066006,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,07",
+   "not": ""
+  },
+  "e0828_ima_fwd_1y1y": {
+   "deger": 33.80345989746881,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,80",
+   "not": ""
+  },
+  "e0828_bilesik_fark_fwd_1y1y": {
+   "deger": -451.84234012482705,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−452 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_fwd_1y1y": {
+   "deger": -319.65401025311877,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−320 bp",
+   "not": ""
+  },
+  "e0828_spot_fwd_2y1y": {
+   "deger": 35.028788,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,03",
+   "not": ""
+  },
+  "e0828_ima_fwd_2y1y": {
+   "deger": 30.118432010237555,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,12",
+   "not": ""
+  },
+  "e0828_bilesik_fark_fwd_2y1y": {
+   "deger": -955.5641401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−956 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_fwd_2y1y": {
+   "deger": -688.1567989762445,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−688 bp",
+   "not": ""
+  },
+  "e0828_spot_fwd_2y3y": {
+   "deger": 31.252822,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,25",
+   "not": ""
+  },
+  "e0828_ima_fwd_2y3y": {
+   "deger": 27.26656528044916,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,27",
+   "not": ""
+  },
+  "e0828_bilesik_fark_fwd_2y3y": {
+   "deger": -1333.1607401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.333 bp",
+   "not": ""
+  },
+  "e0828_ima_fark_fwd_2y3y": {
+   "deger": -973.3434719550839,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−973 bp",
+   "not": ""
+  },
+  "e0904_spot_3a": {
+   "deger": 37.175054,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,18",
+   "not": ""
+  },
+  "e0904_ima_3a": {
+   "deger": 31.704768423779218,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,70",
+   "not": ""
+  },
+  "e0904_bilesik_fark_3a": {
+   "deger": -740.9375401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−741 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_3a": {
+   "deger": -529.5231576220782,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−530 bp",
+   "not": ""
+  },
+  "e0904_spot_6a": {
+   "deger": 37.071506,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,07",
+   "not": ""
+  },
+  "e0904_ima_6a": {
+   "deger": 31.628795284581685,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,63",
+   "not": ""
+  },
+  "e0904_bilesik_fark_6a": {
+   "deger": -751.2923401248272,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−751 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_6a": {
+   "deger": -537.1204715418315,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−537 bp",
+   "not": ""
+  },
+  "e0904_spot_1y": {
+   "deger": 39.134271,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,13",
+   "not": ""
+  },
+  "e0904_ima_1y": {
+   "deger": 33.13174224821028,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,13",
+   "not": ""
+  },
+  "e0904_bilesik_fark_1y": {
+   "deger": -545.0158401248274,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−545 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_1y": {
+   "deger": -386.825775178972,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−387 bp",
+   "not": ""
+  },
+  "e0904_spot_2y": {
+   "deger": 39.908433,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,91",
+   "not": ""
+  },
+  "e0904_ima_2y": {
+   "deger": 33.69016896385998,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,69",
+   "not": ""
+  },
+  "e0904_bilesik_fark_2y": {
+   "deger": -467.599640124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−468 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_2y": {
+   "deger": -330.98310361400183,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−331 bp",
+   "not": ""
+  },
+  "e0904_spot_3y": {
+   "deger": 38.524128,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,52",
+   "not": ""
+  },
+  "e0904_ima_3y": {
+   "deger": 32.6894757919264,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,69",
+   "not": ""
+  },
+  "e0904_bilesik_fark_3y": {
+   "deger": -606.0301401248274,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−606 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_3y": {
+   "deger": -431.0524208073602,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−431 bp",
+   "not": ""
+  },
+  "e0904_spot_5y": {
+   "deger": 34.97251,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,97",
+   "not": ""
+  },
+  "e0904_ima_5y": {
+   "deger": 30.076504179187264,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,08",
+   "not": ""
+  },
+  "e0904_bilesik_fark_5y": {
+   "deger": -961.1919401248272,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−961 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_5y": {
+   "deger": -692.3495820812736,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−692 bp",
+   "not": ""
+  },
+  "e0904_spot_7y": {
+   "deger": 32.081065,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,08",
+   "not": ""
+  },
+  "e0904_ima_7y": {
+   "deger": 27.89893890267531,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,90",
+   "not": ""
+  },
+  "e0904_bilesik_fark_7y": {
+   "deger": -1250.336440124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.250 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_7y": {
+   "deger": -910.1061097324689,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−910 bp",
+   "not": ""
+  },
+  "e0904_spot_fwd_1y1y": {
+   "deger": 40.686903,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,69",
+   "not": ""
+  },
+  "e0904_ima_fwd_1y1y": {
+   "deger": 34.248655434153314,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,25",
+   "not": ""
+  },
+  "e0904_bilesik_fark_fwd_1y1y": {
+   "deger": -389.7526401248271,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−390 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_fwd_1y1y": {
+   "deger": -275.13445658466867,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−275 bp",
+   "not": ""
+  },
+  "e0904_spot_fwd_2y1y": {
+   "deger": 35.796472,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,80",
+   "not": ""
+  },
+  "e0904_ima_fwd_2y1y": {
+   "deger": 30.688661162710545,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,69",
+   "not": ""
+  },
+  "e0904_bilesik_fark_fwd_2y1y": {
+   "deger": -878.795740124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−879 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_fwd_2y1y": {
+   "deger": -631.1338837289454,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−631 bp",
+   "not": ""
+  },
+  "e0904_spot_fwd_2y3y": {
+   "deger": 31.779022,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,78",
+   "not": ""
+  },
+  "e0904_ima_fwd_2y3y": {
+   "deger": 27.668777118589695,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,67",
+   "not": ""
+  },
+  "e0904_bilesik_fark_fwd_2y3y": {
+   "deger": -1280.5407401248272,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.281 bp",
+   "not": ""
+  },
+  "e0904_ima_fark_fwd_2y3y": {
+   "deger": -933.1222881410305,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−933 bp",
+   "not": ""
+  },
+  "e0910_spot_3a": {
+   "deger": 37.325543,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,33",
+   "not": ""
+  },
+  "e0910_ima_3a": {
+   "deger": 31.815081943656626,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,82",
+   "not": ""
+  },
+  "e0910_bilesik_fark_3a": {
+   "deger": -725.8886401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−726 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_3a": {
+   "deger": -518.4918056343374,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−518 bp",
+   "not": ""
+  },
+  "e0910_spot_6a": {
+   "deger": 36.877525,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,88",
+   "not": ""
+  },
+  "e0910_ima_6a": {
+   "deger": 31.48631985332167,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,49",
+   "not": ""
+  },
+  "e0910_bilesik_fark_6a": {
+   "deger": -770.6904401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−771 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_6a": {
+   "deger": -551.3680146678329,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−551 bp",
+   "not": ""
+  },
+  "e0910_spot_1y": {
+   "deger": 39.065893,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,07",
+   "not": ""
+  },
+  "e0910_ima_1y": {
+   "deger": 33.08227272088502,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,08",
+   "not": ""
+  },
+  "e0910_bilesik_fark_1y": {
+   "deger": -551.8536401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−552 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_1y": {
+   "deger": -391.7727279114978,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−392 bp",
+   "not": ""
+  },
+  "e0910_spot_2y": {
+   "deger": 39.965518,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,97",
+   "not": ""
+  },
+  "e0910_ima_2y": {
+   "deger": 33.731226060344035,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,73",
+   "not": ""
+  },
+  "e0910_bilesik_fark_2y": {
+   "deger": -461.8911401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−462 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_2y": {
+   "deger": -326.8773939655965,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−327 bp",
+   "not": ""
+  },
+  "e0910_spot_3y": {
+   "deger": 38.601801,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,60",
+   "not": ""
+  },
+  "e0910_ima_3y": {
+   "deger": 32.74588362872396,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,75",
+   "not": ""
+  },
+  "e0910_bilesik_fark_3y": {
+   "deger": -598.262840124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−598 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_3y": {
+   "deger": -425.4116371276041,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−425 bp",
+   "not": ""
+  },
+  "e0910_spot_5y": {
+   "deger": 35.037984,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,04",
+   "not": ""
+  },
+  "e0910_ima_5y": {
+   "deger": 30.125281518850294,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,13",
+   "not": ""
+  },
+  "e0910_bilesik_fark_5y": {
+   "deger": -954.644540124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−955 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_5y": {
+   "deger": -687.4718481149706,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−687 bp",
+   "not": ""
+  },
+  "e0910_spot_7y": {
+   "deger": 32.103113,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,10",
+   "not": ""
+  },
+  "e0910_ima_7y": {
+   "deger": 27.91571962218017,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,92",
+   "not": ""
+  },
+  "e0910_bilesik_fark_7y": {
+   "deger": -1248.131640124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.248 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_7y": {
+   "deger": -908.428037781983,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−908 bp",
+   "not": ""
+  },
+  "e0910_spot_fwd_1y1y": {
+   "deger": 40.870963,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,87",
+   "not": ""
+  },
+  "e0910_ima_fwd_1y1y": {
+   "deger": 34.380259854349895,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,38",
+   "not": ""
+  },
+  "e0910_bilesik_fark_fwd_1y1y": {
+   "deger": -371.3466401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−371 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_fwd_1y1y": {
+   "deger": -261.9740145650105,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−262 bp",
+   "not": ""
+  },
+  "e0910_spot_fwd_2y1y": {
+   "deger": 35.914099,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,91",
+   "not": ""
+  },
+  "e0910_ima_fwd_2y1y": {
+   "deger": 30.775754044387032,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,78",
+   "not": ""
+  },
+  "e0910_bilesik_fark_fwd_2y1y": {
+   "deger": -867.0330401248272,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−867 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_fwd_2y1y": {
+   "deger": -622.4245955612968,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−622 bp",
+   "not": ""
+  },
+  "e0910_spot_fwd_2y3y": {
+   "deger": 31.849718,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,85",
+   "not": ""
+  },
+  "e0910_ima_fwd_2y3y": {
+   "deger": 27.722694991342784,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,72",
+   "not": ""
+  },
+  "e0910_bilesik_fark_fwd_2y3y": {
+   "deger": -1273.4711401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.273 bp",
+   "not": ""
+  },
+  "e0910_ima_fark_fwd_2y3y": {
+   "deger": -927.7305008657215,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−928 bp",
+   "not": ""
+  },
+  "e0916_spot_3a": {
+   "deger": 37.640034,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,64",
+   "not": ""
+  },
+  "e0916_ima_3a": {
+   "deger": 32.045232172550236,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,05",
+   "not": ""
+  },
+  "e0916_bilesik_fark_3a": {
+   "deger": -694.4395401248272,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−694 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_3a": {
+   "deger": -495.4767827449764,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−495 bp",
+   "not": ""
+  },
+  "e0916_spot_6a": {
+   "deger": 37.399497,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,40",
+   "not": ""
+  },
+  "e0916_ima_6a": {
+   "deger": 31.869249279785468,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,87",
+   "not": ""
+  },
+  "e0916_bilesik_fark_6a": {
+   "deger": -718.4932401248275,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−718 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_6a": {
+   "deger": -513.0750720214533,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−513 bp",
+   "not": ""
+  },
+  "e0916_spot_1y": {
+   "deger": 39.574257,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,57",
+   "not": ""
+  },
+  "e0916_ima_1y": {
+   "deger": 33.44949030010605,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,45",
+   "not": ""
+  },
+  "e0916_bilesik_fark_1y": {
+   "deger": -501.0172401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−501 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_1y": {
+   "deger": -355.05096998939507,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−355 bp",
+   "not": ""
+  },
+  "e0916_spot_2y": {
+   "deger": 40.708586,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,71",
+   "not": ""
+  },
+  "e0916_ima_2y": {
+   "deger": 34.26416773068613,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,26",
+   "not": ""
+  },
+  "e0916_bilesik_fark_2y": {
+   "deger": -387.5843401248275,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−388 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_2y": {
+   "deger": -273.5832269313868,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−274 bp",
+   "not": ""
+  },
+  "e0916_spot_3y": {
+   "deger": 39.246977,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,25",
+   "not": ""
+  },
+  "e0916_ima_3y": {
+   "deger": 33.21322979472994,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,21",
+   "not": ""
+  },
+  "e0916_bilesik_fark_3y": {
+   "deger": -533.7452401248271,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−534 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_3y": {
+   "deger": -378.67702052700594,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−379 bp",
+   "not": ""
+  },
+  "e0916_spot_5y": {
+   "deger": 35.40477,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,40",
+   "not": ""
+  },
+  "e0916_ima_5y": {
+   "deger": 30.398104439350142,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,40",
+   "not": ""
+  },
+  "e0916_bilesik_fark_5y": {
+   "deger": -917.9659401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−918 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_5y": {
+   "deger": -660.1895560649858,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−660 bp",
+   "not": ""
+  },
+  "e0916_spot_7y": {
+   "deger": 32.299376,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,30",
+   "not": ""
+  },
+  "e0916_ima_7y": {
+   "deger": 28.06497432780911,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%28,06",
+   "not": ""
+  },
+  "e0916_bilesik_fark_7y": {
+   "deger": -1228.505340124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.229 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_7y": {
+   "deger": -893.5025672190889,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−894 bp",
+   "not": ""
+  },
+  "e0916_spot_fwd_1y1y": {
+   "deger": 41.852134,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%41,85",
+   "not": ""
+  },
+  "e0916_ima_fwd_1y1y": {
+   "deger": 35.07897180149731,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,08",
+   "not": ""
+  },
+  "e0916_bilesik_fark_fwd_1y1y": {
+   "deger": -273.2295401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−273 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_fwd_1y1y": {
+   "deger": -192.10281985026896,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−192 bp",
+   "not": ""
+  },
+  "e0916_spot_fwd_2y1y": {
+   "deger": 36.369149,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,37",
+   "not": ""
+  },
+  "e0916_ima_fwd_2y1y": {
+   "deger": 31.111985448008987,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,11",
+   "not": ""
+  },
+  "e0916_bilesik_fark_fwd_2y1y": {
+   "deger": -821.5280401248272,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−822 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_fwd_2y1y": {
+   "deger": -588.8014551991013,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−589 bp",
+   "not": ""
+  },
+  "e0916_spot_fwd_2y3y": {
+   "deger": 31.980431,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,98",
+   "not": ""
+  },
+  "e0916_ima_fwd_2y3y": {
+   "deger": 27.822311520541486,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,82",
+   "not": ""
+  },
+  "e0916_bilesik_fark_fwd_2y3y": {
+   "deger": -1260.3998401248273,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.260 bp",
+   "not": ""
+  },
+  "e0916_ima_fark_fwd_2y3y": {
+   "deger": -917.7688479458513,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−918 bp",
+   "not": ""
+  },
+  "e0910_ima_3a_ekim_sonrasi": {
+   "deger": 27.17025951818236,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,17",
+   "not": ""
+  },
+  "e0910_anket_ekim": {
+   "deger": 36.13,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,13",
+   "not": ""
+  },
+  "e0916_ima_3a_ekim_sonrasi": {
+   "deger": 28.65029866114947,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%28,65",
+   "not": ""
+  },
+  "e0916_anket_ekim": {
+   "deger": 36.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,00",
+   "not": ""
+  },
+  "e0910_reel_dibs_1y": {
+   "deger": 9.406304,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%9,41",
+   "not": ""
+  },
+  "e0910_reel_dibs_2y": {
+   "deger": 8.148862,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%8,15",
+   "not": ""
+  },
+  "e0910_basabas_1y": {
+   "deger": 27.10958,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,11",
+   "not": ""
+  },
+  "e0910_reel_repo_bilesik": {
+   "deger": 13.747861806520234,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%13,75",
+   "not": ""
+  },
+  "e0828_pka_faiz_12a": {
+   "deger": 29.59,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,59",
+   "not": ""
+  },
+  "e0828_patika_getirisi": {
+   "deger": 39.359560457039635,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,36",
+   "not": ""
+  },
+  "e0828_spot_eksi_patika_bp": {
+   "deger": 51.9749542960362,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+52 bp",
+   "not": ""
+  },
+  "e0916_pka_faiz_12a": {
+   "deger": 29.22,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,22",
+   "not": ""
+  },
+  "e0916_patika_getirisi": {
+   "deger": 39.10355016734406,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,10",
+   "not": ""
+  },
+  "e0916_spot_eksi_patika_bp": {
+   "deger": 47.070683265594226,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+47 bp",
+   "not": ""
+  },
   "tufe_yillik": {
    "deger": 29.73,
    "b": 2,
@@ -2103,6 +3496,20 @@
    },
    "t12": "2027-10-21",
    "varsayim": "üçüncü toplantıdan 12 ay ucuna doğrusal ara değer"
+  },
+  "duzeltme": {
+   "gunler": {
+    "2026-08-28": "e0828",
+    "2026-09-04": "e0904",
+    "2026-09-10": "e0910",
+    "2026-09-16": "e0916"
+   },
+   "ekim_karari_gecerli": "2026-10-23",
+   "ekim_anketi": {
+    "e0910": "2026-8",
+    "e0916": "2026-9"
+   },
+   "patika": "bugünden 12 ayda doğrusal (o yazıların kendi tanımı)"
   }
  }
 }
