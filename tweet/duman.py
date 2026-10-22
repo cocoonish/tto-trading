@@ -1383,9 +1383,15 @@ def _k5_duzeltme_yaniti():
         an_ad = [x for x in a2 if x["hedef"].startswith("analiz:")]
         assert len(an_ad) == 1 and an_ad[0]["ust"] == "900", a2
         assert dz.metin(an_ad[0], ar).endswith(uret.SORUMLULUK_TEKNIK)
-        gercek = dz.on_bilgi_duzeltmeleri(
-            (Path(__file__).resolve().parents[1] / "site/src/content/analiz/ppk-karari-2026-09-10.mdx").read_text(encoding="utf-8"))
-        assert len(gercek) == 2 and all(k in gercek[0] for k in ("tarih", "alan", "eski", "yeni")), gercek
+        # Gerçek dosya canlı girdidir: beklenen öğe sayısı dosyanın KENDİ listesinden
+        # sayılır. Donmuş "2", yazıya iki düzeltme daha eklendiği gün (22.10.2026) bu
+        # maddeyi düşürdü ve tweet zinciri gönderimden önce durdu.
+        ham_gercek = (Path(__file__).resolve().parents[1]
+                      / "site/src/content/analiz/ppk-karari-2026-09-10.mdx").read_text(encoding="utf-8")
+        gercek = dz.on_bilgi_duzeltmeleri(ham_gercek)
+        beklenen = len(re.findall(r"^\s+-\s+tarih:", dz._duzeltme_blogu(ham_gercek), re.M))
+        assert beklenen >= 2 and len(gercek) == beklenen, (beklenen, gercek)
+        assert all(k in d for d in gercek for k in ("tarih", "alan", "eski", "yeni")), gercek
         # (6) uçtan uca: gonder.main yanıtı doğru kimliğe atar, defter içerik anahtarıyla yazılır,
         #     ikinci koşu aynı düzeltmeyi bir daha atmaz; gövdede medya yok
         (bd / f"{dun}.json").write_text(json.dumps({"tarih": dun, "duzeltmeler": [kayit]}), encoding="utf-8")
