@@ -1,0 +1,73 @@
+{
+ "cipa": "2026-10-22",
+ "dosyalar": {
+  "ppk_2026-45-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-45-TR.json",
+   "sha256": "7864256653e91c89e73b507358faabb28a8e34e002a36977ead363338295f39a"
+  },
+  "ppk_2026-38-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-38-TR.json",
+   "sha256": "6640d037c7f1b0651d48b848ea770db240ed570b3a1d1b74aecbf67fe0609e38"
+  },
+  "ppk_2026-01-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-01-TR.json",
+   "sha256": "a2a8e52f8ed6ea5171f1e9f61e0f4ee1feb16f2bec95dc9af458ef80faf4e724"
+  },
+  "ppk_2026-12-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-12-TR.json",
+   "sha256": "ec463c0b3a7506f1ff8edf9d4791387bbef95c5dd937497bd6a28b2edd436ad6"
+  },
+  "ppk_2026-14-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-14-TR.json",
+   "sha256": "b68337abe37bf5a427ca87d97a98fa37233aa178ac97f16fade2b88213db3983"
+  },
+  "ppk_2026-17-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-17-TR.json",
+   "sha256": "73252e696c9d209e832ebb345bfe65adaa35ccc1bdc5d8b73df748246a46776d"
+  },
+  "ppk_2026-23-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-23-TR.json",
+   "sha256": "0ac866a0d8d0613d2c5ff50a5598e79cb8780a2d5669beecc355864355f4eb58"
+  },
+  "ppk_2026-28-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-28-TR.json",
+   "sha256": "6776adcaa8200acb9812dbe18b3ea56311c6ed14cbfdf5aa2cab30a3d6c71c84"
+  },
+  "ppk_2026-42-TR.json": {
+   "kaynak": "bulten/veri/ppk/2026/2026-42-TR.json",
+   "sha256": "707b19deecd8eae1a1c96be25aa760b7bbbe7b749d6f2228d233354f0b2c559e"
+  },
+  "ppk_2025-41-TR.json": {
+   "kaynak": "bulten/veri/ppk/2025/2025-41-TR.json",
+   "sha256": "e44605c996bb5703798c8b6b262210d9cc91e831492cc69dec210dbe73d362b8"
+  },
+  "ppk_2016-49-TR.json": {
+   "kaynak": "bulten/veri/ppk/2016/2016-49-TR.json",
+   "sha256": "8b4b409acabd4988929ac8864e74097a9bb28eb45fd2f537b025a175c880ad2e"
+  },
+  "karar_tablosu.json": {
+   "kaynak": "bulten/veri/ppk (2016–2026, TR faiz kararları)",
+   "sha256": "2008b6be94c9e7dec8a08a3ade2fc5317f4d06a6d5917b4de4e7cbf16eb6aaa8"
+  },
+  "pka_toplanti.json": {
+   "kaynak": "Aktarılacak Projeler/PpkKarar/veri/kesif/pka_toplanti_2026-10-22.json",
+   "sha256": "a9d16439a13380d08a16b9c2a88a66bbea61cb5c368ad0a1c096697f266966bd"
+  },
+  "dibs_ozet.json": {
+   "kaynak": "site/public/projeler/dibs-verim-egrisi/ozet.json",
+   "sha256": "e24917cb1015470c98cc5db5b030e40ca9db665a4a198309029a88841ef59481"
+  },
+  "enflasyon_ozet.json": {
+   "kaynak": "site/public/projeler/enflasyon/ozet.json",
+   "sha256": "4315990aeed9c12dbe9ccf93fd622216a53518dc9dbabd0865126742b5121e9a"
+  },
+  "fonlama.csv": {
+   "kaynak": "Aktarılacak Projeler/Fonlama/data/metrik.csv (2026, altı sütun)",
+   "sha256": "848b7564306735f4c00ca4666f1bb7dcee0ab0530efc0d4727c511301ea7d350"
+  },
+  "takvim.json": {
+   "kaynak": "bulten/takvim_elle.json (TCMB kayıtları, 22.10.2026–31.01.2027)",
+   "sha256": "a3ab809c154065a259ffb33e1deea2db83a18ee5cd1b80822c062713948eb0a2"
+  }
+ }
+}

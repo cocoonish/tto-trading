@@ -1,0 +1,2108 @@
+{
+ "cipa": "2026-10-22",
+ "arsiv": {
+  "ppk_2026-45-TR.json": "7864256653e91c89e73b507358faabb28a8e34e002a36977ead363338295f39a",
+  "ppk_2026-38-TR.json": "6640d037c7f1b0651d48b848ea770db240ed570b3a1d1b74aecbf67fe0609e38",
+  "ppk_2026-01-TR.json": "a2a8e52f8ed6ea5171f1e9f61e0f4ee1feb16f2bec95dc9af458ef80faf4e724",
+  "ppk_2026-12-TR.json": "ec463c0b3a7506f1ff8edf9d4791387bbef95c5dd937497bd6a28b2edd436ad6",
+  "ppk_2026-14-TR.json": "b68337abe37bf5a427ca87d97a98fa37233aa178ac97f16fade2b88213db3983",
+  "ppk_2026-17-TR.json": "73252e696c9d209e832ebb345bfe65adaa35ccc1bdc5d8b73df748246a46776d",
+  "ppk_2026-23-TR.json": "0ac866a0d8d0613d2c5ff50a5598e79cb8780a2d5669beecc355864355f4eb58",
+  "ppk_2026-28-TR.json": "6776adcaa8200acb9812dbe18b3ea56311c6ed14cbfdf5aa2cab30a3d6c71c84",
+  "ppk_2026-42-TR.json": "707b19deecd8eae1a1c96be25aa760b7bbbe7b749d6f2228d233354f0b2c559e",
+  "ppk_2025-41-TR.json": "e44605c996bb5703798c8b6b262210d9cc91e831492cc69dec210dbe73d362b8",
+  "ppk_2016-49-TR.json": "8b4b409acabd4988929ac8864e74097a9bb28eb45fd2f537b025a175c880ad2e",
+  "karar_tablosu.json": "2008b6be94c9e7dec8a08a3ade2fc5317f4d06a6d5917b4de4e7cbf16eb6aaa8",
+  "pka_toplanti.json": "a9d16439a13380d08a16b9c2a88a66bbea61cb5c368ad0a1c096697f266966bd",
+  "dibs_ozet.json": "e24917cb1015470c98cc5db5b030e40ca9db665a4a198309029a88841ef59481",
+  "enflasyon_ozet.json": "4315990aeed9c12dbe9ccf93fd622216a53518dc9dbabd0865126742b5121e9a",
+  "fonlama.csv": "848b7564306735f4c00ca4666f1bb7dcee0ab0530efc0d4727c511301ea7d350",
+  "takvim.json": "a3ab809c154065a259ffb33e1deea2db83a18ee5cd1b80822c062713948eb0a2"
+ },
+ "olcum_py_oz": "bc7588c68a64f2100752cc744723937585a392026ec98cdda61a957a9be23b3e",
+ "degerler": {
+  "politika_onceki": {
+   "deger": 37.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,0",
+   "not": ""
+  },
+  "politika_yeni": {
+   "deger": 36.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,0",
+   "not": ""
+  },
+  "ust_onceki": {
+   "deger": 40.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,0",
+   "not": ""
+  },
+  "ust_yeni": {
+   "deger": 39.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,0",
+   "not": ""
+  },
+  "alt_onceki": {
+   "deger": 35.5,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,5",
+   "not": ""
+  },
+  "alt_yeni": {
+   "deger": 34.5,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,5",
+   "not": ""
+  },
+  "indirim_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "koridor_genislik": {
+   "deger": 4.5,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "4,5 puan",
+   "not": ""
+  },
+  "ust_mesafe": {
+   "deger": 3.0,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "3,0 puan",
+   "not": ""
+  },
+  "alt_mesafe": {
+   "deger": 1.5,
+   "b": 1,
+   "birim": "puan",
+   "arti": false,
+   "metin": "1,5 puan",
+   "not": ""
+  },
+  "indirimsiz_gun": {
+   "deger": 273.0,
+   "b": 0,
+   "birim": "gün",
+   "arti": false,
+   "metin": "273 gün",
+   "not": ""
+  },
+  "paragraf_sayisi": {
+   "deger": 7.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "7",
+   "not": ""
+  },
+  "degisen_paragraf": {
+   "deger": 3.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "3",
+   "not": ""
+  },
+  "ayni_paragraf": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "not": ""
+  },
+  "teshis_cumle": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "not": ""
+  },
+  "teshis_ayni_cumle": {
+   "deger": 1.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "1",
+   "not": ""
+  },
+  "teshis_degisen_cumle": {
+   "deger": 3.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "3",
+   "not": ""
+  },
+  "durus_cumle": {
+   "deger": 5.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "5",
+   "not": ""
+  },
+  "durus_ayni_cumle": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "not": ""
+  },
+  "durus_degisen_cumle": {
+   "deger": 1.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "1",
+   "not": ""
+  },
+  "gecis_sayisi": {
+   "deger": 6.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "6",
+   "not": ""
+  },
+  "gecis_teshis": {
+   "deger": 6.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "6",
+   "not": ""
+  },
+  "gecis_durus": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "not": ""
+  },
+  "gecis_uye": {
+   "deger": 3.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "3",
+   "not": ""
+  },
+  "gecis_karar": {
+   "deger": 2.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "2",
+   "not": ""
+  },
+  "gecis_makro": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "0",
+   "not": ""
+  },
+  "gecis_hedef": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "0",
+   "not": ""
+  },
+  "gecis_ozet": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "0",
+   "not": ""
+  },
+  "ocak_durus_cumle": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "not": ""
+  },
+  "ocak_durus_ayni": {
+   "deger": 2.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "2",
+   "not": ""
+  },
+  "ocak_durus_yeni": {
+   "deger": 3.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "3",
+   "not": ""
+  },
+  "arsiv_karar": {
+   "deger": 112.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "112",
+   "not": ""
+  },
+  "arsiv_indirim": {
+   "deger": 27.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "27",
+   "not": ""
+  },
+  "arsiv_sabit": {
+   "deger": 67.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "67",
+   "not": ""
+  },
+  "arsiv_artirim": {
+   "deger": 17.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "17",
+   "not": ""
+  },
+  "kalipli_karar": {
+   "deger": 6.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "6",
+   "not": ""
+  },
+  "kalipli_indirim": {
+   "deger": 6.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "6",
+   "not": ""
+  },
+  "kalipsiz_indirim": {
+   "deger": 21.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "21",
+   "not": ""
+  },
+  "kalipli_onceki": {
+   "deger": 5.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "5",
+   "not": ""
+  },
+  "kalipli_sonraki_indirim": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "not": ""
+  },
+  "kalipli_sonraki_sabit": {
+   "deger": 1.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "1",
+   "not": ""
+  },
+  "dongu_tepe": {
+   "deger": 46.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%46,0",
+   "not": ""
+  },
+  "dongu_toplam_puan": {
+   "deger": -10.0,
+   "b": 1,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−10,0 puan",
+   "not": ""
+  },
+  "dongu_indirim_sayisi": {
+   "deger": 6.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "6",
+   "not": ""
+  },
+  "dongu1_politika": {
+   "deger": 46.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%46,0",
+   "not": ""
+  },
+  "dongu1_degisim_bp": {
+   "deger": 350.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+350 bp",
+   "not": ""
+  },
+  "dongu2_politika": {
+   "deger": 46.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%46,0",
+   "not": ""
+  },
+  "dongu2_degisim_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "dongu3_politika": {
+   "deger": 43.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%43,0",
+   "not": ""
+  },
+  "dongu3_degisim_bp": {
+   "deger": -300.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−300 bp",
+   "not": ""
+  },
+  "dongu4_politika": {
+   "deger": 40.5,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,5",
+   "not": ""
+  },
+  "dongu4_degisim_bp": {
+   "deger": -250.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−250 bp",
+   "not": ""
+  },
+  "dongu5_politika": {
+   "deger": 39.5,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,5",
+   "not": ""
+  },
+  "dongu5_degisim_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "dongu6_politika": {
+   "deger": 38.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,0",
+   "not": ""
+  },
+  "dongu6_degisim_bp": {
+   "deger": -150.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−150 bp",
+   "not": ""
+  },
+  "dongu7_politika": {
+   "deger": 37.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,0",
+   "not": ""
+  },
+  "dongu7_degisim_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "dongu8_politika": {
+   "deger": 37.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,0",
+   "not": ""
+  },
+  "dongu8_degisim_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "dongu9_politika": {
+   "deger": 37.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,0",
+   "not": ""
+  },
+  "dongu9_degisim_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "dongu10_politika": {
+   "deger": 37.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,0",
+   "not": ""
+  },
+  "dongu10_degisim_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "dongu11_politika": {
+   "deger": 37.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,0",
+   "not": ""
+  },
+  "dongu11_degisim_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "dongu12_politika": {
+   "deger": 37.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,0",
+   "not": ""
+  },
+  "dongu12_degisim_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "dongu13_politika": {
+   "deger": 36.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,0",
+   "not": ""
+  },
+  "dongu13_degisim_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "kalip1_degisim_bp": {
+   "deger": -300.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−300 bp",
+   "not": ""
+  },
+  "kalip1_sonraki_bp": {
+   "deger": -250.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−250 bp",
+   "not": ""
+  },
+  "kalip2_degisim_bp": {
+   "deger": -250.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−250 bp",
+   "not": ""
+  },
+  "kalip2_sonraki_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "kalip3_degisim_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "kalip3_sonraki_bp": {
+   "deger": -150.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−150 bp",
+   "not": ""
+  },
+  "kalip4_degisim_bp": {
+   "deger": -150.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−150 bp",
+   "not": ""
+  },
+  "kalip4_sonraki_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "kalip5_degisim_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "kalip5_sonraki_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "kalip6_degisim_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "dongu_sikilastirma_cumlesi": {
+   "deger": 5.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "5",
+   "not": ""
+  },
+  "dongu_ara_hedef_yazimi": {
+   "deger": 4.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "4",
+   "not": ""
+  },
+  "dongu_ihtiyatli_indirim": {
+   "deger": 1.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "1",
+   "not": ""
+  },
+  "indirim_sonrasi_n": {
+   "deger": 26.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "26",
+   "not": ""
+  },
+  "indirim_sonrasi_indirim": {
+   "deger": 20.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "20",
+   "not": ""
+  },
+  "israr_orani": {
+   "deger": 76.92307692307692,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%76,9",
+   "not": ""
+  },
+  "kalipli_sonraki_oran": {
+   "deger": 80.0,
+   "b": 1,
+   "birim": "%",
+   "arti": false,
+   "metin": "%80,0",
+   "not": ""
+  },
+  "zamanlama_2016_sonraki_bp": {
+   "deger": 50.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+50 bp",
+   "not": ""
+  },
+  "politika_bilesik_onceki": {
+   "deger": 44.58442940124827,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%44,58",
+   "not": ""
+  },
+  "politika_bilesik_yeni": {
+   "deger": 43.1557411844453,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%43,16",
+   "not": ""
+  },
+  "bilesik_indirim_bp": {
+   "deger": -142.8688216802975,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−143 bp",
+   "not": ""
+  },
+  "konvansiyon_farki": {
+   "deger": 7.584429401248272,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "7,58 puan",
+   "not": ""
+  },
+  "spot_3a": {
+   "deger": 35.96,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,96",
+   "not": ""
+  },
+  "ima_3a": {
+   "deger": 30.8097198152808,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,81",
+   "not": ""
+  },
+  "basit_fark_3a": {
+   "deger": -103.99999999999991,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−104 bp",
+   "not": ""
+  },
+  "bilesik_fark_3a": {
+   "deger": -862.4429401248271,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−862 bp",
+   "not": ""
+  },
+  "spot_6a": {
+   "deger": 37.34,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,34",
+   "not": ""
+  },
+  "ima_6a": {
+   "deger": 31.8256731698061,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,83",
+   "not": ""
+  },
+  "basit_fark_6a": {
+   "deger": 34.00000000000034,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+34 bp",
+   "not": ""
+  },
+  "bilesik_fark_6a": {
+   "deger": -724.4429401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−724 bp",
+   "not": ""
+  },
+  "spot_1y": {
+   "deger": 38.99,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,99",
+   "not": ""
+  },
+  "ima_1y": {
+   "deger": 33.02733836370875,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,03",
+   "not": ""
+  },
+  "basit_fark_1y": {
+   "deger": 199.0000000000002,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+199 bp",
+   "not": ""
+  },
+  "bilesik_fark_1y": {
+   "deger": -559.442940124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−559 bp",
+   "not": ""
+  },
+  "spot_2y": {
+   "deger": 39.7,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,70",
+   "not": ""
+  },
+  "ima_2y": {
+   "deger": 33.540118588103695,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,54",
+   "not": ""
+  },
+  "basit_fark_2y": {
+   "deger": 270.0000000000003,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+270 bp",
+   "not": ""
+  },
+  "bilesik_fark_2y": {
+   "deger": -488.4429401248269,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−488 bp",
+   "not": ""
+  },
+  "spot_3y": {
+   "deger": 39.1,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,10",
+   "not": ""
+  },
+  "ima_3y": {
+   "deger": 33.10695114132318,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,11",
+   "not": ""
+  },
+  "basit_fark_3y": {
+   "deger": 210.00000000000014,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+210 bp",
+   "not": ""
+  },
+  "bilesik_fark_3y": {
+   "deger": -548.442940124827,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−548 bp",
+   "not": ""
+  },
+  "spot_5y": {
+   "deger": 36.58,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,58",
+   "not": ""
+  },
+  "ima_5y": {
+   "deger": 31.267407999260787,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%31,27",
+   "not": ""
+  },
+  "basit_fark_5y": {
+   "deger": -42.00000000000017,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−42 bp",
+   "not": ""
+  },
+  "bilesik_fark_5y": {
+   "deger": -800.4429401248274,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−800 bp",
+   "not": ""
+  },
+  "spot_7y": {
+   "deger": 33.92,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,92",
+   "not": ""
+  },
+  "ima_7y": {
+   "deger": 29.28919558232747,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,29",
+   "not": ""
+  },
+  "basit_fark_7y": {
+   "deger": -307.99999999999983,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−308 bp",
+   "not": ""
+  },
+  "bilesik_fark_7y": {
+   "deger": -1066.4429401248271,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−1.066 bp",
+   "not": ""
+  },
+  "fwd_1y1y": {
+   "deger": 40.42,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,42",
+   "not": ""
+  },
+  "ima_fwd_1y1y": {
+   "deger": 34.05751728161877,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,06",
+   "not": ""
+  },
+  "fwd_2y1y": {
+   "deger": 37.91,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,91",
+   "not": ""
+  },
+  "ima_fwd_2y1y": {
+   "deger": 32.24238715469493,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,24",
+   "not": ""
+  },
+  "pka_faiz_12a": {
+   "deger": 29.01,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,01",
+   "not": ""
+  },
+  "pka_faiz_24a": {
+   "deger": 22.39,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%22,39",
+   "not": ""
+  },
+  "pka_12a": {
+   "deger": 23.89,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%23,89",
+   "not": ""
+  },
+  "pka_24a": {
+   "deger": 17.94,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%17,94",
+   "not": ""
+  },
+  "pka_katilimci": {
+   "deger": 66.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "66",
+   "not": ""
+  },
+  "anket_ort_2y": {
+   "deger": 25.700000000000003,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%25,70",
+   "not": ""
+  },
+  "fark_2y_ima_anket": {
+   "deger": 8.357517281618769,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+8,36 puan",
+   "not": ""
+  },
+  "fwd_3a6a": {
+   "deger": 38.73400706090029,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%38,73",
+   "not": ""
+  },
+  "ima_fwd_3a6a": {
+   "deger": 32.841823310307255,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,84",
+   "not": ""
+  },
+  "fwd_6a1y": {
+   "deger": 40.65982306684142,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,66",
+   "not": ""
+  },
+  "ima_fwd_6a1y": {
+   "deger": 34.22927880896083,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,23",
+   "not": ""
+  },
+  "degisim_ay_1y": {
+   "deger": -55.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−55 bp",
+   "not": ""
+  },
+  "degisim_ay_2y": {
+   "deger": -88.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−88 bp",
+   "not": ""
+  },
+  "degisim_ceyrek_1y": {
+   "deger": -246.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−246 bp",
+   "not": ""
+  },
+  "degisim_ceyrek_2y": {
+   "deger": -210.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−210 bp",
+   "not": ""
+  },
+  "reel_ileri": {
+   "deger": 12.19,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%12,19",
+   "not": ""
+  },
+  "reel_ileri_2y": {
+   "deger": 15.57,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%15,57",
+   "not": ""
+  },
+  "reel_geriye": {
+   "deger": 7.13,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%7,13",
+   "not": ""
+  },
+  "reel_tufex_1y": {
+   "deger": 6.57,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%6,57",
+   "not": ""
+  },
+  "reel_tufex_2y": {
+   "deger": 7.15,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%7,15",
+   "not": ""
+  },
+  "basabas_1y": {
+   "deger": 30.42,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,42",
+   "not": ""
+  },
+  "basabas_2y": {
+   "deger": 30.38,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,38",
+   "not": ""
+  },
+  "basabas_anket_fark": {
+   "deger": 6.530000000000001,
+   "b": 2,
+   "birim": "puan",
+   "arti": false,
+   "metin": "6,53 puan",
+   "not": ""
+  },
+  "tlref_bilesik": {
+   "deger": 44.49,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%44,49",
+   "not": ""
+  },
+  "reel_pol_ilan_onceki": {
+   "deger": 10.581967874727582,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%10,58",
+   "not": ""
+  },
+  "reel_pol_ilan_yeni": {
+   "deger": 9.774800226006919,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%9,77",
+   "not": ""
+  },
+  "reel_pol_bilesik_onceki": {
+   "deger": 16.70387392142083,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%16,70",
+   "not": ""
+  },
+  "reel_pol_bilesik_yeni": {
+   "deger": 15.550683012709076,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%15,55",
+   "not": ""
+  },
+  "blok1_gun": {
+   "deger": 41.0,
+   "b": 0,
+   "birim": "gün",
+   "arti": false,
+   "metin": "41 gün",
+   "not": ""
+  },
+  "blok1_tlref": {
+   "deger": 37.15,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%37,15",
+   "not": ""
+  },
+  "blok1_makas": {
+   "deger": -0.19,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,19 puan",
+   "not": ""
+  },
+  "blok2_gun": {
+   "deger": 117.0,
+   "b": 0,
+   "birim": "gün",
+   "arti": false,
+   "metin": "117 gün",
+   "not": ""
+  },
+  "blok2_tlref": {
+   "deger": 39.96,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%39,96",
+   "not": ""
+  },
+  "blok2_makas": {
+   "deger": 2.96,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+2,96 puan",
+   "not": ""
+  },
+  "blok3_gun": {
+   "deger": 43.0,
+   "b": 0,
+   "birim": "gün",
+   "arti": false,
+   "metin": "43 gün",
+   "not": ""
+  },
+  "blok3_tlref": {
+   "deger": 36.84,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,84",
+   "not": ""
+  },
+  "blok3_makas": {
+   "deger": -0.16,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "−0,16 puan",
+   "not": ""
+  },
+  "tlref_son": {
+   "deger": 36.8509,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,85",
+   "not": ""
+  },
+  "tlref_politika_bp": {
+   "deger": -14.909999999999712,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−15 bp",
+   "not": ""
+  },
+  "fiili_gevseme_bp": {
+   "deger": -311.9999999999998,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−312 bp",
+   "not": ""
+  },
+  "net_ocak_subat_bp": {
+   "deger": -30.999999999999517,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−31 bp",
+   "not": ""
+  },
+  "tlref_maks": {
+   "deger": 39.9978,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%40,00",
+   "not": ""
+  },
+  "tlref_min": {
+   "deger": 36.4859,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,49",
+   "not": ""
+  },
+  "tufe_aylik": {
+   "deger": 1.84,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,84",
+   "not": ""
+  },
+  "tufe_aylik_sa": {
+   "deger": 1.49,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%1,49",
+   "not": ""
+  },
+  "tufe_3a_saar": {
+   "deger": 25.31,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%25,31",
+   "not": ""
+  },
+  "b_3a_saar": {
+   "deger": 24.13,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,13",
+   "not": ""
+  },
+  "c_3a_saar": {
+   "deger": 27.16,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%27,16",
+   "not": ""
+  },
+  "anket_ilk": {
+   "deger": 36.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%36,00",
+   "not": ""
+  },
+  "anket_ikinci": {
+   "deger": 35.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,00",
+   "not": ""
+  },
+  "anket_ucuncu": {
+   "deger": 34.35,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%34,35",
+   "not": ""
+  },
+  "anket_yilsonu": {
+   "deger": 35.0,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,00",
+   "not": ""
+  },
+  "surpriz_bp": {
+   "deger": 0.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "0 bp",
+   "not": ""
+  },
+  "anket_aralik_bp": {
+   "deger": -100.0,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−100 bp",
+   "not": ""
+  },
+  "anket_yol_3a": {
+   "deger": 35.582417582417584,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%35,58",
+   "not": ""
+  },
+  "anket_yol_3a6a": {
+   "deger": 33.51944731738849,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%33,52",
+   "not": ""
+  },
+  "anket_yol_6a1y": {
+   "deger": 30.81617647058823,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%30,82",
+   "not": ""
+  },
+  "anket_yol_1y": {
+   "deger": 32.678438356164385,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%32,68",
+   "not": ""
+  },
+  "makas_3a_bp": {
+   "deger": -477.2697767136783,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−477 bp",
+   "not": ""
+  },
+  "makas_3a6a_bp": {
+   "deger": -67.7624007081235,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "−68 bp",
+   "not": ""
+  },
+  "makas_6a1y_bp": {
+   "deger": 341.31023383725994,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+341 bp",
+   "not": ""
+  },
+  "makas_1y_bp": {
+   "deger": 34.89000075443656,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+35 bp",
+   "not": ""
+  },
+  "fark_1y_yol": {
+   "deger": 0.34890000754436556,
+   "b": 2,
+   "birim": "puan",
+   "arti": true,
+   "metin": "+0,35 puan",
+   "not": ""
+  },
+  "makas_2y_bp": {
+   "deger": 835.7517281618768,
+   "b": 0,
+   "birim": "bp",
+   "arti": true,
+   "metin": "+836 bp",
+   "not": ""
+  },
+  "ima_3a_aralik_sonrasi": {
+   "deger": 24.14211257976382,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%24,14",
+   "not": ""
+  },
+  "tufe_yillik": {
+   "deger": 29.73,
+   "b": 2,
+   "birim": "%",
+   "arti": false,
+   "metin": "%29,73",
+   "not": ""
+  },
+  "sabit_toplanti": {
+   "deger": 5.0,
+   "b": 0,
+   "birim": "",
+   "arti": false,
+   "metin": "5",
+   "not": ""
+  }
+ },
+ "yapi": {
+  "karar": {
+   "onceki_indirim": "2026-01-22"
+  },
+  "metin": {
+   "paragraflar": [
+    {
+     "no": 3,
+     "rol": "kurul üyeleri",
+     "ayni": true
+    },
+    {
+     "no": 4,
+     "rol": "karar",
+     "ayni": false
+    },
+    {
+     "no": 5,
+     "rol": "teşhis",
+     "ayni": false
+    },
+    {
+     "no": 6,
+     "rol": "duruş",
+     "ayni": false
+    },
+    {
+     "no": 7,
+     "rol": "makroihtiyati",
+     "ayni": true
+    },
+    {
+     "no": 8,
+     "rol": "hedef",
+     "ayni": true
+    },
+    {
+     "no": 9,
+     "rol": "özet notu",
+     "ayni": true
+    }
+   ],
+   "cumle": {
+    "teshis": {
+     "onceki": [
+      "Aylık dalgalanmalara karşın, son dönem enflasyon gerçekleşmeleri ve öncü göstergeler enflasyonun ana eğiliminin gerilediğine işaret etmektedir.",
+      "İktisadi faaliyete ilişkin veriler ve arz şoklarının yurt içi fiyatlara yansımasının sınırlı kalması iç talepteki zayıf seyri teyit etmektedir.",
+      "Diğer taraftan, jeopolitik gelişmeler neticesinde yüksek seyreden enerji fiyatları enflasyon görünümü üzerinde yukarı yönlü risk oluşturmaktadır.",
+      "Jeopolitik gelişmelerin maliyet kanalı, iktisadi faaliyet ve beklenti kanalı üzerinden enflasyon görünümüne etkileri yakından takip edilmektedir."
+     ],
+     "bugun": [
+      "Aylık dalgalanmalara karşın, son dönem enflasyon gerçekleşmeleri ve öncü göstergeler ana eğilimdeki gerilemeyi teyit etmektedir.",
+      "İktisadi faaliyete ilişkin veriler ve arz şoklarının yurt içi fiyatlara yansımasının sınırlı kalması, iç talepteki zayıf seyrin devam ettiğini göstermektedir.",
+      "Diğer taraftan, canlılığını koruyan jeopolitik gerilimler neticesinde yüksek seyreden enerji fiyatlarının enflasyon görünümü üzerinde oluşturduğu yukarı yönlü riskler sürmektedir.",
+      "Jeopolitik gelişmelerin maliyet kanalı, iktisadi faaliyet ve beklenti kanalı üzerinden enflasyon görünümüne etkileri yakından takip edilmektedir."
+     ],
+     "ayni": [
+      "Jeopolitik gelişmelerin maliyet kanalı, iktisadi faaliyet ve beklenti kanalı üzerinden enflasyon görünümüne etkileri yakından takip edilmektedir."
+     ],
+     "yeni": [
+      "Aylık dalgalanmalara karşın, son dönem enflasyon gerçekleşmeleri ve öncü göstergeler ana eğilimdeki gerilemeyi teyit etmektedir.",
+      "İktisadi faaliyete ilişkin veriler ve arz şoklarının yurt içi fiyatlara yansımasının sınırlı kalması, iç talepteki zayıf seyrin devam ettiğini göstermektedir.",
+      "Diğer taraftan, canlılığını koruyan jeopolitik gerilimler neticesinde yüksek seyreden enerji fiyatlarının enflasyon görünümü üzerinde oluşturduğu yukarı yönlü riskler sürmektedir."
+     ],
+     "kalkan": [
+      "Aylık dalgalanmalara karşın, son dönem enflasyon gerçekleşmeleri ve öncü göstergeler enflasyonun ana eğiliminin gerilediğine işaret etmektedir.",
+      "İktisadi faaliyete ilişkin veriler ve arz şoklarının yurt içi fiyatlara yansımasının sınırlı kalması iç talepteki zayıf seyri teyit etmektedir.",
+      "Diğer taraftan, jeopolitik gelişmeler neticesinde yüksek seyreden enerji fiyatları enflasyon görünümü üzerinde yukarı yönlü risk oluşturmaktadır."
+     ]
+    },
+    "durus": {
+     "onceki": [
+      "Fiyat istikrarı sağlanana kadar sürdürülecek sıkı para politikası duruşu talep, kur ve beklenti kanalları üzerinden dezenflasyon sürecini güçlendirecektir.",
+      "Kurul politika faizine ilişkin atılacak adımları; enflasyon gerçekleşmelerini, ana eğilimini ve beklentilerini göz önünde bulundurarak ara hedeflerle uyumlu biçimde dezenflasyonun gerektirdiği sıkılığı sağlayacak şekilde belirleyecektir.",
+      "Para politikası kararları enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla alınmaktadır.",
+      "Enflasyon görünümünde belirgin ve kalıcı bir bozulma olması durumunda para politikası duruşu sıkılaştırılacaktır.",
+      "Kurul enflasyon üzerindeki yukarı yönlü risklere karşı ihtiyatlı duruşunu vurgulamıştır."
+     ],
+     "bugun": [
+      "Fiyat istikrarı sağlanana kadar sürdürülecek sıkı para politikası duruşu talep, kur ve beklenti kanalları üzerinden dezenflasyon sürecini güçlendirecektir.",
+      "Kurul politika faizine ilişkin atılacak adımları; enflasyon gerçekleşmelerini, ana eğilimini ve beklentilerini göz önünde bulundurarak ara hedeflerle uyumlu biçimde dezenflasyonun gerektirdiği sıkılığı sağlayacak şekilde belirleyecektir.",
+      "Adımların büyüklüğü ve zamanlaması enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla belirlenecektir.",
+      "Enflasyon görünümünde belirgin ve kalıcı bir bozulma olması durumunda para politikası duruşu sıkılaştırılacaktır.",
+      "Kurul enflasyon üzerindeki yukarı yönlü risklere karşı ihtiyatlı duruşunu vurgulamıştır."
+     ],
+     "ayni": [
+      "Fiyat istikrarı sağlanana kadar sürdürülecek sıkı para politikası duruşu talep, kur ve beklenti kanalları üzerinden dezenflasyon sürecini güçlendirecektir.",
+      "Kurul politika faizine ilişkin atılacak adımları; enflasyon gerçekleşmelerini, ana eğilimini ve beklentilerini göz önünde bulundurarak ara hedeflerle uyumlu biçimde dezenflasyonun gerektirdiği sıkılığı sağlayacak şekilde belirleyecektir.",
+      "Enflasyon görünümünde belirgin ve kalıcı bir bozulma olması durumunda para politikası duruşu sıkılaştırılacaktır.",
+      "Kurul enflasyon üzerindeki yukarı yönlü risklere karşı ihtiyatlı duruşunu vurgulamıştır."
+     ],
+     "yeni": [
+      "Adımların büyüklüğü ve zamanlaması enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla belirlenecektir."
+     ],
+     "kalkan": [
+      "Para politikası kararları enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla alınmaktadır."
+     ]
+    },
+    "durus_ocak": {
+     "ocak": [
+      "Fiyat istikrarı sağlanana kadar sürdürülecek sıkı para politikası duruşu talep, kur ve beklenti kanalları üzerinden dezenflasyon sürecini güçlendirecektir.",
+      "Kurul politika faizine ilişkin atılacak adımları; enflasyon gerçekleşmelerini, ana eğilimini ve beklentilerini göz önünde bulundurarak ara hedeflerle uyumlu biçimde dezenflasyonun gerektirdiği sıkılığı sağlayacak şekilde belirleyecektir.",
+      "Adımların büyüklüğü, enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla gözden geçirilmektedir.",
+      "Enflasyon görünümünün ara hedeflerden belirgin bir biçimde ayrışması durumunda, para politikası duruşu sıkılaştırılacaktır."
+     ],
+     "bugun": [
+      "Fiyat istikrarı sağlanana kadar sürdürülecek sıkı para politikası duruşu talep, kur ve beklenti kanalları üzerinden dezenflasyon sürecini güçlendirecektir.",
+      "Kurul politika faizine ilişkin atılacak adımları; enflasyon gerçekleşmelerini, ana eğilimini ve beklentilerini göz önünde bulundurarak ara hedeflerle uyumlu biçimde dezenflasyonun gerektirdiği sıkılığı sağlayacak şekilde belirleyecektir.",
+      "Adımların büyüklüğü ve zamanlaması enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla belirlenecektir.",
+      "Enflasyon görünümünde belirgin ve kalıcı bir bozulma olması durumunda para politikası duruşu sıkılaştırılacaktır.",
+      "Kurul enflasyon üzerindeki yukarı yönlü risklere karşı ihtiyatlı duruşunu vurgulamıştır."
+     ],
+     "ayni": [
+      "Fiyat istikrarı sağlanana kadar sürdürülecek sıkı para politikası duruşu talep, kur ve beklenti kanalları üzerinden dezenflasyon sürecini güçlendirecektir.",
+      "Kurul politika faizine ilişkin atılacak adımları; enflasyon gerçekleşmelerini, ana eğilimini ve beklentilerini göz önünde bulundurarak ara hedeflerle uyumlu biçimde dezenflasyonun gerektirdiği sıkılığı sağlayacak şekilde belirleyecektir."
+     ],
+     "yeni": [
+      "Adımların büyüklüğü ve zamanlaması enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla belirlenecektir.",
+      "Enflasyon görünümünde belirgin ve kalıcı bir bozulma olması durumunda para politikası duruşu sıkılaştırılacaktır.",
+      "Kurul enflasyon üzerindeki yukarı yönlü risklere karşı ihtiyatlı duruşunu vurgulamıştır."
+     ],
+     "kalkan": [
+      "Adımların büyüklüğü, enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla gözden geçirilmektedir.",
+      "Enflasyon görünümünün ara hedeflerden belirgin bir biçimde ayrışması durumunda, para politikası duruşu sıkılaştırılacaktır."
+     ]
+    }
+   },
+   "gecis": [
+    {
+     "bas": "2026-01-22",
+     "son": "2026-03-12",
+     "degisen": [
+      "kurul üyeleri",
+      "karar",
+      "teşhis",
+      "duruş"
+     ]
+    },
+    {
+     "bas": "2026-03-12",
+     "son": "2026-04-22",
+     "degisen": [
+      "kurul üyeleri",
+      "teşhis",
+      "duruş"
+     ]
+    },
+    {
+     "bas": "2026-04-22",
+     "son": "2026-06-11",
+     "degisen": [
+      "kurul üyeleri",
+      "teşhis",
+      "duruş"
+     ]
+    },
+    {
+     "bas": "2026-06-11",
+     "son": "2026-07-23",
+     "degisen": [
+      "teşhis"
+     ]
+    },
+    {
+     "bas": "2026-07-23",
+     "son": "2026-09-10",
+     "degisen": [
+      "teşhis"
+     ]
+    },
+    {
+     "bas": "2026-09-10",
+     "son": "2026-10-22",
+     "degisen": [
+      "karar",
+      "teşhis",
+      "duruş"
+     ]
+    }
+   ]
+  },
+  "arsiv": {
+   "ilk": "2016-01-19",
+   "son": "2026-10-22",
+   "kalipli": [
+    {
+     "tarih": "2025-07-24",
+     "degisim": -3.0,
+     "sonraki": -2.5,
+     "cumle": "Adımların büyüklüğü, enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla gözden geçirilecektir.",
+     "ihtiyatli": false
+    },
+    {
+     "tarih": "2025-09-11",
+     "degisim": -2.5,
+     "sonraki": -1.0,
+     "cumle": "Adımların büyüklüğü, enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla gözden geçirilecektir.",
+     "ihtiyatli": false
+    },
+    {
+     "tarih": "2025-10-23",
+     "degisim": -1.0,
+     "sonraki": -1.5,
+     "cumle": "Adımların büyüklüğü, enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla gözden geçirilmektedir.",
+     "ihtiyatli": false
+    },
+    {
+     "tarih": "2025-12-11",
+     "degisim": -1.5,
+     "sonraki": -1.0,
+     "cumle": "Adımların büyüklüğü, enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla gözden geçirilmektedir.",
+     "ihtiyatli": false
+    },
+    {
+     "tarih": "2026-01-22",
+     "degisim": -1.0,
+     "sonraki": 0.0,
+     "cumle": "Adımların büyüklüğü, enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla gözden geçirilmektedir.",
+     "ihtiyatli": false
+    },
+    {
+     "tarih": "2026-10-22",
+     "degisim": -1.0,
+     "sonraki": null,
+     "cumle": "Adımların büyüklüğü ve zamanlaması enflasyon görünümü odaklı, toplantı bazlı ve ihtiyatlı bir yaklaşımla belirlenecektir.",
+     "ihtiyatli": true
+    }
+   ],
+   "ifade": {
+    "zamanlaması": {
+     "sayi": 2,
+     "ilk": "2016-10-20",
+     "tarihler": [
+      "2016-10-20",
+      "2026-10-22"
+     ]
+    },
+    "gerilemeyi teyit etmektedir": {
+     "sayi": 1,
+     "ilk": "2026-10-22",
+     "tarihler": [
+      "2026-10-22"
+     ]
+    },
+    "zayıf seyrin devam ettiğini göstermektedir": {
+     "sayi": 1,
+     "ilk": "2026-10-22",
+     "tarihler": [
+      "2026-10-22"
+     ]
+    },
+    "zayıf seyrin sürdüğüne işaret etmektedir": {
+     "sayi": 1,
+     "ilk": "2026-06-11",
+     "tarihler": [
+      "2026-06-11"
+     ]
+    },
+    "canlılığını koruyan jeopolitik gerilimler": {
+     "sayi": 1,
+     "ilk": "2026-10-22",
+     "tarihler": [
+      "2026-10-22"
+     ]
+    },
+    "yukarı yönlü riskler sürmektedir": {
+     "sayi": 1,
+     "ilk": "2026-10-22",
+     "tarihler": [
+      "2026-10-22"
+     ]
+    },
+    "ihtiyatlı duruşunu vurgulamıştır": {
+     "sayi": 5,
+     "ilk": "2026-04-22",
+     "tarihler": [
+      "2026-04-22",
+      "2026-06-11",
+      "2026-07-23",
+      "2026-09-10",
+      "2026-10-22"
+     ]
+    },
+    "belirgin ve kalıcı bir bozulma": {
+     "sayi": 22,
+     "ilk": "2024-02-22",
+     "tarihler": [
+      "2024-02-22",
+      "2024-03-21",
+      "2024-04-25",
+      "2024-05-23",
+      "2024-06-27",
+      "2024-07-23",
+      "2024-08-20",
+      "2024-09-19",
+      "2024-10-17",
+      "2024-11-21",
+      "2024-12-26",
+      "2025-01-23",
+      "2025-03-06",
+      "2025-04-17",
+      "2025-06-19",
+      "2025-07-24",
+      "2026-03-12",
+      "2026-04-22",
+      "2026-06-11",
+      "2026-07-23",
+      "2026-09-10",
+      "2026-10-22"
+     ]
+    },
+    "görünümünde belirgin ve kalıcı bir bozulma olması durumunda": {
+     "sayi": 6,
+     "ilk": "2026-03-12",
+     "tarihler": [
+      "2026-03-12",
+      "2026-04-22",
+      "2026-06-11",
+      "2026-07-23",
+      "2026-09-10",
+      "2026-10-22"
+     ]
+    },
+    "ara hedeflerden belirgin bir biçimde ayrışması": {
+     "sayi": 4,
+     "ilk": "2025-09-11",
+     "tarihler": [
+      "2025-09-11",
+      "2025-10-23",
+      "2025-12-11",
+      "2026-01-22"
+     ]
+    },
+    "tüm para politikası araçları etkili şekilde kullanılacaktır": {
+     "sayi": 2,
+     "ilk": "2025-06-19",
+     "tarihler": [
+      "2025-06-19",
+      "2025-07-24"
+     ]
+    },
+    "duruşu sıkılaştırılacaktır": {
+     "sayi": 18,
+     "ilk": "2024-02-22",
+     "tarihler": [
+      "2024-02-22",
+      "2024-03-21",
+      "2024-04-25",
+      "2024-05-23",
+      "2024-06-27",
+      "2024-07-23",
+      "2024-08-20",
+      "2025-04-17",
+      "2025-09-11",
+      "2025-10-23",
+      "2025-12-11",
+      "2026-01-22",
+      "2026-03-12",
+      "2026-04-22",
+      "2026-06-11",
+      "2026-07-23",
+      "2026-09-10",
+      "2026-10-22"
+     ]
+    },
+    "Para politikası kararları enflasyon görünümü odaklı": {
+     "sayi": 5,
+     "ilk": "2026-03-12",
+     "tarihler": [
+      "2026-03-12",
+      "2026-04-22",
+      "2026-06-11",
+      "2026-07-23",
+      "2026-09-10"
+     ]
+    }
+   },
+   "dongu": [
+    {
+     "tarih": "2025-04-17",
+     "politika": 46.0,
+     "degisim": 3.5
+    },
+    {
+     "tarih": "2025-06-19",
+     "politika": 46.0,
+     "degisim": 0.0
+    },
+    {
+     "tarih": "2025-07-24",
+     "politika": 43.0,
+     "degisim": -3.0
+    },
+    {
+     "tarih": "2025-09-11",
+     "politika": 40.5,
+     "degisim": -2.5
+    },
+    {
+     "tarih": "2025-10-23",
+     "politika": 39.5,
+     "degisim": -1.0
+    },
+    {
+     "tarih": "2025-12-11",
+     "politika": 38.0,
+     "degisim": -1.5
+    },
+    {
+     "tarih": "2026-01-22",
+     "politika": 37.0,
+     "degisim": -1.0
+    },
+    {
+     "tarih": "2026-03-12",
+     "politika": 37.0,
+     "degisim": 0.0
+    },
+    {
+     "tarih": "2026-04-22",
+     "politika": 37.0,
+     "degisim": 0.0
+    },
+    {
+     "tarih": "2026-06-11",
+     "politika": 37.0,
+     "degisim": 0.0
+    },
+    {
+     "tarih": "2026-07-23",
+     "politika": 37.0,
+     "degisim": 0.0
+    },
+    {
+     "tarih": "2026-09-10",
+     "politika": 37.0,
+     "degisim": 0.0
+    },
+    {
+     "tarih": "2026-10-22",
+     "politika": 36.0,
+     "degisim": -1.0
+    }
+   ],
+   "dongu_kosul": [
+    {
+     "tarih": "2025-07-24",
+     "yazim": "araclar"
+    },
+    {
+     "tarih": "2025-09-11",
+     "yazim": "ara_hedef"
+    },
+    {
+     "tarih": "2025-10-23",
+     "yazim": "ara_hedef"
+    },
+    {
+     "tarih": "2025-12-11",
+     "yazim": "ara_hedef"
+    },
+    {
+     "tarih": "2026-01-22",
+     "yazim": "ara_hedef"
+    },
+    {
+     "tarih": "2026-10-22",
+     "yazim": "bozulma"
+    }
+   ],
+   "kalip_bicimleri": {
+    "gözden geçirilecektir": [
+     "2025-07-24",
+     "2025-09-11"
+    ],
+    "gözden geçirilmektedir": [
+     "2025-10-23",
+     "2025-12-11",
+     "2026-01-22"
+    ],
+    "belirlenecektir": [
+     "2026-10-22"
+    ]
+   },
+   "son_artirim": "2025-04-17",
+   "zamanlama_2016": "2016-10-20"
+  },
+  "egri": {
+   "egri_tarihi": "21.10.2026",
+   "anket_ayi": "Ekim 2026",
+   "kiyas_1ay": "21.09.2026",
+   "kiyas_3ay": "21.07.2026"
+  },
+  "fonlama": {
+   "bloklar": [
+    {
+     "cipa": "politika",
+     "bas": "02.01.2026",
+     "son": "27.02.2026",
+     "gun": 41,
+     "tlref_ort": 37.15,
+     "makas": -0.19
+    },
+    {
+     "cipa": "koridor_ust",
+     "bas": "02.03.2026",
+     "son": "21.08.2026",
+     "gun": 117,
+     "tlref_ort": 39.96,
+     "makas": 2.96
+    },
+    {
+     "cipa": "politika",
+     "bas": "24.08.2026",
+     "son": "21.10.2026",
+     "gun": 43,
+     "tlref_ort": 36.84,
+     "makas": -0.16
+    }
+   ],
+   "son_gun": "21.10.2026"
+  },
+  "enflasyon": {
+   "donem": "09.2026",
+   "sa_yontem": "STL(log, period=12, seasonal=13, robust) + hareketli tatil ön-arındırması"
+  },
+  "anket": {
+   "anket_ayi": "2026-10",
+   "kararlar": [
+    "2026-10-22",
+    "2026-12-10",
+    "2027-01-21"
+   ],
+   "gecerli": [
+    "2026-10-23",
+    "2026-12-11",
+    "2027-01-22"
+   ],
+   "gun": {
+    "eski": 2,
+    "ilk": 49,
+    "ikinci": 40
+   },
+   "t12": "2027-10-21",
+   "varsayim": "üçüncü toplantıdan 12 ay ucuna doğrusal ara değer"
+  }
+ }
+}
