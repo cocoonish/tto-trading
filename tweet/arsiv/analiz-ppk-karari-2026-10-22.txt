@@ -1,0 +1,26 @@
+# analiz:ppk-karari-2026-10-22 · 2026-10-22T13:39:01+00:00 · https://x.com/i/status/2113263855438619012
+
+Analiz — 22 Ekim 2026
+PPK Kararı — beklenen indirim, rehberliğe dönen cümle ve eğriden okunamayan patika
+
+Politika faizi 273 gün sonra ilk kez indirildi: %37,0'den %36,0'ya, 100 baz puan; karar, Ekim anketinin bu toplantı için %36,00'lık ortalama beklentisiyle birebir aynı. Duyurunun yedi paragrafından dördü 10 Eylül metniyle kelimesi kelimesine aynı. Rehberliğe indirim döneminin cümlesi döndü, "Adımların büyüklüğü ve zamanlaması … belirlenecektir"; bu kalıp 2016'dan bu yana 112 faiz kararının altısında geçiyor ve altısı da indirim. Eğri ise aynı konvansiyona çevrildiğinde bile bir politika patikası gibi okunmuyor: 3 aylık DİBS'in haftalık repo karşılığı %30,81, anketin önümüzdeki üç ay için beklediği ortalama faiz %35,58.
+
+Karar ne? Politika faizi %37,0'den %36,0'ya, gecelik borç verme %40,0'tan %39,0'a, gecelik borçlanma %35,5'ten %34,5'e indi; koridorun biçimi (genişlik 4,5 puan) değişmedi. Temmuz 2025'te yeniden başlayan döngünün altıncı indirimi; Nisan 2025'teki %46,0'dan bu yana toplam −10,0 puan.
+
+Sürpriz mi? Hayır. Ekim Piyasa Katılımcıları Anketi'nde (66 katılımcı) bu toplantı için ortalama beklenti %36,00'dı; sürpriz 0 baz puan. Aynı anket 10 Aralık için %35,00, 21 Ocak 2027 için %34,35 bekliyor.
+
+Metinde ne değişti? Yedi paragrafın üçü: karar, teşhis ve rehberlik. Teşhiste "teyit" fiili talep cümlesinden dezenflasyon cümlesine geçti ve enerji riskinin dili güçlendi; yeniden yazılan cümlelerdeki dört ifade birebir yazımıyla 2016'dan bu yana hiçbir faiz kararında geçmemişti.
+
+Rehberlik ne söylüyor? İndirime izin veriyor, hız vaat etmiyor. Son indirim metnine (22 Ocak) göre duruş paragrafı üç yerde ayrılıyor: kalıba "ve zamanlaması" eklendi; sıkılaştırma koşulu Mart'taki yazımıyla duruyor; ve "ihtiyatlı duruşunu vurgulamıştır" cümlesi önceki beş indirim metninin hiçbirinde yoktu.
+
+Eğri ne söylüyor? Getiriler yıllık bileşik, politika faizi basit yazılır; %37,0 bir yıl çevrilirse %44,58 eder. Aynı dile çevrilince eğri anketle aynı yılı aynı patikayla anlatmıyor: ilk üç ayda anketin 477 baz puan altında, 6–12 ayda 341 baz puan üstünde. İlk yıl ortalamasındaki yakınlık bu iki ters sapmanın birbirini götürmesinden doğuyor.
+
+Fonlama ne yapıyordu? Mart'taki fiilî sıkılaştırma Ağustos'ta geri alındı: repo ihalelerine ara verilince gecelik oran (TLREF) 117 iş günü koridor tavanında durdu, ihaleler yeniden başlayınca politika faizine döndü. Gecelik maliyet Ocak–Şubat'takinin yalnız 31 baz puan altında; bugünkü indirim 22 Ocak'tan bu yana ilk net gevşeme.
+
+Sonraki adımın koşulu: Metin bir sonrakini taahhüt etmiyor. Kalıbı taşıyan önceki beş kararın dördünü yine indirim izledi, ama arşivde bir indirimden sonra yine indirim gelme oranı zaten %76,9; kalıp bir sonraki toplantı hakkında neredeyse bilgi eklemiyor. İlk sınavlar 30 Ekim'deki özet, 3 Kasım'daki Ekim TÜFE'si ve 12 Kasım'daki Enflasyon Raporu.
+
+Kanıtın gücü: Metin ölçümü güçlü, fiyat çıkarımı zayıf. Paragraf ve cümle karşılaştırması duyuruların tam metninden mekanik olarak yapıldı, ifade sayımları on bir yıllık arşivden ve birebir dizgeyle. Eğri çıkarımı DİBS ile repo arasındaki ölçülmemiş makası, vade primini ve anketin uç noktalar arasındaki doğrusal ara değerini taşıyor. Piyasa sayıları karar öncesi 21 Ekim kapanışıdır.
+
+Kilit ölçümler: 6 / 112 — "Adımların büyüklüğü" kalıbının geçtiği faiz kararı (2016–2026); altısı da indirim; 4 / 7 — 10 Eylül metniyle birebir aynı kalan paragraf; %24,14 — 3 aylık düğüm saf beklenti olsaydı 10 Aralık'ta inilmesi gereken faiz (anket: %35,00); +8,36 puan — ikinci yıl: 1y1y ileri oranın haftalık repo karşılığı − anket ortalaması; %16,70 — reel politika faizi, bir yıl çevrilen repoyla ve ankete göre: indirimden önce · %15,55 — sonra
+
+Analizdir; yatırım tavsiyesi değildir.
