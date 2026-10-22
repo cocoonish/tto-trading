@@ -3308,26 +3308,26 @@
     "kalibrasyon": "2026-10-03T16:53:45"
   },
   {
-    "timestamp": "2026-10-22T06:47:10.574838+00:00",
+    "timestamp": "2026-10-22T17:15:40.005622+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.2404,
+        "value": -0.2353,
         "category": "Bearish"
       },
       "USDJPY": {
-        "value": -0.3361,
+        "value": -0.1977,
         "category": "Bearish"
       },
       "USDCHF": {
-        "value": 0.1405,
-        "category": "Bullish"
+        "value": -0.2087,
+        "category": "Bearish"
       },
       "GBPUSD": {
-        "value": 0.0051,
+        "value": -0.0457,
         "category": "Neutral"
       },
       "AUDUSD": {
-        "value": -0.3104,
+        "value": -0.131,
         "category": "Bearish"
       },
       "NZDUSD": {
@@ -3335,43 +3335,43 @@
         "category": "Bearish"
       },
       "USDCAD": {
-        "value": -0.0272,
-        "category": "Neutral"
+        "value": 0.1659,
+        "category": "Bullish"
       },
       "USDNOK": {
         "value": 0.8682,
         "category": "Extremely Bullish"
       },
       "USDSEK": {
-        "value": -0.2073,
-        "category": "Bearish"
+        "value": 0.6717,
+        "category": "Extremely Bullish"
       },
       "XAUUSD": {
-        "value": -0.3325,
+        "value": -0.1846,
         "category": "Bearish"
       },
       "XAGUSD": {
-        "value": -0.2256,
+        "value": -0.301,
         "category": "Bearish"
       },
       "SPX": {
-        "value": -0.4208,
+        "value": -0.3803,
         "category": "Bearish"
       },
       "UST2Y": {
-        "value": -0.1465,
+        "value": -0.2899,
         "category": "Bearish"
       },
       "UST10Y": {
-        "value": -0.462,
-        "category": "Bearish"
+        "value": -0.544,
+        "category": "Extremely Bearish"
       },
       "BIST100": {
-        "value": -0.6114,
+        "value": -0.5702,
         "category": "Extremely Bearish"
       }
     },
-    "veri_sonu": "2026-10-22T06:26:27+00:00",
+    "veri_sonu": "2026-10-22T16:40:35+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": 0.1334,
