@@ -1,0 +1,30 @@
+# bulten:2026-10-22 · 2026-10-22T04:28:53+00:00 · https://x.com/i/status/2113125407989837884
+
+Sabah Notu — 22 Ekim 2026
+Hisse PPK'ya satışla, tahvilin ön ucu alımla girdi: BIST 100 −%1,87, 1 yıllık DİBS 23 bp düştü
+
+· TCMB PPK kararını bugün TSİ 14:00'te açıklıyor; politika faizi %37. AA Finans anketinde medyan beklenti %36, yani 100 bp indirim. Goldman Sachs ve Société Générale ise rezerv kaybı ve katı beklentiler gerekçesiyle faizin sabit kalmasını bekliyor.
+· BIST 100 çarşamba %1,87 düşüşle 11.577'de, günün dibine yakın kapandı ve salı kazancının yaklaşık %60'ını geri verdi. Sınai endeks %2,75 (1,4σ), sigorta %6,02 düştü; işlem hacmi 85,9 milyar TL'ye geriledi (AA).
+· TL eğrisinin ön ucu indirime doğru çekildi: 1 yıllık spot getiri 23 bp düşüşle %38,99'a indi. Aynı gün 2 yıl sonrasının 1 yıllık forward faizi 70 bp yükselişle %37,91'e çıktı.
+· TCMB'nin ekim İktisadi Yönelim Anketi'nde reel kesim güveni 1,4 puan düşüşle 101,1'e indi; siparişler ve üretim beklentisi zayıfladı. Kapasite kullanımı %74,3'e çıktı (mevsimsellikten arındırılmış).
+· İngiltere'de eylül TÜFE'si %3,5'e yükseldi; beklenti %3,4'tü (ONS, The Guardian). Sterlin dolara karşı yalnız %0,09 değer kazandı.
+· Avrupa hisseleri toparlandı: DAX %1,35 (1,6σ), CAC 40 %1,06 yükseldi. New York'ta Nasdaq 100 %1,13 artarken ABD 5 yıllık getiri 3,7 bp yükselişle %4,97'ye çıktı.
+
+Bugün TSİ 10:00 · ekim tüketici güveni. Anket yönetişim şokundan sonraki günleri de kapsıyorsa düşüş, hanehalkının talebini reel kesimin sipariş kaybına ekler. Tutunursa sınai endeksteki satış talepten değil sermaye piyasasındaki belirsizlikten gelir.
+
+Tez: PPK'dan önceki son seansta hisse ile tahvil iki ayrı soruya cevap verdi. Tahvilin ön ucu indirimin geleceğine, hisse ise yönetişim belirsizliğinin geçmeyeceğine bahis açtı.
+
+Gündem
+Türkiye: TL faizi. TLREF %36,85 ile politika faizinin 15 bp altında; gecelik faiz koridorun alt yarısında kalmayı sürdürüyor. Gösterge tahvilin getirisi 9 bp düşüşle %39,53'e indi.
+Küresel: ABD faizi. Eğri ortadan yükseldi, uzun uç geride kaldı: 10 yıllık 2,9 bp, 30 yıllık 1,4 bp arttı ve 5s30s 47 bp'ye daraldı. Konut kredisi faizi iki ayın ardından ilk kez gerileyerek %7,41'e indi, başvurular ise haftalık %5,3 azaldı (Bloomberg HT).
+Emtia: Ürün marjı. Kalorifer yakıtı %3,28 (1,2σ) düştü ve distilat marjı 6,1 dolar daralarak 102,91 dolara indi. Brent 108,82 dolarda yatay kapandı.
+
+Neye bakılacak
+· PPK faizi sabit tutar → ön uç fiyatlanmış indirimi geri verir, hisse satışı derinleşir; izlenecek: 1 yıllık DİBS getirisinin %39,5'in üstüne dönmesi.
+· Forward primi büyümeyi sürdürür → gevşeme uzun uca maliyet olarak yansır; izlenecek: 2 yıl sonrası 1 yıllık forward faizin %38,5'i aşması.
+
+Pano: USD/TRY 49,60 (+%0,06; 21 Eki, İstanbul 18:00) · 1 aylık yıllıklandırılmış deval. hızı %22,2 (+0,3 puan; 21 Eki) · Net rezerv (günlük tahmin) 50,9 mlr USD (−0,8; 20 Eki) · Brüt rezervde altın payı %62,4 (−0,8 puan; 20 Eki) · DİBS 5 yıllık getiri %36,58 (+0,04 puan; 21 Eki) · 2 yıllık başabaş enflasyon %30,38 (−0,09 puan; 21 Eki)
+
+Beklenen: Bugün 14:00 · PPK. 100 bp ön ucun fiyatlamasını doğrular; kararın ardından bakılacak yer forward faiz. Sabit faiz 3 aylık getiriyi TLREF'in üstüne iter ve bankacılığın sınaiye karşı primini aşındırır. 200 bp ön uca kazandırır, uzun ucun primini büyütür. Özet 30 Ekim'de. Bugün 14:30 · menkul kıymet ve para-banka verileri. 16 Ekim haftasını kapsar, yani SPK başkanlığındaki değişikliği ve aracı kurum kararlarını görmez. Önceki haftanın yabancı akımı +203 milyon dolardı; tekrar giriş, cuma satışının yabancıdan gelmediğini gösterir. Önümüzdeki günler. 28 Ekim'de RBNZ kararı ve Avustralya'nın üçüncü çeyrek TÜFE'si aynı güne düşüyor; Fed kararı aynı akşam 21:00'de.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
