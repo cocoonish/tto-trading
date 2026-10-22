@@ -5541,5 +5541,9 @@ karşılığı"), TLREF kıyası (TLREF de basittir), dış merkez bankası bağ
 yayımlanmış sayıda dili anan bir düzeltme kaydı uyarıyı bilgiye indirir. Kalıbın hassasiyeti ölçüldü: "ön uç",
 "kısa uç", "gösterge" gibi geniş terimlerle aynı tarihçe 34 cümlenin 7'sinde yanlış alarm verdi (TLREF ve Fed
 kıyasları), dar terimlerle 34 cümlenin 34'ü gerçek karışma. Ölçülen katman zaten doğruydu: 2 yıllık taşıma TLREF'i
-bileşiğe çevirerek kuruluyor. AÇIK: geçmiş bültenlerin cümleleri ve söz defterindeki karışık ölçütler bu commit'te
-düzeltilmedi (kullanıcı kararı).
+bileşiğe çevirerek kuruluyor. KARAR (22.10.2026, kullanıcı): geçmiş bültenlere sayı sayı kayıt YAZILMADI; 22.10
+sayısına 30 Ağustos–20 Ekim'i kapsayan tek bir genel düzeltme kaydı girdi (02.10 kur kaydının emsali). 10 ve 17 Eylül
+analizlerinin X gönderileri hatalı iddiayı taşıyordu ve ikisi düzeltme yanıtı aldı (`gonderi` + `gonderi_metni`;
+yanıt metinlerinin sayıları da `dogrula.py` §7'de, kaydın `eski` alanındaki eski değerler izinli). 31 Ağustos
+gönderisi özel kanaldan atıldığı için defterde kimliksiz, yanıt atılamadı. AÇIK: söz defterindeki karışık
+ölçütler (18.10 bozulma ölçütleri) yazıldığı gibi duruyor.

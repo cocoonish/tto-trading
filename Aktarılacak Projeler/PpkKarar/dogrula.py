@@ -362,20 +362,39 @@ DUZELTILEN = {
         "yok": ["Kısa uç politika faizinin üstünde"],
         "var": ["e0904_ima_1y", "e0904_ima_2y", "e0904_ima_5y"]},
     "ppk-karari-2026-09-10": {
-        "veri": "e0910",
+        "veri": "e0910", "yanit": True,
         "yok": ["+207 bp", "indirim fiyatlamıyor", "piyasa henüz fiyatlamıyor", "politika faizine göre şöyle",
                 "bileşiklendirme sözleşmelerindeki fark", "politika faizinden daha yüksek"],
         "var": [f"e0910_{t}_{v}" for t in ("ima", "bilesik_fark") for v in
                 ("3a", "6a", "1y", "2y", "3y", "5y", "7y", "fwd_1y1y")]
                + ["e0910_ima_3a_ekim_sonrasi", "e0910_anket_ekim", "e0910_reel_repo_bilesik"]},
     "ppk-ozeti-2026-09-17": {
-        "veri": "e0916",
+        "veri": "e0916", "yanit": True,
         "yok": ["615 baz puan", "konvansiyon seçiminden gelmiyor", "Anket ile eğri uyuşmuyor"],
         "var": ["e0916_patika_getirisi", "e0916_ima_3a", "e0916_ima_3a_ekim_sonrasi", "e0916_anket_ekim"]},
 }
 ORTAK = ("politika_onceki", "politika_bilesik_onceki", "konvansiyon_farki")
 KAYIT = re.compile(r"^  - tarih: '([^']*)'\n    alan: '((?:[^']|'')*)'\n    eski: '((?:[^']|'')*)'\n"
                    r"    yeni: '((?:[^']|'')*)'\n    sebep: '((?:[^']|'')*)'$", re.M)
+# X'e düzeltme yanıtı (tweet/duzeltme.py): kaydın sonunda gonderi + gonderi_metni.
+YANIT = re.compile(r"^  - tarih: '([^']*)'\n    alan: '(?:[^']|'')*'\n    eski: '((?:[^']|'')*)'\n"
+                   r"    yeni: '(?:[^']|'')*'\n    sebep: '(?:[^']|'')*'\n"
+                   r"    gonderi: '([^']*)'\n    gonderi_metni: '((?:[^']|'')*)'$", re.M)
+
+
+class _EskiIzni:
+    """Yanıt metni eski değeri "değil" diye anar ("+207 bp değil"): kaydın kendi
+    `eski` alanındaki sayılar izinlidir; işaret sorulmaz, birim sorulur."""
+
+    def __init__(self, metin: str, izin: Izin) -> None:
+        self.izin, self.k = izin, set()
+        for x in SAYI.finditer(metin):
+            sonra = (x.group("sonra") or "").strip()
+            self.k.add((x.group("cekirdek"), "%" if x.group("yuzde") else
+                        {"bp": "bp", "baz puan": "bp", "gün": "gün", "puan": "puan"}.get(sonra, "")))
+
+    def var(self, cekirdek: str, birim: str, isaret: str | None) -> bool:
+        return self.izin.var(cekirdek, birim, isaret) or (cekirdek, birim) in self.k
 
 
 def duzeltmeler(o: dict, govde_yeni: str) -> None:
@@ -395,6 +414,18 @@ def duzeltmeler(o: dict, govde_yeni: str) -> None:
                 metin = _norm(metin.replace("''", "'"))
                 envanter(f"düzeltme kaydı · {slug} · {ad}", metin, izin)
                 bicim(f"düzeltme kaydı · {slug} · {ad}", metin)
+        # X yanıtı yalnız ilan edilen yazıda ve yalnız o yazının kendi gönderisine.
+        yanitlar = [y for y in YANIT.findall(on) if y[0] == CIPA]
+        sayac["hukum"] += 1
+        if len(yanitlar) != (1 if k.get("yanit") else 0):
+            hatalar.append(f"X düzeltme yanıtı sayısı {len(yanitlar)} · {slug} "
+                           f"(beklenen {1 if k.get('yanit') else 0})")
+        for _, eski, hedef, govde_x in yanitlar:
+            if hedef != f"analiz:{slug}":
+                hatalar.append(f"X düzeltme yanıtı başka bir gönderiye gidiyor · {slug}: {hedef}")
+            metin = _norm(govde_x.replace("''", "'"))
+            envanter(f"X düzeltme yanıtı · {slug}", metin, _EskiIzni(eski.replace("''", "'"), izin))
+            bicim(f"X düzeltme yanıtı · {slug}", metin)
         duz = _norm(govde)
         for x in k["yok"]:
             sayac["hukum"] += 1
