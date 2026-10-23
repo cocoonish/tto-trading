@@ -1,48 +1,6 @@
 {
- "zaman": "2026-10-22T04:20:01",
+ "zaman": "2026-10-23T04:20:37",
  "veri": [
-  {
-   "tarih": "2026-10-22",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: Tüketici güveni (Ekim 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": "Tüketici Güven Endeksi"
-  },
-  {
-   "tarih": "2026-10-22",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Menkul kıymet ist. (42. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": " Menkul Kıymet İstatistikleri"
-  },
-  {
-   "tarih": "2026-10-22",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Haftalık para-banka (42. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "",
-   "resmi_ad": "Haftalık Para ve Banka İstatistikleri "
-  },
   {
    "tarih": "2026-10-27",
    "saat": "10:00",
@@ -210,6 +168,20 @@
    "onceki": "",
    "not_": "",
    "resmi_ad": "Uluslararası Rezervler ve Döviz Likiditesi"
+  },
+  {
+   "tarih": "2026-11-13",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TCMB: Ödemeler dengesi (Eylül 2026)",
+   "onem": 1,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "",
+   "resmi_ad": "Ödemeler Dengesi İstatistikleri   "
   }
  ]
 }
