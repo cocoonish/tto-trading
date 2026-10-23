@@ -3381,5 +3381,80 @@
       "n_assets": 15
     },
     "kalibrasyon": "2026-10-03T16:53:45"
+  },
+  {
+    "timestamp": "2026-10-23T06:42:41.329231+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": -0.4773,
+        "category": "Bearish"
+      },
+      "USDJPY": {
+        "value": -0.3498,
+        "category": "Bearish"
+      },
+      "USDCHF": {
+        "value": 0.1668,
+        "category": "Bullish"
+      },
+      "GBPUSD": {
+        "value": -0.1976,
+        "category": "Bearish"
+      },
+      "AUDUSD": {
+        "value": -0.4336,
+        "category": "Bearish"
+      },
+      "NZDUSD": {
+        "value": -0.4202,
+        "category": "Bearish"
+      },
+      "USDCAD": {
+        "value": -0.124,
+        "category": "Bearish"
+      },
+      "USDNOK": {
+        "value": 0.8682,
+        "category": "Extremely Bullish"
+      },
+      "USDSEK": {
+        "value": 0.6717,
+        "category": "Extremely Bullish"
+      },
+      "XAUUSD": {
+        "value": -0.4432,
+        "category": "Bearish"
+      },
+      "XAGUSD": {
+        "value": -0.4455,
+        "category": "Bearish"
+      },
+      "SPX": {
+        "value": -0.6805,
+        "category": "Extremely Bearish"
+      },
+      "UST2Y": {
+        "value": -0.7713,
+        "category": "Extremely Bearish"
+      },
+      "UST10Y": {
+        "value": -0.5757,
+        "category": "Extremely Bearish"
+      },
+      "BIST100": {
+        "value": -0.471,
+        "category": "Bearish"
+      }
+    },
+    "veri_sonu": "2026-10-23T06:20:40+00:00",
+    "regime": {
+      "label": "Transitioning",
+      "basket_spread": 0.1334,
+      "avg_correlation": 0.0298,
+      "pc1_share": 0.3026,
+      "as_of": "2026-10-18",
+      "n_assets": 15
+    },
+    "kalibrasyon": "2026-10-03T16:53:45"
   }
 ]
