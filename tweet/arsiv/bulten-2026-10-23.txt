@@ -1,0 +1,32 @@
+# bulten:2026-10-23 · 2026-10-23T04:27:06+00:00 · https://x.com/i/status/2113487347668889606
+
+Sabah Notu — 23 Ekim 2026
+Teknoloji satışı tahvile kaçtı: ABD 10 yıllık 19 bp düştü; TCMB indirimi BIST'i değil TL eğrisini rahatlattı
+
+· TCMB politika faizini 100 bp indirerek %36'ya çekti; koridor %34,5–39 oldu. Ocaktan beri ilk indirim, AA Finans anketindeki 20 ekonomistin 19'unun beklentisiyle aynı. Metin enerji fiyatlarını yukarı yönlü risk olarak andı ve sonraki adım için taahhüt vermedi (Bloomberg).
+· BIST 100 %3,08 düşüşle 11.220'de, 29 Aralık 2025'ten beri en düşük kapanışta. Satış kararın ardından hızlandı; endeksin 100 hissesinden 95'i düştü, bankacılık %3,62 (2,0σ) kaybetti (Borsa İstanbul, AA).
+· Lira ve tahvil satılmadı: dolar/TL %0,05 artışla 49,62'de kaldı, 5 yıllık DİBS getirisi 15 bp düştü, 2 yıl sonrasının 1 yıllık forward faizi önceki iki seansta eklediği primin bir kısmını 35 bp geri verdi.
+· TCMB'nin net rezervi 16 Ekim haftasında 6,3 milyar dolar azalarak 51,5 milyar dolara indi; swap hariç net rezerv 4,9 milyar dolar düşüşle 39,3 milyar dolar. Aynı hafta yabancı yatırımcı 89 milyon dolarlık hisse, 44 milyon dolarlık DİBS sattı.
+· ABD 10 yıllık getiri 19 bp düşüşle %4,95'e indi (3,3σ), 23 Eylül'den beri ilk kez %5'in altında; Mart 2023'ten beri en büyük günlük düşüş (CNBC). Nasdaq 100 %2,90 (2,5σ) geriledi; Meta bilançosunun ardından yaklaşık %7 kaybetti.
+· Brent %4,0 (2,1σ) yükselişle 113,17 dolarda, mayıstan beri en yüksek seviyede. Husiler Suudi Aramco'nun Yanbu tesislerini ve Dammam havalimanını hedef aldığını açıkladı (Al Jazeera). Altın %2,16 düşüşle 4.060 dolara, gümüş %4,63 (2,0σ) geriledi.
+
+Bugün. Türkiye'de ve ABD'de önem derecesi yüksek bir yayım yok. Gün, yeni koridorun TLREF fiksingine nasıl geçtiğiyle ve teknoloji satışının Avrupa açılışına taşınıp taşınmadığıyla okunacak.
+
+Tez: Perşembe iki ayrı satış aynı seansa düştü ve ikisi de faiz cephesinde rahatlama üretti. Küresel tarafta yapay zekâ harcamasından kaçan para petrolün yükselişine rağmen ABD tahviline gitti. Türkiye'de ise indirim hisseyi değil eğrinin orta bölümünü rahatlattı.
+
+Gündem
+Türkiye: Karar ve metin. Kurul politika faizini %36'ya, gecelik borç verme faizini %39'a, gecelik borçlanma faizini %34,5'e indirdi. Bloomberg'in aktardığına göre metin, son enflasyon verilerinin ve öncü göstergelerin ana eğilimdeki yavaşlamayı teyit ettiğini yazdı.
+Küresel: ABD faizi. 5 yıllık getiri 20 bp (3,4σ), 10 yıllık 19 bp (3,3σ), 30 yıllık 15 bp (2,9σ) düştü. Satış uzun ucun %5'in üstündeki seviyesine gelen alımla birleşti (CNBC).
+Emtia: Petrol. Brent 113,17 dolara çıkarken WTI yalnız %2,39 yükseldi ve Brent–WTI farkı 2 dolar açılarak 13,7 dolara çıktı: risk Kızıldeniz ve Körfez'deki arza dönük, ABD iç piyasasına değil. Distilat crack 4,8 dolar artışla 107,7 dolara çıktı.
+
+Neye bakılacak
+· Rezerv erimesi indirim haftasında sürer → aralık adımı sorgulanır, ön uç yukarı; izlenecek: tahmini döviz akımının beş günlük toplamı −3 mlr USD altı.
+· Petrol enflasyon beklentisine geçer → ABD uzun ucundaki ralli geri alınır; izlenecek: Brent 115 dolar, 10 yıllık %5,15 üstü kapanış.
+
+Olağandışı hareketler (22 Eki perşembe): ABD 5 yıllık −20,4 bp (−3,4σ)
+
+Pano: 1 aylık yıllıklandırılmış deval. hızı %22,4 (+0,2 puan; 22 Eki) · Net rezerv (günlük tahmin) 50,7 mlr USD (−0,2; 21 Eki) · Brüt rezervde altın payı %62,5 (+0,1 puan; 21 Eki) · TLREF %36,88 (+0,03 puan; 22 Eki) · DİBS gösterge getirisi (2 yıl) %39,52 (−0,01 puan; 22 Eki) · DİBS 5 yıllık getiri %36,43 (−0,15 puan; 22 Eki)
+
+Beklenen: Salı 27 Ekim · TSİ 10:00 · eylül işgücü. İşsizlik artarsa Kurul'un aralıktaki ikinci adımının gerekçesi güçlenir; düşerse talep tarafı gevşemeyi yavaşlatma argümanı kazanır. Çarşamba 28 Ekim · 10:00 · eylül dış ticaret; 21:00 · Fed. Pahalı petrol ithalat faturasında görünürse cari denge baskısı rezervdeki erimeye eklenir.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
