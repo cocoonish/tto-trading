@@ -1,5 +1,5 @@
 {
- "son_gun": "2026-10-21",
+ "son_gun": "2026-10-22",
  "esik": {
   "aofm_taban_mn_tl": 5000.0,
   "koridor_ustu_pay_pp": 0.05,
@@ -22,7 +22,7 @@
   },
   "marjinal_kaynak_tam": {
    "AOFM": 3373,
-   "AOSM": 434,
+   "AOSM": 435,
    "TLREF (vekil)": 164,
    "yok": 2
   }
@@ -96,7 +96,7 @@
   "taban_son_tarih": "2026-10-09",
   "taban_son_mn_tl": 27550565.76486,
   "ima_oran_son": 3.7160594694785667,
-  "ima_oran_tarih": "2026-10-21",
+  "ima_oran_tarih": "2026-10-22",
   "ima_oran_1y_once": 4.997018710736803
  },
  "gecirgenlik": {
@@ -209,11 +209,11 @@
  "dogrulama": {
   "net_fonlama": {
    "kaynak": "TP.APIFON1.TOP − TP.APIFON2.TOP ↔ TP.APIFON3",
-   "n": 3972,
+   "n": 3973,
    "maks_fark_mn_tl": 1.1641532182693481e-10,
    "esik_mn_tl": 1e-06,
-   "son_biz": -1118394.43,
-   "son_evds": -1118394.43,
+   "son_biz": -1186770.39,
+   "son_evds": -1186770.39,
    "gecti": true
   },
   "politika": {
@@ -247,11 +247,11 @@
   },
   "hatlar_arasi_swap": {
    "kaynak": "bu hat (TP.SWAPTEKTAR alım−satım)/1000 ↔ rezerv hattı gunluk.csv · swap_yerli_usd",
-   "n": 955,
+   "n": 956,
    "maks_fark_mlr_usd": 0.0,
-   "son_biz": -4.36626217,
-   "son_rezerv": -4.36626217,
-   "son_tarih": "2026-10-21",
+   "son_biz": -4.42352769,
+   "son_rezerv": -4.42352769,
+   "son_tarih": "2026-10-22",
    "gecti": true
   },
   "gecelik_repo_aylik": {
@@ -263,20 +263,20 @@
   },
   "aofm_kompozisyon": {
    "kaynak": "(ihale×politika + kotasyon repo×koridor tavanı + GLP×GLP satış) / toplam ↔ TP.APIFON4",
-   "n": 3890,
-   "medyan_fark_pp": 0.3968250335604928,
+   "n": 3891,
+   "medyan_fark_pp": 0.39689275618020403,
    "p95_fark_pp": 8.75,
    "maks_fark_pp": 17.77,
    "son250_medyan_pp": 0.0,
-   "son_gun": "2026-10-21",
-   "son_fark_pp": 0.0,
+   "son_gun": "2026-10-22",
+   "son_fark_pp": 1.0,
    "esik_pp": 0.05,
    "not": "Uç sapmalar geç likidite penceresi dönemlerinde ve kompozisyon geçişlerinde yoğunlaşır; kalibrasyon sabiti KULLANILMAZ.",
    "gecti": true
   },
   "aofm_bant": {
    "kaynak": "AOFM ∈ [koridor tabanı, GLP satış (yoksa tavan)]",
-   "n": 3891,
+   "n": 3892,
    "alt_ihlal_gun": 31,
    "ust_ihlal_gun": 1,
    "alt_ihlal_son": "2024-03-21",
